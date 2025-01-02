@@ -1,0 +1,86 @@
+﻿namespace Villamos.V_MindenEgyéb
+{
+    public static class Enumok
+    {
+        public enum TTP_Státus
+        {
+            Nincs_beállítva = 0,
+            Ütemezett = 1,
+            Javítandó = 5,
+            Lezárt = 8,
+            Törölt = 9
+        };
+
+        public enum Jármű_Státus
+        {
+            Szabad = 1,
+            Beálló = 3,
+            Üzemképtelen = 4
+        };
+
+        public enum Akku_Státus
+        {
+            Új = 1,
+            Beépített = 2,
+            Használt = 3,
+            Selejtezésre_javasolt = 4,
+            Leselejtezett = 5,
+            Törölt = 9
+        };
+
+        public enum Eszterga_Állapot_Státus
+        {
+            Beolvasott = 1,
+            Hibás = 2,
+            Ellenőrzött = 4,
+            Villamos_Áttöltött = 7,
+            Törölt = 9
+        };
+
+        public enum Eszt_Adat_Állapot_Státus
+        {
+            Beolvasott = 1,
+            Hibás = 2,
+            Ellenőrzött = 4,
+            Villamos_Áttöltött = 7,
+            SAP_Áttöltött = 8,
+            Törölt = 9
+        };
+
+        public enum Takfajtaadat
+        {
+            J2 = 1,
+            J3 = 2,
+            J4 = 3,
+            J5 = 4,
+            J6 = 5
+        };
+
+        public enum TW6000_Státusz
+        {
+            tervezési = 0,
+            ütemezett = 2,
+            előjegyezve = 4,
+            elvégzett = 6,
+            törölt = 9
+        }
+
+        public enum T5C5_Nap_Státusz
+        {
+            Forgalomban = 0,
+            Hibás = 1,
+            E3 = 2,
+            V1 = 3,
+            V2 = 4,
+            V3 = 5,
+            J1 = 6,
+        }
+
+        public enum Dolgozó_Státusz
+        {
+           Státus_létrehozása=0,
+           Státus_megszüntetése=1,
+           Személy_csere=2,
+        }
+    }
+}

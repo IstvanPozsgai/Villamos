@@ -1,0 +1,52 @@
+﻿using System;
+using System.Windows.Forms;
+using Zuby.ADGV;
+
+namespace Villamos
+{
+
+    public static class Program
+    {
+        /// <summary>
+        /// Az a telephely ahol működik a program
+        /// </summary>
+        public static string PostásTelephely = "";
+        /// <summary>
+        /// Aki bejelentkezett
+        /// </summary>
+        public static string PostásNév = "";
+        /// <summary>
+        /// Bejelentkező jogosultsági szövege
+        /// </summary>
+        public static string PostásJogkör = "";
+        /// <summary>
+        /// A telephely szakszolgálat-e, van-e alá besorolva más üzem
+        /// </summary>
+        public static bool Postás_Vezér = false;
+        /// <summary>
+        /// Melyik csoportban van
+        /// </summary>
+        public static int Postás_csoport = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool Postás_telephely = false;
+
+
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        public static void Main()
+        {
+            //Magyarosítás
+            AdvancedDataGridView.SetTranslations(AdvancedDataGridView.LoadTranslationsFromFile("lang_hu-HU.json"));
+            AdvancedDataGridViewSearchToolBar.SetTranslations(AdvancedDataGridViewSearchToolBar.LoadTranslationsFromFile("lang_hu-HU.json"));
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new AblakBejelentkezés());
+        }
+    }
+}

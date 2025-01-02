@@ -1,0 +1,491 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+using Villamos.Villamos.Kezelők;
+using Villamos.Villamos_Adatszerkezet;
+using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
+
+namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
+{
+    public partial class Ablak_Caf_Lista : Form
+    {
+        public DateTime Végdát { get; private set; }
+        public DateTime Elsődát { get; private set; }
+
+
+        CAF_Segéd_Adat Posta_adat;
+        int Kijelölt_Sor = -1;
+        string KiÍrás;
+
+
+        public Ablak_Caf_Lista(DateTime végdát, DateTime elsődát)
+        {
+            InitializeComponent();
+            Végdát = végdát;
+            Elsődát = elsődát;
+            Start();
+        }
+
+
+        void Start()
+        {
+            Lista_Dátumig.Value = Végdát;
+            Lista_Dátumtól.Value = Elsődát;
+            Lista_Pályaszámokfeltöltése();
+        }
+
+        private void Ablak_Caf_Lista_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Ablak_Caf_Lista_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_CAF_Alapadat?.Close();
+            Új_Ablak_CAF_Részletes?.Close();
+        }
+
+
+        private void Lista_Pályaszámokfeltöltése()
+        {
+            string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
+            string jelszó = "CzabalayL";
+            string szöveg = "SELECT * FROM alap WHERE törölt=false ORDER BY azonosító";
+            Lista_Pályaszám.Items.Clear();
+            Lista_Pályaszám.BeginUpdate();
+            Lista_Pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
+            Lista_Pályaszám.EndUpdate();
+            Lista_Pályaszám.Refresh();
+        }
+
+
+        private void Alapadatok_listázása()
+        {
+            try
+            {
+                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
+                string jelszó = "CzabalayL";
+                string szöveg = "SELECT * FROM alap ORDER BY azonosító";
+
+                Kezelő_CAF_alap kéz = new Kezelő_CAF_alap();
+                List<Adat_CAF_alap> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+
+                if (!File.Exists(hely) )
+                    return;
+                KiÍrás = "Alap";
+
+                Tábla_lista.Rows.Clear();
+                Tábla_lista.Columns.Clear();
+                Tábla_lista.Refresh();
+                Tábla_lista.Visible = false;
+                Tábla_lista.ColumnCount = 21;
+
+                // fejléc elkészítése
+                Tábla_lista.Columns[0].HeaderText = "Pályaszám";
+                Tábla_lista.Columns[0].Width = 100;
+                Tábla_lista.Columns[1].HeaderText = "Típus";
+                Tábla_lista.Columns[1].Width = 100;
+
+                Tábla_lista.Columns[2].HeaderText = "Idő Ciklus";
+                Tábla_lista.Columns[2].Width = 100;
+                Tábla_lista.Columns[3].HeaderText = "Idő UV";
+                Tábla_lista.Columns[3].Width = 100;
+                Tábla_lista.Columns[4].HeaderText = "Idő UV Ssz";
+                Tábla_lista.Columns[4].Width = 100;
+                Tábla_lista.Columns[5].HeaderText = "Idő telephely";
+                Tábla_lista.Columns[5].Width = 100;
+                Tábla_lista.Columns[6].HeaderText = "Idő Dátum";
+                Tábla_lista.Columns[6].Width = 100;
+
+                Tábla_lista.Columns[7].HeaderText = "KM Ciklus";
+                Tábla_lista.Columns[7].Width = 100;
+                Tábla_lista.Columns[8].HeaderText = "KM UV";
+                Tábla_lista.Columns[8].Width = 100;
+                Tábla_lista.Columns[9].HeaderText = "KM UV Ssz";
+                Tábla_lista.Columns[9].Width = 100;
+                Tábla_lista.Columns[10].HeaderText = "KM telephely";
+                Tábla_lista.Columns[10].Width = 100;
+                Tábla_lista.Columns[11].HeaderText = "KM Dátum";
+                Tábla_lista.Columns[11].Width = 100;
+                Tábla_lista.Columns[12].HeaderText = "Számláló";
+                Tábla_lista.Columns[12].Width = 100;
+
+                Tábla_lista.Columns[13].HeaderText = "Havi km";
+                Tábla_lista.Columns[13].Width = 100;
+                Tábla_lista.Columns[14].HeaderText = "KMU km";
+                Tábla_lista.Columns[14].Width = 100;
+                Tábla_lista.Columns[15].HeaderText = "Frissítés Dátum";
+                Tábla_lista.Columns[15].Width = 100;
+                Tábla_lista.Columns[16].HeaderText = "Felúítás Dátum";
+                Tábla_lista.Columns[16].Width = 100;
+                Tábla_lista.Columns[17].HeaderText = "Össz km";
+                Tábla_lista.Columns[17].Width = 100;
+                Tábla_lista.Columns[18].HeaderText = "Garanciális";
+                Tábla_lista.Columns[18].Width = 100;
+                Tábla_lista.Columns[19].HeaderText = "Aktív";
+                Tábla_lista.Columns[19].Width = 100;
+                Tábla_lista.Columns[20].HeaderText = "Utolsó Vizsgálat óta futott";
+                Tábla_lista.Columns[20].Width = 100;
+
+                int i;
+                foreach (Adat_CAF_alap rekord in Adatok)
+                {
+
+                    Tábla_lista.RowCount++;
+                    i = Tábla_lista.RowCount - 1;
+                    Tábla_lista.Rows[i].Cells[0].Value = rekord.Azonosító;
+                    Tábla_lista.Rows[i].Cells[1].Value = rekord.Típus;
+
+                    Tábla_lista.Rows[i].Cells[2].Value = rekord.Ciklusnap;
+                    Tábla_lista.Rows[i].Cells[3].Value = rekord.Utolsó_Nap;
+                    Tábla_lista.Rows[i].Cells[4].Value = rekord.Utolsó_Nap_sorszám;
+                    Tábla_lista.Rows[i].Cells[5].Value = rekord.Végezte_nap.Trim();
+                    Tábla_lista.Rows[i].Cells[6].Value = rekord.Vizsgdátum_nap.ToString("yyyy.MM.dd");
+
+                    Tábla_lista.Rows[i].Cells[7].Value = rekord.Cikluskm;
+                    Tábla_lista.Rows[i].Cells[8].Value = rekord.Utolsó_Km;
+                    Tábla_lista.Rows[i].Cells[9].Value = rekord.Utolsó_Km_sorszám;
+                    Tábla_lista.Rows[i].Cells[10].Value = rekord.Végezte_km.Trim();
+                    Tábla_lista.Rows[i].Cells[11].Value = rekord.Vizsgdátum_km.ToString("yyyy.MM.dd");
+                    Tábla_lista.Rows[i].Cells[12].Value = rekord.Számláló;
+
+                    Tábla_lista.Rows[i].Cells[13].Value = rekord.Havikm;
+                    Tábla_lista.Rows[i].Cells[14].Value = rekord.KMUkm;
+                    Tábla_lista.Rows[i].Cells[15].Value = rekord.KMUdátum.ToString("yyyy.MM.dd");
+                    Tábla_lista.Rows[i].Cells[16].Value = rekord.Fudátum.ToString("yyyy.MM.dd");
+                    Tábla_lista.Rows[i].Cells[17].Value = rekord.Teljeskm;
+                    if (rekord.Garancia)
+                        Tábla_lista.Rows[i].Cells[18].Value = "Igen";
+                    else
+                        Tábla_lista.Rows[i].Cells[18].Value = "Nem";
+
+                    if (!rekord.Törölt)
+                        Tábla_lista.Rows[i].Cells[19].Value = "Igen";
+                    else
+                        Tábla_lista.Rows[i].Cells[19].Value = "Nem";
+
+                    Tábla_lista.Rows[i].Cells[20].Value = rekord.KMUkm - rekord.Számláló;
+                }
+
+                Tábla_lista.Visible = true;
+                Tábla_lista.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Ütem_frissít_Click(object sender, EventArgs e)
+        {
+            Alapadatok_listázása();
+        }
+
+
+        private void Lista_excel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Tábla_lista.Rows.Count <= 0)
+                    return;
+                string fájlexc;
+
+                // kimeneti fájl helye és neve
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
+                SaveFileDialog1.InitialDirectory = "MyDocuments";
+
+                SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
+                SaveFileDialog1.FileName = "CAF_ütemzés_Adatok" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMdd");
+                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+
+                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, fájlexc.Length - 5);
+                MyE.EXCELtábla(fájlexc, Tábla_lista, false);
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Tábla_lista_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+            Kijelölt_Sor = e.RowIndex;
+        }
+
+
+        private void Lista_Pályaszám_friss_Click(object sender, EventArgs e)
+        {
+            Pályaszám_lista_tábla();
+        }
+
+
+        private void Pályaszám_lista_tábla()
+        {
+            try
+            {
+                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
+                string jelszó = "CzabalayL";
+                if (!File.Exists(hely) )
+                    return;
+
+                string szöveg = "SELECT * FROM Adatok WHERE ";
+                if (Radio_km.Checked == true)
+                    szöveg += " IDŐvKM=2 AND ";
+                if (Radio_idő.Checked == true)
+                    szöveg += " IDŐvKM=1 AND ";
+                szöveg += " (([Dátum]>#" + Lista_Dátumtól.Value.ToString("MM-dd-yyyy") + "#)";
+                szöveg += " AND ([Dátum]<#" + Lista_Dátumig.Value.ToString("MM-dd-yyyy") + "#))";
+                if (Lista_Pályaszám.Text.Trim() != "")
+                    szöveg += " AND azonosító='" + Lista_Pályaszám.Text.Trim() + "'";
+
+                szöveg += "  ORDER BY dátum ";
+
+                Kezelő_CAF_Adatok kéz = new Kezelő_CAF_Adatok();
+                List<Adat_CAF_Adatok> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                KiÍrás = "Pályaszám";
+
+                Holtart.Be(20);
+
+
+                Tábla_lista.Rows.Clear();
+                Tábla_lista.Columns.Clear();
+                Tábla_lista.Refresh();
+                Tábla_lista.Visible = false;
+                Tábla_lista.ColumnCount = 11;
+
+                // fejléc elkészítése
+                Tábla_lista.Columns[0].HeaderText = "Sorszám";
+                Tábla_lista.Columns[0].Width = 100;
+                Tábla_lista.Columns[1].HeaderText = "Pályaszám";
+                Tábla_lista.Columns[1].Width = 100;
+                Tábla_lista.Columns[2].HeaderText = "Vizsgálat";
+                Tábla_lista.Columns[2].Width = 100;
+                Tábla_lista.Columns[3].HeaderText = "Dátum";
+                Tábla_lista.Columns[3].Width = 100;
+                Tábla_lista.Columns[4].HeaderText = "Számláló állás";
+                Tábla_lista.Columns[4].Width = 100;
+                Tábla_lista.Columns[5].HeaderText = "Státus";
+                Tábla_lista.Columns[5].Width = 120;
+                Tábla_lista.Columns[6].HeaderText = "KM_Sorszám";
+                Tábla_lista.Columns[6].Width = 100;
+                Tábla_lista.Columns[7].HeaderText = "IDŐ_Sorszám";
+                Tábla_lista.Columns[7].Width = 100;
+                Tábla_lista.Columns[8].HeaderText = "Vizsgálat fajta";
+                Tábla_lista.Columns[8].Width = 100;
+                Tábla_lista.Columns[9].HeaderText = "Megjegyzés";
+                Tábla_lista.Columns[9].Width = 200;
+                Tábla_lista.Columns[10].HeaderText = "Generált dátum";
+                Tábla_lista.Columns[10].Width = 200;
+                int i;
+                foreach (Adat_CAF_Adatok rekord in Adatok)
+                {
+
+                    Tábla_lista.RowCount++;
+                    i = Tábla_lista.RowCount - 1;
+                    Tábla_lista.Rows[i].Cells[0].Value = rekord.Id;
+                    Tábla_lista.Rows[i].Cells[1].Value = rekord.Azonosító.Trim ();
+                    Tábla_lista.Rows[i].Cells[2].Value = rekord.Vizsgálat.Trim();
+                    Tábla_lista.Rows[i].Cells[3].Value = rekord.Dátum.ToString("yyyy.MM.dd");
+                    Tábla_lista.Rows[i].Cells[4].Value = rekord.Számláló;
+                    switch (rekord.Státus)
+                    {
+                        case 0:
+                            {
+                                Tábla_lista.Rows[i].Cells[5].Value = "0- Tervezési";
+                                break;
+                            }
+                        case 2:
+                            {
+                                Tábla_lista.Rows[i].Cells[5].Value = "2- Ütemezett";
+                                break;
+                            }
+                        case 4:
+                            {
+                                Tábla_lista.Rows[i].Cells[5].Value = "4- Előjegyzett";
+                                break;
+                            }
+                        case 6:
+                            {
+                                Tábla_lista.Rows[i].Cells[5].Value = "6- Elvégzett";
+                                break;
+                            }
+                        case 8:
+                            {
+                                Tábla_lista.Rows[i].Cells[5].Value = "8- Tervezésisegéd";
+                                break;
+                            }
+                        case 9:
+                            {
+                                Tábla_lista.Rows[i].Cells[5].Value = "9- Törölt";
+                                break;
+                            }
+                    }
+                    Tábla_lista.Rows[i].Cells[6].Value = rekord.KM_Sorszám;
+                    Tábla_lista.Rows[i].Cells[7].Value = rekord.IDŐ_Sorszám;
+                    switch (rekord.IDŐvKM)
+                    {
+                        case 0:
+                            {
+                                Tábla_lista.Rows[i].Cells[8].Value = "?";
+                                break;
+                            }
+                        case 1:
+                            {
+                                Tábla_lista.Rows[i].Cells[8].Value = "Idő";
+                                break;
+                            }
+                        case 2:
+                            {
+                                Tábla_lista.Rows[i].Cells[8].Value = "Km";
+                                break;
+                            }
+                    }
+                    Tábla_lista.Rows[i].Cells[9].Value = rekord.Megjegyzés.Trim();
+                    Tábla_lista.Rows[i].Cells[10].Value = rekord.Dátum_program.ToString("yyyy.MM.dd");
+
+                    Holtart.Lép();
+                }
+
+
+                Tábla_lista.Visible = true;
+                Tábla_lista.Refresh();
+
+
+                Holtart.Ki();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Tábla_lista_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (Tábla_lista.Rows.Count < 1)
+                return;
+            // egész sor színezése ha törölt
+            foreach (DataGridViewRow row in Tábla_lista.Rows)
+            {
+                if (MyF.Szöveg_Tisztítás(row.Cells[5].Value.ToString(), 0, 1) == "9")
+                {
+                    row.DefaultCellStyle.ForeColor = Color.White;
+                    row.DefaultCellStyle.BackColor = Color.IndianRed;
+                    row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
+                }
+            }
+        }
+
+        Ablak_CAF_Részletes Új_Ablak_CAF_Részletes;
+        private void Átírja_Módosításhoz_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Kijelölt_Sor == -1)
+                    throw new HibásBevittAdat("Nincs kijelölve érvényes adat.");
+                Új_Ablak_CAF_Részletes?.Close();
+                if (KiÍrás == "Pályaszám")
+                {
+                    int sorszám = int.Parse(Tábla_lista.Rows[Kijelölt_Sor].Cells[0].Value.ToString());
+                    string pályaszám = Tábla_lista.Rows[Kijelölt_Sor].Cells[1].Value.ToString();
+                    DateTime dátum= DateTime.Parse(Tábla_lista.Rows[Kijelölt_Sor].Cells[3].Value.ToString());
+                    Posta_adat = new CAF_Segéd_Adat(pályaszám, dátum, sorszám);
+
+                    Új_Ablak_CAF_Részletes = new Ablak_CAF_Részletes(Posta_adat, Lista_Dátumig.Value  );
+                    Új_Ablak_CAF_Részletes.FormClosed += Ablak_CAF_Részletes_Closed;
+                    Új_Ablak_CAF_Részletes.StartPosition = FormStartPosition.CenterScreen;
+                    Új_Ablak_CAF_Részletes.Show();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Ablak_CAF_Részletes_Closed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_CAF_Részletes = null;
+        }
+
+        private void Lista_Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        Ablak_CAF_Alapadat Új_Ablak_CAF_Alapadat;
+        private void Alap_adatok_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Kijelölt_Sor == -1)
+                    throw new HibásBevittAdat("Nincs kijelölve érvényes adat.");
+
+                string azonosító;
+                if (KiÍrás == "Alap")
+                    azonosító = Tábla_lista.Rows[Kijelölt_Sor].Cells[0].Value.ToString().Trim();
+                else
+                    azonosító = Tábla_lista.Rows[Kijelölt_Sor].Cells[1].Value.ToString().Trim();
+
+                Új_Ablak_CAF_Alapadat?.Close();
+
+                Új_Ablak_CAF_Alapadat = new Ablak_CAF_Alapadat(azonosító);
+                Új_Ablak_CAF_Alapadat.FormClosed += Ablak_CAF_Alapadat_Closed;
+                Új_Ablak_CAF_Alapadat.StartPosition = FormStartPosition.CenterScreen;
+                Új_Ablak_CAF_Alapadat.Show();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Ablak_CAF_Alapadat_Closed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_CAF_Alapadat = null;
+        }
+
+
+    }
+}

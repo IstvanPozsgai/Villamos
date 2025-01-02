@@ -1,0 +1,214 @@
+﻿using System;
+using System.Globalization;
+
+
+public static partial  class Függvénygyűjtemény
+{
+    public static DateTime Év_elsőnapja(DateTime dateTime)
+    {
+        DateTime datum = new DateTime(dateTime.Year, 1, 1);
+        return datum;
+    }
+
+    public static DateTime Év_utolsónapja(DateTime dateTime)
+    {
+        DateTime datum = new DateTime(dateTime.Year, 12, 31);
+        return datum;
+    }
+
+    public static DateTime Hónap_utolsónapja(DateTime dateTime)
+    {
+        DateTime datum = new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));
+        return datum;
+    }
+
+
+    /// <summary>
+    /// Hónap utolsó napjának dátuma
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <returns></returns>
+    public static DateTime HóUNnap(this DateTime dateTime)
+    {
+        DateTime datum = new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));
+        return datum;
+    }
+
+
+    public static DateTime Hónap_elsőnapja(DateTime dateTime)
+    {
+        DateTime datum = new DateTime(dateTime.Year, dateTime.Month, 1);
+        return datum;
+    }
+
+
+    /// <summary>
+    /// Hónap első napjának dátuma
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <returns></returns>
+    public static DateTime HóENap(this DateTime dateTime)
+    {
+        DateTime datum = new DateTime(dateTime.Year, dateTime.Month, 1);
+        return datum;
+    }
+
+
+    public static int Hónap_hossza(DateTime dateTime)
+    {
+        int datum = DateTime.DaysInMonth(dateTime.Year, dateTime.Month);
+        return datum;
+    }
+
+
+    /// <summary>
+    /// Hét első napjának dátuma
+    /// </summary>
+    /// <param name="Dátum"></param>
+    /// <returns></returns>
+    public static DateTime HétENap(this DateTime Dátum)
+    {
+        DateTime válasz;
+
+        int hétnapszáma = Dátum.DayOfWeek == DayOfWeek.Monday
+                        ? 1
+                        : (int)Dátum.DayOfWeek;
+        switch (hétnapszáma)
+        {
+            case 0: //Vasárnap
+                {
+                    válasz = Dátum.AddDays(-6);
+                    break;
+                }
+            case 1:
+                {
+                    válasz = Dátum;
+                    break;
+                }
+            default:
+                {
+                    válasz = Dátum.AddDays(-1 * (hétnapszáma - 1));
+                    break;
+                }
+        }
+
+        return válasz;
+    }
+
+
+    public static DateTime Hét_elsőnapja(DateTime Dátum)
+    {
+        DateTime válasz;
+
+        int hétnapszáma = Dátum.DayOfWeek == DayOfWeek.Monday
+                        ? 1
+                        : (int)Dátum.DayOfWeek;
+        switch (hétnapszáma)
+        {
+            case 0: //Vasárnap
+                {
+                    válasz = Dátum.AddDays(-6);
+                    break;
+                }
+            case 1:
+                {
+                    válasz = Dátum;
+                    break;
+                }
+            default:
+                {
+                    válasz = Dátum.AddDays(-1 * (hétnapszáma - 1));
+                    break;
+                }
+        }
+
+        return válasz;
+    }
+
+
+    /// <summary>
+    /// Hét utolsó napjának a dátuma
+    /// </summary>
+    /// <param name="Dátum"></param>
+    /// <returns></returns>
+    public static DateTime HétUNap(this DateTime Dátum)
+    {
+        DateTime válasz;
+
+        int hétnapszáma = Dátum.DayOfWeek == DayOfWeek.Monday
+                        ? 1
+                        : (int)Dátum.DayOfWeek;
+        switch (hétnapszáma)
+        {
+            case 0: //Vasárnap
+                {
+                    válasz = Dátum;
+                    break;
+                }
+            default:
+                {
+                    válasz = Dátum.AddDays(7 - hétnapszáma);
+                    break;
+                }
+        }
+        return válasz;
+    }
+
+
+    public static DateTime Hét_Utolsónapja(DateTime Dátum)
+    {
+        DateTime válasz;
+
+        int hétnapszáma = Dátum.DayOfWeek == DayOfWeek.Monday
+                        ? 1
+                        : (int)Dátum.DayOfWeek;
+        switch (hétnapszáma)
+        {
+            case 0: //Vasárnap
+                {
+                    válasz = Dátum;
+                    break;
+                }
+            default:
+                {
+                    válasz = Dátum.AddDays(7 - hétnapszáma);
+                    break;
+                }
+        }
+        return válasz;
+    }
+
+
+    public static int Hét_Melyiknapja(DateTime Dátum)
+    {
+        int hétnapszáma = Dátum.DayOfWeek == DayOfWeek.Monday
+                  ? 1
+                  : (int)Dátum.DayOfWeek;
+        if (hétnapszáma == 0) hétnapszáma = 7;
+        return hétnapszáma;
+    }
+
+
+    public static int Hét_Sorszáma(DateTime dátum)
+    {
+        CultureInfo ciCurr = CultureInfo.CurrentCulture;
+        int válasz = ciCurr.Calendar.GetWeekOfYear(dátum, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        return válasz;
+    }
+
+
+    /// <summary>
+    /// Hét sorszáma
+    /// </summary>
+    /// <param name="dátum"></param>
+    /// <returns></returns>
+    public static int Hét_Ssz(this DateTime dátum)
+    {
+        CultureInfo ciCurr = CultureInfo.CurrentCulture;
+        int válasz = ciCurr.Calendar.GetWeekOfYear(dátum, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        return válasz;
+    }
+
+
+}
+

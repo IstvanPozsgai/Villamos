@@ -1,0 +1,32 @@
+﻿using Villamos.Adatszerkezet;
+namespace Villamos.Villamos_Adatbázis_Funkció
+{
+    public static partial class Adatbázis_Létrehozás
+    {
+        public static void Eszterga_Karbantartás(string hely)
+        {
+            string szöveg;
+            string jelszó = "bozaim";
+
+            AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
+            ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
+
+            szöveg = "CREATE TABLE Műveletek (";
+            szöveg += "[ID]  short,";
+            szöveg += "[Művelet] CHAR(254),";
+            szöveg += "[Egység] short, ";
+            szöveg += "[Mennyi_Dátum] short,";
+            szöveg += "[Mennyi_Óra] short,";
+            szöveg += "[Státus] yesno,";
+            szöveg += "[Utolsó_Dátum] DATE,";
+            szöveg += "[Utolsó_Üzemóra_Állás] long)";
+            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
+
+            szöveg = "CREATE TABLE Üzemóra (";
+            szöveg += "[Üzemóra] short, ";
+            szöveg += "[Dátum] DATE, ";
+            szöveg += "[Státus] yesno)";
+            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
+        }
+    }
+}

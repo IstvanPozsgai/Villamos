@@ -1,0 +1,1665 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using Villamos.Kezelők;
+using Villamos.Villamos.Kezelők;
+using Villamos.Villamos_Adatbázis_Funkció;
+using Villamos.Villamos_Adatszerkezet;
+using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
+
+namespace Villamos
+{
+    public partial class Ablak_Munkalap_készítés
+    {
+
+        readonly Kezelő_Munka_Folyamat KézMunkaFoly = new Kezelő_Munka_Folyamat();
+
+        public Ablak_Munkalap_készítés()
+        {
+            InitializeComponent();
+        }
+
+
+        private void Ablak_Munkalap_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                Telephelyekfeltöltése();
+                Dátum.Value = DateTime.Today;
+
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap";
+                if (!Directory.Exists(hely) )                          System.IO.Directory.CreateDirectory(hely);
+
+                // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                if (!File.Exists(hely)) KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value);
+
+
+                Jogosultságkiosztás();
+                Feltöltiválasztékot();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Feltöltiválasztékot()
+        {
+            Csoportfeltöltés();
+            Irányítófeltöltés();
+            Folyamatlistáz();
+            Rendlistáz();
+            Típusfeltöltés();
+            V1feltöltés();
+        }
+
+
+        #region Alap
+
+
+        private void Telephelyekfeltöltése()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Jármű());
+                if (Program.PostásTelephely == "Főmérnökség")
+                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
+                else
+                { Cmbtelephely.Text = Program.PostásTelephely; }
+
+                Cmbtelephely.Enabled = Program.Postás_Vezér;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+        private void Button13_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Munkalap.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Jogosultságkiosztás()
+        {
+            try
+            {
+                int melyikelem;
+                // ide kell az összes gombot tenni amit szabályozni akarunk
+
+                melyikelem = 80;
+                // módosítás 1
+                if (MyF.Vanjoga(melyikelem, 1))
+                {
+
+
+                }
+                // módosítás 2
+                if (MyF.Vanjoga(melyikelem, 2))
+                {
+
+                }
+                // módosítás 3
+                if (MyF.Vanjoga(melyikelem, 3))
+                {
+
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Dátum_ValueChanged(object sender, EventArgs e)
+        {
+            Feltöltiválasztékot();
+        }
+        #endregion
+
+
+        #region Csoport
+        private void Csoportfeltöltés()
+        {
+            try
+            {
+                Csoport.Items.Clear();
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string jelszó = "Mocó";
+
+                string szöveg = "SELECT * FROM csoportbeosztás order by Sorszám";
+
+                Csoport.BeginUpdate();
+                Csoport.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "csoportbeosztás"));
+                Csoport.EndUpdate();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Csuk_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Csoport.Height = 25;
+                Csuk.Visible = false;
+                Nyit.Visible = true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Nyit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Csoport.Height = 500;
+                Csuk.Visible = true;
+                Nyit.Visible = false;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Csoportkijelölmind_Click(object sender, EventArgs e)
+        {
+            for (int j = 0; j < Csoport.Items.Count; j++)
+                Csoport.SetItemChecked(j, true);
+            Jelöltcsoportfel();
+        }
+
+
+        private void Csoportvissza_Click(object sender, EventArgs e)
+        {
+
+            for (int j = 0; j < Csoport.Items.Count; j++)
+                Csoport.SetItemChecked(j, false);
+            Jelöltcsoportfel();
+        }
+
+
+        private void Jelöltcsoport_Click(object sender, EventArgs e)
+        {
+            Jelöltcsoportfel();
+        }
+
+
+        private void Jelöltcsoportfel()
+        {
+            try
+            {
+                Csoport.Height = 25;
+                Csuk.Visible = false;
+                Nyit.Visible = true;
+                // töröljük a neveket
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+                if (!File.Exists(hely) )
+                    return;
+                string jelszó = "forgalmiutasítás";
+
+                Dolgozónév.Rows.Clear();
+                Dolgozónév.Columns.Clear();
+                Dolgozónév.Refresh();
+                Dolgozónév.Visible = false;
+                Dolgozónév.ColumnCount = 2;
+
+                // fejléc elkészítése
+                Dolgozónév.Columns[0].HeaderText = "HR azonosító";
+                Dolgozónév.Columns[0].Width = 100;  // 15-el kell osztani
+                Dolgozónév.Columns[1].HeaderText = "Dolgozónév";
+                Dolgozónév.Columns[1].Width = 230;
+
+                string szöveg;
+
+                for (int j = 0; j < Csoport.Items.Count; j++)
+                {
+                    if (Csoport.GetItemChecked(j) == true)
+                    {
+                        // csoporttagokat kiválogatja
+                        if (Csoport.Items[j].ToString().Trim() == "Összes")
+                            szöveg = "SELECT * FROM Dolgozóadatok WHERE kilépésiidő=#1/1/1900# ORDER BY DolgozóNév asc";
+                        else
+                            szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900# AND [csoport]='" + Csoport.Items[j].ToString().Trim() + "' order by DolgozóNév";
+
+                        Kezelő_Dolgozó_Alap kéz = new Kezelő_Dolgozó_Alap();
+                        List<Adat_Dolgozó_Alap> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                        int i;
+                        foreach (Adat_Dolgozó_Alap rekord in Adatok)
+                        {
+                            Dolgozónév.RowCount++;
+                            i = Dolgozónév.RowCount - 1;
+                            Dolgozónév.Rows[i].Cells[0].Value = rekord.Dolgozószám;
+                            Dolgozónév.Rows[i].Cells[1].Value = rekord.DolgozóNév;
+                        }
+                    }
+                }
+                Dolgozónév.Visible = true;
+                Dolgozónév.Refresh();
+                Csoport.Height = 25;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        #endregion
+
+
+        #region Dolgozó választás
+
+        private void Összeskijelöl_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < Dolgozónév.Rows.Count; i++)
+                Dolgozónév.Rows[i].Selected = true;
+        }
+
+
+        private void Mindtöröl_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < Dolgozónév.Rows.Count; i++)
+                Dolgozónév.Rows[i].Selected = false;
+        }
+
+
+        #endregion
+
+
+        private void Irányítófeltöltés()
+        {
+            try
+            {
+                Kiadta.Items.Clear();
+                Ellenőrizte.Items.Clear();
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+                string jelszó = "forgalmiutasítás";
+
+                string szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900# and főkönyvtitulus<>'' and főkönyvtitulus<>'_'  order by DolgozóNév asc";
+                Kiadta.BeginUpdate();
+                Kiadta.Items.Add("");
+
+                Kiadta.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "dolgozónév"));
+                Kiadta.EndUpdate();
+                Ellenőrizte.BeginUpdate();
+                Ellenőrizte.Items.Add("");
+                Ellenőrizte.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "dolgozónév"));
+
+                Ellenőrizte.EndUpdate();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Rendlistáz()
+        {
+            try
+            {
+                Munkarendlist.Items.Clear();
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                if (!File.Exists(hely)) return;
+                string jelszó = "kismalac";
+                string szöveg = "SELECT * FROM munkarendtábla where látszódik= -1";
+
+                Munkarendlist.BeginUpdate();
+                Munkarendlist.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "munkarend"));
+                Munkarendlist.EndUpdate();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Típusfeltöltés()
+        {
+            try
+            {
+                Típusoklistája.Items.Clear();
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
+                string jelszó = "pozsgaii";
+
+                string szöveg = "SELECT * FROM típustábla order by id";
+                Típusoklistája.BeginUpdate();
+                Típusoklistája.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "típus"));
+                Típusoklistája.Items.Add("Üres");
+                Típusoklistája.EndUpdate();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Command14_Click(object sender, EventArgs e)
+        {
+            Jelöltcsoportfel();
+            Csoportfeltöltés();
+            Folyamatlistáz();
+            Rendlistáz();
+            Típusfeltöltés();
+            Mindenpsz.Checked = false;
+            E2pályaszám.Checked = false;
+            E3pályaszám.Checked = false;
+        }
+
+
+        private void Folyamatlistáz()
+        {
+            try
+            {
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                if (!File.Exists(hely) )                    return;
+                string jelszó = "kismalac";
+                string szöveg = "SELECT * FROM folyamattábla where látszódik= -1 ORDER BY id";
+
+                MunkafolyamatTábla.Rows.Clear();
+                MunkafolyamatTábla.Columns.Clear();
+                MunkafolyamatTábla.Refresh();
+                MunkafolyamatTábla.Visible = false;
+                MunkafolyamatTábla.ColumnCount = 4;
+
+                // fejléc elkészítése
+                MunkafolyamatTábla.Columns[0].HeaderText = "Munkafolyamat";
+                MunkafolyamatTábla.Columns[0].Width = 400;
+                MunkafolyamatTábla.Columns[1].HeaderText = "Pályaszám";
+                MunkafolyamatTábla.Columns[1].Width = 80;
+                MunkafolyamatTábla.Columns[2].HeaderText = "Sorszám";
+                MunkafolyamatTábla.Columns[2].Width = 80;
+                MunkafolyamatTábla.Columns[3].HeaderText = "Rendelési szám";
+                MunkafolyamatTábla.Columns[3].Width = 150;
+
+
+                Kezelő_Munka_Folyamat kéz = new Kezelő_Munka_Folyamat();
+                List<Adat_Munka_Folyamat> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                int i;
+                foreach (Adat_Munka_Folyamat rekord in Adatok)
+                {
+                    MunkafolyamatTábla.RowCount++;
+                    i = MunkafolyamatTábla.RowCount - 1;
+
+                    MunkafolyamatTábla.Rows[i].Cells[0].Value = rekord.Munkafolyamat.Trim();
+                    MunkafolyamatTábla.Rows[i].Cells[1].Value = rekord.Azonosító;
+                    MunkafolyamatTábla.Rows[i].Cells[2].Value = rekord.ID;
+                    MunkafolyamatTábla.Rows[i].Cells[3].Value = rekord.Rendelésiszám;
+                }
+
+                MunkafolyamatTábla.Visible = true;
+                MunkafolyamatTábla.Refresh();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void V1feltöltés()
+        {
+            try
+            {
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year }.mdb";
+                if (!File.Exists(hely))                       return;
+                string jelszó = "tápijános";
+                string szöveg = "SELECT * FROM vezényléstábla where ";
+                szöveg += " törlés=0 and vizsgálatraütemez=1  and  vizsgálat='V1' ";
+                szöveg += " and dátum= #" + Dátum.Value.ToString("yyyy-MM-dd") + "#";
+                szöveg += "  order by  azonosító";
+
+                V1Tábla.Rows.Clear();
+                V1Tábla.Columns.Clear();
+                V1Tábla.Refresh();
+                V1Tábla.Visible = false;
+                V1Tábla.ColumnCount = 2;
+
+                // fejléc elkészítése
+                V1Tábla.Columns[0].HeaderText = "rendelésiszám";
+                V1Tábla.Columns[0].Width = 80;  // 15-el kell osztani
+                V1Tábla.Columns[1].HeaderText = "azonosító";
+                V1Tábla.Columns[1].Width = 80;  // 15-el kell osztani
+
+                Kezelő_Vezénylés kéz = new Kezelő_Vezénylés();
+                List<Adat_Vezénylés> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                int i;
+
+                foreach (Adat_Vezénylés rekord in Adatok)
+                {
+                    V1Tábla.RowCount++;
+                    i = V1Tábla.RowCount - 1;
+
+                    V1Tábla.Rows[i].Cells[0].Value = rekord.Rendelésiszám;
+                    V1Tábla.Rows[i].Cells[1].Value = rekord.Azonosító;
+                }
+
+                V1Tábla.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        #region Excel
+
+
+        private void Excel_Click(object sender, EventArgs e)
+        {
+            if (Option6.Checked)
+                ExcelKészítés_Egyéni();
+            else
+                ExcelKészítés_Csoportos();
+
+            MessageBox.Show("A Munkalapok generálása befejeződött.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        private readonly string munkalap = "Munka1";
+        int sor;
+        int oszlop;
+        int blokkeleje;
+        string HR;
+        string Dolgozó;
+        int maximum = 0;
+
+        private void ExcelKészítés_Egyéni()
+        {
+            try
+            {
+                if (Dolgozónév.Rows.Count == 0)
+                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó");
+                if (Dolgozónév.SelectedRows.Count == 0)
+                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó");
+
+                string könyvtár;
+                string fájlexc;
+                maximum = Típusoklistája.SelectedItems.Count;
+
+                for (int hanyadikember = 0; hanyadikember < Dolgozónév.Rows.Count; hanyadikember++)
+                {
+                    if (Dolgozónév.Rows[hanyadikember].Selected)
+                    {
+
+                        Dolgozó = Dolgozónév.Rows[hanyadikember].Cells[1].Value.ToString().Trim();
+                        HR = Dolgozónév.Rows[hanyadikember].Cells[0].Value.ToString().Trim();
+                        string szöveg1 = DateTime.Now.ToString("yyMMddHHmmss");
+                        fájlexc = $"Munkalap_{DateTime.Now:yyMMddHHmmss}_{HR}.xlsx";
+                        könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\{fájlexc}.xlsx";
+
+                        sor = 5;
+                        blokkeleje = 5;
+
+                        Holtart.Be(10);
+                        MyE.ExcelLétrehozás();
+                        MyE.Munkalap_betű("arial", 12);
+                        MyE.Oszlopszélesség(munkalap, "a:r", 6);
+
+                        Munkalap_Fejléc(szöveg1);
+                        Dolgozó_Fejléc();
+                        Dolgozó_Neve_Egy();
+                        Munkalap_munkaFejléc();
+                        Munkalap_MunkaFolyamatok();
+                        Munkalap_ÜresSorok();
+                        Munkalap_Összesítő();
+                        Munkalap_Pályaszám_fejléc();
+                        Munkalap_Pályaszám_Minden();
+                        Munkalap_Pályaszám_E1();
+                        Munkalap_Pályaszám_E2();
+                        Munkalap_Pályaszám_E3();
+                        Munkalap_Pályaszám_E2_ICS();
+                        Munkalap_Pályaszám_E3_ICS();
+                        Munkalap_Aláíró();
+                        Munkalap_NyomtatásBeállítás();
+
+                        // **********************************************
+                        // **Nyomtatás                                 **
+                        // **********************************************
+                        if (Option9.Checked)
+                        {
+                            MyE.Nyomtatás(munkalap, 1, 1);
+                        }
+                        Holtart.Ki();
+                        MyE.Aktív_Cella(munkalap, "A1");
+                        MyE.ExcelMentés(fájlexc);
+                        MyE.ExcelBezárás();
+
+                        if (Option10.Checked)
+                            File.Delete(fájlexc + ".xlsx");
+                        Dolgozónév.Rows[hanyadikember].Selected = false;
+                    }
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void ExcelKészítés_Csoportos()
+        {
+
+            try
+            {
+                if (Dolgozónév.Rows.Count == 0)
+                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó");
+                if (Dolgozónév.SelectedRows.Count == 0)
+                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó");
+
+                string könyvtár;
+                string fájlexc;
+                maximum = Típusoklistája.SelectedItems.Count;
+
+
+                string szöveg1 = DateTime.Now.ToString("yyMMddHHmmss");
+                fájlexc = $"Munkalap_{DateTime.Now:yyMMddHHmmss}.xlsx";
+                könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\{fájlexc}.xlsx";
+
+                sor = 5;
+                blokkeleje = 5;
+
+                Holtart.Be(10);
+                MyE.ExcelLétrehozás();
+                MyE.Munkalap_betű("arial", 12);
+                MyE.Oszlopszélesség(munkalap, "a:r", 6);
+
+                Munkalap_Fejléc(szöveg1);
+                Dolgozó_Fejléc();
+                Dolgozó_Neve_Csoportos();
+                Munkalap_munkaFejléc();
+                Munkalap_MunkaFolyamatok();
+                Munkalap_ÜresSorok();
+                Munkalap_Összesítő();
+                Munkalap_Pályaszám_fejléc();
+                Munkalap_Pályaszám_Minden();
+                Munkalap_Pályaszám_E1();
+                Munkalap_Pályaszám_E2();
+                Munkalap_Pályaszám_E3();
+                Munkalap_Pályaszám_E2_ICS();
+                Munkalap_Pályaszám_E3_ICS();
+                Munkalap_Aláíró();
+                Munkalap_NyomtatásBeállítás();
+
+                // **********************************************
+                // **Nyomtatás                                 **
+                // **********************************************
+                if (Option9.Checked)
+                {
+                    MyE.Nyomtatás(munkalap, 1, 1);
+                }
+                Holtart.Ki();
+                MyE.Aktív_Cella(munkalap, "A1");
+                MyE.ExcelMentés(fájlexc);
+                MyE.ExcelBezárás();
+
+                if (Option10.Checked)
+                    File.Delete(fájlexc + ".xlsx");
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Munkalap_NyomtatásBeállítás()
+        {
+
+            // **********************************************
+            // **Nyomtatási beállítások                    **
+            // **********************************************
+
+            MyE.NyomtatásiTerület_részletes(munkalap, $"a1:r{sor}", balMargó: 0.393700787401575d, jobbMargó: 0.393700787401575d, alsóMargó: 0.590551181102362d, felsőMargó: 0.590551181102362d,
+                fejlécMéret: 0.511811023622047d, LáblécMéret: 0.511811023622047d, oldalszéles: "1", oldalmagas: "1");
+        }
+
+
+        private void Munkalap_Aláíró()
+        {
+            // **********************************************
+            // **Aláíró sor                            ******
+            // **********************************************
+            sor += 1;
+            MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 35);
+            MyE.Egyesít(munkalap, "a" + sor.ToString() + ":c" + (sor + 1).ToString());
+            MyE.Kiir("A munkát kiadta:", "a" + sor.ToString());
+            MyE.Egyesít(munkalap, "d" + sor.ToString() + ":f" + sor.ToString());
+            MyE.Egyesít(munkalap, "g" + sor.ToString() + ":i" + (sor + 1).ToString());
+            MyE.Kiir("A kiadott munkát\nelvégezte:", "g" + sor.ToString());
+            MyE.Egyesít(munkalap, "j" + sor.ToString() + ":l" + (sor + 1).ToString());
+            MyE.Egyesít(munkalap, "m" + sor.ToString() + ":o" + (sor + 1).ToString());
+            MyE.Sortörésseltöbbsorba_egyesített($"M{sor}:O{sor + 1}");
+            MyE.Sortörésseltöbbsorba_egyesített($"G{sor}:I{sor + 1}");
+
+            MyE.Igazít_vízszintes($"M{sor}:O{sor + 1}", "közép");
+            MyE.Igazít_vízszintes($"G{sor}:I{sor + 1}", "közép");
+            MyE.Kiir("A kiadott munkát\n ellenőrizte:", "m" + sor.ToString());
+            MyE.Egyesít(munkalap, "p" + sor.ToString() + ":r" + sor.ToString());
+
+            MyE.Betű("a" + sor.ToString() + ":r" + sor.ToString(), 10);
+            MyE.Betű("a" + sor.ToString() + ":r" + sor.ToString(), false, true, true);
+            MyE.Rácsoz($"A{sor}:R{sor + 1}");
+
+
+            sor += 1;
+            MyE.Egyesít(munkalap, "d" + sor.ToString() + ":f" + sor.ToString());
+            MyE.Kiir(Kiadta.Text.Trim(), "d" + sor.ToString());
+            MyE.Betű($"D{sor}", 10);
+            MyE.Betű($"D{sor}", false, true, true);
+            MyE.Egyesít(munkalap, "p" + sor.ToString() + ":r" + sor.ToString());
+            MyE.Kiir(Ellenőrizte.Text.Trim(), "p" + sor.ToString());
+            MyE.Betű($"P{sor}", 10);
+            MyE.Betű($"P{sor}", false, true, true);
+            MyE.Igazít_függőleges($"A{sor}", "alsó");
+            MyE.Igazít_függőleges($"G{sor}", "alsó");
+            MyE.Igazít_függőleges($"M{sor}", "alsó");
+
+            MyE.Vastagkeret($"A{sor - 1}:R{sor}");
+            Holtart.Lép();
+        }
+
+
+        private void Munkalap_Pályaszám_E2_ICS()
+        {
+
+            // ////////////////////////////////////////
+            // ///  E2     PÁLYASZÁM    ICS        ////
+            // ////////////////////////////////////////
+            Kezelő_Jármű kéz = new Kezelő_Jármű();
+            List<string> AdatokÖssz;
+            List<string> AdatokRész;
+
+            int mennyi = 0;
+            switch ((int)Dátum.Value.DayOfWeek)
+            {
+                case 1:
+                    {
+                        mennyi = 1;
+                        break;
+                    }
+                case 2:
+                    {
+                        mennyi = 2;
+                        break;
+                    }
+                case 3:
+                    {
+                        mennyi = 3;
+                        break;
+                    }
+                case 4:
+                    {
+                        mennyi = 4;
+                        break;
+                    }
+                case 5:
+                    {
+                        mennyi = 5;
+                        break;
+                    }
+                case 6:
+                    {
+                        mennyi = 6;
+                        break;
+                    }
+                case 7:
+                    {
+                        mennyi = 7;
+                        break;
+                    }
+            }
+            if (E2ICS.Checked == true && maximum >= 1 && mennyi > 0)
+            {
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2ICS.mdb";
+                string jelszó = "pozsgaii";
+                string szöveg;
+
+                for (int i = 0; i < Típusoklistája.Items.Count; i++)
+                {
+                    if (Típusoklistája.GetItemChecked(i) == true)
+                    {
+                        szöveg = $"SELECT * FROM állománytábla where E2={mennyi}  ORDER BY  azonosító";
+                        AdatokRész = kéz.Lista_Pályaszámok(hely3, jelszó, szöveg);
+
+                        szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToString().Trim()}'";
+                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+
+                        if (AdatokRész != null)
+                        {
+                            sor += 1;
+                            blokkeleje = sor;
+                            oszlop = 3;
+                            foreach (string PályaszámLista in AdatokRész)
+                            {
+                                if (AdatokÖssz.Contains(PályaszámLista.Trim()))
+                                    if (oszlop == 18)
+                                    {
+                                        oszlop = 3;
+                                        sor += 1;
+                                    }
+                                oszlop += 1;
+                                MyE.Kiir(PályaszámLista.Trim(), MyE.Oszlopnév(oszlop) + sor.ToString());
+                            }
+                        }
+
+                        MyE.Egyesít(munkalap, "a" + blokkeleje.ToString() + ":c" + sor.ToString());
+                        if (Típusoklistája.Items[i].ToString().Trim() != "Üres")
+                        {
+                            MyE.Kiir("E2-  " + Típusoklistája.Items[i].ToString().Trim(), $"A{blokkeleje}");
+                        }
+
+                        MyE.Rácsoz("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                        MyE.Vastagkeret("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                        MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                        MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                        MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
+                    }
+                }
+            }
+        }
+
+
+        private void Munkalap_Pályaszám_E3_ICS()
+        {
+
+            // ////////////////////////////////////////
+            // ///  E3     PÁLYASZÁM    ICS        ////
+            // ////////////////////////////////////////
+            Kezelő_Jármű kéz = new Kezelő_Jármű();
+            List<string> AdatokÖssz;
+            List<string> AdatokRész;
+
+            int mennyi = 0;
+            switch ((int)Dátum.Value.DayOfWeek)
+            {
+                case 1:
+                    {
+                        mennyi = 1;
+                        break;
+                    }
+                case 2:
+                    {
+                        mennyi = 2;
+                        break;
+                    }
+                case 3:
+                    {
+                        mennyi = 3;
+                        break;
+                    }
+                case 4:
+                    {
+                        mennyi = 4;
+                        break;
+                    }
+                case 5:
+                    {
+                        mennyi = 5;
+                        break;
+                    }
+                case 6:
+                    {
+                        mennyi = 6;
+                        break;
+                    }
+                case 7:
+                    {
+                        mennyi = 7;
+                        break;
+                    }
+            }
+
+            if (E3ICS.Checked == true && maximum >= 1)
+            {
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2ICS.mdb";
+                string jelszó = "pozsgaii";
+                string szöveg;
+
+                for (int i = 0; i < Típusoklistája.Items.Count; i++)
+                {
+                    if (Típusoklistája.GetItemChecked(i) == true)
+                    {
+
+                        szöveg = $"SELECT * FROM állománytábla where E3={mennyi} ORDER BY azonosító";
+                        AdatokRész = kéz.Lista_Pályaszámok(hely3, jelszó, szöveg);
+
+                        szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToString().Trim()}'";
+                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+
+
+                        if (AdatokRész != null)
+                        {
+                            sor += 1;
+                            blokkeleje = sor;
+                            oszlop = 3;
+                            foreach (string PályaszámLista in AdatokRész)
+                            {
+                                if (AdatokÖssz.Contains(PályaszámLista.Trim()))
+                                {
+                                    if (oszlop == 18)
+                                    {
+                                        oszlop = 3;
+                                        sor += 1;
+                                    }
+                                    oszlop += 1;
+                                    MyE.Kiir(PályaszámLista.Trim(), MyE.Oszlopnév(oszlop) + sor.ToString());
+                                }
+                            }
+
+                            MyE.Egyesít(munkalap, "a" + blokkeleje.ToString() + ":c" + sor.ToString());
+
+                            if (Típusoklistája.Items[i].ToString().Trim() != "Üres")
+                            {
+                                MyE.Kiir("E3-  " + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
+                            }
+
+                            MyE.Rácsoz("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        private void Munkalap_Pályaszám_E3()
+        {
+
+            // ////////////////////////////////////////
+            // ///  E3     PÁLYASZÁM     T5C5      ////
+            // ////////////////////////////////////////
+            Kezelő_Jármű kéz = new Kezelő_Jármű();
+            List<string> AdatokVez;
+            List<string> AdatokÖssz;
+
+            if (E3pályaszám.Checked == true & maximum >= 1)
+            {
+
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string jelszó = "pozsgaii";
+
+                string helyvez = Application.StartupPath + $@"\{Cmbtelephely.Text}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
+                string jelszóvez = "tápijános";
+                string szöveg;
+
+                for (int i = 0; i < Típusoklistája.Items.Count; i++)
+                {
+                    if (Típusoklistája.GetItemChecked(i) == true)
+                    {
+                        szöveg = "SELECT * FROM vezényléstábla where törlés=0 and vizsgálatraütemez=1  and  vizsgálat='E3' ";
+                        szöveg += $" and dátum= #{Dátum.Value:yyyy-MM-dd}#  order by  azonosító";
+                        AdatokVez = kéz.Lista_Pályaszámok(helyvez, jelszóvez, szöveg);
+                        szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToString().Trim()}'";
+                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+
+                        if (AdatokVez != null)
+                        {
+                            sor += 1;
+                            blokkeleje = sor;
+                            oszlop = 3;
+                            foreach (string PályaszámLista in AdatokVez)
+                            {
+                                if (AdatokÖssz.Contains(PályaszámLista.Trim()))
+                                {
+                                    if (oszlop == 18)
+                                    {
+                                        oszlop = 3;
+                                        sor += 1;
+                                    }
+                                    oszlop += 1;
+                                    MyE.Kiir(PályaszámLista, MyE.Oszlopnév(oszlop) + sor.ToString());
+                                }
+                            }
+                            MyE.Egyesít(munkalap, "a" + blokkeleje.ToString() + ":c" + sor.ToString());
+                            if (Típusoklistája.Items[i].ToString().Trim() != "Üres")
+                            {
+                                MyE.Kiir("E3-  " + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
+                            }
+                            MyE.Rácsoz("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        private void Munkalap_Pályaszám_E2()
+        {
+            //// ////////////////////////////////////////
+            //// ///  E2     PÁLYASZÁM    T5C5       ////
+            //// ////////////////////////////////////////
+            Kezelő_Jármű kéz = new Kezelő_Jármű();
+            List<string> AdatokÖssz;
+            List<string> AdatokRész;
+
+            int mennyi = 0;
+            switch ((int)Dátum.Value.DayOfWeek)
+            {
+                case 1:
+                    {
+                        mennyi = 1;
+                        break;
+                    }
+                case 2:
+                    {
+                        mennyi = 2;
+                        break;
+                    }
+                case 3:
+                    {
+                        mennyi = 3;
+                        break;
+                    }
+                case 4:
+                    {
+                        mennyi = 1;
+                        break;
+                    }
+                case 5:
+                    {
+                        mennyi = 2;
+                        break;
+                    }
+                case 6:
+                    {
+                        mennyi = 3;
+                        break;
+                    }
+                case 7:
+                    {
+                        mennyi = 0;
+                        break;
+                    }
+            }
+            if (E2pályaszám.Checked == true && maximum >= 1 && mennyi > 0)
+            {
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
+                string jelszó = "pozsgaii";
+                string szöveg, szöveg1;
+
+                for (int i = 0; i < Típusoklistája.Items.Count; i++)
+                {
+                    if (Típusoklistája.GetItemChecked(i) == true)
+                    {
+                        szöveg = $"SELECT * FROM állománytábla where haromnapos={mennyi} ORDER BY azonosító";
+                        AdatokRész = kéz.Lista_Pályaszámok(hely3, jelszó, szöveg);
+
+                        szöveg1 = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToString().Trim()}'";
+                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg1);
+
+                        if (AdatokRész != null)
+                        {
+                            sor += 1;
+                            blokkeleje = sor;
+                            oszlop = 3;
+                            foreach (string PályaszámLista in AdatokRész)
+                            {
+                                if (AdatokÖssz.Contains(PályaszámLista))
+                                {
+                                    if (oszlop == 18)
+                                    {
+                                        oszlop = 3;
+                                        sor += 1;
+                                    }
+                                    oszlop += 1;
+                                    MyE.Kiir(PályaszámLista, MyE.Oszlopnév(oszlop) + sor.ToString());
+                                }
+                            }
+
+                            MyE.Egyesít(munkalap, "a" + blokkeleje.ToString() + ":c" + sor.ToString());
+                            if (Típusoklistája.Items[i].ToString().Trim() != "Üres")
+                            {
+                                MyE.Kiir("E2-  " + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
+                            }
+
+                            MyE.Rácsoz("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        private void Munkalap_Pályaszám_E1()
+        {
+
+            // ////////////////////////////////////////
+            // ///  E1 PÁLYASZÁM                   ////
+            // ////////////////////////////////////////
+            // megnézzük, hogy hány típus van kijelölve
+            maximum = Típusoklistája.SelectedItems.Count;
+            Kezelő_Jármű kéz = new Kezelő_Jármű();
+            List<string> Adatok;
+
+            // minden pályaszám
+            if (E1_pályaszámok.Checked == true && maximum >= 1)
+            {
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string jelszó = "pozsgaii";
+                string szöveg;
+
+                blokkeleje = sor;
+                for (int i = 0; i < Típusoklistája.Items.Count; i++)
+                {
+                    if (Típusoklistája.GetItemChecked(i) == true)
+                    {
+
+                        szöveg = "SELECT * FROM állománytábla where típus='" + Típusoklistája.Items[i].ToString().Trim() + "'";
+                        szöveg += " order by  azonosító";
+                        Adatok = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+
+                        if (Adatok != null)
+                        {
+                            sor += 1;
+                            blokkeleje = sor;
+                            oszlop = 3;
+                            foreach (string PályaszámLista in Adatok)
+                            {
+                                if (oszlop == 18)
+                                {
+                                    oszlop = 3;
+                                    sor += 1;
+                                }
+                                oszlop += 1;
+                                MyE.Kiir(PályaszámLista, MyE.Oszlopnév(oszlop) + sor.ToString());
+                            }
+
+                            MyE.Egyesít(munkalap, "a" + blokkeleje.ToString() + ":c" + sor.ToString());
+                            if (Típusoklistája.Items[i].ToString().Trim() != "Üres")
+                            {
+                                MyE.Kiir("E1- " + Típusoklistája.Items[i].ToString().Trim(), $"a{blokkeleje}");
+                            }
+                            MyE.Rácsoz("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        private void Munkalap_Pályaszám_Minden()
+        {
+            ////////////////////////////////////////
+            ///  MINDEN PÁLYASZÁM               ////
+            ////////////////////////////////////////
+            Kezelő_Jármű kéz = new Kezelő_Jármű();
+            List<string> Adatok;
+            if (Mindenpsz.Checked == true && maximum >= 1)
+            {
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string jelszó = "pozsgaii";
+                string szöveg;
+
+                blokkeleje = sor;
+
+                for (int i = 0; i < Típusoklistája.Items.Count; i++)
+                {
+                    if (Típusoklistája.GetItemChecked(i) == true)
+                    {
+                        szöveg = "SELECT * FROM állománytábla WHERE típus='" + Típusoklistája.Items[i].ToString().Trim() + "' ORDER BY  azonosító";
+                        Adatok = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+
+                        if (Adatok != null)
+                        {
+                            sor += 1;
+                            blokkeleje = sor;
+                            oszlop = 3;
+                            foreach (string PályaszámLista in Adatok)
+                            {
+                                if (oszlop == 18)
+                                {
+                                    oszlop = 3;
+                                    sor += 1;
+                                }
+                                oszlop += 1;
+                                MyE.Kiir(PályaszámLista, MyE.Oszlopnév(oszlop) + sor.ToString());
+
+                            }
+
+                            MyE.Egyesít(munkalap, "a" + blokkeleje.ToString() + ":c" + sor.ToString());
+                            if (Típusoklistája.Items[i].ToString().Trim() != "Üres")
+                            {
+                                MyE.Kiir(Típusoklistája.Items[i].ToString().Trim(), "a" + blokkeleje.ToString());
+                            }
+                            MyE.Rácsoz("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("d" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        private void Munkalap_Pályaszám_fejléc()
+        {
+            // **********************************************
+            // **Pályaszám típus sor                      ***
+            // **********************************************
+            sor += 1;
+            MyE.Egyesít(munkalap, "a" + sor.ToString() + ":c" + sor.ToString());
+            MyE.Kiir("Típus:", "a" + sor.ToString());
+            MyE.Egyesít(munkalap, "d" + sor.ToString() + ":r" + sor.ToString());
+            MyE.Kiir("Pályaszámok:", "d" + sor.ToString());
+            MyE.Betű("a" + sor.ToString() + ":r" + sor.ToString(), 10);
+            MyE.Betű("a" + sor.ToString() + ":r" + sor.ToString(), false, true, true);
+            MyE.Rácsoz("a" + sor.ToString() + ":r" + sor.ToString());
+            MyE.Vastagkeret("a" + sor.ToString() + ":r" + sor.ToString());
+            Holtart.Lép();
+        }
+
+
+        private void Munkalap_Összesítő()
+        {
+
+            // **********************************************
+            // ** öszesítős sor                           ***
+            // **********************************************
+            sor += 1;
+            MyE.Egyesít(munkalap, "a" + sor.ToString() + ":p" + sor.ToString());
+            MyE.Egyesít(munkalap, "q" + sor.ToString() + ":r" + sor.ToString());
+            MyE.Kiir("Összesen:", "a" + sor.ToString());
+            MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 25);
+            MyE.Igazít_vízszintes($"A{sor}", "jobb");
+            MyE.Igazít_függőleges($"A{sor}", "alsó");
+            MyE.Betű("a" + sor.ToString() + ":r" + sor.ToString(), 10);
+            MyE.Betű("a" + sor.ToString() + ":r" + sor.ToString(), false, true, true);
+            MyE.Rácsoz("a" + sor.ToString() + ":r" + sor.ToString());
+            MyE.Vastagkeret("a" + sor.ToString() + ":r" + sor.ToString());
+        }
+
+
+        private void Munkalap_ÜresSorok()
+        {
+            // **********************************************
+            // ** Üres sorok                              ***
+            // **********************************************
+            blokkeleje = sor + 1;
+
+            if (Üressor.Checked)
+            {
+                if (int.TryParse(Üressorszám.Text.Trim(), out int üressor))
+                {
+
+                    for (int i = 1; i <= üressor; i++)
+                    {
+                        sor += 1;
+                        MyE.Egyesít(munkalap, "a" + sor.ToString() + ":c" + sor.ToString());
+                        MyE.Egyesít(munkalap, "d" + sor.ToString() + ":e" + sor.ToString());
+                        MyE.Egyesít(munkalap, "f" + sor.ToString() + ":g" + sor.ToString());
+                        MyE.Egyesít(munkalap, "h" + sor.ToString() + ":p" + sor.ToString());
+                        MyE.Egyesít(munkalap, "q" + sor.ToString() + ":r" + sor.ToString());
+                    }
+                    MyE.Betű("a" + blokkeleje.ToString() + ":r" + sor.ToString(), 16);
+                    MyE.Betű("h" + blokkeleje.ToString() + ":p" + sor.ToString(), 11);
+                    MyE.Sormagasság("a" + blokkeleje.ToString() + ":r" + sor.ToString(), 24);
+                    MyE.Rácsoz("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                    MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                }
+            }
+            Holtart.Lép();
+        }
+
+
+        private void Munkalap_MunkaFolyamatok()
+        {
+            if (MunkafolyamatTábla.SelectedRows.Count != 0)
+            {
+                // **********************************************
+                // ** munkafolyamatok            ****************
+                // **********************************************
+
+                for (int i = 0; i < MunkafolyamatTábla.Rows.Count; i++)
+                {
+                    if (MunkafolyamatTábla.Rows[i].Selected == true)
+                    {
+                        // ha ki van jelölve
+                        if (MunkafolyamatTábla.Rows[i].Cells[3].Value.ToString().Contains("V1"))
+                        {
+                            for (int k = 0; k < V1Tábla.Rows.Count; k++)
+                            {
+                                sor += 1;
+                                MyE.Sormagasság("a" + sor.ToString() + ":r" + sor.ToString(), 24);
+                                MyE.Egyesít(munkalap, "a" + sor.ToString() + ":c" + sor.ToString());
+                                MyE.Egyesít(munkalap, "d" + sor.ToString() + ":e" + sor.ToString());
+                                MyE.Egyesít(munkalap, "f" + sor.ToString() + ":g" + sor.ToString());
+                                MyE.Egyesít(munkalap, "h" + sor.ToString() + ":p" + sor.ToString());
+                                MyE.Egyesít(munkalap, "q" + sor.ToString() + ":r" + sor.ToString());
+                                MyE.Kiir(V1Tábla.Rows[k].Cells[0].Value.ToString(), "a" + sor.ToString());
+                                MyE.Kiir(V1Tábla.Rows[k].Cells[1].Value.ToString(), "d" + sor.ToString());
+                                MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString(), "h" + sor.ToString());
+                                if (MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString().Length > 55)
+                                {
+                                    // ha hosszabb a szöveg 55-nél akkor több sorba írja
+                                    MyE.Sortörésseltöbbsorba_egyesített($"H{sor}");
+                                    int sor_magasság = ((MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString().Length / 55) + 1) * 20;
+                                    MyE.Sormagasság($"{sor}:{sor}", sor_magasság);
+                                }
+                                else
+                                {
+                                    // Ha rövidebb
+                                    MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 24);
+                                }
+                            }
+                        }
+
+                        else
+                        {
+                            sor += 1;
+                            MyE.Sormagasság("a" + sor.ToString() + ":r" + sor.ToString(), 24);
+                            MyE.Egyesít(munkalap, "a" + sor.ToString() + ":c" + sor.ToString());
+                            MyE.Egyesít(munkalap, "d" + sor.ToString() + ":e" + sor.ToString());
+                            MyE.Egyesít(munkalap, "f" + sor.ToString() + ":g" + sor.ToString());
+                            MyE.Egyesít(munkalap, "h" + sor.ToString() + ":p" + sor.ToString());
+                            MyE.Egyesít(munkalap, "q" + sor.ToString() + ":r" + sor.ToString());
+                            MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[3].Value.ToString(), "a" + sor.ToString());
+                            MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[1].Value.ToString(), "d" + sor.ToString());
+                            MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString(), "h" + sor.ToString());
+                            if (MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString().Length > 55)
+                            {
+                                // ha hosszabb a szöveg 55-nél akkor több sorba írja
+                                MyE.Sortörésseltöbbsorba_egyesített($"H{sor}");
+                                int sor_magasság = ((MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString().Length / 55) + 1) * 20;
+                                MyE.Sormagasság($"{sor}:{sor}", sor_magasság);
+                            }
+                            else
+                            {
+                                MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 24);
+                            }
+                        }
+                    }
+                }
+                MyE.Betű("a" + blokkeleje.ToString() + ":r" + sor.ToString(), 16);
+                MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
+                MyE.Igazít_függőleges($"A{blokkeleje}:R{sor}", "alsó");
+                MyE.Betű("h" + blokkeleje.ToString() + ":p" + sor.ToString(), 11);
+                MyE.Betű($"H{blokkeleje}:P{sor}", false, false, true);
+                MyE.Igazít_függőleges($"H{blokkeleje}:P{sor}", "alsó");
+                MyE.Rácsoz("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+                Holtart.Lép();
+            }
+        }
+
+
+        private void Munkalap_munkaFejléc()
+        {
+            // **********************************************
+            // ** munkafejléc                              **
+            // **********************************************
+            MyE.Egyesít(munkalap, "a" + sor.ToString() + ":c" + sor.ToString());
+            MyE.Kiir("Rendelési szám:", "a" + sor.ToString());
+            MyE.Egyesít(munkalap, "d" + sor.ToString() + ":e" + sor.ToString());
+            MyE.Kiir("Pályaszám:", "d" + sor.ToString());
+            MyE.Egyesít(munkalap, "f" + sor.ToString() + ":g" + sor.ToString());
+            MyE.Kiir("Darab:", "f" + sor.ToString());
+            MyE.Egyesít(munkalap, "h" + sor.ToString() + ":p" + sor.ToString());
+            MyE.Kiir("Munkafolyamat megnevezése:", "h" + sor.ToString());
+            MyE.Egyesít(munkalap, "q" + sor.ToString() + ":r" + sor.ToString());
+            MyE.Kiir("Időráfordítás [perc]:", "q" + sor.ToString());
+            MyE.Betű("a" + sor.ToString() + ":r" + sor.ToString(), 10);
+            MyE.Betű("a" + sor.ToString() + ":r" + sor.ToString(), false, true, true);
+            MyE.Igazít_függőleges($"a{sor}:r{sor}", "alsó");
+
+            MyE.Sortörésseltöbbsorba_egyesített($"Q{sor}:R{sor}");
+            MyE.Igazít_függőleges($"Q{sor}:R{sor}", "alsó");
+            MyE.Igazít_vízszintes($"Q{sor}:R{sor}", "közép");
+
+
+            MyE.Rácsoz("a" + sor.ToString() + ":r" + sor.ToString());
+            MyE.Vastagkeret("a" + sor.ToString() + ":r" + sor.ToString());
+            MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 35);
+            blokkeleje = sor + 1;
+        }
+
+
+        private void Dolgozó_Neve_Csoportos()
+        {
+            // **********************************************
+            // ** dolgozók neve                          ****
+            // **********************************************
+
+            for (int m = 0; m < Dolgozónév.Rows.Count; m++)
+            {
+                if (Dolgozónév.Rows[m].Selected == true)
+                {
+                    Dolgozónév.Rows[m].Selected = false;
+                    string dolgozószám = Dolgozónév.Rows[m].Cells[0].Value.ToString().Trim();
+                    string dolgozóneve = Dolgozónév.Rows[m].Cells[1].Value.ToString().Trim();
+                    MyE.Egyesít(munkalap, "a" + sor.ToString() + ":e" + sor.ToString());
+                    MyE.Kiir(dolgozószám, "a" + sor.ToString());
+                    MyE.Egyesít(munkalap, "f" + sor.ToString() + ":n" + sor.ToString());
+                    MyE.Kiir(dolgozóneve, "f" + sor.ToString());
+                    MyE.Egyesít(munkalap, "o" + sor.ToString() + ":r" + sor.ToString());
+                    sor += 1;
+                }
+            }
+
+            MyE.Betű("a" + blokkeleje.ToString() + ":r" + sor.ToString(), 20);
+            MyE.Betű("a" + blokkeleje.ToString() + ":r" + sor.ToString(), false, false, true);
+            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 35);
+            MyE.Rácsoz("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+            MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+        }
+
+
+        private void Dolgozó_Neve_Egy()
+        {
+            // **********************************************
+            // ** dolgozók neve                          ****
+            // **********************************************
+
+            MyE.Egyesít(munkalap, "a" + sor.ToString() + ":e" + sor.ToString());
+            MyE.Kiir(HR, "a" + sor.ToString());
+            MyE.Egyesít(munkalap, "f" + sor.ToString() + ":n" + sor.ToString());
+            MyE.Kiir(Dolgozó, "f" + sor.ToString());
+            MyE.Egyesít(munkalap, "o" + sor.ToString() + ":r" + sor.ToString());
+            sor += 1;
+
+
+            MyE.Betű("a" + blokkeleje.ToString() + ":r" + sor.ToString(), 20);
+            MyE.Betű("a" + blokkeleje.ToString() + ":r" + sor.ToString(), false, false, true);
+            MyE.Igazít_függőleges("a" + blokkeleje.ToString() + ":r" + sor.ToString(), "alsó");
+            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 35);
+            MyE.Rácsoz("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+            MyE.Vastagkeret("a" + blokkeleje.ToString() + ":r" + sor.ToString());
+        }
+
+
+        private void Dolgozó_Fejléc()
+        {
+            // **********************************************
+            // ** dolgozó fejléc                          ***
+            // **********************************************
+            MyE.Egyesít(munkalap, "a4:e4");
+            MyE.Kiir("Dolgozószám:", "a4");
+            MyE.Egyesít(munkalap, "f4:n4");
+            MyE.Kiir("Dolgozó neve:", "f4");
+            MyE.Egyesít(munkalap, "o4:r4");
+            MyE.Kiir("Dolgozó aláírása:", "o4");
+            MyE.Rácsoz("a4:r4");
+            MyE.Vastagkeret("a4:r4");
+            MyE.Betű("a4:r4", 10);
+            MyE.Betű("a4:r4", false, true, true);
+            MyE.Igazít_függőleges("a4:r4", "alsó");
+            blokkeleje = sor;
+            MyE.Sormagasság("1:4", 25);
+            Holtart.Lép();
+        }
+
+
+        private void Munkalap_Fejléc(string szöveg1)
+        {
+            // **********************************************
+            // ** munkalap fejléce         ******************
+            // **********************************************
+            MyE.Egyesít(munkalap, "a1:r1");
+            MyE.Kiir("Munkautasítás", "a1");
+            MyE.Betű("a1:r1", 22);
+            MyE.Betű("a1:r1", false, false, true);
+            MyE.Igazít_vízszintes("a1:r1", "bal");
+            MyE.Egyesít(munkalap, "a2:d2");
+            MyE.Kiir("Munkautasítás száma:", "a2");
+            MyE.Egyesít(munkalap, "a3:d3");
+
+            MyE.Egyesít(munkalap, "e2:h2");
+            MyE.Kiir("Munkarend:", "e2");
+            MyE.Betű("a2:r2", 10);
+            MyE.Betű("a2:r2", false, true, true);
+
+
+
+
+
+            MyE.Egyesít(munkalap, "e3:h3");
+            if (Munkarendlist.SelectedItems.Count != 0)
+            {
+                MyE.Kiir(Munkarendlist.SelectedItems[0].ToString(), "e3");
+                MyE.Betű("e3", false, false, true);
+            }
+
+            MyE.Egyesít(munkalap, "i2:k2");
+            MyE.Kiir("Dátum:", "i2");
+            MyE.Egyesít(munkalap, "i3:k3");
+            MyE.Kiir(Dátum.Value.ToString("yyyy.MM.dd"), "i3");
+            MyE.Egyesít(munkalap, "l2:n2");
+            MyE.Kiir("Költséghely:", "l2");
+            MyE.Egyesít(munkalap, "l3:n3");
+            MyE.Egyesít(munkalap, "o2:r2");
+            MyE.Egyesít(munkalap, "o3:r3");
+
+            string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+            string jelszó = "kismalac";
+            string szöveg = "SELECT * FROM szolgálattábla ";
+
+            Kezelő_Munka_Szolgálat kéz = new Kezelő_Munka_Szolgálat();
+            Adat_Munka_Szolgálat Elem = kéz.Egy_Adat(hely, jelszó, szöveg);
+
+            MyE.Kiir(Elem.Költséghely.Trim(), "l3");
+            MyE.Kiir(Elem.Szolgálat.Trim(), "o2");
+            MyE.Kiir(Elem.Üzem.Trim(), "o3");
+            MyE.Kiir(Elem.Üzem.Trim().Substring(0, 1) + szöveg1, "a3");
+            MyE.Betű("a3:r3", false, false, true);
+
+            MyE.Rácsoz("a2:r3");
+            MyE.Vastagkeret("a2:d3");
+            MyE.Vastagkeret("e2:h3");
+            MyE.Vastagkeret("i2:k3");
+            MyE.Vastagkeret("l2:n3");
+            MyE.Vastagkeret("o2:r3");
+            MyE.Igazít_függőleges("a2:r2", "alsó");
+            MyE.Betű("a3:r3", 18);
+            Holtart.Lép();
+        }
+        #endregion
+
+        private void Benn_Lévők_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Holtart.Be();
+                // minden kijelölést töröl
+                for (int i = 0; i < Dolgozónév.Rows.Count; i++)
+                    Dolgozónév.Rows[i].Selected = false;
+
+                Kiválogat_dolgozó();
+
+                Holtart.Lép();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void Kiválogat_dolgozó()
+        {
+            try
+            {
+                string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
+                if (!File.Exists(helynap))                      return;
+                string jelszónap = "kiskakas";
+                string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
+                if (!File.Exists(helykieg))                         return;
+                string jelszókieg = "Mocó";
+                string szövegkieg = "SELECT * FROM Beosztáskódok WHERE Számoló=true order by BeosztásKód";
+                Kezelő_Kiegészítő_Beosztáskódok kéz = new Kezelő_Kiegészítő_Beosztáskódok();
+                List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = kéz.Lista_Adatok(helykieg, jelszókieg, szövegkieg);
+
+                string szövegnap = $"SELECT * FROM Beosztás WHERE Nap = #{Dátum.Value:M-d-yy}# order by Dolgozószám";
+                Kezelő_Dolgozó_Beosztás_Új kézbeoszt = new Kezelő_Dolgozó_Beosztás_Új();
+                List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = kézbeoszt.Lista_Adatok(helynap, jelszónap, szövegnap);
+
+
+
+                //ha ki van jelölve
+                for (int i = 0; i < Dolgozónév.Rows.Count; i++)
+                {
+                    string HRazonosító = Dolgozónév.Rows[i].Cells[0].Value.ToString().Trim();
+
+                    string dolgozik = (from a in Dolgbeoszt
+                                       where a.Dolgozószám.Trim() == HRazonosító.Trim()
+                                       select a.Beosztáskód).FirstOrDefault();
+                    //Van beosztása, akkor megnézzük, hogy az olyan amit be akarunk jelölni.
+                    if (dolgozik != null)
+                    {
+                        string biztosdolgozik = (from a in Beosztáskód
+                                                 where dolgozik.Trim() == a.Beosztáskód.Trim()
+                                                 select a.Beosztáskód).FirstOrDefault();
+                        if (biztosdolgozik != null)
+                            Dolgozónév.Rows[i].Selected = true;
+                    }
+                    Holtart.Lép();
+                }
+                Holtart.Ki();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}

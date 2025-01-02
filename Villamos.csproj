@@ -1,0 +1,1673 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EB9F9F57-F508-4FCB-99AE-45A62CE622C3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Villamos</RootNamespace>
+    <AssemblyName>Villamos_C#</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>.\</OutputPath>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Aha-Soft-Standard-Transport-Tram.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
+    <OutputPath>bin\ARM64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.interop.access.dao, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>.\Microsoft.Office.interop.access.dao.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_egyéb.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_egyéb.designer.cs">
+      <DependentUpon>Ablak_alap_program_egyéb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_kiadás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_kiadás.designer.cs">
+      <DependentUpon>Ablak_alap_program_kiadás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.designer.cs">
+      <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_technológia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_technológia.Designer.cs">
+      <DependentUpon>Ablak_technológia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.designer.cs">
+      <DependentUpon>Ablak_DolgozóiLekérdezések.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Oktatások.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Oktatások.designer.cs">
+      <DependentUpon>Ablak_Oktatások.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás.designer.cs">
+      <DependentUpon>Ablak_Beosztás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartási_Munkalapok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartási_Munkalapok.Designer.cs">
+      <DependentUpon>Ablak_Karbantartási_Munkalapok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartási_Rendelés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartási_Rendelés.Designer.cs">
+      <DependentUpon>Ablak_Karbantartási_Rendelés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartás_Csoport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartás_Csoport.Designer.cs">
+      <DependentUpon>Ablak_Karbantartás_Csoport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Karbantartási_ListaFeltöltés.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_reklám.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_reklám.designer.cs">
+      <DependentUpon>Ablak_reklám.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Karbantartás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Karbantartás_Módosít.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Karbantartás_Segéd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Adatbázis_Eszterga.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Adat_Eszterga.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Eszterga_Funkció.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelő_Eszterga.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Baross.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Baross.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Adatok_Baross.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Javítás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Javítás.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Adatok_Javítás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_KerékEszterga_Ütemezés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_KerékEszterga_Ütemezés.Designer.cs">
+      <DependentUpon>Ablak_KerékEszterga_Ütemezés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_keréknyilvántartás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_keréknyilvántartás.designer.cs">
+      <DependentUpon>Ablak_keréknyilvántartás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\KerékNyilvántartás_funkciók.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_MEO_kerék.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_MEO_kerék.designer.cs">
+      <DependentUpon>Ablak_MEO_kerék.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.designer.cs">
+      <DependentUpon>Ablak_sérülés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_Sérülés_Kép.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_Sérülés_Kép.Designer.cs">
+      <DependentUpon>Ablak_Sérülés_Kép.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Ablak_Jármű_takarítás_új.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Ablak_Jármű_takarítás_új.designer.cs">
+      <DependentUpon>Ablak_Jármű_takarítás_új.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Jármű_Takarítás_Ütemezés_Segéd1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Jármű_Takarítás_Ütemezés_Segéd1.Designer.cs">
+      <DependentUpon>Jármű_Takarítás_Ütemezés_Segéd1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Jármű_Takarítás_Ütemezés_Segéd2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Jármű_Takarítás_Ütemezés_Segéd2.Designer.cs">
+      <DependentUpon>Jármű_Takarítás_Ütemezés_Segéd2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Takarítás_Eljárások.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Takarítás_teljesítés_Igazolás.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP.Designer.cs">
+      <DependentUpon>Ablak_TTP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Alapadat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Alapadat.Designer.cs">
+      <DependentUpon>Ablak_TTP_Alapadat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Naptár.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Naptár.Designer.cs">
+      <DependentUpon>Ablak_TTP_Naptár.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Történet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Történet.Designer.cs">
+      <DependentUpon>Ablak_TTP_Történet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Év.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Év.Designer.cs">
+      <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Adat_TTP.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Kezelő_TTP.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\TTP_Adatbázis.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\TTP_Adattábla.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\TTP_Funkciók.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.designer.cs">
+      <DependentUpon>Ablak_Tulajdonságok_CAF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_IcsKcsv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_IcsKcsv.designer.cs">
+      <DependentUpon>Ablak_IcsKcsv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Karbantartás\Ablak_Karbantartási_adatok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Karbantartás\Ablak_Karbantartási_adatok.designer.cs">
+      <DependentUpon>Ablak_Karbantartási_adatok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Nosztalgia\Ablak_Nosztalgia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Nosztalgia\Ablak_Nosztalgia.designer.cs">
+      <DependentUpon>Ablak_Nosztalgia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Nosztalgia\Adat_Nosztalgia.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\Nosztalgia\Kezelő_Nosztalgia.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\Nosztalgia\Nosztalgia_Ütemezés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_fűtés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_fűtés.designer.cs">
+      <DependentUpon>Ablak_T5C5_fűtés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_napütemezés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_napütemezés.designer.cs">
+      <DependentUpon>Ablak_T5C5_napütemezés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Tulajdonság.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Tulajdonság.designer.cs">
+      <DependentUpon>Ablak_T5C5_Tulajdonság.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Vizsgálat_ütemező.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Vizsgálat_ütemező.designer.cs">
+      <DependentUpon>Ablak_T5C5_Vizsgálat_ütemező.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Futás\Ablak_T5C5_futás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Futás\Ablak_T5C5_futás.designer.cs">
+      <DependentUpon>Ablak_T5C5_futás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Futás\T5C5_Funkciók.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.designer.cs">
+      <DependentUpon>Ablak_TW6000_Tulajdonság.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Digitális_Főkönyv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Digitális_Főkönyv.designer.cs">
+      <DependentUpon>Ablak_Digitális_Főkönyv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Egyesített.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Egyesített.designer.cs">
+      <DependentUpon>Ablak_Fő_Egyesített.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Kiadás_Forte.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Kiadás_Forte.designer.cs">
+      <DependentUpon>Ablak_Fő_Kiadás_Forte.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Napiadatok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Napiadatok.designer.cs">
+      <DependentUpon>Ablak_Fő_Napiadatok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_szerelvény.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_szerelvény.designer.cs">
+      <DependentUpon>Ablak_szerelvény.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_állomány.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_állomány.designer.cs">
+      <DependentUpon>Ablak_állomány.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv.designer.cs">
+      <DependentUpon>Ablak_Főkönyv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Jelenléti.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Jelenléti.designer.cs">
+      <DependentUpon>Ablak_Jelenléti.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Napi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Napi.Designer.cs">
+      <DependentUpon>Ablak_Főkönyv_Napi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Napi_Adatok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Napi_Adatok.Designer.cs">
+      <DependentUpon>Ablak_Főkönyv_Napi_Adatok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Zser_Másol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Zser_Másol.Designer.cs">
+      <DependentUpon>Ablak_Főkönyv_Zser_Másol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_kidobó.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_kidobó.designer.cs">
+      <DependentUpon>Ablak_kidobó.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetkimaradás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetkimaradás.designer.cs">
+      <DependentUpon>Ablak_Menetkimaradás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetkimaradás_Kiegészítő.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetkimaradás_Kiegészítő.Designer.cs">
+      <DependentUpon>Ablak_Menetkimaradás_Kiegészítő.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Menetkimaradás.cs" />
+    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Behajtási.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Behajtási.designer.cs">
+      <DependentUpon>Ablak_Behajtási.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Szatube.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Szatube.designer.cs">
+      <DependentUpon>Ablak_Szatube.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Beosztás_Rögzítés.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Eszterga_Beállítás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Eszterga_Beállítás.Designer.cs">
+      <DependentUpon>Ablak_CAF_Eszterga_Beállítás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_ICS_KCSV_segéd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_ICS_KCSV_segéd.Designer.cs">
+      <DependentUpon>Ablak_ICS_KCSV_segéd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Adat_ICS_Ütem.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Beosztás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Beosztás.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Beosztás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_Kerék_Gyűjtő.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_Kerék_Gyűjtő.Designer.cs">
+      <DependentUpon>Ablak_Kerék_Gyűjtő.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_Kerék_segéd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_Kerék_segéd.designer.cs">
+      <DependentUpon>Ablak_Kerék_segéd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Alapadat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Alapadat.Designer.cs">
+      <DependentUpon>Ablak_CAF_Alapadat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_Lista.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_Lista.Designer.cs">
+      <DependentUpon>Ablak_Caf_Lista.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.Designer.cs">
+      <DependentUpon>Ablak_CAF_Részletes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Segéd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Segéd.Designer.cs">
+      <DependentUpon>Ablak_CAF_Segéd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Szín.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Szín.Designer.cs">
+      <DependentUpon>Ablak_CAF_Szín.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\CAF_Közös_Eljárások.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\CAF_Segéd_Adat.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Segéd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Segéd.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Segéd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Terjesztés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Terjesztés.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Terjesztés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Kerékeszterga_Excel.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_Kerék_Konverter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_Kerék_Konverter.Designer.cs">
+      <DependentUpon>Ablak_Kerék_Konverter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.Designer.cs">
+      <DependentUpon>Ablak_PDF_Tallózó.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Színkezelő.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Színkezelő.designer.cs">
+      <DependentUpon>Ablak_TW6000_Színkezelő.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Telephely.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Telephely.designer.cs">
+      <DependentUpon>Ablak_TW6000_Telephely.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_külső.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_külső.designer.cs">
+      <DependentUpon>Ablak_külső.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Rezsi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Rezsi.designer.cs">
+      <DependentUpon>Ablak_Rezsi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Védő.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Védő.designer.cs">
+      <DependentUpon>Ablak_Védő.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_BMR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_BMR.Designer.cs">
+      <DependentUpon>Ablak_BMR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Opció.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Opció.Designer.cs">
+      <DependentUpon>Ablak_Opció.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás.designer.cs">
+      <DependentUpon>Ablak_Épülettakarítás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\Közös\Ablak_Fénykép_Betöltés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\Közös\Ablak_Fénykép_Betöltés.Designer.cs">
+      <DependentUpon>Ablak_Fénykép_Betöltés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\Közös\Ablak_PDF_Feltöltés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\Közös\Ablak_PDF_Feltöltés.Designer.cs">
+      <DependentUpon>Ablak_PDF_Feltöltés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Adatbázis\AccesDbLoader.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Behajtási.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Főmérnökség_Dolgozó.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_ICS.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Kulcs.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Külső.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Létszám.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Oktatás.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Rezsi.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Takarítás_BMR.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Takarítás_Opcionális.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Akkumulátor.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Belépés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Ciklus.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Státus.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_ICS.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jogosítvány.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Karbantartási.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_KerékMérő.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kiadás_összesítő.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kiegészítő_Főmérnökség.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kulcs.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Külső.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Létszám.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_MEO.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Munkakör.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Oktatás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Reklám.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Rezsi.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Sérülés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Fűtés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Takarítás_BMR.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Takarítás_Opció.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_TW6000.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
+    <Compile Include="V_Függvények\Fv_Szöveg.cs" />
+    <Compile Include="V_Függvények\Számkonverter.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Alap_egyéb.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Alap_Kiadás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Belépés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_CAF.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Ciklus.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Dolgozó_Alap.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Eszköz.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasó.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Fogas_km.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Hétvége_Előírás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Ics.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jogosítvány.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék.cs" />
+    <Compile Include="V_Kezelők\Kezelő_KerékMérő.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiadás_Összesítő.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kidobó.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Főmérnökség.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />
+    <Compile Include="V_Kezelők\Kezelő_MEO.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Munkakör.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Munkalap.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Osztály_Adat.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Reklám.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Rezsi.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Takarítás_BMR.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Takarítás_Opció.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Váltós.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Védő.cs" />
+    <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás_kieg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás_kieg.designer.cs">
+      <DependentUpon>Ablak_Beosztás_kieg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás_Napló.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás_Napló.designer.cs">
+      <DependentUpon>Ablak_Beosztás_Napló.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Dolgozóialapadatok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Dolgozóialapadatok.designer.cs">
+      <DependentUpon>Ablak_Dolgozóialapadatok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Eszköz_Szerszám\Ablak_Eszköz.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Eszköz_Szerszám\Ablak_Eszköz.Designer.cs">
+      <DependentUpon>Ablak_Eszköz.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Dolgozók.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Dolgozók.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Dolgozók.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Választék.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Választék.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Választék.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Felvétel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Felvétel.designer.cs">
+      <DependentUpon>Ablak_Felvétel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Ablak_Fogaskerekű_Tulajdonságok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Ablak_Fogaskerekű_Tulajdonságok.designer.cs">
+      <DependentUpon>Ablak_Fogaskerekű_Tulajdonságok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\Közös\Ablak_Kereső.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\Közös\Ablak_Kereső.Designer.cs">
+      <DependentUpon>Ablak_Kereső.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Kezelők\Kezelő_Főkönyv_Nap.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű_Xnapos.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Menetkimaradás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Nap_Hiba.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű2.cs" />
+    <Compile Include="V_Kezelők\Kezelő_jármű_hiba.cs" />
+    <Compile Include="V_Kezelők\Kezelő_kiegészítő_telephely.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Technológia.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Vezénylés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Általános.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Épület.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Épület_Takarítás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_összevont.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_Akkumulátor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_Akkumulátor.designer.cs">
+      <DependentUpon>Ablak_Akkumulátor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\Ablak_Bejelentkezés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\Ablak_Bejelentkezés.designer.cs">
+      <DependentUpon>Ablak_Bejelentkezés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus.designer.cs">
+      <DependentUpon>Ablak_Ciklus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\Ablak_Jelszóváltoztatás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\Ablak_Jelszóváltoztatás.designer.cs">
+      <DependentUpon>Ablak_Jelszóváltoztatás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Jármű.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Jármű.designer.cs">
+      <DependentUpon>Ablak_Jármű.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_Ismétlődő.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_Ismétlődő.Designer.cs">
+      <DependentUpon>Ablak_Kidobó_Ismétlődő.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_Napi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_Napi.Designer.cs">
+      <DependentUpon>Ablak_Kidobó_Napi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_változat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_változat.Designer.cs">
+      <DependentUpon>Ablak_Kidobó_változat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Létszámgazdálkodás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Létszámgazdálkodás.designer.cs">
+      <DependentUpon>Ablak_Létszámgazdálkodás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetrögítés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetrögítés.designer.cs">
+      <DependentUpon>Ablak_Menetrögítés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_Munkalap_admin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_Munkalap_admin.designer.cs">
+      <DependentUpon>Ablak_Munkalap_admin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló.designer.cs">
+      <DependentUpon>Ablak_munkalap_dekádoló.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_csoport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_csoport.designer.cs">
+      <DependentUpon>Ablak_munkalap_dekádoló_csoport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_oszlopot_beilleszt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_oszlopot_beilleszt.designer.cs">
+      <DependentUpon>Ablak_munkalap_dekádoló_oszlopot_beilleszt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_oszlopot_készít.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_oszlopot_készít.designer.cs">
+      <DependentUpon>Ablak_munkalap_dekádoló_oszlopot_készít.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_Munkalap_készítés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_Munkalap_készítés.designer.cs">
+      <DependentUpon>Ablak_Munkalap_készítés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Napiadatok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Napiadatok.designer.cs">
+      <DependentUpon>Ablak_Napiadatok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_SAP_osztály.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_SAP_osztály.designer.cs">
+      <DependentUpon>Ablak_SAP_osztály.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Eszköz_Szerszám\Ablak_Szerszám.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Eszköz_Szerszám\Ablak_Szerszám.designer.cs">
+      <DependentUpon>Ablak_Szerszám.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_segéd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_segéd.Designer.cs">
+      <DependentUpon>Ablak_T5C5_segéd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Túlóra_Figyelés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Túlóra_Figyelés.designer.cs">
+      <DependentUpon>Ablak_Túlóra_Figyelés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\2_Információ\Ablak_Utasítás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\2_Információ\Ablak_Utasítás.designer.cs">
+      <DependentUpon>Ablak_Utasítás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Váltós.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Váltós.designer.cs">
+      <DependentUpon>Ablak_Váltós.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás_alap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás_alap.designer.cs">
+      <DependentUpon>Ablak_Épülettakarítás_alap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás_kieg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás_kieg.designer.cs">
+      <DependentUpon>Ablak_Épülettakarítás_kieg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\2_Információ\Ablak_üzenet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\2_Információ\Ablak_üzenet.designer.cs">
+      <DependentUpon>Ablak_üzenet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Adatbázis\Adatbázis_Akkumulátor.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Alap egyéb.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_CAF.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Ciklusrend.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_dolgozó.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Eszköz.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Főkönyvtáblák.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_FŐM összesítők.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Jármű takarítás.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Jármű.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Kerékeszterga.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Kerékmérés.cs" />
+    <Compile Include="V_Adatbázis\AdatBázis_kezelés.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Kidobó.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Kiegészítő.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Menetkimaradás.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_MEO kerékmérés.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Munkalap.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Nosztalgia.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Osztály.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Reklám.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Szerszám.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Sérülés.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_T5C5.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Technológia.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_TW6000.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Utólagos kiegészítő.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Védő.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Épület takarítás.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Üzenet-Utasítás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_CAF.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Alap.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_eszköz.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasó.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Fogas_Km.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Hétvége_Előírás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kerék_Mérés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kidobó.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Menetkimaradás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Munkalap.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Osztály_Adat.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Váltós.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Védő.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Általános.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Épület.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Épület_Takarítás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Havi_Nap.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Havi_Nap.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Alap_Beolvasás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Alap_Egyéb.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Alap_kiadás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Nap.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Fő_Forte.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Nap_Hiba.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_2.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_kiegészítő_telephely.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Szerelvény.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Szerszám.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Technológia.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Utasítás.cs" />
+    <Compile Include="V_Ablakok\1_Beállítások\A_Felhasználó.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\A_Felhasználó.designer.cs">
+      <DependentUpon>A_Felhasználó.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\A_Főoldal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\A_Főoldal.designer.cs">
+      <DependentUpon>A_Főoldal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Kezelők\Kezelő_Fő_Forte.cs" />
+    <Compile Include="V_Kezelők\Kezelő_jármű.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szerelvény.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szerszám.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Utasítás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Vezénylés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Összevont.cs" />
+    <Compile Include="V_Excel\Excel.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Üzenet.cs" />
+    <Compile Include="V_MindenEgyéb\Enumok.cs" />
+    <Compile Include="V_MindenEgyéb\Excel_Kezelés.cs" />
+    <Compile Include="V_Függvények\Fv_Dátum.cs" />
+    <Compile Include="V_Függvények\Függvénygyűjtemény.cs" />
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Funkciók.cs" />
+    <Compile Include="V_MindenEgyéb\Hibakezelés.cs" />
+    <Compile Include="V_MindenEgyéb\IDM_Dolgozó.cs" />
+    <Compile Include="V_MindenEgyéb\Kezelő_Szín.cs" />
+    <Compile Include="V_MindenEgyéb\Kezelő_Értékellenőrzés.cs" />
+    <Compile Include="V_MindenEgyéb\Listák.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="V_MindenEgyéb\Mentés_Ablak.cs" />
+    <Compile Include="V_MindenEgyéb\MyProgressbar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="V_MindenEgyéb\SAP_Adatokbeolvasása_km.cs" />
+    <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_nyomtatványok.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_egyéb.resx">
+      <DependentUpon>Ablak_alap_program_egyéb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_kiadás.resx">
+      <DependentUpon>Ablak_alap_program_kiadás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.resx">
+      <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_technológia.resx">
+      <DependentUpon>Ablak_technológia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.resx">
+      <DependentUpon>Ablak_DolgozóiLekérdezések.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Oktatások.resx">
+      <DependentUpon>Ablak_Oktatások.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás.resx">
+      <DependentUpon>Ablak_Beosztás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartási_Munkalapok.resx">
+      <DependentUpon>Ablak_Karbantartási_Munkalapok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartási_Rendelés.resx">
+      <DependentUpon>Ablak_Karbantartási_Rendelés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartás_Csoport.resx">
+      <DependentUpon>Ablak_Karbantartás_Csoport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Ablak_reklám.resx">
+      <DependentUpon>Ablak_reklám.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.resx">
+      <DependentUpon>Ablak_Eszterga_Karbantartás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.resx">
+      <DependentUpon>Ablak_Eszterga_Karbantartás_Módosít.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.resx">
+      <DependentUpon>Ablak_Eszterga_Karbantartás_Segéd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Baross.resx">
+      <DependentUpon>Ablak_Eszterga_Adatok_Baross.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Javítás.resx">
+      <DependentUpon>Ablak_Eszterga_Adatok_Javítás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_KerékEszterga_Ütemezés.resx">
+      <DependentUpon>Ablak_KerékEszterga_Ütemezés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_keréknyilvántartás.resx">
+      <DependentUpon>Ablak_keréknyilvántartás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_MEO_kerék.resx">
+      <DependentUpon>Ablak_MEO_kerék.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.resx">
+      <DependentUpon>Ablak_sérülés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_Sérülés_Kép.resx">
+      <DependentUpon>Ablak_Sérülés_Kép.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Takarítás\Ablak_Jármű_takarítás_új.resx">
+      <DependentUpon>Ablak_Jármű_takarítás_új.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Takarítás\Jármű_Takarítás_Ütemezés_Segéd1.resx">
+      <DependentUpon>Jármű_Takarítás_Ütemezés_Segéd1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Takarítás\Jármű_Takarítás_Ütemezés_Segéd2.resx">
+      <DependentUpon>Jármű_Takarítás_Ütemezés_Segéd2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP.resx">
+      <DependentUpon>Ablak_TTP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Alapadat.resx">
+      <DependentUpon>Ablak_TTP_Alapadat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Naptár.resx">
+      <DependentUpon>Ablak_TTP_Naptár.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Történet.resx">
+      <DependentUpon>Ablak_TTP_Történet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Év.resx">
+      <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.resx">
+      <DependentUpon>Ablak_Tulajdonságok_CAF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_IcsKcsv.resx">
+      <DependentUpon>Ablak_IcsKcsv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Karbantartás\Ablak_Karbantartási_adatok.resx">
+      <DependentUpon>Ablak_Karbantartási_adatok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Nosztalgia\Ablak_Nosztalgia.resx">
+      <DependentUpon>Ablak_Nosztalgia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_fűtés.resx">
+      <DependentUpon>Ablak_T5C5_fűtés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_napütemezés.resx">
+      <DependentUpon>Ablak_T5C5_napütemezés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Tulajdonság.resx">
+      <DependentUpon>Ablak_T5C5_Tulajdonság.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Vizsgálat_ütemező.resx">
+      <DependentUpon>Ablak_T5C5_Vizsgálat_ütemező.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Futás\Ablak_T5C5_futás.resx">
+      <DependentUpon>Ablak_T5C5_futás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.resx">
+      <DependentUpon>Ablak_TW6000_Tulajdonság.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_Digitális_Főkönyv.resx">
+      <DependentUpon>Ablak_Digitális_Főkönyv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Egyesített.resx">
+      <DependentUpon>Ablak_Fő_Egyesített.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Kiadás_Forte.resx">
+      <DependentUpon>Ablak_Fő_Kiadás_Forte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_Fő_Napiadatok.resx">
+      <DependentUpon>Ablak_Fő_Napiadatok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_szerelvény.resx">
+      <DependentUpon>Ablak_szerelvény.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_állomány.resx">
+      <DependentUpon>Ablak_állomány.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv.resx">
+      <DependentUpon>Ablak_Főkönyv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Napi.resx">
+      <DependentUpon>Ablak_Főkönyv_Napi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Napi_Adatok.resx">
+      <DependentUpon>Ablak_Főkönyv_Napi_Adatok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Zser_Másol.resx">
+      <DependentUpon>Ablak_Főkönyv_Zser_Másol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_kidobó.resx">
+      <DependentUpon>Ablak_kidobó.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetkimaradás.resx">
+      <DependentUpon>Ablak_Menetkimaradás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetkimaradás_Kiegészítő.resx">
+      <DependentUpon>Ablak_Menetkimaradás_Kiegészítő.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Ablak_Behajtási.resx">
+      <DependentUpon>Ablak_Behajtási.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás_kieg.resx">
+      <DependentUpon>Ablak_Beosztás_kieg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás_Napló.resx">
+      <DependentUpon>Ablak_Beosztás_Napló.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Dolgozóialapadatok.resx">
+      <DependentUpon>Ablak_Dolgozóialapadatok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Ablak_külső.resx">
+      <DependentUpon>Ablak_külső.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Ablak_Rezsi.resx">
+      <DependentUpon>Ablak_Rezsi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Ablak_Védő.resx">
+      <DependentUpon>Ablak_Védő.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Eszköz_Szerszám\Ablak_Eszköz.resx">
+      <DependentUpon>Ablak_Eszköz.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Jelenléti.resx">
+      <DependentUpon>Ablak_Jelenléti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Szatube.resx">
+      <DependentUpon>Ablak_Szatube.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Eszterga_Beállítás.resx">
+      <DependentUpon>Ablak_CAF_Eszterga_Beállítás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_ICS_KCSV_segéd.resx">
+      <DependentUpon>Ablak_ICS_KCSV_segéd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Beosztás.resx">
+      <DependentUpon>Ablak_Eszterga_Beosztás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_Kerék_Gyűjtő.resx">
+      <DependentUpon>Ablak_Kerék_Gyűjtő.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerék_nyilvántartás\Ablak_Kerék_segéd.resx">
+      <DependentUpon>Ablak_Kerék_segéd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Alapadat.resx">
+      <DependentUpon>Ablak_CAF_Alapadat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_Lista.resx">
+      <DependentUpon>Ablak_Caf_Lista.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.resx">
+      <DependentUpon>Ablak_CAF_Részletes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Segéd.resx">
+      <DependentUpon>Ablak_CAF_Segéd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Szín.resx">
+      <DependentUpon>Ablak_CAF_Szín.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Dolgozók.resx">
+      <DependentUpon>Ablak_Eszterga_Dolgozók.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Segéd.resx">
+      <DependentUpon>Ablak_Eszterga_Segéd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Terjesztés.resx">
+      <DependentUpon>Ablak_Eszterga_Terjesztés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Választék.resx">
+      <DependentUpon>Ablak_Eszterga_Választék.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Felvétel.resx">
+      <DependentUpon>Ablak_Felvétel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Ablak_Fogaskerekű_Tulajdonságok.resx">
+      <DependentUpon>Ablak_Fogaskerekű_Tulajdonságok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_BMR.resx">
+      <DependentUpon>Ablak_BMR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Opció.resx">
+      <DependentUpon>Ablak_Opció.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás.resx">
+      <DependentUpon>Ablak_Épülettakarítás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\Közös\Ablak_Fénykép_Betöltés.resx">
+      <DependentUpon>Ablak_Fénykép_Betöltés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\Közös\Ablak_Kereső.resx">
+      <DependentUpon>Ablak_Kereső.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Ablak_Akkumulátor.resx">
+      <DependentUpon>Ablak_Akkumulátor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\Ablak_Bejelentkezés.resx">
+      <DependentUpon>Ablak_Bejelentkezés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Ciklus.resx">
+      <DependentUpon>Ablak_Ciklus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\Ablak_Jelszóváltoztatás.resx">
+      <DependentUpon>Ablak_Jelszóváltoztatás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_Jármű.resx">
+      <DependentUpon>Ablak_Jármű.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_Ismétlődő.resx">
+      <DependentUpon>Ablak_Kidobó_Ismétlődő.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_Napi.resx">
+      <DependentUpon>Ablak_Kidobó_Napi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_Kidobó_változat.resx">
+      <DependentUpon>Ablak_Kidobó_változat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Létszámgazdálkodás.resx">
+      <DependentUpon>Ablak_Létszámgazdálkodás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetrögítés.resx">
+      <DependentUpon>Ablak_Menetrögítés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_Kerék_Konverter.resx">
+      <DependentUpon>Ablak_Kerék_Konverter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_Munkalap_admin.resx">
+      <DependentUpon>Ablak_Munkalap_admin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló.resx">
+      <DependentUpon>Ablak_munkalap_dekádoló.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_csoport.resx">
+      <DependentUpon>Ablak_munkalap_dekádoló_csoport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_oszlopot_beilleszt.resx">
+      <DependentUpon>Ablak_munkalap_dekádoló_oszlopot_beilleszt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_munkalap_dekádoló_oszlopot_készít.resx">
+      <DependentUpon>Ablak_munkalap_dekádoló_oszlopot_készít.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Munkalap\Ablak_Munkalap_készítés.resx">
+      <DependentUpon>Ablak_Munkalap_készítés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_Napiadatok.resx">
+      <DependentUpon>Ablak_Napiadatok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Ablak_SAP_osztály.resx">
+      <DependentUpon>Ablak_SAP_osztály.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Eszköz_Szerszám\Ablak_Szerszám.resx">
+      <DependentUpon>Ablak_Szerszám.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.resx">
+      <DependentUpon>Ablak_PDF_Tallózó.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_segéd.resx">
+      <DependentUpon>Ablak_T5C5_segéd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Túlóra_Figyelés.resx">
+      <DependentUpon>Ablak_Túlóra_Figyelés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\2_Információ\Ablak_Utasítás.resx">
+      <DependentUpon>Ablak_Utasítás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Váltós.resx">
+      <DependentUpon>Ablak_Váltós.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Színkezelő.resx">
+      <DependentUpon>Ablak_TW6000_Színkezelő.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Telephely.resx">
+      <DependentUpon>Ablak_TW6000_Telephely.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás_alap.resx">
+      <DependentUpon>Ablak_Épülettakarítás_alap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás_kieg.resx">
+      <DependentUpon>Ablak_Épülettakarítás_kieg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\2_Információ\Ablak_üzenet.resx">
+      <DependentUpon>Ablak_üzenet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\A_Felhasználó.resx">
+      <DependentUpon>A_Felhasználó.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\A_Főoldal.resx">
+      <DependentUpon>A_Főoldal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\Közös\Ablak_PDF_Feltöltés.resx">
+      <DependentUpon>Ablak_PDF_Feltöltés.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\shopping_cart.ico" />
+    <None Include="Resources\19.bmp" />
+    <None Include="lang_hu-HU.json" />
+    <None Include="Resources\help-button-1067077_12801.jpg" />
+    <None Include="Properties\Settings.settings">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\CAR52.ICO" />
+    <None Include="Resources\CAR51.ICO" />
+    <None Include="Resources\TW6000_.ico" />
+    <None Include="Resources\TW6000.ico" />
+    <None Include="Resources\#9_B.ico" />
+    <None Include="Resources\#9_A.ico" />
+    <None Include="Resources\App-warehause.ico" />
+    <None Include="Resources\folder_blue_printer.ico" />
+    <None Include="Resources\részjelöl.ico" />
+    <None Include="Resources\App-ark.ico" />
+    <None Include="Resources\GANZ48.ico" />
+    <None Include="Resources\kerékeszterga_Beáll_32.ico" />
+    <None Include="Resources\kerékeszterga 32.ico" />
+    <None Include="Resources\App-xf-mail.ico" />
+    <None Include="Resources\Icons-Land-Points-Of-Interest-Restaurant-Blue.ico" />
+    <None Include="Resources\App-network-connection-manager2.ico" />
+    <None Include="Resources\Action-demo.ico" />
+    <None Include="Resources\App-network-connection-manager1.ico" />
+    <None Include="Resources\App-network-connection-manager.ico" />
+    <None Include="Resources\fogas logo1.png" />
+    <None Include="Resources\Dolgozó_32.ico" />
+    <None Include="Resources\BOOKS7.ICO" />
+    <None Include="Resources\Dtafalonso-Modern-Xp-ModernXP-12-Workstation-Desktop-Colors.ico" />
+    <None Include="Resources\Elegantthemes-Beautiful-Flat-Running.ico" />
+    <None Include="Resources\átütemez32.ico" />
+    <None Include="Resources\Yellow Glass Folders Icon 25.ico" />
+    <None Include="Resources\Fatcow-Farm-Fresh-Sum.ico" />
+    <None Include="Resources\Control_Panel 32.ico" />
+    <None Include="Resources\clear32.ico" />
+    <None Include="Resources\CAR5.ICO" />
+    <None Include="Resources\Device-zip.ico" />
+    <None Include="Resources\CALENDR4.ICO" />
+    <None Include="Resources\mentés32.ico" />
+    <None Include="Resources\lakatnyitva32.ico" />
+    <None Include="Resources\Lakatzárva32.ico" />
+    <None Include="Resources\e3_töröl.ico" />
+    <None Include="Resources\e2_töröl.ico" />
+    <None Include="Resources\E1_töröl.ico" />
+    <None Include="Resources\e3minden.ico" />
+    <None Include="Resources\e2minden.ico" />
+    <None Include="Resources\E1minden.ico" />
+    <None Include="Resources\e3hp.ico" />
+    <None Include="Resources\e2hp.ico" />
+    <None Include="Resources\E1hp.ico" />
+    <None Include="Resources\App-edit.ico" />
+    <None Include="Resources\alá.ico" />
+    <None Include="Resources\hozzá.ico" />
+    <None Include="Resources\szemetes64.ico" />
+    <None Include="Resources\Yellow Glass Folders Icon 47.ico" />
+    <None Include="Resources\felhasználók32.ico" />
+    <None Include="Resources\mail_accept_32.ico" />
+    <None Include="Resources\mail_next_32.ico" />
+    <None Include="Resources\Yellow Glass Folders Icon 28.ico" />
+    <None Include="Resources\Filesystem-blockdevice-cubes.ico" />
+    <None Include="Resources\BLOONS5.ICO" />
+    <None Include="Resources\home_next.ico" />
+    <None Include="Resources\email.ico" />
+    <None Include="Resources\mail_next.ico" />
+    <None Include="Resources\Google-Noto-Emoji-Travel-Places-42498-factory.ico" />
+    <None Include="Resources\home.ico" />
+    <None Include="Resources\Fatcow-Farm-Fresh-Table-row-delete.32.png" />
+    <None Include="Resources\Document-preferences.ico" />
+    <None Include="Resources\clock.ico" />
+    <None Include="Resources\book.ico" />
+    <None Include="Resources\Treetog-Junior-Document-scroll1.ico" />
+    <None Include="Resources\lista.ico" />
+    <None Include="Resources\page_swap_32.ico" />
+    <None Include="Resources\Fatcow-Farm-Fresh-Table-row-insert.ico" />
+    <None Include="Resources\Custom-Icon-Design-Flatastic-1-Import.ico" />
+    <None Include="Resources\Custom-Icon-Design-Flatastic-1-Export.ico" />
+    <None Include="Resources\Kyo-Tux-Aeon-Sign-Alert.ico" />
+    <None Include="Resources\leadott.ico" />
+    <None Include="Resources\CALC1.ICO" />
+    <None Include="Resources\Iconarchive-Red-Orb-Alphabet-Exclamation-mark.ico" />
+    <None Include="Resources\BeCardStack.gif" />
+    <None Include="Resources\CARDFIL3.ICO" />
+    <None Include="Resources\Treetog-Junior-Document-scroll.ico" />
+    <None Include="Resources\T5C5 fűtés.jpg" />
+    <None Include="Resources\Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\New 32 piros.ico" />
+    <None Include="Resources\battery-2.ico" />
+    <None Include="Resources\kerék24.ico" />
+    <None Include="Resources\Clipboard Paste-01.ico" />
+    <None Include="Resources\Document Copy-01.ico" />
+    <None Include="Resources\visszavonás.ico" />
+    <None Include="Resources\pdf 32.ico" />
+    <None Include="Resources\image_add32.ico" />
+    <None Include="Resources\Aha-Soft-Large-Seo-SEO.ico" />
+    <None Include="Resources\nullás lista32.ico" />
+    <None Include="Resources\nullás lista.ico" />
+    <None Include="Resources\#0.ICO" />
+    <None Include="Resources\process_accept.ico" />
+    <None Include="Resources\SAP32 jó.ico" />
+    <None Include="Resources\SAPba 32.ico" />
+    <None Include="Resources\váltó.ico" />
+    <None Include="Resources\view-list-tree-3.ico" />
+    <None Include="Resources\kerékeszterga.ico" />
+    <None Include="Resources\SAP.ico" />
+    <None Include="Resources\App-xmag-search.ico" />
+    <None Include="Resources\fel1.ico" />
+    <None Include="Resources\le1.ico" />
+    <None Include="Resources\Go-back.ico" />
+    <None Include="Resources\Ok.ico" />
+    <None Include="Resources\Icon1.ico" />
+    <None Include="Resources\#3B.ICO" />
+    <None Include="Resources\#2B.ICO" />
+    <None Include="Resources\#1B.ICO" />
+    <None Include="Resources\felhasználók.ico" />
+    <None Include="Resources\Gear-01.ico" />
+    <None Include="Resources\Mimetype-recycled1.ico" />
+    <None Include="Resources\fel.ico" />
+    <None Include="Resources\le.ico" />
+    <None Include="Resources\Junior Icon 111.ico" />
+    <None Include="Resources\App-aim-3.ico" />
+    <None Include="Resources\Button Previous-01.ico" />
+    <None Include="Resources\Button Next-01.ico" />
+    <None Include="Resources\Button Forward-01.ico" />
+    <None Include="Resources\Button Rewind-01.ico" />
+    <None Include="Resources\Dolgozó.ico" />
+    <None Include="Resources\App-dict.ico" />
+    <None Include="Resources\Document-write.ico" />
+    <None Include="Resources\üres lista.ico" />
+    <None Include="Resources\mndent kijelöl.ico" />
+    <None Include="Resources\Button Upload-01.ico" />
+    <None Include="Resources\Button Download-01.ico" />
+    <None Include="Resources\Calc.ico" />
+    <None Include="Resources\CALENDR1.ICO" />
+    <None Include="Resources\App-spreadsheet.ico" />
+    <None Include="Resources\Calendar.ico" />
+    <None Include="Resources\Designcontest-Ecommerce-Business-Save.ico" />
+    <None Include="Resources\Help Support.ico" />
+    <None Include="Resources\New gyűjtemény.ico" />
+    <None Include="Resources\Folder_.ico" />
+    <None Include="Resources\Orange System Icon 05.ico" />
+    <None Include="Resources\Filesystem-trash-empty.ico" />
+    <None Include="Resources\Up gyűjtemény.ico" />
+    <None Include="Resources\Excel gyűjtő.ico" />
+    <None Include="Resources\frissít gyűjtemény.ico" />
+    <None Include="Resources\CKD.ico" />
+    <None Include="Resources\Ok gyűjtemény.ico" />
+    <None Include="Resources\user_mindenjogtöröl.ico" />
+    <None Include="Resources\user_vendég1.ico" />
+    <None Include="Resources\user_accept_256.ico" />
+    <None Include="Resources\user_remove_256_64.ico" />
+    <None Include="Resources\user_add_256.ico" />
+    <None Include="Resources\Action-configure.ico" />
+    <None Include="Resources\Védő.ico" />
+    <None Include="Resources\CAF.ico" />
+    <None Include="Resources\fogas logo.png" />
+    <None Include="Resources\takarítás.ico" />
+    <None Include="Resources\Atyourservice-Service-Categories-Car-Repair.ico" />
+    <None Include="Resources\Mimetype-recycled.ico" />
+    <None Include="Resources\1.bmp" />
+    <None Include="Resources\bezár.ico" />
+    <None Include="Resources\user_vendég.ico" />
+    <None Include="Resources\help32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AcroPDFLib">
+      <Guid>{05BFD3F1-6319-4F30-B752-C7A22889BCC4}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="ADODB">
+      <Guid>{B691E011-1797-432E-907A-4D8C69339129}</Guid>
+      <VersionMajor>6</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="ADOX">
+      <Guid>{00000600-0000-0010-8000-00AA006D2EA4}</Guid>
+      <VersionMajor>6</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="AxAcroPDFLib">
+      <Guid>{05BFD3F1-6319-4F30-B752-C7A22889BCC4}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DG.AdvancedDataGridView">
+      <Version>1.2.30017.16</Version>
+    </PackageReference>
+    <PackageReference Include="ExcelDataReader">
+      <Version>3.7.0</Version>
+    </PackageReference>
+    <PackageReference Include="ExcelDataReader.DataSet">
+      <Version>3.7.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Office.Interop.Excel">
+      <Version>15.0.4795.1001</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Office.Interop.Outlook">
+      <Version>15.0.4797.1004</Version>
+    </PackageReference>
+    <PackageReference Include="PDFium.Windows">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="PdfiumViewer">
+      <Version>2.13.0</Version>
+    </PackageReference>
+    <PackageReference Include="PdfiumViewer.Native.x86.v8-xfa">
+      <Version>2018.4.8.256</Version>
+    </PackageReference>
+    <PackageReference Include="PdfiumViewer.Native.x86_64.v8-xfa">
+      <Version>2018.4.8.256</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.OleDb">
+      <Version>9.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

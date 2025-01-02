@@ -1,0 +1,771 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.OleDb;
+using System.Windows.Forms;
+using Villamos.Adatszerkezet;
+using MyA = Adatbázis;
+
+
+
+namespace Villamos.Kezelők
+{
+    public class Kezelő_Jármű
+    {
+        public List<Adat_Jármű> Lista_Jármű_állomány(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
+            try
+            {
+                Adat_Jármű Adat;
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Jármű(
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["típus"].ToStrTrim()
+                                        );
+                                    Adatok.Add(Adat);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Lista_Jármű_állomány\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adatok;
+        }
+
+
+
+        public List<string> List_Jármű_típusok(string hely, string jelszó, string szöveg)
+        {
+            List<string> list = new List<string>();
+            string elem;
+            try
+            {
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    elem = rekord["valóstípus"].ToStrTrim();
+                                    list.Add(elem);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "List_Jármű_típusok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return list;
+        }
+
+
+
+        public List<string> List_Jármű_Telephely(string hely, string jelszó, string szöveg)
+        {
+            List<string> list = new List<string>();
+            string elem;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    elem = rekord["üzem"].ToStrTrim();
+                                    list.Add(elem);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "List_Jármű_Telephely\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return list;
+        }
+
+
+        public void Rögzítés(string hely, string jelszó, Adat_Jármű Adat)
+        {
+            try
+            {
+                string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2, üzembehelyezés) VALUES (";
+                szöveg += $"'{Adat.Azonosító.Trim()}', 0, 0, 'Nincs', 'Közös', false, 0, false, 0, '1900.01.01', ";
+                szöveg += $"'{Adat.Valóstípus.Trim()}', ";
+                szöveg += $"'{Adat.Valóstípus2.Trim()}', '1900.01.01')";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Rögzítés\n", ex.StackTrace, ex.Source, ex.HResult);
+            }
+        }
+
+
+        public void Áthelyezés_új(string hely, string jelszó, Adat_Jármű Adat)
+        {
+            try
+            {
+                string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2) VALUES (";
+                szöveg += $"'{Adat.Azonosító}', {Adat.Hibák}, {Adat.Státus}, '{Adat.Típus.Trim()}', '{Adat.Üzem.Trim()}'," +
+                    $" {Adat.Törölt}, {Adat.Hibáksorszáma}, {Adat.Szerelvény}, {Adat.Szerelvénykocsik}, '{Adat.Miótaáll}', ";
+                szöveg += $"'{Adat.Valóstípus.Trim()}', ";
+                szöveg += $"'{Adat.Valóstípus2.Trim()} ')";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Rögzítés\n", ex.StackTrace, ex.Source, ex.HResult);
+            }
+        }
+
+
+        public void Módosítás(string hely, string jelszó, Adat_Jármű Adat)
+        {
+            string szöveg = "";
+            try
+            {
+                szöveg = "UPDATE Állománytábla SET ";
+                szöveg += $"hibák={Adat.Hibák}, ";
+                szöveg += $"státus={Adat.Státus}, ";
+                szöveg += $"törölt={Adat.Törölt}, ";
+                szöveg += $"hibáksorszáma={Adat.Hibáksorszáma}, ";
+                szöveg += $"szerelvény={Adat.Szerelvény}, ";
+                szöveg += $"valóstípus='{Adat.Valóstípus.Trim()}', ";
+                szöveg += $"valóstípus2='{Adat.Valóstípus2.Trim()}', ";
+                szöveg += $"szerelvénykocsik={Adat.Szerelvénykocsik}, ";
+                szöveg += $"miótaáll='{Adat.Miótaáll}', ";
+                szöveg += $"típus='{Adat.Típus.Trim()}', ";
+                szöveg += $"üzem='{Adat.Üzem.Trim()}' ";
+                szöveg += $" WHERE [azonosító] ='{Adat.Azonosító.Trim()}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Módosítás\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+        }
+
+
+        public Adat_Jármű Egy_Adat(string hely, string jelszó, string szöveg)
+        {
+            Adat_Jármű Adat = null;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Jármű(
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["hibák"].ToÉrt_Long(),
+                                        rekord["státus"].ToÉrt_Long(),
+                                        rekord["Típus"].ToStrTrim(),
+                                        rekord["Üzem"].ToStrTrim(),
+                                        rekord["törölt"].ToÉrt_Bool(),
+                                        rekord["hibáksorszáma"].ToÉrt_Long(),
+                                        rekord["szerelvény"].ToÉrt_Bool(),
+                                        rekord["szerelvénykocsik"].ToÉrt_Long(),
+                                        rekord["miótaáll"].ToÉrt_DaTeTime(),
+                                        rekord["valóstípus"].ToStrTrim(),
+                                        rekord["valóstípus2"].ToStrTrim()
+                                        );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Egy_Adat\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adat;
+        }
+
+
+        public Adat_Jármű Egy_Adat_fő(string hely, string jelszó, string szöveg)
+        {
+            Adat_Jármű Adat = null;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Jármű(
+                                         rekord["Azonosító"].ToStrTrim(),
+                                         rekord["hibák"].ToÉrt_Long(),
+                                         rekord["státus"].ToÉrt_Long(),
+                                         rekord["Típus"].ToStrTrim(),
+                                         rekord["Üzem"].ToStrTrim(),
+                                         rekord["törölt"].ToÉrt_Bool(),
+                                         rekord["hibáksorszáma"].ToÉrt_Long(),
+                                         rekord["szerelvény"].ToÉrt_Bool(),
+                                         rekord["szerelvénykocsik"].ToÉrt_Long(),
+                                         rekord["miótaáll"].ToÉrt_DaTeTime(),
+                                         rekord["valóstípus"].ToStrTrim(),
+                                         rekord["valóstípus2"].ToStrTrim(),
+                                         rekord["üzembehelyezés"].ToÉrt_DaTeTime()
+                                         );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Egy_Adat_fő\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adat;
+        }
+
+
+        public List<Adat_Jármű> Lista_Adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
+            Adat_Jármű Adat;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Jármű(
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["hibák"].ToÉrt_Long(),
+                                        rekord["státus"].ToÉrt_Long(),
+                                        rekord["Típus"].ToStrTrim(),
+                                        rekord["Üzem"].ToStrTrim(),
+                                        rekord["törölt"].ToÉrt_Bool(),
+                                        rekord["hibáksorszáma"].ToÉrt_Long(),
+                                        rekord["szerelvény"].ToÉrt_Bool(),
+                                        rekord["szerelvénykocsik"].ToÉrt_Long(),
+                                        rekord["miótaáll"].ToÉrt_DaTeTime(),
+                                        rekord["valóstípus"].ToStrTrim(),
+                                        rekord["valóstípus2"].ToStrTrim()
+                                        );
+                                    Adatok.Add(Adat);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Lista_Adatok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adatok;
+        }
+
+        /// <summary>
+        /// Beolvassuk a feltételeknek megfelelő pályaszámokat egy listába
+        /// </summary>
+        /// <param name="hely"></param>
+        /// <param name="jelszó"></param>
+        /// <param name="szöveg"></param>
+        /// <returns></returns>
+        public List<string> Lista_Pályaszámok(string hely, string jelszó, string szöveg)
+        {
+            List<string> Adatok = new List<string>();
+            string Adat;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = rekord["Azonosító"].ToStrTrim();
+                                    Adatok.Add(Adat);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Lista_Pályaszámok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adatok;
+        }
+    }
+
+    public class Kezelő_Jármű_Vendég
+    {
+        public Dictionary<string, string> Szótár(string hely, string jelszó, string szöveg)
+        {
+            Dictionary<string, string> SzAdat = new Dictionary<string, string>();
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                SzAdat.Add(
+                                      rekord["Azonosító"].ToStrTrim(),
+                                      rekord["kiadótelephely"].ToStrTrim()
+                                      );
+                            }
+                        }
+                    }
+                }
+            }
+            return SzAdat;
+        }
+
+
+        public void Rögzítés_Vendég(string hely, string jelszó, Adat_Jármű_Vendég Adat)
+        {
+
+            string szöveg = $"SELECT * FROM vendégtábla WHERE azonosító='{Adat.Azonosító.Trim()}'";
+            Adat_Jármű_Vendég EgyAdat = Egy_Adat(hely, jelszó, szöveg);
+            // rögzítjük az adatot
+
+            if (EgyAdat != null)
+            {
+                // Ha már létezik, akkor módosítjuk
+                szöveg = "UPDATE vendégtábla  SET ";
+                szöveg += $"típus='{Adat.Típus.Trim()}', "; // típus
+                szöveg += $"BázisTelephely='{Adat.BázisTelephely.Trim()}', "; // BázisTelephely
+                szöveg += $"KiadóTelephely='{Adat.KiadóTelephely.Trim()}' "; // KiadóTelephely
+                szöveg += $" WHERE azonosító='{Adat.Azonosító.Trim()}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                throw new HibásBevittAdat("Az adat módosítása megtörtént.");
+            }
+            else
+            {
+                // ha nem létezik 
+                szöveg = "INSERT INTO vendégtábla  (  azonosító, típus, BázisTelephely, KiadóTelephely ) VALUES (";
+                szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
+                szöveg += $"'{Adat.Típus.Trim()}', "; // típus
+                szöveg += $"'{Adat.BázisTelephely.Trim()}', "; // BázisTelephely
+                szöveg += $"'{Adat.KiadóTelephely.Trim()}')";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                throw new HibásBevittAdat("Az adat rögzítése megtörtént.");
+            }
+        }
+
+        public void Törlés_Vendég(string hely, string jelszó, Adat_Jármű_Vendég Adat)
+        {
+
+            string szöveg = $"SELECT * FROM vendégtábla WHERE azonosító='{Adat.Azonosító.Trim()}'";
+            Adat_Jármű_Vendég EgyAdat = Egy_Adat(hely, jelszó, szöveg);
+
+            if (EgyAdat != null)
+            {
+                szöveg = $"DELETE FROM vendégtábla WHERE azonosító='{Adat.Azonosító.Trim()}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+                throw new HibásBevittAdat("Az adat törlése megtörtént.");
+            }
+
+        }
+
+        public List<Adat_Jármű_Vendég> Lista_adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Jármű_Vendég> Adatok = new List<Adat_Jármű_Vendég>();
+            Adat_Jármű_Vendég Adat;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Vendég(
+                                    rekord["Azonosító"].ToStrTrim(),
+                                    rekord["Típus"].ToStrTrim(),
+                                    rekord["Bázistelephely"].ToStrTrim(),
+                                    rekord["Kiadótelephely"].ToStrTrim()
+                                    );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+        public Adat_Jármű_Vendég Egy_Adat(string hely, string jelszó, string szöveg)
+        {
+            Adat_Jármű_Vendég Adat = null;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            rekord.Read();
+
+                            Adat = new Adat_Jármű_Vendég(
+                                rekord["Azonosító"].ToStrTrim(),
+                                rekord["Típus"].ToStrTrim(),
+                                rekord["Bázistelephely"].ToStrTrim(),
+                                rekord["Kiadótelephely"].ToStrTrim()
+                                );
+                        }
+                    }
+                }
+            }
+            return Adat;
+        }
+    }
+
+
+    public class Kezelő_Jármű_Napló
+    {
+        readonly string jelszó = "pozsgaii";
+        public void Rögzítés(string hely, Adat_Jármű_Napló Adat)
+        {
+            try
+            {
+                string szöveg = "INSERT INTO Állománytáblanapló (azonosító, típus, honnan, hova, törölt, Módosító, mikor, céltelep, üzenet) VALUES (";
+                szöveg += "'" + Adat.Azonosító.Trim() + "', ";
+                szöveg += "'" + Adat.Típus.Trim() + "', ";
+                szöveg += "'" + Adat.Honnan.Trim() + "', ";
+                szöveg += "'" + Adat.Hova.Trim() + "', ";
+                szöveg += Adat.Törölt + ", ";
+                szöveg += "'" + Adat.Módosító.Trim() + "', ";
+                szöveg += "'" + Adat.Mikor + "', ";
+                szöveg += "'" + Adat.Céltelep.Trim() + "', ";
+                szöveg += Adat.Üzenet + ") ";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public List<Adat_Jármű_Napló> Lista_adatok(string hely)
+        {
+            string szöveg = $"SELECT * FROM állománytáblanapló ";
+            List<Adat_Jármű_Napló> Adatok = new List<Adat_Jármű_Napló>();
+            Adat_Jármű_Napló Adat;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Napló(
+                                    rekord["Azonosító"].ToStrTrim(),
+                                    rekord["Típus"].ToStrTrim(),
+                                    rekord["hova"].ToStrTrim(),
+                                    rekord["honnan"].ToStrTrim(),
+                                    rekord["törölt"].ToÉrt_Bool(),
+                                    rekord["Módosító"].ToStrTrim(),
+                                    rekord["Mikor"].ToÉrt_DaTeTime(),
+                                    rekord["Céltelep"].ToStrTrim(),
+                                    rekord["üzenet"].ToÉrt_Int()
+                                    );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+        public List<Adat_Jármű_Napló> Lista_adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Jármű_Napló> Adatok = new List<Adat_Jármű_Napló>();
+            Adat_Jármű_Napló Adat;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Napló(
+                                    rekord["Azonosító"].ToStrTrim(),
+                                    rekord["Típus"].ToStrTrim(),
+                                    rekord["hova"].ToStrTrim(),
+                                    rekord["honnan"].ToStrTrim(),
+                                    rekord["törölt"].ToÉrt_Bool(),
+                                    rekord["Módosító"].ToStrTrim(),
+                                    rekord["Mikor"].ToÉrt_DaTeTime(),
+                                    rekord["Céltelep"].ToStrTrim(),
+                                    rekord["üzenet"].ToÉrt_Int()
+                                    );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+        public void Módosítás(string hely, List<Adat_Jármű_Napló> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Jármű_Napló rekord in Adatok)
+                {
+                  string   szöveg = $"UPDATE állománytáblanapló  SET üzenet=1 WHERE üzenet=0 AND céltelep='{rekord.Céltelep}' AND Azonosító='{rekord.Azonosító}'";
+                  SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+    }
+
+    public class Kezelő_Jármű_Javításiátfutástábla
+    {
+        public List<Adat_Jármű_Javításiátfutástábla> Lista_adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Jármű_Javításiátfutástábla> Adatok = new List<Adat_Jármű_Javításiátfutástábla>();
+            Adat_Jármű_Javításiátfutástábla Adat;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Javításiátfutástábla(
+                                        rekord["kezdődátum"].ToÉrt_DaTeTime(),
+                                        rekord["végdátum"].ToÉrt_DaTeTime(),
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["hibaleírása"].ToStrTrim()
+                                        );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+    }
+
+    public class Kezelő_Jármű_Állomány_Típus
+    {
+        public List<Adat_Jármű_Állomány_Típus> Lista_adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
+            Adat_Jármű_Állomány_Típus Adat;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Állomány_Típus(
+                                            rekord["Id"].ToÉrt_Long(),
+                                            rekord["Állomány"].ToÉrt_Long(),
+                                            rekord["típus"].ToStrTrim()
+                                            );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+        public void Rögzítés(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
+        {
+            try
+            {
+                string szöveg = $"INSERT INTO típustábla (id, típus, állomány)";
+                szöveg += $" VALUES ({Adat.Id},";
+                szöveg += $" '{Adat.Típus}',";
+                szöveg += $" {Adat.Állomány} )";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// típus
+        /// </summary>
+        /// <param name="hely"></param>
+        /// <param name="jelszó"></param>
+        /// <param name="Adat"></param>
+        public void Törlés(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
+        {
+            try
+            {
+                string szöveg = $"DELETE FROM típustábla WHERE típus='{Adat.Típus}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// típus
+        /// </summary>
+        /// <param name="hely"></param>
+        /// <param name="jelszó"></param>
+        /// <param name="Adat"></param>
+        public void Módosítás(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
+        {
+            try
+            {
+                string szöveg = $"Update típustábla SET ";
+                szöveg += $"id = '{Adat.Id}' ";
+                szöveg += $"WHERE típus = '{Adat.Típus}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+    }
+}
