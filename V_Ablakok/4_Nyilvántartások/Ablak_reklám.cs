@@ -324,35 +324,15 @@ namespace Villamos
             try
             {
                 if (Txtírásimező.Text.Trim() == "") return;
-                // megtisztítjuk a szöveget
 
+                // megtisztítjuk a szöveget
                 Txtírásimező.Text = Txtírásimező.Text.Replace(Convert.ToString('"'), "°").Replace(Convert.ToString('\''), "°");
                 // csak aktuális évben tudunk rögzíteni
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Today.Year}utasítás.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
-                string jelszó = "katalin"; // módosít
-                string szöveg = "SELECT * From üzenetek order by sorszám desc";
 
-                Kezelő_Utasítás Kéz = new Kezelő_Utasítás();
-                List<Adat_Utasítás> Utasítás = Kéz.Lista_Adatok(hely, szöveg);
-                double UtasításSorszáma = 1;
-                if (Utasítás.Count != 0) UtasításSorszáma = Utasítás.Max(x => x.Sorszám) + 1;
-
-                // rögzítjuk az adatokat
-                szöveg = "INSERT INTO üzenetek (sorszám, szöveg, írta, mikor, érvényes)  VALUES ";
-                szöveg += $@"({UtasításSorszáma}, '{Txtírásimező.Text.Trim()}', '{Program.PostásNév.Trim()}', '{DateTime.Now}',  0 )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                // ha már ő írta akkor rögzítette is
-                Kezelő_utasítás_Olvasás KézO = new Kezelő_utasítás_Olvasás();
-                szöveg = "SELECT * From olvasás order by sorszám desc";
-                List<Adat_utasítás_olvasás> UtasításO = KézO.Lista_Adatok(hely,  szöveg);
-                double i = 1;
-                if (UtasításO.Count != 0) i = UtasításO.Max(x => x.Sorszám) + 1;
-                szöveg = "INSERT INTO olvasás (sorszám, ki, üzenetid, mikor, olvasva) VALUES ";
-                szöveg += $@"({i}, '{Program.PostásNév.Trim()}', {UtasításSorszáma}, '{DateTime.Now}', -1)";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
+                Adat_Utasítás ADAT = new Adat_Utasítás(0, Txtírásimező.Text.Trim(), Program.PostásNév.Trim(), DateTime.Now, 0);
+                double UtasításSorszáma = KézUtasítás.Rögzítés(hely, ADAT);
                 MessageBox.Show($"Az utasítás rögzítése {UtasításSorszáma} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -1050,7 +1030,7 @@ namespace Villamos
                 Adat_Jármű EgyJármű = (from a in AdatokJármű_Teljes
                                        where a.Azonosító == Pályaszám.Text.Trim()
                                        select a).FirstOrDefault() ?? throw new HibásBevittAdat("Nincs ilyen pályaszámú jármű a nyilvántartásban.");
-               
+
                 Adat_Reklám EgyReklám = (from a in AdatokReklám
                                          where a.Azonosító == Pályaszám.Text.Trim()
                                          select a).FirstOrDefault();

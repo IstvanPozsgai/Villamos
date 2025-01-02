@@ -110,6 +110,7 @@ namespace Villamos.Kezelők
             double Válasz = 1;
             try
             {
+                if (!Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
                 Válasz = Sorszám(hely);
                 string szöveg = "INSERT INTO üzenetek (sorszám, szöveg, írta, mikor, érvényes) VALUES ";
                 szöveg += $"({Válasz}, '{Adat.Szöveg}', '{Adat.Írta}', '{Adat.Mikor}', {Adat.Érvényes})";
