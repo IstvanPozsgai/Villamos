@@ -34,10 +34,10 @@ namespace Villamos
         {
             Dátum.Value = DateTime.Today;
             Dátumról.Value = DateTime.Today;
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}";
             if (!Exists(hely)) Directory.CreateDirectory(hely);
 
-            hely += $@"\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
+            hely += $@"\{DateTime.Today.Year}_fortekiadási_adatok.mdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
 
             Jogosultságkiosztás();
@@ -378,7 +378,7 @@ namespace Villamos
 
         private void Excelbeolvasás()
         {
-            string fájlexc="";
+            string fájlexc = "";
             try
             {
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
@@ -396,7 +396,7 @@ namespace Villamos
                     FileName = "",
                     Filter = "Excel |*.xlsx"
                 };
-          
+
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = OpenFileDialog1.FileName;
@@ -536,8 +536,8 @@ namespace Villamos
                                           where a.Dátum == Dátum.Value && a.Napszak == rekord.Napszak && a.Telephelyforte == rekord.Telephelyforte && a.Típusforte == rekord.Típusforte
                                           select a).FirstOrDefault();
 
-                    if (Elem != null) 
-                    SzövegGy.Add(szöveg);
+                    if (Elem != null)
+                        SzövegGy.Add(szöveg);
                     Holtart.Lép();
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);

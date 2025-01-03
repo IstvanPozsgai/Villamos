@@ -55,27 +55,12 @@ namespace Villamos
         {
             try
             {
+                TáblákLétrehozása();
+                Dátum.Value = DateTime.Today;
+                Dátum.MaxDate = DateTime.Today;
                 Listák_Töltése();
                 Táblaalaphelyzet();
                 Gombokfel();
-                Dátum.Value = DateTime.Today;
-                Dátum.MaxDate = DateTime.Today;
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
-                if (!File.Exists(hely)) Directory.CreateDirectory(hely);
-
-                // éves kiadási darabok
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_kiadási_adatok.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiösszesítőfőmérnöktábla(hely);
-
-                // személyzet hiány tábla
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_személyzet_adatok.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiszemélyzetfőmérnöktábla(hely);
-
-                // típuscsere tábla
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_típuscsere_adatok.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásitípuscserefőmérnöktábla(hely);
-
                 Jogosultságkiosztás();
             }
             catch (HibásBevittAdat ex)
@@ -87,6 +72,28 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void TáblákLétrehozása()
+        {
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}";
+            if (!File.Exists(hely)) Directory.CreateDirectory(hely);
+
+            // éves kiadási darabok
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_kiadási_adatok.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiösszesítőfőmérnöktábla(hely);
+
+            // személyzet hiány tábla
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_személyzet_adatok.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiszemélyzetfőmérnöktábla(hely);
+
+            // típuscsere tábla
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_típuscsere_adatok.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásitípuscserefőmérnöktábla(hely);
+
+
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_fortekiadási_adatok.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
         }
 
 
@@ -1298,7 +1305,7 @@ namespace Villamos
                                                select a).FirstOrDefault();
 
 
-                if (Elem!=null)
+                if (Elem != null)
                 {
                     szöveg = "DELETE FROM típuscseretábla WHERE [dátum]=#" + Dátum.Value.ToString("M-d-yy") + "#";
 
@@ -1523,5 +1530,6 @@ namespace Villamos
         }
 
         #endregion
+
     }
 }

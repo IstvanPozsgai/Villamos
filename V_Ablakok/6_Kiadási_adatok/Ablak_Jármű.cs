@@ -22,7 +22,7 @@ namespace Villamos
         readonly Kezelő_Jármű Kadat = new Kezelő_Jármű();
         readonly Kezelő_Jármű2 Kadat2 = new Kezelő_Jármű2();
         readonly Kezelő_Jármű_Napló KadatNapló = new Kezelő_Jármű_Napló();
-        readonly Kezelő_jármű_hiba JHadat = new Kezelő_jármű_hiba();
+        readonly Kezelő_jármű_hiba Kéz_JHadat = new Kezelő_jármű_hiba();
         readonly Kezelő_Alap_Beolvasás KAAdat = new Kezelő_Alap_Beolvasás();
 
 
@@ -465,7 +465,7 @@ namespace Villamos
                                                  "Új", "Új", "Közös", false,
                                                  Program.PostásNév.Trim(), DateTime.Now, "Közös", 0
                                                  );
-                KadatNapló.Rögzítés(hely,  AdatNapló);
+                KadatNapló.Rögzítés(hely, AdatNapló);
 
                 Főmérnökségi_Állomány_Lista();
 
@@ -1166,7 +1166,7 @@ namespace Villamos
                 ÁllományMódosítás(helyközös, Közös_járművek.SelectedItem.ToStrTrim(), Cmbtelephely.Text.Trim());
 
                 //Naplózzuk
-                ÁllományNaplózás(Közös_járművek.SelectedItem.ToStrTrim(),"Közös", Cmbtelephely.Text.Trim());
+                ÁllományNaplózás(Közös_járművek.SelectedItem.ToStrTrim(), "Közös", Cmbtelephely.Text.Trim());
 
                 // Módosítjuk a típus darabszámát
                 TípusDB(true);
@@ -1174,7 +1174,7 @@ namespace Villamos
                 // hibákat átmásoljuk az állományba
                 string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
                 string honnan = $@"{Application.StartupPath}\Főmérnökség\adatok\hiba.mdb";
-                HibákMásolása(honnan, hova, Közös_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.SelectedItem.ToStrTrim());
+                HibákMásolása(honnan, hova, Közös_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.Text.Trim());
 
                 //E2 másolás
                 hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
@@ -1243,7 +1243,7 @@ namespace Villamos
                 ÁlllományTörlés(hely, Saját_járművek.SelectedItem.ToStrTrim());
 
                 //Naplózzuk
-                ÁllományNaplózás(Saját_járművek.SelectedItem.ToStrTrim(), Cmbtelephely.Text .Trim (), "Közös");
+                ÁllományNaplózás(Saját_járművek.SelectedItem.ToStrTrim(), Cmbtelephely.Text.Trim(), "Közös");
 
                 // Módosítjuk a típus darabszámát
                 TípusDB(false);
@@ -1251,7 +1251,7 @@ namespace Villamos
                 //Hibák másolás
                 string honnan = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
                 string hova = $@"{Application.StartupPath}\Főmérnökség\adatok\hiba.mdb";
-                HibákMásolása(honnan, hova, Saját_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.SelectedItem.ToStrTrim());
+                HibákMásolása(honnan, hova, Saját_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.Text.Trim());
 
                 //E2 másolás
                 hova = Application.StartupPath + @"\Főmérnökség\adatok\villamos2.mdb";
@@ -1344,7 +1344,7 @@ namespace Villamos
             }
         }
 
-        private void ÁllományNaplózás(string azonosító,string Honnan, string Hova)
+        private void ÁllományNaplózás(string azonosító, string Honnan, string Hova)
         {
             try
             {
@@ -1356,7 +1356,7 @@ namespace Villamos
                 if (!File.Exists(helynapló)) Adatbázis_Létrehozás.Kocsitípusanapló(helynapló);
 
                 int üzenet = 0;
-                if (Honnan=="Közös") üzenet = 1;         // ha közösből vesszük be akkor nem kell üzenetet írni
+                if (Honnan == "Közös") üzenet = 1;         // ha közösből vesszük be akkor nem kell üzenetet írni
                 Adat_Jármű_Napló adatnapló = new Adat_Jármű_Napló(
                                         adat.Azonosító.Trim(),
                                         adat.Típus.Trim(),
@@ -1435,7 +1435,7 @@ namespace Villamos
                 // hibákat átmásoljuk az állományba
                 string szöveg = $"SELECT * FROM hibatábla where [azonosító]='{azonosító}'";
                 string jelszó = "pozsgaii";
-                List<Adat_Jármű_hiba> JHadatok = JHadat.Lista_adatok(honnan, jelszó, szöveg);
+                List<Adat_Jármű_hiba> JHadatok = Kéz_JHadat.Lista_adatok(honnan, jelszó, szöveg);
 
                 foreach (Adat_Jármű_hiba item in JHadatok)
                 {
@@ -1449,7 +1449,7 @@ namespace Villamos
                                            item.Azonosító,
                                            item.Hibáksorszáma
                                            );
-                    JHadat.Rögzítés(hova, jelszó, Küld);
+                    Kéz_JHadat.Rögzítés(hova, jelszó, Küld);
                 }
 
                 //kitöröljük pályaszámhoz tartozó az összes hibát
