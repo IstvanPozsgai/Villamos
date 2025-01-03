@@ -1202,10 +1202,10 @@ namespace Villamos
                      false,
                      Egyed_Típus,
                      Pályaszám.Text.Trim(),
-                     long.Parse (Sorszám.Text ));
+                     long.Parse(Sorszám.Text));
 
 
-                KézHiba.Módosítás (hely, jelszó, Elem);
+                KézHiba.Módosítás(hely, jelszó, Elem);
                 HibaListázás();
 
             }
@@ -1592,8 +1592,11 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\főmérnökség\adatok\Villamos4TW.mdb";
-                string helynapló = Application.StartupPath + @"\főmérnökség\napló\naplóTW6000_" + System.Threading.Thread.CurrentThread.CurrentCulture.Calendar.GetYear(DateTime.Today).ToString() + ".mdb";
-                string helynapló2 = Application.StartupPath + @"\főmérnökség\napló\naplóTW6000Ütem_" + System.Threading.Thread.CurrentThread.CurrentCulture.Calendar.GetYear(DateTime.Today).ToString() + ".mdb";
+                string helynapló = $@"{Application.StartupPath}\főmérnökség\napló\naplóTW6000_{DateTime.Today.Year}.mdb";
+                if (!File.Exists(helynapló)) Adatbázis_Létrehozás.TW6000táblanapló(helynapló);
+                string helynapló2 = $@"{Application.StartupPath}\főmérnökség\napló\naplóTW6000Ütem_{DateTime.Today.Year}.mdb";
+                if (!File.Exists(helynapló2)) Adatbázis_Létrehozás.TW6000ütemnapló(helynapló2);
+
                 string szöveg1;
                 string ciklusrend;
                 DateTime vesedékesség;
