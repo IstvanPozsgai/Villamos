@@ -261,9 +261,9 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
-                List<Adat_Dolgozó_Státus> AdatokÖ = Kéz_Státus.Lista_Adatok(hely);
+                if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Státus(hely);
 
+                List<Adat_Dolgozó_Státus> AdatokÖ = Kéz_Státus.Lista_Adatok(hely);
                 List<Adat_Dolgozó_Státus> Adatok = new List<Adat_Dolgozó_Státus>();
 
                 if (SzűrtLista.Checked)

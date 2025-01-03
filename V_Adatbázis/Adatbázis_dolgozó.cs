@@ -7,33 +7,30 @@ namespace Villamos.Villamos_Adatbázis_Funkció
 
         public static void Dolgozói_Státus(string hely)
         {
-            string szöveg = "";
             string jelszó = "forgalmiutasítás";
 
             AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
 
-            szöveg = "CREATE TABLE Státustábla (";
+            string     szöveg = "CREATE TABLE Státustábla (";
             szöveg += "[ID] long,";
-            szöveg += "[Névki] CHAR(255),";
-            szöveg += "[Részmunkaidős] Decimal,";
-            szöveg += "[Hrazonosítóki] CHAR(255),";
-            szöveg += "[Bérki] Double,";
-            szöveg += "[telephelyki] CHAR(255),";
-            szöveg += "[kilépésoka] CHAR(255),";
-            szöveg += "[kilépésdátum] DATE,";
-            szöveg += "[Névbe] CHAR(255),";
-            szöveg += "[Hrazonosítóbe] CHAR(255),";
-            szöveg += "[Bérbe] Double,";
-            szöveg += "[Honnanjött] CHAR(255),";
-            szöveg += "[telephelybe] CHAR(255),";
-            szöveg += "[belépésidátum] DATE,";
-            szöveg += "[Státusváltozások] CHAR(255),";
-            szöveg += "[Státusváltozoka] CHAR(255),";
-            szöveg += "[Megjegyzés] CHAR(255) )";
-
+            szöveg += "[Névki] CHAR(150), ";
+            szöveg += "[Részmunkaidős] Decimal, ";
+            szöveg += "[Hrazonosítóki] CHAR(150), ";
+            szöveg += "[Bérki] Double, ";
+            szöveg += "[telephelyki] CHAR(150), ";
+            szöveg += "[kilépésoka] CHAR(150), ";
+            szöveg += "[kilépésdátum] DATE, ";
+            szöveg += "[Névbe] CHAR(150), ";
+            szöveg += "[Hrazonosítóbe] CHAR(150), ";
+            szöveg += "[Bérbe] Double, ";
+            szöveg += "[Honnanjött] CHAR(150), ";
+            szöveg += "[telephelybe] CHAR(150), ";
+            szöveg += "[belépésidátum] DATE, ";
+            szöveg += "[Státusváltozások] CHAR(150), ";
+            szöveg += "[Státusváltozoka] CHAR(150), ";
+            szöveg += "[Megjegyzés] CHAR(150) )";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-
         }
 
 
