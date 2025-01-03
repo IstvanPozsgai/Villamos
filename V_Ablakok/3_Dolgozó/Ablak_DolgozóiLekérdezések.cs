@@ -1321,10 +1321,10 @@ namespace Villamos
                 if (!Exists(hely)) return;
 
                 List<Adat_Létszám_Elrendezés_Változatok> AdatokÖ = Kéz_Változatok.Lista_Adatok(hely);
-                List<Adat_Létszám_Elrendezés_Változatok> Adatok = AdatokÖ.Select(a => a).Distinct().ToList();
+                List<string > Adatok = AdatokÖ.Select(a => a.Változatnév).Distinct().ToList();
 
-                foreach (Adat_Létszám_Elrendezés_Változatok rekord in Adatok)
-                    Változatoklist.Items.Add(rekord.Változatnév.Trim());
+                foreach (string  rekord in Adatok)
+                    Változatoklist.Items.Add(rekord.Trim());
 
             }
             catch (HibásBevittAdat ex)
@@ -1377,6 +1377,7 @@ namespace Villamos
                 Oszlopa.Text = Adat.Oszlop.Trim();
                 Sora.Text = Adat.Sor.ToString();
                 Szélessége.Text = Adat.Szélesség.ToString();
+                Változatoklist.Text = Adat.Változatnév;
             }
             catch (HibásBevittAdat ex)
             {

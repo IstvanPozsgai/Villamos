@@ -243,9 +243,11 @@ namespace Villamos
                 var BlackTextBrush = new SolidBrush(Color.Black);
 
                 // Állítsa be a szöveg igazítását
-                StringFormat sf = new StringFormat();
-                sf.Alignment = StringAlignment.Center;
-                sf.LineAlignment = StringAlignment.Center;
+                StringFormat sf = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center
+                };
 
                 // Festse meg a szöveget a megfelelő félkövér és szín beállítással
                 if ((e.State & DrawItemState.Selected) != 0)
@@ -341,7 +343,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum2.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarítótábla(hely);
 
-                NaptárListaFeltöltése();
+                NaptárListaFeltöltése(Dátum2.Value);
 
                 int hónapnap = MyF.Hónap_hossza(Dátum2.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum2.Value);
@@ -353,7 +355,7 @@ namespace Villamos
                 if (Elem == null) 
                 {
                     Naptár_átvétel();
-                    NaptárListaFeltöltése();
+                    NaptárListaFeltöltése(Dátum2.Value);
                 }
 
 
@@ -452,7 +454,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum2.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarítótábla(hely);
 
-                NaptárListaFeltöltése();
+                NaptárListaFeltöltése(Dátum2.Value);
 
                 int hónapnap = MyF.Hónap_hossza(Dátum2.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum2.Value);
@@ -851,7 +853,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) return;
 
-                NaptárListaFeltöltése();
+                NaptárListaFeltöltése(Dátum1.Value);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
@@ -894,7 +896,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) return;
 
-                NaptárListaFeltöltése();
+                NaptárListaFeltöltése(Dátum1.Value);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
@@ -935,7 +937,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) return;
 
-                NaptárListaFeltöltése();
+                NaptárListaFeltöltése(Dátum1.Value);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
@@ -2282,7 +2284,7 @@ namespace Villamos
                 int hónapnap = MyF.Hónap_hossza(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value.ToString("yyyy")}épülettakarítás.mdb";
+                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
                 string jelszó = "seprűéslapát";
 
                 string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
@@ -2553,7 +2555,7 @@ namespace Villamos
                 string jelszó = "seprűéslapát";
                 string szöveg = "SELECT * FROM takarításosztály where státus=0  order by  id";
 
-                string helyép = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value.ToString("yyyy")}épülettakarítás.mdb";
+                string helyép = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
                 string szövegép;
 
 
@@ -2745,8 +2747,7 @@ namespace Villamos
         {
             try
             {
-                if (Új_Ablak_Épülettakarítás_kieg != null)
-                    Új_Ablak_Épülettakarítás_kieg.Close();
+                Új_Ablak_Épülettakarítás_kieg?.Close();
 
                 Új_Ablak_Épülettakarítás_kieg = new Ablak_Épülettakarítás_kieg(Cmbtelephely.Text.Trim(), HelységKód, true);
                 Új_Ablak_Épülettakarítás_kieg.FormClosed += Ablak_Épülettakarítás_kieg_Closed;
@@ -2770,8 +2771,7 @@ namespace Villamos
         {
             try
             {
-                if (Új_Ablak_Épülettakarítás_kieg != null)
-                    Új_Ablak_Épülettakarítás_kieg.Close();
+                Új_Ablak_Épülettakarítás_kieg?.Close();
 
                 Új_Ablak_Épülettakarítás_kieg = new Ablak_Épülettakarítás_kieg(Cmbtelephely.Text.Trim(), HelységKód, false);
                 Új_Ablak_Épülettakarítás_kieg.FormClosed += Ablak_Épülettakarítás_kieg_Closed;
@@ -2797,7 +2797,7 @@ namespace Villamos
 
         private void Ablak_Épülettakarítás_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (Új_Ablak_Épülettakarítás_kieg != null) Új_Ablak_Épülettakarítás_kieg.Close();
+            Új_Ablak_Épülettakarítás_kieg?.Close();
         }
 
 
@@ -2816,7 +2816,7 @@ namespace Villamos
 
                 int hónapnap = MyF.Hónap_hossza(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
-                NaptárListaFeltöltése();
+                NaptárListaFeltöltése(Dátum.Value);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum.Value.Month
@@ -2862,7 +2862,7 @@ namespace Villamos
 
                 int hónapnap = MyF.Hónap_hossza(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
-                NaptárListaFeltöltése();
+                NaptárListaFeltöltése(Dátum.Value);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum.Value.Month
@@ -2933,7 +2933,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) return;
 
-                NaptárListaFeltöltése();
+                NaptárListaFeltöltése(Dátum.Value);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum.Value.Month
@@ -2985,12 +2985,12 @@ namespace Villamos
 
 
         #region Listák
-        private void NaptárListaFeltöltése()
+        private void NaptárListaFeltöltése(DateTime Dátum)
         {
             try
             {
                 AdatokÉNaptár.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum2.Value.Year}épülettakarítás.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarítótábla(hely);
 
                 string szöveg = $"SELECT * FROM naptár";

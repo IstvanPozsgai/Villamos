@@ -15,7 +15,7 @@ namespace Villamos.Villamos_Kezelők
         {
             List<Adat_Létszám_Elrendezés_Változatok> Adatok = new List<Adat_Létszám_Elrendezés_Változatok>();
             Adat_Létszám_Elrendezés_Változatok Adat;
-            string szöveg = $"Select * FROM Változatok";
+            string szöveg = $"Select * FROM Alaplista";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
