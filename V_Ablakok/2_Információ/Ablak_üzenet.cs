@@ -168,7 +168,7 @@ namespace Villamos
 
         private void Button1_Click(object sender, EventArgs e)
         {
-  
+
             Táblalistázás();
             Txtírásimező.Text = "";
         }
@@ -326,7 +326,7 @@ namespace Villamos
 
                 Adat_Üzenet_Olvasás Olvasó = (from Elem in Adatok_Olvas
                                               where Elem.Ki.Trim() == Program.PostásNév.Trim()
-                                              && Elem.Üzenetid ==sorszám 
+                                              && Elem.Üzenetid == sorszám
                                               select Elem).FirstOrDefault();
 
                 // gombok kezelése
@@ -1010,7 +1010,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void Bit64_Click(object sender, EventArgs e)
