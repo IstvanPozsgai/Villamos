@@ -53,7 +53,8 @@ namespace Villamos.Villamos_Ablakok
 
             Tevékenység_feltöltés();
             Marad.Checked = false;
-            hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DátumésIdő.Year}_Esztergálás.mdb";
+            DateTime Hételső = MyF.Hét_elsőnapja(DátumésIdő);
+            hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
             switch (Mód)
             {
                 case 0:
@@ -494,8 +495,8 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                if (Norma_Idő.Text.Trim() == "" || !int.TryParse(Norma_Idő.Text, out int NormaIdő))                      throw new HibásBevittAdat("Az időszükséglet mező nem lehet üres és pozítív egész számnak kell lennie.");
-                if (NormaIdő < 1)                                                                throw new HibásBevittAdat("Az időszükséglet mezőnek pozítív egész számnak kell lennie.");
+                if (Norma_Idő.Text.Trim() == "" || !int.TryParse(Norma_Idő.Text, out int NormaIdő)) throw new HibásBevittAdat("Az időszükséglet mező nem lehet üres és pozítív egész számnak kell lennie.");
+                if (NormaIdő < 1) throw new HibásBevittAdat("Az időszükséglet mezőnek pozítív egész számnak kell lennie.");
 
                 //Ami nem mozog csak az marad benne a többit visszaállítjuk alapra
                 Alapra_állítás();
