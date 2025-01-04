@@ -15,11 +15,11 @@ namespace Villamos
     public partial class Ablak_Munkalap_admin
     {
         readonly Kezelő_Munka_Folyamat KézMunkaFoly = new Kezelő_Munka_Folyamat();
+
         public Ablak_Munkalap_admin()
         {
             InitializeComponent();
         }
-
 
         private void Ablak_Munkalap_admin_Load(object sender, EventArgs e)
         {
@@ -28,12 +28,11 @@ namespace Villamos
                 Telephelyekfeltöltése();
                 Dátum.Value = DateTime.Today;
 
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap";
                 if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
 
                 // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
-                hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
                 if (!File.Exists(hely)) KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value);
 
                 Fülek.SelectedIndex = 0;
@@ -61,7 +60,6 @@ namespace Villamos
             Fülekkitöltése();
         }
 
-
         private void Telephelyekfeltöltése()
         {
             try
@@ -85,7 +83,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Fülekkitöltése()
         {
@@ -121,8 +118,7 @@ namespace Villamos
             }
         }
 
-
-        private void Button13_Click(object sender, EventArgs e)
+        private void Súgó_Click(object sender, EventArgs e)
         {
             try
             {
@@ -140,7 +136,6 @@ namespace Villamos
             }
 
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -227,14 +222,12 @@ namespace Villamos
             }
         }
 
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
             Rendlistáz();
             Szolgálatadatok_listázása();
         }
-
 
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
@@ -243,7 +236,6 @@ namespace Villamos
             Rendlistáz();
             Szolgálatadatok_listázása();
         }
-
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -279,10 +271,7 @@ namespace Villamos
             }
             // Munka kész – dobja ki a keféket
             BlackTextBrush.Dispose();
-
         }
-
-
         #endregion
 
 
@@ -291,11 +280,9 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "kismalac";
-                if (!File.Exists(hely))
-                    return;
-                string szöveg = "SELECT * FROM folyamattábla ORDER BY id";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                if (!File.Exists(hely)) return;
+                List<Adat_Munka_Folyamat> Adatok = KézMunkaFoly.Lista_Adatok(hely);
 
                 MunkafolyamatTábla.Rows.Clear();
                 MunkafolyamatTábla.Columns.Clear();
@@ -316,14 +303,10 @@ namespace Villamos
                 MunkafolyamatTábla.Columns[4].HeaderText = "Érvényes";
                 MunkafolyamatTábla.Columns[4].Width = 100;
 
-                Kezelő_Munka_Folyamat kéz = new Kezelő_Munka_Folyamat();
-                List<Adat_Munka_Folyamat> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-                int i;
-
                 foreach (Adat_Munka_Folyamat rekord in Adatok)
                 {
                     MunkafolyamatTábla.RowCount++;
-                    i = MunkafolyamatTábla.RowCount - 1;
+                    int i = MunkafolyamatTábla.RowCount - 1;
                     MunkafolyamatTábla.Rows[i].Cells[0].Value = rekord.ID;
                     MunkafolyamatTábla.Rows[i].Cells[1].Value = rekord.Rendelésiszám.Trim();
                     MunkafolyamatTábla.Rows[i].Cells[2].Value = rekord.Azonosító.Trim();
@@ -359,37 +342,36 @@ namespace Villamos
                 if (RendelésiszámText.Text.Trim() == "") throw new HibásBevittAdat("A rendelési számot ki kell tölteni.");
                 if (MunkafolyamatText.Text.Trim() == "") throw new HibásBevittAdat("A munkafolyamat részt ki kell tölteni.");
                 if (PályaszámText.Text.Trim() == "") PályaszámText.Text = "_";
+                if (!long.TryParse(IDfolyamat.Text, out long sorszám)) sorszám = 0;
+
                 // megnézzük, hogy melyik az utolós sorszám
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value:yyyy}.mdb";
-                string jelszó = "kismalac";
+                List<Adat_Munka_Folyamat> Adatok = KézMunkaFoly.Lista_Adatok(hely);
 
-                //Új
-                string szöveg = "SELECT * FROM folyamattábla";
-                Kezelő_Munka_Folyamat Kéz = new Kezelő_Munka_Folyamat();
-                List<Adat_Munka_Folyamat> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                Adat_Munka_Folyamat Elem = (from a in Adatok
+                                            where a.ID == sorszám
+                                            select a).FirstOrDefault();
 
-                if (IDfolyamat.Text.Trim() == "")
+                if (Elem == null)
                 {
-                    double i = Adatok.Any() ? (Adatok.Max(a => a.ID) + 1) : 1;
-                    IDfolyamat.Text = i.ToString();
-                    szöveg = "INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
-                    szöveg += IDfolyamat.Text + ", ";
-                    szöveg += "'" + RendelésiszámText.Text.Trim() + "', ";
-                    szöveg += "'" + PályaszámText.Text + "', ";
-                    szöveg += "'" + MunkafolyamatText.Text.Trim() + "', ";
-                    szöveg += " true ) ";
+                    //Rögzítés
+                    Adat_Munka_Folyamat ADAT = new Adat_Munka_Folyamat(0,
+                                                                       RendelésiszámText.Text.Trim(),
+                                                                       PályaszámText.Text,
+                                                                       MunkafolyamatText.Text.Trim(),
+                                                                       true);
+                    KézMunkaFoly.Rögzítés(hely, ADAT);
                 }
                 else
                 {
                     // ha már volt adat akkor módosítjuk
-                    szöveg = " UPDATE  folyamattábla SET ";
-                    szöveg += " Rendelésiszám='" + RendelésiszámText.Text.Trim() + "', ";
-                    szöveg += " azonosító='" + PályaszámText.Text + "', ";
-                    szöveg += " munkafolyamat='" + MunkafolyamatText.Text.Trim() + "' ";
-                    szöveg += " WHERE id=" + IDfolyamat.Text;
+                    Adat_Munka_Folyamat ADAT = new Adat_Munka_Folyamat(sorszám,
+                                                                       RendelésiszámText.Text.Trim(),
+                                                                       PályaszámText.Text,
+                                                                       MunkafolyamatText.Text.Trim(),
+                                                                       true);
+                    KézMunkaFoly.Módosítás(hely, ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
                 Folyamatlistáz();
 
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -405,13 +387,10 @@ namespace Villamos
             }
         }
 
-
-
         private void MunkafolyamatTábla_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             MunkafolyamatTábla.Rows[e.RowIndex].Selected = true;
         }
-
 
         private void MunkafolyamatTábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -437,7 +416,6 @@ namespace Villamos
             }
         }
 
-
         private void MunkafolyamatTábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (MunkafolyamatTábla.Rows[e.RowIndex].Cells[4].Value.ToString().Trim() == "Törölt")
@@ -448,25 +426,16 @@ namespace Villamos
             }
         }
 
-
         private void Karbantartás_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "kismalac";
-                if (!File.Exists(hely))
-                    return;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                if (!File.Exists(hely)) return;
                 if (MessageBox.Show("A törölt adatsorokat véglegesen töröljük?", "Kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    string szöveg = "DELETE FROM  folyamattábla WHERE látszódik=false";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                    KézMunkaFoly.Törlés(hely);
                 else
-                {
                     return;
-                }
-                Folyamatlistáz();
                 Adatok_tisztítása();
                 Folyamatlistáz();
             }
@@ -481,26 +450,13 @@ namespace Villamos
             }
         }
 
-
         private void Adatok_tisztítása()
         {
+            //Újra sorszámozza a folyamatokat
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "kismalac";
-                int j = 1;
-
-                List<string> SzövegGy = new List<string>();
-                for (int i = 0; i < MunkafolyamatTábla.Rows.Count; i++)
-                {
-                    if (int.Parse(MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString()) != j)
-                    {
-                        string szöveg = " UPDATE folyamattábla SET id=" + j.ToString() + " WHERE munkafolyamat='" + MunkafolyamatTábla.Rows[i].Cells[3].Value.ToString().Trim() + "'";
-                        SzövegGy.Add(szöveg);
-                    }
-                    j += 1;
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                KézMunkaFoly.ÚjraSorszámoz(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -513,32 +469,15 @@ namespace Villamos
             }
         }
 
-
         private void Cseregomb_Click(object sender, EventArgs e)
         {
             try
             {
-                if (RendelésiszámText.Text.Trim() == "")
-                    throw new HibásBevittAdat("A rendelési számot ki kell tölteni.");
-                if (RendelésiSzámúj.Text.Trim() == "")
-                    throw new HibásBevittAdat("A rendelési számot ki kell tölteni.");
+                if (RendelésiszámText.Text.Trim() == "") throw new HibásBevittAdat("A rendelési számot ki kell tölteni.");
+                if (RendelésiSzámúj.Text.Trim() == "") throw new HibásBevittAdat("A rendelési számot ki kell tölteni.");
 
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "kismalac";
-                int j = 1;
-
-                List<string> SzövegGy = new List<string>();
-                for (int i = 0; i < MunkafolyamatTábla.Rows.Count; i++)
-                {
-                    if (MunkafolyamatTábla.Rows[i].Cells[1].Value.ToString().Trim() == RendelésiszámText.Text.Trim())
-                    {
-                        string szöveg = " UPDATE folyamattábla SET Rendelésiszám='" + RendelésiSzámúj.Text.Trim() + "' WHERE id=" + MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString().Trim();
-                        SzövegGy.Add(szöveg);
-                    }
-                    j += 1;
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                KézMunkaFoly.MódosításRendelés(hely, RendelésiszámText.Text.Trim(), RendelésiSzámúj.Text.Trim());
                 Folyamatlistáz();
                 Bevitelimezőtisztítás();
             }
@@ -552,7 +491,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Bevitelimezőtisztítás()
         {
@@ -576,23 +514,18 @@ namespace Villamos
             }
         }
 
-
         private void ÚjRögzítés_Click(object sender, EventArgs e)
         {
             Bevitelimezőtisztítás();
         }
 
-
         private void MunkafolyamatTörlés_Click(object sender, EventArgs e)
         {
             try
             {
-                if (IDfolyamat.Text.Trim() == "")
-                    throw new HibásBevittAdat("A sorszámot meg kell adni.");
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "kismalac";
-                string szöveg = " UPDATE folyamattábla SET látszódik=false WHERE id=" + IDfolyamat.Text.Trim();
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (!long.TryParse(IDfolyamat.Text, out long sorszám)) throw new HibásBevittAdat("A sorszámot meg kell adni.");
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                KézMunkaFoly.Módosítás(hely, sorszám, false);
                 Folyamatlistáz();
             }
             catch (HibásBevittAdat ex)
@@ -605,18 +538,14 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Visszavon_Click(object sender, EventArgs e)
         {
             try
             {
-                if (IDfolyamat.Text.Trim() == "")
-                    throw new HibásBevittAdat("A sorszámot meg kell adni.");
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "kismalac";
-                string szöveg = " UPDATE folyamattábla SET látszódik=true WHERE id=" + IDfolyamat.Text.Trim();
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (!long.TryParse(IDfolyamat.Text, out long sorszám)) throw new HibásBevittAdat("A sorszámot meg kell adni.");
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                KézMunkaFoly.Módosítás(hely, sorszám, true);
                 Folyamatlistáz();
             }
             catch (HibásBevittAdat ex)
@@ -630,31 +559,14 @@ namespace Villamos
             }
         }
 
-
         private void CseregombPsz_Click(object sender, EventArgs e)
         {
             try
             {
-                if (PályaszámText.Text.Trim() == "")
-                    throw new HibásBevittAdat("A pályaszámot meg kell adni.");
-                if (PályaszámTextÚj.Text.Trim() == "")
-                    throw new HibásBevittAdat("A pályaszámot ki kell tölteni.");
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "kismalac";
-                int j = 1;
-
-                List<string> SzövegGy = new List<string>();
-                for (int i = 0; i < MunkafolyamatTábla.Rows.Count; i++)
-                {
-                    if (MunkafolyamatTábla.Rows[i].Cells[2].Value.ToString().Trim() == PályaszámText.Text.Trim())
-                    {
-                        string szöveg = " UPDATE folyamattábla SET azonosító='" + PályaszámTextÚj.Text.Trim() + "' WHERE id=" + MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString().Trim();
-                        SzövegGy.Add(szöveg);
-                    }
-                    j += 1;
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-
+                if (PályaszámText.Text.Trim() == "") throw new HibásBevittAdat("A pályaszámot meg kell adni.");
+                if (PályaszámTextÚj.Text.Trim() == "") throw new HibásBevittAdat("A pályaszámot ki kell tölteni.");
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                KézMunkaFoly.MódosításPálya(hely, PályaszámText.Text.Trim(), PályaszámTextÚj.Text.Trim());
                 Folyamatlistáz();
                 Bevitelimezőtisztítás();
             }
@@ -669,31 +581,17 @@ namespace Villamos
             }
         }
 
-
         private void CsoportFel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (MunkafolyamatTábla.SelectedRows.Count == 0)
-                    return;
-
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "kismalac";
+                if (MunkafolyamatTábla.SelectedRows.Count == 0) return;
                 // az elsőt nem lehet feljebb vinni
-                int sor = MunkafolyamatTábla.SelectedRows[0].Index;
-                if (sor <= 0) return;
-
-                // a kiválasztott sor elé mentjük
-                string szöveg = " UPDATE folyamattábla SET ";
-                szöveg += " id='" + (double.Parse(MunkafolyamatTábla.Rows[sor].Cells[0].Value.ToString()) - 1).ToString() + "'";
-                szöveg += " WHERE munkafolyamat='" + MunkafolyamatTábla.Rows[sor].Cells[3].Value.ToString().Trim() + "'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-                // az előzőt hátrébb rakjuk
-                szöveg = " UPDATE folyamattábla SET ";
-                szöveg += " id='" + double.Parse(MunkafolyamatTábla.Rows[sor].Cells[0].Value.ToString()).ToString() + "'";
-                szöveg += " WHERE munkafolyamat='" + MunkafolyamatTábla.Rows[MunkafolyamatTábla.SelectedRows[0].Index - 1].Cells[3].Value.ToString().Trim() + "'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                if (MunkafolyamatTábla.SelectedRows[0].Index <= 0) return;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                long SorszámElső = long.Parse(MunkafolyamatTábla.Rows[MunkafolyamatTábla.SelectedRows[0].Index].Cells[0].Value.ToString());
+                long SorszámMásodik = long.Parse(MunkafolyamatTábla.Rows[MunkafolyamatTábla.SelectedRows[0].Index - 1].Cells[0].Value.ToString());
+                KézMunkaFoly.Csere(hely, SorszámElső, SorszámMásodik);
                 Folyamatlistáz();
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -707,9 +605,8 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
+
 
         #region Munkarend 
         private void Button1_Click(object sender, EventArgs e)
@@ -851,7 +748,7 @@ namespace Villamos
             {
                 if (IDrend.Text.Trim() == "")
                     return;
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
                 string jelszó = "kismalac";
                 string szöveg = " UPDATE munkarendtábla SET látszódik=false WHERE id=" + IDrend.Text.Trim();
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -875,7 +772,7 @@ namespace Villamos
             {
                 if (IDrend.Text.Trim() == "")
                     return;
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
                 string jelszó = "kismalac";
                 string szöveg = " UPDATE munkarendtábla SET látszódik=true WHERE id=" + IDrend.Text.Trim();
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -960,7 +857,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Munkalap\munkalap" + Dátum.Value.ToString("yyyy") + ".mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
                 if (!File.Exists(hely)) return;
                 string jelszó = "kismalac";
                 string szöveg = "SELECT * FROM szolgálattábla ";
@@ -984,9 +881,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
-
-
     }
 }

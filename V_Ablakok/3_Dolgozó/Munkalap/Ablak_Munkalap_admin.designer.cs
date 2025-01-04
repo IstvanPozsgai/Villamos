@@ -84,7 +84,7 @@ namespace Villamos
             this.FejlécRögzít = new System.Windows.Forms.Button();
             this.Dátum = new System.Windows.Forms.DateTimePicker();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Button13 = new System.Windows.Forms.Button();
+            this.Súgó = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -190,7 +190,6 @@ namespace Villamos
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.MunkafolyamatTábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.MunkafolyamatTábla.RowHeadersVisible = false;
             this.MunkafolyamatTábla.RowHeadersWidth = 25;
             this.MunkafolyamatTábla.Size = new System.Drawing.Size(920, 237);
             this.MunkafolyamatTábla.TabIndex = 193;
@@ -599,17 +598,17 @@ namespace Villamos
             this.Dátum.TabIndex = 56;
             this.Dátum.ValueChanged += new System.EventHandler(this.Dátum_ValueChanged);
             // 
-            // Button13
+            // Súgó
             // 
-            this.Button13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button13.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.Button13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button13.Location = new System.Drawing.Point(890, 5);
-            this.Button13.Name = "Button13";
-            this.Button13.Size = new System.Drawing.Size(45, 45);
-            this.Button13.TabIndex = 54;
-            this.Button13.UseVisualStyleBackColor = true;
-            this.Button13.Click += new System.EventHandler(this.Button13_Click);
+            this.Súgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Súgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.Súgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Súgó.Location = new System.Drawing.Point(890, 5);
+            this.Súgó.Name = "Súgó";
+            this.Súgó.Size = new System.Drawing.Size(45, 45);
+            this.Súgó.TabIndex = 54;
+            this.Súgó.UseVisualStyleBackColor = true;
+            this.Súgó.Click += new System.EventHandler(this.Súgó_Click);
             // 
             // Ablak_Munkalap_admin
             // 
@@ -619,7 +618,7 @@ namespace Villamos
             this.ClientSize = new System.Drawing.Size(947, 487);
             this.Controls.Add(this.Dátum);
             this.Controls.Add(this.Fülek);
-            this.Controls.Add(this.Button13);
+            this.Controls.Add(this.Súgó);
             this.Controls.Add(this.Panel1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -643,7 +642,7 @@ namespace Villamos
 
         }
 
-        internal Button Button13;
+        internal Button Súgó;
         internal Panel Panel1;
         internal ComboBox Cmbtelephely;
         internal Label Label13;

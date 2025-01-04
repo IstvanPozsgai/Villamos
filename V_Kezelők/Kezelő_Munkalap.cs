@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -11,6 +12,7 @@ namespace Villamos.Villamos.Kezelők
 {
     public class Kezelő_Munka_Folyamat
     {
+        readonly string jelszó = "kismalac";
         public List<Adat_Munka_Folyamat> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Munka_Folyamat> Adatok = new List<Adat_Munka_Folyamat>();
@@ -45,7 +47,142 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
+        public List<Adat_Munka_Folyamat> Lista_Adatok(string hely)
+        {
+            string szöveg = "SELECT * FROM folyamattábla ORDER BY id";
+            List<Adat_Munka_Folyamat> Adatok = new List<Adat_Munka_Folyamat>();
+            Adat_Munka_Folyamat Adat;
 
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Munka_Folyamat(
+                                          rekord["ID"].ToÉrt_Long(),
+                                          rekord["rendelésiszám"].ToStrTrim(),
+                                          rekord["azonosító"].ToStrTrim(),
+                                          rekord["munkafolyamat"].ToStrTrim(),
+                                          rekord["látszódik"].ToÉrt_Bool()
+                                          );
+
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+        private long Sorszám(string hely)
+        {
+            long Válasz = 1;
+            try
+            {
+                List<Adat_Munka_Folyamat> Adatok = Lista_Adatok(hely);
+                if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(x => x.ID) + 1;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        public void Módosítás(string hely, Adat_Munka_Folyamat Adat)
+        {
+            try
+            {
+                string szöveg = " UPDATE  folyamattábla SET ";
+                szöveg += $" Rendelésiszám='{Adat.Rendelésiszám}', ";
+                szöveg += $" azonosító='{Adat.Azonosító}', ";
+                szöveg += $" munkafolyamat='{Adat.Munkafolyamat}', ";
+                szöveg += $" látszódik={Adat.Látszódik} ";
+                szöveg += $" WHERE id={Adat.ID}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string hely, long sorszám, bool látszódik)
+        {
+            try
+            {
+                string szöveg = $" UPDATE folyamattábla SET látszódik={látszódik} WHERE id={sorszám}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(string hely, Adat_Munka_Folyamat Adat)
+        {
+            try
+            {
+                string szöveg = "INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
+                szöveg += $"{Sorszám(hely)}, ";
+                szöveg += $"'{Adat.Rendelésiszám}', ";
+                szöveg += $"'{Adat.Azonosító}', ";
+                szöveg += $"'{Adat.Munkafolyamat}', ";
+                szöveg += $" {Adat.Látszódik} ) ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string hely)
+        {
+            try
+            {
+                string szöveg = "DELETE FROM folyamattábla WHERE látszódik=false";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         public void AdatbázisLétrehozás(string Cmbtelephely, DateTime Dátum)
         {
@@ -169,6 +306,93 @@ namespace Villamos.Villamos.Kezelők
 
 
 
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void ÚjraSorszámoz(string hely)
+        {
+            try
+            {
+                List<Adat_Munka_Folyamat> Adatok = Lista_Adatok(hely);
+
+                List<string> SzövegGy = new List<string>();
+                long i = 0;
+                foreach (Adat_Munka_Folyamat elem in Adatok)
+                {
+                    i++;
+                    string szöveg = $"UPDATE folyamattábla SET id={i} WHERE munkafolyamat='{elem.Munkafolyamat}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void MódosításRendelés(string hely, string Rendelés, string Újrendelés)
+        {
+            try
+            {
+                string szöveg = $"UPDATE folyamattábla SET Rendelésiszám='{Újrendelés}' WHERE Rendelésiszám='{Rendelés}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void MódosításPálya(string hely, string Pályaszám, string ÚjPályaszám)
+        {
+            try
+            {
+                string szöveg = $"UPDATE folyamattábla SET azonosító='{ÚjPályaszám}' WHERE azonosító='{Pályaszám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Csere(string hely, object sorszámElső, object sorszámMásodik)
+        {
+            try
+            {
+                string szöveg = $"UPDATE folyamattábla SET id=0 WHERE id={sorszámMásodik}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                szöveg = $"UPDATE folyamattábla SET id={sorszámMásodik} WHERE id={sorszámElső}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                szöveg = $"UPDATE folyamattábla SET id={sorszámElső} WHERE id={0}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                szöveg = "DELETE FROM folyamattábla WHERE id=0";
+                MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
