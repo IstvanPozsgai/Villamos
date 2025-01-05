@@ -19,6 +19,7 @@ namespace Villamos
     {
         readonly Kezelő_Munka_Idő KézMunkaIdő = new Kezelő_Munka_Idő();
         readonly Kezelő_Munka_Rendelés KézRendelés = new Kezelő_Munka_Rendelés();
+        readonly Kezelő_Munka_Adatok KézMunkaAdatok = new Kezelő_Munka_Adatok();
         public Ablak_munkalap_dekádoló()
         {
             InitializeComponent();
@@ -712,20 +713,17 @@ namespace Villamos
 
 
         #region Dekád 
-
         private void Excel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla3.Rows.Count <= 0)
-                    return;
+                if (Tábla3.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
                 SaveFileDialog1.InitialDirectory = "MyDocuments";
-
                 SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = "Idők_" + Program.PostásTelephely.Trim() + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                SaveFileDialog1.FileName = $"Idők_{Program.PostásTelephely.Trim()}_{DateTime.Now:yyyyMMddHHmmss}";
                 SaveFileDialog1.Filter = "Excel |*.xlsx";
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
@@ -750,26 +748,23 @@ namespace Villamos
             }
         }
 
-
         private void Command10_Click(object sender, EventArgs e)
         {
             Napilista();
         }
 
-
         private void Napilista()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.Year + ".mdb";
-                if (!System.IO.File.Exists(hely))
-                    return;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
+                if (!System.IO.File.Exists(hely)) return;
 
-                string jelszó = "dekádoló";
-                string szöveg = "SELECT * FROM Adatoktábla  where státus=true and dátum=#" + DekádDátum.Value.ToString("yyyy-MM-dd") + "#";
-                szöveg += " order by rendelés";
-
-
+                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(hely);
+                List<Adat_Munka_Adatok> Adatok = (from a in AdatokÖ
+                                                  where a.Státus == true
+                                                  && a.Dátum.ToShortDateString() == DekádDátum.Value.ToShortDateString()
+                                                  select a).ToList();
                 Tábla3.Rows.Clear();
                 Tábla3.Columns.Clear();
                 Tábla3.Refresh();
@@ -794,14 +789,10 @@ namespace Villamos
                 Tábla3.Columns[6].HeaderText = "Munka";
                 Tábla3.Columns[7].Width = 110;
 
-                Kezelő_Munka_Adatok kéz = new Kezelő_Munka_Adatok();
-                List<Adat_Munka_Adatok> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-                int i;
-
                 foreach (Adat_Munka_Adatok rekord in Adatok)
                 {
                     Tábla3.RowCount++;
-                    i = Tábla3.RowCount - 1;
+                    int i = Tábla3.RowCount - 1;
 
                     Tábla3.Rows[i].Cells[0].Value = rekord.ID;
                     Tábla3.Rows[i].Cells[0].ReadOnly = true;
@@ -829,7 +820,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Command12_Click(object sender, EventArgs e)
         {
@@ -869,9 +859,7 @@ namespace Villamos
                 Tábla3.Columns[6].HeaderText = "Munka";
                 Tábla3.Columns[7].Width = 110;
 
-
-                Kezelő_Munka_Adatok kéz = new Kezelő_Munka_Adatok();
-                List<Adat_Munka_Adatok> Adatok = kéz.Lista_Adat_SUM_List(hely, jelszó, szöveg);
+                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_Adat_SUM_List(hely, jelszó, szöveg);
                 int i;
 
                 foreach (Adat_Munka_Adatok rekord in Adatok)
@@ -969,24 +957,19 @@ namespace Villamos
                 Tábla3.Columns[7].HeaderText = "Munka";
                 Tábla3.Columns[7].Width = 110;
 
-                Kezelő_Munka_Adatok kéz = new Kezelő_Munka_Adatok();
-                List<Adat_Munka_Adatok> Adatok = kéz.Lista_AdatokSUM(hely, jelszó, szöveg);
+                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_AdatokSUM(hely, jelszó, szöveg);
                 int i;
 
                 foreach (Adat_Munka_Adatok rekord in Adatok)
                 {
                     Tábla3.RowCount++;
                     i = Tábla3.RowCount - 1;
-
                     Tábla3.Rows[i].Cells[1].Value = rekord.Rendelés.Trim();
                     Tábla3.Rows[i].Cells[2].Value = rekord.Művelet.Trim();
                     Tábla3.Rows[i].Cells[4].Value = rekord.SUMIdő;
-
                 }
-
                 Tábla3.Visible = true;
                 Tábla3.Refresh();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1082,8 +1065,7 @@ namespace Villamos
                 Tábla3.Columns[6].HeaderText = "Munka";
                 Tábla3.Columns[6].Width = 110;
 
-                Kezelő_Munka_Adatok kéz = new Kezelő_Munka_Adatok();
-                List<Adat_Munka_Adatok> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_Adatok(hely, jelszó, szöveg);
                 int i;
 
                 foreach (Adat_Munka_Adatok rekord in Adatok)

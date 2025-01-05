@@ -45,7 +45,6 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-
         public List<Adat_Munka_Adatok> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
@@ -182,5 +181,4 @@ namespace Villamos.Villamos.Kezelők
 
 
     }
-
 }
