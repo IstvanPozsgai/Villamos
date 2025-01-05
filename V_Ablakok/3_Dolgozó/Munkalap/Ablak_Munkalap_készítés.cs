@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -31,7 +30,7 @@ namespace Villamos
                 Dátum.Value = DateTime.Today;
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap";
-                if (!Directory.Exists(hely) )                          System.IO.Directory.CreateDirectory(hely);
+                if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
 
                 // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
                 hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
@@ -255,7 +254,7 @@ namespace Villamos
                 Nyit.Visible = true;
                 // töröljük a neveket
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                if (!File.Exists(hely) )
+                if (!File.Exists(hely))
                     return;
                 string jelszó = "forgalmiutasítás";
 
@@ -436,9 +435,11 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely) )                    return;
-                string jelszó = "kismalac";
-                string szöveg = "SELECT * FROM folyamattábla where látszódik= -1 ORDER BY id";
+                if (!File.Exists(hely)) return;
+                List<Adat_Munka_Folyamat> AdatokÖ = KézMunkaFoly.Lista_Adatok(hely);
+                List<Adat_Munka_Folyamat> Adatok = (from a in AdatokÖ
+                                                    where a.Látszódik == true
+                                                    select a).ToList();
 
                 MunkafolyamatTábla.Rows.Clear();
                 MunkafolyamatTábla.Columns.Clear();
@@ -456,14 +457,10 @@ namespace Villamos
                 MunkafolyamatTábla.Columns[3].HeaderText = "Rendelési szám";
                 MunkafolyamatTábla.Columns[3].Width = 150;
 
-
-                Kezelő_Munka_Folyamat kéz = new Kezelő_Munka_Folyamat();
-                List<Adat_Munka_Folyamat> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-                int i;
                 foreach (Adat_Munka_Folyamat rekord in Adatok)
                 {
                     MunkafolyamatTábla.RowCount++;
-                    i = MunkafolyamatTábla.RowCount - 1;
+                    int i = MunkafolyamatTábla.RowCount - 1;
 
                     MunkafolyamatTábla.Rows[i].Cells[0].Value = rekord.Munkafolyamat.Trim();
                     MunkafolyamatTábla.Rows[i].Cells[1].Value = rekord.Azonosító;
@@ -491,8 +488,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year }.mdb";
-                if (!File.Exists(hely))                       return;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
+                if (!File.Exists(hely)) return;
                 string jelszó = "tápijános";
                 string szöveg = "SELECT * FROM vezényléstábla where ";
                 szöveg += " törlés=0 and vizsgálatraütemez=1  and  vizsgálat='V1' ";
@@ -1561,16 +1558,18 @@ namespace Villamos
             MyE.Egyesít(munkalap, "o3:r3");
 
             string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-            string jelszó = "kismalac";
-            string szöveg = "SELECT * FROM szolgálattábla ";
-
             Kezelő_Munka_Szolgálat kéz = new Kezelő_Munka_Szolgálat();
-            Adat_Munka_Szolgálat Elem = kéz.Egy_Adat(hely, jelszó, szöveg);
-
-            MyE.Kiir(Elem.Költséghely.Trim(), "l3");
-            MyE.Kiir(Elem.Szolgálat.Trim(), "o2");
-            MyE.Kiir(Elem.Üzem.Trim(), "o3");
-            MyE.Kiir(Elem.Üzem.Trim().Substring(0, 1) + szöveg1, "a3");
+            List<Adat_Munka_Szolgálat> Adatok = kéz.Lista_Adatok(hely);
+            Adat_Munka_Szolgálat Elem = (from a in Adatok
+                                         orderby a.Üzem
+                                         select a).FirstOrDefault();
+            if (Elem != null)
+            {
+                MyE.Kiir(Elem.Költséghely.Trim(), "l3");
+                MyE.Kiir(Elem.Szolgálat.Trim(), "o2");
+                MyE.Kiir(Elem.Üzem.Trim(), "o3");
+                MyE.Kiir(Elem.Üzem.Trim().Substring(0, 1) + szöveg1, "a3");
+            }
             MyE.Betű("a3:r3", false, false, true);
 
             MyE.Rácsoz("a2:r3");
@@ -1615,10 +1614,10 @@ namespace Villamos
             try
             {
                 string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
-                if (!File.Exists(helynap))                      return;
+                if (!File.Exists(helynap)) return;
                 string jelszónap = "kiskakas";
                 string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                if (!File.Exists(helykieg))                         return;
+                if (!File.Exists(helykieg)) return;
                 string jelszókieg = "Mocó";
                 string szövegkieg = "SELECT * FROM Beosztáskódok WHERE Számoló=true order by BeosztásKód";
                 Kezelő_Kiegészítő_Beosztáskódok kéz = new Kezelő_Kiegészítő_Beosztáskódok();

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
+
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -15,6 +15,8 @@ namespace Villamos
     public partial class Ablak_Munkalap_admin
     {
         readonly Kezelő_Munka_Folyamat KézMunkaFoly = new Kezelő_Munka_Folyamat();
+        readonly Kezelő_MunkaRend KézMunkaRend = new Kezelő_MunkaRend();
+        readonly Kezelő_Munka_Szolgálat KézSzolgálat = new Kezelő_Munka_Szolgálat();
 
         public Ablak_Munkalap_admin()
         {
@@ -34,8 +36,6 @@ namespace Villamos
                 // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
                 hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
                 if (!File.Exists(hely)) KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value);
-
-                Fülek.SelectedIndex = 0;
 
                 Jogosultságkiosztás();
 
@@ -614,38 +614,24 @@ namespace Villamos
             try
             {
                 if (MunkarendText.Text.Trim() == "") throw new HibásBevittAdat("A munkarendet meg kell adni.");
+                if (!long.TryParse(IDrend.Text, out long Sorszám)) Sorszám = 0;
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value:yyyy}.mdb";
-                string jelszó = "kismalac";
                 if (!File.Exists(hely)) return;
-                // megnézzük, hogy van-e sorszám
-
-                //Új
-                string szöveg = "SELECT * FROM munkarendtábla";
-                Kezelő_MunkaRend Kéz = new Kezelő_MunkaRend();
-                List<Adat_MunkaRend> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
 
                 if (IDrend.Text.Trim() == "")
                 {
-                    double i = Adatok.Any() ? Adatok.Max(a => a.ID) + 1 : 1;
-
-                    IDrend.Text = i.ToString();
-                    szöveg = "INSERT INTO munkarendtábla (id, munkarend, látszódik)  VALUES (";
-                    szöveg += IDrend.Text + ", ";
-                    szöveg += "'" + MunkarendText.Text.Trim() + "', ";
-                    szöveg += " true ) ";
+                    Adat_MunkaRend ADAT = new Adat_MunkaRend(0, MunkarendText.Text.Trim(), true);
+                    KézMunkaRend.Rögzítés(hely, ADAT);
                 }
                 else
                 {
                     // ha már volt adat akkor módosítjuk
-                    szöveg = " UPDATE  munkarendtábla SET ";
-                    szöveg += " munkarend='" + MunkarendText.Text.Trim() + "' ";
-                    szöveg += " WHERE id=" + IDrend.Text;
+                    Adat_MunkaRend ADAT = new Adat_MunkaRend(Sorszám, MunkarendText.Text.Trim(), true);
+                    KézMunkaRend.Módosítás(hely, ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
                 Rendlistáz();
-
+                ÜrítMunkaRend();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -659,16 +645,13 @@ namespace Villamos
             }
         }
 
-
         private void Rendlistáz()
         {
             try
             {
                 string hely = Application.StartupPath + $@"\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                string jelszó = "kismalac";
-                if (!File.Exists(hely))
-                    return;
-                string szöveg = "SELECT * FROM munkarendtábla ORDER BY id";
+                if (!File.Exists(hely)) return;
+                List<Adat_MunkaRend> Adatok = KézMunkaRend.Lista_Adatok(hely);
 
                 MunkarendTábla.Rows.Clear();
                 MunkarendTábla.Columns.Clear();
@@ -684,25 +667,14 @@ namespace Villamos
                 MunkarendTábla.Columns[2].HeaderText = "Státus";
                 MunkarendTábla.Columns[2].Width = 200;
 
-                Kezelő_MunkaRend kéz = new Kezelő_MunkaRend();
-                List<Adat_MunkaRend> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                int i;
                 foreach (Adat_MunkaRend rekord in Adatok)
                 {
                     MunkarendTábla.RowCount++;
-                    i = MunkarendTábla.RowCount - 1;
+                    int i = MunkarendTábla.RowCount - 1;
 
                     MunkarendTábla.Rows[i].Cells[0].Value = rekord.ID;
                     MunkarendTábla.Rows[i].Cells[1].Value = rekord.Munkarend.Trim();
-                    if (rekord.Látszódik)
-                    {
-                        MunkarendTábla.Rows[i].Cells[2].Value = "Érvényes";
-                    }
-                    else
-                    {
-                        MunkarendTábla.Rows[i].Cells[2].Value = "Törölt";
-                    }
+                    MunkarendTábla.Rows[i].Cells[2].Value = rekord.Látszódik ? "Érvényes" : "Törölt";
                 }
 
                 MunkarendTábla.Visible = true;
@@ -719,13 +691,11 @@ namespace Villamos
             }
         }
 
-
         private void Button2_Click(object sender, EventArgs e)
         {
             IDrend.Text = "";
             MunkarendText.Text = "";
         }
-
 
         private void MunkarendTábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -741,17 +711,14 @@ namespace Villamos
             MunkarendTábla.Rows[e.RowIndex].Selected = true;
         }
 
-
         private void Button3_Click(object sender, EventArgs e)
         {
             try
             {
-                if (IDrend.Text.Trim() == "")
-                    return;
+                if (!long.TryParse(IDrend.Text.Trim(), out long Sorszám)) return;
+                if (IDrend.Text.Trim() == "") return;
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                string jelszó = "kismalac";
-                string szöveg = " UPDATE munkarendtábla SET látszódik=false WHERE id=" + IDrend.Text.Trim();
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                KézMunkaRend.Módosítás(hely, Sorszám, false);
                 Rendlistáz();
             }
             catch (HibásBevittAdat ex)
@@ -764,18 +731,15 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Button4_Click(object sender, EventArgs e)
         {
             try
             {
-                if (IDrend.Text.Trim() == "")
-                    return;
+                if (!long.TryParse(IDrend.Text.Trim(), out long Sorszám)) return;
+                if (IDrend.Text.Trim() == "") return;
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                string jelszó = "kismalac";
-                string szöveg = " UPDATE munkarendtábla SET látszódik=true WHERE id=" + IDrend.Text.Trim();
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                KézMunkaRend.Módosítás(hely, Sorszám, true);
                 Rendlistáz();
             }
             catch (HibásBevittAdat ex)
@@ -788,7 +752,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void MunkarendTábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -804,6 +767,12 @@ namespace Villamos
                 }
             }
         }
+
+        private void ÜrítMunkaRend()
+        {
+            IDrend.Clear();
+            MunkarendText.Clear();
+        }
         #endregion
 
 
@@ -813,32 +782,18 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value:yyyy}.mdb";
-                string jelszó = "kismalac";
-                string szöveg = "SELECT * FROM szolgálattábla ";
 
-
-                //Új
-                Kezelő_Munka_Szolgálat Kéz = new Kezelő_Munka_Szolgálat();
-                List<Adat_Munka_Szolgálat> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(hely);
+                Adat_Munka_Szolgálat ADAT = new Adat_Munka_Szolgálat(Költséghely.Text.Trim(),
+                                                                     Szolgálat.Text.Trim(),
+                                                                     Üzem.Text.Trim(),
+                                                                     "0", "0", "0", "0", "0", "0", "0");
                 bool vane = Adatok.Any();
                 if (!vane)
-                {
-                    szöveg = "INSERT INTO szolgálattábla (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
-                    szöveg += "'" + Költséghely.Text.Trim() + "', ";
-                    szöveg += "'" + Szolgálat.Text.Trim() + "', ";
-                    szöveg += "'" + Üzem.Text.Trim() + "', ";
-                    szöveg += " '0', '0', '0', '0', '0', '0', '0' )";
-                }
+                    KézSzolgálat.Rögzítés(hely, ADAT);
                 else
-                {
-                    // ha már volt adat akkor módosítjuk
-                    szöveg = " UPDATE  szolgálattábla SET ";
-                    szöveg += " költséghely='" + Költséghely.Text.Trim() + "', ";
-                    szöveg += " szolgálat='" + Szolgálat.Text.Trim() + "', ";
-                    szöveg += " üzem='" + Üzem.Text.Trim() + "' ";
-                    szöveg += " WHERE A7='0'";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézSzolgálat.Módosítás(hely, ADAT);
+
                 Szolgálatadatok_listázása();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -859,11 +814,10 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
                 if (!File.Exists(hely)) return;
-                string jelszó = "kismalac";
-                string szöveg = "SELECT * FROM szolgálattábla ";
-
-                Kezelő_Munka_Szolgálat Kéz = new Kezelő_Munka_Szolgálat();
-                Adat_Munka_Szolgálat Adat = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(hely);
+                Adat_Munka_Szolgálat Adat = (from a in Adatok
+                                             orderby a.Üzem
+                                             select a).FirstOrDefault();
                 if (Adat != null)
                 {
                     Költséghely.Text = Adat.Költséghely.Trim();
