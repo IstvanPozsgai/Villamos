@@ -23,14 +23,10 @@ namespace Villamos.Villamos_Ablakok
             try
             {
 
-                if (Text5.Text.Trim() == "")
-                    throw new HibásBevittAdat("A rendelési szám megadása kötelező.");
-                if (Text2.Text.Trim() == "")
-                    throw new HibásBevittAdat("A műveletszám megadása kötelező.");
-                if (Text4.Text.Trim() == "")
-                    throw new HibásBevittAdat("A pályaszzám vagy típus megadása kötelező.");
-                if (Text3.Text.Trim() == "")
-                    throw new HibásBevittAdat("A munkaleírás megadása kötelező.");
+                if (Text5.Text.Trim() == "")                      throw new HibásBevittAdat("A rendelési szám megadása kötelező.");
+                if (Text2.Text.Trim() == "")                        throw new HibásBevittAdat("A műveletszám megadása kötelező.");
+                if (Text4.Text.Trim() == "")                        throw new HibásBevittAdat("A pályaszzám vagy típus megadása kötelező.");
+                if (Text3.Text.Trim() == "")                       throw new HibásBevittAdat("A munkaleírás megadása kötelező.");
 
                 string szöveg = "";
                 szöveg += Text5.Text.Trim() + "\r\n";

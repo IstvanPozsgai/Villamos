@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -14,6 +15,7 @@ namespace Villamos.Villamos_Ablakok
         public DateTime Dátum { get; private set; }
         public string Cmbtelephely { get; private set; }
 
+        readonly Kezelő_Munka_Adatok KézMunkaAdat = new Kezelő_Munka_Adatok();
 
         int sor = -1;
 
@@ -42,15 +44,18 @@ namespace Villamos.Villamos_Ablakok
             try
             {
 
-                if (Text6.Text.Trim() == "" || !int.TryParse(Text6.Text.Trim(), out int result))
-                    Text6.Text = "5";
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Trim() + @"\adatok\Munkalap\munkalapelszámoló_" + Dátum.Year + ".mdb";
-                if (!File.Exists(hely) )
-                    return;
-                string jelszó = "dekádoló";
-                string szöveg = "SELECT DISTINCT rendelés, művelet, megnevezés, pályaszám ";
-                szöveg += " FROM Adatoktábla  where státus=true and dátum>#" + Dátum.AddDays(-1 * int.Parse(Text6.Text)).ToString("yyyy-MM-dd") + "#";
-                szöveg += " order by rendelés, művelet";
+                if (Text6.Text.Trim() == "" || !int.TryParse(Text6.Text.Trim(), out int Szám)) Szám = 5;
+
+                Text6.Text = Szám.ToString();
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Munkalap\munkalapelszámoló_{Dátum.Year}.mdb";
+                if (!File.Exists(hely)) return;
+
+                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdat.Lista_Adatok(hely);
+                List<string> rendelés = (from a in AdatokÖ
+                                         where a.Státus == true
+                                         && a.Dátum > Dátum.AddDays(-1 * Szám)
+                                         orderby a.Rendelés
+                                         select a.Rendelés).Distinct().ToList();
 
                 Tábla4.Rows.Clear();
                 Tábla4.Columns.Clear();
@@ -68,18 +73,21 @@ namespace Villamos.Villamos_Ablakok
                 Tábla4.Columns[3].HeaderText = "Munka";
                 Tábla4.Columns[3].Width = 100;
 
-                Kezelő_Munka_Adatok kéz = new Kezelő_Munka_Adatok();
-                List<Adat_Munka_Adatok> Adatok = kéz.Lista_Adatok_Szűk(hely, jelszó, szöveg);
-                int i;
-                foreach (Adat_Munka_Adatok rekord in Adatok)
+                foreach (string elem in rendelés)
                 {
-                    Tábla4.RowCount++;
-                    i = Tábla4.RowCount - 1;
+                    Adat_Munka_Adatok rekord = (from a in AdatokÖ
+                                                where a.Rendelés == elem
+                                                select a).FirstOrDefault();
+                    if (rekord != null)
+                    {
+                        Tábla4.RowCount++;
+                        int i = Tábla4.RowCount - 1;
 
-                    Tábla4.Rows[i].Cells[0].Value = rekord.Rendelés.Trim();
-                    Tábla4.Rows[i].Cells[1].Value = rekord.Művelet.Trim();
-                    Tábla4.Rows[i].Cells[2].Value = rekord.Megnevezés.Trim();
-                    Tábla4.Rows[i].Cells[3].Value = rekord.Pályaszám.Trim();
+                        Tábla4.Rows[i].Cells[0].Value = rekord.Rendelés.Trim();
+                        Tábla4.Rows[i].Cells[1].Value = rekord.Művelet.Trim();
+                        Tábla4.Rows[i].Cells[2].Value = rekord.Megnevezés.Trim();
+                        Tábla4.Rows[i].Cells[3].Value = rekord.Pályaszám.Trim();
+                    }
                 }
 
                 Tábla4.Visible = true;
@@ -109,7 +117,7 @@ namespace Villamos.Villamos_Ablakok
                 szöveg += Tábla4.Rows[sor].Cells[2].Value.ToString() + "\r\n";
                 szöveg += Tábla4.Rows[sor].Cells[3].Value.ToString() + "\r\n";
                 Választott = szöveg;
-                if (Változás != null) Változás();
+                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {

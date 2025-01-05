@@ -712,6 +712,7 @@
     <Compile Include="V_Kezelők\Kezelő_Munkakör.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munkalap.cs" />
     <Compile Include="V_Kezelők\Kezelő_MunkaRend.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Munka_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Adat.cs" />
