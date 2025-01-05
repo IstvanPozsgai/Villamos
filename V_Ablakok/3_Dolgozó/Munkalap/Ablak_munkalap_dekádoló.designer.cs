@@ -82,7 +82,7 @@ namespace Villamos
             this.Feljebb = new System.Windows.Forms.Button();
             this.Változattörlés = new System.Windows.Forms.Button();
             this.Command4 = new System.Windows.Forms.Button();
-            this.List1 = new System.Windows.Forms.ListBox();
+            this.MunkaIdő = new System.Windows.Forms.ListBox();
             this.Text1 = new System.Windows.Forms.TextBox();
             this.TabPage4 = new System.Windows.Forms.TabPage();
             this.Napi_id = new System.Windows.Forms.TextBox();
@@ -566,7 +566,7 @@ namespace Villamos
             this.TabPage3.Controls.Add(this.Feljebb);
             this.TabPage3.Controls.Add(this.Változattörlés);
             this.TabPage3.Controls.Add(this.Command4);
-            this.TabPage3.Controls.Add(this.List1);
+            this.TabPage3.Controls.Add(this.MunkaIdő);
             this.TabPage3.Controls.Add(this.Text1);
             this.TabPage3.Location = new System.Drawing.Point(4, 29);
             this.TabPage3.Name = "TabPage3";
@@ -610,14 +610,14 @@ namespace Villamos
             this.Command4.UseVisualStyleBackColor = true;
             this.Command4.Click += new System.EventHandler(this.Command4_Click);
             // 
-            // List1
+            // MunkaIdő
             // 
-            this.List1.FormattingEnabled = true;
-            this.List1.ItemHeight = 20;
-            this.List1.Location = new System.Drawing.Point(179, 65);
-            this.List1.Name = "List1";
-            this.List1.Size = new System.Drawing.Size(153, 324);
-            this.List1.TabIndex = 1;
+            this.MunkaIdő.FormattingEnabled = true;
+            this.MunkaIdő.ItemHeight = 20;
+            this.MunkaIdő.Location = new System.Drawing.Point(179, 65);
+            this.MunkaIdő.Name = "MunkaIdő";
+            this.MunkaIdő.Size = new System.Drawing.Size(153, 324);
+            this.MunkaIdő.TabIndex = 1;
             // 
             // Text1
             // 
@@ -887,7 +887,7 @@ namespace Villamos
         internal Button Feljebb;
         internal Button Változattörlés;
         internal Button Command4;
-        internal ListBox List1;
+        internal ListBox MunkaIdő;
         internal TextBox Text1;
         internal DataGridView Tábla2;
         internal Button Command3;

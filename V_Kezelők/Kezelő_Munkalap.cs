@@ -410,38 +410,6 @@ namespace Villamos.Villamos.Kezelők
         }
     }
 
-    public class Kezelő_Munka_Idő
-    {
-        public List<Adat_Munka_Idő> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Munka_Idő> Adatok = new List<Adat_Munka_Idő>();
-            Adat_Munka_Idő Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Munka_Idő(
-                                          rekord["ID"].ToÉrt_Long(),
-                                          rekord["Idő"].ToÉrt_Long()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
     public class Kezelő_Munkalapelszámoló
     {

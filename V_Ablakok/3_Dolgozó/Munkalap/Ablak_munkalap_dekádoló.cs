@@ -17,6 +17,7 @@ namespace Villamos
 
     public partial class Ablak_munkalap_dekádoló
     {
+        readonly Kezelő_Munka_Idő KézMunkaIdő = new Kezelő_Munka_Idő();
         public Ablak_munkalap_dekádoló()
         {
             InitializeComponent();
@@ -30,35 +31,30 @@ namespace Villamos
             Telephelyekfeltöltése();
             Jogosultságkiosztás();
 
-            string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-            if (System.IO.File.Exists(hely) == false)
-                Adatbázis_Létrehozás.Munkalapkedvencek(hely);
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+            if (!System.IO.File.Exists(hely)) Adatbázis_Létrehozás.Munkalapkedvencek(hely);
 
-            hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapelszámoló_" + DateTime.Today.ToString("yyyy") + ".mdb";
-            if (System.IO.File.Exists(hely) == false)
-                Adatbázis_Létrehozás.Munkalapévestábla(hely);
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DateTime.Today.ToString("yyyy") + ".mdb";
+            if (!System.IO.File.Exists(hely)) Adatbázis_Létrehozás.Munkalapévestábla(hely);
 
 
             Fülekkitöltése();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
-
         private void Ablak_munkalap_dekádoló_Load(object sender, EventArgs e)
         {
         }
 
-
         private void Ablak_munkalap_dekádoló_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt != null) Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt.Close();
-            if (Új_Ablak_munkalap_dekádoló_oszlopot_készít != null) Új_Ablak_munkalap_dekádoló_oszlopot_készít.Close();
-            if (Új_Ablak_munkalap_dekádoló_csoport != null) Új_Ablak_munkalap_dekádoló_csoport.Close();
+            Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt?.Close();
+            Új_Ablak_munkalap_dekádoló_oszlopot_készít?.Close();
+            Új_Ablak_munkalap_dekádoló_csoport?.Close();
         }
 
 
         #region Alap
-
         private void Jogosultságkiosztás()
         {
             try
@@ -141,7 +137,6 @@ namespace Villamos
             }
         }
 
-
         private void Telephelyekfeltöltése()
         {
             try
@@ -166,19 +161,28 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Munkalap_dekádoló.html";
-            MyE.Megnyitás(hely);
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Munkalap_dekádoló.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
-
 
         private void Fülekkitöltése()
         {
@@ -221,30 +225,31 @@ namespace Villamos
             }
         }
 
-
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
             // Határozza meg, hogy melyik lap van jelenleg kiválasztva
-            var SelectedTab = Fülek.TabPages[e.Index];
+            TabPage SelectedTab = Fülek.TabPages[e.Index];
 
             // Szerezze be a lap fejlécének területét
-            var HeaderRect = Fülek.GetTabRect(e.Index);
+            Rectangle HeaderRect = Fülek.GetTabRect(e.Index);
 
             // Hozzon létreecsetet a szöveg megfestéséhez
-            var BlackTextBrush = new SolidBrush(Color.Black);
+            SolidBrush BlackTextBrush = new SolidBrush(Color.Black);
 
             // Állítsa be a szöveg igazítását
-            StringFormat sf = new StringFormat();
-            sf.Alignment = StringAlignment.Center;
-            sf.LineAlignment = StringAlignment.Center;
+            StringFormat sf = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
 
             // Festse meg a szöveget a megfelelő félkövér és szín beállítással
             if ((e.State & DrawItemState.Selected) != 0)
             {
-                var BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
+                Font BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
                 // háttér szín beállítása
                 e.Graphics.FillRectangle(new SolidBrush(Color.DarkGray), e.Bounds);
-                var paddedBounds = e.Bounds;
+                Rectangle paddedBounds = e.Bounds;
                 paddedBounds.Inflate(0, 0);
                 e.Graphics.DrawString(SelectedTab.Text, BoldFont, BlackTextBrush, paddedBounds, sf);
             }
@@ -255,7 +260,6 @@ namespace Villamos
             // Munka kész – dobja ki a keféket
             BlackTextBrush.Dispose();
         }
-
         #endregion
 
 
@@ -263,9 +267,7 @@ namespace Villamos
         Ablak_munkalap_dekádoló_oszlopot_készít Új_Ablak_munkalap_dekádoló_oszlopot_készít;
         private void Command7_Click(object sender, EventArgs e)
         {
-            if (Új_Ablak_munkalap_dekádoló_oszlopot_készít != null)
-                Új_Ablak_munkalap_dekádoló_oszlopot_készít.Close();
-
+            Új_Ablak_munkalap_dekádoló_oszlopot_készít?.Close();
 
             Új_Ablak_munkalap_dekádoló_oszlopot_készít = new Ablak_munkalap_dekádoló_oszlopot_készít();
             Új_Ablak_munkalap_dekádoló_oszlopot_készít.FormClosed += Ablak_munkalap_dekádoló_oszlopot_készít_Closed;
@@ -279,7 +281,6 @@ namespace Villamos
         {
             Új_Ablak_munkalap_dekádoló_oszlopot_készít = null;
         }
-
 
         private void Újoszlopot_készít_ÚjElemek()
         {
@@ -301,9 +302,7 @@ namespace Villamos
         Ablak_munkalap_dekádoló_oszlopot_beilleszt Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt;
         private void Command18_Click(object sender, EventArgs e)
         {
-            if (Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt != null)
-                Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt.Close();
-
+            Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt?.Close();
 
             Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt = new Ablak_munkalap_dekádoló_oszlopot_beilleszt(Dátum.Value, Cmbtelephely.Text.Trim());
             Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt.FormClosed += Ablak_munkalap_dekádoló_oszlopot_beilleszt_Closed;
@@ -317,7 +316,6 @@ namespace Villamos
         {
             Új_Ablak_munkalap_dekádoló_oszlopot_beilleszt = null;
         }
-
 
         private void Újoszlopot_készít_előzményekből()
         {
@@ -336,7 +334,6 @@ namespace Villamos
 
 
         #region Csoport munkaidő ellenőrzés
-
         Ablak_munkalap_dekádoló_csoport Új_Ablak_munkalap_dekádoló_csoport;
         private void Benn_Lévő_Click(object sender, EventArgs e)
         {
@@ -353,23 +350,17 @@ namespace Villamos
         {
             Új_Ablak_munkalap_dekádoló_csoport = null;
         }
-
-
         #endregion
 
 
 
         #region Napi Összesítő
-
         private void Táblakitöltés0()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-                if (System.IO.File.Exists(hely) == false)
-                    return;
-                string jelszó = "felépítés";
-                string szöveg = "SELECT * FROM időválaszték  order by  id";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                if (!System.IO.File.Exists(hely)) return;
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -386,8 +377,7 @@ namespace Villamos
                 Tábla.Columns[2].Width = 85;
                 Tábla.Columns[2].ReadOnly = true;
 
-                Kezelő_Munka_Idő kéz = new Kezelő_Munka_Idő();
-                List<Adat_Munka_Idő> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Munka_Idő> Adatok = KézMunkaIdő.Lista_Adatok(hely);
                 int i;
                 foreach (Adat_Munka_Idő rekord in Adatok)
                 {
@@ -403,7 +393,6 @@ namespace Villamos
                 Tábla.Visible = true;
                 Tábla.Refresh();
                 Tábla.ClearSelection();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -416,7 +405,6 @@ namespace Villamos
             }
         }
 
-
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
             Táblakitöltés0();
@@ -425,7 +413,6 @@ namespace Villamos
             Napiidőkbetöltése();
             Command5.Enabled = true;
         }
-
 
         private void Command6_Click(object sender, EventArgs e)
         {
@@ -443,14 +430,12 @@ namespace Villamos
             Command5.Enabled = true;
         }
 
-
         private void Command11_Click(object sender, EventArgs e)
         {
             Táblaszámoló();
             Táblaszámoló1();
             Ellenörzés();
         }
-
 
         private void Táblaszámoló()
         {
@@ -503,15 +488,12 @@ namespace Villamos
             }
         }
 
-
         private void Ellenörzés()
         {
             try
             {
-                if (FelhasználtText.Text.Trim() == "" || RendelkezésText.Text.Trim() == "")
-                    return;
-                if (FelhasználtText.Text.Trim() == "0" | RendelkezésText.Text.Trim() == "0")
-                    return;
+                if (FelhasználtText.Text.Trim() == "" || RendelkezésText.Text.Trim() == "") return;
+                if (FelhasználtText.Text.Trim() == "0" | RendelkezésText.Text.Trim() == "0") return;
                 RendelkezésText.ForeColor = Color.White;
                 FelhasználtText.ForeColor = Color.White;
                 if (RendelkezésText.Text.Trim() == FelhasználtText.Text.Trim())
@@ -539,14 +521,12 @@ namespace Villamos
             }
         }
 
-
         private void Táblakitöltés1()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-                if (System.IO.File.Exists(hely) == false)
-                    return;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                if (!System.IO.File.Exists(hely)) return;
                 string jelszó = "felépítés";
                 string szöveg = "SELECT * FROM rendeléstábla  order by  id";
                 string szöveg1;
@@ -592,7 +572,6 @@ namespace Villamos
             }
         }
 
-
         private void Táblaszámoló1()
         {
             try
@@ -633,7 +612,6 @@ namespace Villamos
             }
         }
 
-
         private void Tábla1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
@@ -659,7 +637,6 @@ namespace Villamos
             }
         }
 
-
         private void Command24_Click(object sender, EventArgs e)
         {
             // új sor beszúrása
@@ -669,7 +646,6 @@ namespace Villamos
                 Tábla1.Rows[Tábla1.RowCount - 1].ReadOnly = true;
             }
         }
-
 
         private void Command5_Click(object sender, EventArgs e)
         {
@@ -682,7 +658,7 @@ namespace Villamos
                 long idő;
                 string fejléc;
                 Command5.Enabled = false;
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapelszámoló_" + Dátum.Value.ToString("yyyy") + ".mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + Dátum.Value.ToString("yyyy") + ".mdb";
                 string jelszó = "dekádoló";
                 string szöveg;
 
@@ -732,8 +708,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
@@ -788,7 +762,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.Year + ".mdb";
-                if (System.IO.File.Exists(hely) == false)
+                if (!System.IO.File.Exists(hely))
                     return;
 
                 string jelszó = "dekádoló";
@@ -862,7 +836,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
-                if (System.IO.File.Exists(hely) == false)
+                if (!System.IO.File.Exists(hely))
                     return;
 
                 string jelszó = "dekádoló";
@@ -942,7 +916,7 @@ namespace Villamos
                 DateTime utolsónap = DekádDátum.Value;
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-                if (System.IO.File.Exists(hely) == false)
+                if (!System.IO.File.Exists(hely))
                     return;
                 string jelszó = "dekádoló";
                 if (Option1.Checked == true)
@@ -1034,7 +1008,7 @@ namespace Villamos
                 if (Tábla3.Columns[3].HeaderText != "Napi")
                     return;
 
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
                 if (!System.IO.File.Exists(hely)) return;
                 string jelszó = "dekádoló";
 
@@ -1077,8 +1051,8 @@ namespace Villamos
                 DateTime elsőnap = MyF.Hónap_elsőnapja(DekádDátum.Value);
                 DateTime utolsónap = MyF.Hónap_utolsónapja(DekádDátum.Value);
 
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
-                if (System.IO.File.Exists(hely) == false)
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
+                if (!System.IO.File.Exists(hely))
                     return;
                 string jelszó = "dekádoló";
                 string szöveg = "SELECT *  FROM Adatoktábla";
@@ -1155,8 +1129,8 @@ namespace Villamos
                 if (Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[0].Value.ToString().Trim() == "")
                     throw new HibásBevittAdat("A kijelöléshez tartozó sorszám érvénytelen.");
 
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
-                if (System.IO.File.Exists(hely) == false)
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
+                if (!System.IO.File.Exists(hely))
                     return;
                 string jelszó = "dekádoló";
                 string szöveg = "UPDATE Adatoktábla SET rendelés='" + Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[1].Value.ToString().Trim() + "' ";
@@ -1200,21 +1174,19 @@ namespace Villamos
 
 
         #region Napi munkaidő adatok
-
         private void Napiidőkbetöltése()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-                if (System.IO.File.Exists(hely) == false)
-                    return;
-                string jelszó = "felépítés";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                if (!System.IO.File.Exists(hely)) return;
 
-                List1.Items.Clear();
-                string szöveg = "SELECT * FROM időválaszték  order by  id";
-                List1.BeginUpdate();
-                List1.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "idő"));
-                List1.EndUpdate();
+                List<Adat_Munka_Idő> Adatok = KézMunkaIdő.Lista_Adatok(hely);
+                MunkaIdő.Items.Clear();
+                MunkaIdő.BeginUpdate();
+                foreach (Adat_Munka_Idő elem in Adatok)
+                    MunkaIdő.Items.Add(elem.Idő );
+                MunkaIdő.EndUpdate();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1227,25 +1199,18 @@ namespace Villamos
             }
         }
 
-
         private void Command4_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-                if (System.IO.File.Exists(hely) == false)
-                    return;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                if (!System.IO.File.Exists(hely)) return;
 
-                string jelszó = "felépítés";
+                if (Text1.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve a beviteli mező, így nem lehet rögzíteni.");
+                if (!int.TryParse(Text1.Text, out int Idő)) throw new HibásBevittAdat("A beviteli mezőbe csak egész számot lehet írni.");
 
-                if (Text1.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kitöltve a beviteli mező, így nem lehet rögzíteni.");
-
-                if (!int.TryParse(Text1.Text, out int result))
-                    throw new HibásBevittAdat("A beviteli mezőbe csak egész számot lehet írni.");
-
-                string szöveg = "INSERT INTO időválaszték (idő) VALUES (" + Text1.Text + ")";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Munka_Idő ADAT = new Adat_Munka_Idő(0, Idő);
+                KézMunkaIdő.Rögzítés(hely, ADAT);
 
                 Napiidőkbetöltése();
                 Text1.Text = "";
@@ -1262,22 +1227,18 @@ namespace Villamos
             }
         }
 
-
         private void Változattörlés_Click(object sender, EventArgs e)
         {
             try
             {
-                if (List1.SelectedIndex < 0)
-                    throw new HibásBevittAdat("Nincs kiválasztva törlendő mennyiség.");
+                if (MunkaIdő.SelectedIndex < 0) throw new HibásBevittAdat("Nincs kiválasztva törlendő mennyiség.");
+                if (!int.TryParse(MunkaIdő.Items[MunkaIdő.SelectedIndex].ToString(), out int Idő)) throw new HibásBevittAdat("A beviteli mezőbe csak egész számot lehet írni.");
 
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-                if (System.IO.File.Exists(hely) == false)
-                    return;
-                string jelszó = "felépítés";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                if (!System.IO.File.Exists(hely)) return;
+                Adat_Munka_Idő ADAT = new Adat_Munka_Idő(0, Idő);
+                KézMunkaIdő.Törlés(hely, ADAT);
 
-                string szöveg = "DELETE FROM időválaszték WHERE idő=" + List1.Items[List1.SelectedIndex].ToString();
-
-                MyA.ABtörlés(hely, jelszó, szöveg);
                 Napiidőkbetöltése();
                 MessageBox.Show("Az adattörlése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1292,52 +1253,17 @@ namespace Villamos
             }
         }
 
-
         private void Feljebb_Click(object sender, EventArgs e)
         {
             try
             {
-                if (List1.SelectedIndex <= 0) throw new HibásBevittAdat("Az első elemet nem lehet előrébb tenni.");
-
-                long előzőid = -1;
-
-                long választottid = -1;
+                if (MunkaIdő.SelectedIndex <= 0) throw new HibásBevittAdat("Az első elemet nem lehet előrébb tenni.");
+                if (!long.TryParse(MunkaIdő.Items[MunkaIdő.SelectedIndex - 1].ToStrTrim(), out long sorelőző)) throw new HibásBevittAdat("Hibás adat.");
+                if (!long.TryParse(MunkaIdő.Items[MunkaIdő.SelectedIndex].ToStrTrim(), out long sor)) throw new HibásBevittAdat("Hibás adat.");
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\Munkalap\munkalapösszesítő.mdb";
                 if (!File.Exists(hely)) return;
-                string jelszó = "felépítés";
-
-                string szöveg = "SELECT * FROM időválaszték";
-                Kezelő_Munka_Idő kéz = new Kezelő_Munka_Idő();
-                List<Adat_Munka_Idő> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-                // előző adat
-                if (long.TryParse(List1.Items[List1.SelectedIndex - 1].ToStrTrim(), out long előző))
-                {
-                    Adat_Munka_Idő elozoTalalat = (from a in Adatok
-                                                   where a.Idő == előző
-                                                   select a).FirstOrDefault();
-
-                    if (elozoTalalat != null) előzőid = (int)elozoTalalat.ID;
-                }
-
-                if (long.TryParse(List1.Items[List1.SelectedIndex].ToStrTrim(), out long választott))
-                {
-                    Adat_Munka_Idő választottElem = (from a in Adatok
-                                                     where a.Idő == választott
-                                                     select a).FirstOrDefault();
-
-                    if (választottElem != null) választottid = választottElem.ID;
-                }
-                if (választottid > 0 && előzőid > 0)
-                {
-                    szöveg = $"UPDATE időválaszték SET idő={előző} WHERE id={választottid}";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                    szöveg = $"UPDATE időválaszték SET idő={választott} WHERE id={előzőid}";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                }
-
-
+                KézMunkaIdő.Csere(hely, sorelőző, sor);
                 Napiidőkbetöltése();
             }
             catch (HibásBevittAdat ex)
@@ -1350,8 +1276,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
@@ -1360,9 +1284,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-                if (System.IO.File.Exists(hely) == false)
-                    return;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                if (!System.IO.File.Exists(hely))                    return;
                 string jelszó = "felépítés";
                 string szöveg = "SELECT * FROM rendeléstábla  order by  id";
 
@@ -1507,8 +1430,8 @@ namespace Villamos
             {
                 if (TextRendelés.Text.Trim() == "")
                     return;
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-                if (System.IO.File.Exists(hely) == false)
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                if (!System.IO.File.Exists(hely))
                     return;
 
                 string jelszó = "felépítés";
@@ -1543,8 +1466,8 @@ namespace Villamos
                 if (Tábla2.SelectedRows[0].Index < 1)
                     throw new HibásBevittAdat("Az első elemet nem lehet előrébb vinni.");
 
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\Munkalap\munkalapösszesítő.mdb";
-                if (System.IO.File.Exists(hely) == false)
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                if (!System.IO.File.Exists(hely))
                     return;
                 string jelszó = "felépítés";
 
