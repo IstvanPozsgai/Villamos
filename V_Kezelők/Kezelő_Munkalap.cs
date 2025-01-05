@@ -451,40 +451,5 @@ namespace Villamos.Villamos.Kezelők
     }
 
 
-    public class Kezelő_Munka_Rendelés
-    {
-        public List<Adat_Munka_Rendelés> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Munka_Rendelés> Adatok = new List<Adat_Munka_Rendelés>();
-            Adat_Munka_Rendelés Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Munka_Rendelés(
-                                          rekord["ID"].ToÉrt_Long(),
-                                          rekord["megnevezés"].ToString(),
-                                          rekord["művelet"].ToString(),
-                                          rekord["pályaszám"].ToString(),
-                                          rekord["rendelés"].ToString()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
 }
