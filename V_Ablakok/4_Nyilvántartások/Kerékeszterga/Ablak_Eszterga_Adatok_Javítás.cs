@@ -36,7 +36,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"SELECT * FROM mérés WHERE Eszterga_Id=" + ID;
                 Adat = Kéz.Egy_Adat(hely, jelszó, szöveg);
@@ -177,7 +177,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 string szövegmegjegyzés = "";
                 bool volt = false;
 
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"UPDATE mérés SET ";
                 if (Azonosító.Text != Adat.Azonosító.Trim())

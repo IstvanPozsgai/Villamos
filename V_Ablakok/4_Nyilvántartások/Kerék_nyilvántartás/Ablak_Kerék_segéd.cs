@@ -38,7 +38,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga";
                 if (!Directory.Exists(hely))                     Directory.CreateDirectory(hely);
                 hely += $@"\{DateTime.Today.Year}_Igény.mdb";
                 if (!File.Exists(hely))                        Adatbázis_Létrehozás.Kerék_Igény(hely);
@@ -84,7 +84,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.Year}_Igény.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.Year}_Igény.mdb";
                 string jelszó = "RónaiSándor";
                 // ellenőrzés, hogy már szerepel-e valamelyik kocsi az igénylésben
                 string[] darabol = Pályaszám.Split('-');

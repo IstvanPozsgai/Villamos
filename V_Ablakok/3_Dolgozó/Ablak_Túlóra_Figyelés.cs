@@ -266,7 +266,7 @@ namespace Villamos
                     Határ = Határ / 12 * DateTime.Today.Month;
                 }
 
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 jelszó = "forgalmiutasítás";
                 szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900#  ORDER BY DolgozóNév ";
 
@@ -321,7 +321,7 @@ namespace Villamos
 
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\szatubecs\{Dátum.Value.Year}szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\szatubecs\{Dátum.Value.Year}szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = "SELECT * FROM túlóra WHERE státus<>3";
 
@@ -382,7 +382,7 @@ namespace Villamos
             double óra;
             if (Elem != null) óra = Elem.Munkaidő; else óra = 0;
 
-            hely = Application.StartupPath + $@"\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
             jelszó = "katalin";
             szöveg = $" SELECT * from Naptár";
 
@@ -1057,7 +1057,7 @@ namespace Villamos
             if (Év.Text.Trim() == "")
                 return;
             TelephelyiVáltozat.Items.Clear();
-            string hely = Application.StartupPath + $@"\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
             string jelszó = "katalin";
             string szöveg = $"SELECT DISTINCT telephely FROM kijelöltnapok where (dátum>=#1/1/{Év.Text.Trim()}# and dátum<=#12/31/{Év.Text.Trim()}#) ORDER BY telephely";
 
@@ -1167,7 +1167,7 @@ namespace Villamos
         private void Csoportfeltöltés()
         {
             Csoportlista.Items.Clear();
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
             string jelszó = "Mocó";
 
             string szöveg = "SELECT * FROM csoportbeosztás order by Sorszám";
@@ -1233,7 +1233,7 @@ namespace Villamos
             // minden kijelölést töröl
             for (int i = 0; i < Dolgozónév.Items.Count; i++)
                 Dolgozónév.SetItemChecked(i, false);
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
             string jelszó = "forgalmiutasítás";
 
             for (int j = 0; j < Csoportlista.CheckedItems.Count; j++)

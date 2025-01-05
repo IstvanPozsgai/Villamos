@@ -113,7 +113,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Adatok.Clear();
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"SELECT * FROM Esztergályos ORDER BY Dolgozónév ";
 
@@ -231,7 +231,7 @@ namespace Villamos.Villamos_Ablakok
                     szöveg = "INSERT INTO Esztergályos (Dolgozószám, dolgozónév, telephely, státus) VALUES (";
                     szöveg += $"'{darabol[1].Trim()}','{darabol[0].Trim()}','{Telephely.Text.Trim()}', {int.Parse(darabos[0])} )";
                 }
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
                 string jelszó = "RónaiSándor";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
@@ -263,7 +263,7 @@ namespace Villamos.Villamos_Ablakok
 
                 if (Elem != null)
                 {
-                    string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
+                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
                     string jelszó = "RónaiSándor";
                     string szöveg = $"DELETE FROM Esztergályos  WHERE dolgozószám='{darabol[1].Trim()}'";
                     MyA.ABtörlés(hely, jelszó, szöveg);

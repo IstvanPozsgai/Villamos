@@ -93,7 +93,7 @@ namespace Villamos
 
                 while (Vég > ideigdátum)
                 {
-                    string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\naplózás\{ideigdátum:yyyyMM}napló.mdb";
+                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\naplózás\{ideigdátum:yyyyMM}napló.mdb";
                     if (Exists(hely))
                     {
                         string jelszó = "kerekeskút";
@@ -284,7 +284,7 @@ namespace Villamos
                 Dolgozónév.Items.Clear();
                 Dolgozónév.BeginUpdate();
                 Dolgozónév.Items.Add("");
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 string jelszó = "forgalmiutasítás";
                 string szöveg;
                 if (Kilépettjel.Checked)

@@ -28,7 +28,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
         private void Ablak_Eszterga_Adatok_Baross_Load(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
             if (!Exists(hely))
                 Adatbázis_Létrehozás.Kerék_Baross_Mérési_Adatok(hely);
             Jogosultságkiosztás();
@@ -153,7 +153,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
                 Holtart.Be();
 
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"SELECT * FROM mérés ";
                 AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
@@ -412,7 +412,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
                 string jelszó = "RónaiSándor";
                 Holtart.Be();
                 Tábla.Rows.Clear();
@@ -722,7 +722,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 List<Adat_Jármű> AdatokJármű = Kéz_Jármű.Lista_Adatok(hely, jelszó, szöveg);
 
 
-                hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
                 jelszó = "RónaiSándor";
 
                 List<string> szövegGy = new List<string>();
@@ -819,7 +819,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
         void Státus_Állítás(int státus, long EsztergaID)
         {
-            string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
             string jelszó = "RónaiSándor";
             string szöveg = "SELECT * FROM mérés " ;
             AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
@@ -937,7 +937,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Igény.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Igény.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"UPDATE igény SET státus={Státus_Lesz}";
                 szöveg += $"   WHERE státus=2 AND pályaszám Like '%{Pályaszám.Trim()}%'";

@@ -71,11 +71,11 @@ namespace Villamos.Villamos_Ablakok
             if (!File.Exists(hely))
                 Adatbázis_Létrehozás.Kerék_Törzs(hely);
 
-            hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Value.Year}_Esztergálás.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Value.Year}_Esztergálás.mdb";
             if (!File.Exists(hely))
                 Adatbázis_Létrehozás.Kerék_Éves(hely);
 
-            hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.Year}_Igény.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.Year}_Igény.mdb";
             if (!File.Exists(hely))
                 Adatbázis_Létrehozás.Kerék_Igény(hely);
             Telephelyek_Szűrő_feltöltése();
@@ -330,7 +330,7 @@ namespace Villamos.Villamos_Ablakok
                 Igény_Típus.Items.Add("");
                 for (int ii = -1; ii < 1; ii++)
                 {
-                    string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(ii).Year}_Igény.mdb";
+                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(ii).Year}_Igény.mdb";
                     if (File.Exists(hely))
                     {
                         string jelszó = "RónaiSándor";
@@ -395,7 +395,7 @@ namespace Villamos.Villamos_Ablakok
 
                 for (int ii = -1; ii < 1; ii++)
                 {
-                    string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(ii).Year}_Igény.mdb";
+                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(ii).Year}_Igény.mdb";
                     string jelszó = "RónaiSándor";
                     string szöveg;
                     if (File.Exists(hely))
@@ -513,7 +513,7 @@ namespace Villamos.Villamos_Ablakok
 
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum.Value);
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum.Value).AddHours(23).AddMinutes(30);
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"SELECT * FROM naptár WHERE idő>=#{Hételső:MM-dd-yyyy HH:mm}# AND idő<=#{Hétutolsó:MM-dd-yyyy HH:mm}#";
 
@@ -566,7 +566,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 //Betöltjük a dolgozókat akik beosztását nézzük
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
                 if (!File.Exists(hely)) return;
                 string jelszó = "RónaiSándor";
                 string szöveg = $"SELECT * FROM Esztergályos  ORDER BY dolgozószám ";
@@ -679,7 +679,7 @@ namespace Villamos.Villamos_Ablakok
             {
                 Holtart.Be(20);
                 //Beosztás adatok betöltése
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
                 if (!File.Exists(hely)) return;
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM beosztáskódok WHERE számoló=true  ORDER BY beosztáskód";
@@ -696,7 +696,7 @@ namespace Villamos.Villamos_Ablakok
 
                 foreach (Adat_Kiegészítő_Beosztáskódok rekordBKód in AdatB)
                 {
-                    string helydolg = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{NapTÁR.Year}\EsztBeosztás{NapTÁR:yyyyMM}.mdb";
+                    string helydolg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{NapTÁR.Year}\EsztBeosztás{NapTÁR:yyyyMM}.mdb";
                     if (!File.Exists(helydolg)) Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(helydolg);
                     string jelszódolg = "kiskakas";
                     szöveg = $"SELECT * FROM beosztás where [nap]>=# {Hételső:MM-dd-yyyy} 00:00:0#";
@@ -704,7 +704,7 @@ namespace Villamos.Villamos_Ablakok
                     szöveg += " ORDER BY nap";
                     AdatBEO = KézBEO.Lista_Adatok(helydolg, jelszódolg, szöveg);
 
-                    hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
+                    hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
                     jelszó = "RónaiSándor";
                     List<string> szövegGy = new List<string>();
 
@@ -779,7 +779,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string helyold = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\Ebeosztás{Dátumtól:yyyyMM}.mdb";
+                string helyold = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\Ebeosztás{Dátumtól:yyyyMM}.mdb";
                 if (File.Exists(helyold))
                 {
                     //Az új beosztásból vesszük az adatokat
@@ -856,15 +856,15 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string helyold = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EBeosztás{Dátumtól:yyyyMM}.mdb";
+                string helyold = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EBeosztás{Dátumtól:yyyyMM}.mdb";
                 if (!File.Exists(helyold)) return;
 
-                string helynew = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
+                string helynew = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
                 if (!File.Exists(helynew))
                 {
-                    helynew = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}";
+                    helynew = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}";
                     if (!Directory.Exists(helynew)) Directory.CreateDirectory(helynew);
-                    helynew = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
+                    helynew = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
                     if (!File.Exists(helynew)) Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(helynew);
                 }
                 string jelszó = "kiskakas";
@@ -940,15 +940,15 @@ namespace Villamos.Villamos_Ablakok
             try
             {
 
-                string helyold = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EBeosztás{Dátumtól:yyyyMM}.mdb";
+                string helyold = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EBeosztás{Dátumtól:yyyyMM}.mdb";
                 if (!File.Exists(helyold)) return;
 
-                string helynew = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
+                string helynew = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
                 if (!File.Exists(helynew))
                 {
-                    helynew = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}";
+                    helynew = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}";
                     if (!Directory.Exists(helynew)) Directory.CreateDirectory(helynew);
-                    helynew = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
+                    helynew = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
                     if (!File.Exists(helynew)) Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(helynew);
                 }
                 string jelszó = "kiskakas";
@@ -1037,7 +1037,7 @@ namespace Villamos.Villamos_Ablakok
                     }
                 }
 
-                hely = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\Beosztás\{Dátumig.Year}\EsztBeosztás{Dátumig:yyyyMM}.mdb";
+                hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumig.Year}\EsztBeosztás{Dátumig:yyyyMM}.mdb";
                 if (!File.Exists(hely)) return;
                 jelszó = "kiskakas";
                 vane = Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig);
@@ -1597,7 +1597,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Igény.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Igény.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"UPDATE igény SET státus={Státus_Lesz}";
                 szöveg += $"   WHERE  pályaszám='{Pályaszám.Trim()}'";
@@ -1626,7 +1626,7 @@ namespace Villamos.Villamos_Ablakok
                     //Csak az ütemezett kocsikkal foglalkozunk
                     if ("Ütemezett" == SOR.Cells[5].Value.ToString().Trim())
                     {
-                        string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
+                        string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
                         if (File.Exists(hely))
                         {
                             Státus_állítás(SOR.Cells[2].Value.ToString(), 7, DateTime.Parse(SOR.Cells[1].Value.ToString()));
@@ -1662,7 +1662,7 @@ namespace Villamos.Villamos_Ablakok
                     //Csak az Elkészült kocsikkal foglalkozunk
                     if ("Elkészült" == SOR.Cells[5].Value.ToString().Trim())
                     {
-                        string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
+                        string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
                         if (File.Exists(hely))
                         {
                             Státus_állítás(SOR.Cells[2].Value.ToString(), 2, DateTime.Parse(SOR.Cells[1].Value.ToString()));
@@ -1700,7 +1700,7 @@ namespace Villamos.Villamos_Ablakok
                         //Csak az Elkészült kocsikkal foglalkozunk
                         if ("Igény" == SOR.Cells[5].Value.ToString().Trim())
                         {
-                            string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
+                            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
                             if (File.Exists(hely))
                             {
                                 Státus_állítás(SOR.Cells[2].Value.ToString(), 9, DateTime.Parse(SOR.Cells[1].Value.ToString()));

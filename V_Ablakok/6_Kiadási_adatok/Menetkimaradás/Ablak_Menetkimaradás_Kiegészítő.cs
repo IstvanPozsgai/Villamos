@@ -255,7 +255,7 @@ namespace Villamos.Villamos_Ablakok
             {
                 főholtart.Lép();
                 // telephelyenként végigmegyünk az adatokon
-                helytelep = Application.StartupPath + $@"\{Elem.Telephelynév.Trim()}\Adatok\főkönyv\menet{dátumtól.Value.Year}.mdb";
+                helytelep = $@"{Application.StartupPath}\{Elem.Telephelynév.Trim()}\Adatok\főkönyv\menet{dátumtól.Value.Year}.mdb";
                 if (Exists(helytelep))
                 {
 

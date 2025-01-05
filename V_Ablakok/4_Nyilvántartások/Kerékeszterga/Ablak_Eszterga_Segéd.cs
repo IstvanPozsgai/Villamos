@@ -28,7 +28,7 @@ namespace Villamos.Villamos_Ablakok
 
         string hely;
         string jelszó = "RónaiSándor";
-        string helyTörzs = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
+        string helyTörzs = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
 
         readonly Kezelő_Kerék_Eszterga_Naptár Naptár_Kéz = new Kezelő_Kerék_Eszterga_Naptár();
         List<Adat_Kerék_Eszterga_Naptár> Naptár_Adatok;
@@ -54,7 +54,7 @@ namespace Villamos.Villamos_Ablakok
             Tevékenység_feltöltés();
             Marad.Checked = false;
             DateTime Hételső = MyF.Hét_elsőnapja(DátumésIdő);
-            hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
             switch (Mód)
             {
                 case 0:
@@ -216,7 +216,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string helyigény = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Év}_Igény.mdb";
+                string helyigény = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Év}_Igény.mdb";
                 if (!File.Exists(helyigény)) return;
                 string szöveg = $"SELECT * FROM Igény";
                 AdatokIgény = KézIgény.Lista_Adatok(helyigény, jelszó, szöveg);
@@ -588,7 +588,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string helyi = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DátumésIdő.Year}_Igény.mdb";
+                string helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DátumésIdő.Year}_Igény.mdb";
 
                 string[] darabol = Tevékenység_Vál.Text.Split('=');
                 string szöveg = $"UPDATE igény SET státus={Státus_Lesz}";
@@ -940,7 +940,7 @@ namespace Villamos.Villamos_Ablakok
 
                 for (int ii = -1; ii < 1; ii++)
                 {
-                    string helyF = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(ii).Year}_Igény.mdb";
+                    string helyF = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(ii).Year}_Igény.mdb";
                     if (File.Exists(helyF))
                     {
                         string jelszó = "RónaiSándor";

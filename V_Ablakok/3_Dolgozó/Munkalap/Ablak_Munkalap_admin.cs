@@ -649,7 +649,7 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
                 if (!File.Exists(hely)) return;
                 List<Adat_MunkaRend> Adatok = KézMunkaRend.Lista_Adatok(hely);
 

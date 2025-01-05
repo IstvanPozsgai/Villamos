@@ -246,7 +246,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Esztergálás.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Esztergálás.mdb";
                 string jelszó = "RónaiSándor";
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum);
                 DateTime IdeigDát = Hételső;
@@ -358,7 +358,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Esztergálás.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Esztergálás.mdb";
                 string jelszó = "RónaiSándor";
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum);
                 DateTime IdeigDát = Hételső;

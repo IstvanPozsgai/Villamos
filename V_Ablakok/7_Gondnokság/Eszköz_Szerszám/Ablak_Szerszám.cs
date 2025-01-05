@@ -4524,7 +4524,7 @@ namespace Villamos
             try
             {
                 AdatokEszköz.Clear();
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
                 string jelszó = "TóthKatalin";
                 string szöveg = $"SELECT * FROM adatok ";
 

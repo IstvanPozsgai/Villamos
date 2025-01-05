@@ -761,7 +761,7 @@ namespace Villamos
 
                 if (Kategórilista.SelectedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy kategória sem.");
 
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
                 if (!File.Exists(hely)) throw new HibásBevittAdat($"Nincs {Dátum.Value:yyyy} évnek megfelelő adat.");
 
 
@@ -3631,7 +3631,7 @@ namespace Villamos
             try
             {
                 AdatokFortekiad.Clear();
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
                 if (!File.Exists(hely)) throw new HibásBevittAdat($"Nincs {Dátum.Value:yyyy} évnek megfelelő adat.");
 
                 string jelszó = "gémkapocs";

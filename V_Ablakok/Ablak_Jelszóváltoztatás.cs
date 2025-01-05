@@ -46,7 +46,7 @@ namespace Villamos
                     Első.Focus();
                     return;
                 }
-                string hely = Application.StartupPath + $@"\{TxtTelephely.Text.Trim()}\Adatok\belépés.mdb";
+                string hely = $@"{Application.StartupPath}\{TxtTelephely.Text.Trim()}\Adatok\belépés.mdb";
                 string jelszó = "forgalmiutasítás";
                 string szöveg = $"SELECT * FROM bejelentkezés";
                 Kezelő_Belépés_Bejelentkezés Kéz = new Kezelő_Belépés_Bejelentkezés();

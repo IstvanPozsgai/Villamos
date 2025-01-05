@@ -1038,7 +1038,7 @@ namespace Villamos
             try
             {
 
-                string helynap = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
+                string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
                 if (!File.Exists(helynap))
                     return;
                 string jelszónap = "kiskakas";

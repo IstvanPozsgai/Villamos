@@ -989,7 +989,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string jelszó = "pozsgaii";
 
-                string helyvez = Application.StartupPath + $@"\{Cmbtelephely.Text}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
+                string helyvez = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
                 string jelszóvez = "tápijános";
                 string szöveg;
 
@@ -1557,7 +1557,7 @@ namespace Villamos
             MyE.Egyesít(munkalap, "o2:r2");
             MyE.Egyesít(munkalap, "o3:r3");
 
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
             Kezelő_Munka_Szolgálat kéz = new Kezelő_Munka_Szolgálat();
             List<Adat_Munka_Szolgálat> Adatok = kéz.Lista_Adatok(hely);
             Adat_Munka_Szolgálat Elem = (from a in Adatok

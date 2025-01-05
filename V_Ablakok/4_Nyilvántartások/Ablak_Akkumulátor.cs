@@ -37,7 +37,7 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
                 if (!Exists(hely))
                     Adatbázis_Létrehozás.Akku_Mérés(hely);
 
@@ -465,7 +465,7 @@ namespace Villamos
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 // naplózás
-                hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Now.Year}.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Now.Year}.mdb";
                 szöveg = "INSERT INTO Akkutábla_Napló ";
                 szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő )";
                 szöveg += " VALUES (";
@@ -879,17 +879,17 @@ namespace Villamos
                 Kezelő_Akkumulátor_Mérés Kézmérés = new Kezelő_Akkumulátor_Mérés();
                 szöveg = "SELECT * FROM méréstábla WHERE Rögzítő<>'TÖRÖLT'  ORDER BY gyáriszám, Mérésdátuma asc";
 
-                hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
                 if (!Exists(hely))
                     Adatbázis_Létrehozás.Akku_Mérés(hely);
                 List<Adat_Akkumulátor_Mérés> AdatokMérés = Kézmérés.Lista_Adatok(hely, jelszó, szöveg);
 
-                hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.AddYears(-1).Year}.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.AddYears(-1).Year}.mdb";
                 if (!Exists(hely))
                     Adatbázis_Létrehozás.Akku_Mérés(hely);
                 List<Adat_Akkumulátor_Mérés> AdatokMérés1 = Kézmérés.Lista_Adatok(hely, jelszó, szöveg);
 
-                hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.AddYears(-2).Year}.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.AddYears(-2).Year}.mdb";
                 if (!Exists(hely))
                     Adatbázis_Létrehozás.Akku_Mérés(hely);
                 List<Adat_Akkumulátor_Mérés> AdatokMérés2 = Kézmérés.Lista_Adatok(hely, jelszó, szöveg);
@@ -953,7 +953,7 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
                 string jelszó = "kasosmiklós";
                 if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben nem volt még mérés.");
 
@@ -1111,7 +1111,7 @@ namespace Villamos
             {
                 if (Tábla4.SelectedRows.Count < 0) throw new HibásBevittAdat("Nincs kijelölve egy törlendő elem sem.");
 
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
                 string jelszó = "kasosmiklós";
 
                 AdatokAkkuMérListázás();
@@ -1183,7 +1183,7 @@ namespace Villamos
                                              select a).FirstOrDefault();
 
 
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{MérésDátuma.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{MérésDátuma.Value.Year}.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
 
                 AdatokAkkuMérListázás();
@@ -1342,7 +1342,7 @@ namespace Villamos
 
         void Telephely_Változás_Napló(string Telep, string gyáriszám)
         {
-            string hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Now.Year}.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Now.Year}.mdb";
             string jelszó = "kasosmiklós";
             string szöveg = "INSERT INTO Akkutábla_Napló ";
             szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő )";
@@ -1703,7 +1703,7 @@ namespace Villamos
 
         void Státus_Módosítás_Napló(string Hova, int státus, string gyáriszám)
         {
-            string hely = Application.StartupPath + $@"\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Now.Year}.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Now.Year}.mdb";
             string jelszó = "kasosmiklós";
             string szöveg = "INSERT INTO Akkutábla_Napló ";
             szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő )";

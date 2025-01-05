@@ -84,7 +84,7 @@ namespace Villamos.Villamos_Ablakok
             hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
             if (Exists(hely) == false) Adatbázis_Létrehozás.Futásnaptábla_Nosztalgia(hely);
 
-            hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{DateTime.Today.Year}.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Nosztalgia\Futás_{DateTime.Today.Year}.mdb";
             if (Exists(hely) == false) Adatbázis_Létrehozás.NosztFutás(hely);
 
             Pályaszám_feltöltés();
@@ -522,7 +522,7 @@ namespace Villamos.Villamos_Ablakok
         {
             //try
             //{
-            //    string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb";
+            //    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb";
             //    string jelszó = "kloczkal";
             //    //if (Pályaszám.Items.Contains(Nap_azonosító.Text.Trim())==false)
             //    //    throw new HibásBevittAdat("Nincs ilyen nosztalgia jármű");
@@ -571,7 +571,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                DataSet ds = AccessDbLoader.LoadFromFile(Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb");
+                DataSet ds = AccessDbLoader.LoadFromFile($@"{Application.StartupPath}\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb");
                 Tábla_lekérdezés.DataSource = ds.Tables[0];
                 Tábla_lekérdezés.Columns[0].HeaderText = "Pályaszám";
                 Tábla_lekérdezés.Columns[0].Width = 120;
@@ -723,7 +723,7 @@ namespace Villamos.Villamos_Ablakok
         {
             //try
             //{
-            //    string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
+            //    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
             //    string jelszó = "kloczkal";
             //    DateTime alap = DateTime.Parse("1900.01.01");
             //    int nap = 0;

@@ -48,7 +48,7 @@ namespace Villamos
             Többrögzít.Visible = false;
 
             //'ha nincs üzenet fájl, akkor létrehozunk egy újat
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}üzenet.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}üzenet.mdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
 
             Radioolvastan.Checked = true;
@@ -712,7 +712,7 @@ namespace Villamos
                         if (!double.TryParse(txtválasz.Text, out double Válasz)) Válasz = 0;
 
                         //csak aktuális évben tudunk rögzíteni
-                        string hely = Application.StartupPath + $@"\{ChkTelephely.Items[j].ToString().Trim()}\adatok\üzenetek\{DateTime.Now.Year}üzenet.mdb";
+                        string hely = $@"{Application.StartupPath}\{ChkTelephely.Items[j].ToString().Trim()}\adatok\üzenetek\{DateTime.Now.Year}üzenet.mdb";
                         if (!Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
 
                         Adat_Üzenet ADAT = new Adat_Üzenet(0,

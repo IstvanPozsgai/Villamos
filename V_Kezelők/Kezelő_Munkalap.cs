@@ -183,14 +183,14 @@ namespace Villamos.Villamos.Kezelők
 
         private void Munkarend_Átír(string Cmbtelephely, DateTime Dátum)
         {
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
             Kezelő_MunkaRend kéz = new Kezelő_MunkaRend();
             List<Adat_MunkaRend> AdatokÖ = kéz.Lista_Adatok(hely);
             List<Adat_MunkaRend> Adatok = (from a in AdatokÖ
                                            where a.Látszódik == true
                                            select a).ToList();
 
-            hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
             int id = 0;
 
             List<string> SzövegGy = new List<string>();
@@ -211,14 +211,14 @@ namespace Villamos.Villamos.Kezelők
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
                 List<Adat_Munka_Folyamat> AdatokÖ = Lista_Adatok(hely);
                 List<Adat_Munka_Folyamat> Adatok = (from a in AdatokÖ
                                                     where a.Látszódik == true
                                                     select a).ToList();
                 int id = 0;
 
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
 
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Munka_Folyamat rekord in Adatok)
@@ -250,14 +250,14 @@ namespace Villamos.Villamos.Kezelők
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
                 string szöveg = "SELECT * FROM szolgálattábla";
                 string jelszó = "kismalac";
 
                 Kezelő_Munka_Szolgálat KézSzolgálat = new Kezelő_Munka_Szolgálat();
                 List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(hely);
 
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
 
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Munka_Szolgálat rekord in Adatok)

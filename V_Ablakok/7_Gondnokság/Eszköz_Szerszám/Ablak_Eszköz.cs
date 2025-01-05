@@ -290,7 +290,7 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Be(100);
 
                 //Beolvasás
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
                 jelszó = "TóthKatalin";
 
                 szöveg = "SELECT * FROM Adatok ORDER BY eszköz";
@@ -456,7 +456,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
                 string jelszó = "TóthKatalin";
 
                 if (System.IO.File.Exists(hely) == false)
@@ -746,7 +746,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
                 string jelszó = "TóthKatalin";
 
                 if (!System.IO.File.Exists(hely)) return;
@@ -846,7 +846,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
                 string jelszó = "TóthKatalin";
 
                 if (Ellen_Tábla.Rows.Count < 1) throw new HibásBevittAdat("A táblázat nem tartalmaz ellenőrindő elemeket");
@@ -854,10 +854,10 @@ namespace Villamos.Villamos_Ablakok
                 switch (Ellen_Besorolás.Text.Trim())
                 {
                     case "Épület":
-                        helySzersz = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Helység\Adatok\Szerszám.mdb";
+                        helySzersz = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Helység\Adatok\Szerszám.mdb";
                         break;
                     case "Szerszám":
-                        helySzersz = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Szerszám\Adatok\Szerszám.mdb";
+                        helySzersz = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Szerszám\Adatok\Szerszám.mdb";
                         break;
                     default:
                         throw new HibásBevittAdat("Nincs kiválasztva adatbázis!");
@@ -988,7 +988,7 @@ namespace Villamos.Villamos_Ablakok
                 //    throw new HibásBevittAdat("Nincs kijelölve egy eszköz sem.");
 
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
                 string jelszó = "TóthKatalin";
                 string szöveg;
 
@@ -1011,11 +1011,11 @@ namespace Villamos.Villamos_Ablakok
 
                             if (Melyik_nyilvántartás == "Épület")
                             {
-                                helyúj = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Helység\Adatok\Szerszám.mdb";
+                                helyúj = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Helység\Adatok\Szerszám.mdb";
                             }
                             else if (Melyik_nyilvántartás == "Szerszám")
                             {
-                                helyúj = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Szerszám\Adatok\Szerszám.mdb";
+                                helyúj = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Szerszám\Adatok\Szerszám.mdb";
                             }
                             //ha egyiksem akkor nem rögzítünk
                             if (helyúj.Trim() != "")

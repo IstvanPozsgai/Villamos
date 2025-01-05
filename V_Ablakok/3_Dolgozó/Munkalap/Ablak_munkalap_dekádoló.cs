@@ -941,7 +941,7 @@ namespace Villamos
                 DateTime elsőnap = DekádDátum.Value;
                 DateTime utolsónap = DekádDátum.Value;
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
                 if (System.IO.File.Exists(hely) == false)
                     return;
                 string jelszó = "dekádoló";

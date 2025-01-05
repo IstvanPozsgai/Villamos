@@ -63,7 +63,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             {
                 AdatokBeteg.Clear();
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = "SELECT * FROM beteg";
 
@@ -87,7 +87,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             {
                 AdatokSzabad.Clear();
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = "SELECT * FROM szabadság";
 
@@ -111,7 +111,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             {
                 AdatokTúlóra.Clear();
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM Túlóra ";
 
@@ -135,7 +135,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             {
                 AdatokAft.Clear();
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM AFT ";
 
@@ -159,7 +159,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             {
                 AdatokCsúsztatás.Clear();
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM csúsztatás";
 
@@ -185,7 +185,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             try
             {
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
 
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
@@ -325,7 +325,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
             try
             {
-                string hely = Application.StartupPath + $@"\{cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = $"SELECT * FROM Beosztáskódok WHERE beosztáskód='{beosztáskód}'";
 
@@ -458,7 +458,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             try
             {
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
 
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
@@ -528,7 +528,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             try
             {
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
 
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
@@ -593,7 +593,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
 
@@ -644,7 +644,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
 
@@ -678,7 +678,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string helydolg = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
+                string helydolg = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
                 string jelszódolg = "forgalmiutasítás";
 
                 Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
@@ -688,7 +688,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 DateTime hónapelső = MyF.Hónap_elsőnapja(Dátum);
                 DateTime hónaputolsó = MyF.Hónap_utolsónapja(Dátum);
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM Beteg WHERE törzsszám='{HR_Azonosító.Trim()}' AND ";
                 szöveg += $"[Kezdődátum]>=#{hónapelső:MM-dd-yyyy}# AND [Kezdődátum]<=#{hónaputolsó:MM-dd-yyyy}# AND [státus]<>3";
@@ -696,7 +696,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Beteg Kéz_SZA = new Kezelő_Szatube_Beteg();
                 List<Adat_Szatube_Beteg> Adatok_SZA = Kéz_SZA.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
                 string jelszóbeo = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}'";
 
@@ -754,7 +754,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM Szabadság ";
                 szöveg += $" WHERE törzsszám='{Rekord_Új.Dolgozószám.Trim()}' AND [Kezdődátum]=#{Rekord_Új.Nap:M-d-yy}# AND [státus]<>3";
@@ -801,7 +801,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
 
@@ -843,7 +843,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string helydolg = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
+                string helydolg = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
                 string jelszódolg = "forgalmiutasítás";
 
                 Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
@@ -853,7 +853,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 DateTime hónapelső = MyF.Hónap_elsőnapja(Dátum);
                 DateTime hónaputolsó = MyF.Hónap_utolsónapja(Dátum);
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM Szabadság WHERE törzsszám='{HR_Azonosító.Trim()}' AND ";
                 szöveg += $"[Kezdődátum]>=#{hónapelső:MM-dd-yyyy}# AND [Kezdődátum]<=#{hónaputolsó:MM-dd-yyyy}# AND [státus]<>3";
@@ -861,7 +861,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Szabadság Kéz_SZA = new Kezelő_Szatube_Szabadság();
                 List<Adat_Szatube_Szabadság> Adatok_SZA = Kéz_SZA.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
                 string jelszóbeo = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}'";
 
@@ -943,7 +943,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             try
             {
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
 
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
@@ -1012,7 +1012,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
                 ListaTúlóra(Cmbtelephely, Dátum);
@@ -1088,7 +1088,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
 
@@ -1122,7 +1122,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string helydolg = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
+                string helydolg = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
                 string jelszódolg = "forgalmiutasítás";
 
                 Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
@@ -1132,7 +1132,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 DateTime hónapelső = MyF.Hónap_elsőnapja(Dátum);
                 DateTime hónaputolsó = MyF.Hónap_utolsónapja(Dátum);
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM Túlóra WHERE törzsszám='{HR_Azonosító.Trim()}' AND ";
                 szöveg += $"[Kezdődátum]>=#{hónapelső:MM-dd-yyyy} # AND [Kezdődátum]<=# {hónaputolsó:MM-dd-yyyy}# AND [státus]<>3";
@@ -1140,7 +1140,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Túlóra Kézcsúsz = new Kezelő_Szatube_Túlóra();
                 List<Adat_Szatube_Túlóra> Adatok_Aft = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
                 string jelszóbeo = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND Túlóra<>0";
 
@@ -1278,7 +1278,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             try
             {
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
 
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
@@ -1346,7 +1346,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
 
@@ -1417,7 +1417,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
 
@@ -1451,7 +1451,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string helydolg = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
+                string helydolg = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
                 string jelszódolg = "forgalmiutasítás";
 
                 Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
@@ -1461,7 +1461,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 DateTime hónapelső = MyF.Hónap_elsőnapja(Dátum);
                 DateTime hónaputolsó = MyF.Hónap_utolsónapja(Dátum);
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM aft WHERE törzsszám='{HR_Azonosító.Trim()}' AND ";
                 szöveg += $"[dátum]>=#{hónapelső:M-d-yy}# AND [dátum]<=#{hónaputolsó:M-d-yy}# AND [státus]<>3";
@@ -1469,7 +1469,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Aft Kézcsúsz = new Kezelő_Szatube_Aft();
                 List<Adat_Szatube_AFT> Adatok_Aft = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
                 string jelszóbeo = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND AFTóra<>0";
 
@@ -1533,7 +1533,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             try
             {
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
 
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
@@ -1605,7 +1605,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 DateTime hónapelső = MyF.Hónap_elsőnapja(Dátum);
                 DateTime hónaputolsó = MyF.Hónap_utolsónapja(Dátum);
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg = $"SELECT * FROM csúsztatás WHERE törzsszám='{HR_Azonosító.Trim()}' AND ";
                 szöveg += $"[kezdődátum]>=#{hónapelső:M-d-yy}# AND [befejeződátum]<=#{hónaputolsó:M-d-yy}# AND [státus]<>3";
@@ -1613,7 +1613,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Csúsztatás Kézcsúsz = new Kezelő_Szatube_Csúsztatás();
                 List<Adat_Szatube_Csúsztatás> AdatokCsúszik = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
                 string jelszóbeo = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND Csúszóra<>0";
 
@@ -1656,7 +1656,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
 
@@ -1729,7 +1729,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
 

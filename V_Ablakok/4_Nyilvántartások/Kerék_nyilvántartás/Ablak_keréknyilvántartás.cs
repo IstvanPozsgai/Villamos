@@ -2677,7 +2677,7 @@ namespace Villamos
                 int norma = 0;
                 string típusküld = Tábla2.SelectedRows[0].Cells[3].Value.ToString().Trim();
 
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"SELECT * FROM tengely WHERE típus='{típusküld}' ORDER BY  állapot";
                 Kezelő_Kerék_Eszterga_Tengely kéz = new Kezelő_Kerék_Eszterga_Tengely();
@@ -2917,12 +2917,12 @@ namespace Villamos
             try
             {
                 AdatokEszterga.Clear();
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\{DateTime.Today.AddYears(-1).Year}\telepikerék.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.AddYears(-1).Year}\telepikerék.mdb";
                 string jelszó = "szabólászló";
                 string szöveg = "SELECT * FROM esztergatábla ORDER BY azonosító, mikor ";
                 AdatokEszterga = KézEszterga.Lista_Adatok(hely, jelszó, szöveg);
 
-                hely = Application.StartupPath + $@"\Főmérnökség\adatok\{DateTime.Today.Year}\telepikerék.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\telepikerék.mdb";
                 List<Adat_Kerék_Eszterga> AdatokEszterga1 = KézEszterga.Lista_Adatok(hely, jelszó, szöveg);
                 AdatokEszterga.AddRange(AdatokEszterga1);
             }
@@ -2941,12 +2941,12 @@ namespace Villamos
             try
             {
                 AdatokIgény.Clear();
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(-1).Year}_Igény.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(-1).Year}_Igény.mdb";
                 string jelszó = "RónaiSándor";
                 string szöveg = $"SELECT * FROM Igény WHERE státus<8 ";
                 AdatokIgény = KézEsztIgény.Lista_Adatok(hely, jelszó, szöveg);
 
-                hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.Year}_Igény.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.Year}_Igény.mdb";
                 List<Adat_Kerék_Eszterga_Igény> AdatokIgény1 = KézEsztIgény.Lista_Adatok(hely, jelszó, szöveg);
                 AdatokIgény.AddRange(AdatokIgény1);
             }

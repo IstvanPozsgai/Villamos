@@ -39,7 +39,7 @@ namespace Villamos
             Dátumig.Value = new DateTime(DateTime.Today.Year, 12, 31);
             Dátumtól.Value = new DateTime(DateTime.Today.Year, 1, 1);
 
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\megjelenfeláll.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\megjelenfeláll.mdb";
             if (!Exists(hely))
                 Adatbázis_Létrehozás.Létszám_Elrendezés_Változatok(hely);
         }
@@ -355,11 +355,11 @@ namespace Villamos
                     Részmunkaidős = 0;
                     passzív = 0;
 
-                    hely = Application.StartupPath + $@"\{Cmbtelephely.CheckedItems[ii].ToString().Trim()}\Adatok\Dolgozók.mdb";
+                    hely = $@"{Application.StartupPath}\{Cmbtelephely.CheckedItems[ii].ToString().Trim()}\Adatok\Dolgozók.mdb";
                     // leellenőrizzük, hogy minden munkahely ki van-e töltve.
                     Munkahelyellenőrzés(hely);
 
-                    helyvált = Application.StartupPath + $@"\{Cmbtelephely.CheckedItems[ii].ToString().Trim()}\adatok\segéd\kiegészítő.mdb";
+                    helyvált = $@"{Application.StartupPath}\{Cmbtelephely.CheckedItems[ii].ToString().Trim()}\adatok\segéd\kiegészítő.mdb";
                     szöveg = "SELECT * FROM csoportbeosztás order by sorszám";
 
                     Kezelő_Kiegészítő_Csoportbeosztás KézCsop = new Kezelő_Kiegészítő_Csoportbeosztás();
@@ -718,12 +718,12 @@ namespace Villamos
                     munkalap = telep;
                     MyE.Munkalap_aktív(munkalap);
 
-                    string helyvált = Application.StartupPath + $@"\{telep}\adatok\segéd\kiegészítő.mdb";
+                    string helyvált = $@"{Application.StartupPath}\{telep}\adatok\segéd\kiegészítő.mdb";
                     string jelszóvált = "Mocó";
                     string szöveg = "select * from csoportbeosztás order by sorszám";
                     List<Adat_Kiegészítő_Csoportbeosztás> Csoport = KézCsop.Lista_Adatok(helyvált, jelszóvált, szöveg);
 
-                    string hely = Application.StartupPath + $@"\{telep}\Adatok\Dolgozók.mdb";
+                    string hely = $@"{Application.StartupPath}\{telep}\Adatok\Dolgozók.mdb";
                     string jelszó = "forgalmiutasítás";
 
                     sor = 1;
@@ -1291,7 +1291,7 @@ namespace Villamos
             try
             {
                 Csoportlista.Items.Clear();
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM csoportbeosztás order by Sorszám";
 
@@ -1477,7 +1477,7 @@ namespace Villamos
                     {
                         eredmény = new DateTime(1900, 1, 1);
                         // ha ki van választva a dolgozó akkor lekérdezzük a jogosítványát
-                        string hely = Application.StartupPath + $@"\{TáblaDolgozónévsor.Rows[j].Cells[2].Value.ToString().Trim()}\Adatok\Dolgozók.mdb";
+                        string hely = $@"{Application.StartupPath}\{TáblaDolgozónévsor.Rows[j].Cells[2].Value.ToString().Trim()}\Adatok\Dolgozók.mdb";
                         string jelszó = "forgalmiutasítás";
                         string szöveg = "SELECT * FROM Dolgozóadatok";
 
@@ -1662,7 +1662,7 @@ namespace Villamos
                 {
                     if (Cmbtelephely.GetItemChecked(j) == true)
                     {
-                        string hely = Application.StartupPath + $@"\{Cmbtelephely.Items[j]}\Adatok\Dolgozók.mdb";
+                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Items[j]}\Adatok\Dolgozók.mdb";
                         string szöveg = "SELECT * FROM Dolgozóadatok WHERE Jogosítványszám<>'' AND kilépésiidő=#01-01-1900#";
                         string jelszó = "forgalmiutasítás";
 
@@ -1894,7 +1894,7 @@ namespace Villamos
 
                 string szöveg;
 
-                string helydolg = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+                string helydolg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 string jelszódolg = "forgalmiutasítás";
                 if (Exists(hely))
                 {
@@ -1982,7 +1982,7 @@ namespace Villamos
             {
                 if (Munkakörtábla.SelectedRows.Count != 0)
                 {
-                    string hely = Application.StartupPath + $@"\Főmérnökség\Munkakör\{Cmbtelephely.Text.Trim()}\" + Munkakörtábla.Rows[Munkakörtábla.SelectedRows[0].Index].Cells[5].Value.ToString();
+                    string hely = $@"{Application.StartupPath}\Főmérnökség\Munkakör\{Cmbtelephely.Text.Trim()}\" + Munkakörtábla.Rows[Munkakörtábla.SelectedRows[0].Index].Cells[5].Value.ToString();
                     if (!Exists(hely))
                         return;
                     Byte[] bytes = System.IO.File.ReadAllBytes(hely);

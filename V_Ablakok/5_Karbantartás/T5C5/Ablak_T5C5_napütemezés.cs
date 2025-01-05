@@ -288,7 +288,7 @@ namespace Villamos
 
 
                 //    Hiba
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\villamos\Új_napihiba.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Új_napihiba.mdb";
                 string jelszó = "pozsgaii";
                 string szöveg = "SELECT * FROM hiba  ORDER BY azonosító";
                 AdatokHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
@@ -543,7 +543,7 @@ namespace Villamos
         private void SzerelvényListaFeltöltése()
         {
             AdatokSzerelvény.Clear();
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
             if (!File.Exists(hely)) return;
             string szöveg = "Select * FROM szerelvénytábla ORDER BY id";
             string jelszó = "pozsgaii";
@@ -635,7 +635,7 @@ namespace Villamos
             {
                 AdatokVezénylés.Clear();
                 //    Vezénylés
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
                 string jelszó = "tápijános";
                 string szöveg = $"SELECT * FROM vezényléstábla where   [dátum]>=#{DateTime.Today.AddDays(-1):MM-dd-yyyy}# and [törlés]=0 ORDER BY azonosító";
                 AdatokVezénylés = KézVezénylés.Lista_Adatok(hely, jelszó, szöveg);
@@ -704,7 +704,7 @@ namespace Villamos
             {
                 AdatokVezénylésN.Clear();
                 //    Vezénylés
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
                 string jelszó = "tápijános";
                 string szöveg = $"SELECT * FROM vezényléstábla where   [dátum]>=#{Dátum.Value:MM-dd-yyyy}# and [törlés]=0 ORDER BY szerelvényszám, azonosító";
 
@@ -1075,10 +1075,10 @@ namespace Villamos
             {
                 Ütemezés_lista.Items.Clear();
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}";
                 if (!Exists(hely)) System.IO.Directory.CreateDirectory(hely);
 
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Vezényléstábla(hely);
 
                 VezénylésN_Lista_feltöltés();

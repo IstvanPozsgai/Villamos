@@ -2284,7 +2284,7 @@ namespace Villamos
                 int hónapnap = MyF.Hónap_hossza(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
                 string jelszó = "seprűéslapát";
 
                 string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
@@ -2555,7 +2555,7 @@ namespace Villamos
                 string jelszó = "seprűéslapát";
                 string szöveg = "SELECT * FROM takarításosztály where státus=0  order by  id";
 
-                string helyép = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
+                string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
                 string szövegép;
 
 

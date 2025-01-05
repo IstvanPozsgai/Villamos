@@ -14,7 +14,7 @@ namespace Villamos.Villamos_Ablakok
 {
     public partial class Ablak_Eszterga_Választék : Form
     {
-        string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
+        string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
         string jelszó = "RónaiSándor";
 
         readonly Kezelő_Kerék_Eszterga_Tengely KézEsztergaTengely = new Kezelő_Kerék_Eszterga_Tengely();

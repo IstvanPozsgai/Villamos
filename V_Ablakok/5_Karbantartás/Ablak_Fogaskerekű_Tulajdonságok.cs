@@ -347,7 +347,7 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 if (!Exists(hely))
                     return;
                 string jelszó = "pozsgaii";

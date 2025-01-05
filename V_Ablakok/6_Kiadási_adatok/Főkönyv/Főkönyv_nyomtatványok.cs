@@ -2179,7 +2179,7 @@ namespace Villamos.Villamos_Nyomtatványok
             // tartalom kiírása
             // ********************************+
 
-            string hely = Application.StartupPath + $@"\{Telephely.Trim()}\adatok\főkönyv\{Dátum:yyyy}\nap\{Dátum:yyyyMMdd}" + napszak.Trim() + "nap.mdb";
+            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\főkönyv\{Dátum:yyyy}\nap\{Dátum:yyyyMMdd}" + napszak.Trim() + "nap.mdb";
             string jelszó = "lilaakác";
 
             string szöveg = "SELECT * FROM adattábla where Adattábla.viszonylat <> '-'  order by tényérkezés,viszonylat, forgalmiszám, azonosító ";

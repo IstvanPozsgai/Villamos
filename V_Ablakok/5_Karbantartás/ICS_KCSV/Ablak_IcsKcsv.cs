@@ -479,7 +479,7 @@ namespace Villamos
                                       select a).FirstOrDefault();
                 if (Elem2 != null) Takarítás_text.Text = Elem2.Takarítás.ToStrTrim();
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Villamos\Villamos2ICS.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Villamos\Villamos2ICS.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.VillamostáblaICS(hely);
 
                 Adat_Jármű_2ICS Elem2ICS = (from a in AdatokJármű2ICS
@@ -627,10 +627,10 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Villamos\Villamos.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Villamos\Villamos.mdb";
                 string jelszó = "pozsgaii";
 
-                string hely2 = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Villamos\Villamos2ICS.mdb";
+                string hely2 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Villamos\Villamos2ICS.mdb";
 
                 string szöveg = "SELECT * FROM állománytábla  ORDER BY Azonosító";
 
@@ -681,7 +681,7 @@ namespace Villamos
                 else
                     return;
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Villamos\Villamos2ICS.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Villamos\Villamos2ICS.mdb";
                 string jelszó = "pozsgaii";
                 string szöveg = "Select * FROM állománytábla";
 

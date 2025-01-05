@@ -303,12 +303,12 @@ namespace Villamos
 
                     // dátumok színezése
                     string jelszómunka = "katalin";
-                    string helyelv = Application.StartupPath + $@"\Főmérnökség\adatok\{Elő_Dátumtól.Value.Year}\munkaidőnaptár.mdb";
+                    string helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Elő_Dátumtól.Value.Year}\munkaidőnaptár.mdb";
                     if (Exists(helyelv))
                         Munkaidő_naptár(helyelv, jelszómunka);
 
                     // ha átnyúlik a következő évre 
-                    helyelv = Application.StartupPath + $@"\Főmérnökség\adatok\{Elő_Dátumtól.Value.AddYears(1).Year}\munkaidőnaptár.mdb";
+                    helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Elő_Dátumtól.Value.AddYears(1).Year}\munkaidőnaptár.mdb";
                     if (Exists(helyelv) == true)
                         Munkaidő_naptár(helyelv, jelszómunka);
 
@@ -1212,7 +1212,7 @@ namespace Villamos
                 string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
 
                 // naplózás
-                string helynapló = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Now:yyyyMM}hibanapló.mdb";
+                string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Now:yyyyMM}hibanapló.mdb";
                 if (Exists(helynapló) == false) Adatbázis_Létrehozás.Hibatáblalap(helynapló);
 
                 Holtart.Be();
@@ -1702,7 +1702,7 @@ namespace Villamos
                 // dátumok színezése
 
                 string jelszómunka = "katalin";
-                string helyelv = Application.StartupPath + $@"\Főmérnökség\adatok\{Elő_Dátumtól.Value.Year}\munkaidőnaptár.mdb";
+                string helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Elő_Dátumtól.Value.Year}\munkaidőnaptár.mdb";
                 if (Exists(helyelv) == true)
                     Munkaidő_naptár(helyelv, jelszómunka);
 
@@ -2183,12 +2183,12 @@ namespace Villamos
                 // dátumok színezése
 
                 string jelszómunka = "katalin";
-                string helyelv = Application.StartupPath + $@"\Főmérnökség\adatok\{Elő_Dátumtól.Value.Year}\munkaidőnaptár.mdb";
+                string helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Elő_Dátumtól.Value.Year}\munkaidőnaptár.mdb";
                 if (Exists(helyelv) == true)
                     Munkaidő_naptár(helyelv, jelszómunka);
 
                 // ha átnyúlik a következő évre 
-                helyelv = Application.StartupPath + $@"\Főmérnökség\adatok\{Elő_Dátumtól.Value.AddYears(1).Year}\munkaidőnaptár.mdb";
+                helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Elő_Dátumtól.Value.AddYears(1).Year}\munkaidőnaptár.mdb";
                 if (Exists(helyelv) == true)
                     Munkaidő_naptár(helyelv, jelszómunka);
 
@@ -2443,7 +2443,7 @@ namespace Villamos
 
             for (int l = 1; l > -1; l--)
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\{DateTime.Today.AddYears(-l).Year}\telepikerék.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.AddYears(-l).Year}\telepikerék.mdb";
 
                 if (Exists(hely))
                 {

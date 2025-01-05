@@ -62,7 +62,7 @@ namespace Villamos.Villamos_Ablakok
 
             Kiürít_Füleket();
 
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
 
             string jelszó = "kiskakas";
             if (!Exists(hely))
@@ -444,7 +444,7 @@ namespace Villamos.Villamos_Ablakok
 
                     if (BeosztáskódVálasztott.Trim() != "")
                     {
-                        string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                         if (!Exists(hely))
                             return;
                         string jelszó = "Mocó";
@@ -586,7 +586,7 @@ namespace Villamos.Villamos_Ablakok
                         }
                     case 5:
                         {
-                            hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
+                            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
                             string jelszó = "forgalmiutasítás";
                             string szöveg = $" select * from  dolgozóadatok where dolgozószám='{Hrazonosító.Trim()}'";
 
@@ -819,7 +819,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 SzabadságOka.Items.Clear();
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM szabadságok WHERE megnevezés like '%kivétel%' ";
 

@@ -1098,12 +1098,12 @@ namespace Villamos
             {
                 Mérés_Adatok.Clear();
                 string jelszó = "szabólászló";
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\{DateTime.Today.Year}\telepikerék.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\telepikerék.mdb";
                 string szöveg = $"SELECT * FROM keréktábla ";
 
                 Mérés_Adatok = Mérés_kéz.Lista_Adatok(hely, jelszó, szöveg);
 
-                hely = Application.StartupPath + $@"\Főmérnökség\adatok\{DateTime.Today.AddYears(-1).Year}\telepikerék.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.AddYears(-1).Year}\telepikerék.mdb";
                 List<Adat_Kerék_Mérés> Mérés_AdatokE = Mérés_kéz.Lista_Adatok(hely, jelszó, szöveg);
                 if (Mérés_AdatokE != null)
                     Mérés_Adatok.AddRange(Mérés_AdatokE);
@@ -2665,7 +2665,7 @@ namespace Villamos
         {
             try
             {
-                string helykerék = Application.StartupPath + $@"\Főmérnökség\adatok\{DateTime.Today.AddYears(eltérés).Year}\telepikerék.mdb";
+                string helykerék = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.AddYears(eltérés).Year}\telepikerék.mdb";
                 string jelszó = "szabólászló";
                 string szöveg;
                 int hiba = 0;

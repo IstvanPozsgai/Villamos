@@ -35,7 +35,7 @@ namespace Villamos
             string hely = Application.StartupPath + @"\Főmérnökség\adatok\rezsiképek";
             if (!Exists(hely)) Directory.Exists(hely);
 
-            hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi";
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi";
 
             if (!Exists(hely)) Directory.Exists(hely);
 

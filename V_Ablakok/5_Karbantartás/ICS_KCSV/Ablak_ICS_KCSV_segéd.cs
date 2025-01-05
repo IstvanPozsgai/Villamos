@@ -173,7 +173,7 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Telephely.Trim()}\Adatok\főkönyv\futás\{Dátum_ütem.Year}\vezénylés{Dátum_ütem.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\főkönyv\futás\{Dátum_ütem.Year}\vezénylés{Dátum_ütem.Year}.mdb";
                 string jelszó = "tápijános";
                 Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
                 string szöveg = $"SELECT * FROM vezényléstábla";

@@ -107,24 +107,24 @@ namespace Villamos
             Névfeltöltés();
             Dátum.Value = DateTime.Today;
 
-            string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\beosztás";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\beosztás";
             if (!Directory.Exists(hely))
                 Directory.CreateDirectory(hely);
 
-            hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\beosztás\{DateTime.Today.Year}";
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\beosztás\{DateTime.Today.Year}";
             if (!Directory.Exists(hely))
                 Directory.CreateDirectory(hely);
 
-            hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\{DateTime.Today.Year}SzaTuBeCs.mdb";
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\{DateTime.Today.Year}SzaTuBeCs.mdb";
             if (!Exists(hely))
                 Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
 
-            hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\naplózás\{DateTime.Today.ToString("yyyyMM")}napló.mdb";
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\naplózás\{DateTime.Today.ToString("yyyyMM")}napló.mdb";
             if (!Exists(hely))
                 Adatbázis_Létrehozás.Beosztás_Naplózása(hely);
 
             // Adott havi adatbázis létezik
-            hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value.ToString("yyyyMM")}.mdb";
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value.ToString("yyyyMM")}.mdb";
             if (!Exists(hely))
                 Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(hely);
             Visszacsukcsoport();
@@ -431,7 +431,7 @@ namespace Villamos
             try
             {
                 Csoport.Items.Clear();
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM csoportbeosztás order by Sorszám";
 
@@ -619,7 +619,7 @@ namespace Villamos
                 // ********************************************
                 // kiszinezzük a szabad és munkaszüneti napokat
                 // ********************************************
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
                 if (!Exists(hely))
                 {
                     // akkor a naptári jelölés
@@ -871,7 +871,7 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\{Dátum.Value.Year}SzaTuBeCs.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\{Dátum.Value.Year}SzaTuBeCs.mdb";
                 string jelszó = "kertitörpe";
                 if (!Exists(hely))
                     return;
@@ -962,14 +962,14 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM beosztáskódok WHERE éjszakás=true";
                 Kezelő_Kiegészítő_Beosztáskódok KÉZBeo = new Kezelő_Kiegészítő_Beosztáskódok();
                 List<Adat_Kiegészítő_Beosztáskódok> AdatokBEO = KÉZBeo.Lista_Adatok(hely, jelszó, szöveg);
 
 
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
 
                 if (!Exists(hely)) return;
                 jelszó = "kiskakas";
@@ -1227,7 +1227,7 @@ namespace Villamos
             {
                 hónap_hossz = MyF.Hónap_hossza(Dátum.Value);
                 Hónap_első = MyF.Hónap_elsőnapja(Dátum.Value);
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\beosztás\" + Dátum.Value.Year;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\beosztás\" + Dátum.Value.Year;
 
                 // ha nincs könyvtár akkor létrehozza
                 if (!Directory.Exists(hely))
@@ -1240,18 +1240,18 @@ namespace Villamos
 
 
                 // ha nincs adatbázis akkor létrehozza
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
                 if (!Exists(hely))
                     Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(hely);
 
                 this.Text = $"A {Dátum.Value.Year} év {Dátum.Value.Month} havi beosztása";
 
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\";
                 if (!Directory.Exists(hely))
                     Directory.CreateDirectory(hely);
 
 
-                hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\{Dátum.Value.Year}Szatubecs.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\{Dátum.Value.Year}Szatubecs.mdb";
                 if (!Exists(hely))
                     Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
                 // leellenőrizzük a tábla jóságát
@@ -1331,7 +1331,7 @@ namespace Villamos
                 Tizenkétórás.Items.Clear();
                 Tizenkétórás.BeginUpdate();
                 Tizenkétórás.Items.Add("");
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM Beosztáskódok where [munkarend]=12 order by sorszám";
 
@@ -1478,7 +1478,7 @@ namespace Villamos
                 Minden.Items.Clear();
                 Minden.BeginUpdate();
                 Minden.Items.Add("");
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM Beosztáskódok order by sorszám";
 
@@ -1625,7 +1625,7 @@ namespace Villamos
                 Nyolcórás.Items.Clear();
                 Nyolcórás.BeginUpdate();
                 Nyolcórás.Items.Add("");
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM Beosztáskódok where [munkarend]=8 order by sorszám";
 
@@ -2088,7 +2088,7 @@ namespace Villamos
 
 
                 Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
                 string jelszó = "kiskakas";
                 string szöveg = $"SELECT * FROM beosztás ";
                 List<Adat_Dolgozó_Beosztás_Új> AdatokBEO = Kéz.Lista_Adatok(hely, jelszó, szöveg);
@@ -2390,10 +2390,10 @@ namespace Villamos
                 string szöveg;
                 Holtart.Be(Tábla.Rows.Count + 1);
 
-                string hely = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
                 string jelszó = "kiskakas";
 
-                string helysz = Application.StartupPath + $@"\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\{Dátum.Value.Year}Szatubecs.mdb";
+                string helysz = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Szatubecs\{Dátum.Value.Year}Szatubecs.mdb";
                 string jelszósz = "kertitörpe";
 
                 List<string> szövegGy = new List<string>();
@@ -2472,7 +2472,7 @@ namespace Villamos
                 if (MessageBox.Show("Csak ÜRES beosztás esetén használható!\nBiztos, hogy feltölti a nappalos beosztást a táblázatban szereplő dolgozóknál? \n Minden meglévő adatot törölni fogsz vele.", "Figyelmeztetés", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.Cancel)
                     return;
 
-                string hely = Application.StartupPath + $@"\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
                 if (!Exists(hely))
                     throw new HibásBevittAdat($"{Dátum.Value.Year} évben még nincs beállítva a munkaidő naptár.");
                 string jelszó = "katalin";

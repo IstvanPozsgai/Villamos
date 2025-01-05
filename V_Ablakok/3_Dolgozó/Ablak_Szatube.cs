@@ -37,10 +37,10 @@ namespace Villamos
         {
             Telephelyekfeltöltése();
 
-            hely = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
+            hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
             if (!Exists(hely)) Directory.Exists(hely);
 
-            hely = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\adatok\Szatubecs\{DateTime.Now.Year}Szatubecs.mdb";
+            hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs\{DateTime.Now.Year}Szatubecs.mdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
 
             Évek_Feltöltése();
@@ -94,7 +94,7 @@ namespace Villamos
         {
             Dolgozónév.Items.Clear();
             Dolgozónév.BeginUpdate();
-            string helyn = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+            string helyn = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
             string jelszón = "forgalmiutasítás";
             string szövegn;
 
@@ -244,7 +244,7 @@ namespace Villamos
             try
             {
                 Adat_Évek.Items.Clear();
-                string hely = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
+                string hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
 
                 foreach (string file in System.IO.Directory.GetFiles(hely))
                 {
@@ -270,7 +270,7 @@ namespace Villamos
 
         private void Adat_Évek_SelectedIndexChanged(object sender, EventArgs e)
         {
-            hely = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\adatok\Szatubecs\{Adat_Évek.Text.Trim()}Szatubecs.mdb";
+            hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs\{Adat_Évek.Text.Trim()}Szatubecs.mdb";
             Text = Adat_Évek.Text + " - Szabadság - Túlóra - Betegállomány -  AFT- Csúsztatás";
         }
 
@@ -602,7 +602,7 @@ namespace Villamos
         {
             try
             {
-                string fájlexcel = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\nyomtatvány\Szabadságlap.xlsx";
+                string fájlexcel = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\nyomtatvány\Szabadságlap.xlsx";
                 if (!Exists(fájlexcel))
                     throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
 
@@ -1418,7 +1418,7 @@ namespace Villamos
         {
             try
             {
-                string Hely = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
+                string Hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string Jelszó = "Mocó";
                 string szöveg = "SELECT * FROM szabadságok WHERE NOT megnevezés like '%kivétel%' order by megnevezés asc";
                 Szabiok.Items.Clear();
@@ -1578,7 +1578,7 @@ namespace Villamos
                 }
 
 
-                helym = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+                helym = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 jelszóm = "forgalmiutasítás";
                 szöveg = "SELECT * FROM dolgozóadatok";
                 Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
@@ -1832,7 +1832,7 @@ namespace Villamos
                 MyE.Egyesít(munkalap, "d3:g3");
                 MyE.Egyesít(munkalap, "m3:p3");
 
-                string helym = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\adatok\segéd\kiegészítő.mdb";
+                string helym = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\segéd\kiegészítő.mdb";
                 string jelszóm = "Mocó";
                 string szöveg = "Select * FROM jelenlétiív where id>1 ORDER BY id";
                 Kezelő_Kiegészítő_Jelenlétiív Kéz = new Kezelő_Kiegészítő_Jelenlétiív();
@@ -2018,7 +2018,7 @@ namespace Villamos
                 }
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:p30", "", "", false);
 
-                helym = Application.StartupPath + $@"\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
+                helym = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 jelszóm = "forgalmiutasítás";
                 szöveg = "SELECT * FROM dolgozóadatok";
                 Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
