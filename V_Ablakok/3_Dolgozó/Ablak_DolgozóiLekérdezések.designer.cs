@@ -95,9 +95,9 @@ namespace Villamos
             this.TabPage5 = new System.Windows.Forms.TabPage();
             this.PDF_néző = new PdfiumViewer.PdfViewer();
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
-            this.Főholtart = new V_MindenEgyéb.MyProgressbar();
-            this.Alholtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Főholtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Alholtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Cmbtelephely = new System.Windows.Forms.CheckedListBox();
             this.BtnLe = new System.Windows.Forms.Button();
             this.BtnFel = new System.Windows.Forms.Button();
@@ -797,7 +797,6 @@ namespace Villamos
             this.PDF_néző.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.PDF_néző.Name = "PDF_néző";
             this.PDF_néző.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.PDF_néző.ShowToolbar = false;
             this.PDF_néző.Size = new System.Drawing.Size(1173, 297);
             this.PDF_néző.TabIndex = 241;
             this.PDF_néző.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;

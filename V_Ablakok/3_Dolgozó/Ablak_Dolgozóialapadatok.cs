@@ -1803,14 +1803,14 @@ namespace Villamos
                     List<Adat_Munkakör> AdatokÖ = Kéz_Munkakör.Lista_Adatok(hely);
                     List<Adat_Munkakör> Adatok = (from a in AdatokÖ
                                                   where a.Telephely == Cmbtelephely.Text.Trim()
-                                                  && a.HRazonosító== Dolgozószám.Text.Trim()
+                                                  && a.HRazonosító == Dolgozószám.Text.Trim()
                                                   orderby a.ID
-                                                  select a).ToList ();
+                                                  select a).ToList();
 
                     foreach (Adat_Munkakör rekord in Adatok)
                     {
                         Munkakörtábla.RowCount++;
-                     int   i = Munkakörtábla.RowCount - 1;
+                        int i = Munkakörtábla.RowCount - 1;
                         Munkakörtábla.Rows[i].Cells[0].Value = rekord.ID;
                         Munkakörtábla.Rows[i].Cells[1].Value = rekord.HRazonosító.Trim();
                         Munkakörtábla.Rows[i].Cells[2].Value = rekord.Megnevezés.Trim();
@@ -2217,14 +2217,14 @@ namespace Villamos
             {
                 if (Dolgozószám.Text.Trim() == "") return;
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség2.mdb";
-              
+
                 List<Adat_Dolgozó_Személyes> Adatok = KézSzemélyes.Lista_Adatok(hely);
 
                 Adat_Dolgozó_Személyes vane = (from a in Adatok
                                                where a.Dolgozószám == Dolgozószám.Text.Trim()
                                                select a).FirstOrDefault();
 
-                Adat_Dolgozó_Személyes ADAT = new Adat_Dolgozó_Személyes(Anyja.Text.Trim(), 
+                Adat_Dolgozó_Személyes ADAT = new Adat_Dolgozó_Személyes(Anyja.Text.Trim(),
                                                                          Dolgozószám.Text.Trim(),
                                                                          Ideiglenescím.Text.Trim(),
                                                                          Lakcím.Text.Trim(),
@@ -2236,7 +2236,7 @@ namespace Villamos
                                                                          Telefonszám3.Text.Trim());
 
                 if (vane == null)
-                    KézSzemélyes.Rögzítés(hely,ADAT);
+                    KézSzemélyes.Rögzítés(hely, ADAT);
                 else
                     KézSzemélyes.Módosítás(hely, ADAT);
 

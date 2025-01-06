@@ -264,7 +264,7 @@ namespace Villamos
             this.CAFRögzít = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Btn_Súgó = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -2470,7 +2470,6 @@ namespace Villamos
             this.PDF_néző.Location = new System.Drawing.Point(220, 59);
             this.PDF_néző.Margin = new System.Windows.Forms.Padding(9, 12, 9, 12);
             this.PDF_néző.Name = "PDF_néző";
-            this.PDF_néző.ShowToolbar = false;
             this.PDF_néző.Size = new System.Drawing.Size(1008, 546);
             this.PDF_néző.TabIndex = 240;
             this.PDF_néző.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;
