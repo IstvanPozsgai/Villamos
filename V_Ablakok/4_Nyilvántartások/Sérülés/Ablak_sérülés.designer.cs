@@ -264,7 +264,7 @@ namespace Villamos
             this.CAFRögzít = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Btn_Súgó = new System.Windows.Forms.Button();
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();

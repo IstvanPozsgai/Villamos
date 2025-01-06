@@ -175,5 +175,16 @@ namespace Villamos.Villamos_Adatszerkezet
             Művelet = művelet;
             Rendelés = rendelés;
         }
+
+        public Adat_Munka_Adatok(int sUMIdő, DateTime dátum, string megnevezés, string művelet, string pályaszám, string rendelés, bool státus)
+        {
+            SUMIdő = sUMIdő;
+            Dátum = dátum;
+            Megnevezés = megnevezés;
+            Művelet = művelet;
+            Pályaszám = pályaszám;
+            Rendelés = rendelés;
+            Státus = státus;
+        }
     }
 }

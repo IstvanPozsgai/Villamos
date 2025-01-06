@@ -95,9 +95,9 @@ namespace Villamos
             this.TabPage5 = new System.Windows.Forms.TabPage();
             this.PDF_néző = new PdfiumViewer.PdfViewer();
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.Főholtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.Alholtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Főholtart = new V_MindenEgyéb.MyProgressbar();
+            this.Alholtart = new V_MindenEgyéb.MyProgressbar();
             this.Cmbtelephely = new System.Windows.Forms.CheckedListBox();
             this.BtnLe = new System.Windows.Forms.Button();
             this.BtnFel = new System.Windows.Forms.Button();
