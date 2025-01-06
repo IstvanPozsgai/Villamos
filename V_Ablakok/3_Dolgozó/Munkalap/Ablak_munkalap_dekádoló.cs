@@ -63,7 +63,7 @@ namespace Villamos
             {
                 int melyikelem;
                 // ide kell az összes gombot tenni amit szabályozni akarunk
-                Command5.Enabled = false;
+                Rögzítés.Enabled = false;
                 Button2.Enabled = false;
                 Command14.Enabled = false;
 
@@ -79,7 +79,7 @@ namespace Villamos
                 // módosítás 1
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-                    Command5.Enabled = true;
+                    Rögzítés.Enabled = true;
 
                 }
                 // módosítás 2
@@ -146,7 +146,7 @@ namespace Villamos
                 Cmbtelephely.Items.Clear();
                 Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Személy(true));
                 if (Program.PostásTelephely == "Főmérnökség")
-                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
+                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim(); }
                 else
                 { Cmbtelephely.Text = Program.PostásTelephely; }
 
@@ -413,7 +413,7 @@ namespace Villamos
             Táblakitöltés1();
             Táblakitöltés2();
             Napiidőkbetöltése();
-            Command5.Enabled = true;
+            Rögzítés.Enabled = true;
         }
 
         private void Command6_Click(object sender, EventArgs e)
@@ -422,14 +422,14 @@ namespace Villamos
             FelhasználtText.Text = "";
             RendelkezésText.BackColor = Color.MediumOrchid;
             FelhasználtText.BackColor = Color.MediumOrchid;
-            Command5.Visible = false;
+            Rögzítés.Visible = false;
 
             Táblakitöltés0();
             Táblakitöltés1();
             Táblakitöltés2();
             Napiidőkbetöltése();
 
-            Command5.Enabled = true;
+            Rögzítés.Enabled = true;
         }
 
         private void Command11_Click(object sender, EventArgs e)
@@ -503,13 +503,13 @@ namespace Villamos
                     RendelkezésText.BackColor = Color.Green;
                     FelhasználtText.BackColor = Color.Green;
 
-                    Command5.Visible = true;
+                    Rögzítés.Visible = true;
                 }
                 else
                 {
                     RendelkezésText.BackColor = Color.Red;
                     FelhasználtText.BackColor = Color.Red;
-                    Command5.Visible = false;
+                    Rögzítés.Visible = false;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -560,7 +560,6 @@ namespace Villamos
                 Tábla1.Rows[19].ReadOnly = true;
                 Tábla1.Visible = true;
                 Tábla1.Refresh();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -586,20 +585,15 @@ namespace Villamos
                         összeg = 0;
                         for (int i = 0; i < Tábla1.RowCount - 1; i++)
                         {
-                            if (Tábla1.Rows[i].Cells[j].Value == null || !int.TryParse(Tábla1.Rows[i].Cells[j].Value.ToString().Trim(), out int result))
-                            {
-                            }
-                            else
-                            {
-                                összeg += int.Parse(Tábla1.Rows[i].Cells[j].Value.ToString().Trim());
-                            }
+
+                            if (Tábla1.Rows[i].Cells[j].Value != null && !int.TryParse(Tábla1.Rows[i].Cells[j].Value.ToStrTrim(), out int Cellaérték))
+                                összeg += Cellaérték;
+
                         }
                         Tábla1.Rows[Tábla1.RowCount - 1].Cells[j].Value = összeg;
                         összesen += összeg;
                     }
-
                     FelhasználtText.Text = összesen.ToString();
-
                 }
             }
             catch (HibásBevittAdat ex)
@@ -648,55 +642,32 @@ namespace Villamos
             }
         }
 
-        private void Command5_Click(object sender, EventArgs e)
+        private void Rögzítés_Click(object sender, EventArgs e)
         {
             try
             {
-                string rendelés;
-                string művelet;
-                string megnevezés;
-                string pályaszám;
-                long idő;
-                string fejléc;
-                Command5.Enabled = false;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + Dátum.Value.ToString("yyyy") + ".mdb";
-                string jelszó = "dekádoló";
-                string szöveg;
-
-                List<string> szövegGy = new List<string>();
+                Rögzítés.Enabled = false;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{Dátum.Value.Year}.mdb";
+                List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
                 for (int i = 0; i < Tábla1.ColumnCount; i++)
                 {
-                    if (Tábla1.Rows[Tábla1.RowCount - 1].Cells[i].Value.ToString() != "0")
+                    if (int.TryParse(Tábla1.Rows[Tábla1.RowCount - 1].Cells[i].Value.ToString(), out int idő) && idő != 0)
                     {
-                        idő = long.Parse(Tábla1.Rows[Tábla1.RowCount - 1].Cells[i].Value.ToString());
-                        rendelés = "";
-                        művelet = "";
-                        megnevezés = "";
-                        pályaszám = "";
-                        fejléc = Tábla1.Columns[i].HeaderText;
+                        string fejléc = Tábla1.Columns[i].HeaderText;
                         string[] daraboló = fejléc.Replace("\r", "").Split('\n');
                         // szétdaraboljuk a fejlécet 
-                        rendelés = daraboló[0].Trim();
-                        művelet = daraboló[1].Trim();
-                        megnevezés = daraboló[2].Trim();
-                        pályaszám = daraboló[3].Trim();
+                        string rendelés = daraboló[0].Trim();
+                        string művelet = daraboló[1].Trim();
+                        string megnevezés = daraboló[2].Trim();
+                        string pályaszám = daraboló[3].Trim();
 
-                        szöveg = "INSERT INTO Adatoktábla (rendelés, művelet, megnevezés, pályaszám, idő, dátum, státus) VALUES (";
-                        szöveg += "'" + rendelés + "', ";
-                        szöveg += "'" + művelet + "', ";
-                        szöveg += "'" + megnevezés + "', ";
-                        szöveg += "'" + pályaszám + "', ";
-                        szöveg += idő.ToString() + ", ";
-                        szöveg += "'" + Dátum.Value + "', ";
-                        szöveg += "true )";
-                        szövegGy.Add(szöveg);
+                        Adat_Munka_Adatok ADAT = new Adat_Munka_Adatok(0, idő, Dátum.Value, megnevezés, művelet, pályaszám, rendelés, true);
+                        Adatok.Add(ADAT);
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
-
-
-                Command5.Enabled = true;
-                Command5.Visible = false;
+                KézMunkaAdatok.Rögzítés(hely, Adatok);
+                Rögzítés.Enabled = true;
+                Rögzítés.Visible = false;
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -825,9 +796,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
-                if (!System.IO.File.Exists(hely))
-                    return;
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
+                if (!System.IO.File.Exists(hely)) return;
 
                 string jelszó = "dekádoló";
                 string szöveg = "SELECT Adatoktábla.rendelés, Adatoktábla.művelet, Sum(Adatoktábla.idő) AS SUMIdő, Adatoktábla.dátum, Adatoktábla.pályaszám, Adatoktábla.megnevezés, Adatoktábla.státus";
@@ -835,6 +805,7 @@ namespace Villamos
                 szöveg += " GROUP BY Adatoktábla.rendelés, Adatoktábla.művelet, Adatoktábla.dátum, Adatoktábla.pályaszám, Adatoktábla.megnevezés, Adatoktábla.státus";
                 szöveg += " HAVING (((Adatoktábla.dátum)=#" + DekádDátum.Value.ToString("yyyy-MM-dd") + "#) AND ((Adatoktábla.státus)=True))";
                 szöveg += " order by rendelés";
+                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_Adat_SUM_List(hely, jelszó, szöveg);
 
                 Tábla3.Rows.Clear();
                 Tábla3.Columns.Clear();
@@ -859,13 +830,10 @@ namespace Villamos
                 Tábla3.Columns[6].HeaderText = "Munka";
                 Tábla3.Columns[7].Width = 110;
 
-                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_Adat_SUM_List(hely, jelszó, szöveg);
-                int i;
-
                 foreach (Adat_Munka_Adatok rekord in Adatok)
                 {
                     Tábla3.RowCount++;
-                    i = Tábla3.RowCount - 1;
+                    int i = Tábla3.RowCount - 1;
 
                     // kimarad
                     Tábla3.Rows[i].Cells[1].Value = rekord.Rendelés.Trim();
@@ -875,7 +843,6 @@ namespace Villamos
                     Tábla3.Rows[i].Cells[5].Value = rekord.Megnevezés;
                     Tábla3.Rows[i].Cells[6].Value = rekord.Pályaszám;
                     Tábla3.Rows[i].Cells[7].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-
                 }
 
                 Tábla3.Visible = true;
@@ -933,6 +900,7 @@ namespace Villamos
                 szöveg += " WHERE Adatoktábla.dátum>=#" + elsőnap.ToString("yyyy-MM-dd") + "# AND Adatoktábla.dátum<=#" + utolsónap.ToString("yyyy-MM-dd") + "# and Adatoktábla.státus=True";
                 szöveg += " GROUP BY Adatoktábla.rendelés, Adatoktábla.művelet";
                 szöveg += " order by rendelés";
+                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_AdatokSUM(hely, jelszó, szöveg);
 
                 Tábla3.Rows.Clear();
                 Tábla3.Columns.Clear();
@@ -957,13 +925,10 @@ namespace Villamos
                 Tábla3.Columns[7].HeaderText = "Munka";
                 Tábla3.Columns[7].Width = 110;
 
-                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_AdatokSUM(hely, jelszó, szöveg);
-                int i;
-
                 foreach (Adat_Munka_Adatok rekord in Adatok)
                 {
                     Tábla3.RowCount++;
-                    i = Tábla3.RowCount - 1;
+                    int i = Tábla3.RowCount - 1;
                     Tábla3.Rows[i].Cells[1].Value = rekord.Rendelés.Trim();
                     Tábla3.Rows[i].Cells[2].Value = rekord.Művelet.Trim();
                     Tábla3.Rows[i].Cells[4].Value = rekord.SUMIdő;
@@ -988,10 +953,9 @@ namespace Villamos
             try
             {
                 if (Tábla3.Rows.Count < 1) return;
-                if (Tábla3.Columns[3].HeaderText != "Napi")
-                    return;
+                if (Tábla3.Columns[3].HeaderText != "Napi") return;
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
                 if (!System.IO.File.Exists(hely)) return;
                 string jelszó = "dekádoló";
 
@@ -1020,12 +984,10 @@ namespace Villamos
             }
         }
 
-
         private void Command25_Click(object sender, EventArgs e)
         {
             Havilista();
         }
-
 
         private void Havilista()
         {
@@ -1034,14 +996,14 @@ namespace Villamos
                 DateTime elsőnap = MyF.Hónap_elsőnapja(DekádDátum.Value);
                 DateTime utolsónap = MyF.Hónap_utolsónapja(DekádDátum.Value);
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
                 if (!System.IO.File.Exists(hely))
                     return;
                 string jelszó = "dekádoló";
                 string szöveg = "SELECT *  FROM Adatoktábla";
                 szöveg += " where dátum>=#" + elsőnap.ToString("yyyy-MM-dd") + "# AND dátum<=#" + utolsónap.ToString("yyyy-MM-dd") + "# and státus=True";
                 szöveg += " order by rendelés,dátum";
-
+                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_Adatok(hely, jelszó, szöveg);
 
                 Tábla3.Rows.Clear();
                 Tábla3.Columns.Clear();
@@ -1065,13 +1027,10 @@ namespace Villamos
                 Tábla3.Columns[6].HeaderText = "Munka";
                 Tábla3.Columns[6].Width = 110;
 
-                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_Adatok(hely, jelszó, szöveg);
-                int i;
-
                 foreach (Adat_Munka_Adatok rekord in Adatok)
                 {
                     Tábla3.RowCount++;
-                    i = Tábla3.RowCount - 1;
+                    int i = Tábla3.RowCount - 1;
 
                     Tábla3.Rows[i].Cells[0].Value = rekord.ID;
                     Tábla3.Rows[i].Cells[1].Value = rekord.Rendelés.Trim();
@@ -1104,21 +1063,14 @@ namespace Villamos
             {
                 // rendelési szám módosítás
                 if (Tábla3.Rows.Count < 1) return;
-                if (Tábla3.SelectedRows.Count < 0)
-                    throw new HibásBevittAdat("Nincs Kijelölve a táblázatban módosítandó elem.");
-                if (Tábla3.Columns[3].HeaderText != "Napi")
-                    throw new HibásBevittAdat("Nem Napi listázású a táblázat.");
-                if (Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[0].Value.ToString().Trim() == "")
-                    throw new HibásBevittAdat("A kijelöléshez tartozó sorszám érvénytelen.");
+                if (Tábla3.SelectedRows.Count < 0) throw new HibásBevittAdat("Nincs Kijelölve a táblázatban módosítandó elem.");
+                if (Tábla3.Columns[3].HeaderText != "Napi") throw new HibásBevittAdat("Nem Napi listázású a táblázat.");
+                if (Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[1].Value.ToStrTrim() == "") throw new HibásBevittAdat("A kijelöléshez tartozó rendelésiszám érvénytelen.");
+                if (!int.TryParse(Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[0].Value.ToStrTrim(), out int sorszám)) throw new HibásBevittAdat("A kijelöléshez tartozó sorszám érvénytelen.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_" + DekádDátum.Value.ToString("yyyy") + ".mdb";
-                if (!System.IO.File.Exists(hely))
-                    return;
-                string jelszó = "dekádoló";
-                string szöveg = "UPDATE Adatoktábla SET rendelés='" + Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[1].Value.ToString().Trim() + "' ";
-                szöveg += " WHERE id=" + Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[0].Value.ToString().Trim();
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
+                if (!System.IO.File.Exists(hely)) return;
+                KézMunkaAdatok.Módosítás(hely, Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[1].Value.ToStrTrim(), sorszám);
                 Napilista();
                 MessageBox.Show("A rendelési szám értéke megváltoztatva. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1136,11 +1088,9 @@ namespace Villamos
 
         private void Tábla3_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
             Tábla3.Rows[e.RowIndex].Selected = true;
         }
-
 
         private void Tábla3_SelectionChanged(object sender, EventArgs e)
         {
@@ -1150,8 +1100,6 @@ namespace Villamos
                 Button2.Visible = true;
             }
         }
-
-
         #endregion
 
 

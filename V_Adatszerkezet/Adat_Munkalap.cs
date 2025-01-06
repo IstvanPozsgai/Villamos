@@ -141,7 +141,6 @@ namespace Villamos.Villamos_Adatszerkezet
     {
         public long ID { get; private set; }
         public int Idő { get; private set; }
-
         public int SUMIdő { get; private set; }
         public DateTime Dátum { get; private set; }
         public string Megnevezés { get; private set; }
@@ -175,17 +174,6 @@ namespace Villamos.Villamos_Adatszerkezet
             SUMIdő = sUMIdő;
             Művelet = művelet;
             Rendelés = rendelés;
-        }
-
-        public Adat_Munka_Adatok(int sUMIdő, DateTime dátum, string megnevezés, string művelet, string pályaszám, string rendelés, bool státus)
-        {
-            SUMIdő = sUMIdő;
-            Dátum = dátum;
-            Megnevezés = megnevezés;
-            Művelet = művelet;
-            Pályaszám = pályaszám;
-            Rendelés = rendelés;
-            Státus = státus;
         }
     }
 }

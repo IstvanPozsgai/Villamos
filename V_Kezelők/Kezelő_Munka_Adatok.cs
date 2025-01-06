@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
@@ -179,6 +182,54 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
+        public void Rögzítés(string hely, List<Adat_Munka_Adatok> Adatok) 
+        {
+            try
+            {
+                List<string> szövegGy = new List<string>();
+                foreach (Adat_Munka_Adatok adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO Adatoktábla (rendelés, művelet, megnevezés, pályaszám, idő, dátum, státus) VALUES (";
+                    szöveg += $"'{adat.Rendelés}', ";
+                    szöveg += $"'{adat.Művelet}', ";
+                    szöveg += $"'{adat.Megnevezés}', ";
+                    szöveg += $"'{adat.Pályaszám}', ";
+                    szöveg += $"{adat.Idő}, ";
+                    szöveg += $"'{adat.Dátum:yyyy.MM.dd}', ";
+                    szöveg += $"'{adat.Státus}') ";
+                    szövegGy.Add(szöveg);
+                }
 
+                MyA.ABMódosítás(hely, jelszó, szövegGy);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string hely, string rendelés, int Id)
+        {
+            try
+            {
+                string szöveg = $"UPDATE Adatoktábla SET rendelés='{rendelés}' WHERE id={Id}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

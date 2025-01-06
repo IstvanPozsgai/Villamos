@@ -62,7 +62,7 @@ namespace Villamos
             this.Dátum = new System.Windows.Forms.DateTimePicker();
             this.Command6 = new System.Windows.Forms.Button();
             this.Tábla = new System.Windows.Forms.DataGridView();
-            this.Command5 = new System.Windows.Forms.Button();
+            this.Rögzítés = new System.Windows.Forms.Button();
             this.Tábla1 = new System.Windows.Forms.DataGridView();
             this.TabPage2 = new System.Windows.Forms.TabPage();
             this.Button2 = new System.Windows.Forms.Button();
@@ -173,7 +173,7 @@ namespace Villamos
             this.TabPage1.Controls.Add(this.Dátum);
             this.TabPage1.Controls.Add(this.Command6);
             this.TabPage1.Controls.Add(this.Tábla);
-            this.TabPage1.Controls.Add(this.Command5);
+            this.TabPage1.Controls.Add(this.Rögzítés);
             this.TabPage1.Controls.Add(this.Tábla1);
             this.TabPage1.Location = new System.Drawing.Point(4, 29);
             this.TabPage1.Name = "TabPage1";
@@ -326,19 +326,19 @@ namespace Villamos
             this.Tábla.Size = new System.Drawing.Size(245, 232);
             this.Tábla.TabIndex = 85;
             // 
-            // Command5
+            // Rögzítés
             // 
-            this.Command5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Command5.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Command5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Command5.Location = new System.Drawing.Point(1131, 477);
-            this.Command5.Name = "Command5";
-            this.Command5.Size = new System.Drawing.Size(45, 45);
-            this.Command5.TabIndex = 84;
-            this.ToolTip1.SetToolTip(this.Command5, "Rögzíti az adatokat.");
-            this.Command5.UseVisualStyleBackColor = true;
-            this.Command5.Visible = false;
-            this.Command5.Click += new System.EventHandler(this.Command5_Click);
+            this.Rögzítés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Rögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Rögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Rögzítés.Location = new System.Drawing.Point(1131, 477);
+            this.Rögzítés.Name = "Rögzítés";
+            this.Rögzítés.Size = new System.Drawing.Size(45, 45);
+            this.Rögzítés.TabIndex = 84;
+            this.ToolTip1.SetToolTip(this.Rögzítés, "Rögzíti az adatokat.");
+            this.Rögzítés.UseVisualStyleBackColor = true;
+            this.Rögzítés.Visible = false;
+            this.Rögzítés.Click += new System.EventHandler(this.Rögzítés_Click);
             // 
             // Tábla1
             // 
@@ -859,7 +859,7 @@ namespace Villamos
         internal TabPage TabPage2;
         internal Button Command6;
         internal DataGridView Tábla;
-        internal Button Command5;
+        internal Button Rögzítés;
         internal DataGridView Tábla1;
         internal TabPage TabPage3;
         internal ProgressBar Holtart;
