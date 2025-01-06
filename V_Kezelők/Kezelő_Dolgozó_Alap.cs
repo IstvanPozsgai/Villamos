@@ -363,6 +363,7 @@ namespace Villamos.Villamos.Kezelők
                 szöveg += $" Főkönyvtitulus='{Adat.Főkönyvtitulus}', ";
                 szöveg += $" bejelentkezésinév='{Adat.Bejelentkezésinév}', ";
                 szöveg += $" munkarend={Adat.Munkarend}, ";
+                szöveg += $" Csopvez={Adat.Csopvez}, ";
                 szöveg += $" Passzív={Adat.Passzív}, ";
                 szöveg += $" Részmunkaidős={Adat.Részmunkaidős}, ";
                 szöveg += $" alkalmazott={Adat.Alkalmazott}, ";
