@@ -754,8 +754,8 @@ namespace Villamos
                 Tábla3.Columns[1].Width = 110;
                 Tábla3.Columns[2].HeaderText = "Művelet";
                 Tábla3.Columns[2].Width = 90;
-                Tábla3.Columns[3].HeaderText = "Napi";
-                Tábla3.Columns[2].Width = 90;
+                Tábla3.Columns[3].HeaderText = "";
+                Tábla3.Columns[3].Width = 90;
                 Tábla3.Columns[4].HeaderText = "Munkaidő";
                 Tábla3.Columns[4].Width = 150;
                 Tábla3.Columns[5].HeaderText = "Típus";
@@ -776,7 +776,7 @@ namespace Villamos
                     Tábla3.Rows[i].Cells[4].Value = rekord.Idő;
                     Tábla3.Rows[i].Cells[5].Value = rekord.Megnevezés;
                     Tábla3.Rows[i].Cells[6].Value = rekord.Pályaszám;
-                    Tábla3.Rows[i].Cells[7].Value = rekord.Dátum.ToString("yyyy.MM.dd");
+                    Tábla3.Rows[i].Cells[7].Value = rekord.Dátum!=new DateTime (1900,1,1) ? rekord.Dátum.ToString("yyyy.MM.dd"): "";
                 }
 
                 Tábla3.Visible = true;
@@ -807,40 +807,19 @@ namespace Villamos
                                                    where a.Dátum.ToShortDateString() == DekádDátum.Value.ToShortDateString()
                                                    && a.Státus == true
                                                    select a).ToList();
-                List<string> Rendelések = AdatokS.Select(a => a.Rendelés).Distinct().ToList();
 
-                List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
-                foreach (string rendelés in Rendelések)
-                {
-                    int Szum = (from a in AdatokS
-                                where a.Rendelés == rendelés
-                                select a.Idő).Sum();
-                    Adat_Munka_Adatok Ideig = (from a in AdatokS
-                                               where a.Rendelés == rendelés
-                                               select a).FirstOrDefault();
-                    if (Ideig != null)
-                    {
-                        Adat_Munka_Adatok Adat = new Adat_Munka_Adatok(0,
-                                                                       Szum,
-                                                                       DekádDátum.Value,
-                                                                       Ideig.Rendelés,
-                                                                       Ideig.Művelet,
-                                                                       Ideig.Pályaszám,
-                                                                       rendelés,
-                                                                       true);
-
-                        Adatok.Add(Adat);
-                    }
-                }
-
-
-                //string jelszó = "dekádoló";
-                //string szöveg = "SELECT Adatoktábla.rendelés, Adatoktábla.művelet, Sum(Adatoktábla.idő) AS SUMIdő, Adatoktábla.dátum, Adatoktábla.pályaszám, Adatoktábla.megnevezés, Adatoktábla.státus";
-                //szöveg += " FROM Adatoktábla";
-                //szöveg += " GROUP BY Adatoktábla.rendelés, Adatoktábla.művelet, Adatoktábla.dátum, Adatoktábla.pályaszám, Adatoktábla.megnevezés, Adatoktábla.státus";
-                //szöveg += " HAVING (((Adatoktábla.dátum)=#" + DekádDátum.Value.ToString("yyyy-MM-dd") + "#) AND ((Adatoktábla.státus)=True))";
-                //szöveg += " order by rendelés";
-                //List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_Adat_SUM_List(hely, jelszó, szöveg);
+                List<Adat_Munka_Adatok> Adatok = (from a in AdatokS
+                                                  group a by new { a.Rendelés, a.Művelet } into csoport
+                                                  select new Adat_Munka_Adatok(
+                                                      0,
+                                                      csoport.Sum(x => x.Idő),
+                                                      DekádDátum.Value,
+                                                      csoport.First().Megnevezés,
+                                                      csoport.Key.Művelet,
+                                                      csoport.First().Pályaszám,
+                                                      csoport.Key.Rendelés,
+                                                      true
+                                                  )).ToList();
 
                 Tábla_Napilista(Adatok);
             }
@@ -855,7 +834,6 @@ namespace Villamos
             }
         }
 
-
         private void Command13_Click(object sender, EventArgs e)
         {
             try
@@ -864,9 +842,8 @@ namespace Villamos
                 DateTime utolsónap = DekádDátum.Value;
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-                if (!System.IO.File.Exists(hely))
-                    return;
-                string jelszó = "dekádoló";
+                if (!System.IO.File.Exists(hely))                        return;
+
                 if (Option1.Checked)
                 {
                     elsőnap = MyF.Hónap_elsőnapja(DekádDátum.Value);
@@ -887,46 +864,27 @@ namespace Villamos
                     elsőnap = MyF.Hónap_elsőnapja(DekádDátum.Value);
                     utolsónap = MyF.Hónap_utolsónapja(DekádDátum.Value);
                 }
+                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(hely);
 
-                string szöveg = "SELECT Adatoktábla.rendelés, Adatoktábla.művelet, Sum(Adatoktábla.idő) AS SUMIdő FROM Adatoktábla ";
-                szöveg += " WHERE Adatoktábla.dátum>=#" + elsőnap.ToString("yyyy-MM-dd") + "# AND Adatoktábla.dátum<=#" + utolsónap.ToString("yyyy-MM-dd") + "# and Adatoktábla.státus=True";
-                szöveg += " GROUP BY Adatoktábla.rendelés, Adatoktábla.művelet";
-                szöveg += " order by rendelés";
-                List<Adat_Munka_Adatok> Adatok = KézMunkaAdatok.Lista_AdatokSUM(hely, jelszó, szöveg);
+                List<Adat_Munka_Adatok> AdatokS = (from a in AdatokÖ
+                                                  where a.Státus == true
+                                                  && a.Dátum >=elsőnap
+                                                  && a.Dátum <=utolsónap
+                                                  select a).ToList();
 
-                Tábla3.Rows.Clear();
-                Tábla3.Columns.Clear();
-                Tábla3.Refresh();
-                Tábla3.Visible = false;
-                Tábla3.ColumnCount = 8;
-
-                // fejléc elkészítése
-                Tábla3.Columns[0].HeaderText = "Sorszám";
-                Tábla3.Columns[0].Width = 90;
-                Tábla3.Columns[1].HeaderText = "Rendelés";
-                Tábla3.Columns[1].Width = 110;
-                Tábla3.Columns[2].HeaderText = "Művelet";
-                Tábla3.Columns[2].Width = 90;
-                // kimarad
-                Tábla3.Columns[4].HeaderText = "Munkaidő";
-                Tábla3.Columns[3].Width = 150;
-                Tábla3.Columns[5].HeaderText = "Típus";
-                Tábla3.Columns[4].Width = 150;
-                Tábla3.Columns[6].HeaderText = "Dátum";
-                Tábla3.Columns[5].Width = 150;
-                Tábla3.Columns[7].HeaderText = "Munka";
-                Tábla3.Columns[7].Width = 110;
-
-                foreach (Adat_Munka_Adatok rekord in Adatok)
-                {
-                    Tábla3.RowCount++;
-                    int i = Tábla3.RowCount - 1;
-                    Tábla3.Rows[i].Cells[1].Value = rekord.Rendelés.Trim();
-                    Tábla3.Rows[i].Cells[2].Value = rekord.Művelet.Trim();
-                    Tábla3.Rows[i].Cells[4].Value = rekord.SUMIdő;
-                }
-                Tábla3.Visible = true;
-                Tábla3.Refresh();
+                List<Adat_Munka_Adatok> Adatok = (from a in AdatokS
+                                                  group a by new { a.Rendelés, a.Művelet } into csoport
+                                                  select new Adat_Munka_Adatok(
+                                                      0,
+                                                      csoport.Sum(x => x.Idő),
+                                                      new DateTime(1900,1,1),
+                                                      "",
+                                                      csoport.Key.Művelet,
+                                                      "",
+                                                      csoport.Key.Rendelés,
+                                                      true
+                                                  )).ToList();
+                Tábla_Napilista(Adatok);
             }
             catch (HibásBevittAdat ex)
             {
@@ -991,7 +949,7 @@ namespace Villamos
                 List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(hely);
                 List<Adat_Munka_Adatok> Adatok = (from a in AdatokÖ
                                                   where a.Státus == true
-                                                  && a.Dátum>= elsőnap
+                                                  && a.Dátum >= elsőnap
                                                   && a.Dátum <= utolsónap
                                                   orderby a.Rendelés, a.Dátum
                                                   select a).ToList();

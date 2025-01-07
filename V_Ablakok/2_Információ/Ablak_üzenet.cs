@@ -725,6 +725,8 @@ namespace Villamos
                         BtnOlvasva.Visible = false;
                     }
                 }
+                Táblalistázás();
+                Txtírásimező.Text = "";
             }
             catch (HibásBevittAdat ex)
             {
