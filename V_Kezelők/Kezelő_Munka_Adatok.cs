@@ -182,7 +182,7 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, List<Adat_Munka_Adatok> Adatok) 
+        public void Rögzítés(string hely, List<Adat_Munka_Adatok> Adatok)
         {
             try
             {
@@ -220,6 +220,29 @@ namespace Villamos.Villamos.Kezelők
             {
                 string szöveg = $"UPDATE Adatoktábla SET rendelés='{rendelés}' WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string hely, List<long> idk)
+        {
+            try
+            {
+                List<string> szövegGy = new List<string>();
+                foreach (long elem in idk)
+                {
+                    string szöveg = $"UPDATE Adatoktábla SET státus=false WHERE id={elem}";
+                    szövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, szövegGy);
             }
             catch (HibásBevittAdat ex)
             {

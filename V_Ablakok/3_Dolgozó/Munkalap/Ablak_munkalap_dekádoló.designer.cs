@@ -70,7 +70,7 @@ namespace Villamos
             this.Option3 = new System.Windows.Forms.RadioButton();
             this.Option2 = new System.Windows.Forms.RadioButton();
             this.Option1 = new System.Windows.Forms.RadioButton();
-            this.Command12 = new System.Windows.Forms.Button();
+            this.NapÖsszeg = new System.Windows.Forms.Button();
             this.Tábla3 = new System.Windows.Forms.DataGridView();
             this.DekádDátum = new System.Windows.Forms.DateTimePicker();
             this.Command25 = new System.Windows.Forms.Button();
@@ -370,7 +370,7 @@ namespace Villamos
             this.TabPage2.Controls.Add(this.Option3);
             this.TabPage2.Controls.Add(this.Option2);
             this.TabPage2.Controls.Add(this.Option1);
-            this.TabPage2.Controls.Add(this.Command12);
+            this.TabPage2.Controls.Add(this.NapÖsszeg);
             this.TabPage2.Controls.Add(this.Tábla3);
             this.TabPage2.Controls.Add(this.DekádDátum);
             this.TabPage2.Controls.Add(this.Command25);
@@ -445,17 +445,17 @@ namespace Villamos
             this.Option1.Text = "1 dekád";
             this.Option1.UseVisualStyleBackColor = false;
             // 
-            // Command12
+            // NapÖsszeg
             // 
-            this.Command12.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Sum;
-            this.Command12.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Command12.Location = new System.Drawing.Point(207, 6);
-            this.Command12.Name = "Command12";
-            this.Command12.Size = new System.Drawing.Size(45, 45);
-            this.Command12.TabIndex = 95;
-            this.ToolTip1.SetToolTip(this.Command12, "Napi összesített adatokat listázza.");
-            this.Command12.UseVisualStyleBackColor = true;
-            this.Command12.Click += new System.EventHandler(this.Command12_Click);
+            this.NapÖsszeg.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Sum;
+            this.NapÖsszeg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.NapÖsszeg.Location = new System.Drawing.Point(207, 6);
+            this.NapÖsszeg.Name = "NapÖsszeg";
+            this.NapÖsszeg.Size = new System.Drawing.Size(45, 45);
+            this.NapÖsszeg.TabIndex = 95;
+            this.ToolTip1.SetToolTip(this.NapÖsszeg, "Napi összesített adatokat listázza.");
+            this.NapÖsszeg.UseVisualStyleBackColor = true;
+            this.NapÖsszeg.Click += new System.EventHandler(this.NapÖsszeg_Click);
             // 
             // Tábla3
             // 
@@ -882,7 +882,7 @@ namespace Villamos
         internal RadioButton Option3;
         internal RadioButton Option2;
         internal RadioButton Option1;
-        internal Button Command12;
+        internal Button NapÖsszeg;
         internal TabPage TabPage4;
         internal Button Feljebb;
         internal Button Változattörlés;
