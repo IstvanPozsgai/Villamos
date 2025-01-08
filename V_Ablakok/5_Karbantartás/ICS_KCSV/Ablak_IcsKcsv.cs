@@ -1,5 +1,4 @@
-﻿using ADODB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -189,6 +188,7 @@ namespace Villamos
 
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Fülekkitöltése();
             Pályaszám_feltöltés();
         }
 
