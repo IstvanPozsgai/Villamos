@@ -1585,7 +1585,7 @@ namespace Villamos
                         szöveg = "INSERT INTO alapadatok ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
                         szöveg += $" VALUES ( '{TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim()}', 2, ";
                         szöveg += $"{sor}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        MyA.ABMódosítás(helynapló, jelszó, szöveg);
 
                         // ha a negyedikhez érünk akkor nyomtatunk egyet.
                         if (j == 5)
@@ -1969,7 +1969,7 @@ namespace Villamos
                     szöveg = "INSERT INTO alapadatok ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
                     szöveg += $" VALUES ( '{TáblaLista.SelectedRows[i].Cells[0].Value.ToString().Trim()}', 4, ";
                     szöveg += $"{sor}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    MyA.ABMódosítás(helynapló, jelszó, szöveg);
                 }
                 LISTAlista();
 
@@ -2017,7 +2017,7 @@ namespace Villamos
                     szöveg = "INSERT INTO alapadatok ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
                     szöveg += $" VALUES ( '{TáblaLista.SelectedRows[i].Cells[0].Value.ToString().Trim()}', 5, ";
                     szöveg += $"{sor}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    MyA.ABMódosítás(helynapló, jelszó, szöveg);
                 }
                 LISTAlista();
 
@@ -2066,7 +2066,7 @@ namespace Villamos
                     szöveg = "INSERT INTO alapadatok ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
                     szöveg += $" VALUES ( '{TáblaLista.SelectedRows[i].Cells[0].Value.ToString().Trim()}', 8, ";
                     szöveg += $"{sor}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    MyA.ABMódosítás(helynapló, jelszó, szöveg);
                 }
                 LISTAlista();
 
@@ -2262,7 +2262,7 @@ namespace Villamos
                 double sor = KézNapló.Napló_Id(helynapló);
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
                 string jelszó = "forgalmirendszám";
-             
+
                 int HUE = 0;
                 int SZÁE = 0;
                 int ZUE = 0;
