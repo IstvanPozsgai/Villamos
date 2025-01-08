@@ -585,7 +585,7 @@ namespace Villamos
                         for (int i = 0; i < Tábla1.RowCount - 1; i++)
                         {
 
-                            if (Tábla1.Rows[i].Cells[j].Value != null && !int.TryParse(Tábla1.Rows[i].Cells[j].Value.ToStrTrim(), out int Cellaérték))
+                            if (Tábla1.Rows[i].Cells[j].Value != null && int.TryParse(Tábla1.Rows[i].Cells[j].Value.ToStrTrim(), out int Cellaérték))
                                 összeg += Cellaérték;
 
                         }
