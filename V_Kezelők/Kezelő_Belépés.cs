@@ -9,8 +9,42 @@ namespace Villamos.Villamos_Kezelők
 {
     public class Kezelő_Belépés_Bejelentkezés
     {
+        readonly string jelszó = "forgalmiutasítás";
         public List<Adat_Belépés_Bejelentkezés> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
+            List<Adat_Belépés_Bejelentkezés> Adatok = new List<Adat_Belépés_Bejelentkezés>();
+            Adat_Belépés_Bejelentkezés Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Belépés_Bejelentkezés(
+                                      rekord["sorszám"].ToÉrt_Long(),
+                                      rekord["név"].ToStrTrim(),
+                                      rekord["jelszó"].ToStrTrim(),
+                                      rekord["jogkör"].ToStrTrim()
+                                      );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+
+        }
+        public List<Adat_Belépés_Bejelentkezés> Lista_Adatok(string hely)
+        {
+            string szöveg = $"SELECT * FROM bejelentkezés";
             List<Adat_Belépés_Bejelentkezés> Adatok = new List<Adat_Belépés_Bejelentkezés>();
             Adat_Belépés_Bejelentkezés Adat;
 
@@ -99,7 +133,7 @@ namespace Villamos.Villamos_Kezelők
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Módosítás(string hely, string jelszó, Adat_Belépés_Bejelentkezés Adat)
+        public void Módosítás(string hely, Adat_Belépés_Bejelentkezés Adat)
         {
             try
             {
@@ -117,7 +151,6 @@ namespace Villamos.Villamos_Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         /// <summary>

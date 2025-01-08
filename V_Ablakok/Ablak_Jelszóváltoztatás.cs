@@ -9,6 +9,7 @@ namespace Villamos
 {
     public partial class AblakJelszóváltoztatás
     {
+        readonly Kezelő_Belépés_Bejelentkezés Kéz = new Kezelő_Belépés_Bejelentkezés();
         public AblakJelszóváltoztatás(string Telephely, string Név)
         {
             InitializeComponent();
@@ -47,10 +48,7 @@ namespace Villamos
                     return;
                 }
                 string hely = $@"{Application.StartupPath}\{TxtTelephely.Text.Trim()}\Adatok\belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = $"SELECT * FROM bejelentkezés";
-                Kezelő_Belépés_Bejelentkezés Kéz = new Kezelő_Belépés_Bejelentkezés();
-                List<Adat_Belépés_Bejelentkezés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Belépés_Bejelentkezés> Adatok = Kéz.Lista_Adatok(hely);
 
                 Adat_Belépés_Bejelentkezés Elem = (from a in Adatok
                                                    where a.Név == TxtUserName.Text.Trim()
@@ -63,12 +61,12 @@ namespace Villamos
                         TxtPassword.Focus();
                         throw new HibásBevittAdat("A régi jelszó nem egyezik a tárolt adatokkal !");
                     }
-                    Adat_Belépés_Bejelentkezés ADAT = new Adat_Belépés_Bejelentkezés(Elem.Sorszám ,Elem.Név.ToUpper(), Elem.Jelszó.ToUpper(), Elem.Jogkör );
-                    Kéz.Módosítás(hely, jelszó, ADAT);
+                    Adat_Belépés_Bejelentkezés ADAT = new Adat_Belépés_Bejelentkezés(Elem.Sorszám, Elem.Név.ToUpper(), Első.Text.Trim().ToUpper(), Elem.Jogkör);
+                    Kéz.Módosítás(hely, ADAT);
                     MessageBox.Show("A jelszó módosításra került !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                 }
-              }
+            }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);

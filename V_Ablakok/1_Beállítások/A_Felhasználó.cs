@@ -316,7 +316,7 @@ namespace Villamos
                                                                                      TextNév.Text.Trim(),
                                                                                      "INIT",
                                                                                      "_");
-                    KézBej.Módosítás(hely, jelszó, ADAT);
+                    KézBej.Módosítás(hely, ADAT);
                     MessageBox.Show("A jelszó 'INIT'-re változott.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -1203,18 +1203,18 @@ namespace Villamos
                     bool volt = false;
                     if (CMBMireSzemélyes.GetItemChecked(i)) // ha be van jelölve
                     {
-                           // soronként rögzítjük
+                        // soronként rögzítjük
                         string adat1 = TextNév.Text.Trim();
                         string adat2 = Cmbtelephely.Text.Trim();
                         string adat3 = CMBMireSzemélyes.Items[i].ToString().Trim().Substring(0, 1);
-                        volt = KézKulcs.ABKULCSvan( adat1, adat2, adat3);
+                        volt = KézKulcs.ABKULCSvan(adat1, adat2, adat3);
                         if (!volt)
                         {
                             // ha nincs ilyen adat akkor nem rögzítjük újra
                             Adat_Kulcs Adat = new Adat_Kulcs(MyF.MÁSKódol(TextNév.Text.Trim()),
                                                              MyF.MÁSKódol(Cmbtelephely.Text.Trim()),
                                                              MyF.MÁSKódol(CMBMireSzemélyes.Items[i].ToString().Trim().Substring(0, 1)));
-                            KézKulcs.Rögzít( Adat);
+                            KézKulcs.Rögzít(Adat);
                         }
                     }
                 }
