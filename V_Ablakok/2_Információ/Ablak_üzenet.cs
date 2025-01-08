@@ -517,21 +517,14 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}üzenet.mdb";
                 // ha nincs kijelölve, de a sorszám mező nem üres
                 if (Tábla.SelectedRows.Count == 0)
-                {
                     Olvasottátesz(hely, sorszám);
-                }
                 else
                 {
                     List<double> Sorok = new List<double>();
-                    for (int sor = 0; sor < Tábla.Rows.Count; sor++)
-                    {
-                        if (Tábla.Rows[sor].Selected == true)
-                        {
-                            double sora = double.Parse(Tábla.Rows[sor].Cells[0].Value.ToString());
-                            Sorok.Add(sora);
-                            Olvasottátesz(hely, Sorok);
-                        }
-                    }
+                    for (int sor = 0; sor < Tábla.SelectedRows.Count; sor++)
+                        if (double.TryParse(Tábla.SelectedRows[sor].Cells[0].Value.ToString(), out double sora)) Sorok.Add(sora);
+
+                    Olvasottátesz(hely, Sorok);
                 }
                 Táblalistázás();
                 Txtírásimező.Text = "";

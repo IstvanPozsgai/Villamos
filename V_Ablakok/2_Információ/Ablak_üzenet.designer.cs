@@ -122,6 +122,7 @@ namespace Villamos
             this.Tábla.Location = new System.Drawing.Point(5, 70);
             this.Tábla.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Tábla.Name = "Tábla";
+            this.Tábla.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.DarkKhaki;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -145,6 +146,7 @@ namespace Villamos
             this.Column1.HeaderText = "Sorszám";
             this.Column1.MinimumWidth = 6;
             this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
             this.Column1.Width = 80;
             // 
             // Column2
@@ -153,6 +155,7 @@ namespace Villamos
             this.Column2.HeaderText = "Írta";
             this.Column2.MinimumWidth = 6;
             this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
             this.Column2.Width = 105;
             // 
             // Column3
@@ -161,6 +164,7 @@ namespace Villamos
             this.Column3.HeaderText = "Mikor";
             this.Column3.MinimumWidth = 6;
             this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
             this.Column3.Width = 145;
             // 
             // Column4
@@ -169,12 +173,14 @@ namespace Villamos
             this.Column4.HeaderText = "Szöveg";
             this.Column4.MinimumWidth = 6;
             this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
             // 
             // Column5
             // 
             this.Column5.HeaderText = "Olvasott";
             this.Column5.MinimumWidth = 6;
             this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
             this.Column5.Width = 70;
             // 
             // Dátumtól
