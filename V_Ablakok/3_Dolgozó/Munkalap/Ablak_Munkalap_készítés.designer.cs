@@ -152,7 +152,7 @@ namespace Villamos
             this.Csoport.FormattingEnabled = true;
             this.Csoport.Location = new System.Drawing.Point(3, 42);
             this.Csoport.Name = "Csoport";
-            this.Csoport.Size = new System.Drawing.Size(371, 4);
+            this.Csoport.Size = new System.Drawing.Size(371, 25);
             this.Csoport.TabIndex = 60;
             // 
             // Label1

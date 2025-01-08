@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű
     {
+
         public List<Adat_Jármű> Lista_Jármű_állomány(string hely, string jelszó, string szöveg)
         {
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
@@ -47,8 +48,6 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-
 
         public List<string> List_Jármű_típusok(string hely, string jelszó, string szöveg)
         {
@@ -612,8 +611,8 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű_Napló rekord in Adatok)
                 {
-                  string   szöveg = $"UPDATE állománytáblanapló  SET üzenet=1 WHERE üzenet=0 AND céltelep='{rekord.Céltelep}' AND Azonosító='{rekord.Azonosító}'";
-                  SzövegGy.Add(szöveg);
+                    string szöveg = $"UPDATE állománytáblanapló  SET üzenet=1 WHERE üzenet=0 AND céltelep='{rekord.Céltelep}' AND Azonosító='{rekord.Azonosító}'";
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
@@ -666,8 +665,40 @@ namespace Villamos.Kezelők
 
     public class Kezelő_Jármű_Állomány_Típus
     {
+        readonly string jelszó = "pozsgaii";
         public List<Adat_Jármű_Állomány_Típus> Lista_adatok(string hely, string jelszó, string szöveg)
         {
+            List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
+            Adat_Jármű_Állomány_Típus Adat;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Állomány_Típus(
+                                            rekord["Id"].ToÉrt_Long(),
+                                            rekord["Állomány"].ToÉrt_Long(),
+                                            rekord["típus"].ToStrTrim()
+                                            );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+        public List<Adat_Jármű_Állomány_Típus> Lista_adatok(string hely)
+        {
+            string szöveg = "SELECT * FROM Típustábla";
             List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
             Adat_Jármű_Állomány_Típus Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
