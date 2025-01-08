@@ -98,7 +98,7 @@ namespace Villamos
                         szöveg += " A helyes formátum: éééé.HH.nn. nincs szóköz a pont után.\r\n";
                         szöveg += " Beállítani a területi/ régió beállításoknál kell.";
                         FigyKiírás(szöveg);
-                        HibaNapló.Log("Hibás  dátum forma.", $"Dátum: {DateTime.Now}\n Felhasználó : {Environment.UserName}", "Dátumformátumellenőrzés", "", 0);
+                        //     HibaNapló.Log("Hibás  dátum forma.", $"Dátum: {DateTime.Now}\n Felhasználó : {Environment.UserName}", "Dátumformátumellenőrzés", "", 0);
                         Timer_kilép.Enabled = true;
 
                         Application.Exit();
@@ -247,7 +247,7 @@ namespace Villamos
                 Width = 555,
                 Height = 275,
                 Text = szöveg,
-                TextAlign= ContentAlignment.MiddleCenter,
+                TextAlign = ContentAlignment.MiddleCenter,
                 BackColor = Color.Tomato,
                 Font = new System.Drawing.Font("Arial", 20, FontStyle.Bold),
                 Visible = true
