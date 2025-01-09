@@ -927,12 +927,12 @@ namespace Villamos
             List<string> AdatokVez;
             List<string> AdatokÖssz;
 
-            if (E3pályaszám.Checked == true & maximum >= 1)
+            if (E3pályaszám.Checked & maximum >= 1)
             {
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string helyvez = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
-
+                if (!File.Exists(hely)) return;
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
@@ -1030,9 +1030,9 @@ namespace Villamos
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
-                    if (Típusoklistája.GetItemChecked(i) == true)
+                    if (Típusoklistája.GetItemChecked(i))
                     {
-                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi);
+                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi, "T5C5");
                         AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
 
                         if (AdatokRész != null)
@@ -1092,7 +1092,7 @@ namespace Villamos
                 {
                     if (Típusoklistája.GetItemChecked(i) == true)
                     {
-                        Adatok = KézJármű.Lista_Pályaszámok(hely,Típusoklistája.Items[i].ToStrTrim());
+                        Adatok = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
 
                         if (Adatok != null)
                         {
@@ -1518,16 +1518,16 @@ namespace Villamos
             {
                 string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
                 if (!File.Exists(helynap)) return;
-   
+
                 string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
                 if (!File.Exists(helykieg)) return;
-              
+
                 List<Adat_Kiegészítő_Beosztáskódok> BeosztáskódÖ = KézBeoKód.Lista_Adatok(helykieg);
                 List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = (from a in BeosztáskódÖ
-                                                                   where a.Számoló ==true 
-                                                                   orderby a.Beosztáskód 
-                                                                   select a).ToList ();
-          
+                                                                   where a.Számoló == true
+                                                                   orderby a.Beosztáskód
+                                                                   select a).ToList();
+
                 List<Adat_Dolgozó_Beosztás_Új> DolgbeosztÖ = KézBeosztás.Lista_Adatok(helynap);
                 List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = (from a in DolgbeosztÖ
                                                              where a.Nap == Dátum.Value

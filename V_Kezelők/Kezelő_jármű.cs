@@ -360,9 +360,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<string> Lista_Pályaszámok(string hely, int Melyiknap)
+        public List<string> Lista_Pályaszámok(string hely, int Melyiknap, string Típus="ICS")
         {
             string szöveg = $"SELECT * FROM állománytábla where E2={Melyiknap}  ORDER BY  azonosító";
+            if (Típus == "T5C5") szöveg = $"SELECT * FROM állománytábla where haromnapos={Melyiknap}  ORDER BY  azonosító";
+
             List<string> Adatok = new List<string>();
             string Adat;
             try
