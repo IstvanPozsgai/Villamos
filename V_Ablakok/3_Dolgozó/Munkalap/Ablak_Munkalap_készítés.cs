@@ -14,13 +14,15 @@ namespace Villamos
 {
     public partial class Ablak_Munkalap_készítés
     {
-
         readonly Kezelő_Munka_Folyamat KézMunkaFoly = new Kezelő_Munka_Folyamat();
         readonly Kezelő_Kiegészítő_Csoportbeosztás KézCsoport = new Kezelő_Kiegészítő_Csoportbeosztás();
         readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
         readonly Kezelő_MunkaRend KézMunkaRend = new Kezelő_MunkaRend();
         readonly Kezelő_Jármű_Állomány_Típus KézJárműTípus = new Kezelő_Jármű_Állomány_Típus();
         readonly Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Kiegészítő_Beosztáskódok KézBeoKód = new Kezelő_Kiegészítő_Beosztáskódok();
+        readonly Kezelő_Dolgozó_Beosztás_Új KézBeosztás = new Kezelő_Dolgozó_Beosztás_Új();
 
         public Ablak_Munkalap_készítés()
         {
@@ -729,7 +731,7 @@ namespace Villamos
             // ////////////////////////////////////////
             // ///  E2     PÁLYASZÁM    ICS        ////
             // ////////////////////////////////////////
-            Kezelő_Jármű kéz = new Kezelő_Jármű();
+
             List<string> AdatokÖssz;
             List<string> AdatokRész;
 
@@ -772,22 +774,17 @@ namespace Villamos
                         break;
                     }
             }
-            if (E2ICS.Checked == true && maximum >= 1 && mennyi > 0)
+            if (E2ICS.Checked && maximum >= 1 && mennyi > 0)
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2ICS.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
-                    if (Típusoklistája.GetItemChecked(i) == true)
+                    if (Típusoklistája.GetItemChecked(i))
                     {
-                        szöveg = $"SELECT * FROM állománytábla where E2={mennyi}  ORDER BY  azonosító";
-                        AdatokRész = kéz.Lista_Pályaszámok(hely3, jelszó, szöveg);
-
-                        szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToStrTrim()}'";
-                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi);
+                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
 
                         if (AdatokRész != null)
                         {
@@ -813,16 +810,15 @@ namespace Villamos
                             MyE.Kiir("E2-  " + Típusoklistája.Items[i].ToStrTrim(), $"A{blokkeleje}");
                         }
 
-                        MyE.Rácsoz("d" + blokkeleje.ToString() + $":r{sor}");
-                        MyE.Vastagkeret("d" + blokkeleje.ToString() + $":r{sor}");
+                        MyE.Rácsoz($"d{blokkeleje}:r{sor}");
+                        MyE.Vastagkeret($"d{blokkeleje}:r{sor}");
                         MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
-                        MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                        MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                         MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
                     }
                 }
             }
         }
-
 
         private void Munkalap_Pályaszám_E3_ICS()
         {
@@ -830,7 +826,6 @@ namespace Villamos
             // ////////////////////////////////////////
             // ///  E3     PÁLYASZÁM    ICS        ////
             // ////////////////////////////////////////
-            Kezelő_Jármű kéz = new Kezelő_Jármű();
             List<string> AdatokÖssz;
             List<string> AdatokRész;
 
@@ -878,20 +873,13 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2ICS.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i) == true)
                     {
-
-                        szöveg = $"SELECT * FROM állománytábla where E3={mennyi} ORDER BY azonosító";
-                        AdatokRész = kéz.Lista_Pályaszámok(hely3, jelszó, szöveg);
-
-                        szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToStrTrim()}'";
-                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
-
+                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi);
+                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
 
                         if (AdatokRész != null)
                         {
@@ -912,17 +900,17 @@ namespace Villamos
                                 }
                             }
 
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}" + $":c{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}:c{sor}");
 
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir("E3-  " + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
                             }
 
-                            MyE.Rácsoz("d" + blokkeleje.ToString() + $":r{sor}");
-                            MyE.Vastagkeret("d" + blokkeleje.ToString() + $":r{sor}");
+                            MyE.Rácsoz($"d{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"d{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
-                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
                         }
                     }
@@ -930,14 +918,12 @@ namespace Villamos
             }
         }
 
-
         private void Munkalap_Pályaszám_E3()
         {
 
             // ////////////////////////////////////////
             // ///  E3     PÁLYASZÁM     T5C5      ////
             // ////////////////////////////////////////
-            Kezelő_Jármű kéz = new Kezelő_Jármű();
             List<string> AdatokVez;
             List<string> AdatokÖssz;
 
@@ -945,21 +931,15 @@ namespace Villamos
             {
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-
                 string helyvez = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
-                string jelszóvez = "tápijános";
-                string szöveg;
+
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i) == true)
                     {
-                        szöveg = "SELECT * FROM vezényléstábla where törlés=0 and vizsgálatraütemez=1  and  vizsgálat='E3' ";
-                        szöveg += $" and dátum= #{Dátum.Value:yyyy-MM-dd}#  order by  azonosító";
-                        AdatokVez = kéz.Lista_Pályaszámok(helyvez, jelszóvez, szöveg);
-                        szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToStrTrim()}'";
-                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+                        AdatokVez = KézVezénylés.Lista_Pályaszámok(helyvez, Dátum.Value);
+                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
 
                         if (AdatokVez != null)
                         {
@@ -979,15 +959,15 @@ namespace Villamos
                                     MyE.Kiir(PályaszámLista, MyE.Oszlopnév(oszlop) + sor.ToString());
                                 }
                             }
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}" + $":c{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}:c{sor}");
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir("E3-  " + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
                             }
-                            MyE.Rácsoz("d" + blokkeleje.ToString() + $":r{sor}");
-                            MyE.Vastagkeret("d" + blokkeleje.ToString() + $":r{sor}");
+                            MyE.Rácsoz($"d{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"d{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
-                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
                         }
                     }
@@ -996,13 +976,11 @@ namespace Villamos
 
         }
 
-
         private void Munkalap_Pályaszám_E2()
         {
             //// ////////////////////////////////////////
             //// ///  E2     PÁLYASZÁM    T5C5       ////
             //// ////////////////////////////////////////
-            Kezelő_Jármű kéz = new Kezelő_Jármű();
             List<string> AdatokÖssz;
             List<string> AdatokRész;
 
@@ -1049,18 +1027,13 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg, szöveg1;
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i) == true)
                     {
-                        szöveg = $"SELECT * FROM állománytábla where haromnapos={mennyi} ORDER BY azonosító";
-                        AdatokRész = kéz.Lista_Pályaszámok(hely3, jelszó, szöveg);
-
-                        szöveg1 = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToStrTrim()}'";
-                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg1);
+                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi);
+                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
 
                         if (AdatokRész != null)
                         {
@@ -1081,16 +1054,16 @@ namespace Villamos
                                 }
                             }
 
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}" + $":c{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}:c{sor}");
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir("E2-  " + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
                             }
 
-                            MyE.Rácsoz("d" + blokkeleje.ToString() + $":r{sor}");
-                            MyE.Vastagkeret("d" + blokkeleje.ToString() + $":r{sor}");
+                            MyE.Rácsoz($"d{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"d{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
-                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
                         }
                     }
@@ -1098,7 +1071,6 @@ namespace Villamos
             }
 
         }
-
 
         private void Munkalap_Pályaszám_E1()
         {
@@ -1108,25 +1080,19 @@ namespace Villamos
             // ////////////////////////////////////////
             // megnézzük, hogy hány típus van kijelölve
             maximum = Típusoklistája.SelectedItems.Count;
-            Kezelő_Jármű kéz = new Kezelő_Jármű();
             List<string> Adatok;
 
             // minden pályaszám
             if (E1_pályaszámok.Checked == true && maximum >= 1)
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
 
                 blokkeleje = sor;
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i) == true)
                     {
-
-                        szöveg = "SELECT * FROM állománytábla where típus='" + Típusoklistája.Items[i].ToStrTrim() + "'";
-                        szöveg += " order by  azonosító";
-                        Adatok = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+                        Adatok = KézJármű.Lista_Pályaszámok(hely,Típusoklistája.Items[i].ToStrTrim());
 
                         if (Adatok != null)
                         {
@@ -1149,40 +1115,33 @@ namespace Villamos
                             {
                                 MyE.Kiir("E1- " + Típusoklistája.Items[i].ToStrTrim(), $"a{blokkeleje}");
                             }
-                            MyE.Rácsoz("d" + blokkeleje.ToString() + $":r{sor}");
-                            MyE.Vastagkeret("d" + blokkeleje.ToString() + $":r{sor}");
+                            MyE.Rácsoz($"d{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"d{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
-                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
                         }
                     }
                 }
             }
-
         }
-
 
         private void Munkalap_Pályaszám_Minden()
         {
             ////////////////////////////////////////
             ///  MINDEN PÁLYASZÁM               ////
             ////////////////////////////////////////
-            Kezelő_Jármű kéz = new Kezelő_Jármű();
             List<string> Adatok;
             if (Mindenpsz.Checked == true && maximum >= 1)
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
-
                 blokkeleje = sor;
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
-                    if (Típusoklistája.GetItemChecked(i) == true)
+                    if (Típusoklistája.GetItemChecked(i))
                     {
-                        szöveg = "SELECT * FROM állománytábla WHERE típus='" + Típusoklistája.Items[i].ToStrTrim() + "' ORDER BY  azonosító";
-                        Adatok = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
+                        Adatok = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
 
                         if (Adatok != null)
                         {
@@ -1201,22 +1160,21 @@ namespace Villamos
 
                             }
 
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}" + $":c{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}:c{sor}");
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir(Típusoklistája.Items[i].ToStrTrim(), $"a{blokkeleje}");
                             }
-                            MyE.Rácsoz("d" + blokkeleje.ToString() + $":r{sor}");
-                            MyE.Vastagkeret("d" + blokkeleje.ToString() + $":r{sor}");
+                            MyE.Rácsoz($"d{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"d{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
-                            MyE.Sormagasság(blokkeleje.ToString() + ":" + sor.ToString(), 25);
+                            MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
                         }
                     }
                 }
             }
         }
-
 
         private void Munkalap_Pályaszám_fejléc()
         {
@@ -1554,25 +1512,26 @@ namespace Villamos
             }
         }
 
-
         private void Kiválogat_dolgozó()
         {
             try
             {
                 string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
                 if (!File.Exists(helynap)) return;
-                string jelszónap = "kiskakas";
+   
                 string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
                 if (!File.Exists(helykieg)) return;
-                string jelszókieg = "Mocó";
-                string szövegkieg = "SELECT * FROM Beosztáskódok WHERE Számoló=true order by BeosztásKód";
-                Kezelő_Kiegészítő_Beosztáskódok kéz = new Kezelő_Kiegészítő_Beosztáskódok();
-                List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = kéz.Lista_Adatok(helykieg, jelszókieg, szövegkieg);
-
-                string szövegnap = $"SELECT * FROM Beosztás WHERE Nap = #{Dátum.Value:M-d-yy}# order by Dolgozószám";
-                Kezelő_Dolgozó_Beosztás_Új kézbeoszt = new Kezelő_Dolgozó_Beosztás_Új();
-                List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = kézbeoszt.Lista_Adatok(helynap, jelszónap, szövegnap);
-
+              
+                List<Adat_Kiegészítő_Beosztáskódok> BeosztáskódÖ = KézBeoKód.Lista_Adatok(helykieg);
+                List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = (from a in BeosztáskódÖ
+                                                                   where a.Számoló ==true 
+                                                                   orderby a.Beosztáskód 
+                                                                   select a).ToList ();
+          
+                List<Adat_Dolgozó_Beosztás_Új> DolgbeosztÖ = KézBeosztás.Lista_Adatok(helynap);
+                List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = (from a in DolgbeosztÖ
+                                                             where a.Nap == Dátum.Value
+                                                             select a).ToList();
 
 
                 //ha ki van jelölve

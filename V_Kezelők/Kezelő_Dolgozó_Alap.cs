@@ -888,6 +888,7 @@ namespace Villamos.Villamos.Kezelők
             }
             return Adatok;
         }
+  
         public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string hely)
         {
             string szöveg = $"SELECT * FROM Beosztás";

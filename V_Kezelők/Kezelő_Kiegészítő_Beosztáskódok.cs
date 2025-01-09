@@ -71,8 +71,6 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-
-
         public List<string> Lista_AdatBeoKód(string hely, string jelszó, string szöveg)
         {
             List<string> Adatok = new List<string>();
@@ -162,7 +160,6 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-
         public Adat_Kiegészítő_Beosztáskódok Egy_Adat(string hely, string jelszó, string szöveg)
         {
 
@@ -222,6 +219,8 @@ namespace Villamos.Villamos.Kezelők
             }
             return Adat;
         }
+    
+    
     }
 
 }
