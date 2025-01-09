@@ -929,10 +929,9 @@ namespace Villamos
 
             if (E3pályaszám.Checked & maximum >= 1)
             {
-
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string helyvez = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
+                if (!File.Exists(helyvez)) return;
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
