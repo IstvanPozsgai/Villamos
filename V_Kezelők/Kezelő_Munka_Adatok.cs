@@ -196,7 +196,7 @@ namespace Villamos.Villamos.Kezelők
                     szöveg += $"'{adat.Pályaszám}', ";
                     szöveg += $"{adat.Idő}, ";
                     szöveg += $"'{adat.Dátum:yyyy.MM.dd}', ";
-                    szöveg += $"'{adat.Státus}') ";
+                    szöveg += $"{adat.Státus}) ";
                     szövegGy.Add(szöveg);
                 }
 
