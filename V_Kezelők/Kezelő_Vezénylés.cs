@@ -48,7 +48,7 @@ namespace Villamos.Villamos.Kezelők
             }
             return Adatok;
         }
-      
+
         public List<Adat_Vezénylés> Lista_Adatok(string hely)
         {
             string szöveg = "SELECT * FROM vezényléstábla";
@@ -91,6 +91,39 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-
+        public List<string> Lista_Pályaszámok(string hely, DateTime Dátum)
+        {
+            string szöveg = "SELECT * FROM vezényléstábla where törlés=0 and vizsgálatraütemez=1  and  vizsgálat='E3' ";
+            szöveg += $" and dátum= #{Dátum:yyyy-MM-dd}#  order by  azonosító";
+            List<string> Adatok = new List<string>();
+            string Adat;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = rekord["Azonosító"].ToStrTrim();
+                                    Adatok.Add(Adat);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Lista_Pályaszámok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adatok;
+        }
     }
 }
