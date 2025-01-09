@@ -931,7 +931,9 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string helyvez = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
-                if (!File.Exists(helyvez)) return;
+                string jelszóvez = "tápijános";
+                string szöveg;
+
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
@@ -1031,8 +1033,11 @@ namespace Villamos
                 {
                     if (Típusoklistája.GetItemChecked(i))
                     {
-                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi, "T5C5");
-                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
+                        szöveg = $"SELECT * FROM állománytábla where haromnapos={mennyi} ORDER BY azonosító";
+                        AdatokRész = kéz.Lista_Pályaszámok(hely3, jelszó, szöveg);
+
+                        szöveg1 = $"SELECT * FROM állománytábla WHERE  típus='{Típusoklistája.Items[i].ToStrTrim()}'";
+                        AdatokÖssz = kéz.Lista_Pályaszámok(hely, jelszó, szöveg1);
 
                         if (AdatokRész != null)
                         {
@@ -1091,7 +1096,10 @@ namespace Villamos
                 {
                     if (Típusoklistája.GetItemChecked(i) == true)
                     {
-                        Adatok = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
+
+                        szöveg = "SELECT * FROM állománytábla where típus='" + Típusoklistája.Items[i].ToStrTrim() + "'";
+                        szöveg += " order by  azonosító";
+                        Adatok = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
 
                         if (Adatok != null)
                         {
@@ -1517,20 +1525,18 @@ namespace Villamos
             {
                 string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
                 if (!File.Exists(helynap)) return;
-
+                string jelszónap = "kiskakas";
                 string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
                 if (!File.Exists(helykieg)) return;
+                string jelszókieg = "Mocó";
+                string szövegkieg = "SELECT * FROM Beosztáskódok WHERE Számoló=true order by BeosztásKód";
+                Kezelő_Kiegészítő_Beosztáskódok kéz = new Kezelő_Kiegészítő_Beosztáskódok();
+                List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = kéz.Lista_Adatok(helykieg, jelszókieg, szövegkieg);
 
-                List<Adat_Kiegészítő_Beosztáskódok> BeosztáskódÖ = KézBeoKód.Lista_Adatok(helykieg);
-                List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = (from a in BeosztáskódÖ
-                                                                   where a.Számoló == true
-                                                                   orderby a.Beosztáskód
-                                                                   select a).ToList();
+                string szövegnap = $"SELECT * FROM Beosztás WHERE Nap = #{Dátum.Value:M-d-yy}# order by Dolgozószám";
+                Kezelő_Dolgozó_Beosztás_Új kézbeoszt = new Kezelő_Dolgozó_Beosztás_Új();
+                List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = kézbeoszt.Lista_Adatok(helynap, jelszónap, szövegnap);
 
-                List<Adat_Dolgozó_Beosztás_Új> DolgbeosztÖ = KézBeosztás.Lista_Adatok(helynap);
-                List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = (from a in DolgbeosztÖ
-                                                             where a.Nap == Dátum.Value
-                                                             select a).ToList();
 
 
                 //ha ki van jelölve
