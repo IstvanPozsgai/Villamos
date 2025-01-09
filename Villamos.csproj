@@ -1053,6 +1053,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="V_MindenEgyéb\SAP_Adatokbeolvasása_km.cs" />
+    <Compile Include="V_MindenEgyéb\ScreenshotHelper.cs" />
     <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_nyomtatványok.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
