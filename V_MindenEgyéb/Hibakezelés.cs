@@ -40,14 +40,14 @@ namespace Villamos
 
             //Beírjuk a napi fájlba
             string szöveg = "\n=======================================================================\n";
-            szöveg += $"{DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss")}\n";
-            szöveg += $"{Program.PostásTelephely}\n";
-            szöveg += $"{Program.PostásNév}\n";
-            szöveg += $"{hibaUzenet}\n\n";
-            szöveg += $"{osztaly}\n";
-            szöveg += $"{metodus}\n";
-            szöveg += $"{névtér}\n";
-            szöveg += $"{Egyéb}\n";
+            szöveg += $"Idő: {DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss")}\n";
+            szöveg += $"Telephely: {Program.PostásTelephely}\n";
+            szöveg += $"Felhasználó: {Program.PostásNév}\n";
+            szöveg += $"hibaUzenet: {hibaUzenet}\n\n";
+            szöveg += $"osztaly: {osztaly}\n";
+            szöveg += $"metodus: {metodus}\n";
+            szöveg += $"névtér: {névtér}\n";
+            szöveg += $"Egyéb: {Egyéb}\n";
             szöveg += $"Hibakód: {HibaKód}\n";
             szöveg += " -----------------------------------------------------------------------\n";
 
@@ -92,11 +92,11 @@ namespace Villamos
 
         private static string KépernyőKép()
         {
-            Bitmap bitmap = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-            Graphics graphics = Graphics.FromImage(bitmap as Image);
-            graphics.CopyFromScreen(0, 0, 0, 0, bitmap.Size);
             string Válasz = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Hiba_{DateTime.Now:yyyyMMddHHmmss}.bmp";
-            bitmap.Save(Válasz, ImageFormat.Jpeg);
+            string selection = "Villamos_C#";
+            Image img = ScreenshotHelper.GetBitmapScreenshot(selection);
+            img?.Save(Válasz, ImageFormat.Jpeg);
+
             return Válasz;
         }
 
@@ -108,16 +108,9 @@ namespace Villamos
             mail.To = "pozsgaii@bkv.hu";
             // üzenet tárgya
             mail.Subject = $"Hibanapló {DateTime.Now:yyyyMMddHHmmss}";
-
-            //string Html_szöveg = $"<html><body>";
-            //Html_szöveg += $"<a>{hiba}<a>";
-            //Html_szöveg += $"<center><IMG SRC={hely}></IMG></center>";
-            //Html_szöveg += $"</body></html>";
-            // üzent szövege
-            //mail.HTMLBody = Html_szöveg;
             mail.Body = hiba;
             mail.Importance = MyO.OlImportance.olImportanceNormal;
-            mail.Attachments.Add(hely);
+            if (File.Exists(hely)) mail.Attachments.Add(hely);
             ((MyO._MailItem)mail).Send();
         }
     }
