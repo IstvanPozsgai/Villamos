@@ -99,6 +99,10 @@ namespace Villamos
                 string jelszó = "pozsgaii";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, "Zároljuk", ex.StackTrace, ex.Source, ex.HResult);
