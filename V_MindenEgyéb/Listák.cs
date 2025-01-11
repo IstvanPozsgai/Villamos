@@ -8,7 +8,6 @@ namespace Villamos
 {
     public class Listák
     {
-
         public static AdatCombohoz[] TelephelyLista_Jármű()
         {
             Kezelő_Kiegészítő_Sérülés Kéz = new Kezelő_Kiegészítő_Sérülés();

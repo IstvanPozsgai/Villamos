@@ -18,7 +18,7 @@ namespace Villamos
 {
     public partial class Ablak_Behajtási
     {
-
+        #region Listák def
 #pragma warning disable IDE0044
 
         List<string> TáblaTelephely = new List<string>();
@@ -27,36 +27,45 @@ namespace Villamos
         List<Adat_Behajtás_Alap> Adatok_Behajtás_Alap = new List<Adat_Behajtás_Alap>();
         List<Adat_Behajtás_Kérelemoka> Adatok_Behajtás_Kérelemoka = new List<Adat_Behajtás_Kérelemoka>();
         List<Adat_Behajtás_Behajtási_Napló> Adatok_Napló = new List<Adat_Behajtás_Behajtási_Napló>();
+        List<Adat_Behajtás_Engedélyezés> EmailAdatok = new List<Adat_Behajtás_Engedélyezés>();
+        List<Adat_Behajtási_Engedélyek> EngedélyMátrix = new List<Adat_Behajtási_Engedélyek>();
 #pragma warning restore IDE0044
+        #endregion
+
 
         string Cellaelőzmény = "";
 
+
+        #region Kezelők def
         readonly Kezelő_Behajtás_Alap Kéz_BehajtásAlap = new Kezelő_Behajtás_Alap();
         readonly Kezelő_Behajtás_Behajtási Kéz_Behajtás = new Kezelő_Behajtás_Behajtási();
         readonly Kezelő_Behajtás_Engedélyezés EmailKéz = new Kezelő_Behajtás_Engedélyezés();
         readonly Kezelő_Behajtás_Kérelemoka Kéz_Kérelemoka = new Kezelő_Behajtás_Kérelemoka();
-        List<Adat_Behajtás_Engedélyezés> EmailAdatok = new List<Adat_Behajtás_Engedélyezés>();
         readonly Kezelő_Behajtás_Behajtási_Napló KézNapló = new Kezelő_Behajtás_Behajtási_Napló();
         readonly Kezelő_Behajtás_Telephelystátusz KézStátus = new Kezelő_Behajtás_Telephelystátusz();
+        readonly Kezelő_Kiegészítő_Könyvtár KézKiegKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
+        readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
+        readonly Kezelő_Behajtás_Jogosultság KézBehajtJog = new Kezelő_Behajtás_Jogosultság();
+        readonly Kezelő_Behajtás_Kérelemstátus KézKérelemStát = new Kezelő_Behajtás_Kérelemstátus();
+        #endregion
+
 
         public Ablak_Behajtási()
         {
             InitializeComponent();
         }
 
-
+        #region Alap
         private void AblakBehajtási_Load(object sender, EventArgs e)
         {
         }
-
 
         private void Ablak_Behajtási_Shown(object sender, EventArgs e)
         {
             try
             {
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Behajtási_alap.mdb";
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Behajtási_Alap(hely);
+                if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Alap(hely);
 
                 Telephelyekfeltöltése();
                 Szereplők_lista();
@@ -148,12 +157,10 @@ namespace Villamos
             }
         }
 
-
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
-
 
         private void Fülekkitöltése()
         {
@@ -198,32 +205,33 @@ namespace Villamos
             }
         }
 
-
-        #region Alap
         private void Telephelyekfeltöltése()
         {
-            // Adatbázis megnyitásának előkészítése
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő2.mdb";  // módosít
-            string jelszó = "Mocó"; // módosít
             // COMBO amibe az adatokat feltöltjük
             Cmbtelephely.Items.Clear();
             Cmbtelephely.Enabled = false;
-            string szöveg;
 
+            List<Adat_Kiegészítő_Könyvtár> AdatokÖ = KézKiegKönyvtár.Lista_Adatok();
+            List<Adat_Kiegészítő_Könyvtár> Adatok;
             if (Program.PostásTelephely.Trim() == "Főmérnökség")
             {
-                szöveg = "SELECT * FROM könyvtár WHERE név<>'Főmérnökség' ORDER BY név ";
+                Adatok = (from a in AdatokÖ
+                          where a.Név != "Főmérnökség"
+                          orderby a.Név
+                          select a).ToList();
                 // Ha főmérnökség akkor minden telephelyet feltölt
                 Cmbtelephely.Enabled = true;
             }
             else
             {
-                szöveg = $"SELECT * FROM könyvtár WHERE csoport1={Program.Postás_csoport} Order BY név";
-                if (Program.Postás_Vezér)
-                    Cmbtelephely.Enabled = true;
+                Adatok = (from a in AdatokÖ
+                          where a.Csoport1 == Program.Postás_csoport
+                          orderby a.Név
+                          select a).ToList();
+                Cmbtelephely.Enabled = Program.Postás_Vezér;
             }
-            Kezelő_Kiegészítő_Könyvtár kéz = new Kezelő_Kiegészítő_Könyvtár();
-            List<Adat_Kiegészítő_Könyvtár> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+
             foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
                 Cmbtelephely.Items.Add(rekord.Név);
 
@@ -232,7 +240,6 @@ namespace Villamos
             if (Cmbtelephely.Text.Trim() == "")
                 Cmbtelephely.Text = Program.PostásTelephely.Trim();
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -377,13 +384,23 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\behajtási.html";
-            MyE.Megnyitás(hely);
+            try
+            {
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\behajtási.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -419,15 +436,6 @@ namespace Villamos
             // Munka kész – dobja ki a keféket
             BlackTextBrush.Dispose();
         }
-
-        private void EmailAdatok_Feltöltése()
-        {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-            string jelszó = "egérpad";
-            string szöveg = "SELECT * FROM engedélyezés ORDER BY id";
-            EmailAdatok = EmailKéz.Lista_Adatok(hely, jelszó, szöveg);
-        }
-
         #endregion
 
 
@@ -437,15 +445,11 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszó = "egérpad";
-                string szöveg = "SELECT DISTINCT (Dolgozóktábla.Szervezetiegység) AS Szervezetiegység FROM Dolgozóktábla";
-
+                List<Adat_Behajtás_Dolgozótábla> AdatokDolgÖ = KézDolgozó.Lista_Adatok();
+                List<string> Adatok = AdatokDolgÖ.Select(a => a.Szervezetiegység).Distinct().ToList();
                 CmbKérelemSzolgálati.Items.Clear();
                 CmbKérelemSzolgálati.BeginUpdate();
 
-                Kezelő_Általános_String kéz = new Kezelő_Általános_String();
-                List<string> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg, "Szervezetiegység");
                 foreach (string rekord in Adatok)
                     CmbKérelemSzolgálati.Items.Add(rekord);
 
@@ -462,21 +466,13 @@ namespace Villamos
             }
         }
 
-
         private void Jogosultságtípusfeltöltés()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszó = "egérpad";
-
                 CmbKérelemTípus.Items.Clear();
                 CmbKérelemTípus.BeginUpdate();
-
-                string szöveg = "SELECT * FROM jogosultságtípus ORDER BY id";
-
-                Kezelő_Behajtás_Jogosultság kéz = new Kezelő_Behajtás_Jogosultság();
-                List<Adat_Behajtás_Jogosultság> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Behajtás_Jogosultság> Adatok = KézBehajtJog.Lista_Adatok();
                 foreach (Adat_Behajtás_Jogosultság rekord in Adatok)
                     CmbKérelemTípus.Items.Add(rekord.Státustípus);
 
@@ -493,23 +489,17 @@ namespace Villamos
             }
         }
 
-
         private void CMBkérelemStátusfeltöltés()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszó = "egérpad";
-                string szöveg = "SELECT * FROM Kérelemstátus ORDER BY id";
-
                 CMBkérelemStátus.Items.Clear();
                 CMBkérelemStátus.BeginUpdate();
                 CmbEngedélylistaszűrő.Items.Clear();
                 CmbEngedélylistaszűrő.BeginUpdate();
                 CmbEngedélylistaszűrő.Items.Add("");
 
-                Kezelő_Behajtás_Kérelemstátus kéz = new Kezelő_Behajtás_Kérelemstátus();
-                List<Adat_Behajtás_Kérelemsátus> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Behajtás_Kérelemsátus> Adatok = KézKérelemStát.Lista_Adatok();
                 foreach (Adat_Behajtás_Kérelemsátus rekord in Adatok)
                 {
                     CMBkérelemStátus.Items.Add(rekord.Státus);
@@ -530,20 +520,17 @@ namespace Villamos
             }
         }
 
-
         private void BtnÖsszSzabiLista_Click(object sender, EventArgs e)
         {
             try
             {
-                if (TxtkérelemHR.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kitöltve a HR azonosító mező.");
+                if (TxtkérelemHR.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve a HR azonosító mező.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszó = "egérpad";
-                string szöveg = $"SELECT * FROM dolgozóktábla WHERE SZTSZ='{TxtkérelemHR.Text.Trim()}'";
+                List<Adat_Behajtás_Dolgozótábla> Adatok = KézDolgozó.Lista_Adatok();
+                Adat_Behajtás_Dolgozótábla rekord = (from a in Adatok
+                                                     where a.SZTSZ == TxtkérelemHR.Text.Trim()
+                                                     select a).FirstOrDefault();
 
-                Kezelő_Behajtás_Dolgozótábla Kéz = new Kezelő_Behajtás_Dolgozótábla();
-                Adat_Behajtás_Dolgozótábla rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
                 if (rekord != null)
                 {
                     // név és szervezet
@@ -551,12 +538,12 @@ namespace Villamos
                     CmbKérelemSzolgálati.Text = rekord.Szervezetiegység.Trim();
                 }
 
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                jelszó = "forgalmirendszám";
-                szöveg = $"SELECT * FROM alapadatok WHERE Hrazonosító= '{TxtkérelemHR.Text.Trim()}'";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
 
-                Kezelő_Behajtás_Behajtási Kézalap = new Kezelő_Behajtás_Behajtási();
-                List<Adat_Behajtás_Behajtási> AdatokAlap = Kézalap.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Behajtás_Behajtási> AdatokAlapÖ = Kéz_Behajtás.Lista_Adatok(hely);
+                List<Adat_Behajtás_Behajtási> AdatokAlap = (from a in AdatokAlapÖ
+                                                            where a.HRazonosító == TxtkérelemHR.Text.Trim()
+                                                            select a).ToList();
 
                 if (AdatokAlap != null)
                     TxtKérelemautó.Text = (AdatokAlap.Count + 1).ToString();
@@ -573,7 +560,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Kérelemürítés()
         {
@@ -597,9 +583,7 @@ namespace Villamos
                 Kérelemürítés();
 
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                string jelszó = "forgalmirendszám";
-                string szöveg = $"SELECT * FROM alapadatok";
-                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(hely);
                 Adat_Behajtás_Behajtási rekord = (from a in Adatok_Behajtás
                                                   where a.Sorszám == TxtKérelemID.Text.Trim()
                                                   select a).FirstOrDefault();
@@ -618,7 +602,6 @@ namespace Villamos
                         KérelemTábla.Rows[i].Cells[4].Value = rekord.GetType().GetProperty($"{KérelemTábla.Rows[i].Cells[1].Value}_megjegyzés").GetValue(rekord);
                     }
 
-
                     for (int i = 0; i < 10; i++)
                     {
                         int cellaErtek = KérelemTábla.Rows[i].Cells[2].Value.ToÉrt_Int();
@@ -635,11 +618,7 @@ namespace Villamos
                 }
 
                 // kiírjuk az állapotokat
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                jelszó = "egérpad";
-                szöveg = $"SELECT * FROM telephelystátus";
-                Kezelő_Behajtás_Telephelystátusz Kéztelep = new Kezelő_Behajtás_Telephelystátusz();
-                List<Adat_Behajtás_Telephelystátusz> AdatokTelep = Kéztelep.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Behajtás_Telephelystátusz> AdatokTelep = KézStátus.Lista_Adatok();
                 for (int i = 0; i <= 9; i++)
                 {
                     int ideigId = int.Parse(KérelemTábla.Rows[i].Cells[2].Value.ToString());
@@ -649,11 +628,11 @@ namespace Villamos
 
                     if (ideig != null) KérelemTábla.Rows[i].Cells[3].Value = ideig;
                 }
-                szöveg = $" SELECT * FROM kérelemstátus WHERE id={státus}";
 
-                Kezelő_Behajtás_Kérelemstátus Kéz = new Kezelő_Behajtás_Kérelemstátus();
-                Adat_Behajtás_Kérelemsátus rekord2 = Kéz.Egy_Adat(hely, jelszó, szöveg);
-
+                List<Adat_Behajtás_Kérelemsátus> AdatokStátus = KézKérelemStát.Lista_Adatok();
+                Adat_Behajtás_Kérelemsátus rekord2 = (from a in AdatokStátus
+                                                      where a.ID == státus
+                                                      select a).FirstOrDefault();
                 if (rekord2 != null) CMBkérelemStátus.Text = rekord2.Státus.Trim();
             }
             catch (HibásBevittAdat ex)
@@ -678,6 +657,7 @@ namespace Villamos
                 if (TxtKérelemFrsz.Text == "") throw new HibásBevittAdat("Töltse ki a Forgalmi rendszám mezőt!");
                 if (CmbkérelemOka.Text == "") throw new HibásBevittAdat("Töltse ki a Kérelem oka mezőt!");
                 if (KérelemDátuma.Value.Year > DatÉrvényes.Value.Year) throw new HibásBevittAdat("Nem lehet az igénylés dátuma nagyobb mint az érvényességi ideje!");
+                if (!int.TryParse(TxtKérelemautó.Text.Trim(), out int autókszáma)) autókszáma = 1;
 
                 // HA nincs még feltöltve kérelem, akkor 
                 if (TxtKérrelemPDF.Text.Trim() == "") TxtKérrelemPDF.Text = "_";
@@ -699,13 +679,11 @@ namespace Villamos
                     TxtKérrelemPDF.Text = $"{TxtKérelemID.Text.Trim()}.pdf";
                 }
 
-                if (TxtKérelemMegjegyzés.Text.Trim() == "")
-                    TxtKérelemMegjegyzés.Text = "_";
+                if (TxtKérelemMegjegyzés.Text.Trim() == "") TxtKérelemMegjegyzés.Text = "_";
 
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                string jelszó = "forgalmirendszám";
+
                 string szöveg = $"SELECT * FROM alapadatok WHERE sorszám='{TxtKérelemID.Text.Trim()}'";
-                int előzőstátus;
                 string ideigrendszám;
 
                 // ha szóközzel van elválasztva akkor javítja és nagybetűsít
@@ -725,196 +703,179 @@ namespace Villamos
                         TxtKérelemFrsz.Text = ideigrendszám;
                     }
                 }
+                List<Adat_Behajtás_Behajtási> Adatok_Behajtás_Alap = Kéz_Behajtás.Lista_Adatok(hely);
+                Adat_Behajtás_Behajtási rekord = (from a in Adatok_Behajtás_Alap
+                                                  where a.Sorszám == TxtKérelemID.Text.Trim()
+                                                  select a).FirstOrDefault();
+                TelepiAdatokFeltöltése();
 
-                Kezelő_Behajtás_Behajtási Kéz = new Kezelő_Behajtás_Behajtási();
-                Adat_Behajtás_Behajtási rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_Behajtás_Behajtási ADAT;
+
                 if (rekord != null)
                 {
                     // ha van ilyen akkor módosítunk
-                    előzőstátus = rekord.Státus;
+                    int státus = 2;
+                    if (rekord.Státus != 1) státus = 1;
 
-                    szöveg = "UPDATE alapadatok Set ";
-                    szöveg += $" Hrazonosító='{TxtkérelemHR.Text.Trim()}', ";
-                    szöveg += $" Név='{Txtkérelemnév.Text.Trim()}', ";
-                    szöveg += $" Szolgálatihely='{CmbKérelemSzolgálati.Text.Trim()}', ";
-                    szöveg += $" Dátum='{KérelemDátuma.Value}', ";
-                    szöveg += $" PDF='{TxtKérrelemPDF.Text.Trim()}', ";
-                    szöveg += $" oka='{CmbkérelemOka.Text.Trim()}', ";
-                    szöveg += $" Korlátlan='{CmbKérelemTípus.Text.Trim()}', ";
-                    szöveg += $" Autók_száma='{TxtKérelemautó.Text.Trim()}', ";
-                    szöveg += $" Megjegyzés ='{TxtKérelemMegjegyzés.Text.Trim()}', ";
-                    int volt = 0;
-
-                    for (int j = 0; j < KérelemTábla.Rows.Count; j++)
-                    {
-                        if (!int.TryParse(KérelemTábla.Rows[j].Cells[2].Value.ToString(), out int érték))
-                            érték = 1;
-
-                        bool engedély = KérelemTábla.Rows[j].Cells[0].Value.ToÉrt_Bool();
-                        string tábla = KérelemTábla.Rows[j].Cells[1].Value.ToString();
-
-                        if (érték < 2)
-                            szöveg += $" {tábla}_engedély={(engedély ? 1 : 0)}, ";
-
-                        else if (érték >= 3 && !engedély)
-                            szöveg += $" {tábla}_engedély=0, {tábla}_megjegyzés='', ";
-                        if (érték == 0 && engedély == true) volt = 1;
-                    }
-
-                    if (előzőstátus != 1)
-                        if (volt == 1) szöveg += $"Státus={1}, ";
-                        else szöveg += $"Státus={2}, ";
-
-                    szöveg += $"Rendszám='{TxtKérelemFrsz.Text.Trim()}', ";
-                    szöveg += $"érvényes='{DatÉrvényes.Value}' ";
-                    szöveg += $"WHERE sorszám='{TxtKérelemID.Text.Trim()}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                    ADAT = new Adat_Behajtás_Behajtási(TxtKérelemID.Text.Trim(),
+                                            CmbKérelemSzolgálati.Text.Trim(),
+                                            TxtkérelemHR.Text.Trim(),
+                                            Txtkérelemnév.Text.Trim(),
+                                            TxtKérelemFrsz.Text.Trim().ToUpper(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Angyalföld" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Angyalföld" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Baross" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Baross" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Budafok" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Budafok" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Ferencváros" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Ferencváros" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Fogaskerekű" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Fogaskerekű" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Hungária" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Hungária" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Kelenföld" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Kelenföld" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Száva" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Száva" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Szépilona" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Szépilona" select a.Megjegyzés).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Zugló" select a.Engedély).First(),
+                                            (from a in EngedélyMátrix where a.Telephely == "Zugló" select a.Megjegyzés).First(),
+                                            CmbKérelemTípus.Text.Trim(),
+                                            autókszáma,
+                                            1,
+                                            KérelemDátuma.Value,
+                                            TxtKérelemMegjegyzés.Text.Trim(),
+                                            TxtKérrelemPDF.Text.Trim(),
+                                            CmbkérelemOka.Text.Trim(),
+                                            DatÉrvényes.Value);
+                    Kéz_Behajtás.Módosítás(hely, ADAT);
                     // ********************
                     // naplófájl rögzítés
                     // ********************
-                    hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-                    jelszó = "forgalmirendszám";
-                    szöveg = "SELECT * FROM alapadatok";
-                    Adatok_Napló = KézNapló.Lista_Adatok(hely, jelszó, szöveg);
-
-                    int i = 1;
-                    if (Adatok_Napló != null && Adatok_Napló.Count > 0)
-                        i = (from a in Adatok_Behajtás_Alap
-                             orderby a.Id descending
-                             select a.Id).FirstOrDefault() + 1;
-
-
-                    szöveg = "INSERT INTO alapadatok ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
-                    szöveg += "Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
-                    szöveg += "Száva_engedély, Szépilona_engedély, Zugló_engedély, Státus, Dátum, PDF, oka, ";
-                    szöveg += "Angyalföld_megjegyzés, Baross_megjegyzés, Budafok_megjegyzés, Ferencváros_megjegyzés, Fogaskerekű_megjegyzés, Hungária_megjegyzés, Kelenföld_megjegyzés, ";
-                    szöveg += "Száva_megjegyzés, Szépilona_megjegyzés, Zugló_megjegyzés, ";
-                    szöveg += "Korlátlan, Autók_száma,  Megjegyzés, I_engedély, II_engedély, III_engedély, ID, Rögzítette, rögzítésdátuma, érvényes )";
-                    szöveg += $" VALUES ( '{TxtKérelemID.Text.Trim()}', ";
-                    szöveg += $"'{CmbKérelemSzolgálati.Text.Trim()}', ";
-                    szöveg += $"'{TxtkérelemHR.Text.Trim()}', ";
-                    szöveg += $"'{Txtkérelemnév.Text.Trim()}', ";
-                    szöveg += $"'{TxtKérelemFrsz.Text.Trim().ToUpper()}', ";
-                    szöveg += $"{KérelemTábla.Rows[4].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[8].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[9].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[5].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[0].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[7].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[1].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[6].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[2].Cells[2].Value}, ";
-                    szöveg += $"{KérelemTábla.Rows[3].Cells[2].Value}, ";
-
-                    if (volt == 1)
-                        szöveg += "1, ";
-                    else
-                        szöveg += "2, ";
-
-                    szöveg += $" '{KérelemDátuma.Value}', ";
-                    szöveg += $" '{TxtKérrelemPDF.Text.Trim()}', ";
-                    szöveg += $" '{CmbkérelemOka.Text.Trim()}', ";
-                    szöveg += $" '{KérelemTábla.Rows[4].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[8].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[9].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[5].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[0].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[7].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[1].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[6].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[2].Cells[4].Value}', ";
-                    szöveg += $" '{KérelemTábla.Rows[3].Cells[4].Value}', ";
-                    szöveg += $" '{CmbKérelemTípus.Text.Trim()}', ";
-                    szöveg += $" {TxtKérelemautó.Text}, ";
-                    szöveg += $" '{TxtKérelemMegjegyzés.Text.Trim()}', ";
-                    szöveg += $" 0, 0, 0, {i}, '{Program.PostásNév.Trim()}', '{DateTime.Now}', '{DatÉrvényes.Value}') ";
-
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(
+                                    TxtKérelemID.Text.Trim(),
+                                    CmbKérelemSzolgálati.Text.Trim(),
+                                    TxtkérelemHR.Text.Trim(),
+                                    Txtkérelemnév.Text.Trim(),
+                                    TxtKérelemFrsz.Text.Trim().ToUpper(),
+                                    KérelemTábla.Rows[4].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[4].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[8].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[8].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[9].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[9].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[5].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[5].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[0].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[0].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[7].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[7].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[1].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[1].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[6].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[6].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[2].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[2].Cells[4].Value.ToStrTrim(),
+                                    KérelemTábla.Rows[3].Cells[2].Value.ToÉrt_Int(),
+                                    KérelemTábla.Rows[3].Cells[4].Value.ToStrTrim(),
+                                    CmbKérelemTípus.Text.Trim(),
+                                    autókszáma,
+                                    0, 0, 0,
+                                    státus,
+                                    KérelemDátuma.Value,
+                                    TxtKérelemMegjegyzés.Text.Trim(),
+                                    TxtKérrelemPDF.Text.Trim(),
+                                    CmbkérelemOka.Text.Trim(),
+                                    0,
+                                    Program.PostásNév.Trim(),
+                                    DateTime.Now,
+                                    DatÉrvényes.Value);
+                    string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
+                    KézNapló.Rögzítés(helynapló, ADATNapló);
                 }
 
                 else
                 {
-                    // ha nincs akkor újat hozunk létre
-                    szöveg = "INSERT INTO alapadatok ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
-                    szöveg += "Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
-                    szöveg += "Száva_engedély, Szépilona_engedély, Zugló_engedély, Státus, Dátum, PDF, oka, ";
-                    szöveg += "Angyalföld_megjegyzés, Baross_megjegyzés, Budafok_megjegyzés, Ferencváros_megjegyzés, Fogaskerekű_megjegyzés, Hungária_megjegyzés, Kelenföld_megjegyzés, ";
-                    szöveg += "Száva_megjegyzés, Szépilona_megjegyzés, Zugló_megjegyzés, ";
-                    szöveg += "Korlátlan, Autók_száma,  Megjegyzés, érvényes )";
-                    szöveg += $" VALUES ( '{TxtKérelemID.Text.Trim()}', ";//Sorszám
-                    szöveg += $" '{CmbKérelemSzolgálati.Text.Trim()}', ";//Szolgálatihely
-                    szöveg += $" '{TxtkérelemHR.Text.Trim()}', ";//Hrazonosító
-                    szöveg += $" '{Txtkérelemnév.Text.Trim()}', ";//Név
-                    szöveg += $" '{TxtKérelemFrsz.Text.Trim().ToUpper()}', ";//Rendszám
-                    //Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
-                    //"Száva_engedély, Szépilona_engedély, Zugló_engedély
-                    TáblaTelephely.Sort();
+                    ADAT = new Adat_Behajtás_Behajtási(TxtKérelemID.Text.Trim(),
+                                                       CmbKérelemSzolgálati.Text.Trim(),
+                                                       TxtkérelemHR.Text.Trim(),
+                                                       Txtkérelemnév.Text.Trim(),
+                                                       TxtKérelemFrsz.Text.Trim().ToUpper(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Angyalföld" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Angyalföld" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Baross" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Baross" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Budafok" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Budafok" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Ferencváros" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Ferencváros" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Fogaskerekű" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Fogaskerekű" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Hungária" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Hungária" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Kelenföld" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Kelenföld" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Száva" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Száva" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Szépilona" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Szépilona" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Zugló" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Zugló" select a.Megjegyzés).First(),
+                                                       CmbKérelemTípus.Text.Trim(),
+                                                       autókszáma,
+                                                       0, 0, 0, 1,
+                                                       KérelemDátuma.Value,
+                                                       TxtKérelemMegjegyzés.Text.Trim(),
+                                                       TxtKérrelemPDF.Text.Trim(),
+                                                       CmbkérelemOka.Text.Trim(),
+                                                       DatÉrvényes.Value);
+                    Kéz_Behajtás.Rögzítés(hely, ADAT);
 
-                    string cellaÉrték = "0";
-                    for (int j = 0; j < TáblaTelephely.Count; j++)
-                    {
-                        for (int Ii = 0; Ii < KérelemTábla.Rows.Count; Ii++)
-                        {
-                            if (KérelemTábla.Rows[Ii].Cells[1].Value.ToString().Trim() == TáblaTelephely[j].Trim())
-                                cellaÉrték = bool.Parse(KérelemTábla.Rows[Ii].Cells[0].Value.ToString()) ? "1" : "0";
-                        }
-                        szöveg += $"{cellaÉrték}, ";
-                    }
-
-                    szöveg += $"1, '{KérelemDátuma.Value}', ";//Státus,Dátum
-                    szöveg += $"'{TxtKérrelemPDF.Text.Trim()}', ";// PDF
-                    szöveg += $"'{CmbkérelemOka.Text}', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', ";
-                    szöveg += $"'{CmbKérelemTípus.Text}', ";
-                    szöveg += $"{TxtKérelemautó.Text}, ";
-                    szöveg += $"'{TxtKérelemMegjegyzés.Text.Trim()}', '{DatÉrvényes.Value}') ";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(
+                                                       TxtKérelemID.Text.Trim(),
+                                                       CmbKérelemSzolgálati.Text.Trim(),
+                                                       TxtkérelemHR.Text.Trim(),
+                                                       Txtkérelemnév.Text.Trim(),
+                                                       TxtKérelemFrsz.Text.Trim().ToUpper(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Angyalföld" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Angyalföld" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Baross" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Baross" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Budafok" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Budafok" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Ferencváros" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Ferencváros" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Fogaskerekű" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Fogaskerekű" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Hungária" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Hungária" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Kelenföld" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Kelenföld" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Száva" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Száva" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Szépilona" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Szépilona" select a.Megjegyzés).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Zugló" select a.Engedély).First(),
+                                                       (from a in EngedélyMátrix where a.Telephely == "Zugló" select a.Megjegyzés).First(),
+                                                       CmbKérelemTípus.Text.Trim(),
+                                                       autókszáma,
+                                                       0, 0, 0, 1,
+                                                       KérelemDátuma.Value,
+                                                       TxtKérelemMegjegyzés.Text.Trim(),
+                                                       TxtKérrelemPDF.Text.Trim(),
+                                                       CmbkérelemOka.Text.Trim(),
+                                                       0,
+                                                       Program.PostásNév.Trim(),
+                                                       DateTime.Now,
+                                                       DatÉrvényes.Value);
 
                     // ********************
                     // naplófájl rögzítés
                     // ********************
-                    hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-                    jelszó = "forgalmirendszám";
-                    szöveg = "SELECT * FROM alapadatok";
-                    Adatok_Napló = KézNapló.Lista_Adatok(hely, jelszó, szöveg);
-
-                    int i = 1;
-                    if (Adatok_Napló != null && Adatok_Napló.Count > 0)
-                        i = (from a in Adatok_Behajtás_Alap
-                             orderby a.Id descending
-                             select a.Id).FirstOrDefault() + 1;
-
-                    szöveg = "INSERT INTO alapadatok ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
-                    szöveg += "Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
-                    szöveg += "Száva_engedély, Szépilona_engedély, Zugló_engedély, Státus, Dátum, PDF, oka, ";
-                    szöveg += "Angyalföld_megjegyzés, Baross_megjegyzés, Budafok_megjegyzés, Ferencváros_megjegyzés, Fogaskerekű_megjegyzés, Hungária_megjegyzés, Kelenföld_megjegyzés, ";
-                    szöveg += "Száva_megjegyzés, Szépilona_megjegyzés, Zugló_megjegyzés, ";
-                    szöveg += "Korlátlan, Autók_száma,  Megjegyzés, I_engedély, II_engedély, III_engedély, ID, Rögzítette, rögzítésdátuma, érvényes )";
-                    szöveg += $"VALUES ('{TxtKérelemID.Text.Trim()}', ";
-                    szöveg += $"'{CmbKérelemSzolgálati.Text.Trim()}', ";
-                    szöveg += $"'{TxtkérelemHR.Text.Trim()}', ";
-                    szöveg += $"'{Txtkérelemnév.Text.Trim()}', ";
-                    szöveg += $"'{TxtKérelemFrsz.Text.ToUpper().Trim()}', ";
-
-                    for (int j = 0; j < TáblaTelephely.Count; j++)
-                    {
-                        for (int Ii = 0; Ii < KérelemTábla.Rows.Count; Ii++)
-                        {
-                            if (KérelemTábla.Rows[Ii].Cells[1].Value.ToString().Trim() == TáblaTelephely[j].Trim())
-                                cellaÉrték = bool.Parse(KérelemTábla.Rows[Ii].Cells[0].Value.ToString()) ? "1" : "0";
-                        }
-                        szöveg += $"{cellaÉrték}, ";
-                    }
-
-                    szöveg += $"1, '{KérelemDátuma.Value}', ";
-                    szöveg += $"'{TxtKérrelemPDF.Text.Trim()}', ";
-                    szöveg += $"'{CmbkérelemOka.Text.Trim()}', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', ";
-                    szöveg += $"'{CmbKérelemTípus.Text.Trim()}', ";
-                    szöveg += $"{TxtKérelemautó.Text}, ";
-                    szöveg += $"'{TxtKérelemMegjegyzés.Text.Trim()}', ";
-                    szöveg += $" 0, 0, 0, {i}, '{Program.PostásNév.Trim()}', '{DateTime.Now}', '{DatÉrvényes.Value}') ";
-
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
+                    KézNapló.Rögzítés(helynapló, ADATNapló);
                 }
                 Kérelemújraírás();
                 MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -930,7 +891,17 @@ namespace Villamos
             }
         }
 
-
+        private void TelepiAdatokFeltöltése()
+        {
+            EngedélyMátrix.Clear();
+            for (int i = 0; i < KérelemTábla.Rows.Count; i++)
+            {
+                string telephely = KérelemTábla.Rows[i].Cells[1].Value.ToString();
+                int engedély = bool.Parse(KérelemTábla.Rows[i].Cells[0].Value.ToString()) ? 1 : 0;
+                string megjegyzés = KérelemTábla.Rows[i].Cells[4].Value.ToString();
+                EngedélyMátrix.Add(new Adat_Behajtási_Engedélyek(telephely, engedély, megjegyzés));
+            }
+        }
 
         private void BtnOktatásÚj_Click(object sender, EventArgs e)
         {
@@ -941,12 +912,11 @@ namespace Villamos
                 long szám;
                 string betű = TxtadminBetű.Text.Trim();
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                string jelszó = "forgalmirendszám";
-                string szöveg = "SELECT * FROM alapadatok ORDER BY sorszám DESC ";
 
-                Kezelő_Behajtás_Behajtási kéz = new Kezelő_Behajtás_Behajtási();
-                Adat_Behajtás_Behajtási rekord = kéz.Egy_Adat(hely, jelszó, szöveg);
-
+                List<Adat_Behajtás_Behajtási> Adatok = Kéz_Behajtás.Lista_Adatok(hely);
+                Adat_Behajtás_Behajtási rekord = (from a in Adatok
+                                                  orderby a.Sorszám descending
+                                                  select a).FirstOrDefault();
                 if (rekord != null)
                     szám = long.Parse(rekord.Sorszám.Substring(betű.Length)) + 1;
                 else
@@ -966,10 +936,8 @@ namespace Villamos
             }
         }
 
-
         private string Bővít(string a, long b, int darab)
         {
-
             int HiányzóKarakterekSzáma = darab - b.ToString().Length;
             string c = "";
             if (HiányzóKarakterekSzáma > 1)
@@ -984,7 +952,6 @@ namespace Villamos
             }
             return c;
         }
-
 
         private void Kérelemalaptábla()
         {
@@ -1002,12 +969,12 @@ namespace Villamos
             KérelemTábla.ColumnCount = 5;
             KérelemTábla.RowCount = 10;
 
-            string hely = Application.StartupPath + @"\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-            string jelszó = "egérpad";
-            string szöveg = "SELECT * FROM Engedélyezés  WHERE Engedélyezés.Gondnok=true AND Engedélyezés.Szakszolgálat=false ORDER BY Engedélyezés.Szakszolgálatszöveg, Engedélyezés.id";
-
-            Kezelő_Behajtás_Engedélyezés Kéz = new Kezelő_Behajtás_Engedélyezés();
-            List<Adat_Behajtás_Engedélyezés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Behajtás_Engedélyezés> AdatokÖ = EmailKéz.Lista_Adatok();
+            List<Adat_Behajtás_Engedélyezés> Adatok = (from a in AdatokÖ
+                                                       where a.Gondnok == true
+                                                       && a.Szakszolgálat == false
+                                                       orderby a.Szakszolgálatszöveg, a.Id
+                                                       select a).ToList();
             for (int sor = 0; sor < Adatok.Count; sor++)
             {
                 KérelemTábla.Rows[sor].Cells[1].Value = Adatok[sor].Telephely;
@@ -1026,14 +993,12 @@ namespace Villamos
             }
         }
 
-
         private void Btn1szak_Click(object sender, EventArgs e)
         {
             KérelemTábla.Rows[0].Cells[0].Value = true;
             KérelemTábla.Rows[1].Cells[0].Value = true;
             KérelemTábla.Rows[2].Cells[0].Value = true;
         }
-
 
         private void Btn2szak_Click(object sender, EventArgs e)
         {
@@ -1043,7 +1008,6 @@ namespace Villamos
             KérelemTábla.Rows[6].Cells[0].Value = true;
         }
 
-
         private void Btn3szak_Click(object sender, EventArgs e)
         {
             KérelemTábla.Rows[7].Cells[0].Value = true;
@@ -1051,20 +1015,17 @@ namespace Villamos
             KérelemTábla.Rows[9].Cells[0].Value = true;
         }
 
-
         private void BtnKijelölcsop_Click(object sender, EventArgs e)
         {
             for (int i = 0; i <= 9; i++)
                 KérelemTábla.Rows[i].Cells[0].Value = true;
         }
 
-
         private void Btnkilelöltörlés_Click(object sender, EventArgs e)
         {
             for (int i = 0; i <= 9; i++)
                 KérelemTábla.Rows[i].Cells[0].Value = false;
         }
-
 
         private void BtnKérelemPDF_Click(object sender, EventArgs e)
         {
@@ -1103,7 +1064,6 @@ namespace Villamos
         {
             LISTAlista();
         }
-
 
         private void LISTAlista()
         {
@@ -1193,12 +1153,10 @@ namespace Villamos
                 }
 
                 int státus = 0;
-                string helystátus = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszóstátus = "egérpad";
-                string szöveg1 = $"SELECT * FROM kérelemstátus WHERE státus='{CmbEngedélylistaszűrő.Text.Trim()}'";
-
-                Kezelő_Behajtás_Kérelemstátus Kéz = new Kezelő_Behajtás_Kérelemstátus();
-                Adat_Behajtás_Kérelemsátus rekord2 = Kéz.Egy_Adat(helystátus, jelszóstátus, szöveg1);
+                List<Adat_Behajtás_Kérelemsátus> AdatokStát = KézKérelemStát.Lista_Adatok();
+                Adat_Behajtás_Kérelemsátus rekord2 = (from a in AdatokStát
+                                                      where a.Státus == CmbEngedélylistaszűrő.Text.Trim()
+                                                      select a).FirstOrDefault();
                 if (rekord2 != null) státus = rekord2.ID;
 
 
@@ -1318,7 +1276,6 @@ namespace Villamos
             }
         }
 
-
         private void TáblaLista_SelectionChanged(object sender, EventArgs e)
         {
             try
@@ -1345,7 +1302,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void TáblaLista_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1377,14 +1333,11 @@ namespace Villamos
             }
         }
 
-
-
         private void BtnExcelkimenet_Click(object sender, EventArgs e)
         {
             try
             {
-                if (TáblaLista.Rows.Count <= 0)
-                    throw new HibásBevittAdat("Nincsenek sorok a táblázatban!");
+                if (TáblaLista.Rows.Count <= 0) throw new HibásBevittAdat("Nincsenek sorok a táblázatban!");
 
                 string fájlexc;
 
@@ -1420,7 +1373,6 @@ namespace Villamos
             }
         }
 
-
         private void Gombok_kikapcs()
         {
             BtnEngedélyListaEngedélyNyomtat.Visible = false;
@@ -1431,7 +1383,6 @@ namespace Villamos
             BtnEngedélyListaÁtvételMegtörtént.Visible = false;
             BtnEngedélyListaTörlés.Visible = false;
         }
-
 
         private void CmbEngedélylistaszűrő_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1480,7 +1431,6 @@ namespace Villamos
             LISTAlista();
         }
 
-
         private void BtnEngedélyListaEngedélyNyomtat_Click(object sender, EventArgs e)
         {
             Holtart.Be();
@@ -1488,7 +1438,6 @@ namespace Villamos
             {
                 Engedélyek_Listázása();
                 // nyomtatjuk az engedélyeket
-                string jelszó = "forgalmirendszám";
                 string helyexcel = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Behajtási_engedély.xlsx";
 
                 // ha nincs meg a fájl akkor kilép
@@ -1502,9 +1451,6 @@ namespace Villamos
                 int k = 0;
                 int l = 0;
                 string eredmény;
-
-                string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-                double sor = KézNapló.Napló_Id(helynapló);
 
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
@@ -1575,17 +1521,12 @@ namespace Villamos
 
                         // Módosítjuk a kérelem státusát
                         string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                        string szöveg = "UPDATE alapadatok Set ";
-                        szöveg += " Státus=3";
-                        szöveg += $" WHERE sorszám='{TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim()}'";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        Adat_Behajtás_Behajtási ADAT = new Adat_Behajtás_Behajtási(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 3);
+                        Kéz_Behajtás.Módosítás_Státus(hely, ADAT);
 
-                        //léptetjük a napló id-t
-                        sor++;
-                        szöveg = "INSERT INTO alapadatok ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
-                        szöveg += $" VALUES ( '{TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim()}', 2, ";
-                        szöveg += $"{sor}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
-                        MyA.ABMódosítás(helynapló, jelszó, szöveg);
+                        string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
+                        Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(0, 3, sor, Program.PostásNév.Trim(), DateTime.Now);
+                        KézNapló.Rögzítés_Státus(helynapló, ADATNapló);
 
                         // ha a negyedikhez érünk akkor nyomtatunk egyet.
                         if (j == 5)
@@ -1622,18 +1563,15 @@ namespace Villamos
             Holtart.Ki();
         }
 
-
         private void BtnEngedélyListaGondnokEmail_Click(object sender, EventArgs e)
         {
             Gondnoki();
         }
 
-
         private void BtnEngedélyListaSzakEmail_Click(object sender, EventArgs e)
         {
             Szakszolgálati();
         }
-
 
         private void Gondnoki()
         {
@@ -1723,7 +1661,6 @@ namespace Villamos
             Holtart.Ki();
         }
 
-
         private void Szakszolgálati()
         {
             Holtart.Be();
@@ -1811,7 +1748,6 @@ namespace Villamos
             }
             Holtart.Ki();
         }
-
 
         private void BtnEngedélyListaÁtvételNyomtat_Click(object sender, EventArgs e)
         {
@@ -3581,9 +3517,7 @@ namespace Villamos
             {
                 Adatok_Behajtás.Clear();
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                string jelszó = "forgalmirendszám";
-                string szöveg = "SELECT * FROM alapadatok ";
-                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -3596,15 +3530,22 @@ namespace Villamos
             }
         }
 
-        private int Behajt_Napló_Következő_ID(List<Adat_Behajtás_Behajtási_Napló> adatok)
+        private void EmailAdatok_Feltöltése()
         {
-            if (adatok == null || adatok.Count == 0)
-                return 1;
-            return adatok.Max(a => a.ID) + 1;
+            try
+            {
+                EmailAdatok = EmailKéz.Lista_Adatok();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
         #endregion
-
-
     }
 }
