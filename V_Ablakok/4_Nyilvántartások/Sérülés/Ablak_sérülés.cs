@@ -939,14 +939,16 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg;
+                List<Adat_Kiegészítő_Sérülés> AdatokKiegSérülésÖ = KézKiegSérülés.Lista_Adatok();
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                    szöveg = $"SELECT * FROM sérülés WHERE  Vezér1=false ";
+                    AdatokKiegSérülés = (from a in AdatokKiegSérülésÖ
+                                         where a.Vezér1 == false
+                                         select a).ToList();
                 else
-                    szöveg = $"SELECT * FROM sérülés WHERE csoport1={Program.Postás_csoport} AND Vezér1=false ";
-                AdatokKiegSérülés = KézKiegSérülés.Lista_Adatok(hely, jelszó, szöveg);
+                    AdatokKiegSérülés = (from a in AdatokKiegSérülésÖ
+                                         where a.Csoport1 == Program.Postás_csoport
+                                         && a.Vezér1 == false
+                                         select a).ToList();
 
                 LekTelephely.Items.Clear();
                 LekTelephely.Items.Add("<Összes>");
@@ -3696,16 +3698,15 @@ namespace Villamos
 
 
                 // költséghely
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                szöveg = $"SELECT * FROM sérülés WHERE név='{Telephely.Text.Trim()}'";
-                AdatKiegSérülés = KézKiegSérülés.Egy_Adat(hely, jelszó, szöveg);
-                if (AdatKiegSérülés != null)
-                    Költséghely.Text = AdatKiegSérülés.Költséghely;
+                List<Adat_Kiegészítő_Sérülés> AdatokSérülés = KézKiegSérülés.Lista_Adatok();
+                AdatKiegSérülés = (from a in AdatokSérülés
+                                   where a.Név == Telephely.Text.Trim()
+                                   select a).FirstOrDefault();
+                if (AdatKiegSérülés != null) Költséghely.Text = AdatKiegSérülés.Költséghely;
 
                 // üzembehelyezés
                 hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                jelszó = "pozsgaii";
+                string jelszó = "pozsgaii";
                 szöveg = $"SELECT * FROM állománytábla WHERE [azonosító]='{Pályaszám.Text.Trim()}'";
 
                 AdatJármű = KézJármű.Egy_Adat_fő(hely, jelszó, szöveg);

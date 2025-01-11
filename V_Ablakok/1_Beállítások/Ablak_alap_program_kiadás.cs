@@ -9,7 +9,6 @@ using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MySz = Villamos.V_MindenEgyéb.Kezelő_Szín;
@@ -2602,7 +2601,7 @@ namespace Villamos
             try
             {
                 if (Táblaszolgálat.RowCount == 0) return;
-                if (e.RowIndex >= 0)                        txtSzolgálat.Text = Táblaszolgálat.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
+                if (e.RowIndex >= 0) txtSzolgálat.Text = Táblaszolgálat.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
             }
             catch (HibásBevittAdat ex)
             {
@@ -3597,8 +3596,8 @@ namespace Villamos
                                                                                              CmbSzolgtelepSZOL.Text.Trim(),
                                                                                              txtSzolgtelepFelelősmunkahely.Text.Trim());
                 if (Elem != null)
-                       Kéz.Módosítás(hely, jelszó, ADAT);
-                              else
+                    Kéz.Módosítás(hely, jelszó, ADAT);
+                else
                     Kéz.Rögzítés(hely, jelszó, ADAT);
 
                 Szolgálattelephelylista();
@@ -4521,11 +4520,7 @@ namespace Villamos
                 Telep_Könyvtár.Text = MyF.Szöveg_Tisztítás(Telep_Könyvtár.Text);
                 Telep_Költséghely.Text = MyF.Szöveg_Tisztítás(Telep_Költséghely.Text);
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                if (!Exists(hely)) return;
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM sérülés";
-                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
 
                 Adat_Kiegészítő_Sérülés Elem = (from a in Adatok
                                                 where a.ID == sorszám
@@ -4541,9 +4536,9 @@ namespace Villamos
                                                                            Sorrend_2,
                                                                            Telep_Költséghely.Text.Trim());
                 if (Elem == null)
-                    KézSérülés.Rögzítés(hely, jelszó, ADAT);
+                    KézSérülés.Rögzítés(ADAT);
                 else
-                    KézSérülés.Módosítás(hely, jelszó, ADAT);
+                    KézSérülés.Módosítás(ADAT);
 
                 Telep_Tábla_kiirás();
                 Könytár_tisztít();
@@ -4565,11 +4560,8 @@ namespace Villamos
             {
                 if (!int.TryParse(Telep_sorszám.Text.Trim(), out int sorszám)) throw new HibásBevittAdat("Nincs kiválasztva érvényes adat törlésre.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-
                 Adat_Kiegészítő_Sérülés ADAT = new Adat_Kiegészítő_Sérülés(sorszám, "", false, 0, 0, false, 0, 0, "");
-                KézSérülés.Törlés(hely, jelszó, ADAT);
+                KézSérülés.Törlés(ADAT);
 
                 Telep_Tábla_kiirás();
                 Könytár_tisztít();
@@ -4644,11 +4636,10 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM sérülés WHERE id={sorszám}";
-
-                Adat_Kiegészítő_Sérülés Rekord = KézSérülés.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
+                Adat_Kiegészítő_Sérülés Rekord = (from a in Adatok
+                                                  where a.ID == sorszám
+                                                  select a).FirstOrDefault();
 
                 // Táblázat sorának kijelölése
                 if (Rekord != null)
@@ -4685,10 +4676,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM sérülés ORDER BY id";
-
                 Telep_Tábla.Rows.Clear();
                 Telep_Tábla.Columns.Clear();
                 Telep_Tábla.Refresh();
@@ -4715,7 +4702,7 @@ namespace Villamos
                 Telep_Tábla.Columns[8].HeaderText = "Költséghely";
                 Telep_Tábla.Columns[8].Width = 120;
 
-                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
 
                 foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
                 {

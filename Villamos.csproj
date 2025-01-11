@@ -707,6 +707,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztáskódok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Főmérnökség.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
     <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />

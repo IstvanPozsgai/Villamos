@@ -139,8 +139,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                     Btn_TTP_Év.Visible = false;
                     BtnNaptár.Visible = false;
                     BtnAlapadat.Visible = false;
-                    Btn_Ütemez.Visible = false ;
-                    BtnKuka.Visible =  false ;
+                    Btn_Ütemez.Visible = false;
+                    BtnKuka.Visible = false;
                 }
 
                 melyikelem = 130;
@@ -739,12 +739,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM sérülés WHERE vezér1=false ORDER BY id";
-
                 AdatokTelep.Clear();
-                AdatokTelep = KézTelep.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Sérülés> AdatokTelepÖ = KézTelep.Lista_Adatok();
+                AdatokTelep = (from a in AdatokTelepÖ
+                               where a.Vezér1 ==false
+                               orderby a.ID
+                               select a).ToList ();
             }
             catch (HibásBevittAdat ex)
             {
