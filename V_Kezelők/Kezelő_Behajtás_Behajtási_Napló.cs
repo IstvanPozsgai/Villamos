@@ -259,12 +259,50 @@ namespace Villamos.Villamos_Kezelők
             }
         }
 
+        public void Rögzítés_Gondnok(string hely, string Telephely, int Gondnok, string Megjegyzés, string sorszám)
+        {
+            try
+            {
+                string szöveg = $"INSERT INTO alapadatok ( Sorszám, {Telephely}_engedély, {Telephely}_megjegyzés, ID, Rögzítette, rögzítésdátuma )";
+                szöveg += $" VALUES ( '{sorszám}', {Gondnok}, '{Megjegyzés}', {Sorszám(hely)}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Rögzítés_Státus(string hely, Adat_Behajtás_Behajtási_Napló Adat)
         {
             try
             {
                 string szöveg = "INSERT INTO alapadatok ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
-                szöveg += $" VALUES ('{Adat.Sorszám}', {Adat.Státus}, {Sorszám(hely)},'{Adat.Rögzítette}', '{Adat.Rögzítésdátuma}' ";
+                szöveg += $" VALUES ('{Adat.Sorszám}', {Adat.Státus}, {Sorszám(hely)},'{Adat.Rögzítette}', '{Adat.Rögzítésdátuma}') ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés_Szakszolgálat(string hely, string Szakszolg, int SzakszolgEng, string sorSzám)
+        {
+            try
+            {
+                string szöveg = $"INSERT INTO alapadatok ( Sorszám, {Szakszolg}, ID, Rögzítette, rögzítésdátuma )";
+                szöveg += $" VALUES ( '{sorSzám}', {SzakszolgEng}, {Sorszám(hely)}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

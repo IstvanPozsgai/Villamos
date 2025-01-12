@@ -138,66 +138,6 @@ namespace Villamos.Villamos_Kezelők
             return Adatok;
         }
 
-        public Adat_Behajtás_Behajtási Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Behajtás_Behajtási Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_Behajtás_Behajtási(
-                                        rekord["Sorszám"].ToStrTrim(),
-                                        rekord["Szolgálatihely"].ToStrTrim(),
-                                        rekord["HRazonosító"].ToStrTrim(),
-                                        rekord["Név"].ToStrTrim(),
-                                        rekord["Rendszám"].ToStrTrim(),
-                                        rekord["Angyalföld_engedély"].ToÉrt_Int(),
-                                        rekord["Angyalföld_megjegyzés"].ToStrTrim(),
-                                        rekord["Baross_engedély"].ToÉrt_Int(),
-                                        rekord["Baross_megjegyzés"].ToStrTrim(),
-                                        rekord["Budafok_engedély"].ToÉrt_Int(),
-                                        rekord["Budafok_megjegyzés"].ToStrTrim(),
-                                        rekord["Ferencváros_engedély"].ToÉrt_Int(),
-                                        rekord["Ferencváros_megjegyzés"].ToStrTrim(),
-                                        rekord["Fogaskerekű_engedély"].ToÉrt_Int(),
-                                        rekord["Fogaskerekű_megjegyzés"].ToStrTrim(),
-                                        rekord["Hungária_engedély"].ToÉrt_Int(),
-                                        rekord["Hungária_megjegyzés"].ToStrTrim(),
-                                        rekord["Kelenföld_engedély"].ToÉrt_Int(),
-                                        rekord["Kelenföld_megjegyzés"].ToStrTrim(),
-                                        rekord["Száva_engedély"].ToÉrt_Int(),
-                                        rekord["Száva_megjegyzés"].ToStrTrim(),
-                                        rekord["Szépilona_engedély"].ToÉrt_Int(),
-                                        rekord["Szépilona_megjegyzés"].ToStrTrim(),
-                                        rekord["Zugló_engedély"].ToÉrt_Int(),
-                                        rekord["Zugló_megjegyzés"].ToStrTrim(),
-                                        rekord["Korlátlan"].ToStrTrim(),
-                                        rekord["Autók_száma"].ToÉrt_Int(),
-                                        rekord["I_engedély"].ToÉrt_Int(),
-                                        rekord["II_engedély"].ToÉrt_Int(),
-                                        rekord["III_engedély"].ToÉrt_Int(),
-                                        rekord["Státus"].ToÉrt_Int(),
-                                        rekord["Dátum"].ToÉrt_DaTeTime(),
-                                        rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["PDF"].ToStrTrim(),
-                                        rekord["OKA"].ToStrTrim(),
-                                        rekord["Érvényes"].ToÉrt_DaTeTime());
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-
         public void Rögzítés(string hely, Adat_Behajtás_Behajtási Adat)
         {
             try
@@ -261,7 +201,6 @@ namespace Villamos.Villamos_Kezelők
             }
         }
 
-
         public void Módosítás(string hely, Adat_Behajtás_Behajtási Adat)
         {
             try
@@ -315,12 +254,51 @@ namespace Villamos.Villamos_Kezelők
             }
         }
 
-        public void Módosítás_Státus(string hely, Adat_Behajtás_Behajtási Adat) 
+        public void Módosítás_Gondnok(string hely, string Telephely, int Gondnok, string Megjegyzés, string Sorszám)
+        {
+            try
+            {
+                string szöveg = "UPDATE alapadatok SET ";
+                szöveg += $"{Telephely}_engedély={Gondnok}, ";
+                szöveg += $"{Telephely}_megjegyzés='{Megjegyzés}'";
+                szöveg += $" WHERE sorszám='{Sorszám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Státus(string hely, Adat_Behajtás_Behajtási Adat)
         {
             try
             {
                 string szöveg = $"UPDATE alapadatok Set Státus={Adat.Státus}";
                 szöveg += $" WHERE sorszám='{Adat.Sorszám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Szakszolgálat(string hely, string Szakszolg, int SzakszolgEng, string sorSzám)
+        {
+            try
+            {
+                string szöveg = $"UPDATE alapadatok SET {Szakszolg}={SzakszolgEng} WHERE sorszám='{sorSzám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

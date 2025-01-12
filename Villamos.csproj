@@ -688,6 +688,7 @@
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Dolgozótábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Engedélyezés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Jogosultság.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Kérelemoka.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Kérelemstátus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Telephelystátusz.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
