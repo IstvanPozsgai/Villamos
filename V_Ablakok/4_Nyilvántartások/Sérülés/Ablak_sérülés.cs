@@ -1258,11 +1258,17 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\PDF\{FilePDF.SelectedItems[0]}";
                 if (!Exists(hely)) throw new HibásBevittAdat("Nem létezik a pdf fájl!");
 
-                Byte[] bytes = ReadAllBytes(hely);
+                Byte[] bytes = System.IO.File.ReadAllBytes(hely);
                 MemoryStream stream = new MemoryStream(bytes);
                 PdfDocument pdfDocument = PdfDocument.Load(stream);
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {

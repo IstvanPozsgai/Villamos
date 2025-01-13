@@ -518,6 +518,12 @@ namespace Villamos
                     CHKpdfvan.Checked = false;
                     Fülek.SelectedIndex = 5;
                     Felcsukja();
+
+                    pdfDocument?.Dispose();
+                    stream?.Dispose();
+                    stream = null;
+                    pdfDocument = null;
+                    GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -786,9 +792,11 @@ namespace Villamos
                 string Könyvtár = $@"{Application.StartupPath}\Főmérnökség\Oktatás\{Cmbtelephely.Text}";
 
                 // feltöltött fájlok ismételt felhasználása
-                OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-                OpenFileDialog1.Filter = "PDF Files |*.pdf";
-                OpenFileDialog1.InitialDirectory = Könyvtár;
+                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                {
+                    Filter = "PDF Files |*.pdf",
+                    InitialDirectory = Könyvtár
+                };
 
 
 
@@ -862,13 +870,19 @@ namespace Villamos
 
         void Pdf_Megjelenítés(string hely)
         {
-            if (!File.Exists(hely))
-                return;
-            Byte[] bytes = File.ReadAllBytes(hely);
+            if (!File.Exists(hely)) return;
+
+            Byte[] bytes = System.IO.File.ReadAllBytes(hely);
             MemoryStream stream = new MemoryStream(bytes);
             PdfDocument pdfDocument = PdfDocument.Load(stream);
             PDF_néző.Document = pdfDocument;
             PDF_néző.Visible = true;
+
+            pdfDocument?.Dispose();
+            stream?.Dispose();
+            stream = null;
+            pdfDocument = null;
+            GC.Collect();
         }
 
 

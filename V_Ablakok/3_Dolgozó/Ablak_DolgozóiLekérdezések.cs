@@ -1321,9 +1321,9 @@ namespace Villamos
                 if (!Exists(hely)) return;
 
                 List<Adat_Létszám_Elrendezés_Változatok> AdatokÖ = Kéz_Változatok.Lista_Adatok(hely);
-                List<string > Adatok = AdatokÖ.Select(a => a.Változatnév).Distinct().ToList();
+                List<string> Adatok = AdatokÖ.Select(a => a.Változatnév).Distinct().ToList();
 
-                foreach (string  rekord in Adatok)
+                foreach (string rekord in Adatok)
                     Változatoklist.Items.Add(rekord.Trim());
 
             }
@@ -1983,13 +1983,19 @@ namespace Villamos
                 if (Munkakörtábla.SelectedRows.Count != 0)
                 {
                     string hely = $@"{Application.StartupPath}\Főmérnökség\Munkakör\{Cmbtelephely.Text.Trim()}\" + Munkakörtábla.Rows[Munkakörtábla.SelectedRows[0].Index].Cells[5].Value.ToString();
-                    if (!Exists(hely))
-                        return;
+                    if (!Exists(hely)) return;
+
                     Byte[] bytes = System.IO.File.ReadAllBytes(hely);
                     MemoryStream stream = new MemoryStream(bytes);
                     PdfDocument pdfDocument = PdfDocument.Load(stream);
                     PDF_néző.Document = pdfDocument;
                     PDF_néző.Visible = true;
+
+                    pdfDocument?.Dispose();
+                    stream?.Dispose();
+                    stream = null;
+                    pdfDocument = null;
+                    GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)

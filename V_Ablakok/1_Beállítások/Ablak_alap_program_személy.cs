@@ -1216,10 +1216,19 @@ namespace Villamos
             {
                 if (Pdfhely.Trim() == "") return;
                 if (!File.Exists(Pdfhely.Trim())) return;
-                Byte[] bytes = System.IO.File.ReadAllBytes(Pdfhely);
-                var stream = new MemoryStream(bytes);
+                string hely = Pdfhely.Trim();
+
+                Byte[] bytes = System.IO.File.ReadAllBytes(hely);
+                MemoryStream stream = new MemoryStream(bytes);
                 PdfDocument pdfDocument = PdfDocument.Load(stream);
-                pdfViewer1.Document = pdfDocument;
+                PDF_néző.Document = pdfDocument;
+                PDF_néző.Visible = true;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {
@@ -2283,7 +2292,7 @@ namespace Villamos
             {
                 AdatokMunkakör.Clear();
                 string szöveg = "SELECT * FROM Munkakör  order by  kategória, Megnevezés";
-                AdatokMunkakör = KézMunkakör.Lista_Adatok( szöveg);
+                AdatokMunkakör = KézMunkakör.Lista_Adatok(szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2333,7 +2342,7 @@ namespace Villamos
                                                                              Munka_Státus.Checked
                                                                             );
                 if (AdatokMunkakör.Any(a => a.Id == Sorszám))
-                    KézMunkakör.Módosítás( ADAT);
+                    KézMunkakör.Módosítás(ADAT);
                 else
                     KézMunkakör.Rögzítés(ADAT);
 

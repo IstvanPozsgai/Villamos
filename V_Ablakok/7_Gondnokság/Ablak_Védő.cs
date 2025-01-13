@@ -1164,7 +1164,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőnapló" + Napló_Dátumtól.Value.ToString("yyyy") + ".mdb";
-                if (!File.Exists(hely) ) return;
+                if (!File.Exists(hely)) return;
 
                 CikkLista_Feltöltés();
 
@@ -1650,6 +1650,12 @@ namespace Villamos
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
                 Lapfülek.SelectedIndex = 5;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             else
             {
@@ -1848,7 +1854,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőkönyvelés.mdb";
-                if (!File.Exists(hely) ) return;
+                if (!File.Exists(hely)) return;
 
                 if (Lekérd_Szerszámkönyvszám.CheckedItems.Count < 1)
                     return;
@@ -2455,6 +2461,12 @@ namespace Villamos
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
                 Lapfülek.SelectedIndex = 5;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             else
             {
@@ -2934,7 +2946,7 @@ namespace Villamos
             {
                 Könyvelés_Feltöltés();
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőkönyvelés.mdb";
-                if (!File.Exists(hely) ) return;
+                if (!File.Exists(hely)) return;
 
                 Adat_Védő_Könyvelés IdeigMennyi = (from a in AdatokKönyvelés
                                                    where a.Azonosító == SzerszámAzonosító.Text.Trim() && a.Szerszámkönyvszám == Honnan.Text.Trim() && a.Státus == false
@@ -3791,7 +3803,7 @@ namespace Villamos
             if (Gyáriszám.Text.Trim() == "")
                 return;
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
-            if (!File.Exists(hely) )
+            if (!File.Exists(hely))
             {
                 // ha nincs akkor feltöltjük
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
@@ -3807,6 +3819,12 @@ namespace Villamos
                     PDF_néző.Visible = true;
 
                     File.Copy(OpenFileDialog1.FileName, hely);
+
+                    pdfDocument?.Dispose();
+                    stream?.Dispose();
+                    stream = null;
+                    pdfDocument = null;
+                    GC.Collect();
                 }
             }
         }

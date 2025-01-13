@@ -344,7 +344,7 @@ namespace Villamos.Villamos_Ablakok
             string hely = Application.StartupPath + @"\" + Cmbtelephely.Text + @"\adatok\villamos\villamos2.mdb"; //takarítás dátumok
             //string jelszó = "pozsgaii";
             string szöveg = $"SELECT * FROM állománytábla WHERE azonosító = '{Pályaszám.Text.Trim()}'";
-         //   Takarítás_text.Text = MyA.ABkiolvasásdátum(hely, jelszó, szöveg, "takarítás").ToString();
+            //   Takarítás_text.Text = MyA.ABkiolvasásdátum(hely, jelszó, szöveg, "takarítás").ToString();
         }
         private void Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -679,7 +679,7 @@ namespace Villamos.Villamos_Ablakok
                         if (Holtart.Value >= Holtart.Maximum) Holtart.Value = 1;
                     }
 
-                    MyA.ABMódosítás (hely, jelszó, lista);
+                    MyA.ABMódosítás(hely, jelszó, lista);
                 }
                 // az excel tábla bezárása
                 MyE.ExcelBezárás();
@@ -1071,6 +1071,12 @@ namespace Villamos.Villamos_Ablakok
                     PDF_néző.Document = pdfDocument;
                     PDF_néző.Visible = true;
                     Feltöltendő.Text = openFileDialog1.FileName;
+
+                    pdfDocument?.Dispose();
+                    stream?.Dispose();
+                    stream = null;
+                    pdfDocument = null;
+                    GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1193,6 +1199,12 @@ namespace Villamos.Villamos_Ablakok
                 PdfDocument pdfDocument = PdfDocument.Load(stream);
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1257,7 +1269,7 @@ namespace Villamos.Villamos_Ablakok
                         if (Holtart.Value >= Holtart.Maximum) Holtart.Value = 1;
                     }
 
-                    MyA.ABMódosítás (hely, jelszó, lista);
+                    MyA.ABMódosítás(hely, jelszó, lista);
                 }
                 // az excel tábla bezárása
                 MyE.ExcelBezárás();

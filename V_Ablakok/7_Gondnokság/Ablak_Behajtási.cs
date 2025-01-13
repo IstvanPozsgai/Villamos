@@ -1039,6 +1039,12 @@ namespace Villamos
                     PDF_néző.Visible = true;
                     TxtKérrelemPDF.Text = OpenFileDialog1.FileName;
                     Fülek.SelectedIndex = 2;
+
+                    pdfDocument?.Dispose();
+                    stream?.Dispose();
+                    stream = null;
+                    pdfDocument = null;
+                    GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -2452,6 +2458,12 @@ namespace Villamos
                 PdfDocument pdfDocument = PdfDocument.Load(stream);
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {

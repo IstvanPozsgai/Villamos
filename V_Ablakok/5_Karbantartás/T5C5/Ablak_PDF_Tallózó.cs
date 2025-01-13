@@ -58,15 +58,20 @@ namespace Villamos.Villamos_Ablakok.T5C5
         {
             try
             {
-                string    hely =Hely.Trim ()+@"\" + FileList.SelectedItems[0].ToString();
-                if (!File.Exists(hely) )
-                    return;
+                string hely = Hely.Trim() + @"\" + FileList.SelectedItems[0].ToString();
+                if (!File.Exists(hely)) return;
 
                 Byte[] bytes = System.IO.File.ReadAllBytes(hely);
                 MemoryStream stream = new MemoryStream(bytes);
                 PdfDocument pdfDocument = PdfDocument.Load(stream);
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {

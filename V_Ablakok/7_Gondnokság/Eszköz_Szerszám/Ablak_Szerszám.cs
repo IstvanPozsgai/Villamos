@@ -1462,7 +1462,7 @@ namespace Villamos
             }
         }
 
-        private void Lekérd_Tábla_tartalom_Anyag() 
+        private void Lekérd_Tábla_tartalom_Anyag()
         {
             KönyvelésListaFeltöltés();
             CikktörzsListaFeltöltés();
@@ -2095,6 +2095,12 @@ namespace Villamos
                     PDF_néző.Document = pdfDocument;
                     PDF_néző.Visible = true;
                     Feltöltendő.Text = OpenFileDialog1.FileName;
+
+                    pdfDocument?.Dispose();
+                    stream?.Dispose();
+                    stream = null;
+                    pdfDocument = null;
+                    GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -2236,6 +2242,12 @@ namespace Villamos
                 PdfDocument pdfDocument = PdfDocument.Load(stream);
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {

@@ -919,7 +919,7 @@ namespace Villamos
             try
             {
                 Engedély_Tábla_író(1);
-                if (Engedély_tábla.Rows.Count < 1)                     return;
+                if (Engedély_tábla.Rows.Count < 1) return;
 
                 int ii = 0;
                 Microsoft.Office.Interop.Outlook.Application _app = new Microsoft.Office.Interop.Outlook.Application();
@@ -3320,6 +3320,12 @@ namespace Villamos
                 PdfDocument pdfDocument = PdfDocument.Load(stream);
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
+
+                pdfDocument?.Dispose();
+                stream?.Dispose();
+                stream = null;
+                pdfDocument = null;
+                GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {

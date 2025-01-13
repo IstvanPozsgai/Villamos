@@ -159,7 +159,7 @@ namespace Villamos
             this.BtnOktatásFel = new System.Windows.Forms.Button();
             this.BtnOktatásOK = new System.Windows.Forms.Button();
             this.TabPage4 = new System.Windows.Forms.TabPage();
-            this.pdfViewer1 = new PdfiumViewer.PdfViewer();
+            this.PDF_néző = new PdfiumViewer.PdfViewer();
             this.TabPage5 = new System.Windows.Forms.TabPage();
             this.Feortörlés = new System.Windows.Forms.Button();
             this.FrissítMunkakör = new System.Windows.Forms.Button();
@@ -1332,7 +1332,7 @@ namespace Villamos
             // 
             // TabPage4
             // 
-            this.TabPage4.Controls.Add(this.pdfViewer1);
+            this.TabPage4.Controls.Add(this.PDF_néző);
             this.TabPage4.Location = new System.Drawing.Point(4, 54);
             this.TabPage4.Name = "TabPage4";
             this.TabPage4.Size = new System.Drawing.Size(1188, 462);
@@ -1342,16 +1342,16 @@ namespace Villamos
             // 
             // pdfViewer1
             // 
-            this.pdfViewer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.PDF_néző.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pdfViewer1.Location = new System.Drawing.Point(4, 5);
-            this.pdfViewer1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pdfViewer1.Name = "pdfViewer1";
-            this.pdfViewer1.ShowToolbar = false;
-            this.pdfViewer1.Size = new System.Drawing.Size(1179, 448);
-            this.pdfViewer1.TabIndex = 0;
-            this.pdfViewer1.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;
+            this.PDF_néző.Location = new System.Drawing.Point(4, 5);
+            this.PDF_néző.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.PDF_néző.Name = "pdfViewer1";
+            this.PDF_néző.ShowToolbar = false;
+            this.PDF_néző.Size = new System.Drawing.Size(1179, 448);
+            this.PDF_néző.TabIndex = 0;
+            this.PDF_néző.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;
             // 
             // TabPage5
             // 
@@ -2849,7 +2849,7 @@ namespace Villamos
         internal Button Gond_töröl;
         internal TextBox Gond_szakszolg_szöv;
         internal Label Label48;
-        private PdfiumViewer.PdfViewer pdfViewer1;
+        private PdfiumViewer.PdfViewer PDF_néző;
         internal TextBox JelenlétiText5;
         internal Label label49;
         internal Button Eszközhöz;
