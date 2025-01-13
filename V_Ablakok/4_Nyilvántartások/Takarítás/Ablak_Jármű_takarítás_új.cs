@@ -29,13 +29,8 @@ namespace Villamos
 #pragma warning restore IDE0044 // Add readonly modifier
 
         #region Kezelők-Adatok
+        readonly Kezelő_Jármű_Takarítás_Vezénylés KézVezény = new Kezelő_Jármű_Takarítás_Vezénylés();
         readonly Kezelő_Jármű_Takarítás KézTak = new Kezelő_Jármű_Takarítás();
-        List<Adat_Jármű_Takarítás_Takarítások> AdatokTak = new List<Adat_Jármű_Takarítás_Takarítások>();
-
-
-        public Kezelő_Jármű_Takarítás_Vezénylés KézVezény = new Kezelő_Jármű_Takarítás_Vezénylés();
-        public List<Adat_Jármű_Takarítás_Vezénylés> AdatokVezény = new List<Adat_Jármű_Takarítás_Vezénylés>();
-
         readonly Kezelő_Vezénylés KézVez = new Kezelő_Vezénylés();
         readonly Kezelő_Jármű_Takarítás_Teljesítés KézTelj = new Kezelő_Jármű_Takarítás_Teljesítés();
         readonly Kezelő_Jármű_Takarítás_J1 KézJ1 = new Kezelő_Jármű_Takarítás_J1();
@@ -51,7 +46,10 @@ namespace Villamos
         readonly Kezelő_Jármű_Takarítás_Kötbér KézKötbér = new Kezelő_Jármű_Takarítás_Kötbér();
         readonly Kezelő_Jármű_Takarítás_Ár KézÁr = new Kezelő_Jármű_Takarítás_Ár();
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelen = new Kezelő_Kiegészítő_Jelenlétiív();
+        readonly Kezelő_Jármű_Takarítás_Napló KézNap = new Kezelő_Jármű_Takarítás_Napló();
 
+        List<Adat_Jármű_Takarítás_Takarítások> AdatokTak = new List<Adat_Jármű_Takarítás_Takarítások>();
+        public List<Adat_Jármű_Takarítás_Vezénylés> AdatokVezény = new List<Adat_Jármű_Takarítás_Vezénylés>();
         List<Adat_Vezénylés> AdatokVez = new List<Adat_Vezénylés>();
         List<Adat_Jármű_Takarítás_Teljesítés> AdatokTelj = new List<Adat_Jármű_Takarítás_Teljesítés>();
         List<Adat_Jármű_Takarítás_J1> AdatokJ1 = new List<Adat_Jármű_Takarítás_J1>();
@@ -71,7 +69,6 @@ namespace Villamos
 
 
 #pragma warning disable IDE0044 // Add readonly modifier
-        Kezelő_Jármű_Takarítás_Napló KézNap = new Kezelő_Jármű_Takarítás_Napló();
         List<Adat_Jármű_Takarítás_TIG> AdatokTIG = new List<Adat_Jármű_Takarítás_TIG>();
         List<string> TIGTípusok = new List<string>();
 #pragma warning restore IDE0044 // Add readonly modifier
@@ -722,96 +719,71 @@ namespace Villamos
 
                 #endregion
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_takarítás.mdb";
-                if (!Exists(hely)) return;
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM takarítások ";
+                TakarításokLista();
 
-                Kezelő_Jármű_Takarítás KézTak = new Kezelő_Jármű_Takarítás();
-                List<Adat_Jármű_Takarítás_Takarítások> AdatokTak = KézTak.Takarítások_Lista_Adatok(hely, jelszó, szöveg);
+                List<string> Pályaszámok = (from a in AdatokTak
+                                            where a.Telephely == Cmbtelephely.Text.Trim()
+                                            && a.Státus == 0
+                                            orderby a.Azonosító, a.Takarítási_fajta, a.Dátum ascending
+                                            select a.Azonosító).Distinct().ToList();
+                List<Adat_Jármű_Takarítás_Takarítások> AdatokTakÖ = AdatokTak;
 
-                string előző = "";
-                DateTime Ideig_dátum;
-                int j = 0;
-
-                List<Adat_Jármű_Takarítás_Takarítások> AdatJár = (from a in AdatokTak
-                                                                  where a.Telephely == Cmbtelephely.Text.Trim()
-                                                                  && a.Státus == 0
-                                                                  orderby a.Azonosító, a.Takarítási_fajta, a.Dátum ascending
-                                                                  select a).ToList();
-
-                foreach (Adat_Jármű_Takarítás_Takarítások rekord in AdatJár)
+                foreach (string pályaszám in Pályaszámok)
                 {
-                    if (előző.Trim() != rekord.Azonosító)
-                    {
-                        Tábla.RowCount++;
-                        j = Tábla.Rows.Count - 1;
-                        előző = rekord.Azonosító;
-                    }
-
-                    Tábla.Rows[j].Cells[0].Value = rekord.Azonosító;
+                    Tábla.RowCount++;
+                    int j = Tábla.Rows.Count - 1;
+                    Tábla.Rows[j].Cells[0].Value = pályaszám;
                     TimeSpan delta;
 
-                    if (rekord.Dátum == null)
-                        Ideig_dátum = DateTime.Parse("1900.01.01");
-                    else
-                        Ideig_dátum = rekord.Dátum;
+                    DateTime Ideig_dátum = MikorVolt(AdatokTakÖ, pályaszám, "J2");
+                    Tábla.Rows[j].Cells[3].Value = Ideig_dátum.ToString("yyyy.MM.dd");
+                    delta = DateTime.Now - Ideig_dátum;
+                    Tábla.Rows[j].Cells[4].Value = (int)delta.TotalDays;
 
-                    switch (rekord.Takarítási_fajta)
-                    {
-                        case "J2":
-                            {
-                                Tábla.Rows[j].Cells[3].Value = Ideig_dátum.ToString("yyyy.MM.dd");
-                                delta = DateTime.Now - Ideig_dátum;
-                                Tábla.Rows[j].Cells[4].Value = (int)delta.TotalDays;
-                                break;
-                            }
-                        case "J3":
-                            {
-                                Tábla.Rows[j].Cells[6].Value = Ideig_dátum.ToString("yyyy.MM.dd");
-                                delta = DateTime.Now - Ideig_dátum;
-                                Tábla.Rows[j].Cells[7].Value = (int)delta.TotalDays;
-                                break;
-                            }
-                        case "J4":
-                            {
-                                Tábla.Rows[j].Cells[9].Value = Ideig_dátum.ToString("yyyy.MM.dd");
-                                delta = DateTime.Now - Ideig_dátum;
-                                Tábla.Rows[j].Cells[10].Value = (int)delta.TotalDays;
-                                break;
-                            }
-                        case "J5":
-                            {
-                                Tábla.Rows[j].Cells[12].Value = Ideig_dátum.ToString("yyyy.MM.dd");
-                                delta = DateTime.Now - Ideig_dátum;
-                                Tábla.Rows[j].Cells[13].Value = (int)delta.TotalDays;
-                                break;
-                            }
-                        case "J6":
-                            {
-                                Tábla.Rows[j].Cells[15].Value = Ideig_dátum.ToString("yyyy.MM.dd");
-                                delta = DateTime.Now - Ideig_dátum;
-                                Tábla.Rows[j].Cells[16].Value = (int)delta.TotalDays;
-                                break;
-                            }
-                    }
+                    Ideig_dátum = MikorVolt(AdatokTakÖ, pályaszám, "J3");
+                    Tábla.Rows[j].Cells[6].Value = Ideig_dátum.ToString("yyyy.MM.dd");
+                    delta = DateTime.Now - Ideig_dátum;
+                    Tábla.Rows[j].Cells[7].Value = (int)delta.TotalDays;
 
-                    Szerelvények_listázása(rekord.Azonosító, j);
-                    Előírt_szerelvény_listázása(rekord.Azonosító, j);
-                    Hiba_listázása(rekord.Azonosító, j);
-                    Típus_listázása(rekord.Azonosító, j);
-                    Vezénylés_listázása(rekord.Azonosító, j);
-                    ELőterv_listázása(rekord.Azonosító, j, rekord.Takarítási_fajta);
-                    Vezénylés_listázása_napi(rekord.Azonosító, j, rekord.Takarítási_fajta);
-                    T5C5_ütemezés(rekord.Azonosító, j);
-                    Idegenben_Telephely_kiírása(rekord.Azonosító, j);
+                    Ideig_dátum = MikorVolt(AdatokTakÖ, pályaszám, "J4");
+                    Tábla.Rows[j].Cells[9].Value = Ideig_dátum.ToString("yyyy.MM.dd");
+                    delta = DateTime.Now - Ideig_dátum;
+                    Tábla.Rows[j].Cells[10].Value = (int)delta.TotalDays;
+
+                    Ideig_dátum = MikorVolt(AdatokTakÖ, pályaszám, "J5");
+                    Tábla.Rows[j].Cells[12].Value = Ideig_dátum.ToString("yyyy.MM.dd");
+                    delta = DateTime.Now - Ideig_dátum;
+                    Tábla.Rows[j].Cells[13].Value = (int)delta.TotalDays;
+
+                    Ideig_dátum = MikorVolt(AdatokTakÖ, pályaszám, "J6");
+                    Tábla.Rows[j].Cells[15].Value = Ideig_dátum.ToString("yyyy.MM.dd");
+                    delta = DateTime.Now - Ideig_dátum;
+                    Tábla.Rows[j].Cells[16].Value = (int)delta.TotalDays;
+
+                    Szerelvények_listázása(pályaszám, j);
+                    Előírt_szerelvény_listázása(pályaszám, j);
+                    Hiba_listázása(pályaszám, j);
+                    Típus_listázása(pályaszám, j);
+                    Vezénylés_listázása(pályaszám, j);
+
+                    ELőterv_listázása(pályaszám, j, "J2");
+                    ELőterv_listázása(pályaszám, j, "J3");
+                    ELőterv_listázása(pályaszám, j, "J4");
+                    ELőterv_listázása(pályaszám, j, "J5");
+                    ELőterv_listázása(pályaszám, j, "J6");
+
+                    Vezénylés_listázása_napi(pályaszám, j, "J2");
+                    Vezénylés_listázása_napi(pályaszám, j, "J3");
+                    Vezénylés_listázása_napi(pályaszám, j, "J4");
+                    Vezénylés_listázása_napi(pályaszám, j, "J5");
+                    Vezénylés_listázása_napi(pályaszám, j, "J6");
+
+                    T5C5_ütemezés(pályaszám, j);
+                    Idegenben_Telephely_kiírása(pályaszám, j);
 
 
-                    if (Tábla.Rows[j].Cells[19].Value == null)
-                        Tábla.Rows[j].Cells[19].Value = 0;
-
-                    if (Tábla.Rows[j].Cells[21].Value == null)
-                        Tábla.Rows[j].Cells[21].Value = 0;
+                    if (Tábla.Rows[j].Cells[19].Value == null) Tábla.Rows[j].Cells[19].Value = 0;
+                    if (Tábla.Rows[j].Cells[21].Value == null) Tábla.Rows[j].Cells[21].Value = 0;
                     Holtart.Lép();
                 }
 
@@ -830,6 +802,31 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private DateTime MikorVolt(List<Adat_Jármű_Takarítás_Takarítások> AdatokTak, string pályaszám, string Takarítási_fajta)
+        {
+            DateTime Válasz = DateTime.Parse("1900.01.01");
+            try
+            {
+                List<Adat_Jármű_Takarítás_Takarítások> rekord = (from a in AdatokTak
+                                                                 where a.Azonosító == pályaszám
+                                                                 && a.Státus == 0
+                                                                 && a.Takarítási_fajta == Takarítási_fajta
+                                                                 orderby a.Dátum
+                                                                 select a).ToList();
+                if (rekord != null && rekord.Count > 0) Válasz = rekord.Max(a => a.Dátum);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
         }
 
         private void Szerelvények_listázása(string azonosító, int sor)
@@ -1559,7 +1556,7 @@ namespace Villamos
                 JárműHibaLista();
                 ÁllományLista();
 
-                for (int i = 0; i < Tábla.Rows.Count ; i++)
+                for (int i = 0; i < Tábla.Rows.Count; i++)
                 {
                     ideig_psz = Tábla.Rows[i].Cells[0].Value.ToStrTrim();
 
@@ -1829,7 +1826,7 @@ namespace Villamos
                 if (JK_Azonosító.Text.ToStrTrim() == "") return;
 
                 // megnézzük, hogy létezik-e a pályaszám
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
                 if (!Exists(hely)) return;
                 string jelszó = "pozsgaii";
                 string típus;
@@ -2522,7 +2519,7 @@ namespace Villamos
 
                 string hely, jelszó, szöveg;
                 // megnézzük, hogy létezik-e a pályaszám
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
                 if (!Exists(hely)) return;
                 jelszó = "pozsgaii";
 
@@ -3896,7 +3893,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{ListaDátum.Value:yyyy}.mdb";
-                if (!Exists(hely))                     return;
+                if (!Exists(hely)) return;
                 string jelszó = "seprűéslapát";
 
                 // *********************************************
@@ -5590,7 +5587,7 @@ namespace Villamos
         private void Gepi_palyaszam_feltoltes()
         {
             string hely, jelszó, szöveg;
-            hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
             if (!Exists(hely)) return;
 
             jelszó = "pozsgaii";
@@ -5720,20 +5717,18 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                Kezelő_Jármű_Takarítás KézTak = new Kezelő_Jármű_Takarítás();
-                List<Adat_Jármű_Takarítás_Takarítások> AdatokTak;
-                string szöveg = "SELECT * FROM takarítások WHERE Takarítási_fajta='Gépi' ";
-                if (Pály_TB.Text.Trim() != "")
-                    szöveg += $" AND azonosító='{Pály_TB.Text.Trim()}' ";
+                TakarításokLista();
 
-                if (Tel_TB.Text.Trim() != "")
-                    szöveg += $" AND Telephely='{Tel_TB.Text.Trim()}' ";
-
-                szöveg += " order by azonosító, Takarítási_fajta , dátum desc";
-
-                AdatokTak = KézTak.Takarítások_Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű_Takarítás_Takarítások> Adatok = (from a in AdatokTak
+                                                                 where a.Takarítási_fajta == "Gépi"
+                                                                 orderby a.Azonosító, a.Takarítási_fajta, a.Dátum
+                                                                 select a).ToList();
+                if (Pály_TB.Text.Trim() != "") Adatok = (from a in Adatok
+                                                         where a.Azonosító == Pály_TB.Text.Trim()
+                                                         select a).ToList();
+                if (Tel_TB.Text.Trim() != "") Adatok = (from a in Adatok
+                                                        where a.Telephely == Tel_TB.Text.Trim()
+                                                        select a).ToList();
 
                 Gepi_dataGrid_.Rows.Clear();
                 Gepi_dataGrid_.Columns.Clear();
@@ -5761,17 +5756,17 @@ namespace Villamos
 
 
                 int j;
-                for (int i = 0; i < AdatokTak.Count; i++)
+                for (int i = 0; i < Adatok.Count; i++)
                 {
                     Gepi_dataGrid_.RowCount++;
                     j = Gepi_dataGrid_.RowCount - 1;
-                    Gepi_dataGrid_.Rows[i].Cells[0].Value = AdatokTak[i].Azonosító.ToStrTrim();
+                    Gepi_dataGrid_.Rows[i].Cells[0].Value = Adatok[i].Azonosító.ToStrTrim();
                     //
-                    Gepi_dataGrid_.Rows[i].Cells[2].Value = AdatokTak[i].Dátum.ToString("yyyy.MM.dd");
-                    Gepi_dataGrid_.Rows[i].Cells[3].Value = AdatokTak[i].Takarítási_fajta.ToStrTrim();
-                    Gepi_dataGrid_.Rows[i].Cells[4].Value = AdatokTak[i].Telephely;
-                    Gepi_dataGrid_.Rows[i].Cells[5].Value = AdatokTak[i].Státus;
-                    Gepi_dataGrid_.Rows[i].Cells[6].Value = (DateTime.Today - AdatokTak[i].Dátum).Days;
+                    Gepi_dataGrid_.Rows[i].Cells[2].Value = Adatok[i].Dátum.ToString("yyyy.MM.dd");
+                    Gepi_dataGrid_.Rows[i].Cells[3].Value = Adatok[i].Takarítási_fajta.ToStrTrim();
+                    Gepi_dataGrid_.Rows[i].Cells[4].Value = Adatok[i].Telephely;
+                    Gepi_dataGrid_.Rows[i].Cells[5].Value = Adatok[i].Státus;
+                    Gepi_dataGrid_.Rows[i].Cells[6].Value = (DateTime.Today - Adatok[i].Dátum).Days;
                 }
                 Gepi_dataGrid_.Visible = true;
                 Mosás_Típusok();
@@ -5790,7 +5785,7 @@ namespace Villamos
 
         private void GépiTípusCmbFeltölt()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
             string jelszó = "pozsgaii";
             string szöveg = "SELECT * FROM Állománytábla";
 
@@ -5798,6 +5793,7 @@ namespace Villamos
             List<Adat_Jármű> AdatokJármű = KézTíp.Állomány_Lista_típus(hely, jelszó, szöveg);
 
             List<string> Típusok = (from a in AdatokJármű
+                                    orderby a.Típus 
                                     select a.Típus).Distinct().ToList();
 
             CmbGépiTíp.Items.Clear();
@@ -5811,7 +5807,7 @@ namespace Villamos
             try
             {
                 Gepi_dataGrid_.Visible = false;
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
                 string jelszó = "pozsgaii";
                 string szöveg = "SELECT * FROM Állománytábla ORDER BY azonosító";
 

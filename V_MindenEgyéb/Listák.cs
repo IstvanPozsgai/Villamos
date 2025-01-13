@@ -8,15 +8,10 @@ namespace Villamos
 {
     public class Listák
     {
-
         public static AdatCombohoz[] TelephelyLista_Jármű()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = $"SELECT * FROM sérülés ORDER BY név";
-            //    string szöveg = $"SELECT * FROM sérülés WHERE név='{Program.PostásTelephely}'";
             Kezelő_Kiegészítő_Sérülés Kéz = new Kezelő_Kiegészítő_Sérülés();
-            List<Adat_Kiegészítő_Sérülés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Kiegészítő_Sérülés> Adatok = Kéz.Lista_Adatok().OrderBy (a=>a.Név ).ToList ();
 
             Adat_Kiegészítő_Sérülés Elem = (from a in Adatok
                                             where a.Név.Trim() == Program.PostásTelephely.Trim()

@@ -210,6 +210,49 @@ namespace Villamos.Villamos_Adatszerkezet
             OKA = oKA;
             Érvényes = érvényes;
         }
+
+        public Adat_Behajtás_Behajtási(string sorszám, string szolgálatihely, string hRazonosító, string név, string rendszám, int angyalföld_engedély, string angyalföld_megjegyzés, int baross_engedély, string baross_megjegyzés, int budafok_engedély, string budafok_megjegyzés, int ferencváros_engedély, string ferencváros_megjegyzés, int fogaskerekű_engedély, string fogaskerekű_megjegyzés, int hungária_engedély, string hungária_megjegyzés, int kelenföld_engedély, string kelenföld_megjegyzés, int száva_engedély, string száva_megjegyzés, int szépilona_engedély, string szépilona_megjegyzés, int zugló_engedély, string zugló_megjegyzés, string korlátlan, int autók_száma, int státus, DateTime dátum, string megjegyzés, string pDF, string oKA, DateTime érvényes)
+        {
+            Sorszám = sorszám;
+            Szolgálatihely = szolgálatihely;
+            HRazonosító = hRazonosító;
+            Név = név;
+            Rendszám = rendszám;
+            Angyalföld_engedély = angyalföld_engedély;
+            Angyalföld_megjegyzés = angyalföld_megjegyzés;
+            Baross_engedély = baross_engedély;
+            Baross_megjegyzés = baross_megjegyzés;
+            Budafok_engedély = budafok_engedély;
+            Budafok_megjegyzés = budafok_megjegyzés;
+            Ferencváros_engedély = ferencváros_engedély;
+            Ferencváros_megjegyzés = ferencváros_megjegyzés;
+            Fogaskerekű_engedély = fogaskerekű_engedély;
+            Fogaskerekű_megjegyzés = fogaskerekű_megjegyzés;
+            Hungária_engedély = hungária_engedély;
+            Hungária_megjegyzés = hungária_megjegyzés;
+            Kelenföld_engedély = kelenföld_engedély;
+            Kelenföld_megjegyzés = kelenföld_megjegyzés;
+            Száva_engedély = száva_engedély;
+            Száva_megjegyzés = száva_megjegyzés;
+            Szépilona_engedély = szépilona_engedély;
+            Szépilona_megjegyzés = szépilona_megjegyzés;
+            Zugló_engedély = zugló_engedély;
+            Zugló_megjegyzés = zugló_megjegyzés;
+            Korlátlan = korlátlan;
+            Autók_száma = autók_száma;
+            Státus = státus;
+            Dátum = dátum;
+            Megjegyzés = megjegyzés;
+            PDF = pDF;
+            OKA = oKA;
+            Érvényes = érvényes;
+        }
+
+        public Adat_Behajtás_Behajtási(string sorszám, int státus)
+        {
+            Sorszám = sorszám;
+            Státus = státus;
+        }
     }
 
     public class Adat_Behajtás_Behajtási_Napló
@@ -295,6 +338,29 @@ namespace Villamos.Villamos_Adatszerkezet
             Rögzítette = rögzítette;
             Rögzítésdátuma = rögzítésdátuma;
             Érvényes = érvényes;
+        }
+
+        public Adat_Behajtás_Behajtási_Napló(string sorszám, int státus, int iD, string rögzítette, DateTime rögzítésdátuma)
+        {
+            Sorszám = sorszám;
+            Státus = státus;
+            ID = iD;
+            Rögzítette = rögzítette;
+            Rögzítésdátuma = rögzítésdátuma;
+        }
+    }
+
+    public class Adat_Behajtási_Engedélyek 
+    {
+        public string Telephely { get; set; }
+        public int Engedély { get; set; }
+        public string Megjegyzés { get; set; }
+
+        public Adat_Behajtási_Engedélyek(string telephely, int engedély, string megjegyzés)
+        {
+            Telephely = telephely;
+            Engedély = engedély;
+            Megjegyzés = megjegyzés;
         }
     }
 }

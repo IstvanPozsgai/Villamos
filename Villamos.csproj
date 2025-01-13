@@ -683,6 +683,14 @@
     <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási_Napló.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Dolgozótábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Engedélyezés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Jogosultság.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Kérelemoka.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Kérelemstátus.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Behajtás_Telephelystátusz.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
@@ -707,6 +715,8 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztáskódok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Főmérnökség.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Könyvtár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
     <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />
