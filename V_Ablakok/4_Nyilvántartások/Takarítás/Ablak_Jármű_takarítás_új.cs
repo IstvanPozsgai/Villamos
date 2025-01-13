@@ -2833,20 +2833,6 @@ namespace Villamos
         {
             try
             {
-                Tábla_utolsó.Refresh();
-                Tábla_utolsó.Visible = false;
-
-                // fejléc elkészítése
-                AdatTábla_Utolsó.Rows.Clear();
-                AdatTábla_Utolsó.Columns.Clear();
-                AdatTábla_Utolsó.Columns.Add("Azonosító");
-                AdatTábla_Utolsó.Columns.Add("Dátum");
-                AdatTábla_Utolsó.Columns.Add("Takarítási fajta");
-                AdatTábla_Utolsó.Columns.Add("Telephely");
-                AdatTábla_Utolsó.Columns.Add("Státus");
-                AdatTábla_Utolsó.Columns.Add("Mikor");
-                AdatTábla_Utolsó.Columns.Add("Módosító");
-
                 List<Adat_Jármű_Takarítás_Napló> AdatNapl;
 
                 if (Utolsó_pályaszám.Text.Trim() == "")
@@ -2862,6 +2848,20 @@ namespace Villamos
                                 orderby a.Takarítási_fajta, a.Dátum
                                 select a).ToList();
                 }
+                if (AdatNapl == null || AdatNapl.Count == 0) throw new HibásBevittAdat("Nincs listázandó adat."); ;
+                Tábla_utolsó.Refresh();
+                Tábla_utolsó.Visible = false;
+
+                // fejléc elkészítése
+                AdatTábla_Utolsó.Rows.Clear();
+                AdatTábla_Utolsó.Columns.Clear();
+                AdatTábla_Utolsó.Columns.Add("Azonosító");
+                AdatTábla_Utolsó.Columns.Add("Dátum");
+                AdatTábla_Utolsó.Columns.Add("Takarítási fajta");
+                AdatTábla_Utolsó.Columns.Add("Telephely");
+                AdatTábla_Utolsó.Columns.Add("Státus");
+                AdatTábla_Utolsó.Columns.Add("Mikor");
+                AdatTábla_Utolsó.Columns.Add("Módosító");
 
                 foreach (Adat_Jármű_Takarítás_Napló rekord in AdatNapl)
                 {
@@ -5793,7 +5793,7 @@ namespace Villamos
             List<Adat_Jármű> AdatokJármű = KézTíp.Állomány_Lista_típus(hely, jelszó, szöveg);
 
             List<string> Típusok = (from a in AdatokJármű
-                                    orderby a.Típus 
+                                    orderby a.Típus
                                     select a.Típus).Distinct().ToList();
 
             CmbGépiTíp.Items.Clear();
