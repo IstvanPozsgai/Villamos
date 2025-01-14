@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -2812,10 +2813,20 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás_napló_{Utolsó_dátum.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás_napló_{Utolsó_dátum.Value.Year - 1}.mdb";
                 string jelszó = "seprűéslapát";
                 string szöveg = "SELECT * FROM takarítások_napló";
-                AdatokNapl = KézNap.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Jármű_Takarítás_Napló> Ideig = new List<Adat_Jármű_Takarítás_Napló>();
+                if (File.Exists(hely))
+                {
+                    AdatokNapl = KézNap.Lista_Adat(hely, jelszó, szöveg);
+                }
+                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás_napló_{Utolsó_dátum.Value.Year}.mdb";
+                if (File.Exists(hely))
+                {
+                    Ideig = KézNap.Lista_Adat(hely, jelszó, szöveg);
+                }
+                AdatokNapl.AddRange(Ideig);
                 Utolsó_tört_lista();
             }
             catch (HibásBevittAdat ex)
@@ -2851,6 +2862,7 @@ namespace Villamos
                 if (AdatNapl == null || AdatNapl.Count == 0) throw new HibásBevittAdat("Nincs listázandó adat."); ;
                 Tábla_utolsó.Refresh();
                 Tábla_utolsó.Visible = false;
+                AdatTábla_Utolsó.Clear();
 
                 // fejléc elkészítése
                 AdatTábla_Utolsó.Rows.Clear();
@@ -2862,6 +2874,7 @@ namespace Villamos
                 AdatTábla_Utolsó.Columns.Add("Státus");
                 AdatTábla_Utolsó.Columns.Add("Mikor");
                 AdatTábla_Utolsó.Columns.Add("Módosító");
+
 
                 foreach (Adat_Jármű_Takarítás_Napló rekord in AdatNapl)
                 {
@@ -2876,6 +2889,7 @@ namespace Villamos
 
                     AdatTábla_Utolsó.Rows.Add(Soradat);
                 }
+                Tábla_utolsó.DataSource = AdatTábla_Utolsó;
 
                 Tábla_utolsó.Columns["Azonosító"].Width = 100;
                 Tábla_utolsó.Columns["Dátum"].Width = 100;
