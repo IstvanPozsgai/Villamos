@@ -209,11 +209,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
                 Pdftöltő.Document = pdfDocument;
                 Pdftöltő.Visible = true;
 
-                pdfDocument?.Dispose();
-                stream?.Dispose();
-                stream = null;
-                pdfDocument = null;
-                GC.Collect();
+                //pdfDocument?.Dispose();
+                //stream?.Dispose();
+                //stream = null;
+                //pdfDocument = null;
+                //GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {

@@ -1264,11 +1264,11 @@ namespace Villamos
                 PDF_néző.Document = pdfDocument;
                 PDF_néző.Visible = true;
 
-                pdfDocument?.Dispose();
-                stream?.Dispose();
-                stream = null;
-                pdfDocument = null;
-                GC.Collect();
+                //pdfDocument?.Dispose();
+                //stream?.Dispose();
+                //stream = null;
+                //pdfDocument = null;
+                //GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {

@@ -1651,11 +1651,11 @@ namespace Villamos
                 PDF_néző.Visible = true;
                 Lapfülek.SelectedIndex = 5;
 
-                pdfDocument?.Dispose();
-                stream?.Dispose();
-                stream = null;
-                pdfDocument = null;
-                GC.Collect();
+                //pdfDocument?.Dispose();
+                //stream?.Dispose();
+                //stream = null;
+                //pdfDocument = null;
+                //GC.Collect();
             }
             else
             {
@@ -2462,11 +2462,11 @@ namespace Villamos
                 PDF_néző.Visible = true;
                 Lapfülek.SelectedIndex = 5;
 
-                pdfDocument?.Dispose();
-                stream?.Dispose();
-                stream = null;
-                pdfDocument = null;
-                GC.Collect();
+                //pdfDocument?.Dispose();
+                //stream?.Dispose();
+                //stream = null;
+                //pdfDocument = null;
+                //GC.Collect();
             }
             else
             {
@@ -3820,11 +3820,11 @@ namespace Villamos
 
                     File.Copy(OpenFileDialog1.FileName, hely);
 
-                    pdfDocument?.Dispose();
-                    stream?.Dispose();
-                    stream = null;
-                    pdfDocument = null;
-                    GC.Collect();
+                    //pdfDocument?.Dispose();
+                    //stream?.Dispose();
+                    //stream = null;
+                    //pdfDocument = null;
+                    //GC.Collect();
                 }
             }
         }
