@@ -1130,10 +1130,10 @@ namespace Villamos
             ///  MINDEN PÁLYASZÁM               ////
             ////////////////////////////////////////
             List<string> Adatok;
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
             if (Mindenpsz.Checked == true && maximum >= 1)
             {
-
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                blokkeleje = sor;
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i))
