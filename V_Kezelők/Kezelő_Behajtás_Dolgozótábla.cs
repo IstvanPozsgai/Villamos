@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Kezelők
 {
@@ -45,7 +40,7 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
- 
+
         public List<Adat_Behajtás_Dolgozótábla> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM Dolgozóktábla";
@@ -107,6 +102,4 @@ namespace Villamos.Villamos_Kezelők
             return Adat;
         }
     }
-
-
 }
