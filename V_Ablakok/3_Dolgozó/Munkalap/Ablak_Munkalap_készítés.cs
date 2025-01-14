@@ -28,7 +28,7 @@ namespace Villamos
         {
             InitializeComponent();
         }
-
+        // Ez egy szöveg  Ez kék színű
         private void Ablak_Munkalap_Load(object sender, EventArgs e)
         {
             try
