@@ -6,12 +6,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+
 
 namespace Villamos
 {
@@ -1906,19 +1908,7 @@ namespace Villamos
             try
             {
                 if (!File.Exists(hely)) return;
-
-                Byte[] bytes = System.IO.File.ReadAllBytes(hely);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
-
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1930,6 +1920,14 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void PDFMemóriaFelszabadítás(PdfViewer PDFkeret)
+        {
+            PDFkeret?.Dispose();
+            PDFkeret.Document = null;
+            GC.Collect();
+        }
+
         #endregion
 
 

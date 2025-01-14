@@ -1,8 +1,8 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 
@@ -203,17 +203,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
                 string hely = $@"{BeolvasásiHely}\{FájlLista.SelectedItems[0]}";
                 if (!Exists(hely)) throw new HibásBevittAdat("Nem létezik a betölteni kívánt pdf.");
 
-                Byte[] bytes = ReadAllBytes(hely);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                Pdftöltő.Document = pdfDocument;
-                Pdftöltő.Visible = true;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
+                Kezelő_Pdf.PdfMegnyitás(Pdftöltő, hely);
             }
             catch (HibásBevittAdat ex)
             {

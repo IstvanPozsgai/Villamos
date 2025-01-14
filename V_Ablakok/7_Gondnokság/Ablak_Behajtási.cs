@@ -1,5 +1,4 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -1032,19 +1031,10 @@ namespace Villamos
 
                 if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    Byte[] bytes = File.ReadAllBytes(OpenFileDialog1.FileName);
-                    MemoryStream stream = new MemoryStream(bytes);
-                    PdfDocument pdfDocument = PdfDocument.Load(stream);
-                    PDF_néző.Document = pdfDocument;
-                    PDF_néző.Visible = true;
+                    Kezelő_Pdf.PdfMegnyitás(PDF_néző, OpenFileDialog1.FileName);
+
                     TxtKérrelemPDF.Text = OpenFileDialog1.FileName;
                     Fülek.SelectedIndex = 2;
-
-                    //pdfDocument?.Dispose();
-                    //stream?.Dispose();
-                    //stream = null;
-                    //pdfDocument = null;
-                    //GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -2453,17 +2443,7 @@ namespace Villamos
                 string helypdf = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\pdf\{pdffájlnév}";
                 if (!File.Exists(helypdf)) return;
 
-                Byte[] bytes = File.ReadAllBytes(helypdf);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, helypdf);
             }
             catch (HibásBevittAdat ex)
             {

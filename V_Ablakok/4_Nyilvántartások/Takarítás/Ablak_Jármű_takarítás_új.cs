@@ -2817,15 +2817,11 @@ namespace Villamos
                 string jelszó = "seprűéslapát";
                 string szöveg = "SELECT * FROM takarítások_napló";
                 List<Adat_Jármű_Takarítás_Napló> Ideig = new List<Adat_Jármű_Takarítás_Napló>();
-                if (File.Exists(hely))
-                {
-                    AdatokNapl = KézNap.Lista_Adat(hely, jelszó, szöveg);
-                }
+                if (File.Exists(hely)) AdatokNapl = KézNap.Lista_Adat(hely, jelszó, szöveg);
+
                 hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás_napló_{Utolsó_dátum.Value.Year}.mdb";
-                if (File.Exists(hely))
-                {
-                    Ideig = KézNap.Lista_Adat(hely, jelszó, szöveg);
-                }
+                if (File.Exists(hely)) Ideig = KézNap.Lista_Adat(hely, jelszó, szöveg);
+
                 AdatokNapl.AddRange(Ideig);
                 Utolsó_tört_lista();
             }

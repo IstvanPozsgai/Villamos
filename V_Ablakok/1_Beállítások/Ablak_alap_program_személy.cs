@@ -1,11 +1,11 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
@@ -1218,17 +1218,7 @@ namespace Villamos
                 if (!File.Exists(Pdfhely.Trim())) return;
                 string hely = Pdfhely.Trim();
 
-                Byte[] bytes = System.IO.File.ReadAllBytes(hely);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
             }
             catch (HibásBevittAdat ex)
             {

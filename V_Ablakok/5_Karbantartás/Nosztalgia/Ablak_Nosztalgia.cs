@@ -1,5 +1,4 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -1065,18 +1065,9 @@ namespace Villamos.Villamos_Ablakok
                 openFileDialog1.Filter = "PDF Files |*.pdf";
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    Byte[] bytes = File.ReadAllBytes(openFileDialog1.FileName);
-                    MemoryStream stream = new MemoryStream(bytes);
-                    PdfDocument pdfDocument = PdfDocument.Load(stream);
-                    PDF_néző.Document = pdfDocument;
-                    PDF_néző.Visible = true;
-                    Feltöltendő.Text = openFileDialog1.FileName;
+                    Kezelő_Pdf.PdfMegnyitás(PDF_néző, openFileDialog1.FileName);
 
-                    //pdfDocument?.Dispose();
-                    //stream?.Dispose();
-                    //stream = null;
-                    //pdfDocument = null;
-                    //GC.Collect();
+                    Feltöltendő.Text = openFileDialog1.FileName;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1194,17 +1185,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 string helypdf = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\pdf\" + Pdf_listbox.SelectedItems[0].ToString();
-                Byte[] bytes = System.IO.File.ReadAllBytes(helypdf);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, helypdf);
             }
             catch (HibásBevittAdat ex)
             {

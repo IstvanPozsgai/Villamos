@@ -1,5 +1,4 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -1258,17 +1258,8 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\PDF\{FilePDF.SelectedItems[0]}";
                 if (!Exists(hely)) throw new HibásBevittAdat("Nem létezik a pdf fájl!");
 
-                Byte[] bytes = System.IO.File.ReadAllBytes(hely);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
 
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
             }
             catch (HibásBevittAdat ex)
             {

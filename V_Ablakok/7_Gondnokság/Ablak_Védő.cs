@@ -1,5 +1,4 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -1639,23 +1638,12 @@ namespace Villamos
 
         private void Napló_Tábla_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Napló_Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim() + ".pdf";
             if (File.Exists(hely))
             {
-                Byte[] bytes = System.IO.File.ReadAllBytes(hely);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
                 Lapfülek.SelectedIndex = 5;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
             }
             else
             {
@@ -2455,18 +2443,8 @@ namespace Villamos
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Lekérd_Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim() + ".pdf";
             if (File.Exists(hely))
             {
-                Byte[] bytes = System.IO.File.ReadAllBytes(hely);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
                 Lapfülek.SelectedIndex = 5;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
             }
             else
             {
@@ -3812,19 +3790,9 @@ namespace Villamos
                 };
                 if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    Byte[] bytes = System.IO.File.ReadAllBytes(OpenFileDialog1.FileName);
-                    MemoryStream stream = new MemoryStream(bytes);
-                    PdfDocument pdfDocument = PdfDocument.Load(stream);
-                    PDF_néző.Document = pdfDocument;
-                    PDF_néző.Visible = true;
+                    Kezelő_Pdf.PdfMegnyitás(PDF_néző, OpenFileDialog1.FileName);
 
                     File.Copy(OpenFileDialog1.FileName, hely);
-
-                    //pdfDocument?.Dispose();
-                    //stream?.Dispose();
-                    //stream = null;
-                    //pdfDocument = null;
-                    //GC.Collect();
                 }
             }
         }

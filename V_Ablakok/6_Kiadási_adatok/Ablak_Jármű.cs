@@ -1,5 +1,4 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -1879,18 +1879,8 @@ namespace Villamos
                 };
                 if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    Byte[] bytes = File.ReadAllBytes(OpenFileDialog1.FileName);
-                    MemoryStream stream = new MemoryStream(bytes);
-                    PdfDocument pdfDocument = PdfDocument.Load(stream);
-                    PDF_néző.Document = pdfDocument;
-                    PDF_néző.Visible = true;
+                    Kezelő_Pdf.PdfMegnyitás(PDF_néző, OpenFileDialog1.FileName);
                     Feltöltendő.Text = OpenFileDialog1.FileName;
-
-                    //pdfDocument?.Dispose();
-                    //stream?.Dispose();
-                    //stream = null;
-                    //pdfDocument = null;
-                    //GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1974,17 +1964,7 @@ namespace Villamos
             try
             {
                 string helypdf = Application.StartupPath + @"\Főmérnökség\Jegyzőkönyvek\" + Pdf_listbox.SelectedItems[0].ToString();
-                Byte[] bytes = System.IO.File.ReadAllBytes(helypdf);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, helypdf);
             }
             catch (HibásBevittAdat ex)
             {
