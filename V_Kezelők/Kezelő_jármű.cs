@@ -398,7 +398,7 @@ namespace Villamos.Kezelők
 
         public List<string> Lista_Pályaszámok(string hely, string Típus)
         {
-            string szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típus}'";
+            string szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típus}' ORDER BY azonosító";
             List<string> Adatok = new List<string>();
             string Adat;
             try

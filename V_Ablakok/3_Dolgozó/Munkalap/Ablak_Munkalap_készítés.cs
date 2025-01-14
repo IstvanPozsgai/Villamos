@@ -1130,10 +1130,9 @@ namespace Villamos
             ///  MINDEN PÁLYASZÁM               ////
             ////////////////////////////////////////
             List<string> Adatok;
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
             if (Mindenpsz.Checked == true && maximum >= 1)
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                blokkeleje = sor;
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
@@ -1519,18 +1518,18 @@ namespace Villamos
 
                 string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
                 if (!File.Exists(helykieg)) return;
-               
+
                 List<Adat_Kiegészítő_Beosztáskódok> BeosztáskódÖ = KézBeoKód.Lista_Adatok(helykieg);
                 List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = (from a in BeosztáskódÖ
-                                                                   where a.Számoló ==true 
-                                                                   orderby a.Beosztáskód 
+                                                                   where a.Számoló == true
+                                                                   orderby a.Beosztáskód
                                                                    select a).ToList();
                 string szövegnap = $"SELECT * FROM Beosztás WHERE Nap = #{Dátum.Value:M-d-yy}# order by Dolgozószám";
                 List<Adat_Dolgozó_Beosztás_Új> DolgbeosztÖ = KézBeosztás.Lista_Adatok(helynap);
                 List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = (from a in DolgbeosztÖ
-                                                             where a.Nap ==Dátum .Value 
-                                                             orderby a.Dolgozószám 
-                                                             select a).ToList ();
+                                                             where a.Nap == Dátum.Value
+                                                             orderby a.Dolgozószám
+                                                             select a).ToList();
 
 
                 //ha ki van jelölve
