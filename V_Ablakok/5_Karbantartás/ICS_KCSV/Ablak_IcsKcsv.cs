@@ -104,7 +104,7 @@ namespace Villamos
                 Cmbtelephely.Items.Clear();
                 Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Jármű());
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
-                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
+                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim(); }
                 else
                 { Cmbtelephely.Text = Program.PostásTelephely; }
 
@@ -367,42 +367,43 @@ namespace Villamos
             Kiüríti_lapfül();
         }
 
-
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
+            // Határozza meg, hogy melyik lap van jelenleg kiválasztva
+            TabPage SelectedTab = Fülek.TabPages[e.Index];
+
+            // Szerezze be a lap fejlécének területét
+            Rectangle HeaderRect = Fülek.GetTabRect(e.Index);
+
+            // Hozzon létreecsetet a szöveg megfestéséhez
+            SolidBrush BlackTextBrush = new SolidBrush(Color.Black);
+
+            // Állítsa be a szöveg igazítását
+            StringFormat sf = new StringFormat
             {
-                // Határozza meg, hogy melyik lap van jelenleg kiválasztva
-                var SelectedTab = Fülek.TabPages[e.Index];
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
 
-                // Szerezze be a lap fejlécének területét
-                var HeaderRect = Fülek.GetTabRect(e.Index);
-
-                // Hozzon létreecsetet a szöveg megfestéséhez
-                var BlackTextBrush = new SolidBrush(Color.Black);
-
-                // Állítsa be a szöveg igazítását
-                StringFormat sf = new StringFormat();
-                sf.Alignment = StringAlignment.Center;
-                sf.LineAlignment = StringAlignment.Center;
-
-                // Festse meg a szöveget a megfelelő félkövér és szín beállítással
-                if ((e.State & DrawItemState.Selected) != 0)
-                {
-                    var BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
-                    // háttér szín beállítása
-                    e.Graphics.FillRectangle(new SolidBrush(Color.DarkGray), e.Bounds);
-                    var paddedBounds = e.Bounds;
-                    paddedBounds.Inflate(0, 0);
-                    e.Graphics.DrawString(SelectedTab.Text, BoldFont, BlackTextBrush, paddedBounds, sf);
-                }
-                else
-                {
-                    e.Graphics.DrawString(SelectedTab.Text, e.Font, BlackTextBrush, HeaderRect, sf);
-                }
-                // Munka kész – dobja ki a keféket
-                BlackTextBrush.Dispose();
+            // Festse meg a szöveget a megfelelő félkövér és szín beállítással
+            if ((e.State & DrawItemState.Selected) != 0)
+            {
+                Font BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
+                // háttér szín beállítása
+                e.Graphics.FillRectangle(new SolidBrush(Color.DarkGray), e.Bounds);
+                Rectangle paddedBounds = e.Bounds;
+                paddedBounds.Inflate(0, 0);
+                e.Graphics.DrawString(SelectedTab.Text, BoldFont, BlackTextBrush, paddedBounds, sf);
             }
+            else
+            {
+                e.Graphics.DrawString(SelectedTab.Text, e.Font, BlackTextBrush, HeaderRect, sf);
+            }
+            // Munka kész – dobja ki a keféket
+            BlackTextBrush.Dispose();
         }
+
+
         #endregion
 
 
@@ -568,7 +569,7 @@ namespace Villamos
 
                     for (int i = 0; i < 7; i++)
                     {
-                        if (Combo_E3.Items[i].ToString().Trim() == Combo_E3.Text.Trim())
+                        if (Combo_E3.Items[i].ToStrTrim() == Combo_E3.Text.Trim())
                         {
                             e3 = i + 1;
                             break;
@@ -579,7 +580,7 @@ namespace Villamos
                 {
                     for (int i = 0; i < 7; i++)
                     {
-                        if (Combo_E2.Items[i].ToString().Trim() == Combo_E2.Text.Trim())
+                        if (Combo_E2.Items[i].ToStrTrim() == Combo_E2.Text.Trim())
                         {
                             e2 = i + 1;
                             break;
@@ -669,12 +670,14 @@ namespace Villamos
             {
                 // kimeneti fájl helye és neve
                 string fájlexc;
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
 
-                SaveFileDialog1.Title = "E2-E3 napok listájának készítése";
-                SaveFileDialog1.FileName = "E2-E3_tábla_" + DateTime.Now.ToString("yyyyMMddhhmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                    Title = "E2-E3 napok listájának készítése",
+                    FileName = "E2-E3_tábla_" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -847,7 +850,7 @@ namespace Villamos
                 for (int i = 0; i < Tábla_lekérdezés.RowCount; i++)
                 {
                     Holtart.Lép();
-                    string szöveg = $"SELECT * FROM KMtábla where [azonosító]='{Tábla_lekérdezés.Rows[i].Cells[0].Value.ToString().Trim()}' ORDER BY vizsgdátumk desc";
+                    string szöveg = $"SELECT * FROM KMtábla where [azonosító]='{Tábla_lekérdezés.Rows[i].Cells[0].Value.ToStrTrim()}' ORDER BY vizsgdátumk desc";
 
                     Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok();
                     Adat_T5C5_Kmadatok rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
@@ -928,10 +931,10 @@ namespace Villamos
                 foreach (Adat_Jármű rekord in Adatok)
                 {
 
-                    if (String.Compare(Tábla_lekérdezés.Rows[i].Cells[0].Value.ToString().Trim(), rekord.Azonosító.Trim()) <= 0)
+                    if (String.Compare(Tábla_lekérdezés.Rows[i].Cells[0].Value.ToStrTrim(), rekord.Azonosító.Trim()) <= 0)
                     {
                         // ha kisebb a táblázatban lévő szám akkor addig növeljük amíg egyenlő nem lesz
-                        while (String.Compare(Tábla_lekérdezés.Rows[i].Cells[0].Value.ToString().Trim(), rekord.Azonosító.Trim()) < 0)
+                        while (String.Compare(Tábla_lekérdezés.Rows[i].Cells[0].Value.ToStrTrim(), rekord.Azonosító.Trim()) < 0)
                         {
                             i += 1;
                             if (i == Tábla_lekérdezés.Rows.Count)
@@ -943,9 +946,9 @@ namespace Villamos
 
                         if (hiba == 1)
                             break;
-                        while (String.Compare(Tábla_lekérdezés.Rows[i].Cells[0].Value.ToString().Trim(), rekord.Azonosító.Trim()) <= 0)
+                        while (String.Compare(Tábla_lekérdezés.Rows[i].Cells[0].Value.ToStrTrim(), rekord.Azonosító.Trim()) <= 0)
                         {
-                            if (Tábla_lekérdezés.Rows[i].Cells[0].Value.ToString().Trim() == rekord.Azonosító.Trim())
+                            if (Tábla_lekérdezés.Rows[i].Cells[0].Value.ToStrTrim() == rekord.Azonosító.Trim())
                             {
                                 // ha egyforma akkor kiírjuk
                                 Tábla_lekérdezés.Rows[i].Cells[14].Value = rekord.Üzem.Trim();
@@ -1031,12 +1034,14 @@ namespace Villamos
             string fájlexc;
 
             // kimeneti fájl helye és neve
-            SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-            SaveFileDialog1.InitialDirectory = "MyDocuments";
+            SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+            {
+                InitialDirectory = "MyDocuments",
 
-            SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-            SaveFileDialog1.FileName = "ICS_KCSV_futásadatok_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            SaveFileDialog1.Filter = "Excel |*.xlsx";
+                Title = "Listázott tartalom mentése Excel fájlba",
+                FileName = "ICS_KCSV_futásadatok_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                Filter = "Excel |*.xlsx"
+            };
             // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
             if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                 fájlexc = SaveFileDialog1.FileName;
@@ -1053,13 +1058,15 @@ namespace Villamos
 
         private void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
         {
-            SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-            // kimeneti fájl helye és neve
-            SaveFileDialog1.InitialDirectory = "MyDocuments";
+            SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+            {
+                // kimeneti fájl helye és neve
+                InitialDirectory = "MyDocuments",
 
-            SaveFileDialog1.Title = "Adatbázis mentése Excel fájlba";
-            SaveFileDialog1.FileName = "ICS_KCSV_adatbázis_mentés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            SaveFileDialog1.Filter = "Excel |*.xlsx";
+                Title = "Adatbázis mentése Excel fájlba",
+                FileName = "ICS_KCSV_adatbázis_mentés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                Filter = "Excel |*.xlsx"
+            };
             // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
             if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                 _fájlexc = SaveFileDialog1.FileName;
@@ -1094,7 +1101,7 @@ namespace Villamos
         }
 
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             Holtart.Lép();
         }
@@ -1850,12 +1857,14 @@ namespace Villamos
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
 
-                SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = "Állománytábla_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = "Állománytábla_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -2166,13 +2175,13 @@ namespace Villamos
 
                 foreach (Adat_Jármű rekord in Adatok)
                 {
-                    while (PszJelölő.Items[i].ToString().Trim() != rekord.Azonosító.Trim())
+                    while (PszJelölő.Items[i].ToStrTrim() != rekord.Azonosító.Trim())
                     {
                         i += 1;
                         if (PszJelölő.Items.Count - 1 <= i)
                             break;
                     }
-                    if (PszJelölő.Items[i].ToString().Trim() == rekord.Azonosító.Trim())
+                    if (PszJelölő.Items[i].ToStrTrim() == rekord.Azonosító.Trim())
                     {
                         PszJelölő.SetItemChecked(i, true);
                     }
@@ -2227,7 +2236,7 @@ namespace Villamos
                 Text1.Text = "";
                 return;
             }
-            HaviKm.Text = Text1.Text;
+            HaviKm.Text = n.ToString();
             Option8.Checked = true;
         }
 
@@ -2503,7 +2512,7 @@ namespace Villamos
                 {
                     if (PszJelölő.GetItemChecked(j))
                     {
-                        szöveg = $"SELECT * FROM KMtábla where [azonosító]='{PszJelölő.Items[j].ToString().Trim()}' order by vizsgdátumv desc";
+                        szöveg = $"SELECT * FROM KMtábla where [azonosító]='{PszJelölő.Items[j].ToStrTrim()}' order by vizsgdátumv desc";
                         rekordhova = Kéz.Egy_Adat(hova, jelszó, szöveg);
 
                         if (rekordhova != null)
@@ -2723,12 +2732,14 @@ namespace Villamos
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
 
-                SaveFileDialog1.Title = "Vizsgálat előtervező";
-                SaveFileDialog1.FileName = "V_javítások_előtervezése_" + DateTime.Now.ToString("yyyyMMddhhmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                    Title = "Vizsgálat előtervező",
+                    FileName = "V_javítások_előtervezése_" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -3041,12 +3052,14 @@ namespace Villamos
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
 
-                SaveFileDialog1.Title = "Vizsgálatok tény adatai";
-                SaveFileDialog1.FileName = "T5C5_adatbázis_mentés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                    Title = "Vizsgálatok tény adatai",
+                    FileName = "T5C5_adatbázis_mentés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -3153,11 +3166,13 @@ namespace Villamos
             try
             {
                 // megpróbáljuk megnyitni az excel táblát.
-                OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-                OpenFileDialog1.InitialDirectory = "MyDocuments";
-                OpenFileDialog1.Title = "SAP-s Adatok betöltése";
-                OpenFileDialog1.FileName = "";
-                OpenFileDialog1.Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls";
+                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "SAP-s Adatok betöltése",
+                    FileName = "",
+                    Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls"
+                };
 
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
@@ -3459,8 +3474,10 @@ namespace Villamos
                                                   a.Sorszám == rekordICS.Vizsgsorszám + 1
                                                   select a).FirstOrDefault();
 
-                        if (ElemCiklus != null) Tábla_ütemező.Rows[i].Cells[10].Value = ElemCiklus.Vizsgálatfok;
-
+                        if (ElemCiklus != null)
+                            Tábla_ütemező.Rows[i].Cells[10].Value = ElemCiklus.Vizsgálatfok;
+                        else
+                            Tábla_ütemező.Rows[i].Cells[10].Value = "";
                         Adat_Nap_Hiba ElemHiba = (from a in AdatokHiba
                                                   where a.Azonosító == rekord.Azonosító
                                                   select a).FirstOrDefault();
@@ -3529,31 +3546,22 @@ namespace Villamos
         {
             try
             {
-
-                if (Tábla_ütemező.Rows[sor].Cells[0].Value == null)
-                    throw new HibásBevittAdat("Nincs kijelölve érvényes sor.");
-
-                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[14].Value.ToString(), out int állapot))
-                    állapot = 0;
-                bool ütemez;
-                if (Tábla_ütemező.Rows[sor].Cells[16].Value.ToString().Trim() == "0") ütemez = false; else ütemez = true;
-
-                int v_sorszám;
-                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[19].Value.ToString(), out v_sorszám))
-                    v_sorszám = 0;
-                int v_km;
-                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[6].Value.ToString(), out v_km))
-                    v_km = 0;
+                if (Tábla_ütemező.Rows[sor].Cells[0].Value == null) throw new HibásBevittAdat("Nincs kijelölve érvényes sor.");
+                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[14].Value.ToString(), out int állapot)) állapot = 0;
+                bool ütemez = true;
+                if (Tábla_ütemező.Rows[sor].Cells[16].Value.ToStrTrim() == "0") ütemez = false;
+                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[19].Value.ToString(), out int v_sorszám)) v_sorszám = 0;
+                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[6].Value.ToString(), out int v_km)) v_km = 0;
 
                 Adat_ICS_Ütem Küld = new Adat_ICS_Ütem(
-                    Tábla_ütemező.Rows[sor].Cells[0].Value.ToString().Trim(),
+                    Tábla_ütemező.Rows[sor].Cells[0].Value.ToStrTrim(),
                     állapot,
                     ütemez,
-                    Tábla_ütemező.Rows[sor].Cells[15].Value.ToString().Trim(),
+                    Tábla_ütemező.Rows[sor].Cells[15].Value.ToStrTrim(),
                     v_sorszám,
-                    Tábla_ütemező.Rows[sor].Cells[5].Value.ToString().Trim(),
+                    Tábla_ütemező.Rows[sor].Cells[5].Value.ToStrTrim(),
                     v_km,
-                    Tábla_ütemező.Rows[sor].Cells[10].Value.ToString().Trim(),
+                    Tábla_ütemező.Rows[sor].Cells[10].Value.ToStrTrim(),
                     v_sorszám + 1
                     );
 
@@ -3583,8 +3591,7 @@ namespace Villamos
         {
             try
             {
-                if (e.RowIndex < 0)
-                    throw new HibásBevittAdat("Nincs kijelölve érvényes sor.");
+                if (e.RowIndex < 0) throw new HibásBevittAdat("Nincs kijelölve érvényes sor.");
                 Táblázatba_kattint(e.RowIndex);
             }
             catch (HibásBevittAdat ex)
@@ -3695,7 +3702,7 @@ namespace Villamos
 
                 for (int i = 0; i < Tábla_ütemező.Rows.Count; i++)
                 {
-                    if (Tábla_vezénylés.Rows[e.RowIndex].Cells[1].Value.ToString().Trim() == Tábla_ütemező.Rows[i].Cells[0].Value.ToString().Trim())
+                    if (Tábla_vezénylés.Rows[e.RowIndex].Cells[1].Value.ToStrTrim() == Tábla_ütemező.Rows[i].Cells[0].Value.ToStrTrim())
                     {
                         Táblázatba_kattint(i);
                         break;
@@ -3933,12 +3940,14 @@ namespace Villamos
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
 
-                SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = "ICS_KCSV_ütemzés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = "ICS_KCSV_ütemzés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -3983,12 +3992,14 @@ namespace Villamos
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
 
-                SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = $"{Pályaszám.Text.Trim()}_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"{Pályaszám.Text.Trim()}_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -4170,6 +4181,11 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Tábla_ütemező_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
         private void HibaListaFeltöltés()
