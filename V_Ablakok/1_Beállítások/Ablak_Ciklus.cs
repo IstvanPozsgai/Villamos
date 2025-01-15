@@ -13,9 +13,6 @@ namespace Villamos
 {
     public partial class Ablak_Ciklus
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ciklus.mdb";
-        readonly string jelszó = "pocsaierzsi";
-
         readonly Kezelő_Ciklus Kéz = new Kezelő_Ciklus();
         List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
 
@@ -26,6 +23,7 @@ namespace Villamos
 
         private void Ablak_Ciklus_Load(object sender, EventArgs e)
         {
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ciklus.mdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.Ciklusrendtábla(hely);
             AdatLista();
             CiklusTípusfeltöltés();
@@ -281,9 +279,9 @@ namespace Villamos
                                                    FelsőÉ);
 
                 if (Elem == null)
-                    Kéz.Rögzítés(hely, jelszó, ADAT);
+                    Kéz.Rögzítés(ADAT);
                 else
-                    Kéz.Módosítás(hely, jelszó, ADAT);
+                    Kéz.Módosítás(ADAT);
 
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -322,7 +320,7 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    Kéz.Töröl(hely, jelszó, ADAT);
+                    Kéz.Töröl(ADAT);
                     MessageBox.Show("Az adatok törlése megtörtént !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Táblaíró();
                 }
@@ -343,8 +341,7 @@ namespace Villamos
             try
             {
                 Adatok.Clear();
-                string szöveg = $"SELECT * FROM ciklusrendtábla";
-                Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok = Kéz.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {
@@ -372,7 +369,7 @@ namespace Villamos
                                                  select a).ToList();
 
                 List<Adat_Ciklus> ADATGy = new List<Adat_Ciklus>();
-                int i = 1;
+                int i = 0;
 
                 foreach (Adat_Ciklus rekord in SzűrtAdatok)
                 {
@@ -386,7 +383,7 @@ namespace Villamos
                     ADATGy.Add(ADAT);
                     i++;
                 }
-                Kéz.Rögzítés(hely, jelszó, ADATGy);
+                Kéz.Rögzítés(ADATGy);
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 AdatLista();
                 CiklusTípusfeltöltés();

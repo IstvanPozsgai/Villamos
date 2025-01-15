@@ -2225,6 +2225,7 @@ namespace Villamos
                 Új_Ablak_Behajtási = new Ablak_Behajtási();
                 Új_Ablak_Behajtási.FormClosed += Új_Ablak_Behajtási_FormClosed;
                 Új_Ablak_Behajtási.Show();
+
             }
             else
             {
@@ -2379,7 +2380,6 @@ namespace Villamos
             {
                 Új_Ablak_Szerszám = new Ablak_Szerszám();
                 Új_Ablak_Szerszám.FormClosed += Ablak_Szerszám_FormClosed;
-                WeakEventManager
                 MyEvent += Új_Ablak_Szerszám.SetData;
                 MyEvent("Szerszám");
                 Új_Ablak_Szerszám.Show();

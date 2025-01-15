@@ -9,6 +9,8 @@ namespace Villamos.Villamos_Kezelők
 {
     public class Kezelő_Ciklus
     {
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ciklus.mdb";
+        readonly string jelszó = "pocsaierzsi";
         public List<Adat_Ciklus> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
@@ -44,6 +46,43 @@ namespace Villamos.Villamos_Kezelők
             return Adatok;
         }
 
+        public List<Adat_Ciklus> Lista_Adatok()
+        {
+            string szöveg = $"SELECT * FROM ciklusrendtábla";
+            List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
+            Adat_Ciklus Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Ciklus(
+                                        rekord["Típus"].ToStrTrim(),
+                                        rekord["Sorszám"].ToÉrt_Long(),
+                                        rekord["Vizsgálatfok"].ToStrTrim(),
+                                        rekord["Törölt"].ToStrTrim(),
+                                        rekord["Névleges"].ToÉrt_Long(),
+                                        rekord["Alsóérték"].ToÉrt_Long(),
+                                        rekord["Felsőérték"].ToÉrt_Long()
+                                        );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+
         public Adat_Ciklus Egy_Adat(string hely, string jelszó, string szöveg)
         {
             Adat_Ciklus Adat = null;
@@ -75,7 +114,7 @@ namespace Villamos.Villamos_Kezelők
             return Adat;
         }
 
-        public void Rögzítés(string hely, string jelszó, Adat_Ciklus Adat)
+        public void Rögzítés(Adat_Ciklus Adat)
         {
             try
             {
@@ -100,7 +139,7 @@ namespace Villamos.Villamos_Kezelők
             }
         }
 
-        public void Rögzítés(string hely, string jelszó, List<Adat_Ciklus> Adatok)
+        public void Rögzítés(List<Adat_Ciklus> Adatok)
         {
             try
             {
@@ -136,7 +175,7 @@ namespace Villamos.Villamos_Kezelők
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Módosítás(string hely, string jelszó, Adat_Ciklus Adat)
+        public void Módosítás(Adat_Ciklus Adat)
         {
             try
             {
@@ -166,7 +205,7 @@ namespace Villamos.Villamos_Kezelők
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Töröl(string hely, string jelszó, Adat_Ciklus Adat)
+        public void Töröl(Adat_Ciklus Adat)
         {
             try
             {
