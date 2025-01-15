@@ -2379,6 +2379,7 @@ namespace Villamos
             {
                 Új_Ablak_Szerszám = new Ablak_Szerszám();
                 Új_Ablak_Szerszám.FormClosed += Ablak_Szerszám_FormClosed;
+                WeakEventManager
                 MyEvent += Új_Ablak_Szerszám.SetData;
                 MyEvent("Szerszám");
                 Új_Ablak_Szerszám.Show();

@@ -1133,8 +1133,8 @@ namespace Villamos
 
                 Holtart.Be(100);
                 string szöveg = "SELECT * FROM Adattábla ";
-                Kezelő_Főkönyv_Nap K_kéz = new Kezelő_Főkönyv_Nap();
-                List<Adat_Főkönyv_Nap> Adatok = K_kéz.Lista_adatok(hely, jelszó, szöveg);
+
+                List<Adat_Főkönyv_Nap> Adatok = KézFőkönyvNap.Lista_adatok(hely, jelszó, szöveg);
 
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Főkönyv_Nap rekord in Adatok)
@@ -1637,8 +1637,8 @@ namespace Villamos
 
             // azon kocsikat is átírja amelyek voltak forgalomban az nap
             szöveg = "SELECT * FROM Adattábla WHERE tervindulás<#01-01-2000# ORDER BY Azonosító";
-            Kezelő_Főkönyv_Nap kezes = new Kezelő_Főkönyv_Nap();
-            List<Adat_Főkönyv_Nap> Adat = kezes.Lista_adatok(HelyNap, jelszó, szöveg);
+
+            List<Adat_Főkönyv_Nap> Adat = KézFőkönyvNap.Lista_adatok(HelyNap, jelszó, szöveg);
 
             List<string> SzövegGy = new List<string>();
             foreach (Adat_Főkönyv_Nap rekord in Adat)
@@ -2027,31 +2027,29 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\nap\" + Dátum.Value.ToString("yyyyMMdd");
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\{Dátum.Value.Year}\nap\{Dátum.Value:yyyyMMdd}";
 
                 if (Délelőtt.Checked)
                     hely += "denap.mdb";
                 else
                     hely += "dunap.mdb";
 
-                if (!File.Exists(hely))
-                    return;
+                if (!File.Exists(hely)) return;
 
-                string jelszó = "lilaakác";
-                string szöveg;
+                List<Adat_Főkönyv_Nap> AdatokÖ = KézFőkönyvNap.Lista_adatok(hely);
+
+                List<Adat_Főkönyv_Nap> Adatok;
                 if (változat == 0)
-                    szöveg = "SELECT * FROM Adattábla ORDER BY azonosító";
+                    Adatok = AdatokÖ;
                 else
-                    szöveg = $"SELECT * FROM Adattábla WHERE tervérkezés<#{Óráig.Value:MM-dd-yyyy HH:mm:ss}# ORDER BY azonosító";
-
-                Kezelő_Főkönyv_Nap KFN_kéz = new Kezelő_Főkönyv_Nap();
-                List<Adat_Főkönyv_Nap> Adatok = KFN_kéz.Lista_adatok(hely, jelszó, szöveg);
+                    Adatok = (from a in AdatokÖ
+                              where a.Tervérkezés < Óráig.Value
+                              && a.Tervérkezés != new DateTime(1900, 1, 1)
+                              select a).ToList();
 
                 DataTable AdatTábla = new DataTable();
 
-
                 AdatTábla.Columns.Clear();
-                ;
                 AdatTábla.Columns.Add("Státus");
                 AdatTábla.Columns.Add("hibaleírása");
                 AdatTábla.Columns.Add("típus");
@@ -2350,8 +2348,8 @@ namespace Villamos
                 string jelszó = "lilaakác";
                 string szöveg = "SELECT * FROM Adattábla WHERE azonosító='" + R_azonosító.Text.Trim() + "'";
 
-                Kezelő_Főkönyv_Nap KFN_kéz = new Kezelő_Főkönyv_Nap();
-                Adat_Főkönyv_Nap rekord = KFN_kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_Főkönyv_Nap rekord = KézFőkönyvNap.Egy_Adat(hely, jelszó, szöveg);
 
                 if (rekord != null)
                 {
@@ -2674,7 +2672,7 @@ namespace Villamos
             else
             {
                 Főkönyv.Visible = true;
-                return; 
+                return;
             }
 
             Holtart.Be();
@@ -3764,7 +3762,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\üzenetek\{DateTime.Today.Year}utasítás.mdb";
                 Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
 
-                string txtsorszám = KézUtasítás.Új_utasítás(hely,  RichtextBox1.Text.Trim()).ToStrTrim();
+                string txtsorszám = KézUtasítás.Új_utasítás(hely, RichtextBox1.Text.Trim()).ToStrTrim();
                 MessageBox.Show($"Az üzenet rögzítése {txtsorszám} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
