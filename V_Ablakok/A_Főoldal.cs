@@ -837,7 +837,7 @@ namespace Villamos
 
                     //Naplózás
                     hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
-                    KézNapló.Módosítás(hely,Adatok);
+                    KézNapló.Módosítás(hely, Adatok);
                 }
 
             }
@@ -2603,7 +2603,7 @@ namespace Villamos
                                         where a.Id == 2
                                         select a).FirstOrDefault();
             double verzió = double.Parse(Application.ProductVersion.Replace(".", ""));
-            Adat_Belépés_Verzió ADAT = new Adat_Belépés_Verzió(2, verzió );
+            Adat_Belépés_Verzió ADAT = new Adat_Belépés_Verzió(2, verzió);
             if (Elem != null)
                 Kéz_Belépés_Verzió.Módosítás(ADAT);
             else

@@ -1,10 +1,10 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -1985,17 +1985,8 @@ namespace Villamos
                     string hely = $@"{Application.StartupPath}\Főmérnökség\Munkakör\{Cmbtelephely.Text.Trim()}\" + Munkakörtábla.Rows[Munkakörtábla.SelectedRows[0].Index].Cells[5].Value.ToString();
                     if (!Exists(hely)) return;
 
-                    Byte[] bytes = System.IO.File.ReadAllBytes(hely);
-                    MemoryStream stream = new MemoryStream(bytes);
-                    PdfDocument pdfDocument = PdfDocument.Load(stream);
-                    PDF_néző.Document = pdfDocument;
-                    PDF_néző.Visible = true;
+                    Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
 
-                    //pdfDocument?.Dispose();
-                    //stream?.Dispose();
-                    //stream = null;
-                    //pdfDocument = null;
-                    //GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)

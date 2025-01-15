@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -509,21 +510,12 @@ namespace Villamos
                 OpenFileDialog1.Filter = "PDF Files |*.pdf";
                 if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    Byte[] bytes = File.ReadAllBytes(OpenFileDialog1.FileName);
-                    MemoryStream stream = new MemoryStream(bytes);
-                    PdfDocument pdfDocument = PdfDocument.Load(stream);
-                    PDF_néző.Document = pdfDocument;
-                    PDF_néző.Visible = true;
+                    Kezelő_Pdf.PdfMegnyitás(PDF_néző, OpenFileDialog1.FileName);
+
                     Txtmegnyitott.Text = OpenFileDialog1.FileName;
                     CHKpdfvan.Checked = false;
                     Fülek.SelectedIndex = 5;
                     Felcsukja();
-
-                    //pdfDocument?.Dispose();
-                    //stream?.Dispose();
-                    //stream = null;
-                    //pdfDocument = null;
-                    //GC.Collect();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -871,18 +863,7 @@ namespace Villamos
         void Pdf_Megjelenítés(string hely)
         {
             if (!File.Exists(hely)) return;
-
-            Byte[] bytes = System.IO.File.ReadAllBytes(hely);
-            MemoryStream stream = new MemoryStream(bytes);
-            PdfDocument pdfDocument = PdfDocument.Load(stream);
-            PDF_néző.Document = pdfDocument;
-            PDF_néző.Visible = true;
-
-            //pdfDocument?.Dispose();
-            //stream?.Dispose();
-            //stream = null;
-            //pdfDocument = null;
-            //GC.Collect();
+            Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
         }
 
 

@@ -1,7 +1,7 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 
 namespace Villamos.Villamos_Ablakok.T5C5
 {
@@ -61,17 +61,7 @@ namespace Villamos.Villamos_Ablakok.T5C5
                 string hely = Hely.Trim() + @"\" + FileList.SelectedItems[0].ToString();
                 if (!File.Exists(hely)) return;
 
-                Byte[] bytes = System.IO.File.ReadAllBytes(hely);
-                MemoryStream stream = new MemoryStream(bytes);
-                PdfDocument pdfDocument = PdfDocument.Load(stream);
-                PDF_néző.Document = pdfDocument;
-                PDF_néző.Visible = true;
-
-                //pdfDocument?.Dispose();
-                //stream?.Dispose();
-                //stream = null;
-                //pdfDocument = null;
-                //GC.Collect();
+                Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
             }
             catch (HibásBevittAdat ex)
             {

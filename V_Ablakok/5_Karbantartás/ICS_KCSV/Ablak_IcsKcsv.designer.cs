@@ -1548,12 +1548,13 @@ namespace Villamos
             this.Tábla_ütemező.Size = new System.Drawing.Size(795, 434);
             this.Tábla_ütemező.TabIndex = 168;
             this.Tábla_ütemező.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_ütemező_CellClick);
+            this.Tábla_ütemező.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_ütemező_CellContentClick);
             this.Tábla_ütemező.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_ütemező_CellFormatting);
             // 
             // timer1
             // 
             this.timer1.Interval = 500;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // Ablak_IcsKcsv
             // 
