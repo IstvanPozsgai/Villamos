@@ -721,6 +721,7 @@ namespace Villamos
         private void Command10_Click(object sender, EventArgs e)
         {
             Napilista();
+
         }
 
         private void Napilista()
@@ -734,6 +735,8 @@ namespace Villamos
                                               && a.Dátum.ToShortDateString() == DekádDátum.Value.ToShortDateString()
                                               select a).ToList();
             Tábla_Napilista(Adatok);
+            Command14.Visible = true;
+            Button2.Visible = true;
         }
 
         private void Tábla_Napilista(List<Adat_Munka_Adatok> Adatok)
@@ -776,7 +779,7 @@ namespace Villamos
                     Tábla3.Rows[i].Cells[4].Value = rekord.Idő;
                     Tábla3.Rows[i].Cells[5].Value = rekord.Megnevezés;
                     Tábla3.Rows[i].Cells[6].Value = rekord.Pályaszám;
-                    Tábla3.Rows[i].Cells[7].Value = rekord.Dátum!=new DateTime (1900,1,1) ? rekord.Dátum.ToString("yyyy.MM.dd"): "";
+                    Tábla3.Rows[i].Cells[7].Value = rekord.Dátum != new DateTime(1900, 1, 1) ? rekord.Dátum.ToString("yyyy.MM.dd") : "";
                 }
 
                 Tábla3.Visible = true;
@@ -842,7 +845,7 @@ namespace Villamos
                 DateTime utolsónap = DekádDátum.Value;
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-                if (!System.IO.File.Exists(hely))                        return;
+                if (!System.IO.File.Exists(hely)) return;
 
                 if (Option1.Checked)
                 {
@@ -867,17 +870,17 @@ namespace Villamos
                 List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(hely);
 
                 List<Adat_Munka_Adatok> AdatokS = (from a in AdatokÖ
-                                                  where a.Státus == true
-                                                  && a.Dátum >=elsőnap
-                                                  && a.Dátum <=utolsónap
-                                                  select a).ToList();
+                                                   where a.Státus == true
+                                                   && a.Dátum >= elsőnap
+                                                   && a.Dátum <= utolsónap
+                                                   select a).ToList();
 
                 List<Adat_Munka_Adatok> Adatok = (from a in AdatokS
                                                   group a by new { a.Rendelés, a.Művelet } into csoport
                                                   select new Adat_Munka_Adatok(
                                                       0,
                                                       csoport.Sum(x => x.Idő),
-                                                      new DateTime(1900,1,1),
+                                                      new DateTime(1900, 1, 1),
                                                       "",
                                                       csoport.Key.Művelet,
                                                       "",
@@ -903,7 +906,6 @@ namespace Villamos
             try
             {
                 if (Tábla3.Rows.Count < 1) return;
-                if (Tábla3.Columns[3].HeaderText != "Napi") return;
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
                 if (!System.IO.File.Exists(hely)) return;
@@ -954,6 +956,8 @@ namespace Villamos
                                                   orderby a.Rendelés, a.Dátum
                                                   select a).ToList();
                 Tábla_Napilista(Adatok);
+                Command14.Visible = true;
+                Button2.Visible = true;
             }
             catch (HibásBevittAdat ex)
             {
@@ -973,7 +977,6 @@ namespace Villamos
                 // rendelési szám módosítás
                 if (Tábla3.Rows.Count < 1) return;
                 if (Tábla3.SelectedRows.Count < 0) throw new HibásBevittAdat("Nincs Kijelölve a táblázatban módosítandó elem.");
-                if (Tábla3.Columns[3].HeaderText != "Napi") throw new HibásBevittAdat("Nem Napi listázású a táblázat.");
                 if (Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[1].Value.ToStrTrim() == "") throw new HibásBevittAdat("A kijelöléshez tartozó rendelésiszám érvénytelen.");
                 if (!int.TryParse(Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[0].Value.ToStrTrim(), out int sorszám)) throw new HibásBevittAdat("A kijelöléshez tartozó sorszám érvénytelen.");
 
