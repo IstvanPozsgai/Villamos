@@ -6,12 +6,12 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -47,11 +47,7 @@ namespace Villamos
 
             // virtuálisan megnyitjuk a képet
             hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Fűtés_beállítás.jpg";
-            Image Kép = Image.FromFile(hely);
-            // megnyitjuk a ablakban 
-            PictureBox2.Image = new Bitmap(Kép);
-            // töröljük a virtuális képet, hogy felszabadítsa a fájlt.
-            Kép.Dispose();
+            Kezelő_Kép.KépMegnyitás(PictureBox2, hely, ToolTip1);
             PictureBox2.Top = 10;
             PictureBox2.Left = 10;
             PictureBox2.Width = 450;
@@ -255,7 +251,7 @@ namespace Villamos
                 List<Adat_T5C5_Fűtés> AdatokÖ = Kéz.Lista_Adatok(hely, jelszó, szöveg);
 
                 long id = 1;
-                if (AdatokÖ.Count > 0) id = AdatokÖ.Max(a => a.ID)  + 1;
+                if (AdatokÖ.Count > 0) id = AdatokÖ.Max(a => a.ID) + 1;
 
                 int fűtés_típusa = 0;
                 if (RadioButton1.Checked)

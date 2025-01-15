@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Fénykép_Betöltés));
             this.Fényképek = new System.Windows.Forms.ListBox();
             this.Képnyitó = new System.Windows.Forms.Button();
             this.Képválasztó = new System.Windows.Forms.Button();
             this.Képtöltő = new System.Windows.Forms.PictureBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Képtöltő)).BeginInit();
             this.SuspendLayout();
             // 
@@ -111,5 +113,6 @@
         internal System.Windows.Forms.Button Képválasztó;
         internal System.Windows.Forms.ListBox Fényképek;
         internal System.Windows.Forms.PictureBox Képtöltő;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Közös;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -885,15 +886,8 @@ namespace Villamos
                 if (FényképLista.SelectedItems.Count == 0) return;
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\Rezsiképek\" + FényképLista.SelectedItems[0].ToString();
                 if (!Exists(hely)) throw new HibásBevittAdat("A kiválaszott kép nem létezik.");
-                // virtuálisan megnyitjuk a képet
-                Image Kép = Image.FromFile(hely);
-                // megnyitjuk a ablakban 
-                KépKeret.Image = new Bitmap(Kép);
 
-                // töröljük a virtuális képet, hogy felszabadítsa a fájlt.
-                Kép.Dispose();
-
-                KépKeret.Visible = true;
+                Kezelő_Kép.KépMegnyitás(KépKeret, hely, toolTip1);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1476,8 +1470,8 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi\rezsikönyv.mdb";
 
                 Adat_Rezsi_Lista Elem = (from a in AdatokLista
-                                        where a.Azonosító == BeAzonosító.Text.Trim()
-                                        select a).FirstOrDefault();
+                                         where a.Azonosító == BeAzonosító.Text.Trim()
+                                         select a).FirstOrDefault();
                 double Mennyiség;
                 string szöveg;
                 if (Elem != null)
@@ -1814,7 +1808,7 @@ namespace Villamos
                 else
                     Adatok = (from a in AdatokNapló
                               where a.Módosításidátum >= Dátumtól.Value
-                              && a.Módosításidátum <= Dátumig.Value .AddDays(1)
+                              && a.Módosításidátum <= Dátumig.Value.AddDays(1)
                               orderby a.Módosításidátum
                               select a).ToList();
 

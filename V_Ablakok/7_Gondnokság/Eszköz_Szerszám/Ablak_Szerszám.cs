@@ -1863,13 +1863,7 @@ namespace Villamos
                 string helykép = Kép_Feltöltendő.Text.Trim();
 
                 if (!File.Exists(helykép)) throw new HibásBevittAdat("Nincs kiválasztva egy kép sem.");
-                PictureBox1.Image?.Dispose();
-
-                using (Image Kép = Image.FromFile(helykép))
-                {
-                    PictureBox1.Image = new Bitmap(Kép);
-                }
-                PictureBox1.Visible = true;
+                Kezelő_Kép.KépMegnyitás(PictureBox1, helykép, toolTip1);
             }
             catch (HibásBevittAdat ex)
             {

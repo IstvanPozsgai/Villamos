@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 using static System.IO.File;
 
 namespace Villamos.Villamos_Ablakok.Közös
@@ -41,7 +41,7 @@ namespace Villamos.Villamos_Ablakok.Közös
             try
             {
                 Fényképek.Items.Clear();
-                FolderBrowserDialog FolderBrowserDialog1=new FolderBrowserDialog();
+                FolderBrowserDialog FolderBrowserDialog1 = new FolderBrowserDialog();
                 if (FolderBrowserDialog1.ShowDialog() == DialogResult.OK)
                 {
 
@@ -101,8 +101,7 @@ namespace Villamos.Villamos_Ablakok.Közös
         {
             string hely = $@"{Könyvtár}\{Fényképek.SelectedItems[0].ToStrTrim()}";
             if (!Exists(hely)) return;
-            Képtöltő.Image = Image.FromFile(hely);
-            Képtöltő.Visible = true;
+            Kezelő_Kép.KépMegnyitás(Képtöltő, hely, toolTip1);
         }
     }
 }

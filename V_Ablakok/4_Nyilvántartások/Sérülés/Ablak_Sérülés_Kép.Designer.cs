@@ -30,10 +30,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Képnyitó = new System.Windows.Forms.Button();
             this.Képválasztó = new System.Windows.Forms.Button();
             this.ListBox1 = new System.Windows.Forms.ListBox();
             this.Képtöltő = new System.Windows.Forms.PictureBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Képtöltő)).BeginInit();
             this.SuspendLayout();
             // 
@@ -115,5 +117,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
         internal System.Windows.Forms.Button Képválasztó;
         internal System.Windows.Forms.ListBox ListBox1;
         internal System.Windows.Forms.PictureBox Képtöltő;
+        private ToolTip toolTip1;
     }
 }

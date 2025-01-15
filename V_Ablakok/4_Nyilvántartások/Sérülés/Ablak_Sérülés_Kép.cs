@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.V_MindenEgyéb;
 using static System.IO.File;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
@@ -115,9 +115,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
                 if (ListBox1.SelectedItems.Count == 0) return;
                 string hely = $@"{utvonal}\{ListBox1.SelectedItems[0]}";
                 if (!Exists(hely)) return;
-
-                Képtöltő.Image = Image.FromFile(hely);
-                Képtöltő.Visible = true;
+                Kezelő_Kép.KépMegnyitás(Képtöltő, hely, toolTip1);
             }
             catch (HibásBevittAdat ex)
             {

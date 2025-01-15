@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP;
@@ -580,10 +581,6 @@ namespace Villamos
                                 .ToArray();
                 if (dirs.Length < 2) return;
 
-                MemóriaFelszabadítás(Képkeret);
-                MemóriaFelszabadítás(Képkeret1);
-
-
                 //Azért van do while hogy a két kép ne legyen ugyanaz egyszerre
                 Random rnd = new Random();
                 választottkép = rnd.Next(dirs.Length);
@@ -594,9 +591,8 @@ namespace Villamos
 
                 string helykép = dirs[választottkép];
                 string helykép1 = dirs[választottkép1];
-
-                KépBetöltés(Képkeret, helykép);
-                KépBetöltés(Képkeret1, helykép1);
+                Kezelő_Kép.KépMegnyitás(Képkeret, helykép, ToolTip1);
+                Kezelő_Kép.KépMegnyitás(Képkeret1, helykép1, ToolTip1);
             }
             catch (HibásBevittAdat ex)
             {
@@ -646,43 +642,7 @@ namespace Villamos
             }
         }
 
-        private void FájlTörlés(string helykép)
-        {
-            try
-            {
-                if (File.Exists(helykép))
-                {
-                    //GC.Collect();
-                    //GC.WaitForPendingFinalizers();
-                    //File.Delete(helykép);
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void KépBetöltés(PictureBox Keret, string helykép)
-        {
-            using (Image kép = Image.FromFile(helykép))
-            {
-                Keret.Image = new Bitmap(kép);
-                ToolTip1.SetToolTip(Keret, helykép);
-            }
-        }
-
-        private void MemóriaFelszabadítás(PictureBox keret)
-        {
-            keret.Image?.Dispose();
-            keret.Image = null;
-            GC.Collect();
-        }
+        private void FájlTörlés(string helykép) { }
 
         private void Súgómenü_Click(object sender, EventArgs e)
         {
