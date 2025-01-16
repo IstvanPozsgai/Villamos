@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 
-namespace Villamos.Villamos.Kezelők
+
+namespace Villamos.Kezelők
 {
-    public class Kezelő_Alap_Beolvasás
+    public class Kezelő_Jármű_Állomány_Típus
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb";
-        readonly string jelszó = "sajátmagam";
-
-        public List<Adat_Alap_Beolvasás> Lista_Adatok(string hely, string jelszó, string szöveg)
+        readonly string jelszó = "pozsgaii";
+        public List<Adat_Jármű_Állomány_Típus> Lista_adatok(string hely, string jelszó, string szöveg)
         {
-            List<Adat_Alap_Beolvasás> Adatok = new List<Adat_Alap_Beolvasás>();
-            Adat_Alap_Beolvasás Adat;
-
+            List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
+            Adat_Jármű_Állomány_Típus Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -30,13 +28,11 @@ namespace Villamos.Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Alap_Beolvasás(
-                                        rekord["csoport"].ToStrTrim(),
-                                        rekord["oszlop"].ToÉrt_Int(),
-                                        rekord["fejléc"].ToStrTrim(),
-                                        rekord["törölt"].ToStrTrim(),
-                                        rekord["kell"].ToÉrt_Long()
-                                     );
+                                Adat = new Adat_Jármű_Állomány_Típus(
+                                            rekord["Id"].ToÉrt_Long(),
+                                            rekord["Állomány"].ToÉrt_Long(),
+                                            rekord["típus"].ToStrTrim()
+                                            );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -46,12 +42,12 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Alap_Beolvasás> Lista_Adatok()
+        public List<Adat_Jármű_Állomány_Típus> Lista_adatok(string hely)
         {
-            string szöveg = $"SELECT * FROM tábla";
-            List<Adat_Alap_Beolvasás> Adatok = new List<Adat_Alap_Beolvasás>();
-            Adat_Alap_Beolvasás Adat;
+            string szöveg = "Select * FROM típustábla order by id";
 
+            List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
+            Adat_Jármű_Állomány_Típus Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -64,13 +60,11 @@ namespace Villamos.Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Alap_Beolvasás(
-                                        rekord["csoport"].ToStrTrim(),
-                                        rekord["oszlop"].ToÉrt_Int(),
-                                        rekord["fejléc"].ToStrTrim(),
-                                        rekord["törölt"].ToStrTrim(),
-                                        rekord["kell"].ToÉrt_Long()
-                                     );
+                                Adat = new Adat_Jármű_Állomány_Típus(
+                                            rekord["Id"].ToÉrt_Long(),
+                                            rekord["Állomány"].ToÉrt_Long(),
+                                            rekord["típus"].ToStrTrim()
+                                            );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -80,32 +74,14 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-
-        public void Rögzítés(Adat_Alap_Beolvasás Adat)
-        {
-            string szöveg = "INSERT INTO tábla ";
-            szöveg += " ( csoport, oszlop, fejléc, törölt, kell)";
-            szöveg += " VALUES ";
-            szöveg += $" ('{Adat.Csoport}', {Adat.Oszlop}, '{Adat.Fejléc}', '{Adat.Törölt}', {Adat.Kell})";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-
-        /// <summary>
-        /// csoport, oszlop, törölt
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(Adat_Alap_Beolvasás Adat)
+        public void Rögzítés(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
         {
             try
             {
-                string szöveg = "UPDATE  tábla SET ";
-                szöveg += $" fejléc='{Adat.Fejléc}', ";
-                szöveg += $" kell={Adat.Kell}";
-                szöveg += $" WHERE [csoport]= '{Adat.Csoport}'  and [oszlop]={Adat.Oszlop}";
-                szöveg += $" and [törölt]='{Adat.Törölt}'";
+                string szöveg = $"INSERT INTO típustábla (id, típus, állomány)";
+                szöveg += $" VALUES ({Adat.Id},";
+                szöveg += $" '{Adat.Típus}',";
+                szöveg += $" {Adat.Állomány} )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -117,23 +93,45 @@ namespace Villamos.Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         /// <summary>
-        /// csoport, oszlop, törölt
+        /// típus
         /// </summary>
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Törlés(Adat_Alap_Beolvasás Adat)
+        public void Törlés(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
         {
             try
             {
-                string szöveg = "UPDATE  tábla SET ";
-                szöveg += $" törölt='1'";
-                szöveg += $" WHERE [csoport]= '{Adat.Csoport}'  and [oszlop]={Adat.Oszlop}";
-                szöveg += $" and [törölt]='{Adat.Törölt}'";
+                string szöveg = $"DELETE FROM típustábla WHERE típus='{Adat.Típus}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// típus
+        /// </summary>
+        /// <param name="hely"></param>
+        /// <param name="jelszó"></param>
+        /// <param name="Adat"></param>
+        public void Módosítás(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
+        {
+            try
+            {
+                string szöveg = $"Update típustábla SET ";
+                szöveg += $"id = '{Adat.Id}' ";
+                szöveg += $"WHERE típus = '{Adat.Típus}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -145,7 +143,7 @@ namespace Villamos.Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
+
     }
 }

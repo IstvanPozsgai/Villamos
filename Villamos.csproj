@@ -708,6 +708,10 @@
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Előírás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Ics.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosítvány.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_Kötbér.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_Mátrix.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_Ár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű_Állomány_Típus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék.cs" />
     <Compile Include="V_Kezelők\Kezelő_KerékMérő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga.cs" />
@@ -733,6 +737,7 @@
     <Compile Include="V_Kezelők\Kezelő_Munka_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Adat.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Osztály_Név.cs" />
     <Compile Include="V_Kezelők\Kezelő_Reklám.cs" />
     <Compile Include="V_Kezelők\Kezelő_Rezsi.cs" />
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />

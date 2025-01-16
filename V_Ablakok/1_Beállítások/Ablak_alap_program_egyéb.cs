@@ -17,6 +17,15 @@ namespace Villamos
 {
     public partial class Ablak_alap_program_egyéb
     {
+        #region Kezelők
+        readonly Kezelő_Alap_Beolvasás KézBeolv = new Kezelő_Alap_Beolvasás();
+        readonly Kezelő_Osztály_Név KézOsztály = new Kezelő_Osztály_Név();
+        readonly Kezelő_Jármű_Takarítás_Kötbér KézJárműtakKöt = new Kezelő_Jármű_Takarítás_Kötbér();
+        readonly Kezelő_Jármű_Takarítás_Ár KézTakÁr = new Kezelő_Jármű_Takarítás_Ár();
+        readonly Kezelő_Jármű_Állomány_Típus KézÁllományTípus = new Kezelő_Jármű_Állomány_Típus();
+        readonly Kezelő_Jármű_Takarítás_Mátrix KétJárműtakMátr = new Kezelő_Jármű_Takarítás_Mátrix();
+        #endregion
+
 
         private string directoryTargetLocation; // Selected file path
         private string Destinydirectory; // Selected dest directory path
@@ -321,19 +330,15 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb";
-                // ha nincs fájl akkor nem listáz
-                if (!Exists(hely)) return;
-                string jelszó = "sajátmagam";
-                string szöveg = "SELECT DISTINCT csoport  FROM tábla where törölt='0' order by csoport";
-
+                List<Adat_Alap_Beolvasás> AdatokBeolvÖ = KézBeolv.Lista_Adatok();
+                List<string> AdatokBeolv = (from a in AdatokBeolvÖ
+                                            where a.Törölt == "0"
+                                            orderby a.Csoport
+                                            select a.Csoport).Distinct().ToList();
                 SAPCsoport.Items.Clear();
                 SAPCsoport.Items.Add("");
-                SAPCsoport.Items.Clear();
-                SAPCsoport.BeginUpdate();
-                SAPCsoport.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "csoport"));
-                SAPCsoport.EndUpdate();
-                SAPCsoport.Refresh();
+                foreach (string elem in AdatokBeolv)
+                    SAPCsoport.Items.Add(elem);
             }
             catch (HibásBevittAdat ex)
             {
@@ -368,13 +373,12 @@ namespace Villamos
             try
             {
                 if (SAPCsoport.Text.Trim() == "") return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = $"SELECT * FROM tábla where [csoport]='{SAPCsoport.Text.Trim()}' and [törölt]='0' order by oszlop";
-
-                Kezelő_Alap_Beolvasás KézBeolv = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> AdatokBeolv = KézBeolv.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Alap_Beolvasás> AdatokBeolvÖ = KézBeolv.Lista_Adatok();
+                List<Adat_Alap_Beolvasás> AdatokBeolv = (from a in AdatokBeolvÖ
+                                                         where a.Csoport == SAPCsoport.Text.Trim()
+                                                         && a.Törölt == "0"
+                                                         orderby a.Oszlop
+                                                         select a).ToList();
                 SAPTábla.Rows.Clear();
                 SAPTábla.Columns.Clear();
                 SAPTábla.Refresh();
@@ -474,12 +478,7 @@ namespace Villamos
                 if (!int.TryParse(SAPOSzlopszám.Text, out int SAPoszlop)) return;
                 if (!int.TryParse(SAPBeolvassuk.Text, out int SAPBeolvas)) return;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = $"SELECT * FROM tábla";
-
-                Kezelő_Alap_Beolvasás KézBeolv = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> AdatokBeolv = KézBeolv.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Alap_Beolvasás> AdatokBeolv = KézBeolv.Lista_Adatok();
 
                 Adat_Alap_Beolvasás Elem = (from a in AdatokBeolv
                                             where a.Csoport == SAPCsoport.Text.Trim() && a.Oszlop == SAPoszlop && a.Törölt == "0"
@@ -492,15 +491,10 @@ namespace Villamos
                                                                    SAPBeolvas);
 
                 if (Elem != null)
-                {
-                    KézBeolv.Módosítás(hely, jelszó, Adat);
-                    // ha van
-                }
+                    KézBeolv.Módosítás(Adat);
                 else
-                {
-                    KézBeolv.Rögzítés(hely, jelszó, Adat);
-                    // ha nincs
-                }
+                    KézBeolv.Rögzítés(Adat);
+
 
                 Táblaíró();
                 MessageBox.Show("Az adat rögzítése megtörtént. ", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -526,13 +520,7 @@ namespace Villamos
                 if (SAPOSzlopszám.Text.Trim() == "") throw new HibásBevittAdat("Oszlop száma mező nincs kötöltve.");
                 if (!int.TryParse(SAPOSzlopszám.Text, out int SAPoszlop)) throw new HibásBevittAdat("Oszlop száma mezőnek egész számnak kell lennie.");
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = "SELECT * FROM tábla ";
-
-                Kezelő_Alap_Beolvasás KézBeolv = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> AdatokBeolv = KézBeolv.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Alap_Beolvasás> AdatokBeolv = KézBeolv.Lista_Adatok();
 
                 Adat_Alap_Beolvasás Elem = (from a in AdatokBeolv
                                             where a.Csoport == SAPCsoport.Text.Trim() && a.Oszlop == SAPoszlop && a.Törölt == "0"
@@ -546,7 +534,7 @@ namespace Villamos
                                    "0",
                                    0);
                     // ha van
-                    KézBeolv.Törlés(hely, jelszó, ADAT);
+                    KézBeolv.Törlés(ADAT);
                     Táblaíró();
                     MessageBox.Show("Az adat törlése megtörtént. ", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -625,21 +613,19 @@ namespace Villamos
             {
                 Osztálynév.Text = MyF.Szöveg_Tisztítás(Osztálynév.Text);
                 Osztálymező.Text = MyF.Szöveg_Tisztítás(Osztálymező.Text);
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
-                if (!Exists(hely)) return;
-                string jelszó = "kéménybe";
+
                 // leellenőrizzük, hogy minden adat ki van-e töltve
                 if ((Osztálynév.Text.Trim() == "")) return;
                 if ((Osztálymező.Text.Trim() == "")) return;
                 if ((ID.Text.Trim() == "")) return;
 
-                Kezelő_Osztály_Név Kéz = new Kezelő_Osztály_Név();
-                Adat_Osztály_Név ADAT = new Adat_Osztály_Név(ID.Text.ToÉrt_Int (),
+
+                Adat_Osztály_Név ADAT = new Adat_Osztály_Név(ID.Text.ToÉrt_Int(),
                                                              Osztálynév.Text,
                                                              Osztálymező.Text,
-                                                             Használatban.Checked ? "1": "0");
+                                                             Használatban.Checked ? "1" : "0");
 
-                Kéz.Módosítás(hely, jelszó, ADAT);
+                KézOsztály.Módosítás(ADAT);
                 Osztálytáblaíró();
                 MessageBox.Show("Az adat rögzítése megtörtént. ", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -679,13 +665,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
-                if (!Exists(hely)) return;
-                string jelszó = "kéménybe";
-                string szöveg = "SELECT * FROM osztálytábla order by id";
-
-                Kezelő_Osztály_Név KézOsztNév = new Kezelő_Osztály_Név();
-                List<Adat_Osztály_Név> AdatokOsztNév = KézOsztNév.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Osztály_Név> AdatokOsztNév = KézOsztály.Lista_Adat();
                 TáblaOsztály.Rows.Clear();
                 TáblaOsztály.Columns.Clear();
                 TáblaOsztály.Refresh();
@@ -742,10 +722,7 @@ namespace Villamos
                     ID.Text = TáblaOsztály.Rows[TáblaOsztály.SelectedRows[0].Index].Cells[0].Value.ToString();
                     Osztálynév.Text = TáblaOsztály.Rows[TáblaOsztály.SelectedRows[0].Index].Cells[1].Value.ToString();
                     Osztálymező.Text = TáblaOsztály.Rows[TáblaOsztály.SelectedRows[0].Index].Cells[2].Value.ToString();
-                    if (TáblaOsztály.Rows[TáblaOsztály.SelectedRows[0].Index].Cells[3].Value.ToString() == "Igen")
-                        Használatban.Checked = true;
-                    else
-                        Használatban.Checked = false;
+                    Használatban.Checked = TáblaOsztály.Rows[TáblaOsztály.SelectedRows[0].Index].Cells[3].Value.ToString() == "Igen";
                 }
             }
             catch (HibásBevittAdat ex)
@@ -875,13 +852,8 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                if (!Exists(hely))
-                    Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM kötbér order by takarítási_fajta";
-
-                Kezelő_Jármű_Takarítás_Kötbér KézJárműtakKöt = new Kezelő_Jármű_Takarítás_Kötbér();
-                List<Adat_Jármű_Takarítás_Kötbér> ADatokJárműtakKöt = KézJárműtakKöt.Lista_Adat(hely, jelszó, szöveg);
+                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
+                List<Adat_Jármű_Takarítás_Kötbér> ADatokJárműtakKöt = KézJárműtakKöt.Lista_Adat();
 
                 Kötbér_tábla.Rows.Clear();
                 Kötbér_tábla.Columns.Clear();
@@ -965,20 +937,13 @@ namespace Villamos
         {
             try
             {
-
                 if (Kötbér_takarítási_fajta.Text.Trim() == "") throw new HibásBevittAdat("Takarítási fajtát meg kell adni.");
                 if (Kötbér_Nem.Text.Trim() == "") Kötbér_Nem.Text = "0";
                 if (Kötbér_pót.Text.Trim() == "") Kötbér_pót.Text = "0";
                 if (!int.TryParse(Kötbér_Nem.Text, out int Kötbérnem)) throw new HibásBevittAdat("A nem megfelelési szorzónak számnak kell lennie.");
                 if (!int.TryParse(Kötbér_pót.Text, out int Kötbérpót)) throw new HibásBevittAdat("A póthatáridő szorzónak számnak kell lennie.");
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM kötbér ";
-
-                Kezelő_Jármű_Takarítás_Kötbér KézJárműtakKöt = new Kezelő_Jármű_Takarítás_Kötbér();
-                List<Adat_Jármű_Takarítás_Kötbér> ADatokJárműtakKöt = KézJárműtakKöt.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Jármű_Takarítás_Kötbér> ADatokJárműtakKöt = KézJárműtakKöt.Lista_Adat();
 
                 Adat_Jármű_Takarítás_Kötbér Elem = (from a in ADatokJárműtakKöt
                                                     where a.Takarítási_fajta == Kötbér_takarítási_fajta.Text.Trim()
@@ -989,15 +954,10 @@ namespace Villamos
                                                                                    Kötbér_pót.Text.Replace(",", "."));
 
                 if (Elem != null)
-                {
-                    // módosítás
-                    KézJárműtakKöt.Módosítás(hely, jelszó, ADAT);
-                }
+                    KézJárműtakKöt.Módosítás(ADAT);
                 else
-                {
-                    // Új rögzítés
-                    KézJárműtakKöt.Rögzítés(hely, jelszó, ADAT);
-                }
+                    KézJárműtakKöt.Rögzítés(ADAT);
+
 
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Kötbér_listázás();
@@ -1052,7 +1012,7 @@ namespace Villamos
         }
         #endregion
 
-        //Itt tartok
+
         #region Takarítás Ár
         private void Tak_Ár_frissít_Click(object sender, EventArgs e)
         {
@@ -1130,8 +1090,8 @@ namespace Villamos
                 Tak_Ár_Tábla.Columns[6].HeaderText = "Vég dátum";
                 Tak_Ár_Tábla.Columns[6].Width = 100;
 
-                Kezelő_Jármű_Takarítás_Ár kéz = new Kezelő_Jármű_Takarítás_Ár();
-                List<Adat_Jármű_Takarítás_Árak> adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Jármű_Takarítás_Árak> adatok = KézTakÁr.Lista_Adatok(hely, jelszó, szöveg);
 
 
                 foreach (Adat_Jármű_Takarítás_Árak rekord in adatok)
@@ -1228,11 +1188,7 @@ namespace Villamos
                 if (!double.TryParse(Tak_Ár.Text, out double result)) throw new HibásBevittAdat("A takarítási árnak számnak kell lennie.");
                 if (Tak_Érv_k.Value >= Tak_érv_V.Value) throw new HibásBevittAdat("Az érvényesség kezdetének a végénél kisebbnek kell lennie.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM árak";
-                Kezelő_Jármű_Takarítás_Ár KézÁr = new Kezelő_Jármű_Takarítás_Ár();
-                List<Adat_Jármű_Takarítás_Árak> AdatokÁr = KézÁr.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű_Takarítás_Árak> AdatokÁr = KézTakÁr.Lista_Adatok();
 
                 // lellenőrizzük, hogy van-e olyan id
                 double ID = 1;
@@ -1249,7 +1205,7 @@ namespace Villamos
                                                                 double.Parse(Tak_Ár.Text.Replace(",", ".")),
                                                                 Tak_Érv_k.Value,
                                                                 Tak_érv_V.Value);
-                    KézÁr.Rögzítés(hely, jelszó, ADAT);
+                    KézTakÁr.Rögzítés(ADAT);
                     MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -1269,7 +1225,7 @@ namespace Villamos
                                                                double.Parse(Tak_Ár.Text.Replace(",", ".")),
                                                                Tak_Érv_k.Value,
                                                                Tak_érv_V.Value);
-                        KézÁr.Módosítás(hely, jelszó, ADAT);
+                        KézTakÁr.Módosítás(ADAT);
                         MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -1342,7 +1298,6 @@ namespace Villamos
             }
         }
 
-
         private void Beviteli_táblakészítés_Click(object sender, EventArgs e)
         {
             try
@@ -1374,14 +1329,10 @@ namespace Villamos
                 MyE.Kiir("Vége", "F1");
                 string[] Tak_fajta = { "J1", "J2", "J3", "J4", "J5", "J6", "Graffiti", "Eseti", "Fertőtlenítés" };
                 string[] Napszak = { "Nappal", "Éjszaka" };
-                string hely, jelszó, szöveg;
+                string hely;
 
                 hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                jelszó = "pozsgaii";
-                szöveg = "Select * FROM típustábla order by id";
-
-                Kezelő_Jármű_Állomány_Típus kéz = new Kezelő_Jármű_Állomány_Típus();
-                List<Adat_Jármű_Állomány_Típus> Adatok = kéz.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű_Állomány_Típus> Adatok = KézÁllományTípus.Lista_adatok(hely);
 
                 int sor = 1;
                 foreach (Adat_Jármű_Állomány_Típus rekord in Adatok)
@@ -1446,11 +1397,7 @@ namespace Villamos
                 MyE.Munkalap_aktív("Munka1");
                 int sor = 2;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = $"SELECT * FROM árak";
-                Kezelő_Jármű_Takarítás_Ár KézÁr = new Kezelő_Jármű_Takarítás_Ár();
-                List<Adat_Jármű_Takarítás_Árak> AdatokÁrak = KézÁr.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű_Takarítás_Árak> AdatokÁrak = KézTakÁr.Lista_Adatok();
                 double id = 1;
                 if (AdatokÁrak.Count > 0) id = AdatokÁrak.Max(a => a.Id);
 
@@ -1499,8 +1446,8 @@ namespace Villamos
                     sor++;
                     Holtart.Lép();
                 }
-                KézÁr.Módosítás_Vég(hely, jelszó, MódosítGy);
-                KézÁr.Rögzítés(hely, jelszó, RögzítGy);
+                KézTakÁr.Módosítás_Vég(MódosítGy);
+                KézTakÁr.Rögzítés(RögzítGy);
 
 
                 MyE.ExcelBezárás();
@@ -1532,11 +1479,8 @@ namespace Villamos
             try
             {
                 if (Tak_Ár_Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy módosítani kívánt tétel sem.");
-                Kezelő_Jármű_Takarítás_Ár Kéz = new Kezelő_Jármű_Takarítás_Ár();
-                List<Adat_Jármű_Takarítás_Árak> Adatok = new List<Adat_Jármű_Takarítás_Árak>();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                string jelszó = "seprűéslapát";
+                List<Adat_Jármű_Takarítás_Árak> Adatok = new List<Adat_Jármű_Takarítás_Árak>();
                 Holtart.Be(Tak_Ár_Tábla.SelectedRows.Count + 1);
                 for (int i = 0; i < Tak_Ár_Tábla.SelectedRows.Count; i++)
                 {
@@ -1545,7 +1489,7 @@ namespace Villamos
                     Adatok.Add(ADAT);
                     Holtart.Lép();
                 }
-                Kéz.Módosítás_Vég(hely, jelszó, Adatok);
+                KézTakÁr.Módosítás_Vég(Adatok);
                 Holtart.Ki();
                 Ár_tábla_listázás();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1570,11 +1514,8 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM mátrix order by id";
 
-                Kezelő_Jármű_Takarítás_Mátrix KétJárműtakMátr = new Kezelő_Jármű_Takarítás_Mátrix();
-                List<Adat_Jármű_Takarítás_Mátrix> AdatokJárműtakMátr = KétJárműtakMátr.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Jármű_Takarítás_Mátrix> AdatokJárműtakMátr = KétJárműtakMátr.Lista_Adat();
 
                 Mátrix_tábla.Rows.Clear();
                 Mátrix_tábla.Columns.Clear();
@@ -1687,11 +1628,8 @@ namespace Villamos
 
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
                 if (!Exists(hely)) return;
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM mátrix";
 
-                Kezelő_Jármű_Takarítás_Mátrix Kéz = new Kezelő_Jármű_Takarítás_Mátrix();
-                List<Adat_Jármű_Takarítás_Mátrix> Adatok = Kéz.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Jármű_Takarítás_Mátrix> Adatok = KétJárműtakMátr.Lista_Adat();
 
                 Adat_Jármű_Takarítás_Mátrix Elem = (from a in Adatok
                                                     where a.Fajta == Mátrix_fajta.Text.Trim() && a.Fajtamásik == Mátrix_fajtamásik.Text.Trim()
@@ -1703,7 +1641,7 @@ namespace Villamos
                                                                       Mátrix_fajta.Text.Trim(),
                                                                       Mátrix_fajtamásik.Text.Trim(),
                                                                       Mátrix_igazság.Text.Trim() == "Igen");
-                    Kéz.Módosítás(hely, jelszó, ADAT);
+                    KétJárműtakMátr.Módosítás(ADAT);
                 }
                 else
                 {
@@ -1715,7 +1653,7 @@ namespace Villamos
                                                                                        Mátrix_fajta.Text.Trim(),
                                                                                        Mátrix_fajtamásik.Text.Trim(),
                                                                                        Mátrix_igazság.Text.Trim() == "Igen");
-                    Kéz.Rögzítés(hely, jelszó, ADAT);
+                    KétJárműtakMátr.Rögzítés(ADAT);
                 }
                 Mátrix_tábla_kiírás();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1735,23 +1673,18 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "Select DISTINCT fajta FROM mátrix";
+                List<Adat_Jármű_Takarítás_Mátrix> Adatok = KétJárműtakMátr.Lista_Adat();
+                List<string> Fajta = (from a in Adatok select a.Fajta).Distinct().ToList();
 
                 Mátrix_fajta.Items.Clear();
-                Mátrix_fajta.BeginUpdate();
-                Mátrix_fajta.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "fajta"));
-                Mátrix_fajta.EndUpdate();
-                Mátrix_fajta.Refresh();
+                foreach (string elem in Fajta)
+                    Mátrix_fajta.Items.Add(elem);
 
-                szöveg = "Select DISTINCT fajtamásik FROM mátrix";
 
+                Fajta = (from a in Adatok select a.Fajtamásik).Distinct().ToList();
                 Mátrix_fajtamásik.Items.Clear();
-                Mátrix_fajtamásik.BeginUpdate();
-                Mátrix_fajtamásik.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "fajtamásik"));
-                Mátrix_fajtamásik.EndUpdate();
-                Mátrix_fajtamásik.Refresh();
+                foreach (string elem in Fajta)
+                    Mátrix_fajtamásik.Items.Add(elem);
 
                 Mátrix_igazság.Items.Clear();
                 Mátrix_igazság.Items.Add("Igen");
@@ -1891,7 +1824,5 @@ namespace Villamos
             }
         }
         #endregion
-
-
     }
 }
