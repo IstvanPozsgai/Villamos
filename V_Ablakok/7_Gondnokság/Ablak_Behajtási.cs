@@ -891,7 +891,8 @@ namespace Villamos
             for (int i = 0; i < KérelemTábla.Rows.Count; i++)
             {
                 string telephely = KérelemTábla.Rows[i].Cells[1].Value.ToString();
-                int engedély = bool.Parse(KérelemTábla.Rows[i].Cells[0].Value.ToString()) ? 1 : 0;
+                if (!int.TryParse(KérelemTábla.Rows[i].Cells[2].Value.ToString(), out int engedély))
+                    engedély = bool.Parse(KérelemTábla.Rows[i].Cells[0].Value.ToString()) ? 1 : 0;
                 string megjegyzés = KérelemTábla.Rows[i].Cells[4].Value.ToString();
                 EngedélyMátrix.Add(new Adat_Behajtási_Engedélyek(telephely, engedély, megjegyzés));
             }
