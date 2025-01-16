@@ -5,11 +5,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using static System.IO.File;
 using MyE = Villamos.Module_Excel;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos
 {
@@ -17,6 +17,9 @@ namespace Villamos
     {
         readonly Kezelő_Belépés_Jogosultságtábla Kéz_Jogosultság = new Kezelő_Belépés_Jogosultságtábla();
         readonly Kezelő_Belépés_Bejelentkezés Kéz_Bejelentkezés = new Kezelő_Belépés_Bejelentkezés();
+        readonly Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
+        readonly Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
+        readonly Kezelő_Belépés_WinTábla KézWin = new Kezelő_Belépés_WinTábla();
 
         List<Adat_Belépés_Jogosultságtábla> AdatokJogosultságTelephely = new List<Adat_Belépés_Jogosultságtábla>();
         List<Adat_Belépés_Bejelentkezés> AdatokBelépésTelephely = new List<Adat_Belépés_Bejelentkezés>();
@@ -138,17 +141,11 @@ namespace Villamos
         private void Subtelephelyfeltöltés()
         {
             try
-            {        // COMBO amibe az adatokat feltöltjük
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő2.mdb";  // módosít
-                if (!Exists(hely)) return;
-                string jelszó = "Mocó"; // módosít
-                string szöveg = "SELECT * FROM könyvtár order by név "; // módosít
-
+            {
                 CmbTelephely.Items.Clear();
-                CmbTelephely.BeginUpdate();
-                CmbTelephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "név"));
-                CmbTelephely.EndUpdate();
-                CmbTelephely.Refresh();
+                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
+                foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
+                    CmbTelephely.Items.Add(rekord.Név);
             }
             catch (HibásBevittAdat ex)
             {
@@ -165,12 +162,7 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM WinTábla";
-
-                Kezelő_Belépés_WinTábla Kéz = new Kezelő_Belépés_WinTábla();
-                List<Adat_Belépés_WinTábla> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Belépés_WinTábla> Adatok = KézWin.Lista_Adatok();
 
                 if (Adatok != null)
                 {
@@ -205,12 +197,7 @@ namespace Villamos
         {
             try
             {
-                // ha elavult a verzió, akkor kirakjuk
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM Verzió";
-                Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
-                List<Adat_Belépés_Verzió> Adatok = KézVerzió.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Belépés_Verzió> Adatok = KézVerzió.Lista_Adatok();
 
                 Adat_Belépés_Verzió Elem = (from a in Adatok
                                             where a.Id == 2
@@ -413,9 +400,7 @@ namespace Villamos
             {
                 AdatokJogosultságTelephely.Clear();
                 string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = $"SELECT * FROM Jogosultságtábla ";
-                AdatokJogosultságTelephely = Kéz_Jogosultság.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokJogosultságTelephely = Kéz_Jogosultság.Lista_Adatok(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -435,9 +420,7 @@ namespace Villamos
             {
                 AdatokBelépésTelephely.Clear();
                 string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = $"SELECT * FROM Bejelentkezés";
-                AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(hely);
             }
             catch (HibásBevittAdat ex)
             {

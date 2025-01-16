@@ -691,6 +691,8 @@
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Kérelemoka.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Kérelemstátus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Telephelystátusz.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Belépés_Jogosultságtábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Belépés_Verzió.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_WinTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
