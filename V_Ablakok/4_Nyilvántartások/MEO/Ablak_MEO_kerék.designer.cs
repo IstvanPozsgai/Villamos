@@ -104,7 +104,7 @@ namespace Villamos
             this.Btn_Jog_Hatarnap_Rogzit = new System.Windows.Forms.Button();
             this.Btn_Jog_Tipus_Rogzit = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -301,7 +301,7 @@ namespace Villamos
             this.Tábla.Name = "Tábla";
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.RowHeadersWidth = 51;
-            this.Tábla.Size = new System.Drawing.Size(1005, 242);
+            this.Tábla.Size = new System.Drawing.Size(1005, 235);
             this.Tábla.TabIndex = 83;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -708,9 +708,9 @@ namespace Villamos
             this.TabPage4.Controls.Add(this.Btn_Jog_Frissit);
             this.TabPage4.Controls.Add(this.Btn_Jog_Hatarnap_Rogzit);
             this.TabPage4.Controls.Add(this.Btn_Jog_Tipus_Rogzit);
-            this.TabPage4.Location = new System.Drawing.Point(4, 22);
+            this.TabPage4.Location = new System.Drawing.Point(4, 29);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1278, 305);
+            this.TabPage4.Size = new System.Drawing.Size(1278, 298);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Jogosultság kiosztás";
             // 
@@ -748,7 +748,7 @@ namespace Villamos
             this.FelhasználóTábla.Name = "FelhasználóTábla";
             this.FelhasználóTábla.RowHeadersVisible = false;
             this.FelhasználóTábla.RowHeadersWidth = 51;
-            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 275);
+            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 268);
             this.FelhasználóTábla.TabIndex = 82;
             this.FelhasználóTábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FelhasználóTábla_CellClick);
             // 

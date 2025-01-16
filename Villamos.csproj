@@ -722,6 +722,7 @@
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
     <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />
     <Compile Include="V_Kezelők\Kezelő_MEO.cs" />
+    <Compile Include="V_Kezelők\Kezelő_MEO_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munkakör.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munkalap.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munkalapösszesítő.cs" />

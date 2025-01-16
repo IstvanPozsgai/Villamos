@@ -18,18 +18,25 @@ namespace Villamos
 {
     public partial class Ablak_MEO_kerék
     {
+        #region Kezelők
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_MEO_KerékMérés KézKerékMérés = new Kezelő_MEO_KerékMérés();
         readonly Kezelő_MEO_Tábla KézKerékMérés2 = new Kezelő_MEO_Tábla();
         readonly Kezelő_kiegészítő_telephely KézKiegTelephely = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_MEO_Naptábla KézNaptábla = new Kezelő_MEO_Naptábla();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
+        readonly Kezelő_Belépés_Jogosultságtábla KézJogTábla = new Kezelő_Belépés_Jogosultságtábla();
+        #endregion
 
+
+        #region Listák
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_MEO_KerékMérés> AdatokKerékMérés = new List<Adat_MEO_KerékMérés>();
         List<Adat_MEO_Tábla> AdatokKerékMérés2 = new List<Adat_MEO_Tábla>();
         List<Adat_kiegészítő_telephely> AdatokKiegTelephely = new List<Adat_kiegészítő_telephely>();
         readonly List<Adat_Jármű_hiba> AdatokHIBA = new List<Adat_Jármű_hiba>();
+        #endregion
+
         Adat_Jármű AdatJármű;
         Adat_MEO_Naptábla AdatNaptábla;
 
@@ -47,7 +54,6 @@ namespace Villamos
         {
             InitializeComponent();
         }
-
 
         private void Ablak_MEO_kerék_Load(object sender, EventArgs e)
         {
@@ -73,7 +79,6 @@ namespace Villamos
 
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
-
 
         private void Ablak_MEO_kerék_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -142,7 +147,6 @@ namespace Villamos
             }
         }
 
-
         private void Fülekkitöltése()
         {
             switch (Lapfülek.SelectedIndex)
@@ -177,7 +181,6 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
@@ -200,7 +203,6 @@ namespace Villamos
         {
             Fülekkitöltése();
         }
-
 
         private void Lapfülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -244,17 +246,21 @@ namespace Villamos
             Felhasználólistáz();
         }
 
-
         private void Felhasználólistáz()
         {
             try
             {
                 if (!File.Exists(KerékMéréshely)) throw new HibásBevittAdat("Nem létezik az adatbázis.");
-                string szöveg;
+
+                List<Adat_MEO_Tábla> AdatokÖ = KézKerékMérés2.Lista_Adatok();
+                List<Adat_MEO_Tábla> Adatok;
                 if (Rögzítő.Text.Trim() != "")
-                    szöveg = $"SELECT * FROM tábla WHERE  név='{Rögzítő.Text.Trim()}'  ORDER BY típus";
+                    Adatok = (from a in AdatokÖ
+                              where a.Név == Rögzítő.Text.Trim()
+                              select a).ToList();
                 else
-                    szöveg = "SELECT * FROM tábla  ORDER BY név, típus";
+                    Adatok = AdatokÖ;
+
                 FelhasználóTábla.Rows.Clear();
                 FelhasználóTábla.Columns.Clear();
                 FelhasználóTábla.Refresh();
@@ -268,8 +274,7 @@ namespace Villamos
                 FelhasználóTábla.Columns[1].Width = 150;
 
                 int i;
-                Kezelő_MEO_Tábla Kéz = new Kezelő_MEO_Tábla();
-                List<Adat_MEO_Tábla> Adatok = Kéz.Lista_Adatok(KerékMéréshely, KerékMérésjelszó, szöveg);
+
                 foreach (Adat_MEO_Tábla rekord in Adatok)
                 {
                     FelhasználóTábla.RowCount++;
@@ -292,20 +297,15 @@ namespace Villamos
             }
         }
 
-
         private void Névfeltöltés()
         {
             try
             {
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM jogosultságtábla ORDER BY név";
-
                 Rögzítő.Items.Clear();
                 Rögzítő.BeginUpdate();
 
-                Kezelő_Belépés_Jogosultságtábla Kéz = new Kezelő_Belépés_Jogosultságtábla();
-                List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJogTábla.Lista_Adatok(hely);
                 foreach (Adat_Belépés_Jogosultságtábla rekord in Adatok)
                 {
                     string ideig = rekord.Jogkörúj1.ToStrTrim();
@@ -332,7 +332,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Típusfeltöltés()
         {
@@ -441,17 +440,17 @@ namespace Villamos
                 if (Típus.Text.ToStrTrim() == "") throw new HibásBevittAdat("Nincs kitöltve a típus!");
                 if (!File.Exists(KerékMéréshely)) throw new HibásBevittAdat("Nem létezik az adatbázis.");
 
-                string szöveg = $"SELECT * FROM tábla WHERE név='{Rögzítő.Text.ToStrTrim()}'";
-                szöveg += $" AND típus='{Típus.Text.ToStrTrim()}'";
-                AdatokKerékMérés2 = KézKerékMérés2.Lista_Adatok(KerékMéréshely, KerékMérésjelszó, szöveg);
+                List<Adat_MEO_Tábla> AdatokÖ = KézKerékMérés2.Lista_Adatok();
+                AdatokKerékMérés2 = (from a in AdatokÖ
+                                     where a.Név == Rögzítő.Text.ToStrTrim()
+                                     && a.Típus == Típus.Text.ToStrTrim()
+                                     select a).ToList();
                 if (AdatokKerékMérés2.Count != 0)
                     MessageBox.Show("Az adatok már egyszer rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
                 {
-                    szöveg = "INSERT INTO tábla  (név, típus ) VALUES (";
-                    szöveg += $"'{Rögzítő.Text.ToStrTrim()}', ";
-                    szöveg += $"'{Típus.Text.ToStrTrim()}') ";
-                    MyA.ABMódosítás(KerékMéréshely, KerékMérésjelszó, szöveg);
+                    Adat_MEO_Tábla ADAT = new Adat_MEO_Tábla(Rögzítő.Text.ToStrTrim(), Típus.Text.ToStrTrim());
+                    KézKerékMérés2.Rögzítés(ADAT);
                     MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Felhasználólistáz();

@@ -4,7 +4,6 @@ using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Villamos.Kezelők
 {
-
     public class Kezelő_MEO_Naptábla
     {
         public List<Adat_MEO_Naptábla> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -61,38 +60,7 @@ namespace Villamos.Villamos.Kezelők
         }
     }
 
-    public class Kezelő_MEO_Tábla
-    {
-        public List<Adat_MEO_Tábla> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_MEO_Tábla> Adatok = new List<Adat_MEO_Tábla>();
-            Adat_MEO_Tábla Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_MEO_Tábla(
-                                        rekord["Név"].ToStrTrim(),
-                                        rekord["Típus"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
     public class Kezelő_MEO_KerékMérés
     {
