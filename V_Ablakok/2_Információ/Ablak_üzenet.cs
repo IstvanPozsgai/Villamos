@@ -20,7 +20,7 @@ namespace Villamos
     {
         readonly Kezelő_Üzenet KézÜzenet = new Kezelő_Üzenet();
         readonly Kezelő_Üzenet_Olvas KézOlvas = new Kezelő_Üzenet_Olvas();
-
+        readonly Kezelő_Kiegészítő_Könyvtár KézKiegKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
 
         List<Adat_Üzenet> Adatok_Üzenet = new List<Adat_Üzenet>();
         List<Adat_Üzenet_Olvasás> Adatok_Olvas = new List<Adat_Üzenet_Olvasás>();
@@ -739,12 +739,10 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM könyvtár WHERE csoport1={melyik}";
-
-                Kezelő_Kiegészítő_Könyvtár Kéz = new Kezelő_Kiegészítő_Könyvtár();
-                List<Adat_Kiegészítő_Könyvtár> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Könyvtár> AdatokÖ = KézKiegKönyvtár.Lista_Adatok();
+                List<Adat_Kiegészítő_Könyvtár> Adatok = (from a in AdatokÖ
+                                                         where a.Csoport1 == melyik
+                                                         select a).ToList();
 
                 foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
                 {
@@ -968,10 +966,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}üzenet.mdb";
                 // ha nincs fájl akkor nem listáz
                 if (!Exists(hely)) return;
-
-                string szöveg = "SELECT * FROM üzenetek ";
-
-                Adatok_Üzenet = KézÜzenet.Lista_Adatok(hely, szöveg);
+                Adatok_Üzenet = KézÜzenet.Lista_Adatok(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -993,8 +988,7 @@ namespace Villamos
                 // ha nincs fájl akkor nem listáz
                 if (!Exists(hely)) return;
 
-                string szöveg = "SELECT * FROM olvasás ";
-                Adatok_Olvas = KézOlvas.Lista_Adatok(hely, szöveg);
+                Adatok_Olvas = KézOlvas.Lista_Adatok(hely);
             }
             catch (HibásBevittAdat ex)
             {

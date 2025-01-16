@@ -1049,6 +1049,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Összevont.cs" />
     <Compile Include="V_Excel\Excel.cs" />
     <Compile Include="V_Kezelők\Kezelő_Üzenet.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Üzenet_Olvas.cs" />
     <Compile Include="V_MindenEgyéb\Enumok.cs" />
     <Compile Include="V_MindenEgyéb\Excel_Kezelés.cs" />
     <Compile Include="V_Függvények\Fv_Dátum.cs" />
