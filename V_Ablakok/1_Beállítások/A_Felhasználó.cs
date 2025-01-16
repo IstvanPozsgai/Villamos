@@ -17,7 +17,6 @@ namespace Villamos
     public partial class AblakFelhasználó
     {
         string hely = "";
-        readonly string jelszó = "forgalmiutasítás";
         string Másolnadó = "VENDÉG";
 
         readonly Kezelő_Kulcs_Fekete KézKulcs = new Kezelő_Kulcs_Fekete();
@@ -237,7 +236,7 @@ namespace Villamos
 
                 // létrehozzuk az első beállítás értékeit.
 
-                KézBej.Rögzítés(hely, jelszó, ADAT);
+                KézBej.Rögzítés(hely, ADAT);
 
                 // létrehozzuk az első beállítás értékeit.
                 Adat_Belépés_Jogosultságtábla ADAT1 = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim().ToUpper(),
@@ -245,7 +244,7 @@ namespace Villamos
                                                                                         Dolgozójogköre);
 
                 //   Kezelő_Belépés_Jogosultságtábla
-                KézJog.Rögzítés(hely, jelszó, ADAT1);
+                KézJog.Rögzítés(hely, ADAT1);
 
                 Neveklistája();
                 TextNév.Text = "";
@@ -282,8 +281,8 @@ namespace Villamos
                 if (MessageBox.Show("Biztos, hogy töröljük, " + TextNév.Text.Trim() + " felhasználót?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     // igent választottuk
-                    KézBej.Törlés(hely, jelszó, ADAT);
-                    KézJog.Törlés(hely, jelszó, ADAT1);
+                    KézBej.Törlés(hely, ADAT);
+                    KézJog.Törlés(hely, ADAT1);
                     MessageBox.Show("Az adat törlése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -363,8 +362,6 @@ namespace Villamos
                 if (MessageBox.Show($"Biztos, hogy a \n {Másolnadó} \n felhasználó jogosultságait akarjuk másolni?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                     throw new HibásBevittAdat("Nem történt semmilyen módosítás.");
 
-                Kezelő_Belépés_Jogosultságtábla Kéz = new Kezelő_Belépés_Jogosultságtábla();
-
                 // kiolvassuk a vendég jogosultságát
                 string jogosultság = (from a in AdatokLista
                                       where a.Név.ToUpper() == Másolnadó
@@ -383,7 +380,7 @@ namespace Villamos
                 if (jogosulságegyéni == null)
                 {
                     //Kezelő_Belépés_Jogosultságtábla
-                    Kéz.Módosítás(hely, jelszó, ADAT);
+                    KézJog.Módosítás(hely, ADAT);
                     throw new HibásBevittAdat(TextNév.Text.Trim().ToUpper() + " jogosultsági körét megváltoztatta!");
                 }
 
@@ -409,7 +406,7 @@ namespace Villamos
                     ADAT = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim(),
                                                              újjog,
                                                              "");
-                    Kéz.Módosítás(hely, jelszó, ADAT);
+                    KézJog.Módosítás(hely, ADAT);
                     MessageBox.Show(TextNév.Text.Trim().ToUpper() + " jogosultsági körét megváltoztatta!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
@@ -443,7 +440,7 @@ namespace Villamos
                 Adat_Belépés_Jogosultságtábla ADAT = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim(),
                                                                                        jogosultság,
                                                                                        "");
-                KézJog.Módosítás(hely, jelszó, ADAT);
+                KézJog.Módosítás(hely, ADAT);
                 MessageBox.Show(TextNév.Text.Trim().ToUpper() + " jogosultsági körét megváltoztatta!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // kiírjuk az új jogosultságokat
@@ -463,9 +460,8 @@ namespace Villamos
 
         void ListákFeltöltése()
         {
-            string szöveg = "SELECT * FROM Jogosultságtábla order by név";
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Belépés.mdb";
-            AdatokLista = KézJog.Lista_Adatok(hely, jelszó, szöveg);
+            AdatokLista = KézJog.Lista_Adatok(hely);
         }
 
         private void Neveklistája()
@@ -867,13 +863,10 @@ namespace Villamos
                     return;
 
                 // Megkeressük a dolgozót és kiíjuk a jogosultságait
-
-                string szöveg = $"SELECT * FROM Jogosultságtábla where név='{TextNév.Text.Trim()}'";
-
-                Kezelő_Belépés_Jogosultságtábla Kéz = new Kezelő_Belépés_Jogosultságtábla();
-                Adat_Belépés_Jogosultságtábla rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
-
-
+                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJog.Lista_Adatok(hely);
+                Adat_Belépés_Jogosultságtábla rekord = (from a in Adatok
+                                                        where a.Név == TextNév.Text.Trim()
+                                                        select a).FirstOrDefault();
                 if (rekord != null)
                 {
                     for (int i = 0; i < Tábla.RowCount; i++)
@@ -1049,15 +1042,17 @@ namespace Villamos
                     jogosultság += betű;
                 }
 
-                string szöveg = $"SELECT * FROM jogosultságtábla  Where név='{TextNév.Text.Trim()}'";
                 Adat_Belépés_Jogosultságtábla ADAT = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim(),
                                                                                        jogosultság,
                                                                                        "");
-                Adat_Belépés_Jogosultságtábla rekord = KézJog.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJog.Lista_Adatok(hely);
+                Adat_Belépés_Jogosultságtábla rekord = (from aa in Adatok
+                                                        where aa.Név == TextNév.Text.Trim()
+                                                        select aa).FirstOrDefault();
 
                 if (rekord != null)
                 {
-                    KézJog.Módosítás(hely, jelszó, ADAT);
+                    KézJog.Módosítás(hely, ADAT);
                     MessageBox.Show(TextNév.Text.Trim().ToUpper() + " jogosultsági körét megváltoztatta!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -1094,7 +1089,7 @@ namespace Villamos
                     Adat_Belépés_Jogosultságtábla ADAT = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim().ToUpper(),
                                                                         "Dolgozójogköre",
                                                                         "Dolgozójogköre");
-                    KézJog.Rögzítés(hely, jelszó, ADAT);
+                    KézJog.Rögzítés(hely, ADAT);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1240,14 +1235,12 @@ namespace Villamos
                 if (TextNév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve a Felhasználónév mező.");
                 if (WinUser.Text.Trim() == "") WinUser.Text = "_";
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM WinTábla";
+
 
                 Adat_Belépés_WinTábla ADAT = new Adat_Belépés_WinTábla(TextNév.Text.Trim(),
                                                                        Cmbtelephely.Text.Trim(),
                                                                        WinUser.Text.Trim());
-                List<Adat_Belépés_WinTábla> Adatok = KézWin.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Belépés_WinTábla> Adatok = KézWin.Lista_Adatok();
                 if (Adatok != null)
                 {
                     Adat_Belépés_WinTábla Elem = (from a in Adatok
@@ -1256,9 +1249,9 @@ namespace Villamos
 
                     //Ha van ilyen dolgozó, akkor módosítjuk a belépését
                     if (Elem != null)
-                        KézWin.Módosítás(hely, jelszó, ADAT);
+                        KézWin.Módosítás(ADAT);
                     else
-                        KézWin.Rögzítés(hely, jelszó, ADAT);
+                        KézWin.Rögzítés(ADAT);
 
                     MessageBox.Show(TextNév.Text.Trim().ToUpper() + " Windows usernev kapcsdolatát megváltoztatta!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -1279,11 +1272,7 @@ namespace Villamos
             try
             {
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM WinTábla";
-
-                List<Adat_Belépés_WinTábla> Adatok = KézWin.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Belépés_WinTábla> Adatok = KézWin.Lista_Adatok();
                 if (Adatok != null)
                 {
                     Adat_Belépés_WinTábla Elem = (from a in Adatok
