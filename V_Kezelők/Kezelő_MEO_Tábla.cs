@@ -9,8 +9,8 @@ namespace Villamos.Villamos.Kezelők
 {
     public class Kezelő_MEO_Tábla
     {
-        readonly string KerékMéréshely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
-        readonly string KerékMérésjelszó = "rudolfg";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
+        readonly string jelszó = "rudolfg";
         public List<Adat_MEO_Tábla> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_MEO_Tábla> Adatok = new List<Adat_MEO_Tábla>();
@@ -79,7 +79,7 @@ namespace Villamos.Villamos.Kezelők
                 string szöveg = "INSERT INTO tábla  (név, típus ) VALUES (";
                 szöveg += $"'{Adat.Név}', ";
                 szöveg += $"'{Adat.Típus}') ";
-                MyA.ABMódosítás(KerékMéréshely, KerékMérésjelszó, szöveg);
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

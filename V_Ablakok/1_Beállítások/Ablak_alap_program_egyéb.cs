@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace Villamos
 
         private string directoryTargetLocation; // Selected file path
         private string Destinydirectory; // Selected dest directory path
+
+        readonly DataTable AdatÁRTábla = new DataTable();
 
         public Ablak_alap_program_egyéb()
         {
@@ -816,22 +819,16 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "  Select DISTINCT JárműTípus FROM árak";
-
+                List<string> Adatok = KézTakÁr.Lista_Adatok().Select(a => a.JárműTípus).Distinct().ToList();
 
                 Tak_J_típus.Items.Clear();
-                Tak_J_típus.BeginUpdate();
-                Tak_J_típus.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "JárműTípus"));
-                Tak_J_típus.EndUpdate();
-                Tak_J_típus.Refresh();
-
                 Szűr_Típus.Items.Clear();
-                Szűr_Típus.BeginUpdate();
-                Szűr_Típus.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "JárműTípus"));
-                Szűr_Típus.EndUpdate();
-                Szűr_Típus.Refresh(); ;
+
+                foreach (string elem in Adatok)
+                {
+                    Tak_J_típus.Items.Add(elem);
+                    Szűr_Típus.Items.Add(elem);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -1037,80 +1034,45 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
-                string jelszó = "seprűéslapát";
-                string feltétel = "";
 
-                if (Szűr_Fajta.Text.Trim() != "") feltétel += $" WHERE Takarítási_fajta='{Szűr_Fajta.Text.Trim()}' ";
+                List<Adat_Jármű_Takarítás_Árak> AdatokÖ = KézTakÁr.Lista_Adatok();
+
+                if (Szűr_Fajta.Text.Trim() != "")
+                    AdatokÖ = (from a in AdatokÖ
+                               where a.Takarítási_fajta == Szűr_Fajta.Text.Trim()
+                               select a).ToList();
 
                 if (Szűr_Típus.Text.Trim() != "")
-                {
-                    feltétel += feltétel.Trim() == "" ? " WHERE " : " AND ";
-                    feltétel += $" JárműTípus='{Szűr_Típus.Text.Trim()}' ";
-                }
+                    AdatokÖ = (from a in AdatokÖ
+                               where a.JárműTípus == Szűr_Típus.Text.Trim()
+                               select a).ToList();
 
                 if (Szűr_Napszak.Text.Trim() == "Nappal")
-                {
-                    feltétel += feltétel.Trim() == "" ? " WHERE " : " AND ";
-                    feltétel += $" Napszak=1 ";
-                }
+                    AdatokÖ = (from a in AdatokÖ
+                               where a.Napszak == 1
+                               select a).ToList();
                 else if (Szűr_Napszak.Text.Trim() == "Éjszaka")
-                {
-                    feltétel += feltétel.Trim() == "" ? " WHERE " : " AND ";
-                    feltétel += $" Napszak=2 ";
-                }
+                    AdatokÖ = (from a in AdatokÖ
+                               where a.Napszak == 2
+                               select a).ToList();
 
-                if (Szűr_Érvényes.Checked == true)
-                {
-                    feltétel += feltétel.Trim() == "" ? " WHERE " : " AND ";
-                    feltétel += $" (Érv_kezdet<=#{DateTime.Today:yyyy-MM-dd}# AND  Érv_vég>=#{DateTime.Today:yyyy-MM-dd}# )";
-                }
+                if (Szűr_Érvényes.Checked)
+                    AdatokÖ = (from a in AdatokÖ
+                               where a.Érv_kezdet <= DateTime.Today && a.Érv_vég >= DateTime.Today
+                               select a).ToList();
 
-                string szöveg = $"SELECT * FROM árak {feltétel} ORDER BY érv_kezdet, járműtípus, takarítási_fajta";
+                AdatokÖ = (from a in AdatokÖ
+                           orderby a.Érv_kezdet, a.JárműTípus, a.Takarítási_fajta
+                           select a).ToList();
 
-                Tak_Ár_Tábla.Rows.Clear();
-                Tak_Ár_Tábla.Columns.Clear();
-                Tak_Ár_Tábla.Refresh();
                 Tak_Ár_Tábla.Visible = false;
-                Tak_Ár_Tábla.ColumnCount = 7;
+                Tak_Ár_Tábla_Fejléc();
+                AdatÁRTábla.Clear();
 
-                // fejléc elkészítése
+                Tak_Ár_tábla_Feltöltés(AdatokÖ);
 
-                Tak_Ár_Tábla.Columns[0].HeaderText = "Sorszám";
-                Tak_Ár_Tábla.Columns[0].Width = 100;
-                Tak_Ár_Tábla.Columns[1].HeaderText = "Jármű típus";
-                Tak_Ár_Tábla.Columns[1].Width = 100;
-                Tak_Ár_Tábla.Columns[2].HeaderText = "Takarítási fajta";
-                Tak_Ár_Tábla.Columns[2].Width = 100;
-                Tak_Ár_Tábla.Columns[3].HeaderText = "Napszak";
-                Tak_Ár_Tábla.Columns[3].Width = 100;
-                Tak_Ár_Tábla.Columns[4].HeaderText = "Ár";
-                Tak_Ár_Tábla.Columns[4].Width = 100;
-                Tak_Ár_Tábla.Columns[5].HeaderText = "Kezdő dátum";
-                Tak_Ár_Tábla.Columns[5].Width = 100;
-                Tak_Ár_Tábla.Columns[6].HeaderText = "Vég dátum";
-                Tak_Ár_Tábla.Columns[6].Width = 100;
-
-
-                List<Adat_Jármű_Takarítás_Árak> adatok = KézTakÁr.Lista_Adatok(hely, jelszó, szöveg);
-
-
-                foreach (Adat_Jármű_Takarítás_Árak rekord in adatok)
-                {
-                    Tak_Ár_Tábla.RowCount++;
-                    int i = Tak_Ár_Tábla.RowCount - 1;
-
-                    Tak_Ár_Tábla.Rows[i].Cells[0].Value = rekord.Id;
-                    Tak_Ár_Tábla.Rows[i].Cells[1].Value = rekord.JárműTípus.Trim();
-                    Tak_Ár_Tábla.Rows[i].Cells[2].Value = rekord.Takarítási_fajta.Trim();
-                    if (rekord.Napszak == 1)
-                        Tak_Ár_Tábla.Rows[i].Cells[3].Value = "Nappal";
-                    else
-                        Tak_Ár_Tábla.Rows[i].Cells[3].Value = "Éjszaka";
-
-                    Tak_Ár_Tábla.Rows[i].Cells[4].Value = rekord.Ár;
-                    Tak_Ár_Tábla.Rows[i].Cells[5].Value = rekord.Érv_kezdet.ToString("yyyy.MM.dd");
-                    Tak_Ár_Tábla.Rows[i].Cells[6].Value = rekord.Érv_vég.ToString("yyyy.MM.dd");
-                }
+                Tak_Ár_Tábla.DataSource = AdatÁRTábla;
+                Tak_Ár_Tábla_Szélesség();
 
                 Tak_Ár_Tábla.Visible = true;
                 Tak_Ár_Tábla.Refresh();
@@ -1125,6 +1087,51 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Tak_Ár_Tábla_Fejléc()
+        {
+            AdatÁRTábla.Columns.Clear();
+            AdatÁRTábla.Columns.Add("Sorszám");
+            AdatÁRTábla.Columns.Add("Jármű típus");
+            AdatÁRTábla.Columns.Add("Takarítási fajta");
+            AdatÁRTábla.Columns.Add("Napszak");
+            AdatÁRTábla.Columns.Add("Ár");
+            AdatÁRTábla.Columns.Add("Kezdő dátum");
+            AdatÁRTábla.Columns.Add("Vég dátum");
+        }
+
+        private void Tak_Ár_Tábla_Szélesség()
+        {
+            Tak_Ár_Tábla.Columns["Sorszám"].Width = 100;
+            Tak_Ár_Tábla.Columns["Jármű típus"].Width = 100;
+            Tak_Ár_Tábla.Columns["Takarítási fajta"].Width = 100;
+            Tak_Ár_Tábla.Columns["Napszak"].Width = 100;
+            Tak_Ár_Tábla.Columns["Ár"].Width = 100;
+            Tak_Ár_Tábla.Columns["Kezdő dátum"].Width = 100;
+            Tak_Ár_Tábla.Columns["Vég dátum"].Width = 100;
+        }
+
+        private void Tak_Ár_tábla_Feltöltés(List<Adat_Jármű_Takarítás_Árak> AdatokÖ)
+        {
+            foreach (Adat_Jármű_Takarítás_Árak rekord in AdatokÖ)
+            {
+                DataRow Soradat = AdatÁRTábla.NewRow();
+
+                Soradat["Sorszám"] = rekord.Id;
+                Soradat["Jármű típus"] = rekord.JárműTípus.Trim();
+                Soradat["Takarítási fajta"] = rekord.Takarítási_fajta.Trim();
+                if (rekord.Napszak == 1)
+                    Soradat["Napszak"] = "Nappal";
+                else
+                    Soradat["Napszak"] = "Éjszaka";
+                Soradat["Ár"] = rekord.Ár;
+                Soradat["Kezdő dátum"] = rekord.Érv_kezdet.ToString("yyyy.MM.dd");
+                Soradat["Vég dátum"] = rekord.Érv_vég.ToString("yyyy.MM.dd");
+
+                AdatÁRTábla.Rows.Add(Soradat);
+            }
+
         }
 
         private void Ár_beviteli_törlés()
@@ -1472,7 +1479,6 @@ namespace Villamos
                 }
             }
         }
-
 
         private void VégeÁrRögzítés_Click(object sender, EventArgs e)
         {

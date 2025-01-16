@@ -104,7 +104,7 @@ namespace Villamos
             this.Btn_Jog_Hatarnap_Rogzit = new System.Windows.Forms.Button();
             this.Btn_Jog_Tipus_Rogzit = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new V_MindenEgyéb.MyProgressbar();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();

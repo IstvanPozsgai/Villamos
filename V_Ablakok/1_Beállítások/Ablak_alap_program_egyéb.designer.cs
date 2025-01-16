@@ -147,7 +147,7 @@ namespace Villamos
             this.Tak_J_takarítási_fajta = new System.Windows.Forms.ComboBox();
             this.Label12 = new System.Windows.Forms.Label();
             this.Label5 = new System.Windows.Forms.Label();
-            this.Tak_Ár_Tábla = new System.Windows.Forms.DataGridView();
+            this.Tak_Ár_Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new V_MindenEgyéb.MyProgressbar();
@@ -1493,7 +1493,7 @@ namespace Villamos
         internal Label LLabel1;
         internal ComboBox Kötbér_takarítási_fajta;
         internal GroupBox GroupBox1;
-        internal DataGridView Tak_Ár_Tábla;
+        internal Zuby.ADGV.AdvancedDataGridView Tak_Ár_Tábla;
         internal Button Tak_Ár_frissít;
         internal Button Tak_Ár_rögzítés;
         internal ComboBox Tak_J_típus;
