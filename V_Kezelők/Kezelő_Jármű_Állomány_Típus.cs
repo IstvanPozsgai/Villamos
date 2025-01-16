@@ -5,42 +5,11 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
-
-
 namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű_Állomány_Típus
     {
         readonly string jelszó = "pozsgaii";
-        public List<Adat_Jármű_Állomány_Típus> Lista_adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
-            Adat_Jármű_Állomány_Típus Adat;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Jármű_Állomány_Típus(
-                                            rekord["Id"].ToÉrt_Long(),
-                                            rekord["Állomány"].ToÉrt_Long(),
-                                            rekord["típus"].ToStrTrim()
-                                            );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Jármű_Állomány_Típus> Lista_adatok(string hely)
         {
@@ -74,7 +43,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
+        public void Rögzítés(string hely, Adat_Jármű_Állomány_Típus Adat)
         {
             try
             {
@@ -101,7 +70,7 @@ namespace Villamos.Kezelők
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Törlés(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
+        public void Törlés(string hely, Adat_Jármű_Állomány_Típus Adat)
         {
             try
             {
@@ -125,7 +94,7 @@ namespace Villamos.Kezelők
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Módosítás(string hely, string jelszó, Adat_Jármű_Állomány_Típus Adat)
+        public void Módosítás(string hely, Adat_Jármű_Állomány_Típus Adat)
         {
             try
             {

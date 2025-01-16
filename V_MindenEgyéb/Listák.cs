@@ -9,9 +9,19 @@ namespace Villamos
     public class Listák
     {
         public static AdatCombohoz[] TelephelyLista_Jármű()
-        {
+        {   //Erre kell cserélni
+            //Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
+            //CmbTelephely.Items.Clear();
+            //List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
+            //foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
+            //    CmbTelephely.Items.Add(rekord.Név);
+
+            //Cmbtelephely.Refresh();
+
+
+
             Kezelő_Kiegészítő_Sérülés Kéz = new Kezelő_Kiegészítő_Sérülés();
-            List<Adat_Kiegészítő_Sérülés> Adatok = Kéz.Lista_Adatok().OrderBy (a=>a.Név ).ToList ();
+            List<Adat_Kiegészítő_Sérülés> Adatok = Kéz.Lista_Adatok().OrderBy(a => a.Név).ToList();
 
             Adat_Kiegészítő_Sérülés Elem = (from a in Adatok
                                             where a.Név.Trim() == Program.PostásTelephely.Trim()

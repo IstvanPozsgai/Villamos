@@ -9,11 +9,11 @@ using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
+using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyMen = Villamos.Villamos_Ablakok._6_Kiadási_adatok.Menetkimaradás.Menetkimaradás;
 using MyO = Microsoft.Office.Interop.Outlook;
-using MyA = Adatbázis;
 
 namespace Villamos
 {
@@ -342,13 +342,14 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM Sapmunkahely  order by  id";
 
                 Kezelő_Telep_Kiegészítő_SAP KézSap = new Kezelő_Telep_Kiegészítő_SAP();
-                Adat_Telep_Kiegészítő_SAP RekordSAP = KézSap.Egy_Adat(hely, jelszó, szöveg);
-                if (RekordSAP != null)
-                    válasz = RekordSAP.Felelősmunkahely;
+                List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(hely);
+                Adat_Telep_Kiegészítő_SAP RekordSAP = (from a in AdatokSAP
+                                                       where a.Id == 1
+                                                       select a).FirstOrDefault();
+
+                if (RekordSAP != null) válasz = RekordSAP.Felelősmunkahely;
             }
             catch (HibásBevittAdat ex)
             {
@@ -435,8 +436,8 @@ namespace Villamos
                     }
                 case 2:
                     {
-                        DateTime hónapelsőnapja =MyF .Hónap_elsőnapja (Dátum.Value);
-                        DateTime hónaputolsónapja = MyF.Hónap_utolsónapja (Dátum.Value);
+                        DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
+                        DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
                         szöveg += " FROM menettábla where [bekövetkezés]>=#" + hónapelsőnapja.ToString("yyyy-MM-dd") + " 00:00:0#";
                         szöveg += " and [bekövetkezés]<#" + hónaputolsónapja.ToString("yyyy-MM-dd") + " 23:59:0#";
                         break;

@@ -107,8 +107,14 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Jármű());
+                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
+                foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
+                    Cmbtelephely.Items.Add(rekord.Név);
+
+                Cmbtelephely.Refresh();
+
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
                 { Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim(); }
                 else
@@ -930,9 +936,9 @@ namespace Villamos.Villamos_Ablakok
                     List<Adat_Főkönyv_Zser_Km> AdatokZSER = new List<Adat_Főkönyv_Zser_Km>();
                     helykm = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\Napi_km_Zser_{Dátum.Value.Year}.mdb";
                     if (File.Exists(helykm)) AdatokZSER = KézZser.Lista_adatok(helykm);
-                    if(Dátum.Value.Month <4)
+                    if (Dátum.Value.Month < 4)
                     {
-                        helykm = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year-1}\Napi_km_Zser_{Dátum.Value.Year-1}.mdb";
+                        helykm = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year - 1}\Napi_km_Zser_{Dátum.Value.Year - 1}.mdb";
                         List<Adat_Főkönyv_Zser_Km> AdatokZSERelőző = new List<Adat_Főkönyv_Zser_Km>();
                         if (File.Exists(helykm))
                         {
@@ -941,7 +947,7 @@ namespace Villamos.Villamos_Ablakok
                         }
                     }
 
-                   
+
                     if (AdatokZSER != null)
                     {
                         List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER

@@ -1383,11 +1383,7 @@ namespace Villamos
             try
             {
                 AdatokTipRend.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-
-                string szöveg = "SELECT * FROM típusrendezéstábla  ";
-                AdatokTipRend = KézTipRend.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTipRend = KézTipRend.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {

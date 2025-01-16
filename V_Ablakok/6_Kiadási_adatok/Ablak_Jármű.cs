@@ -1391,11 +1391,10 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                string szöveg = $"SELECT * FROM típustábla";
                 string jelszó = "pozsgaii";
 
                 Kezelő_Jármű_Állomány_Típus kéz = new Kezelő_Jármű_Állomány_Típus();
-                List<Adat_Jármű_Állomány_Típus> Adatok = kéz.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű_Állomány_Típus> Adatok = kéz.Lista_adatok(hely);
 
                 Adat_Jármű_Állomány_Típus EgyTípus = (from a in Adatok
                                                       where a.Típus == Telephelyi_típus.Text.Trim()
@@ -1410,7 +1409,7 @@ namespace Villamos
                         állomány--;
                     if (állomány < 0) állomány = 0;
 
-                    szöveg = "UPDATE típustábla SET ";
+                    string szöveg = "UPDATE típustábla SET ";
                     szöveg += $" állomány={állomány} ";
                     szöveg += $" WHERE [típus] ='{Telephelyi_típus.Text.Trim()}'";
                     MyA.ABMódosítás(hely, jelszó, szöveg);

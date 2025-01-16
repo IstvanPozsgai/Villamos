@@ -415,11 +415,13 @@ namespace Villamos
         private void Alsópanelkitöltés()
         {
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Segéd\kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM Kidobó order by id";
 
             Kezelő_Telep_Kiegészítő_Kidobó KézKidob = new Kezelő_Telep_Kiegészítő_Kidobó();
-            Adat_Telep_Kiegészítő_Kidobó AdatokKidob = KézKidob.Egy_Adat(hely, jelszó, szöveg);
+            List<Adat_Telep_Kiegészítő_Kidobó> Adatok = KézKidob.Lista_Adatok(hely);
+
+            Adat_Telep_Kiegészítő_Kidobó AdatokKidob = (from a in Adatok
+                                                        where a.Id == 1
+                                                        select a).FirstOrDefault();
 
             if (AdatokKidob != null) AlsóPanels = AdatokKidob.Telephely;
         }

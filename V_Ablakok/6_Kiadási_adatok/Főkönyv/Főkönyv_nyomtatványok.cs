@@ -52,14 +52,12 @@ namespace Villamos.Villamos_Nyomtatványok
             MyE.Kiir("I. Járműállomány", "b" + $"{sor}");
             // kiirjuk a típusokat
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\villamos\Jármű.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM típustábla order by id";
 
             oszlop = 12;
             eleje = 12;
 
             Kezelő_Jármű_Állomány_Típus KJÁT_kéz = new Kezelő_Jármű_Állomány_Típus();
-            List<Adat_Jármű_Állomány_Típus> típus = KJÁT_kéz.Lista_adatok(hely, jelszó, szöveg);
+            List<Adat_Jármű_Állomány_Típus> típus = KJÁT_kéz.Lista_adatok(hely);
 
             foreach (Adat_Jármű_Állomány_Típus rekord in típus)
             {
@@ -77,8 +75,8 @@ namespace Villamos.Villamos_Nyomtatványok
             // napi adatok tábla
             // megnézzük kicsinálta
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\főkönyv\{Dátum.Year}\nap\{Dátum:yyyyMMdd}{napszak.Trim()}nap.mdb";
-            jelszó = "lilaakác";
-            szöveg = "SELECT * FROM segédtábla WHERE id=1 ";
+            string jelszó = "lilaakác";
+            string szöveg = "SELECT * FROM segédtábla WHERE id=1 ";
             Kezelő_Főkönyv_SegédTábla KézSegédTábla = new Kezelő_Főkönyv_SegédTábla();
             Adat_Főkönyv_SegédTábla ElemSegéd = KézSegédTábla.Egy_Adat(hely, jelszó, szöveg);
 
@@ -2335,7 +2333,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 string Típuskell = (from a in AdatokTakarításTípus
                                     where a == rekord.Típus
                                     select a).FirstOrDefault();
-                if (Típuskell!=null && Típuskell.Trim ()!="")
+                if (Típuskell != null && Típuskell.Trim() != "")
                 {
                     if (sor == 5)
                     {
@@ -2826,7 +2824,7 @@ namespace Villamos.Villamos_Nyomtatványok
             MyE.Megnyitás(fájlexc);
         }
 
-        private void Söpréslapok(string napszak , DateTime Dátum, string Cmbtelephely, List<string> AdatokTakarításTípus,
+        private void Söpréslapok(string napszak, DateTime Dátum, string Cmbtelephely, List<string> AdatokTakarításTípus,
                                  List<Adat_Jármű> AdatokJármű,
                                  List<Adat_Főkönyv_Nap> AdatokFőkönyvNap,
                                  List<Adat_Jármű_Vendég> AdatokFőVendég)

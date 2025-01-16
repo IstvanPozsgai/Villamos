@@ -2278,12 +2278,9 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
                 if (!File.Exists(hely)) return;
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM típustábla order by id";
 
                 AdatokTípus.Clear();
-                AdatokTípus = KézTípus.Lista_adatok(hely, jelszó, szöveg);
-
+                AdatokTípus = KézTípus.Lista_adatok(hely);
 
             }
             catch (HibásBevittAdat ex)

@@ -721,9 +721,16 @@
     <Compile Include="V_Kezelők\Kezelő_Kidobó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztáskódok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_főkönyvtábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Főmérnökség.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Idő_Kor.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Idő_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Könyvtár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Mentésihelyek.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Sérülés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típusrendezéstábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típuszínektábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
     <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />
@@ -746,6 +753,8 @@
     <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_BMR.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Opció.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Kidobó.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SAP.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós.cs" />
     <Compile Include="V_Kezelők\Kezelő_Védő.cs" />

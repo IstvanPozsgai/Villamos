@@ -72,8 +72,12 @@ namespace Villamos
         {
             try
             {
+                Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Jármű());
+                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
+                foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
+                    Cmbtelephely.Items.Add(rekord.Név);
+
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
                 { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
                 else

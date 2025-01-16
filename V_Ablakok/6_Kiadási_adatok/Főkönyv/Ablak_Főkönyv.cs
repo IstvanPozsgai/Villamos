@@ -985,12 +985,8 @@ namespace Villamos
             try
             {
                 // Idő korrekciók
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM idő_korrekció";
-
                 Kezelő_Kiegészítő_Idő_Kor KézKor = new Kezelő_Kiegészítő_Idő_Kor();
-                List<Adat_Kiegészítő_Idő_Kor> AdatokKor = KézKor.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Idő_Kor> AdatokKor = KézKor.Lista_Adatok();
 
                 Adat_Kiegészítő_Idő_Kor Elem = (from a in AdatokKor
                                                 where a.Id == 1
@@ -1005,7 +1001,7 @@ namespace Villamos
                 }
 
                 // megnézzük, hogy létezik-e adott napi tábla
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\ZSER\zser" + Dátum.Value.ToString("yyyyMMdd");
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\ZSER\zser" + Dátum.Value.ToString("yyyyMMdd");
                 if (Délelőtt.Checked)
                     hely += "de.mdb";
                 else
@@ -1274,12 +1270,11 @@ namespace Villamos
                 }
             }
             // betöltjük az időket
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-            jelszó = "Mocó";
-            szöveg = $"SELECT * FROM időtábla where sorszám={munkanap}";
-
             Kezelő_Kiegészítő_Idő_Tábla Kéz = new Kezelő_Kiegészítő_Idő_Tábla();
-            Adat_Kiegészítő_Idő_Tábla EgyAdat = Kéz.Egy_Adat(hely, jelszó, szöveg);
+            List<Adat_Kiegészítő_Idő_Tábla> AdatokIdő = Kéz.Lista_Adatok();
+            Adat_Kiegészítő_Idő_Tábla EgyAdat = (from a in AdatokIdő
+                                                 where a.Sorszám == munkanap
+                                                 select a).FirstOrDefault();
             if (EgyAdat != null)
             {
                 ideigdátum = EgyAdat.Reggel;
@@ -2642,10 +2637,11 @@ namespace Villamos
             // ha gyűjtő hely akkor odamentjük
             string ideig = "MyDocuments";
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM Mentésihelyek where sorszám=1";
             Kezelő_Kiegészítő_Mentésihelyek KézMentés = new Kezelő_Kiegészítő_Mentésihelyek();
-            Adat_Kiegészítő_Mentésihelyek AdatMentés = KézMentés.Egy_Adat(hely, jelszó, szöveg);
+            List<Adat_Kiegészítő_Mentésihelyek> AdatokMentés = KézMentés.Lista_Adatok(hely);
+            Adat_Kiegészítő_Mentésihelyek AdatMentés = (from a in AdatokMentés
+                                                        where a.Sorszám == 1
+                                                        select a).FirstOrDefault();
             if (AdatMentés != null)
             {
                 //ha van és nem NINCS
@@ -2653,8 +2649,8 @@ namespace Villamos
             }
             else
             {
-                szöveg = "INSERT INTO Mentésihelyek (sorszám, alprogram, elérésiút) VALUES (1, 'Főkönyv készítés', 'NINCS')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Kiegészítő_Mentésihelyek ADAT = new Adat_Kiegészítő_Mentésihelyek(1, "Főkönyv készítés", "NINCS");
+                KézMentés.Rögzítés(hely, ADAT);
             }
             Főkönyv.Visible = false;
 
