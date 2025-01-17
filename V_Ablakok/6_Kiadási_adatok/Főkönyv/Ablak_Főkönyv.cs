@@ -2016,6 +2016,7 @@ namespace Villamos
         private void Beálló_Kocsik_Hibái_Click(object sender, EventArgs e)
         {
             NapiTábla_kiírás(1);
+            ExcelNapi();
         }
 
         private void NapiTábla_kiírás(int változat)
@@ -2039,7 +2040,7 @@ namespace Villamos
                 else
                     Adatok = (from a in AdatokÖ
                               where a.Tervérkezés < Óráig.Value
-                              && a.Tervérkezés != new DateTime(1900, 1, 1)
+                              && a.Hibaleírása != "_"
                               select a).ToList();
 
                 DataTable AdatTábla = new DataTable();
@@ -2157,13 +2158,11 @@ namespace Villamos
             KözösKereső(NapiTábla, Új_Ablak_Kereső.Keresendő.Trim());
         }
 
-
-        private void Button3_Click(object sender, EventArgs e)
+        private void ExcelNapi()
         {
             try
             {
-                if (NapiTábla.Rows.Count <= 0)
-                    return;
+                if (NapiTábla.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -2194,6 +2193,11 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            ExcelNapi();
         }
 
 
