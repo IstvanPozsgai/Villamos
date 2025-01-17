@@ -17,7 +17,7 @@ namespace Villamos
     {
         readonly Kezelő_Belépés_Jogosultságtábla Kéz_Jogosultság = new Kezelő_Belépés_Jogosultságtábla();
         readonly Kezelő_Belépés_Bejelentkezés Kéz_Bejelentkezés = new Kezelő_Belépés_Bejelentkezés();
-        readonly Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
+        readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
         readonly Kezelő_Belépés_WinTábla KézWin = new Kezelő_Belépés_WinTábla();
 
@@ -143,8 +143,8 @@ namespace Villamos
             try
             {
                 CmbTelephely.Items.Clear();
-                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
-                foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
+                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKönyvtár.Lista_Adatok();
+                foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
                     CmbTelephely.Items.Add(rekord.Név);
             }
             catch (HibásBevittAdat ex)
