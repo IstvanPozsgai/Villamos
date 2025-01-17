@@ -6,12 +6,12 @@ namespace Villamos.Adatszerkezet
 {
     public class AdatBázis_kezelés
     {
-        public void AB_Adat_Tábla_Létrehozás(string hely, string jelszó, string szöveg,bool Bit32 = true)
+        public void AB_Adat_Tábla_Létrehozás(string hely, string jelszó, string szöveg)
         {
             try
             {
                 string kapcsolatiszöveg = "";
-                if (Bit32)
+                if (hely.Contains(".mdb"))
                     kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{hely}'; Jet Oledb:Database Password={jelszó};";
                 else
                     kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{hely}'; Jet OLEDB:Database Password ={jelszó};";
@@ -32,14 +32,14 @@ namespace Villamos.Adatszerkezet
             }
         }
 
-        public void AB_Adat_Bázis_Létrehozás(string hely, string jelszó, bool Bit32 = true)
+        public void AB_Adat_Bázis_Létrehozás(string hely, string jelszó)
         {
             try
             {
 
                 ADOX.Catalog cat = new ADOX.Catalog();
                 string kapcsolatiszöveg = "";
-                if (Bit32)
+                if (hely.Contains(".mdb"))
                     kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{hely}'; Jet Oledb:Database Password={jelszó};";
                 else
                     kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{hely}'; Jet OLEDB:Database Password ={jelszó};";
