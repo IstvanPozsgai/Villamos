@@ -12,12 +12,12 @@ internal static partial class Adatbázis
     /// <param name="holvan"> A fájl elérhetőségének helye </param>
     /// <param name="ABjelszó"> Adatbázis jelszó </param>
     /// <param name="SQLszöveg"> SQl módosítási szöveg </param>
-    public static void ABMódosítás(string holvan, string ABjelszó, string SQLszöveg, bool Bit32 = true)
+    public static void ABMódosítás(string holvan, string ABjelszó, string SQLszöveg)
     {
         try
         {
             string kapcsolatiszöveg = "";
-            if (Bit32)
+            if (holvan.Contains(".mdb"))
                 kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{holvan}'; Jet Oledb:Database Password={ABjelszó}";
             else
                 kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{holvan}'; Jet OLEDB:Database Password ={ABjelszó}";
@@ -39,13 +39,14 @@ internal static partial class Adatbázis
         }
     }
 
+
     /// <summary>
     /// Adatbázisban módosít a küldött szöveg alapján (SQL)
     /// </summary>
     /// <param name="holvan"> A fájl elérhetőségének helye </param>
     /// <param name="ABjelszó"> Adatbázis jelszó </param>
     /// <param name="SQLszöveg">Lista SQl módosítási szöveg </param>
-    public static void ABMódosítás(string holvan, string ABjelszó, List<string> SQLszöveg, bool Bit32 = true)
+    public static void ABMódosítás(string holvan, string ABjelszó, List<string> SQLszöveg)
     {
         bool hiba = false;
         string szöveg = "";
@@ -53,7 +54,7 @@ internal static partial class Adatbázis
         {
             // módosítjuk az adatokat
             string kapcsolatiszöveg = "";
-            if (Bit32)
+            if (holvan.Contains(".mdb"))
                 kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{holvan}'; Jet Oledb:Database Password={ABjelszó}";
             else
                 kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{holvan}'; Jet OLEDB:Database Password ={ABjelszó}";
@@ -94,13 +95,13 @@ internal static partial class Adatbázis
     /// <param name="holvan">A fájl elérhetőségének helye </param>
     /// <param name="ABjelszó">Adatbázis jelszó</param>
     /// <param name="SQLszöveg">SQl módosítási szöveg </param>
-    public static void ABtörlés(string holvan, string ABjelszó, string SQLszöveg, bool Bit32 = true)
+    public static void ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
     {
         try
         {
             // módosítjuk az adatokat
             string kapcsolatiszöveg = "";
-            if (Bit32)
+            if (holvan.Contains(".mdb"))
                 kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{holvan}'; Jet Oledb:Database Password={ABjelszó}";
             else
                 kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{holvan}'; Jet OLEDB:Database Password ={ABjelszó}";
@@ -120,19 +121,20 @@ internal static partial class Adatbázis
         }
     }
 
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="holvan">A fájl elérhetőségének helye </param>
     /// <param name="ABjelszó">Adatbázis jelszó</param>
     /// <param name="SQLszöveg">Lista SQl módosítási szöveg </param>
-    public static void ABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg, bool Bit32 = true)
+    public static void ABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
     {
         try
         {
             // módosítjuk az adatokat
             string kapcsolatiszöveg = "";
-            if (Bit32)
+            if (holvan.Contains(".mdb"))
                 kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{holvan}'; Jet Oledb:Database Password={ABjelszó}";
             else
                 kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{holvan}'; Jet OLEDB:Database Password ={ABjelszó}";
@@ -163,12 +165,18 @@ internal static partial class Adatbázis
         }
     }
 
+
     public static bool ABvanTábla(string holvan, string ABjelszó, string SQLszöveg)
     {
         bool válasz = false;
         try
         {
-            string kapcsolatiszöveg = "Provider=Microsoft.Jet.OleDb.4.0;Data Source= '" + holvan + "'; Jet Oledb:Database Password=" + ABjelszó;
+            string kapcsolatiszöveg = "";
+            if (holvan.Contains(".mdb"))
+                kapcsolatiszöveg = "Provider=Microsoft.Jet.OleDb.4.0;Data Source= '" + holvan + "'; Jet Oledb:Database Password=" + ABjelszó;
+            else
+                kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{holvan}'; Jet OLEDB:Database Password ={ABjelszó}";
+
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
                 using (OleDbCommand Parancs = new OleDbCommand(SQLszöveg, Kapcsolat))
