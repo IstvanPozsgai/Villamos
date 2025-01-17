@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,12 @@ namespace Villamos
 
     public partial class Ablak_kidobó
     {
+
+        #region Kezelők
+        readonly Kezelő_Kidobó KézKidobó = new Kezelő_Kidobó();
+        #endregion
+
+
         Ablak_Kidobó_Ismétlődő Új_Ablak_Kidobó_Ismétlődő;
         Ablak_Kidobó_Napi Új_Ablak_Kidobó_Napi;
         Ablak_Kereső Új_Ablak_Kereső;
@@ -456,6 +463,11 @@ namespace Villamos
 
         private void Command2_Click(object sender, EventArgs e)
         {
+            NapiAdatokListázása();
+        }
+
+        private void NapiAdatokListázása()
+        {
             Label18.Text = "Adott napi adatok:";
             Tábla1.Visible = false;
             Tábla.Visible = true;
@@ -471,58 +483,62 @@ namespace Villamos
             string jelszó = "lilaakác";
             string szöveg = "SELECT * FROM kidobótábla  order by szolgálatiszám";
 
-            Tábla.Rows.Clear();
-            Tábla.Columns.Clear();
-            Tábla.Refresh();
+            DataTable AdatTábla = new DataTable();
+
+            AdatTábla.Columns.Clear();
+            AdatTábla.Columns.Add("Visz.");
+            AdatTábla.Columns.Add("Forg.");
+            AdatTábla.Columns.Add("Szolg.");
+            AdatTábla.Columns.Add("Jvez.");
+            AdatTábla.Columns.Add("Kezdés");
+            AdatTábla.Columns.Add("Végzés");
+            AdatTábla.Columns.Add("Kezdési hely");
+            AdatTábla.Columns.Add("Végzési hely");
+            AdatTábla.Columns.Add("Tárolásihely");
+            AdatTábla.Columns.Add("Kocsi");
+            AdatTábla.Columns.Add("Megjegyzés");
+            AdatTábla.Columns.Add("Típus");
+
+            AdatTábla.Clear();
+
             Tábla.Visible = false;
-            Tábla.ColumnCount = 12;
 
-            // fejléc elkészítése
-            Tábla.Columns[0].HeaderText = "Visz.";
-            Tábla.Columns[0].Width = 80;
-            Tábla.Columns[1].HeaderText = "Forg.";
-            Tábla.Columns[1].Width = 80;
-            Tábla.Columns[2].HeaderText = "Szolg.";
-            Tábla.Columns[2].Width = 100;
-            Tábla.Columns[3].HeaderText = "Jvez.";
-            Tábla.Columns[3].Width = 250;
-            Tábla.Columns[4].HeaderText = "Kezdés";
-            Tábla.Columns[4].Width = 100;
-            Tábla.Columns[5].HeaderText = "Végzés";
-            Tábla.Columns[5].Width = 100;
-            Tábla.Columns[6].HeaderText = "Kezdési hely";
-            Tábla.Columns[6].Width = 200;
-            Tábla.Columns[7].HeaderText = "Végzési hely";
-            Tábla.Columns[7].Width = 200;
-            Tábla.Columns[8].HeaderText = "Tárolásihely";
-            Tábla.Columns[8].Width = 100;
-            Tábla.Columns[9].HeaderText = "Kocsi";
-            Tábla.Columns[9].Width = 100;
-            Tábla.Columns[10].HeaderText = "Megjegyzés";
-            Tábla.Columns[10].Width = 100;
-            Tábla.Columns[11].HeaderText = "Típus";
-            Tábla.Columns[11].Width = 100;
+            List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(hely, jelszó, szöveg);
 
-            Kezelő_Kidobó kéz = new Kezelő_Kidobó();
-            List<Adat_Kidobó> Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
-            int i;
             foreach (Adat_Kidobó rekord in Adatok)
             {
-                Tábla.RowCount++;
-                i = Tábla.RowCount - 1;
-                Tábla.Rows[i].Cells[0].Value = rekord.Viszonylat.Trim();
-                Tábla.Rows[i].Cells[1].Value = rekord.Forgalmiszám.Trim();
-                Tábla.Rows[i].Cells[2].Value = rekord.Szolgálatiszám.Trim();
-                Tábla.Rows[i].Cells[3].Value = rekord.Jvez.Trim();
-                Tábla.Rows[i].Cells[4].Value = rekord.Kezdés.ToString("HH:mm");
-                Tábla.Rows[i].Cells[5].Value = rekord.Végzés.ToString("HH:mm");
-                Tábla.Rows[i].Cells[6].Value = rekord.Kezdéshely.Trim();
-                Tábla.Rows[i].Cells[7].Value = rekord.Végzéshely.Trim();
-                Tábla.Rows[i].Cells[8].Value = rekord.Tárolásihely.Trim();
-                Tábla.Rows[i].Cells[9].Value = rekord.Villamos.Trim();
-                Tábla.Rows[i].Cells[10].Value = rekord.Megjegyzés.Trim();
-                Tábla.Rows[i].Cells[11].Value = rekord.Szerelvénytípus.Trim();
+                DataRow Soradat = AdatTábla.NewRow();
+
+                Soradat["Visz."] = rekord.Viszonylat.Trim();
+                Soradat["Forg."] = rekord.Forgalmiszám.Trim();
+                Soradat["Szolg."] = rekord.Szolgálatiszám.Trim();
+                Soradat["Jvez."] = rekord.Jvez.Trim();
+                Soradat["Kezdés"] = rekord.Kezdés.ToString("HH:mm");
+                Soradat["Végzés"] = rekord.Végzés.ToString("HH:mm");
+                Soradat["Kezdési hely"] = rekord.Kezdéshely.Trim();
+                Soradat["Végzési hely"] = rekord.Végzéshely.Trim();
+                Soradat["Tárolásihely"] = rekord.Tárolásihely.Trim();
+                Soradat["Kocsi"] = rekord.Villamos.Trim();
+                Soradat["Megjegyzés"] = rekord.Megjegyzés.Trim();
+                Soradat["Típus"] = rekord.Szerelvénytípus.Trim();
+
+                AdatTábla.Rows.Add(Soradat);
             }
+            Tábla.DataSource = AdatTábla;
+
+            Tábla.Columns["Visz."].Width = 80;
+            Tábla.Columns["Forg."].Width = 80;
+            Tábla.Columns["Szolg."].Width = 100;
+            Tábla.Columns["Jvez."].Width = 250;
+            Tábla.Columns["Kezdés"].Width = 100;
+            Tábla.Columns["Végzés"].Width = 100;
+            Tábla.Columns["Kezdési hely"].Width = 200;
+            Tábla.Columns["Végzési hely"].Width = 200;
+            Tábla.Columns["Tárolásihely"].Width = 100;
+            Tábla.Columns["Kocsi"].Width = 100;
+            Tábla.Columns["Megjegyzés"].Width = 100;
+            Tábla.Columns["Típus"].Width = 100;
+
             Tábla.Visible = true;
             Tábla.Refresh();
         }
@@ -531,10 +547,8 @@ namespace Villamos
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // leellenőrizzük, hogy van-e adat
-            if (Tábla.Rows.Count < 1)
-                return;
-            if (e.RowIndex < 0)
-                return;
+            if (Tábla.Rows.Count < 1) return;
+            if (e.RowIndex < 0) return;
 
             Napi_Adat = new Adat_Kidobó(
                  Tábla.Rows[e.RowIndex].Cells[0].Value.ToString().Trim(),
@@ -572,8 +586,7 @@ namespace Villamos
         {
             try
             {
-                if (Napi_Adat == null)
-                    throw new HibásBevittAdat("Nincs kiválasztva elem.");
+                if (Napi_Adat == null) throw new HibásBevittAdat("Nincs kiválasztva elem.");
 
 
                 Új_Ablak_Kidobó_Napi?.Close();
@@ -583,7 +596,7 @@ namespace Villamos
                 Új_Ablak_Kidobó_Napi.Top = 400;
                 Új_Ablak_Kidobó_Napi.Left = 600;
                 Új_Ablak_Kidobó_Napi.Show();
-                Új_Ablak_Kidobó_Napi.Ismétlődő_Változás += Változatok_listázása;
+                Új_Ablak_Kidobó_Napi.Ismétlődő_Változás += NapiAdatokListázása;
                 Új_Ablak_Kidobó_Napi.Ismétlődő_Változás += VáltozatCombofeltölt;
             }
             catch (HibásBevittAdat ex)
@@ -625,7 +638,7 @@ namespace Villamos
                 //Új
 
                 szöveg = "Select * from Kidobótábla";
-                Kezelő_Kidobó KézKidobó = new Kezelő_Kidobó();
+
                 List<Adat_Kidobó> AdatokKidobó = KézKidobó.Lista_Adat(hely, jelszó, szöveg);
 
                 Adat_Kidobó AdatKidobó;
@@ -776,8 +789,8 @@ namespace Villamos
                 string szöveg = "SELECT * FROM kidobótábla where Kezdéshely='" + AlsóPanels.Trim() + "'";
                 szöveg += " and [Kezdés]< #12:00:00#  order by kezdés";
 
-                Kezelő_Kidobó kéz = new Kezelő_Kidobó();
-                List<Adat_Kidobó> Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
+
+                List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(hely, jelszó, szöveg);
 
                 Holtart.Be(20);
                 int i = 0;
@@ -832,7 +845,7 @@ namespace Villamos
                 szöveg = "SELECT * FROM kidobótábla where Kezdéshely='" + AlsóPanels.Trim() + "'";
                 szöveg += " and [Kezdés]> #12:00:00#  order by kezdés";
                 Holtart.Lép();
-                Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
+                Adatok = KézKidobó.Lista_Adat(hely, jelszó, szöveg);
 
                 i = 0;
                 Holtart.Lép();
@@ -887,7 +900,7 @@ namespace Villamos
 
                 szöveg = "SELECT * FROM kidobótábla where Kezdéshely<>'" + AlsóPanels.Trim() + "'  order by kezdés";
 
-                Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
+                Adatok = KézKidobó.Lista_Adat(hely, jelszó, szöveg);
 
                 i = 0;
                 Holtart.Lép();
@@ -981,8 +994,8 @@ namespace Villamos
             string szöveg = "SELECT * FROM kidobótábla where Kezdéshely='" + AlsóPanels.Trim() + "'";
             szöveg += " and [Kezdés]< #12:00:00# order by viszonylat,kezdés";
 
-            Kezelő_Kidobó kéz = new Kezelő_Kidobó();
-            List<Adat_Kidobó> Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
+
+            List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(hely, jelszó, szöveg);
 
             Holtart.Be(20);
             int i = 0;
@@ -1186,8 +1199,8 @@ namespace Villamos
             string jelszó = "lilaakác";
             string szöveg = "SELECT * FROM kidobótábla where Kezdéshely='" + AlsóPanels.Trim() + "' order by viszonylat,kezdés";
 
-            Kezelő_Kidobó kéz = new Kezelő_Kidobó();
-            List<Adat_Kidobó> Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
+
+            List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(hely, jelszó, szöveg);
 
             string utolsóviszonylat = "";
 
@@ -1683,12 +1696,11 @@ namespace Villamos
         }
 
 
-        void Ablakot_Nyit()
+        private void Ablakot_Nyit()
         {
             try
             {
-                if (Segéd_adat == null)
-                    throw new HibásBevittAdat("Nincs kiválasztva elem.");
+                if (Segéd_adat == null) throw new HibásBevittAdat("Nincs kiválasztva elem.");
 
 
                 Új_Ablak_Kidobó_Ismétlődő?.Close();

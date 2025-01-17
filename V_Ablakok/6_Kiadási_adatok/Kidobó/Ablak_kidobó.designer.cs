@@ -49,7 +49,7 @@ namespace Villamos
             this.Command2 = new System.Windows.Forms.Button();
             this.Command11 = new System.Windows.Forms.Button();
             this.Command12 = new System.Windows.Forms.Button();
-            this.Tábla = new System.Windows.Forms.DataGridView();
+            this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Tábla1 = new System.Windows.Forms.DataGridView();
             this.VáltozatCombo = new System.Windows.Forms.ComboBox();
             this.Label18 = new System.Windows.Forms.Label();
@@ -326,7 +326,7 @@ namespace Villamos
         internal Button Command2;
         internal Button Command11;
         internal Button Command12;
-        internal DataGridView Tábla;
+        internal  Zuby.ADGV.AdvancedDataGridView Tábla;
         internal DataGridView Tábla1;
         internal ComboBox VáltozatCombo;
         internal Label Label18;

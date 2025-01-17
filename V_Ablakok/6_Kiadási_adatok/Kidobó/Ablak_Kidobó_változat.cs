@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -57,18 +57,18 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                if (Újváltozat.Text.Trim() == "")                     return;
+                if (Újváltozat.Text.Trim() == "") return;
 
                 string Elem = MyF.Szöveg_Tisztítás(Újváltozat.Text, 0, 50);
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
                 string jelszó = "erzsébet";
                 string szöveg = "SELECT * FROM Változattábla  order by id desc";
 
-            
+
                 List<Adat_Kidobó_Változat> AdatokKidobSeg = KézKidobSeg.Lista_Adat(hely, jelszó, szöveg);
 
                 long utolsó = 1;
-                if (AdatokKidobSeg.Count > 0) utolsó = AdatokKidobSeg.Max(a => a.Id)+ 1;  
+                if (AdatokKidobSeg.Count > 0) utolsó = AdatokKidobSeg.Max(a => a.Id) + 1;
 
                 Adat_Kidobó_Változat AdatKidobSeg = (from a in AdatokKidobSeg
                                                      where a.Változatnév == Elem
@@ -101,8 +101,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                if (Újváltozat.Text.Trim() == "")
-                    return;
+                if (Újváltozat.Text.Trim() == "") return;
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
                 string jelszó = "erzsébet";
@@ -117,6 +116,9 @@ namespace Villamos.Villamos_Ablakok
 
                 if (AdatKidobSeg != null)
                 {
+                    szöveg = $"DELETE FROM Kidobósegédtábla WHERE Változatnév='{Újváltozat.Text.Trim()}'";
+                    MyA.ABtörlés(hely, jelszó, szöveg);
+
                     szöveg = $"DELETE FROM Változattábla WHERE Változatnév='{Újváltozat.Text.Trim()}'";
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
