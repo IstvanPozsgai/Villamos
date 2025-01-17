@@ -143,7 +143,7 @@ namespace Villamos
                     // főmérnökségi adatok 
                     hely = Application.StartupPath + @"\Főmérnökség\adatok\" + Dátum.Value.ToString("yyyy") + @"\" + Dátum.Value.ToString("yyyy") + "_menet_adatok.mdb";
                 }
-
+                if (!File.Exists(hely)) throw new HibásBevittAdat($"A {Dátum.Value:yyyy.MM.dd} dátumra a program nem rendelkezik adatokkal.");
                 string jelszó = "lilaakác";
                 string szöveg = "SELECT DISTINCT azonosító FROM menettábla order by azonosító";
                 Pályaszámok.BeginUpdate();
