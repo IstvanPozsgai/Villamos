@@ -1423,11 +1423,7 @@ namespace Villamos
             try
             {
                 AdatokTelep.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-
-                string szöveg = "SELECT * FROM telephelytábla  order by sorszám";
-                AdatokTelep = KézTelep.Lista_adatok(hely, jelszó, szöveg);
+                AdatokTelep = KézTelep.Lista_adatok();
             }
             catch (HibásBevittAdat ex)
             {

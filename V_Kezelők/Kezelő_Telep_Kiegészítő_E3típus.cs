@@ -7,15 +7,15 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
-    public class Kezelő_Telep_Kieg_Fortetípus
+    public class Kezelő_Telep_Kiegészítő_E3típus
     {
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Telep_Kieg_Fortetípus> Lista_Adatok(string hely)
+        public List<Adat_Telep_Kiegészítő_E3típus> Lista_Adatok(string hely)
         {
-            string szöveg = "SELECT *  FROM fortetipus ORDER BY ftípus";
-            List<Adat_Telep_Kieg_Fortetípus> Adatok = new List<Adat_Telep_Kieg_Fortetípus>();
-            Adat_Telep_Kieg_Fortetípus Adat;
+            string szöveg = "SELECT * FROM E3típus order by típus";
+            List<Adat_Telep_Kiegészítő_E3típus> Adatok = new List<Adat_Telep_Kiegészítő_E3típus>();
+            Adat_Telep_Kiegészítő_E3típus Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -29,10 +29,8 @@ namespace Villamos.Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Telep_Kieg_Fortetípus(
-                                        rekord["típus"].ToStrTrim(),
-                                        rekord["ftípus"].ToStrTrim()
-                                          );
+                                Adat = new Adat_Telep_Kiegészítő_E3típus(
+                                            rekord["típus"].ToStrTrim());
                                 Adatok.Add(Adat);
                             }
                         }
@@ -42,13 +40,36 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        /// <summary>
+        /// típus
+        /// </summary>
+        /// <param name="hely"></param>
+        /// <param name="jelszó"></param>
+        /// <param name="Adat"></param>
+        public void Törlés(string hely, Adat_Telep_Kiegészítő_E3típus Adat)
         {
             try
             {
-                string szöveg = $"INSERT INTO fortetipus (típus, ftípus) ";
-                szöveg += $"VALUES ('{Adat.Típus}',";
-                szöveg += $" '{Adat.Ftípus}')";
+                string szöveg = $"DELETE * FROM E3típus WHERE típus='{Adat.Típus}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(string hely, Adat_Telep_Kiegészítő_E3típus Adat)
+        {
+            try
+            {
+                string szöveg = $"INSERT INTO E3típus ( típus ) VALUES ('{Adat.Típus}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -61,30 +82,5 @@ namespace Villamos.Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        /// <summary>
-        /// típus, ftípus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
-        {
-            try
-            {
-                string szöveg = $"DELETE * FROM fortetipus where típus='{Adat.Típus}' and ftípus='{Adat.Ftípus}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
-
 }

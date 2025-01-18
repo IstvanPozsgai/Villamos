@@ -497,11 +497,11 @@ namespace Villamos
                 string szöveg = "SELECT * FROM fortetípus";
 
                 Kezelő_Kiegészítő_Fortetípus KézTípus = new Kezelő_Kiegészítő_Fortetípus();
-                List<Adat_Kiegészítő_Fortetípus> AdatokTípus = KézTípus.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Fortetípus> AdatokTípus = KézTípus.Lista_Adatok();
 
-                szöveg = "SELECT * FROM telephelytábla";
+
                 Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokTelep = KézTelep.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_kiegészítő_telephely> AdatokTelep = KézTelep.Lista_adatok();
 
                 Adatok_Forte_Feltöltés();
 

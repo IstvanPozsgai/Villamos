@@ -7,15 +7,16 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
-    public class Kezelő_Telep_Kieg_Fortetípus
+    public class Kezelő_Kiegészítő_Főkategóriatábla
     {
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Telep_Kieg_Fortetípus> Lista_Adatok(string hely)
+        public List<Adat_Kiegészítő_Főkategóriatábla> Lista_Adatok()
         {
-            string szöveg = "SELECT *  FROM fortetipus ORDER BY ftípus";
-            List<Adat_Telep_Kieg_Fortetípus> Adatok = new List<Adat_Telep_Kieg_Fortetípus>();
-            Adat_Telep_Kieg_Fortetípus Adat;
+            string szöveg = "SELECT * FROM főkategóriatábla  order by  sorszám";
+            List<Adat_Kiegészítő_Főkategóriatábla> Adatok = new List<Adat_Kiegészítő_Főkategóriatábla>();
+            Adat_Kiegészítő_Főkategóriatábla Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -29,10 +30,10 @@ namespace Villamos.Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Telep_Kieg_Fortetípus(
-                                        rekord["típus"].ToStrTrim(),
-                                        rekord["ftípus"].ToStrTrim()
-                                          );
+                                Adat = new Adat_Kiegészítő_Főkategóriatábla(
+                                     rekord["sorszám"].ToÉrt_Long(),
+                                     rekord["főkategória"].ToStrTrim()
+                                     );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -42,14 +43,39 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        public void Rögzítés(Adat_Kiegészítő_Főkategóriatábla Adat)
         {
             try
             {
-                string szöveg = $"INSERT INTO fortetipus (típus, ftípus) ";
-                szöveg += $"VALUES ('{Adat.Típus}',";
-                szöveg += $" '{Adat.Ftípus}')";
+                string szöveg = $"INSERT INTO főkategóriatábla (sorszám, főkategória) ";
+                szöveg += $"VALUES ({Adat.Sorszám}, ";
+                szöveg += $"'{Adat.Főkategória}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        /// <summary>
+        /// főkategória
+        /// </summary>
+        /// <param name="hely"></param>
+        /// <param name="jelszó"></param>
+        /// <param name="Adat"></param>
+        public void Törlés(Adat_Kiegészítő_Főkategóriatábla Adat)
+        {
+            try
+            {
+                string szöveg = $"DELETE  FROM főkategóriatábla WHERE főkategória='{Adat.Főkategória}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -63,17 +89,19 @@ namespace Villamos.Villamos.Kezelők
         }
 
         /// <summary>
-        /// típus, ftípus
+        /// sorszám
         /// </summary>
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        public void Módosítás(Adat_Kiegészítő_Főkategóriatábla Adat)
         {
             try
             {
-                string szöveg = $"DELETE * FROM fortetipus where típus='{Adat.Típus}' and ftípus='{Adat.Ftípus}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                string szöveg = $"UPDATE főkategóriatábla SET ";
+                szöveg += $"főkategória='{Adat.Főkategória}' ";
+                szöveg += $"WHERE sorszám= '{Adat.Sorszám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -86,5 +114,4 @@ namespace Villamos.Villamos.Kezelők
             }
         }
     }
-
 }

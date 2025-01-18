@@ -127,12 +127,9 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM főkategóriatábla order by sorszám";
 
                 Kezelő_Kiegészítő_Főkategóriatábla Kéz = new Kezelő_Kiegészítő_Főkategóriatábla();
-                List<Adat_Kiegészítő_Főkategóriatábla> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Főkategóriatábla> Adatok = Kéz.Lista_Adatok();
 
 
 
@@ -964,12 +961,8 @@ namespace Villamos
 
                 int sormax = sor;
 
-                hely = Application.StartupPath + @"\főmérnökség\adatok\Kiegészítő.mdb";
-                jelszó = "Mocó";
-                szöveg = "SELECT * FROM telephelytábla order by sorszám";
-
                 Kezelő_kiegészítő_telephely KézKiegTelep = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokKiegTelep = KézKiegTelep.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_kiegészítő_telephely> AdatokKiegTelep = KézKiegTelep.Lista_adatok();
 
                 int oszlop = 3;
 
@@ -3050,11 +3043,8 @@ namespace Villamos
                 Napok_kiírása();
                 MunkaVHétvége();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                szöveg = "SELECT * FROM telephelytábla order by sorszám";
                 Kezelő_kiegészítő_telephely KézKiegTeleph = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_adatok();
 
                 int oszlopmax = 0, eleje;
                 Holtart_Be(hónapnap + 1);
@@ -3242,11 +3232,8 @@ namespace Villamos
                 MyE.Kiir(szöveg, MyE.Oszlopnév(3) + 3.ToString());
 
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                szöveg = "SELECT * FROM telephelytábla order by sorszám";
                 Kezelő_kiegészítő_telephely KézKiegTeleph = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_adatok();
 
                 int oszlopmax = 0, eleje;
                 Holtart_Be(hónapnap + 1);

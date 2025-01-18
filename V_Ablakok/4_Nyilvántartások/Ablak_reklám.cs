@@ -758,12 +758,8 @@ namespace Villamos
             try
             {
                 TelephelyList.Items.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM telephelytábla order by telephelykönyvtár ";
-
                 Kezelő_kiegészítő_telephely Kéz = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> Telephelyek = Kéz.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_kiegészítő_telephely> Telephelyek = Kéz.Lista_adatok();
 
                 TelephelyList.BeginUpdate();
                 foreach (Adat_kiegészítő_telephely Elem in Telephelyek)

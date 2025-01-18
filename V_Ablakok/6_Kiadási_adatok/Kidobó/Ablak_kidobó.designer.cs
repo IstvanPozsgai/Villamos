@@ -36,6 +36,7 @@ namespace Villamos
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_kidobó));
             this.Holtart = new V_MindenEgyéb.MyProgressbar();
             this.Panel2 = new System.Windows.Forms.Panel();
@@ -55,6 +56,7 @@ namespace Villamos
             this.Forte_Beolvasás = new System.Windows.Forms.Button();
             this.Keresés = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
@@ -249,6 +251,7 @@ namespace Villamos
             this.BtnSúgó.Name = "BtnSúgó";
             this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
             this.BtnSúgó.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
@@ -311,5 +314,6 @@ namespace Villamos
         internal Label Label18;
         internal Button Keresés;
         internal Button Forte_Beolvasás;
+        private ToolTip toolTip1;
     }
 }

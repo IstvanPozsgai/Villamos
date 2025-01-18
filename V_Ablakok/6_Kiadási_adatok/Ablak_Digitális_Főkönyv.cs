@@ -61,12 +61,7 @@ namespace Villamos
             {
                 GombTároló.Controls.Clear();
                 int Gombokszáma = 0;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM telephelytábla ORDER BY sorszám";
-
-
-                List<Adat_kiegészítő_telephely> Adatok = KKT_Kéz.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_kiegészítő_telephely> Adatok = KKT_Kéz.Lista_adatok();
 
                 int i = 1;
                 foreach (Adat_kiegészítő_telephely item in Adatok)

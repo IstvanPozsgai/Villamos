@@ -7,15 +7,15 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
-    public class Kezelő_Kiegészítő_Szolgálat
+    public class Kezelő_Kiegészítő_Típusaltípustábla
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Kiegészítő_Szolgálat> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public List<Adat_Kiegészítő_Típusaltípustábla> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
-            Adat_Kiegészítő_Szolgálat Adat;
-            List<Adat_Kiegészítő_Szolgálat> Adatok = new List<Adat_Kiegészítő_Szolgálat>();
+            List<Adat_Kiegészítő_Típusaltípustábla> Adatok = new List<Adat_Kiegészítő_Típusaltípustábla>();
+            Adat_Kiegészítő_Típusaltípustábla Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -25,15 +25,16 @@ namespace Villamos.Villamos.Kezelők
                 {
                     using (OleDbDataReader rekord = Parancs.ExecuteReader())
                     {
-
                         if (rekord.HasRows)
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Kiegészítő_Szolgálat(
-                                           rekord["sorszám"].ToÉrt_Int(),
-                                           rekord["szolgálatnév"].ToStrTrim()
-                                           );
+                                Adat = new Adat_Kiegészítő_Típusaltípustábla(
+                                     rekord["sorszám"].ToÉrt_Long(),
+                                     rekord["főkategória"].ToStrTrim(),
+                                     rekord["típus"].ToStrTrim(),
+                                     rekord["alTípus"].ToStrTrim()
+                                     );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -43,11 +44,11 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Kiegészítő_Szolgálat> Lista_Adatok()
+        public List<Adat_Kiegészítő_Típusaltípustábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM szolgálattábla order by sorszám";
-            Adat_Kiegészítő_Szolgálat Adat;
-            List<Adat_Kiegészítő_Szolgálat> Adatok = new List<Adat_Kiegészítő_Szolgálat>();
+            string szöveg = "SELECT * FROM típusaltípustábla order by sorszám";
+            List<Adat_Kiegészítő_Típusaltípustábla> Adatok = new List<Adat_Kiegészítő_Típusaltípustábla>();
+            Adat_Kiegészítő_Típusaltípustábla Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -57,15 +58,16 @@ namespace Villamos.Villamos.Kezelők
                 {
                     using (OleDbDataReader rekord = Parancs.ExecuteReader())
                     {
-
                         if (rekord.HasRows)
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Kiegészítő_Szolgálat(
-                                           rekord["sorszám"].ToÉrt_Int(),
-                                           rekord["szolgálatnév"].ToStrTrim()
-                                           );
+                                Adat = new Adat_Kiegészítő_Típusaltípustábla(
+                                     rekord["sorszám"].ToÉrt_Long(),
+                                     rekord["főkategória"].ToStrTrim(),
+                                     rekord["típus"].ToStrTrim(),
+                                     rekord["alTípus"].ToStrTrim()
+                                     );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -75,14 +77,15 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-
-        public void Rögzítés(Adat_Kiegészítő_Szolgálat Adat)
+        public void Rögzítés(Adat_Kiegészítő_Típusaltípustábla Adat)
         {
             try
             {
-                string szöveg = $"INSERT INTO szolgálattábla (sorszám, szolgálatnév) VALUES ";
-                szöveg += $" ({Adat.Sorszám}, ";
-                szöveg += $"'{Adat.Szolgálatnév}')";
+                string szöveg = "INSERT INTO típusaltípustábla ( sorszám, Főkategória, típus, altípus )";
+                szöveg += $" VALUES ({Adat.Sorszám}, ";
+                szöveg += $"'{Adat.Főkategória}', ";
+                szöveg += $"'{Adat.Típus}', ";
+                szöveg += $"'{Adat.AlTípus}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -97,16 +100,16 @@ namespace Villamos.Villamos.Kezelők
         }
 
         /// <summary>
-        /// szolgálatnév
+        /// sorszám
         /// </summary>
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Törlés(Adat_Kiegészítő_Szolgálat Adat)
+        public void Törlés(Adat_Kiegészítő_Típusaltípustábla Adat)
         {
             try
             {
-                string szöveg = $"DELETE FROM szolgálattábla WHERE szolgálatnév='{Adat.Szolgálatnév}'";
+                string szöveg = $"DELETE FROM típusaltípustábla where  sorszám={Adat.Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -120,18 +123,20 @@ namespace Villamos.Villamos.Kezelők
             }
         }
 
+
         /// <summary>
-        /// 
+        /// altípus
         /// </summary>
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Módosítás(Adat_Kiegészítő_Szolgálat Adat)
+        public void Módosítás(Adat_Kiegészítő_Típusaltípustábla Adat)
         {
             try
             {
-                string szöveg = $"UPDATE szolgálattábla SET szolgálatnév='{Adat.Szolgálatnév}' ";
-                szöveg += $"WHERE sorszám= '{Adat.Sorszám}' ";
+                string szöveg = $"UPDATE típusaltípustábla SET ";
+                szöveg += $"sorszám= '{Adat.Sorszám}'";
+                szöveg += $"WHERE altípus='{Adat.AlTípus}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -144,5 +149,7 @@ namespace Villamos.Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
+
 }

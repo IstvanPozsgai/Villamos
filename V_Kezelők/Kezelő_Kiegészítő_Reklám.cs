@@ -7,15 +7,17 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
-    public class Kezelő_Telep_Kieg_Fortetípus
+    public class Kezelő_Kiegészítő_Reklám
     {
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Telep_Kieg_Fortetípus> Lista_Adatok(string hely)
+
+        public List<Adat_Kiegészítő_Reklám> Lista_Adatok()
         {
-            string szöveg = "SELECT *  FROM fortetipus ORDER BY ftípus";
-            List<Adat_Telep_Kieg_Fortetípus> Adatok = new List<Adat_Telep_Kieg_Fortetípus>();
-            Adat_Telep_Kieg_Fortetípus Adat;
+            string szöveg = "SELECT * FROM reklámtábla order by méret";
+            List<Adat_Kiegészítő_Reklám> Adatok = new List<Adat_Kiegészítő_Reklám>();
+            Adat_Kiegészítő_Reklám Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -29,10 +31,9 @@ namespace Villamos.Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Telep_Kieg_Fortetípus(
-                                        rekord["típus"].ToStrTrim(),
-                                        rekord["ftípus"].ToStrTrim()
-                                          );
+                                Adat = new Adat_Kiegészítő_Reklám(
+                                     rekord["méret"].ToStrTrim()
+                                     );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -42,13 +43,12 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        public void Rögzítés(Adat_Kiegészítő_Reklám Adat)
         {
             try
             {
-                string szöveg = $"INSERT INTO fortetipus (típus, ftípus) ";
-                szöveg += $"VALUES ('{Adat.Típus}',";
-                szöveg += $" '{Adat.Ftípus}')";
+                string szöveg = $"INSERT INTO reklámtábla ( méret ) ";
+                szöveg += $"VALUES ('{Adat.Méret}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -62,17 +62,18 @@ namespace Villamos.Villamos.Kezelők
             }
         }
 
+
         /// <summary>
-        /// típus, ftípus
+        /// méret
         /// </summary>
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        public void Törlés(Adat_Kiegészítő_Reklám Adat)
         {
             try
             {
-                string szöveg = $"DELETE * FROM fortetipus where típus='{Adat.Típus}' and ftípus='{Adat.Ftípus}'";
+                string szöveg = $"DELETE  FROM reklámtábla WHERE méret='{Adat.Méret}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -85,6 +86,7 @@ namespace Villamos.Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 
 }

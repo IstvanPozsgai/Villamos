@@ -10,8 +10,12 @@ namespace Villamos.Villamos.Kezelők
 {
     public class Kezelő_kiegészítő_telephely
     {
-        public List<Adat_kiegészítő_telephely> Lista_adatok(string hely, string jelszó, string szöveg)
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
+        readonly string jelszó = "Mocó";
+
+        public List<Adat_kiegészítő_telephely> Lista_adatok()
         {
+            string szöveg = "SELECT * FROM telephelytábla order by sorszám";
             List<Adat_kiegészítő_telephely> Adatok = new List<Adat_kiegészítő_telephely>();
             Adat_kiegészítő_telephely Adat;
 
@@ -42,7 +46,7 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, string jelszó, Adat_kiegészítő_telephely Adat)
+        public void Rögzítés(Adat_kiegészítő_telephely Adat)
         {
             try
             {
@@ -70,7 +74,7 @@ namespace Villamos.Villamos.Kezelők
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Módosítás(string hely, string jelszó, Adat_kiegészítő_telephely Adat)
+        public void Módosítás(Adat_kiegészítő_telephely Adat)
         {
             try
             {
@@ -97,7 +101,7 @@ namespace Villamos.Villamos.Kezelők
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Törlés(string hely, string jelszó, Adat_kiegészítő_telephely Adat)
+        public void Törlés(Adat_kiegészítő_telephely Adat)
         {
             try
             {
@@ -116,102 +120,6 @@ namespace Villamos.Villamos.Kezelők
         }
     }
 
-    public class Kezelő_kiegészítő_Hibaterv
-    {
-        public List<Adat_Kiegészítő_Hibaterv> Lista_adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Hibaterv> Adatok = new List<Adat_Kiegészítő_Hibaterv>();
-            Adat_Kiegészítő_Hibaterv Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Hibaterv(
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["szöveg"].ToStrTrim(),
-                                    rekord["főkönyv"].ToÉrt_Bool()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public void Rögzítés(string hely, string jelszó, Adat_Kiegészítő_Hibaterv Adat)
-        {
-            string szöveg = $"INSERT INTO hibaterv (id , szöveg, főkönyv ) ";
-            szöveg += $" VALUES ({Adat.Id}, ";
-            szöveg += $"'{Adat.Szöveg}', ";
-            szöveg += $"{Adat.Főkönyv})";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Mósosítás(string hely, string jelszó, Adat_Kiegészítő_Hibaterv Adat)
-        {
-            try
-            {
-                string szöveg = $"UPDATE hibaterv SET ";
-                szöveg += $"főkönyv={Adat.Főkönyv}, ";
-                szöveg += $"szöveg='{Adat.Szöveg}' ";
-                szöveg += $"WHERE id={Adat.Id}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, string jelszó, Adat_Kiegészítő_Hibaterv Adat)
-        {
-            try
-            {
-                string szöveg = $"DELETE * FROM hibaterv where id={Adat.Id}";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-    }
 
     public class Kezelő_Kiegészítő_Takarítás
     {
@@ -507,116 +415,6 @@ namespace Villamos.Villamos.Kezelők
         }
     }
 
-    public class Kezelő_Kiegészítő_Igen_Nem
-    {
-        public List<Adat_Kiegészítő_Igen_Nem> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Igen_Nem> Adatok = new List<Adat_Kiegészítő_Igen_Nem>();
-            Adat_Kiegészítő_Igen_Nem Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Igen_Nem(
-                                        rekord["id"].ToÉrt_Long(),
-                                        rekord["Válasz"].ToÉrt_Bool(),
-                                        rekord["Megjegyzés"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public Adat_Kiegészítő_Igen_Nem Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Kiegészítő_Igen_Nem Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_Kiegészítő_Igen_Nem(
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["Válasz"].ToÉrt_Bool(),
-                                    rekord["Megjegyzés"].ToStrTrim()
-                                      );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-
-        public void Rögzítés(string hely, string jelszó, Adat_Kiegészítő_Igen_Nem Adat)
-        {
-            try
-            {
-                string szöveg = "INSERT INTO igen_nem  (id, válasz, megjegyzés) ";
-                szöveg += $"VALUES ({Adat.Id}, ";
-                szöveg += $"{Adat.Válasz}, ";
-                szöveg += $"'{Adat.Megjegyzés}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, string jelszó, Adat_Kiegészítő_Igen_Nem Adat)
-        {
-            try
-            {
-                string szöveg = $"UPDATE igen_nem SET Válasz={Adat.Válasz} ";
-                szöveg += $"WHERE '{Adat.Id}' ";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-    }
 
 
     public class Kezelő_Telep_Kiegészítő_SérülésCaf
@@ -683,151 +481,6 @@ namespace Villamos.Villamos.Kezelők
         }
     }
 
-
-
-    public class Kezelő_Telep_Kiegészítő_E3típus
-    {
-        public Adat_Telep_Kiegészítő_E3típus Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Telep_Kiegészítő_E3típus Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_Telep_Kiegészítő_E3típus(
-                                                        rekord["Típus"].ToStrTrim());
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-
-        /// <summary>
-        /// típus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, string jelszó, Adat_Telep_Kiegészítő_E3típus Adat)
-        {
-            try
-            {
-                string szöveg = $"DELETE * FROM E3típus WHERE típus='{Adat.Típus}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        public void Rögzítés(string hely, string jelszó, Adat_Telep_Kiegészítő_E3típus Adat)
-        {
-            try
-            {
-                string szöveg = $"INSERT INTO E3típus ( típus ) VALUES ('{Adat.Típus}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-    }
-
-    public class Kezelő_Telep_Kiegészítő_Takarítástípus
-    {
-        public Adat_Telep_Kiegészítő_Takarítástípus Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Telep_Kiegészítő_Takarítástípus Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_Telep_Kiegészítő_Takarítástípus(
-                                                        rekord["Típus"].ToStrTrim());
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-
-        /// <summary>
-        /// típus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, string jelszó, Adat_Telep_Kiegészítő_Takarítástípus Adat)
-        {
-            try
-            {
-                string szöveg = $"DELETE * FROM takarítástípus WHERE típus='{Adat.Típus}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Rögzítés(string hely, string jelszó, Adat_Telep_Kiegészítő_Takarítástípus Adat)
-        {
-            try
-            {
-                string szöveg = $"INSERT INTO takarítástípus (típus)  VALUES ('{Adat.Típus}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-    }
 }
 
 

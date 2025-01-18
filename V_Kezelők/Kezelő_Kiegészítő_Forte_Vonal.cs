@@ -7,15 +7,16 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
-    public class Kezelő_Telep_Kieg_Fortetípus
-    {
-        readonly string jelszó = "Mocó";
 
-        public List<Adat_Telep_Kieg_Fortetípus> Lista_Adatok(string hely)
+    public class Kezelő_Kiegészítő_Forte_Vonal
+    {
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
+        readonly string jelszó = "Mocó";
+        public List<Adat_Kiegészítő_Forte_Vonal> Lista_Adatok()
         {
-            string szöveg = "SELECT *  FROM fortetipus ORDER BY ftípus";
-            List<Adat_Telep_Kieg_Fortetípus> Adatok = new List<Adat_Telep_Kieg_Fortetípus>();
-            Adat_Telep_Kieg_Fortetípus Adat;
+            string szöveg = "Select * FROM fortevonal order by fortevonal";
+            List<Adat_Kiegészítő_Forte_Vonal> Adatok = new List<Adat_Kiegészítő_Forte_Vonal>();
+            Adat_Kiegészítő_Forte_Vonal Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -29,10 +30,9 @@ namespace Villamos.Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Telep_Kieg_Fortetípus(
-                                        rekord["típus"].ToStrTrim(),
-                                        rekord["ftípus"].ToStrTrim()
-                                          );
+                                Adat = new Adat_Kiegészítő_Forte_Vonal(
+                                     rekord["ForteVonal"].ToStrTrim()
+                                     );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -42,13 +42,12 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        public void Rögzítés(Adat_Kiegészítő_Forte_Vonal Adat)
         {
             try
             {
-                string szöveg = $"INSERT INTO fortetipus (típus, ftípus) ";
-                szöveg += $"VALUES ('{Adat.Típus}',";
-                szöveg += $" '{Adat.Ftípus}')";
+                string szöveg = $"INSERT INTO fortevonal (fortevonal) ";
+                szöveg += $"VALUES ('{Adat.ForteVonal}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -63,16 +62,16 @@ namespace Villamos.Villamos.Kezelők
         }
 
         /// <summary>
-        /// típus, ftípus
+        /// fortevonal
         /// </summary>
         /// <param name="hely"></param>
         /// <param name="jelszó"></param>
         /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        public void Törlés(Adat_Kiegészítő_Forte_Vonal Adat)
         {
             try
             {
-                string szöveg = $"DELETE * FROM fortetipus where típus='{Adat.Típus}' and ftípus='{Adat.Ftípus}'";
+                string szöveg = $"DELETE  FROM fortevonal WHERE fortevonal='{Adat.ForteVonal}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
