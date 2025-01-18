@@ -36,7 +36,6 @@ namespace Villamos
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_kidobó));
             this.Holtart = new V_MindenEgyéb.MyProgressbar();
             this.Panel2 = new System.Windows.Forms.Panel();
@@ -54,10 +53,8 @@ namespace Villamos
             this.VáltozatCombo = new System.Windows.Forms.ComboBox();
             this.Label18 = new System.Windows.Forms.Label();
             this.Forte_Beolvasás = new System.Windows.Forms.Button();
-            this.Forte_típus = new System.Windows.Forms.ListBox();
             this.Keresés = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Chk_CTRL = new System.Windows.Forms.CheckBox();
             this.Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
@@ -177,10 +174,15 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.BackgroundColor = System.Drawing.Color.Orange;
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla.FilterAndSortEnabled = true;
+            this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.Location = new System.Drawing.Point(226, 62);
+            this.Tábla.MaxFilterButtonImageHeight = 23;
             this.Tábla.Name = "Tábla";
+            this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.Size = new System.Drawing.Size(837, 489);
+            this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 204;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -227,16 +229,6 @@ namespace Villamos
             this.Forte_Beolvasás.UseVisualStyleBackColor = true;
             this.Forte_Beolvasás.Click += new System.EventHandler(this.Forte_Beolvasás_Click);
             // 
-            // Forte_típus
-            // 
-            this.Forte_típus.FormattingEnabled = true;
-            this.Forte_típus.ItemHeight = 20;
-            this.Forte_típus.Location = new System.Drawing.Point(77, 427);
-            this.Forte_típus.Name = "Forte_típus";
-            this.Forte_típus.Size = new System.Drawing.Size(120, 24);
-            this.Forte_típus.TabIndex = 214;
-            this.Forte_típus.Visible = false;
-            // 
             // Keresés
             // 
             this.Keresés.BackgroundImage = global::Villamos.Properties.Resources.Nagyító;
@@ -260,25 +252,12 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
-            // Chk_CTRL
-            // 
-            this.Chk_CTRL.AutoSize = true;
-            this.Chk_CTRL.Location = new System.Drawing.Point(12, 232);
-            this.Chk_CTRL.Name = "Chk_CTRL";
-            this.Chk_CTRL.Size = new System.Drawing.Size(127, 24);
-            this.Chk_CTRL.TabIndex = 215;
-            this.Chk_CTRL.Text = "CTRL nyomva";
-            this.Chk_CTRL.UseVisualStyleBackColor = true;
-            this.Chk_CTRL.Visible = false;
-            // 
             // Ablak_kidobó
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Orange;
             this.ClientSize = new System.Drawing.Size(1074, 563);
-            this.Controls.Add(this.Chk_CTRL);
-            this.Controls.Add(this.Forte_típus);
             this.Controls.Add(this.Forte_Beolvasás);
             this.Controls.Add(this.Keresés);
             this.Controls.Add(this.Label18);
@@ -332,7 +311,5 @@ namespace Villamos
         internal Label Label18;
         internal Button Keresés;
         internal Button Forte_Beolvasás;
-        internal ListBox Forte_típus;
-        internal CheckBox Chk_CTRL;
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
+
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok
@@ -13,7 +13,8 @@ namespace Villamos.Villamos_Ablakok
     public partial class Ablak_Kidobó_változat : Form
     {
         public event Event_Kidobó Változat_Változás;
-        readonly Kezelő_Kidobó_Változat KézKidobSeg = new Kezelő_Kidobó_Változat();
+        readonly Kezelő_Kidobó_Változat KézVáltozat = new Kezelő_Kidobó_Változat();
+        readonly Kezelő_Kidobó_Segéd KézKidobSeg = new Kezelő_Kidobó_Segéd();
 
         public string Cmbtelephely { get; private set; }
 
@@ -35,23 +36,31 @@ namespace Villamos.Villamos_Ablakok
         {
         }
 
-        #region Változat nevek karbantartása
 
+        #region Változat nevek karbantartása
         private void Változatlista1()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-            string jelszó = "erzsébet";
+            try
+            {
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
+                Változatalaplista.Items.Clear();
 
-            string szöveg = "SELECT * FROM Változattábla  order by id";
+                List<Adat_Kidobó_Változat> Adatok = KézVáltozat.Lista_Adat(hely);
+                foreach (Adat_Kidobó_Változat Elem in Adatok)
+                    Változatalaplista.Items.Add(Elem.Változatnév);
 
-            Változatalaplista.Items.Clear();
-
-            Változatalaplista.BeginUpdate();
-            Változatalaplista.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "Változatnév"));
-            Változatalaplista.EndUpdate();
-            Változatalaplista.Refresh();
+                Változatalaplista.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         private void ÚjváltozatRögzít_Click(object sender, EventArgs e)
         {
@@ -59,32 +68,26 @@ namespace Villamos.Villamos_Ablakok
             {
                 if (Újváltozat.Text.Trim() == "") return;
 
-                string Elem = MyF.Szöveg_Tisztítás(Újváltozat.Text, 0, 50);
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-                string jelszó = "erzsébet";
-                string szöveg = "SELECT * FROM Változattábla  order by id desc";
-
-
-                List<Adat_Kidobó_Változat> AdatokKidobSeg = KézKidobSeg.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Kidobó_Változat> AdatokKidobSeg = KézVáltozat.Lista_Adat(hely);
 
                 long utolsó = 1;
                 if (AdatokKidobSeg.Count > 0) utolsó = AdatokKidobSeg.Max(a => a.Id) + 1;
 
                 Adat_Kidobó_Változat AdatKidobSeg = (from a in AdatokKidobSeg
-                                                     where a.Változatnév == Elem
+                                                     where a.Változatnév == MyF.Szöveg_Tisztítás(Újváltozat.Text, 0, 50)
                                                      orderby a.Id
                                                      select a).FirstOrDefault();
 
                 if (AdatKidobSeg == null)
                 {
-                    szöveg = "INSERT INTO Változattábla (id, változatnév) VALUES (";
-                    szöveg += $"{utolsó}, '{Elem}') ";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Kidobó_Változat ADAT = new Adat_Kidobó_Változat(0, MyF.Szöveg_Tisztítás(Újváltozat.Text, 0, 50));
+                    KézVáltozat.Rögzítés(hely, ADAT);
                 }
 
                 Újváltozat.Text = "";
                 Változatlista1();
-                if (Változat_Változás != null) Változat_Változás();
+                Változat_Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {
@@ -104,10 +107,8 @@ namespace Villamos.Villamos_Ablakok
                 if (Újváltozat.Text.Trim() == "") return;
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-                string jelszó = "erzsébet";
 
-                string szöveg = "SELECT * FROM Változattábla ";
-                List<Adat_Kidobó_Változat> AdatokKidobSeg = KézKidobSeg.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Kidobó_Változat> AdatokKidobSeg = KézVáltozat.Lista_Adat(hely);
 
                 Adat_Kidobó_Változat AdatKidobSeg = (from a in AdatokKidobSeg
                                                      where a.Változatnév == Újváltozat.Text.Trim()
@@ -116,16 +117,13 @@ namespace Villamos.Villamos_Ablakok
 
                 if (AdatKidobSeg != null)
                 {
-                    szöveg = $"DELETE FROM Kidobósegédtábla WHERE Változatnév='{Újváltozat.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-
-                    szöveg = $"DELETE FROM Változattábla WHERE Változatnév='{Újváltozat.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    KézKidobSeg.Törlés(hely, Újváltozat.Text.Trim());
+                    KézVáltozat.Törlés(hely, AdatKidobSeg);
                 }
                 Újváltozat.Text = "";
                 Változatlista1();
 
-                if (Változat_Változás != null) Változat_Változás();
+                Változat_Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {
@@ -137,13 +135,12 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Változatalaplista_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Változatalaplista.SelectedIndex < 0) return;
             Újváltozat.Text = Változatalaplista.Items[Változatalaplista.SelectedIndex].ToString();
         }
-
-
         #endregion
 
         private void Ablak_Kidobó_változat_KeyDown(object sender, KeyEventArgs e)

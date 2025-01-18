@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
+using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
     public class Kezelő_Kidobó
     {
-        public List<Adat_Kidobó> Lista_Adat(string hely, string jelszó, string szöveg)
+        readonly string jelszó = "lilaakác";
+
+        public List<Adat_Kidobó> Lista_Adat(string hely)
         {
+            string szöveg = "SELECT * FROM kidobótábla  order by szolgálatiszám";
             List<Adat_Kidobó> Adatok = new List<Adat_Kidobó>();
             Adat_Kidobó Adat;
 
@@ -26,7 +30,7 @@ namespace Villamos.Villamos.Kezelők
                             while (rekord.Read())
                             {
                                 Adat = new Adat_Kidobó(
-                                    rekord["viszonylat"].ToStrTrim (),
+                                    rekord["viszonylat"].ToStrTrim(),
                                     rekord["forgalmiszám"].ToStrTrim(),
                                     rekord["szolgálatiszám"].ToStrTrim(),
                                     rekord["jvez"].ToStrTrim(),
@@ -48,112 +52,100 @@ namespace Villamos.Villamos.Kezelők
             }
             return Adatok;
         }
-    }
 
-    public class Kezelő_Kidobó_Változat
-    {
-        public List<Adat_Kidobó_Változat> Lista_Adat(string hely, string jelszó, string szöveg)
+        public void Módosítás(string hely, Adat_Kidobó Adat)
         {
-            List<Adat_Kidobó_Változat> Adatok = new List<Adat_Kidobó_Változat>();
-            Adat_Kidobó_Változat Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kidobó_Változat(
-                                      rekord["id"].ToÉrt_Long(),
-                                      rekord["Változatnév"].ToStrTrim()
-                                      );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
+                string szöveg = "UPDATE kidobótábla  SET ";
+                szöveg += $"Kezdéshely='{Adat.Kezdéshely}', ";
+                szöveg += $"Végzéshely='{Adat.Végzéshely}', ";
+                szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";
+                szöveg += $" Kezdés='{Adat.Kezdés:HH:mm}', ";
+                szöveg += $" végzés='{Adat.Végzés:HH:mm}' ";
+                szöveg += $" WHERE szolgálatiszám='{Adat.Szolgálatiszám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
-            return Adatok;
-        }
-    }
-
-    public class Kezelő_Kidobó_Segéd
-    {
-        public List<Adat_Kidobó_Segéd> Lista_Adat(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kidobó_Segéd> Adatok = new List<Adat_Kidobó_Segéd>();
-            Adat_Kidobó_Segéd Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            catch (HibásBevittAdat ex)
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kidobó_Segéd(
-                                    rekord["forgalmiszám"].ToStrTrim(),
-                                    rekord["szolgálatiszám"].ToStrTrim(),
-                                    rekord["kezdés"].ToÉrt_DaTeTime(),
-                                    rekord["végzés"].ToÉrt_DaTeTime(),
-                                    rekord["Kezdéshely"].ToStrTrim(),
-                                    rekord["Végzéshely"].ToStrTrim(),
-                                    rekord["Változatnév"].ToStrTrim(),
-                                    rekord["megjegyzés"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            return Adatok;
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        public Adat_Kidobó_Segéd Egy_Adat(string hely, string jelszó, string szöveg)
+        public void Módosítás(string hely, List<Adat_Kidobó> Adatok)
         {
-
-            Adat_Kidobó_Segéd Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Kidobó Adat in Adatok)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kidobó_Segéd(
-                                    rekord["forgalmiszám"].ToStrTrim(),
-                                    rekord["szolgálatiszám"].ToStrTrim(),
-                                    rekord["kezdés"].ToÉrt_DaTeTime(),
-                                    rekord["végzés"].ToÉrt_DaTeTime(),
-                                    rekord["Kezdéshely"].ToStrTrim(),
-                                    rekord["Végzéshely"].ToStrTrim(),
-                                    rekord["Változatnév"].ToStrTrim(),
-                                    rekord["megjegyzés"].ToStrTrim()
-                                    );
-                            }
-                        }
-                    }
+                    string szöveg = "UPDATE kidobótábla  SET ";
+                    szöveg += $"Kezdéshely='{Adat.Kezdéshely}', ";
+                    szöveg += $"Végzéshely='{Adat.Végzéshely}', ";
+                    szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";
+                    szöveg += $" Kezdés='{Adat.Kezdés:HH:mm}', ";
+                    szöveg += $" végzés='{Adat.Végzés:HH:mm}' ";
+                    szöveg += $" WHERE szolgálatiszám='{Adat.Szolgálatiszám}'";
+                    SzövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
-            return Adat;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+        public void Rögzítés(string hely, List<Adat_Kidobó> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Kidobó Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO Kidobótábla (viszonylat, forgalmiszám, szolgálatiszám, ";
+                    szöveg += " jvez, kezdés, végzés, ";
+                    szöveg += " Kezdéshely, Végzéshely, Kód, ";
+                    szöveg += " Tárolásihely, Villamos, Megjegyzés, ";
+                    szöveg += " szerelvénytípus ) VALUES (";
+                    szöveg += $"'{Adat.Viszonylat}', "; // viszonylat
+                    szöveg += $"'{Adat.Forgalmiszám}', "; // forgalmiszám
+                    szöveg += $"'{Adat.Szolgálatiszám}', "; // szolgálatiszám
+                    szöveg += $"'{Adat.Jvez}', "; // jvez
+                    szöveg += $"'{Adat.Kezdés:HH:mm:ss}', "; // kezdés
+                    szöveg += $"'{Adat.Végzés:HH:mm:ss}', "; // végzés
+                    szöveg += $"'{Adat.Kezdéshely}', "; // kezdéshely
+                    szöveg += $"'{Adat.Végzéshely}', "; // végzéshely
+                    szöveg += $"'{Adat.Kód}', "; // kód
+                    szöveg += $"'{Adat.Tárolásihely}', "; // tárolásihely
+                    szöveg += $"'{Adat.Villamos}', "; // villamos
+                    szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
+                    szöveg += $"'{Adat.Szerelvénytípus}') "; // szerelvénytípus
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
     }
 }

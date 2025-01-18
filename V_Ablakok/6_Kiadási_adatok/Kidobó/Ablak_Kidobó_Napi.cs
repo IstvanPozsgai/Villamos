@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Ablakok
 {
     public partial class Ablak_Kidobó_Napi : Form
     {
+        readonly Kezelő_Kidobó KézKidobó = new Kezelő_Kidobó();
 
         public event Event_Kidobó Ismétlődő_Változás;
         public string Cmbtelephely { get; private set; }
@@ -27,6 +27,7 @@ namespace Villamos.Villamos_Ablakok
             InitializeComponent();
             Adatak_kiírása();
         }
+
         private void Ablak_Kidobó_Napi_Load(object sender, EventArgs e)
         {
 
@@ -46,51 +47,38 @@ namespace Villamos.Villamos_Ablakok
             KezdésiHely.Text = Alsópanel;
         }
 
-
         private void Command3_Click(object sender, EventArgs e)
         {
             VégzésiHely.Text = Alsópanel;
         }
-
 
         private void Rögzít_Click(object sender, EventArgs e)
         {
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Year}\{Dátum:yyyyMMdd}Forte.mdb";
-                string jelszó = "lilaakác";
-                string szöveg = $"SELECT * FROM kidobótábla";
-
-                Kezelő_Kidobó KézKidobó = new Kezelő_Kidobó();
-                List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(hely,jelszó,szöveg );
+                List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(hely);
 
                 Adat_Kidobó Elem = (from a in Adatok
-                                    where a.Szolgálatiszám== Rekord.Szolgálatiszám
-                                    select a).FirstOrDefault ();
+                                    where a.Szolgálatiszám == Rekord.Szolgálatiszám
+                                    select a).FirstOrDefault();
 
-
-                if (Elem!=null)
+                if (Elem != null)
                 {
-                    szöveg = "UPDATE kidobótábla  SET ";
-                    if (KezdésiHely.Text.Trim() == "")
-                        szöveg += "Kezdéshely='_', ";
-                    else
-                        szöveg += $"Kezdéshely='{KezdésiHely.Text.Trim()}', ";
-
-                    if (VégzésiHely.Text.Trim() == "")
-                        szöveg += "Végzéshely='_', ";
-                    else
-                        szöveg += $"Végzéshely='{VégzésiHely.Text.Trim()}', ";
-
-                    if (Megjegyzés.Text.Trim() == "")
-                        szöveg += "megjegyzés='_', ";
-                    else
-                        szöveg += $"megjegyzés='{Megjegyzés.Text.Trim()}', ";
-
-                    szöveg += $" Kezdés='{KezdésiIdő.Value:HH:mm}', ";
-                    szöveg += $" végzés='{VégzésiIdő.Value:HH:mm}' ";
-                    szöveg += $" WHERE szolgálatiszám='{Rekord.Szolgálatiszám}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Rekord = new Adat_Kidobó(Rekord.Viszonylat,
+                                           Rekord.Forgalmiszám,
+                                           Rekord.Szolgálatiszám,
+                                           Rekord.Jvez,
+                                           KezdésiIdő.Value,
+                                           VégzésiIdő.Value,
+                                           KezdésiHely.Text,
+                                           VégzésiHely.Text,
+                                           Rekord.Kód,
+                                           Rekord.Tárolásihely,
+                                           Rekord.Villamos,
+                                           Megjegyzés.Text,
+                                           Rekord.Szerelvénytípus);
+                    KézKidobó.Módosítás(hely, Rekord);
                 }
                 Ismétlődő_Változás?.Invoke();
             }

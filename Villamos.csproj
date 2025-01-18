@@ -719,6 +719,8 @@
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiadás_Összesítő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kidobó.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kidobó_Segéd.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kidobó_Változat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztáskódok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_főkönyvtábla.cs" />
@@ -753,6 +755,7 @@
     <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_BMR.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Opció.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Telep_Kieg_Fortetípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Kidobó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SAP.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
