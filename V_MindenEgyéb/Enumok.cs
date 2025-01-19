@@ -78,9 +78,10 @@
 
         public enum Dolgozó_Státusz
         {
-           Státus_létrehozása=0,
-           Státus_megszüntetése=1,
-           Személy_csere=2,
+            Státus_létrehozása = 0,
+            Státus_megszüntetése = 1,
+            Személy_csere = 2,
         }
+
     }
 }

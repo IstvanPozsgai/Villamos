@@ -9,17 +9,7 @@ namespace Villamos
     public class Listák
     {
         public static AdatCombohoz[] TelephelyLista_Jármű()
-        {   //Erre kell cserélni
-            //Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
-            //CmbTelephely.Items.Clear();
-            //List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
-            //foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
-            //    CmbTelephely.Items.Add(rekord.Név);
-
-            //Cmbtelephely.Refresh();
-
-
-
+        {
             Kezelő_Kiegészítő_Sérülés Kéz = new Kezelő_Kiegészítő_Sérülés();
             List<Adat_Kiegészítő_Sérülés> Adatok = Kéz.Lista_Adatok().OrderBy(a => a.Név).ToList();
 
@@ -65,6 +55,46 @@ namespace Villamos
             }
 
             return Combo_lista;
+        }
+
+        public static List<Adat_Kiegészítő_Sérülés> TelephelyJármű()
+        {
+            Kezelő_Kiegészítő_Sérülés Kéz = new Kezelő_Kiegészítő_Sérülés();
+            List<Adat_Kiegészítő_Sérülés> Adatok = Kéz.Lista_Adatok().OrderBy(a => a.Név).ToList();
+
+            Adat_Kiegészítő_Sérülés Elem = (from a in Adatok
+                                            where a.Név.Trim() == Program.PostásTelephely.Trim()
+                                            select a).FirstOrDefault();
+
+            List<Adat_Kiegészítő_Sérülés> Eredmény = new List<Adat_Kiegészítő_Sérülés>();
+
+            if (Elem != null)
+            {
+                // Szakszolgálat
+                if (Elem.Vezér1)
+                {
+                    Eredmény = (from a in Adatok
+                                where a.Vezér1 == false && a.Csoport1 == Elem.Csoport1
+                                select a).ToList();
+                    Program.Postás_Vezér = true;
+                }
+                //telephely
+                else
+                {
+                    Eredmény.Add(Elem);
+                    Program.Postás_Vezér = false;
+                }
+            }
+            else
+            if (Program.PostásTelephely.Trim() == "Főmérnökség" || Program.PostásTelephely.Trim() == "Műszaki osztály")
+            {
+                Eredmény = (from a in Adatok
+                            where a.Vezér1 == false
+                            select a).ToList();
+                Program.Postás_Vezér = true;
+            }
+
+            return Eredmény;
         }
 
         /// <summary>
