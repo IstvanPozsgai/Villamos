@@ -421,7 +421,6 @@ namespace Villamos
             if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
 
             hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Now.Year}.mdb";
-            //    hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Now.Year}.accdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
         }
 
@@ -2578,8 +2577,13 @@ namespace Villamos
         {
             Verzió_Váltás.Visible = Shift_le;
         }
+
         #endregion
 
-
+        private void Próba_Click(object sender, EventArgs e)
+        {
+            string hely = $@"{Application.StartupPath}\Főmérnökség\napló{DateTime.Now.Year}.accdb";
+            if (!Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
+        }
     }
 }
