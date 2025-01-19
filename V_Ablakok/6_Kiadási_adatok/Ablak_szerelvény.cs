@@ -282,11 +282,12 @@ namespace Villamos.Ablakok
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM igen_nem WHERE id=1";
 
                 Kezelő_Kiegészítő_Igen_Nem Kéz = new Kezelő_Kiegészítő_Igen_Nem();
-                Adat_Kiegészítő_Igen_Nem Válasz = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Igen_Nem> Adatok = Kéz.Lista_Adatok(hely);
+                Adat_Kiegészítő_Igen_Nem Válasz = (from a in Adatok
+                                                   where a.Id == 1
+                                                   select a).FirstOrDefault();
 
                 if (!Válasz.Válasz)
                 {
@@ -2197,7 +2198,7 @@ namespace Villamos.Ablakok
             }
         }
 
-    private     void E2_rögzítés_Eljárás()
+        private void E2_rögzítés_Eljárás()
         {
             try
             {
@@ -2472,10 +2473,10 @@ namespace Villamos.Ablakok
 
                 // csak aktuális évben tudunk rögzíteni
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Now.Year}utasítás.mdb";
-             
+
                 //Utasírás rögzítés és olvasás rögzítés
                 Kezelő_Utasítás Ku = new Kezelő_Utasítás();
-                double Sorszám = Ku.Új_utasítás(hely,  Txtírásimező.Text.Trim());
+                double Sorszám = Ku.Új_utasítás(hely, Txtírásimező.Text.Trim());
 
                 MessageBox.Show($"Az utasítás rögzítése {Sorszám} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

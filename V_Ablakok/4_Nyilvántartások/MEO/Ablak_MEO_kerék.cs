@@ -42,14 +42,14 @@ namespace Villamos
 
         readonly string Járműhely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
         readonly string KerékMéréshely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
-        readonly string Kiegészítőhely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
+
 
         readonly string Járműjelszó = "pozsgaii";
         readonly string KerékMérésjelszó = "rudolfg";
-        readonly string Kiegészítőjelszó = "Mocó";
+
 
         readonly string Járműszöveg = "SELECT * FROM állománytábla";
-        readonly string Kiegészítőszöveg = "SELECT * FROM telephelytábla ORDER BY sorszám";
+
         public Ablak_MEO_kerék()
         {
             InitializeComponent();

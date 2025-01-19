@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
@@ -10,7 +13,7 @@ namespace Villamos.Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Beosztáskódok> Lista_Adatok(string hely)
         {
-            string szöveg = "SELECT * FROM Beosztáskódok";
+            string szöveg = "SELECT * FROM beosztáskódok Order By  sorszám";
             List<Adat_Kiegészítő_Beosztáskódok> Adatok = new List<Adat_Kiegészítő_Beosztáskódok>();
             Adat_Kiegészítő_Beosztáskódok Adat;
 
@@ -62,33 +65,6 @@ namespace Villamos.Villamos.Kezelők
                                         rekord["23"].ToÉrt_Int(),
                                         rekord["Magyarázat"].ToStrTrim()
                                           );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public List<string> Lista_AdatBeoKód(string hely, string jelszó, string szöveg)
-        {
-            List<string> Adatok = new List<string>();
-            string Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = rekord["beosztáskód"].ToStrTrim();
                                 Adatok.Add(Adat);
                             }
                         }
@@ -219,8 +195,82 @@ namespace Villamos.Villamos.Kezelők
             }
             return Adat;
         }
-    
-    
+
+        public void Rögzítés(string hely, Adat_Kiegészítő_Beosztáskódok Adat)
+        {
+            try
+            {
+                string szöveg = "INSERT INTO beosztáskódok (sorszám, beosztáskód, munkaidőkezdet, munkaidővége,  munkaidő, munkarend, napszak, éjszakás, számoló, 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23, Magyarázat)";
+                szöveg += " VALUES (";
+                szöveg += $" {Adat.Sorszám}, ";                            //  sorszám
+                szöveg += $"'{Adat.Beosztáskód}', ";                       //  beosztáskód
+                szöveg += $"'{Adat.Munkaidőkezdet:HH:mm:ss}', ";           //  munkaidőkezdet
+                szöveg += $"'{Adat.Munkaidővége:HH:mm:ss}', ";             //  munkaidővége
+                szöveg += $" {Adat.Munkaidő}, ";                           //  munkaidő
+                szöveg += $" {Adat.Munkarend},";                           //  munkarend
+                szöveg += $"'_', ";                                      //  napszak
+                szöveg += $" {Adat.Éjszakás}, ";                           //  éjszakás
+                szöveg += $" {Adat.Számoló}, ";                            //  számoló
+                szöveg += " 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0, ";
+                szöveg += $" '{Adat.Magyarázat}') ";                       //   Magyarázat
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string hely, Adat_Kiegészítő_Beosztáskódok Adat)
+        {
+            try
+            {
+                string szöveg = "UPDATE beosztáskódok SET ";
+                szöveg += $" beosztáskód='{Adat.Beosztáskód}', ";
+                szöveg += $" munkaidőkezdet='{Adat.Munkaidőkezdet:HH:mm:ss}', ";
+                szöveg += $" munkaidővége='{Adat.Munkaidővége:HH:mm:ss}', ";
+                szöveg += $" munkaidő={Adat.Munkaidő}, ";
+                szöveg += $" munkarend={Adat.Munkarend}, ";
+                szöveg += $" éjszakás={Adat.Éjszakás}, ";
+                szöveg += $" számoló={Adat.Számoló}, ";
+                szöveg += $" Magyarázat='{Adat.Magyarázat}' ";
+                szöveg += $" WHERE  sorszám={Adat.Sorszám} ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string hely, string BeoKód)
+        {
+            try
+            {
+                string szöveg = $"DELETE FROM beosztáskódok where beosztáskód='{BeoKód}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 
 }

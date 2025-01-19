@@ -4102,10 +4102,8 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM igen_nem ";
                 AdatokIgenNem.Clear();
-                AdatokIgenNem = KézKiegIgenNem.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokIgenNem = KézKiegIgenNem.Lista_Adatok(hely);
             }
             catch (HibásBevittAdat ex)
             {

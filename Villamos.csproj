@@ -724,6 +724,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Adatok_Terjesztés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztáskódok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Feorszámok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Fortetípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Forte_Vonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Főkategóriatábla.cs" />
@@ -733,14 +734,19 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Idő_Kor.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Idő_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Igen_Nem.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Jelenlétiív.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Jogtípus.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_JogVonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Könyvtár.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Mentésihelyek.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Munkakör.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Reklám.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típusaltípustábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típusrendezéstábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típuszínektábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Védelem.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
     <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />
@@ -755,6 +761,7 @@
     <Compile Include="V_Kezelők\Kezelő_Munka_Rendelés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_OktatásTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Adat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Név.cs" />
     <Compile Include="V_Kezelők\Kezelő_Reklám.cs" />

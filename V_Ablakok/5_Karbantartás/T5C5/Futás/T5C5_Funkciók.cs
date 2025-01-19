@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
+using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -16,10 +17,7 @@ namespace Villamos
             try
             {
                 Kezelő_T5C5_Göngyöl_DátumTábla KézGöngyöl = new Kezelő_T5C5_Göngyöl_DátumTábla();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\T5C5\villamos3.mdb";
-                string szöveg = "SELECT * FROM dátumtábla";
-                string jelszó = "pozsgaii";
-                Adatok = KézGöngyöl.Lista_Adat(hely, jelszó, szöveg);
+                Adatok = KézGöngyöl.Lista_Adatok();
 
             }
             catch (HibásBevittAdat ex)
@@ -42,7 +40,7 @@ namespace Villamos
                 Kezelő_T5C5_Göngyöl_DátumTábla KézGöngyöl = new Kezelő_T5C5_Göngyöl_DátumTábla();
                 string szöveg = "SELECT * FROM dátumtábla";
                 string jelszó = "pozsgaii";
-                Adatok = KézGöngyöl.Lista_Adat(hely, jelszó, szöveg);
+                Adatok = KézGöngyöl.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

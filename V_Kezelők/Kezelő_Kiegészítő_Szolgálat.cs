@@ -131,7 +131,7 @@ namespace Villamos.Villamos.Kezelők
             try
             {
                 string szöveg = $"UPDATE szolgálattábla SET szolgálatnév='{Adat.Szolgálatnév}' ";
-                szöveg += $"WHERE sorszám= '{Adat.Sorszám}' ";
+                szöveg += $"WHERE sorszám={Adat.Sorszám} ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

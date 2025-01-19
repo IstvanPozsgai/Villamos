@@ -42,7 +42,7 @@ namespace Villamos.Villamos.Kezelők
         public void Rögzítés(string hely, Adat_Telep_Kiegészítő_SAP Adat)
         {
             string szöveg = $"INSERT INTO sapmunkahely (id, felelősmunkahely)";
-            szöveg += $"VALUES ({Adat.Id} ,'";
+            szöveg += $"VALUES ({Adat.Id}, ";
             szöveg += $"'{Adat.Felelősmunkahely}')";
             MyA.ABMódosítás(hely, jelszó, szöveg);
 
@@ -58,7 +58,7 @@ namespace Villamos.Villamos.Kezelők
         {
             string szöveg = $"UPDATE sapmunkahely SET ";
             szöveg += $"felelősmunkahely='{Adat.Felelősmunkahely}'";
-            szöveg += $"WHERE id= '{Adat.Id}'";
+            szöveg += $"WHERE id={Adat.Id}";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 

@@ -1,5 +1,4 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -1920,14 +1919,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void PDFMemóriaFelszabadítás(PdfViewer PDFkeret)
-        {
-            PDFkeret?.Dispose();
-            PDFkeret.Document = null;
-            GC.Collect();
-        }
-
         #endregion
 
 
@@ -2504,8 +2495,7 @@ namespace Villamos
             try
             {
                 AdatokMunkakör.Clear();
-                string szöveg = "SELECT * FROM Munkakör  order by  kategória, Megnevezés";
-                AdatokMunkakör = KézMunkakör.Lista_Adatok(szöveg);
+                AdatokMunkakör = KézMunkakör.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {

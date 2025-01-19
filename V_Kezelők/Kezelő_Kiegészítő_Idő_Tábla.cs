@@ -56,8 +56,10 @@ namespace Villamos.Villamos.Kezelők
             try
             {
                 string szöveg = $"UPDATE időtábla Set ";
-                szöveg += $"reggel='{Adat.Reggel}' ";
-                szöveg += $"where sorszám= '{Adat.Sorszám}' ";
+                szöveg += $"reggel='{Adat.Reggel}', ";
+                szöveg += $"este='{Adat.Este}', ";
+                szöveg += $"délután='{Adat.Délután}' ";
+                szöveg += $"where sorszám={Adat.Sorszám} ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

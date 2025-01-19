@@ -2185,8 +2185,8 @@ namespace Villamos
             try
             {
                 Adat_Kiegészítő_Adatok_Terjesztés ADAT = new Adat_Kiegészítő_Adatok_Terjesztés(3,
-                                                                                               txtIIelérési.Text.Trim(),
-                                                                                               txtIIterjesztési.Text.Trim());
+                                                                                               txtIIIelérési.Text.Trim(),
+                                                                                               txtIIIterjesztési.Text.Trim());
                 KézTerjesztés.Módosítás(ADAT);
                 // kiírjuk a módosított értékeket
                 Szolgálatokmenetkimaradása();
@@ -3145,7 +3145,7 @@ namespace Villamos
         {
             try
             {
-                if (txtTelephelyekNév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva érvényes elem.");
+                if (!long.TryParse(txtTelephelyekID.Text.Trim(), out long sor1)) throw new HibásBevittAdat("Nincs kiválasztva érvényes elem.");
 
                 List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_adatok();
 
@@ -3153,10 +3153,12 @@ namespace Villamos
                                                   where a.Telephelynév == txtTelephelyekNév.Text.Trim()
                                                   select a).FirstOrDefault();
 
+                long sor2 = 0;
                 string előző = "";
                 for (int i = 0; i < TáblaTelephelyek.Rows.Count; i++)
                 {
-                    if (TáblaTelephelyek.Rows[i].Cells[1].Value.ToStrTrim() == txtTelephelyekNév.Text.Trim()) break;
+                    if (TáblaTelephelyek.Rows[i].Cells[0].Value.ToÉrt_Long() == sor1) break;
+                    sor2 = long.Parse(TáblaTelephelyek.Rows[i].Cells[0].Value.ToStrTrim());
                     előző = TáblaTelephelyek.Rows[i].Cells[1].Value.ToStrTrim();
                 }
 
@@ -3166,17 +3168,7 @@ namespace Villamos
 
                 if (ElőzőElem != null && Elem != null && előző != txtTelephelyekNév.Text.Trim())
                 {
-                    Adat_kiegészítő_telephely ADAT = new Adat_kiegészítő_telephely(Elem.Sorszám,
-                                                                                   ElőzőElem.Telephelynév,
-                                                                                   ElőzőElem.Telephelykönyvtár,
-                                                                                   ElőzőElem.Fortekód);
-                    Kézkiegészítő_telephely.Módosítás(ADAT);
-                    ADAT = new Adat_kiegészítő_telephely(ElőzőElem.Sorszám,
-                                                         Elem.Telephelynév,
-                                                         Elem.Telephelykönyvtár,
-                                                         Elem.Fortekód);
-                    Kézkiegészítő_telephely.Módosítás(ADAT);
-
+                    Kézkiegészítő_telephely.Csere(sor1, sor2);
                     TáblaTelephelyeklistázás();
                 }
             }

@@ -1077,11 +1077,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM Adatok";
                 Kezelő_Kiegészítő_Adatok_Terjesztés kéz = new Kezelő_Kiegészítő_Adatok_Terjesztés();
-                List<Adat_Kiegészítő_Adatok_Terjesztés> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Adatok_Terjesztés> Adatok = kéz.Lista_Adatok();
 
                 string email = (from a in Adatok
                                 where a.Id == Convert.ToInt32(alsópanels1.Text.Trim())
@@ -1463,12 +1460,9 @@ namespace Villamos
             {
                 if (!int.TryParse(alsópanels1.Text, out int ID)) throw new HibásBevittAdat("Nincs megfelelő adat");
                 // Kiolvassuk az excel fájl helyét
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM Adatok";
 
                 Kezelő_Kiegészítő_Adatok_Terjesztés kéz = new Kezelő_Kiegészítő_Adatok_Terjesztés();
-                List<Adat_Kiegészítő_Adatok_Terjesztés> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Adatok_Terjesztés> Adatok = kéz.Lista_Adatok();
 
                 string rekordszöveg = (from a in Adatok
                                        where a.Id == ID

@@ -1114,7 +1114,7 @@ namespace Villamos
                 //Telephelyi göngyölés
                 szöveg = $"SELECT * FROM dátumtábla";
                 Kezelő_T5C5_Göngyöl_DátumTábla KézDátum = new Kezelő_T5C5_Göngyöl_DátumTábla();
-                List<Adat_T5C5_Göngyöl_DátumTábla> AdatokDátum = KézDátum.Lista_Adat(helyBázis, jelszóBázis, szöveg);
+                List<Adat_T5C5_Göngyöl_DátumTábla> AdatokDátum = KézDátum.Lista_Adatok();
 
                 Holtart.Be(AdatokNapi.Count);
                 List<string> szövegGyHavi = new List<string>();

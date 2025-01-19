@@ -69,7 +69,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Kértvizsgálat { get; private set; }
         public string Bevezetés { get; private set; }
         public string Tárgyalás { get; private set; }
-        public string Befejezés { get; private set; } 
+        public string Befejezés { get; private set; }
         public string CiklusTípus { get; private set; }
 
         public Adat_Kiegészítő_Felmentés(int id, string címzett, string másolat, string tárgy, string kértvizsgálat,
@@ -176,9 +176,17 @@ namespace Villamos.Villamos_Adatszerkezet
             Magyarázat = magyarázat;
         }
 
-        public Adat_Kiegészítő_Beosztáskódok(string beosztáskód)
+        public Adat_Kiegészítő_Beosztáskódok(long sorszám, string beosztáskód, DateTime munkaidőkezdet, DateTime munkaidővége, int munkaidő, int munkarend, bool éjszakás, bool számoló, string magyarázat)
         {
+            Sorszám = sorszám;
             Beosztáskód = beosztáskód;
+            Munkaidőkezdet = munkaidőkezdet;
+            Munkaidővége = munkaidővége;
+            Munkaidő = munkaidő;
+            Munkarend = munkarend;
+            Éjszakás = éjszakás;
+            Számoló = számoló;
+            Magyarázat = magyarázat;
         }
     }
 
@@ -295,7 +303,7 @@ namespace Villamos.Villamos_Adatszerkezet
         {
             Típus = típus;
         }
-        
+
     }
 
 }

@@ -100,7 +100,7 @@ namespace Villamos.Villamos.Kezelők
             {
                 string szöveg = $"UPDATE főkategóriatábla SET ";
                 szöveg += $"főkategória='{Adat.Főkategória}' ";
-                szöveg += $"WHERE sorszám= '{Adat.Sorszám}'";
+                szöveg += $"WHERE sorszám={Adat.Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

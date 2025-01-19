@@ -11,6 +11,44 @@ namespace Villamos.Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
         readonly string jelszó = "pozsgaii";
 
+        /// <summary>
+        /// Telephelyi adatnak kell lennie
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = new List<Adat_T5C5_Göngyöl_DátumTábla>();
+            Adat_T5C5_Göngyöl_DátumTábla Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+
+                                Adat = new Adat_T5C5_Göngyöl_DátumTábla(
+                                    rekord["telephely"].ToStrTrim(),
+                                    rekord["utolsórögzítés"].ToÉrt_DaTeTime(),
+                                    rekord["Zárol"].ToÉrt_Bool()
+                                    ); ;
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+
         public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok()
         {
             string szöveg = $"SELECT * From Dátumtábla ";

@@ -721,7 +721,7 @@ namespace Villamos
             try
             {
                 AdatokKönyvtár.Clear();
-                AdatokKönyvtár = KézKönyvtár.Lista_Adatok();
+                AdatokKönyvtár = KézKönyvtár.Lista_Adatok().OrderBy(a => a.Név).ToList();
             }
             catch (HibásBevittAdat ex)
             {

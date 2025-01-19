@@ -28,7 +28,7 @@ namespace Villamos
         readonly Kezelő_Kiadás_Összesítő KKÖ_kéz = new Kezelő_Kiadás_Összesítő();
         readonly Kezelő_Jármű KJ_kéz = new Kezelő_Jármű();
         readonly Kezelő_összevont KÖ_kéz = new Kezelő_összevont();
-        readonly Kezelő_FőKiadási_adatok KFK_Kéz = new Kezelő_FőKiadási_adatok();
+        //    readonly Kezelő_FőKiadási_adatok KFK_Kéz = new Kezelő_FőKiadási_adatok();
         readonly Kezelő_Forte_Kiadási_Adatok KézForteKiadás = new Kezelő_Forte_Kiadási_Adatok();
 
         private void Ablak_Digitális_Főkönyv_Load(object sender, EventArgs e)
@@ -67,17 +67,20 @@ namespace Villamos
                 foreach (Adat_kiegészítő_telephely item in Adatok)
                 {
                     Gombokszáma++;
-                    Button Telephelygomb = new Button { Location = new Point(10, 10 + Gombokszáma * 40) };
-                    Telephelygomb.Size = new Size(145, 35);
-                    Telephelygomb.Name = $"Járgomb_{Gombokszáma + 1}";
-                    Telephelygomb.Text = item.Telephelynév;
-                    Telephelygomb.Visible = true;
+                    Button Telephelygomb = new Button
+                    {
+                        Location = new Point(10, 10 + Gombokszáma * 40),
+                        Size = new Size(145, 35),
+                        Name = $"Járgomb_{Gombokszáma + 1}",
+                        Text = item.Telephelynév,
+                        Visible = true
+                    };
 
                     string helytelep = $@"{Application.StartupPath}\{item.Telephelykönyvtár.Trim()}\adatok\főkönyv\kiadás{Dátum.Value:yyyy}.mdb";
                     if (File.Exists(helytelep))
                     {
                         string jelszótelep = "plédke";
-                        szöveg = "SELECT * FROM tábla  ";
+                        string szöveg = "SELECT * FROM tábla  ";
                         List<Adat_Kiadás_összesítő> AdatokÖsszesítő = KKÖ_kéz.Lista_adatok(helytelep, jelszótelep, szöveg);
 
                         List<Adat_Kiadás_összesítő> Elemek = (from a in AdatokÖsszesítő

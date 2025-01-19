@@ -77,6 +77,14 @@ namespace Villamos
         /// <returns></returns>
         public static AdatCombohoz[] TelephelyLista_Személy(bool Főmérnök)
         {
+            // false
+            //List<Adat_Kiegészítő_Könyvtár> AdatokÖ = kézKönyvtár.Lista_Adatok();
+            //List<Adat_Kiegészítő_Könyvtár> Adatok = (from a in AdatokÖ
+            //                                         where a.Név != "Főmérnökség"
+            //                                         select a).ToList();
+
+            //foreach (Adat_Kiegészítő_Könyvtár Elem in Adatok)
+            //    Cmbtelephely.Items.Add(Elem.Név);
             string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
             string jelszó = "Mocó";
             string szöveg;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -10,7 +11,6 @@ using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static Villamos.Főkönyv_Funkciók;
 using MyF = Függvénygyűjtemény;
-using System.Linq;
 
 namespace Villamos
 {
@@ -39,29 +39,29 @@ namespace Villamos
 
                 // megnézzük, hogy létezik-e az éves tábla fájl
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\kiadás" + Dátum.Value.ToString("yyyy") + ".mdb";
-                if (!File.Exists(hely) )
+                if (!File.Exists(hely))
                     Adatbázis_Létrehozás.Kiadásiösszesítőtábla(hely);
 
                 // megnézzük, hogy létezik-e az éves tábla fájl
                 hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\személyzet" + Dátum.Value.ToString("yyyy") + ".mdb";
-                if (!File.Exists(hely) )
+                if (!File.Exists(hely))
                     Adatbázis_Létrehozás.Személyzetösszesítőtábla(hely);
 
                 // megnézzük, hogy létezik-e az éves tábla fájl
                 hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\típuscsere" + Dátum.Value.ToString("yyyy") + ".mdb";
-                if (!File.Exists(hely) )
+                if (!File.Exists(hely))
                     Adatbázis_Létrehozás.Tipuscsereösszesítőtábla(hely);
 
                 // xnapos tábla
                 hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\Elkészült" + Dátum.Value.ToString("yyyy") + ".mdb";
-                if (!File.Exists(hely) )
+                if (!File.Exists(hely))
                     Adatbázis_Létrehozás.Javításiátfutástábla(hely);
 
                 // napi állók
                 // xnapos tábla
                 hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\Napi.mdb";
 
-                if (!File.Exists(hely) )
+                if (!File.Exists(hely))
                     Adatbázis_Létrehozás.Javításiátfutástábla(hely);
 
                 Jogosultságkiosztás();
@@ -93,7 +93,7 @@ namespace Villamos
             Cmbtelephely.Items.Clear();
             Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Jármű());
 
-            if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér|| Program.PostásTelephely == "Műszaki osztály")
+            if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér || Program.PostásTelephely == "Műszaki osztály")
                 Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim();
             else
                 Cmbtelephely.Text = Program.PostásTelephely;
@@ -211,7 +211,7 @@ namespace Villamos
 
         private void Állókocsik_Click(object sender, EventArgs e)
         {
-            SUBnapihibagöngyölés( Cmbtelephely.Text.Trim());
+            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
             SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
             AlsóPanels1 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\napi.mdb";
             AlsóPanels2 = "minden";
@@ -294,7 +294,7 @@ namespace Villamos
                 Tábla.Height = Height - Tábla.Top - 50;
                 Tábla.Width = Width - Tábla.Left - 20;
                 Tábla.Visible = true;
-                Tábla.Refresh(); 
+                Tábla.Refresh();
                 Tábla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
@@ -324,7 +324,7 @@ namespace Villamos
 
             // megnézzük, hogy létezik-e az éves tábla fájl
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\kiadás" + Dátum.Value.ToString("yyyy") + ".mdb";
-            if (!File.Exists(hely) )
+            if (!File.Exists(hely))
                 Adatbázis_Létrehozás.Kiadásiösszesítőtábla(hely);
 
             Táblázatlistázás();
@@ -344,7 +344,7 @@ namespace Villamos
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
-                Tábla.Refresh(); 
+                Tábla.Refresh();
                 Tábla.Visible = false;
                 Tábla.ColumnCount = 11;
 
@@ -397,7 +397,7 @@ namespace Villamos
                 Tábla.Height = Height - Tábla.Top - 50;
                 Tábla.Width = Width - Tábla.Left - 20;
                 Tábla.Visible = true;
-                Tábla.Refresh(); 
+                Tábla.Refresh();
                 Tábla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
@@ -681,7 +681,7 @@ namespace Villamos
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
-                    Tábla.Refresh();
+                Tábla.Refresh();
 
                 Tábla.ColumnCount = 10;
 
@@ -747,7 +747,7 @@ namespace Villamos
 
         private void Havielkészültkocsik_Click(object sender, EventArgs e)
         {
-            SUBnapihibagöngyölés( Cmbtelephely.Text.Trim());
+            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
             SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
             AlsóPanels1 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\Elkészült" + Dátum.Value.ToString("yyyy") + ".mdb";
             AlsóPanels2 = "havikészült";
@@ -850,7 +850,7 @@ namespace Villamos
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
-                Tábla.Refresh(); 
+                Tábla.Refresh();
                 Tábla.Visible = false;
                 Tábla.ColumnCount = 8;
 
@@ -917,7 +917,7 @@ namespace Villamos
         #region Napi adatok stb
         private void Napielkészültek_Click(object sender, EventArgs e)
         {
-            SUBnapihibagöngyölés( Cmbtelephely.Text.Trim());
+            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
             SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
             AlsóPanels1 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\Elkészült" + Dátum.Value.ToString("yyyy") + ".mdb";
             AlsóPanels2 = "elkészült";
@@ -930,7 +930,6 @@ namespace Villamos
             try
             {
                 string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                string jelszókieg = "Mocó";
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló" + @"\" + Dátum.Value.ToString("yyyyMM") + "hibanapló.mdb";
                 string jelszó = "pozsgaii";
@@ -961,7 +960,7 @@ namespace Villamos
                 string szöveg = "SELECT * FROM hibaterv where főkönyv = true ORDER BY id";
 
                 Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
-                List<Adat_Kiegészítő_Hibaterv> KAdatok = KKH_kéz.Lista_adatok(helykieg, jelszókieg, szöveg);
+                List<Adat_Kiegészítő_Hibaterv> KAdatok = KKH_kéz.Lista_Adatok(helykieg);
 
                 Kezelő_jármű_hiba KJH_kéz = new Kezelő_jármű_hiba();
 
@@ -1025,7 +1024,7 @@ namespace Villamos
                 Tábla.Height = Height - Tábla.Top - 50;
                 Tábla.Width = Width - Tábla.Left - 20;
                 Tábla.Visible = true;
-                Tábla.Refresh(); 
+                Tábla.Refresh();
                 Tábla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
@@ -1050,7 +1049,7 @@ namespace Villamos
             // megnézzük, hogy létezik-e az éves tábla fájl
 
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\kiadás" + Dátum.Value.ToString("yyyy") + ".mdb";
-            if (!File.Exists(hely) )
+            if (!File.Exists(hely))
                 Adatbázis_Létrehozás.Kiadásiösszesítőtábla(hely);
 
             Főkönyv_Funkciók.Napiadatokmentése("de", Dátum.Value, Cmbtelephely.Text);

@@ -57,7 +57,7 @@ namespace Villamos.Villamos.Kezelők
                 string szöveg = $"UPDATE Adatok SET ";
                 szöveg += $"szöveg='{Adat.Szöveg}', ";
                 szöveg += $"email='{Adat.Email}' ";
-                szöveg += $"WHERE '{Adat.Id}' ";
+                szöveg += $"WHERE id={Adat.Id} ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

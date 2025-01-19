@@ -42,7 +42,7 @@ namespace Villamos.Villamos.Kezelők
         public void Rögzítés(string hely, Adat_Telep_Kiegészítő_Kidobó Adat)
         {
             string szöveg = $"INSERT INTO kidobó (id, telephely)";
-            szöveg += $"VALUES ('{Adat.Id}',";
+            szöveg += $"VALUES ({Adat.Id},";
             szöveg += $"'{Adat.Telephely})'";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
@@ -57,7 +57,7 @@ namespace Villamos.Villamos.Kezelők
         {
             string szöveg = $"UPDATE kidobó SET ";
             szöveg += $"telephely='{Adat.Telephely}'";
-            szöveg += $"WHERE id= '{Adat.Id}'";
+            szöveg += $"WHERE id={Adat.Id}";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
     }

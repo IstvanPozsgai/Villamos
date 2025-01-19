@@ -1589,7 +1589,7 @@ namespace Villamos.Villamos_Nyomtatványok
         {
 
             string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\segéd\Kiegészítő.mdb";
-            string jelszókieg = "Mocó";
+
 
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló" + @"\" + Dátum.ToString("yyyyMM") + "hibanapló.mdb";
             string jelszó = "pozsgaii";
@@ -1603,7 +1603,10 @@ namespace Villamos.Villamos_Nyomtatványok
                 List<Adat_Jármű_hiba> Adatok;
 
                 Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
-                List<Adat_Kiegészítő_Hibaterv> KiAdatok = KKH_kéz.Lista_adatok(helykieg, jelszókieg, szöveg);
+                List<Adat_Kiegészítő_Hibaterv> KiAdatokÖ = KKH_kéz.Lista_Adatok(helykieg);
+                List<Adat_Kiegészítő_Hibaterv> KiAdatok = (from a in KiAdatokÖ
+                                                           where a.Főkönyv == true
+                                                           select a).ToList();
 
                 foreach (Adat_Kiegészítő_Hibaterv rekordkieg in KiAdatok)
                 {

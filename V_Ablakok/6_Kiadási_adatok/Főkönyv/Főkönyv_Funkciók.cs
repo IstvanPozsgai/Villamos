@@ -370,18 +370,16 @@ namespace Villamos
             string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
             if (!File.Exists(hely)) return;
             string jelszó = "lilaakác";
-            string szöveg=$"SELECT * FROM adattábla";
+            string szöveg = $"SELECT * FROM adattábla";
             Kezelő_Főkönyv_Nap KézNap = new Kezelő_Főkönyv_Nap();
-            List<Adat_Főkönyv_Nap> AdatokNap = KézNap.Lista_adatok(hely,jelszó ,szöveg );
+            List<Adat_Főkönyv_Nap> AdatokNap = KézNap.Lista_adatok(hely, jelszó, szöveg);
 
             string helyzser = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\zser\zser{KÜLDdátum:yyyyMMdd}{KÜLDreggel}.mdb";
             if (!File.Exists(helyzser)) return;
 
             string helykieg = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\segéd\Kiegészítő.mdb";
-            string jelszókieg = "Mocó";
-            szöveg = "SELECT * FROM fortetipus";
             Kezelő_Telep_Kieg_Fortetípus KézKiegTipus = new Kezelő_Telep_Kieg_Fortetípus();
-            List<Adat_Telep_Kieg_Fortetípus> AdatokKiegTipus = KézKiegTipus.Lista_Adatok(helykieg, jelszókieg, szöveg);
+            List<Adat_Telep_Kieg_Fortetípus> AdatokKiegTipus = KézKiegTipus.Lista_Adatok(helykieg);
 
 
 
@@ -448,9 +446,9 @@ namespace Villamos
                         {
                             Adat_Főkönyv_Nap ElemNap = (from a in AdatokNap
                                                         where a.Azonosító == ideigpsz.Trim()
-                                                        select a).FirstOrDefault ();
+                                                        select a).FirstOrDefault();
                             jótípusalap = "_";
-                            if (ElemNap!=null) jótípusalap =ElemNap.Típus .ToUpper ();
+                            if (ElemNap != null) jótípusalap = ElemNap.Típus.ToUpper();
 
                             if (jótípus.Trim() != jótípusalap.Trim())
                             {

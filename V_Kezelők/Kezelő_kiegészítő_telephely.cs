@@ -118,6 +118,32 @@ namespace Villamos.Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Csere(long sor1, long sor2)
+        {
+            try
+            {
+                string szöveg = $"UPDATE telephelytábla SET sorszám='{0}' WHERE  sorszám={sor1}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                szöveg = $"UPDATE telephelytábla SET sorszám='{sor1}' WHERE  sorszám={sor2}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                szöveg = $"UPDATE telephelytábla SET sorszám='{sor2}' WHERE  sorszám={0}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                szöveg = $"DELETE FROM telephelytábla where  sorszám={0}";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 
 
@@ -353,67 +379,6 @@ namespace Villamos.Villamos.Kezelők
         }
     }
 
-
-    public class Kezelő_Kiegészítő_Jelenlétiív
-    {
-        public List<Adat_Kiegészítő_Jelenlétiív> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Jelenlétiív> Adatok = new List<Adat_Kiegészítő_Jelenlétiív>();
-            Adat_Kiegészítő_Jelenlétiív Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Jelenlétiív(
-                                        rekord["id"].ToÉrt_Long(),
-                                        rekord["Szervezet"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public Adat_Kiegészítő_Jelenlétiív Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Kiegészítő_Jelenlétiív Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_Kiegészítő_Jelenlétiív(
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["Szervezet"].ToStrTrim()
-                                      );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-    }
 
 
 

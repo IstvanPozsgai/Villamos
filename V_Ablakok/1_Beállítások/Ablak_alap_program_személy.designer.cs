@@ -261,6 +261,7 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Button13 = new System.Windows.Forms.Button();
             this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.FeorStátus = new System.Windows.Forms.CheckBox();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CsoportTábla)).BeginInit();
@@ -1340,14 +1341,14 @@ namespace Villamos
             this.TabPage4.Text = "PDF";
             this.TabPage4.UseVisualStyleBackColor = true;
             // 
-            // pdfViewer1
+            // PDF_néző
             // 
             this.PDF_néző.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PDF_néző.Location = new System.Drawing.Point(4, 5);
             this.PDF_néző.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.PDF_néző.Name = "pdfViewer1";
+            this.PDF_néző.Name = "PDF_néző";
             this.PDF_néző.ShowToolbar = false;
             this.PDF_néző.Size = new System.Drawing.Size(1179, 448);
             this.PDF_néző.TabIndex = 0;
@@ -1356,6 +1357,7 @@ namespace Villamos
             // TabPage5
             // 
             this.TabPage5.BackColor = System.Drawing.Color.SandyBrown;
+            this.TabPage5.Controls.Add(this.FeorStátus);
             this.TabPage5.Controls.Add(this.Feortörlés);
             this.TabPage5.Controls.Add(this.FrissítMunkakör);
             this.TabPage5.Controls.Add(this.FeorTábla);
@@ -2611,6 +2613,16 @@ namespace Villamos
             this.Holtart.TabIndex = 53;
             this.Holtart.Visible = false;
             // 
+            // FeorStátus
+            // 
+            this.FeorStátus.AutoSize = true;
+            this.FeorStátus.Location = new System.Drawing.Point(781, 50);
+            this.FeorStátus.Name = "FeorStátus";
+            this.FeorStátus.Size = new System.Drawing.Size(68, 24);
+            this.FeorStátus.TabIndex = 82;
+            this.FeorStátus.Text = "Törölt";
+            this.FeorStátus.UseVisualStyleBackColor = true;
+            // 
             // Ablak_alap_program_személy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -2859,5 +2871,6 @@ namespace Villamos
         internal Label label50;
         internal TextBox Munka_Id;
         private ComboBox Munka_Kategória;
+        private CheckBox FeorStátus;
     }
 }
