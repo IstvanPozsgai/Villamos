@@ -808,7 +808,7 @@ namespace Villamos
                 MyE.Vastagkeret($"a{sor}" + $":j{sor}");
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
-                DateTime Határóra = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, 12, 0, 0);
+                DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
                 List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(hely);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
@@ -829,7 +829,7 @@ namespace Villamos
                     MyE.Kiir(rekord.Villamos.Trim(), $"f{sor}");
                     MyE.Kiir(rekord.Tárolásihely.Trim(), $"g{sor}");
                     MyE.Kiir(rekord.Megjegyzés.Trim(), $"h{sor}");
-                    MyE.Kiir($"(i + 1)", $"i{sor}");
+                    MyE.Kiir($"{i + 1}", $"i{sor}");
                     MyE.Kiir(rekord.Szerelvénytípus.Trim(), $"j{sor}");
                     if (rekord.Végzés.Hour < 12 && rekord.Végzéshely.Trim() == AlsóPanels.Trim())
                     {
@@ -937,7 +937,7 @@ namespace Villamos
                     MyE.Kiir(rekord.Villamos.Trim(), $"f{sor}");
                     MyE.Kiir(rekord.Tárolásihely.Trim(), $"g{sor}");
                     MyE.Kiir(rekord.Megjegyzés.Trim(), $"h{sor}");
-                    MyE.Kiir((i + 1).ToString(), $"i{sor}");
+                    MyE.Kiir($"{(i + 1)}", $"i{sor}");
                     MyE.Kiir(rekord.Szerelvénytípus.Trim(), $"j{sor}");
                     i++;
                     Holtart.Lép();
@@ -1010,7 +1010,7 @@ namespace Villamos
                 MyE.Vastagkeret($"a{sor}" + $":i{sor}");
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
-                DateTime Határóra = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, 12, 0, 0);
+                DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
                 List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(hely);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
@@ -1226,7 +1226,7 @@ namespace Villamos
 
                 // érdemi rész
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
-                DateTime Határóra = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, 12, 0, 0);
+                DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
                 List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(hely);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
