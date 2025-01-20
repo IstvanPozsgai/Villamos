@@ -2584,6 +2584,7 @@ namespace Villamos
         {
             string hely = $@"{Application.StartupPath}\Főmérnökség\napló{DateTime.Now.Year}.accdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
+            MessageBox.Show("Ez most elkészült?", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

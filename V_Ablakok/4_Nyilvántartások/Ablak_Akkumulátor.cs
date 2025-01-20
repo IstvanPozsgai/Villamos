@@ -27,7 +27,7 @@ namespace Villamos
 
         #region Kezelők és Listák
         readonly Kezelő_Akkumulátor KézAkku = new Kezelő_Akkumulátor();
-        readonly Kezelő_Akkumulátor_Mérés KézAkkuMér = new Kezelő_Akkumulátor_Mérés();
+        readonly Kezelő_Akkumulátor_Mérés KézAkkuMér = new Kezelő_Akkumulátor_Mérés(DateTime.Today);
         readonly Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
         readonly Kezelő_Akkumulátor_Napló KézAkkuNapló = new Kezelő_Akkumulátor_Napló(DateTime.Today);
 
@@ -41,8 +41,13 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Today.Year}.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Today.AddYears(-2).Year}.mdb";
+                if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Today.AddYears(-1).Year}.mdb";
+                if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
+
 
                 hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\Akku.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Akku_adatok(hely);
@@ -408,29 +413,10 @@ namespace Villamos
                 Adat_Akkumulátor AdatAkku = (from a in AdatokAkku
                                              where a.Gyáriszám == Textgyáriszám.Text.Trim()
                                              select a).FirstOrDefault();
-
-                if (AdatAkku == null)
-                {
-                    Textbeépítve.Text = "_";
-                    Telephely_alap.Text = CmbTelephely.Text.Trim();
-                    Adat_Akkumulátor ADAT = new Adat_Akkumulátor(
-                                                Textbeépítve.Text.Trim(),
-                                                Combofajta.Text.Trim(),
-                                                Combogyártó.Text.Trim(),
-                                                Textgyáriszám.Text.Trim(),
-                                                Combotípus.Text.Trim(),
-                                                Dgarancia.Value,
-                                                Dgyártásiidő.Value,
-                                                1,
-                                                TextMegjegyzés.Text.Trim(),
-                                                DateTime.Today,
-                                                kapacitás,
-                                                CmbTelephely.Text.Trim());
-                    KézAkku.Rögzítés(ADAT);
-                }
-                else
-                {
-                    Adat_Akkumulátor ADAT = new Adat_Akkumulátor(
+                int státus = AdatAkku == null ? 1 : AdatAkku.Státus;
+                Textbeépítve.Text = AdatAkku == null ? "_" : Textbeépítve.Text.Trim();
+                Telephely_alap.Text = AdatAkku == null ? "_" : CmbTelephely.Text.Trim();
+                Adat_Akkumulátor ADAT = new Adat_Akkumulátor(
                             Textbeépítve.Text.Trim(),
                             Combofajta.Text.Trim(),
                             Combogyártó.Text.Trim(),
@@ -438,13 +424,17 @@ namespace Villamos
                             Combotípus.Text.Trim(),
                             Dgarancia.Value,
                             Dgyártásiidő.Value,
-                            AdatAkku.Státus,
+                            státus,
                             TextMegjegyzés.Text.Trim(),
                             DateTime.Today,
                             kapacitás,
                             CmbTelephely.Text.Trim());
+
+                if (AdatAkku == null)
+                    KézAkku.Rögzítés(ADAT);
+                else
                     KézAkku.Módosítás(ADAT);
-                }
+
 
                 Adat_Akkumulátor_Napló ADATNAPLÓ = new Adat_Akkumulátor_Napló(
                                                Textbeépítve.Text.Trim(),
@@ -454,7 +444,7 @@ namespace Villamos
                                                Combotípus.Text.Trim(),
                                                Dgarancia.Value,
                                                Dgyártásiidő.Value,
-                                               AdatAkku.Státus,
+                                               státus,
                                                TextMegjegyzés.Text.Trim(),
                                                DateTime.Today,
                                                kapacitás,
@@ -680,14 +670,12 @@ namespace Villamos
             }
         }
 
-
         private void Teljesség_Click(object sender, EventArgs e)
         {
             try
             {
                 PályaszámListaFeltöltés(true);
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\akku.mdb";
-                string jelszó = "kasosmiklós";
+
                 Holtart.Be();
                 Tábla2.Rows.Clear();
                 Tábla2.Columns.Clear();
@@ -698,16 +686,14 @@ namespace Villamos
                 Tábla2.Columns[0].HeaderText = "Pályaszám";
                 Tábla2.Columns[0].Width = 100;
 
-
-                string szöveg = "SELECT * FROM akkutábla WHERE Beépítve<>'_' ";
+                List<Adat_Akkumulátor> AdatokÖ = KézAkku.Lista_Adatok().OrderBy(a => a.Beépítve).ToList();
+                List<Adat_Akkumulátor> Adatok = (from a in AdatokÖ
+                                                 where a.Beépítve != "_"
+                                                 select a).ToList();
                 if (!Program.Postás_Vezér)
-                    szöveg += $" AND telephely='{CmbTelephely.Text.Trim()}'";
-
-                szöveg += " ORDER BY Beépítve";
-
-
-                List<Adat_Akkumulátor> Adatok = KézAkku.Lista_Adatok(hely, jelszó, szöveg);
-
+                    Adatok = (from a in Adatok
+                              where a.Telephely != CmbTelephely.Text.Trim()
+                              select a).ToList();
                 int oszlop = 0;
                 foreach (Adat_Jármű rekord in Adatok_Jármű)
                 {
@@ -751,12 +737,10 @@ namespace Villamos
             }
         }
 
-
         private void Mérés_Click(object sender, EventArgs e)
         {
             try
             {
-
                 Holtart.Be();
                 Tábla2.Rows.Clear();
                 Tábla2.Columns.Clear();
@@ -783,36 +767,15 @@ namespace Villamos
                 Tábla2.Columns[8].HeaderText = "Telephely";
                 Tábla2.Columns[8].Width = 120;
 
-                string szöveg = "SELECT * FROM akkutábla WHERE státus<4 ";
-                if (!Program.Postás_Vezér)
-                    szöveg += $" AND telephely='{CmbTelephely.Text.Trim()}'";
+                List<Adat_Akkumulátor> Adatok = KézAkku.Lista_Adatok().Where(a => a.Státus < 4).OrderBy(a => a.Beépítve).ToList();
+                if (!Program.Postás_Vezér) Adatok = Adatok.Where(a => a.Telephely == CmbTelephely.Text.Trim()).ToList();
 
-                szöveg += " ORDER BY Beépítve";
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\akku.mdb";
-                string jelszó = "kasosmiklós";
-
-                List<Adat_Akkumulátor> Adatok = KézAkku.Lista_Adatok(hely, jelszó, szöveg);
-
-                Kezelő_Akkumulátor_Mérés Kézmérés = new Kezelő_Akkumulátor_Mérés();
-                szöveg = "SELECT * FROM méréstábla WHERE Rögzítő<>'TÖRÖLT'  ORDER BY gyáriszám, Mérésdátuma asc";
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
-                if (!Exists(hely))
-                    Adatbázis_Létrehozás.Akku_Mérés(hely);
-                List<Adat_Akkumulátor_Mérés> AdatokMérés = Kézmérés.Lista_Adatok(hely, jelszó, szöveg);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.AddYears(-1).Year}.mdb";
-                if (!Exists(hely))
-                    Adatbázis_Létrehozás.Akku_Mérés(hely);
-                List<Adat_Akkumulátor_Mérés> AdatokMérés1 = Kézmérés.Lista_Adatok(hely, jelszó, szöveg);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.AddYears(-2).Year}.mdb";
-                if (!Exists(hely))
-                    Adatbázis_Létrehozás.Akku_Mérés(hely);
-                List<Adat_Akkumulátor_Mérés> AdatokMérés2 = Kézmérés.Lista_Adatok(hely, jelszó, szöveg);
-
-
-
+                List<Adat_Akkumulátor_Mérés> AdatokMérés = KézAkkuMér.Lista_Adatok(0).Where(a => a.Rögzítő != "TÖRÖLT").ToList();
+                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(-1).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
+                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(-2).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
+                AdatokMérés = (from a in AdatokMérés
+                               orderby a.Gyáriszám descending, a.Mérésdátuma ascending
+                               select a).ToList();
 
                 foreach (Adat_Akkumulátor rekord in Adatok)
                 {
@@ -825,13 +788,10 @@ namespace Villamos
                     Tábla2.Rows[i].Cells[7].Value = $"{rekord.Státus} - {Enum.GetName(typeof(MyEn.Akku_Státus), rekord.Státus)}";
                     Tábla2.Rows[i].Cells[8].Value = rekord.Telephely.Trim();
 
-                    var eredmény = (AdatokMérés.FirstOrDefault(a => a.Gyáriszám.Trim() == rekord.Gyáriszám.Trim()))
-                         ?? (AdatokMérés1.FirstOrDefault(a => a.Gyáriszám.Trim() == rekord.Gyáriszám.Trim()))
-                         ?? (AdatokMérés2.FirstOrDefault(a => a.Gyáriszám.Trim() == rekord.Gyáriszám.Trim()));
+                    Adat_Akkumulátor_Mérés eredmény = (AdatokMérés.FirstOrDefault(a => a.Gyáriszám.Trim() == rekord.Gyáriszám.Trim()));
 
                     if (eredmény != null)
                     {
-
                         Tábla2.Rows[i].Cells[3].Value = eredmény.Kapacitás;
                         Tábla2.Rows[i].Cells[4].Value = Math.Round(eredmény.Kapacitás / (double)rekord.Kapacitás, 4) * 100;
                         Tábla2.Rows[i].Cells[6].Value = eredmény.Mérésdátuma.ToString("yyyy.MM.dd");
@@ -852,9 +812,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
         #endregion
 
 
@@ -920,8 +877,8 @@ namespace Villamos
                     szöveg += " AND  gyáriszám Like '%" + MérésLekGyári.Text.Trim() + "%'";
                 szöveg += " ORDER BY gyáriszám";
 
-                Kezelő_Akkumulátor_Mérés Kéz = new Kezelő_Akkumulátor_Mérés();
-                List<Adat_Akkumulátor_Mérés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Akkumulátor_Mérés> Adatok = KézAkkuMér.Lista_Adatok(hely, jelszó, szöveg);
 
                 hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\akku.mdb";
                 szöveg = "SELECT * FROM akkutábla ORDER BY gyáriszám";

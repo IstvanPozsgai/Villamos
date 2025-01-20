@@ -22,7 +22,7 @@ namespace Villamos.Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO akkutábla ";
+                string szöveg = "INSERT INTO Akkutábla_Napló ";
                 szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.Beépítve}', "; //beépítve       ,

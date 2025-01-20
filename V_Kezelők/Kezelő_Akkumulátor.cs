@@ -92,42 +92,6 @@ namespace Villamos.Villamos_Kezelők
             return Adatok;
         }
 
-        public Adat_Akkumulátor Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Akkumulátor Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_Akkumulátor(
-                                 rekord["Beépítve"].ToStrTrim(),
-                                 rekord["Fajta"].ToStrTrim(),
-                                 rekord["Gyártó"].ToStrTrim(),
-                                 rekord["Gyáriszám"].ToStrTrim(),
-                                 rekord["Típus"].ToStrTrim(),
-                                 rekord["Garancia"].ToÉrt_DaTeTime(),
-                                 rekord["Gyártásiidő"].ToÉrt_DaTeTime(),
-                                 rekord["Státus"].ToÉrt_Int(),
-                                 rekord["Megjegyzés"].ToStrTrim(),
-                                 rekord["Módosításdátuma"].ToÉrt_DaTeTime(),
-                                 rekord["Kapacitás"].ToÉrt_Int(),
-                                 rekord["Telephely"].ToStrTrim()
-                              );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-
         public void Rögzítés(Adat_Akkumulátor Adat)
         {
             try
@@ -187,8 +151,4 @@ namespace Villamos.Villamos_Kezelők
             }
         }
     }
-
-
-
-
 }
