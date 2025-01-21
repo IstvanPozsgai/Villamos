@@ -143,7 +143,7 @@ namespace Villamos
             try
             {
                 CmbTelephely.Items.Clear();
-                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKönyvtár.Lista_Adatok();
+                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKönyvtár.Lista_Adatok().OrderBy(a => a.Név).ToList();
                 foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
                     CmbTelephely.Items.Add(rekord.Név);
             }
