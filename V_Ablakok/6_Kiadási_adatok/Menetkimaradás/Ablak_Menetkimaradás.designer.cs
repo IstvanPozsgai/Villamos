@@ -211,7 +211,6 @@ namespace Villamos
             // 
             // AdatRészletesMegjelenítéseToolStripMenuItem
             // 
-            this.AdatRészletesMegjelenítéseToolStripMenuItem.Enabled = false;
             this.AdatRészletesMegjelenítéseToolStripMenuItem.Name = "AdatRészletesMegjelenítéseToolStripMenuItem";
             this.AdatRészletesMegjelenítéseToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
             this.AdatRészletesMegjelenítéseToolStripMenuItem.Text = "Adat részletes megjelenítése";

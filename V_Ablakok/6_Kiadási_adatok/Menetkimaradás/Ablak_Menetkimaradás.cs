@@ -37,7 +37,6 @@ namespace Villamos
         {
             // beállítjuk a dátumot az előző napra mert mai adat még nincs
             Dátum.Value = DateTime.Now.AddDays(-1);
-            AdatRészletesMegjelenítéseToolStripMenuItem.Enabled = false;
             Telephelyekfeltöltése();
             Szolgálatoklista();
             Telephelyek_Feltöltése_lista();
@@ -95,7 +94,7 @@ namespace Villamos
 
                 cmbtelephely1.Items.Clear();
                 cmbtelephely1.Items.AddRange(Listák.TelephelyLista_Jármű());
-
+                cmbtelephely.Enabled = false;
 
                 if (Program.PostásTelephely == "Főmérnökség" || Program.PostásTelephely.Contains("törzs"))
                 {
@@ -191,7 +190,7 @@ namespace Villamos
             // módosítás 3
             if (MyF.Vanjoga(melyikelem, 3))
             {
-                cmbtelephely.Enabled = true;
+
                 Panel1.Visible = true;
                 Panel2.Visible = true;
                 FőmérnökségiLekérdezésToolStripMenuItem.Visible = true;
@@ -503,7 +502,7 @@ namespace Villamos
             Táblatörlése();
             int argmelyiket = 1;
             Táblalistázás(argmelyiket);
-            AdatRészletesMegjelenítéseToolStripMenuItem.Enabled = true;
+
         }
 
         private void HaviLlistaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -511,14 +510,14 @@ namespace Villamos
             Táblatörlése();
             int argmelyiket = 2;
             Táblalistázás(argmelyiket);
-            AdatRészletesMegjelenítéseToolStripMenuItem.Enabled = true;
+
         }
 
         private void VonalasListaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
-                AdatRészletesMegjelenítéseToolStripMenuItem.Enabled = false;
+
 
                 Táblatörlése();
                 if (cmbtelephely1.Text.Trim() == "")
@@ -716,7 +715,6 @@ namespace Villamos
         {
             try
             {
-                AdatRészletesMegjelenítéseToolStripMenuItem.Enabled = false;
 
                 Táblatörlése();
                 if (cmbtelephely1.Text == "")
@@ -946,7 +944,7 @@ namespace Villamos
         {
             try
             {
-                AdatRészletesMegjelenítéseToolStripMenuItem.Enabled = true;
+
                 if (Pályaszámok.Text == "")
                     throw new HibásBevittAdat("Nincs kiválasztva pályaszám.");
                 if (cmbtelephely1.Text == "")
@@ -1277,31 +1275,62 @@ namespace Villamos
 
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // melyik sorra kattintottunk
-            if (e.RowIndex < 0) return;
-            txtSorszám.Text = e.RowIndex.ToString();
-            idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[0].Value.ToString());
-            if (cmbtelephely.Enabled == false)
+            try
             {
-                // telephelyi adatok
-                txthely.Text = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
+                // melyik sorra kattintottunk
+                if (e.RowIndex < 0) return;
+                txtSorszám.Text = e.RowIndex.ToString();
+                idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[9].Value.ToString());
+                if (cmbtelephely.Enabled == false)
+                {
+                    // telephelyi adatok
+                    txthely.Text = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
+                }
+                else
+                {
+                    // főmérnökségi adatok 
+                    txthely.Text = Application.StartupPath + @"\Főmérnökség\adatok\" + Dátum.Value.ToString("yyyy") + @"\" + Dátum.Value.ToString("yyyy") + "_menet_adatok.mdb";
+                }
             }
-            else
+            catch (HibásBevittAdat ex)
             {
-                // főmérnökségi adatok 
-                txthely.Text = Application.StartupPath + @"\Főmérnökség\adatok\" + Dátum.Value.ToString("yyyy") + @"\" + Dátum.Value.ToString("yyyy") + "_menet_adatok.mdb";
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void AdatRészletesMegjelenítéseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (idszám_ != 0)
+            try
             {
-                string szöveg = "SELECT * FROM menettábla WHERE id=" + idszám_.ToString();
-                Új_Ablak_Menetrögítés?.Close();
-                Új_Ablak_Menetrögítés = new Ablak_Menetrögítés(hely_, jelszó_, szöveg);
-                Új_Ablak_Menetrögítés.FormClosed += Ablak_Menetrögítés_FormClosed;
-                Új_Ablak_Menetrögítés.Show();
+                if (cmbtelephely.Enabled)
+                    hely_ = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\{Dátum.Value:yyyy}_menet_adatok.mdb";
+                else
+                    hely_ = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value:yyyy}.mdb";
+
+                string jelszó = "lilaakác";
+
+                if (idszám_ != 0)
+                {
+                    string szöveg = "SELECT * FROM menettábla WHERE id=" + idszám_.ToString();
+                    Új_Ablak_Menetrögítés?.Close();
+                    Új_Ablak_Menetrögítés = new Ablak_Menetrögítés(hely_, jelszó, szöveg);
+                    Új_Ablak_Menetrögítés.FormClosed += Ablak_Menetrögítés_FormClosed;
+                    Új_Ablak_Menetrögítés.Show();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1378,7 +1407,7 @@ namespace Villamos
                     throw new HibásBevittAdat("Nincs kijelölve egy üzem sem.");
 
 
-                Tábla.ColumnCount = 9;
+                Tábla.ColumnCount = 10;
                 Tábla.RowCount = 0;
                 Tábla.Visible = false;
 
@@ -1400,8 +1429,9 @@ namespace Villamos
                 Tábla.Columns[7].HeaderText = "Menet";
                 Tábla.Columns[7].Width = 60;
                 Tábla.Columns[8].HeaderText = "Bekövetkezés";
-                Tábla.Columns[8].Width = 170;
-
+                Tábla.Columns[8].Width = 180;
+                Tábla.Columns[9].HeaderText = "ID";
+                Tábla.Columns[9].Width = 80;
                 int i;
                 Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
                 List<Adat_Menetkimaradás> Adatok;
@@ -1437,6 +1467,7 @@ namespace Villamos
                                 Tábla.Rows[i].Cells[6].Value = rekord.Javítás;
                                 Tábla.Rows[i].Cells[7].Value = rekord.Kimaradtmenet;
                                 Tábla.Rows[i].Cells[8].Value = rekord.Bekövetkezés;
+                                Tábla.Rows[i].Cells[9].Value = rekord.Id;
                             }
                         }
                     }
