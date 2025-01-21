@@ -32,8 +32,15 @@ namespace Villamos.Villamos_Adatszerkezet
             Kapacitás = kapacitás;
             Telephely = telephely;
         }
-    }
 
+        public Adat_Akkumulátor(string beépítve, string gyáriszám, int státus, DateTime módosításdátuma)
+        {
+            Beépítve = beépítve;
+            Gyáriszám = gyáriszám;
+            Státus = státus;
+            Módosításdátuma = módosításdátuma;
+        }
+    }
 
     public class Adat_Akkumulátor_Napló
     {

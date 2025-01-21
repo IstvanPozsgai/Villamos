@@ -150,5 +150,45 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Módosítás_Státus(Adat_Akkumulátor Adat)
+        {
+            try
+            {
+                string szöveg = " UPDATE akkutábla SET ";
+                szöveg += $" beépítve='{Adat.Beépítve}', ";
+                szöveg += $" státus={Adat.Státus}, ";
+                szöveg += $" Módosításdátuma='{Adat.Módosításdátuma:yyyy.MM.dd}' ";
+                szöveg += $" WHERE Gyáriszám='{Adat.Gyáriszám}' ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public void Módosítás(string Telep, string gyáriszám)
+        {
+            try
+            {
+                string szöveg = $"UPDATE akkutábla SET  telephely='{Telep.Trim()}' WHERE Gyáriszám='{gyáriszám.Trim()}' ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString() + $"\n{hely},\nTelephely:{Telep},\nGyáriszám:{gyáriszám}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }
