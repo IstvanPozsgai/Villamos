@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.Beosztás;
 using Villamos.Villamos_Adatszerkezet;
+using Villamos.Villamos_Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
@@ -579,10 +580,10 @@ namespace Villamos.Villamos_Ablakok
                             DirectoryInfo Directories = new DirectoryInfo($@"{Application.StartupPath}\Főmérnökség\adatok\dokumentumok");
                             string mialapján = $"{Hrazonosító.Trim()}_tul_{Dátum.Year}*.pdf";
                             FileInfo[] fileInfo = Directories.GetFiles(mialapján, SearchOption.TopDirectoryOnly);
-            
-                            if (fileInfo.Count()<1 )
+
+                            if (fileInfo.Count() < 1)
                                 throw new HibásBevittAdat("A Túlórát dolgozói nyilatkozat hiányában nem lehet rögzíteni!");
-                             break;
+                            break;
                         }
                     case 5:
                         {

@@ -4,8 +4,9 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
+using Villamos.Villamos_Kezelők;
 using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
 {
@@ -16,7 +17,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         public string Gyökér { get; private set; }
         public DateTime Dátum { get; private set; }
 
-        int NormaIdő =0;
+        int NormaIdő = 0;
         public Kerékeszterga_Excel(string fájl, string gyökér, DateTime dátum)
         {
             Fájl = fájl;
@@ -151,7 +152,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 // hétvége és ünnepnap színezés
                 string hely = Gyökér + @"\Főmérnökség\adatok\" + Dátum.Year.ToString() + @"\munkaidőnaptár.mdb";
                 string jelszó = "katalin";
-                string szöveg = $"SELECT * FROM naptár WHERE dátum>=#{Hételső.ToString("MM-dd-yyyy")}# AND dátum<=#{Hétutolsó.ToString("MM-dd-yyyy")}# ORDER BY Dátum";
+                string szöveg = $"SELECT * FROM naptár WHERE dátum>=#{Hételső:MM-dd-yyyy}# AND dátum<=#{Hétutolsó:MM-dd-yyyy}# ORDER BY Dátum";
                 Kezelő_Váltós_Naptár KéZNaptár = new Kezelő_Váltós_Naptár();
                 List<Adat_Váltós_Naptár> AdatNaptár = KéZNaptár.Lista_Adatok(hely, jelszó, szöveg);
 
@@ -210,9 +211,9 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             DateTime Hételső = MyF.Hét_elsőnapja(KüldDátum);
             DateTime Hétutolsó = MyF.Hét_Utolsónapja(KüldDátum);
 
-            string hely = Gyökér + $@"\Baross\Adatok\Beosztás\{Hételső.Year}\EsztBeosztás{Hételső.ToString("yyyyMM")}.mdb";
+            string hely = Gyökér + $@"\Baross\Adatok\Beosztás\{Hételső.Year}\EsztBeosztás{Hételső:yyyyMM}.mdb";
             string jelszó = "kiskakas";
-            string szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{dolgozószám.Trim()}' AND Nap>=#{Hételső.ToString("MM-dd-yyyy")}# AND Nap<=#{Hétutolsó.ToString("MM-dd-yyyy")}#";
+            string szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{dolgozószám.Trim()}' AND Nap>=#{Hételső:MM-dd-yyyy}# AND Nap<=#{Hétutolsó:MM-dd-yyyy}#";
             szöveg += " ORDER BY Nap";
 
             Kezelő_Dolgozó_Beosztás_Új kéz = new Kezelő_Dolgozó_Beosztás_Új();
@@ -223,7 +224,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             if (Hételső.Month != Hétutolsó.Month)
             {
                 //Másik Hónap
-                hely = Gyökér + $@"\Baross\Adatok\Beosztás\{Hétutolsó.Year}\EsztBeosztás{Hétutolsó.ToString("yyyyMM")}.mdb";
+                hely = Gyökér + $@"\Baross\Adatok\Beosztás\{Hétutolsó.Year}\EsztBeosztás{Hétutolsó:yyyyMM}.mdb";
                 List<Adat_Dolgozó_Beosztás_Új> Ideig = kéz.Lista_Adatok(hely, jelszó, szöveg);
                 Adatok.AddRange(Ideig);
 
@@ -252,8 +253,8 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 DateTime IdeigDát = Hételső;
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum);
 
-                string szöveg = $"SELECT * FROM Naptár WHERE Naptár.Idő>=#{Hételső.ToString("MM-dd-yyyy")}# ";
-                szöveg += $" And Naptár.Idő<=#{Hétutolsó.ToString("MM-dd-yyyy")}# ORDER BY pályaszám";
+                string szöveg = $"SELECT * FROM Naptár WHERE Naptár.Idő>=#{Hételső:MM-dd-yyyy}# ";
+                szöveg += $" And Naptár.Idő<=#{Hétutolsó:MM-dd-yyyy}# ORDER BY pályaszám";
 
                 Kezelő_Kerék_Eszterga_Naptár kéz = new Kezelő_Kerék_Eszterga_Naptár();
                 List<Adat_Kerék_Eszterga_Naptár> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
@@ -261,7 +262,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 string munkalap = "Elvégzett";
                 MyE.Új_munkalap(munkalap);
 
-        
+
                 MyE.Oszlopszélesség(munkalap, "F:F", 70);
                 int sor = 1;
                 string előző = "";
@@ -280,8 +281,8 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                             sor++;
                         }
                         darab++;
-                        if (rekord.Megjegyzés.Trim() != "" && !megjegyzés.Contains (rekord.Megjegyzés.Trim()))
-                            megjegyzés += rekord.Megjegyzés.Trim()  + "-" ;
+                        if (rekord.Megjegyzés.Trim() != "" && !megjegyzés.Contains(rekord.Megjegyzés.Trim()))
+                            megjegyzés += rekord.Megjegyzés.Trim() + "-";
                         MyE.Kiir(rekord.Idő.ToString("yyyy.MM.dd"), "A" + sor);
                         MyE.Kiir(rekord.Pályaszám, "B" + sor);
                         MyE.Kiir((darab * 30).ToString(), "E" + sor);
@@ -289,7 +290,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     }
                 }
 
-             
+
                 //Megkeressük a telephelyet és a Norma időt
                 Kezelő_Kerék_Eszterga_Igény kézIgény = new Kezelő_Kerék_Eszterga_Igény();
                 hely = Gyökér + $@"\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Igény.mdb";
@@ -298,8 +299,8 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 for (int i = 2; i <= sor; i++)
                 {
                     string Beolvasott = MyE.Beolvas("B" + i);
-                    string[] darabol =Beolvasott .Split('=');
-                    szöveg = $"SELECT * FROM Igény WHERE pályaszám='{darabol[0].Trim ()}' ";
+                    string[] darabol = Beolvasott.Split('=');
+                    szöveg = $"SELECT * FROM Igény WHERE pályaszám='{darabol[0].Trim()}' ";
                     AdatokIgény = kézIgény.Egy_Adat(hely, jelszó, szöveg);
                     if (AdatokIgény != null)
                     {
@@ -326,7 +327,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                         }
 
 
-                     
+
                     }
                 }
 
@@ -364,8 +365,8 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 DateTime IdeigDát = Hételső;
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum);
 
-                string szöveg = $"SELECT * FROM Naptár WHERE Naptár.Idő>=#{Hételső.ToString("MM-dd-yyyy")}# ";
-                szöveg += $" And Naptár.Idő<=#{Hétutolsó.ToString("MM-dd-yyyy")}# ORDER BY pályaszám";
+                string szöveg = $"SELECT * FROM Naptár WHERE Naptár.Idő>=#{Hételső:MM-dd-yyyy}# ";
+                szöveg += $" And Naptár.Idő<=#{Hétutolsó:MM-dd-yyyy}# ORDER BY pályaszám";
 
                 Kezelő_Kerék_Eszterga_Naptár kéz = new Kezelő_Kerék_Eszterga_Naptár();
                 List<Adat_Kerék_Eszterga_Naptár> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
@@ -403,19 +404,19 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                         összesen++;
 
                         MyE.Kiir(tevékenység, "A" + sor);
-                        if(tevékenység== "Esztergálás") MyE.Kiir((darab * 30).ToString(), "m3");
+                        if (tevékenység == "Esztergálás") MyE.Kiir((darab * 30).ToString(), "m3");
 
-                        MyE.Kiir((darab * 30).ToString(), "B" + sor);                    
-                    }             
+                        MyE.Kiir((darab * 30).ToString(), "B" + sor);
+                    }
                 }
-                összesen = összesen == 0? 1: összesen*30; //ne osszunk váletlenül sem nullával
+                összesen = összesen == 0 ? 1 : összesen * 30; //ne osszunk váletlenül sem nullával
                 for (int i = 2; i <= sor; i++)
                 {
                     MyE.Kiir($"=RC[-1]/{összesen}", "C" + i);
                     MyE.Betű("C" + i, "Percent", "");
                 }
-            
-                MyE.Diagram(munkalap,10, 150, 500, 500, "A1", "B" + sor);
+
+                MyE.Diagram(munkalap, 10, 150, 500, 500, "A1", "B" + sor);
                 MyE.Rácsoz("A1:C" + sor);
                 MyE.Vastagkeret("A1:C" + sor);
                 MyE.Oszlopszélesség(munkalap, "A:C");
@@ -427,7 +428,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 MyE.Vastagkeret("l1:m3");
                 MyE.Oszlopszélesség(munkalap, "l:m");
                 MyE.Háttérszín("l1:m1", System.Drawing.Color.Yellow);
-                MyE.Diagram(munkalap, 600, 150, 500, 500, "l1", "m3" );
+                MyE.Diagram(munkalap, 600, 150, 500, 500, "l1", "m3");
 
 
                 MyE.NyomtatásiTerület_részletes(munkalap, "A1:Q" + sor, "1:1", "", true);

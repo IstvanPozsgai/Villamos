@@ -8,6 +8,7 @@ using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.Beosztás;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using Villamos.Villamos_Kezelők;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 
@@ -377,8 +378,8 @@ namespace Villamos
             List<Adat_Kiegészítő_Munkaidő> AdatokMunka = KézMunka.Lista_Adatok(hely, jelszó, szöveg);
 
             Adat_Kiegészítő_Munkaidő Elem = (from a in AdatokMunka
-                                             where a.Munkarendelnevezés =="8" 
-                                             select a                                             ).FirstOrDefault ();
+                                             where a.Munkarendelnevezés == "8"
+                                             select a).FirstOrDefault();
             double óra;
             if (Elem != null) óra = Elem.Munkaidő; else óra = 0;
 

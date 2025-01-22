@@ -9,6 +9,7 @@ using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok.Beosztás;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using Villamos.Villamos_Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
@@ -119,12 +120,12 @@ namespace Villamos
             if (!Exists(hely))
                 Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
 
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\naplózás\{DateTime.Today.ToString("yyyyMM")}napló.mdb";
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\naplózás\{DateTime.Today:yyyyMM}napló.mdb";
             if (!Exists(hely))
                 Adatbázis_Létrehozás.Beosztás_Naplózása(hely);
 
             // Adott havi adatbázis létezik
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value.ToString("yyyyMM")}.mdb";
+            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
             if (!Exists(hely))
                 Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(hely);
             Visszacsukcsoport();

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
+using Villamos.Villamos_Kezelők;
 using MyA = Adatbázis;
+using MyF = Függvénygyűjtemény;
 
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
@@ -25,7 +25,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         private void Ablak_TTP_Naptár_Load(object sender, EventArgs e)
         {
             Dátum.Value = DateTime.Today;
-                  TáblaListázás();
+            TáblaListázás();
         }
 
         private void Adatok_Áttöltése()
@@ -171,7 +171,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             button1.Visible = false;
             Adatok_Áttöltése();

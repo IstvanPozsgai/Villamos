@@ -12,6 +12,7 @@ using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using Villamos.Villamos_Kezelők;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -289,7 +290,7 @@ namespace Villamos
             {
                 //ha nincs még kész a munkaidőnaptár akkor, kilépünk
                 string helymunka = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum2.Value.Year}\munkaidőnaptár.mdb";
-                if (!File.Exists(helymunka) )                      return;
+                if (!File.Exists(helymunka)) return;
 
 
                 string jelszómunka = "katalin";
@@ -352,7 +353,7 @@ namespace Villamos
                                            where a.Hónap == Dátum2.Value.Month
                                            select a).FirstOrDefault();
                 // ha nincs ilyen akkor átvesszük a munkaidő naptárból ha van.
-                if (Elem == null) 
+                if (Elem == null)
                 {
                     Naptár_átvétel();
                     NaptárListaFeltöltése(Dátum2.Value);

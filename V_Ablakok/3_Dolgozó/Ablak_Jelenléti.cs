@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
+using Villamos.Villamos_Kezelők;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -193,7 +194,7 @@ namespace Villamos
             try
             {
                 AdatokFőkönyv.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim ()}\adatok\segéd\kiegészítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM főkönyvtábla ";
                 AdatokFőkönyv = KézFőkönyv.Lista_Adatok(hely, jelszó, szöveg);
@@ -757,7 +758,7 @@ namespace Villamos
 
                 // Ha dolgozik és éjszakás
                 // kiirjuk a váltós munkarendeket
-                
+
                 // ha nincs kijelölve váltós akkor nem írja ki
                 Kezelő_Kiegészítő_Váltóstábla kéz = new Kezelő_Kiegészítő_Váltóstábla();
                 Kezelő_Kiegészítő_Beosztásciklus KézBeo = new Kezelő_Kiegészítő_Beosztásciklus();
@@ -820,11 +821,11 @@ namespace Villamos
                         else
                             ciklusnap = (int)Math.Round(1 + (hanyadik / (double)rekordciklus - Math.Floor(hanyadik / (double)rekordciklus)) * 28);
 
-                        Adat_Kiegészítő_Beosztásciklus Kód = (from a in AdatokBeo 
-                                                              where a.Id ==ciklusnap 
-                                                              select a).FirstOrDefault ();
-                        string beosztáskód="_";
-                        if (Kód!=null ) beosztáskód =Kód.Beosztáskód ;
+                        Adat_Kiegészítő_Beosztásciklus Kód = (from a in AdatokBeo
+                                                              where a.Id == ciklusnap
+                                                              select a).FirstOrDefault();
+                        string beosztáskód = "_";
+                        if (Kód != null) beosztáskód = Kód.Beosztáskód;
 
                         if (beosztáskód == "_" | beosztáskód == "P" | (beosztáskód) == "")
                         {
