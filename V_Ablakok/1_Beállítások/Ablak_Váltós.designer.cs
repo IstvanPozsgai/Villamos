@@ -2222,7 +2222,7 @@ namespace Villamos
             // Chk_CTRL
             // 
             this.Chk_CTRL.AutoSize = true;
-            this.Chk_CTRL.Location = new System.Drawing.Point(559, 11);
+            this.Chk_CTRL.Location = new System.Drawing.Point(960, 56);
             this.Chk_CTRL.Name = "Chk_CTRL";
             this.Chk_CTRL.Size = new System.Drawing.Size(127, 24);
             this.Chk_CTRL.TabIndex = 65;
@@ -2242,7 +2242,7 @@ namespace Villamos
             this.Button13.TabIndex = 62;
             this.toolTip1.SetToolTip(this.Button13, "Súgó");
             this.Button13.UseVisualStyleBackColor = true;
-            this.Button13.Click += new System.EventHandler(this.Button13_Click);
+            this.Button13.Click += new System.EventHandler(this.Súgó_Click);
             // 
             // toolTip1
             // 

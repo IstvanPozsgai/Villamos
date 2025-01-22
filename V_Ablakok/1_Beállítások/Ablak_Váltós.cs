@@ -41,6 +41,7 @@ namespace Villamos
         double Egészév = 0;
         #endregion
 
+
         #region Kezelők
         readonly Kezelő_Kiegészítő_Beosegéd KézBeoSegéd = new Kezelő_Kiegészítő_Beosegéd();
         readonly Kezelő_Kiegészítő_Túlórakeret KézTúlórakeret = new Kezelő_Kiegészítő_Túlórakeret();
@@ -54,7 +55,9 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Beosztásciklus KézÉjszakásBeoCiklus = new Kezelő_Kiegészítő_Beosztásciklus();
         readonly Kezelő_Váltós_Váltóscsopitábla KézVáltóscsopitábla = new Kezelő_Váltós_Váltóscsopitábla();
         readonly Kezelő_Váltós_Kijelöltnapok KézKijelöltnapok = new Kezelő_Váltós_Kijelöltnapok();
+        readonly Kezelő_Kiegészítő_Könyvtár KézKiegKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
         #endregion
+
 
         #region Listák
         List<Adat_Kiegészítő_Beosegéd> AdatokBeoSegéd = new List<Adat_Kiegészítő_Beosegéd>();
@@ -69,6 +72,8 @@ namespace Villamos
         List<Adat_Váltós_Kijelöltnapok> AdatokKijelöltnapok = new List<Adat_Váltós_Kijelöltnapok>();
         #endregion
 
+
+        #region alap
         public Ablak_Váltós()
         {
             InitializeComponent();
@@ -91,8 +96,6 @@ namespace Villamos
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
-
-        #region alap
         private void Jogosultságkiosztás()
         {
             int melyikelem;
@@ -414,7 +417,7 @@ namespace Villamos
             }
         }
 
-        private void Button13_Click(object sender, EventArgs e)
+        private void Súgó_Click(object sender, EventArgs e)
         {
             try
             {
@@ -490,32 +493,15 @@ namespace Villamos
         #region Beosztás lapfül
         private void Telephelyfeltöltés()
         {
-            Telephely.Items.Clear();
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő2.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM könyvtár  ORDER BY  id";
-
-            Telephely.Items.Add("_");
-            Telephely.BeginUpdate();
-            Telephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "név"));
-            Telephely.EndUpdate();
-            Telephely.Refresh();
-        }
-
-        private void BEOkódFriss_Click(object sender, EventArgs e)
-        {
-            Tábla_BeoKód_kiirás();
-        }
-
-        private void BeoSegédListaFeltöltés()
-        {
             try
             {
-                AdatokBeoSegéd.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM beosegéd  ORDER BY beosztáskód ";
-                AdatokBeoSegéd = KézBeoSegéd.Lista_Adatok(hely, jelszó, szöveg);
+                Telephely.Items.Clear();
+                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKiegKönyvtár.Lista_Adatok();
+
+                Telephely.Items.Add("_");
+                foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
+                    Telephely.Items.Add(rekord.Név);
+                Telephely.Refresh();
             }
             catch (HibásBevittAdat ex)
             {
@@ -528,6 +514,11 @@ namespace Villamos
             }
         }
 
+        private void BEOkódFriss_Click(object sender, EventArgs e)
+        {
+            Tábla_BeoKód_kiirás();
+        }
+
         private void Tábla_BeoKód_kiirás()
         {
             try
@@ -535,7 +526,7 @@ namespace Villamos
                 // **************************************
                 // *****Beosztás kódok*******************
                 // **************************************
-                BeoSegédListaFeltöltés();
+                AdatokBeoSegéd = KézBeoSegéd.Lista_Adatok();
 
 
                 Tábla_BeoKód.Rows.Clear();
@@ -631,7 +622,7 @@ namespace Villamos
                 if (Telephely.Text.Trim() == "") throw new HibásBevittAdat("A telephely mező értékenek tartalmazni kell valamit.");
                 if (!int.TryParse(Túlóra.Text, out int TúlÓra)) Túlóra.Text = "0";
                 if (Túlóraoka.Text.Trim() == "") Túlóraoka.Text = "_";
-                BeoSegédListaFeltöltés();
+                AdatokBeoSegéd = KézBeoSegéd.Lista_Adatok();
                 Adat_Kiegészítő_Beosegéd Elem = (from a in AdatokBeoSegéd
                                                  where a.Beosztáskód == Beosztáskód.Text.Trim()
                                                  && a.Telephely == Telephely.Text.Trim()
@@ -643,31 +634,10 @@ namespace Villamos
                                                                              Végeidő.Value,
                                                                              Túlóraoka.Text.Trim(),
                                                                              Telephely.Text.Trim());
-                
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb";
-                string jelszó = "Mocó";
-
                 if (Elem != null)
-                {
-                    KézBeoSegéd.Módosítás(hely,jelszó,ADAT);
-                    //szöveg = " UPDATE  beosegéd SET ";
-                    //szöveg += $" túlóra={TúlÓra}, ";
-                    //szöveg += $" túlóraoka='{Túlóraoka.Text.Trim()}', ";
-                    //szöveg += $" kezdőidő='{Kezdőidő.Value:HH:mm:ss}', ";
-                    //szöveg += $" végeidő='{Végeidő.Value:HH:mm:ss}' ";
-                    //szöveg += $" WHERE beosztáskód='{Beosztáskód.Text.Trim()}' AND telephely='{Telephely.Text.Trim()}'";
-                }
+                    KézBeoSegéd.Módosítás(ADAT);
                 else
-                {
-                    KézBeoSegéd.Rögzítés(hely, jelszó, ADAT);
-                    //szöveg = "INSERT INTO beosegéd (beosztáskód, túlóra, kezdőidő, végeidő, túlóraoka, telephely) VALUES (";
-                    //szöveg += "'" + Beosztáskód.Text.Trim() + "', ";
-                    //szöveg += $"{TúlÓra}, ";
-                    //szöveg += $"'{Kezdőidő.Value:HH:mm:ss}', ";
-                    //szöveg += $"'{Végeidő.Value:HH:mm:ss}', ";
-                    //szöveg += $"'{Túlóraoka.Text.Trim()}', ";
-                    //szöveg += $"'{Telephely.Text.Trim()}' ) ";
-                }
+                    KézBeoSegéd.Rögzítés(ADAT);
 
                 Tábla_BeoKód_kiirás();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -690,7 +660,7 @@ namespace Villamos
                 if (Beosztáskód.Text.Trim() == "") throw new HibásBevittAdat("A beosztáskód mezőt ki kell tölteni.");
                 if (Telephely.Text.Trim() == "") throw new HibásBevittAdat("A telephely mező nem lehet üres.");
 
-                BeoSegédListaFeltöltés();
+                AdatokBeoSegéd = KézBeoSegéd.Lista_Adatok();
                 Adat_Kiegészítő_Beosegéd Elem = (from a in AdatokBeoSegéd
                                                  where a.Beosztáskód == Beosztáskód.Text.Trim()
                                                  && a.Telephely == Telephely.Text.Trim()
@@ -698,10 +668,7 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb";
-                    string jelszó = "Mocó";
-                    string szöveg = $"DELETE FROM beosegéd where beosztáskód='{Beosztáskód.Text.Trim()}' AND telephely='{Telephely.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    KézBeoSegéd.Törlés(Beosztáskód.Text.Trim(), Telephely.Text.Trim());
                     MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Tábla_BeoKód_kiirás();
                 }
@@ -747,32 +714,11 @@ namespace Villamos
             }
         }
 
-        private void TúlórakeretListaFeltöltés()
-        {
-            try
-            {
-                AdatokTúlórakeret.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM túlórakeret  ORDER BY telephely, határ";
-                AdatokTúlórakeret = KézTúlórakeret.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Tábla_Keret_kiirás()
         {
             try
             {
-                TúlórakeretListaFeltöltés();
+                AdatokTúlórakeret = KézTúlórakeret.Lista_Adatok();
 
                 Tábla_Keret.Rows.Clear();
                 Tábla_Keret.Columns.Clear();
@@ -812,18 +758,25 @@ namespace Villamos
 
         private void TÚLTelephelyfeltöltés()
         {
-            Túltelephely.Items.Clear();
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő2.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM könyvtár ORDER BY  id";
-
-            Túltelephely.Items.Add("_");
-            Túltelephely.BeginUpdate();
-            Túltelephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "név"));
-            Túltelephely.EndUpdate();
-            Túltelephely.Refresh();
+            try
+            {
+                Túltelephely.Items.Clear();
+                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKiegKönyvtár.Lista_Adatok();
+                Túltelephely.Items.Add("_");
+                foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
+                    Túltelephely.Items.Add(rekord.Név);
+                Túltelephely.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         private void Tábla_Keret_OK_Click(object sender, EventArgs e)
         {
@@ -843,24 +796,11 @@ namespace Villamos
                                                                                    Parancs,
                                                                                    Túltelephely.Text.Trim());
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb";
-                string jelszó = "Mocó";
-
                 if (Elem != null)
-                {
-                    KézTúlórakeret.Módosítás(hely, jelszó, ADAT);
-                    //szöveg = " UPDATE  túlórakeret SET ";
-                    //szöveg += $" parancs={Parancs} ";
-                    //szöveg += $" WHERE határ={Határ} AND telephely='{Túltelephely.Text.Trim()}'";
-                }
+                    KézTúlórakeret.Módosítás(ADAT);
                 else
-                {
-                    KézTúlórakeret.Rögzítés(hely, jelszó, ADAT);
-                    //szöveg = "INSERT INTO túlórakeret (határ, telephely, parancs ) VALUES (";
-                    //szöveg += $"{Határ}, '{Túltelephely.Text.Trim()}', {Parancs})";
-                }
+                    KézTúlórakeret.Rögzítés(ADAT);
 
-                //MyA.ABMódosítás(hely, jelszó, szöveg);
                 Tábla_Keret_kiirás();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -895,10 +835,11 @@ namespace Villamos
                                                     select a).FirstOrDefault();
                 if (Elem != null)
                 {
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb";
-                    string jelszó = "Mocó";
-                    string szöveg = $"DELETE FROM túlórakeret WHERE határ={Határ} AND telephely='{Túltelephely.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    Adat_Kiegészítő_Túlórakeret ADAT = new Adat_Kiegészítő_Túlórakeret(
+                                                                   Határ,
+                                                                   0,
+                                                                   Túltelephely.Text.Trim());
+                    KézTúlórakeret.Törlés(ADAT);
                     MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     Tábla_Keret_kiirás();
                 }
@@ -943,33 +884,12 @@ namespace Villamos
             }
         }
 
-        private void VáltóstáblaListaFeltöltés()
-        {
-            try
-            {
-                AdatokVáltóstábla.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{ÉvesÉv.Text.Trim()}\munkaidőnaptár.mdb";
-                if (!Exists(hely)) return;
-                string jelszó = "katalin";
-                string szöveg = "SELECT * FROM Váltóstábla  ORDER BY telephely, év, félév, csoport";
-                AdatokVáltóstábla = KézVáltóstábla.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Éves_Tábla_kiirás()
         {
             try
             {
-                VáltóstáblaListaFeltöltés();
+                if (!int.TryParse(ÉvesÉv.Text, out int Év)) return;
+                AdatokVáltóstábla = KézVáltóstábla.Lista_Adatok(Év);
 
                 Éves_Tábla.Rows.Clear();
                 Éves_Tábla.Columns.Clear();
@@ -1036,15 +956,12 @@ namespace Villamos
         private void ÉvesTelephelyfeltöltés()
         {
             ÉvesTelephely.Items.Clear();
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő2.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM könyvtár  ORDER BY  id";
-
+            List<Adat_Kiegészítő_Könyvtár> Adatok = KézKiegKönyvtár.Lista_Adatok();
             ÉvesTelephely.Items.Add("_");
-            ÉvesTelephely.BeginUpdate();
-            ÉvesTelephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "név"));
-            ÉvesTelephely.EndUpdate();
+            foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
+                ÉvesTelephely.Items.Add(rekord.Név);
             ÉvesTelephely.Refresh();
+            ÉvesTelephely.Items.Clear();
         }
 
         private void ÉvesCsoportfeltöltés()
@@ -1076,8 +993,8 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{ÉvesÉv.Text.Trim()}\munkaidőnaptár.mdb";
                 if (!Exists(hely)) return;
 
-                VáltóstáblaListaFeltöltés();
-                string jelszó = "katalin";
+
+                AdatokVáltóstábla = KézVáltóstábla.Lista_Adatok(Év);
 
                 Adat_Váltós_Váltóstábla Elem = (from a in AdatokVáltóstábla
                                                 where a.Év == Év && a.Félév == Félév
@@ -1091,25 +1008,12 @@ namespace Villamos
                                                                            Félév,
                                                                            ZKnap,
                                                                            EPnap,
-                                                                           Tperc);                
+                                                                           Tperc);
                 if (Elem != null)
-                {
-                    KézVáltóstábla.Módosítás(hely, jelszó, ADAT);
-                    //szöveg = " UPDATE  váltóstábla SET ";
-                    //szöveg += $" ZKnap={ZKnap}, ";
-                    //szöveg += $" EPnap={EPnap}, ";
-                    //szöveg += $" Tperc={Tperc} ";
-                    //szöveg += $" WHERE  év={Év}";
-                    //szöveg += $" and félév={Félév}";
-                    //szöveg += $" and csoport='{ÉvesCsoport.Text.Trim()}'";
-                    //szöveg += $" and telephely='{ÉvesTelephely.Text.Trim()}'";
-                }
+                    KézVáltóstábla.Módosítás(Év, ADAT);
                 else
-                {
-                    KézVáltóstábla.Rögzítés(hely, jelszó, ADAT);
-                    //szöveg = "INSERT INTO váltóstábla (év, félév, csoport, ZKnap, EPnap, Tperc, telephely ) VALUES (";
-                    //szöveg += $"{Év}, {Félév},'{ÉvesCsoport.Text.Trim()}', {ZKnap}, {EPnap}, {Tperc}, '{ÉvesTelephely.Text.Trim()}' )";
-                }
+                    KézVáltóstábla.Rögzítés(Év, ADAT);
+
 
                 Éves_Tábla_kiirás();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1261,6 +1165,7 @@ namespace Villamos
         {
             try
             {
+                if (!int.TryParse(ÉvesÉv.Text, out int Év)) throw new HibásBevittAdat("Az Évnek egész számnak kell lennie.");
                 string szöveg = "SELECT * FROM váltóstábla ";
                 List<Adat_Váltós_Váltóstábla> Adatok = KézVáltóstábla.Lista_Adatok(hely, jelszó, szöveg);
 
@@ -1276,26 +1181,12 @@ namespace Villamos
                                                                            Adat.Zknap,
                                                                            Adat.Epnap,
                                                                            Adat.Tperc);
-                
+
                 if (Elem != null)
-                {
-                    KézVáltóstábla.Módosítás(hely, jelszó, ADAT);
-                    //szöveg = " UPDATE  váltóstábla SET ";
-                    //szöveg += $" ZKnap={Adat.Zknap}, ";
-                    //szöveg += $" EPnap={Adat.Epnap}, ";
-                    //szöveg += $" Tperc={Adat.Tperc} ";
-                    //szöveg += $" WHERE év={Adat.Év} ";
-                    //szöveg += $" and félév={Adat.Félév}";
-                    //szöveg += $" and csoport='{Adat.Csoport}'";
-                    //szöveg += $" and telephely='{Adat.Telephely}'";
-                }
+                    KézVáltóstábla.Módosítás(Év, ADAT);
                 else
-                {
-                    KézVáltóstábla.Rögzítés(hely, jelszó, ADAT);
-                    //szöveg = "INSERT INTO váltóstábla (év, félév, csoport, ZKnap, EPnap, Tperc, telephely ) VALUES (";
-                    //szöveg += $"{Adat.Év}, {Adat.Félév}, '{Adat.Csoport}', {Adat.Zknap}, {Adat.Epnap}, {Adat.Tperc}, '{Adat.Telephely}')";
-                }
-                //MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézVáltóstábla.Rögzítés(Év, ADAT);
+
 
             }
             catch (HibásBevittAdat ex)
@@ -1539,7 +1430,7 @@ namespace Villamos
                                                                                    Napciklus,
                                                                                    MegnevezésText.Text.Trim(),
                                                                                    CsoportCombo.Text.Trim());
-                
+
                 if (Elem != null)
                 {
                     KézKiegVáltóstábla.Módosítás(hely, jelszó, ADAT);
@@ -1710,7 +1601,7 @@ namespace Villamos
                                                  select a).FirstOrDefault();
                 Adat_Kiegészítő_Munkaidő ADAT = new Adat_Kiegészítő_Munkaidő(Munkarendelnevezés.Text.Trim(),
                                                                              IdőMunkna);
-                
+
                 if (Elem != null)
                 {
                     KézMunkaidő.Módosítás(hely, jelszó, ADAT);
@@ -2264,7 +2155,7 @@ namespace Villamos
                                                        select a).FirstOrDefault();
                             Adat_Váltós_Naptár ADAT = new Adat_Váltós_Naptár(napiérték,
                                                                              próbanap);
-                            
+
                             if (Elem != null)
                             {
                                 KézVNaptár.Módosítás(hely, jelszó, ADAT);
@@ -2300,7 +2191,7 @@ namespace Villamos
                     Adat_Váltós_Összesítő ADAT = new Adat_Váltós_Összesítő(Tábla_Nappalos.Rows[i - 1].Cells[2].Value.ToÉrt_Int(),
                                                                             próbanap);
 
-                    
+
                     if (Összes != null)
                     {
                         KézVáltÖsszesítő.Módosítás(hely, jelszó, ADAT);
@@ -4350,7 +4241,7 @@ namespace Villamos
                 }
                 else
                 {
-                    KézVáltóscsopitábla.Rögzítés(hely,jelszó,ADAT);
+                    KézVáltóscsopitábla.Rögzítés(hely, jelszó, ADAT);
                     //szöveg = "INSERT INTO tábla (csoport, telephely, név) VALUES (";
                     //szöveg += $"'{CsoportVáltóCsop.Text.Trim()}', ";
                     //szöveg += $"'{TelephelyVáltóCsop.Text.Trim()}', ";
@@ -4554,7 +4445,7 @@ namespace Villamos
                                                                                           Választott.Beosztáskód,
                                                                                           Választott.Hétnapja,
                                                                                           Választott.Beosztásszöveg);
-                KézBeosztásciklus.Módosítás(hely,jelszó,ADAT);
+                KézBeosztásciklus.Módosítás(hely, jelszó, ADAT);
                 //szöveg = "UPDATE éjszakásciklus SET ";
                 //szöveg += $" hétnapja='{Előtte.Hétnapja}',";
                 //szöveg += $" beosztáskód='{Előtte.Beosztáskód}',";
@@ -4634,7 +4525,7 @@ namespace Villamos
 
 
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
-                string jelszó = "Mocó";              
+                string jelszó = "Mocó";
 
                 if (Tábla_Éjszaka.SelectedRows.Count < 1)
                 {
@@ -4643,7 +4534,7 @@ namespace Villamos
                                                                                              ÉhétNapja.Text.Trim(),
                                                                                              ÉBeosztásSzöveg.Text.Trim());
 
-                    KézBeosztásciklus.Rögzítés(hely,jelszó,ADAT);
+                    KézBeosztásciklus.Rögzítés(hely, jelszó, ADAT);
                     //szöveg = "INSERT INTO éjszakásciklus (hétnapja, beosztáskód, beosztásszöveg) VALUES (";
                     //szöveg += "'" + ÉhétNapja.Text.Trim() + "', ";
                     //szöveg += "'" + ÉBeoKód.Text.Trim() + "', ";
