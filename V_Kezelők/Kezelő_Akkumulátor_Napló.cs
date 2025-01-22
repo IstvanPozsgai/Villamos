@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
 
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
@@ -54,8 +53,7 @@ namespace Villamos.Villamos.Kezelők
                                         rekord["Kapacitás"].ToÉrt_Int(),
                                         rekord["Telephely"].ToStrTrim(),
                                         rekord["Rögzítés"].ToÉrt_DaTeTime(),
-                                        rekord["Rögzítő"].ToStrTrim(),
-                                        rekord["id"].ToÉrt_Long()
+                                        rekord["Rögzítő"].ToStrTrim()
                                      );
                                 Adatok.Add(Adat);
                             }
@@ -71,7 +69,7 @@ namespace Villamos.Villamos.Kezelők
             try
             {
                 string szöveg = "INSERT INTO Akkutábla_Napló ";
-                szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő, id)";
+                szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.Beépítve}', "; //beépítve       ,
                 szöveg += $"'{Adat.Fajta}', "; //fajta,
@@ -86,8 +84,7 @@ namespace Villamos.Villamos.Kezelők
                 szöveg += $"{Adat.Kapacitás}, "; //kapacitás,
                 szöveg += $"'{Adat.Telephely}', "; //Telephely
                 szöveg += $"'{Adat.Rögzítés}', "; //Rögzítés,
-                szöveg += $"'{Adat.Rögzítő}', "; //Rögzítő
-                szöveg += $"{Sorszám()})"; //id
+                szöveg += $"'{Adat.Rögzítő}') "; //Rögzítő
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -101,24 +98,5 @@ namespace Villamos.Villamos.Kezelők
             }
         }
 
-        public long Sorszám()
-        {
-            long Válasz = 1;
-            try
-            {
-                List<Adat_Akkumulátor_Napló> Adatok = Lista_Adatok();
-                if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(x => x.Id) + 1;
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Válasz;
-        }
     }
 }

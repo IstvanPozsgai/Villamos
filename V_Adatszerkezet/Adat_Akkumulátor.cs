@@ -58,9 +58,10 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Telephely { get; private set; }
         public DateTime Rögzítés { get; private set; }
         public string Rögzítő { get; private set; }
-        public long Id { get; private set; }
 
-        public Adat_Akkumulátor_Napló(string beépítve, string fajta, string gyártó, string gyáriszám, string típus, DateTime garancia, DateTime gyártásiidő, int státus, string megjegyzés, DateTime módosításdátuma, int kapacitás, string telephely, DateTime rögzítés, string rögzítő, long id)
+
+        public Adat_Akkumulátor_Napló(string beépítve, string fajta, string gyártó, string gyáriszám, string típus, DateTime garancia, DateTime gyártásiidő,
+            int státus, string megjegyzés, DateTime módosításdátuma, int kapacitás, string telephely, DateTime rögzítés, string rögzítő)
         {
             Beépítve = beépítve;
             Fajta = fajta;
@@ -76,7 +77,6 @@ namespace Villamos.Villamos_Adatszerkezet
             Telephely = telephely;
             Rögzítés = rögzítés;
             Rögzítő = rögzítő;
-            Id = id;
         }
     }
 
