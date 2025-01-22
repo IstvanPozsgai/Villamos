@@ -320,6 +320,58 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public List<Adat_Jármű> Lista_Adatok(string telephely)
+        {
+            string szöveg = "SELECT * FROM állománytábla order by  azonosító";
+            string hely = $@"{Application.StartupPath}\{telephely}\Adatok\villamos\villamos.mdb";
+            if (telephely == "Főmérnökség") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
+
+            List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
+            Adat_Jármű Adat;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Jármű(
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["hibák"].ToÉrt_Long(),
+                                        rekord["státus"].ToÉrt_Long(),
+                                        rekord["Típus"].ToStrTrim(),
+                                        rekord["Üzem"].ToStrTrim(),
+                                        rekord["törölt"].ToÉrt_Bool(),
+                                        rekord["hibáksorszáma"].ToÉrt_Long(),
+                                        rekord["szerelvény"].ToÉrt_Bool(),
+                                        rekord["szerelvénykocsik"].ToÉrt_Long(),
+                                        rekord["miótaáll"].ToÉrt_DaTeTime(),
+                                        rekord["valóstípus"].ToStrTrim(),
+                                        rekord["valóstípus2"].ToStrTrim()
+                                        );
+                                    Adatok.Add(Adat);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Lista_Adatok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adatok;
+        }
+
+
+
         /// <summary>
         /// Beolvassuk a feltételeknek megfelelő pályaszámokat egy listába
         /// </summary>

@@ -10,7 +10,6 @@ using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using static System.IO.File;
-using MyA = Adatbázis;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 
@@ -27,7 +26,7 @@ namespace Villamos
 
         #region Kezelők és Listák
         readonly Kezelő_Akkumulátor KézAkku = new Kezelő_Akkumulátor();
-        readonly Kezelő_Akkumulátor_Mérés KézAkkuMér = new Kezelő_Akkumulátor_Mérés(DateTime.Today);
+        readonly Kezelő_Akkumulátor_Mérés KézAkkuMér = new Kezelő_Akkumulátor_Mérés();
         readonly Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
         readonly Kezelő_Akkumulátor_Napló KézAkkuNapló = new Kezelő_Akkumulátor_Napló(DateTime.Today);
 
@@ -409,7 +408,7 @@ namespace Villamos
                 if (!int.TryParse(Kapacitás_Alap.Text, out int kapacitás)) throw new HibásBevittAdat("A kapacitás mezőbe csak egész számot lehet rögzíteni.");
                 Textgyáriszám.Text = Textgyáriszám.Text.ToUpper().Trim();
 
-                AdatokAkkuListázás();
+                AdatokAkku = KézAkku.Lista_Adatok();
                 Adat_Akkumulátor AdatAkku = (from a in AdatokAkku
                                              where a.Gyáriszám == Textgyáriszám.Text.Trim()
                                              select a).FirstOrDefault();
@@ -471,7 +470,7 @@ namespace Villamos
         {
             try
             {
-                AdatokAkkuListázás();
+                AdatokAkku = KézAkku.Lista_Adatok();
                 List<string> Adatok = AdatokAkku.Select(a => a.Gyártó).Distinct().ToList();
                 Combogyártó.Items.Clear();
                 foreach (string Elem in Adatok)
@@ -508,7 +507,7 @@ namespace Villamos
         {
             try
             {
-                AdatokAkkuListázás();
+                AdatokAkku = KézAkku.Lista_Adatok();
                 List<Adat_Akkumulátor> Adatok = AdatokAkku.OrderByDescending(a => a.Gyáriszám).ToList();
 
                 if (ComboStátuslek.Text.Trim() != "")
@@ -597,7 +596,7 @@ namespace Villamos
                 ComboStátuslek.Items.Add($"{(int)elem} - {elem.ToString().Replace('_', ' ')}");
             ComboStátuslek.Refresh();
 
-            AdatokAkkuListázás();
+            AdatokAkku = KézAkku.Lista_Adatok();
             List<string> Adatok = AdatokAkku.Select(a => a.Telephely).Distinct().ToList();
             Telephely_Szűrő.Items.Clear();
             foreach (string Elem in Adatok)
@@ -770,9 +769,9 @@ namespace Villamos
                 List<Adat_Akkumulátor> Adatok = KézAkku.Lista_Adatok().Where(a => a.Státus < 4).OrderBy(a => a.Beépítve).ToList();
                 if (!Program.Postás_Vezér) Adatok = Adatok.Where(a => a.Telephely == CmbTelephely.Text.Trim()).ToList();
 
-                List<Adat_Akkumulátor_Mérés> AdatokMérés = KézAkkuMér.Lista_Adatok(0).Where(a => a.Rögzítő != "TÖRÖLT").ToList();
-                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(-1).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
-                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(-2).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
+                List<Adat_Akkumulátor_Mérés> AdatokMérés = KézAkkuMér.Lista_Adatok(Dátumtól.Value).Where(a => a.Rögzítő != "TÖRÖLT").ToList();
+                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-1)).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
+                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-2)).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
                 AdatokMérés = (from a in AdatokMérés
                                orderby a.Gyáriszám descending, a.Mérésdátuma ascending
                                select a).ToList();
@@ -815,20 +814,17 @@ namespace Villamos
         #endregion
 
 
-
         #region Mérések Listázása
         private void BtnMéréslista_Click(object sender, EventArgs e)
         {
             Mérési_lista();
         }
 
-
-        void Mérési_lista()
+        private void Mérési_lista()
         {
             try
             {
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
-                string jelszó = "kasosmiklós";
                 if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben nem volt még mérés.");
 
                 Tábla4.Rows.Clear();
@@ -869,21 +865,12 @@ namespace Villamos
                 Tábla4.Columns[14].HeaderText = "%-os";
                 Tábla4.Columns[14].Width = 120;
 
-                string szöveg = "SELECT * FROM méréstábla WHERE ";
-                szöveg += $" [mérésdátuma]>=#{Dátumtól.Value:M-d-yy} 00:00:0#";
-                szöveg += $" and [mérésdátuma]<#{dátumig.Value:M-d-yy} 23:59:0#";
-                szöveg += " AND Rögzítő<>'TÖRÖLT' ";
+                List<Adat_Akkumulátor_Mérés> Adatok = KézAkkuMér.Lista_Adatok(Dátumtól.Value);
+                Adatok = Adatok.Where(a => a.Mérésdátuma >= Dátumtól.Value && a.Mérésdátuma < dátumig.Value.AddDays(1) && a.Rögzítő != "TÖRÖLT").OrderBy(a => a.Gyáriszám).ToList();
                 if (MérésLekGyári.Text.Trim() != "")
-                    szöveg += " AND  gyáriszám Like '%" + MérésLekGyári.Text.Trim() + "%'";
-                szöveg += " ORDER BY gyáriszám";
+                    Adatok = Adatok.Where(a => a.Gyáriszám.Contains(MérésLekGyári.Text.Trim())).ToList();
 
-
-                List<Adat_Akkumulátor_Mérés> Adatok = KézAkkuMér.Lista_Adatok(hely, jelszó, szöveg);
-
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\akku.mdb";
-                szöveg = "SELECT * FROM akkutábla ORDER BY gyáriszám";
-
-                List<Adat_Akkumulátor> Adatok_Alap = KézAkku.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Akkumulátor> Adatok_Alap = KézAkku.Lista_Adatok();
 
                 foreach (Adat_Akkumulátor_Mérés rekord in Adatok)
                 {
@@ -937,14 +924,11 @@ namespace Villamos
 
         }
 
-
         private void Button2_Click(object sender, EventArgs e)
         {
             try
             {
-
-                if (Tábla4.Rows.Count <= 0)
-                    return;
+                if (Tábla4.Rows.Count <= 0) return;
                 string fájlexc;
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -976,7 +960,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void R_törlés_Click(object sender, EventArgs e)
@@ -985,26 +968,19 @@ namespace Villamos
             {
                 if (Tábla4.SelectedRows.Count < 0) throw new HibásBevittAdat("Nincs kijelölve egy törlendő elem sem.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
-                string jelszó = "kasosmiklós";
-
-                AdatokAkkuMérListázás();
-                if (AdatokAkkuMér == null) return;
-                List<string> SzövegGy = new List<string>();
+                AdatokAkkuMér = KézAkkuMér.Lista_Adatok(Dátumtól.Value);
+                if (AdatokAkkuMér == null && AdatokAkkuMér.Count == 0) return;
+                List<int> Sorszámok = new List<int>();
                 for (int i = 0; i < Tábla4.SelectedRows.Count; i++)
                 {
-                    if (!int.TryParse(Tábla4.Rows[i].Cells[9].Value.ToString(), out int ID))
-                        ID = 0;
+                    if (!int.TryParse(Tábla4.Rows[i].Cells[9].Value.ToString(), out int ID)) ID = 0;
                     Adat_Akkumulátor_Mérés AdatAkkuMér = (from a in AdatokAkkuMér
                                                           where a.Id == ID
                                                           select a).FirstOrDefault();
-                    if (AdatAkkuMér != null)
-                    {
-                        string szöveg = $"UPDATE  méréstábla SET Rögzítő='TÖRÖLT' WHERE ID={ID}";
-                        SzövegGy.Add(szöveg);
-                    }
+                    if (AdatAkkuMér != null && ID != 0)
+                        Sorszámok.Add(ID);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                KézAkkuMér.Törlés(Dátumtól.Value, Sorszámok);
                 MessageBox.Show("Az adatok törlése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Mérési_lista();
             }
@@ -1018,11 +994,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
         #endregion
-
 
 
         #region Mérés_Rögzítés
@@ -1035,7 +1007,7 @@ namespace Villamos
                 if (Textmérkezdetifesz.Text.Trim() == "") throw new HibásBevittAdat("A kezdeti feszültség mezőt ki kell tölteni.");
                 if (Textmérvégfesz.Text.Trim() == "") throw new HibásBevittAdat("A Vég feszültség mezőt ki kell tölteni.");
                 if (Textmérkapacitás.Text.Trim() == "") throw new HibásBevittAdat("A Kapacitás mezőt ki kell tölteni.");
-                if (!double.TryParse(Textmérkisütésiáram.Text, out double Kisütési)) throw new HibásBevittAdat("A kisütési áram mezőnek számnak kell lennie.");
+                if (!long.TryParse(Textmérkisütésiáram.Text, out long Kisütési)) throw new HibásBevittAdat("A kisütési áram mezőnek számnak kell lennie.");
                 if (!double.TryParse(Textmérkezdetifesz.Text, out double KezdetiFesz)) throw new HibásBevittAdat("A kezdeti feszültség mezőnek számnak kell lennie.");
                 if (!double.TryParse(Textmérvégfesz.Text, out double VégFesz)) throw new HibásBevittAdat("A  vég feszültség mezőnek számnak kell lennie.");
                 if (!double.TryParse(Textmérkapacitás.Text, out double Kapacitás)) throw new HibásBevittAdat("A Kapacitás mezőnek számnak kell lennie.");
@@ -1043,50 +1015,29 @@ namespace Villamos
 
                 Textgyárimérés.Text = Textgyárimérés.Text.Trim().ToUpper();
 
-                string jelszó = "kasosmiklós";
-                string szöveg;
-
-                AdatokAkkuListázás();
+                AdatokAkku = KézAkku.Lista_Adatok();
                 if (AdatokAkku == null) return;
-
                 Akkuszám_ellenőrzés();
-
 
                 Adat_Akkumulátor AdatAkku = (from a in AdatokAkku
                                              where a.Gyáriszám == Textgyárimérés.Text.Trim()
                                              select a).FirstOrDefault();
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{MérésDátuma.Value.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
-
-                AdatokAkkuMérListázás();
-
-                long id = 1;
-                if (AdatokAkkuMér != null) id = AdatokAkkuMér.Max(a => a.Id) + 1;
-
-                szöveg = "INSERT INTO méréstábla ";
-                szöveg += "(Gyáriszám, Kisütésiáram, Kezdetifesz, Végfesz, Kisütésiidő, Kapacitás, Megjegyzés, Van, Mérésdátuma, Rögzítés, Rögzítő, id)";
-                szöveg += " VALUES (";
-                szöveg += $"'{Textgyárimérés.Text.Trim()}', ";//Gyáriszám
-                szöveg += $"{Kisütési.ToString().Replace(',', '.')}, ";//kisütésiáram
-                szöveg += $"{KezdetiFesz.ToString().Replace(',', '.')}, ";//kezdetifesz
-                szöveg += $"{VégFesz.ToString().Replace(',', '.')}, ";//végfesz]
-                szöveg += $"'{mérdátum.Value}', ";//kisütésiidő
-                szöveg += $" {Kapacitás.ToString().Replace(',', '.')}, ";//kapacitás
-                szöveg += $"'{TextMérmegjegyzés.Text.Trim()}', ";//Megjegyzés
-                if (Check1.Checked)//van
-                    szöveg += " '1', ";
-                else
-                    szöveg += " '0', ";
-                szöveg += $"'{MérésDátuma.Value:yyyy.MM.dd}', ";//Mérésdátuma
-                szöveg += $"'{DateTime.Now}', ";//Rögzítés
-                szöveg += $"'{Program.PostásNév.Trim()}', ";//Rögzítő
-                szöveg += $"{id})";//id
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                Adat_Akkumulátor_Mérés ADAT = new Adat_Akkumulátor_Mérés(
+                                            Textgyárimérés.Text.Trim(),
+                                            Kisütési,
+                                            KezdetiFesz,
+                                            VégFesz,
+                                            mérdátum.Value,
+                                            Kapacitás,
+                                            TextMérmegjegyzés.Text.Trim(),
+                                            Check1.Checked ? "1" : "0",
+                                            MérésDátuma.Value,
+                                            DateTime.Now,
+                                            Program.PostásNév.Trim(),
+                                            0);
+                KézAkkuMér.Rögzítés(ADAT, MérésDátuma.Value);
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1097,7 +1048,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void Akkuszám_ellenőrzés()
@@ -1154,26 +1104,25 @@ namespace Villamos
             try
             {
                 Holtart.Be();
-
                 PályaszámListaFeltöltés(false);
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\akku.mdb";
-                string jelszó = "kasosmiklós";
-                string szöveg = "SELECT * FROM akkutábla where Státus=2 ORDER BY gyáriszám";
-                List<Adat_Akkumulátor> Adatok_Akku = KézAkku.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Akkumulátor> Adatok_Akku = KézAkku.Lista_Adatok().Where(a => a.Státus == 2).OrderBy(a => a.Gyáriszám).ToList();
 
                 foreach (Adat_Akkumulátor Rekord in Adatok_Akku)
                 {
-                    var eredmény = Adatok_Jármű.FirstOrDefault(a => a.Azonosító.Trim() == Rekord.Beépítve.Trim());
+                    Adat_Jármű eredmény = Adatok_Jármű.FirstOrDefault(a => a.Azonosító.Trim() == Rekord.Beépítve.Trim());
                     if (eredmény != null)
                     {
                         if (eredmény.Üzem.Trim() != Rekord.Telephely.Trim())
                         {
-                            Telephely_Változás(eredmény.Üzem.Trim(), Rekord.Gyáriszám.Trim());
-                            Telephely_Változás_Napló(eredmény.Üzem.Trim(), Rekord.Gyáriszám.Trim());
+                            KézAkku.Módosítás(eredmény.Üzem.Trim(), Rekord.Gyáriszám.Trim());
+                            Adat_Akkumulátor_Napló ADAT = new Adat_Akkumulátor_Napló(
+                                                        "_", "_", "_", Rekord.Gyáriszám.Trim(),
+                                                        "_", new DateTime(1900, 1, 1), new DateTime(1900, 1, 1), 0,
+                                                        "Telephely változás", new DateTime(1900, 1, 1), 0,
+                                                        eredmény.Üzem.Trim(), DateTime.Now, Program.PostásNév.Trim(), 0);
+                            KézAkkuNapló.Rögzítés(ADAT);
                         }
                     }
-
                     Holtart.Lép();
                 }
                 Holtart.Ki();
@@ -1188,69 +1137,18 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        void Telephely_Változás(string Telep, string gyáriszám)
-        {
-            string szöveg = "", hely = "";
-            try
-            {
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\akku.mdb";
-                string jelszó = "kasosmiklós";
-                szöveg = " UPDATE akkutábla SET ";
-                szöveg += $" telephely='{Telep.Trim()}' ";
-                szöveg += $" WHERE Gyáriszám='{gyáriszám.Trim()}' ";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString() + $"\n{hely},\n{szöveg}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        void Telephely_Változás_Napló(string Telep, string gyáriszám)
-        {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Now.Year}.mdb";
-            string jelszó = "kasosmiklós";
-            string szöveg = "INSERT INTO Akkutábla_Napló ";
-            szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő )";
-            szöveg += " VALUES (";
-            szöveg += $"'_', "; //beépítve       ,
-            szöveg += $"'_', "; //fajta,
-            szöveg += $"'_', "; //gyártó,
-            szöveg += $"'{gyáriszám.Trim()}', "; //Gyáriszám,
-            szöveg += $"'_', "; //típus,
-            szöveg += $"'{new DateTime(1900, 1, 1)}', "; //garancia,
-            szöveg += $"'{new DateTime(1900, 1, 1)}', "; //gyártásiidő,
-            szöveg += $"0, "; //státus,
-            szöveg += $"'Telephely változás', "; //Megjegyzés,
-            szöveg += $"'{new DateTime(1900, 1, 1)}', "; //Módosításdátuma,
-            szöveg += $"0, "; //kapacitás,
-            szöveg += $"'{Telep}', "; //Telephely
-            szöveg += $"'{DateTime.Now}', "; //Rögzítés,
-            szöveg += $"'{Program.PostásNév.Trim()}') "; //Rögzítő
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
         #endregion
 
+
         #region Kiépítés-Beépítés
-
-        void Beép_Státus_Feltöltés()
+        private void Beép_Státus_Feltöltés()
         {
-
             Beép_Státus.Items.Clear();
             Beép_Státus.Items.Add("");
 
             foreach (MyEn.Akku_Státus adat in (MyEn.Akku_Státus[])Enum.GetValues(typeof(MyEn.Akku_Státus)))
                 Beép_Státus.Items.Add($"{((MyEn.Akku_Státus)Enum.Parse(typeof(MyEn.Akku_Státus), adat.ToString())).GetHashCode()} - {adat}");
             Beép_Státus.Refresh();
-
         }
 
         private void Beép_Pályaszám_fetöltés()
@@ -1277,29 +1175,12 @@ namespace Villamos
         {
             try
             {
-                string hely, jelszó, szöveg;
-                if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                {
-                    hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                    jelszó = "pozsgaii";
-                    szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-                }
-                else
-                {
-                    hely = $@"{Application.StartupPath}\" + CmbTelephely.Text.Trim() + @"\Adatok\villamos\villamos.mdb";
-                    jelszó = "pozsgaii";
-                    szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-                }
-
-                if (kell)
-                {
-                    hely = $@"{Application.StartupPath}\" + CmbTelephely.Text.Trim() + @"\Adatok\villamos\villamos.mdb";
-                    jelszó = "pozsgaii";
-                    szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-                }
+                string telephely = CmbTelephely.Text.Trim();
+                if (Program.PostásTelephely.Trim() == "Főmérnökség") telephely = "Főmérnökség";
+                if (kell) telephely = CmbTelephely.Text.Trim();
 
                 Adatok_Jármű.Clear();
-                Adatok_Jármű = Kéz_Jármű.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Jármű = Kéz_Jármű.Lista_Adatok(telephely).Where(a => a.Törölt == false).ToList();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1317,67 +1198,18 @@ namespace Villamos
             Beépítés_Listázás();
         }
 
-
-        void Beépítés_Listázás()
+        private void Beépítés_Listázás()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\akku.mdb";
-                string jelszó = "kasosmiklós";
-                bool Volt = false;
-                int státus;
+                List<Adat_Akkumulátor> Adatok = KézAkku.Lista_Adatok().OrderBy(a => a.Gyáriszám).ToList();
 
-                if (Beép_Státus.Text.Trim() == "")
-                    státus = 0;
-                else if (!int.TryParse(Beép_Státus.Text.Substring(0, 1), out státus))
-                    státus = 0;
+                if (!int.TryParse(Beép_Státus.Text.Substring(0, 1), out int státus)) státus = 0;
 
-                string szöveg = "SELECT * FROM akkutábla ";
-                if (státus != 0 || !Program.Postás_Vezér)
-                    szöveg += " WHERE ";
-
-                if (Beép_Státus.Text.Trim() != "")
-                {
-                    szöveg += $" státus={Beép_Státus.Text.Substring(0, 1)}";
-                    Volt = true;
-                }
-
-
-
-                if (Beép_Gyári.Text.Trim() != "")
-                {
-                    if (Volt == true)
-                    {
-                        szöveg += " AND ";
-                        Volt = false;
-                    }
-                    szöveg += $"  gyáriszám Like '%{Beép_Gyári.Text.Trim()}%'";
-                    Volt = true;
-                }
-
-
-                if (!Program.Postás_Vezér)
-                {
-                    if (Volt == true)
-                    {
-                        szöveg += " AND ";
-                        Volt = false;
-                    }
-                    szöveg += $" Telephely='{CmbTelephely.Text.Trim()}'";
-                    Volt = true;
-                }
-
-                if (státus == 2 && Beép_Psz.Text.Trim() != "")
-                {
-                    if (Volt == true)
-                    {
-                        szöveg += " AND ";
-                        Volt = false;
-                    }
-                    szöveg += $" beépítve='{Beép_Psz.Text.Trim()}'";
-                }
-
-                szöveg += " ORDER BY gyáriszám";
+                if (Beép_Státus.Text.Trim() != "") Adatok = Adatok.Where(a => a.Státus == státus).ToList();
+                if (Beép_Gyári.Text.Trim() != "") Adatok = Adatok.Where(a => a.Gyáriszám.Contains(Beép_Gyári.Text.Trim())).ToList();
+                if (!Program.Postás_Vezér) Adatok = Adatok.Where(a => a.Telephely == CmbTelephely.Text.Trim()).ToList();
+                if (státus == 2 && Beép_Psz.Text.Trim() != "") Adatok = Adatok.Where(a => a.Beépítve == Beép_Psz.Text.Trim()).ToList();
 
                 Holtart.Be();
                 Tábla_Beép.Rows.Clear();
@@ -1411,9 +1243,6 @@ namespace Villamos
                 Tábla_Beép.Columns[10].Width = 120;
                 Tábla_Beép.Columns[11].HeaderText = "Telephely";
                 Tábla_Beép.Columns[11].Width = 120;
-
-
-                List<Adat_Akkumulátor> Adatok = KézAkku.Lista_Adatok(hely, jelszó, szöveg);
 
                 foreach (Adat_Akkumulátor rekord in Adatok)
                 {
@@ -1454,8 +1283,7 @@ namespace Villamos
             StátusVálasztás();
         }
 
-
-        void StátusVálasztás()
+        private void StátusVálasztás()
         {
             try
             {
@@ -1506,12 +1334,9 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
 
-
-        void Gombok_Ki()
+        private void Gombok_Ki()
         {
 
             Pályaszám_Szűrő.Visible = false;
@@ -1523,7 +1348,6 @@ namespace Villamos
             Leselejtezett.Visible = false;
             Használt.Visible = false;
         }
-
 
         private void Beépít_Click(object sender, EventArgs e)
         {
@@ -1539,12 +1363,10 @@ namespace Villamos
                 {
                     Státus_Módosítás(BePSz.Text.Trim(), 2, SOR.Cells[0].Value.ToString().Trim());
                     Státus_Módosítás_Napló(BePSz.Text.Trim(), 2, SOR.Cells[0].Value.ToString().Trim());
-
                 }
 
                 Beép_Gyári.Text = "";
                 Beépítés_Listázás();
-
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -1558,58 +1380,31 @@ namespace Villamos
             }
         }
 
-
         void Státus_Módosítás(string Hova, int státus, string gyáriszám)
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\akku.mdb";
-            string jelszó = "kasosmiklós";
-
-            string szöveg = " UPDATE akkutábla SET ";
-            szöveg += $" beépítve='{Hova.Trim()}', ";
-            szöveg += $" státus={státus}, ";
-            szöveg += $" Módosításdátuma='{DateTime.Today:yyyy.MM.dd}' ";
-            szöveg += $" WHERE Gyáriszám='{gyáriszám.Trim()}' ";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            Adat_Akkumulátor ADAT = new Adat_Akkumulátor(Hova.Trim(), gyáriszám.Trim(), státus, DateTime.Today);
+            KézAkku.Módosítás_Státus(ADAT);
         }
-
 
         void Státus_Módosítás_Napló(string Hova, int státus, string gyáriszám)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Now.Year}.mdb";
-            string jelszó = "kasosmiklós";
-            string szöveg = "INSERT INTO Akkutábla_Napló ";
-            szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő )";
-            szöveg += " VALUES (";
-            szöveg += $"'{Hova.Trim()}', "; //beépítve       ,
-            szöveg += $"'_', "; //fajta,
-            szöveg += $"'_', "; //gyártó,
-            szöveg += $"'{gyáriszám.Trim()}', "; //Gyáriszám,
-            szöveg += $"'_', "; //típus,
-            szöveg += $"'{new DateTime(1900, 1, 1)}', "; //garancia,
-            szöveg += $"'{new DateTime(1900, 1, 1)}', "; //gyártásiidő,
-            szöveg += $"{státus}, "; //státus,
-            szöveg += $"'_', "; //Megjegyzés,
-            szöveg += $"'{DateTime.Today:yyyy.MM.dd}', "; //Módosításdátuma,
-            szöveg += $"0, "; //kapacitás,
-            szöveg += $"'_', "; //Telephely
-            szöveg += $"'{DateTime.Now}', "; //Rögzítés,
-            szöveg += $"'{Program.PostásNév.Trim()}') "; //Rögzítő
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            Adat_Akkumulátor_Napló ADAT = new Adat_Akkumulátor_Napló(
+                                    Hova.Trim(), "_", "_",
+                                    gyáriszám.Trim(), "_", new DateTime(1900, 1, 1), new DateTime(1900, 1, 1),
+                                    státus, "_", new DateTime(1900, 1, 1), 0, "_", DateTime.Now, Program.PostásNév.Trim(), 0);
+            KézAkkuNapló.Rögzítés(ADAT);
         }
-
 
         private void Kiépít_Click(object sender, EventArgs e)
         {
             Használt_állapot();
         }
 
-
-        void Használt_állapot()
+        private void Használt_állapot()
         {
             try
             {
-                if (Tábla_Beép.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kiválsztva akkumulátor.");
+                if (Tábla_Beép.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválsztva akkumulátor.");
 
                 foreach (DataGridViewRow SOR in Tábla_Beép.SelectedRows)
                 {
@@ -1631,21 +1426,16 @@ namespace Villamos
             }
         }
 
-
         private void Használt_Click(object sender, EventArgs e)
         {
             Használt_állapot();
         }
 
-
         private void SelejtElő_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla_Beép.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kiválsztva akkumulátor.");
-
-
+                if (Tábla_Beép.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválsztva akkumulátor.");
                 foreach (DataGridViewRow SOR in Tábla_Beép.SelectedRows)
                 {
                     Státus_Módosítás("_", 4, SOR.Cells[0].Value.ToString().Trim());
@@ -1666,13 +1456,11 @@ namespace Villamos
             }
         }
 
-
         private void Leselejtezett_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla_Beép.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kiválsztva akkumulátor.");
+                if (Tábla_Beép.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválsztva akkumulátor.");
 
                 foreach (DataGridViewRow SOR in Tábla_Beép.SelectedRows)
                 {
@@ -1694,13 +1482,11 @@ namespace Villamos
             }
         }
 
-
         private void Törölt_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla_Beép.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kiválsztva akkumulátor.");
+                if (Tábla_Beép.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválsztva akkumulátor.");
 
                 foreach (DataGridViewRow SOR in Tábla_Beép.SelectedRows)
                 {
@@ -1721,55 +1507,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
         #endregion
-
-        #region Listák feltöltése
-
-        private void AdatokAkkuMérListázás()
-        {
-            try
-            {
-                AdatokAkkuMér.Clear();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
-                string jelszó = "kasosmiklós";
-                string szöveg = "SELECT * FROM méréstábla";
-
-                AdatokAkkuMér = KézAkkuMér.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void AdatokAkkuListázás()
-        {
-            try
-            {
-                AdatokAkku.Clear();
-                AdatokAkku = KézAkku.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-
-
     }
 }

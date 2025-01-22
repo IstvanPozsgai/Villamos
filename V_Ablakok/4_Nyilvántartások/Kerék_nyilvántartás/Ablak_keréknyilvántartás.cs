@@ -3030,25 +3030,32 @@ namespace Villamos
                 string hely;
                 if (Dátumtól.Value != null)
                     hely = Application.StartupPath + @"\főmérnökség\adatok\" + Dátumtól.Value.Year + @"\telepikerék.mdb";
-                else
-                    hely = Application.StartupPath + @"\főmérnökség\adatok\" + DateTime.Today.Year + @"\telepikerék.mdb";
+            ﻿namespace Villamos.Villamos_Ablakok
+{
+    partial class Ablak_Kerék_segéd
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-                string jelszó = "szabólászló";
-                string szöveg = "SELECT * FROM keréktábla ";
-
-                AdatokMérés.Clear();
-                AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
             {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                components.Dispose();
             }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            base.Dispose(disposing);
         }
-        #endregion
-    }
-}
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private

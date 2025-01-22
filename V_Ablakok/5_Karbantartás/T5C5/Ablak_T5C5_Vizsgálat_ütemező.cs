@@ -920,6 +920,7 @@ namespace Villamos
                 string szöveg = "Select * FROM szerelvénytábla ORDER BY id";
                 string jelszó = "pozsgaii";
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
+                if (File.Exists(hely)) return;
                 AdatokSzer = KézSzer.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -940,6 +941,7 @@ namespace Villamos
             {
                 AdatokSzerelvényElő.Clear();
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
+                if (File.Exists(hely)) return;
                 string szöveg = "Select * FROM szerelvénytábla ORDER BY id";
                 string jelszó = "pozsgaii";
                 AdatokSzerelvényElő = KézSzerElő.Lista_Adatok(hely, jelszó, szöveg);
@@ -987,6 +989,7 @@ namespace Villamos
             {
                 AdatokZSER.Clear();
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\Napi_km_Zser_{DateTime.Today.Year}.mdb";
+                if (File.Exists(hely)) return;
                 string jelszó = "pozsgaii";
                 string szöveg = "SELECT * FROM tábla";
                 AdatokZSER = KézZser.Lista_adatok(hely, jelszó, szöveg);
@@ -1009,6 +1012,7 @@ namespace Villamos
             {
                 AdatokVkm.Clear();
                 string hely = Application.StartupPath + @"\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
+                if (File.Exists(hely)) return;
                 string jelszó = "pocsaierzsi";
                 string szöveg = "SELECT * FROM KMtábla WHERE törölt=false  order by azonosító asc, vizsgdátumk  desc";
                 AdatokVkm = KézVkm.Lista_Adat(hely, jelszó, szöveg);
@@ -1032,6 +1036,7 @@ namespace Villamos
             {
                 AdatokCsatoló.Clear();
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
+                if (File.Exists(hely)) return;
                 string jelszó = "kéménybe";
                 string szöveg = "SELECT * FROM osztályadatok ORDER BY azonosító";
                 AdatokCsatoló = KézCsat.Lista_Adat(hely, jelszó, szöveg);
@@ -1054,6 +1059,7 @@ namespace Villamos
             {
                 AdatokFutás.Clear();
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\T5C5\villamos3.mdb";
+                if (File.Exists(hely)) return;
                 string jelszó = "pozsgaii";
                 string szöveg = "SELECT * FROM Állománytábla where telephely= '" + Cmbtelephely.Text.Trim() + "' ORDER BY azonosító";
                 AdatokFutás = KézFutás.Lista_Adat(hely, jelszó, szöveg);
@@ -1076,6 +1082,7 @@ namespace Villamos
             {
                 AdatokHBeosztás.Clear();
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
+                if (File.Exists(hely)) return;
                 string szöveg = "Select * FROM beosztás ORDER BY id";
                 string jelszó = "pozsgaii";
                 AdatokHBeosztás = KézHBeosztás.Lista_Adatok(hely, jelszó, szöveg);
@@ -1099,6 +1106,7 @@ namespace Villamos
                 Mérés_Adatok.Clear();
                 string jelszó = "szabólászló";
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\telepikerék.mdb";
+                if (File.Exists(hely)) return;
                 string szöveg = $"SELECT * FROM keréktábla ";
 
                 Mérés_Adatok = Mérés_kéz.Lista_Adatok(hely, jelszó, szöveg);
@@ -1125,7 +1133,8 @@ namespace Villamos
             try
             {
                 AdatokVezény.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\" + DateTime.Today.Year + @"\vezénylés" + DateTime.Today.Year + ".mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{DateTime.Today.Year}\vezénylés{DateTime.Today.Year}.mdb";
+                if (File.Exists(hely)) return;
                 string jelszó = "tápijános";
                 string szöveg = "SELECT * FROM vezényléstábla where [dátum]>=#" + DateTime.Today.AddDays(-1).ToString("MM-dd-yyyy") + "#";
                 szöveg += " and [törlés]=0 ORDER BY azonosító";
@@ -2431,7 +2440,7 @@ namespace Villamos
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
                 string szöveg = "SELECT * From üzenetek";
                 Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
-                List<Adat_Utasítás> AdatokUtasítás = KézUtasítás.Lista_Adatok(hely,  szöveg);
+                List<Adat_Utasítás> AdatokUtasítás = KézUtasítás.Lista_Adatok(hely, szöveg);
 
                 // megkeressük az utolsó sorszámot
                 Txtsorszám = 1;
@@ -2445,7 +2454,7 @@ namespace Villamos
                 // ha már ő írta akkor rögzítette is
                 szöveg = "SELECT * From olvasás ";
                 Kezelő_utasítás_Olvasás KézOlvasás = new Kezelő_utasítás_Olvasás();
-                List<Adat_utasítás_olvasás> AdatokOlvasás = KézOlvasás.Lista_Adatok(hely,  szöveg);
+                List<Adat_utasítás_olvasás> AdatokOlvasás = KézOlvasás.Lista_Adatok(hely, szöveg);
 
                 szöveg = "SELECT * From olvasás order by sorszám desc";
                 double i = 1;
