@@ -719,6 +719,8 @@
     <Compile Include="V_Kezelők\Kezelő_Kidobó_Segéd.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kidobó_Változat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Adatok_Terjesztés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosegéd.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztásciklus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztáskódok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Feorszámok.cs" />
@@ -736,13 +738,17 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_JogVonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Könyvtár.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Mentésihelyek.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Munkaidő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Munkakör.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Reklám.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Sérülés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Turnusok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típusaltípustábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típusrendezéstábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típuszínektábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Túlórakeret.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Váltóstábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Védelem.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
@@ -775,6 +781,11 @@
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Takarítástípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Váltós_Kijelöltnapok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Váltós_Naptár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Váltós_Váltóscsopitábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Váltós_Váltóstábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Váltós_Összesítő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Védő.cs" />
     <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás_kieg.cs">
       <SubType>Form</SubType>
