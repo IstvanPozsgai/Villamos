@@ -449,7 +449,7 @@ namespace Villamos
                                                kapacitás,
                                                CmbTelephely.Text.Trim(),
                                                DateTime.Now,
-                                               Program.PostásNév.Trim(), 0);
+                                               Program.PostásNév.Trim());
                 KézAkkuNapló.Rögzítés(ADATNAPLÓ);
                 // naplózás
 
@@ -1119,7 +1119,7 @@ namespace Villamos
                                                         "_", "_", "_", Rekord.Gyáriszám.Trim(),
                                                         "_", new DateTime(1900, 1, 1), new DateTime(1900, 1, 1), 0,
                                                         "Telephely változás", new DateTime(1900, 1, 1), 0,
-                                                        eredmény.Üzem.Trim(), DateTime.Now, Program.PostásNév.Trim(), 0);
+                                                        eredmény.Üzem.Trim(), DateTime.Now, Program.PostásNév.Trim());
                             KézAkkuNapló.Rögzítés(ADAT);
                         }
                     }
@@ -1391,7 +1391,7 @@ namespace Villamos
             Adat_Akkumulátor_Napló ADAT = new Adat_Akkumulátor_Napló(
                                     Hova.Trim(), "_", "_",
                                     gyáriszám.Trim(), "_", new DateTime(1900, 1, 1), new DateTime(1900, 1, 1),
-                                    státus, "_", new DateTime(1900, 1, 1), 0, "_", DateTime.Now, Program.PostásNév.Trim(), 0);
+                                    státus, "_", new DateTime(1900, 1, 1), 0, "_", DateTime.Now, Program.PostásNév.Trim());
             KézAkkuNapló.Rögzítés(ADAT);
         }
 
