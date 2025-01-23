@@ -2840,22 +2840,32 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Jármű_Takarítás_Napló> AdatNapl;
+                List<Adat_Jármű_Takarítás_Napló> AdatNap;
 
                 if (Utolsó_pályaszám.Text.Trim() == "")
                 {
-                    AdatNapl = (from a in AdatokNapl
-                                orderby a.Azonosító, a.Takarítási_fajta, a.Dátum
-                                select a).ToList();
+                    AdatNap = (from a in AdatokNapl
+                               orderby a.Azonosító, a.Takarítási_fajta, a.Dátum
+                               select a).ToList();
                 }
                 else
                 {
-                    AdatNapl = (from a in AdatokNapl
-                                where a.Azonosító == Utolsó_pályaszám.Text.Trim()
-                                orderby a.Takarítási_fajta, a.Dátum
-                                select a).ToList();
+                    AdatNap = (from a in AdatokNapl
+                               where a.Azonosító == Utolsó_pályaszám.Text.Trim()
+                               orderby a.Takarítási_fajta, a.Dátum
+                               select a).ToList();
                 }
-                if (AdatNapl == null || AdatNapl.Count == 0) throw new HibásBevittAdat("Nincs listázandó adat."); ;
+                if (Utolsó_telephely.Text.Trim() != "")
+                    AdatNap = (from a in AdatNap
+                               where a.Telephely == Utolsó_telephely.Text.Trim()
+                               orderby a.Takarítási_fajta, a.Dátum
+                               select a).ToList();
+                if (Utolsó_takarítási_fajta.Text.Trim() != "")
+                    AdatNap = (from a in AdatNap
+                               where a.Takarítási_fajta == Utolsó_takarítási_fajta.Text.Trim()
+                               orderby a.Takarítási_fajta, a.Dátum
+                               select a).ToList();
+                if (AdatNap == null || AdatNap.Count == 0) throw new HibásBevittAdat("Nincs listázandó adat."); ;
                 Tábla_utolsó.Refresh();
                 Tábla_utolsó.Visible = false;
                 AdatTábla_Utolsó.Clear();
@@ -2872,7 +2882,7 @@ namespace Villamos
                 AdatTábla_Utolsó.Columns.Add("Módosító");
 
 
-                foreach (Adat_Jármű_Takarítás_Napló rekord in AdatNapl)
+                foreach (Adat_Jármű_Takarítás_Napló rekord in AdatNap)
                 {
                     DataRow Soradat = AdatTábla_Utolsó.NewRow();
                     Soradat["Azonosító"] = rekord.Azonosító.Trim();
