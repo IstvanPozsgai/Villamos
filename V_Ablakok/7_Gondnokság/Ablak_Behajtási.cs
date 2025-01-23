@@ -709,7 +709,8 @@ namespace Villamos
                 {
                     // ha van ilyen akkor módosítunk
                     int státus = 2;
-                    if (rekord.Státus != 1) státus = 1;
+                    if (rekord.Státus <= 1) státus = 1;
+                    if (EngedélyMátrix.Where(a => a.Engedély == 1).FirstOrDefault() != null) státus = 1;
 
                     ADAT = new Adat_Behajtás_Behajtási(TxtKérelemID.Text.Trim(),
                                             CmbKérelemSzolgálati.Text.Trim(),
@@ -738,7 +739,7 @@ namespace Villamos
                                             (from a in EngedélyMátrix where a.Telephely == "Zugló" select a.Megjegyzés).First(),
                                             CmbKérelemTípus.Text.Trim(),
                                             autókszáma,
-                                            1,
+                                            státus,
                                             KérelemDátuma.Value,
                                             TxtKérelemMegjegyzés.Text.Trim(),
                                             TxtKérrelemPDF.Text.Trim(),
@@ -891,8 +892,9 @@ namespace Villamos
             for (int i = 0; i < KérelemTábla.Rows.Count; i++)
             {
                 string telephely = KérelemTábla.Rows[i].Cells[1].Value.ToString();
-                if (!int.TryParse(KérelemTábla.Rows[i].Cells[2].Value.ToString(), out int engedély))
-                    engedély = bool.Parse(KérelemTábla.Rows[i].Cells[0].Value.ToString()) ? 1 : 0;
+
+                if (!int.TryParse(KérelemTábla.Rows[i].Cells[2].Value.ToString(), out int engedély)) engedély = 0;
+                if (bool.Parse(KérelemTábla.Rows[i].Cells[0].Value.ToString()) && engedély == 0) engedély = bool.Parse(KérelemTábla.Rows[i].Cells[0].Value.ToString()) ? 1 : 0;
                 string megjegyzés = KérelemTábla.Rows[i].Cells[4].Value.ToString();
                 EngedélyMátrix.Add(new Adat_Behajtási_Engedélyek(telephely, engedély, megjegyzés));
             }
