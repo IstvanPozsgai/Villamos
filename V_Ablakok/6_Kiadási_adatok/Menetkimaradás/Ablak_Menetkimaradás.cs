@@ -1280,16 +1280,19 @@ namespace Villamos
                 // melyik sorra kattintottunk
                 if (e.RowIndex < 0) return;
                 txtSorszám.Text = e.RowIndex.ToString();
-                idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[9].Value.ToString());
-                if (cmbtelephely.Enabled == false)
+                if (Tábla.Columns[0].HeaderCell.Value.ToString() == "Srsz")
+                    idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[0].Value.ToString());
+                if (Tábla.Columns.Count > 9 && Tábla.Columns[9].HeaderCell.Value.ToString() == "ID")
+                    idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[9].Value.ToString());
+                if (!cmbtelephely.Enabled)
                 {
                     // telephelyi adatok
-                    txthely.Text = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
+                    txthely.Text = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value.Year}.mdb";
                 }
                 else
                 {
                     // főmérnökségi adatok 
-                    txthely.Text = Application.StartupPath + @"\Főmérnökség\adatok\" + Dátum.Value.ToString("yyyy") + @"\" + Dátum.Value.ToString("yyyy") + "_menet_adatok.mdb";
+                    txthely.Text = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_menet_adatok.mdb";
                 }
             }
             catch (HibásBevittAdat ex)
