@@ -117,7 +117,6 @@ namespace Villamos.Villamos_Kezelők
             }
         }
 
-
         public void Módosítás(int Dátum, Adat_Váltós_Váltóstábla Adat)
         {
             try
@@ -144,5 +143,28 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Törlés(int Dátum, Adat_Váltós_Váltóstábla Adat)
+        {
+            try
+            {
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb";
+                string szöveg = $"DELETE FROM váltóstábla where év={Adat.Év}";
+                szöveg += $" and félév={Adat.Félév}";
+                szöveg += $" and csoport='{Adat.Csoport}'";
+                szöveg += $" and telephely='{Adat.Telephely}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

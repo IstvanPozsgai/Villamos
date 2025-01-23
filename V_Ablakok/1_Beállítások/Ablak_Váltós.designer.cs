@@ -926,9 +926,9 @@ namespace Villamos
             this.Panel3.Controls.Add(this.Munkaidő);
             this.Panel3.Controls.Add(this.Label23);
             this.Panel3.Controls.Add(this.Label24);
-            this.Panel3.Location = new System.Drawing.Point(884, 14);
+            this.Panel3.Location = new System.Drawing.Point(805, 10);
             this.Panel3.Name = "Panel3";
-            this.Panel3.Size = new System.Drawing.Size(239, 333);
+            this.Panel3.Size = new System.Drawing.Size(318, 337);
             this.Panel3.TabIndex = 69;
             // 
             // Tábla_Munkarend
@@ -960,7 +960,7 @@ namespace Villamos
             dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tábla_Munkarend.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.Tábla_Munkarend.RowHeadersWidth = 51;
-            this.Tábla_Munkarend.Size = new System.Drawing.Size(232, 183);
+            this.Tábla_Munkarend.Size = new System.Drawing.Size(312, 187);
             this.Tábla_Munkarend.TabIndex = 82;
             this.Tábla_Munkarend.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_Munkarend_CellClick);
             this.Tábla_Munkarend.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_Munkarend_CellDoubleClick);
@@ -970,7 +970,7 @@ namespace Villamos
             // 
             this.MunkaRend_OK.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.MunkaRend_OK.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.MunkaRend_OK.Location = new System.Drawing.Point(190, 26);
+            this.MunkaRend_OK.Location = new System.Drawing.Point(259, 29);
             this.MunkaRend_OK.Name = "MunkaRend_OK";
             this.MunkaRend_OK.Size = new System.Drawing.Size(45, 45);
             this.MunkaRend_OK.TabIndex = 2;
@@ -982,7 +982,7 @@ namespace Villamos
             // 
             this.MunkaRend_Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.MunkaRend_Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.MunkaRend_Töröl.Location = new System.Drawing.Point(190, 91);
+            this.MunkaRend_Töröl.Location = new System.Drawing.Point(259, 94);
             this.MunkaRend_Töröl.Name = "MunkaRend_Töröl";
             this.MunkaRend_Töröl.Size = new System.Drawing.Size(45, 45);
             this.MunkaRend_Töröl.TabIndex = 3;
@@ -994,14 +994,14 @@ namespace Villamos
             // 
             this.Munkarendelnevezés.Location = new System.Drawing.Point(20, 45);
             this.Munkarendelnevezés.Name = "Munkarendelnevezés";
-            this.Munkarendelnevezés.Size = new System.Drawing.Size(140, 26);
+            this.Munkarendelnevezés.Size = new System.Drawing.Size(164, 26);
             this.Munkarendelnevezés.TabIndex = 0;
             // 
             // Munkaidő
             // 
             this.Munkaidő.Location = new System.Drawing.Point(20, 110);
             this.Munkaidő.Name = "Munkaidő";
-            this.Munkaidő.Size = new System.Drawing.Size(140, 26);
+            this.Munkaidő.Size = new System.Drawing.Size(164, 26);
             this.Munkaidő.TabIndex = 1;
             // 
             // Label23
@@ -1043,7 +1043,7 @@ namespace Villamos
             this.Panel2.Controls.Add(this.Csoport_OK);
             this.Panel2.Location = new System.Drawing.Point(225, 11);
             this.Panel2.Name = "Panel2";
-            this.Panel2.Size = new System.Drawing.Size(653, 336);
+            this.Panel2.Size = new System.Drawing.Size(574, 336);
             this.Panel2.TabIndex = 68;
             // 
             // Csoport_Töröl
@@ -1088,7 +1088,7 @@ namespace Villamos
             dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Csoport_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.Csoport_Tábla.RowHeadersWidth = 51;
-            this.Csoport_Tábla.Size = new System.Drawing.Size(647, 151);
+            this.Csoport_Tábla.Size = new System.Drawing.Size(568, 151);
             this.Csoport_Tábla.TabIndex = 78;
             this.Csoport_Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Csoport_Tábla_CellClick);
             this.Csoport_Tábla.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Csoport_Tábla_CellDoubleClick);
@@ -1219,7 +1219,7 @@ namespace Villamos
             this.TurnusokLista.ItemHeight = 20;
             this.TurnusokLista.Location = new System.Drawing.Point(14, 78);
             this.TurnusokLista.Name = "TurnusokLista";
-            this.TurnusokLista.Size = new System.Drawing.Size(140, 204);
+            this.TurnusokLista.Size = new System.Drawing.Size(140, 244);
             this.TurnusokLista.TabIndex = 1;
             this.TurnusokLista.SelectedIndexChanged += new System.EventHandler(this.TurnusokLista_SelectedIndexChanged);
             // 

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,6 +9,9 @@ namespace Villamos.Villamos_Kezelők
 {
     public class Kezelő_Kiegészítő_Munkaidő
     {
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
+        readonly string jelszó = "Mocó";
+
         public List<Adat_Kiegészítő_Munkaidő> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kiegészítő_Munkaidő> Adatok = new List<Adat_Kiegészítő_Munkaidő>();
@@ -41,33 +42,12 @@ namespace Villamos.Villamos_Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, string jelszó, Adat_Kiegészítő_Munkaidő Adat)
+
+        public List<Adat_Kiegészítő_Munkaidő> Lista_Adatok()
         {
-            string szöveg = "INSERT INTO munkaidő (munkaidő, munkarendelnevezés) VALUES (";
-            szöveg += $"'{Adat.Munkaidő}";
-            szöveg += $"{Adat.Munkarendelnevezés} )";
-            MyA.ABMódosítás(hely, jelszó, szöveg);            
-        }
-
-        /// <summary>
-        /// munkarendelnevezés
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, string jelszó, Adat_Kiegészítő_Munkaidő Adat)
-        {
-            string szöveg = " UPDATE  munkaidő SET ";
-            szöveg += $" munkaidő={Adat.Munkaidő}";
-            szöveg += $" WHERE munkarendelnevezés='{Adat.Munkarendelnevezés}'";
-
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        public Adat_Kiegészítő_Munkaidő Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Kiegészítő_Munkaidő Adat = null;
+            string szöveg = "SELECT * FROM munkaidő ORDER BY munkarendelnevezés";
+            List<Adat_Kiegészítő_Munkaidő> Adatok = new List<Adat_Kiegészítő_Munkaidő>();
+            Adat_Kiegészítő_Munkaidő Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -79,16 +59,78 @@ namespace Villamos.Villamos_Kezelők
                     {
                         if (rekord.HasRows)
                         {
-                            rekord.Read();
-                            Adat = new Adat_Kiegészítő_Munkaidő(
-                                  rekord["munkarendelnevezés"].ToStrTrim(),
-                                  rekord["munkaidő"].ToÉrt_Double()
-                                  );
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Kiegészítő_Munkaidő(
+                                     rekord["munkarendelnevezés"].ToStrTrim(),
+                                     rekord["munkaidő"].ToÉrt_Double()
+                                     );
+                                Adatok.Add(Adat);
+                            }
                         }
                     }
                 }
             }
-            return Adat;
+            return Adatok;
+        }
+
+        public void Rögzítés(Adat_Kiegészítő_Munkaidő Adat)
+        {
+            try
+            {
+                string szöveg = "INSERT INTO munkaidő (munkaidő, munkarendelnevezés) VALUES (";
+                szöveg += $"{Adat.Munkaidő}, ";
+                szöveg += $"'{Adat.Munkarendelnevezés}')";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(Adat_Kiegészítő_Munkaidő Adat)
+        {
+            try
+            {
+                string szöveg = " UPDATE  munkaidő SET ";
+                szöveg += $" munkaidő={Adat.Munkaidő}";
+                szöveg += $" WHERE munkarendelnevezés='{Adat.Munkarendelnevezés}'";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string Munkarendelnevezés)
+        {
+            try
+            {
+                string szöveg = $"DELETE FROM munkaidő WHERE munkarendelnevezés='{Munkarendelnevezés}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
