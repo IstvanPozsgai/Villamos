@@ -42,7 +42,7 @@ namespace Villamos.Villamos_Kezelők
 
         public List<Adat_Váltós_Naptár> Lista_Adatok(int Év, string Tábla)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
             string szöveg = $"SELECT * FROM naptár{Tábla}";
             List<Adat_Váltós_Naptár> Adatok = new List<Adat_Váltós_Naptár>();
             Adat_Váltós_Naptár Adat;
@@ -76,7 +76,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
                 string szöveg = $"INSERT INTO naptár{Tábla} (nap, dátum) VALUES (";
                 szöveg += $"'{Adat.Nap}', ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
@@ -97,7 +97,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
                 string szöveg = $"UPDATE  naptár{Tábla} SET ";
                 szöveg += $" nap='{Adat.Nap}'";
                 szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";
@@ -118,7 +118,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Naptár Adat in Adatok)
                 {
@@ -145,7 +145,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Naptár Adat in Adatok)
                 {

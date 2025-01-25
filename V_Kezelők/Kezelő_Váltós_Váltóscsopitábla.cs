@@ -9,7 +9,7 @@ namespace Villamos.Villamos.Kezelők
 {
     public class Kezelő_Váltós_Váltóscsopitábla
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb".Ellenőrzés();
         readonly string jelszó = "Gábor";
 
         public List<Adat_Váltós_Váltóscsopitábla> Lista_Adatok()

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using MyE = Villamos.Module_Excel;
@@ -80,13 +78,8 @@ namespace Villamos
 
         private void Ablak_Váltós_Load(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}";
-            if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-            hely += @"\munkaidőnaptár.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely);
-            // váltós csoport tábla
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Váltóscsopitábla(hely);
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\munkaidőnaptár.mdb".Ellenőrzés();
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb".Ellenőrzés();
 
             Jogosultságkiosztás();
             Fülek.SelectedIndex = 0;
@@ -998,10 +991,6 @@ namespace Villamos
                 if (!int.TryParse(ÉvesTperc.Text, out int Tperc)) throw new HibásBevittAdat("A túlóra percnek egész számnak kell lennie.");
                 if (ÉvesTelephely.Text.Trim() == "") throw new HibásBevittAdat("A telephely mezőt ki kell tölteni.");
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{ÉvesÉv.Text.Trim()}\munkaidőnaptár.mdb";
-                if (!File.Exists(hely)) return;
-
                 AdatokVáltóstábla = KézVáltóstábla.Lista_Adatok(Év);
 
                 Adat_Váltós_Váltóstábla Elem = (from a in AdatokVáltóstábla
@@ -1046,9 +1035,6 @@ namespace Villamos
                 if (!int.TryParse(ÉvesFélév.Text, out int Félév)) throw new HibásBevittAdat("Az Félévnek egész számnak kell lennie.");
                 if (ÉvesTelephely.Text.Trim() == "") throw new HibásBevittAdat("A telephely mezőt ki kell tölteni.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{ÉvesÉv.Text.Trim()}\munkaidőnaptár.mdb";
-                if (!File.Exists(hely)) return;
-
                 Adat_Váltós_Váltóstábla Elem = (from a in AdatokVáltóstábla
                                                 where a.Év == Év && a.Félév == Félév
                                                 && a.Csoport == ÉvesCsoport.Text.Trim()
@@ -1090,8 +1076,6 @@ namespace Villamos
             try
             {
                 if (!int.TryParse(ÉvesÉv.Text, out int Év)) throw new HibásBevittAdat("Az Évnek egész számnak kell lennie.");
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
-                if (!File.Exists(hely)) return;
 
                 if (ÉvesTelephely.Text.Trim() == "") ÉvesTelephely.Text = "_";
 
@@ -1577,97 +1561,97 @@ namespace Villamos
             {
                 DateTime hónaputolsónapja;
                 DateTime próbanap;
-                {
-                    Tábla_Nappalos.Rows.Clear();
-                    Tábla_Nappalos.Columns.Clear();
-                    Tábla_Nappalos.Refresh();
-                    Tábla_Nappalos.Visible = false;
-                    Tábla_Nappalos.ColumnCount = 36;
-                    Tábla_Nappalos.RowCount = 15;
 
-                    // fejléc elkészítése
-                    Tábla_Nappalos.Columns[0].HeaderText = "Hónap";
-                    Tábla_Nappalos.Columns[0].Width = 100;
-                    Tábla_Nappalos.Columns[1].HeaderText = "Munkanapok";
-                    Tábla_Nappalos.Columns[1].Width = 105;
-                    Tábla_Nappalos.Columns[2].HeaderText = "idő [perc]";
-                    Tábla_Nappalos.Columns[2].Width = 100;
-                    Tábla_Nappalos.Columns[3].HeaderText = "idő [óra]";
-                    Tábla_Nappalos.Columns[3].Width = 100;
-                    Tábla_Nappalos.Columns[4].HeaderText = "Pihenőnapok száma";
-                    Tábla_Nappalos.Columns[4].Width = 110;
+                Tábla_Nappalos.Rows.Clear();
+                Tábla_Nappalos.Columns.Clear();
+                Tábla_Nappalos.Refresh();
+                Tábla_Nappalos.Visible = false;
+                Tábla_Nappalos.ColumnCount = 36;
+                Tábla_Nappalos.RowCount = 15;
+
+                // fejléc elkészítése
+                Tábla_Nappalos.Columns[0].HeaderText = "Hónap";
+                Tábla_Nappalos.Columns[0].Width = 100;
+                Tábla_Nappalos.Columns[1].HeaderText = "Munkanapok";
+                Tábla_Nappalos.Columns[1].Width = 105;
+                Tábla_Nappalos.Columns[2].HeaderText = "idő [perc]";
+                Tábla_Nappalos.Columns[2].Width = 100;
+                Tábla_Nappalos.Columns[3].HeaderText = "idő [óra]";
+                Tábla_Nappalos.Columns[3].Width = 100;
+                Tábla_Nappalos.Columns[4].HeaderText = "Pihenőnapok száma";
+                Tábla_Nappalos.Columns[4].Width = 110;
+
+                for (int i = 1; i <= 31; i++)
+                {
+                    Tábla_Nappalos.Columns[i + 4].HeaderText = i.ToString();
+                    Tábla_Nappalos.Columns[i + 4].Width = 27;
+
+                }
+                // színezi az első és a második félévet
+                for (int j = 1; j <= 12; j++)
+                {
+                    for (int i = 1; i <= 31; i++)
+                    {
+
+                        if (j > 6)
+                        {
+                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.SandyBrown;
+                        }
+
+                        else
+                        {
+                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.PeachPuff;
+                        }
+                    }
+                }
+                // tartalom feltöltés
+                for (int j = 1; j <= 12; j++)
+                {
+                    Tábla_Nappalos.Rows[j - 1].Cells[0].Value = j;
+
+                    DateTime képzettDátum = new DateTime(Dátumnappal.Value.Year, j, 1);
+                    hónaputolsónapja = MyF.Hónap_utolsónapja(képzettDátum);
+
 
                     for (int i = 1; i <= 31; i++)
                     {
-                        Tábla_Nappalos.Columns[i + 4].HeaderText = i.ToString();
-                        Tábla_Nappalos.Columns[i + 4].Width = 27;
-
-                    }
-                    // színezi az első és a második félévet
-                    for (int j = 1; j <= 12; j++)
-                    {
-                        for (int i = 1; i <= 31; i++)
+                        if (hónaputolsónapja.Day < i)
                         {
-
-                            if (j > 6)
+                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value = "X";
+                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.DimGray;
+                        }
+                        else
+                        {
+                            próbanap = new DateTime(Dátumnappal.Value.Year, j, i);
+                            switch (próbanap.DayOfWeek)
                             {
-                                Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.SandyBrown;
-                            }
+                                case DayOfWeek.Saturday:
+                                    {
+                                        Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value = "P";
+                                        Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.MediumSeaGreen;
+                                        break;
+                                    }
+                                case DayOfWeek.Sunday:
+                                    {
+                                        Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value = "V";
+                                        Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.OrangeRed;
+                                        break;
+                                    }
 
-                            else
-                            {
-                                Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.PeachPuff;
+                                default:
+                                    {
+                                        Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value = "1";
+                                        break;
+                                    }
+
                             }
                         }
                     }
-                    // tartalom feltöltés
-                    for (int j = 1; j <= 12; j++)
-                    {
-                        Tábla_Nappalos.Rows[j - 1].Cells[0].Value = j;
-
-                        DateTime képzettDátum = new DateTime(Dátumnappal.Value.Year, j, 1);
-                        hónaputolsónapja = MyF.Hónap_utolsónapja(képzettDátum);
-
-
-                        for (int i = 1; i <= 31; i++)
-                        {
-                            if (hónaputolsónapja.Day < i)
-                            {
-                                Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value = "X";
-                                Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.DimGray;
-                            }
-                            else
-                            {
-                                próbanap = new DateTime(Dátumnappal.Value.Year, j, i);
-                                switch (próbanap.DayOfWeek)
-                                {
-                                    case DayOfWeek.Saturday:
-                                        {
-                                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value = "P";
-                                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.MediumSeaGreen;
-                                            break;
-                                        }
-                                    case DayOfWeek.Sunday:
-                                        {
-                                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value = "V";
-                                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Style.BackColor = Color.OrangeRed;
-                                            break;
-                                        }
-
-                                    default:
-                                        {
-                                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value = "1";
-                                            break;
-                                        }
-
-                                }
-                            }
-                        }
-                    }
-
-                    Tábla_Nappalos.Refresh();
-                    Tábla_Nappalos.Visible = true;
                 }
+
+                Tábla_Nappalos.Refresh();
+                Tábla_Nappalos.Visible = true;
+
                 Alapszámolás();
             }
             catch (HibásBevittAdat ex)
@@ -2024,11 +2008,6 @@ namespace Villamos
                 string napiérték;
                 if (Tábla_Nappalos.Rows.Count < 1) return;
                 // munkaidő naptár rögzítése
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátumnappal.Value.Year}";
-                if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-                hely += @"\munkaidőnaptár.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely);
-
                 List<Adat_Váltós_Naptár> Adatok = KézVNaptár.Lista_Adatok(Dátumnappal.Value.Year, "");
 
                 Holtart.Be(32);
@@ -2749,11 +2728,6 @@ namespace Villamos
                 DateTime próbanap;
                 string napiérték;
                 if (Tábla9.Rows.Count < 1) return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{VáltósNaptár.Value.Year}";
-                if (Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely += @"\munkaidőnaptár.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely);
 
                 string Tábla;
                 if (!VváltósCsoport.Text.Contains("É"))

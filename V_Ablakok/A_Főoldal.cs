@@ -369,59 +369,7 @@ namespace Villamos
 
         private void Könyvtárak_Létrehozása()
         {
-            string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\Adatok";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Főkönyv";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Főkönyv\{DateTime.Today.Year}\Nap";
-            if (Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Beosztás";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Főkönyv\Futás";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Naplózás";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Üzenetek";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Villamos";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Hibanapló";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Segéd";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\Hangok";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\Szerszám";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\Képek";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = Application.StartupPath + @"\Főmérnökség\Napló";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\főkönyv\{DateTime.Today.Year}";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Főkönyv\{DateTime.Today.Year}\Zser";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\Főkönyv\{DateTime.Today.Year}\Nap";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Now.Year}.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
+            Hely_Ellenőr.Könyvtárszerkezet(lbltelephely.Text.Trim());
         }
 
         private void AblakFőoldal_Resize(object sender, EventArgs e)
@@ -642,7 +590,10 @@ namespace Villamos
             }
         }
 
-        private void FájlTörlés(string helykép) { }
+        private void FájlTörlés(string helykép)
+        {
+            //ezt nem haszáljuk
+        }
 
         private void Súgómenü_Click(object sender, EventArgs e)
         {

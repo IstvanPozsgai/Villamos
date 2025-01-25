@@ -44,7 +44,7 @@ namespace Villamos.Villamos_Kezelők
 
         public List<Adat_Váltós_Kijelöltnapok> Lista_Adatok(int Év)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM kijelöltnapok ";
             List<Adat_Váltós_Kijelöltnapok> Adatok = new List<Adat_Váltós_Kijelöltnapok>();
             Adat_Váltós_Kijelöltnapok Adat;
@@ -80,7 +80,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
                 string szöveg = "INSERT INTO kijelöltnapok (dátum, csoport,  telephely ) VALUES ( ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Csoport}', ";
@@ -102,7 +102,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Kijelöltnapok Adat in Adatok)
                 {
@@ -128,7 +128,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
                 string szöveg = $"DELETE FROM kijelöltnapok  WHERE csoport='{Adat.Csoport}'";
                 szöveg += $" And Telephely='{Adat.Telephely}'";
                 szöveg += $" And dátum=#{Adat.Dátum:M-d-yy}#";
