@@ -83,5 +83,23 @@
             Személy_csere = 2,
         }
 
+        public enum Váltós_Naptár_Státusz
+        {
+            Munkanap_1 = 1,
+            Ünnepnap_Ü = 2,
+            Pihenőnap_P = 3,
+            Vasárnap_V = 4
+        }
+
+        public enum Váltós_Naptár_Státusz_Váltó
+        {
+            Üres_ = 1,
+            Nappal_7 = 2,
+            Éjszaka_8 = 3,
+            ElvontSzabadnap_E = 4,
+            Pihenő_P = 5,
+            KiadottSzabadnap_Z = 6
+        }
+
     }
 }

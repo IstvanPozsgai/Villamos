@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
 using MyA = Adatbázis;
 
 namespace Villamos.Villamos.Kezelők
 {
     public class Kezelő_Váltós_Váltóscsopitábla
     {
-        public List<Adat_Váltós_Váltóscsopitábla> Lista_Adatok(string hely, string jelszó, string szöveg)
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb";
+        readonly string jelszó = "Gábor";
+
+        public List<Adat_Váltós_Váltóscsopitábla> Lista_Adatok()
         {
+            string szöveg = "SELECT * FROM tábla  order by  csoport,telephely";
             List<Adat_Váltós_Váltóscsopitábla> Adatok = new List<Adat_Váltós_Váltóscsopitábla>();
             Adat_Váltós_Váltóscsopitábla Adat;
 
@@ -41,28 +45,63 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, string jelszó, Adat_Váltós_Váltóscsopitábla Adat)
+        public void Rögzítés(Adat_Váltós_Váltóscsopitábla Adat)
         {
-            string szöveg = "INSERT INTO tábla (csoport, telephely, név) VALUES (";
-            szöveg += $"'{Adat.Csoport}', ";
-            szöveg += $"'{Adat.Telephely}', ";
-            szöveg += $"'{Adat.Név}') ";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                string szöveg = "INSERT INTO tábla (csoport, telephely, név) VALUES (";
+                szöveg += $"'{Adat.Csoport}', ";
+                szöveg += $"'{Adat.Telephely}', ";
+                szöveg += $"'{Adat.Név}') ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        /// <summary>
-        /// csoport, telephely
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, string jelszó, Adat_Váltós_Váltóscsopitábla Adat)
+        public void Módosítás(Adat_Váltós_Váltóscsopitábla Adat)
         {
-            string szöveg = " UPDATE  tábla SET ";
-            szöveg += $" név='{Adat.Név}' ";
-            szöveg += $" WHERE csoport='{Adat.Csoport}' and telephely='{Adat.Telephely}'";
+            try
+            {
+                string szöveg = " UPDATE  tábla SET ";
+                szöveg += $" név='{Adat.Név}' ";
+                szöveg += $" WHERE csoport='{Adat.Csoport}' and telephely='{Adat.Telephely}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+        public void Törlés(Adat_Váltós_Váltóscsopitábla Adat)
+        {
+            try
+            {
+                string szöveg = $"DELETE FROM tábla WHERE csoport='{Adat.Csoport}' and telephely='{Adat.Telephely}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

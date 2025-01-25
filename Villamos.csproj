@@ -1099,6 +1099,7 @@
     <Compile Include="V_Függvények\Fv_Dátum.cs" />
     <Compile Include="V_Függvények\Függvénygyűjtemény.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Funkciók.cs" />
+    <Compile Include="V_MindenEgyéb\Hely_Ellenőr.cs" />
     <Compile Include="V_MindenEgyéb\Hibakezelés.cs" />
     <Compile Include="V_MindenEgyéb\IDM_Dolgozó.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Kép.cs" />

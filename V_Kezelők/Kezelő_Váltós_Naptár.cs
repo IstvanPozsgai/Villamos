@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
@@ -39,7 +40,7 @@ namespace Villamos.Villamos_Kezelők
             return Adatok;
         }
 
-        public List<Adat_Váltós_Naptár> Lista_Adatok(int Év, int Tábla)
+        public List<Adat_Váltós_Naptár> Lista_Adatok(int Év, string Tábla)
         {
             string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
             string szöveg = $"SELECT * FROM naptár{Tábla}";
@@ -71,24 +72,99 @@ namespace Villamos.Villamos_Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(int Év, Adat_Váltós_Naptár Adat)
+        public void Rögzítés(int Év, string Tábla, Adat_Váltós_Naptár Adat)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
-            string szöveg = "INSERT INTO naptár (nap, dátum) VALUES (";
-            szöveg += $"'{Adat.Nap}', ";
-            szöveg += $"'{Adat.Dátum}' )";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string szöveg = $"INSERT INTO naptár{Tábla} (nap, dátum) VALUES (";
+                szöveg += $"'{Adat.Nap}', ";
+                szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(int Év, string Tábla, Adat_Váltós_Naptár Adat)
+        {
+            try
+            {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                string szöveg = $"UPDATE  naptár{Tábla} SET ";
+                szöveg += $" nap='{Adat.Nap}'";
+                szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(int Év, string Tábla, List<Adat_Váltós_Naptár> Adatok)
+        {
+            try
+            {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Váltós_Naptár Adat in Adatok)
+                {
+                    string szöveg = $"INSERT INTO naptár{Tábla} (nap, dátum) VALUES (";
+                    szöveg += $"'{Adat.Nap}', ";
+                    szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
-        public void Módosítás(int Év, Adat_Váltós_Naptár Adat)
+        public void Módosítás(int Év, string Tábla, List<Adat_Váltós_Naptár> Adatok)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
-            string szöveg = " UPDATE  naptár SET ";
-            szöveg += $" nap='{Adat.Nap}'";
-            szöveg += $" WHERE dátum= '{Adat.Dátum}'";
-
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Váltós_Naptár Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE  naptár{Tábla} SET ";
+                    szöveg += $" nap='{Adat.Nap}'";
+                    szöveg += $" WHERE dátum= {Adat.Dátum:M-d-yy}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }

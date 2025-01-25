@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,6 +9,8 @@ namespace Villamos.Villamos_Kezelők
 {
     public class Kezelő_Kiegészítő_Beosztásciklus
     {
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
+        readonly string jelszó = "Mocó";
         public List<Adat_Kiegészítő_Beosztásciklus> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kiegészítő_Beosztásciklus> Adatok = new List<Adat_Kiegészítő_Beosztásciklus>();
@@ -42,52 +42,11 @@ namespace Villamos.Villamos_Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, string jelszó, Adat_Kiegészítő_Beosztásciklus Adat)
+        public List<Adat_Kiegészítő_Beosztásciklus> Lista_Adatok(string Tábla)
         {
-            string szöveg = "INSERT INTO beosztásciklus (hétnapja, beosztáskód, beosztásszöveg) VALUES (";
-            szöveg += $"'{Adat.Hétnapja}', ";
-            szöveg += $"'{Adat.Beosztáskód}";
-            szöveg += $"{Adat.Beosztásszöveg} )";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, string jelszó, Adat_Kiegészítő_Beosztásciklus Adat)
-        {
-            string szöveg = " UPDATE  beosztásciklus SET ";
-            szöveg += $" hétnapja='{Adat.Hétnapja}', ";
-            szöveg += $" beosztáskód='{Adat.Beosztáskód}', ";
-            szöveg += $" beosztásszöveg='{Adat.Beosztásszöveg}' ";
-            szöveg += $" WHERE   id={Adat.Id}";
-
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás1(string hely, string jelszó, Adat_Kiegészítő_Beosztásciklus Adat1)
-        {
-            string szöveg = " UPDATE  beosztásciklus SET ";
-            szöveg += $" hétnapja='{Adat1.Hétnapja}', ";
-            szöveg += $" beosztáskód='{Adat1.Beosztáskód}', ";
-            szöveg += $" beosztásszöveg='{Adat1.Beosztásszöveg}' ";
-            szöveg += $" WHERE   id={Adat1.Id}";
-
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        public Adat_Kiegészítő_Beosztásciklus Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Kiegészítő_Beosztásciklus Adat = null;
+            string szöveg = $"SELECT * FROM {Tábla} ORDER BY  id";
+            List<Adat_Kiegészítő_Beosztásciklus> Adatok = new List<Adat_Kiegészítő_Beosztásciklus>();
+            Adat_Kiegészítő_Beosztásciklus Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -99,18 +58,82 @@ namespace Villamos.Villamos_Kezelők
                     {
                         if (rekord.HasRows)
                         {
-                            rekord.Read();
-
-                            Adat = new Adat_Kiegészítő_Beosztásciklus(
-                                   rekord["Id"].ToÉrt_Int(),
-                                   rekord["Beosztáskód"].ToStrTrim(),
-                                   rekord["Hétnapja"].ToStrTrim(),
-                                   rekord["Beosztásszöveg"].ToStrTrim());
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Kiegészítő_Beosztásciklus(
+                                       rekord["Id"].ToÉrt_Int(),
+                                       rekord["Beosztáskód"].ToStrTrim(),
+                                       rekord["Hétnapja"].ToStrTrim(),
+                                       rekord["Beosztásszöveg"].ToStrTrim());
+                                Adatok.Add(Adat);
+                            }
                         }
                     }
                 }
             }
-            return Adat;
+            return Adatok;
         }
+
+        public void Rögzítés(string Tábla, Adat_Kiegészítő_Beosztásciklus Adat)
+        {
+            try
+            {
+                string szöveg = $"INSERT INTO {Tábla} (hétnapja, beosztáskód, beosztásszöveg) VALUES (";
+                szöveg += $"'{Adat.Hétnapja}', ";
+                szöveg += $"'{Adat.Beosztáskód}";
+                szöveg += $"{Adat.Beosztásszöveg} )";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string Tábla, Adat_Kiegészítő_Beosztásciklus Adat)
+        {
+            try
+            {
+                string szöveg = $"UPDATE {Tábla} SET ";
+                szöveg += $" hétnapja='{Adat.Hétnapja}', ";
+                szöveg += $" beosztáskód='{Adat.Beosztáskód}', ";
+                szöveg += $" beosztásszöveg='{Adat.Beosztásszöveg}' ";
+                szöveg += $" WHERE id={Adat.Id}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string Tábla, Adat_Kiegészítő_Beosztásciklus Adat)
+        {
+            try
+            {
+                string szöveg = $"DELETE FROM {Tábla} WHERE  id={Adat.Id}";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

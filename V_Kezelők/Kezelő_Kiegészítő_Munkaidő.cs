@@ -42,7 +42,6 @@ namespace Villamos.Villamos_Kezelők
             return Adatok;
         }
 
-
         public List<Adat_Kiegészítő_Munkaidő> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM munkaidő ORDER BY munkarendelnevezés";
