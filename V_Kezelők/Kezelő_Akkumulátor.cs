@@ -9,47 +9,8 @@ namespace Villamos.Villamos_Kezelők
 {
     public class Kezelő_Akkumulátor
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\akku.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\akku.mdb".Ellenőrzés();
         readonly string jelszó = "kasosmiklós";
-        public List<Adat_Akkumulátor> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Akkumulátor> Adatok = new List<Adat_Akkumulátor>();
-            Adat_Akkumulátor Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Akkumulátor(
-                                        rekord["Beépítve"].ToStrTrim(),
-                                        rekord["Fajta"].ToStrTrim(),
-                                        rekord["Gyártó"].ToStrTrim(),
-                                        rekord["Gyáriszám"].ToStrTrim(),
-                                        rekord["Típus"].ToStrTrim(),
-                                        rekord["Garancia"].ToÉrt_DaTeTime(),
-                                        rekord["Gyártásiidő"].ToÉrt_DaTeTime(),
-                                        rekord["Státus"].ToÉrt_Int(),
-                                        rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["Módosításdátuma"].ToÉrt_DaTeTime(),
-                                        rekord["Kapacitás"].ToÉrt_Int(),
-                                        rekord["Telephely"].ToStrTrim()
-                                     );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Akkumulátor> Lista_Adatok()
         {
@@ -172,6 +133,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public void Módosítás(string Telep, string gyáriszám)
         {
             try

@@ -179,7 +179,6 @@ namespace Villamos
             this.Btnüzenetfrissítés = new System.Windows.Forms.Button();
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
-            this.Próba = new System.Windows.Forms.Button();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -1255,7 +1254,6 @@ namespace Villamos
             // Rejtett
             // 
             this.Rejtett.BackColor = System.Drawing.Color.Peru;
-            this.Rejtett.Controls.Add(this.Próba);
             this.Rejtett.Controls.Add(this.Cmbtelephely);
             this.Rejtett.Controls.Add(this.TároltVerzió);
             this.Rejtett.Controls.Add(this.txtutsorszám);
@@ -1389,18 +1387,6 @@ namespace Villamos
             this.Képkeret1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Képkeret1.TabIndex = 27;
             this.Képkeret1.TabStop = false;
-            // 
-            // Próba
-            // 
-            this.Próba.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Próba.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Próba.Location = new System.Drawing.Point(568, 238);
-            this.Próba.Name = "Próba";
-            this.Próba.Size = new System.Drawing.Size(40, 40);
-            this.Próba.TabIndex = 29;
-            this.ToolTip1.SetToolTip(this.Próba, "Aktuális verziót állítja be a verzió számnak");
-            this.Próba.UseVisualStyleBackColor = true;
-            this.Próba.Click += new System.EventHandler(this.Próba_Click);
             // 
             // A_Főoldal
             // 
@@ -1588,6 +1574,5 @@ namespace Villamos
         internal ToolStripMenuItem TTTPToolStripMenuItem;
         internal ToolStripSeparator toolStripSeparator34;
         internal ToolStripMenuItem EsztergaKarbantartásToolStripMenuItem;
-        internal Button Próba;
     }
 }

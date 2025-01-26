@@ -40,7 +40,6 @@ namespace Villamos
             return Válasz;
         }
 
-
         private static void Tábla(string hely, string fájl)
         {
             try
@@ -51,6 +50,9 @@ namespace Villamos
                 if (fájl.Contains("munkaidőnaptár.mdb")) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hova);
                 if (fájl.Contains("üzenet.mdb")) Adatbázis_Létrehozás.ALÜzenetadatok(hova);
                 if (fájl.Contains("utasítás.mdb")) Adatbázis_Létrehozás.UtasításadatokTábla(hova);
+                if (fájl.Contains("Akkunapló")) Adatbázis_Létrehozás.Akku_Mérés(hova);
+                if (fájl.Contains("akku.mdb")) Adatbázis_Létrehozás.Akku_adatok(hova);
+
 
             }
             catch (HibásBevittAdat ex)

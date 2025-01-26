@@ -10,19 +10,12 @@ namespace Villamos.Villamos.Kezelők
 {
     public class Kezelő_Akkumulátor_Napló
     {
-        readonly string hely;
+
         readonly string jelszó = "kasosmiklós";
 
-        public DateTime Dátum { get; private set; }
-
-        public Kezelő_Akkumulátor_Napló(DateTime dátum)
+        public List<Adat_Akkumulátor_Napló> Lista_Adatok(int Év)
         {
-            Dátum = dátum;
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb";
-        }
-
-        public List<Adat_Akkumulátor_Napló> Lista_Adatok()
-        {
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Év}.mdb".Ellenőrzés();
             string szöveg = $"SELECT * FROM Akkutábla_Napló";
             List<Adat_Akkumulátor_Napló> Adatok = new List<Adat_Akkumulátor_Napló>();
             Adat_Akkumulátor_Napló Adat;
@@ -64,10 +57,11 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(Adat_Akkumulátor_Napló Adat)
+        public void Rögzítés(int Év, Adat_Akkumulátor_Napló Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Év}.mdb".Ellenőrzés();
                 string szöveg = "INSERT INTO Akkutábla_Napló ";
                 szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő)";
                 szöveg += " VALUES (";

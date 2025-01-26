@@ -6,10 +6,8 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
-using static System.IO.File;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 
@@ -28,7 +26,7 @@ namespace Villamos
         readonly Kezelő_Akkumulátor KézAkku = new Kezelő_Akkumulátor();
         readonly Kezelő_Akkumulátor_Mérés KézAkkuMér = new Kezelő_Akkumulátor_Mérés();
         readonly Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
-        readonly Kezelő_Akkumulátor_Napló KézAkkuNapló = new Kezelő_Akkumulátor_Napló(DateTime.Today);
+        readonly Kezelő_Akkumulátor_Napló KézAkkuNapló = new Kezelő_Akkumulátor_Napló();
 
         List<Adat_Akkumulátor_Mérés> AdatokAkkuMér = new List<Adat_Akkumulátor_Mérés>();
         List<Adat_Akkumulátor> AdatokAkku = new List<Adat_Akkumulátor>();
@@ -40,17 +38,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Today.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Today.AddYears(-2).Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{DateTime.Today.AddYears(-1).Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
-
-
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\Akkumulátor\Akku.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Akku_adatok(hely);
-
                 Jogosultságkiosztás();
                 Telephelyekfeltöltése();
                 Fülekkitöltése();
@@ -824,9 +811,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátumtól.Value.Year}.mdb";
-                if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben nem volt még mérés.");
-
                 Tábla4.Rows.Clear();
                 Tábla4.Columns.Clear();
                 Tábla4.Refresh();

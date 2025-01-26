@@ -688,12 +688,6 @@ namespace Villamos
             try
             {
                 // megkeressük azt az érvényes utasítást amit még nem olvastunk
-                string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\üzenetek\";
-                if (!Directory.Exists(hely)) throw new HibásBevittAdat("A program nem találja a hálózatot, ezért kilép.");
-
-                hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Now.Year}üzenet.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
-
                 Adat_Üzenet rekord = Kéz_Üzenet.ElsőOlvasatlan(lbltelephely.Text.Trim(), DateTime.Now.Year);
                 if (rekord != null)
                 {
@@ -733,11 +727,10 @@ namespace Villamos
                         szöveg += $"{rekord.Honnan.Trim()} : {rekord.Azonosító.Trim()}\r\n";
 
                     Adat_Üzenet ElemÜzenet = new Adat_Üzenet(0, szöveg.Trim(), "Program", DateTime.Now, 0);
-                    string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\Adatok\üzenetek\{DateTime.Today.Year}Üzenet.mdb";
                     Kéz_Üzenet.Rögzítés(lbltelephely.Text.Trim(), DateTime.Today.Year, ElemÜzenet);
 
                     //Naplózás
-                    hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
+                    string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
                     KézNapló.Módosítás(hely, Adatok);
                 }
 
@@ -785,10 +778,6 @@ namespace Villamos
             try
             {
                 Utasításoktext.Text = "Nincs Olvasatlan Utasítás.";
-
-                string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\üzenetek\";
-                if (!Directory.Exists(hely)) throw new HibásBevittAdat("A program nem találja a hálózatot, ezért kilép.");
-
                 // megkeressük azt az érvényes utasítást amit még nem olvastunk
                 Adat_Utasítás rekord = KézUtasítás.ElsőOlvasatlan(lbltelephely.Text.Trim(), DateTime.Today.Year);
                 if (rekord != null)
@@ -2518,11 +2507,6 @@ namespace Villamos
 
         #endregion
 
-        private void Próba_Click(object sender, EventArgs e)
-        {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\napló{DateTime.Now.Year}.accdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
-            MessageBox.Show("Ez most elkészült?", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+
     }
 }

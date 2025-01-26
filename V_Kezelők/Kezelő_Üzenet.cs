@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Üzenet> Lista_Adatok(string Telephely, int Év)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb";
+            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM üzenetek ";
             List<Adat_Üzenet> Adatok = new List<Adat_Üzenet>();
             Adat_Üzenet Adat;
@@ -109,7 +109,7 @@ namespace Villamos.Kezelők
             Adat_Üzenet Válasz = null;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb";
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
                 string szöveg = $"Select * FROM Olvasás WHERE ki='{Program.PostásNév.Trim()}'  ORDER BY sorszám DESC";
                 List<Adat_Üzenet_Olvasás> AdatokOlvasás = KézOlvas.Lista_Adatok(Telephely, Év);
 

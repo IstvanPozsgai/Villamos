@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Kezelők
@@ -15,52 +13,12 @@ namespace Villamos.Villamos_Kezelők
         string hely;
         readonly string jelszó = "kasosmiklós";
 
-        public List<Adat_Akkumulátor_Mérés> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Akkumulátor_Mérés> Adatok = new List<Adat_Akkumulátor_Mérés>();
-            Adat_Akkumulátor_Mérés Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Akkumulátor_Mérés(
-                                        rekord["Gyáriszám"].ToStrTrim(),
-                                        rekord["kisütésiáram"].ToÉrt_Long(),
-                                        rekord["kezdetifesz"].ToÉrt_Double(),
-                                        rekord["végfesz"].ToÉrt_Double(),
-                                        rekord["kisütésiidő"].ToÉrt_DaTeTime(),
-                                        rekord["kapacitás"].ToÉrt_Double(),
-                                        rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["van"].ToStrTrim(),
-                                        rekord["Mérésdátuma"].ToÉrt_DaTeTime(),
-                                        rekord["Rögzítés"].ToÉrt_DaTeTime(),
-                                        rekord["Rögzítő"].ToStrTrim(),
-                                        rekord["id"].ToÉrt_Long()
-                                         );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
         public List<Adat_Akkumulátor_Mérés> Lista_Adatok(DateTime Dátum)
         {
             List<Adat_Akkumulátor_Mérés> Adatok = new List<Adat_Akkumulátor_Mérés>();
             Adat_Akkumulátor_Mérés Adat;
 
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM méréstábla ORDER BY gyáriszám, Mérésdátuma asc";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -102,7 +60,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb";
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb".Ellenőrzés();
                 List<string> SzövegGy = new List<string>();
                 foreach (int ID in Számok)
                 {
@@ -126,8 +84,8 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb".Ellenőrzés();
+
                 string szöveg = "INSERT INTO méréstábla ";
                 szöveg += "(Gyáriszám, Kisütésiáram, Kezdetifesz, Végfesz, Kisütésiidő, Kapacitás, Megjegyzés, Van, Mérésdátuma, Rögzítés, Rögzítő, id)";
                 szöveg += " VALUES (";
