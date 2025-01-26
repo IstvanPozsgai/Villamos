@@ -10,40 +10,10 @@ namespace Villamos.Villamos_Kezelők
     public class Kezelő_Belépés_Jogosultságtábla
     {
         readonly string jelszó = "forgalmiutasítás";
-        public List<Adat_Belépés_Jogosultságtábla> Lista_Adatok(string hely, string jelszó, string szöveg)
+
+        public List<Adat_Belépés_Jogosultságtábla> Lista_Adatok(string Telephely)
         {
-            List<Adat_Belépés_Jogosultságtábla> Adatok = new List<Adat_Belépés_Jogosultságtábla>();
-            Adat_Belépés_Jogosultságtábla Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Belépés_Jogosultságtábla(
-                                    rekord["név"].ToStrTrim(),
-                                    rekord["jogkörúj1"].ToStrTrim(),
-                                    rekord["jogkörÚj2"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-
-        }
-
-        public List<Adat_Belépés_Jogosultságtábla> Lista_Adatok(string hely)
-        {
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
             string szöveg = $"SELECT * FROM Jogosultságtábla order by név";
             List<Adat_Belépés_Jogosultságtábla> Adatok = new List<Adat_Belépés_Jogosultságtábla>();
             Adat_Belépés_Jogosultságtábla Adat;
@@ -75,42 +45,11 @@ namespace Villamos.Villamos_Kezelők
 
         }
 
-        public Adat_Belépés_Jogosultságtábla Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Belépés_Jogosultságtábla Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_Belépés_Jogosultságtábla(
-                                rekord["név"].ToStrTrim(),
-                                rekord["jogkörúj1"].ToStrTrim(),
-                                rekord["jogkörÚj2"].ToStrTrim()
-                                );
-
-                        }
-                    }
-                }
-            }
-            return Adat;
-
-        }
-
-
-        public void Rögzítés(string hely, Adat_Belépés_Jogosultságtábla Adat)
+        public void Rögzítés(string Telephely, Adat_Belépés_Jogosultságtábla Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
                 string szöveg = "INSERT INTO Jogosultságtábla (név, Jogkörúj1, Jogkörúj2) ";
                 szöveg += $" Values('{Adat.Név}', ";
                 szöveg += $"'{Adat.Jogkörúj1}', ";
@@ -128,16 +67,12 @@ namespace Villamos.Villamos_Kezelők
             }
 
         }
-        /// <summary>
-        /// név
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, Adat_Belépés_Jogosultságtábla Adat)
+
+        public void Módosítás(string Telephely, Adat_Belépés_Jogosultságtábla Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
                 string szöveg = $"Update Jogosultságtábla set ";
                 szöveg += $"jogkörúj1='{Adat.Jogkörúj1}' ";
                 szöveg += $"WHERE név= '{Adat.Név}'";
@@ -155,16 +90,12 @@ namespace Villamos.Villamos_Kezelők
 
         }
 
-        /// <summary>
-        /// név
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Belépés_Jogosultságtábla Adat)
+
+        public void Törlés(string Telephely, Adat_Belépés_Jogosultságtábla Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
                 string szöveg = $"DELETE * From Jogosultságtábla where név='{Adat.Név}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

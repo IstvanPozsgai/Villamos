@@ -11,41 +11,10 @@ namespace Villamos.Kezelők
     public class Kezelő_Üzenet_Olvas
     {
         readonly string jelszó = "katalin";
-        public List<Adat_Üzenet_Olvasás> Lista_Adatok(string hely, string szöveg)
-        {
-            List<Adat_Üzenet_Olvasás> Adatok = new List<Adat_Üzenet_Olvasás>();
-            Adat_Üzenet_Olvasás Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Üzenet_Olvasás(
-                                    rekord["Sorszám"].ToÉrt_Double(),
-                                    rekord["ki"].ToStrTrim(),
-                                    rekord["üzenetid"].ToÉrt_Double(),
-                                    rekord["Mikor"].ToÉrt_DaTeTime(),
-                                    rekord["olvasva"].ToÉrt_Bool()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public List<Adat_Üzenet_Olvasás> Lista_Adatok(string hely)
+        public List<Adat_Üzenet_Olvasás> Lista_Adatok(string Telephely, int Év)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM olvasás ";
             List<Adat_Üzenet_Olvasás> Adatok = new List<Adat_Üzenet_Olvasás>();
             Adat_Üzenet_Olvasás Adat;
@@ -78,13 +47,12 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Üzenet_Olvasás Adat)
+        public void Rögzítés(string Telephely, int Év, Adat_Üzenet_Olvasás Adat)
         {
             try
             {
-
-                string szöveg = $"SELECT * FROM olvasás";
-                List<Adat_Üzenet_Olvasás> Adatok = Lista_Adatok(hely, szöveg);
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
+                List<Adat_Üzenet_Olvasás> Adatok = Lista_Adatok(Telephely, Év);
 
                 Adat_Üzenet_Olvasás vane = (from a in Adatok
                                             where a.Üzenetid == Adat.Üzenetid
@@ -95,7 +63,7 @@ namespace Villamos.Kezelők
                     double i = 1;
                     if (Adatok.Count > 0) i = Adatok.Max(a => a.Sorszám) + 1;
 
-                    szöveg = "INSERT INTO olvasás ";
+                    string szöveg = "INSERT INTO olvasás ";
                     szöveg += "(sorszám, ki, üzenetid, mikor, olvasva)";
                     szöveg += " VALUES ";
                     szöveg += $"({i}, '{Program.PostásNév.Trim()}', {Adat.Üzenetid}, '{DateTime.Now}', -1)";
@@ -113,12 +81,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(string hely, List<Adat_Üzenet_Olvasás> AdatokOlvas)
+        public void Rögzítés(string Telephely, int Év, List<Adat_Üzenet_Olvasás> AdatokOlvas)
         {
             try
             {
-                string szöveg = $"SELECT * FROM olvasás";
-                List<Adat_Üzenet_Olvasás> Adatok = Lista_Adatok(hely, szöveg);
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
+                List<Adat_Üzenet_Olvasás> Adatok = Lista_Adatok(Telephely, Év);
 
                 double i = 0;
                 if (Adatok.Count > 0) i = Adatok.Max(a => a.Sorszám);
@@ -132,7 +100,7 @@ namespace Villamos.Kezelők
                     if (vane == null)
                     {
                         i++;
-                        szöveg = "INSERT INTO olvasás ";
+                        string szöveg = "INSERT INTO olvasás ";
                         szöveg += "(sorszám, ki, üzenetid, mikor, olvasva)";
                         szöveg += " VALUES ";
                         szöveg += $"({i}, '{Program.PostásNév.Trim()}', {item.Üzenetid}, '{DateTime.Now}', -1)";

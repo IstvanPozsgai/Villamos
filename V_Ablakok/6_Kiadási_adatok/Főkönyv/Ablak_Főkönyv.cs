@@ -43,6 +43,7 @@ namespace Villamos
         readonly Kezelő_Főkönyv_ZSER KézFőkönyvZSER = new Kezelő_Főkönyv_ZSER();
         readonly Kezelő_Kiegészítő_Takarítás KézTakarításTípus = new Kezelő_Kiegészítő_Takarítás();
         readonly Kezelő_Jármű_Vendég KézFőJárműVendég = new Kezelő_Jármű_Vendég();
+        readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
 
 
         public List<Adat_Reklám> AdatokReklám = new List<Adat_Reklám>();
@@ -3759,10 +3760,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\üzenetek\{DateTime.Today.Year}utasítás.mdb";
-                Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
-
-                string txtsorszám = KézUtasítás.Új_utasítás(hely, RichtextBox1.Text.Trim()).ToStrTrim();
+                string txtsorszám = KézUtasítás.Új_utasítás(Cmbtelephely.Text.Trim(), DateTime.Now.Year, RichtextBox1.Text.Trim()).ToStrTrim();
                 MessageBox.Show($"Az üzenet rögzítése {txtsorszám} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

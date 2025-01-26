@@ -2426,7 +2426,7 @@ namespace Villamos
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
                 string szöveg = "SELECT * From üzenetek";
                 Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
-                List<Adat_Utasítás> AdatokUtasítás = KézUtasítás.Lista_Adatok(hely, szöveg);
+                List<Adat_Utasítás> AdatokUtasítás = KézUtasítás.Lista_Adatok(Cmbtelephely.Text.Trim(), DateTime.Now.Year);
 
                 // megkeressük az utolsó sorszámot
                 Txtsorszám = 1;
@@ -2440,7 +2440,7 @@ namespace Villamos
                 // ha már ő írta akkor rögzítette is
                 szöveg = "SELECT * From olvasás ";
                 Kezelő_utasítás_Olvasás KézOlvasás = new Kezelő_utasítás_Olvasás();
-                List<Adat_utasítás_olvasás> AdatokOlvasás = KézOlvasás.Lista_Adatok(hely, szöveg);
+                List<Adat_utasítás_olvasás> AdatokOlvasás = KézOlvasás.Lista_Adatok(Cmbtelephely.Text.Trim(), DateTime.Now.Year);
 
                 szöveg = "SELECT * From olvasás order by sorszám desc";
                 double i = 1;

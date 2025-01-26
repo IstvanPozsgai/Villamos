@@ -173,7 +173,7 @@ namespace Villamos
                     //Ha van ilyen dolgozó, akkor beléptetjük
                     if (Elem != null)
                     {
-                        TelephelyBelépésFeltöltés(Elem.Telephely);
+                        AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(Elem.Telephely);
                         Adat_Belépés_Bejelentkezés Kiaz = (from a in AdatokBelépésTelephely
                                                            where a.Név.ToUpper() == Elem.Név.ToUpper()
                                                            select a).FirstOrDefault();
@@ -299,7 +299,7 @@ namespace Villamos
         {
             try
             {
-                TelephelyJogosultságFeltöltés(Telephely);
+                AdatokJogosultságTelephely = Kéz_Jogosultság.Lista_Adatok(Telephely);
                 Adat_Belépés_Jogosultságtábla rekord = (from a in AdatokJogosultságTelephely
                                                         where a.Név.ToUpper() == Név.ToUpper()
                                                         select a).FirstOrDefault();
@@ -360,8 +360,8 @@ namespace Villamos
 
         private void Subdolgozófeltöltés()
         {
-            TelephelyJogosultságFeltöltés(CmbTelephely.Text.Trim());
-            TelephelyBelépésFeltöltés(CmbTelephely.Text.Trim());
+            AdatokJogosultságTelephely = Kéz_Jogosultság.Lista_Adatok(CmbTelephely.Text.Trim());
+            AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(CmbTelephely.Text.Trim());
             CmbUserName.Items.Clear();
 
             foreach (Adat_Belépés_Bejelentkezés Elem in AdatokBelépésTelephely)
@@ -378,7 +378,7 @@ namespace Villamos
             if (CmbUserName.Text.Trim() == "") return;
             TxtPassword.Text = "";
             Subjelszómódosítás();
-            TelephelyBelépésFeltöltés(CmbTelephely.Text.Trim());
+            AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(CmbTelephely.Text.Trim());
         }
 
 
@@ -388,50 +388,6 @@ namespace Villamos
             jelszó_váltás.ShowDialog();
             TxtPassword.Text = "";
             TxtPassword.Focus();
-        }
-        #endregion
-
-
-        #region Listák
-
-        private void TelephelyJogosultságFeltöltés(string Telephely)
-        {
-            try
-            {
-                AdatokJogosultságTelephely.Clear();
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\belépés.mdb";
-                AdatokJogosultságTelephely = Kéz_Jogosultság.Lista_Adatok(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        private void TelephelyBelépésFeltöltés(string Telephely)
-        {
-            try
-            {
-                AdatokBelépésTelephely.Clear();
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\belépés.mdb";
-                AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
         }
         #endregion
     }

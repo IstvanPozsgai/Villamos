@@ -9,10 +9,10 @@ namespace Villamos
     {
         public static string Ellenőrzés(this string fájl)
         {
-            string Válasz = "";
+            string Válasz = fájl;
             try
             {
-                if (File.Exists(fájl)) return fájl;
+                if (File.Exists(fájl)) return Válasz;
                 string[] Könyvtár = fájl.Split('\\');
                 string alap = Könyvtár[0];
                 for (int i = 1; i < Könyvtár.Length; i++)
@@ -49,6 +49,9 @@ namespace Villamos
                 if (fájl.Contains("napló") && fájl.Contains(".mdb")) Adatbázis_Létrehozás.Kocsitípusanapló(hova);
                 if (fájl.Contains("Váltóscsoportvezetők.mdb")) Adatbázis_Létrehozás.Váltóscsopitábla(hova);
                 if (fájl.Contains("munkaidőnaptár.mdb")) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hova);
+                if (fájl.Contains("üzenet.mdb")) Adatbázis_Létrehozás.ALÜzenetadatok(hova);
+                if (fájl.Contains("utasítás.mdb")) Adatbázis_Létrehozás.UtasításadatokTábla(hova);
+
             }
             catch (HibásBevittAdat ex)
             {

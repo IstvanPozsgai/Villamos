@@ -512,10 +512,7 @@ namespace Villamos
 
             try
             {
-                string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\képek";
-                if (!Directory.Exists(hely)) return;
-
-
+                string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\képek".Ellenőrzés();
                 //Ezt lehet allitani ha szeretnenk, ertekek amiket var: helye a kepnek, Max merete bajtban,
                 //kep max szélessége és magassága és az összesen mennyi pixel lehet a kép
                 //Most ki van veve belole az az opcio hogy megadjuk neki az ossz pixel mennyiséget.
@@ -567,7 +564,7 @@ namespace Villamos
 
                 if (Flnf.Length > MaxMéret)
                 {
-                    FájlTörlés(helykép);
+                    //  FájlTörlés(helykép);
                     return false;
                 }
 
@@ -577,7 +574,7 @@ namespace Villamos
                     if (kép.Width > MaxSzélesség || kép.Height > MaxMagasság /*|| ÖsszPixel > ÖsszPixel*/)
                     {
                         kép.Dispose();
-                        FájlTörlés(helykép);
+                        //  FájlTörlés(helykép);
                         return false;
                     }
                 }
@@ -585,21 +582,16 @@ namespace Villamos
             }
             catch
             {
-                FájlTörlés(helykép);
+                //   FájlTörlés(helykép);
                 return false;
             }
-        }
-
-        private void FájlTörlés(string helykép)
-        {
-            //ezt nem haszáljuk
         }
 
         private void Súgómenü_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Főoldal.html";
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Főoldal.html";
                 Module_Excel.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
@@ -631,9 +623,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{panels4.Text.Trim()}\Adatok\belépés.mdb";
-
-                List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(hely);
+                List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Belépés_Jogosultságtábla Elem = (from a in Adatok
                                                       where a.Név.ToUpper() == Panels1.Text.Trim().ToUpper()
@@ -704,7 +694,7 @@ namespace Villamos
                 hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Now.Year}üzenet.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
 
-                Adat_Üzenet rekord = Kéz_Üzenet.ElsőOlvasatlan(hely);
+                Adat_Üzenet rekord = Kéz_Üzenet.ElsőOlvasatlan(lbltelephely.Text.Trim(), DateTime.Now.Year);
                 if (rekord != null)
                 {
                     Üzenetektext.Text = $"Dátum: {rekord.Mikor:yyyy.MMMM dd. HH:mm}\r\n";
@@ -744,7 +734,7 @@ namespace Villamos
 
                     Adat_Üzenet ElemÜzenet = new Adat_Üzenet(0, szöveg.Trim(), "Program", DateTime.Now, 0);
                     string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\Adatok\üzenetek\{DateTime.Today.Year}Üzenet.mdb";
-                    Kéz_Üzenet.Rögzítés(hely, ElemÜzenet);
+                    Kéz_Üzenet.Rögzítés(lbltelephely.Text.Trim(), DateTime.Today.Year, ElemÜzenet);
 
                     //Naplózás
                     hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
@@ -800,11 +790,7 @@ namespace Villamos
                 if (!Directory.Exists(hely)) throw new HibásBevittAdat("A program nem találja a hálózatot, ezért kilép.");
 
                 // megkeressük azt az érvényes utasítást amit még nem olvastunk
-                hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Now.Year}utasítás.mdb";
-
-                if (!Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
-
-                Adat_Utasítás rekord = KézUtasítás.ElsőOlvasatlan(hely);
+                Adat_Utasítás rekord = KézUtasítás.ElsőOlvasatlan(lbltelephely.Text.Trim(), DateTime.Today.Year);
                 if (rekord != null)
                 {
                     Utasításoktext.Text = $"Dátum: {rekord.Mikor:yyyy.MMMM dd. HH:mm}\r\n";
@@ -823,6 +809,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Btnutasításfrissítés_Click(object sender, EventArgs e)
         {
             Utasításkiírása();

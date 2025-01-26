@@ -5,9 +5,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -47,18 +45,13 @@ namespace Villamos
             Jogosultságkiosztás();
             Többrögzít.Visible = false;
 
-            //'ha nincs üzenet fájl, akkor létrehozunk egy újat
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}üzenet.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
-
             Radioolvastan.Checked = true;
-
             Táblalistázás();
         }
 
         private void Listák_Feltöltése()
         {
-            Üzenetek_Listázása();
+            Adatok_Üzenet = KézÜzenet.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
             Olvasás_listázás();
         }
 
@@ -141,7 +134,7 @@ namespace Villamos
         {
             try
             {
-                Üzenetek_Listázása();
+                Adatok_Üzenet = KézÜzenet.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
                 List<string> Írók = Adatok_Üzenet.Select(x => x.Írta).Distinct().ToList();
                 if (Írók == null) return;
 
@@ -514,17 +507,16 @@ namespace Villamos
                 // ha nincs kijelölve egy sor sem és a sorszám mező üres, akkor kilépünk
                 if (Tábla.SelectedRows.Count == 0 || !int.TryParse(txtsorszám.Text, out int sorszám)) return;
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}üzenet.mdb";
                 // ha nincs kijelölve, de a sorszám mező nem üres
                 if (Tábla.SelectedRows.Count == 0)
-                    Olvasottátesz(hely, sorszám);
+                    Olvasottátesz(sorszám);
                 else
                 {
                     List<double> Sorok = new List<double>();
                     for (int sor = 0; sor < Tábla.SelectedRows.Count; sor++)
                         if (double.TryParse(Tábla.SelectedRows[sor].Cells[0].Value.ToString(), out double sora)) Sorok.Add(sora);
 
-                    Olvasottátesz(hely, Sorok);
+                    Olvasottátesz(Sorok);
                 }
                 Táblalistázás();
                 Txtírásimező.Text = "";
@@ -541,19 +533,16 @@ namespace Villamos
             }
         }
 
-        private void Olvasottátesz(string hely, double sorszám)
+        private void Olvasottátesz(double sorszám)
         {
             try
             {
-
-                if (!Exists(hely)) return;
-
                 Adat_Üzenet_Olvasás ADAT = new Adat_Üzenet_Olvasás(0,
-                                                                   Program.PostásNév.Trim(),
-                                                                   sorszám,
-                                                                   DateTime.Now,
-                                                                   false);
-                KézOlvas.Rögzítés(hely, ADAT);
+                                                               Program.PostásNév.Trim(),
+                                                               sorszám,
+                                                               DateTime.Now,
+                                                               false);
+                KézOlvas.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today.Year, ADAT);
 
                 BtnOlvasva.Visible = false;
                 Olvasás_listázás();
@@ -569,11 +558,11 @@ namespace Villamos
             }
         }
 
-        private void Olvasottátesz(string hely, List<double> Sorszámok)
+        private void Olvasottátesz(List<double> Sorszámok)
         {
             try
             {
-                if (!Exists(hely)) return;
+
                 List<Adat_Üzenet_Olvasás> ADATOK = new List<Adat_Üzenet_Olvasás>();
                 foreach (double item in Sorszámok)
                 {
@@ -586,7 +575,7 @@ namespace Villamos
                 }
 
 
-                KézOlvas.Rögzítés(hely, ADATOK);
+                KézOlvas.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today.Year, ADATOK);
 
                 BtnOlvasva.Visible = false;
                 Olvasás_listázás();
@@ -663,7 +652,7 @@ namespace Villamos
         {
             try
             {
-                Üzenetek_Listázása();
+                Adatok_Üzenet = KézÜzenet.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
                 if (Txtírásimező.Text.Trim() == "") return;
                 if (txtválasz.Text.Trim() == "") txtválasz.Text = "0";
 
@@ -705,15 +694,12 @@ namespace Villamos
                         if (!double.TryParse(txtválasz.Text, out double Válasz)) Válasz = 0;
 
                         //csak aktuális évben tudunk rögzíteni
-                        string hely = $@"{Application.StartupPath}\{ChkTelephely.Items[j].ToString().Trim()}\adatok\üzenetek\{DateTime.Now.Year}üzenet.mdb";
-                        if (!Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
-
                         Adat_Üzenet ADAT = new Adat_Üzenet(0,
                                                            Txtírásimező.Text.Trim(),
                                                            Program.PostásNév.Trim(),
                                                            DateTime.Now,
                                                            Válasz);
-                        KézÜzenet.Rögzítés(hely, ADAT);
+                        KézÜzenet.Rögzítés(ChkTelephely.Items[j].ToString().Trim(), DateTime.Now.Year, ADAT);
                         Többrögzít.Visible = false;
                         BtnOlvasva.Visible = false;
                     }
@@ -958,37 +944,12 @@ namespace Villamos
             }
         }
 
-        private void Üzenetek_Listázása()
-        {
-            try
-            {
-                Adatok_Üzenet.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}üzenet.mdb";
-                // ha nincs fájl akkor nem listáz
-                if (!Exists(hely)) return;
-                Adatok_Üzenet = KézÜzenet.Lista_Adatok(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Olvasás_listázás()
         {
             try
             {
                 Adatok_Olvas.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}üzenet.mdb";
-                // ha nincs fájl akkor nem listáz
-                if (!Exists(hely)) return;
-
-                Adatok_Olvas = KézOlvas.Lista_Adatok(hely);
+                Adatok_Olvas = KézOlvas.Lista_Adatok(Cmbtelephely.Text.Trim(), DateTime.Today.Year);
             }
             catch (HibásBevittAdat ex)
             {

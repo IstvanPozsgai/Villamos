@@ -327,12 +327,11 @@ namespace Villamos
 
                 // megtisztítjuk a szöveget
                 Txtírásimező.Text = Txtírásimező.Text.Replace(Convert.ToString('"'), "°").Replace(Convert.ToString('\''), "°");
-                // csak aktuális évben tudunk rögzíteni
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Today.Year}utasítás.mdb";
 
+                // csak aktuális évben tudunk rögzíteni
                 Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
                 Adat_Utasítás ADAT = new Adat_Utasítás(0, Txtírásimező.Text.Trim(), Program.PostásNév.Trim(), DateTime.Now, 0);
-                double UtasításSorszáma = KézUtasítás.Rögzítés(hely, ADAT);
+                double UtasításSorszáma = KézUtasítás.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Now.Year, ADAT);
                 MessageBox.Show($"Az utasítás rögzítése {UtasításSorszáma} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

@@ -47,11 +47,11 @@ namespace Villamos
                     Első.Focus();
                     return;
                 }
-                string hely = $@"{Application.StartupPath}\{TxtTelephely.Text.Trim()}\Adatok\belépés.mdb";
-                List<Adat_Belépés_Bejelentkezés> Adatok = Kéz.Lista_Adatok(hely);
+
+                List<Adat_Belépés_Bejelentkezés> Adatok = Kéz.Lista_Adatok(TxtTelephely.Text.Trim());
 
                 Adat_Belépés_Bejelentkezés Elem = (from a in Adatok
-                                                   where a.Név == TxtUserName.Text.Trim()
+                                                   where a.Név.ToUpper() == TxtUserName.Text.Trim().ToUpper()
                                                    select a).FirstOrDefault();
 
                 if (Elem != null)
@@ -62,7 +62,7 @@ namespace Villamos
                         throw new HibásBevittAdat("A régi jelszó nem egyezik a tárolt adatokkal !");
                     }
                     Adat_Belépés_Bejelentkezés ADAT = new Adat_Belépés_Bejelentkezés(Elem.Sorszám, Elem.Név.ToUpper(), Első.Text.Trim().ToUpper(), Elem.Jogkör);
-                    Kéz.Módosítás(hely, ADAT);
+                    Kéz.Módosítás(TxtTelephely.Text.Trim(), ADAT);
                     MessageBox.Show("A jelszó módosításra került !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                 }

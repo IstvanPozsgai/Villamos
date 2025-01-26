@@ -16,7 +16,6 @@ namespace Villamos
 
     public partial class AblakFelhasználó
     {
-        string hely = "";
         string Másolnadó = "VENDÉG";
 
         readonly Kezelő_Kulcs_Fekete KézKulcs = new Kezelő_Kulcs_Fekete();
@@ -36,7 +35,6 @@ namespace Villamos
             try
             {
                 Telephelyekfeltöltése();
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Belépés.mdb";
                 Neveklistája();
                 Fülek.TabIndex = 0;
                 TextNév.Focus();
@@ -236,7 +234,7 @@ namespace Villamos
 
                 // létrehozzuk az első beállítás értékeit.
 
-                KézBej.Rögzítés(hely, ADAT);
+                KézBej.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 // létrehozzuk az első beállítás értékeit.
                 Adat_Belépés_Jogosultságtábla ADAT1 = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim().ToUpper(),
@@ -244,7 +242,7 @@ namespace Villamos
                                                                                         Dolgozójogköre);
 
                 //   Kezelő_Belépés_Jogosultságtábla
-                KézJog.Rögzítés(hely, ADAT1);
+                KézJog.Rögzítés(Cmbtelephely.Text.Trim(), ADAT1);
 
                 Neveklistája();
                 TextNév.Text = "";
@@ -281,8 +279,8 @@ namespace Villamos
                 if (MessageBox.Show("Biztos, hogy töröljük, " + TextNév.Text.Trim() + " felhasználót?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     // igent választottuk
-                    KézBej.Törlés(hely, ADAT);
-                    KézJog.Törlés(hely, ADAT1);
+                    KézBej.Törlés(Cmbtelephely.Text.Trim(), ADAT);
+                    KézJog.Törlés(Cmbtelephely.Text.Trim(), ADAT1);
                     MessageBox.Show("Az adat törlése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -315,7 +313,7 @@ namespace Villamos
                                                                                      TextNév.Text.Trim(),
                                                                                      "INIT",
                                                                                      "_");
-                    KézBej.Módosítás(hely, ADAT);
+                    KézBej.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                     MessageBox.Show("A jelszó 'INIT'-re változott.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -380,7 +378,7 @@ namespace Villamos
                 if (jogosulságegyéni == null)
                 {
                     //Kezelő_Belépés_Jogosultságtábla
-                    KézJog.Módosítás(hely, ADAT);
+                    KézJog.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                     throw new HibásBevittAdat(TextNév.Text.Trim().ToUpper() + " jogosultsági körét megváltoztatta!");
                 }
 
@@ -406,7 +404,7 @@ namespace Villamos
                     ADAT = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim(),
                                                              újjog,
                                                              "");
-                    KézJog.Módosítás(hely, ADAT);
+                    KézJog.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                     MessageBox.Show(TextNév.Text.Trim().ToUpper() + " jogosultsági körét megváltoztatta!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
@@ -440,7 +438,7 @@ namespace Villamos
                 Adat_Belépés_Jogosultságtábla ADAT = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim(),
                                                                                        jogosultság,
                                                                                        "");
-                KézJog.Módosítás(hely, ADAT);
+                KézJog.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 MessageBox.Show(TextNév.Text.Trim().ToUpper() + " jogosultsági körét megváltoztatta!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // kiírjuk az új jogosultságokat
@@ -460,8 +458,8 @@ namespace Villamos
 
         void ListákFeltöltése()
         {
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Belépés.mdb";
-            AdatokLista = KézJog.Lista_Adatok(hely);
+
+            AdatokLista = KézJog.Lista_Adatok(Cmbtelephely.Text.Trim());
         }
 
         private void Neveklistája()
@@ -863,7 +861,7 @@ namespace Villamos
                     return;
 
                 // Megkeressük a dolgozót és kiíjuk a jogosultságait
-                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJog.Lista_Adatok(hely);
+                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJog.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Belépés_Jogosultságtábla rekord = (from a in Adatok
                                                         where a.Név == TextNév.Text.Trim()
                                                         select a).FirstOrDefault();
@@ -1045,14 +1043,14 @@ namespace Villamos
                 Adat_Belépés_Jogosultságtábla ADAT = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim(),
                                                                                        jogosultság,
                                                                                        "");
-                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJog.Lista_Adatok(hely);
+                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJog.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Belépés_Jogosultságtábla rekord = (from aa in Adatok
                                                         where aa.Név == TextNév.Text.Trim()
                                                         select aa).FirstOrDefault();
 
                 if (rekord != null)
                 {
-                    KézJog.Módosítás(hely, ADAT);
+                    KézJog.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                     MessageBox.Show(TextNév.Text.Trim().ToUpper() + " jogosultsági körét megváltoztatta!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -1089,7 +1087,7 @@ namespace Villamos
                     Adat_Belépés_Jogosultságtábla ADAT = new Adat_Belépés_Jogosultságtábla(TextNév.Text.Trim().ToUpper(),
                                                                         "Dolgozójogköre",
                                                                         "Dolgozójogköre");
-                    KézJog.Rögzítés(hely, ADAT);
+                    KézJog.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                 }
             }
             catch (HibásBevittAdat ex)

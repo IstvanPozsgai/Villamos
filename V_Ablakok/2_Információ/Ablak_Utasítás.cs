@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -36,10 +33,6 @@ namespace Villamos
             Dátumig.MaxDate = new DateTime(DateTime.Today.Year, 12, 31, 23, 59, 59);
             Dátumtól.MaxDate = DateTime.Today;
             btnrögzítés.Visible = true;
-
-            // ha nincs üzenet fájl, akkor létrehozzuk az adatbázisba
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}utasítás.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
 
             Utasítás_feltöltés();
 
@@ -88,11 +81,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}utasítás.mdb";
-                // ha nincs fájl akkor nem listáz
-                if (!Exists(hely)) return;
                 Utasítás_feltöltés();
-                List<string> Adatok = AdatokUtas.Select (a => a.Írta ).Distinct().ToList();
+                List<string> Adatok = AdatokUtas.Select(a => a.Írta).Distinct().ToList();
 
                 cmbNév.Items.Clear();
                 cmbNév.Items.Add("");
@@ -285,14 +275,12 @@ namespace Villamos
             try
             {
                 if (!double.TryParse(txtsorszám.Text.Trim(), out double sorszám)) return;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}utasítás.mdb";
-                if (!Exists(hely)) return;
 
                 Adat_utasítás_olvasás Olvasta = (from a in AdatokOlvas
                                                  where a.Üzenetid == sorszám && a.Ki == Program.PostásNév.Trim()
                                                  select a).FirstOrDefault();
                 if (Olvasta == null)
-                    KézOlvas.Rögzítés(hely, new Adat_utasítás_olvasás(0, Program.PostásNév.Trim(), sorszám, DateTime.Now, false));
+                    KézOlvas.Rögzítés(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year, new Adat_utasítás_olvasás(0, Program.PostásNév.Trim(), sorszám, DateTime.Now, false));
 
                 btnOlvasva.Visible = false;
                 Olvas_feltöltés();
@@ -312,8 +300,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}utasítás.mdb";
-                if (!Exists(hely)) return;
                 if (!int.TryParse(txtsorszám.Text, out int sorszám)) return;
 
                 // módosít
@@ -325,7 +311,7 @@ namespace Villamos
                 if (Elem != null)
                 {
                     Adat_Utasítás ADAT = new Adat_Utasítás(sorszám, Elem.Szöveg + ideig, 1);
-                    KézUtas.Módosítás(hely, ADAT);
+                    KézUtas.Módosítás(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year, ADAT);
                     txtírásimező.Text = Elem.Szöveg + ideig;
                 }
                 btnVisszavon.Visible = false;
@@ -352,11 +338,8 @@ namespace Villamos
                 txtírásimező.Text = txtírásimező.Text.Replace('"', '°').Replace("\'", "°");
 
                 // csak aktuális évben tudunk rögzíteni
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Now.Year}utasítás.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
-
                 Adat_Utasítás ADAT = new Adat_Utasítás(0, txtírásimező.Text.Trim(), Program.PostásNév.Trim(), DateTime.Now, 0);
-                double sorszám = KézUtas.Rögzítés(hely, ADAT);
+                double sorszám = KézUtas.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Now.Year, ADAT);
                 txtsorszám.Text = sorszám.ToString();
 
                 btnrögzítés.Visible = false;
@@ -600,9 +583,7 @@ namespace Villamos
             {
                 AdatokUtas.Clear();
                 UtolsóUtas = 0;
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}utasítás.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
-                AdatokUtas = KézUtas.Lista_Adatok(hely);
+                AdatokUtas = KézUtas.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
                 if (AdatokUtas.Count == 0) return;
                 UtolsóUtas = AdatokUtas.Max(a => a.Sorszám);
             }
@@ -622,8 +603,7 @@ namespace Villamos
             try
             {
                 AdatokOlvas.Clear();
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{Dátumtól.Value.Year}utasítás.mdb";
-                AdatokOlvas = KézOlvas.Lista_Adatok(hely);
+                AdatokOlvas = KézOlvas.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
             }
             catch (HibásBevittAdat ex)
             {

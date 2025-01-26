@@ -780,6 +780,7 @@
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SAP.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Takarítástípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
+    <Compile Include="V_Kezelők\Kezelő_utasítás_Olvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós_Kijelöltnapok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós_Naptár.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós_Váltóscsopitábla.cs" />

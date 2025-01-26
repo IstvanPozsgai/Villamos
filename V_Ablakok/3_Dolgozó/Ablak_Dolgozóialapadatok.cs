@@ -461,12 +461,9 @@ namespace Villamos
             {
                 Felhasználóinév.BeginUpdate();
                 Felhasználóinév.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Belépés.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM Bejelentkezés order by Név asc";
 
                 Kezelő_Belépés_Bejelentkezés kéz = new Kezelő_Belépés_Bejelentkezés();
-                List<Adat_Belépés_Bejelentkezés> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Belépés_Bejelentkezés> Adatok = kéz.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 foreach (Adat_Belépés_Bejelentkezés rekord in Adatok)
                     Felhasználóinév.Items.Add(rekord.Név.Trim());

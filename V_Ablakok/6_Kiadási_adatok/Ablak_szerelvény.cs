@@ -2471,12 +2471,9 @@ namespace Villamos.Ablakok
                 // megtisztítjuk a szöveget
                 Txtírásimező.Text = MyF.Szöveg_Tisztítás(Txtírásimező.Text);
 
-                // csak aktuális évben tudunk rögzíteni
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Now.Year}utasítás.mdb";
-
                 //Utasírás rögzítés és olvasás rögzítés
                 Kezelő_Utasítás Ku = new Kezelő_Utasítás();
-                double Sorszám = Ku.Új_utasítás(hely, Txtírásimező.Text.Trim());
+                double Sorszám = Ku.Új_utasítás(Cmbtelephely.Text.Trim(), DateTime.Now.Year, Txtírásimező.Text.Trim());
 
                 MessageBox.Show($"Az utasítás rögzítése {Sorszám} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

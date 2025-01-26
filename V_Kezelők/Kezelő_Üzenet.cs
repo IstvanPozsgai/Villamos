@@ -4,18 +4,19 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.Villamos_Adatbázis_Funkció;
-using static System.IO.File;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Üzenet
     {
+        readonly Kezelő_Üzenet_Olvas KézOlvas = new Kezelő_Üzenet_Olvas();
+
         readonly string jelszó = "katalin";
 
-        public List<Adat_Üzenet> Lista_Adatok(string hely)
+        public List<Adat_Üzenet> Lista_Adatok(string Telephely, int Év)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb";
             string szöveg = "SELECT * FROM üzenetek ";
             List<Adat_Üzenet> Adatok = new List<Adat_Üzenet>();
             Adat_Üzenet Adat;
@@ -48,45 +49,13 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Üzenet> Lista_Adatok(string hely, string szöveg)
-        {
-            List<Adat_Üzenet> Adatok = new List<Adat_Üzenet>();
-            Adat_Üzenet Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Üzenet(
-                                    rekord["Sorszám"].ToÉrt_Double(),
-                                    rekord["Szöveg"].ToStrTrim(),
-                                    rekord["Írta"].ToStrTrim(),
-                                    rekord["Mikor"].ToÉrt_DaTeTime(),
-                                    rekord["válaszsorszám"].ToÉrt_Double()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public void Rögzítés(string hely, Adat_Üzenet Adat)
+        public void Rögzítés(string Telephely, int Év, Adat_Üzenet Adat)
         {
             try
             {
-                if (!Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
-                double id = Sorszám(hely);
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
+                double id = Sorszám(Telephely, Év);
 
                 string szöveg = "INSERT INTO üzenetek  (sorszám, szöveg, írta, mikor,válaszsorszám ) VALUES (";
                 szöveg += $"{id}, "; // sorszám
@@ -101,7 +70,7 @@ namespace Villamos.Kezelők
                                                    id,
                                                    DateTime.Now,
                                                    false);
-                Kéz.Rögzítés(hely, ADAT);
+                Kéz.Rögzítés(Telephely, Év, ADAT);
             }
             catch (HibásBevittAdat ex)
             {
@@ -114,13 +83,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        private double Sorszám(string hely)
+        private double Sorszám(string Telephely, int Év)
         {
             double Válasz = 1;
             try
             {
-                string szöveg = "Select * FROM Üzenetek";
-                List<Adat_Üzenet> AdatokÜzenet = Lista_Adatok(hely, szöveg);
+                List<Adat_Üzenet> AdatokÜzenet = Lista_Adatok(Telephely, Év);
                 // megkeressük az utolsó sorszámot
                 if (AdatokÜzenet != null && AdatokÜzenet.Count > 0) Válasz = AdatokÜzenet.Max(a => a.Sorszám) + 1;
             }
@@ -136,18 +104,17 @@ namespace Villamos.Kezelők
             return Válasz;
         }
 
-        public Adat_Üzenet ElsőOlvasatlan(string hely)
+        public Adat_Üzenet ElsőOlvasatlan(string Telephely, int Év)
         {
             Adat_Üzenet Válasz = null;
             try
             {
-
-                Kezelő_Üzenet_Olvas Kéz = new Kezelő_Üzenet_Olvas();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb";
                 string szöveg = $"Select * FROM Olvasás WHERE ki='{Program.PostásNév.Trim()}'  ORDER BY sorszám DESC";
-                List<Adat_Üzenet_Olvasás> AdatokOlvasás = Kéz.Lista_Adatok(hely, szöveg);
+                List<Adat_Üzenet_Olvasás> AdatokOlvasás = KézOlvas.Lista_Adatok(Telephely, Év);
 
-                szöveg = "Select * FROM Üzenetek ORDER BY sorszám DESC";
-                List<Adat_Üzenet> AdatokÜzenet = Lista_Adatok(hely, szöveg);
+
+                List<Adat_Üzenet> AdatokÜzenet = Lista_Adatok(Telephely, Év).OrderByDescending(a => a.Sorszám).ToList();
                 foreach (Adat_Üzenet elem in AdatokÜzenet)
                 {
                     Adat_Üzenet_Olvasás Elem = (from a in AdatokOlvasás
