@@ -40,18 +40,22 @@ namespace Villamos
             return Válasz;
         }
 
-        private static void Tábla(string hely, string fájl)
+        private static void Tábla(string Hely, string fájl)
         {
+            string hely = $@"{Hely}\{fájl}";
             try
             {
-                string hova = $@"{hely}\{fájl}";
-                if (fájl.Contains("napló") && fájl.Contains(".mdb")) Adatbázis_Létrehozás.Kocsitípusanapló(hova);
-                if (fájl.Contains("Váltóscsoportvezetők.mdb")) Adatbázis_Létrehozás.Váltóscsopitábla(hova);
-                if (fájl.Contains("munkaidőnaptár.mdb")) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hova);
-                if (fájl.Contains("üzenet.mdb")) Adatbázis_Létrehozás.ALÜzenetadatok(hova);
-                if (fájl.Contains("utasítás.mdb")) Adatbázis_Létrehozás.UtasításadatokTábla(hova);
-                if (fájl.Contains("Akkunapló")) Adatbázis_Létrehozás.Akku_Mérés(hova);
-                if (fájl.Contains("akku.mdb")) Adatbázis_Létrehozás.Akku_adatok(hova);
+
+                if (fájl.Contains("napló") && fájl.Contains(".mdb")) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
+                if (fájl.Contains("Váltóscsoportvezetők.mdb")) Adatbázis_Létrehozás.Váltóscsopitábla(hely);
+                if (fájl.Contains("munkaidőnaptár.mdb")) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely);
+                if (fájl.Contains("üzenet.mdb")) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
+                if (fájl.Contains("utasítás.mdb")) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
+                if (fájl.Contains("Akkunapló")) Adatbázis_Létrehozás.Akku_Mérés(hely);
+                if (fájl.Contains("akku.mdb")) Adatbázis_Létrehozás.Akku_adatok(hely);
+                if (fájl.Contains("ciklus.mdb")) Adatbázis_Létrehozás.Ciklusrendtábla(hely);
+                if (fájl.Contains("munkalapelszámoló")) Adatbázis_Létrehozás.Ciklusrendtábla(hely);
+
 
 
             }

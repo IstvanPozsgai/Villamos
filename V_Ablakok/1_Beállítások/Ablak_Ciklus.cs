@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -23,8 +21,6 @@ namespace Villamos
 
         private void Ablak_Ciklus_Load(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ciklus.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.Ciklusrendtábla(hely);
             AdatLista();
             CiklusTípusfeltöltés();
             Jogosultságkiosztás();

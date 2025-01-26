@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos.Kezelők;
@@ -47,10 +46,8 @@ namespace Villamos.Villamos_Ablakok
                 if (Text6.Text.Trim() == "" || !int.TryParse(Text6.Text.Trim(), out int Szám)) Szám = 5;
 
                 Text6.Text = Szám.ToString();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Munkalap\munkalapelszámoló_{Dátum.Year}.mdb";
-                if (!File.Exists(hely)) return;
 
-                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdat.Lista_Adatok(hely);
+                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdat.Lista_Adatok(Cmbtelephely, Dátum.Year);
                 List<string> rendelés = (from a in AdatokÖ
                                          where a.Státus == true
                                          && a.Dátum > Dátum.AddDays(-1 * Szám)

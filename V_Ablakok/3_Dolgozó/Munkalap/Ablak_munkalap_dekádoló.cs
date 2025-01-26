@@ -646,7 +646,7 @@ namespace Villamos
             try
             {
                 Rögzítés.Enabled = false;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{Dátum.Value.Year}.mdb";
+
                 List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
                 for (int i = 0; i < Tábla1.ColumnCount; i++)
                 {
@@ -664,7 +664,7 @@ namespace Villamos
                         Adatok.Add(ADAT);
                     }
                 }
-                KézMunkaAdatok.Rögzítés(hely, Adatok);
+                KézMunkaAdatok.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, Adatok);
                 Rögzítés.Enabled = true;
                 Rögzítés.Visible = false;
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -726,10 +726,7 @@ namespace Villamos
 
         private void Napilista()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-            if (!System.IO.File.Exists(hely)) return;
-
-            List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(hely);
+            List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(Cmbtelephely.Text.Trim(), DekádDátum.Value.Year);
             List<Adat_Munka_Adatok> Adatok = (from a in AdatokÖ
                                               where a.Státus == true
                                               && a.Dátum.ToShortDateString() == DekádDátum.Value.ToShortDateString()
@@ -803,9 +800,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(hely);
+
+                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(Cmbtelephely.Text.Trim(), DekádDátum.Value.Year);
                 List<Adat_Munka_Adatok> AdatokS = (from a in AdatokÖ
                                                    where a.Dátum.ToShortDateString() == DekádDátum.Value.ToShortDateString()
                                                    && a.Státus == true
@@ -844,9 +840,6 @@ namespace Villamos
                 DateTime elsőnap = DekádDátum.Value;
                 DateTime utolsónap = DekádDátum.Value;
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-
                 if (Option1.Checked)
                 {
                     elsőnap = MyF.Hónap_elsőnapja(DekádDátum.Value);
@@ -867,7 +860,7 @@ namespace Villamos
                     elsőnap = MyF.Hónap_elsőnapja(DekádDátum.Value);
                     utolsónap = MyF.Hónap_utolsónapja(DekádDátum.Value);
                 }
-                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(hely);
+                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(Cmbtelephely.Text.Trim(), DekádDátum.Value.Year);
 
                 List<Adat_Munka_Adatok> AdatokS = (from a in AdatokÖ
                                                    where a.Státus == true
@@ -907,16 +900,13 @@ namespace Villamos
             {
                 if (Tábla3.Rows.Count < 1) return;
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-
                 if (MessageBox.Show(DekádDátum.Value.ToShortDateString() + "-i adatok törlésére készülsz, biztos törlöd?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     List<long> IdK = new List<long>();
                     for (int i = 0; i < Tábla3.Rows.Count; i++)
                         if (long.TryParse(Tábla3.Rows[i].Cells[0].Value.ToString(), out long id)) IdK.Add(id);
 
-                    KézMunkaAdatok.Módosítás(hely, IdK);
+                    KézMunkaAdatok.Módosítás(Cmbtelephely.Text.Trim(), DekádDátum.Value.Year, IdK);
                 }
 
                 Napilista();
@@ -945,10 +935,7 @@ namespace Villamos
                 DateTime elsőnap = MyF.Hónap_elsőnapja(DekádDátum.Value);
                 DateTime utolsónap = MyF.Hónap_utolsónapja(DekádDátum.Value);
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-
-                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(hely);
+                List<Adat_Munka_Adatok> AdatokÖ = KézMunkaAdatok.Lista_Adatok(Cmbtelephely.Text.Trim(), DekádDátum.Value.Year);
                 List<Adat_Munka_Adatok> Adatok = (from a in AdatokÖ
                                                   where a.Státus == true
                                                   && a.Dátum >= elsőnap
@@ -980,9 +967,7 @@ namespace Villamos
                 if (Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[1].Value.ToStrTrim() == "") throw new HibásBevittAdat("A kijelöléshez tartozó rendelésiszám érvénytelen.");
                 if (!int.TryParse(Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[0].Value.ToStrTrim(), out int sorszám)) throw new HibásBevittAdat("A kijelöléshez tartozó sorszám érvénytelen.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapelszámoló_{DekádDátum.Value.Year}.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-                KézMunkaAdatok.Módosítás(hely, Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[1].Value.ToStrTrim(), sorszám);
+                KézMunkaAdatok.Módosítás(Cmbtelephely.Text.Trim(), DekádDátum.Value.Year, Tábla3.Rows[Tábla3.SelectedRows[0].Index].Cells[1].Value.ToStrTrim(), sorszám);
                 Napilista();
                 MessageBox.Show("A rendelési szám értéke megváltoztatva. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

@@ -11,7 +11,7 @@ namespace Villamos
 {
     public partial class Ablak_Utasítás
     {
-        string hely;
+
         double UtolsóUtas;
 
         readonly Kezelő_Utasítás KézUtas = new Kezelő_Utasítás();

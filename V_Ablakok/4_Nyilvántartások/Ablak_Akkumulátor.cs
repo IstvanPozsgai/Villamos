@@ -437,7 +437,7 @@ namespace Villamos
                                                CmbTelephely.Text.Trim(),
                                                DateTime.Now,
                                                Program.PostásNév.Trim());
-                KézAkkuNapló.Rögzítés(ADATNAPLÓ);
+                KézAkkuNapló.Rögzítés(DateTime.Today.Year, ADATNAPLÓ);
                 // naplózás
 
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1104,7 +1104,7 @@ namespace Villamos
                                                         "_", new DateTime(1900, 1, 1), new DateTime(1900, 1, 1), 0,
                                                         "Telephely változás", new DateTime(1900, 1, 1), 0,
                                                         eredmény.Üzem.Trim(), DateTime.Now, Program.PostásNév.Trim());
-                            KézAkkuNapló.Rögzítés(ADAT);
+                            KézAkkuNapló.Rögzítés(DateTime.Today.Year, ADAT);
                         }
                     }
                     Holtart.Lép();
@@ -1376,7 +1376,7 @@ namespace Villamos
                                     Hova.Trim(), "_", "_",
                                     gyáriszám.Trim(), "_", new DateTime(1900, 1, 1), new DateTime(1900, 1, 1),
                                     státus, "_", new DateTime(1900, 1, 1), 0, "_", DateTime.Now, Program.PostásNév.Trim());
-            KézAkkuNapló.Rögzítés(ADAT);
+            KézAkkuNapló.Rögzítés(DateTime.Today.Year, ADAT);
         }
 
         private void Kiépít_Click(object sender, EventArgs e)

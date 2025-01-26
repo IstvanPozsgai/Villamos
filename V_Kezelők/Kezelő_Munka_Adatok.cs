@@ -11,8 +11,9 @@ namespace Villamos.Villamos.Kezelők
     {
         readonly string jelszó = "dekádoló";
 
-        public List<Adat_Munka_Adatok> Lista_Adatok(string hely)
+        public List<Adat_Munka_Adatok> Lista_Adatok(string Telephely, int Év)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM Adatoktábla";
             List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
             Adat_Munka_Adatok Adat;
@@ -48,10 +49,11 @@ namespace Villamos.Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, List<Adat_Munka_Adatok> Adatok)
+        public void Rögzítés(string Telephely, int Év, List<Adat_Munka_Adatok> Adatok)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".Ellenőrzés();
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Munka_Adatok adat in Adatok)
                 {
@@ -80,10 +82,11 @@ namespace Villamos.Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, string rendelés, int Id)
+        public void Módosítás(string Telephely, int Év, string rendelés, int Id)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".Ellenőrzés();
                 string szöveg = $"UPDATE Adatoktábla SET rendelés='{rendelés}' WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -98,10 +101,11 @@ namespace Villamos.Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, List<long> idk)
+        public void Módosítás(string Telephely, int Év, List<long> idk)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".Ellenőrzés();
                 List<string> szövegGy = new List<string>();
                 foreach (long elem in idk)
                 {
