@@ -34,7 +34,7 @@ namespace Villamos
         {
             //elindítjuk az alkalmazást. létrehozzuk a fájlt és a munkalapot.
             xlApp = new MyExcel.Application();
-            //     xlApp.Visible = true;
+            //   xlApp.Visible = true;
             Module_Excel.xlWorkBook = xlApp.Workbooks.Add(misValue);
             Module_Excel.xlWorkSheet = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets.get_Item(1);
 
@@ -1840,7 +1840,7 @@ namespace Villamos
             MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[honnan];
             try
             {
-               
+
                 if (Cella.Value == null)
                 {
                     válasz = new DateTime(1900, 1, 1);
@@ -1853,7 +1853,7 @@ namespace Villamos
                 {
                     válasz = Convert.ToDateTime(Cella.Value);
                 }
-          
+
             }
             catch (HibásBevittAdat ex)
             {

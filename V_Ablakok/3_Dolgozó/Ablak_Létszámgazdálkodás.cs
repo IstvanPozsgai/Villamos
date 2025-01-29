@@ -9,8 +9,8 @@ using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using MyE = Villamos.Module_Excel;
-using MyF = Függvénygyűjtemény;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos
 {
@@ -27,8 +27,11 @@ namespace Villamos
         #endregion
 
         List<Adat_Dolgozó_Státus> AdatokStátus = new List<Adat_Dolgozó_Státus>();
-        List<Adat_Dolgozó_Alap> Dolgozók;
-        List<Adat_Kiegészítő_Csoportbeosztás> Segéd;
+
+        List<Adat_Dolgozó_Személyes> Adatok_Személyes = new List<Adat_Dolgozó_Személyes>();
+        List<Adat_Dolgozó_Telephely> AdatokDolgozók = new List<Adat_Dolgozó_Telephely>();
+        readonly List<Adat_Kiegészítő_Csoportbeosztás> AdatokSegéd = new List<Adat_Kiegészítő_Csoportbeosztás>();
+        int öoszlop = 2;
 
         public AblakLétszámgazdálkodás()
         {
@@ -384,465 +387,6 @@ namespace Villamos
             }
         }
 
-        private void Command5_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                SzűrtLista.Checked = false;
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\kiegészítő2.mdb";
-                Holtart.Be();
-                string helykulcs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Villamos\Kulcs.mdb";
-                bool kulcsfájlvan = false;
-                List<Adat_Kulcs> AdatokKulcs = null;
-                if (File.Exists(helykulcs))
-                {
-                    kulcsfájlvan = true;
-                    AdatokKulcs = KézKulcs.Lista_Adatok();
-                }
-                string helypénz = Application.StartupPath + @"\Főmérnökség\adatok\Villamos10.mdb";
-
-                // kimeneti fájl helye és neve
-                string fájlexc;
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "Felépítés Státus lekérdezés",
-                    FileName = "Felépítés_Státus_" + DateTime.Now.ToString("yyyyMMddhhmmss"),
-                    Filter = "Excel |*.xlsx"
-                };
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = SaveFileDialog1.FileName;
-                else
-                    return;
-
-                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, -1);
-
-                // létrehozzuk az excel táblát
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("arial", 12);
-
-                // ****************************************************
-                // elkészítjük a lapokat
-                // ****************************************************
-                MyE.Munkalap_átnevezés("Munka1", "Státus");
-
-                for (int i = 0; i < Cmbtelephely.Items.Count; i++)
-                    MyE.Új_munkalap(Cmbtelephely.Items[i].ToString());
-
-                MyE.Új_munkalap("Összesítő");
-
-                int öoszlop = 2;
-
-
-                string helyvált;
-
-                string helyszemélyes = Application.StartupPath + @"\Főmérnökség\Adatok\Főmérnökség2.mdb";
-                int sor;
-                int oszlop = 0;
-                DateTime kilépésidátum;
-                int fizikai = 0;
-                int alkalmazott = 0;
-                int Vezényelt = 0;
-                int Vezényelve = 0;
-                int Részmunkaidős = 0;
-                int passzív = 0;
-                bool személyeseng = false;
-                bool béreng = false;
-
-                string munkalap;
-
-                for (int ii = 0; ii < Cmbtelephely.Items.Count; ii++)
-                {
-                    személyeseng = false;
-                    béreng = false;
-                    munkalap = Cmbtelephely.Items[ii].ToString();
-                    Cmbtelephely.Text = Cmbtelephely.Items[ii].ToString();
-                    if (kulcsfájlvan)
-                    {
-
-                        string adat1 = Program.PostásNév.Trim().ToUpper();
-                        string adat2 = Program.PostásTelephely.Trim().ToUpper();
-                        string adat3 = "A";
-                        személyeseng = KézKulcs.ABKULCSvan(adat1, adat2, adat3);
-
-                        adat3 = "B";
-                        béreng = KézKulcs.ABKULCSvan(adat1, adat2, adat3);
-                    }
-
-                    MyE.Munkalap_aktív(Cmbtelephely.Text);
-
-                    // elkészítjük a fejlécet
-                    MyE.Kiir("Sorszám", "a1");
-                    MyE.Kiir("Név", "b1");
-                    MyE.Kiir("Munkakör", "c1");
-                    MyE.Kiir("HR törzsszám", "d1");
-                    MyE.Kiir("Születési idő", "e1");
-                    MyE.Kiir("Belépési idő", "f1");
-                    MyE.Kiir("Bér", "g1");
-                    MyE.Kiir("Csoport", "h1");
-                    MyE.Kiir("Passzív", "i1");
-                    MyE.Kiir("Alkalmazott/fizikai", "j1");
-                    MyE.Kiir("Ide vezényelt", "k1");
-                    MyE.Kiir("Elvezényelve", "l1");
-                    MyE.Kiir("Részmunkaidős", "m1");
-                    // lenullázzuk
-                    fizikai = 0;
-                    alkalmazott = 0;
-                    Vezényelt = 0;
-                    Vezényelve = 0;
-                    Részmunkaidős = 0;
-                    passzív = 0;
-
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Dolgozók.mdb";
-                    // leellenőrizzük, hogy minden munkahely ki van-e töltve.
-                    Munkahelyellenőrzés(hely);
-
-                    helyvált = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\segéd\kiegészítő.mdb";
-                    Segéd = KézSegéd.Lista_Adatok(helyvált);
-
-                    List<Adat_Dolgozó_Személyes> Adatok_Személyes = Kezelő_Személyes.Lista_Adatok(helyszemélyes);
-
-                    int i = 2;
-                    if (File.Exists(helyvált) && File.Exists(hely))
-                    {
-
-                        Holtart.Lép();
-                        foreach (Adat_Kiegészítő_Csoportbeosztás csoportnév in Segéd)
-                        {
-                            Holtart.Lép();
-                            List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(hely);
-
-                            Dolgozók = (from a in Adatok
-                                        where a.Csoport == csoportnév.Csoportbeosztás
-                                        orderby a.DolgozóNév
-                                        select a).ToList();
-
-                            foreach (Adat_Dolgozó_Alap rekord in Dolgozók)
-                            {
-
-                                if (rekord.Kilépésiidő != null)
-                                    kilépésidátum = rekord.Kilépésiidő;
-                                else
-                                    kilépésidátum = new DateTime(1900, 1, 1);
-
-                                if (kilépésidátum < new DateTime(2000, 1, 1))
-                                {
-                                    sor = 1;
-                                    oszlop = 1;
-
-                                    MyE.Kiir((i - 1d).ToString(), "a" + i.ToString());
-                                    MyE.Kiir(rekord.DolgozóNév.Trim(), "b" + i.ToString());
-                                    if (rekord.Munkakör.Trim() != null)
-                                        MyE.Kiir(rekord.Munkakör.Trim(), "C" + i.ToString());
-                                    MyE.Kiir(rekord.Dolgozószám.Trim(), "D" + i.ToString());
-
-                                    if (személyeseng)
-                                    {
-                                        DateTime ideigdátum = (from a in Adatok_Személyes
-                                                               where a.Dolgozószám == rekord.Dolgozószám
-                                                               select a.Születésiidő).FirstOrDefault();
-                                        if (ideigdátum != null) MyE.Kiir(ideigdátum.ToString("yyyy.MM.dd"), "e" + i);
-                                    }
-
-
-                                    if (rekord.Belépésiidő != null)
-                                        MyE.Kiir(rekord.Belépésiidő.ToString(), "F" + i.ToString());
-
-                                    if (béreng)
-                                    {
-                                        string ideig = MyF.Rövidkód(rekord.Dolgozószám.Trim());
-                                        ideig = (from adat in AdatokKulcs
-                                                 where adat.Adat1.Contains(ideig)
-                                                 select adat.Adat2).FirstOrDefault();
-                                        if (ideig != "_")
-                                            MyE.Kiir(MyF.Dekódolja(ideig), "g" + i.ToString());
-                                    }
-
-                                    if (rekord.Csoport.Trim() != null)
-                                        MyE.Kiir(rekord.Csoport.Trim(), "h" + i.ToString());
-                                    if (rekord.Passzív)
-                                    {
-                                        MyE.Kiir("passzív", "i" + i.ToString());
-                                        passzív += 1;
-                                    }
-
-                                    if (rekord.Alkalmazott)
-                                    {
-                                        MyE.Kiir("Alkalmazott", "j" + i.ToString());
-                                        alkalmazott += 1;
-                                    }
-                                    else
-                                    {
-                                        MyE.Kiir("Fizikai", "j" + i.ToString());
-                                        fizikai += 1;
-                                    }
-
-                                    if (rekord.Vezényelt)
-                                    {
-                                        MyE.Kiir("vezényelt", "k" + i.ToString());
-                                        Vezényelt += 1;
-                                    }
-                                    if (rekord.Vezényelve)
-                                    {
-                                        MyE.Kiir("vezényelve", "l" + i.ToString());
-                                        Vezényelve += 1;
-                                    }
-                                    if (rekord.Részmunkaidős)
-                                    {
-                                        MyE.Kiir("részmunkaidős", "m" + i.ToString());
-                                        Részmunkaidős += 1;
-                                    }
-                                    i += 1;
-                                }
-                            }
-                        }
-                    }
-
-                    MyE.Szűrés(munkalap, "A:M", 1);
-                    MyE.Oszlopszélesség(munkalap, "A:m");
-
-                    MyE.Rácsoz("A1:m" + i.ToString());
-                    MyE.Vastagkeret("A1:m" + i.ToString());
-
-                    i += 1;
-                    MyE.Kiir("Szellemi", "b" + i.ToString());
-                    MyE.Kiir(alkalmazott.ToString(), "c" + i.ToString());
-
-                    MyE.Kiir("Fizikai", "b" + (i + 1d).ToString());
-                    MyE.Kiir(fizikai.ToString(), "c" + (i + 1d).ToString());
-
-                    MyE.Kiir("Összesen", "b" + (i + 2d).ToString());
-                    MyE.Kiir((fizikai + alkalmazott).ToString(), "c" + (i + 2d).ToString());
-
-                    MyE.Kiir("Vezényelve", "b" + (i + 3d).ToString());
-                    MyE.Kiir(Vezényelve.ToString(), "c" + (i + 3d).ToString());
-
-                    MyE.Kiir("vezényelt", "b" + (i + 4d).ToString());
-                    MyE.Kiir(Vezényelt.ToString(), "c" + (i + 4d).ToString());
-
-                    MyE.Kiir("részmunkaidős", "b" + (i + 5d).ToString());
-                    MyE.Kiir(Részmunkaidős.ToString(), "c" + (i + 5d).ToString());
-
-                    MyE.Kiir("Passzív", "b" + (i + 6d).ToString());
-                    MyE.Kiir(passzív.ToString(), "c" + (i + 6d).ToString());
-
-                    MyE.Rácsoz("b" + i.ToString() + ":c" + (i + 6d).ToString());
-                    MyE.Vastagkeret("b" + i.ToString() + ":c" + (i + 6d).ToString());
-
-                    // ------------------------------------------
-                    // összesítő lapra kiírjuk telephelyenként
-                    // ------------------------------------------
-
-                    MyE.Munkalap_aktív("Összesítő");
-
-                    MyE.Kiir(Cmbtelephely.Items[ii].ToString(), MyE.Oszlopnév(öoszlop) + "1");
-                    MyE.Kiir(Cmbtelephely.Items[ii].ToString(), MyE.Oszlopnév(öoszlop) + "11");
-                    MyE.Kiir(alkalmazott.ToString(), MyE.Oszlopnév(öoszlop) + "2");
-                    MyE.Kiir(alkalmazott.ToString(), MyE.Oszlopnév(öoszlop) + "12");
-                    MyE.Kiir(fizikai.ToString(), MyE.Oszlopnév(öoszlop) + "3");
-                    MyE.Kiir(fizikai.ToString(), MyE.Oszlopnév(öoszlop) + "13");
-                    MyE.Kiir((fizikai + alkalmazott).ToString(), MyE.Oszlopnév(öoszlop) + "4");
-                    MyE.Betű(MyE.Oszlopnév(öoszlop) + "4", false, false, true);
-                    MyE.Kiir(Vezényelve.ToString(), MyE.Oszlopnév(öoszlop) + "5");
-                    MyE.Kiir(Vezényelt.ToString(), MyE.Oszlopnév(öoszlop) + "6");
-                    MyE.Kiir(Részmunkaidős.ToString(), MyE.Oszlopnév(öoszlop) + "7");
-                    MyE.Kiir(passzív.ToString(), MyE.Oszlopnév(öoszlop) + "8");
-                    MyE.Kiir(passzív.ToString(), MyE.Oszlopnév(öoszlop) + "14");
-                    MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
-                    MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
-                    MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
-                    MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
-                    MyE.Oszlopszélesség("Összesítő", MyE.Oszlopnév(öoszlop) + ":" + MyE.Oszlopnév(öoszlop));
-                    öoszlop += 1;
-                    MyE.Aktív_Cella("Összesítő", "A1");
-
-                }
-                // telep hely vége
-
-                munkalap = "Összesítő";
-                MyE.Rácsoz("a1:a8");
-                MyE.Vastagkeret("a1:a8");
-                MyE.Rácsoz("a11:a18");
-                MyE.Vastagkeret("a11:a18");
-                MyE.Kiir("Szellemi", "a2");
-                MyE.Kiir("Szellemi", "a12");
-                MyE.Kiir("Fizikai", "a3");
-                MyE.Kiir("Fizikai", "a13");
-                MyE.Kiir("Összesen", "a4");
-                MyE.Kiir("Összesen", "a18");
-                MyE.Betű("a4", false, false, true);
-                MyE.Betű("a18", false, false, true);
-                MyE.Kiir("Vezényelve", "a5");
-                MyE.Kiir("Vezényelt", "a6");
-                MyE.Kiir("részmunkaidős", "a7");
-                MyE.Kiir("Passzív", "a8");
-                MyE.Kiir("Passzív", "a14");
-                MyE.Kiir("Előzetesen kilépetett", "a15");
-                MyE.Kiir("Üres Státus", "a16");
-                MyE.Kiir("Felvétel Folyamatban", "a17");
-                MyE.Oszlopszélesség(munkalap, "A:A");
-
-                // összesítő oszlop
-                MyE.Kiir("Összesen:", MyE.Oszlopnév(öoszlop) + "1");
-                MyE.Kiir("Összesen:", MyE.Oszlopnév(öoszlop) + "11");
-                for (int isor = 2; isor <= 8; isor++)
-                    MyE.Kiir("=SUM(RC[-" + (öoszlop - 2).ToString() + "]:RC[-1])", MyE.Oszlopnév(öoszlop) + isor.ToString());
-                for (int isor = 12; isor <= 18; isor++)
-                    MyE.Kiir("=SUM(RC[-" + (öoszlop - 2).ToString() + "]:RC[-1])", MyE.Oszlopnév(öoszlop) + isor.ToString());
-                oszlop = 2;
-                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
-                {
-                    MyE.Kiir("=SUM(R[-6]C:R[-1]C)", MyE.Oszlopnév(oszlop) + "18");
-                    oszlop += 1;
-                }
-                MyE.Betű(MyE.Oszlopnév(öoszlop) + "4", false, false, true);
-                MyE.Betű(MyE.Oszlopnév(öoszlop) + "18", false, false, true);
-                MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
-                MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
-                MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
-                MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
-                MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(öoszlop) + ":" + MyE.Oszlopnév(öoszlop));
-
-
-                // számoljuk a státus tábla adatait
-                // ++++++++++++++++++++++++++++++
-                // Üres státusok
-                // ++++++++++++++++++++++++++++++
-                Cmbtelephely.Text = Program.PostásTelephely;
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                List<Adat_Dolgozó_Státus> AdatokStátus = Kéz_Státus.Lista_Adatok(hely);
-
-                int Összeg = 0;
-                oszlop = 2;
-                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
-                {
-                    List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
-                                                          where a.Telephelyki == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
-                                                          && a.Hrazonosítóbe == "_"
-                                                          && a.Névbe == "_"
-                                                          && a.Honnanjött == "_"
-                                                          && a.Státusváltozások == "Személy csere"
-                                                          select a).ToList();
-                    if (Eredmény != null)
-                        Összeg = Eredmény.Count;
-
-                    Eredmény.Clear();
-                    Eredmény = (from a in AdatokStátus
-                                where a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
-                                && a.Hrazonosítóbe == "_"
-                                && a.Honnanjött == "_"
-                                && a.Státusváltozások == "Státus létrehozása"
-                                select a).ToList();
-                    if (Eredmény != null)
-                        Összeg += Eredmény.Count;
-
-                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "16");
-                    oszlop += 1;
-                }
-
-                //'++++++++++++++++++++++++++++++
-                // ' felvétel folyamatban
-                // '++++++++++++++++++++++++++++++
-                oszlop = 2;
-                Összeg = 0;
-                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
-                {
-                    List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
-                                                          where a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
-                                                          && a.Hrazonosítóbe == "_"
-                                                          && a.Névbe != "_"
-                                                          && a.Honnanjött != "_"
-                                                          select a).ToList();
-                    if (Eredmény != null)
-                        Összeg = Eredmény.Count;
-
-                    Eredmény.Clear();
-                    Eredmény = (from a in AdatokStátus
-                                where a.Belépésidátum > DateTime.Today
-                                && a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
-                                select a).ToList();
-
-                    if (Eredmény != null)
-                        Összeg += Eredmény.Count;
-
-                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "17");
-                    oszlop += 1;
-                }
-
-                // ++++++++++++++++++++++++++++++
-                // ' Előzetesen kilépett
-                // '++++++++++++++++++++++++++++++
-                oszlop = 2;
-                Összeg = 0;
-                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
-                {
-                    List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
-                                                          where a.Telephelyki == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
-                                                          && a.Kilépésdátum > DateTime.Today
-                                                          select a).ToList();
-                    if (Eredmény != null)
-                        Összeg = Eredmény.Count;
-                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "15");
-                    oszlop += 1;
-                }
-                MyE.Aktív_Cella(munkalap, "A1");
-
-                // ***************************
-                // Státus tábla
-                // ***************************
-                munkalap = "Státus";
-                MyE.Munkalap_aktív(munkalap);
-                MyE.EXCELtábla(munkalap, "", Tábla, true);
-
-                // oszlopszélességek
-                MyE.Oszlopszélesség(munkalap, "a:a", 5);
-                MyE.Oszlopszélesség(munkalap, "b:b", 17);
-                MyE.Oszlopszélesség(munkalap, "c:c", 8);
-                MyE.Oszlopszélesség(munkalap, "d:d", 8);
-                MyE.Oszlopszélesség(munkalap, "e:e", 14);
-                MyE.Oszlopszélesség(munkalap, "f:f", 59);
-                MyE.Oszlopszélesség(munkalap, "g:g", 13);
-                MyE.Oszlopszélesség(munkalap, "h:h", 17);
-                MyE.Oszlopszélesség(munkalap, "i:i", 8);
-                MyE.Oszlopszélesség(munkalap, "j:j", 8);
-                MyE.Oszlopszélesség(munkalap, "k:k", 18);
-                MyE.Oszlopszélesség(munkalap, "l:l", 14);
-                MyE.Oszlopszélesség(munkalap, "m:m", 13);
-                MyE.Oszlopszélesség(munkalap, "n:n", 22);
-                MyE.Oszlopszélesség(munkalap, "o:o", 36);
-                MyE.Oszlopszélesség(munkalap, "p:p", 36);
-
-
-                MyE.Háttérszín("a:a", 11851260);
-                MyE.Háttérszín("b:g", 13421823);
-                MyE.Háttérszín("h:m", 10092441);
-                MyE.Háttérszín("n:r", 13434879);
-
-                // megszűnő státus szürkítése
-                for (sor = 0; sor < Tábla.Rows.Count; sor++)
-                {
-                    if (MyE.Beolvas("N" + (sor + 1).ToString()).Trim() == "Státus megszüntetése")
-                        MyE.Háttérszín("h" + (sor + 1).ToString() + ":n" + (sor + 1).ToString(), 9868950);
-                }
-
-                Holtart.Ki();
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
-                MyE.Megnyitás(fájlexc);
-                Cmbtelephely.Text = Program.PostásTelephely;
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void SzűrtLista_CheckedChanged(object sender, EventArgs e)
         {
@@ -1351,10 +895,10 @@ namespace Villamos
         private void Státusváltozásokfeltöltése()
         {
             Státusváltozások.Items.Clear();
-    
+
             foreach (MyEn.Dolgozó_Státusz elem in Enum.GetValues(typeof(MyEn.Dolgozó_Státusz)))
             {
-                Státusváltozások.Items.Add(elem.ToString().Replace ('_', ' '));
+                Státusváltozások.Items.Add(elem.ToString().Replace('_', ' '));
             }
         }
 
@@ -1495,9 +1039,526 @@ namespace Villamos
         }
         #endregion
 
+
+
+        #region Exceltábla
+        private void Command5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+
+                string hely = Application.StartupPath + @"\Főmérnökség\adatok\kiegészítő2.mdb";
+                Holtart.Be();
+
+                string helypénz = Application.StartupPath + @"\Főmérnökség\adatok\Villamos10.mdb";
+
+                // kimeneti fájl helye és neve
+                string fájlexc;
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Felépítés Státus lekérdezés",
+                    FileName = "Felépítés_Státus_" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+
+                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, -1);
+
+                // létrehozzuk az excel táblát
+                MyE.ExcelLétrehozás();
+                MyE.Munkalap_betű("arial", 12);
+
+                // ****************************************************
+                // elkészítjük a lapokat
+                // ****************************************************
+                MyE.Munkalap_átnevezés("Munka1", "Státus");
+
+                for (int i = 0; i < Cmbtelephely.Items.Count; i++)
+                    MyE.Új_munkalap(Cmbtelephely.Items[i].ToString());
+
+                MyE.Új_munkalap("Összesítő");
+                MyE.Új_munkalap("Adatok");
+
+                string helyszemélyes = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség2.mdb";
+                Adatok_Személyes = Kezelő_Személyes.Lista_Adatok(helyszemélyes);
+
+                for (int ii = 0; ii < Cmbtelephely.Items.Count; ii++)
+                {
+                    string helytelep = $@"{Application.StartupPath}\{Cmbtelephely.Items[ii]}\Adatok\Dolgozók.mdb";
+                    string helyvált = $@"{Application.StartupPath}\{Cmbtelephely.Items[ii]}\adatok\segéd\kiegészítő.mdb";
+                    List<Adat_Kiegészítő_Csoportbeosztás> Segéd = KézSegéd.Lista_Adatok(helyvált);
+                    if (File.Exists(helyvált) && File.Exists(helytelep))
+                    {
+                        // leellenőrizzük, hogy minden munkahely ki van-e töltve.
+                        Munkahelyellenőrzés(helytelep);
+                        List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(helytelep);
+                        List<Adat_Dolgozó_Telephely> AdatokTelep = new List<Adat_Dolgozó_Telephely>();
+                        Cmbtelephely.Text = Cmbtelephely.Items[ii].ToString();
+                        foreach (Adat_Dolgozó_Alap Elem in Adatok)
+                        {
+                            Adat_Dolgozó_Telephely EgyAdat = new Adat_Dolgozó_Telephely(Elem, Cmbtelephely.Items[ii].ToString());
+                            AdatokTelep.Add(EgyAdat);
+                        }
+
+                        AdatokListázásaMunkalapra(Cmbtelephely.Items[ii].ToString(), AdatokTelep, Segéd);
+                        AdatokDolgozók.AddRange(AdatokTelep);
+                        AdatokSegéd.AddRange(Segéd);
+                    }
+                }
+
+                AdatokDolgozók = AdatokDolgozók.OrderBy(a => a.Dolgozó.DolgozóNév).ToList();
+                AdatokListázásaMunkalapra("Adatok", AdatokDolgozók, AdatokSegéd);
+
+                ÖsszesítőMunkalap();
+
+
+
+                // számoljuk a státus tábla adatait
+                // ++++++++++++++++++++++++++++++
+                // Üres státusok
+                // ++++++++++++++++++++++++++++++
+                SzűrtLista.Checked = false;
+                Cmbtelephely.Text = Program.PostásTelephely;
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
+                List<Adat_Dolgozó_Státus> AdatokStátus = Kéz_Státus.Lista_Adatok(hely);
+
+                int Összeg = 0;
+                int oszlop = 2;
+                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
+                {
+                    List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
+                                                          where a.Telephelyki == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                                          && a.Hrazonosítóbe == "_"
+                                                          && a.Névbe == "_"
+                                                          && a.Honnanjött == "_"
+                                                          && a.Státusváltozások == "Személy csere"
+                                                          select a).ToList();
+                    if (Eredmény != null)
+                        Összeg = Eredmény.Count;
+
+                    Eredmény.Clear();
+                    Eredmény = (from a in AdatokStátus
+                                where a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                && a.Hrazonosítóbe == "_"
+                                && a.Honnanjött == "_"
+                                && a.Státusváltozások == "Státus létrehozása"
+                                select a).ToList();
+                    if (Eredmény != null)
+                        Összeg += Eredmény.Count;
+
+                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "16");
+                    oszlop += 1;
+                }
+
+                //'++++++++++++++++++++++++++++++
+                // ' felvétel folyamatban
+                // '++++++++++++++++++++++++++++++
+                oszlop = 2;
+                Összeg = 0;
+                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
+                {
+                    List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
+                                                          where a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                                          && a.Hrazonosítóbe == "_"
+                                                          && a.Névbe != "_"
+                                                          && a.Honnanjött != "_"
+                                                          select a).ToList();
+                    if (Eredmény != null)
+                        Összeg = Eredmény.Count;
+
+                    Eredmény.Clear();
+                    Eredmény = (from a in AdatokStátus
+                                where a.Belépésidátum > DateTime.Today
+                                && a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                select a).ToList();
+
+                    if (Eredmény != null)
+                        Összeg += Eredmény.Count;
+
+                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "17");
+                    oszlop += 1;
+                }
+
+                // ++++++++++++++++++++++++++++++
+                // ' Előzetesen kilépett
+                // '++++++++++++++++++++++++++++++
+                oszlop = 2;
+                Összeg = 0;
+                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
+                {
+                    List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
+                                                          where a.Telephelyki == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                                          && a.Kilépésdátum > DateTime.Today
+                                                          select a).ToList();
+                    if (Eredmény != null)
+                        Összeg = Eredmény.Count;
+                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "15");
+                    oszlop += 1;
+                }
+                string munkalap = "Státus";
+                MyE.Aktív_Cella(munkalap, "A1");
+
+                // ***************************
+                // Státus tábla
+                // ***************************
+                StátusMunkaLap();
+
+                Holtart.Ki();
+                MyE.Aktív_Cella(munkalap, "A1");
+                MyE.ExcelMentés(fájlexc);
+                MyE.ExcelBezárás();
+                MyE.Megnyitás(fájlexc);
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ÖsszesítőMunkalap()
+        {
+            try
+            {
+                string munkalap = "Összesítő";
+                MyE.Munkalap_aktív(munkalap);
+                MyE.Rácsoz("a1:a8");
+                MyE.Vastagkeret("a1:a8");
+                MyE.Rácsoz("a11:a18");
+                MyE.Vastagkeret("a11:a18");
+                MyE.Kiir("Szellemi", "a2");
+                MyE.Kiir("Szellemi", "a12");
+                MyE.Kiir("Fizikai", "a3");
+                MyE.Kiir("Fizikai", "a13");
+                MyE.Kiir("Összesen", "a4");
+                MyE.Kiir("Összesen", "a18");
+                MyE.Betű("a4", false, false, true);
+                MyE.Betű("a18", false, false, true);
+                MyE.Kiir("Vezényelve", "a5");
+                MyE.Kiir("Vezényelt", "a6");
+                MyE.Kiir("részmunkaidős", "a7");
+                MyE.Kiir("Passzív", "a8");
+                MyE.Kiir("Passzív", "a14");
+                MyE.Kiir("Előzetesen kilépetett", "a15");
+                MyE.Kiir("Üres Státus", "a16");
+                MyE.Kiir("Felvétel Folyamatban", "a17");
+                MyE.Oszlopszélesség(munkalap, "A:A");
+
+                // összesítő oszlop
+                MyE.Kiir("Összesen:", MyE.Oszlopnév(öoszlop) + "1");
+                MyE.Kiir("Összesen:", MyE.Oszlopnév(öoszlop) + "11");
+                for (int isor = 2; isor <= 8; isor++)
+                    MyE.Kiir("=SUM(RC[-" + (öoszlop - 2).ToString() + "]:RC[-1])", MyE.Oszlopnév(öoszlop) + isor.ToString());
+                for (int isor = 12; isor <= 18; isor++)
+                    MyE.Kiir("=SUM(RC[-" + (öoszlop - 2).ToString() + "]:RC[-1])", MyE.Oszlopnév(öoszlop) + isor.ToString());
+                int oszlop = 2;
+                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
+                {
+                    MyE.Kiir("=SUM(R[-6]C:R[-1]C)", MyE.Oszlopnév(oszlop) + "18");
+                    oszlop += 1;
+                }
+                MyE.Betű(MyE.Oszlopnév(öoszlop) + "4", false, false, true);
+                MyE.Betű(MyE.Oszlopnév(öoszlop) + "18", false, false, true);
+                MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
+                MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
+                MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
+                MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
+                MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(öoszlop) + ":" + MyE.Oszlopnév(öoszlop));
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void StátusMunkaLap()
+        {
+            try
+            {
+                string munkalap = "Státus";
+                MyE.Munkalap_aktív(munkalap);
+                MyE.EXCELtábla(munkalap, "", Tábla, true);
+
+                // oszlopszélességek
+                MyE.Oszlopszélesség(munkalap, "a:a", 5);
+                MyE.Oszlopszélesség(munkalap, "b:b", 17);
+                MyE.Oszlopszélesség(munkalap, "c:c", 8);
+                MyE.Oszlopszélesség(munkalap, "d:d", 8);
+                MyE.Oszlopszélesség(munkalap, "e:e", 14);
+                MyE.Oszlopszélesség(munkalap, "f:f", 59);
+                MyE.Oszlopszélesség(munkalap, "g:g", 13);
+                MyE.Oszlopszélesség(munkalap, "h:h", 17);
+                MyE.Oszlopszélesség(munkalap, "i:i", 8);
+                MyE.Oszlopszélesség(munkalap, "j:j", 8);
+                MyE.Oszlopszélesség(munkalap, "k:k", 18);
+                MyE.Oszlopszélesség(munkalap, "l:l", 14);
+                MyE.Oszlopszélesség(munkalap, "m:m", 13);
+                MyE.Oszlopszélesség(munkalap, "n:n", 22);
+                MyE.Oszlopszélesség(munkalap, "o:o", 36);
+                MyE.Oszlopszélesség(munkalap, "p:p", 36);
+
+
+                MyE.Háttérszín("a:a", 11851260);
+                MyE.Háttérszín("b:g", 13421823);
+                MyE.Háttérszín("h:m", 10092441);
+                MyE.Háttérszín("n:r", 13434879);
+
+                // megszűnő státus szürkítése
+                for (int sor = 0; sor < Tábla.Rows.Count; sor++)
+                {
+                    if (MyE.Beolvas("N" + (sor + 1).ToString()).Trim() == "Státus megszüntetése")
+                        MyE.Háttérszín("h" + (sor + 1).ToString() + ":n" + (sor + 1).ToString(), 9868950);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AdatokListázásaMunkalapra(string munkalap, List<Adat_Dolgozó_Telephely> AdatokKapott, List<Adat_Kiegészítő_Csoportbeosztás> Segéd)
+        {
+            try
+            {
+                string helykulcs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Villamos\Kulcs.mdb";
+                bool kulcsfájlvan = false;
+                List<Adat_Kulcs> AdatokKulcs = null;
+                if (File.Exists(helykulcs))
+                {
+                    kulcsfájlvan = true;
+                    AdatokKulcs = KézKulcs.Lista_Adatok();
+                }
+                DateTime kilépésidátum;
+                int fizikai = 0;
+                int alkalmazott = 0;
+                int Vezényelt = 0;
+                int Vezényelve = 0;
+                int Részmunkaidős = 0;
+                int passzív = 0;
+                bool személyeseng = false;
+                bool béreng = false;
+                if (kulcsfájlvan)
+                {
+                    string adat1 = Program.PostásNév.Trim().ToUpper();
+                    string adat2 = Program.PostásTelephely.Trim().ToUpper();
+                    string adat3 = "A";
+                    személyeseng = KézKulcs.ABKULCSvan(adat1, adat2, adat3);
+
+                    adat3 = "B";
+                    béreng = KézKulcs.ABKULCSvan(adat1, adat2, adat3);
+                }
+
+                MyE.Munkalap_aktív(munkalap);
+
+                // elkészítjük a fejlécet
+                MyE.Kiir("Sorszám", "a1");
+                MyE.Kiir("Név", "b1");
+                MyE.Kiir("Munkakör", "c1");
+                MyE.Kiir("HR törzsszám", "d1");
+                MyE.Kiir("Születési idő", "e1");
+                MyE.Kiir("Belépési idő", "f1");
+                MyE.Kiir("Bér", "g1");
+                MyE.Kiir("Csoport", "h1");
+                MyE.Kiir("Passzív", "i1");
+                MyE.Kiir("Alkalmazott/fizikai", "j1");
+                MyE.Kiir("Ide vezényelt", "k1");
+                MyE.Kiir("Elvezényelve", "l1");
+                MyE.Kiir("Részmunkaidős", "m1");
+                MyE.Kiir("Szervezetiegység", "n1");
+                // lenullázzuk
+                fizikai = 0;
+                alkalmazott = 0;
+                Vezényelt = 0;
+                Vezényelve = 0;
+                Részmunkaidős = 0;
+                passzív = 0;
+
+                int i = 2;
+                Holtart.Lép();
+                foreach (Adat_Kiegészítő_Csoportbeosztás csoportnév in Segéd)
+                {
+                    Holtart.Lép();
+
+
+                    List<Adat_Dolgozó_Telephely> Dolgozók = (from a in AdatokKapott
+                                                             where a.Dolgozó.Csoport == csoportnév.Csoportbeosztás
+                                                             orderby a.Dolgozó.DolgozóNév
+                                                             select a).ToList();
+
+                    foreach (Adat_Dolgozó_Telephely rekord in Dolgozók)
+                    {
+
+                        if (rekord.Dolgozó.Kilépésiidő != null)
+                            kilépésidátum = rekord.Dolgozó.Kilépésiidő;
+                        else
+                            kilépésidátum = new DateTime(1900, 1, 1);
+
+                        if (kilépésidátum < new DateTime(2000, 1, 1))
+                        {
+                            MyE.Kiir((i - 1d).ToString(), $"a{i}");
+                            MyE.Kiir(rekord.Dolgozó.DolgozóNév.Trim(), $"b{i}");
+                            if (rekord.Dolgozó.Munkakör.Trim() != null)
+                                MyE.Kiir(rekord.Dolgozó.Munkakör.Trim(), $"c{i}");
+                            MyE.Kiir(rekord.Dolgozó.Dolgozószám.Trim(), $"d{i}");
+
+                            if (személyeseng)
+                            {
+                                DateTime ideigdátum = (from a in Adatok_Személyes
+                                                       where a.Dolgozószám == rekord.Dolgozó.Dolgozószám
+                                                       select a.Születésiidő).FirstOrDefault();
+                                if (ideigdátum != null) MyE.Kiir(ideigdátum.ToString("yyyy.MM.dd"), "e" + i);
+                            }
+
+
+                            if (rekord.Dolgozó.Belépésiidő != null)
+                                MyE.Kiir(rekord.Dolgozó.Belépésiidő.ToString(), $"F{i}");
+
+                            if (béreng)
+                            {
+                                string ideig = MyF.Rövidkód(rekord.Dolgozó.Dolgozószám.Trim());
+                                ideig = (from adat in AdatokKulcs
+                                         where adat.Adat1.Contains(ideig)
+                                         select adat.Adat2).FirstOrDefault();
+                                if (ideig != null && ideig != "_")
+                                    MyE.Kiir(MyF.Dekódolja(ideig), $"G{i}");
+                            }
+
+                            if (rekord.Dolgozó.Csoport.Trim() != null)
+                                MyE.Kiir(rekord.Dolgozó.Csoport.Trim(), $"H{i}");
+                            if (rekord.Dolgozó.Passzív)
+                            {
+                                MyE.Kiir("passzív", $"I{i}");
+                                passzív += 1;
+                            }
+
+                            if (rekord.Dolgozó.Alkalmazott)
+                            {
+                                MyE.Kiir("Alkalmazott", $"J{i}");
+                                alkalmazott += 1;
+                            }
+                            else
+                            {
+                                MyE.Kiir("Fizikai", $"J{i}");
+                                fizikai += 1;
+                            }
+
+                            if (rekord.Dolgozó.Vezényelt)
+                            {
+                                MyE.Kiir("vezényelt", $"K{i}");
+                                Vezényelt += 1;
+                            }
+                            if (rekord.Dolgozó.Vezényelve)
+                            {
+                                MyE.Kiir("vezényelve", $"L{i}");
+                                Vezényelve += 1;
+                            }
+                            if (rekord.Dolgozó.Részmunkaidős)
+                            {
+                                MyE.Kiir("részmunkaidős", $"M{i}");
+                                Részmunkaidős += 1;
+                            }
+                            MyE.Kiir(rekord.Telephely, $"n{i}");
+                            i += 1;
+                        }
+                    }
+                }
+
+                MyE.Szűrés(munkalap, "A:N", 1);
+                MyE.Oszlopszélesség(munkalap, "A:N");
+
+                MyE.Rácsoz($"A1:N{i}");
+                MyE.Vastagkeret($"A1:N{i}");
+
+                i += 1;
+                MyE.Kiir("Szellemi", $"b{i}");
+                MyE.Kiir(alkalmazott.ToString(), $"c{i}");
+
+                MyE.Kiir("Fizikai", $"b{(i + 1)}");
+                MyE.Kiir(fizikai.ToString(), $"c{i + 1}");
+
+                MyE.Kiir("Összesen", $"b{i + 2}");
+                MyE.Kiir((fizikai + alkalmazott).ToString(), $"c{i + 2}");
+
+                MyE.Kiir("Vezényelve", $"b{i + 3} ");
+                MyE.Kiir(Vezényelve.ToString(), $"c{i + 3}");
+
+                MyE.Kiir("vezényelt", $"b{i + 4}");
+                MyE.Kiir(Vezényelt.ToString(), $"c{i + 4}");
+
+                MyE.Kiir("részmunkaidős", $"b{i + 5}");
+                MyE.Kiir(Részmunkaidős.ToString(), $"c{i + 5}");
+
+                MyE.Kiir("Passzív", $"b{i + 6}");
+                MyE.Kiir(passzív.ToString(), $"c{i + 6}");
+
+                MyE.Rácsoz($"b{i}:c{i + 6}");
+                MyE.Vastagkeret($"b{i}:c{i + 6}");
+
+                // ------------------------------------------
+                // összesítő lapra kiírjuk telephelyenként
+                // ------------------------------------------
+                if (munkalap != "Adatok")
+                {
+                    MyE.Munkalap_aktív("Összesítő");
+
+                    MyE.Kiir(munkalap, MyE.Oszlopnév(öoszlop) + "1");
+                    MyE.Kiir(munkalap, MyE.Oszlopnév(öoszlop) + "11");
+                    MyE.Kiir(alkalmazott.ToString(), MyE.Oszlopnév(öoszlop) + "2");
+                    MyE.Kiir(alkalmazott.ToString(), MyE.Oszlopnév(öoszlop) + "12");
+                    MyE.Kiir(fizikai.ToString(), MyE.Oszlopnév(öoszlop) + "3");
+                    MyE.Kiir(fizikai.ToString(), MyE.Oszlopnév(öoszlop) + "13");
+                    MyE.Kiir((fizikai + alkalmazott).ToString(), MyE.Oszlopnév(öoszlop) + "4");
+                    MyE.Betű(MyE.Oszlopnév(öoszlop) + "4", false, false, true);
+                    MyE.Kiir(Vezényelve.ToString(), MyE.Oszlopnév(öoszlop) + "5");
+                    MyE.Kiir(Vezényelt.ToString(), MyE.Oszlopnév(öoszlop) + "6");
+                    MyE.Kiir(Részmunkaidős.ToString(), MyE.Oszlopnév(öoszlop) + "7");
+                    MyE.Kiir(passzív.ToString(), MyE.Oszlopnév(öoszlop) + "8");
+                    MyE.Kiir(passzív.ToString(), MyE.Oszlopnév(öoszlop) + "14");
+                    MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
+                    MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
+                    MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
+                    MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
+                    MyE.Oszlopszélesség("Összesítő", MyE.Oszlopnév(öoszlop) + ":" + MyE.Oszlopnév(öoszlop));
+                    öoszlop += 1;
+                    MyE.Aktív_Cella("Összesítő", "A1");
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Munkahelyellenőrzés(string hely)
         {
-            Dolgozók = KézDolgozó.Lista_Adatok(hely);
+            List<Adat_Dolgozó_Alap> Dolgozók = KézDolgozó.Lista_Adatok(hely);
             if (Dolgozók != null)
             {
                 List<string> Adatok = new List<string>();
@@ -1509,6 +1570,6 @@ namespace Villamos
                 if (Adatok != null && Adatok.Count > 0) KézDolgozó.Módosít_Csoport(hely, Adatok);
             }
         }
-
+        #endregion
     }
 }

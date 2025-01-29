@@ -52,6 +52,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public bool Túlóraeng { get; private set; }
         public decimal Részmunkaidőperc { get; private set; }
 
+
         public Adat_Dolgozó_Alap(long sorszám, string dolgozóNév, string dolgozószám, string leánykori, string anyja, DateTime születésiidő, string születésihely, string tAj,
             string aDÓ, DateTime belépésiidő, string lakcím, string ideiglenescím, string telefonszám1, string telefonszám2, string telefonszám3, string munkakör, bool csopvez,
             string csoport, bool munkarend, DateTime orvosiérvényesség, DateTime orvosivizsgálat, DateTime targoncaérvényesség, DateTime emelőérvényesség, DateTime kilépésiidő,
@@ -199,6 +200,20 @@ namespace Villamos.Villamos_Adatszerkezet
             Vezényelt = vezényelt;
             Vezényelve = vezényelve;
             Lakcím = lakcím;
+        }
+
+
+    }
+
+    public class Adat_Dolgozó_Telephely
+    {
+        public Adat_Dolgozó_Alap Dolgozó { get; private set; }
+        public string Telephely { get; private set; }
+
+        public Adat_Dolgozó_Telephely(Adat_Dolgozó_Alap dolgozó, string telephely)
+        {
+            Dolgozó = dolgozó;
+            Telephely = telephely;
         }
     }
 
