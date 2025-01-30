@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Alap_Beolvasás
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb".Ellenőrzés();
         readonly string jelszó = "sajátmagam";
 
         public List<Adat_Alap_Beolvasás> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -80,7 +80,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public void Rögzítés(Adat_Alap_Beolvasás Adat)
         {
             string szöveg = "INSERT INTO tábla ";
@@ -90,13 +89,6 @@ namespace Villamos.Kezelők
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
-
-        /// <summary>
-        /// csoport, oszlop, törölt
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Alap_Beolvasás Adat)
         {
             try
@@ -104,7 +96,7 @@ namespace Villamos.Kezelők
                 string szöveg = "UPDATE  tábla SET ";
                 szöveg += $" fejléc='{Adat.Fejléc}', ";
                 szöveg += $" kell={Adat.Kell}";
-                szöveg += $" WHERE [csoport]= '{Adat.Csoport}'  and [oszlop]={Adat.Oszlop}";
+                szöveg += $" WHERE [csoport]= '{Adat.Csoport}' and [oszlop]={Adat.Oszlop}";
                 szöveg += $" and [törölt]='{Adat.Törölt}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -120,12 +112,6 @@ namespace Villamos.Kezelők
 
         }
 
-        /// <summary>
-        /// csoport, oszlop, törölt
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Alap_Beolvasás Adat)
         {
             try

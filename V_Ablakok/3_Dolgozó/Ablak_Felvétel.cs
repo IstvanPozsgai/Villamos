@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -50,19 +49,19 @@ namespace Villamos
             try
             {
                 // Adatbázis megnyitásának előkészítése
-                List<Adat_Kiegészítő_Könyvtár> Adatok=KézKönyvtár.Lista_Adatok ();
+                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKönyvtár.Lista_Adatok();
 
                 // COMBO amibe az adatokat feltöltjük
                 Cmbtelephely.Items.Clear();
                 Cmbtelephely.Enabled = false;
                 if (Program.PostásTelephely == "Főmérnökség")
                 {
-                    if (Adatok != null) 
+                    if (Adatok != null)
                     {
                         Adatok = (from a in Adatok
                                   where a.Név != "Főmérnökség"
-                                  orderby a.Név 
-                                  select a).ToList ();
+                                  orderby a.Név
+                                  select a).ToList();
                     }
                     Cmbtelephely.Enabled = true;
                     foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
@@ -79,7 +78,7 @@ namespace Villamos
                         if (Adatok != null)
                         {
                             Adatok = (from a in Adatok
-                                      where a.Csoport1  == Program.Postás_csoport
+                                      where a.Csoport1 == Program.Postás_csoport
                                       orderby a.Név
                                       select a).ToList();
                         }
@@ -1321,7 +1320,7 @@ namespace Villamos
             {
                 AdatokKönyvtár.Clear();
                 AdatokKönyvtár = KézKönyvtár.Lista_Adatok();
-             }
+            }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);

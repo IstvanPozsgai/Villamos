@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.Kerékeszterga;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -517,7 +516,7 @@ namespace Villamos.Villamos_Ablakok
                 string jelszó = "RónaiSándor";
                 string szöveg = $"SELECT * FROM naptár WHERE idő>=#{Hételső:MM-dd-yyyy HH:mm}# AND idő<=#{Hétutolsó:MM-dd-yyyy HH:mm}#";
 
-      
+
                 List<DateTime> Adatok = KézNaptár.Lista_Adatok_Idő(hely, jelszó, szöveg);
 
                 DateTime FutóIdő = new DateTime(Hételső.Year, Hételső.Month, Hételső.Day, 0, 0, 0);
@@ -626,7 +625,7 @@ namespace Villamos.Villamos_Ablakok
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum.Value);
 
                 string szöveg = $"SELECT * FROM naptár";
-        
+
                 List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
 
                 bool vane = Adatok.Any(n =>
@@ -1114,7 +1113,7 @@ namespace Villamos.Villamos_Ablakok
                 string jelszó = "RónaiSándor";
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.Kerék_Éves(hely);
 
-       
+
                 List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
 
                 if (Hételső.Year != Hétutolsó.Year)
@@ -1122,12 +1121,12 @@ namespace Villamos.Villamos_Ablakok
                     hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hétutolsó.Year}_Esztergálás.mdb";
                     if (!File.Exists(hely)) Adatbázis_Létrehozás.Kerék_Éves(hely);
                     List<Adat_Kerék_Eszterga_Naptár> Adatokköv = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
-                    Adatok.AddRange(Adatokköv );
+                    Adatok.AddRange(Adatokköv);
                 }
 
-          
 
-            
+
+
 
                 Szín_kódolás Szín;
 

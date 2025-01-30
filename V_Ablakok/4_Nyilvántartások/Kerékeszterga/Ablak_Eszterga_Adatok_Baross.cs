@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
@@ -821,15 +820,15 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
             string jelszó = "RónaiSándor";
-            string szöveg = "SELECT * FROM mérés " ;
+            string szöveg = "SELECT * FROM mérés ";
             AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
             Adat_Baross_Mérési_Adatok ElemMérés = (from a in AdatokMérés
-                                                   where a.Eszterga_Id ==EsztergaID 
-                                                   select a).FirstOrDefault ();
+                                                   where a.Eszterga_Id == EsztergaID
+                                                   select a).FirstOrDefault();
 
-            if (ElemMérés!=null)
+            if (ElemMérés != null)
             {
-                szöveg = $"UPDATE mérés SET Státus={státus} WHERE Eszterga_Id={EsztergaID}"; 
+                szöveg = $"UPDATE mérés SET Státus={státus} WHERE Eszterga_Id={EsztergaID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
         }

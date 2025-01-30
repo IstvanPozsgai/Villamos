@@ -8,7 +8,6 @@ using System.Threading;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;

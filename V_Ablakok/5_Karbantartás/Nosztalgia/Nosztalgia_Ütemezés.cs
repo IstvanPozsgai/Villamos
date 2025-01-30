@@ -1,21 +1,11 @@
-﻿using PdfiumViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
-using static System.IO.File;
-using MyA = Adatbázis;
-using MyE = Villamos.Module_Excel;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok
 {

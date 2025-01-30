@@ -8,7 +8,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
@@ -742,9 +741,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 AdatokTelep.Clear();
                 List<Adat_Kiegészítő_Sérülés> AdatokTelepÖ = KézTelep.Lista_Adatok();
                 AdatokTelep = (from a in AdatokTelepÖ
-                               where a.Vezér1 ==false
+                               where a.Vezér1 == false
                                orderby a.ID
-                               select a).ToList ();
+                               select a).ToList();
             }
             catch (HibásBevittAdat ex)
             {

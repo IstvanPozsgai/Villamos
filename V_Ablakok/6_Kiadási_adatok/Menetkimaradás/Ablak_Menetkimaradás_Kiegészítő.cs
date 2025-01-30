@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
@@ -171,7 +170,7 @@ namespace Villamos.Villamos_Ablakok
                                                                 where a.Tétel == tétel && a.Jelentés == jelentés
                                                                 select a).ToList();
 
-                        if ( Ellenorzes.Any ())
+                        if (Ellenorzes.Any())
                         {
                             // ha van ilyen akkor módosítjuk
                             szöveg = "UPDATE menettábla SET viszonylat= '" + viszonylat.Trim() + "'";
@@ -270,7 +269,7 @@ namespace Villamos.Villamos_Ablakok
                         string jvbeírás = (from a in Adatok
                                            where a.Tétel == rekord.Tétel && a.Jelentés == rekord.Jelentés
                                            select a.Jvbeírás).FirstOrDefault();
-                        if (jvbeírás!=null && jvbeírás == "_")
+                        if (jvbeírás != null && jvbeírás == "_")
                         {
                             // ha nincs a főmérnökségi táblába akkor rögzítjük
                             szöveg = "INSERT INTO menettábla ";

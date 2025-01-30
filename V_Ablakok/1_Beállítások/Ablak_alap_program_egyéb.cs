@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
@@ -25,6 +24,7 @@ namespace Villamos
         readonly Kezelő_Jármű_Takarítás_Ár KézTakÁr = new Kezelő_Jármű_Takarítás_Ár();
         readonly Kezelő_Jármű_Állomány_Típus KézÁllományTípus = new Kezelő_Jármű_Állomány_Típus();
         readonly Kezelő_Jármű_Takarítás_Mátrix KétJárműtakMátr = new Kezelő_Jármű_Takarítás_Mátrix();
+        readonly Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
         #endregion
 
 
@@ -46,10 +46,9 @@ namespace Villamos
                 Telephelyekfeltöltése();
                 Jogosultságkiosztás();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Egyéb_beolvasás(hely);
 
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
+
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Osztálytábla(hely);
 
                 Fülek.SelectedIndex = 0;
@@ -72,7 +71,7 @@ namespace Villamos
         {
             try
             {
-                Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
+
                 Cmbtelephely.Items.Clear();
                 List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
                 foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
@@ -852,8 +851,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
                 List<Adat_Jármű_Takarítás_Kötbér> ADatokJárműtakKöt = KézJárműtakKöt.Lista_Adat();
 
                 Kötbér_tábla.Rows.Clear();

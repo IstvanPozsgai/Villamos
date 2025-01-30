@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using MyA = Adatbázis;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
 using MyF = Függvénygyűjtemény;
@@ -864,7 +863,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 string szöveg = "SELECT * FROM adatok";
                 Kezelő_CAF_Adatok kéz = new Kezelő_CAF_Adatok();
                 List<Adat_CAF_Adatok> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-                
+
                 // ha nincs kitöltve az id, megkeressük a következő számot
                 if (Ütem_köv_sorszám.Text.Trim() == "" || Ütem_köv_sorszám.Text.Trim() == "0")
                 {
@@ -874,9 +873,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 }
 
                 Adat_CAF_Adatok Elem = (from a in Adatok
-                                        where a.Id ==ID
-                                        select a ).FirstOrDefault ();
-                if (Elem!=null)
+                                        where a.Id == ID
+                                        select a).FirstOrDefault();
+                if (Elem != null)
                 {
                     // Módosít
                     szöveg = "UPDATE adatok  SET ";

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
@@ -302,7 +301,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 if (!File.Exists(hely)) return AdatokKivétel;
                 string jelszó = "Bezzegh";
                 string szöveg = szöveg = $"SELECT * FROM kivételek";
-                
+
                 AdatokKivétel = KézKivételek.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

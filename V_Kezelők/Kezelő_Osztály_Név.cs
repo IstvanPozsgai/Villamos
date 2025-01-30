@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Osztály_Név
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb".Ellenőrzés();
         readonly string jelszó = "kéménybe";
         public List<Adat_Osztály_Név> Lista_Adat(string hely, string jelszó, string szöveg)
         {
@@ -45,7 +45,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public List<Adat_Osztály_Név> Lista_Adat()
         {
             string szöveg = "SELECT * FROM osztálytábla order by id";
@@ -78,12 +77,7 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
+
         public void Módosítás(Adat_Osztály_Név Adat)
         {
             try

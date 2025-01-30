@@ -9,7 +9,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű_Takarítás_Kötbér
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb".Ellenőrzés();
         readonly string jelszó = "seprűéslapát";
 
         public List<Adat_Jármű_Takarítás_Kötbér> Lista_Adat(string hely, string jelszó, string szöveg)
@@ -82,12 +82,6 @@ namespace Villamos.Kezelők
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
-        /// <summary>
-        /// takarítási_fajta
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Jármű_Takarítás_Kötbér Adat)
         {
             string szöveg = "UPDATE kötbér  SET ";
@@ -96,8 +90,6 @@ namespace Villamos.Kezelők
             szöveg += $" WHERE  takarítási_fajta='{Adat.Takarítási_fajta}'";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
-
-
     }
 
 }

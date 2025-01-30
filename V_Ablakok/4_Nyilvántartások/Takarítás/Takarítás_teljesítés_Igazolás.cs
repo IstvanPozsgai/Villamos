@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Villamos.V_Kezelők;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;

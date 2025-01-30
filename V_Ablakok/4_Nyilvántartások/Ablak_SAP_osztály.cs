@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyA = Adatbázis;
@@ -807,7 +806,7 @@ namespace Villamos
             }
         }
         #endregion
-  
+
         #region Listafeltöltések
         private void ListákFeltöltése()
         {

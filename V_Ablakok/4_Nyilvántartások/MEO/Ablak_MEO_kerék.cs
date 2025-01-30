@@ -6,11 +6,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.MEO;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 

@@ -10,7 +10,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._4_Nyilvántartások.Takarítás;
 using Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás;
-using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -4029,7 +4028,7 @@ namespace Villamos
                 MyE.Munkalap_aktív("J1");
 
                 // beolvassuk a kötbér értékét
-                KötbérLista();
+                AdatokKötbér = KézKötbér.Lista_Adat();
                 Adat_Jármű_Takarítás_Kötbér AdatKötbér = (from a in AdatokKötbér
                                                           where a.Takarítási_fajta == "J1"
                                                           select a).FirstOrDefault();
@@ -4205,7 +4204,7 @@ namespace Villamos
             {
                 MyE.Munkalap_aktív(munkalap);
 
-                KötbérLista();
+                AdatokKötbér = KézKötbér.Lista_Adat();
                 Adat_Jármű_Takarítás_Kötbér AdatKötbér = (from a in AdatokKötbér
                                                           where a.Takarítási_fajta == munkalap
                                                           select a).FirstOrDefault();
@@ -5101,7 +5100,7 @@ namespace Villamos
             {
                 MyE.Munkalap_aktív(munkalap);
 
-                KötbérLista();
+                AdatokKötbér = KézKötbér.Lista_Adat();
                 Adat_Jármű_Takarítás_Kötbér AdatKötbér = (from a in AdatokKötbér
                                                           where a.Takarítási_fajta == munkalap
                                                           select a).FirstOrDefault();
@@ -6166,27 +6165,6 @@ namespace Villamos
                 string jelszó = "seprűéslapát";
                 string szöveg = "SELECT * FROM létszám";
                 AdatokLétsz = KézLétsz.Lista_Adat(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void KötbérLista()
-        {
-            try
-            {
-                AdatokKötbér.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Takarítás\Jármű_takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM kötbér ";
-                AdatokKötbér = KézKötbér.Lista_Adat(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

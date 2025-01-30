@@ -56,8 +56,14 @@ namespace Villamos
                 if (fájl.Contains("munkalapelszámoló")) Adatbázis_Létrehozás.Ciklusrendtábla(hely);
                 if (fájl.Contains("Villamos9.mdb")) Adatbázis_Létrehozás.Felhasználó_Extra(hely);
                 if (fájl.Contains("Kulcs.mdb")) Adatbázis_Létrehozás.Kulcs_Adatok(hely);
+                if (fájl.Contains("beolvasás.mdb")) Adatbázis_Létrehozás.Egyéb_beolvasás(hely);
+                if (fájl.Contains("osztály.mdb")) Adatbázis_Létrehozás.Osztálytábla(hely);
+                if (fájl.Contains("Jármű_Takarítás.mdb")) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
 
 
+
+
+                //if (fájl.Contains("")) Adatbázis_Létrehozás.Osztálytábla(hely);
 
 
             }

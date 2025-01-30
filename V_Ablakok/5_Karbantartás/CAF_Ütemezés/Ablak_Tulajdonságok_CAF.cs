@@ -6,11 +6,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.CAF_Ütemezés;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
@@ -1239,9 +1237,9 @@ namespace Villamos
 
                     // megnézzük, hogy a telephelyen van-e a kocsi
                     Adat_Jármű Kocsi = (from a in AdatokJármű
-                             where a.Azonosító == rekordütemez.Azonosító.Trim()
-                             && a.Státus == 2
-                             select a).FirstOrDefault();
+                                        where a.Azonosító == rekordütemez.Azonosító.Trim()
+                                        && a.Státus == 2
+                                        select a).FirstOrDefault();
 
                     if (Kocsi != null)
                     {

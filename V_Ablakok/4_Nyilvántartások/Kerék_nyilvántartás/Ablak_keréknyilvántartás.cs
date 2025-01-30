@@ -7,12 +7,10 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok.Kerék_nyilvántartás;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
@@ -923,7 +921,7 @@ namespace Villamos
         {
             long KMU = 0;
 
-            string hely =  $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
             string jelszó = "pocsaierzsi";
             string szöveg = "Select * FROM KMtábla";
 
@@ -943,7 +941,7 @@ namespace Villamos
                                              where a.Törölt == false
                                              && a.Azonosító == Azonosító.Trim()
                                              orderby a.Vizsgdátumk descending
-                                             select a).FirstOrDefault(); 
+                                             select a).FirstOrDefault();
 
             switch (Típus)
             {

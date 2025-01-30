@@ -7,11 +7,9 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.TW6000;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
@@ -2217,8 +2215,8 @@ namespace Villamos
                     cikluseredmény = "";
                     szöveg = $"SELECT * FROM alap WHERE [azonosító]='{PszJelölő.Items[j].ToString().Trim()}'";
                     Adat_TW6000_Alap rekord = (from a in Adatok
-                                                 where a.Azonosító == PszJelölő.Items[j].ToString().Trim()
-                                                 select a).FirstOrDefault();
+                                               where a.Azonosító == PszJelölő.Items[j].ToString().Trim()
+                                               select a).FirstOrDefault();
 
                     if (rekord != null)
                     {

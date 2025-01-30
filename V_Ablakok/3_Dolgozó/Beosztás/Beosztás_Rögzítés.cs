@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;

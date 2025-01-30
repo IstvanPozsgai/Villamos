@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -294,7 +293,7 @@ namespace Villamos.Villamos_Ablakok
                 jelszó = "TóthKatalin";
 
                 szöveg = "SELECT * FROM Adatok ORDER BY eszköz";
-        
+
                 List<string> AdatokEszk = KézEszk.Lista_EszközNév(hely, jelszó, szöveg);
 
 
@@ -495,7 +494,7 @@ namespace Villamos.Villamos_Ablakok
 
                 szöveg += " ORDER BY eszköz";
 
-       
+
                 List<Adat_Eszköz> Adatok = KézEszk.Lista_Adatok(hely, jelszó, szöveg);
 
                 DataTable AdatTábla = new DataTable();
@@ -1002,7 +1001,7 @@ namespace Villamos.Villamos_Ablakok
                         string Eszköz = Ellen_Tábla.Rows[j].Cells[0].Value.ToString().Trim();
                         szöveg = $"SELECT * FROM Adatok WHERE eszköz='{Eszköz.Trim()}'";
                         //Betöltjük az egy eszközt és az adatai felhasználásával feltöltjük a épületbe, vagy a szerszámban
-             Adat_Eszköz           EszkAdat = KézEszk.Egy_Adat(hely, jelszó, szöveg);
+                        Adat_Eszköz EszkAdat = KézEszk.Egy_Adat(hely, jelszó, szöveg);
                         if (EszkAdat != null)
                         {
                             string Melyik_nyilvántartás = Ellen_Tábla.Rows[j].Cells[2].Value.ToString().Trim();

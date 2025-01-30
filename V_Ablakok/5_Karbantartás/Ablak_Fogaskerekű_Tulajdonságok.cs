@@ -7,10 +7,8 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
@@ -1049,14 +1047,14 @@ namespace Villamos
                 szöveg = "SELECT * FROM kmtáblaNapló";
                 List<Adat_T5C5_Kmadatok_Napló> AdatokNapló = KézT5C5Napló.Lista_Adat(hely, jelszó, szöveg);
                 long id = 1;
-                if (AdatokNapló.Count > 0) id =AdatokNapló.Max(a => a.ID) + 1;
+                if (AdatokNapló.Count > 0) id = AdatokNapló.Max(a => a.ID) + 1;
 
                 szöveg = "INSERT INTO kmtáblaNapló  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
                 szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
                 szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
                 szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
                 szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt, Módosító, Mikor) VALUES (";
-                szöveg +=  $"{id}, '" + Pályaszám.Text.Trim() + "', " + Jjavszám.Text.Trim() + ", " + KMUkm.Text.Trim() + ", '" + KMUdátum.Value.ToString("yyyy.MM.dd") + "', ";
+                szöveg += $"{id}, '" + Pályaszám.Text.Trim() + "', " + Jjavszám.Text.Trim() + ", " + KMUkm.Text.Trim() + ", '" + KMUdátum.Value.ToString("yyyy.MM.dd") + "', ";
                 szöveg += "'" + Vizsgfok_új.Text.Trim() + "', '" + Vizsgdátumk.Value.ToString("yyyy.MM.dd") + "', '" + Vizsgdátumv.Value.ToString("yyyy.MM.dd") + "', ";
                 szöveg += VizsgKm.Text.Trim() + ", " + HaviKm.Text.Trim() + ", " + Vizsg_sorszám_combo.Text.Trim() + ", '" + Utolsófelújításdátuma.Value.ToString("yyyy.MM.dd") + "', ";
                 szöveg += TEljesKmText.Text.Trim() + ", '" + CiklusrendCombo.Text.Trim() + "', '" + Üzemek.Text.Trim() + "', 0, '_', ";
@@ -1148,12 +1146,12 @@ namespace Villamos
                         szöveg = " UPDATE kmtábla SET ";
                         szöveg += " törölt=true  ";
                         szöveg += " WHERE id=" + Sorszám.Text.Trim();
-          
+
                         MyA.ABMódosítás(hely, jelszó, szöveg);
 
                         // naplózás
                         hely = $@"{Application.StartupPath}\Főmérnökség\Napló\" + "2021Kmnapló" + DateTime.Today.ToString("yyyy") + ".mdb";
-                        if (!Exists(hely))                               Adatbázis_Létrehozás.KmfutástáblaNapló(hely);
+                        if (!Exists(hely)) Adatbázis_Létrehozás.KmfutástáblaNapló(hely);
 
                         Kezelő_T5C5_Kmadatok_Napló KézT5C5Napló = new Kezelő_T5C5_Kmadatok_Napló();
                         szöveg = "SELECT * FROM kmtáblaNapló";
@@ -1166,7 +1164,7 @@ namespace Villamos
                         szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
                         szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
                         szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt, Módosító, Mikor) VALUES (";
-                        szöveg +=  $"{id}, '" + Pályaszám.Text.Trim() + "', " + Jjavszám.Text.Trim() + ", " + KMUkm.Text.Trim() + ", '" + KMUdátum.Value.ToString("yyyy.MM.dd") + "', ";
+                        szöveg += $"{id}, '" + Pályaszám.Text.Trim() + "', " + Jjavszám.Text.Trim() + ", " + KMUkm.Text.Trim() + ", '" + KMUdátum.Value.ToString("yyyy.MM.dd") + "', ";
                         szöveg += "'" + Vizsgfok_új.Text.Trim() + "', '" + Vizsgdátumk.Value.ToString("yyyy.MM.dd") + "', '" + Vizsgdátumv.Value.ToString("yyyy.MM.dd") + "', ";
                         szöveg += VizsgKm.Text.Trim() + ", " + HaviKm.Text.Trim() + ", " + Vizsg_sorszám_combo.Text.Trim() + ", '" + Utolsófelújításdátuma.Value.ToString("yyyy.MM.dd") + "', ";
                         szöveg += TEljesKmText.Text.Trim() + ", '" + CiklusrendCombo.Text.Trim() + "', '" + Üzemek.Text.Trim() + "', 0, '_', ";
