@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -12,6 +12,7 @@ namespace Villamos
     public partial class Ablak_Ciklus
     {
         readonly Kezelő_Ciklus Kéz = new Kezelő_Ciklus();
+
         List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
 
         public Ablak_Ciklus()
@@ -21,7 +22,7 @@ namespace Villamos
 
         private void Ablak_Ciklus_Load(object sender, EventArgs e)
         {
-            AdatLista();
+            Adatok = Kéz.Lista_Adatok();
             CiklusTípusfeltöltés();
             Jogosultságkiosztás();
         }
@@ -162,7 +163,7 @@ namespace Villamos
             try
             {
                 if (CiklusTípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva ciklus");
-                AdatLista();
+                Adatok = Kéz.Lista_Adatok();
 
                 List<Adat_Ciklus> AdatokSzűrt = (from a in Adatok
                                                  where a.Törölt == "0" && a.Típus == CiklusTípus.Text.Trim()
@@ -332,23 +333,7 @@ namespace Villamos
             }
         }
 
-        private void AdatLista()
-        {
-            try
-            {
-                Adatok.Clear();
-                Adatok = Kéz.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+
 
         private void CsoportosMásolás_Click(object sender, EventArgs e)
         {
@@ -381,7 +366,7 @@ namespace Villamos
                 }
                 Kéz.Rögzítés(ADATGy);
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                AdatLista();
+                Adatok = Kéz.Lista_Adatok();
                 CiklusTípusfeltöltés();
                 CiklusTípus.Text = ÚjCiklus.Text.Trim();
                 ÚjCiklus.Text = "";

@@ -61,7 +61,13 @@ namespace Villamos
                 if (fájl.Contains("Jármű_Takarítás.mdb")) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
                 if (fájl.Contains("Jármű.mdb")) Adatbázis_Létrehozás.Osztálytábla(hely);
                 if (fájl.Contains(@"Főmérnökség\Adatok\kiegészítő.mdb")) Adatbázis_Létrehozás.Kieg_Főmérnökség(hely);
+                //      if (fájl.Contains(@"Főmérnökség\Adatok\belépés.mdb")) Adatbázis_Létrehozás Nincs tábla létrehozása
+                //      if (fájl.Contains(@"Főmérnökség\Adatok\belépés.mdb")) Adatbázis_Létrehozás Nincs tábla létrehozása telephelyi sincs
+                //    if (fájl.Contains(@"villamos\villamos.mdb")) Adatbázis_Létrehozás.Villamostábla(hely); tisztázandó, hogy melyik
+                //    if (fájl.Contains(@"Főmérnökség\Adatok\villamos.mdb")) Adatbázis_Létrehozás.Villamostábla(hely); tisztázandó, hogy melyik
 
+
+                //if (fájl.Contains("")) Adatbázis_Létrehozás.Osztálytábla(hely);
                 //if (fájl.Contains("")) Adatbázis_Létrehozás.Osztálytábla(hely);
 
 

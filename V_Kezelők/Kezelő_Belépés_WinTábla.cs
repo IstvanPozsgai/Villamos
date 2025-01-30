@@ -9,39 +9,8 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Belépés_WinTábla
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb".Ellenőrzés();
         readonly string jelszó = "forgalmiutasítás";
-
-        public List<Adat_Belépés_WinTábla> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Belépés_WinTábla> Adatok = new List<Adat_Belépés_WinTábla>();
-            Adat_Belépés_WinTábla Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Belépés_WinTábla(
-                                    rekord["név"].ToStrTrim(),
-                                    rekord["telephely"].ToStrTrim(),
-                                    rekord["WinUser"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Belépés_WinTábla> Lista_Adatok()
         {

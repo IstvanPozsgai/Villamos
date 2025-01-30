@@ -34,7 +34,7 @@ namespace Villamos.Villamos_Ablakok
                 szöveg += Text3.Text.Trim() + "\r\n";
                 Választott = szöveg;
 
-                if (Változás != null) Változás();
+                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {

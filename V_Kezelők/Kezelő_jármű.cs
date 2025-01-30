@@ -83,8 +83,6 @@ namespace Villamos.Kezelők
             return list;
         }
 
-
-
         public List<string> List_Jármű_Telephely(string hely, string jelszó, string szöveg)
         {
             List<string> list = new List<string>();
@@ -323,8 +321,8 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű> Lista_Adatok(string telephely)
         {
             string szöveg = "SELECT * FROM állománytábla order by  azonosító";
-            string hely = $@"{Application.StartupPath}\{telephely}\Adatok\villamos\villamos.mdb";
-            if (telephely == "Főmérnökség") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
+            string hely = $@"{Application.StartupPath}\{telephely}\Adatok\villamos\villamos.mdb".Ellenőrzés();
+            if (telephely == "Főmérnökség") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb".Ellenőrzés();
 
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
             Adat_Jármű Adat;
@@ -370,15 +368,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
-
-        /// <summary>
-        /// Beolvassuk a feltételeknek megfelelő pályaszámokat egy listába
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="szöveg"></param>
-        /// <returns></returns>
         public List<string> Lista_Pályaszámok(string hely, string jelszó, string szöveg)
         {
             List<string> Adatok = new List<string>();
