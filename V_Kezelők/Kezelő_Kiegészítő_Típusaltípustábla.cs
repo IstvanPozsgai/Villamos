@@ -9,7 +9,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Típusaltípustábla
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb".Ellenőrzés();
         readonly string jelszó = "Mocó";
 
         public List<Adat_Kiegészítő_Típusaltípustábla> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -99,12 +99,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// sorszám
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Kiegészítő_Típusaltípustábla Adat)
         {
             try
@@ -123,13 +117,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        /// <summary>
-        /// altípus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Kiegészítő_Típusaltípustábla Adat)
         {
             try

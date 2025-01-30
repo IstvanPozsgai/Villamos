@@ -64,12 +64,6 @@ namespace Villamos.Kezelők
 
         }
 
-        /// <summary>
-        /// főkategória
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Kiegészítő_Főkategóriatábla Adat)
         {
             try
@@ -88,12 +82,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// sorszám
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Kiegészítő_Főkategóriatábla Adat)
         {
             try

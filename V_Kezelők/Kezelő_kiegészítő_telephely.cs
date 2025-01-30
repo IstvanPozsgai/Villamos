@@ -68,12 +68,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// telephelynév, sorszám
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_kiegészítő_telephely Adat)
         {
             try
@@ -95,12 +89,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// telephelynév, sorszám
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_kiegészítő_telephely Adat)
         {
             try
@@ -143,7 +131,6 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 
 

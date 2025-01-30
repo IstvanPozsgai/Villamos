@@ -11,8 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Telep_Kiegészítő_E3típus> Lista_Adatok(string hely)
+        public List<Adat_Telep_Kiegészítő_E3típus> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM E3típus order by típus";
             List<Adat_Telep_Kiegészítő_E3típus> Adatok = new List<Adat_Telep_Kiegészítő_E3típus>();
             Adat_Telep_Kiegészítő_E3típus Adat;
@@ -40,16 +41,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        /// <summary>
-        /// típus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Telep_Kiegészítő_E3típus Adat)
+        public void Törlés(string Telephely, Adat_Telep_Kiegészítő_E3típus Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"DELETE * FROM E3típus WHERE típus='{Adat.Típus}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -65,10 +61,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(string hely, Adat_Telep_Kiegészítő_E3típus Adat)
+        public void Rögzítés(string Telephely, Adat_Telep_Kiegészítő_E3típus Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"INSERT INTO E3típus ( típus ) VALUES ('{Adat.Típus}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

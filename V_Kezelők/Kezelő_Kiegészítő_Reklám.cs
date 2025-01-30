@@ -12,7 +12,6 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
 
-
         public List<Adat_Kiegészítő_Reklám> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM reklámtábla order by méret";
@@ -62,13 +61,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        /// <summary>
-        /// méret
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Kiegészítő_Reklám Adat)
         {
             try

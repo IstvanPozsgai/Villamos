@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Szolgálattelepei
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb".Ellenőrzés();
         readonly string jelszó = "Mocó";
 
         public List<Adat_Kiegészítő_Szolgálattelepei> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -102,12 +102,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// telephelynév
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Kiegészítő_Szolgálattelepei Adat)
         {
             try
@@ -130,12 +124,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// telephelynév, sorszám
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Kiegészítő_Szolgálattelepei Adat)
         {
             try

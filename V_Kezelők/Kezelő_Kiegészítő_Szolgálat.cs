@@ -75,7 +75,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public void Rögzítés(Adat_Kiegészítő_Szolgálat Adat)
         {
             try
@@ -96,12 +95,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// szolgálatnév
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Kiegészítő_Szolgálat Adat)
         {
             try
@@ -120,12 +113,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Kiegészítő_Szolgálat Adat)
         {
             try

@@ -61,12 +61,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// fortevonal
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Kiegészítő_Forte_Vonal Adat)
         {
             try
@@ -85,5 +79,4 @@ namespace Villamos.Kezelők
             }
         }
     }
-
 }

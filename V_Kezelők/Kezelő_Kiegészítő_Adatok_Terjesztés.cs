@@ -44,12 +44,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Kiegészítő_Adatok_Terjesztés Adat)
         {
             try

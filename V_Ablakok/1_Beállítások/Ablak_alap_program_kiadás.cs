@@ -1874,9 +1874,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
 
-                List<Adat_Telep_Kiegészítő_E3típus> Adatok = KézE3Típus.Lista_Adatok(hely);
+                List<Adat_Telep_Kiegészítő_E3típus> Adatok = KézE3Típus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 ListE3Típus.Items.Clear();
                 foreach (Adat_Telep_Kiegészítő_E3típus Elem in Adatok)
                     ListE3Típus.Items.Add(Elem.Típus);
@@ -1920,9 +1919,8 @@ namespace Villamos
 
                 Adat_Telep_Kiegészítő_E3típus ADAT = new Adat_Telep_Kiegészítő_E3típus(CmbE3típus.Text.Trim());
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
 
-                KézE3Típus.Törlés(hely, ADAT);
+                KézE3Típus.Törlés(Cmbtelephely.Text.Trim(), ADAT);
                 ListE3Típusfeltöltés();
                 MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1945,8 +1943,8 @@ namespace Villamos
                 if (ListE3Típus.Items.Contains(CmbE3típus.Text.Trim())) throw new HibásBevittAdat("Van már ilyen a listában.");
 
                 Adat_Telep_Kiegészítő_E3típus ADAT = new Adat_Telep_Kiegészítő_E3típus(CmbE3típus.Text.Trim());
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                KézE3Típus.Rögzítés(hely, ADAT);
+
+                KézE3Típus.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                 ListE3Típusfeltöltés();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1968,8 +1966,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Telep_Kiegészítő_Takarítástípus> Adatok = KézTakarítástípus.Lista_Adatok(hely);
+                List<Adat_Telep_Kiegészítő_Takarítástípus> Adatok = KézTakarítástípus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 ListTAK.Items.Clear();
                 foreach (Adat_Telep_Kiegészítő_Takarítástípus Elem in Adatok)
                     ListTAK.Items.Add(Elem.Típus);
@@ -2018,9 +2015,7 @@ namespace Villamos
 
                 Adat_Telep_Kiegészítő_Takarítástípus ADAT = new Adat_Telep_Kiegészítő_Takarítástípus(CmbTakTípus.Text.Trim());
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
-                KézTakarítástípus.Törlés(hely, ADAT);
+                KézTakarítástípus.Törlés(Cmbtelephely.Text.Trim(), ADAT);
                 ListTAKTípusfeltöltés();
                 MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -2044,9 +2039,7 @@ namespace Villamos
 
                 Adat_Telep_Kiegészítő_Takarítástípus ADAT = new Adat_Telep_Kiegészítő_Takarítástípus(CmbTakTípus.Text.Trim());
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
-                KézTakarítástípus.Rögzítés(hely, ADAT);
+                KézTakarítástípus.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                 ListTAKTípusfeltöltés();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
