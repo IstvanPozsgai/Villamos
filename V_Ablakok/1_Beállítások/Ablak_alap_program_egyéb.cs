@@ -71,7 +71,6 @@ namespace Villamos
         {
             try
             {
-
                 Cmbtelephely.Items.Clear();
                 List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
                 foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
@@ -1514,9 +1513,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
-
                 List<Adat_Jármű_Takarítás_Mátrix> AdatokJárműtakMátr = KétJárműtakMátr.Lista_Adat();
 
                 Mátrix_tábla.Rows.Clear();
@@ -1626,10 +1622,6 @@ namespace Villamos
             try
             {
                 if ((Mátrix_fajta.Text.Trim() == "") || (Mátrix_fajtamásik.Text.Trim() == "")) return;
-
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                if (!Exists(hely)) return;
 
                 List<Adat_Jármű_Takarítás_Mátrix> Adatok = KétJárműtakMátr.Lista_Adat();
 

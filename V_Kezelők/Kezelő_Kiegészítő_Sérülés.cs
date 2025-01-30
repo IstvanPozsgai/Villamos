@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Sérülés
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő.mdb".Ellenőrzés();
         readonly string jelszó = "Mocó";
         public List<Adat_Kiegészítő_Sérülés> Lista_Adatok()
         {
@@ -79,12 +79,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Kiegészítő_Sérülés Adat)
         {
             try
@@ -113,12 +107,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Kiegészítő_Sérülés Adat)
         {
             try
@@ -137,7 +125,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
-
 }

@@ -9,7 +9,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű_Takarítás_Mátrix
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb".Ellenőrzés();
         readonly string jelszó = "seprűéslapát";
 
         public List<Adat_Jármű_Takarítás_Mátrix> Lista_Adat(string hely, string jelszó, string szöveg)
@@ -88,12 +88,6 @@ namespace Villamos.Kezelők
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
-        /// <summary>
-        /// fajta, fajtamásik
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Jármű_Takarítás_Mátrix Adat)
         {
             try

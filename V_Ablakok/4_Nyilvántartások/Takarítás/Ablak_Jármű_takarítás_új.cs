@@ -1949,7 +1949,7 @@ namespace Villamos
                 if (AdatJármű == null) MessageBox.Show("A telephelyen nincs ilyen jármű!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 Átrögzít(JK_Kategória.Text.Trim());
-                MátrixLista();
+                AdatokMátrix = KézMátrix.Lista_Adat();
                 List<Adat_Jármű_Takarítás_Mátrix> AdatokMátrix1 = (from a in AdatokMátrix
                                                                    where a.Igazság == true
                                                                    && a.Fajta == JK_Kategória.Text.Trim()
@@ -6091,26 +6091,6 @@ namespace Villamos
             }
         }
 
-        private void MátrixLista()
-        {
-            try
-            {
-                AdatokMátrix.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM mátrix";
-                AdatokMátrix = KézMátrix.Lista_Adat(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void TakarításokLista()
         {
