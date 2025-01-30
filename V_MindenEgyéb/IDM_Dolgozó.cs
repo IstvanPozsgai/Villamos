@@ -66,12 +66,9 @@ namespace Villamos.V_MindenEgyéb
 
 
                 int státus;
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                jelszó = "egérpad";
 
-                szöveg = $"SELECT * FROM dolgozóktábla";
                 Kezelő_Behajtás_Dolgozótábla Kéz_behajt = new Kezelő_Behajtás_Dolgozótábla();
-                List<Adat_Behajtás_Dolgozótábla> Adatok_behajt = Kéz_behajt.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Behajtás_Dolgozótábla> Adatok_behajt = Kéz_behajt.Lista_Adatok();
                 int sor = 2;
 
                 while (MyE.Beolvas($"A{sor}").Trim() != "_")

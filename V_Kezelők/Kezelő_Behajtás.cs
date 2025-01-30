@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Behajtás_Alap
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".Ellenőrzés();
         readonly string jelszó = "egérpad";
 
         public List<Adat_Behajtás_Alap> Lista_Adatok()
@@ -113,42 +113,4 @@ namespace Villamos.Kezelők
             return válasz;
         }
     }
-
-
-
-
-
-
-    public class Kezelő_Behajtás_Szolgálati
-    {
-        public List<Adat_Behajtás_Szolgálati> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Behajtás_Szolgálati> Adatok = new List<Adat_Behajtás_Szolgálati>();
-            Adat_Behajtás_Szolgálati Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Behajtás_Szolgálati(
-                                        rekord["ID"].ToÉrt_Int(),
-                                        rekord["Szolgálatihely"].ToStrTrim());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
-
 }

@@ -2,13 +2,12 @@
 using System.Data.OleDb;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Behajtás_Jogosultság
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".Ellenőrzés();
         readonly string jelszó = "egérpad";
         public List<Adat_Behajtás_Jogosultság> Lista_Adatok()
         {

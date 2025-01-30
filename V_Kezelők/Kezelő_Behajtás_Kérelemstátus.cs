@@ -7,7 +7,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Behajtás_Kérelemstátus
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".Ellenőrzés();
         readonly string jelszó = "egérpad";
 
 
@@ -41,31 +41,5 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_Behajtás_Kérelemsátus Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Behajtás_Kérelemsátus Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_Behajtás_Kérelemsátus(
-                                        rekord["ID"].ToÉrt_Int(),
-                                        rekord["Státus"].ToStrTrim());
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
     }
-
 }

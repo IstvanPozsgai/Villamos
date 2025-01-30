@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Kérelemoka
     {
         readonly string jelszó = "egérpad";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".Ellenőrzés();
 
         public List<Adat_Behajtás_Kérelemoka> Lista_Adatok()
         {
@@ -78,7 +78,6 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private int Sorszám()
         {

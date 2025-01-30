@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.V_Kezelők;
 using Villamos.Kezelők;
+using Villamos.V_Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyE = Villamos.Module_Excel;
@@ -29,6 +29,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         readonly Kezelő_Jármű_Takarítás_Ár KézTakÁr = new Kezelő_Jármű_Takarítás_Ár();
         readonly Kezelő_Jármű_Takarítás_J1 KézJ1 = new Kezelő_Jármű_Takarítás_J1();
         readonly Kezelő_Jármű_Takarítás_Teljesítés KézTelj = new Kezelő_Jármű_Takarítás_Teljesítés();
+        readonly Kezelő_Behajtás_Engedélyezés KézBehEng = new Kezelő_Behajtás_Engedélyezés();
 
 
         List<Adat_Jármű_Takarítás_Teljesítés> AdatokTelj = new List<Adat_Jármű_Takarítás_Teljesítés>();
@@ -103,14 +104,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         {
             try
             {
-                Kezelő_Behajtás_Engedélyezés KézBehEng = new Kezelő_Behajtás_Engedélyezés();
+
                 List<Adat_Behajtás_Engedélyezés> AdatokBehEng = new List<Adat_Behajtás_Engedélyezés>();
 
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszó = "egérpad";
-                string szöveg = "SELECT * FROM  Engedélyezés Order BY ID ";
-                if (!Exists(hely)) return;
-                AdatokBehEng = KézBehEng.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokBehEng = KézBehEng.Lista_Adatok();
                 Adat_Behajtás_Engedélyezés Elem = AdatokBehEng.Where(a => a.Telephely == Telephely).FirstOrDefault();
                 if (Elem != null)
                 {

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -58,9 +57,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Behajtási_alap.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Alap(hely);
-
                 Telephelyekfeltöltése();
                 Szereplők_lista();
                 Jogosultságkiosztás();
@@ -112,30 +108,7 @@ namespace Villamos
 
                 KérelemDátuma.Value = DateTime.Today;
 
-                // megnézzük, hogy létezik-e a könyvtár
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}";
-                if (!Directory.Exists(hely))
-                    // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
-                    Directory.CreateDirectory(hely);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\PDF";
-                if (!Directory.Exists(hely))
-                    // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
-                    Directory.CreateDirectory(hely);
-
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Behajtási_alap.mdb";
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Behajtási_Alap(hely);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Behajtási_Adatok(hely);
-
-                // naplófájl
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely);
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\PDF".Ellenőrzés();
 
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
                 Engedélyek_Listázása();
@@ -531,9 +504,7 @@ namespace Villamos
                     CmbKérelemSzolgálati.Text = rekord.Szervezetiegység.Trim();
                 }
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-
-                List<Adat_Behajtás_Behajtási> AdatokAlapÖ = Kéz_Behajtás.Lista_Adatok(hely);
+                List<Adat_Behajtás_Behajtási> AdatokAlapÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                 List<Adat_Behajtás_Behajtási> AdatokAlap = (from a in AdatokAlapÖ
                                                             where a.HRazonosító == TxtkérelemHR.Text.Trim()
                                                             select a).ToList();
@@ -575,8 +546,7 @@ namespace Villamos
             {
                 Kérelemürítés();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(hely);
+                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                 Adat_Behajtás_Behajtási rekord = (from a in Adatok_Behajtás
                                                   where a.Sorszám == TxtKérelemID.Text.Trim()
                                                   select a).FirstOrDefault();
@@ -674,9 +644,6 @@ namespace Villamos
 
                 if (TxtKérelemMegjegyzés.Text.Trim() == "") TxtKérelemMegjegyzés.Text = "_";
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-
-                string szöveg = $"SELECT * FROM alapadatok WHERE sorszám='{TxtKérelemID.Text.Trim()}'";
                 string ideigrendszám;
 
                 // ha szóközzel van elválasztva akkor javítja és nagybetűsít
@@ -696,7 +663,7 @@ namespace Villamos
                         TxtKérelemFrsz.Text = ideigrendszám;
                     }
                 }
-                List<Adat_Behajtás_Behajtási> Adatok_Behajtás_Alap = Kéz_Behajtás.Lista_Adatok(hely);
+                List<Adat_Behajtás_Behajtási> Adatok_Behajtás_Alap = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                 Adat_Behajtás_Behajtási rekord = (from a in Adatok_Behajtás_Alap
                                                   where a.Sorszám == TxtKérelemID.Text.Trim()
                                                   select a).FirstOrDefault();
@@ -744,7 +711,7 @@ namespace Villamos
                                             TxtKérrelemPDF.Text.Trim(),
                                             CmbkérelemOka.Text.Trim(),
                                             DatÉrvényes.Value);
-                    Kéz_Behajtás.Módosítás(hely, ADAT);
+                    Kéz_Behajtás.Módosítás(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADAT);
                     // ********************
                     // naplófájl rögzítés
                     // ********************
@@ -786,8 +753,7 @@ namespace Villamos
                                     Program.PostásNév.Trim(),
                                     DateTime.Now,
                                     DatÉrvényes.Value);
-                    string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-                    KézNapló.Rögzítés(helynapló, ADATNapló);
+                    KézNapló.Rögzítés(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
                 }
 
                 else
@@ -825,7 +791,7 @@ namespace Villamos
                                                        TxtKérrelemPDF.Text.Trim(),
                                                        CmbkérelemOka.Text.Trim(),
                                                        DatÉrvényes.Value);
-                    Kéz_Behajtás.Rögzítés(hely, ADAT);
+                    Kéz_Behajtás.Rögzítés(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADAT);
 
                     Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(
                                                        TxtKérelemID.Text.Trim(),
@@ -868,8 +834,7 @@ namespace Villamos
                     // ********************
                     // naplófájl rögzítés
                     // ********************
-                    string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-                    KézNapló.Rögzítés(helynapló, ADATNapló);
+                    KézNapló.Rögzítés(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
                 }
                 Kérelemújraírás();
                 MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -907,9 +872,8 @@ namespace Villamos
 
                 long szám;
                 string betű = TxtadminBetű.Text.Trim();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
 
-                List<Adat_Behajtás_Behajtási> Adatok = Kéz_Behajtás.Lista_Adatok(hely);
+                List<Adat_Behajtás_Behajtási> Adatok = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                 Adat_Behajtás_Behajtási rekord = (from a in Adatok
                                                   orderby a.Sorszám descending
                                                   select a).FirstOrDefault();
@@ -1513,13 +1477,11 @@ namespace Villamos
 
 
                         // Módosítjuk a kérelem státusát
-                        string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
                         Adat_Behajtás_Behajtási ADAT = new Adat_Behajtás_Behajtási(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 3);
-                        Kéz_Behajtás.Módosítás_Státus(hely, ADAT);
+                        Kéz_Behajtás.Módosítás_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADAT);
 
-                        string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
                         Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 3, 0, Program.PostásNév.Trim(), DateTime.Now);
-                        KézNapló.Rögzítés_Státus(helynapló, ADATNapló);
+                        KézNapló.Rögzítés_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
 
                         // ha a negyedikhez érünk akkor nyomtatunk egyet.
                         if (j == 5)
@@ -1761,10 +1723,8 @@ namespace Villamos
 
                 int k = 0;
                 int l = 0;
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
                 string eredmény;
-                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(hely);
+                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
 
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
@@ -1871,18 +1831,16 @@ namespace Villamos
             {
                 // elküldjük átvételre
                 if (TáblaLista.SelectedRows.Count < 1) MessageBox.Show("Nincsen kijelölve sor!");
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
 
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
                     Holtart.Lép();
                     // Módosítjuk a kérelem státusát
                     Adat_Behajtás_Behajtási ADAT = new Adat_Behajtás_Behajtási(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 4);
-                    Kéz_Behajtás.Módosítás_Státus(hely, ADAT);
+                    Kéz_Behajtás.Módosítás_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADAT);
 
                     Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 4, 0, Program.PostásNév.Trim(), DateTime.Now);
-                    KézNapló.Rögzítés_Státus(helynapló, ADATNapló);
+                    KézNapló.Rögzítés_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
                 }
                 LISTAlista();
 
@@ -1908,18 +1866,15 @@ namespace Villamos
                 // kész
                 if (TáblaLista.SelectedRows.Count < 1) MessageBox.Show("Nincsen kijelölve sor!");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
                     Holtart.Lép();
                     // Módosítjuk a kérelem státusát
                     Adat_Behajtás_Behajtási ADAT = new Adat_Behajtás_Behajtási(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 5);
-                    Kéz_Behajtás.Módosítás_Státus(hely, ADAT);
+                    Kéz_Behajtás.Módosítás_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADAT);
 
                     Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 5, 0, Program.PostásNév.Trim(), DateTime.Now);
-                    KézNapló.Rögzítés_Státus(helynapló, ADATNapló);
+                    KézNapló.Rögzítés_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
                 }
                 LISTAlista();
 
@@ -1945,19 +1900,15 @@ namespace Villamos
             {
                 // törölt
                 if (TáblaLista.SelectedRows.Count < 1) MessageBox.Show("Nincsen kijelölve sor!");
-
-                string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
                     Holtart.Lép();
                     // Módosítjuk a kérelem státusát
                     Adat_Behajtás_Behajtási ADAT = new Adat_Behajtás_Behajtási(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 8);
-                    Kéz_Behajtás.Módosítás_Státus(hely, ADAT);
+                    Kéz_Behajtás.Módosítás_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADAT);
 
                     Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 8, 0, Program.PostásNév.Trim(), DateTime.Now);
-                    KézNapló.Rögzítés_Státus(helynapló, ADATNapló);
+                    KézNapló.Rögzítés_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
                 }
                 LISTAlista();
 
@@ -2019,8 +1970,8 @@ namespace Villamos
                 if (volt == null) return;
 
                 // Kilistázza a képernyőre a rögzített adatokat
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(hely);
+
+                List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                 List<Adat_Behajtás_Behajtási> Adatok = (from a in AdatokÖ
                                                         where (int)a.GetType().GetProperty($"{Cmbtelephely.Text.Trim()}_engedély").GetValue(a) == 1
                                                         select a).ToList();
@@ -2153,9 +2104,6 @@ namespace Villamos
 
                 if (Státus != null && Státus.Indoklás == 1 && TxtGondnokMegjegyzés.Text.Trim() == "") throw new HibásBevittAdat("A Indoklás/Megjegyzés mezőt ki kell tölteni.");
 
-                string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-
                 int HUE = 0;
                 int SZÁE = 0;
                 int ZUE = 0;
@@ -2176,10 +2124,10 @@ namespace Villamos
 
                     string SorSzám = Táblagondnok.Rows[i].Cells[0].Value.ToStrTrim();
 
-                    Kéz_Behajtás.Módosítás_Gondnok(hely, Cmbtelephely.Text.Trim(), int.Parse(CmbGondnokEngedély.Text.Substring(0, 1)), TxtGondnokMegjegyzés.Text.Trim(), SorSzám);
-                    KézNapló.Rögzítés_Gondnok(helynapló, Cmbtelephely.Text.Trim(), int.Parse(CmbGondnokEngedély.Text.Substring(0, 1)), TxtGondnokMegjegyzés.Text.Trim(), SorSzám);
+                    Kéz_Behajtás.Módosítás_Gondnok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), Cmbtelephely.Text.Trim(), int.Parse(CmbGondnokEngedély.Text.Substring(0, 1)), TxtGondnokMegjegyzés.Text.Trim(), SorSzám);
+                    KézNapló.Rögzítés_Gondnok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), Cmbtelephely.Text.Trim(), int.Parse(CmbGondnokEngedély.Text.Substring(0, 1)), TxtGondnokMegjegyzés.Text.Trim(), SorSzám);
 
-                    List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(hely);
+                    List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                     Adat_Behajtás_Behajtási rekord = (from a in AdatokÖ
                                                       where a.Sorszám == SorSzám
                                                       select a).FirstOrDefault();
@@ -2216,22 +2164,22 @@ namespace Villamos
                         {
                             // ha engedély volt
                             IE = 1;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "I_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "I_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "I_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "I_engedély", 1, SorSzám);
                         }
                         else if ((HUE == 3 | HUE == 0) & (SZÁE == 3 | SZÁE == 0) & (ZUE == 3 | ZUE == 0))
                         {
                             // ha elutasították mindenhol
                             IE = 3;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "I_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "I_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "I_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "I_engedély", 1, SorSzám);
                         }
                         else
                         {
                             // ha valahol engedélyezték
                             IE = 1;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "I_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "I_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "I_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "I_engedély", 1, SorSzám);
                         }
                     }
 
@@ -2248,22 +2196,22 @@ namespace Villamos
                         {
                             // ha engedély volt
                             IIE = 1;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "II_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "II_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "II_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "II_engedély", 1, SorSzám);
                         }
                         else if ((AFE == 3 | AFE == 0) & (BAE == 3 | BAE == 0) & (FOE == 3 | FOE == 0) & (SZIE == 3 | SZIE == 0))
                         {
                             // ha elutasították mindenhol
                             IIE = 3;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "II_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "II_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "II_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "II_engedély", 1, SorSzám);
                         }
                         else
                         {
                             // ha valahol engedélyezték
                             IIE = 1;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "II_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "II_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "II_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "II_engedély", 1, SorSzám);
                         }
                     }
                     //
@@ -2281,22 +2229,22 @@ namespace Villamos
                         {
                             // ha engedély volt
                             IIIE = 1;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "III_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "III_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "III_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "III_engedély", 1, SorSzám);
                         }
                         else if ((KEE == 3 | KEE == 0) & (BUE == 3 | BUE == 0) & (FEE == 3 | FEE == 0))
                         {
                             // ha elutasították mindenhol
                             IIIE = 3;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "III_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "III_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "III_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "III_engedély", 1, SorSzám);
                         }
                         else
                         {
                             // ha valahol engedélyezték
                             IIIE = 1;
-                            Kéz_Behajtás.Módosítás_Szakszolgálat(hely, "III_engedély", 1, SorSzám);
-                            KézNapló.Rögzítés_Szakszolgálat(helynapló, "III_engedély", 1, SorSzám);
+                            Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "III_engedély", 1, SorSzám);
+                            KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), "III_engedély", 1, SorSzám);
                         }
                     }
                 }
@@ -2338,7 +2286,6 @@ namespace Villamos
 
             string eredmény = Cmbtelephely.Text;
             // Kilistázza a képernyőre a rögzített adatokat
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
 
             Táblaszaksz.Rows.Clear();
             Táblaszaksz.Columns.Clear();
@@ -2392,7 +2339,7 @@ namespace Villamos
 
             Cmbtelephely.Text = eredmény;
 
-            List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(hely);
+            List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
             List<Adat_Behajtás_Behajtási> Adatok = (from a in AdatokÖ
                                                     where (int)a.GetType().GetProperty($"{Cmbtelephely.Text.Trim().Split(' ')[0]}_engedély").GetValue(a) == 1
                                                     orderby a.Sorszám
@@ -2513,8 +2460,6 @@ namespace Villamos
             {
                 if (CmbSzakszlista.Text.Trim() == "") return;
                 if (Táblaszaksz.SelectedRows.Count < 1) return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
 
                 int HUE = 0;
                 int SZÁE = 0;
@@ -2538,10 +2483,10 @@ namespace Villamos
                     string[] darabol = Cmbtelephely.Text.Trim().Split(' ');
                     string sorszám = Táblaszaksz.Rows[i].Cells[0].Value.ToStrTrim();
 
-                    Kéz_Behajtás.Módosítás_Szakszolgálat(hely, $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
-                    KézNapló.Rögzítés_Szakszolgálat(helynapló, $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
+                    Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
+                    KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
 
-                    List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(hely);
+                    List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                     Adat_Behajtás_Behajtási rekord = (from a in AdatokÖ
                                                       where a.Sorszám == sorszám
                                                       select a).FirstOrDefault();
@@ -2579,18 +2524,18 @@ namespace Villamos
                                 if (IE == 2 || IIE == 2 || IIIE == 2)
                                 {
                                     Adat_Behajtás_Behajtási ADAT = new Adat_Behajtás_Behajtási(sorszám, 2);
-                                    Kéz_Behajtás.Módosítás_Státus(hely, ADAT);
+                                    Kéz_Behajtás.Módosítás_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADAT);
                                     Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(sorszám, 2, 0, Program.PostásNév.Trim(), DateTime.Now);
-                                    KézNapló.Rögzítés_Státus(helynapló, ADATNapló);
+                                    KézNapló.Rögzítés_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
                                 }
 
                                 // ha mindenütt elutasították
                                 if (IE == 0 && IIE == 0 && IIIE == 3 || IE == 0 && IIE == 3 && IIIE == 0 || IE == 3 && IIE == 0 && IIIE == 0)
                                 {
                                     Adat_Behajtás_Behajtási ADAT = new Adat_Behajtás_Behajtási(sorszám, 9);
-                                    Kéz_Behajtás.Módosítás_Státus(hely, ADAT);
+                                    Kéz_Behajtás.Módosítás_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADAT);
                                     Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(sorszám, 9, 0, Program.PostásNév.Trim(), DateTime.Now);
-                                    KézNapló.Rögzítés_Státus(helynapló, ADATNapló);
+                                    KézNapló.Rögzítés_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
                                 }
                             }
                         }
@@ -2668,8 +2613,6 @@ namespace Villamos
                 // ha van kijelölt sor
                 if (Táblaszaksz.SelectedRows.Count > 0)
                 {
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                    string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
 
                     for (int j = 0; j < Táblaszaksz.SelectedRows.Count; j++)
                     {
@@ -2680,8 +2623,8 @@ namespace Villamos
                             {
                                 string telephely = Táblaszaksz.Columns[i].HeaderText.Trim();
                                 int engedély = int.Parse(Táblaszaksz.SelectedRows[j].Cells[i].Value.ToString());
-                                Kéz_Behajtás.Módosítás_Gondnok(hely, telephely, engedély, "Szakszolgálat-vezető felülbírálta", SorSzám);
-                                KézNapló.Rögzítés_Gondnok(helynapló, telephely, engedély, "Szakszolgálat-vezető felülbírálta", SorSzám);
+                                Kéz_Behajtás.Módosítás_Gondnok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), telephely, engedély, "Szakszolgálat-vezető felülbírálta", SorSzám);
+                                KézNapló.Rögzítés_Gondnok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), telephely, engedély, "Szakszolgálat-vezető felülbírálta", SorSzám);
                             }
                         }
                     }
@@ -3093,9 +3036,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}_napló.mdb";
-
-                List<Adat_Behajtás_Behajtási_Napló> AdatokÖ = KézNapló.Lista_Adatok(hely);
+                List<Adat_Behajtás_Behajtási_Napló> AdatokÖ = KézNapló.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                 List<Adat_Behajtás_Behajtási_Napló> Adatok;
                 if (TextNaplósorszám.Text.Trim() != "")
                     Adatok = (from a in AdatokÖ
@@ -3199,8 +3140,7 @@ namespace Villamos
             try
             {
                 Adatok_Behajtás.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\{TxtAmindFájl.Text.Trim()}.mdb";
-                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(hely);
+                Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {

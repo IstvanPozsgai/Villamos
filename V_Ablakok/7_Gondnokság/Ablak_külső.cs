@@ -86,13 +86,7 @@ namespace Villamos
                 CÉG_ürít();
                 Engedély_lejárat();
 
-
-                string helyi = Application.StartupPath + @"\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszói = "egérpad";
-
-                string szöveg = "SELECT * FROM Engedélyezés";
-                Adatok_Behajtás_Engedély = Kéz_Behajtás_Engedély.Lista_Adatok(helyi, jelszói, szöveg);
-
+                Adatok_Behajtás_Engedély = Kéz_Behajtás_Engedély.Lista_Adatok();
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
@@ -930,10 +924,8 @@ namespace Villamos
                 string címzett = "";
 
                 // Főmérnöki email cím
-                string helyi = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszói = "egérpad";
-                string szöveg = "SELECT * FROM  Engedélyezés";
-                Adatok_Behajtás_Engedély = Kéz_Behajtás_Engedély.Lista_Adatok(helyi, jelszói, szöveg);
+
+                Adatok_Behajtás_Engedély = Kéz_Behajtás_Engedély.Lista_Adatok();
                 címzett = Adatok_Behajtás_Engedély
                     .Where(a => a.Gondnok == true && a.Szakszolgálat == true)
                     .Select(a => a.Emailcím)
@@ -982,10 +974,8 @@ namespace Villamos
                 string címzett = "";
 
                 // Főmérnöki email cím
-                string helyi = Application.StartupPath + @"\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszói = "egérpad";
-                string szöveg = "SELECT * FROM Engedélyezés";
-                Adatok_Behajtás_Engedély = Kéz_Behajtás_Engedély.Lista_Adatok(helyi, jelszói, szöveg);
+
+                Adatok_Behajtás_Engedély = Kéz_Behajtás_Engedély.Lista_Adatok();
                 string szakszolgálatszöveg = (from a in Adatok_Behajtás_Engedély
                                               where a.Telephely.Trim() == Telephely_választott.Trim()
                                               select a.Szakszolgálatszöveg).FirstOrDefault();
@@ -1867,16 +1857,12 @@ namespace Villamos
         {
             try
             {
-                string helyi = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszói = "egérpad";
-                string szöveg = "SELECT * FROM Engedélyezés WHERE gondnok=true AND Szakszolgálat=false  Order BY ID ";
 
                 Telephely_Tábla.Rows.Clear();
                 Telephely_Tábla.Refresh();
                 Telephely_Tábla.Visible = false;
 
-                Kezelő_Behajtás_Engedélyezés Kéz = new Kezelő_Behajtás_Engedélyezés();
-                List<Adat_Behajtás_Engedélyezés> Adatok = Kéz.Lista_Adatok(helyi, jelszói, szöveg);
+                List<Adat_Behajtás_Engedélyezés> Adatok = Kéz_Behajtás_Engedély.Lista_Adatok().Where(a => a.Gondnok == true && a.Szakszolgálat == false).ToList();
 
                 foreach (Adat_Behajtás_Engedélyezés rekord in Adatok)
                 {

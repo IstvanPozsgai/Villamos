@@ -11,71 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "forgalmirendszám";
 
-        public List<Adat_Behajtás_Behajtási> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public List<Adat_Behajtás_Behajtási> Lista_Adatok(string Könyvtár, string Fájl)
         {
-            List<Adat_Behajtás_Behajtási> Adatok = new List<Adat_Behajtás_Behajtási>();
-            Adat_Behajtás_Behajtási Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Behajtás_Behajtási(
-                                        rekord["Sorszám"].ToStrTrim(),
-                                        rekord["Szolgálatihely"].ToStrTrim(),
-                                        rekord["HRazonosító"].ToStrTrim(),
-                                        rekord["Név"].ToStrTrim(),
-                                        rekord["Rendszám"].ToStrTrim(),
-                                        rekord["Angyalföld_engedély"].ToÉrt_Int(),
-                                        rekord["Angyalföld_megjegyzés"].ToStrTrim(),
-                                        rekord["Baross_engedély"].ToÉrt_Int(),
-                                        rekord["Baross_megjegyzés"].ToStrTrim(),
-                                        rekord["Budafok_engedély"].ToÉrt_Int(),
-                                        rekord["Budafok_megjegyzés"].ToStrTrim(),
-                                        rekord["Ferencváros_engedély"].ToÉrt_Int(),
-                                        rekord["Ferencváros_megjegyzés"].ToStrTrim(),
-                                        rekord["Fogaskerekű_engedély"].ToÉrt_Int(),
-                                        rekord["Fogaskerekű_megjegyzés"].ToStrTrim(),
-                                        rekord["Hungária_engedély"].ToÉrt_Int(),
-                                        rekord["Hungária_megjegyzés"].ToStrTrim(),
-                                        rekord["Kelenföld_engedély"].ToÉrt_Int(),
-                                        rekord["Kelenföld_megjegyzés"].ToStrTrim(),
-                                        rekord["Száva_engedély"].ToÉrt_Int(),
-                                        rekord["Száva_megjegyzés"].ToStrTrim(),
-                                        rekord["Szépilona_engedély"].ToÉrt_Int(),
-                                        rekord["Szépilona_megjegyzés"].ToStrTrim(),
-                                        rekord["Zugló_engedély"].ToÉrt_Int(),
-                                        rekord["Zugló_megjegyzés"].ToStrTrim(),
-                                        rekord["Korlátlan"].ToStrTrim(),
-                                        rekord["Autók_száma"].ToÉrt_Int(),
-                                        rekord["I_engedély"].ToÉrt_Int(),
-                                        rekord["II_engedély"].ToÉrt_Int(),
-                                        rekord["III_engedély"].ToÉrt_Int(),
-                                        rekord["Státus"].ToÉrt_Int(),
-                                        rekord["Dátum"].ToÉrt_DaTeTime(),
-                                        rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["PDF"].ToStrTrim(),
-                                        rekord["OKA"].ToStrTrim(),
-                                        rekord["Érvényes"].ToÉrt_DaTeTime());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public List<Adat_Behajtás_Behajtási> Lista_Adatok(string hely)
-        {
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
             string szöveg = "SELECT * FROM alapadatok ";
             List<Adat_Behajtás_Behajtási> Adatok = new List<Adat_Behajtás_Behajtási>();
             Adat_Behajtás_Behajtási Adat;
@@ -138,10 +76,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Behajtás_Behajtási Adat)
+        public void Rögzítés(string Könyvtár, string Fájl, Adat_Behajtás_Behajtási Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
                 string szöveg = "INSERT INTO alapadatok ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
                 szöveg += "Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
                 szöveg += "Száva_engedély, Szépilona_engedély, Zugló_engedély, Státus, Dátum, PDF, oka, ";
@@ -201,10 +140,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, Adat_Behajtás_Behajtási Adat)
+        public void Módosítás(string Könyvtár, string Fájl, Adat_Behajtás_Behajtási Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
                 string szöveg = "UPDATE alapadatok Set ";
                 szöveg += $" Hrazonosító='{Adat.HRazonosító}', ";
                 szöveg += $" Név='{Adat.Név}', ";
@@ -254,10 +194,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás_Gondnok(string hely, string Telephely, int Gondnok, string Megjegyzés, string Sorszám)
+        public void Módosítás_Gondnok(string Könyvtár, string Fájl, string Telephely, int Gondnok, string Megjegyzés, string Sorszám)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
                 string szöveg = "UPDATE alapadatok SET ";
                 szöveg += $"{Telephely}_engedély={Gondnok}, ";
                 szöveg += $"{Telephely}_megjegyzés='{Megjegyzés}'";
@@ -275,10 +216,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás_Státus(string hely, Adat_Behajtás_Behajtási Adat)
+        public void Módosítás_Státus(string Könyvtár, string Fájl, Adat_Behajtás_Behajtási Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
                 string szöveg = $"UPDATE alapadatok Set Státus={Adat.Státus}";
                 szöveg += $" WHERE sorszám='{Adat.Sorszám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -294,10 +236,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás_Szakszolgálat(string hely, string Szakszolg, int SzakszolgEng, string sorSzám)
+        public void Módosítás_Szakszolgálat(string Könyvtár, string Fájl, string Szakszolg, int SzakszolgEng, string sorSzám)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
                 string szöveg = $"UPDATE alapadatok SET {Szakszolg}={SzakszolgEng} WHERE sorszám='{sorSzám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
