@@ -280,10 +280,9 @@ namespace Villamos.Ablakok
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
 
                 Kezelő_Kiegészítő_Igen_Nem Kéz = new Kezelő_Kiegészítő_Igen_Nem();
-                List<Adat_Kiegészítő_Igen_Nem> Adatok = Kéz.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Igen_Nem> Adatok = Kéz.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Igen_Nem Válasz = (from a in Adatok
                                                    where a.Id == 1
                                                    select a).FirstOrDefault();

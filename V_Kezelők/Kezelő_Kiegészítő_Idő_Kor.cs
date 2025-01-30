@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Idő_Kor
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb".Ellenőrzés();
         readonly string jelszó = "Mocó";
 
         public List<Adat_Kiegészítő_Idő_Kor> Lista_Adatok()
@@ -67,12 +67,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Kiegészítő_Idő_Kor Adat)
         {
             try

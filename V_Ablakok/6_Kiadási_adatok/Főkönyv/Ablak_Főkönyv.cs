@@ -4098,9 +4098,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
                 AdatokIgenNem.Clear();
-                AdatokIgenNem = KézKiegIgenNem.Lista_Adatok(hely);
+                AdatokIgenNem = KézKiegIgenNem.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {

@@ -1600,7 +1600,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 List<Adat_Jármű_hiba> Adatok;
 
                 Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
-                List<Adat_Kiegészítő_Hibaterv> KiAdatokÖ = KKH_kéz.Lista_Adatok(helykieg);
+                List<Adat_Kiegészítő_Hibaterv> KiAdatokÖ = KKH_kéz.Lista_Adatok(Cmbtelephely.Trim());
                 List<Adat_Kiegészítő_Hibaterv> KiAdatok = (from a in KiAdatokÖ
                                                            where a.Főkönyv == true
                                                            select a).ToList();

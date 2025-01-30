@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -41,8 +42,9 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Kiegészítő_főkönyvtábla> Lista_Adatok(string hely)
+        public List<Adat_Kiegészítő_főkönyvtábla> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM Főkönyvtábla";
             List<Adat_Kiegészítő_főkönyvtábla> Adatok = new List<Adat_Kiegészítő_főkönyvtábla>();
             Adat_Kiegészítő_főkönyvtábla Adat;
@@ -74,17 +76,12 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        /// <summary>
-        /// Id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, Adat_Kiegészítő_főkönyvtábla Adat)
+        public void Módosítás(string Telephely, Adat_Kiegészítő_főkönyvtábla Adat)
         {
             string szöveg = $"UPDATE Főkönyvtábla SET név='{Adat.Név}',";
             szöveg += $" beosztás='{Adat.Beosztás}'";
             szöveg += $" WHERE id={Adat.Id} ";
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
     }

@@ -11,8 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Kiegészítő_Hibaterv> Lista_Adatok(string hely)
+        public List<Adat_Kiegészítő_Hibaterv> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM hibaterv order by id";
             List<Adat_Kiegészítő_Hibaterv> Adatok = new List<Adat_Kiegészítő_Hibaterv>();
             Adat_Kiegészítő_Hibaterv Adat;
@@ -43,25 +44,33 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Kiegészítő_Hibaterv Adat)
-        {
-            string szöveg = $"INSERT INTO hibaterv (id , szöveg, főkönyv ) ";
-            szöveg += $" VALUES ({Adat.Id}, ";
-            szöveg += $"'{Adat.Szöveg}', ";
-            szöveg += $"{Adat.Főkönyv})";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Mósosítás(string hely, Adat_Kiegészítő_Hibaterv Adat)
+        public void Rögzítés(string Telephely, Adat_Kiegészítő_Hibaterv Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string szöveg = $"INSERT INTO hibaterv (id , szöveg, főkönyv ) ";
+                szöveg += $" VALUES ({Adat.Id}, ";
+                szöveg += $"'{Adat.Szöveg}', ";
+                szöveg += $"{Adat.Főkönyv})";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Mósosítás(string Telephely, Adat_Kiegészítő_Hibaterv Adat)
+        {
+            try
+            {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"UPDATE hibaterv SET ";
                 szöveg += $"főkönyv={Adat.Főkönyv}, ";
                 szöveg += $"szöveg='{Adat.Szöveg}' ";
@@ -80,17 +89,11 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Kiegészítő_Hibaterv Adat)
+        public void Törlés(string Telephely, Adat_Kiegészítő_Hibaterv Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"DELETE * FROM hibaterv where id={Adat.Id}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

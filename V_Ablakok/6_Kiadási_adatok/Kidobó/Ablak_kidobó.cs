@@ -457,8 +457,7 @@ namespace Villamos
         #region Gombok
         private void Alsópanelkitöltés()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Segéd\kiegészítő.mdb";
-            List<Adat_Telep_Kiegészítő_Kidobó> Adatok = KézKiegdob.Lista_Adatok(hely);
+            List<Adat_Telep_Kiegészítő_Kidobó> Adatok = KézKiegdob.Lista_Adatok(Cmbtelephely.Text.Trim());
 
             Adat_Telep_Kiegészítő_Kidobó AdatokKidob = (from a in Adatok
                                                         where a.Id == 1
@@ -1703,8 +1702,7 @@ namespace Villamos
                 VáltozatCombo.Refresh();
 
                 // típusok feltöltése
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\kiegészítő.mdb";
-                List<Adat_Telep_Kieg_Fortetípus> AdatokFort = KézFortetípus.Lista_Adatok(hely);
+                List<Adat_Telep_Kieg_Fortetípus> AdatokFort = KézFortetípus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Forte_típus.Clear();
                 foreach (Adat_Telep_Kieg_Fortetípus elem in AdatokFort)
                     Forte_típus.Add(elem.Ftípus);

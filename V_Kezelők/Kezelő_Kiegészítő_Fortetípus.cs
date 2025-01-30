@@ -10,40 +10,8 @@ namespace Villamos.Kezelők
 
     public class Kezelő_Kiegészítő_Fortetípus
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb".Ellenőrzés();
         readonly string jelszó = "Mocó";
-
-        public List<Adat_Kiegészítő_Fortetípus> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Fortetípus> Adatok = new List<Adat_Kiegészítő_Fortetípus>();
-            Adat_Kiegészítő_Fortetípus Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Fortetípus(
-                                     rekord["sorszám"].ToÉrt_Long(),
-                                     rekord["ftípus"].ToStrTrim(),
-                                     rekord["telephely"].ToStrTrim(),
-                                     rekord["telephelyitípus"].ToStrTrim()
-                                     );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Kiegészítő_Fortetípus> Lista_Adatok()
         {
@@ -100,12 +68,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// sorszám
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Törlés(Adat_Kiegészítő_Fortetípus Adat)
         {
             try

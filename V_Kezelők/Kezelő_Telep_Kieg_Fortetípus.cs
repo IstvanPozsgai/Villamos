@@ -11,8 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Telep_Kieg_Fortetípus> Lista_Adatok(string hely)
+        public List<Adat_Telep_Kieg_Fortetípus> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
             string szöveg = "SELECT *  FROM fortetipus ORDER BY ftípus";
             List<Adat_Telep_Kieg_Fortetípus> Adatok = new List<Adat_Telep_Kieg_Fortetípus>();
             Adat_Telep_Kieg_Fortetípus Adat;
@@ -42,10 +43,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        public void Rögzítés(string Telephely, Adat_Telep_Kieg_Fortetípus Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"INSERT INTO fortetipus (típus, ftípus) ";
                 szöveg += $"VALUES ('{Adat.Típus}',";
                 szöveg += $" '{Adat.Ftípus}')";
@@ -62,16 +64,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// típus, ftípus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Telep_Kieg_Fortetípus Adat)
+        public void Törlés(string Telephely, Adat_Telep_Kieg_Fortetípus Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"DELETE * FROM fortetipus where típus='{Adat.Típus}' and ftípus='{Adat.Ftípus}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

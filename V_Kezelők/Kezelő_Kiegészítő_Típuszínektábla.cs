@@ -11,8 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Kiegészítő_Típuszínektábla> Lista_Adatok(string hely)
+        public List<Adat_Kiegészítő_Típuszínektábla> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM Típuszínektábla ORDER BY  típus";
             List<Adat_Kiegészítő_Típuszínektábla> Adatok = new List<Adat_Kiegészítő_Típuszínektábla>();
             Adat_Kiegészítő_Típuszínektábla Adat;
@@ -41,24 +42,20 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Kiegészítő_Típuszínektábla Adat)
+        public void Rögzítés(string Telephely, Adat_Kiegészítő_Típuszínektábla Adat)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
             string szöveg = $"INSERT INTO Típuszínektábla (típus, színszám) ";
             szöveg += $"VALUES ('{Adat.Típus}' ,";
             szöveg += $" {Adat.Színszám})";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
-        /// <summary>
-        /// típus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, Adat_Kiegészítő_Típuszínektábla Adat)
+        public void Módosítás(string Telephely, Adat_Kiegészítő_Típuszínektábla Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
                 string szöveg = $"UPDATE Típuszínektábla SET ";
                 szöveg += $"színszám= '{Adat.Színszám}',";
                 szöveg += $"WHERE típus='{Adat.Típus}'";
@@ -75,16 +72,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// típus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Kiegészítő_Típuszínektábla Adat)
+        public void Törlés(string Telephely, Adat_Kiegészítő_Típuszínektábla Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
                 string szöveg = $"DELETE * FROM Típuszínektábla where típus='{Adat.Típus}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

@@ -30,7 +30,7 @@ namespace Villamos
         readonly Kezelő_Telep_Kiegészítő_SAP KézSap = new Kezelő_Telep_Kiegészítő_SAP();
         readonly Kezelő_T5C5_Göngyöl_DátumTábla KézDátumTábla = new Kezelő_T5C5_Göngyöl_DátumTábla();
         readonly Kezelő_Kiegészítő_Igen_Nem KézIgenNem = new Kezelő_Kiegészítő_Igen_Nem();
-        readonly Kezelő_Telep_Kieg_Fortetípus KézKiegFortetíp = new Kezelő_Telep_Kieg_Fortetípus();
+        readonly Kezelő_Telep_Kieg_Fortetípus KézKiegFortetípTelep = new Kezelő_Telep_Kieg_Fortetípus();
         readonly Kezelő_kiegészítő_Hibaterv KézKiegHiba = new Kezelő_kiegészítő_Hibaterv();
         readonly Kezelő_Telep_Kiegészítő_E3típus KézE3Típus = new Kezelő_Telep_Kiegészítő_E3típus();
         readonly Kezelő_Telep_Kiegészítő_Takarítástípus KézTakarítástípus = new Kezelő_Telep_Kiegészítő_Takarítástípus();
@@ -122,7 +122,7 @@ namespace Villamos
         {
             try
             {
-                Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
+
                 Cmbtelephely.Items.Clear();
                 List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
                 foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
@@ -779,14 +779,12 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
                 Adat_Kiegészítő_főkönyvtábla ADAT = new Adat_Kiegészítő_főkönyvtábla(2, txtnév2.Text.Trim(), txtbeosztás2.Text.Trim());
 
-                Kézfőkönyvtábla.Módosítás(hely, ADAT);
+                Kézfőkönyvtábla.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
 
                 ADAT = new Adat_Kiegészítő_főkönyvtábla(3, txtnév3.Text.Trim(), txtbeosztás3.Text.Trim());
-                Kézfőkönyvtábla.Módosítás(hely, ADAT);
+                Kézfőkönyvtábla.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
 
 
                 Főkönyvialáírások();
@@ -808,9 +806,9 @@ namespace Villamos
             try
             {
                 // főkönyvi aláírások
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
 
-                List<Adat_Kiegészítő_főkönyvtábla> Adatok = Kézfőkönyvtábla.Lista_Adatok(hely);
+
+                List<Adat_Kiegészítő_főkönyvtábla> Adatok = Kézfőkönyvtábla.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_főkönyvtábla Adat = (from a in Adatok
                                                      where a.Id == 2
@@ -853,9 +851,7 @@ namespace Villamos
                 if (txtMelérési.Text.Trim() == "") txtMelérési.Text = "Nincs";
                 if (!int.TryParse(txtMsorszám.Text.Trim(), out int sorszám)) throw new HibásBevittAdat("A sorszám mezőbe egész számot kell írni.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-
-                List<Adat_Kiegészítő_Mentésihelyek> Adatok = KézMentésihelyek.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Mentésihelyek> Adatok = KézMentésihelyek.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Mentésihelyek Adat = (from a in Adatok
                                                       where a.Sorszám == sorszám
@@ -866,9 +862,9 @@ namespace Villamos
                                                                        txtMelérési.Text.Trim());
 
                 if (Adat != null)
-                    KézMentésihelyek.Módosítás(hely, ADAT);
+                    KézMentésihelyek.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézMentésihelyek.Rögzítés(hely, ADAT);
+                    KézMentésihelyek.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
 
                 Mentésihelyekkiírása();
@@ -891,9 +887,8 @@ namespace Villamos
             {
                 // mentési helyek kiirása
                 Táblamentés.Visible = false;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
 
-                List<Adat_Kiegészítő_Mentésihelyek> AdatokKiegMent = KézMentésihelyek.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Mentésihelyek> AdatokKiegMent = KézMentésihelyek.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Táblamentés.ColumnCount = 3;
                 Táblamentés.RowCount = 0;
@@ -932,9 +927,7 @@ namespace Villamos
             {
                 if (!int.TryParse(txtMsorszám.Text.Trim(), out int sorszám)) throw new HibásBevittAdat("A sorszámnak számnak kell lennie.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-
-                List<Adat_Kiegészítő_Mentésihelyek> Adatok = KézMentésihelyek.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Mentésihelyek> Adatok = KézMentésihelyek.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Mentésihelyek Adat = (from a in Adatok
                                                       where a.Sorszám == sorszám
@@ -942,7 +935,7 @@ namespace Villamos
                 Adat_Kiegészítő_Mentésihelyek ADAT = new Adat_Kiegészítő_Mentésihelyek(sorszám, "", "");
                 if (Adat != null)
                 {
-                    KézMentésihelyek.Törlés(hely, ADAT);
+                    KézMentésihelyek.Törlés(Cmbtelephely.Text.Trim(), ADAT);
                     MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Mentésihelyekkiírása();
@@ -1209,9 +1202,8 @@ namespace Villamos
                 if (!long.TryParse(txtszín.Text, out long szín)) szín = 0;
 
                 // rögzítjük a színezést
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
 
-                List<Adat_Kiegészítő_Típuszínektábla> Adatok = KézTípuszínektábla.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Típuszínektábla> Adatok = KézTípuszínektábla.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Típuszínektábla rekord = (from a in Adatok
                                                           where a.Típus == CmbTípus.Text.Trim()
@@ -1220,9 +1212,9 @@ namespace Villamos
                 Adat_Kiegészítő_Típuszínektábla ADAT = new Adat_Kiegészítő_Típuszínektábla(CmbTípus.Text.Trim(),
                                                                                            szín);
                 if (rekord != null)
-                    KézTípuszínektábla.Módosítás(hely, ADAT);
+                    KézTípuszínektábla.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézTípuszínektábla.Rögzítés(hely, ADAT);
+                    KézTípuszínektábla.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
 
                 Színtáblafeltöltés();
@@ -1244,9 +1236,8 @@ namespace Villamos
             try
             {
                 if (CmbTípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva Típus a törléshez.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
 
-                List<Adat_Kiegészítő_Típuszínektábla> Adatok = KézTípuszínektábla.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Típuszínektábla> Adatok = KézTípuszínektábla.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Típuszínektábla rekord = (from a in Adatok
                                                           where a.Típus == CmbTípus.Text.Trim()
@@ -1254,7 +1245,7 @@ namespace Villamos
                 Adat_Kiegészítő_Típuszínektábla ADAT = new Adat_Kiegészítő_Típuszínektábla(CmbTípus.Text.Trim(), 0);
                 if (rekord != null)
                 {
-                    KézTípuszínektábla.Törlés(hely, ADAT);
+                    KézTípuszínektábla.Törlés(Cmbtelephely.Text.Trim(), ADAT);
                     Színtáblafeltöltés();
                     MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -1274,9 +1265,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-
-                List<Adat_Kiegészítő_Típuszínektábla> AdatokKiegTípSzín = KézTípuszínektábla.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Típuszínektábla> AdatokKiegTípSzín = KézTípuszínektábla.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Táblaszín.Visible = false;
                 Táblaszín.ColumnCount = 3;
@@ -1401,8 +1390,7 @@ namespace Villamos
         #region Forte
         private void ForteKiírás()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-            List<Adat_Telep_Kiegészítő_Kidobó> Adatok = KézKidobó.Lista_Adatok(hely);
+            List<Adat_Telep_Kiegészítő_Kidobó> Adatok = KézKidobó.Lista_Adatok(Cmbtelephely.Text.Trim());
 
             Adat_Telep_Kiegészítő_Kidobó rekord = (from a in Adatok
                                                    where a.Id == 1
@@ -1415,8 +1403,8 @@ namespace Villamos
             try
             {
                 if (txtForte.Text.Trim() == "") txtForte.Text = "_";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Telep_Kiegészítő_Kidobó> Adatok = KézKidobó.Lista_Adatok(hely);
+
+                List<Adat_Telep_Kiegészítő_Kidobó> Adatok = KézKidobó.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Telep_Kiegészítő_Kidobó rekord = (from a in Adatok
                                                        where a.Id == 1
@@ -1426,9 +1414,9 @@ namespace Villamos
                                                                                      txtForte.Text.Trim());
 
                 if (rekord != null)
-                    KézKidobó.Módosítás(hely, ADAT);
+                    KézKidobó.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézKidobó.Rögzítés(hely, ADAT);
+                    KézKidobó.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 Sap_Forte_T5C5();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1449,9 +1437,8 @@ namespace Villamos
         #region SAP
         private void SAPKiírás()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
 
-            List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(hely);
+            List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(Cmbtelephely.Text.Trim());
             Adat_Telep_Kiegészítő_SAP RekordSAP = (from a in AdatokSAP
                                                    where a.Id == 1
                                                    select a).FirstOrDefault();
@@ -1462,9 +1449,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
 
-                List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(hely);
+                List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Telep_Kiegészítő_SAP RekordSAP = (from a in AdatokSAP
                                                        where a.Id == 1
                                                        select a).FirstOrDefault();
@@ -1473,9 +1459,9 @@ namespace Villamos
                                                                                txtSAPmunkahely.Text.Trim());
 
                 if (RekordSAP != null)
-                    KézSap.Módosítás(hely, ADAT);
+                    KézSap.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézSap.Rögzítés(hely, ADAT);
+                    KézSap.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 Sap_Forte_T5C5();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1492,6 +1478,7 @@ namespace Villamos
         }
         #endregion
 
+
         #region T5C5 E2
         private void E2_kiírása()
         {
@@ -1499,8 +1486,7 @@ namespace Villamos
             {
 
                 E2_Kiírás.Checked = false;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-                List<Adat_Kiegészítő_Igen_Nem> Adatok = KézIgenNem.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Igen_Nem> Adatok = KézIgenNem.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Igen_Nem Érték = (from a in Adatok
                                                   where a.Id == 1
                                                   select a).FirstOrDefault();
@@ -1526,8 +1512,7 @@ namespace Villamos
                                                                              E2_Kiírás.Checked,
                                                                              "");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-                KézIgenNem.Módosítás(hely, ADAT);
+                KézIgenNem.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -1549,9 +1534,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
-                List<Adat_Telep_Kieg_Fortetípus> AdatokKiegFortetíp = KézKiegFortetíp.Lista_Adatok(hely);
+                List<Adat_Telep_Kieg_Fortetípus> AdatokKiegFortetíp = KézKiegFortetípTelep.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 TáblaFroteTípus.Visible = false;
                 TáblaFroteTípus.ColumnCount = 2;
@@ -1610,9 +1593,9 @@ namespace Villamos
             {
                 if (CmbForteTípus.Text.Trim() == "") throw new HibásBevittAdat("A Típus mező nem lehet üres.");
                 if (txtForteTípus.Text.Trim() == "") throw new HibásBevittAdat("A Forte típus mező nem lehet üres.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
 
-                List<Adat_Telep_Kieg_Fortetípus> AdatokKiegFortetíp = KézKiegFortetíp.Lista_Adatok(hely);
+
+                List<Adat_Telep_Kieg_Fortetípus> AdatokKiegFortetíp = KézKiegFortetípTelep.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Telep_Kieg_Fortetípus rekord = (from a in AdatokKiegFortetíp
                                                      where a.Típus == CmbForteTípus.Text.Trim() && a.Ftípus == txtForteTípus.Text.Trim()
@@ -1623,7 +1606,7 @@ namespace Villamos
 
                 if (rekord == null)
                 {
-                    KézKiegFortetíp.Rögzítés(hely, ADAT);
+                    KézKiegFortetípTelep.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                     TáblaForteTípusfeltöltés();
                     MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -1645,9 +1628,9 @@ namespace Villamos
             {
                 if (CmbForteTípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva érvényes elem a törléshez.");
                 if (txtForteTípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva érvényes elem a törléshez.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
 
-                List<Adat_Telep_Kieg_Fortetípus> AdatokKiegFortetíp = KézKiegFortetíp.Lista_Adatok(hely);
+
+                List<Adat_Telep_Kieg_Fortetípus> AdatokKiegFortetíp = KézKiegFortetípTelep.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Telep_Kieg_Fortetípus rekord = (from a in AdatokKiegFortetíp
                                                      where a.Típus == CmbForteTípus.Text.Trim() && a.Ftípus == txtForteTípus.Text.Trim()
@@ -1657,7 +1640,7 @@ namespace Villamos
 
                 if (rekord != null)
                 {
-                    KézKiegFortetíp.Törlés(hely, ADAT);
+                    KézKiegFortetípTelep.Törlés(Cmbtelephely.Text.Trim(), ADAT);
                     TáblaForteTípusfeltöltés();
                     MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -1680,8 +1663,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 TáblaHibaterv.Visible = false;
                 TáblaHibaterv.ColumnCount = 3;
@@ -1752,8 +1734,7 @@ namespace Villamos
                 if (Txthibaterv.Text.Trim() == "") throw new HibásBevittAdat("A hibaterv szövegét ki kell tölteni.");
                 if (!int.TryParse(txthibatervID.Text, out int Id)) throw new HibásBevittAdat("Az Id mező ki kell tölteni egész számmal.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Hibaterv rekord = (from a in AdatokKiegHiba
                                                    where a.Id == Id
@@ -1764,9 +1745,9 @@ namespace Villamos
                                                                              Check1.Checked);
 
                 if (rekord != null)
-                    KézKiegHiba.Mósosítás(hely, ADAT);
+                    KézKiegHiba.Mósosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézKiegHiba.Rögzítés(hely, ADAT);
+                    KézKiegHiba.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 TáblaHibatervlistázás();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1789,9 +1770,7 @@ namespace Villamos
                 if (!int.TryParse(txthibatervID.Text, out int ID)) throw new HibásBevittAdat("Nincs kiválasztva érvényes elem.");
                 if (ID == 1) throw new HibásBevittAdat("Az első elemet nem lehet feljebb vinni.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
-                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Hibaterv rekord = (from a in AdatokKiegHiba
                                                    where a.Id == ID
@@ -1814,11 +1793,11 @@ namespace Villamos
                     Adat_Kiegészítő_Hibaterv ADAT = new Adat_Kiegészítő_Hibaterv(rekord.Id,
                                                                                  rekordElőző.Szöveg,
                                                                                  rekordElőző.Főkönyv);
-                    KézKiegHiba.Mósosítás(hely, ADAT);
+                    KézKiegHiba.Mósosítás(Cmbtelephely.Text.Trim(), ADAT);
                     ADAT = new Adat_Kiegészítő_Hibaterv(rekordElőző.Id,
                                                         rekord.Szöveg,
                                                         rekord.Főkönyv);
-                    KézKiegHiba.Mósosítás(hely, ADAT);
+                    KézKiegHiba.Mósosítás(Cmbtelephely.Text.Trim(), ADAT);
                     TáblaHibatervlistázás();
                 }
             }
@@ -1839,8 +1818,8 @@ namespace Villamos
             {
                 if (!int.TryParse(txthibatervID.Text, out int Id)) throw new HibásBevittAdat("Az Id mező ki kell tölteni egész számmal.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(hely);
+
+                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Hibaterv rekord = (from a in AdatokKiegHiba
                                                    where a.Id == Id
@@ -1848,7 +1827,7 @@ namespace Villamos
                 Adat_Kiegészítő_Hibaterv ADAT = new Adat_Kiegészítő_Hibaterv(Id, "", false);
                 if (rekord != null)
                 {
-                    KézKiegHiba.Törlés(hely, ADAT);
+                    KézKiegHiba.Törlés(Cmbtelephely.Text.Trim(), ADAT);
                     TáblaHibatervlistázás();
                     MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -1870,8 +1849,8 @@ namespace Villamos
             {
                 Txthibaterv.Text = "";
                 Check1.Checked = false;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(hely);
+
+                List<Adat_Kiegészítő_Hibaterv> AdatokKiegHiba = KézKiegHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 long i = 1;
                 if (AdatokKiegHiba.Count > 0) i = AdatokKiegHiba.Max(a => a.Id) + 1;
@@ -2905,8 +2884,7 @@ namespace Villamos
                 Adat_Kiegészítő_Igen_Nem ADAT = new Adat_Kiegészítő_Igen_Nem(2,
                                                                              Reklám_Check.Checked,
                                                                              "");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-                KézIgenNem.Módosítás(hely, ADAT);
+                KézIgenNem.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -2924,9 +2902,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
-
-                List<Adat_Kiegészítő_Igen_Nem> Adatok = KézIgenNem.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Igen_Nem> Adatok = KézIgenNem.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Igen_Nem rekord = (from a in Adatok
                                                    where a.Id == 2
                                                    select a).FirstOrDefault();
@@ -2938,7 +2914,7 @@ namespace Villamos
                     Reklám_Check.Checked = rekord.Válasz;
                 else
                 {
-                    KézIgenNem.Rögzítés(hely, ADAT);
+                    KézIgenNem.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                     Reklám_Check.Checked = false;
                 }
             }

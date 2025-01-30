@@ -11,8 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Kiegészítő_Igen_Nem> Lista_Adatok(string hely)
+        public List<Adat_Kiegészítő_Igen_Nem> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
             string szöveg = "SELECT *  FROM igen_nem ";
             List<Adat_Kiegészítő_Igen_Nem> Adatok = new List<Adat_Kiegészítő_Igen_Nem>();
             Adat_Kiegészítő_Igen_Nem Adat;
@@ -43,10 +44,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Kiegészítő_Igen_Nem Adat)
+        public void Rögzítés(string Telephely, Adat_Kiegészítő_Igen_Nem Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
                 string szöveg = "INSERT INTO igen_nem  (id, válasz, megjegyzés) ";
                 szöveg += $"VALUES ({Adat.Id}, ";
                 szöveg += $"{Adat.Válasz}, ";
@@ -64,17 +66,11 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, Adat_Kiegészítő_Igen_Nem Adat)
+        public void Módosítás(string Telephely, Adat_Kiegészítő_Igen_Nem Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
                 string szöveg = $"UPDATE igen_nem SET Válasz={Adat.Válasz} ";
                 szöveg += $"WHERE '{Adat.Id}' ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

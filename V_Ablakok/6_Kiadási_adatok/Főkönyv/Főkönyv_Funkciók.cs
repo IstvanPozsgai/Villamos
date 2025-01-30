@@ -378,7 +378,7 @@ namespace Villamos
 
             string helykieg = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\segéd\Kiegészítő.mdb";
             Kezelő_Telep_Kieg_Fortetípus KézKiegTipus = new Kezelő_Telep_Kieg_Fortetípus();
-            List<Adat_Telep_Kieg_Fortetípus> AdatokKiegTipus = KézKiegTipus.Lista_Adatok(helykieg);
+            List<Adat_Telep_Kieg_Fortetípus> AdatokKiegTipus = KézKiegTipus.Lista_Adatok(Küldtelephely.Trim());
 
 
 

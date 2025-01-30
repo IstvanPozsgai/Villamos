@@ -959,7 +959,7 @@ namespace Villamos
                 string szöveg = "SELECT * FROM hibaterv where főkönyv = true ORDER BY id";
 
                 Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
-                List<Adat_Kiegészítő_Hibaterv> KAdatok = KKH_kéz.Lista_Adatok(helykieg);
+                List<Adat_Kiegészítő_Hibaterv> KAdatok = KKH_kéz.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Kezelő_jármű_hiba KJH_kéz = new Kezelő_jármű_hiba();
 

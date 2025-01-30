@@ -340,10 +340,8 @@ namespace Villamos
             string válasz = "";
             try
             {
-                string hely = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
                 Kezelő_Telep_Kiegészítő_SAP KézSap = new Kezelő_Telep_Kiegészítő_SAP();
-                List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(hely);
+                List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(cmbtelephely.Text.Trim());
                 Adat_Telep_Kiegészítő_SAP RekordSAP = (from a in AdatokSAP
                                                        where a.Id == 1
                                                        select a).FirstOrDefault();

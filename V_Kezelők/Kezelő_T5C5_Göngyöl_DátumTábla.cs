@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
@@ -11,11 +12,7 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
         readonly string jelszó = "pozsgaii";
 
-        /// <summary>
-        /// Telephelyi adatnak kell lennie
-        /// </summary>
-        /// <returns></returns>
-        /// 
+        //Telephelyi adat vissza kell fejteni
         public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = new List<Adat_T5C5_Göngyöl_DátumTábla>();
@@ -47,7 +44,6 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
 
         public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok()
         {
@@ -84,24 +80,42 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(Adat_T5C5_Göngyöl_DátumTábla Adat)
         {
-            string szöveg = $"INSERT INTO Dátumtábla (telephely, utolsórögzítés) ";
-            szöveg += $"VALUES ('{Adat.Telephely}',";
-            szöveg += $"'{Adat.Utolsórögzítés}')";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                string szöveg = $"INSERT INTO Dátumtábla (telephely, utolsórögzítés) ";
+                szöveg += $"VALUES ('{Adat.Telephely}',";
+                szöveg += $"'{Adat.Utolsórögzítés}')";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        /// <summary>
-        /// Telephely
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_T5C5_Göngyöl_DátumTábla Adat)
         {
-            string szöveg = $"UPDATE Dátumtábla SET ";
-            szöveg += $"utolsórögzítés='{Adat.Utolsórögzítés}' ";
-            szöveg += $"WHERE telephely='{Adat.Telephely}'";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                string szöveg = $"UPDATE Dátumtábla SET ";
+                szöveg += $"utolsórögzítés='{Adat.Utolsórögzítés}' ";
+                szöveg += $"WHERE telephely='{Adat.Telephely}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }

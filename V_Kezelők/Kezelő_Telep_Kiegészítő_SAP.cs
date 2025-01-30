@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -9,8 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Telep_Kiegészítő_SAP> Lista_Adatok(string hely)
+        public List<Adat_Telep_Kiegészítő_SAP> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM sapmunkahely";
             List<Adat_Telep_Kiegészítő_SAP> Adatok = new List<Adat_Telep_Kiegészítő_SAP>();
             Adat_Telep_Kiegészítő_SAP Adat;
@@ -39,27 +42,47 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Telep_Kiegészítő_SAP Adat)
+        public void Rögzítés(string Telephely, Adat_Telep_Kiegészítő_SAP Adat)
         {
-            string szöveg = $"INSERT INTO sapmunkahely (id, felelősmunkahely)";
-            szöveg += $"VALUES ({Adat.Id}, ";
-            szöveg += $"'{Adat.Felelősmunkahely}')";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string szöveg = $"INSERT INTO sapmunkahely (id, felelősmunkahely)";
+                szöveg += $"VALUES ({Adat.Id}, ";
+                szöveg += $"'{Adat.Felelősmunkahely}')";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
 
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, Adat_Telep_Kiegészítő_SAP Adat)
+        public void Módosítás(string Telephely, Adat_Telep_Kiegészítő_SAP Adat)
         {
-            string szöveg = $"UPDATE sapmunkahely SET ";
-            szöveg += $"felelősmunkahely='{Adat.Felelősmunkahely}'";
-            szöveg += $"WHERE id={Adat.Id}";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string szöveg = $"UPDATE sapmunkahely SET ";
+                szöveg += $"felelősmunkahely='{Adat.Felelősmunkahely}'";
+                szöveg += $"WHERE id={Adat.Id}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }

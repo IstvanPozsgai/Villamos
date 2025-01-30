@@ -11,8 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
 
-        public List<Adat_Kiegészítő_Mentésihelyek> Lista_Adatok(string hely)
+        public List<Adat_Kiegészítő_Mentésihelyek> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM Mentésihelyek  order by  sorszám";
             List<Adat_Kiegészítő_Mentésihelyek> Adatok = new List<Adat_Kiegészítő_Mentésihelyek>();
             Adat_Kiegészítő_Mentésihelyek Adat;
@@ -42,8 +43,9 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Kiegészítő_Mentésihelyek Adat)
+        public void Rögzítés(string Telephely, Adat_Kiegészítő_Mentésihelyek Adat)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
             string szöveg = $"INSERT INTO Mentésihelyek ( sorszám, alprogram, elérésiút )";
             szöveg += $" VALUES ({Adat.Sorszám}, ";
             szöveg += $"'{Adat.Alprogram}',";
@@ -52,16 +54,11 @@ namespace Villamos.Kezelők
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
-        /// <summary>
-        /// sorszám
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, Adat_Kiegészítő_Mentésihelyek Adat)
+        public void Módosítás(string Telephely, Adat_Kiegészítő_Mentésihelyek Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
                 string szöveg = $"UPDATE Mentésihelyek SET ";
                 szöveg += $" alprogram='{Adat.Alprogram}',";
                 szöveg += $" elérésiút='{Adat.Elérésiút}' ";
@@ -80,16 +77,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// sorszám
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Kiegészítő_Mentésihelyek Adat)
+        public void Törlés(string Telephely, Adat_Kiegészítő_Mentésihelyek Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
                 string szöveg = $"DELETE FROM Mentésihelyek WHERE sorszám={Adat.Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
