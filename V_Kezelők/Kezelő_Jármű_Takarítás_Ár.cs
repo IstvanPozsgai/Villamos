@@ -8,7 +8,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű_Takarítás_Ár
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb".Ellenőrzés();
         readonly string jelszó = "seprűéslapát";
         public List<Adat_Jármű_Takarítás_Árak> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
@@ -81,12 +81,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        /// <summary>
-        /// id
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Jármű_Takarítás_Árak Adat)
         {
             string szöveg = "UPDATE árak  SET ";
@@ -117,12 +111,7 @@ namespace Villamos.Kezelők
             }
             MyA.ABMódosítás(hely, jelszó, szövegGy);
         }
-        /// <summary>
-        /// Érv vége módosítás
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adatok"></param>
+
         public void Módosítás_Vég(List<Adat_Jármű_Takarítás_Árak> Adatok)
         {
             List<string> szövegGy = new List<string>();

@@ -86,7 +86,7 @@ namespace Villamos
             HibaListázás();
             JárművekLista();
             Szer_Feltöltés();
-            JárműTípusokLista();
+            AdatokTípus = KézTípus.Lista_Adatok(Cmbtelephely.Text.Trim());
             Ciklus_Feltölése();
             JárművekFŐLista();
             Napi_Feltölése();
@@ -2270,27 +2270,7 @@ namespace Villamos
             }
         }
 
-        private void JárműTípusokLista()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                if (!File.Exists(hely)) return;
 
-                AdatokTípus.Clear();
-                AdatokTípus = KézTípus.Lista_adatok(hely);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Naplók_feltöltése()
         {

@@ -377,8 +377,8 @@ namespace Villamos
             try
             {
                 Típusoklistája.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                List<Adat_Jármű_Állomány_Típus> Adatok = KézJárműTípus.Lista_adatok(hely);
+
+                List<Adat_Jármű_Állomány_Típus> Adatok = KézJárműTípus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 foreach (Adat_Jármű_Állomány_Típus Elem in Adatok)
                     Típusoklistája.Items.Add(Elem.Típus);

@@ -1033,9 +1033,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely);
-
                 List<Adat_Jármű_Takarítás_Árak> AdatokÖ = KézTakÁr.Lista_Adatok();
 
                 if (Szűr_Fajta.Text.Trim() != "")
@@ -1337,10 +1334,8 @@ namespace Villamos
                 MyE.Kiir("Vége", "F1");
                 string[] Tak_fajta = { "J1", "J2", "J3", "J4", "J5", "J6", "Graffiti", "Eseti", "Fertőtlenítés" };
                 string[] Napszak = { "Nappal", "Éjszaka" };
-                string hely;
 
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                List<Adat_Jármű_Állomány_Típus> Adatok = KézÁllományTípus.Lista_adatok(hely);
+                List<Adat_Jármű_Állomány_Típus> Adatok = KézÁllományTípus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 int sor = 1;
                 foreach (Adat_Jármű_Állomány_Típus rekord in Adatok)

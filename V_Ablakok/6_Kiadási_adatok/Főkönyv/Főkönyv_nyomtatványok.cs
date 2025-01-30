@@ -49,14 +49,12 @@ namespace Villamos.Villamos_Nyomtatványok
             MyE.Kiir("Visz.", "a" + $"{sor}");
             MyE.Egyesít(munkalap, "b" + $"{sor}" + ":" + MyE.Oszlopnév(11) + $"{sor}");
             MyE.Kiir("I. Járműállomány", "b" + $"{sor}");
-            // kiirjuk a típusokat
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\villamos\Jármű.mdb";
 
             oszlop = 12;
             eleje = 12;
 
             Kezelő_Jármű_Állomány_Típus KJÁT_kéz = new Kezelő_Jármű_Állomány_Típus();
-            List<Adat_Jármű_Állomány_Típus> típus = KJÁT_kéz.Lista_adatok(hely);
+            List<Adat_Jármű_Állomány_Típus> típus = KJÁT_kéz.Lista_Adatok(Cmbtelephely.Trim());
 
             foreach (Adat_Jármű_Állomány_Típus rekord in típus)
             {
@@ -73,7 +71,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
             // napi adatok tábla
             // megnézzük kicsinálta
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\főkönyv\{Dátum.Year}\nap\{Dátum:yyyyMMdd}{napszak.Trim()}nap.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\főkönyv\{Dátum.Year}\nap\{Dátum:yyyyMMdd}{napszak.Trim()}nap.mdb";
             string jelszó = "lilaakác";
             string szöveg = "SELECT * FROM segédtábla WHERE id=1 ";
             Kezelő_Főkönyv_SegédTábla KézSegédTábla = new Kezelő_Főkönyv_SegédTábla();

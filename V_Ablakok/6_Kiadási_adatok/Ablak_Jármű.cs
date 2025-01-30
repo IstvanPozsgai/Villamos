@@ -1393,7 +1393,7 @@ namespace Villamos
                 string jelszó = "pozsgaii";
 
                 Kezelő_Jármű_Állomány_Típus kéz = new Kezelő_Jármű_Állomány_Típus();
-                List<Adat_Jármű_Állomány_Típus> Adatok = kéz.Lista_adatok(hely);
+                List<Adat_Jármű_Állomány_Típus> Adatok = kéz.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Jármű_Állomány_Típus EgyTípus = (from a in Adatok
                                                       where a.Típus == Telephelyi_típus.Text.Trim()

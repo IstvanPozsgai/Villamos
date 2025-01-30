@@ -11,8 +11,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
 
-        public List<Adat_Jármű_Állomány_Típus> Lista_adatok(string hely)
+        public List<Adat_Jármű_Állomány_Típus> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".Ellenőrzés();
             string szöveg = "Select * FROM típustábla order by id";
 
             List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
@@ -43,7 +44,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Jármű_Állomány_Típus Adat)
+        public void Rögzítés(string Telephely, Adat_Jármű_Állomány_Típus Adat)
         {
             try
             {
@@ -51,6 +52,7 @@ namespace Villamos.Kezelők
                 szöveg += $" VALUES ({Adat.Id},";
                 szöveg += $" '{Adat.Típus}',";
                 szöveg += $" {Adat.Állomány} )";
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".Ellenőrzés();
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -64,17 +66,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// típus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Törlés(string hely, Adat_Jármű_Állomány_Típus Adat)
+        public void Törlés(string Telephely, Adat_Jármű_Állomány_Típus Adat)
         {
             try
             {
                 string szöveg = $"DELETE FROM típustábla WHERE típus='{Adat.Típus}'";
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".Ellenőrzés();
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -88,19 +85,14 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// típus
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, Adat_Jármű_Állomány_Típus Adat)
+        public void Módosítás(string Telephely, Adat_Jármű_Állomány_Típus Adat)
         {
             try
             {
                 string szöveg = $"Update típustábla SET ";
                 szöveg += $"id = '{Adat.Id}' ";
                 szöveg += $"WHERE típus = '{Adat.Típus}'";
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".Ellenőrzés();
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -113,6 +105,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }

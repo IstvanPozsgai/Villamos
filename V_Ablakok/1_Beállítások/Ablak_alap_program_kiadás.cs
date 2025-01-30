@@ -85,9 +85,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-
-                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_adatok(hely);
+                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 CmbTípus.Items.Clear();
                 CmbForteTípus.Items.Clear();
@@ -1031,11 +1029,7 @@ namespace Villamos
             {
                 if (txtTípuslét.Text.Trim() == "") throw new HibásBevittAdat("A Típust meg kell adni nem lehet üres mező.");
                 // Leellenőrizzük, hogy van-e már ilyen típus
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-
-
-
-                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_adatok(hely);
+                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Jármű_Állomány_Típus rekord = (from a in Adatok
                                                     where a.Típus == txtTípuslét.Text.Trim()
@@ -1049,7 +1043,7 @@ namespace Villamos
                     Adat_Jármű_Állomány_Típus ADAT = new Adat_Jármű_Állomány_Típus(i,
                                                                                    0,
                                                                                    txtTípuslét.Text.Trim());
-                    Kéz_Állomány_Típus.Rögzítés(hely, ADAT);
+                    Kéz_Állomány_Típus.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                     MessageBox.Show("Az adatok módosítása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Típusfeltöltés();
@@ -1072,9 +1066,7 @@ namespace Villamos
             {
                 if (txtTípuslét.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva elem amit törölni kellene.");
                 // Leellenőrizzük, hogy van-e már ilyen típus
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-
-                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_adatok(hely);
+                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Jármű_Állomány_Típus rekord = (from a in Adatok
                                                     where a.Típus == txtTípuslét.Text.Trim()
                                                     select a).FirstOrDefault();
@@ -1090,7 +1082,7 @@ namespace Villamos
                     }
                     else
                     {
-                        Kéz_Állomány_Típus.Törlés(hely, ADAT);
+                        Kéz_Állomány_Típus.Törlés(Cmbtelephely.Text.Trim(), ADAT);
                         Típusfeltöltés();
                         MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -1122,9 +1114,7 @@ namespace Villamos
                     előzőnév = LstTípuslét.Items[i].ToStrTrim();
                 }
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-
-                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_adatok(hely);
+                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Jármű_Állomány_Típus Előző = (from a in Adatok
                                                    where a.Típus == előzőnév
@@ -1137,9 +1127,9 @@ namespace Villamos
                     Adat_Jármű_Állomány_Típus ADAT = new Adat_Jármű_Állomány_Típus(Aktuális.Id,
                                                                                    Előző.Állomány,
                                                                                    Előző.Típus);
-                    Kéz_Állomány_Típus.Módosítás(hely, ADAT);
+                    Kéz_Állomány_Típus.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                     ADAT = new Adat_Jármű_Állomány_Típus(Előző.Id, Aktuális.Állomány, Aktuális.Típus);
-                    Kéz_Állomány_Típus.Módosítás(hely, ADAT);
+                    Kéz_Állomány_Típus.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                     Típusfeltöltés();
                 }
             }
@@ -3815,11 +3805,9 @@ namespace Villamos
             {
                 if (CmbFőforteTelephely.Text.Trim() == "") throw new HibásBevittAdat("A Forte típus mező nem lehet üres.");
 
-                string hely = $@"{Application.StartupPath}\{CmbFőforteTelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-
                 CmbFőforteTelephelyTípus.Items.Clear();
 
-                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_adatok(hely);
+                List<Adat_Jármű_Állomány_Típus> Adatok = Kéz_Állomány_Típus.Lista_Adatok(CmbFőforteTelephely.Text.Trim());
                 foreach (Adat_Jármű_Állomány_Típus rekord in Adatok)
                     CmbFőforteTelephelyTípus.Items.Add(rekord.Típus);
 
@@ -4036,9 +4024,7 @@ namespace Villamos
                 LstKapcsolat.Items.Clear();
                 if (CmbKapcsolat.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva típus.");
 
-                string hely = $@"{Application.StartupPath}\" + CmbKapcsolat.Text + @"\adatok\villamos\Jármű.mdb";
-
-                List<Adat_Jármű_Állomány_Típus> AdatokJármÁll = Kéz_Állomány_Típus.Lista_adatok(hely);
+                List<Adat_Jármű_Állomány_Típus> AdatokJármÁll = Kéz_Állomány_Típus.Lista_Adatok(CmbKapcsolat.Text.Trim());
 
                 List<Adat_Kiegészítő_Típusrendezéstábla> AdatokKiegTípus = KézKiegTípus.Lista_Adatok();
 
