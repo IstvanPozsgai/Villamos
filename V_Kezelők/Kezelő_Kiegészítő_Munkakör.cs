@@ -9,7 +9,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Munkakör
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb".Ellenőrzés();
         readonly string jelszó = "Mocó";
         public List<Adat_Kiegészítő_Munkakör> Lista_Adatok()
         {
@@ -63,10 +63,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        /// <summary>
-        /// Id szerint keresessünk
-        /// </summary>
-        /// <param name="Adat"></param>
         public void Módosítás(Adat_Kiegészítő_Munkakör Adat)
         {
             try

@@ -12,39 +12,6 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
 
-
-        public List<Adat_Kiegészítő_Feorszámok> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            Adat_Kiegészítő_Feorszámok Adat;
-            List<Adat_Kiegészítő_Feorszámok> Adatok = new List<Adat_Kiegészítő_Feorszámok>();
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Feorszámok(
-                                           rekord["sorszám"].ToÉrt_Long(),
-                                           rekord["Feorszám"].ToStrTrim(),
-                                           rekord["feormegnevezés"].ToStrTrim(),
-                                           rekord["Státus"].ToÉrt_Long()
-                                           );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
         public List<Adat_Kiegészítő_Feorszámok> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM feorszámok ORDER BY sorszám";

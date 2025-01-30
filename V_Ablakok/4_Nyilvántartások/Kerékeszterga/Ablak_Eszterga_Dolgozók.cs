@@ -55,13 +55,9 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Telephely.Items.Clear();
-                //    Telephely.Items.Add("BKV egyéb");
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM könyvtár ORDER BY név";
 
                 Kezelő_Kiegészítő_Könyvtár kéz = new Kezelő_Kiegészítő_Könyvtár();
-                List<Adat_Kiegészítő_Könyvtár> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Könyvtár> Adatok = kéz.Lista_Adatok().OrderBy(a => a.Név).ToList();
 
                 foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
                     Telephely.Items.Add(rekord.Név.Trim());
@@ -85,7 +81,7 @@ namespace Villamos.Villamos_Ablakok
                 Dolgozó_nevek.Items.Clear();
 
                 string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Trim() + @"\Adatok\Dolgozók.mdb";
-                if (!File.Exists(hely) )
+                if (!File.Exists(hely))
                     return;
                 string jelszó = "forgalmiutasítás";
                 string szöveg = "SELECT * FROM Dolgozóadatok WHERE kilépésiidő=#1/1/1900# ORDER BY DolgozóNév asc";

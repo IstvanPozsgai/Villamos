@@ -650,11 +650,8 @@ namespace Villamos
             {
                 Jogtípus.BeginUpdate();
                 Jogtípus.Items.Clear();
-                string hely = $@"{Application.StartupPath}\" + @"Főmérnökség\adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM jogtípus order by típus asc";
                 Kezelő_Kiegészítő_Jogtípus kéz = new Kezelő_Kiegészítő_Jogtípus();
-                List<Adat_Kiegészítő_Jogtípus> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Jogtípus> Adatok = kéz.Lista_Adatok().OrderBy(a => a.Típus).ToList();
 
                 foreach (Adat_Kiegészítő_Jogtípus rekord in Adatok)
                     Jogtípus.Items.Add(rekord.Típus.Trim());
@@ -926,12 +923,9 @@ namespace Villamos
                 Vonalszám.Items.Clear();
                 Vonalmegnevezés.BeginUpdate();
                 Vonalmegnevezés.Items.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM jogvonal order by szám asc";
 
                 Kezelő_Kiegészítő_JogVonal kéz = new Kezelő_Kiegészítő_JogVonal();
-                List<Adat_Kiegészítő_Jogvonal> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Jogvonal> Adatok = kéz.Lista_Adatok().OrderBy(a => a.Szám).ToList();
 
                 foreach (Adat_Kiegészítő_Jogvonal rekord in Adatok)
                 {
@@ -1134,11 +1128,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM jogvonal  where szám='{Vonalszám.Text.Trim()}'";
                 Kezelő_Kiegészítő_JogVonal kéz = new Kezelő_Kiegészítő_JogVonal();
-                Adat_Kiegészítő_Jogvonal rekord = kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_Kiegészítő_Jogvonal rekord = kéz.Lista_Adatok().Where(a => a.Szám == Vonalszám.Text.Trim()).FirstOrDefault();
 
                 if (rekord != null) Vonalmegnevezés.Text = rekord.Megnevezés.Trim();
             }
@@ -1157,12 +1148,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM jogvonal WHERE megnevezés='{Vonalmegnevezés.Text.Trim()}'";
-
                 Kezelő_Kiegészítő_JogVonal kéz = new Kezelő_Kiegészítő_JogVonal();
-                Adat_Kiegészítő_Jogvonal rekord = kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_Kiegészítő_Jogvonal rekord = kéz.Lista_Adatok().Where(a => a.Megnevezés == Vonalmegnevezés.Text.Trim()).FirstOrDefault();
                 if (rekord != null) Vonalszám.Text = rekord.Szám.Trim();
             }
             catch (HibásBevittAdat ex)
@@ -1443,7 +1430,7 @@ namespace Villamos
         {
             try
             {
-                FeorListaFeltöltése();
+                AdatokFeor = Kéz.Lista_Adatok().Where(a => a.Státus == 0).OrderBy(a => a.Feormegnevezés).ToList();
                 Munkakör.BeginUpdate();
                 Munkakör.Items.Clear();
                 foreach (Adat_Kiegészítő_Feorszámok rekord in AdatokFeor)
@@ -1554,7 +1541,7 @@ namespace Villamos
         {
             try
             {
-                FeorListaFeltöltése();
+                AdatokFeor = Kéz.Lista_Adatok().Where(a => a.Státus == 0).OrderBy(a => a.Feormegnevezés).ToList();
                 PDFMunkakör.BeginUpdate();
                 PDFMunkakör.Items.Clear();
                 foreach (Adat_Kiegészítő_Feorszámok rekord in AdatokFeor)
@@ -2463,27 +2450,6 @@ namespace Villamos
         {
             DolgozóLista();
             ÚjraKiír();
-        }
-
-        private void FeorListaFeltöltése()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM feorszámok WHERE Státus=0 ORDER BY feormegnevezés asc";
-
-                AdatokFeor = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void MunkaListaFeltöltés()

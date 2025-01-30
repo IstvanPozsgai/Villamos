@@ -482,8 +482,7 @@ namespace Villamos
                 if (CsoportNév.Text.Trim() == "") throw new HibásBevittAdat("A Csoport név mező nem lehet üres!");
                 if (CsoportTípus.Text.Trim() == "") CsoportTípus.Text = "*";
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = KézCsoportbeosztás.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = KézCsoportbeosztás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Csoportbeosztás Elem = (from a in AdatokÖ
                                                         where a.Csoportbeosztás == CsoportNév.Text.Trim()
@@ -494,14 +493,14 @@ namespace Villamos
                     Adat_Kiegészítő_Csoportbeosztás ADAT = new Adat_Kiegészítő_Csoportbeosztás(Elem.Sorszám,
                                                                                                CsoportNév.Text.Trim(),
                                                                                                CsoportTípus.Text.Trim());
-                    KézCsoportbeosztás.Módosítás(hely, ADAT);
+                    KézCsoportbeosztás.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 }
                 else
                 {
                     Adat_Kiegészítő_Csoportbeosztás ADAT = new Adat_Kiegészítő_Csoportbeosztás(0,
                                                                                               CsoportNév.Text.Trim(),
                                                                                               CsoportTípus.Text.Trim());
-                    KézCsoportbeosztás.Rögzítés(hely, ADAT);
+                    KézCsoportbeosztás.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                 }
 
                 Csoportlista_listázás();
@@ -525,13 +524,12 @@ namespace Villamos
                 if (CsoportTábla.SelectedRows.Count == 0) return;
                 if (!long.TryParse(CsoportTábla.Rows[CsoportTábla.SelectedRows[0].Index].Cells[0].Value.ToStrTrim(), out long Sorszám)) throw new HibásBevittAdat("Érvénytelen sorszám");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = KézCsoportbeosztás.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = KézCsoportbeosztás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Csoportbeosztás Elem = (from a in AdatokÖ
                                                         where a.Sorszám == Sorszám
                                                         select a).FirstOrDefault();
-                if (Elem != null) KézCsoportbeosztás.Törlés(hely, Sorszám);
+                if (Elem != null) KézCsoportbeosztás.Törlés(Cmbtelephely.Text.Trim(), Sorszám);
 
                 Csoportlista_listázás();
                 CsoportSorszámEll();
@@ -556,9 +554,7 @@ namespace Villamos
                 if (CsoportTábla.SelectedRows.Count == 0) return;
                 if (CsoportTábla.SelectedRows[0].Index == 0) throw new HibásBevittAdat("Az elsőt nem lehet feljebb vinni.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-
-                KézCsoportbeosztás.Csere(hely, CsoportTábla.Rows[CsoportTábla.SelectedRows[0].Index].Cells[0].Value.ToÉrt_Int(),
+                KézCsoportbeosztás.Csere(Cmbtelephely.Text.Trim(), CsoportTábla.Rows[CsoportTábla.SelectedRows[0].Index].Cells[0].Value.ToÉrt_Int(),
                                                 CsoportTábla.Rows[CsoportTábla.SelectedRows[0].Index - 1].Cells[0].Value.ToÉrt_Int());
 
                 Csoportlista_listázás();
@@ -579,8 +575,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = KézCsoportbeosztás.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = KézCsoportbeosztás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 CsoportTábla.Rows.Clear();
                 CsoportTábla.Columns.Clear();
@@ -639,8 +634,7 @@ namespace Villamos
 
         private void CsoportSorszámEll()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-            KézCsoportbeosztás.SorszámEllenőrzés(hely);
+            KézCsoportbeosztás.SorszámEllenőrzés(Cmbtelephely.Text.Trim());
         }
         #endregion
 
@@ -1144,23 +1138,6 @@ namespace Villamos
 
 
         #region Feor
-        private void FeorListaFeltöltés()
-        {
-            try
-            {
-                AdatokFeorSzám.Clear();
-                AdatokFeorSzám = KézFeorszám.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Command4_Click(object sender, EventArgs e)
         {
@@ -1252,7 +1229,7 @@ namespace Villamos
         {
             try
             {
-                FeorListaFeltöltés();
+                AdatokFeorSzám = KézFeorszám.Lista_Adatok();
 
                 DataTable AdatTábla = new DataTable();
 
@@ -1318,7 +1295,7 @@ namespace Villamos
         {
             try
             {
-                FeorListaFeltöltés();
+                AdatokFeorSzám = KézFeorszám.Lista_Adatok();
                 if (!long.TryParse(Feorsorszám.Text.Trim(), out long SorszámFeor)) return;
                 if (FeorFeorszám.Text.Trim() == "") return;
                 if (FeorFeormegnevezés.Text.Trim() == "") return;
@@ -1422,23 +1399,6 @@ namespace Villamos
 
 
         #region Jogosítvány típus
-        private void JogTípusListaFeltöltés()
-        {
-            try
-            {
-                AdatokJog.Clear();
-                AdatokJog = KézJogTípus.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Command5_Click(object sender, EventArgs e)
         {
@@ -1495,7 +1455,7 @@ namespace Villamos
         {
             try
             {
-                JogTípusListaFeltöltés();
+                AdatokJog = KézJogTípus.Lista_Adatok();
 
                 DataTable AdatTábla = new DataTable();
 
@@ -1592,23 +1552,6 @@ namespace Villamos
 
 
         #region Jogosítvány viszonylat
-        private void JogVonalListaFeltöltés()
-        {
-            try
-            {
-                AdatokJogVonal.Clear();
-                AdatokJogVonal = KézJogVonal.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Command3_Click(object sender, EventArgs e)
         {
@@ -1676,7 +1619,7 @@ namespace Villamos
         {
             try
             {
-                JogVonalListaFeltöltés();
+                AdatokJogVonal = KézJogVonal.Lista_Adatok();
 
                 DataTable AdatTábla = new DataTable();
 
@@ -2258,30 +2201,12 @@ namespace Villamos
 
 
         #region Jelenléti ív
-        private void JelenlétiListaFeltöltés()
-        {
-            try
-            {
-                AdatokJelenléti.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-                AdatokJelenléti = KézJelenléti.Lista_Adatok(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Jelenléti_kitöltés()
         {
             try
             {
-                JelenlétiListaFeltöltés();
+                AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 JelenlétiText1.Text = "";
                 JelenlétiText2.Text = "";
@@ -2342,19 +2267,19 @@ namespace Villamos
             try
             {
                 if (JelenlétiText1.Text.Trim() == "") throw new HibásBevittAdat("A mező nem lehet üres!");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
+
                 JelenlétiText1.Text = MyF.Szöveg_Tisztítás(JelenlétiText1.Text);
 
-                JelenlétiListaFeltöltés();
+                AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Jelenlétiív Elem = (from a in AdatokJelenléti
                                                     where a.Id == 1
                                                     select a).FirstOrDefault();
 
                 Adat_Kiegészítő_Jelenlétiív ADAT = new Adat_Kiegészítő_Jelenlétiív(1, JelenlétiText1.Text.Trim());
                 if (Elem != null)
-                    KézJelenléti.Módosítás(hely, ADAT);
+                    KézJelenléti.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézJelenléti.Rögzítés(hely, ADAT);
+                    KézJelenléti.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 Jelenléti_kitöltés();
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2375,18 +2300,18 @@ namespace Villamos
             try
             {
                 if (JelenlétiText2.Text.Trim() == "") throw new HibásBevittAdat("A mező nem lehet üres!");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-                JelenlétiText2.Text = MyF.Szöveg_Tisztítás(JelenlétiText2.Text);
 
-                JelenlétiListaFeltöltés();
+                JelenlétiText2.Text = MyF.Szöveg_Tisztítás(JelenlétiText2.Text);
+                AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
+
                 Adat_Kiegészítő_Jelenlétiív Elem = (from a in AdatokJelenléti
                                                     where a.Id == 2
                                                     select a).FirstOrDefault();
                 Adat_Kiegészítő_Jelenlétiív ADAT = new Adat_Kiegészítő_Jelenlétiív(2, JelenlétiText2.Text.Trim());
                 if (Elem != null)
-                    KézJelenléti.Módosítás(hely, ADAT);
+                    KézJelenléti.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézJelenléti.Rögzítés(hely, ADAT);
+                    KézJelenléti.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 Jelenléti_kitöltés();
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2407,10 +2332,10 @@ namespace Villamos
             try
             {
                 if (JelenlétiText3.Text.Trim() == "") throw new HibásBevittAdat("A mező nem lehet üres!");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
+
                 JelenlétiText3.Text = MyF.Szöveg_Tisztítás(JelenlétiText3.Text);
 
-                JelenlétiListaFeltöltés();
+                AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Jelenlétiív Elem = (from a in AdatokJelenléti
                                                     where a.Id == 3
                                                     select a).FirstOrDefault();
@@ -2418,9 +2343,9 @@ namespace Villamos
                 Adat_Kiegészítő_Jelenlétiív ADAT = new Adat_Kiegészítő_Jelenlétiív(3, JelenlétiText3.Text.Trim());
 
                 if (Elem != null)
-                    KézJelenléti.Módosítás(hely, ADAT);
+                    KézJelenléti.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézJelenléti.Rögzítés(hely, ADAT);
+                    KézJelenléti.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 Jelenléti_kitöltés();
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2441,18 +2366,18 @@ namespace Villamos
             try
             {
                 if (JelenlétiText4.Text.Trim() == "") throw new HibásBevittAdat("A mező nem lehet üres!");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
+
                 JelenlétiText4.Text = MyF.Szöveg_Tisztítás(JelenlétiText4.Text);
 
-                JelenlétiListaFeltöltés();
+                AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Jelenlétiív Elem = (from a in AdatokJelenléti
                                                     where a.Id == 4
                                                     select a).FirstOrDefault();
                 Adat_Kiegészítő_Jelenlétiív ADAT = new Adat_Kiegészítő_Jelenlétiív(4, JelenlétiText4.Text.Trim());
                 if (Elem != null)
-                    KézJelenléti.Módosítás(hely, ADAT);
+                    KézJelenléti.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézJelenléti.Rögzítés(hely, ADAT);
+                    KézJelenléti.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 Jelenléti_kitöltés();
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2473,18 +2398,18 @@ namespace Villamos
             try
             {
                 if (JelenlétiText5.Text.Trim() == "") throw new HibásBevittAdat("A mező nem lehet üres!");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
+
                 JelenlétiText5.Text = MyF.Szöveg_Tisztítás(JelenlétiText5.Text);
 
-                JelenlétiListaFeltöltés();
+                AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Jelenlétiív Elem = (from a in AdatokJelenléti
                                                     where a.Id == 5
                                                     select a).FirstOrDefault();
                 Adat_Kiegészítő_Jelenlétiív ADAT = new Adat_Kiegészítő_Jelenlétiív(5, JelenlétiText5.Text.Trim());
                 if (Elem != null)
-                    KézJelenléti.Módosítás(hely, ADAT);
+                    KézJelenléti.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    KézJelenléti.Rögzítés(hely, ADAT);
+                    KézJelenléti.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 Jelenléti_kitöltés();
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2505,8 +2430,7 @@ namespace Villamos
             try
             {
                 AdatokAlárás.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                AdatokAlárás = KézAláíró.Lista_Adatok(hely);
+                AdatokAlárás = KézAláíró.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -2561,12 +2485,10 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
                 Adat_Kiegészítő_főkönyvtábla ADAT2 = new Adat_Kiegészítő_főkönyvtábla(2, txtnév2.Text.Trim(), txtbeosztás2.Text.Trim());
                 Adat_Kiegészítő_főkönyvtábla ADAT3 = new Adat_Kiegészítő_főkönyvtábla(3, txtnév3.Text.Trim(), txtbeosztás3.Text.Trim());
-                KézAláíró.Módosítás(hely, ADAT2);
-                KézAláíró.Módosítás(hely, ADAT3);
+                KézAláíró.Módosítás(Cmbtelephely.Text.Trim(), ADAT2);
+                KézAláíró.Módosítás(Cmbtelephely.Text.Trim(), ADAT3);
                 Jelenlét_aláírók();
 
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2585,24 +2507,6 @@ namespace Villamos
 
 
         #region Beosztáskódok
-        private void BEOListaFeltöltés()
-        {
-            try
-            {
-                AdatokBeoKód.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-                AdatokBeoKód = kézBeoKód.Lista_Adatok(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void BeoOk_Click(object sender, EventArgs e)
         {
@@ -2618,9 +2522,7 @@ namespace Villamos
                 if (!int.TryParse(BEOMunkarend.Text, out int Munkarend)) throw new HibásBevittAdat("A Munkarend mező nem lehet szöveg!!");
                 if (BEOMagyarázat.Text.Trim() == "") throw new HibásBevittAdat("A Magyarázat mező nem lehet üres!!");
 
-                BEOListaFeltöltés();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
+                AdatokBeoKód = kézBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Beosztáskódok Elem = (from a in AdatokBeoKód
                                                       where a.Sorszám == SorszámBEO
@@ -2637,9 +2539,9 @@ namespace Villamos
                                         BEOMagyarázat.Text.Trim());
 
                 if (Elem != null)
-                    kézBeoKód.Módosítás(hely, ADAT);
+                    kézBeoKód.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                    kézBeoKód.Rögzítés(hely, ADAT);
+                    kézBeoKód.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 BeosztásTáblaíró();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2660,13 +2562,13 @@ namespace Villamos
             try
             {
                 if (BeoKód.Text.Trim() == "") return;
-                BEOListaFeltöltés();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
+                AdatokBeoKód = kézBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
+
                 Adat_Kiegészítő_Beosztáskódok Elem = (from a in AdatokBeoKód
                                                       where a.Beosztáskód == BeoKód.Text.Trim()
                                                       select a).FirstOrDefault();
                 if (Elem == null) return;
-                kézBeoKód.Törlés(hely, BeoKód.Text.Trim());
+                kézBeoKód.Törlés(Cmbtelephely.Text.Trim(), BeoKód.Text.Trim());
                 BeosztásTáblaíró();
                 MessageBox.Show("Az adatok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -2826,7 +2728,7 @@ namespace Villamos
         {
             try
             {
-                BEOListaFeltöltés();
+                AdatokBeoKód = kézBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 DataTable AdatTábla = new DataTable();
                 AdatTábla.Columns.Clear();
@@ -2890,29 +2792,12 @@ namespace Villamos
 
 
         #region Védőlap
-        private void VédelemListaFeltöltés()
-        {
-            try
-            {
-                AdatokKiegVéd.Clear();
-                AdatokKiegVéd = KézKiegVéd.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Védő_tábla_kiir()
         {
             try
             {
-                VédelemListaFeltöltés();
+                AdatokKiegVéd = KézKiegVéd.Lista_Adatok();
 
                 Védő_tábla.Rows.Clear();
                 Védő_tábla.Columns.Clear();
@@ -2991,7 +2876,7 @@ namespace Villamos
             {
                 Védő_Megnevezés.Text = MyF.Szöveg_Tisztítás(Védő_Megnevezés.Text);
                 if (!long.TryParse(Védő_id.Text.Trim(), out long Sorszám)) Sorszám = 0;
-                VédelemListaFeltöltés();
+                AdatokKiegVéd = KézKiegVéd.Lista_Adatok();
 
                 Adat_Kiegészítő_Védelem Elem = (from a in AdatokKiegVéd
                                                 where a.Sorszám == Sorszám
@@ -3309,6 +3194,5 @@ namespace Villamos
         }
 
         #endregion
-
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 
@@ -107,27 +106,14 @@ namespace Villamos
         /// <returns></returns>
         public static AdatCombohoz[] TelephelyLista_Személy(bool Főmérnök)
         {
-            // false
-            //List<Adat_Kiegészítő_Könyvtár> AdatokÖ = kézKönyvtár.Lista_Adatok();
-            //List<Adat_Kiegészítő_Könyvtár> Adatok = (from a in AdatokÖ
-            //                                         where a.Név != "Főmérnökség"
-            //                                         select a).ToList();
-
-            //foreach (Adat_Kiegészítő_Könyvtár Elem in Adatok)
-            //    Cmbtelephely.Items.Add(Elem.Név);
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
-            string jelszó = "Mocó";
-            string szöveg;
-
-            //Főmérnökséget töröl a listából
-            if (Főmérnök)
-                szöveg = "SELECT * FROM könyvtár ORDER BY név";
-            else
-                szöveg = "SELECT * FROM könyvtár WHERE Név<>'Főmérnökség' ORDER BY név";
-
 
             Kezelő_Kiegészítő_Könyvtár Kéz = new Kezelő_Kiegészítő_Könyvtár();
-            List<Adat_Kiegészítő_Könyvtár> AdatokÖ = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Kiegészítő_Könyvtár> AdatokÖ;
+            //Főmérnökséget töröl a listából
+            if (Főmérnök)
+                AdatokÖ = Kéz.Lista_Adatok().OrderBy(a => a.Név).ToList();
+            else
+                AdatokÖ = Kéz.Lista_Adatok().Where(a => a.Név != "Főmérnökség").OrderBy(a => a.Név).ToList();
 
             Adat_Kiegészítő_Könyvtár Elem = (from a in AdatokÖ
                                              where a.Név == Program.PostásTelephely

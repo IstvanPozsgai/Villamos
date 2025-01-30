@@ -9,38 +9,8 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Védelem
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb".Ellenőrzés();
         readonly string jelszó = "Mocó";
-
-        public List<Adat_Kiegészítő_Védelem> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Védelem> Adatok = new List<Adat_Kiegészítő_Védelem>();
-            Adat_Kiegészítő_Védelem Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Védelem(
-                                     rekord["sorszám"].ToÉrt_Long(),
-                                     rekord["megnevezés"].ToStrTrim()
-                                     );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Kiegészítő_Védelem> Lista_Adatok()
         {

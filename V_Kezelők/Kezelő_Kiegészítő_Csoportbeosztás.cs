@@ -43,8 +43,9 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Kiegészítő_Csoportbeosztás> Lista_Adatok(string hely)
+        public List<Adat_Kiegészítő_Csoportbeosztás> Lista_Adatok(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM csoportbeosztás order by sorszám";
             List<Adat_Kiegészítő_Csoportbeosztás> Adatok = new List<Adat_Kiegészítő_Csoportbeosztás>();
             Adat_Kiegészítő_Csoportbeosztás Adat;
@@ -75,10 +76,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Kiegészítő_Csoportbeosztás Adat)
+        public void Rögzítés(string Telephely, Adat_Kiegészítő_Csoportbeosztás Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"INSERT INTO csoportbeosztás (sorszám, csoportbeosztás, típus) ";
                 szöveg += $"VALUES ({Sorszám(hely)}, ";
                 szöveg += $"'{Adat.Csoportbeosztás}', ";
@@ -97,16 +99,11 @@ namespace Villamos.Kezelők
 
         }
 
-        /// <summary>
-        /// csoportbeosztás
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="Adat"></param>
-        public void Módosítás(string hely, Adat_Kiegészítő_Csoportbeosztás Adat)
+        public void Módosítás(string Telephely, Adat_Kiegészítő_Csoportbeosztás Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = " UPDATE csoportbeosztás SET ";
                 szöveg += $" típus='{Adat.Típus}'";
                 szöveg += $" WHERE csoportbeosztás='{Adat.Csoportbeosztás}'";
@@ -124,11 +121,11 @@ namespace Villamos.Kezelők
 
         }
 
-
-        public void Módosítás(string hely, List<Adat_Kiegészítő_Csoportbeosztás> Adat)
+        public void Módosítás(string Telephely, List<Adat_Kiegészítő_Csoportbeosztás> Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kiegészítő_Csoportbeosztás rekord in Adat)
                 {
@@ -152,12 +149,12 @@ namespace Villamos.Kezelők
 
         }
 
-
-        private long Sorszám(string hely)
+        private long Sorszám(string Telephely)
         {
             long Válasz = 1;
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(hely);
                 if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(a => a.Sorszám) + 1;
             }
@@ -173,10 +170,11 @@ namespace Villamos.Kezelők
             return Válasz;
         }
 
-        public void Törlés(string hely, long Sorszám)
+        public void Törlés(string Telephely, long Sorszám)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $" DELETE FROM csoportbeosztás WHERE sorszám={Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -192,10 +190,11 @@ namespace Villamos.Kezelők
 
         }
 
-        public void Csere(string hely, long Sorszám1, long Sorszám2)
+        public void Csere(string Telephely, long Sorszám1, long Sorszám2)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(hely);
                 Adat_Kiegészítő_Csoportbeosztás Adat1 = Adatok.Find(a => a.Sorszám == Sorszám1);
                 Adat_Kiegészítő_Csoportbeosztás Adat2 = Adatok.Find(a => a.Sorszám == Sorszám2);
@@ -222,10 +221,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void SorszámEllenőrzés(string hely)
+        public void SorszámEllenőrzés(string Telephely)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = Lista_Adatok(hely);
 
                 int i = 1;

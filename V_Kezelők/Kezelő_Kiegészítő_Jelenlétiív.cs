@@ -40,9 +40,9 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Kiegészítő_Jelenlétiív> Lista_Adatok(string hely)
+        public List<Adat_Kiegészítő_Jelenlétiív> Lista_Adatok(string Telephely)
         {
-
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
             string szöveg = "SELECT * FROM jelenlétiív ORDER BY id";
             List<Adat_Kiegészítő_Jelenlétiív> Adatok = new List<Adat_Kiegészítő_Jelenlétiív>();
             Adat_Kiegészítő_Jelenlétiív Adat;
@@ -72,38 +72,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_Kiegészítő_Jelenlétiív Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Kiegészítő_Jelenlétiív Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_Kiegészítő_Jelenlétiív(
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["Szervezet"].ToStrTrim()
-                                      );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-
-        public void Rögzítés(string hely, Adat_Kiegészítő_Jelenlétiív Adat)
+        public void Rögzítés(string Telephely, Adat_Kiegészítő_Jelenlétiív Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"INSERT INTO jelenlétiív (id, szervezet) Values ({Adat.Id},'{Adat.Szervezet}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -118,10 +91,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, Adat_Kiegészítő_Jelenlétiív Adat)
+        public void Módosítás(string Telephely, Adat_Kiegészítő_Jelenlétiív Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
                 string szöveg = $"UPDATE jelenlétiív SET szervezet='{Adat.Szervezet}' where id={Adat.Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -136,6 +110,4 @@ namespace Villamos.Kezelők
             }
         }
     }
-
-
 }

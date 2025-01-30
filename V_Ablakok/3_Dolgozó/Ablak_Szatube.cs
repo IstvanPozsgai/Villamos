@@ -121,11 +121,8 @@ namespace Villamos
 
         private void Munkahely()
         {
-            string helym = $@"{Application.StartupPath}\" + CmbTelephely.Text.Trim() + @"\adatok\segéd\kiegészítő.mdb";
-            string jelszóm = "Mocó";
-            string szövegm = "Select * FROM jelenlétiív where id=4";
             Kezelő_Kiegészítő_Jelenlétiív Kéz = new Kezelő_Kiegészítő_Jelenlétiív();
-            Adat_Kiegészítő_Jelenlétiív Rekord = Kéz.Egy_Adat(helym, jelszóm, szövegm);
+            Adat_Kiegészítő_Jelenlétiív Rekord = Kéz.Lista_Adatok(CmbTelephely.Text.Trim()).Where(a => a.Id == 4).FirstOrDefault();
             if (Rekord != null)
                 Texttelephely = Rekord.Szervezet.Trim();
         }
@@ -2724,7 +2721,7 @@ namespace Villamos
             Kezelő_Dolgozó_Beosztás KézBeosztás = new Kezelő_Dolgozó_Beosztás();
             Adat_Dolgozó_Beosztás Elem = KézBeosztás.Egy_Adat(helyb, jelszób, szöveg);
 
-            if (Elem!=null)                 válasz = true;
+            if (Elem != null) válasz = true;
 
             return válasz;
         }
