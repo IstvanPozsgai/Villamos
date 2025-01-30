@@ -6,7 +6,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Sérülés
     {

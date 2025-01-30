@@ -6,7 +6,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Könyvtár
     {
@@ -155,8 +155,6 @@ namespace Villamos.Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
     }
 
 }

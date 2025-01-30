@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok;
 using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;

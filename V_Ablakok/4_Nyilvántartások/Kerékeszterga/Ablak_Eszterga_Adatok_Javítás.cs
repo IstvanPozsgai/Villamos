@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
@@ -65,7 +65,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     Típus_Eszt.Text = Adat.Típus_Eszt.Trim();
                     Pozíció.Text = Adat.Pozíció_Eszt.ToString();
                     Eszterga_Id.Text = Adat.Eszterga_Id.ToString();
-                    Státus.Text = Enum.GetName(typeof(MyEn.Eszt_Adat_Állapot_Státus), Adat.Státus); 
+                    Státus.Text = Enum.GetName(typeof(MyEn.Eszt_Adat_Állapot_Státus), Adat.Státus);
                     B_Átmérő_Ú.Text = Adat.B_Átmérő_Ú.ToString();
                     J_Átmérő_Ú.Text = Adat.J_Átmérő_Ú.ToString();
                     Megjegyzés.Text = Adat.Megjegyzés.Trim();
@@ -142,7 +142,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 }
 
                 Tábla.Visible = true;
-                Tábla.Refresh(); 
+                Tábla.Refresh();
                 Tábla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
@@ -207,13 +207,13 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     szövegmegjegyzés += $"Pozíció:{Adat.Pozíció_Eszt},";
                     volt = true;
                 }
-                if (Megjegyzés.Text.Trim () != Adat.Megjegyzés.Trim())
+                if (Megjegyzés.Text.Trim() != Adat.Megjegyzés.Trim())
                 {
                     if (volt) szöveg += ",";
                     szövegmegjegyzés += $"Megjegyzés:{Megjegyzés.Text.Trim()}\n";
                     szöveg += $" Megjegyzés='{Adat.Megjegyzés.Trim() + "\n" + szövegmegjegyzés}'";
                 }
-                   
+
                 szöveg += " WHERE Eszterga_Id=" + ID;
                 MyA.ABMódosítás(hely, jelszó, szöveg);
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);

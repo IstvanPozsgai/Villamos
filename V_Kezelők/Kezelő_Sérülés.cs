@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Villamos.Villamos_Adatszerkezet;
 
-namespace Villamos.Villamos_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Sérülés_Anyag
     {

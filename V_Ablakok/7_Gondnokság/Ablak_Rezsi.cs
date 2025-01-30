@@ -8,7 +8,7 @@ using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Közös;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
+using Villamos.Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;

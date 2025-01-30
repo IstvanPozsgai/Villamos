@@ -693,6 +693,7 @@
     <Compile Include="V_Kezelők\Kezelő_Belépés_Verzió.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_WinTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
     <Compile Include="V_Kezelők\Kezelő_Alap_egyéb.cs" />
@@ -751,6 +752,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Túlórakeret.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Váltóstábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Védelem.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kulcs_Fekete.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
     <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />

@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_jármű_hiba
     {

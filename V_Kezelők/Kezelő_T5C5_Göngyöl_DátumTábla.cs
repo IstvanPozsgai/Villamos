@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_T5C5_Göngyöl_DátumTábla
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
@@ -22,8 +22,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
 
 
-     readonly   string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-     readonly   string jelszó = "CzabalayL";
+        readonly string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
+        readonly string jelszó = "CzabalayL";
 
         public Ablak_CAF_Segéd(CAF_Segéd_Adat adat, DateTime dátumig)
         {
@@ -104,13 +104,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
 
-        private void AdatokListaFeltöltés() 
+        private void AdatokListaFeltöltés()
         {
             try
             {
                 Adatok.Clear();
                 string szöveg = "SELECT * FROM adatok";
-                Adatok = Kéz.Lista_Adatok(hely,jelszó,szöveg );
+                Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -236,7 +236,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 if (Segéd_Vizsg.Text.Trim() == "") throw new HibásBevittAdat("Vizsgálat neve nem lehet üres.");
                 if (Segéd_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("A pályaszám mező nem lehet üres.");
-         
+
                 if (!int.TryParse(Segéd_darab.Text, out int Darab)) throw new HibásBevittAdat("A darab mező nem lehet üres és pozitív egész számnak kell lennie.");
                 if (Darab <= 0) throw new HibásBevittAdat("A darab mező nem lehet nullánál kisebb.");
 
@@ -328,7 +328,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             try
             {
                 if (Segéd_sorszám.Text.Trim() == "") throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
-                if(!double .TryParse (Segéd_sorszám.Text.Trim(), out double Sorszám)) throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
+                if (!double.TryParse(Segéd_sorszám.Text.Trim(), out double Sorszám)) throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
 
                 AdatokListaFeltöltés();
 
@@ -368,7 +368,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
 
                 // ha nem raktuk át másik napra akkor kilépünk
-                if (Adat.Dátum == Dátumra)                      throw new HibásBevittAdat("Nem történt meg az átütemezés");
+                if (Adat.Dátum == Dátumra) throw new HibásBevittAdat("Nem történt meg az átütemezés");
 
                 MyCaf.IDŐ_Átütemez(hely, jelszó, Adat, Dátumra, Dátumig);
 
@@ -403,12 +403,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                         // ezen a napon ha van már idő alapú akkor töröljük
                         Adat_CAF_Adatok rekord = (from a in Adatok
-                                                  where a.Dátum >=Dátumra 
+                                                  where a.Dátum >= Dátumra
                                                   && a.Azonosító == Adat.Azonosító.Trim()
-                                                  && a.Státus ==0
-                                                  select a).FirstOrDefault ();
-        
-                        if (rekord!=null)
+                                                  && a.Státus == 0
+                                                  select a).FirstOrDefault();
+
+                        if (rekord != null)
                         {
                             szöveg = $"DELETE FROM adatok WHERE [Dátum]>=#{Dátumra:MM-dd-yyyy}# AND azonosító='{Adat.Azonosító.Trim()}' And státus=0";
                             MyA.ABtörlés(hely, jelszó, szöveg);

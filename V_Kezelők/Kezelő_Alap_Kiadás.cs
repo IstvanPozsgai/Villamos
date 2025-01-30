@@ -2,7 +2,7 @@
 using System.Data.OleDb;
 using MyF = Függvénygyűjtemény;
 
-namespace Villamos.Villamos_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Alap_Kiadás
     {

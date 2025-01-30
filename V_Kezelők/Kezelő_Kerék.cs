@@ -6,7 +6,7 @@ using MyF = Függvénygyűjtemény;
 using MyA = Adatbázis;
 using System.Linq;
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Kerék_Mérés
     {

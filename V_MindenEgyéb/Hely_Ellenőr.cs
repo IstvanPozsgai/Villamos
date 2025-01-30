@@ -7,7 +7,7 @@ namespace Villamos
 {
     public static class Hely_Ellenőr
     {
-        public static string Ellenőrzés(this string fájl)
+        public static string Ellenőrzés(this string fájl, string adattípus = "")
         {
             string Válasz = fájl;
             try
@@ -19,7 +19,7 @@ namespace Villamos
                 {
 
                     if (Könyvtár[i].Contains(".mdb"))
-                        Tábla(alap, Könyvtár[i]);
+                        Tábla(alap, Könyvtár[i], adattípus);
                     else
                     {
                         alap += $@"\{Könyvtár[i]}";
@@ -40,13 +40,12 @@ namespace Villamos
             return Válasz;
         }
 
-        private static void Tábla(string Hely, string fájl)
+        private static void Tábla(string Hely, string fájl, string adattípus)
         {
             string hely = $@"{Hely}\{fájl}";
             try
             {
-
-                if (fájl.Contains("napló") && fájl.Contains(".mdb")) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
+                if (fájl.Contains("napló") && fájl.Contains(".mdb") && adattípus == "Adat_Jármű_Napló") Adatbázis_Létrehozás.Kocsitípusanapló(hely);
                 if (fájl.Contains("Váltóscsoportvezetők.mdb")) Adatbázis_Létrehozás.Váltóscsopitábla(hely);
                 if (fájl.Contains("munkaidőnaptár.mdb")) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely);
                 if (fájl.Contains("üzenet.mdb")) Adatbázis_Létrehozás.ALÜzenetadatok(hely);
@@ -55,6 +54,9 @@ namespace Villamos
                 if (fájl.Contains("akku.mdb")) Adatbázis_Létrehozás.Akku_adatok(hely);
                 if (fájl.Contains("ciklus.mdb")) Adatbázis_Létrehozás.Ciklusrendtábla(hely);
                 if (fájl.Contains("munkalapelszámoló")) Adatbázis_Létrehozás.Ciklusrendtábla(hely);
+                if (fájl.Contains("Villamos9.mdb")) Adatbázis_Létrehozás.Felhasználó_Extra(hely);
+                if (fájl.Contains("Kulcs.mdb")) Adatbázis_Létrehozás.Kulcs_Adatok(hely);
+
 
 
 

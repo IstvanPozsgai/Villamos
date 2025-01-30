@@ -3,7 +3,7 @@ using System.Data.OleDb;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Telep_Kiegészítő_SAP
     {

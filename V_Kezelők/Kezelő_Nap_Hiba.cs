@@ -5,7 +5,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Nap_Hiba
     {

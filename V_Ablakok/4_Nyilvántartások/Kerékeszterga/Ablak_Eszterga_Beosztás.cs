@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
+using Villamos.Kezelők;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga

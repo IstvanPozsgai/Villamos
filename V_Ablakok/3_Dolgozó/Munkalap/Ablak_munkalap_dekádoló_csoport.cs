@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Villamos_Ablakok

@@ -6,7 +6,7 @@ using MyF = Függvénygyűjtemény;
 using MyA = Adatbázis;
 using System.Collections.Generic;
 using System.Linq;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Villamos_Ablakok

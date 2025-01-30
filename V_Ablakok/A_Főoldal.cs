@@ -10,14 +10,11 @@ using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP;
 using Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás;
 using Villamos.Villamos_Ablakok.Kerékeszterga;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 
@@ -33,16 +30,22 @@ namespace Villamos
         bool Shift_le = false;
         bool Alt_le = false;
 
+        #region Kezelők és Listák
+
+
         readonly Kezelő_Üzenet Kéz_Üzenet = new Kezelő_Üzenet();
         readonly Kezelő_Belépés_Verzió Kéz_Belépés_Verzió = new Kezelő_Belépés_Verzió();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelő_Jármű_Napló KézNapló = new Kezelő_Jármű_Napló();
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
         readonly Kezelő_Belépés_Jogosultságtábla Kéz_Jogosultság = new Kezelő_Belépés_Jogosultságtábla();
+        readonly Kezelő_Kulcs_Fekete KézFekete = new Kezelő_Kulcs_Fekete();
+        readonly Kezelő_Kulcs KézKulcs = new Kezelő_Kulcs();
 
         List<Adat_Belépés_Verzió> AdatokVerzó = new List<Adat_Belépés_Verzió>();
         List<Adat_Kiegészítő_Könyvtár> AdatokKönyvtár = new List<Adat_Kiegészítő_Könyvtár>();
         List<Adat_Jármű_Napló> AdatokNapló = new List<Adat_Jármű_Napló>();
+        #endregion
 
         public A_Főoldal()
         {
@@ -714,7 +717,7 @@ namespace Villamos
         {
             try
             {
-                NaplóListaFeltöltés();
+                AdatokNapló = KézNapló.Lista_adatok(DateTime.Today.Year);
                 List<Adat_Jármű_Napló> Adatok = (from a in AdatokNapló
                                                  where a.Céltelep == lbltelephely.Text.Trim()
                                                  && a.Üzenet == 0
@@ -730,8 +733,7 @@ namespace Villamos
                     Kéz_Üzenet.Rögzítés(lbltelephely.Text.Trim(), DateTime.Today.Year, ElemÜzenet);
 
                     //Naplózás
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
-                    KézNapló.Módosítás(hely, Adatok);
+                    KézNapló.Módosítás(DateTime.Today.Year, Adatok);
                 }
 
             }
@@ -749,26 +751,7 @@ namespace Villamos
             }
         }
 
-        private void NaplóListaFeltöltés()
-        {
-            try
-            {
-                AdatokNapló.Clear();
-                // ha nincs naplófájl akkor létrehozzuk
-                string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
-                AdatokNapló = KézNapló.Lista_adatok(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+
         #endregion
 
 
@@ -807,24 +790,13 @@ namespace Villamos
 
 
         #region Hardver_kulcs
-
-
         private void BtnHardverkulcs_Click(object sender, EventArgs e)
         {
             try
             {
-
-                string hely = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Villamos";
-                // ha a könyvtás akkor létre hozzuk
-                if (!Exists(hely)) Directory.CreateDirectory(hely);
-                hely += @"\Kulcs.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Kulcs_Adatok(hely);
-
                 // A jogokat beírjuk
                 string adat1 = MyF.MÁSRövidkód(Panels1.Text.Trim());
 
-                Kezelő_Kulcs_Fekete KézFekete = new Kezelő_Kulcs_Fekete();
-                Kezelő_Kulcs Kéz = new Kezelő_Kulcs();
                 List<Adat_Kulcs> AdatokTeljes = KézFekete.Lista_Adatok();
 
                 List<Adat_Kulcs> AdatokSzűrt = (from a in AdatokTeljes
@@ -834,7 +806,7 @@ namespace Villamos
                 foreach (Adat_Kulcs rekord in AdatokSzűrt)
                 {
                     Adat_Kulcs ADAT = new Adat_Kulcs(rekord.Adat1, rekord.Adat2, rekord.Adat3);
-                    Kéz.Rögzít(ADAT);
+                    KézKulcs.Rögzít(ADAT);
                     KézFekete.Törlés(ADAT);
                 }
                 MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2446,8 +2418,7 @@ namespace Villamos
             if (!Exists(hely)) return;
 
             string keres = MyF.MÁSRövidkód(Panels1.Text.Trim());
-            Kezelő_Kulcs_Fekete Kézkulcs = new Kezelő_Kulcs_Fekete();
-            List<Adat_Kulcs> Adatok = Kézkulcs.Lista_Adatok();
+            List<Adat_Kulcs> Adatok = KézFekete.Lista_Adatok();
             Adat_Kulcs Elem = (from a in Adatok
                                where a.Adat1.Contains(keres.Substring(0, keres.Length - 3))
                                select a).FirstOrDefault();
@@ -2506,7 +2477,5 @@ namespace Villamos
         }
 
         #endregion
-
-
     }
 }

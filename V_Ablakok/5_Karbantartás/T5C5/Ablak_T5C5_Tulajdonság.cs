@@ -8,11 +8,11 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.T5C5;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
+using Villamos.Kezelők;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -1182,27 +1182,18 @@ namespace Villamos
             {
                 // leellenőrizzük, hogy minden adat ki van-e töltve
 
-                if (VizsgKm.Text.Trim() == "") throw new HibásBevittAdat("Utolsó felújítás óta futott km mezőt ki kell tölteni");
+                if (!int.TryParse(VizsgKm.Text, out int vizsgkm)) throw new HibásBevittAdat("Vizsgálat km számláló állása mező nem lehet üres és egész számnak kell lennie.");
                 if (Vizsgfok.Text.Trim() == "") throw new HibásBevittAdat("Vizsgálat foka mezőt ki kell tölteni");
-                if (Vizsgsorszám.Text.Trim() == "") throw new HibásBevittAdat("Vizsgálat sorszáma mezőt ki kell tölteni");
-                if (!int.TryParse(Vizsgsorszám.Text, out int vizsgsorszám)) throw new HibásBevittAdat("Vizsgálat sorszáma mezőnek egész számnak kell lennie.");
-                if (!int.TryParse(VizsgKm.Text, out int vizsgkm)) throw new HibásBevittAdat("Vizsgálat km számláló állása mezőnek egész számnak kell lennie.");
-                if (KMUkm.Text.Trim() == "") throw new HibásBevittAdat("Utolsó felújítás óta futott km mezőt ki kell tölteni");
-                if (!int.TryParse(KMUkm.Text, out int kmukm)) throw new HibásBevittAdat("Utolsó felújítás óta futott km mezőnek egész számnak kell lennie.");
-                if (HaviKm.Text.Trim() == "") throw new HibásBevittAdat("Havi futásteljesítmény mezőt ki kell tölteni");
-                if (!int.TryParse(HaviKm.Text, out int havikm)) throw new HibásBevittAdat("Havi futásteljesítmény mezőnek egész számnak kell lennie.");
-                if (Jjavszám.Text.Trim() == "") throw new HibásBevittAdat("Felújítás sorszáma mezőt ki kell tölteni");
-                if (!int.TryParse(Jjavszám.Text, out int jjavszám)) throw new HibásBevittAdat("Felújítás sorszáma mezőnek egész számnak kell lennie.");
-                if (TEljesKmText.Text.Trim() == "") throw new HibásBevittAdat("Üzembehelyezés óta futott km mezőt ki kell tölteni");
-                if (!int.TryParse(TEljesKmText.Text, out int teljesKmText)) throw new HibásBevittAdat("Üzembehelyezés óta futott km mezőnek egész számnak kell lennie.");
+                if (!int.TryParse(Vizsgsorszám.Text, out int vizsgsorszám)) throw new HibásBevittAdat("Vizsgálat sorszáma mező nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(KMUkm.Text, out int kmukm)) throw new HibásBevittAdat("Utolsó felújítás óta futott km mező nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(HaviKm.Text, out int havikm)) throw new HibásBevittAdat("Havi futásteljesítmény mező nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(Jjavszám.Text, out int jjavszám)) throw new HibásBevittAdat("Felújítás sorszáma mező nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(TEljesKmText.Text, out int teljesKmText)) throw new HibásBevittAdat("Üzembehelyezés óta futott km mező nem lehet üres és egész számnak kell lennie.");
                 if (CiklusrendCombo.Text.Trim() == "") throw new HibásBevittAdat("Ütemezés típusa mezőt ki kell tölteni");
-                if (KövV2_Sorszám.Text.Trim() == "") throw new HibásBevittAdat("Következő V2-V3 sorszám mezőt ki kell tölteni");
-                if (!int.TryParse(KövV2_Sorszám.Text, out int kövV2_Sorszám)) throw new HibásBevittAdat("Következő V2-V3 sorszám mezőnek egész számnak kell lennie.");
-                if (KövV_Sorszám.Text.Trim() == "") throw new HibásBevittAdat("Következő V mezőt ki kell tölteni");
-                if (!int.TryParse(KövV_Sorszám.Text, out int kövV_Sorszám)) throw new HibásBevittAdat("Következő V mezőnek egész számnak kell lennie.");
-                if (KövV2km.Text.Trim() == "") throw new HibásBevittAdat("V2-V3-tól futott km mezőt ki kell tölteni");
-                if (!int.TryParse(KövV2km.Text, out int kövV2km)) throw new HibásBevittAdat("V2-V3-tól futott km mezőnek egész számnak kell lennie.");
-                if (!long.TryParse(KövV2_számláló.Text, out long kövV2_számláló)) throw new HibásBevittAdat("V2-V3 számláló állás mezőnek egész számnak kell lennie.");
+                if (!int.TryParse(KövV2_Sorszám.Text, out int kövV2_Sorszám)) throw new HibásBevittAdat("Következő V2-V3 sorszám mező nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(KövV_Sorszám.Text, out int kövV_Sorszám)) throw new HibásBevittAdat("Következő V mező nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(KövV2km.Text, out int kövV2km)) throw new HibásBevittAdat("V2-V3-tól futott km mező nem lehet üres és egész számnak kell lennie.");
+                if (!long.TryParse(KövV2_számláló.Text, out long kövV2_számláló)) throw new HibásBevittAdat("V2-V3 számláló állás mező nem lehet üres és egész számnak kell lennie.");
                 // megnézzük az adatbázist, ha nincs ilyen kocsi T5C5 benne akkor rögzít máskülönben az adatokat módosítja
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
                 string jelszó = "pozsgaii";

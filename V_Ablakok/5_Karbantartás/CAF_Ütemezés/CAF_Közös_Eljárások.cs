@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
 using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
@@ -177,7 +176,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             string szöveg = "SELECT * FROM adatok ORDER BY id desc";
             List<Adat_CAF_Adatok> Adatok = Kéz_Adatok.Lista_Adatok(hely, jelszó, szöveg);
             double válasz = 1;
-            if (Adatok.Count > 0) válasz = Adatok.Max (a=>a.Id )+1;
+            if (Adatok.Count > 0) válasz = Adatok.Max(a => a.Id) + 1;
             return válasz;
         }
 
@@ -186,7 +185,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             try
             {
                 double Sorszám;
-    
+
 
                 // ha nincs kitöltve az id, megkeressük a következő számot
                 if (Adat.Id == 0)
@@ -201,7 +200,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                         where a.Id == Sorszám
                                         select a).FirstOrDefault();
 
-                if (Elem!=null)
+                if (Elem != null)
                 {
                     // Módosít
                     szöveg = "UPDATE adatok  SET ";

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
+using Villamos.Kezelők;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 {

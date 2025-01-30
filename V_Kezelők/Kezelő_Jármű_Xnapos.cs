@@ -4,7 +4,7 @@ using System.Data.OleDb;
 using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű_Xnapos
     {

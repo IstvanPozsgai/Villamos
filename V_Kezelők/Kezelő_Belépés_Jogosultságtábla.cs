@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.Villamos_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Belépés_Jogosultságtábla
     {
@@ -90,7 +90,6 @@ namespace Villamos.Villamos_Kezelők
 
         }
 
-
         public void Törlés(string Telephely, Adat_Belépés_Jogosultságtábla Adat)
         {
             try
@@ -110,6 +109,5 @@ namespace Villamos.Villamos_Kezelők
             }
         }
     }
-
 
 }

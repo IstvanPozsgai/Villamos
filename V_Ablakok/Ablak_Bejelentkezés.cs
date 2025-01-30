@@ -5,9 +5,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
 using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 

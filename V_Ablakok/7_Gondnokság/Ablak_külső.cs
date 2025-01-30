@@ -4,11 +4,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -1649,12 +1648,14 @@ namespace Villamos
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
 
-                SaveFileDialog1.Title = "Dolgozói beviteli tábla készítése";
-                SaveFileDialog1.FileName = $"Dolgozói_Beviteli_tábla_{Dolg_cégid.Text.Trim()}-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                    Title = "Dolgozói beviteli tábla készítése",
+                    FileName = $"Dolgozói_Beviteli_tábla_{Dolg_cégid.Text.Trim()}-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
                 //  bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -2742,12 +2743,14 @@ namespace Villamos
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
 
-                SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = "Belépési_munkavégzési_" + Program.PostásTelephely + "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = "Belépési_munkavégzési_" + Program.PostásTelephely + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -3301,8 +3304,10 @@ namespace Villamos
         private void PDF_feltöltés_Click(object sender, EventArgs e)
         {
             PDF_cégid.Text = "";
-            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-            OpenFileDialog1.Filter = "PDF Files |*.pdf";
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+            {
+                Filter = "PDF Files |*.pdf"
+            };
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 PDF_megjelenítés(OpenFileDialog1.FileName);

@@ -2,7 +2,7 @@
 using System.Data.OleDb;
 using Villamos.Villamos_Adatszerkezet;
 
-namespace Villamos.Villamos_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Oktatásrajelöltek
     {

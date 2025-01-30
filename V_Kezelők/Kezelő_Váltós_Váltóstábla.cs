@@ -6,7 +6,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 
-namespace Villamos.Villamos_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Váltós_Váltóstábla
     {

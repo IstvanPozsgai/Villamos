@@ -4,8 +4,6 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.Villamos_Adatbázis_Funkció;
-using static System.IO.File;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -20,8 +18,6 @@ namespace Villamos.Kezelők
             {
                 string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
                 // ha nem létezik akkor létrehozzuk
-                if (!Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
-
                 Válasz = Sorszám(Telephely, Év);
 
                 Adat_Utasítás ADAT = new Adat_Utasítás(Válasz, mese, Program.PostásNév.Trim(), DateTime.Now, 0);
@@ -80,7 +76,6 @@ namespace Villamos.Kezelők
             try
             {
                 string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
-                if (!Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
                 Válasz = Sorszám(Telephely, Év);
                 string szöveg = "INSERT INTO üzenetek (sorszám, szöveg, írta, mikor, érvényes) VALUES ";
                 szöveg += $"({Válasz}, '{Adat.Szöveg}', '{Adat.Írta}', '{Adat.Mikor}', {Adat.Érvényes})";

@@ -7,7 +7,7 @@ using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
 
-namespace Villamos.Villamos.Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Osztály_Név
     {

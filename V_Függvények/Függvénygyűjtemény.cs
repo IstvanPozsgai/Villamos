@@ -5,7 +5,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos;
-using Villamos.Villamos.Kezelők;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 

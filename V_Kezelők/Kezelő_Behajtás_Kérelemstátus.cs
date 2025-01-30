@@ -3,7 +3,7 @@ using System.Data.OleDb;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 
-namespace Villamos.Villamos_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Behajtás_Kérelemstátus
     {
