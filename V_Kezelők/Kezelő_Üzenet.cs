@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Üzenet> Lista_Adatok(string Telephely, int Év)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM üzenetek ";
             List<Adat_Üzenet> Adatok = new List<Adat_Üzenet>();
             Adat_Üzenet Adat;
@@ -54,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".KönyvSzerk();
                 double id = Sorszám(Telephely, Év);
 
                 string szöveg = "INSERT INTO üzenetek  (sorszám, szöveg, írta, mikor,válaszsorszám ) VALUES (";
@@ -109,7 +109,7 @@ namespace Villamos.Kezelők
             Adat_Üzenet Válasz = null;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".KönyvSzerk();
                 string szöveg = $"Select * FROM Olvasás WHERE ki='{Program.PostásNév.Trim()}'  ORDER BY sorszám DESC";
                 List<Adat_Üzenet_Olvasás> AdatokOlvasás = KézOlvas.Lista_Adatok(Telephely, Év);
 

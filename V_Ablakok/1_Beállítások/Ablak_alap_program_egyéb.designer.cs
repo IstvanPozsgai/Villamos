@@ -150,7 +150,7 @@ namespace Villamos
             this.Tak_Ár_Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -1224,7 +1224,7 @@ namespace Villamos
             // Tak_id
             // 
             this.Tak_id.Enabled = false;
-            this.Tak_id.Location = new System.Drawing.Point(3, 30);
+            this.Tak_id.Location = new System.Drawing.Point(3, 37);
             this.Tak_id.Name = "Tak_id";
             this.Tak_id.Size = new System.Drawing.Size(121, 26);
             this.Tak_id.TabIndex = 113;
@@ -1232,7 +1232,7 @@ namespace Villamos
             // Label10
             // 
             this.Label10.AutoSize = true;
-            this.Label10.Location = new System.Drawing.Point(130, 27);
+            this.Label10.Location = new System.Drawing.Point(130, 34);
             this.Label10.Name = "Label10";
             this.Label10.Size = new System.Drawing.Size(75, 20);
             this.Label10.TabIndex = 4;
@@ -1241,7 +1241,7 @@ namespace Villamos
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Location = new System.Drawing.Point(130, 59);
+            this.Label6.Location = new System.Drawing.Point(130, 68);
             this.Label6.Name = "Label6";
             this.Label6.Size = new System.Drawing.Size(139, 20);
             this.Label6.TabIndex = 2;
@@ -1258,7 +1258,7 @@ namespace Villamos
             // Tak_Napszak
             // 
             this.Tak_Napszak.FormattingEnabled = true;
-            this.Tak_Napszak.Location = new System.Drawing.Point(275, 30);
+            this.Tak_Napszak.Location = new System.Drawing.Point(275, 37);
             this.Tak_Napszak.Name = "Tak_Napszak";
             this.Tak_Napszak.Size = new System.Drawing.Size(121, 28);
             this.Tak_Napszak.TabIndex = 10;
@@ -1266,7 +1266,7 @@ namespace Villamos
             // Tak_Érv_k
             // 
             this.Tak_Érv_k.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Tak_Érv_k.Location = new System.Drawing.Point(275, 62);
+            this.Tak_Érv_k.Location = new System.Drawing.Point(275, 71);
             this.Tak_Érv_k.Name = "Tak_Érv_k";
             this.Tak_Érv_k.Size = new System.Drawing.Size(121, 26);
             this.Tak_Érv_k.TabIndex = 7;
@@ -1274,14 +1274,14 @@ namespace Villamos
             // Tak_érv_V
             // 
             this.Tak_érv_V.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Tak_érv_V.Location = new System.Drawing.Point(524, 62);
+            this.Tak_érv_V.Location = new System.Drawing.Point(524, 71);
             this.Tak_érv_V.Name = "Tak_érv_V";
             this.Tak_érv_V.Size = new System.Drawing.Size(121, 26);
             this.Tak_érv_V.TabIndex = 8;
             // 
             // Tak_Ár
             // 
-            this.Tak_Ár.Location = new System.Drawing.Point(524, 30);
+            this.Tak_Ár.Location = new System.Drawing.Point(524, 37);
             this.Tak_Ár.Name = "Tak_Ár";
             this.Tak_Ár.Size = new System.Drawing.Size(121, 26);
             this.Tak_Ár.TabIndex = 9;
@@ -1298,7 +1298,7 @@ namespace Villamos
             // Label9
             // 
             this.Label9.AutoSize = true;
-            this.Label9.Location = new System.Drawing.Point(402, 27);
+            this.Label9.Location = new System.Drawing.Point(402, 34);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(29, 20);
             this.Label9.TabIndex = 3;
@@ -1315,7 +1315,7 @@ namespace Villamos
             // Label12
             // 
             this.Label12.AutoSize = true;
-            this.Label12.Location = new System.Drawing.Point(402, 59);
+            this.Label12.Location = new System.Drawing.Point(402, 68);
             this.Label12.Name = "Label12";
             this.Label12.Size = new System.Drawing.Size(116, 20);
             this.Label12.TabIndex = 6;
@@ -1350,8 +1350,12 @@ namespace Villamos
             this.Tak_Ár_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tak_Ár_Tábla.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.Tak_Ár_Tábla.EnableHeadersVisualStyles = false;
+            this.Tak_Ár_Tábla.FilterAndSortEnabled = true;
+            this.Tak_Ár_Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tak_Ár_Tábla.Location = new System.Drawing.Point(4, 236);
+            this.Tak_Ár_Tábla.MaxFilterButtonImageHeight = 23;
             this.Tak_Ár_Tábla.Name = "Tak_Ár_Tábla";
+            this.Tak_Ár_Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
@@ -1362,6 +1366,7 @@ namespace Villamos
             this.Tak_Ár_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.Tak_Ár_Tábla.RowHeadersWidth = 30;
             this.Tak_Ár_Tábla.Size = new System.Drawing.Size(777, 103);
+            this.Tak_Ár_Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tak_Ár_Tábla.TabIndex = 112;
             this.Tak_Ár_Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tak_Ár_Tábla_CellClick);
             // 
@@ -1538,5 +1543,6 @@ namespace Villamos
         internal CheckBox Szűr_Érvényes;
         internal Button VégeÁrRögzítés;
         internal V_MindenEgyéb.MyProgressbar Holtart;
-    }
+       
+    }                    
 }

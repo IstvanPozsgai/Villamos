@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Belépés_Jogosultságtábla> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
             string szöveg = $"SELECT * FROM Jogosultságtábla order by név";
             List<Adat_Belépés_Jogosultságtábla> Adatok = new List<Adat_Belépés_Jogosultságtábla>();
             Adat_Belépés_Jogosultságtábla Adat;
@@ -49,7 +49,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
                 string szöveg = "INSERT INTO Jogosultságtábla (név, Jogkörúj1, Jogkörúj2) ";
                 szöveg += $" Values('{Adat.Név}', ";
                 szöveg += $"'{Adat.Jogkörúj1}', ";
@@ -72,7 +72,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
                 string szöveg = $"Update Jogosultságtábla set ";
                 szöveg += $"jogkörúj1='{Adat.Jogkörúj1}' ";
                 szöveg += $"WHERE név= '{Adat.Név}'";
@@ -94,7 +94,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
                 string szöveg = $"DELETE * From Jogosultságtábla where név='{Adat.Név}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

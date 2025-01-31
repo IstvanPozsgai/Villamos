@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Hibaterv> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM hibaterv order by id";
             List<Adat_Kiegészítő_Hibaterv> Adatok = new List<Adat_Kiegészítő_Hibaterv>();
             Adat_Kiegészítő_Hibaterv Adat;
@@ -48,7 +48,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"INSERT INTO hibaterv (id , szöveg, főkönyv ) ";
                 szöveg += $" VALUES ({Adat.Id}, ";
                 szöveg += $"'{Adat.Szöveg}', ";
@@ -70,7 +70,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE hibaterv SET ";
                 szöveg += $"főkönyv={Adat.Főkönyv}, ";
                 szöveg += $"szöveg='{Adat.Szöveg}' ";
@@ -93,7 +93,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"DELETE * FROM hibaterv where id={Adat.Id}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Telep_Kiegészítő_SAP> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM sapmunkahely";
             List<Adat_Telep_Kiegészítő_SAP> Adatok = new List<Adat_Telep_Kiegészítő_SAP>();
             Adat_Telep_Kiegészítő_SAP Adat;
@@ -46,7 +46,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"INSERT INTO sapmunkahely (id, felelősmunkahely)";
                 szöveg += $"VALUES ({Adat.Id}, ";
                 szöveg += $"'{Adat.Felelősmunkahely}')";
@@ -68,7 +68,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE sapmunkahely SET ";
                 szöveg += $"felelősmunkahely='{Adat.Felelősmunkahely}'";
                 szöveg += $"WHERE id={Adat.Id}";

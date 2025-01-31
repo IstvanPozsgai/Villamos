@@ -108,7 +108,7 @@ namespace Villamos
 
                 KérelemDátuma.Value = DateTime.Today;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\PDF".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{TxtAdminkönyvtár.Text.Trim()}\PDF".KönyvSzerk();
 
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
                 Engedélyek_Listázása();

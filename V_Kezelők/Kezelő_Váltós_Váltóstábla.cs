@@ -15,7 +15,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Váltós_Váltóstábla> Lista_Adatok(int Dátum)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".Ellenőrzés();
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".KönyvSzerk();
 
             string szöveg = "SELECT * FROM Váltóstábla  ORDER BY telephely, év, félév, csoport";
             List<Adat_Váltós_Váltóstábla> Adatok = new List<Adat_Váltós_Váltóstábla>();
@@ -56,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".Ellenőrzés();
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".KönyvSzerk();
 
                 string szöveg = "INSERT INTO váltóstábla (év, félév, csoport, ZKnap, EPnap, Tperc, telephely ) VALUES (";
                 szöveg += $" VALUES ({Adat.Év},";
@@ -84,7 +84,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".Ellenőrzés();
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".KönyvSzerk();
                 string szöveg = " UPDATE  váltóstábla SET ";
                 szöveg += $" ZKnap={Adat.Zknap}, ";
                 szöveg += $" EPnap={Adat.Epnap}, ";
@@ -111,7 +111,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".Ellenőrzés();
+                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".KönyvSzerk();
                 string szöveg = $"DELETE FROM váltóstábla where év={Adat.Év}";
                 szöveg += $" and félév={Adat.Félév}";
                 szöveg += $" and csoport='{Adat.Csoport}'";

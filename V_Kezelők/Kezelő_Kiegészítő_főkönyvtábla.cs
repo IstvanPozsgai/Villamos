@@ -48,7 +48,7 @@ namespace Villamos.Kezelők
             List<Adat_Kiegészítő_főkönyvtábla> Adatok = new List<Adat_Kiegészítő_főkönyvtábla>();
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = "SELECT * FROM Főkönyvtábla";
 
                 Adat_Kiegészítő_főkönyvtábla Adat;
@@ -97,7 +97,7 @@ namespace Villamos.Kezelők
                 string szöveg = $"UPDATE Főkönyvtábla SET név='{Adat.Név}',";
                 szöveg += $" beosztás='{Adat.Beosztás}'";
                 szöveg += $" WHERE id={Adat.Id} ";
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

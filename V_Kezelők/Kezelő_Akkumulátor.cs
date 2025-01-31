@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -9,8 +11,15 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Akkumulátor
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\akku.mdb".Ellenőrzés();
+        readonly string hely;
         readonly string jelszó = "kasosmiklós";
+
+        public Kezelő_Akkumulátor()
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\akku.mdb".KönyvSzerk();
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Akku_adatok(hely);
+        }
+
 
         public List<Adat_Akkumulátor> Lista_Adatok()
         {

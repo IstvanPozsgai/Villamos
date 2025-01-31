@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Belépés_Bejelentkezés> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
             string szöveg = $"SELECT * FROM bejelentkezés";
             List<Adat_Belépés_Bejelentkezés> Adatok = new List<Adat_Belépés_Bejelentkezés>();
             Adat_Belépés_Bejelentkezés Adat;
@@ -51,7 +51,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
                 string szöveg = $"INSERT INTO Bejelentkezés (Név, Jelszó, Jogkör)";
                 szöveg += $"Values('{Adat.Név}', ";
                 szöveg += $"'{Adat.Jelszó}', ";
@@ -74,7 +74,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE Bejelentkezés SET ";
                 szöveg += $"jelszó='{Adat.Jelszó}' ";
                 szöveg += $"WHERE név='{Adat.Név}'";
@@ -96,7 +96,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
                 string szöveg = $"DELETE * From Bejelentkezés where név='{Adat.Név}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

@@ -515,7 +515,7 @@ namespace Villamos
 
             try
             {
-                string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\képek".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{lbltelephely.Text.Trim()}\képek".KönyvSzerk();
                 //Ezt lehet allitani ha szeretnenk, ertekek amiket var: helye a kepnek, Max merete bajtban,
                 //kep max szélessége és magassága és az összesen mennyi pixel lehet a kép
                 //Most ki van veve belole az az opcio hogy megadjuk neki az ossz pixel mennyiséget.

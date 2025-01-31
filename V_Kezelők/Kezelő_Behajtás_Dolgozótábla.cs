@@ -8,7 +8,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Dolgozótábla
     {
         readonly string jelszó = "egérpad";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".Ellenőrzés();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".KönyvSzerk();
 
         public List<Adat_Behajtás_Dolgozótábla> Lista_Adatok()
         {

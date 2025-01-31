@@ -9,7 +9,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Belépés_WinTábla
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb".Ellenőrzés();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb".KönyvSzerk();
         readonly string jelszó = "forgalmiutasítás";
 
         public List<Adat_Belépés_WinTábla> Lista_Adatok()

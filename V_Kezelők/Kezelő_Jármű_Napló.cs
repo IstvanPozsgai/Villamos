@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -10,10 +12,20 @@ namespace Villamos.Kezelők
     public class Kezelő_Jármű_Napló
     {
         readonly string jelszó = "pozsgaii";
-        public void Rögzítés(string hely, Adat_Jármű_Napló Adat)
+        string hely;
+
+        private void FájlBeállítás(int Év)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{Év}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely.KönyvSzerk());
+        }
+
+
+        public void Rögzítés(int Év, Adat_Jármű_Napló Adat)
         {
             try
             {
+                FájlBeállítás(Év);
                 string szöveg = "INSERT INTO Állománytáblanapló (azonosító, típus, honnan, hova, törölt, Módosító, mikor, céltelep, üzenet) VALUES (";
                 szöveg += $"'{Adat.Azonosító.Trim()}', ";
                 szöveg += $"'{Adat.Típus.Trim()}', ";
@@ -40,7 +52,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Napló> Lista_adatok(int Év)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{Év}.mdb".Ellenőrzés("Adat_Jármű_Napló");
+            FájlBeállítás(Év);
             string szöveg = $"SELECT * FROM állománytáblanapló ";
             List<Adat_Jármű_Napló> Adatok = new List<Adat_Jármű_Napló>();
             Adat_Jármű_Napló Adat;
@@ -116,13 +128,14 @@ namespace Villamos.Kezelők
         {
             try
             {
+                FájlBeállítás(Év);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű_Napló rekord in Adatok)
                 {
                     string szöveg = $"UPDATE állománytáblanapló  SET üzenet=1 WHERE üzenet=0 AND céltelep='{rekord.Céltelep}' AND Azonosító='{rekord.Azonosító}'";
                     SzövegGy.Add(szöveg);
                 }
-                string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{Év}.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{Év}.mdb".KönyvSzerk();
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)

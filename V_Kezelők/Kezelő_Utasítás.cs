@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
             double Válasz = 1;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
                 // ha nem létezik akkor létrehozzuk
                 Válasz = Sorszám(Telephely, Év);
 
@@ -37,7 +37,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Utasítás> Lista_Adatok(string Telephely, int Év)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM üzenetek ORDER BY sorszám desc";
             List<Adat_Utasítás> Adatok = new List<Adat_Utasítás>();
             Adat_Utasítás Adat;
@@ -75,7 +75,7 @@ namespace Villamos.Kezelők
             double Válasz = 1;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
                 Válasz = Sorszám(Telephely, Év);
                 string szöveg = "INSERT INTO üzenetek (sorszám, szöveg, írta, mikor, érvényes) VALUES ";
                 szöveg += $"({Válasz}, '{Adat.Szöveg}', '{Adat.Írta}', '{Adat.Mikor}', {Adat.Érvényes})";
@@ -101,7 +101,7 @@ namespace Villamos.Kezelők
             double Válasz = 1;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
                 List<Adat_Utasítás> AdatokÜzenet = Lista_Adatok(Telephely, Év);
                 // megkeressük az utolsó sorszámot
                 if (AdatokÜzenet != null && AdatokÜzenet.Count > 0) Válasz = AdatokÜzenet.Max(a => a.Sorszám) + 1;
@@ -123,7 +123,7 @@ namespace Villamos.Kezelők
             Adat_Utasítás Válasz = null;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
                 Kezelő_utasítás_Olvasás Kéz = new Kezelő_utasítás_Olvasás();
 
                 List<Adat_utasítás_olvasás> AdatokOlvasás = Kéz.Lista_Adatok(Telephely, Év);
@@ -162,7 +162,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE üzenetek SET érvényes={Adat.Érvényes}, szöveg='{Adat.Szöveg}' WHERE sorszám={Adat.Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

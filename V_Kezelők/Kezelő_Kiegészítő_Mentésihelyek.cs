@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Mentésihelyek> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM Mentésihelyek  order by  sorszám";
             List<Adat_Kiegészítő_Mentésihelyek> Adatok = new List<Adat_Kiegészítő_Mentésihelyek>();
             Adat_Kiegészítő_Mentésihelyek Adat;
@@ -45,7 +45,7 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(string Telephely, Adat_Kiegészítő_Mentésihelyek Adat)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
             string szöveg = $"INSERT INTO Mentésihelyek ( sorszám, alprogram, elérésiút )";
             szöveg += $" VALUES ({Adat.Sorszám}, ";
             szöveg += $"'{Adat.Alprogram}',";
@@ -58,7 +58,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE Mentésihelyek SET ";
                 szöveg += $" alprogram='{Adat.Alprogram}',";
                 szöveg += $" elérésiút='{Adat.Elérésiút}' ";
@@ -81,7 +81,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
                 string szöveg = $"DELETE FROM Mentésihelyek WHERE sorszám={Adat.Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

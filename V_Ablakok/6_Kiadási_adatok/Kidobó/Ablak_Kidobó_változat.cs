@@ -42,10 +42,10 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
+
                 Változatalaplista.Items.Clear();
 
-                List<Adat_Kidobó_Változat> Adatok = KézVáltozat.Lista_Adat(hely);
+                List<Adat_Kidobó_Változat> Adatok = KézVáltozat.Lista_Adat(Cmbtelephely.Trim());
                 foreach (Adat_Kidobó_Változat Elem in Adatok)
                     Változatalaplista.Items.Add(Elem.Változatnév);
 
@@ -67,9 +67,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 if (Újváltozat.Text.Trim() == "") return;
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-                List<Adat_Kidobó_Változat> AdatokKidobSeg = KézVáltozat.Lista_Adat(hely);
+                List<Adat_Kidobó_Változat> AdatokKidobSeg = KézVáltozat.Lista_Adat(Cmbtelephely.Trim());
 
                 long utolsó = 1;
                 if (AdatokKidobSeg.Count > 0) utolsó = AdatokKidobSeg.Max(a => a.Id) + 1;
@@ -82,7 +80,7 @@ namespace Villamos.Villamos_Ablakok
                 if (AdatKidobSeg == null)
                 {
                     Adat_Kidobó_Változat ADAT = new Adat_Kidobó_Változat(0, MyF.Szöveg_Tisztítás(Újváltozat.Text, 0, 50));
-                    KézVáltozat.Rögzítés(hely, ADAT);
+                    KézVáltozat.Rögzítés(Cmbtelephely.Trim(), ADAT);
                 }
 
                 Újváltozat.Text = "";
@@ -106,9 +104,7 @@ namespace Villamos.Villamos_Ablakok
             {
                 if (Újváltozat.Text.Trim() == "") return;
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-
-                List<Adat_Kidobó_Változat> AdatokKidobSeg = KézVáltozat.Lista_Adat(hely);
+                List<Adat_Kidobó_Változat> AdatokKidobSeg = KézVáltozat.Lista_Adat(Cmbtelephely.Trim());
 
                 Adat_Kidobó_Változat AdatKidobSeg = (from a in AdatokKidobSeg
                                                      where a.Változatnév == Újváltozat.Text.Trim()
@@ -117,8 +113,8 @@ namespace Villamos.Villamos_Ablakok
 
                 if (AdatKidobSeg != null)
                 {
-                    KézKidobSeg.Törlés(hely, Újváltozat.Text.Trim());
-                    KézVáltozat.Törlés(hely, AdatKidobSeg);
+                    KézKidobSeg.Törlés(Cmbtelephely.Trim(), Újváltozat.Text.Trim());
+                    KézVáltozat.Törlés(Cmbtelephely.Trim(), AdatKidobSeg);
                 }
                 Újváltozat.Text = "";
                 Változatlista1();

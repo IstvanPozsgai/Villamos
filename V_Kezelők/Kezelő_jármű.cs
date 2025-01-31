@@ -321,8 +321,8 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű> Lista_Adatok(string telephely)
         {
             string szöveg = "SELECT * FROM állománytábla order by  azonosító";
-            string hely = $@"{Application.StartupPath}\{telephely}\Adatok\villamos\villamos.mdb".Ellenőrzés();
-            if (telephely == "Főmérnökség") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{telephely}\Adatok\villamos\villamos.mdb".KönyvSzerk();
+            if (telephely == "Főmérnökség") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb".KönyvSzerk();
 
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
             Adat_Jármű Adat;

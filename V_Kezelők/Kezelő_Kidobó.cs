@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,9 +12,17 @@ namespace Villamos.Kezelők
     public class Kezelő_Kidobó
     {
         readonly string jelszó = "lilaakác";
+        string hely;
 
-        public List<Adat_Kidobó> Lista_Adat(string hely)
+        private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\{Dátum.Year}\{Dátum:yyyyMMdd}Forte.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kidobóadattábla(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Kidobó> Lista_Adat(string Telephely, DateTime Dátum)
+        {
+            FájlBeállítás(Telephely, Dátum);
             string szöveg = "SELECT * FROM kidobótábla  order by szolgálatiszám";
             List<Adat_Kidobó> Adatok = new List<Adat_Kidobó>();
             Adat_Kidobó Adat;
@@ -53,10 +63,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Módosítás(string hely, Adat_Kidobó Adat)
+        public void Módosítás(string Telephely, DateTime Dátum, Adat_Kidobó Adat)
         {
             try
             {
+                FájlBeállítás(Telephely, Dátum);
                 string szöveg = "UPDATE kidobótábla  SET ";
                 szöveg += $"Kezdéshely='{Adat.Kezdéshely}', ";
                 szöveg += $"Végzéshely='{Adat.Végzéshely}', ";
@@ -77,10 +88,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, List<Adat_Kidobó> Adatok)
+        public void Módosítás(string Telephely, DateTime Dátum, List<Adat_Kidobó> Adatok)
         {
             try
             {
+                FájlBeállítás(Telephely, Dátum);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kidobó Adat in Adatok)
                 {
@@ -106,10 +118,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(string hely, List<Adat_Kidobó> Adatok)
+        public void Rögzítés(string Telephely, DateTime Dátum, List<Adat_Kidobó> Adatok)
         {
             try
             {
+                FájlBeállítás(Telephely, Dátum);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kidobó Adat in Adatok)
                 {
@@ -145,7 +158,6 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
     }
 }

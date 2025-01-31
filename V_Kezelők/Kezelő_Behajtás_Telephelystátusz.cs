@@ -7,7 +7,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Behajtás_Telephelystátusz
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".Ellenőrzés();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".KönyvSzerk();
         readonly string jelszó = "egérpad";
 
         public List<Adat_Behajtás_Telephelystátusz> Lista_Adatok()

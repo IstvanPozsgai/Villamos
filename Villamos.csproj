@@ -110,6 +110,10 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Holtart, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Holtart.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -1113,9 +1117,6 @@
     <Compile Include="V_MindenEgyéb\Listák.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="V_MindenEgyéb\Mentés_Ablak.cs" />
-    <Compile Include="V_MindenEgyéb\MyProgressbar.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="V_MindenEgyéb\SAP_Adatokbeolvasása_km.cs" />
     <Compile Include="V_MindenEgyéb\ScreenshotHelper.cs" />
     <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />
@@ -1720,7 +1721,9 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="MyTool\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

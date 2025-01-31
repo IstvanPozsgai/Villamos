@@ -42,7 +42,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Jelenlétiív> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM jelenlétiív ORDER BY id";
             List<Adat_Kiegészítő_Jelenlétiív> Adatok = new List<Adat_Kiegészítő_Jelenlétiív>();
             Adat_Kiegészítő_Jelenlétiív Adat;
@@ -76,7 +76,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"INSERT INTO jelenlétiív (id, szervezet) Values ({Adat.Id},'{Adat.Szervezet}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -95,7 +95,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE jelenlétiív SET szervezet='{Adat.Szervezet}' where id={Adat.Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

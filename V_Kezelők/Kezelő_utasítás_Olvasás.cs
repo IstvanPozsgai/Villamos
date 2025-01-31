@@ -14,7 +14,7 @@ namespace Villamos.Kezelők
         readonly string jelszó = "katalin";
         public List<Adat_utasítás_olvasás> Lista_Adatok(string Telephely, int Év)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
             string szöveg = "SELECT * From olvasás order by sorszám desc";
             List<Adat_utasítás_olvasás> Adatok = new List<Adat_utasítás_olvasás>();
             Adat_utasítás_olvasás Adat;
@@ -52,7 +52,7 @@ namespace Villamos.Kezelők
             double Válasz = 1;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
                 List<Adat_utasítás_olvasás> AdatokÜzenet = Lista_Adatok(Telephely, Év);
                 // megkeressük az utolsó sorszámot
                 if (AdatokÜzenet != null && AdatokÜzenet.Count > 0) Válasz = AdatokÜzenet.Max(a => a.Sorszám) + 1;
@@ -73,7 +73,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
                 string szöveg = "INSERT INTO olvasás (sorszám, ki, üzenetid, mikor, olvasva) VALUES ";
                 szöveg += $"({Sorszám(Telephely, Év)}, '{Adat.Ki}', {Adat.Üzenetid}, '{Adat.Mikor}', {Adat.Olvasva})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

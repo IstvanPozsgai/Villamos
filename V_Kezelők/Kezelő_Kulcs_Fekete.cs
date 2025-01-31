@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kulcs_Fekete
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos9.mdb".Ellenőrzés();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos9.mdb".KönyvSzerk();
         readonly string jelszó = "Fekete_Könyv";
 
         public List<Adat_Kulcs> Lista_Adatok()

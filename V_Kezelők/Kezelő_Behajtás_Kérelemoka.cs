@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Kérelemoka
     {
         readonly string jelszó = "egérpad";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".Ellenőrzés();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".KönyvSzerk();
 
         public List<Adat_Behajtás_Kérelemoka> Lista_Adatok()
         {

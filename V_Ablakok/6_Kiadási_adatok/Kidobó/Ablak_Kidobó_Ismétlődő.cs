@@ -70,9 +70,7 @@ namespace Villamos.Villamos_Ablakok
                 if (ComboVáltozat.Text.Trim() == "") throw new HibásBevittAdat("A változat nevét meg kell adni.");
                 if (Frame3Szolgálatiszám.Text.Trim() == "") throw new HibásBevittAdat("A szolgálati szám nem lehet üres mező.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-
-                List<Adat_Kidobó_Segéd> AdatokÖ = KézKidobSeg.Lista_Adatok(hely);
+                List<Adat_Kidobó_Segéd> AdatokÖ = KézKidobSeg.Lista_Adatok(Cmbtelephely.Trim());
                 Adat_Kidobó_Segéd AdatKidobSeg = (from a in AdatokÖ
                                                   where a.Szolgálatiszám == Frame3Szolgálatiszám.Text.Trim()
                                                   && a.Változatnév == ComboVáltozat.Text.Trim()
@@ -88,9 +86,9 @@ namespace Villamos.Villamos_Ablakok
                                                ComboVáltozat.Text.Trim(),
                                                Frame3Megjegyzés.Text.Trim());
                 if (AdatKidobSeg != null)
-                    KézKidobSeg.Módosítás(hely, ADAT);
+                    KézKidobSeg.Módosítás(Cmbtelephely.Trim(), ADAT);
                 else
-                    KézKidobSeg.Rögzítés(hely, ADAT);
+                    KézKidobSeg.Rögzítés(Cmbtelephely.Trim(), ADAT);
 
                 Ismétlődő_Változás?.Invoke();
             }
@@ -112,9 +110,8 @@ namespace Villamos.Villamos_Ablakok
                 if (ComboVáltozat.Text == "") throw new HibásBevittAdat("A változat neve nem lehet üres!");
                 if (Frame3Szolgálatiszám.Text.Trim() == "") throw new HibásBevittAdat("A Szolgálatszám mezőnek értéket kell tartalmaznia.");
                 // menti a változat adatait.
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
 
-                List<Adat_Kidobó_Segéd> AdatokKidobSeg = KézKidobSeg.Lista_Adatok(hely);
+                List<Adat_Kidobó_Segéd> AdatokKidobSeg = KézKidobSeg.Lista_Adatok(Cmbtelephely.Trim());
 
                 Adat_Kidobó_Segéd AdatKidobSeg = (from a in AdatokKidobSeg
                                                   where a.Szolgálatiszám == Frame3Szolgálatiszám.Text.Trim()
@@ -123,7 +120,7 @@ namespace Villamos.Villamos_Ablakok
 
                 if (AdatKidobSeg != null)
                 {
-                    KézKidobSeg.Törlés(hely, ComboVáltozat.Text.Trim(), Frame3Szolgálatiszám.Text.Trim());
+                    KézKidobSeg.Törlés(Cmbtelephely.Trim(), ComboVáltozat.Text.Trim(), Frame3Szolgálatiszám.Text.Trim());
                     Ismétlődő_Változás?.Invoke();
                 }
             }
@@ -151,9 +148,7 @@ namespace Villamos.Villamos_Ablakok
         #region Változat
         private void Combováltozatfeltölt()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-
-            List<Adat_Kidobó_Változat> Adatok = KézVáltozat.Lista_Adat(hely);
+            List<Adat_Kidobó_Változat> Adatok = KézVáltozat.Lista_Adat(Cmbtelephely.Trim());
 
             ComboVáltozat.Items.Clear();
             ComboVáltozat.Items.Add("");

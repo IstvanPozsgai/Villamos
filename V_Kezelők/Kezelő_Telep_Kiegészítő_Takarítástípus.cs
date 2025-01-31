@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Telep_Kiegészítő_Takarítástípus> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM takarítástípus order by típus";
             List<Adat_Telep_Kiegészítő_Takarítástípus> Adatok = new List<Adat_Telep_Kiegészítő_Takarítástípus>();
             Adat_Telep_Kiegészítő_Takarítástípus Adat = null;
@@ -45,7 +45,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"DELETE * FROM takarítástípus WHERE típus='{Adat.Típus}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -65,7 +65,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"INSERT INTO takarítástípus (típus)  VALUES ('{Adat.Típus}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

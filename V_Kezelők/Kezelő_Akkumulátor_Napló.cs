@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,12 +11,18 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Akkumulátor_Napló
     {
-
+        string hely;
         readonly string jelszó = "kasosmiklós";
+
+        private void FájlBeállítás(int Év)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Év}.mdb".KönyvSzerk();
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
+        }
 
         public List<Adat_Akkumulátor_Napló> Lista_Adatok(int Év)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Év}.mdb".Ellenőrzés();
+            FájlBeállítás(Év);
             string szöveg = $"SELECT * FROM Akkutábla_Napló";
             List<Adat_Akkumulátor_Napló> Adatok = new List<Adat_Akkumulátor_Napló>();
             Adat_Akkumulátor_Napló Adat;
@@ -61,7 +68,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Év}.mdb".Ellenőrzés();
+                FájlBeállítás(Év);
                 string szöveg = "INSERT INTO Akkutábla_Napló ";
                 szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő)";
                 szöveg += " VALUES (";

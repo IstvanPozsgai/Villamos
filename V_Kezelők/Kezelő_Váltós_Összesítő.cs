@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Váltós_Összesítő> Lista_Adatok(int Év, string Tábla)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
             string szöveg = $"SELECT * FROM összesítő{Tábla}";
             List<Adat_Váltós_Összesítő> Adatok = new List<Adat_Váltós_Összesítő>();
             Adat_Váltós_Összesítő Adat;
@@ -47,7 +47,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
                 string szöveg = $"INSERT INTO összesítő{Tábla} (perc, dátum) VALUES (";
                 szöveg += $"{Adat.Perc}, ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
@@ -68,7 +68,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE összesítő{Tábla} SET ";
                 szöveg += $" perc={Adat.Perc} ";
                 szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";
@@ -89,7 +89,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Összesítő Adat in Adatok)
                 {
@@ -115,7 +115,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Összesítő Adat in Adatok)
                 {

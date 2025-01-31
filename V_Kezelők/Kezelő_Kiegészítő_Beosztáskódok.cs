@@ -135,7 +135,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Beosztáskódok> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM beosztáskódok Order By  sorszám";
             List<Adat_Kiegészítő_Beosztáskódok> Adatok = new List<Adat_Kiegészítő_Beosztáskódok>();
             Adat_Kiegészítő_Beosztáskódok Adat;
@@ -201,7 +201,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = "INSERT INTO beosztáskódok (sorszám, beosztáskód, munkaidőkezdet, munkaidővége,  munkaidő, munkarend, napszak, éjszakás, számoló, 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23, Magyarázat)";
                 szöveg += " VALUES (";
                 szöveg += $" {Adat.Sorszám}, ";                            //  sorszám
@@ -232,7 +232,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = "UPDATE beosztáskódok SET ";
                 szöveg += $" beosztáskód='{Adat.Beosztáskód}', ";
                 szöveg += $" munkaidőkezdet='{Adat.Munkaidőkezdet:HH:mm:ss}', ";
@@ -260,7 +260,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
                 string szöveg = $"DELETE FROM beosztáskódok where beosztáskód='{BeoKód}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

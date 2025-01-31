@@ -754,9 +754,9 @@ namespace Villamos
                 List<Adat_Akkumulátor> Adatok = KézAkku.Lista_Adatok().Where(a => a.Státus < 4).OrderBy(a => a.Beépítve).ToList();
                 if (!Program.Postás_Vezér) Adatok = Adatok.Where(a => a.Telephely == CmbTelephely.Text.Trim()).ToList();
 
-                List<Adat_Akkumulátor_Mérés> AdatokMérés = KézAkkuMér.Lista_Adatok(Dátumtól.Value).Where(a => a.Rögzítő != "TÖRÖLT").ToList();
-                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-1)).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
-                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-2)).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
+                List<Adat_Akkumulátor_Mérés> AdatokMérés = KézAkkuMér.Lista_Adatok(Dátumtól.Value.Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList();
+                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-1).Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
+                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-2).Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
                 AdatokMérés = (from a in AdatokMérés
                                orderby a.Gyáriszám descending, a.Mérésdátuma ascending
                                select a).ToList();
@@ -847,7 +847,7 @@ namespace Villamos
                 Tábla4.Columns[14].HeaderText = "%-os";
                 Tábla4.Columns[14].Width = 120;
 
-                List<Adat_Akkumulátor_Mérés> Adatok = KézAkkuMér.Lista_Adatok(Dátumtól.Value);
+                List<Adat_Akkumulátor_Mérés> Adatok = KézAkkuMér.Lista_Adatok(Dátumtól.Value.Year);
                 Adatok = Adatok.Where(a => a.Mérésdátuma >= Dátumtól.Value && a.Mérésdátuma < dátumig.Value.AddDays(1) && a.Rögzítő != "TÖRÖLT").OrderBy(a => a.Gyáriszám).ToList();
                 if (MérésLekGyári.Text.Trim() != "")
                     Adatok = Adatok.Where(a => a.Gyáriszám.Contains(MérésLekGyári.Text.Trim())).ToList();
@@ -950,7 +950,7 @@ namespace Villamos
             {
                 if (Tábla4.SelectedRows.Count < 0) throw new HibásBevittAdat("Nincs kijelölve egy törlendő elem sem.");
 
-                AdatokAkkuMér = KézAkkuMér.Lista_Adatok(Dátumtól.Value);
+                AdatokAkkuMér = KézAkkuMér.Lista_Adatok(Dátumtól.Value.Year);
                 if (AdatokAkkuMér == null && AdatokAkkuMér.Count == 0) return;
                 List<int> Sorszámok = new List<int>();
                 for (int i = 0; i < Tábla4.SelectedRows.Count; i++)
@@ -962,7 +962,7 @@ namespace Villamos
                     if (AdatAkkuMér != null && ID != 0)
                         Sorszámok.Add(ID);
                 }
-                KézAkkuMér.Törlés(Dátumtól.Value, Sorszámok);
+                KézAkkuMér.Törlés(Dátumtól.Value.Year, Sorszámok);
                 MessageBox.Show("Az adatok törlése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Mérési_lista();
             }
@@ -1018,7 +1018,7 @@ namespace Villamos
                                             DateTime.Now,
                                             Program.PostásNév.Trim(),
                                             0);
-                KézAkkuMér.Rögzítés(ADAT, MérésDátuma.Value);
+                KézAkkuMér.Rögzítés(ADAT, MérésDátuma.Value.Year);
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

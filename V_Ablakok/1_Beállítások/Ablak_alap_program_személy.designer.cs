@@ -260,7 +260,7 @@ namespace Villamos
             this.Label13 = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Button13 = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos. V_MindenEgyéb.MyProgressbar();
             this.FeorStátus = new System.Windows.Forms.CheckBox();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -2865,7 +2865,7 @@ namespace Villamos
         internal TextBox JelenlétiText5;
         internal Label label49;
         internal Button Eszközhöz;
-        internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal Villamos.V_MindenEgyéb.MyProgressbar Holtart;
         internal Button Gondnok_Fel;
         private CheckBox Munka_Státus;
         internal Label label50;

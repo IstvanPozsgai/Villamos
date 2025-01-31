@@ -77,8 +77,8 @@ namespace Villamos
 
         private void Ablak_Váltós_Load(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\munkaidőnaptár.mdb".Ellenőrzés();
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\munkaidőnaptár.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb".KönyvSzerk();
 
             Jogosultságkiosztás();
             Fülek.SelectedIndex = 0;

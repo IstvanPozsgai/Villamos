@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Sérülés
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő.mdb".Ellenőrzés();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
         public List<Adat_Kiegészítő_Sérülés> Lista_Adatok()
         {

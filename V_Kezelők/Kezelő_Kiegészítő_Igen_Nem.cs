@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Igen_Nem> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
             string szöveg = "SELECT *  FROM igen_nem ";
             List<Adat_Kiegészítő_Igen_Nem> Adatok = new List<Adat_Kiegészítő_Igen_Nem>();
             Adat_Kiegészítő_Igen_Nem Adat;
@@ -48,7 +48,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
                 string szöveg = "INSERT INTO igen_nem  (id, válasz, megjegyzés) ";
                 szöveg += $"VALUES ({Adat.Id}, ";
                 szöveg += $"{Adat.Válasz}, ";
@@ -70,7 +70,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE igen_nem SET Válasz={Adat.Válasz} ";
                 szöveg += $"WHERE '{Adat.Id}' ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

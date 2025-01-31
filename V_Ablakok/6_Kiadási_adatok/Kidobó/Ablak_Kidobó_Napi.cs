@@ -56,8 +56,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Year}\{Dátum:yyyyMMdd}Forte.mdb";
-                List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(hely);
+                List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(Cmbtelephely.Trim(), Dátum);
 
                 Adat_Kidobó Elem = (from a in Adatok
                                     where a.Szolgálatiszám == Rekord.Szolgálatiszám
@@ -78,7 +77,7 @@ namespace Villamos.Villamos_Ablakok
                                            Rekord.Villamos,
                                            Megjegyzés.Text,
                                            Rekord.Szerelvénytípus);
-                    KézKidobó.Módosítás(hely, Rekord);
+                    KézKidobó.Módosítás(Cmbtelephely.Trim(), Dátum, Rekord);
                 }
                 Ismétlődő_Változás?.Invoke();
             }

@@ -12,44 +12,9 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "erzsébet";
 
-        public List<Adat_Kidobó_Segéd> Lista_Adat(string hely, string jelszó, string szöveg)
+        public List<Adat_Kidobó_Segéd> Lista_Adatok(string Telephely)
         {
-            List<Adat_Kidobó_Segéd> Adatok = new List<Adat_Kidobó_Segéd>();
-            Adat_Kidobó_Segéd Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kidobó_Segéd(
-                                    rekord["forgalmiszám"].ToStrTrim(),
-                                    rekord["szolgálatiszám"].ToStrTrim(),
-                                    rekord["kezdés"].ToÉrt_DaTeTime(),
-                                    rekord["végzés"].ToÉrt_DaTeTime(),
-                                    rekord["Kezdéshely"].ToStrTrim(),
-                                    rekord["Végzéshely"].ToStrTrim(),
-                                    rekord["Változatnév"].ToStrTrim(),
-                                    rekord["megjegyzés"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public List<Adat_Kidobó_Segéd> Lista_Adatok(string hely)
-        {
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM Kidobósegédtábla  order by változatnév, szolgálatiszám";
             List<Adat_Kidobó_Segéd> Adatok = new List<Adat_Kidobó_Segéd>();
             Adat_Kidobó_Segéd Adat;
@@ -85,11 +50,12 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Törlés(string hely, string változatnév)
+        public void Törlés(string Telephely, string változatnév)
         {
             try
             {
-                List<Adat_Kidobó_Segéd> AdatokÖ = Lista_Adatok(hely);
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+                List<Adat_Kidobó_Segéd> AdatokÖ = Lista_Adatok(Telephely);
                 List<Adat_Kidobó_Segéd> Adatok = (from a in AdatokÖ
                                                   where a.Változatnév == változatnév
                                                   select a).ToList();
@@ -110,11 +76,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(string hely, string változatnév, string szolgálatiszám)
+        public void Törlés(string Telephely, string változatnév, string szolgálatiszám)
         {
             try
             {
-                List<Adat_Kidobó_Segéd> AdatokÖ = Lista_Adatok(hely);
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+                List<Adat_Kidobó_Segéd> AdatokÖ = Lista_Adatok(Telephely);
                 List<Adat_Kidobó_Segéd> Adatok = (from a in AdatokÖ
                                                   where a.Változatnév == változatnév
                                                   && a.Szolgálatiszám == szolgálatiszám
@@ -136,10 +103,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(string hely, Adat_Kidobó_Segéd Adat)
+        public void Rögzítés(string Telephely, Adat_Kidobó_Segéd Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
                 string szöveg = "INSERT INTO Kidobósegédtábla (változatnév, forgalmiszám, szolgálatiszám, Kezdéshely, Végzéshely, megjegyzés, Kezdés, Végzés) VALUES (";
                 szöveg += $"'{Adat.Változatnév}', ";      //változatnév
                 szöveg += $"'{Adat.Forgalmiszám}', ";      //forgalmiszám
@@ -162,10 +130,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, Adat_Kidobó_Segéd Adat)
+        public void Módosítás(string Telephely, Adat_Kidobó_Segéd Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
                 string szöveg = "UPDATE Kidobósegédtábla  SET ";
                 szöveg += $"Kezdéshely='{Adat.Kezdéshely}', ";
                 szöveg += $"Végzéshely='{Adat.Végzéshely}', ";

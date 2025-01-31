@@ -455,16 +455,12 @@ namespace Villamos
                 }
 
                 // naplózás
-                hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
-
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
-
                 Adat_Jármű_Napló AdatNapló = new Adat_Jármű_Napló(
                                                  LÉT_Pályaszám.Text.Trim(),
                                                  "Új", "Új", "Közös", false,
                                                  Program.PostásNév.Trim(), DateTime.Now, "Közös", 0
                                                  );
-                KadatNapló.Rögzítés(hely, AdatNapló);
+                KadatNapló.Rögzítés(DateTime.Today.Year, AdatNapló);
 
                 Főmérnökségi_Állomány_Lista();
 
@@ -1347,12 +1343,9 @@ namespace Villamos
         {
             try
             {
-                string helynapló = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Now.Year}.mdb";
                 Adat_Jármű adat = (from a in Adatok_Állomány
                                    where a.Azonosító == azonosító
                                    select a).FirstOrDefault();
-
-                if (!File.Exists(helynapló)) Adatbázis_Létrehozás.Kocsitípusanapló(helynapló);
 
                 int üzenet = 0;
                 if (Honnan == "Közös") üzenet = 1;         // ha közösből vesszük be akkor nem kell üzenetet írni
@@ -1367,7 +1360,7 @@ namespace Villamos
                                         Lektelephely.Text.Trim(),
                                         üzenet
                                         );
-                KadatNapló.Rögzítés(helynapló, adatnapló);
+                KadatNapló.Rögzítés(DateTime.Now.Year, adatnapló);
             }
             catch (HibásBevittAdat ex)
             {

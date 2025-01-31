@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Munka_Adatok> Lista_Adatok(string Telephely, int Év)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM Adatoktábla";
             List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
             Adat_Munka_Adatok Adat;
@@ -53,7 +53,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".KönyvSzerk();
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Munka_Adatok adat in Adatok)
                 {
@@ -86,7 +86,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE Adatoktábla SET rendelés='{rendelés}' WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -105,7 +105,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb".KönyvSzerk();
                 List<string> szövegGy = new List<string>();
                 foreach (long elem in idk)
                 {

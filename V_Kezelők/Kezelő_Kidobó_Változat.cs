@@ -11,8 +11,9 @@ namespace Villamos.Kezelők
     public class Kezelő_Kidobó_Változat
     {
         readonly string jelszó = "erzsébet";
-        public List<Adat_Kidobó_Változat> Lista_Adat(string hely)
+        public List<Adat_Kidobó_Változat> Lista_Adat(string Telephely)
         {
+            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM Változattábla  order by id";
             List<Adat_Kidobó_Változat> Adatok = new List<Adat_Kidobó_Változat>();
             Adat_Kidobó_Változat Adat;
@@ -42,10 +43,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Kidobó_Változat Adat)
+        public void Rögzítés(string Telephely, Adat_Kidobó_Változat Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
                 string szöveg = "INSERT INTO Változattábla (id, változatnév) VALUES (";
                 szöveg += $"{Sorszám(hely)}, '{Adat.Változatnév}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -61,12 +63,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        private long Sorszám(string hely)
+        private long Sorszám(string Telephely)
         {
             long Válasz = 1;
             try
             {
-                List<Adat_Kidobó_Változat> Adatok = Lista_Adat(hely);
+                List<Adat_Kidobó_Változat> Adatok = Lista_Adat(Telephely);
                 if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(a => a.Id) + 1;
             }
             catch (HibásBevittAdat ex)
@@ -81,10 +83,11 @@ namespace Villamos.Kezelők
             return Válasz;
         }
 
-        public void Törlés(string hely, Adat_Kidobó_Változat Adat)
+        public void Törlés(string Telephely, Adat_Kidobó_Változat Adat)
         {
             try
             {
+                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
                 string szöveg = $"DELETE FROM Változattábla WHERE Változatnév='{Adat.Változatnév}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -98,7 +101,6 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 
 }

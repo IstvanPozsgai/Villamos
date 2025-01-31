@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -36,6 +35,7 @@ namespace Villamos
         Adat_Kidobó Napi_Adat = null;
         readonly List<string> Forte_típus = new List<string>();
 
+        #region Alap
         public Ablak_kidobó()
         {
             InitializeComponent();
@@ -47,19 +47,6 @@ namespace Villamos
             Telephelyekfeltöltése();
 
             Dátum.Value = DateTime.Today;
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{DateTime.Today.Year}";
-            if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-            // következő év
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{DateTime.Today.Year + 1}";
-            if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-            //   hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.accdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kidobósegédadattábla(hely);
-
             Alsópanelkitöltés();
             VáltozatCombofeltölt();
             Gombok();
@@ -67,8 +54,6 @@ namespace Villamos
             Jogosultságkiosztás();
         }
 
-
-        #region Alap
         private void Ablak_kidobó_Load(object sender, EventArgs e)
         {
 
@@ -198,8 +183,6 @@ namespace Villamos
                 // megnyitjuk a beolvasandó táblát
                 MyE.ExcelMegnyitás(fájlexc);
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
-
                 // leellenőrizzük, hogy az adat nap egyezik-e
                 szöveg = MyE.Beolvas("a2").Trim().Replace(".", "");
                 if (MyE.Beolvas("a2").Trim().Replace(".", "") != Dátum.Value.ToString("yyyyMMdd"))
@@ -210,24 +193,22 @@ namespace Villamos
                     Holtart.Ki();
                     throw new HibásBevittAdat("A betölteni kívánt adatok nem egyeznek meg a beállított nappal !");
                 }
-
-                if (!File.Exists(hely))
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
+                if (File.Exists(hely))
                 {
-                    Adatbázis_Létrehozás.Kidobóadattábla(hely);
-                }
-                else if (MessageBox.Show("Már van az adott napra feltöltve adat ! Módosítjuk az adatokat ?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
-                {
-                    // Nemet választottuk
-                    MyE.ExcelBezárás();
-                    Holtart.Ki();
-                    return;
-                }
-                else
-                {
-                    // ha létezik akkor töröljük
-                    // igent választottuk
-                    File.Delete(hely);
-                    Adatbázis_Létrehozás.Kidobóadattábla(hely);
+                    if (MessageBox.Show("Már van az adott napra feltöltve adat ! Módosítjuk az adatokat ?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                    {
+                        // Nemet választottuk
+                        MyE.ExcelBezárás();
+                        Holtart.Ki();
+                        return;
+                    }
+                    else
+                    {
+                        // ha létezik akkor töröljük
+                        // igent választottuk
+                        File.Delete(hely);
+                    }
                 }
                 // megnézzük, hogy hány sorból áll a tábla
                 int ii = 4;
@@ -268,7 +249,8 @@ namespace Villamos
                         Adatok.Add(Adat);
                         Holtart.Lép();
                     }
-                    KézKidobó.Rögzítés(hely, Adatok);
+
+                    KézKidobó.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, Adatok);
                 }
                 Gombok();
 
@@ -381,7 +363,7 @@ namespace Villamos
                         Adatok.Add(Adat);
                         Holtart.Lép();
                     }
-                    KézKidobó.Rögzítés(hely, Adatok);
+                    KézKidobó.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, Adatok);
                 }
 
                 Gombok();
@@ -519,9 +501,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
-                if (!File.Exists(hely)) return;
-
                 DataTable AdatTábla = new DataTable();
 
                 AdatTábla.Columns.Clear();
@@ -542,7 +521,7 @@ namespace Villamos
 
                 Tábla.Visible = false;
 
-                List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(hely);
+                List<Adat_Kidobó> Adatok = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
 
                 foreach (Adat_Kidobó rekord in Adatok)
                 {
@@ -644,23 +623,17 @@ namespace Villamos
         {
             try
             {
-                // változattal felülír
-                string helyvált = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
-
-                if (!File.Exists(helyvált)) throw new HibásBevittAdat("Nincs változati fájl.");
-                if (!File.Exists(hely)) throw new HibásBevittAdat("Nincs módosítandó fájl.");
                 if (VáltozatCombo.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva a változat amivel lehet módosítani.");
 
                 // ha nincs olyan akkor rögzít különben módosít
                 Holtart.Be(20);
 
-                List<Adat_Kidobó_Segéd> AdatokÖ = KézSegéd.Lista_Adatok(helyvált);
+                List<Adat_Kidobó_Segéd> AdatokÖ = KézSegéd.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Kidobó_Segéd> Adatok = (from a in AdatokÖ
                                                   where a.Változatnév == VáltozatCombo.Text.Trim()
                                                   select a).ToList();
 
-                List<Adat_Kidobó> AdatokKidobó = KézKidobó.Lista_Adat(hely);
+                List<Adat_Kidobó> AdatokKidobó = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
 
                 List<Adat_Kidobó> Adatok_Módosítás = new List<Adat_Kidobó>();
 
@@ -691,7 +664,7 @@ namespace Villamos
                         Holtart.Lép();
                     }
                 }
-                if (Adatok_Módosítás != null && Adatok_Módosítás.Count > 0) KézKidobó.Módosítás(hely, Adatok_Módosítás);
+                if (Adatok_Módosítás != null && Adatok_Módosítás.Count > 0) KézKidobó.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value, Adatok_Módosítás);
                 Holtart.Ki();
                 Label18.Text = "Adott napi adatok:";
                 Tábla1.Visible = false;
@@ -806,9 +779,8 @@ namespace Villamos
                 MyE.Kiir("Típus", $"j{sor}");
                 MyE.Vastagkeret($"a{sor}" + $":j{sor}");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
                 DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
-                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(hely);
+                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
                                             && a.Kezdés < Határóra
@@ -1008,9 +980,8 @@ namespace Villamos
                 MyE.Kiir("Típus", $"i{sor}");
                 MyE.Vastagkeret($"a{sor}" + $":i{sor}");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
                 DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
-                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(hely);
+                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
                                             && a.Kezdés < Határóra
@@ -1224,9 +1195,8 @@ namespace Villamos
                 int[] típusdb = new int[Forte_típus.Count + 1];
 
                 // érdemi rész
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
                 DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
-                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(hely);
+                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
                                             orderby a.Viszonylat, a.Kezdés
@@ -1631,9 +1601,8 @@ namespace Villamos
             Label18.Text = "Változat lista:";
             Tábla1.Visible = true;
             Tábla.Visible = false;
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
 
-            List<Adat_Kidobó_Segéd> AdatokÖ = KézSegéd.Lista_Adatok(hely);
+            List<Adat_Kidobó_Segéd> AdatokÖ = KézSegéd.Lista_Adatok(Cmbtelephely.Text.Trim());
             // ha nincs olyan akkor rögzít különben módosít
             List<Adat_Kidobó_Segéd> Adatok;
             if (VáltozatCombo.Text.Trim() == "")
@@ -1691,8 +1660,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
-                List<Adat_Kidobó_Változat> Adatok = KézVáltozat.Lista_Adat(hely);
+                List<Adat_Kidobó_Változat> Adatok = KézVáltozat.Lista_Adat(Cmbtelephely.Text.Trim());
 
                 VáltozatCombo.Items.Clear();
                 VáltozatCombo.Items.Add("");

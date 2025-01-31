@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,10 +13,17 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Behajtási_Napló
     {
         readonly string jelszó = "forgalmirendszám";
+        string hely;
+
+        private void FájlBeállítás(string Könyvtár, string Fájl)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}_napló.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
 
         public List<Adat_Behajtás_Behajtási_Napló> Lista_Adatok(string Könyvtár, string Fájl)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}_napló.mdb".Ellenőrzés("Adat_Behajtás_Behajtási_Napló");
+            FájlBeállítás(Könyvtár, Fájl);
             string szöveg = "SELECT * FROM alapadatok";
             List<Adat_Behajtás_Behajtási_Napló> Adatok = new List<Adat_Behajtás_Behajtási_Napló>();
             Adat_Behajtás_Behajtási_Napló Adat;
@@ -105,7 +114,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}_napló.mdb".Ellenőrzés("Adat_Behajtás_Behajtási_Napló");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = "INSERT INTO alapadatok ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
                 szöveg += "Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
                 szöveg += "Száva_engedély, Szépilona_engedély, Zugló_engedély, Státus, Dátum, PDF, oka, ";
@@ -172,7 +181,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}_napló.mdb".Ellenőrzés("Adat_Behajtás_Behajtási_Napló");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = $"INSERT INTO alapadatok ( Sorszám, {Telephely}_engedély, {Telephely}_megjegyzés, ID, Rögzítette, rögzítésdátuma )";
                 szöveg += $" VALUES ( '{sorszám}', {Gondnok}, '{Megjegyzés}', {Sorszám(Könyvtár, Fájl)}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -192,7 +201,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}_napló.mdb".Ellenőrzés("Adat_Behajtás_Behajtási_Napló");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = "INSERT INTO alapadatok ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
                 szöveg += $" VALUES ('{Adat.Sorszám}', {Adat.Státus}, {Sorszám(Könyvtár, Fájl)},'{Adat.Rögzítette}', '{Adat.Rögzítésdátuma}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -212,7 +221,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}_napló.mdb".Ellenőrzés("Adat_Behajtás_Behajtási_Napló");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = $"INSERT INTO alapadatok ( Sorszám, {Szakszolg}, ID, Rögzítette, rögzítésdátuma )";
                 szöveg += $" VALUES ( '{sorSzám}', {SzakszolgEng}, {Sorszám(Könyvtár, Fájl)}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

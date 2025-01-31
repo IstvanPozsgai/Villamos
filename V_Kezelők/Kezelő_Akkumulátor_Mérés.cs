@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -13,12 +15,18 @@ namespace Villamos.Kezelők
         string hely;
         readonly string jelszó = "kasosmiklós";
 
-        public List<Adat_Akkumulátor_Mérés> Lista_Adatok(DateTime Dátum)
+        private void FájlBeállítás(int Év)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Év}.mdb".KönyvSzerk();
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
+        }
+
+        public List<Adat_Akkumulátor_Mérés> Lista_Adatok(int Év)
         {
             List<Adat_Akkumulátor_Mérés> Adatok = new List<Adat_Akkumulátor_Mérés>();
             Adat_Akkumulátor_Mérés Adat;
 
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb".Ellenőrzés();
+            FájlBeállítás(Év);
             string szöveg = "SELECT * FROM méréstábla ORDER BY gyáriszám, Mérésdátuma asc";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -56,11 +64,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Törlés(DateTime Dátum, List<int> Számok)
+        public void Törlés(int Év, List<int> Számok)
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb".Ellenőrzés();
+                FájlBeállítás(Év);
                 List<string> SzövegGy = new List<string>();
                 foreach (int ID in Számok)
                 {
@@ -80,11 +88,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(Adat_Akkumulátor_Mérés Adat, DateTime Dátum)
+        public void Rögzítés(Adat_Akkumulátor_Mérés Adat, int Év)
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Dátum.Year}.mdb".Ellenőrzés();
+                FájlBeállítás(Év);
 
                 string szöveg = "INSERT INTO méréstábla ";
                 szöveg += "(Gyáriszám, Kisütésiáram, Kezdetifesz, Végfesz, Kisütésiidő, Kapacitás, Megjegyzés, Van, Mérésdátuma, Rögzítés, Rögzítő, id)";
@@ -100,7 +108,7 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Mérésdátuma:yyyy.MM.dd}', ";//Mérésdátuma
                 szöveg += $"'{Adat.Rögzítés}', ";//Rögzítés
                 szöveg += $"'{Adat.Rögzítő}', ";//Rögzítő
-                szöveg += $"{Sorszám(Dátum)})";//id
+                szöveg += $"{Sorszám(Év)})";//id
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -114,12 +122,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public long Sorszám(DateTime Dátum)
+        public long Sorszám(int Év)
         {
             long Válasz = 1;
             try
             {
-                List<Adat_Akkumulátor_Mérés> Adatok = Lista_Adatok(Dátum);
+                List<Adat_Akkumulátor_Mérés> Adatok = Lista_Adatok(Év);
                 if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(x => x.Id) + 1;
             }
             catch (HibásBevittAdat ex)

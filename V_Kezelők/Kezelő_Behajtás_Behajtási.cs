@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,10 +12,17 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Behajtási
     {
         readonly string jelszó = "forgalmirendszám";
+        string hely;
+
+        private void FájlBeállítás(string Könyvtár, string Fájl)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".KönyvSzerk();
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok(hely);
+        }
 
         public List<Adat_Behajtás_Behajtási> Lista_Adatok(string Könyvtár, string Fájl)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
+            FájlBeállítás(Könyvtár, Fájl);
             string szöveg = "SELECT * FROM alapadatok ";
             List<Adat_Behajtás_Behajtási> Adatok = new List<Adat_Behajtás_Behajtási>();
             Adat_Behajtás_Behajtási Adat;
@@ -80,7 +89,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = "INSERT INTO alapadatok ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
                 szöveg += "Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
                 szöveg += "Száva_engedély, Szépilona_engedély, Zugló_engedély, Státus, Dátum, PDF, oka, ";
@@ -144,7 +153,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = "UPDATE alapadatok Set ";
                 szöveg += $" Hrazonosító='{Adat.HRazonosító}', ";
                 szöveg += $" Név='{Adat.Név}', ";
@@ -198,7 +207,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = "UPDATE alapadatok SET ";
                 szöveg += $"{Telephely}_engedély={Gondnok}, ";
                 szöveg += $"{Telephely}_megjegyzés='{Megjegyzés}'";
@@ -220,7 +229,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = $"UPDATE alapadatok Set Státus={Adat.Státus}";
                 szöveg += $" WHERE sorszám='{Adat.Sorszám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -240,7 +249,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".Ellenőrzés("Adat_Behajtás_Behajtási");
+                FájlBeállítás(Könyvtár, Fájl);
                 string szöveg = $"UPDATE alapadatok SET {Szakszolg}={SzakszolgEng} WHERE sorszám='{sorSzám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

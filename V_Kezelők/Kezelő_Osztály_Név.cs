@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Osztály_Név
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb".Ellenőrzés();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb".KönyvSzerk();
         readonly string jelszó = "kéménybe";
         public List<Adat_Osztály_Név> Lista_Adat(string hely, string jelszó, string szöveg)
         {

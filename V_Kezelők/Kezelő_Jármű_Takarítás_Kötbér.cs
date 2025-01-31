@@ -9,7 +9,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű_Takarítás_Kötbér
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb".Ellenőrzés();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb".KönyvSzerk();
         readonly string jelszó = "seprűéslapát";
 
         public List<Adat_Jármű_Takarítás_Kötbér> Lista_Adat(string hely, string jelszó, string szöveg)

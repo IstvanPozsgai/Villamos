@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Állomány_Típus> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".KönyvSzerk();
             string szöveg = "Select * FROM típustábla order by id";
 
             List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
@@ -52,7 +52,7 @@ namespace Villamos.Kezelők
                 szöveg += $" VALUES ({Adat.Id},";
                 szöveg += $" '{Adat.Típus}',";
                 szöveg += $" {Adat.Állomány} )";
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".KönyvSzerk();
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -71,7 +71,7 @@ namespace Villamos.Kezelők
             try
             {
                 string szöveg = $"DELETE FROM típustábla WHERE típus='{Adat.Típus}'";
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".KönyvSzerk();
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -92,7 +92,7 @@ namespace Villamos.Kezelők
                 string szöveg = $"Update típustábla SET ";
                 szöveg += $"id = '{Adat.Id}' ";
                 szöveg += $"WHERE típus = '{Adat.Típus}'";
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".KönyvSzerk();
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

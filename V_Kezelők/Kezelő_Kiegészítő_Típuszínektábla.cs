@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Típuszínektábla> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
             string szöveg = "SELECT * FROM Típuszínektábla ORDER BY  típus";
             List<Adat_Kiegészítő_Típuszínektábla> Adatok = new List<Adat_Kiegészítő_Típuszínektábla>();
             Adat_Kiegészítő_Típuszínektábla Adat;
@@ -44,7 +44,7 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(string Telephely, Adat_Kiegészítő_Típuszínektábla Adat)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
             string szöveg = $"INSERT INTO Típuszínektábla (típus, színszám) ";
             szöveg += $"VALUES ('{Adat.Típus}' ,";
             szöveg += $" {Adat.Színszám})";
@@ -55,7 +55,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE Típuszínektábla SET ";
                 szöveg += $"színszám= '{Adat.Színszám}',";
                 szöveg += $"WHERE típus='{Adat.Típus}'";
@@ -76,7 +76,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".Ellenőrzés();
+                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
                 string szöveg = $"DELETE * FROM Típuszínektábla where típus='{Adat.Típus}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
