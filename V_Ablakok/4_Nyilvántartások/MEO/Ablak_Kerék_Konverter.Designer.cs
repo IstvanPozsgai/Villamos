@@ -103,6 +103,6 @@
         internal System.Windows.Forms.Button Végrehajt;
         internal System.Windows.Forms.Button Könyvtár;
         internal System.Windows.Forms.ListBox FileList;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

@@ -150,7 +150,7 @@ namespace Villamos
             this.Tak_Ár_Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();

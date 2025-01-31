@@ -354,9 +354,9 @@ namespace Villamos
                     Részmunkaidős = 0;
                     passzív = 0;
 
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.CheckedItems[ii].ToString().Trim()}\Adatok\Dolgozók.mdb";
+                    hely = $@"{Application.StartupPath}\{Cmbtelephely.CheckedItems[ii].ToStrTrim()}\Adatok\Dolgozók.mdb";
                     // leellenőrizzük, hogy minden munkahely ki van-e töltve.
-                    Munkahelyellenőrzés(hely);
+                    Munkahelyellenőrzés(Cmbtelephely.CheckedItems[ii].ToStrTrim());
 
                     helyvált = $@"{Application.StartupPath}\{Cmbtelephely.CheckedItems[ii].ToString().Trim()}\adatok\segéd\kiegészítő.mdb";
                     szöveg = "SELECT * FROM csoportbeosztás order by sorszám";
@@ -623,12 +623,12 @@ namespace Villamos
 
 
 
-        private void Munkahelyellenőrzés(string hely)
+        private void Munkahelyellenőrzés(string Telephely)
         {
             try
             {
                 Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> AdatokDolgÖ = KézDolg.Lista_Adatok(hely);
+                List<Adat_Dolgozó_Alap> AdatokDolgÖ = KézDolg.Lista_Adatok(Telephely);
                 List<Adat_Dolgozó_Alap> AdatokDolg = (from a in AdatokDolgÖ
                                                       where a.Kilépésiidő.ToShortDateString() == "1900.01.01"
                                                       orderby a.DolgozóNév
@@ -641,7 +641,7 @@ namespace Villamos
                         Adat_Dolgozó_Alap ADAT = new Adat_Dolgozó_Alap(rekord.Dolgozószám.Trim(),
                                                                        "Nincs",
                                                                        new DateTime(1900, 1, 1));
-                        KézDolg.Módosít_Csoport(hely, ADAT);
+                        KézDolg.Módosít_Csoport(Telephely, ADAT);
                     }
                 }
             }

@@ -804,6 +804,6 @@ namespace Villamos
         internal Button CsukCsoport;
         internal Button CsoportFrissít;
         internal CheckBox Kilépettjel;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

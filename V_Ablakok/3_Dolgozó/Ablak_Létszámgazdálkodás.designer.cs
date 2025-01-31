@@ -123,7 +123,7 @@ namespace Villamos
             this.Label24 = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -1195,6 +1195,6 @@ namespace Villamos
         internal Button Áthelyez;
         internal Label label29;
         internal Label label30;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal  V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

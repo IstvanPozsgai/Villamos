@@ -1204,6 +1204,6 @@ namespace Villamos
         internal Label label14;
         internal Button Új_Pozíció;
         internal TextBox Új_Gyári;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

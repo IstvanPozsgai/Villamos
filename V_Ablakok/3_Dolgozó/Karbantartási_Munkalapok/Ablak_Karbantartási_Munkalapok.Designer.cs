@@ -743,6 +743,6 @@
         internal System.Windows.Forms.Button BtnCsoportosítás;
         private System.Windows.Forms.CheckBox CHKMinta;
         private System.Windows.Forms.CheckBox CHKKMU;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

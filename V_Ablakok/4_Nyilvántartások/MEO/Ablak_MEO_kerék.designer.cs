@@ -957,6 +957,6 @@ namespace Villamos
         internal Button BtnKijelölTelephely1;
         internal Button BtnKijelölTípus1Törlés;
         internal Button BtnKijelölTípus1;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

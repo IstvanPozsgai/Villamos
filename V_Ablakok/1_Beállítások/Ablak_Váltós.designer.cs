@@ -2483,7 +2483,7 @@ namespace Villamos
         internal Panel Panel5;
         internal Button Éves_Frissít;
         private ToolTip toolTip1;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
         internal Button BEOkódFriss;
         internal Button TúlóraFrissít;
         internal Label Label9;

@@ -3003,6 +3003,6 @@ namespace Villamos
         internal TextBox TxtBxDigitalisAlairo2;
         private CheckBox ChckBxDigitális;
         internal Label label72;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

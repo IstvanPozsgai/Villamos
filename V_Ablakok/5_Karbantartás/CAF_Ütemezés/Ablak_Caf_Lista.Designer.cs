@@ -261,6 +261,6 @@
         internal System.Windows.Forms.Button Ütem_frissít;
         internal System.Windows.Forms.Button Alap_adatok;
         private System.Windows.Forms.ToolTip toolTip1;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

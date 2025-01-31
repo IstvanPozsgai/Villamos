@@ -592,6 +592,6 @@
         internal System.Windows.Forms.ComboBox Alap_pályaszám;
         internal System.Windows.Forms.Label Label1;
         private System.Windows.Forms.ToolTip toolTip1;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

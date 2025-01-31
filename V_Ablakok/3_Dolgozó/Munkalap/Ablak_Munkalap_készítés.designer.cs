@@ -778,6 +778,6 @@ namespace Villamos
         internal CheckBox E2ICS;
         internal CheckBox E1_pályaszámok;
         internal Button Benn_Lévők;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

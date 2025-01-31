@@ -2422,7 +2422,7 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 DolgozóAdatok.Clear();
-                DolgozóAdatok = KézDolgozó.Lista_Adatok(hely);
+                DolgozóAdatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {

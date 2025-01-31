@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -372,8 +371,8 @@ namespace Villamos
                 // Ellenőrzések
 
                 string eredmény = "";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\Státus.mdb";
-                AdatokStátusListázás();
+
+                AdatokStátus = KézStátus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Dolgozó_Státus AdatStátus = (from a in AdatokStátus
                                                   where a.ID == StátusID
@@ -382,8 +381,7 @@ namespace Villamos
                 // Státus tábla rögzítése
                 if (Státusid.Text.Trim() != "n") // ha nincs státus vezetve akkor fel tudja tölteni a dolgozókat
                 {
-                    // ha nincs  fájl, akkor másolunk egy újat.
-                    if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Státus(hely);
+
                     // ha van id szám 
                     if (AdatStátus != null)
                     {
@@ -402,9 +400,7 @@ namespace Villamos
                         throw new HibásBevittAdat("Nincs ilyen sorszámú státus!");
                     }
                 }
-
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                AdatokDolgozóListázás(hely);
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
                                                  where a.Kilépésiidő == new DateTime(1900, 1, 1)
                                                  && a.Dolgozószám == Dolgozószámúj.Text.Trim()
@@ -424,7 +420,7 @@ namespace Villamos
                                                                    MyF.Szöveg_Tisztítás(Dolgozónévúj.Text.Trim(), 0, 50),
                                                                    new DateTime(1900, 1, 1),
                                                                    Belépésiidő.Value);
-                    KézDolgozó.Rögzítés(hely, EGYADAT);
+                    KézDolgozó.Rögzítés(Cmbtelephely.Text.Trim(), EGYADAT);
                 }
                 else
                 {
@@ -434,7 +430,7 @@ namespace Villamos
                                                       MyF.Szöveg_Tisztítás(Dolgozónévúj.Text.Trim(), 0, 50),
                                                       new DateTime(1900, 1, 1),
                                                       new DateTime(1900, 1, 1));
-                    KézDolgozó.Módosít_Csoport(hely, EGYADAT);
+                    KézDolgozó.Módosít_Csoport(Cmbtelephely.Text.Trim(), EGYADAT);
                 }
 
 
@@ -442,7 +438,7 @@ namespace Villamos
                 // státust is rögzítünk
                 if (Státusid.Text.Trim() != "n")
                 {
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\Státus.mdb";
+
                     if (AdatStátus != null)
                     {
                         Adat_Dolgozó_Státus ADATBE = new Adat_Dolgozó_Státus(StátusID,
@@ -450,7 +446,7 @@ namespace Villamos
                                                                            MyF.Szöveg_Tisztítás(Dolgozószámúj.Text.Trim(), 0, 8),
                                                                            BelépésiBér,
                                                                            Belépésiidő.Value);
-                        KézStátus.Módosít_Be(hely, ADATBE);
+                        KézStátus.Módosít_Be(Cmbtelephely.Text.Trim(), ADATBE);
                     }
                 }
 
@@ -504,10 +500,14 @@ namespace Villamos
             {
                 KilépDolgozónév.Items.Clear();
                 KilépDolgozónév.BeginUpdate();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                if (KilépTelephely.Visible) hely = $@"{Application.StartupPath}\{KilépTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
 
-                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(hely).OrderBy(a => a.DolgozóNév).ToList();
+                List<Adat_Dolgozó_Alap> Adatok;
+                if (KilépTelephely.Visible)
+                    Adatok = KézDolgozó.Lista_Adatok(KilépTelephely.Text.Trim()).OrderBy(a => a.DolgozóNév).ToList();
+                else
+                    Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim()).OrderBy(a => a.DolgozóNév).ToList();
+
+
                 if (Adatok != null)
                 {
                     Adatok = (from a in Adatok
@@ -563,16 +563,14 @@ namespace Villamos
         {
             try
             {
-                string hely;
-                if (KilépTelephely.Visible == true)
-                    hely = $@"{Application.StartupPath}\{KilépTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                else
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-
                 string[] darabol = KilépDolgozónév.Text.Trim().Split('=');
                 KilépDolgozószám.Text = darabol[1].Trim();
 
-                AdatokDolgozóListázás(hely);
+                if (KilépTelephely.Visible)
+                    AdatokDolgozó = KézDolgozó.Lista_Adatok(KilépTelephely.Text.Trim());
+                else
+                    AdatokDolgozó = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+
                 Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
                                                  where a.Dolgozószám == darabol[0].Trim()
                                                  select a).FirstOrDefault();
@@ -585,7 +583,7 @@ namespace Villamos
                 }
 
                 // bér kiírás
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\Villamos10.mdb";
+                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Villamos10.mdb";
 
                 if (File.Exists(hely))
                 {
@@ -624,13 +622,8 @@ namespace Villamos
                 if (KilépTelephely.Text.Trim() == "") KilépTelephely.Text = "_";
                 // le ellenőrizzük, hogy a státusban kilépett-e már
 
-                // új sort hoz létre a státusnál
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\Státus.mdb";
 
-                // ha nincs  fájl, akkor másolunk egy újat.
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Státus(hely);
-
-                AdatokStátusListázás();
+                AdatokStátus = KézStátus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 // ha jövőbeli a kilépés akkor nem rögzítünk újat
                 Adat_Dolgozó_Státus AdatStátus = (from a in AdatokStátus
@@ -656,23 +649,21 @@ namespace Villamos
                                                                          "_",
                                                                          new DateTime(1900, 1, 1),
                                                                          "Személy csere");
-                    KézStátus.Rögzítés_Alap(hely, ADATBE);
+                    KézStátus.Rögzítés_Alap(Cmbtelephely.Text.Trim(), ADATBE);
                 }
                 else
                 {
                     // módosíthatjuk a dátumot
                     Adat_Dolgozó_Státus ADATBE = new Adat_Dolgozó_Státus(melyik,
                                                                          Kilépésiidő.Value);
-                    KézStátus.Módosít_Kilép(hely, ADATBE);
+                    KézStátus.Módosít_Kilép(Cmbtelephely.Text.Trim(), ADATBE);
                 }
 
                 // ha nem látszódik a választó, akkor a dolgozó ki lesz léptetve
                 if (!KilépTelephely.Visible)
                 {
-
                     // ha nem látszódik akkor a dolgozó kilép
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                    AdatokDolgozóListázás(hely);
+                    AdatokDolgozó = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
                     Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
                                                      where a.Dolgozószám == KilépDolgozószám.Text.Trim()
                                                      select a).FirstOrDefault();
@@ -681,7 +672,7 @@ namespace Villamos
                     {
                         Adat_Dolgozó_Alap ADAT = new Adat_Dolgozó_Alap(KilépDolgozószám.Text.Trim(),
                                                                        Kilépésiidő.Value);
-                        KézDolgozó.Módosít_Kilép(hely, ADAT);
+                        KézDolgozó.Módosít_Kilép(Cmbtelephely.Text.Trim(), ADAT);
                     }
                 }
                 Kiürítkilép();
@@ -709,9 +700,7 @@ namespace Villamos
                 if (Dolgozószámba.Text.Trim() == "") throw new HibásBevittAdat("A HR azonosítót meg kell adni.");
 
                 // törzsből elvesz
-                string hely = $@"{Application.StartupPath}\" + Honnanba.Text + @"\Adatok\Dolgozók.mdb";
-
-                AdatokDolgozóListázás(hely);
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Honnanba.Text.Trim());
                 Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
                                                  where a.Dolgozószám == Dolgozószámba.Text.Trim()
                                                  select a).FirstOrDefault();
@@ -724,13 +713,11 @@ namespace Villamos
                     Adat_Dolgozó_Alap ADAT1 = new Adat_Dolgozó_Alap(Dolgozószámba.Text.Trim(),
                                                                    DateTime.Today,
                                                                    Honnanba.Text.Trim());
-                    KézDolgozó.Módosít_Kilép(hely, ADAT1);
+                    KézDolgozó.Módosít_Kilép(Honnanba.Text.Trim(), ADAT1);
                 }
 
                 // sajátba betesz
-                hely = $@"{Application.StartupPath}\{Hovába.Text.Trim()}\Adatok\Dolgozók.mdb";
-
-                AdatokDolgozóListázás(hely);
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Hovába.Text.Trim());
                 AdatDolgozó = (from a in AdatokDolgozó
                                where a.Dolgozószám == Dolgozószámba.Text.Trim()
                                select a).FirstOrDefault();
@@ -743,9 +730,9 @@ namespace Villamos
                                                                belépés,
                                                                Honnanba.Text.Trim());
                 if (AdatDolgozó != null)
-                    KézDolgozó.Módosít_Telep(hely, ADAT);
+                    KézDolgozó.Módosít_Telep(Hovába.Text.Trim(), ADAT);
                 else
-                    KézDolgozó.Rögzítés_Telep(hely, ADAT);
+                    KézDolgozó.Rögzítés_Telep(Hovába.Text.Trim(), ADAT);
 
                 Névfeltöltésba();
                 Dolgozószámba.Text = "";
@@ -770,9 +757,7 @@ namespace Villamos
             {
                 Dolgozóba.Items.Clear();
                 Dolgozóba.BeginUpdate();
-
-                string hely = $@"{Application.StartupPath}\{Honnanba.Text}\Adatok\Dolgozók.mdb";
-                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(hely);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Honnanba.Text);
                 if (Adatok != null)
                 {
                     Adatok = (from a in Adatok
@@ -877,9 +862,7 @@ namespace Villamos
                 DolgozóKi.Items.Clear();
                 DolgozóKi.BeginUpdate();
 
-                string hely = $@"{Application.StartupPath}\{HonnanKi.Text}\Adatok\Dolgozók.mdb";
-
-                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(hely);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(HonnanKi.Text);
                 if (Adatok != null)
                 {
                     Adatok = (from a in Adatok
@@ -929,9 +912,7 @@ namespace Villamos
             {
                 if (DolgozószámKi.Text.Trim() == "") throw new HibásBevittAdat("A HR azonosítót meg kell adni.");
                 // sajátból kirak
-                string hely = $@"{Application.StartupPath}\{HonnanKi.Text.Trim()}\Adatok\Dolgozók.mdb";
-
-                AdatokDolgozóListázás(hely);
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(HonnanKi.Text.Trim());
                 if (AdatokDolgozó == null) return;
                 Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
                                                  where a.Dolgozószám == DolgozószámKi.Text.Trim()
@@ -945,14 +926,13 @@ namespace Villamos
                     Adat_Dolgozó_Alap ADAT1 = new Adat_Dolgozó_Alap(DolgozószámKi.Text.Trim(),
                                                                     DateTime.Today,
                                                                     HonnanKi.Text.Trim());
-                    KézDolgozó.Módosít_Ki(hely, ADAT1);
+                    KézDolgozó.Módosít_Ki(HonnanKi.Text.Trim(), ADAT1);
                 }
 
 
                 // törzsbe berak
-                hely = $@"{Application.StartupPath}\{HováKi.Text.Trim()}\Adatok\Dolgozók.mdb";
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(HováKi.Text.Trim());
 
-                AdatokDolgozóListázás(hely);
                 if (AdatokDolgozó == null) return;
                 AdatDolgozó = (from a in AdatokDolgozó
                                where a.Dolgozószám == DolgozószámKi.Text.Trim()
@@ -965,9 +945,9 @@ namespace Villamos
                                                                 HonnanKi.Text.Trim());
 
                 if (AdatDolgozó != null)
-                    KézDolgozó.Módosít_Telep(hely, ADAT2);
+                    KézDolgozó.Módosít_Telep(HováKi.Text.Trim(), ADAT2);
                 else
-                    KézDolgozó.Rögzítés_Telep(hely, ADAT2);
+                    KézDolgozó.Rögzítés_Telep(HováKi.Text.Trim(), ADAT2);
 
                 NévfeltöltésKi();
                 DolgozószámKi.Text = "";
@@ -1034,13 +1014,9 @@ namespace Villamos
             {
                 if (Telephonnan.Text.Trim() == "") throw new HibásBevittAdat("Honnan mezőt ki kell tölteni.");
                 Dolgozószámvezénylés.Text = "";
-
-                string hely = $@"{Application.StartupPath}\{Telephonnan.Text.Trim()}\Adatok\Dolgozók.mdb";
-                if (!File.Exists(hely)) throw new HibásBevittAdat("Honnan mezőt ki kell tölteni.");
-
                 Dolgozóvez.Items.Clear();
 
-                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(hely);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Telephonnan.Text.Trim());
                 if (Adatok != null)
                 {
                     Adatok = (from a in Adatok
@@ -1092,52 +1068,43 @@ namespace Villamos
                 if (Dolgozóvez.Text.Trim() == "") throw new HibásBevittAdat("Dolgozó neve mezőt ki kell tölteni.");
 
                 // sajátból kirak
-                string hely = $@"{Application.StartupPath}\{Telephonnan.Text.Trim()}\Adatok\Dolgozók.mdb";
-
-                AdatokDolgozóListázás(hely);
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Telephonnan.Text.Trim());
                 if (AdatokDolgozó == null) return;
                 Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
                                                  where a.Dolgozószám == Dolgozószámvezénylés.Text.Trim()
                                                  select a).FirstOrDefault();
 
-                if (File.Exists(hely))
+                if (AdatDolgozó != null)
                 {
-                    if (AdatDolgozó != null)
-                    {
-                        Adat_Dolgozó_Alap ADATDolg = new Adat_Dolgozó_Alap(Dolgozószámvezénylés.Text.Trim(),
-                                                                          "",
-                                                                          new DateTime(1900, 1, 1),
-                                                                          true,
-                                                                          false,
-                                                                          Telephová.Text.Trim());
-                        KézDolgozó.Módosít_Vezénylés_Saját(hely, ADATDolg);
-                    }
+                    Adat_Dolgozó_Alap ADATDolg = new Adat_Dolgozó_Alap(Dolgozószámvezénylés.Text.Trim(),
+                                                                      "",
+                                                                      new DateTime(1900, 1, 1),
+                                                                      true,
+                                                                      false,
+                                                                      Telephová.Text.Trim());
+                    KézDolgozó.Módosít_Vezénylés_Saját(Telephonnan.Text.Trim(), ADATDolg);
                 }
+
                 string[] darabol = Dolgozóvez.Text.Trim().Split('=');
                 // a kívánt telephelyre
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Telephová.Text.Trim());
 
-                hely = $@"{Application.StartupPath}\{Telephová.Text.Trim()}\Adatok\Dolgozók.mdb";
-
-                AdatokDolgozóListázás(hely);
                 if (AdatokDolgozó == null) return;
                 AdatDolgozó = (from a in AdatokDolgozó
                                where a.Dolgozószám == Dolgozószámvezénylés.Text.Trim()
                                select a).FirstOrDefault();
 
-                if (File.Exists(hely))
-                {
-                    Adat_Dolgozó_Alap ADATVBE = new Adat_Dolgozó_Alap(Dolgozószámvezénylés.Text.Trim(),
-                                                  darabol[0].Trim(),
-                                                  new DateTime(1900, 1, 1),
-                                                  false,
-                                                  true,
-                                                  Telephonnan.Text.Trim());
-                    if (AdatDolgozó != null)
-                        KézDolgozó.Módosít_Vezénylés(hely, ADATVBE);
-                    else
-                        KézDolgozó.Rögzítés_Vezénylés(hely, ADATVBE);
+                Adat_Dolgozó_Alap ADATVBE = new Adat_Dolgozó_Alap(Dolgozószámvezénylés.Text.Trim(),
+                                              darabol[0].Trim(),
+                                              new DateTime(1900, 1, 1),
+                                              false,
+                                              true,
+                                              Telephonnan.Text.Trim());
+                if (AdatDolgozó != null)
+                    KézDolgozó.Módosít_Vezénylés(Telephová.Text.Trim(), ADATVBE);
+                else
+                    KézDolgozó.Rögzítés_Vezénylés(Telephová.Text.Trim(), ADATVBE);
 
-                }
                 Dolgozószámvezénylés.Text = "";
                 Dolgozóvez.Text = "";
                 Telephová.Text = "";
@@ -1168,9 +1135,7 @@ namespace Villamos
                 for (int j = 0; j < Cmbtelephely.Items.Count; j++)
                 {
                     Cmbtelephely.Text = Cmbtelephely.Items[j].ToString();
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Dolgozók.mdb";
-
-                    List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(hely);
+                    List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
                     if (Adatok != null)
                     {
                         Adatok = (from a in Adatok
@@ -1205,72 +1170,58 @@ namespace Villamos
                 string lakcím;
                 bool vezénylő;
                 //Telephely ahova be vagyunk jelentkezve
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
 
-                AdatokDolgozóListázás(hely);
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-
-                if (File.Exists(hely))
+                Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
+                                                 where a.Dolgozószám == Label22text.Text.Trim()
+                                                 && a.Kilépésiidő == new DateTime(1900, 1, 1)
+                                                 select a).FirstOrDefault();
+                if (AdatDolgozó != null)
                 {
-                    Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
-                                                     where a.Dolgozószám == Label22text.Text.Trim()
-                                                     && a.Kilépésiidő == new DateTime(1900, 1, 1)
-                                                     select a).FirstOrDefault();
-                    if (AdatDolgozó != null)
+                    lakcím = AdatDolgozó.Lakcím;
+                    vezénylő = AdatDolgozó.Vezényelt;
+
+                    if (vezénylő)
                     {
-                        lakcím = AdatDolgozó.Lakcím;
-                        vezénylő = AdatDolgozó.Vezényelt;
+                        // a saját telephely
+                        Adat_Dolgozó_Alap ADATVS = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
+                                                                         "",
+                                                                         new DateTime(1900, 1, 1),
+                                                                         false,
+                                                                         false,
+                                                                         "");
+                        KézDolgozó.Módosít_Vezénylés(Cmbtelephely.Text.Trim(), ADATVS);
 
-                        if (vezénylő)
-                        {
-                            // a saját telephely
-                            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                            Adat_Dolgozó_Alap ADATVS = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
-                                                                             "",
-                                                                             new DateTime(1900, 1, 1),
-                                                                             false,
-                                                                             false,
-                                                                             "");
-                            KézDolgozó.Módosít_Vezénylés(hely, ADATVS);
+                        // idegen telephely
+                        Adat_Dolgozó_Alap ADATV = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
+                                                                        "",
+                                                                        DateTime.Today,
+                                                                        false,
+                                                                        false,
+                                                                        "");
+                        KézDolgozó.Módosít_Vezénylés(lakcím.Trim(), ADATV);
 
-                            // idegen telephely
-                            hely = $@"{Application.StartupPath}\{lakcím.Trim()}\Adatok\Dolgozók.mdb";
-                            if (File.Exists(hely))
-                            {
-                                Adat_Dolgozó_Alap ADATV = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
-                                                                                "",
-                                                                                DateTime.Today,
-                                                                                false,
-                                                                                false,
-                                                                                "");
-                                KézDolgozó.Módosít_Vezénylés(hely, ADATV);
-                            }
-                        }
-                        else
-                        {
-                            // a saját telephely
-                            hely = $@"{Application.StartupPath}\{lakcím.Trim()}\Adatok\Dolgozók.mdb";
-                            if (File.Exists(hely))
-                            {
-                                Adat_Dolgozó_Alap ADATVS = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
-                                                                                 "",
-                                                                                 new DateTime(1900, 1, 1),
-                                                                                 false,
-                                                                                 false,
-                                                                                 "");
-                                KézDolgozó.Módosít_Vezénylés(hely, ADATVS);
-                            }
+                    }
+                    else
+                    {
+                        // a saját telephely
+                        Adat_Dolgozó_Alap ADATVS = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
+                                                                         "",
+                                                                         new DateTime(1900, 1, 1),
+                                                                         false,
+                                                                         false,
+                                                                         "");
+                        KézDolgozó.Módosít_Vezénylés(lakcím.Trim(), ADATVS);
 
-                            // idegen telephely
-                            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                            Adat_Dolgozó_Alap ADATV = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
-                                                                             "",
-                                                                             DateTime.Today,
-                                                                             false,
-                                                                             false,
-                                                                             "");
-                            KézDolgozó.Módosít_Vezénylés(hely, ADATV);
-                        }
+                        // idegen telephely
+                        Adat_Dolgozó_Alap ADATV = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
+                                                                         "",
+                                                                         DateTime.Today,
+                                                                         false,
+                                                                         false,
+                                                                         "");
+                        KézDolgozó.Módosít_Vezénylés(Cmbtelephely.Text.Trim(), ADATV);
                     }
                 }
 
@@ -1332,42 +1283,7 @@ namespace Villamos
             }
         }
 
-        private void AdatokStátusListázás()
-        {
-            try
-            {
-                AdatokStátus.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\Státus.mdb";
-                AdatokStátus = KézStátus.Lista_Adatok(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
-        private void AdatokDolgozóListázás(string hely)
-        {
-            try
-            {
-                AdatokDolgozó.Clear();
-                AdatokDolgozó = KézDolgozó.Lista_Adatok(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         #endregion
     }

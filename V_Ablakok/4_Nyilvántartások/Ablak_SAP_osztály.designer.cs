@@ -379,6 +379,6 @@ namespace Villamos
         internal Button LekérdezTelep;
         internal DataGridView Tábla1;
         internal ToolTip ToolTip1;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

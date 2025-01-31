@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         public Kezelő_Kulcs_Kettő()
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kulcs_Adatok(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kulcs_Adatok_Kettő(hely.KönyvSzerk());
         }
 
         public List<Adat_Kulcs> Lista_Adatok()

@@ -1345,6 +1345,6 @@ namespace Villamos
         private PdfiumViewer.PdfViewer PDF_néző;
         private CheckBox Oktataandó_Választó;
         private Panel Oktatás_Panel;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

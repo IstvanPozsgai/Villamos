@@ -241,7 +241,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 if (!File.Exists(hely)) return;
 
-                List<Adat_Dolgozó_Alap> AdatokÖ = KézDolgozó.Lista_Adatok(hely);
+                List<Adat_Dolgozó_Alap> AdatokÖ = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Dolgozónév.Rows.Clear();
                 Dolgozónév.Columns.Clear();
@@ -321,7 +321,7 @@ namespace Villamos
                 Kiadta.Items.Clear();
                 Ellenőrizte.Items.Clear();
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                List<Adat_Dolgozó_Alap> AdatokÖ = KézDolgozó.Lista_Adatok(hely);
+                List<Adat_Dolgozó_Alap> AdatokÖ = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Dolgozó_Alap> Adatok = (from a in AdatokÖ
                                                   where a.Kilépésiidő == new DateTime(1900, 1, 1)
                                                   && a.Főkönyvtitulus != ""

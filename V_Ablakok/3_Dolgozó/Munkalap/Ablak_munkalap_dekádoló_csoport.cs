@@ -108,7 +108,7 @@ namespace Villamos.Villamos_Ablakok
 
             //Csoport dolgozói
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
-            List<Adat_Dolgozó_Alap> AdatokDolgÖ = kézdolg.Lista_Adatok(hely);
+            List<Adat_Dolgozó_Alap> AdatokDolgÖ = kézdolg.Lista_Adatok(Cmbtelephely.Trim());
             List<Adat_Dolgozó_Alap> AdatokDolg = (from a in AdatokDolgÖ
                                                   where a.Kilépésiidő < new DateTime(1900, 1, 31)
                                                   && a.Csoport == Csoportbeosztás

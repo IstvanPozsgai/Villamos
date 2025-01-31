@@ -95,6 +95,6 @@
         #endregion
         internal System.Windows.Forms.DataGridView CsoportTábla;
         internal System.Windows.Forms.Button Command21;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

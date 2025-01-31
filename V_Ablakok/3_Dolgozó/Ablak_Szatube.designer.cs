@@ -954,6 +954,6 @@ namespace Villamos
         private Label label2;
         private DateTimePicker Határnap;
         internal Button Határnapig_Összesít;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

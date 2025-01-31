@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,9 +13,18 @@ namespace Villamos.Kezelők
     public class Kezelő_Dolgozó_Státus
     {
         readonly string jelszó = "forgalmiutasítás";
+        string hely;
 
-        public List<Adat_Dolgozó_Státus> Lista_Adatok(string hely)
+        private void FájlBeállítás(string Telephely)
         {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Státus(hely.KönyvSzerk());
+        }
+
+
+        public List<Adat_Dolgozó_Státus> Lista_Adatok(string Telephely)
+        {
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM státustábla ORDER BY ID desc";
             List<Adat_Dolgozó_Státus> Adatok = new List<Adat_Dolgozó_Státus>();
             Adat_Dolgozó_Státus Adat;
@@ -60,10 +71,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Módosít_Be(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Be(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE  státustábla SET ";
                 szöveg += $" Névbe='{Adat.Névbe}', ";
                 szöveg += $" Hrazonosítóbe ='{Adat.Hrazonosítóbe}', ";
@@ -83,10 +95,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Be_Honnan(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Be_Honnan(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE státustábla  SET  ";
                 szöveg += $"Honnanjött='{Adat.Honnanjött}' ";
                 szöveg += $" WHERE id={Adat.ID}";
@@ -103,10 +116,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Státus(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Státus(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE státustábla  SET  ";
                 szöveg += $" Státusváltozások='{Adat.Státusváltozások}'";
                 szöveg += $" WHERE id={Adat.ID}";
@@ -123,10 +137,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Státus_Teljes(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Státus_Teljes(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE státustábla  SET  ";
                 szöveg += $"Státusváltzásoka='{Adat.Státusváltozoka}', ";
                 szöveg += $"Megjegyzés='{Adat.Megjegyzés}', ";
@@ -145,10 +160,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Státus_Megjegyzés(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Státus_Megjegyzés(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE státustábla  SET  ";
                 szöveg += $"Megjegyzés='{Adat.Megjegyzés}', ";
                 szöveg += $"Részmunkaidős={Adat.Részmunkaidős} ";
@@ -166,10 +182,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Be_Teljes(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Be_Teljes(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE státustábla  SET  ";
                 szöveg += $" Névbe='{Adat.Névbe}', ";
                 szöveg += $" Hrazonosítóbe ='{Adat.Hrazonosítóbe}', ";
@@ -191,10 +208,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Kilép(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Kilép(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE  státustábla SET ";
                 szöveg += $" kilépésdátum='{Adat.Kilépésdátum:yyyy.MM.dd}' ";
                 szöveg += $" WHERE id={Adat.ID}";
@@ -211,10 +229,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Kilép_Ok(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Kilép_Ok(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE státustábla  SET  ";
                 szöveg += $"kilépésoka='{Adat.Kilépésoka}' ";
                 szöveg += $" WHERE id={Adat.ID}";
@@ -231,10 +250,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Kilép_Teljes(string hely, Adat_Dolgozó_Státus Adat)
+        public void Módosít_Kilép_Teljes(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE státustábla  SET  ";
                 szöveg += $"névki='{Adat.Névki}', ";
                 szöveg += $"Hrazonosítóki='{Adat.Hrazonosítóki}', ";
@@ -256,12 +276,13 @@ namespace Villamos.Kezelők
             }
         }
 
-        public long Rögzítés_Új(string hely, Adat_Dolgozó_Státus Adat)
+        public long Rögzítés_Új(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             long Válasz = 1;
             try
             {
-                Válasz = Sorszám(hely);
+                FájlBeállítás(Telephely);
+                Válasz = Sorszám(Telephely);
                 string szöveg = "INSERT INTO státustábla (id, Státusváltozások, telephelyki, honnanjött, Hrazonosítóbe, névbe) VALUES";
                 szöveg += $" ({Válasz},'{Adat.Státusváltozások}', '_', '_', '_', '_')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -277,12 +298,13 @@ namespace Villamos.Kezelők
             }
             return Válasz;
         }
-  
-        public void Rögzítés_Alap(string hely, Adat_Dolgozó_Státus Adat)
+
+        public void Rögzítés_Alap(string Telephely, Adat_Dolgozó_Státus Adat)
         {
             try
             {
-             long   Válasz = Sorszám(hely);
+                FájlBeállítás(Telephely);
+                long Válasz = Sorszám(Telephely);
                 string szöveg = "INSERT INTO státustábla ";
                 szöveg += " (id, Névki, Hrazonosítóki, kilépésdátum, Bérki, telephelyki, Státusváltozások, névbe,  Hrazonosítóbe, honnanjött, belépésidátum )";
                 szöveg += " VALUES (";
@@ -308,14 +330,14 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-                   }
+        }
 
-        public long Sorszám(string hely)
+        public long Sorszám(string Telephely)
         {
             long Válasz = 1;
             try
             {
-                List<Adat_Dolgozó_Státus> Adatok = Lista_Adatok(hely);
+                List<Adat_Dolgozó_Státus> Adatok = Lista_Adatok(Telephely);
                 if (Adatok != null) Válasz = Adatok.Max(a => a.ID) + 1;
             }
             catch (HibásBevittAdat ex)

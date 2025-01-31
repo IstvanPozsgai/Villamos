@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,11 +12,20 @@ namespace Villamos.Kezelők
     public class Kezelő_Dolgozó_Alap
     {
         readonly string jelszó = "forgalmiutasítás";
+        string hely;
 
-        public List<Adat_Dolgozó_Alap> Lista_Adatok(string hely, string jelszó, string szöveg)
+        private void FájlBeállítás(string Telephely)
         {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Dolgozók.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Adatok(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Dolgozó_Alap> Lista_Adatok(string Telephely)
+        {
+            FájlBeállítás(Telephely);
             List<Adat_Dolgozó_Alap> Adatok = new List<Adat_Dolgozó_Alap>();
             Adat_Dolgozó_Alap Adat;
+            string szöveg = "SELECT * FROM Dolgozóadatok order by DolgozóNév asc";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -87,16 +98,372 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        /// <summary>
-        /// Ez a változat a teljes listát adja vissza
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <returns></returns>
-        public List<Adat_Dolgozó_Alap> Lista_Adatok(string hely)
+        public void Rögzítés(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "INSERT INTO dolgozóadatok ";
+                szöveg += " ( dolgozónév, dolgozószám, kilépésiidő, belépésiidő)";
+                szöveg += " VALUES (";
+                szöveg += $"'{Adat.DolgozóNév}', ";
+                szöveg += $"'{Adat.Dolgozószám}', ";
+                szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}', ";
+                szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}' )";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Csoport(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = $"UPDATE Dolgozóadatok SET csoport='Nincs' WHERE dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Kilép(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE  dolgozóadatok SET ";
+                szöveg += $" kilépésiidő ='{Adat.Kilépésiidő:yyyy.MM.dd}' ";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Telep(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE  dolgozóadatok SET ";
+                szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
+                szöveg += $" belépésiidő='{Adat.Belépésiidő:yyyy.MM.dd}', ";
+                szöveg += $" lakcím='{Adat.Lakcím}', ";
+                szöveg += $" dolgozónév='{Adat.DolgozóNév}' ";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés_Telep(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "INSERT INTO dolgozóadatok ";
+                szöveg += " ( dolgozónév, dolgozószám, kilépésiidő, belépésiidő, lakcím)";
+                szöveg += " VALUES (";
+                szöveg += $"'{Adat.DolgozóNév}', ";
+                szöveg += $"'{Adat.Dolgozószám}', ";
+                szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}', ";
+                szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}',";
+                szöveg += $"'{Adat.Lakcím}' )";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Vezénylés(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE  dolgozóadatok SET ";
+                szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
+                szöveg += $" lakcím='{Adat.Lakcím}', ";
+                szöveg += $" Vezényelt={Adat.Vezényelt}, ";
+                szöveg += $" Vezényelve={Adat.Vezényelve} ";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Vezénylés_Saját(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE  dolgozóadatok SET ";
+                szöveg += $" lakcím='{Adat.Lakcím}', ";
+                szöveg += $" Vezényelt={Adat.Vezényelt}, ";
+                szöveg += $" Vezényelve={Adat.Vezényelve} ";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés_Vezénylés(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "INSERT INTO dolgozóadatok ";
+                szöveg += "(dolgozószám, dolgozónév, Vezényelt, Vezényelve, lakcím, kilépésiidő)";
+                szöveg += " VALUES (";
+                szöveg += $"'{Adat.Dolgozószám}', ";
+                szöveg += $"'{Adat.DolgozóNév}', ";
+                szöveg += $"{Adat.Vezényelt}, {Adat.Vezényelve}, ";
+                szöveg += $"'{Adat.Lakcím}', ";
+                szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}') ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Alap(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE Dolgozóadatok SET ";
+                szöveg += $" csoport='{Adat.Csoport}', ";
+                szöveg += $" Főkönyvtitulus='{Adat.Főkönyvtitulus}', ";
+                szöveg += $" bejelentkezésinév='{Adat.Bejelentkezésinév}', ";
+                szöveg += $" munkarend={Adat.Munkarend}, ";
+                szöveg += $" Csopvez={Adat.Csopvez}, ";
+                szöveg += $" Passzív={Adat.Passzív}, ";
+                szöveg += $" Részmunkaidős={Adat.Részmunkaidős}, ";
+                szöveg += $" alkalmazott={Adat.Alkalmazott}, ";
+                szöveg += $" TAJ='{Adat.TAj}', ";
+                szöveg += $" csoportkód='{Adat.Csoportkód}', ";
+                szöveg += $" részmunkaidőperc={Adat.Részmunkaidőperc} ";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Túl(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = $"UPDATE Dolgozóadatok SET túlóraeng={Adat.Túlóraeng} WHERE dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Munka(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE Dolgozóadatok SET ";
+                szöveg += $" feorsz='{Adat.Feorsz}', ";
+                szöveg += $" munkakör='{Adat.Munkakör}' ";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Jog(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE Dolgozóadatok SET ";
+                szöveg += $" Jogosítványszám='{Adat.Jogosítványszám}', ";
+                szöveg += $" Jogtanúsítvány='{Adat.Jogtanúsítvány}', ";
+                szöveg += $" jogosítványérvényesség='{Adat.Jogosítványérvényesség:yyyy.MM.dd}', ";
+                szöveg += $" jogorvosi='{Adat.Jogorvosi:yyyy.MM.dd}' ";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Csoport(string Telephely, List<string> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                List<string> SzövegGy = new List<string>();
+                foreach (string elem in Adatok)
+                {
+                    string szöveg = $"UPDATE Dolgozóadatok SET csoport='Nincs' WHERE dolgozószám='{elem}'";
+                    SzövegGy.Add(szöveg);
+                }
+
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Vissza(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE  dolgozóadatok SET ";
+                szöveg += $" kilépésiidő ='{Adat.Kilépésiidő}', ";
+                szöveg += $" dolgozónév='{Adat.DolgozóNév}'";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít_Ki(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE  dolgozóadatok SET ";
+                szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
+                szöveg += $" lakcím='{Adat.Lakcím}' ";
+                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+
+        public List<Adat_Dolgozó_Alap> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Dolgozó_Alap> Adatok = new List<Adat_Dolgozó_Alap>();
             Adat_Dolgozó_Alap Adat;
-            string szöveg = "SELECT * FROM Dolgozóadatok order by DolgozóNév asc";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -244,13 +611,6 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
-        /// <summary>
-        /// Bejelentkezési név birtokában hozzáférünk a dolgozó adataihoz.
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="NickNév"></param>
-        /// <returns></returns>
         public Adat_Dolgozó_Alap Felhasználó(string hely, string jelszó, string NickNév)
         {
             Adat_Dolgozó_Alap Adat = null;
@@ -352,350 +712,6 @@ namespace Villamos.Kezelők
                     Darabol[1].Trim()
                     );
             return válasz;
-        }
-
-        public void Módosít_Alap(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE Dolgozóadatok SET ";
-                szöveg += $" csoport='{Adat.Csoport}', ";
-                szöveg += $" Főkönyvtitulus='{Adat.Főkönyvtitulus}', ";
-                szöveg += $" bejelentkezésinév='{Adat.Bejelentkezésinév}', ";
-                szöveg += $" munkarend={Adat.Munkarend}, ";
-                szöveg += $" Csopvez={Adat.Csopvez}, ";
-                szöveg += $" Passzív={Adat.Passzív}, ";
-                szöveg += $" Részmunkaidős={Adat.Részmunkaidős}, ";
-                szöveg += $" alkalmazott={Adat.Alkalmazott}, ";
-                szöveg += $" TAJ='{Adat.TAj}', ";
-                szöveg += $" csoportkód='{Adat.Csoportkód}', ";
-                szöveg += $" részmunkaidőperc={Adat.Részmunkaidőperc} ";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Túl(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = $"UPDATE Dolgozóadatok SET túlóraeng={Adat.Túlóraeng} WHERE dolgozószám='{Adat.Dolgozószám}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Munka(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE Dolgozóadatok SET ";
-                szöveg += $" feorsz='{Adat.Feorsz}', ";
-                szöveg += $" munkakör='{Adat.Munkakör}' ";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Jog(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE Dolgozóadatok SET ";
-                szöveg += $" Jogosítványszám='{Adat.Jogosítványszám}', ";
-                szöveg += $" Jogtanúsítvány='{Adat.Jogtanúsítvány}', ";
-                szöveg += $" jogosítványérvényesség='{Adat.Jogosítványérvényesség:yyyy.MM.dd}', ";
-                szöveg += $" jogorvosi='{Adat.Jogorvosi:yyyy.MM.dd}' ";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Csoport(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = $"UPDATE Dolgozóadatok SET csoport='Nincs' WHERE dolgozószám='{Adat.Dolgozószám}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Csoport(string hely, List<string> Adatok)
-        {
-            try
-            {
-                List<string> SzövegGy = new List<string>();
-                foreach (string elem in Adatok)
-                {
-                    string szöveg = $"UPDATE Dolgozóadatok SET csoport='Nincs' WHERE dolgozószám='{elem}'";
-                    SzövegGy.Add(szöveg);
-                }
-
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Vissza(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE  dolgozóadatok SET ";
-                szöveg += $" kilépésiidő ='{Adat.Kilépésiidő}', ";
-                szöveg += $" dolgozónév='{Adat.DolgozóNév}'";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Kilép(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE  dolgozóadatok SET ";
-                szöveg += $" kilépésiidő ='{Adat.Kilépésiidő:yyyy.MM.dd}' ";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Ki(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE  dolgozóadatok SET ";
-                szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
-                szöveg += $" lakcím='{Adat.Lakcím}' ";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Telep(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE  dolgozóadatok SET ";
-                szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
-                szöveg += $" belépésiidő='{Adat.Belépésiidő:yyyy.MM.dd}', ";
-                szöveg += $" lakcím='{Adat.Lakcím}', ";
-                szöveg += $" dolgozónév='{Adat.DolgozóNév}' ";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Vezénylés(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE  dolgozóadatok SET ";
-                szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
-                szöveg += $" lakcím='{Adat.Lakcím}', ";
-                szöveg += $" Vezényelt={Adat.Vezényelt}, ";
-                szöveg += $" Vezényelve={Adat.Vezényelve} ";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosít_Vezénylés_Saját(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "UPDATE  dolgozóadatok SET ";
-                szöveg += $" lakcím='{Adat.Lakcím}', ";
-                szöveg += $" Vezényelt={Adat.Vezényelt}, ";
-                szöveg += $" Vezényelve={Adat.Vezényelve} ";
-                szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Rögzítés(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "INSERT INTO dolgozóadatok ";
-                szöveg += " ( dolgozónév, dolgozószám, kilépésiidő, belépésiidő)";
-                szöveg += " VALUES (";
-                szöveg += $"'{Adat.DolgozóNév}', ";
-                szöveg += $"'{Adat.Dolgozószám}', ";
-                szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}', ";
-                szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}' )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Rögzítés_Telep(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "INSERT INTO dolgozóadatok ";
-                szöveg += " ( dolgozónév, dolgozószám, kilépésiidő, belépésiidő, lakcím)";
-                szöveg += " VALUES (";
-                szöveg += $"'{Adat.DolgozóNév}', ";
-                szöveg += $"'{Adat.Dolgozószám}', ";
-                szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}', ";
-                szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}',";
-                szöveg += $"'{Adat.Lakcím}' )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Rögzítés_Vezénylés(string hely, Adat_Dolgozó_Alap Adat)
-        {
-            try
-            {
-                string szöveg = "INSERT INTO dolgozóadatok ";
-                szöveg += "(dolgozószám, dolgozónév, Vezényelt, Vezényelve, lakcím, kilépésiidő)";
-                szöveg += " VALUES (";
-                szöveg += $"'{Adat.Dolgozószám}', ";
-                szöveg += $"'{Adat.DolgozóNév}', ";
-                szöveg += $"{Adat.Vezényelt}, {Adat.Vezényelve}, ";
-                szöveg += $"'{Adat.Lakcím}', ";
-                szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}') ";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
     }
 
@@ -888,7 +904,7 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-  
+
         public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string hely)
         {
             string szöveg = $"SELECT * FROM Beosztás";

@@ -1474,6 +1474,6 @@ namespace Villamos
         internal Label label30;
         internal TextBox MérésLekGyári;
         internal Button TelephelyEllenőr;
-        private V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

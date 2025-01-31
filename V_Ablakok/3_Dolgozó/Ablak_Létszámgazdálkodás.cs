@@ -1095,8 +1095,8 @@ namespace Villamos
                     if (File.Exists(helyvált) && File.Exists(helytelep))
                     {
                         // leellenőrizzük, hogy minden munkahely ki van-e töltve.
-                        Munkahelyellenőrzés(helytelep);
-                        List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(helytelep);
+                        Munkahelyellenőrzés(Cmbtelephely.Items[ii].ToStrTrim());
+                        List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Items[ii].ToStrTrim()); //     helytelep
                         List<Adat_Dolgozó_Telephely> AdatokTelep = new List<Adat_Dolgozó_Telephely>();
                         Cmbtelephely.Text = Cmbtelephely.Items[ii].ToString();
                         foreach (Adat_Dolgozó_Alap Elem in Adatok)
@@ -1555,9 +1555,9 @@ namespace Villamos
             }
         }
 
-        private void Munkahelyellenőrzés(string hely)
+        private void Munkahelyellenőrzés(string Telephely)
         {
-            List<Adat_Dolgozó_Alap> Dolgozók = KézDolgozó.Lista_Adatok(hely);
+            List<Adat_Dolgozó_Alap> Dolgozók = KézDolgozó.Lista_Adatok(Telephely);
             if (Dolgozók != null)
             {
                 List<string> Adatok = new List<string>();
@@ -1566,7 +1566,7 @@ namespace Villamos
                     if (rekord.Csoport == null)
                         Adatok.Add(rekord.Dolgozószám);
                 }
-                if (Adatok != null && Adatok.Count > 0) KézDolgozó.Módosít_Csoport(hely, Adatok);
+                if (Adatok != null && Adatok.Count > 0) KézDolgozó.Módosít_Csoport(Telephely, Adatok);
             }
         }
         #endregion

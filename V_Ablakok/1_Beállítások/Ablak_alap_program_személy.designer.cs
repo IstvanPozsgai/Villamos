@@ -2865,7 +2865,7 @@ namespace Villamos
         internal TextBox JelenlétiText5;
         internal Label label49;
         internal Button Eszközhöz;
-        internal Villamos.V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
         internal Button Gondnok_Fel;
         private CheckBox Munka_Státus;
         internal Label label50;
