@@ -32,10 +32,9 @@ namespace Villamos
             Telephelyekfeltöltése();
 
             // Szakszolgálati lekérdezés esetén működik csak a lekérdezés
-            if (Cmbtelephely.Enabled == true)
-                Kimutatás_készítés.Visible = true;
-            else
-                Kimutatás_készítés.Visible = false;
+
+            Kimutatás_készítés.Visible = Cmbtelephely.Enabled;
+
 
             string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{DateTime.Now.Year}\T5C5_Fűtés.mdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.T5C5_fűtés_tábla(hely);
@@ -50,6 +49,7 @@ namespace Villamos
             PictureBox2.Left = 10;
             PictureBox2.Width = 450;
             PictureBox2.Height = 570;
+            PictureBox2.Visible = false;
         }
 
 
