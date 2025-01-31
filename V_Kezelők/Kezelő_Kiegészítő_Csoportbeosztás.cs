@@ -12,6 +12,14 @@ namespace Villamos.Kezelők
     public class Kezelő_Kiegészítő_Csoportbeosztás
     {
         readonly string jelszó = "Mocó";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
         public List<Adat_Kiegészítő_Csoportbeosztás> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kiegészítő_Csoportbeosztás> Adatok = new List<Adat_Kiegészítő_Csoportbeosztás>();
@@ -45,7 +53,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Csoportbeosztás> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM csoportbeosztás order by sorszám";
             List<Adat_Kiegészítő_Csoportbeosztás> Adatok = new List<Adat_Kiegészítő_Csoportbeosztás>();
             Adat_Kiegészítő_Csoportbeosztás Adat;
@@ -80,7 +88,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO csoportbeosztás (sorszám, csoportbeosztás, típus) ";
                 szöveg += $"VALUES ({Sorszám(hely)}, ";
                 szöveg += $"'{Adat.Csoportbeosztás}', ";
@@ -103,7 +111,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = " UPDATE csoportbeosztás SET ";
                 szöveg += $" típus='{Adat.Típus}'";
                 szöveg += $" WHERE csoportbeosztás='{Adat.Csoportbeosztás}'";
@@ -125,7 +133,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kiegészítő_Csoportbeosztás rekord in Adat)
                 {
@@ -154,7 +162,7 @@ namespace Villamos.Kezelők
             long Válasz = 1;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(hely);
                 if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(a => a.Sorszám) + 1;
             }
@@ -174,7 +182,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $" DELETE FROM csoportbeosztás WHERE sorszám={Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -194,7 +202,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(hely);
                 Adat_Kiegészítő_Csoportbeosztás Adat1 = Adatok.Find(a => a.Sorszám == Sorszám1);
                 Adat_Kiegészítő_Csoportbeosztás Adat2 = Adatok.Find(a => a.Sorszám == Sorszám2);
@@ -225,7 +233,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = Lista_Adatok(hely);
 
                 int i = 1;

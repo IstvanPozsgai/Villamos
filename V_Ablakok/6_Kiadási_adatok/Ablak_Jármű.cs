@@ -57,7 +57,7 @@ namespace Villamos
 
             // megnézzük, hogy van-e villamos... tábla
             hely = $@"{Application.StartupPath}\{Program.PostásTelephely.Trim()}\Adatok\villamos\villamos.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusa(hely);
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely);
 
             hely = $@"{Application.StartupPath}\{Program.PostásTelephely.Trim()}\Adatok\villamos\villamos2.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Villamostábla(hely);
@@ -72,7 +72,7 @@ namespace Villamos
 
             // megnézzük, hogy van-e villamos... tábla
             hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusa(hely);
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely);
 
             hely = Application.StartupPath + @"\Főmérnökség\adatok\villamos2.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Villamostábla(hely);
@@ -285,7 +285,7 @@ namespace Villamos
                         if (File.Exists(hely))
                             LÉT_listáz();
                         else
-                            Adatbázis_Létrehozás.Kocsitípusa(hely);
+                            Adatbázis_Létrehozás.KocsikTípusa(hely);
 
                         // megnézzük, hogy létezik-e naplófájl
                         hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
@@ -1152,7 +1152,7 @@ namespace Villamos
             {
                 // megnézzük, hogy létezik-e az üzemben már a fájl, ha nem akkor létrehozzuk
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusa(hely);
+                if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely);
 
                 string helyközös = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
 
@@ -1228,7 +1228,7 @@ namespace Villamos
             {
                 // megnézzük, hogy létezik-e az üzemben már a fájl, ha nem akkor létrehozzuk
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusa(hely);
+                if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely);
 
                 // berakjuk közös állományba
                 string helyközös = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";

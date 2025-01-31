@@ -748,6 +748,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Munkakör.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Reklám.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálat.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálattelepei.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Turnusok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típusaltípustábla.cs" />
@@ -756,6 +757,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Túlórakeret.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Váltóstábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Védelem.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kulcs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Fekete.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />

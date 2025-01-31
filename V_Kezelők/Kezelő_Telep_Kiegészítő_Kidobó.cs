@@ -10,10 +10,18 @@ namespace Villamos.Kezelők
     public class Kezelő_Telep_Kiegészítő_Kidobó
     {
         readonly string jelszó = "Mocó";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
 
         public List<Adat_Telep_Kiegészítő_Kidobó> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM kidobó  WHERE  id=1";
             List<Adat_Telep_Kiegészítő_Kidobó> Adatok = new List<Adat_Telep_Kiegészítő_Kidobó>();
             Adat_Telep_Kiegészítő_Kidobó Adat;
@@ -46,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO kidobó (id, telephely)";
                 szöveg += $"VALUES ({Adat.Id},";
                 szöveg += $"'{Adat.Telephely})'";
@@ -69,7 +77,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"UPDATE kidobó SET ";
                 szöveg += $"telephely='{Adat.Telephely}'";
                 szöveg += $"WHERE id={Adat.Id}";

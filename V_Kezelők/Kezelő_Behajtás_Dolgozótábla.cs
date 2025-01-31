@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
@@ -8,7 +10,12 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Dolgozótábla
     {
         readonly string jelszó = "egérpad";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+
+        public Kezelő_Behajtás_Dolgozótábla()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Alap(hely.KönyvSzerk());
+        }
 
         public List<Adat_Behajtás_Dolgozótábla> Lista_Adatok()
         {

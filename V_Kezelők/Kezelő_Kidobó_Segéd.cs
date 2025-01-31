@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,10 +13,16 @@ namespace Villamos.Kezelők
     public class Kezelő_Kidobó_Segéd
     {
         readonly string jelszó = "erzsébet";
+        string hely;
 
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kidobósegédadattábla(hely.KönyvSzerk());
+        }
         public List<Adat_Kidobó_Segéd> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM Kidobósegédtábla  order by változatnév, szolgálatiszám";
             List<Adat_Kidobó_Segéd> Adatok = new List<Adat_Kidobó_Segéd>();
             Adat_Kidobó_Segéd Adat;
@@ -54,7 +62,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 List<Adat_Kidobó_Segéd> AdatokÖ = Lista_Adatok(Telephely);
                 List<Adat_Kidobó_Segéd> Adatok = (from a in AdatokÖ
                                                   where a.Változatnév == változatnév
@@ -80,7 +88,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 List<Adat_Kidobó_Segéd> AdatokÖ = Lista_Adatok(Telephely);
                 List<Adat_Kidobó_Segéd> Adatok = (from a in AdatokÖ
                                                   where a.Változatnév == változatnév
@@ -107,7 +115,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = "INSERT INTO Kidobósegédtábla (változatnév, forgalmiszám, szolgálatiszám, Kezdéshely, Végzéshely, megjegyzés, Kezdés, Végzés) VALUES (";
                 szöveg += $"'{Adat.Változatnév}', ";      //változatnév
                 szöveg += $"'{Adat.Forgalmiszám}', ";      //forgalmiszám
@@ -134,7 +142,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE Kidobósegédtábla  SET ";
                 szöveg += $"Kezdéshely='{Adat.Kezdéshely}', ";
                 szöveg += $"Végzéshely='{Adat.Végzéshely}', ";

@@ -13,6 +13,11 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb";
         readonly string jelszó = "forgalmiutasítás";
 
+        public Kezelő_Belépés_Verzió()
+        {
+            // Nincs kidolgozva
+        }
+
         public List<Adat_Belépés_Verzió> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM Verzió";

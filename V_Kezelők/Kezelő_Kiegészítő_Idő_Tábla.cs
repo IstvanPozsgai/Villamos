@@ -12,6 +12,12 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
 
+        public Kezelő_Kiegészítő_Idő_Tábla()
+        {
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
+
         public List<Adat_Kiegészítő_Idő_Tábla> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM időtábla";

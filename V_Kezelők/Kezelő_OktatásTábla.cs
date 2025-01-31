@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -12,6 +14,11 @@ namespace Villamos.Kezelők
     {
         readonly string hely = Application.StartupPath + @"\Főmérnökség\adatok\Főmérnökség_oktatás.mdb";
         readonly string jelszó = "pázmányt";
+
+        public Kezelő_OktatásTábla()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Oktatás_ALAP(hely.KönyvSzerk());
+        }
 
         public List<Adat_OktatásTábla> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

@@ -12,6 +12,13 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő2.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+
+        public Kezelő_Kiegészítő_Könyvtár()
+        {
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
+
         public List<Adat_Kiegészítő_Könyvtár> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM könyvtár ORDER BY id";

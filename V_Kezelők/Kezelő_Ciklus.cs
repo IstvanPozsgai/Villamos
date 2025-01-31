@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -9,8 +11,14 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Ciklus
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ciklus.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ciklus.mdb";
         readonly string jelszó = "pocsaierzsi";
+
+        public Kezelő_Ciklus()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Ciklusrendtábla(hely.KönyvSzerk());
+        }
+
         public List<Adat_Ciklus> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();

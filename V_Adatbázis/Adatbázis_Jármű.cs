@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Villamos.Adatszerkezet;
+﻿using Villamos.Adatszerkezet;
 
 namespace Villamos.Villamos_Adatbázis_Funkció
 {
     public static partial class Adatbázis_Létrehozás
     {
 
-        /// <summary>
-        /// Adatbázis generálása
-        /// </summary>
-        /// <param name="hely"></param>
-        public static void KocsikTípusa(string hely)
+        public static void KocsikTípusaTelep(string hely)
         {
             string szöveg;
             string jelszó = "pozsgaii";
@@ -36,17 +27,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[szerelvénykocsik] Long,";
             szöveg += "[miótaáll] Date,";
             szöveg += "[valóstípus] CHAR(50),";
-            szöveg += "[valóstípus2] CHAR(50),";
-            szöveg += "[üzembehelyezés] Date)";
-            //Létrehozzuk az adatbázist
-            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-
-            szöveg = "CREATE TABLE Vendégtábla (";
-            szöveg += "[azonosító] CHAR(10),";
-            szöveg += "[típus] CHAR(20),";
-            szöveg += "[BázisTelephely] CHAR(30),";
-            szöveg += "[KiadóTelephely] CHAR(30))";
-
+            szöveg += "[valóstípus2] CHAR(50))";
             //Létrehozzuk az adatbázist
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
@@ -74,7 +55,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
 
-        public static void Kocsitípusa(string hely)
+        public static void KocsikTípusa(string hely)
         {
             string szöveg;
             string jelszó = "pozsgaii";

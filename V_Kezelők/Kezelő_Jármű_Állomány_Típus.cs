@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -10,10 +12,17 @@ namespace Villamos.Kezelők
     public class Kezelő_Jármű_Állomány_Típus
     {
         readonly string jelszó = "pozsgaii";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Jármű_Állomány_Típus(hely.KönyvSzerk());
+        }
 
         public List<Adat_Jármű_Állomány_Típus> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "Select * FROM típustábla order by id";
 
             List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
@@ -48,11 +57,11 @@ namespace Villamos.Kezelők
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO típustábla (id, típus, állomány)";
                 szöveg += $" VALUES ({Adat.Id},";
                 szöveg += $" '{Adat.Típus}',";
                 szöveg += $" {Adat.Állomány} )";
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".KönyvSzerk();
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -70,8 +79,8 @@ namespace Villamos.Kezelők
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = $"DELETE FROM típustábla WHERE típus='{Adat.Típus}'";
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".KönyvSzerk();
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -89,10 +98,11 @@ namespace Villamos.Kezelők
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = $"Update típustábla SET ";
                 szöveg += $"id = '{Adat.Id}' ";
                 szöveg += $"WHERE típus = '{Adat.Típus}'";
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb".KönyvSzerk();
+
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

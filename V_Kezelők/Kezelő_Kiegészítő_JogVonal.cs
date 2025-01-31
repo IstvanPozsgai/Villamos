@@ -12,6 +12,12 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
 
+        public Kezelő_Kiegészítő_JogVonal()
+        {
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
+
         public List<Adat_Kiegészítő_Jogvonal> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM jogvonal  order by  sorszám";

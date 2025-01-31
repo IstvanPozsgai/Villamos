@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,8 +12,13 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Alap_Beolvasás
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\beolvasás.mdb";
         readonly string jelszó = "sajátmagam";
+
+        public Kezelő_Alap_Beolvasás()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Egyéb_beolvasás(hely.KönyvSzerk());
+        }
 
         public List<Adat_Alap_Beolvasás> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

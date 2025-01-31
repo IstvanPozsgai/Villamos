@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -8,8 +10,14 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű_Takarítás_Ár
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
         readonly string jelszó = "seprűéslapát";
+
+        public Kezelő_Jármű_Takarítás_Ár()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely.KönyvSzerk());
+        }
+
         public List<Adat_Jármű_Takarítás_Árak> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Jármű_Takarítás_Árak> Adatok = new List<Adat_Jármű_Takarítás_Árak>();

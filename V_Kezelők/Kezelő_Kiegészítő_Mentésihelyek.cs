@@ -10,10 +10,18 @@ namespace Villamos.Kezelők
     public class Kezelő_Kiegészítő_Mentésihelyek
     {
         readonly string jelszó = "Mocó";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb";
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
 
         public List<Adat_Kiegészítő_Mentésihelyek> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM Mentésihelyek  order by  sorszám";
             List<Adat_Kiegészítő_Mentésihelyek> Adatok = new List<Adat_Kiegészítő_Mentésihelyek>();
             Adat_Kiegészítő_Mentésihelyek Adat;
@@ -45,7 +53,7 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(string Telephely, Adat_Kiegészítő_Mentésihelyek Adat)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = $"INSERT INTO Mentésihelyek ( sorszám, alprogram, elérésiút )";
             szöveg += $" VALUES ({Adat.Sorszám}, ";
             szöveg += $"'{Adat.Alprogram}',";
@@ -58,7 +66,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"UPDATE Mentésihelyek SET ";
                 szöveg += $" alprogram='{Adat.Alprogram}',";
                 szöveg += $" elérésiút='{Adat.Elérésiút}' ";
@@ -81,7 +89,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"DELETE FROM Mentésihelyek WHERE sorszám={Adat.Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

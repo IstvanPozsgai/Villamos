@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,10 +15,17 @@ namespace Villamos.Kezelők
         readonly Kezelő_Üzenet_Olvas KézOlvas = new Kezelő_Üzenet_Olvas();
 
         readonly string jelszó = "katalin";
+        string hely;
+
+        private void FájlBeállítás(string Telephely, int Év)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely.KönyvSzerk());
+        }
 
         public List<Adat_Üzenet> Lista_Adatok(string Telephely, int Év)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely, Év);
             string szöveg = "SELECT * FROM üzenetek ";
             List<Adat_Üzenet> Adatok = new List<Adat_Üzenet>();
             Adat_Üzenet Adat;
@@ -54,7 +63,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely, Év);
                 double id = Sorszám(Telephely, Év);
 
                 string szöveg = "INSERT INTO üzenetek  (sorszám, szöveg, írta, mikor,válaszsorszám ) VALUES (";
@@ -109,7 +118,7 @@ namespace Villamos.Kezelők
             Adat_Üzenet Válasz = null;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}üzenet.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely, Év);
                 string szöveg = $"Select * FROM Olvasás WHERE ki='{Program.PostásNév.Trim()}'  ORDER BY sorszám DESC";
                 List<Adat_Üzenet_Olvasás> AdatokOlvasás = KézOlvas.Lista_Adatok(Telephely, Év);
 

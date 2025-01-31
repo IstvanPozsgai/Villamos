@@ -12,6 +12,12 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb".KönyvSzerk();
         readonly string jelszó = "forgalmiutasítás";
 
+        public Kezelő_Belépés_WinTábla()
+        {
+            // Nincs kidolgozva
+            //if (!File.Exists(hely)) Adatbázis_Létrehozás.(hely.KönyvSzerk());
+        }
+
         public List<Adat_Belépés_WinTábla> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM WinTábla";

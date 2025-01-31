@@ -12,6 +12,13 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
+
+        public Kezelő_Kiegészítő_Forte_Vonal()
+        {
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
+
         public List<Adat_Kiegészítő_Forte_Vonal> Lista_Adatok()
         {
             string szöveg = "Select * FROM fortevonal order by fortevonal";

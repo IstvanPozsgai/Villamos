@@ -10,6 +10,14 @@ namespace Villamos.Kezelők
     public class Kezelő_Kiegészítő_főkönyvtábla
     {
         readonly string jelszó = "Mocó";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
 
         public List<Adat_Kiegészítő_főkönyvtábla> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
@@ -48,7 +56,7 @@ namespace Villamos.Kezelők
             List<Adat_Kiegészítő_főkönyvtábla> Adatok = new List<Adat_Kiegészítő_főkönyvtábla>();
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = "SELECT * FROM Főkönyvtábla";
 
                 Adat_Kiegészítő_főkönyvtábla Adat;
@@ -94,10 +102,11 @@ namespace Villamos.Kezelők
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = $"UPDATE Főkönyvtábla SET név='{Adat.Név}',";
                 szöveg += $" beosztás='{Adat.Beosztás}'";
                 szöveg += $" WHERE id={Adat.Id} ";
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

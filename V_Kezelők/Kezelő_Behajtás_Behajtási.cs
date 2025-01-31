@@ -16,8 +16,8 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Könyvtár, string Fájl)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb".KönyvSzerk();
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok(hely);
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\{Könyvtár}\{Fájl}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok(hely.KönyvSzerk());
         }
 
         public List<Adat_Behajtás_Behajtási> Lista_Adatok(string Könyvtár, string Fájl)

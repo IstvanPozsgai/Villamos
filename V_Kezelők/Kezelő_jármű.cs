@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 
@@ -12,6 +14,25 @@ namespace Villamos.Kezelők
     public class Kezelő_Jármű
     {
         readonly string jelszó = "pozsgaii";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+
+            if (Telephely == "Főmérnökség")
+            {
+                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
+                if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusaTelep(hely.KönyvSzerk());
+            }
+            else
+            {
+                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\villamos.mdb";
+                if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely.KönyvSzerk());
+            }
+
+
+        }
+
         public List<Adat_Jármű> Lista_Jármű_állomány(string hely, string jelszó, string szöveg)
         {
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
@@ -318,11 +339,10 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Jármű> Lista_Adatok(string telephely)
+        public List<Adat_Jármű> Lista_Adatok(string Telephely)
         {
             string szöveg = "SELECT * FROM állománytábla order by  azonosító";
-            string hely = $@"{Application.StartupPath}\{telephely}\Adatok\villamos\villamos.mdb".KönyvSzerk();
-            if (telephely == "Főmérnökség") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
 
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
             Adat_Jármű Adat;

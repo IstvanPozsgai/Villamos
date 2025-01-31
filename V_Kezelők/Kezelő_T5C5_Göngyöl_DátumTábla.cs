@@ -12,6 +12,12 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
         readonly string jelszó = "pozsgaii";
 
+        public Kezelő_T5C5_Göngyöl_DátumTábla()
+        {
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
+
         //Telephelyi adat vissza kell fejteni
         public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

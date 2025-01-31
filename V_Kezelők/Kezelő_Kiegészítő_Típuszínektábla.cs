@@ -10,10 +10,18 @@ namespace Villamos.Kezelők
     public class Kezelő_Kiegészítő_Típuszínektábla
     {
         readonly string jelszó = "Mocó";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb";
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
 
         public List<Adat_Kiegészítő_Típuszínektábla> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM Típuszínektábla ORDER BY  típus";
             List<Adat_Kiegészítő_Típuszínektábla> Adatok = new List<Adat_Kiegészítő_Típuszínektábla>();
             Adat_Kiegészítő_Típuszínektábla Adat;
@@ -44,7 +52,7 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(string Telephely, Adat_Kiegészítő_Típuszínektábla Adat)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = $"INSERT INTO Típuszínektábla (típus, színszám) ";
             szöveg += $"VALUES ('{Adat.Típus}' ,";
             szöveg += $" {Adat.Színszám})";
@@ -55,7 +63,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"UPDATE Típuszínektábla SET ";
                 szöveg += $"színszám= '{Adat.Színszám}',";
                 szöveg += $"WHERE típus='{Adat.Típus}'";
@@ -76,7 +84,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"DELETE * FROM Típuszínektábla where típus='{Adat.Típus}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

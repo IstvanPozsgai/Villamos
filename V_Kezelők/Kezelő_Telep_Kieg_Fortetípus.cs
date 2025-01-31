@@ -10,10 +10,18 @@ namespace Villamos.Kezelők
     public class Kezelő_Telep_Kieg_Fortetípus
     {
         readonly string jelszó = "Mocó";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
 
         public List<Adat_Telep_Kieg_Fortetípus> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT *  FROM fortetipus ORDER BY ftípus";
             List<Adat_Telep_Kieg_Fortetípus> Adatok = new List<Adat_Telep_Kieg_Fortetípus>();
             Adat_Telep_Kieg_Fortetípus Adat;
@@ -47,7 +55,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO fortetipus (típus, ftípus) ";
                 szöveg += $"VALUES ('{Adat.Típus}',";
                 szöveg += $" '{Adat.Ftípus}')";
@@ -68,7 +76,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"DELETE * FROM fortetipus where típus='{Adat.Típus}' and ftípus='{Adat.Ftípus}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

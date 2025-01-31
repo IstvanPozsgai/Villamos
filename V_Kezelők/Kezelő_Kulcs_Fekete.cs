@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
@@ -12,6 +14,11 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos9.mdb".KönyvSzerk();
         readonly string jelszó = "Fekete_Könyv";
+
+        public Kezelő_Kulcs_Fekete()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Felhasználó_Extra(hely.KönyvSzerk());
+        }
 
         public List<Adat_Kulcs> Lista_Adatok()
         {

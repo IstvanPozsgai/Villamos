@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
@@ -13,6 +15,13 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb".KönyvSzerk();
         readonly string jelszó = "kéménybe";
+
+
+        public Kezelő_Osztály_Név()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Osztálytábla(hely.KönyvSzerk());
+        }
+
         public List<Adat_Osztály_Név> Lista_Adat(string hely, string jelszó, string szöveg)
         {
             List<Adat_Osztály_Név> Adatok = new List<Adat_Osztály_Név>();

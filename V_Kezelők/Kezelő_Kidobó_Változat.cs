@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,9 +13,16 @@ namespace Villamos.Kezelők
     public class Kezelő_Kidobó_Változat
     {
         readonly string jelszó = "erzsébet";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kidobósegédadattábla(hely.KönyvSzerk());
+        }
         public List<Adat_Kidobó_Változat> Lista_Adat(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM Változattábla  order by id";
             List<Adat_Kidobó_Változat> Adatok = new List<Adat_Kidobó_Változat>();
             Adat_Kidobó_Változat Adat;
@@ -47,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = "INSERT INTO Változattábla (id, változatnév) VALUES (";
                 szöveg += $"{Sorszám(hely)}, '{Adat.Változatnév}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -87,7 +96,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Kidobó\kidobósegéd.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"DELETE FROM Változattábla WHERE Változatnév='{Adat.Változatnév}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

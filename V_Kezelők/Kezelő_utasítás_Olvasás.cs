@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -12,9 +14,17 @@ namespace Villamos.Kezelők
     public class Kezelő_utasítás_Olvasás
     {
         readonly string jelszó = "katalin";
+        string hely;
+
+        private void FájlBeállítás(string Telephely, int Év)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely.KönyvSzerk());
+        }
+
         public List<Adat_utasítás_olvasás> Lista_Adatok(string Telephely, int Év)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely, Év);
             string szöveg = "SELECT * From olvasás order by sorszám desc";
             List<Adat_utasítás_olvasás> Adatok = new List<Adat_utasítás_olvasás>();
             Adat_utasítás_olvasás Adat;
@@ -52,7 +62,7 @@ namespace Villamos.Kezelők
             double Válasz = 1;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely, Év);
                 List<Adat_utasítás_olvasás> AdatokÜzenet = Lista_Adatok(Telephely, Év);
                 // megkeressük az utolsó sorszámot
                 if (AdatokÜzenet != null && AdatokÜzenet.Count > 0) Válasz = AdatokÜzenet.Max(a => a.Sorszám) + 1;
@@ -73,7 +83,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely, Év);
                 string szöveg = "INSERT INTO olvasás (sorszám, ki, üzenetid, mikor, olvasva) VALUES ";
                 szöveg += $"({Sorszám(Telephely, Év)}, '{Adat.Ki}', {Adat.Üzenetid}, '{Adat.Mikor}', {Adat.Olvasva})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

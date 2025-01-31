@@ -10,10 +10,18 @@ namespace Villamos.Kezelők
     public class Kezelő_Belépés_Jogosultságtábla
     {
         readonly string jelszó = "forgalmiutasítás";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb";
+            //Nincs kidolgozva
+            //if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
 
         public List<Adat_Belépés_Jogosultságtábla> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = $"SELECT * FROM Jogosultságtábla order by név";
             List<Adat_Belépés_Jogosultságtábla> Adatok = new List<Adat_Belépés_Jogosultságtábla>();
             Adat_Belépés_Jogosultságtábla Adat;
@@ -49,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = "INSERT INTO Jogosultságtábla (név, Jogkörúj1, Jogkörúj2) ";
                 szöveg += $" Values('{Adat.Név}', ";
                 szöveg += $"'{Adat.Jogkörúj1}', ";
@@ -72,7 +80,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"Update Jogosultságtábla set ";
                 szöveg += $"jogkörúj1='{Adat.Jogkörúj1}' ";
                 szöveg += $"WHERE név= '{Adat.Név}'";
@@ -94,7 +102,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Belépés.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"DELETE * From Jogosultságtábla where név='{Adat.Név}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

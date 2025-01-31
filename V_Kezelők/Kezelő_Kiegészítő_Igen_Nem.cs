@@ -10,10 +10,18 @@ namespace Villamos.Kezelők
     public class Kezelő_Kiegészítő_Igen_Nem
     {
         readonly string jelszó = "Mocó";
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb";
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
 
         public List<Adat_Kiegészítő_Igen_Nem> Lista_Adatok(string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT *  FROM igen_nem ";
             List<Adat_Kiegészítő_Igen_Nem> Adatok = new List<Adat_Kiegészítő_Igen_Nem>();
             Adat_Kiegészítő_Igen_Nem Adat;
@@ -48,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = "INSERT INTO igen_nem  (id, válasz, megjegyzés) ";
                 szöveg += $"VALUES ({Adat.Id}, ";
                 szöveg += $"{Adat.Válasz}, ";
@@ -70,7 +78,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb".KönyvSzerk();
+                FájlBeállítás(Telephely);
                 string szöveg = $"UPDATE igen_nem SET Válasz={Adat.Válasz} ";
                 szöveg += $"WHERE '{Adat.Id}' ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
