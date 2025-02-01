@@ -699,6 +699,7 @@
     <Compile Include="V_Kezelők\Kezelő_Belépés_WinTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Személyes.cs" />
+    <Compile Include="V_Kezelők\Kezelő_JogosítványVonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
@@ -776,10 +777,12 @@
     <Compile Include="V_Kezelők\Kezelő_Munka_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
     <Compile Include="V_Kezelők\Kezelő_OktatásTábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Oktatás_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Adat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Név.cs" />
     <Compile Include="V_Kezelők\Kezelő_Reklám.cs" />
     <Compile Include="V_Kezelők\Kezelő_Rezsi.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Túlóra.cs" />
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Göngyöl_DátumTábla.cs" />

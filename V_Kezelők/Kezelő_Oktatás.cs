@@ -121,48 +121,4 @@ namespace Villamos.Kezelők
         }
     }
 
-    public class Kezelő_Oktatás_Napló
-    {
-
-        public List<Adat_Oktatás_Napló> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Oktatás_Napló> Adatok = new List<Adat_Oktatás_Napló>();
-            Adat_Oktatás_Napló Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Oktatás_Napló(
-                                    rekord["ID"].ToÉrt_Long(),
-                                    rekord["HRazonosító"].ToStrTrim(),
-                                    rekord["IDoktatás"].ToÉrt_Long(),
-                                    rekord["Oktatásdátuma"].ToÉrt_DaTeTime(),
-                                    rekord["Kioktatta"].ToStrTrim(),
-                                    rekord["Rögzítésdátuma"].ToÉrt_DaTeTime(),
-                                    rekord["telephely"].ToStrTrim(),
-                                    rekord["PDFFájlneve"].ToStrTrim(),
-                                    rekord["Számonkérés"].ToÉrt_Long(),
-                                    rekord["státus"].ToÉrt_Long(),
-                                    rekord["Rögzítő"].ToStrTrim(),
-                                    rekord["Megjegyzés"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
-
 }

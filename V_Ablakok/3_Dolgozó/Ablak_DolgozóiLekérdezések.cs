@@ -1504,7 +1504,7 @@ namespace Villamos
 
                         // Lekérdezzük a típust
                         Kezelő_JogosítványTípus KézJog = new Kezelő_JogosítványTípus();
-                        List<Adat_JogosítványTípus> AdatokJogÖ = KézJog.Lista_Adatok(helyjog);
+                        List<Adat_JogosítványTípus> AdatokJogÖ = KézJog.Lista_Adatok();
 
                         List<Adat_JogosítványTípus> AdatokJog = (from a in AdatokJogÖ
                                                                  where a.Törzsszám == TáblaDolgozónévsor.Rows[j].Cells[1].Value.ToString().Trim()
@@ -1525,7 +1525,7 @@ namespace Villamos
                         }
 
                         Kezelő_JogosítványVonal KézVonal = new Kezelő_JogosítványVonal();
-                        List<Adat_JogosítványVonal> AdatokvonalÖ = KézVonal.Lista_Adatok(helyjog);
+                        List<Adat_JogosítványVonal> AdatokvonalÖ = KézVonal.Lista_Adatok();
 
                         List<Adat_JogosítványVonal> Adatokvonal = (from a in AdatokvonalÖ
                                                                    where a.Törzsszám == TáblaDolgozónévsor.Rows[j].Cells[1].Value.ToString().Trim()
@@ -1899,7 +1899,7 @@ namespace Villamos
                 {
 
                     Kezelő_Munkakör Kéz = new Kezelő_Munkakör();
-                    List<Adat_Munkakör> AdatokÖ = Kéz.Lista_Adatok(hely);
+                    List<Adat_Munkakör> AdatokÖ = Kéz.Lista_Adatok();
 
                     List<Adat_Munkakör> Adatok = (from a in AdatokÖ
                                                   where a.Telephely == Cmbtelephely.Text.Trim()

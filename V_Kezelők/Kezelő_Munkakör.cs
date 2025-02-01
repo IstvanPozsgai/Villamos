@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,7 +13,14 @@ namespace Villamos.Kezelők
     public class Kezelő_Munkakör
     {
         readonly string jelszó = "ladányis";
-        public List<Adat_Munkakör> Lista_Adatok(string hely)
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_munkakör.mdb";
+
+        public Kezelő_Munkakör()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Munkakör_segédadattábla(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Munkakör> Lista_Adatok()
         {
             List<Adat_Munkakör> Adatok = new List<Adat_Munkakör>();
             Adat_Munkakör Adat;
@@ -48,14 +57,14 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Munkakör Adat)
+        public void Rögzítés(Adat_Munkakör Adat)
         {
             try
             {
                 string szöveg = "INSERT INTO munkakörtábla ";
                 szöveg += "(ID,  Megnevezés, PDFfájlnév, státus, telephely,  Hrazonosító, dátum,  rögzítő)";
                 szöveg += " VALUES (";
-                szöveg += $"{Sorszám (hely)}, ";
+                szöveg += $"{Sorszám()}, ";
                 szöveg += $"'{Adat.Megnevezés}', ";
                 szöveg += $"'{Adat.PDFfájlnév}', ";
                 szöveg += $"{Adat.Státus}, ";
@@ -76,7 +85,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(string hely, Adat_Munkakör Adat) 
+        public void Törlés(Adat_Munkakör Adat)
         {
             try
             {
@@ -94,12 +103,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public long Sorszám(string hely)
+        public long Sorszám()
         {
             long Válasz = 1;
             try
             {
-                List<Adat_Munkakör> Adatok = Lista_Adatok(hely);
+                List<Adat_Munkakör> Adatok = Lista_Adatok();
                 if (Adatok.Count > 0) Válasz = Adatok.Max(j => j.ID) + 1;
             }
             catch (HibásBevittAdat ex)
