@@ -1,0 +1,177 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
+using Villamos.Villamos_Adatszerkezet;
+
+namespace Villamos.Kezelők
+{
+    public class Kezelő_Dolgozó_Beosztás_Új
+    {
+        readonly string jelszó = "kiskakas";
+        string hely;
+
+        private void FájlBeállítás(string Telephely, DateTime Dátum)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Dolgozó_Beosztás_Új> Adatok = new List<Adat_Dolgozó_Beosztás_Új>();
+            Adat_Dolgozó_Beosztás_Új Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+
+                                Adat = new Adat_Dolgozó_Beosztás_Új(
+                                          rekord["dolgozószám"].ToStrTrim(),
+                                          rekord["Nap"].ToÉrt_DaTeTime(),
+                                          rekord["Beosztáskód"].ToStrTrim(),
+                                          rekord["Ledolgozott"].ToÉrt_Int(),
+
+                                          rekord["Túlóra"].ToÉrt_Int(),
+                                          rekord["Túlórakezd"].ToÉrt_DaTeTime(),
+                                          rekord["Túlóravég"].ToÉrt_DaTeTime(),
+
+                                          rekord["Csúszóra"].ToÉrt_Int(),
+                                          rekord["CSúszórakezd"].ToÉrt_DaTeTime(),
+                                          rekord["Csúszóravég"].ToÉrt_DaTeTime(),
+
+                                          rekord["Megjegyzés"].ToStrTrim(),
+                                          rekord["Túlóraok"].ToStrTrim(),
+                                          rekord["Szabiok"].ToStrTrim(),
+
+                                          rekord["kért"].ToÉrt_Bool(),
+                                          rekord["Csúszok"].ToStrTrim(),
+                                          rekord["AFTóra"].ToÉrt_Int(),
+                                          rekord["AFTok"].ToStrTrim()
+                                          );
+
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+        public Adat_Dolgozó_Beosztás_Új Egy_Adat(string hely, string jelszó, string szöveg)
+        {
+            Adat_Dolgozó_Beosztás_Új Adat = null;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+
+                                Adat = new Adat_Dolgozó_Beosztás_Új(
+                                          rekord["dolgozószám"].ToStrTrim(),
+                                          rekord["Nap"].ToÉrt_DaTeTime(),
+                                          rekord["Beosztáskód"].ToStrTrim(),
+                                          rekord["Ledolgozott"].ToÉrt_Int(),
+
+                                          rekord["Túlóra"].ToÉrt_Int(),
+                                          rekord["Túlórakezd"].ToÉrt_DaTeTime(),
+                                          rekord["Túlóravég"].ToÉrt_DaTeTime(),
+
+                                          rekord["Csúszóra"].ToÉrt_Int(),
+                                          rekord["CSúszórakezd"].ToÉrt_DaTeTime(),
+                                          rekord["Csúszóravég"].ToÉrt_DaTeTime(),
+
+                                          rekord["Megjegyzés"].ToStrTrim(),
+                                          rekord["Túlóraok"].ToStrTrim(),
+                                          rekord["Szabiok"].ToStrTrim(),
+
+                                          rekord["kért"].ToÉrt_Bool(),
+                                          rekord["Csúszok"].ToStrTrim(),
+                                          rekord["AFTóra"].ToÉrt_Int(),
+                                          rekord["AFTok"].ToStrTrim()
+                                          );
+                            }
+                        }
+                    }
+                }
+            }
+            return Adat;
+        }
+
+        public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string Telephely, DateTime Dátum)
+        {
+            FájlBeállítás(Telephely, Dátum);
+            string szöveg = $"SELECT * FROM Beosztás";
+            List<Adat_Dolgozó_Beosztás_Új> Adatok = new List<Adat_Dolgozó_Beosztás_Új>();
+            Adat_Dolgozó_Beosztás_Új Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+
+                                Adat = new Adat_Dolgozó_Beosztás_Új(
+                                          rekord["dolgozószám"].ToStrTrim(),
+                                          rekord["Nap"].ToÉrt_DaTeTime(),
+                                          rekord["Beosztáskód"].ToStrTrim(),
+                                          rekord["Ledolgozott"].ToÉrt_Int(),
+
+                                          rekord["Túlóra"].ToÉrt_Int(),
+                                          rekord["Túlórakezd"].ToÉrt_DaTeTime(),
+                                          rekord["Túlóravég"].ToÉrt_DaTeTime(),
+
+                                          rekord["Csúszóra"].ToÉrt_Int(),
+                                          rekord["CSúszórakezd"].ToÉrt_DaTeTime(),
+                                          rekord["Csúszóravég"].ToÉrt_DaTeTime(),
+
+                                          rekord["Megjegyzés"].ToStrTrim(),
+                                          rekord["Túlóraok"].ToStrTrim(),
+                                          rekord["Szabiok"].ToStrTrim(),
+
+                                          rekord["kért"].ToÉrt_Bool(),
+                                          rekord["Csúszok"].ToStrTrim(),
+                                          rekord["AFTóra"].ToÉrt_Int(),
+                                          rekord["AFTok"].ToStrTrim()
+                                          );
+
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+    }
+}

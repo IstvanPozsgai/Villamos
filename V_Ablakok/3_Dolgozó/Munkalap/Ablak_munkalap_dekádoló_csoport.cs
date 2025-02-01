@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
@@ -15,7 +14,7 @@ namespace Villamos.Villamos_Ablakok
 
         readonly Kezelő_Kiegészítő_Beosztáskódok KézKód = new Kezelő_Kiegészítő_Beosztáskódok();
         readonly Kezelő_Kiegészítő_Csoportbeosztás KézCsopBeo = new Kezelő_Kiegészítő_Csoportbeosztás();
-        readonly Kezelő_Dolgozó_Alap kézdolg = new Kezelő_Dolgozó_Alap();
+        readonly Kezelő_Dolgozó_Alap KézDolgozóAlap = new Kezelő_Dolgozó_Alap();
         readonly Kezelő_Dolgozó_Beosztás_Új KézBeoLista = new Kezelő_Dolgozó_Beosztás_Új();
 
         public Ablak_munkalap_dekádoló_csoport(DateTime dátum, string cmbtelephely)
@@ -27,7 +26,6 @@ namespace Villamos.Villamos_Ablakok
 
         private void Ablak_munkalap_dekádoló_csoport_Load(object sender, EventArgs e)
         {
-
         }
 
         private void Command21_Click(object sender, EventArgs e)
@@ -40,11 +38,6 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Holtart.Be(20);
-                string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-                if (!File.Exists(helynap)) return;
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                if (!File.Exists(hely)) return;
                 List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsopBeo.Lista_Adatok(Cmbtelephely.Trim());
 
                 CsoportTábla.Rows.Clear();
@@ -89,11 +82,8 @@ namespace Villamos.Villamos_Ablakok
         {
             Fő8 = 0;
             Fő12 = 0;
-            //Beolvassuk a nyolc és a tizenkét órása kódokat
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-            if (!File.Exists(hely)) return;
 
-            List<Adat_Kiegészítő_Beosztáskódok> AdatokKód = KézKód.Lista_Adatok(hely);
+            List<Adat_Kiegészítő_Beosztáskódok> AdatokKód = KézKód.Lista_Adatok(Cmbtelephely.Trim());
             List<string> Kód8 = (from a in AdatokKód
                                  where a.Számoló == true
                                  && a.Munkarend == 8
@@ -107,20 +97,16 @@ namespace Villamos.Villamos_Ablakok
                                   select a.Beosztáskód).ToList();
 
             //Csoport dolgozói
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
-            List<Adat_Dolgozó_Alap> AdatokDolgÖ = kézdolg.Lista_Adatok(Cmbtelephely.Trim());
+            List<Adat_Dolgozó_Alap> AdatokDolgÖ = KézDolgozóAlap.Lista_Adatok(Cmbtelephely.Trim());
             List<Adat_Dolgozó_Alap> AdatokDolg = (from a in AdatokDolgÖ
                                                   where a.Kilépésiidő < new DateTime(1900, 1, 31)
                                                   && a.Csoport == Csoportbeosztás
                                                   select a).ToList();
 
-            string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-            if (!File.Exists(helynap)) return;
-            //havi adatokban a dolgozó azonosító lista
-            string szöveg = $"SELECT * FROM beosztás WHERE NAP=#{Dátum:MM-dd-yyyy}# ORDER BY dolgozószám";
-            List<Adat_Dolgozó_Beosztás_Új> BeoListaÖ = KézBeoLista.Lista_Adatok(helynap);
+            List<Adat_Dolgozó_Beosztás_Új> BeoListaÖ = KézBeoLista.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
             List<Adat_Dolgozó_Beosztás_Új> BeoLista = (from a in BeoListaÖ
                                                        where a.Nap.ToShortDateString() == Dátum.ToShortDateString()
+                                                       orderby a.Dolgozószám
                                                        select a).ToList();
 
             foreach (Adat_Dolgozó_Alap rekord in AdatokDolg)

@@ -1508,9 +1508,6 @@ namespace Villamos
         {
             try
             {
-                string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
-                if (!File.Exists(helynap)) return;
-
                 string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
                 if (!File.Exists(helykieg)) return;
 
@@ -1519,8 +1516,8 @@ namespace Villamos
                                                                    where a.Számoló == true
                                                                    orderby a.Beosztáskód
                                                                    select a).ToList();
-                string szövegnap = $"SELECT * FROM Beosztás WHERE Nap = #{Dátum.Value:M-d-yy}# order by Dolgozószám";
-                List<Adat_Dolgozó_Beosztás_Új> DolgbeosztÖ = KézBeosztás.Lista_Adatok(helynap);
+
+                List<Adat_Dolgozó_Beosztás_Új> DolgbeosztÖ = KézBeosztás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
                 List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = (from a in DolgbeosztÖ
                                                              where a.Nap == Dátum.Value
                                                              orderby a.Dolgozószám
