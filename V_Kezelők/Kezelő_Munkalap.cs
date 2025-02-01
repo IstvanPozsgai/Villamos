@@ -169,12 +169,12 @@ namespace Villamos.Kezelők
             {
                 // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
                 string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
-                if (!File.Exists(hely))
+                if (!File.Exists(helyi))
                 {
                     Adatbázis_Létrehozás.Munkalap_tábla(helyi);
                     //HA Van előző évi akkor az adatokat átmásoljuk
-                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év - 1}.mdb";
-                    if (File.Exists(hely))
+                    helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{(Év - 1)}.mdb";
+                    if (File.Exists(helyi))
                     {
                         Folyamat_Átír(Telephely, Év);
                         Munkarend_Átír(Telephely, Év);
@@ -195,14 +195,13 @@ namespace Villamos.Kezelők
 
         private void Munkarend_Átír(string Telephely, int Év)
         {
-            string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év - 1}.mdb";
             Kezelő_MunkaRend kéz = new Kezelő_MunkaRend();
             List<Adat_MunkaRend> AdatokÖ = kéz.Lista_Adatok(Telephely, Év - 1);
             List<Adat_MunkaRend> Adatok = (from a in AdatokÖ
                                            where a.Látszódik == true
                                            select a).ToList();
 
-            helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
+            string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
             int id = 0;
 
             List<string> SzövegGy = new List<string>();
@@ -223,14 +222,13 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string helyi = $@"{Application.StartupPath}\{Telephely} \Adatok\Munkalap\munkalap {Év - 1}.mdb";
                 List<Adat_Munka_Folyamat> AdatokÖ = Lista_Adatok(Telephely, Év - 1);
                 List<Adat_Munka_Folyamat> Adatok = (from a in AdatokÖ
                                                     where a.Látszódik == true
                                                     select a).ToList();
                 int id = 0;
 
-                helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
+                string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
 
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Munka_Folyamat rekord in Adatok)
@@ -262,19 +260,15 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string helyi = $@"{Application.StartupPath}\{Telephely} \Adatok\Munkalap\munkalap {Év - 1}.mdb";
-                string szöveg = "SELECT * FROM szolgálattábla";
-                string jelszó = "kismalac";
-
                 Kezelő_Munka_Szolgálat KézSzolgálat = new Kezelő_Munka_Szolgálat();
-                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(helyi);
+                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(Telephely, Év - 1);
 
-                helyi = $@"{Application.StartupPath}\{Telephely} \Adatok\Munkalap\munkalap {Év}.mdb";
+                string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
 
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Munka_Szolgálat rekord in Adatok)
                 {
-                    szöveg = "INSERT INTO szolgálattábla (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
+                    string szöveg = "INSERT INTO szolgálattábla (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
                     szöveg += $"'{rekord.Költséghely}',";
                     szöveg += $"'{rekord.Szolgálat}',";
                     szöveg += $"'{rekord.Üzem}',";

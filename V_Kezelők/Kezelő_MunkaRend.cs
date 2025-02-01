@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Év);
                 string szöveg = "INSERT INTO munkarendtábla (id, munkarend, látszódik)  VALUES (";
-                szöveg += $"{Sorszám(hely)}, ";
+                szöveg += $"{Sorszám(Telephely, Év)}, ";
                 szöveg += $"'{Adat.Munkarend}', ";
                 szöveg += $" {Adat.Látszódik} ) ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

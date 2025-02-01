@@ -352,9 +352,7 @@ namespace Villamos
             try
             {
                 Munkarendlist.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                List<Adat_MunkaRend> AdatokÖ = KézMunkaRend.Lista_Adatok(hely);
+                List<Adat_MunkaRend> AdatokÖ = KézMunkaRend.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                 List<Adat_MunkaRend> Adatok = (from a in AdatokÖ
                                                where a.Látszódik == true
                                                select a).ToList();
@@ -1455,9 +1453,9 @@ namespace Villamos
             MyE.Egyesít(munkalap, "o2:r2");
             MyE.Egyesít(munkalap, "o3:r3");
 
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+
             Kezelő_Munka_Szolgálat kéz = new Kezelő_Munka_Szolgálat();
-            List<Adat_Munka_Szolgálat> Adatok = kéz.Lista_Adatok(hely);
+            List<Adat_Munka_Szolgálat> Adatok = kéz.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
             Adat_Munka_Szolgálat Elem = (from a in Adatok
                                          orderby a.Üzem
                                          select a).FirstOrDefault();

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,9 +13,16 @@ namespace Villamos.Kezelők
     public class Kezelő_Munka_Rendelés
     {
         readonly string jelszó = "felépítés";
-        public List<Adat_Munka_Rendelés> Lista_Adatok(string hely)
-        {
+        string hely;
 
+        private void FájlBeállítás(string Telephely)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapösszesítő.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Munkalapkedvencek(hely.KönyvSzerk());
+        }
+        public List<Adat_Munka_Rendelés> Lista_Adatok(string Telephely)
+        {
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM rendeléstábla  order by  id";
             List<Adat_Munka_Rendelés> Adatok = new List<Adat_Munka_Rendelés>();
             Adat_Munka_Rendelés Adat;
@@ -46,10 +55,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Munka_Rendelés Adat)
+        public void Rögzítés(string Telephely, Adat_Munka_Rendelés Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "INSERT INTO  rendeléstábla (rendelés, művelet, megnevezés, pályaszám) VALUES (";
                 szöveg += $"'{Adat.Rendelés}', ";
                 szöveg += $"'{Adat.Műveletet}', ";
@@ -68,10 +78,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, Adat_Munka_Rendelés Adat)
+        public void Módosítás(string Telephely, Adat_Munka_Rendelés Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE rendeléstábla  SET ";
                 szöveg += $" megnevezés='{Adat.Megnevezés}', ";
                 szöveg += $" pályaszám='{Adat.Pályaszám}', ";
@@ -91,10 +102,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(string hely, long ID)
+        public void Törlés(string Telephely, long ID)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = $"DELETE FROM rendeléstábla WHERE id={ID}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -109,11 +121,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Csere(string hely, long előző, long következő)
+        public void Csere(string Telephely, long előző, long következő)
         {
             try
             {
-                List<Adat_Munka_Rendelés> Adatok = Lista_Adatok(hely);
+                FájlBeállítás(Telephely);
+                List<Adat_Munka_Rendelés> Adatok = Lista_Adatok(Telephely);
                 Adat_Munka_Rendelés ElőzőAdat = (from a in Adatok
                                                  where a.ID == előző
                                                  select a).FirstOrDefault();
@@ -121,18 +134,18 @@ namespace Villamos.Kezelők
                                                      where a.ID == következő
                                                      select a).FirstOrDefault();
 
-                Adat_Munka_Rendelés ÚjElőző=new Adat_Munka_Rendelés(következő,
+                Adat_Munka_Rendelés ÚjElőző = new Adat_Munka_Rendelés(következő,
                                                                     ElőzőAdat.Megnevezés,
                                                                     ElőzőAdat.Műveletet,
                                                                     ElőzőAdat.Pályaszám,
-                                                                    ElőzőAdat.Rendelés);        
+                                                                    ElőzőAdat.Rendelés);
                 Adat_Munka_Rendelés ÚjKövetkező = new Adat_Munka_Rendelés(előző,
                                                                           KövetkezőAdat.Megnevezés,
                                                                           KövetkezőAdat.Műveletet,
                                                                           KövetkezőAdat.Pályaszám,
                                                                           KövetkezőAdat.Rendelés);
-                Módosítás(hely, ÚjElőző);
-                Módosítás(hely, ÚjKövetkező);
+                Módosítás(Telephely, ÚjElőző);
+                Módosítás(Telephely, ÚjKövetkező);
             }
             catch (HibásBevittAdat ex)
             {

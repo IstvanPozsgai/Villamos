@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,8 +13,17 @@ namespace Villamos.Kezelők
     public class Kezelő_Munka_Idő
     {
         readonly string jelszó = "felépítés";
-        public List<Adat_Munka_Idő> Lista_Adatok(string hely)
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
         {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapösszesítő.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Munkalapkedvencek(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Munka_Idő> Lista_Adatok(string Telephely)
+        {
+            FájlBeállítás(Telephely);
             string szöveg = "SELECT * FROM időválaszték ORDER BY id";
             List<Adat_Munka_Idő> Adatok = new List<Adat_Munka_Idő>();
             Adat_Munka_Idő Adat;
@@ -42,10 +53,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, Adat_Munka_Idő Adat)
+        public void Rögzítés(string Telephely, Adat_Munka_Idő Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO időválaszték (id, idő) VALUES ({Sorszám(hely)},{Adat.Idő})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -60,10 +72,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, Adat_Munka_Idő Adat)
+        public void Módosítás(string Telephely, Adat_Munka_Idő Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = $"UPDATE időválaszték SET idő={Adat.Idő} WHERE id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -78,10 +91,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(string hely, Adat_Munka_Idő Adat)
+        public void Törlés(string Telephely, Adat_Munka_Idő Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = $"DELETE FROM időválaszték WHERE idő={Adat.Idő}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -96,12 +110,13 @@ namespace Villamos.Kezelők
             }
         }
 
-        private long Sorszám(string hely)
+        private long Sorszám(string Telephely)
         {
             long válasz = 1;
             try
             {
-                List<Adat_Munka_Idő> Adatok = Lista_Adatok(hely);
+                FájlBeállítás(Telephely);
+                List<Adat_Munka_Idő> Adatok = Lista_Adatok(Telephely);
                 if (Adatok != null) válasz = Adatok.Max(x => x.ID) + 1;
             }
             catch (HibásBevittAdat ex)
@@ -116,17 +131,18 @@ namespace Villamos.Kezelők
             return válasz;
         }
 
-        public void Csere(string hely, long Sorelőző, long Sor)
+        public void Csere(string Telephely, long Sorelőző, long Sor)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 List<Adat_Munka_Idő> Adatok = Lista_Adatok(hely);
 
                 Adat_Munka_Idő Előző = (from a in Adatok
                                         where a.Idő == Sorelőző
                                         select a).FirstOrDefault();
                 Adat_Munka_Idő Következő = (from a in Adatok
-                                            where a.Idő  == Sor
+                                            where a.Idő == Sor
                                             select a).FirstOrDefault();
                 if (Előző != null && Következő != null)
                 {
