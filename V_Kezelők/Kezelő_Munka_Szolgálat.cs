@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,8 +12,17 @@ namespace Villamos.Kezelők
     public class Kezelő_Munka_Szolgálat
     {
         readonly string jelszó = "kismalac";
-        public List<Adat_Munka_Szolgálat> Lista_Adatok(string hely)
+        string hely;
+
+        private void FájlBeállítás(string Telephely, int Év)
         {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Munkalap_tábla(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Munka_Szolgálat> Lista_Adatok(string Telephely, int Év)
+        {
+            FájlBeállítás(Telephely, Év);
             string szöveg = "SELECT * FROM szolgálattábla ";
             List<Adat_Munka_Szolgálat> Adatok = new List<Adat_Munka_Szolgálat>();
             Adat_Munka_Szolgálat Adat;
@@ -50,14 +61,15 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Módosítás(string hely, Adat_Munka_Szolgálat Adat)
+        public void Módosítás(string Telephely, int Év, Adat_Munka_Szolgálat Adat)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = " UPDATE  szolgálattábla SET ";
-                szöveg += $" költséghely='{Adat.Költséghely}', "; 
-                szöveg += $" szolgálat='{Adat.Szolgálat}', "; 
-                szöveg += $" üzem='{Adat.Üzem}' "; 
+                szöveg += $" költséghely='{Adat.Költséghely}', ";
+                szöveg += $" szolgálat='{Adat.Szolgálat}', ";
+                szöveg += $" üzem='{Adat.Üzem}' ";
                 szöveg += " WHERE A7='0'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -72,12 +84,13 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(string hely, Adat_Munka_Szolgálat Adat)
+        public void Rögzítés(string Telephely, int Év, Adat_Munka_Szolgálat Adat)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = "INSERT INTO szolgálattábla (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
-                szöveg += $"'{Adat.Költséghely}', "; 
+                szöveg += $"'{Adat.Költséghely}', ";
                 szöveg += $"'{Adat.Szolgálat}', ";
                 szöveg += $"'{Adat.Üzem}', ";
                 szöveg += " '0', '0', '0', '0', '0', '0', '0' )";

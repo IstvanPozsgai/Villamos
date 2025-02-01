@@ -13,9 +13,17 @@ namespace Villamos.Kezelők
     public class Kezelő_Munka_Folyamat
     {
         readonly string jelszó = "kismalac";
+        string hely;
 
-        public List<Adat_Munka_Folyamat> Lista_Adatok(string hely)
+        private void FájlBeállítás(string Telephely, int Év)
         {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Munkalap_tábla(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Munka_Folyamat> Lista_Adatok(string Telephely, int Év)
+        {
+            FájlBeállítás(Telephely, Év);
             string szöveg = "SELECT * FROM folyamattábla ORDER BY id";
             List<Adat_Munka_Folyamat> Adatok = new List<Adat_Munka_Folyamat>();
             Adat_Munka_Folyamat Adat;
@@ -49,12 +57,12 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        private long Sorszám(string hely)
+        private long Sorszám(string Telephely, int Év)
         {
             long Válasz = 1;
             try
             {
-                List<Adat_Munka_Folyamat> Adatok = Lista_Adatok(hely);
+                List<Adat_Munka_Folyamat> Adatok = Lista_Adatok(Telephely, Év);
                 if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(x => x.ID) + 1;
             }
             catch (HibásBevittAdat ex)
@@ -69,10 +77,11 @@ namespace Villamos.Kezelők
             return Válasz;
         }
 
-        public void Módosítás(string hely, Adat_Munka_Folyamat Adat)
+        public void Módosítás(string Telephely, int Év, Adat_Munka_Folyamat Adat)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = " UPDATE  folyamattábla SET ";
                 szöveg += $" Rendelésiszám='{Adat.Rendelésiszám}', ";
                 szöveg += $" azonosító='{Adat.Azonosító}', ";
@@ -92,10 +101,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, long sorszám, bool látszódik)
+        public void Módosítás(string Telephely, int Év, long sorszám, bool látszódik)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = $" UPDATE folyamattábla SET látszódik={látszódik} WHERE id={sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -110,12 +120,13 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(string hely, Adat_Munka_Folyamat Adat)
+        public void Rögzítés(string Telephely, int Év, Adat_Munka_Folyamat Adat)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = "INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
-                szöveg += $"{Sorszám(hely)}, ";
+                szöveg += $"{Sorszám(Telephely, Év)}, ";
                 szöveg += $"'{Adat.Rendelésiszám}', ";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Munkafolyamat}', ";
@@ -133,10 +144,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(string hely)
+        public void Törlés(string Telephely, int Év)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = "DELETE FROM folyamattábla WHERE látszódik=false";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -151,22 +163,22 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void AdatbázisLétrehozás(string Cmbtelephely, DateTime Dátum)
+        public void AdatbázisLétrehozás(string Telephely, int Év)
         {
             try
             {
                 // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
+                string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
                 if (!File.Exists(hely))
                 {
-                    Adatbázis_Létrehozás.Munkalap_tábla(hely);
+                    Adatbázis_Létrehozás.Munkalap_tábla(helyi);
                     //HA Van előző évi akkor az adatokat átmásoljuk
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év - 1}.mdb";
                     if (File.Exists(hely))
                     {
-                        Folyamat_Átír(Cmbtelephely, Dátum);
-                        Munkarend_Átír(Cmbtelephely, Dátum);
-                        Szolgálat_Átír(Cmbtelephely, Dátum);
+                        Folyamat_Átír(Telephely, Év);
+                        Munkarend_Átír(Telephely, Év);
+                        Szolgálat_Átír(Telephely, Év);
                     }
                 }
             }
@@ -181,16 +193,16 @@ namespace Villamos.Kezelők
             }
         }
 
-        private void Munkarend_Átír(string Cmbtelephely, DateTime Dátum)
+        private void Munkarend_Átír(string Telephely, int Év)
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
+            string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év - 1}.mdb";
             Kezelő_MunkaRend kéz = new Kezelő_MunkaRend();
-            List<Adat_MunkaRend> AdatokÖ = kéz.Lista_Adatok(hely);
+            List<Adat_MunkaRend> AdatokÖ = kéz.Lista_Adatok(Telephely, Év - 1);
             List<Adat_MunkaRend> Adatok = (from a in AdatokÖ
                                            where a.Látszódik == true
                                            select a).ToList();
 
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
+            helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
             int id = 0;
 
             List<string> SzövegGy = new List<string>();
@@ -204,21 +216,21 @@ namespace Villamos.Kezelők
                 szöveg += " true ) ";
                 SzövegGy.Add(szöveg);
             }
-            MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            MyA.ABMódosítás(helyi, jelszó, SzövegGy);
         }
 
-        private void Folyamat_Átír(string Cmbtelephely, DateTime Dátum)
+        private void Folyamat_Átír(string Telephely, int Év)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
-                List<Adat_Munka_Folyamat> AdatokÖ = Lista_Adatok(hely);
+                string helyi = $@"{Application.StartupPath}\{Telephely} \Adatok\Munkalap\munkalap {Év - 1}.mdb";
+                List<Adat_Munka_Folyamat> AdatokÖ = Lista_Adatok(Telephely, Év - 1);
                 List<Adat_Munka_Folyamat> Adatok = (from a in AdatokÖ
                                                     where a.Látszódik == true
                                                     select a).ToList();
                 int id = 0;
 
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
+                helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
 
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Munka_Folyamat rekord in Adatok)
@@ -233,7 +245,7 @@ namespace Villamos.Kezelők
                     szöveg += " true ) ";
                     SzövegGy.Add(szöveg);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                MyA.ABMódosítás(helyi, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -246,18 +258,18 @@ namespace Villamos.Kezelők
             }
         }
 
-        private void Szolgálat_Átír(string Cmbtelephely, DateTime Dátum)
+        private void Szolgálat_Átír(string Telephely, int Év)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.AddYears(-1).Year}.mdb";
+                string helyi = $@"{Application.StartupPath}\{Telephely} \Adatok\Munkalap\munkalap {Év - 1}.mdb";
                 string szöveg = "SELECT * FROM szolgálattábla";
                 string jelszó = "kismalac";
 
                 Kezelő_Munka_Szolgálat KézSzolgálat = new Kezelő_Munka_Szolgálat();
-                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(hely);
+                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(helyi);
 
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Munkalap\munkalap{Dátum.Year}.mdb";
+                helyi = $@"{Application.StartupPath}\{Telephely} \Adatok\Munkalap\munkalap {Év}.mdb";
 
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Munka_Szolgálat rekord in Adatok)
@@ -269,7 +281,7 @@ namespace Villamos.Kezelők
                     szöveg += " '0', '0', '0', '0', '0', '0', '0' )";
                     SzövegGy.Add(szöveg);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                MyA.ABMódosítás(helyi, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -282,11 +294,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void ÚjraSorszámoz(string hely)
+        public void ÚjraSorszámoz(string Telephely, int Év)
         {
             try
             {
-                List<Adat_Munka_Folyamat> Adatok = Lista_Adatok(hely);
+                FájlBeállítás(Telephely, Év);
+                List<Adat_Munka_Folyamat> Adatok = Lista_Adatok(Telephely, Év);
 
                 List<string> SzövegGy = new List<string>();
                 long i = 0;
@@ -309,10 +322,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void MódosításRendelés(string hely, string Rendelés, string Újrendelés)
+        public void MódosításRendelés(string Telephely, int Év, string Rendelés, string Újrendelés)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = $"UPDATE folyamattábla SET Rendelésiszám='{Újrendelés}' WHERE Rendelésiszám='{Rendelés}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -327,10 +341,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void MódosításPálya(string hely, string Pályaszám, string ÚjPályaszám)
+        public void MódosításPálya(string Telephely, int Év, string Pályaszám, string ÚjPályaszám)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = $"UPDATE folyamattábla SET azonosító='{ÚjPályaszám}' WHERE azonosító='{Pályaszám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -345,10 +360,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Csere(string hely, object sorszámElső, object sorszámMásodik)
+        public void Csere(string Telephely, int Év, long sorszámElső, long sorszámMásodik)
         {
             try
             {
+                FájlBeállítás(Telephely, Év);
                 string szöveg = $"UPDATE folyamattábla SET id=0 WHERE id={sorszámMásodik}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
                 szöveg = $"UPDATE folyamattábla SET id={sorszámMásodik} WHERE id={sorszámElső}";
@@ -369,51 +385,4 @@ namespace Villamos.Kezelők
             }
         }
     }
-
-
-
-
-
-
-    public class Kezelő_Munkalapelszámoló
-    {
-        public List<Adat_Munkalapelszámoló> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Munkalapelszámoló> Adatok = new List<Adat_Munkalapelszámoló>();
-            Adat_Munkalapelszámoló Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Munkalapelszámoló(
-                                          rekord["ID"].ToÉrt_Long(),
-                                          rekord["idő"].ToÉrt_Long(),
-                                          rekord["dátum"].ToÉrt_DaTeTime(),
-                                          rekord["megnevezés"].ToString(),
-                                          rekord["művelet"].ToString(),
-                                          rekord["pályaszám"].ToString(),
-                                          rekord["rendelés"].ToString(),
-                                          rekord["státus"].ToÉrt_Bool()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
-
-
-
 }

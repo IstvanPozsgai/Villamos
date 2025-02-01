@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
@@ -18,6 +17,7 @@ namespace Villamos
         readonly Kezelő_MunkaRend KézMunkaRend = new Kezelő_MunkaRend();
         readonly Kezelő_Munka_Szolgálat KézSzolgálat = new Kezelő_Munka_Szolgálat();
 
+        #region Alap
         public Ablak_Munkalap_admin()
         {
             InitializeComponent();
@@ -29,16 +29,7 @@ namespace Villamos
             {
                 Telephelyekfeltöltése();
                 Dátum.Value = DateTime.Today;
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap";
-                if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-
-                // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value);
-
                 Jogosultságkiosztás();
-
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             }
             catch (HibásBevittAdat ex)
@@ -53,8 +44,6 @@ namespace Villamos
 
         }
 
-
-        #region Alap
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
@@ -231,7 +220,7 @@ namespace Villamos
 
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
-            KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value);
+            KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value.Year);
             Fülekkitöltése();
             Rendlistáz();
             Szolgálatadatok_listázása();
@@ -280,9 +269,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                List<Adat_Munka_Folyamat> Adatok = KézMunkaFoly.Lista_Adatok(hely);
+                List<Adat_Munka_Folyamat> Adatok = KézMunkaFoly.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 MunkafolyamatTábla.Rows.Clear();
                 MunkafolyamatTábla.Columns.Clear();
@@ -344,9 +331,7 @@ namespace Villamos
                 if (PályaszámText.Text.Trim() == "") PályaszámText.Text = "_";
                 if (!long.TryParse(IDfolyamat.Text, out long sorszám)) sorszám = 0;
 
-                // megnézzük, hogy melyik az utolós sorszám
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value:yyyy}.mdb";
-                List<Adat_Munka_Folyamat> Adatok = KézMunkaFoly.Lista_Adatok(hely);
+                List<Adat_Munka_Folyamat> Adatok = KézMunkaFoly.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 Adat_Munka_Folyamat Elem = (from a in Adatok
                                             where a.ID == sorszám
@@ -360,7 +345,7 @@ namespace Villamos
                                                                        PályaszámText.Text,
                                                                        MunkafolyamatText.Text.Trim(),
                                                                        true);
-                    KézMunkaFoly.Rögzítés(hely, ADAT);
+                    KézMunkaFoly.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, ADAT);
                 }
                 else
                 {
@@ -370,7 +355,7 @@ namespace Villamos
                                                                        PályaszámText.Text,
                                                                        MunkafolyamatText.Text.Trim(),
                                                                        true);
-                    KézMunkaFoly.Módosítás(hely, ADAT);
+                    KézMunkaFoly.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, ADAT);
                 }
                 Folyamatlistáz();
 
@@ -403,7 +388,6 @@ namespace Villamos
                 RendelésiszámText.Text = MunkafolyamatTábla.Rows[sor].Cells[1].Value.ToString().Trim();
                 PályaszámText.Text = MunkafolyamatTábla.Rows[sor].Cells[2].Value.ToString().Trim();
                 MunkafolyamatText.Text = MunkafolyamatTábla.Rows[sor].Cells[3].Value.ToString().Trim();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -430,10 +414,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
                 if (MessageBox.Show("A törölt adatsorokat véglegesen töröljük?", "Kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    KézMunkaFoly.Törlés(hely);
+                    KézMunkaFoly.Törlés(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                 else
                     return;
                 Adatok_tisztítása();
@@ -455,8 +437,7 @@ namespace Villamos
             //Újra sorszámozza a folyamatokat
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                KézMunkaFoly.ÚjraSorszámoz(hely);
+                KézMunkaFoly.ÚjraSorszámoz(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -476,8 +457,7 @@ namespace Villamos
                 if (RendelésiszámText.Text.Trim() == "") throw new HibásBevittAdat("A rendelési számot ki kell tölteni.");
                 if (RendelésiSzámúj.Text.Trim() == "") throw new HibásBevittAdat("A rendelési számot ki kell tölteni.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                KézMunkaFoly.MódosításRendelés(hely, RendelésiszámText.Text.Trim(), RendelésiSzámúj.Text.Trim());
+                KézMunkaFoly.MódosításRendelés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, RendelésiszámText.Text.Trim(), RendelésiSzámúj.Text.Trim());
                 Folyamatlistáz();
                 Bevitelimezőtisztítás();
             }
@@ -524,8 +504,7 @@ namespace Villamos
             try
             {
                 if (!long.TryParse(IDfolyamat.Text, out long sorszám)) throw new HibásBevittAdat("A sorszámot meg kell adni.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                KézMunkaFoly.Módosítás(hely, sorszám, false);
+                KézMunkaFoly.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, sorszám, false);
                 Folyamatlistáz();
             }
             catch (HibásBevittAdat ex)
@@ -544,8 +523,7 @@ namespace Villamos
             try
             {
                 if (!long.TryParse(IDfolyamat.Text, out long sorszám)) throw new HibásBevittAdat("A sorszámot meg kell adni.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                KézMunkaFoly.Módosítás(hely, sorszám, true);
+                KézMunkaFoly.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, sorszám, true);
                 Folyamatlistáz();
             }
             catch (HibásBevittAdat ex)
@@ -565,8 +543,7 @@ namespace Villamos
             {
                 if (PályaszámText.Text.Trim() == "") throw new HibásBevittAdat("A pályaszámot meg kell adni.");
                 if (PályaszámTextÚj.Text.Trim() == "") throw new HibásBevittAdat("A pályaszámot ki kell tölteni.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                KézMunkaFoly.MódosításPálya(hely, PályaszámText.Text.Trim(), PályaszámTextÚj.Text.Trim());
+                KézMunkaFoly.MódosításPálya(Cmbtelephely.Text.Trim(), Dátum.Value.Year, PályaszámText.Text.Trim(), PályaszámTextÚj.Text.Trim());
                 Folyamatlistáz();
                 Bevitelimezőtisztítás();
             }
@@ -588,10 +565,9 @@ namespace Villamos
                 if (MunkafolyamatTábla.SelectedRows.Count == 0) return;
                 // az elsőt nem lehet feljebb vinni
                 if (MunkafolyamatTábla.SelectedRows[0].Index <= 0) return;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
                 long SorszámElső = long.Parse(MunkafolyamatTábla.Rows[MunkafolyamatTábla.SelectedRows[0].Index].Cells[0].Value.ToString());
                 long SorszámMásodik = long.Parse(MunkafolyamatTábla.Rows[MunkafolyamatTábla.SelectedRows[0].Index - 1].Cells[0].Value.ToString());
-                KézMunkaFoly.Csere(hely, SorszámElső, SorszámMásodik);
+                KézMunkaFoly.Csere(Cmbtelephely.Text.Trim(), Dátum.Value.Year, SorszámElső, SorszámMásodik);
                 Folyamatlistáz();
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -615,20 +591,16 @@ namespace Villamos
             {
                 if (MunkarendText.Text.Trim() == "") throw new HibásBevittAdat("A munkarendet meg kell adni.");
                 if (!long.TryParse(IDrend.Text, out long Sorszám)) Sorszám = 0;
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value:yyyy}.mdb";
-                if (!File.Exists(hely)) return;
-
                 if (IDrend.Text.Trim() == "")
                 {
                     Adat_MunkaRend ADAT = new Adat_MunkaRend(0, MunkarendText.Text.Trim(), true);
-                    KézMunkaRend.Rögzítés(hely, ADAT);
+                    KézMunkaRend.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, ADAT);
                 }
                 else
                 {
                     // ha már volt adat akkor módosítjuk
                     Adat_MunkaRend ADAT = new Adat_MunkaRend(Sorszám, MunkarendText.Text.Trim(), true);
-                    KézMunkaRend.Módosítás(hely, ADAT);
+                    KézMunkaRend.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, ADAT);
                 }
                 Rendlistáz();
                 ÜrítMunkaRend();
@@ -649,9 +621,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                List<Adat_MunkaRend> Adatok = KézMunkaRend.Lista_Adatok(hely);
+                List<Adat_MunkaRend> Adatok = KézMunkaRend.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 MunkarendTábla.Rows.Clear();
                 MunkarendTábla.Columns.Clear();
@@ -717,8 +687,8 @@ namespace Villamos
             {
                 if (!long.TryParse(IDrend.Text.Trim(), out long Sorszám)) return;
                 if (IDrend.Text.Trim() == "") return;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                KézMunkaRend.Módosítás(hely, Sorszám, false);
+
+                KézMunkaRend.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, Sorszám, false);
                 Rendlistáz();
             }
             catch (HibásBevittAdat ex)
@@ -738,8 +708,8 @@ namespace Villamos
             {
                 if (!long.TryParse(IDrend.Text.Trim(), out long Sorszám)) return;
                 if (IDrend.Text.Trim() == "") return;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                KézMunkaRend.Módosítás(hely, Sorszám, true);
+
+                KézMunkaRend.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, Sorszám, true);
                 Rendlistáz();
             }
             catch (HibásBevittAdat ex)
@@ -781,18 +751,16 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value:yyyy}.mdb";
-
-                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(hely);
+                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                 Adat_Munka_Szolgálat ADAT = new Adat_Munka_Szolgálat(Költséghely.Text.Trim(),
                                                                      Szolgálat.Text.Trim(),
                                                                      Üzem.Text.Trim(),
                                                                      "0", "0", "0", "0", "0", "0", "0");
                 bool vane = Adatok.Any();
                 if (!vane)
-                    KézSzolgálat.Rögzítés(hely, ADAT);
+                    KézSzolgálat.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, ADAT);
                 else
-                    KézSzolgálat.Módosítás(hely, ADAT);
+                    KézSzolgálat.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, ADAT);
 
                 Szolgálatadatok_listázása();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -812,9 +780,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(hely);
+                List<Adat_Munka_Szolgálat> Adatok = KézSzolgálat.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                 Adat_Munka_Szolgálat Adat = (from a in Adatok
                                              orderby a.Üzem
                                              select a).FirstOrDefault();

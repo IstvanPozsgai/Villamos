@@ -39,8 +39,8 @@ namespace Villamos
                 if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
 
                 // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value);
+                //hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
+                //if (!File.Exists(hely)) KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value);
 
 
                 Jogosultságkiosztás();
@@ -413,9 +413,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                List<Adat_Munka_Folyamat> AdatokÖ = KézMunkaFoly.Lista_Adatok(hely);
+                List<Adat_Munka_Folyamat> AdatokÖ = KézMunkaFoly.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                 List<Adat_Munka_Folyamat> Adatok = (from a in AdatokÖ
                                                     where a.Látszódik == true
                                                     select a).ToList();
