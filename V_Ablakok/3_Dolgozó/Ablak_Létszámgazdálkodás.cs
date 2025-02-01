@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
@@ -16,28 +15,29 @@ namespace Villamos
 
     public partial class AblakLétszámgazdálkodás
     {
-        #region Kezelők
+        #region Kezelők és Listák
         readonly Kezelő_Kulcs KézKulcs = new Kezelő_Kulcs();
         readonly Kezelő_Kulcs_Kettő KézKulcsPénz = new Kezelő_Kulcs_Kettő();
         readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
         readonly Kezelő_Kiegészítő_Csoportbeosztás KézSegéd = new Kezelő_Kiegészítő_Csoportbeosztás();
         readonly Kezelő_Dolgozó_Státus Kéz_Státus = new Kezelő_Dolgozó_Státus();
         readonly Kezelő_Dolgozó_Személyes Kezelő_Személyes = new Kezelő_Dolgozó_Személyes();
-        #endregion
 
         List<Adat_Dolgozó_Státus> AdatokStátus = new List<Adat_Dolgozó_Státus>();
         List<Adat_Dolgozó_Személyes> Adatok_Személyes = new List<Adat_Dolgozó_Személyes>();
         List<Adat_Dolgozó_Telephely> AdatokDolgozók = new List<Adat_Dolgozó_Telephely>();
         List<Adat_Kulcs> AdatokPénz = new List<Adat_Kulcs>();
         readonly List<Adat_Kiegészítő_Csoportbeosztás> AdatokSegéd = new List<Adat_Kiegészítő_Csoportbeosztás>();
+        #endregion
+
         int öoszlop = 2;
 
+        #region Alap
         public AblakLétszámgazdálkodás()
         {
             InitializeComponent();
         }
 
-        #region Alap
         private void AblakLétszámgazdálkodás_Load(object sender, EventArgs e)
         {
             try
@@ -262,9 +262,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Státus(hely);
-
                 List<Adat_Dolgozó_Státus> AdatokÖ = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Dolgozó_Státus> Adatok = new List<Adat_Dolgozó_Státus>();
 
@@ -295,8 +292,6 @@ namespace Villamos
                 }
                 else
                     Adatok = AdatokÖ;
-
-
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -340,17 +335,10 @@ namespace Villamos
                 Tábla.Columns[16].HeaderText = "RészMunkaidős";
                 Tábla.Columns[16].Width = 150;
 
-
-
-
-                int i = 1;
-                //int kell;
                 foreach (Adat_Dolgozó_Státus rekord in Adatok)
                 {
-
                     Tábla.RowCount++;
-                    i = Tábla.RowCount - 1;
-
+                    int i = Tábla.RowCount - 1;
                     Tábla.Rows[i].Cells[0].Value = rekord.ID;
                     Tábla.Rows[i].Cells[1].Value = rekord.Névki.Trim();
                     Tábla.Rows[i].Cells[2].Value = rekord.Hrazonosítóki.Trim();
@@ -386,14 +374,9 @@ namespace Villamos
             }
         }
 
-
         private void SzűrtLista_CheckedChanged(object sender, EventArgs e)
         {
-            if (SzűrtLista.Checked)
-                Panel3.Visible = true;
-            else
-                Panel3.Visible = false;
-
+            Panel3.Visible = SzűrtLista.Checked;
             Táblaíró();
         }
 
@@ -448,9 +431,6 @@ namespace Villamos
             try
             {
                 Kiürítiamezőket();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
                 List<Adat_Dolgozó_Státus> Adatok = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Dolgozó_Státus rekord = (from a in Adatok
@@ -551,10 +531,6 @@ namespace Villamos
                 }
                 if (KilépésOka.Text.Trim() == "") KilépésOka.Text = "_";
 
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
-
                 AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 bool vane = AdatokStátus.Any(adat => adat.ID == sorszám);
 
@@ -590,8 +566,6 @@ namespace Villamos
             {
                 if (!int.TryParse(Id.Text, out int sorszám)) throw new HibásBevittAdat("Nincs kitöltve a sorszám, így nem kerül rögzítésre.");
                 if (KilépésOka.Text.Trim() == "") KilépésOka.Text = "_";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
 
                 AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 bool vane = AdatokStátus.Any(adat => adat.ID == sorszám);
@@ -630,9 +604,6 @@ namespace Villamos
                 if (Honnanjött.Text.Trim() == "") Honnanjött.Text = "_";
                 if (Hrazonosítóbe.Text.Trim() == "") Hrazonosítóbe.Text = "_";
                 if (Névbe.Text.Trim() == "") Névbe.Text = "_";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
-
                 AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 bool vane = AdatokStátus.Any(adat => adat.ID == sorszám);
 
@@ -670,8 +641,6 @@ namespace Villamos
             {
                 if (!int.TryParse(Id.Text, out int sorszám)) throw new HibásBevittAdat("Nincs kitöltve a sorszám, így nem kerül rögzítésre.");
                 if (Honnanjött.Text.Trim() == "") Honnanjött.Text = "_";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
 
                 AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 bool vane = AdatokStátus.Any(adat => adat.ID == sorszám);
@@ -707,8 +676,6 @@ namespace Villamos
             try
             {
                 if (!int.TryParse(Id.Text, out int sorszám)) throw new HibásBevittAdat("Nincs kitöltve a sorszám, így nem kerül rögzítésre.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
                 AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 bool vane = AdatokStátus.Any(adat => adat.ID == sorszám);
 
@@ -747,8 +714,6 @@ namespace Villamos
             try
             {
                 if (!int.TryParse(Id.Text, out int sorszám)) throw new HibásBevittAdat("Nincs kitöltve a sorszám, így nem kerül rögzítésre.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
                 AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 bool vane = AdatokStátus.Any(adat => adat.ID == sorszám);
                 if (vane)
@@ -779,8 +744,6 @@ namespace Villamos
             try
             {
                 if (!int.TryParse(Id.Text, out int sorszám)) throw new HibásBevittAdat("Nincs kitöltve a sorszám, így nem kerül rögzítésre.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
                 AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 bool vane = AdatokStátus.Any(adat => adat.ID == sorszám);
                 if (vane)
@@ -811,9 +774,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
-
                 Adat_Dolgozó_Státus ADAT = new Adat_Dolgozó_Státus(0,
                                                                    "", "", 0,
                                                                    "_",
@@ -847,8 +807,6 @@ namespace Villamos
             try
             {
                 if (!int.TryParse(Id.Text, out int sorszám)) throw new HibásBevittAdat("Nincs kitöltve a sorszám, így nem kerül rögzítésre.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
                 AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
                 string eredmény = AdatokStátus
                     .Where(adat => adat.ID == sorszám)
@@ -894,11 +852,8 @@ namespace Villamos
         private void Státusváltozásokfeltöltése()
         {
             Státusváltozások.Items.Clear();
-
             foreach (MyEn.Dolgozó_Státusz elem in Enum.GetValues(typeof(MyEn.Dolgozó_Státusz)))
-            {
                 Státusváltozások.Items.Add(elem.ToString().Replace('_', ' '));
-            }
         }
 
         private void Áthelyez_Click(object sender, EventArgs e)
@@ -907,11 +862,6 @@ namespace Villamos
             {
                 if (!long.TryParse(Id.Text, out long sorszám)) throw new HibásBevittAdat("Nincs kitöltve a sorszám, így nem lehet áthelyezni az adatokat.");
                 if (!long.TryParse(Új_Sorszám.Text, out long Új_sorszám)) throw new HibásBevittAdat("Nincs kitöltve az új sorszám, így nem lehet áthelyezni az adatokat.");
-
-                //Megnézzük, hogy lehet-e áthelyezni
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
-                if (!File.Exists(hely)) return;
-
                 List<Adat_Dolgozó_Státus> Adatok = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Dolgozó_Státus Adat = (from a in Adatok
@@ -975,8 +925,6 @@ namespace Villamos
 
                 string hroszlop = Text4.Text.Trim();
                 string béroszlop = Text5.Text.Trim();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Villamos10.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Bér_Adatok(hely);
 
                 string fájlexc;
                 // megpróbáljuk megnyitni az excel táblát.
@@ -1039,19 +987,12 @@ namespace Villamos
         #endregion
 
 
-
         #region Exceltábla
         private void Command5_Click(object sender, EventArgs e)
         {
             try
             {
-
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\kiegészítő2.mdb";
                 Holtart.Be();
-
-                string helypénz = Application.StartupPath + @"\Főmérnökség\adatok\Villamos10.mdb";
-
                 // kimeneti fájl helye és neve
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -1096,7 +1037,7 @@ namespace Villamos
                     {
                         // leellenőrizzük, hogy minden munkahely ki van-e töltve.
                         Munkahelyellenőrzés(Cmbtelephely.Items[ii].ToStrTrim());
-                        List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Items[ii].ToStrTrim()); //     helytelep
+                        List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Items[ii].ToStrTrim());
                         List<Adat_Dolgozó_Telephely> AdatokTelep = new List<Adat_Dolgozó_Telephely>();
                         Cmbtelephely.Text = Cmbtelephely.Items[ii].ToString();
                         foreach (Adat_Dolgozó_Alap Elem in Adatok)
@@ -1113,18 +1054,13 @@ namespace Villamos
 
                 AdatokDolgozók = AdatokDolgozók.OrderBy(a => a.Dolgozó.DolgozóNév).ToList();
                 AdatokListázásaMunkalapra("Adatok", AdatokDolgozók, AdatokSegéd);
-
                 ÖsszesítőMunkalap();
-
-
-
                 // számoljuk a státus tábla adatait
                 // ++++++++++++++++++++++++++++++
                 // Üres státusok
                 // ++++++++++++++++++++++++++++++
                 SzűrtLista.Checked = false;
                 Cmbtelephely.Text = Program.PostásTelephely;
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Segéd\Státus.mdb";
                 List<Adat_Dolgozó_Státus> AdatokStátus = Kéz_Státus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 int Összeg = 0;
@@ -1322,8 +1258,8 @@ namespace Villamos
                 // megszűnő státus szürkítése
                 for (int sor = 0; sor < Tábla.Rows.Count; sor++)
                 {
-                    if (MyE.Beolvas("N" + (sor + 1).ToString()).Trim() == "Státus megszüntetése")
-                        MyE.Háttérszín("h" + (sor + 1).ToString() + ":n" + (sor + 1).ToString(), 9868950);
+                    if (MyE.Beolvas($"N{sor + 1}").Trim() == "Státus megszüntetése")
+                        MyE.Háttérszín($"H{sor + 1}:N{sor + 1}", 9868950);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1341,14 +1277,9 @@ namespace Villamos
         {
             try
             {
-                string helykulcs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Villamos\Kulcs.mdb";
-                bool kulcsfájlvan = false;
-                List<Adat_Kulcs> AdatokKulcs = null;
-                if (File.Exists(helykulcs))
-                {
-                    kulcsfájlvan = true;
-                    AdatokKulcs = KézKulcs.Lista_Adatok();
-                }
+                List<Adat_Kulcs> AdatokKulcs = KézKulcs.Lista_Adatok();
+                bool kulcsfájlvan = AdatokKulcs.Count > 0;
+
                 DateTime kilépésidátum;
                 int fizikai = 0;
                 int alkalmazott = 0;
