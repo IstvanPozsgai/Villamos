@@ -701,6 +701,7 @@
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Személyes.cs" />
     <Compile Include="V_Kezelők\Kezelő_JogosítványVonal.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű2ICS.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />

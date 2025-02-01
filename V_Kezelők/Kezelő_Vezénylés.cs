@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
@@ -8,6 +11,15 @@ namespace Villamos.Kezelők
     public class Kezelő_Vezénylés
     {
         readonly string jelszó = "tápijános";
+        string hely;
+
+        private void FájlBeállítás(string Telephely, DateTime Dátum)
+        {
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\futás\{Dátum.Year}\vezénylés{Dátum.Year}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Vezényléstábla(hely.KönyvSzerk());
+        }
+
+
         public List<Adat_Vezénylés> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Vezénylés> Adatok = new List<Adat_Vezénylés>();
@@ -49,8 +61,9 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Vezénylés> Lista_Adatok(string hely)
+        public List<Adat_Vezénylés> Lista_Adatok(string Telephely, DateTime Dátum)
         {
+            FájlBeállítás(Telephely, Dátum);
             string szöveg = "SELECT * FROM vezényléstábla";
             List<Adat_Vezénylés> Adatok = new List<Adat_Vezénylés>();
             Adat_Vezénylés Adat = null;
@@ -91,39 +104,5 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<string> Lista_Pályaszámok(string hely, DateTime Dátum)
-        {
-            string szöveg = "SELECT * FROM vezényléstábla where törlés=0 and vizsgálatraütemez=1  and  vizsgálat='E3' ";
-            szöveg += $" and dátum= #{Dátum:yyyy-MM-dd}#  order by  azonosító";
-            List<string> Adatok = new List<string>();
-            string Adat;
-            try
-            {
-                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-                {
-                    Kapcsolat.Open();
-                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                    {
-                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                        {
-                            if (rekord.HasRows)
-                            {
-                                while (rekord.Read())
-                                {
-                                    Adat = rekord["Azonosító"].ToStrTrim();
-                                    Adatok.Add(Adat);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Lista_Pályaszámok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
-            }
-            return Adatok;
-        }
     }
 }

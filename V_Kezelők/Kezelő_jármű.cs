@@ -29,8 +29,6 @@ namespace Villamos.Kezelők
                 hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\villamos.mdb";
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely.KönyvSzerk());
             }
-
-
         }
 
         public List<Adat_Jármű> Lista_Jármű_állomány(string hely, string jelszó, string szöveg)
@@ -421,75 +419,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<string> Lista_Pályaszámok(string hely, int Melyiknap, string Típus = "ICS")
-        {
-            string szöveg = $"SELECT * FROM állománytábla where E2={Melyiknap}  ORDER BY  azonosító";
-            if (Típus == "T5C5") szöveg = $"SELECT * FROM állománytábla where haromnapos={Melyiknap}  ORDER BY  azonosító";
-
-            List<string> Adatok = new List<string>();
-            string Adat;
-            try
-            {
-                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-                {
-                    Kapcsolat.Open();
-                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                    {
-                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                        {
-                            if (rekord.HasRows)
-                            {
-                                while (rekord.Read())
-                                {
-                                    Adat = rekord["Azonosító"].ToStrTrim();
-                                    Adatok.Add(Adat);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Lista_Pályaszámok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
-            }
-            return Adatok;
-        }
-
-        public List<string> Lista_Pályaszámok(string hely, string Típus)
-        {
-            string szöveg = $"SELECT * FROM állománytábla WHERE  típus='{Típus}' ORDER BY azonosító";
-            List<string> Adatok = new List<string>();
-            string Adat;
-            try
-            {
-                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-                {
-                    Kapcsolat.Open();
-                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                    {
-                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                        {
-                            if (rekord.HasRows)
-                            {
-                                while (rekord.Read())
-                                {
-                                    Adat = rekord["Azonosító"].ToStrTrim();
-                                    Adatok.Add(Adat);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Lista_Pályaszámok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
-            }
-            return Adatok;
-        }
     }
 
     public class Kezelő_Jármű_Vendég

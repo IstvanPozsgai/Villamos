@@ -18,7 +18,12 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely, int Év)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Munkalap_tábla(hely.KönyvSzerk());
+            if (!File.Exists(hely))
+            {
+                Adatbázis_Létrehozás.Munkalap_tábla(hely.KönyvSzerk());
+                // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
+                AdatbázisLétrehozás(Telephely, Év);
+            }
         }
 
         public List<Adat_Munka_Folyamat> Lista_Adatok(string Telephely, int Év)

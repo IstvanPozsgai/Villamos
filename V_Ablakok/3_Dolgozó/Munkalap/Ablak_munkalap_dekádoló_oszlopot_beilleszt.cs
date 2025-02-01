@@ -153,7 +153,5 @@ namespace Villamos.Villamos_Ablakok
                 this.Close();
             }
         }
-
-
     }
 }

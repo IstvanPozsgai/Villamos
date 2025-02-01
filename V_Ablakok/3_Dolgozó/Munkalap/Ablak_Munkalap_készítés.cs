@@ -22,27 +22,22 @@ namespace Villamos
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Kiegészítő_Beosztáskódok KézBeoKód = new Kezelő_Kiegészítő_Beosztáskódok();
         readonly Kezelő_Dolgozó_Beosztás_Új KézBeosztás = new Kezelő_Dolgozó_Beosztás_Új();
+        readonly Kezelő_Munka_Szolgálat KézMunkaSzolg = new Kezelő_Munka_Szolgálat();
+        readonly Kezelő_Jármű2ICS KézICS = new Kezelő_Jármű2ICS();
+        readonly Kezelő_Jármű2 KézT5C5 = new Kezelő_Jármű2();
 
+        #region Alap
         public Ablak_Munkalap_készítés()
         {
             InitializeComponent();
         }
-        // Ez egy szöveg  Ez kék színű
+
         private void Ablak_Munkalap_Load(object sender, EventArgs e)
         {
             try
             {
                 Telephelyekfeltöltése();
                 Dátum.Value = DateTime.Today;
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap";
-                if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-
-                // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
-                //hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalap{Dátum.Value.Year}.mdb";
-                //if (!File.Exists(hely)) KézMunkaFoly.AdatbázisLétrehozás(Cmbtelephely.Text, Dátum.Value);
-
-
                 Jogosultságkiosztás();
                 Feltöltiválasztékot();
             }
@@ -67,8 +62,6 @@ namespace Villamos
             V1feltöltés();
         }
 
-
-        #region Alap
         private void Telephelyekfeltöltése()
         {
             try
@@ -156,7 +149,6 @@ namespace Villamos
             try
             {
                 Csoport.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsoport.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 foreach (Adat_Kiegészítő_Csoportbeosztás rekord in Adatok)
@@ -237,9 +229,6 @@ namespace Villamos
                 Csoport.Height = 25;
                 Csuk.Visible = false;
                 Nyit.Visible = true;
-                // töröljük a neveket
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                if (!File.Exists(hely)) return;
 
                 List<Adat_Dolgozó_Alap> AdatokÖ = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
 
@@ -314,13 +303,13 @@ namespace Villamos
         #endregion
 
 
+        #region Feltöltések
         private void Irányítófeltöltés()
         {
             try
             {
                 Kiadta.Items.Clear();
                 Ellenőrizte.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 List<Adat_Dolgozó_Alap> AdatokÖ = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Dolgozó_Alap> Adatok = (from a in AdatokÖ
                                                   where a.Kilépésiidő == new DateTime(1900, 1, 1)
@@ -462,9 +451,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                List<Adat_Vezénylés> AdatokÖ = KézVezénylés.Lista_Adatok(hely);
+                List<Adat_Vezénylés> AdatokÖ = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
 
                 List<Adat_Vezénylés> Adatok = (from a in AdatokÖ
                                                where a.Törlés == 0
@@ -507,10 +494,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
 
 
         #region Excel
-
         private void Excel_Click(object sender, EventArgs e)
         {
             if (Option6.Checked)
@@ -722,14 +709,9 @@ namespace Villamos
 
         private void Munkalap_Pályaszám_E2_ICS()
         {
-
             // ////////////////////////////////////////
             // ///  E2     PÁLYASZÁM    ICS        ////
             // ////////////////////////////////////////
-
-            List<string> AdatokÖssz;
-            List<string> AdatokRész;
-
             int mennyi = 0;
             switch ((int)Dátum.Value.DayOfWeek)
             {
@@ -771,16 +753,21 @@ namespace Villamos
             }
             if (E2ICS.Checked && maximum >= 1 && mennyi > 0)
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2ICS.mdb";
-
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i))
                     {
-                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi);
-                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
+                        List<Adat_Jármű_2ICS> AdatokICS = KézICS.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> AdatokRész = (from a in AdatokICS
+                                                   where a.E2 == mennyi
+                                                   orderby a.Azonosító
+                                                   select a.Azonosító).ToList();
 
+                        List<Adat_Jármű> AdatokÖsszes = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> AdatokÖssz = (from a in AdatokÖsszes
+                                                   where a.Típus == Típusoklistája.Items[i].ToStrTrim()
+                                                   orderby a.Azonosító
+                                                   select a.Azonosító).ToList();
                         if (AdatokRész != null)
                         {
                             sor += 1;
@@ -821,9 +808,6 @@ namespace Villamos
             // ////////////////////////////////////////
             // ///  E3     PÁLYASZÁM    ICS        ////
             // ////////////////////////////////////////
-            List<string> AdatokÖssz;
-            List<string> AdatokRész;
-
             int mennyi = 0;
             switch ((int)Dátum.Value.DayOfWeek)
             {
@@ -864,17 +848,23 @@ namespace Villamos
                     }
             }
 
-            if (E3ICS.Checked == true && maximum >= 1)
+            if (E3ICS.Checked && maximum >= 1)
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2ICS.mdb";
-
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
-                    if (Típusoklistája.GetItemChecked(i) == true)
+                    if (Típusoklistája.GetItemChecked(i))
                     {
-                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi);
-                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
+                        List<Adat_Jármű_2ICS> AdatokICS = KézICS.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> AdatokRész = (from a in AdatokICS
+                                                   where a.E3 == mennyi
+                                                   orderby a.Azonosító
+                                                   select a.Azonosító).ToList();
+
+                        List<Adat_Jármű> AdatokÖsszes = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> AdatokÖssz = (from a in AdatokÖsszes
+                                                   where a.Típus == Típusoklistája.Items[i].ToStrTrim()
+                                                   orderby a.Azonosító
+                                                   select a.Azonosító).ToList();
 
                         if (AdatokRész != null)
                         {
@@ -919,29 +909,35 @@ namespace Villamos
             // ////////////////////////////////////////
             // ///  E3     PÁLYASZÁM     T5C5      ////
             // ////////////////////////////////////////
-            List<string> AdatokVez;
-            List<string> AdatokÖssz;
-
-            if (E3pályaszám.Checked & maximum >= 1)
+            if (E3pályaszám.Checked && maximum >= 1)
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string helyvez = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
-                if (!File.Exists(helyvez)) return;
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i) == true)
                     {
-                        AdatokVez = KézVezénylés.Lista_Pályaszámok(helyvez, Dátum.Value);
-                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
+                        List<Adat_Vezénylés> AdatokVezénylés = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                        AdatokVezénylés = (from a in AdatokVezénylés
+                                           where a.Törlés == 0
+                                           && a.Vizsgálatraütemez == 1
+                                           && a.Vizsgálat == "E3"
+                                           && a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
+                                           orderby a.Azonosító
+                                           select a).ToList();
 
-                        if (AdatokVez != null)
+                        List<Adat_Jármű> AdatokÖsszes = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> AdatokÖssz = (from a in AdatokÖsszes
+                                                   where a.Típus == Típusoklistája.Items[i].ToStrTrim()
+                                                   orderby a.Azonosító
+                                                   select a.Azonosító).ToList();
+
+                        if (AdatokVezénylés != null)
                         {
                             sor += 1;
                             blokkeleje = sor;
                             oszlop = 3;
-                            foreach (string PályaszámLista in AdatokVez)
+                            foreach (Adat_Vezénylés PályaszámLista in AdatokVezénylés)
                             {
-                                if (AdatokÖssz.Contains(PályaszámLista.Trim()))
+                                if (AdatokÖssz.Contains(PályaszámLista.Azonosító.Trim()))
                                 {
                                     if (oszlop == 18)
                                     {
@@ -949,7 +945,7 @@ namespace Villamos
                                         sor += 1;
                                     }
                                     oszlop += 1;
-                                    MyE.Kiir(PályaszámLista, MyE.Oszlopnév(oszlop) + sor.ToString());
+                                    MyE.Kiir(PályaszámLista.Azonosító.Trim(), MyE.Oszlopnév(oszlop) + sor.ToString());
                                 }
                             }
                             MyE.Egyesít(munkalap, $"a{blokkeleje}:c{sor}");
@@ -966,7 +962,6 @@ namespace Villamos
                     }
                 }
             }
-
         }
 
         private void Munkalap_Pályaszám_E2()
@@ -974,9 +969,6 @@ namespace Villamos
             //// ////////////////////////////////////////
             //// ///  E2     PÁLYASZÁM    T5C5       ////
             //// ////////////////////////////////////////
-            List<string> AdatokÖssz;
-            List<string> AdatokRész;
-
             int mennyi = 0;
             switch ((int)Dátum.Value.DayOfWeek)
             {
@@ -1016,18 +1008,25 @@ namespace Villamos
                         break;
                     }
             }
-            if (E2pályaszám.Checked == true && maximum >= 1 && mennyi > 0)
+            if (E2pályaszám.Checked && maximum >= 1 && mennyi > 0)
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i))
                     {
-                        AdatokRész = KézJármű.Lista_Pályaszámok(hely3, mennyi, "T5C5");
-                        AdatokÖssz = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
+                        List<Adat_Jármű_2> AdatokÖ = KézT5C5.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> AdatokRész = (from a in AdatokÖ
+                                                   where a.Haromnapos == mennyi
+                                                   orderby a.Azonosító
+                                                   select a.Azonosító).ToList();
 
+                        List<Adat_Jármű> AdatokÖsszes = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> AdatokÖssz = (from a in AdatokÖsszes
+                                                   where a.Típus == Típusoklistája.Items[i].ToStrTrim()
+                                                   orderby a.Azonosító
+                                                   select a.Azonosító).ToList();
                         if (AdatokRész != null)
                         {
                             sor += 1;
@@ -1073,20 +1072,19 @@ namespace Villamos
             // ////////////////////////////////////////
             // megnézzük, hogy hány típus van kijelölve
             maximum = Típusoklistája.SelectedItems.Count;
-            List<string> Adatok;
-
             // minden pályaszám
-            if (E1_pályaszámok.Checked == true && maximum >= 1)
+            if (E1_pályaszámok.Checked && maximum >= 1)
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-
                 blokkeleje = sor;
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
-                    if (Típusoklistája.GetItemChecked(i) == true)
+                    if (Típusoklistája.GetItemChecked(i))
                     {
-                        Adatok = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
-
+                        List<Adat_Jármű> AdatokÖ = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> Adatok = (from a in AdatokÖ
+                                               where a.Típus == Típusoklistája.Items[i].ToStrTrim()
+                                               orderby a.Azonosító
+                                               select a.Azonosító).ToList();
                         if (Adatok != null)
                         {
                             sor += 1;
@@ -1124,16 +1122,18 @@ namespace Villamos
             ////////////////////////////////////////
             ///  MINDEN PÁLYASZÁM               ////
             ////////////////////////////////////////
-            List<string> Adatok;
-            if (Mindenpsz.Checked == true && maximum >= 1)
+            if (Mindenpsz.Checked && maximum >= 1)
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 blokkeleje = sor;
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {
                     if (Típusoklistája.GetItemChecked(i))
                     {
-                        Adatok = KézJármű.Lista_Pályaszámok(hely, Típusoklistája.Items[i].ToStrTrim());
+                        List<Adat_Jármű> AdatokÖ = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        List<string> Adatok = (from a in AdatokÖ
+                                               where a.Típus == Típusoklistája.Items[i].ToStrTrim()
+                                               orderby a.Azonosító
+                                               select a.Azonosító).ToList();
 
                         if (Adatok != null)
                         {
@@ -1454,8 +1454,8 @@ namespace Villamos
             MyE.Egyesít(munkalap, "o3:r3");
 
 
-            Kezelő_Munka_Szolgálat kéz = new Kezelő_Munka_Szolgálat();
-            List<Adat_Munka_Szolgálat> Adatok = kéz.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
+
+            List<Adat_Munka_Szolgálat> Adatok = KézMunkaSzolg.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
             Adat_Munka_Szolgálat Elem = (from a in Adatok
                                          orderby a.Üzem
                                          select a).FirstOrDefault();
@@ -1508,10 +1508,8 @@ namespace Villamos
         {
             try
             {
-                string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                if (!File.Exists(helykieg)) return;
 
-                List<Adat_Kiegészítő_Beosztáskódok> BeosztáskódÖ = KézBeoKód.Lista_Adatok(helykieg);
+                List<Adat_Kiegészítő_Beosztáskódok> BeosztáskódÖ = KézBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = (from a in BeosztáskódÖ
                                                                    where a.Számoló == true
                                                                    orderby a.Beosztáskód
