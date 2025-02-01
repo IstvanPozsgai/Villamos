@@ -90,7 +90,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO csoportbeosztás (sorszám, csoportbeosztás, típus) ";
-                szöveg += $"VALUES ({Sorszám(hely)}, ";
+                szöveg += $"VALUES ({Sorszám(Telephely)}, ";
                 szöveg += $"'{Adat.Csoportbeosztás}', ";
                 szöveg += $"'{Adat.Típus}' )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -163,7 +163,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(Telephely);
                 if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(a => a.Sorszám) + 1;
             }
             catch (HibásBevittAdat ex)
@@ -203,7 +203,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(Telephely);
                 Adat_Kiegészítő_Csoportbeosztás Adat1 = Adatok.Find(a => a.Sorszám == Sorszám1);
                 Adat_Kiegészítő_Csoportbeosztás Adat2 = Adatok.Find(a => a.Sorszám == Sorszám2);
                 if (Adat1 != null && Adat2 != null)
@@ -234,7 +234,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = Lista_Adatok(Telephely);
 
                 int i = 1;
 

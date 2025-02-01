@@ -45,7 +45,7 @@ namespace Villamos.Villamos_Ablakok
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 if (!File.Exists(hely)) return;
-                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsopBeo.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsopBeo.Lista_Adatok(Cmbtelephely.Trim());
 
                 CsoportTábla.Rows.Clear();
                 CsoportTábla.Columns.Clear();

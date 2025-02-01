@@ -157,7 +157,7 @@ namespace Villamos
             {
                 Csoport.Items.Clear();
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsoport.Lista_Adatok(hely);
+                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsoport.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 foreach (Adat_Kiegészítő_Csoportbeosztás rekord in Adatok)
                     Csoport.Items.Add(rekord.Csoportbeosztás);

@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Segéd\Státus.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Státus(hely.KönyvSzerk());
         }
 

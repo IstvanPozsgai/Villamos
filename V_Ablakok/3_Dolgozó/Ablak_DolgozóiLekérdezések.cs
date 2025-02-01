@@ -19,6 +19,7 @@ namespace Villamos
         readonly Kezelő_Kulcs KézKulcs = new Kezelő_Kulcs();
         readonly Kezelő_Kulcs_Kettő KézKulcs2 = new Kezelő_Kulcs_Kettő();
         readonly Kezelő_Létszám_Elrendezés_Változatok Kéz_Változatok = new Kezelő_Létszám_Elrendezés_Változatok();
+        readonly Kezelő_Dolgozó_Személyes KézSzemélyes = new Kezelő_Dolgozó_Személyes();
         List<Adat_Kulcs> Adatok_Kulcs = new List<Adat_Kulcs>();
 
         public Ablak_DolgozóiLekérdezések()
@@ -292,10 +293,9 @@ namespace Villamos
                 string helyvált;
                 string jelszóvált = "Mocó";
                 string jelszó = "forgalmiutasítás";
-                string helyszemélyes = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség2.mdb";
-                szöveg = "SELECT * FROM személyes";
-                Kezelő_Dolgozó_Személyes KézSzemélyes = new Kezelő_Dolgozó_Személyes();
-                List<Adat_Dolgozó_Személyes> AdatokSzemélyes = KézSzemélyes.Lista_Adatok(helyszemélyes);
+
+
+                List<Adat_Dolgozó_Személyes> AdatokSzemélyes = KézSzemélyes.Lista_Adatok();
 
 
                 int fizikai = 0;

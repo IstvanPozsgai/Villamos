@@ -24,7 +24,7 @@ namespace Villamos
         readonly string jelszó = "kertitörpe";
 
         readonly Kezelő_Szatube_Szabadság Kéz_Szabadság = new Kezelő_Szatube_Szabadság();
-
+        readonly Kezelő_Dolgozó_Személyes KézSzemélyes = new Kezelő_Dolgozó_Személyes();
         List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();
 
         public Ablak_Szatube()
@@ -1369,11 +1369,9 @@ namespace Villamos
                 string munkalap = "Munka1";
                 string[] darabol = Dolgozónév.Text.Split('=');
 
-                string Hely = Application.StartupPath + @"\Főmérnökség\Adatok\Főmérnökség2.mdb";
-
                 Holtart.Lép();
-                Kezelő_Dolgozó_Személyes Kéz = new Kezelő_Dolgozó_Személyes();
-                List<Adat_Dolgozó_Személyes> Adatok = Kéz.Lista_Adatok(Hely);
+
+                List<Adat_Dolgozó_Személyes> Adatok = KézSzemélyes.Lista_Adatok();
                 Adat_Dolgozó_Személyes Rekord = (from a in Adatok
                                                  where a.Dolgozószám == darabol[1].Trim()
                                                  select a).FirstOrDefault();

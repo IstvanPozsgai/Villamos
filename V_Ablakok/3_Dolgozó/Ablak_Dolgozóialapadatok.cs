@@ -626,7 +626,7 @@ namespace Villamos
                                                              ideig,
                                                              Váltóscsoport.Text.Trim(),
                                                              részmunkaidőperc);
-                KézDolgozó.Módosít_Alap(hely, ADAT);
+                KézDolgozó.Módosít_Alap(Cmbtelephely.Text.Trim(), ADAT);
                 MentésUtán();
                 MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -803,7 +803,7 @@ namespace Villamos
                                                                Jogtanusítvány.Text.Trim(),
                                                                Jogosítványidő.Value,
                                                                Jogorvosi.Value);
-                KézDolgozó.Módosít_Jog(hely, ADAT);
+                KézDolgozó.Módosít_Jog(Cmbtelephely.Text.Trim(), ADAT);
                 MentésUtán();
                 MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1467,7 +1467,7 @@ namespace Villamos
                 Adat_Dolgozó_Alap ADAT = new Adat_Dolgozó_Alap(Dolgozószám.Text.Trim(),
                                                              Feorszám.Text.Trim(),
                                                              Munkakör.Text.Trim());
-                KézDolgozó.Módosít_Munka(hely, ADAT);
+                KézDolgozó.Módosít_Munka(Cmbtelephely.Text.Trim(), ADAT);
                 MentésUtán();
                 MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -2157,9 +2157,8 @@ namespace Villamos
             try
             {
                 if (Dolgozószám.Text.Trim() == "") return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség2.mdb";
 
-                List<Adat_Dolgozó_Személyes> Adatok = KézSzemélyes.Lista_Adatok(hely);
+                List<Adat_Dolgozó_Személyes> Adatok = KézSzemélyes.Lista_Adatok();
                 Adat_Dolgozó_Személyes rekord = (from a in Adatok
                                                  where a.Dolgozószám == Dolgozószám.Text.Trim()
                                                  select a).FirstOrDefault();
@@ -2193,9 +2192,8 @@ namespace Villamos
             try
             {
                 if (Dolgozószám.Text.Trim() == "") return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség2.mdb";
 
-                List<Adat_Dolgozó_Személyes> Adatok = KézSzemélyes.Lista_Adatok(hely);
+                List<Adat_Dolgozó_Személyes> Adatok = KézSzemélyes.Lista_Adatok();
 
                 Adat_Dolgozó_Személyes vane = (from a in Adatok
                                                where a.Dolgozószám == Dolgozószám.Text.Trim()
@@ -2213,9 +2211,9 @@ namespace Villamos
                                                                          Telefonszám3.Text.Trim());
 
                 if (vane == null)
-                    KézSzemélyes.Rögzítés(hely, ADAT);
+                    KézSzemélyes.Rögzítés(ADAT);
                 else
-                    KézSzemélyes.Módosítás(hely, ADAT);
+                    KézSzemélyes.Módosítás(ADAT);
 
                 Ürítiaszemélyest();
                 Kiírja_személyes();
@@ -2367,7 +2365,7 @@ namespace Villamos
                 if (Dolgozószám.Text.Trim() == "") return;
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 Adat_Dolgozó_Alap ADAT = new Adat_Dolgozó_Alap(Dolgozószám_, CheckBox1.Checked);
-                KézDolgozó.Módosít_Túl(hely, ADAT);
+                KézDolgozó.Módosít_Túl(Cmbtelephely.Text.Trim(), ADAT);
                 MentésUtán();
                 MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

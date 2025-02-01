@@ -64,6 +64,7 @@ namespace Villamos.Kezelők
                     szöveg += "(adat1, adat2) VALUES ";
                     szöveg += $"('{Adat.Adat1}', ";
                     szöveg += $" '{Adat.Adat2}')";
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
@@ -110,7 +111,7 @@ namespace Villamos.Kezelők
                     string szöveg = "UPDATE Adattábla SET ";
                     szöveg += $" Adat2='{Adat.Adat2}'";
                     szöveg += $" WHERE Adat1 like '%{Adat.Adat1}%'";
-
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
