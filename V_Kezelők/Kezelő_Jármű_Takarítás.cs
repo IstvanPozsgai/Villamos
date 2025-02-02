@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -51,5 +53,50 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public void Rögzítés(Adat_Jármű_Takarítás_Takarítások Adat)
+        {
+            try
+            {
+                string szöveg = "INSERT INTO takarítások  (azonosító, dátum, takarítási_fajta, telephely, státus ) VALUES (";
+                szöveg += $"'{Adat.Azonosító}', ";         // azonosító
+                szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";  // dátum
+                szöveg += $"'{Adat.Takarítási_fajta}', ";  // takarítási_fajta
+                szöveg += $"'{Adat.Telephely}', ";         // telephely
+                szöveg += $" {Adat.Státus})";              // státus
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Dátum(Adat_Jármű_Takarítás_Takarítások Adat)
+        {
+            try
+            {
+                string szöveg = "UPDATE takarítások  SET ";
+                szöveg += $"dátum ='{Adat.Dátum:yyyy.MM.dd}', ";
+                szöveg += $"státus ={Adat.Státus} ";
+                szöveg += $" WHERE [azonosító]='{Adat.Azonosító}'";
+                szöveg += $" AND takarítási_fajta='{Adat.Takarítási_fajta}'";
+                szöveg += $" AND Telephely='{Adat.Telephely}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

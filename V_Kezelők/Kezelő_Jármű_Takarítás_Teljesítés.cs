@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -16,6 +18,43 @@ namespace Villamos.Kezelők
         {
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Takarítás\Takarítás_{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Telephely_tábla(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Jármű_Takarítás_Teljesítés> Lista_Adat(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Jármű_Takarítás_Teljesítés> Adatok = new List<Adat_Jármű_Takarítás_Teljesítés>();
+            Adat_Jármű_Takarítás_Teljesítés Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Takarítás_Teljesítés(
+                                        rekord["azonosító"].ToStrTrim(),
+                                        rekord["takarítási_fajta"].ToStrTrim(),
+                                        rekord["dátum"].ToÉrt_DaTeTime(),
+                                        rekord["megfelelt1"].ToÉrt_Int(),
+                                        rekord["státus"].ToÉrt_Int(),
+                                        rekord["megfelelt2"].ToÉrt_Int(),
+                                        rekord["pótdátum"].ToÉrt_Bool(),
+                                        rekord["napszak"].ToÉrt_Int(),
+                                        rekord["mérték"].ToÉrt_Double(),
+                                        rekord["típus"].ToStrTrim());
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
         }
 
         public List<Adat_Jármű_Takarítás_Teljesítés> Lista_Adat(string Telephely, int Év)
@@ -58,41 +97,61 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Jármű_Takarítás_Teljesítés> Lista_Adat(string hely, string jelszó, string szöveg)
+        public void Módosítás(string Telephely, int Év, Adat_Jármű_Takarítás_Teljesítés Adat)
         {
-            List<Adat_Jármű_Takarítás_Teljesítés> Adatok = new List<Adat_Jármű_Takarítás_Teljesítés>();
-            Adat_Jármű_Takarítás_Teljesítés Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Jármű_Takarítás_Teljesítés(
-                                        rekord["azonosító"].ToStrTrim(),
-                                        rekord["takarítási_fajta"].ToStrTrim(),
-                                        rekord["dátum"].ToÉrt_DaTeTime(),
-                                        rekord["megfelelt1"].ToÉrt_Int(),
-                                        rekord["státus"].ToÉrt_Int(),
-                                        rekord["megfelelt2"].ToÉrt_Int(),
-                                        rekord["pótdátum"].ToÉrt_Bool(),
-                                        rekord["napszak"].ToÉrt_Int(),
-                                        rekord["mérték"].ToÉrt_Double(),
-                                        rekord["típus"].ToStrTrim());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
+                FájlBeállítás(Telephely, Év);
+                string szöveg = "UPDATE Teljesítés SET ";
+                szöveg += $"megfelelt1={Adat.Megfelelt1}, ";
+                szöveg += $"státus={Adat.Státus}, ";
+                szöveg += $"megfelelt2={Adat.Megfelelt2}, ";
+                szöveg += $"pótdátum={Adat.Pótdátum} ";
+                szöveg += $" WHERE dátum=#{Adat.Dátum:MM-dd-yyyy}#";
+                szöveg += $" and napszak={Adat.Napszak} ";
+                szöveg += $" and azonosító='{Adat.Azonosító}'";
+                szöveg += $" and takarítási_fajta='{Adat.Takarítási_fajta}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        internal void Rögzítés(string Telephely, int Év, Adat_Jármű_Takarítás_Teljesítés Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = "INSERT INTO Teljesítés (azonosító, takarítási_fajta, dátum, megfelelt1, státus, megfelelt2, pótdátum, napszak, típus,  mérték ) VALUES (";
+                szöveg += $"'{Adat.Azonosító}', ";  // azonosító
+                szöveg += $"'{Adat.Takarítási_fajta}', ";  // takarítási_fajta
+                szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // dátum
+                szöveg += $"{Adat.Megfelelt1}, ";            // megfelelt1,
+                szöveg += $"{Adat.Státus}, ";                             // státus,
+                szöveg += $"{Adat.Megfelelt2}, ";                             // megfelelt2,
+                szöveg += $"{Adat.Pótdátum}, ";                             // pótdátum,
+                szöveg += $"{Adat.Napszak}, ";                             // napszak,
+                szöveg += $"'{Adat.Típus}', ";                             // típus,
+                szöveg += $"{Adat.Mérték})";                             // mérték
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 

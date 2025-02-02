@@ -337,6 +337,39 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public List<string> Lista_Pályaszámok(string hely, string jelszó, string szöveg)
+        {
+            List<string> Adatok = new List<string>();
+            string Adat;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = rekord["Azonosító"].ToStrTrim();
+                                    Adatok.Add(Adat);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Lista_Pályaszámok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adatok;
+        }
+
         public List<Adat_Jármű> Lista_Adatok(string Telephely)
         {
             string szöveg = "SELECT * FROM állománytábla order by  azonosító";
@@ -386,39 +419,27 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<string> Lista_Pályaszámok(string hely, string jelszó, string szöveg)
+        public void Módosítás_Hiba(string Telephely, Adat_Jármű Adat)
         {
-            List<string> Adatok = new List<string>();
-            string Adat;
             try
             {
-                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-                {
-                    Kapcsolat.Open();
-                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                    {
-                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                        {
-                            if (rekord.HasRows)
-                            {
-                                while (rekord.Read())
-                                {
-                                    Adat = rekord["Azonosító"].ToStrTrim();
-                                    Adatok.Add(Adat);
-                                }
-                            }
-                        }
-                    }
-                }
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE állománytábla SET ";
+                szöveg += $" hibák={Adat.Hibák}, ";
+                szöveg += $" státus={Adat.Státus} ";
+                szöveg += $" WHERE  [azonosító]='{Adat.Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "Lista_Pályaszámok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return Adatok;
         }
-
     }
 
     public class Kezelő_Jármű_Vendég

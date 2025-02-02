@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Policy;
 
 namespace Villamos.Adatszerkezet
 {
@@ -77,6 +76,8 @@ namespace Villamos.Adatszerkezet
             Szerelvénykocsik = szerelvénykocsik;
         }
 
+
+
         /// <summary>
         /// Állomány tábla
         /// </summary>
@@ -88,7 +89,18 @@ namespace Villamos.Adatszerkezet
             Típus = típus;
         }
 
-
+        /// <summary>
+        /// Hiba rögzítéshez
+        /// </summary>
+        /// <param name="azonosító"></param>
+        /// <param name="hibák"></param>
+        /// <param name="státus"></param>
+        public Adat_Jármű(string azonosító, long hibák, long státus)
+        {
+            Azonosító = azonosító;
+            Hibák = hibák;
+            Státus = státus;
+        }
     }
 
     /// <summary>

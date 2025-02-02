@@ -15,7 +15,7 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely, int Év)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Takarítás\Takarítás_{Év}.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Telephely_tábla(hely.KönyvSzerk());
         }
 
 
