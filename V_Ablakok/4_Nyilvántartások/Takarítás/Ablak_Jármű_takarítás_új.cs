@@ -65,7 +65,6 @@ namespace Villamos
         List<Adat_Jármű_Takarítás_Árak> AdatokÁrak = new List<Adat_Jármű_Takarítás_Árak>();
         List<Adat_Jármű_hiba> AdatokJárműHiba = new List<Adat_Jármű_hiba>();
         List<Adat_Jármű_Takarítás_Mátrix> AdatokMátrix = new List<Adat_Jármű_Takarítás_Mátrix>();
-        List<Adat_Jármű_Takarítás_Létszám> AdatokLétsz = new List<Adat_Jármű_Takarítás_Létszám>();
         List<Adat_Jármű_Takarítás_Kötbér> AdatokKötbér = new List<Adat_Jármű_Takarítás_Kötbér>();
         List<Adat_Kiegészítő_Jelenlétiív> AdatokJelen = new List<Adat_Kiegészítő_Jelenlétiív>();
 
@@ -2021,46 +2020,30 @@ namespace Villamos
         {
             try
             {
-                if (Lét_Előírt.Text.ToStrTrim() == "") Lét_Előírt.Text = 0.ToString();
-                if (Lét_Megjelent.Text.ToStrTrim() == "") Lét_Megjelent.Text = 0.ToString();
-                if (Lét_Viselt.Text.ToStrTrim() == "") Lét_Viselt.Text = 0.ToString();
-                if (int.TryParse(Lét_Előírt.Text, out int result) == false) return;
-                if (int.TryParse(Lét_Megjelent.Text, out int result1) == false) return;
-                if (int.TryParse(Lét_Viselt.Text, out int result2) == false) return;
-                string hely, jelszó, szöveg;
-
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{JDátum.Value.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Telephely_tábla(hely);
-                jelszó = "seprűéslapát";
+                if (!int.TryParse(Lét_Előírt.Text, out int Előírt)) Lét_Előírt.Text = 0.ToString();
+                if (!int.TryParse(Lét_Megjelent.Text, out int Megjelent)) Lét_Megjelent.Text = 0.ToString();
+                if (!int.TryParse(Lét_Viselt.Text, out int Ruhátlan)) Lét_Viselt.Text = 0.ToString();
 
                 int napszak = 2;
                 if (Jnappal.Checked) napszak = 1;
 
-                LétszámLista(JDátum.Value);
+                List<Adat_Jármű_Takarítás_Létszám> AdatokLétsz = KézLétsz.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+
                 Adat_Jármű_Takarítás_Létszám AdatLétszám = (from a in AdatokLétsz
                                                             where a.Dátum == JDátum.Value
                                                             && a.Napszak == napszak
                                                             select a).FirstOrDefault();
 
+                Adat_Jármű_Takarítás_Létszám ADAT = new Adat_Jármű_Takarítás_Létszám(
+                                                JDátum.Value,
+                                                Előírt,
+                                                Megjelent,
+                                                napszak,
+                                                Ruhátlan);
                 if (AdatLétszám != null)
-                {
-                    szöveg = "UPDATE létszám  SET ";
-                    szöveg += "előírt=" + Lét_Előírt.Text.Trim() + ", ";
-                    szöveg += "megjelent=" + Lét_Megjelent.Text.Trim() + ", ";
-                    szöveg += "ruhátlan=" + Lét_Viselt.Text.Trim();
-                    szöveg += " WHERE Dátum =#" + JDátum.Value.ToString("M-d-yy") + "#";
-                    szöveg += $" And napszak={napszak}";
-                }
+                    KézLétsz.Módosítás(Cmbtelephely.Text.Trim(), JDátum.Value.Year, ADAT);
                 else
-                {
-                    szöveg = "INSERT INTO létszám  (dátum, napszak, előírt, megjelent, ruhátlan  ) VALUES (";
-                    szöveg += $"'{JDátum.Value:yyyy.MM.dd}', ";
-                    szöveg += $" {napszak}, ";
-                    szöveg += Lét_Előírt.Text + ", ";
-                    szöveg += Lét_Megjelent.Text + ", ";
-                    szöveg += Lét_Viselt.Text + ") ";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézLétsz.Rögzítés(Cmbtelephely.Text.Trim(), JDátum.Value.Year, ADAT);
 
                 Lét_Előírt.Text = "";
                 Lét_Megjelent.Text = "";
@@ -5706,28 +5689,6 @@ namespace Villamos
         }
 
 
-
-        private void LétszámLista(DateTime Dátum)
-        {
-            try
-            {
-                AdatokLétsz.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{Dátum.Year}.mdb";
-                if (!Exists(hely)) return;
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM létszám";
-                AdatokLétsz = KézLétsz.Lista_Adat(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void JelenlétLista()
         {
