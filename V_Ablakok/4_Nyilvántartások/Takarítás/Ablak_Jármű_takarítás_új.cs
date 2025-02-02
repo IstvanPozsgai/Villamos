@@ -2638,7 +2638,11 @@ namespace Villamos
             {
                 if (Utolsó_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva pályaszám");
                 List<Adat_Jármű_Takarítás_Takarítások> Adatok = KézTak.Lista_Adatok();
-                Adatok = Adatok.Where(a => a.Azonosító == Utolsó_pályaszám.Text.Trim()).OrderBy(a => a.Takarítási_fajta).ToList();
+                Adatok = (from a in Adatok
+                          where a.Azonosító == Utolsó_pályaszám.Text.Trim()
+                          && a.Státus == 0
+                          orderby a.Takarítási_fajta, a.Dátum descending
+                          select a).ToList();
 
                 Tábla_utolsó.Visible = false;
                 Tábla_utolsó_Fejléc();
