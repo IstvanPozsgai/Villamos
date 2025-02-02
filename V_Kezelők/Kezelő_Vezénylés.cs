@@ -19,7 +19,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Vezényléstábla(hely.KönyvSzerk());
         }
 
-
         public List<Adat_Vezénylés> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Vezénylés> Adatok = new List<Adat_Vezénylés>();
