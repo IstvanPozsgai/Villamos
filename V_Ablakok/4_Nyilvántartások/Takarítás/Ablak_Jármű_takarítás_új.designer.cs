@@ -177,6 +177,7 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.PályaszámTakarításai = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -480,6 +481,7 @@ namespace Villamos
             this.GroupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.GroupBox5.BackColor = System.Drawing.Color.RoyalBlue;
+            this.GroupBox5.Controls.Add(this.PályaszámTakarításai);
             this.GroupBox5.Controls.Add(this.Excel_Takarítás);
             this.GroupBox5.Controls.Add(this.Utolsó_telephely);
             this.GroupBox5.Controls.Add(this.Utolsó_státus);
@@ -535,7 +537,7 @@ namespace Villamos
             // 
             this.Utolsó_történet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Utolsó_történet.Image = global::Villamos.Properties.Resources.BeCardStack;
-            this.Utolsó_történet.Location = new System.Drawing.Point(566, 120);
+            this.Utolsó_történet.Location = new System.Drawing.Point(520, 121);
             this.Utolsó_történet.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Utolsó_történet.Name = "Utolsó_történet";
             this.Utolsó_történet.Size = new System.Drawing.Size(40, 40);
@@ -622,13 +624,13 @@ namespace Villamos
             // Utolsó_frissít
             // 
             this.Utolsó_frissít.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Utolsó_frissít.Image = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Utolsó_frissít.Image = global::Villamos.Properties.Resources.leadott;
             this.Utolsó_frissít.Location = new System.Drawing.Point(612, 120);
             this.Utolsó_frissít.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Utolsó_frissít.Name = "Utolsó_frissít";
             this.Utolsó_frissít.Size = new System.Drawing.Size(40, 40);
             this.Utolsó_frissít.TabIndex = 177;
-            this.ToolTip1.SetToolTip(this.Utolsó_frissít, "Frissíti a táblázatot");
+            this.ToolTip1.SetToolTip(this.Utolsó_frissít, "Ütemezéshez pályaszám felvétele/Törlése");
             this.Utolsó_frissít.UseVisualStyleBackColor = true;
             this.Utolsó_frissít.Click += new System.EventHandler(this.Utolsó_frissít_Click);
             // 
@@ -1823,6 +1825,19 @@ namespace Villamos
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // PályaszámTakarításai
+            // 
+            this.PályaszámTakarításai.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PályaszámTakarításai.Image = global::Villamos.Properties.Resources.App_spreadsheet1;
+            this.PályaszámTakarításai.Location = new System.Drawing.Point(566, 120);
+            this.PályaszámTakarításai.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.PályaszámTakarításai.Name = "PályaszámTakarításai";
+            this.PályaszámTakarításai.Size = new System.Drawing.Size(40, 40);
+            this.PályaszámTakarításai.TabIndex = 192;
+            this.ToolTip1.SetToolTip(this.PályaszámTakarításai, "Utolsó takarítások");
+            this.PályaszámTakarításai.UseVisualStyleBackColor = true;
+            this.PályaszámTakarításai.Click += new System.EventHandler(this.PályaszámTakarításai_Click);
+            // 
             // Ablak_Jármű_takarítás_új
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -2031,5 +2046,6 @@ namespace Villamos
         internal Button TIG_Készítés;
         internal Button BMR;
         private Timer timer1;
+        internal Button PályaszámTakarításai;
     }
 }

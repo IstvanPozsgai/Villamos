@@ -53,7 +53,17 @@
             J3 = 2,
             J4 = 3,
             J5 = 4,
-            J6 = 5
+            J6 = 5,
+        };
+
+        public enum TakfajtaadatÖ
+        {
+            J2 = 1,
+            J3 = 2,
+            J4 = 3,
+            J5 = 4,
+            J6 = 5,
+            Gépi = 6
         };
 
         public enum TW6000_Státusz
