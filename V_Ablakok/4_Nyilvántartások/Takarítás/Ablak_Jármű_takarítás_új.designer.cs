@@ -39,7 +39,7 @@ namespace Villamos
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Jármű_takarítás_új));
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
@@ -93,7 +93,7 @@ namespace Villamos
             this.Label21 = new System.Windows.Forms.Label();
             this.Label20 = new System.Windows.Forms.Label();
             this.Label19 = new System.Windows.Forms.Label();
-            this.Button3 = new System.Windows.Forms.Button();
+            this.Opció_Töröl = new System.Windows.Forms.Button();
             this.Opció_terület = new System.Windows.Forms.TextBox();
             this.Button2 = new System.Windows.Forms.Button();
             this.Opció_lista = new System.Windows.Forms.ComboBox();
@@ -804,7 +804,7 @@ namespace Villamos
             this.GroupBox3.Controls.Add(this.Label21);
             this.GroupBox3.Controls.Add(this.Label20);
             this.GroupBox3.Controls.Add(this.Label19);
-            this.GroupBox3.Controls.Add(this.Button3);
+            this.GroupBox3.Controls.Add(this.Opció_Töröl);
             this.GroupBox3.Controls.Add(this.Opció_terület);
             this.GroupBox3.Controls.Add(this.Button2);
             this.GroupBox3.Controls.Add(this.Opció_lista);
@@ -868,16 +868,16 @@ namespace Villamos
             this.Label19.TabIndex = 146;
             this.Label19.Text = "Opció fajta:";
             // 
-            // Button3
+            // Opció_Töröl
             // 
-            this.Button3.Image = global::Villamos.Properties.Resources.Kuka;
-            this.Button3.Location = new System.Drawing.Point(505, 113);
-            this.Button3.Name = "Button3";
-            this.Button3.Size = new System.Drawing.Size(40, 40);
-            this.Button3.TabIndex = 5;
-            this.ToolTip1.SetToolTip(this.Button3, "Listában kijelöltek törlése");
-            this.Button3.UseVisualStyleBackColor = true;
-            this.Button3.Click += new System.EventHandler(this.Button3_Click);
+            this.Opció_Töröl.Image = global::Villamos.Properties.Resources.Kuka;
+            this.Opció_Töröl.Location = new System.Drawing.Point(505, 113);
+            this.Opció_Töröl.Name = "Opció_Töröl";
+            this.Opció_Töröl.Size = new System.Drawing.Size(40, 40);
+            this.Opció_Töröl.TabIndex = 5;
+            this.ToolTip1.SetToolTip(this.Opció_Töröl, "Listában kijelöltek törlése");
+            this.Opció_Töröl.UseVisualStyleBackColor = true;
+            this.Opció_Töröl.Click += new System.EventHandler(this.Opció_Töröl_Click);
             // 
             // Opció_terület
             // 
@@ -1950,7 +1950,7 @@ namespace Villamos
         internal ComboBox Opció_lista;
         internal TextBox Opció_psz;
         internal Button Opció_mentés;
-        internal Button Button3;
+        internal Button Opció_Töröl;
         internal DataGridView ListaTábla;
         internal Button Havi_Lekérdezés;
         internal Button Lek_excel;

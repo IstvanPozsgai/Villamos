@@ -106,7 +106,8 @@ namespace Villamos.Kezelők
                 szöveg += $"megfelelt1={Adat.Megfelelt1}, ";
                 szöveg += $"státus={Adat.Státus}, ";
                 szöveg += $"megfelelt2={Adat.Megfelelt2}, ";
-                szöveg += $"pótdátum={Adat.Pótdátum} ";
+                szöveg += $"pótdátum={Adat.Pótdátum}, ";
+                szöveg += $"mérték={Adat.Mérték.ToString().Replace(",", ".")} ";
                 szöveg += $" WHERE dátum=#{Adat.Dátum:MM-dd-yyyy}#";
                 szöveg += $" and napszak={Adat.Napszak} ";
                 szöveg += $" and azonosító='{Adat.Azonosító}'";
@@ -124,7 +125,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        internal void Rögzítés(string Telephely, int Év, Adat_Jármű_Takarítás_Teljesítés Adat)
+        public void Rögzítés(string Telephely, int Év, Adat_Jármű_Takarítás_Teljesítés Adat)
         {
             try
             {
@@ -135,11 +136,11 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // dátum
                 szöveg += $"{Adat.Megfelelt1}, ";            // megfelelt1,
                 szöveg += $"{Adat.Státus}, ";                             // státus,
-                szöveg += $"{Adat.Megfelelt2}, ";                             // megfelelt2,
-                szöveg += $"{Adat.Pótdátum}, ";                             // pótdátum,
-                szöveg += $"{Adat.Napszak}, ";                             // napszak,
-                szöveg += $"'{Adat.Típus}', ";                             // típus,
-                szöveg += $"{Adat.Mérték})";                             // mérték
+                szöveg += $"{Adat.Megfelelt2}, ";                         // megfelelt2,
+                szöveg += $"{Adat.Pótdátum}, ";                           // pótdátum,
+                szöveg += $"{Adat.Napszak}, ";                            // napszak,
+                szöveg += $"'{Adat.Típus}', ";                            // típus,
+                szöveg += $"{Adat.Mérték.ToString().Replace(",", ".")})"; // mérték
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

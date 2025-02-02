@@ -59,7 +59,6 @@ namespace Villamos
         List<Adat_Szerelvény> AdatokSzerelvényElő = new List<Adat_Szerelvény>();
         List<Adat_Nap_Hiba> AdatokHiba = new List<Adat_Nap_Hiba>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
-        List<Adat_Jármű> AdatokFőJármű = new List<Adat_Jármű>();
         List<Adat_Jármű_Takarítás_Ütemező> AdatokÜtem = new List<Adat_Jármű_Takarítás_Ütemező>();
         List<Adat_Jármű_Vendég> AdatokIdegen = new List<Adat_Jármű_Vendég>();
         List<Adat_Jármű_Takarítás_Árak> AdatokÁrak = new List<Adat_Jármű_Takarítás_Árak>();
@@ -171,7 +170,7 @@ namespace Villamos
             J1Mentés.Enabled = false;
             LétszámMentés.Enabled = false;
             Opció_mentés.Enabled = false;
-            Button3.Enabled = false;
+            Opció_Töröl.Enabled = false;
             JK_Mentés.Enabled = false;
 
             melyikelem = 181;
@@ -198,7 +197,7 @@ namespace Villamos
                 J1Mentés.Enabled = true;
                 LétszámMentés.Enabled = true;
                 Opció_mentés.Enabled = true;
-                Button3.Enabled = true;
+                Opció_Töröl.Enabled = true;
                 JK_Mentés.Enabled = true;
             }
         }
@@ -1616,7 +1615,7 @@ namespace Villamos
                 if (JK_Kategória.Text.ToStrTrim() == "") return;
                 if (JK_Azonosító.Text.ToStrTrim() == "") return;
 
-                AdatokFőJármű = KézJármű.Lista_Adatok("Főmérnökség");
+                List<Adat_Jármű> AdatokFőJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 Adat_Jármű AdatJármű = (from a in AdatokFőJármű
                                         where a.Azonosító == JK_Azonosító.Text.Trim()
                                         select a).FirstOrDefault();
@@ -2081,19 +2080,14 @@ namespace Villamos
             OpciósKocsik();
         }
 
-        private void Button3_Click(object sender, EventArgs e)
+        private void Opció_Töröl_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Opció_lista.Text.Trim() == "") return;
                 if (Opció_psz.Text.Trim() == "") return;
-                string hely, jelszó, szöveg;
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{JDátum.Value.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Telephely_tábla(hely);
-                jelszó = "seprűéslapát";
-
                 int napszak = 2;
-                if (Jnappal.Checked == true) napszak = 1;
+                if (Jnappal.Checked) napszak = 1;
 
                 AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adat_Jármű_Takarítás_Teljesítés AdatTakTelj = (from a in AdatokTelj
@@ -2106,15 +2100,16 @@ namespace Villamos
 
                 if (AdatTakTelj != null)
                 {
-                    szöveg = "UPDATE teljesítés  SET ";
-                    szöveg += " státus= 3 ";
-                    szöveg += $" where dátum=#{JDátum.Value:MM-dd-yyyy}# ";
-                    szöveg += $" and napszak={napszak}";
-                    szöveg += " AND státus=1 ";
-                    szöveg += $" AND takarítási_fajta='{Opció_lista.Text.Trim()}'";
-                    szöveg += $" AND azonosító='{Opció_psz.Text.Trim()}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                    MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Adat_Jármű_Takarítás_Teljesítés ADAT = new Adat_Jármű_Takarítás_Teljesítés(
+                                       Opció_psz.Text.Trim(),
+                                       Opció_lista.Text.Trim(),
+                                       JDátum.Value,
+                                       0, 3, 0, false,
+                                       napszak,
+                                       AdatTakTelj.Mérték,
+                                       AdatTakTelj.Típus);
+                    KézTakarításTelj.Módosítás(Cmbtelephely.Text.Trim(), JDátum.Value.Year, ADAT);
+                    MessageBox.Show("Az adatok törlése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
 
@@ -2132,8 +2127,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         private void OpciósKocsik()
         {
@@ -2200,37 +2193,23 @@ namespace Villamos
                 if (Opció_lista.Text.ToStrTrim() == "") return;
                 if (Opció_psz.Text.ToStrTrim() == "") return;
                 if (Opció_terület.Text.ToStrTrim() == "") return;
-                if (double.TryParse(Opció_terület.Text, out double result) == false) return;
-
-                string hely, jelszó, szöveg;
-                // megnézzük, hogy létezik-e a pályaszám
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
-                if (!Exists(hely)) return;
-                jelszó = "pozsgaii";
+                if (double.TryParse(Opció_terület.Text, out double Mérték) == false) return;
 
                 string típus;
-                ÁllományFőLista();
+                List<Adat_Jármű> AdatokFőJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 Adat_Jármű AdatJármű = (from a in AdatokFőJármű
                                         where a.Azonosító == Opció_psz.Text.Trim()
                                         select a).FirstOrDefault();
 
-
                 if (AdatJármű != null)
-                {
                     típus = AdatJármű.Típus;
-                }
                 else
                 {
                     MessageBox.Show("Nincs ilyen pályaszám a nyilvántartásban !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{JDátum.Value.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Telephely_tábla(hely);
-                jelszó = "seprűéslapát";
                 // Rögzítjük a teljesítés táblába
-
                 int napszak = 2;
                 if (Jnappal.Checked) napszak = 1;
 
@@ -2243,31 +2222,18 @@ namespace Villamos
                                                               && a.Takarítási_fajta == Opció_lista.Text.Trim()
                                                               select a).FirstOrDefault();
 
+                Adat_Jármű_Takarítás_Teljesítés ADAT = new Adat_Jármű_Takarítás_Teljesítés(
+                                                       Opció_psz.Text.Trim(),
+                                                       Opció_lista.Text.Trim(),
+                                                       JDátum.Value,
+                                                       0, 1, 0, false,
+                                                       napszak,
+                                                       Mérték,
+                                                       típus.Trim());
                 if (AdatTeljes != null)
-                {
-                    szöveg = "UPDATE Teljesítés SET ";
-                    szöveg += " mérték=" + Opció_terület.Text.Replace(",", ".");
-                    //szöveg += szöveg1;
-                    szöveg += $" WHERE dátum=#{AdatTeljes.Dátum:M-d-yy}#";
-                    szöveg += $" and napszak={napszak} ";
-                    szöveg += $" and azonosító='{AdatTeljes.Azonosító}'";
-                    szöveg += $" and takarítási_fajta='{AdatTeljes.Takarítási_fajta}'";
-                    szöveg += $" and státus=1 ";
-                }
-
+                    KézTakarításTelj.Módosítás(Cmbtelephely.Text.Trim(), JDátum.Value.Year, ADAT);
                 else
-                {
-                    szöveg = "INSERT INTO Teljesítés (azonosító, takarítási_fajta, dátum, megfelelt1, státus, megfelelt2, pótdátum, napszak, típus,  mérték ) VALUES (";
-                    szöveg += $"'{Opció_psz.Text.Trim()}', ";  // azonosító
-                    szöveg += $"'{Opció_lista.Text.Trim()}', ";  // takarítási_fajta
-                    szöveg += $"'{JDátum.Value:yyyy.MM.dd}', "; // dátum
-                    szöveg += " 0, 1, 0, false, "; // megfelelt1, státus, megfelelt2, pótdátum
-                    szöveg += $" {napszak}, ";
-                    szöveg += $"'{típus.Trim()}', "; // típus
-                    szöveg += Opció_terület.Text.Replace(",", ".") + ")";
-
-                } // mérték
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézTakarításTelj.Rögzítés(Cmbtelephely.Text.Trim(), JDátum.Value.Year, ADAT);
 
                 if (JK_Megfelel1.Checked == true | JK_megfelel2.Checked == true) Takarításátrögzítés();
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2292,20 +2258,17 @@ namespace Villamos
             }
         }
 
-
         private void Opció_lista_feltöltés()
         {
             Opció_lista.Items.Clear();
             Opció_lista.Items.Add("Graffiti");
             Opció_lista.Items.Add("Eseti");
             Opció_lista.Items.Add("Fertőtlenítés");
-
         }
 
         private void Opció_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
             Opció_psz.Text = Opció_tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
             Opció_terület.Text = Opció_tábla.Rows[e.RowIndex].Cells[1].Value.ToString();
         }
@@ -5664,31 +5627,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
-        private void ÁllományFőLista()
-        {
-            try
-            {
-                AdatokFőJármű.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla";
-                AdatokFőJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
 
         private void JelenlétLista()
         {
