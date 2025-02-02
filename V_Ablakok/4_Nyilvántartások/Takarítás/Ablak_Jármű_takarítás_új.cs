@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -2401,22 +2400,13 @@ namespace Villamos
 
         private void Utolsó_pályaszám_feltöltés()
         {
-            string hely, jelszó, szöveg;
-            hely = Application.StartupPath + @"\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-            if (!Exists(hely))
-                return;
-
-            jelszó = "seprűéslapát";
-
-            szöveg = "SELECT DISTINCT azonosító FROM takarítások ";
+            List<Adat_Jármű_Takarítás_Takarítások> Adatok = KézTak.Lista_Adatok().OrderBy(a => a.Azonosító).ToList();
             if (Cmbtelephely.Text.Trim() != "Főmérnökség" || Program.Postás_Vezér)
-                szöveg += $"WHERE Telephely='{Cmbtelephely.Text.Trim()}'";
-            szöveg += "order by azonosító";
+                Adatok = Adatok.Where(a => a.Telephely == Cmbtelephely.Text.Trim()).ToList();
 
             Utolsó_pályaszám.Items.Clear();
-            Utolsó_pályaszám.BeginUpdate();
-            Utolsó_pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-            Utolsó_pályaszám.EndUpdate();
+            foreach (Adat_Jármű_Takarítás_Takarítások Elem in Adatok)
+                Utolsó_pályaszám.Items.Add(Elem.Azonosító);
             Utolsó_pályaszám.Refresh();
         }
 
@@ -2434,23 +2424,14 @@ namespace Villamos
         {
             try
             {
-                if (e.RowIndex < 0)
-                    return;
+                if (e.RowIndex < 0) return;
                 int i = e.RowIndex;
 
                 Utolsó_pályaszám.Text = Tábla_utolsó.Rows[i].Cells[0].Value.ToStrTrim();
                 Utolsó_dátum.Value = Tábla_utolsó.Rows[i].Cells[1].Value.ToÉrt_DaTeTime();
                 Utolsó_takarítási_fajta.Text = Tábla_utolsó.Rows[i].Cells[2].Value.ToStrTrim();
                 Utolsó_telephely.Text = Tábla_utolsó.Rows[i].Cells[3].Value.ToStrTrim();
-                if (Tábla_utolsó.Rows[i].Cells[4].Value.ToÉrt_Bool())
-
-                {
-                    Utolsó_státus.Checked = true;
-                }
-                else
-                {
-                    Utolsó_státus.Checked = false;
-                }
+                Utolsó_státus.Checked = Tábla_utolsó.Rows[i].Cells[4].Value.ToÉrt_Bool();
             }
             catch (HibásBevittAdat ex)
             {
@@ -2463,21 +2444,14 @@ namespace Villamos
             }
         }
 
-
         private void Utolsó_történet_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás_napló_{Utolsó_dátum.Value.Year - 1}.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM takarítások_napló";
-                List<Adat_Jármű_Takarítás_Napló> Ideig = new List<Adat_Jármű_Takarítás_Napló>();
-                if (File.Exists(hely)) AdatokNapl = KézTakNapló.Lista_Adat(hely, jelszó, szöveg);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás_napló_{Utolsó_dátum.Value.Year}.mdb";
-                if (File.Exists(hely)) Ideig = KézTakNapló.Lista_Adat(hely, jelszó, szöveg);
-
+                List<Adat_Jármű_Takarítás_Napló> AdatokNapl = KézTakNapló.Lista_Adatok(Utolsó_dátum.Value.Year - 1);
+                List<Adat_Jármű_Takarítás_Napló> Ideig = KézTakNapló.Lista_Adatok(Utolsó_dátum.Value.Year);
                 AdatokNapl.AddRange(Ideig);
+                AdatokNapl = AdatokNapl.OrderBy(a => a.Dátum).ToList();
                 Utolsó_tört_lista();
             }
             catch (HibásBevittAdat ex)
@@ -2582,11 +2556,6 @@ namespace Villamos
                 if (Utolsó_pályaszám.Text.ToStrTrim() == "") return;
                 if (Utolsó_takarítási_fajta.Text.ToStrTrim() == "") return;
                 if (Utolsó_telephely.Text.ToStrTrim() == "") return;
-                string hely, jelszó, szöveg;
-                hely = Application.StartupPath + @"\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                if (!Exists(hely)) return;
-                jelszó = "seprűéslapát";
-
                 AdatokTak = KézTak.Lista_Adatok();
                 Adat_Jármű_Takarítás_Takarítások AdatTak = (from a in AdatokTak
                                                             where a.Azonosító == Utolsó_pályaszám.Text.Trim()
@@ -2595,27 +2564,19 @@ namespace Villamos
                                                             select a).FirstOrDefault();
                 int státus = 0;
                 if (Utolsó_státus.Checked) státus = 1;
+
+                Adat_Jármű_Takarítás_Takarítások ADAT = new Adat_Jármű_Takarítás_Takarítások(
+                                                Utolsó_pályaszám.Text.ToStrTrim(),
+                                                Utolsó_dátum.Value,
+                                                Utolsó_takarítási_fajta.Text.ToStrTrim(),
+                                                Utolsó_telephely.Text.ToStrTrim(),
+                                                státus);
+
                 if (AdatTak != null)
-                {
-                    // módosítás
-                    szöveg = "UPDATE takarítások  SET ";
-                    szöveg += " dátum='" + Utolsó_dátum.Value.ToString("yyyy.MM.dd") + "', ";
-                    szöveg += $" státus={státus} ";
-                    szöveg += " WHERE azonosító='" + Utolsó_pályaszám.Text.ToStrTrim() + "' AND ";
-                    szöveg += " takarítási_fajta='" + Utolsó_takarítási_fajta.Text.ToStrTrim() + "' AND ";
-                    szöveg += " telephely='" + Utolsó_telephely.Text.ToStrTrim() + "'";
-                }
+                    KézTak.Módosítás_Dátum(ADAT);
                 else
-                {
-                    // új elem
-                    szöveg = "INSERT INTO takarítások (azonosító, dátum, Takarítási_fajta, Telephely, státus ) VALUES (";
-                    szöveg += "'" + Utolsó_pályaszám.Text.ToStrTrim() + "', ";
-                    szöveg += "'" + Utolsó_dátum.Value.ToString("yyyy.MM.dd") + "', ";
-                    szöveg += "'" + Utolsó_takarítási_fajta.Text.ToStrTrim() + "', ";
-                    szöveg += "'" + Utolsó_telephely.Text.ToStrTrim() + "', ";
-                    szöveg += $" {státus}) ";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézTak.Rögzítés(ADAT);
+
                 Előzmény_lista_takarítás();
                 TáblaUtolsóCella();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2630,7 +2591,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void TáblaUtolsóCella()
         {
@@ -2662,8 +2622,7 @@ namespace Villamos
 
         private void Excel_Takarítás_Click(object sender, EventArgs e)
         {
-            if (Tábla_utolsó.Rows.Count <= 0)
-                return;
+            if (Tábla_utolsó.Rows.Count <= 0) return;
             string fájlexc;
 
             // kimeneti fájl helye és neve
