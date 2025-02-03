@@ -36,6 +36,7 @@ namespace Villamos
         {
             try
             {
+                MérésDátuma.MaxDate = DateTime.Today;
                 Jogosultságkiosztás();
                 Telephelyekfeltöltése();
                 Fülekkitöltése();
@@ -850,7 +851,7 @@ namespace Villamos
                 List<Adat_Akkumulátor_Mérés> Adatok = KézAkkuMér.Lista_Adatok(Dátumtól.Value.Year);
                 Adatok = Adatok.Where(a => a.Mérésdátuma >= Dátumtól.Value && a.Mérésdátuma < dátumig.Value.AddDays(1) && a.Rögzítő != "TÖRÖLT").OrderBy(a => a.Gyáriszám).ToList();
                 if (MérésLekGyári.Text.Trim() != "")
-                    Adatok = Adatok.Where(a => a.Gyáriszám.Contains(MérésLekGyári.Text.Trim())).ToList();
+                    Adatok = Adatok.Where(a => a.Gyáriszám.ToUpper().Contains(MérésLekGyári.Text.Trim().ToUpper())).ToList();
 
                 List<Adat_Akkumulátor> Adatok_Alap = KézAkku.Lista_Adatok();
 
@@ -886,7 +887,7 @@ namespace Villamos
                         Tábla4.Rows[i].Cells[13].Value = Elem.Kapacitás;
                         if (rekord.Kapacitás != 0)
                         {
-                            Tábla4.Rows[i].Cells[14].Value = Math.Round(Elem.Kapacitás.ToÉrt_Double() / rekord.Kapacitás.ToÉrt_Double() * 100, 1);
+                            Tábla4.Rows[i].Cells[14].Value = Math.Round(rekord.Kapacitás.ToÉrt_Double() / Elem.Kapacitás.ToÉrt_Double() * 100, 1);
                         }
                     }
                 }

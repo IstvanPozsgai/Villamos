@@ -2642,7 +2642,7 @@ namespace Villamos
             string ideig = "MyDocuments";
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
             Kezelő_Kiegészítő_Mentésihelyek KézMentés = new Kezelő_Kiegészítő_Mentésihelyek();
-            List<Adat_Kiegészítő_Mentésihelyek> AdatokMentés = KézMentés.Lista_Adatok(hely);
+            List<Adat_Kiegészítő_Mentésihelyek> AdatokMentés = KézMentés.Lista_Adatok(Cmbtelephely.Text.Trim());
             Adat_Kiegészítő_Mentésihelyek AdatMentés = (from a in AdatokMentés
                                                         where a.Sorszám == 1
                                                         select a).FirstOrDefault();
@@ -2654,7 +2654,7 @@ namespace Villamos
             else
             {
                 Adat_Kiegészítő_Mentésihelyek ADAT = new Adat_Kiegészítő_Mentésihelyek(1, "Főkönyv készítés", "NINCS");
-                KézMentés.Rögzítés(hely, ADAT);
+                KézMentés.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
             }
             Főkönyv.Visible = false;
 

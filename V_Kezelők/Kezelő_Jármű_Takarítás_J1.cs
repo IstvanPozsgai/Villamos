@@ -85,7 +85,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely, Év);
                 string szöveg = "UPDATE j1adatok SET ";
                 szöveg += $"J1megfelelő={Adat.J1megfelelő}, ";
-                szöveg += $"J1nemmegfelelő={Adat.J1nemmegfelelő}, ";
+                szöveg += $"J1nemmegfelelő={Adat.J1nemmegfelelő} ";
                 szöveg += $" WHERE Dátum =#{Adat.Dátum:M-d-yyyy}# And napszak={Adat.Napszak} And típus='{Adat.Típus}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

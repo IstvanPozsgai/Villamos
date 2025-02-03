@@ -92,27 +92,16 @@ namespace Villamos.V_MindenEgyéb
                             státus = 0;
                         // meg nézzük, hogy van-e már ilyen adat
                         bool vane = Adatok_behajt.Any(a => a.SZTSZ.Trim() == sztsz.Trim());
+                        Adat_Behajtás_Dolgozótábla ADAT = new Adat_Behajtás_Dolgozótábla(
+                                                        sztsz.Trim(),
+                                                        családnévutónév.Trim(),
+                                                        szervezetiegység.Trim(),
+                                                        munkakör.Trim(),
+                                                        státus);
                         if (vane)
-                        {
-                            // ha van akkor módosít
-                            szöveg = "UPDATE dolgozóktábla SET ";
-                            szöveg += " családnévutónév='" + családnévutónév.Trim() + "', ";
-                            szöveg += " munkakör='" + munkakör.Trim() + "', ";
-                            szöveg += " szervezetiegység='" + szervezetiegység.Trim() + "', ";
-                            szöveg += " státus=" + státus;
-                            szöveg += $"  WHERE SZTSZ='{sztsz.Trim()}'";
-                        }
+                            Kéz_behajt.Módosítás(ADAT);
                         else
-                        {
-                            // ha nincs akkor újként rögzíti
-                            szöveg = "INSERT INTO dolgozóktábla ( sztsz, családnévutónév, munkakör, szervezetiegység, státus )  VALUES ( ";
-                            szöveg += "'" + sztsz.Trim() + "', ";
-                            szöveg += "'" + családnévutónév.Trim() + "', ";
-                            szöveg += "'" + munkakör.Trim() + "', ";
-                            szöveg += "'" + szervezetiegység.Trim() + "', ";
-                            szöveg += státus.ToString() + ") ";
-                        }
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                            Kéz_behajt.Rögzítés(ADAT);
                     }
                     sor++;
                 }
