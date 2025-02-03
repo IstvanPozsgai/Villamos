@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
 
 namespace Villamos
@@ -11,17 +10,17 @@ namespace Villamos
             string Válasz = fájl;
             try
             {
-                if (File.Exists(fájl)) return Válasz;
-                string[] Könyvtár = fájl.Split('\\');
-                string alap = Könyvtár[0];
-                for (int i = 1; i < Könyvtár.Length; i++)
-                {
-                    if (!Könyvtár[i].Contains(".mdb"))
-                    {
-                        alap += $@"\{Könyvtár[i]}";
-                        if (!Directory.Exists(alap)) Directory.CreateDirectory(alap);
-                    }
-                }
+                //if (File.Exists(fájl)) return Válasz;
+                //string[] Könyvtár = fájl.Split('\\');
+                //string alap = Könyvtár[0];
+                //for (int i = 1; i < Könyvtár.Length; i++)
+                //{
+                //    if (!Könyvtár[i].Contains(".mdb"))
+                //    {
+                //        alap += $@"\{Könyvtár[i]}";
+                //        if (!Directory.Exists(alap)) Directory.CreateDirectory(alap);
+                //    }
+                //}
             }
             catch (HibásBevittAdat ex)
             {
@@ -75,5 +74,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }

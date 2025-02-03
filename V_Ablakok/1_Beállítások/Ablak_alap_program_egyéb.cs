@@ -1818,5 +1818,15 @@ namespace Villamos
             }
         }
         #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = Application.StartupPath;
+            textBox2.Text = Application.CommonAppDataPath;
+            textBox3.Text = Application.ExecutablePath;
+            textBox4.Text = Application.LocalUserAppDataPath;
+            textBox5.Text = Application.UserAppDataPath;
+
+        }
     }
 }
