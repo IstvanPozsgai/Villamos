@@ -3389,10 +3389,6 @@ namespace Villamos
         {
             try
             {
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_" + ListaDátum.Value.Year.ToString() + ".mdb";
-                if (!Exists(hely)) return;
-
                 // kimeneti fájl helye és neve
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -3606,9 +3602,6 @@ namespace Villamos
 
                 double NemMegfelel = AdatKötbér.NemMegfelel.ToÉrt_Double();
                 double Póthatáridő = AdatKötbér.Póthatáridő.ToÉrt_Double();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{ListaDátum.Value.Year}.mdb";
-                if (!Exists(hely)) return;
 
                 // Dátum kiírása
                 MyE.Kiir("Dátum", "a3");
@@ -4067,9 +4060,6 @@ namespace Villamos
 
                 MyE.Egyesít(munkalap, "a1:d1");
 
-                // kiírjuk a kocsiszín azonosítóját
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
                 // jelenléti ív
                 AdatokJelen = KézJelen.Lista_Adatok(Cmbtelephely.Text.Trim());
 
@@ -4335,7 +4325,6 @@ namespace Villamos
                 int hónapnap = DateTime.DaysInMonth(ListaDátum.Value.Year, ListaDátum.Value.Month);
                 DateTime hónaputolsónapja = new DateTime(ListaDátum.Value.Year, ListaDátum.Value.Month, hónapnap);
 
-                string helytakarítás = Application.StartupPath + @"\főmérnökség\adatok\takarítás\Jármű_Takarítás.mdb";
                 string munkalap = "Összesítő_minden";
 
                 MyE.Munkalap_aktív("Összesítő_minden");
@@ -4343,9 +4332,7 @@ namespace Villamos
                 MyE.Sortörésseltöbbsorba_egyesített("A1:G1");
 
                 // kiírjuk a kocsiszín azonosítóját
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
                 // jelenléti ív
-                string szöveg;
 
                 AdatokJelen = KézJelen.Lista_Adatok(Cmbtelephely.Text.Trim());
 
@@ -4363,7 +4350,7 @@ namespace Villamos
                 MyE.Oszlopszélesség(munkalap, "a:a", 15);
                 MyE.Oszlopszélesség(munkalap, "b:b", 8);
                 MyE.Egyesít(munkalap, "a4:g4");
-                szöveg = ListaDátum.Value.ToString("yyyy. MMMM") + ". havi ";
+                string szöveg = ListaDátum.Value.ToString("yyyy. MMMM") + ". havi ";
                 szöveg += "Takarítás összesítőlap";
                 MyE.Kiir(szöveg, "A4");
                 MyE.Betű("A4", 18);
@@ -4675,10 +4662,6 @@ namespace Villamos
                     NemMegfelel = AdatKötbér.NemMegfelel.ToÉrt_Double();
                     Póthatáridő = AdatKötbér.Póthatáridő.ToÉrt_Double();
                 }
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{ListaDátum.Value.Year}.mdb";
-                if (!Exists(hely)) return;
-
 
                 // Dátum kiírása
                 MyE.Kiir("Dátum", "a3");
@@ -5099,8 +5082,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{ListaDátum.Value.Year}.mdb";
-                if (!Exists(hely)) return;
                 Holtart.Be();
                 DateTime Eleje = DateTime.Now;
                 Telephely_ = Cmbtelephely.Text.Trim();
