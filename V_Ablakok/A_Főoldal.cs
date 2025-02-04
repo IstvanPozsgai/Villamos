@@ -39,8 +39,7 @@ namespace Villamos
         readonly Kezelő_Jármű_Napló KézNapló = new Kezelő_Jármű_Napló();
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
         readonly Kezelő_Belépés_Jogosultságtábla Kéz_Jogosultság = new Kezelő_Belépés_Jogosultságtábla();
-        readonly Kezelő_Kulcs_Fekete KézFekete = new Kezelő_Kulcs_Fekete();
-        readonly Kezelő_Kulcs KézKulcs = new Kezelő_Kulcs();
+
 
         List<Adat_Belépés_Verzió> AdatokVerzó = new List<Adat_Belépés_Verzió>();
         List<Adat_Kiegészítő_Könyvtár> AdatokKönyvtár = new List<Adat_Kiegészítő_Könyvtár>();
@@ -796,7 +795,7 @@ namespace Villamos
             {
                 // A jogokat beírjuk
                 string adat1 = MyF.MÁSRövidkód(Panels1.Text.Trim());
-
+                Kezelő_Kulcs_Fekete KézFekete = new Kezelő_Kulcs_Fekete();
                 List<Adat_Kulcs> AdatokTeljes = KézFekete.Lista_Adatok();
 
                 List<Adat_Kulcs> AdatokSzűrt = (from a in AdatokTeljes
@@ -806,6 +805,7 @@ namespace Villamos
                 foreach (Adat_Kulcs rekord in AdatokSzűrt)
                 {
                     Adat_Kulcs ADAT = new Adat_Kulcs(rekord.Adat1, rekord.Adat2, rekord.Adat3);
+                    Kezelő_Kulcs KézKulcs = new Kezelő_Kulcs();
                     KézKulcs.Rögzít(ADAT);
                     KézFekete.Törlés(ADAT);
                 }
@@ -2418,6 +2418,7 @@ namespace Villamos
             if (!Exists(hely)) return;
 
             string keres = MyF.MÁSRövidkód(Panels1.Text.Trim());
+            Kezelő_Kulcs_Fekete KézFekete = new Kezelő_Kulcs_Fekete();
             List<Adat_Kulcs> Adatok = KézFekete.Lista_Adatok();
             Adat_Kulcs Elem = (from a in Adatok
                                where a.Adat1.Contains(keres.Substring(0, keres.Length - 3))

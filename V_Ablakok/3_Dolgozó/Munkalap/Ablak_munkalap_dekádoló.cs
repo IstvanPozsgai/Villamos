@@ -28,13 +28,10 @@ namespace Villamos
 
         void Start()
         {
+            Telephelyekfeltöltése();
             Dátum.Value = DateTime.Today.AddDays(-1);
             DekádDátum.Value = DateTime.Today.AddDays(-1);
-            Telephelyekfeltöltése();
             Jogosultságkiosztás();
-
-
-
 
             Fülekkitöltése();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;

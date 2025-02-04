@@ -2093,9 +2093,12 @@ namespace Villamos
             string[] Darabol = ChkDolgozónév.Text.Split('=');
 
             if (Darabol.Length == 2)
+            {
                 EgyDolgozó = (from a in DolgozóAdatok
                               where a.Dolgozószám == Darabol[1].Trim()
                               select a).FirstOrDefault();
+                Dolgozószám.Text = Darabol[1].Trim();
+            }
         }
         #endregion
     }
