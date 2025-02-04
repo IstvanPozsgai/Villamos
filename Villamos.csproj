@@ -206,7 +206,6 @@
       <DependentUpon>Ablak_Karbantartás_Csoport.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Karbantartási_ListaFeltöltés.cs" />
-    <Compile Include="V_Ablakok\3_Dolgozó\list.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_reklám.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -728,6 +727,7 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_Vezénylés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_Ár.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_Ütemező.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jármű_Vendég.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Állomány_Típus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék.cs" />
     <Compile Include="V_Kezelők\Kezelő_KerékMérő.cs" />

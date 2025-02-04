@@ -1,20 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Szerelvény
     {
+        readonly string jelszó = "pozsgaii";
+        string hely;
 
-        /// <summary>
-        /// A feltételknek megfelelő listát adja vissza
-        /// </summary>
-        /// <param name="hely">fájl elérhetősége</param>
-        /// <param name="jelszó">Jelszó</param>
-        /// <param name="szöveg">SQL</param>
-        /// <returns></returns>
+        private void FájlBeállítás(string Telephely, bool előírt = false)
+        {
+            if (előírt)
+                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\szerelvényelőírt.mdb";
+            else
+                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\szerelvény.mdb";
+
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Szerelvénytáblalap(hely.KönyvSzerk());
+        }
+
+
+        public List<Adat_Szerelvény> Lista_Adatok(string Telephely, bool előírt = false)
+        {
+            FájlBeállítás(Telephely, előírt);
+            string szöveg = "Select * FROM szerelvénytábla";
+            List<Adat_Szerelvény> AdatKocsik = new List<Adat_Szerelvény>();
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat_Szerelvény Adat = new Adat_Szerelvény(
+                                                rekord["id"].ToÉrt_Long(),
+                                                rekord["szerelvényhossz"].ToÉrt_Long(),
+                                                rekord["Kocsi1"].ToStrTrim(),
+                                                rekord["Kocsi2"].ToStrTrim(),
+                                                rekord["Kocsi3"].ToStrTrim(),
+                                                rekord["Kocsi4"].ToStrTrim(),
+                                                rekord["Kocsi5"].ToStrTrim(),
+                                                rekord["Kocsi6"].ToStrTrim());
+                                AdatKocsik.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return AdatKocsik;
+        }
+
+
         public List<Adat_Szerelvény> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Szerelvény> AdatKocsik = new List<Adat_Szerelvény>();
@@ -49,13 +95,6 @@ namespace Villamos.Kezelők
             return AdatKocsik;
         }
 
-        /// <summary>
-        /// A szerelvény Id alapján visszaadja a teljes rekordot
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="szerelvényId"></param>
-        /// <returns></returns>
         public Adat_Szerelvény SzerelvényEgy(string hely, string jelszó, long szerelvényId)
         {
             Adat_Szerelvény Adat = null;
