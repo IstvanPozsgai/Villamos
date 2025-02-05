@@ -119,8 +119,8 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"Select * FROM Olvasás WHERE ki='{Program.PostásNév.Trim()}'  ORDER BY sorszám DESC";
                 List<Adat_Üzenet_Olvasás> AdatokOlvasás = KézOlvas.Lista_Adatok(Telephely, Év);
+                AdatokOlvasás = AdatokOlvasás.Where(a => a.Ki == Program.PostásNév.Trim()).ToList();
 
 
                 List<Adat_Üzenet> AdatokÜzenet = Lista_Adatok(Telephely, Év).OrderByDescending(a => a.Sorszám).ToList();
