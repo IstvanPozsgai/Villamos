@@ -625,7 +625,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(Cmbtelephely.Text.Trim());
+                List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(lbltelephely.Text.Trim());
 
                 Adat_Belépés_Jogosultságtábla Elem = (from a in Adatok
                                                       where a.Név.ToUpper() == Panels1.Text.Trim().ToUpper()

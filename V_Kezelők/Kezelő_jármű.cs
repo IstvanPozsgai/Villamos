@@ -19,7 +19,7 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely)
         {
 
-            if (Telephely == "Főmérnökség")
+            if (Telephely == "Főmérnökség" || Telephely.Contains("törzs") || Telephely.Contains("osztály"))
             {
                 hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusaTelep(hely.KönyvSzerk());
