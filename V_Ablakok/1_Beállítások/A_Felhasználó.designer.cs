@@ -406,6 +406,8 @@ namespace Villamos
             // 
             // Tábla
             // 
+            this.Tábla.AllowUserToAddRows = false;
+            this.Tábla.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 

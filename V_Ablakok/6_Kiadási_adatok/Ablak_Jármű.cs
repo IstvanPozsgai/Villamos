@@ -18,7 +18,7 @@ namespace Villamos
 {
     public partial class Ablak_Jármű
     {
-        readonly Kezelő_Jármű Kadat = new Kezelő_Jármű();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Jármű2 Kadat2 = new Kezelő_Jármű2();
         readonly Kezelő_Jármű_Napló KadatNapló = new Kezelő_Jármű_Napló();
         readonly Kezelő_jármű_hiba Kéz_JHadat = new Kezelő_jármű_hiba();
@@ -27,6 +27,7 @@ namespace Villamos
 
         List<Adat_Jármű> Adatok_Állomány = new List<Adat_Jármű>();
         List<Adat_Jármű_Napló> Adatok_Napló = new List<Adat_Jármű_Napló>();
+        List<string> Szűrés = new List<string>();
 
         DateTime ElőzőDátum = new DateTime(1900, 1, 1);
 
@@ -126,7 +127,7 @@ namespace Villamos
                                               select a).ToList();
 
                 string szöveg = "SELECT * FROM Állománytábla ORDER BY azonosító";
-                List<Adat_Jármű> AdatokTelep = Kadat.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű> AdatokTelep = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
 
                 Holtart.Be();
 
@@ -446,7 +447,7 @@ namespace Villamos
                         LÉT_járműtípus.Text.Trim(),
                         new DateTime(1900, 1, 1)
                         );
-                    Kadat.Rögzítés(hely, jelszó, Adat);
+                    KézJármű.Rögzítés(hely, jelszó, Adat);
                 }
                 else
                 {
@@ -688,7 +689,7 @@ namespace Villamos
                     szöveg = "SELECT * FROM állománytábla ";
 
                     Adatok_Állomány.Clear();
-                    Adatok_Állomány = Kadat.Lista_Adatok(hely, jelszó, szöveg);
+                    Adatok_Állomány = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
 
                     Elem = (from a in Adatok_Állomány
                             where a.Azonosító == Mód_pályaszám.Text.Trim()
@@ -781,7 +782,7 @@ namespace Villamos
                 jelszó = "pozsgaii";
                 szöveg = $"SELECT * FROM állománytábla ";
                 Adatok_Állomány.Clear();
-                Adatok_Állomány = Kadat.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Állomány = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
 
                 Holtart.Be(utolsó + 2);
                 // Első adattól végig pörgetjüka beolvasást
@@ -1318,14 +1319,14 @@ namespace Villamos
                     adat.Üzem = Cmbtelephely.Text.Trim();
                     adat.Típus = Telephelyi_típus.Text.Trim();
                     // ha van a telephelyen
-                    Kadat.Módosítás(hely, jelszó, adat);
+                    KézJármű.Módosítás(hely, jelszó, adat);
                 }
                 else
                 {
                     adat.Üzem = Cmbtelephely.Text.Trim();
                     adat.Típus = Telephelyi_típus.Text.Trim();
                     // ha nincs a telephelyen
-                    Kadat.Áthelyezés_új(hely, jelszó, adat);
+                    KézJármű.Áthelyezés_új(hely, jelszó, adat);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1789,34 +1790,29 @@ namespace Villamos
         #region PDF lapfül
         private void PDF_Listáz_psz_()
         {
-            Mód_pályaszám.Items.Clear();
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM Állománytábla where  [törölt]=false  ORDER BY azonosító";
             PDF_pályaszám.Items.Clear();
-            PDF_pályaszám.BeginUpdate();
-            PDF_pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-            PDF_pályaszám.EndUpdate();
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Törölt == false).ToList();
+
+            PDF_pályaszám.Items.Clear();
+            foreach (Adat_Jármű Elem in Adatok)
+                PDF_pályaszám.Items.Add(Elem.Azonosító);
+
             PDF_pályaszám.Refresh();
         }
-
 
         private void PDF_lista_szűrés()
         {
             try
             {
-                if (PDF_pályaszám.Text.Trim() == "")
-                    return;
+                if (PDF_pályaszám.Text.Trim() == "") return;
                 Pdf_listbox.Items.Clear();
 
-                string hely = Application.StartupPath + @"\Főmérnökség\Jegyzőkönyvek";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Jegyzőkönyvek".KönyvSzerk();
+                string mialapján = $"{PDF_pályaszám.Text.Trim()}*.pdf";
+
                 DirectoryInfo Directories = new DirectoryInfo(hely);
-
-                string mialapján = PDF_pályaszám.Text.Trim() + "*.pdf";
-                // ha nem üres
-
                 FileInfo[] fileInfo = Directories.GetFiles(mialapján, SearchOption.AllDirectories);
-                foreach (var file in fileInfo)
+                foreach (FileInfo file in fileInfo)
                     Pdf_listbox.Items.Add(file.Name);
             }
             catch (HibásBevittAdat ex)
@@ -1830,24 +1826,22 @@ namespace Villamos
             }
         }
 
-
         private void PDF_Frissít_Click(object sender, EventArgs e)
         {
             PDF_lista_szűrés();
         }
 
-
         private void Kiegészítők_feltöltése()
         {
             Kiegészítő.Items.Clear();
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Jegyzőkönyvek".KönyvSzerk();
 
-            string hely = Application.StartupPath + @"\Főmérnökség\Jegyzőkönyvek";
             DirectoryInfo Directories = new DirectoryInfo(hely);
             string mialapján = "*.pdf";
             // ha nem üres
 
             FileInfo[] fileInfo = Directories.GetFiles(mialapján, SearchOption.AllDirectories);
-            foreach (var file in fileInfo)
+            foreach (FileInfo file in fileInfo)
             {
                 string[] szövegek;
                 szövegek = file.Name.Split('_');
@@ -1857,7 +1851,6 @@ namespace Villamos
                 }
             }
         }
-
 
         private void BtnPDF_Click(object sender, EventArgs e)
         {
@@ -1885,49 +1878,39 @@ namespace Villamos
             }
         }
 
-
         private void PDF_rögzít_Click(object sender, EventArgs e)
         {
             try
             {
-                if (PDF_pályaszám.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs megadva az azonosító.");
-                if (Feltöltendő.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs feltöltendő fájl.");
-                if (Kiegészítő.Text.Trim() == "")
-                    Kiegészítő.Text = "?";
+                if (PDF_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva az azonosító.");
+                if (Feltöltendő.Text.Trim() == "") throw new HibásBevittAdat("Nincs feltöltendő fájl.");
+                if (Kiegészítő.Text.Trim() == "") throw new HibásBevittAdat("Nincs meghatározva a kiegészítő kategória.");
 
-                string helypdf = Application.StartupPath + @"\Főmérnökség\Jegyzőkönyvek";
-                if (Directory.Exists(helypdf) == false)
-                {
-                    // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
-                    Directory.CreateDirectory(helypdf);
-                }
+                string helypdf = $@"{Application.StartupPath}\Főmérnökség\Jegyzőkönyvek".KönyvSzerk();
 
                 // A tervezett fájlnévnek megfelelően szűrjük a könyvtár tartalmát
-                Szűrés.Items.Clear();
+                Szűrés.Clear();
                 DirectoryInfo Directories = new System.IO.DirectoryInfo(helypdf);
 
-
-                string mialapján = PDF_pályaszám.Text.Trim() + "_" + Kiegészítő.Text.Trim() + "*.pdf";
+                string mialapján = $"{PDF_pályaszám.Text.Trim()}_{Kiegészítő.Text.Trim()}*.pdf";
                 FileInfo[] fileInfo = Directories.GetFiles(mialapján, SearchOption.AllDirectories);
 
-                foreach (var file in fileInfo)
-                    Szűrés.Items.Add(file.Name);
+                foreach (FileInfo file in fileInfo)
+                    Szűrés.Add(file.Name);
 
-                int i;
-
-                if (fileInfo.Length < 1)
-                    i = 1;
-                else
+                int i = 1;
+                if (fileInfo.Length >= 1)
                 {
-                    string[] darab = Szűrés.Items[Szűrés.Items.Count - 1].ToString().Split('_');
-                    i = int.Parse(darab[1].Replace(".pdf", "")) + 1;
+                    foreach (string Elem in Szűrés)
+                    {
+                        string[] darab = Elem.Split('_');
+                        i = int.Parse(darab[2].Replace(".pdf", "")) + 1;
+                    }
                 }
 
                 //létrehozzuk az új fájlnevet és átmásoljuk a tárhelyre
 
-                string újfájlnév = helypdf + @"\" + PDF_pályaszám.Text.Trim() + "_" + Kiegészítő.Text.Trim() + "_" + i.ToString() + ".pdf";
+                string újfájlnév = $@"{helypdf}\{PDF_pályaszám.Text.Trim()}_{Kiegészítő.Text.Trim()}_{i}.pdf";
 
                 File.Copy(Feltöltendő.Text.Trim(), újfájlnév);
                 //kitöröljük a feltöltendő fájlt
@@ -1949,13 +1932,45 @@ namespace Villamos
             }
         }
 
-
         private void Filelistbox_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                string helypdf = Application.StartupPath + @"\Főmérnökség\Jegyzőkönyvek\" + Pdf_listbox.SelectedItems[0].ToString();
+                if (Pdf_listbox.SelectedItems.Count < 1) return;
+                string helypdf = $@"{Application.StartupPath}\Főmérnökség\Jegyzőkönyvek\{Pdf_listbox.SelectedItems[0]}";
                 Kezelő_Pdf.PdfMegnyitás(PDF_néző, helypdf);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Pdf_csere_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Pdf_listbox.SelectedItems.Count != 2) throw new HibásBevittAdat("Két elemet lehet csak egyszerre megcserélni.");
+                if (PDF_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve a pályaszám.");
+
+                string helypdf = $@"{Application.StartupPath}\Főmérnökség\Jegyzőkönyvek".KönyvSzerk();
+                string Ideig = $@"{helypdf}\{PDF_pályaszám.Text.Trim()}_Ideig_0.pdf";
+                if (File.Exists(Ideig)) File.Delete(Ideig);
+                string psz1 = $@"{helypdf}\{Pdf_listbox.SelectedItems[0]}";
+                string psz2 = $@"{helypdf}\{Pdf_listbox.SelectedItems[1]}";
+
+                File.Copy(psz1, Ideig);
+                File.Delete(psz1);
+                File.Copy(psz2, psz1);
+                File.Delete(psz2);
+                File.Copy(Ideig, psz2);
+                File.Delete(Ideig);
+                MessageBox.Show("A PDF-k cseréje megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1980,7 +1995,7 @@ namespace Villamos
                 string jelszó = "pozsgaii";
                 string szöveg = "SELECT * FROM állománytábla";
 
-                Adatok_Állomány = Kadat.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Állomány = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2017,5 +2032,7 @@ namespace Villamos
             }
         }
         #endregion
+
+
     }
 }
