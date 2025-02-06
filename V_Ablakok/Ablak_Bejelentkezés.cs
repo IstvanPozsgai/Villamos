@@ -69,10 +69,19 @@ namespace Villamos
             lblVerzió.Text = "Verzió: " + Application.ProductVersion;
             lblProgramnév.Text = Application.ProductName;
             Timer_kilép.Enabled = false;
-            if (Application.StartupPath.Substring(0, 2) == @"\\") FigyKiírás("A programot csak hálózati meghajtón keresztül lehet elindítani. \n Kérem csatlakoztasson hálózati meghajtót.");
+            Hálózat();
             Dátumformátumellenőrzés();
             Karbantartásellenőrzés();
             Subtelephelyfeltöltés();
+        }
+
+        private void Hálózat()
+        {
+            if (Application.StartupPath.Substring(0, 2) == @"\\")
+            {
+                FigyKiírás("A programot csak hálózati meghajtón keresztül lehet elindítani. \n Kérem csatlakoztasson hálózati meghajtót.");
+                Beléphet = false;
+            }
         }
 
 
