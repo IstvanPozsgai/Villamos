@@ -299,11 +299,10 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Belépés.mdb";
                 Rögzítő.Items.Clear();
                 Rögzítő.BeginUpdate();
 
-                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJogTábla.Lista_Adatok(hely);
+                List<Adat_Belépés_Jogosultságtábla> Adatok = KézJogTábla.Lista_Adatok("Főmérnökség");
                 foreach (Adat_Belépés_Jogosultságtábla rekord in Adatok)
                 {
                     string ideig = rekord.Jogkörúj1.ToStrTrim();
