@@ -2724,8 +2724,7 @@ namespace Villamos
         {
             try
             {
-                if (Lekérdezés_tábla.Rows.Count <= 0)
-                    return;
+                if (Lekérdezés_tábla.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -2742,11 +2741,11 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 1, fájlexc.Length - 5);
-                //EXCELtábla_old(fájlexc, Lekérdezés_tábla);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, fájlexc.Length - 5);
+                MyE.EXCELtábla(fájlexc, Lekérdezés_tábla, false);
+                MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}.xlsx", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.ExcelMegnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {

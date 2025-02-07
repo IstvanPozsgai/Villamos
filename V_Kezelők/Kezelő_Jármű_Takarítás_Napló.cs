@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -107,6 +108,43 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Mikor}',";             // Mikor
                 szöveg += $"'{Adat.Módosító}')";          // Módosító
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+                //Ha téves rögzítés miatt törlésre kerül, akkor a naplóban is átállítjuk töröltre
+                if (Adat.Státus == 1) NaplóTörlés(Év, Adat);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void NaplóTörlés(int Év, Adat_Jármű_Takarítás_Napló Adat)
+        {
+
+            try
+            {
+                List<Adat_Jármű_Takarítás_Napló> Adatok = Lista_Adatok(Év);
+                Adatok = (from a in Adatok
+                          where a.Dátum == Adat.Dátum
+                          && a.Telephely == Adat.Telephely
+                          && a.Azonosító == Adat.Azonosító
+                          && a.Takarítási_fajta == "Gépi"
+                          select a).ToList();
+                if (Adatok.Count > 0)
+                {
+                    string szöveg = "UPDATE takarítások_napló  SET ";
+                    szöveg += $"státus =1 ";
+                    szöveg += $" WHERE [azonosító]='{Adat.Azonosító}'";
+                    szöveg += $" AND takarítási_fajta='Gépi'";
+                    szöveg += $" AND Telephely='{Adat.Telephely}'";
+                    szöveg += $" AND dátum=#{Adat.Dátum:M-d-yyyy}# ";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
+
             }
             catch (HibásBevittAdat ex)
             {

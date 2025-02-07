@@ -5170,6 +5170,38 @@ namespace Villamos
                 Gepi_lista_Napló();
             else
                 Gepi_lista_Kocsik();
+
+            TöröltekKiemelése();
+        }
+
+        private void TöröltekKiemelése()
+        {
+
+            try
+            {
+                if (Gepi_dataGrid_.RowCount > 0)
+                {
+                    foreach (DataGridViewRow row in Gepi_dataGrid_.Rows)
+                    {
+                        if (row.Cells[5].Value.ToÉrt_Int() == 1)
+                        {
+                            row.DefaultCellStyle.ForeColor = Color.White;
+                            row.DefaultCellStyle.BackColor = Color.IndianRed;
+                            row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
+                        }
+                    }
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Gepi_lista_Napló()
@@ -5177,6 +5209,8 @@ namespace Villamos
             try
             {
                 List<Adat_Jármű_Takarítás_Napló> AdatokNapló = KézTakNapló.Lista_Adatok(Gepi_datum.Value.Year).Where(a => a.Takarítási_fajta == "Gépi").ToList();
+                List<Adat_Jármű_Takarítás_Napló> ideig = KézTakNapló.Lista_Adatok(Gepi_datum.Value.Year - 1).Where(a => a.Takarítási_fajta == "Gépi").ToList();
+                AdatokNapló.AddRange(ideig);
 
                 if (Pály_TB.Text.Trim() != "")
                     AdatokNapló = AdatokNapló.Where(a => a.Azonosító == Pály_TB.Text.Trim()).ToList();
@@ -5209,7 +5243,7 @@ namespace Villamos
                 Gepi_dataGrid_.Columns[5].HeaderText = "Státus";
                 Gepi_dataGrid_.Columns[5].Width = 100;
                 Gepi_dataGrid_.Columns[6].HeaderText = "Rögzítő";
-                Gepi_dataGrid_.Columns[6].Width = 100;
+                Gepi_dataGrid_.Columns[6].Width = 130;
                 Gepi_dataGrid_.Columns[7].HeaderText = "Mikor";
                 Gepi_dataGrid_.Columns[7].Width = 180;
 
@@ -5418,13 +5452,16 @@ namespace Villamos
             {
                 if (Gepi_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Pályaszámot meg kell adni.");
                 AdatokTak = KézTak.Lista_Adatok();
+                int státus = 0;
+                if (Gepi_torolt.Checked) státus = 1;
+
                 Adat_Jármű_Takarítás_Takarítások AdatTakarítások = (from a in AdatokTak
                                                                     where a.Azonosító == Gepi_pályaszám.Text.Trim()
                                                                     && a.Takarítási_fajta == "Gépi"
                                                                     && a.Telephely == Cmbtelephely.Text.Trim()
+                                                                    && a.Státus == 0
                                                                     select a).FirstOrDefault();
-                int státus = 0;
-                if (Gepi_torolt.Checked) státus = 1;
+
                 Adat_Jármű_Takarítás_Takarítások ADAT = new Adat_Jármű_Takarítás_Takarítások(
                                                      Gepi_pályaszám.Text.Trim(),
                                                      Gepi_datum.Value,
@@ -5432,20 +5469,38 @@ namespace Villamos
                                                      Cmbtelephely.Text.Trim(),
                                                      státus);
                 if (AdatTakarítások != null)
-                    KézTak.Módosítás_Dátum(ADAT);
+                {
+                    if (státus != AdatTakarítások.Státus)
+                    {
+                        KézTak.Módosítás_Dátum(ADAT);
+                        //Naplózás
+                        Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
+                                                            ADAT.Azonosító,
+                                                            ADAT.Dátum,
+                                                            ADAT.Takarítási_fajta,
+                                                            ADAT.Telephely,
+                                                            DateTime.Now,
+                                                            Program.PostásNév,
+                                                            ADAT.Státus);
+                        KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
+                    }
+                }
                 else
+                {
                     KézTak.Rögzítés(ADAT);
+                    //Naplózás
+                    Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
+                                                        ADAT.Azonosító,
+                                                        ADAT.Dátum,
+                                                        ADAT.Takarítási_fajta,
+                                                        ADAT.Telephely,
+                                                        DateTime.Now,
+                                                        Program.PostásNév,
+                                                        ADAT.Státus);
+                    KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
+                }
 
-                //Naplózás
-                Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
-                                                    ADAT.Azonosító,
-                                                    ADAT.Dátum,
-                                                    ADAT.Takarítási_fajta,
-                                                    ADAT.Telephely,
-                                                    DateTime.Now,
-                                                    Program.PostásNév,
-                                                    ADAT.Státus);
-                KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
+
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
