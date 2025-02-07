@@ -8,10 +8,10 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos.Kezelők;
+//using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Villamos_Kezelők;
+//using Villamos.Villamos_Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
@@ -32,10 +32,14 @@ namespace Villamos.Villamos_Ablakok
         Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         Kezelő_Nosztalgia_Állomány KézÁllomány = new Kezelő_Nosztalgia_Állomány();
         Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
+        Kezelő_Nosztagia_Futás KézFutás = new Kezelő_Nosztagia_Futás();
+        Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_Nosztalgia_Állomány> AdatokÁllomány = new List<Adat_Nosztalgia_Állomány>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
+        List<Adat_Nosztagia_Futás> AdatokFutás = new List<Adat_Nosztagia_Futás>();
+        List<Adat_Jármű_hiba> AdatokHiba = new List<Adat_Jármű_hiba>();
 
         private void ListaVillamos()
         {
@@ -60,6 +64,24 @@ namespace Villamos.Villamos_Ablakok
             string szöveg = $"SELECT * FROM Ciklusrendtábla";
             AdatokCiklus?.Clear();
             AdatokCiklus = KézCiklus.Lista_Adatok(hely, jelszó, szöveg);
+        }
+        private void ListaÉvesFutás()
+        {
+            string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb";
+            string jelszó = "kloczkal";
+            string szöveg = $"SELECT * FROM Futás";
+            AdatokFutás.Clear();
+            AdatokFutás = KézFutás.Lista_Adat(hely, jelszó, szöveg);
+
+        }
+        private void ListaHiba()
+        {
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
+            string jelszó = "pozsgaii";
+            string szöveg = $"SELECT * FROM hibatábla";
+            AdatokHiba.Clear();
+            AdatokHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
+
         }
         private void ListaFeltöltés()
         {
@@ -485,7 +507,7 @@ namespace Villamos.Villamos_Ablakok
                                   select a).ToList();
 
 
-                if (AdatokÁllomány.Count()!=0)
+                if (AdatokÁllomány.Count() != 0)
                 {
                     // módosítás
                     szöveg = "UPDATE Állomány  SET ";
@@ -536,7 +558,7 @@ namespace Villamos.Villamos_Ablakok
                                   where a.Azonosító.Trim() == Pályaszám.Text.Trim()
                                   select a).ToList();
 
-                if (AdatokÁllomány.Count()!=0)
+                if (AdatokÁllomány.Count() != 0)
                 {
                     // módosítás
                     szöveg = "UPDATE Állomány  SET ";
@@ -579,14 +601,21 @@ namespace Villamos.Villamos_Ablakok
                 string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb";
                 string jelszó = "kloczkal";
 
-                //le kell ellenőrizni, hogy van e olyan pályaszám!
+
                 string azon = Tábla_lekérdezés.CurrentRow?.Cells[0].Value?.ToString();
                 if (azon == null) { MessageBox.Show("Nincs kiválasztott kocsi", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
 
                 DateTime celldate = Tábla_lekérdezés.CurrentRow.Cells[1].Value.ToÉrt_DaTeTime();
 
-                string szöveg = $"SELECT * FROM Futás WHERE azonosító='{Nap_azonosító.Text.Trim()}' AND dátum=#{celldate:yyyy.MM.dd}#";
-                if (MyA.ABvanilyen(hely, jelszó, szöveg))
+                string szöveg;
+
+                ListaÉvesFutás();
+                Adat_Nosztagia_Futás AdatFutás = (from a in AdatokFutás
+                                                  where a.Azonosító.Trim() == Nap_azonosító.Text.Trim()
+                                                  && a.Dátum == celldate
+                                                  select a).FirstOrDefault();
+
+                if (AdatFutás != null)
                 {
                     szöveg = "UPDATE Futás SET ";
                     szöveg += $" dátum='{Nap_Dátum.Value:yyyy.MM.dd}', ";
@@ -783,14 +812,22 @@ namespace Villamos.Villamos_Ablakok
                 DateTime alap = DateTime.Parse("1900.01.01");
                 int nap = 0;
 
+                ListaVillamos();
+                Adat_Jármű AdatJármű;
+
                 for (int i = 0; i < Tábla_lekérdezés.RowCount; i++)
                 {
                     string azon = Tábla_lekérdezés.Rows[i].Cells[0].Value?.ToString();
                     if (azon == null) { MessageBox.Show("Nincs kiválasztott kocsi", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
 
                     DateTime forgNap = Tábla_lekérdezés.Rows[i].Cells[1].Value.ToÉrt_DaTeTime();
-                    string szöveg = $"SELECT * FROM Állomány WHERE azonosító='{azon.Trim()}'";
-                    if (MyA.ABvanilyen(hely, jelszó, szöveg))
+                    string szöveg;
+
+                    AdatJármű = (from a in AdatokJármű
+                                 where a.Azonosító.Trim() == azon.Trim()
+                                 select a).FirstOrDefault();
+
+                    if (AdatJármű != null)
                     {
                         DateTime forgnapElőző = alap;
                         if (i > 1) forgnapElőző = Tábla_lekérdezés.Rows[i - 1].Cells[1].Value.ToÉrt_DaTeTime();
@@ -847,14 +884,13 @@ namespace Villamos.Villamos_Ablakok
                 if (Pályaszám.Text.Trim() == "")
                     throw new HibásBevittAdat("Nincs kijelölve egy Azonosító sem.");
 
-                string hely = Application.StartupPath + @"\" + Cmbtelephely.Text.Trim() + @"\Adatok\Villamos\Villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM Állománytábla WHERE azonosító='" + Pályaszám.Text.Trim() + "'";
+                ListaVillamos();
 
-                if (Adatbázis.ABvanilyen(hely, jelszó, szöveg))
-                {
-                    Kép_megnevezés.Text = Adatbázis.ABkiolvasásszöveg(hely, jelszó, szöveg, "típus");
-                }
+                Adat_Jármű AdatJármű = (from a in AdatokJármű
+                                        where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                        select a).FirstOrDefault();
+
+                if (AdatJármű != null) Kép_megnevezés.Text = AdatJármű.Típus;
 
                 Kép_lista_szűrés();
             }
@@ -873,19 +909,17 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                if (Pályaszám.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kijelölve egy Azonosító sem.");
+                if (Pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy Azonosító sem.");
                 Kép_listbox.Items.Clear();
 
                 string helykép = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\kép";
-                var Directories = new System.IO.DirectoryInfo(helykép);
+                DirectoryInfo Directories = new DirectoryInfo(helykép);
 
                 string mialapján = Pályaszám.Text.Trim() + "*.jpg";
-                // ha nem üres
 
-                System.IO.FileInfo[] fileInfo = Directories.GetFiles(mialapján, System.IO.SearchOption.AllDirectories);
-                foreach (var file in fileInfo)
-                    Kép_listbox.Items.Add(file.Name);
+                FileInfo[] fileInfo = Directories.GetFiles(mialapján, SearchOption.AllDirectories);
+
+                foreach (var file in fileInfo) Kép_listbox.Items.Add(file.Name);
             }
             catch (HibásBevittAdat ex)
             {
@@ -927,7 +961,7 @@ namespace Villamos.Villamos_Ablakok
             {
                 string helykép = Kép_Feltöltendő.Text.Trim();
 
-                if (File.Exists(helykép) == false)
+                if (!Exists(helykép))
                     throw new HibásBevittAdat("Nincs kiválasztva egy kép sem.");
 
                 Image Kép = Image.FromFile(helykép);
@@ -967,7 +1001,7 @@ namespace Villamos.Villamos_Ablakok
 
 
                 string helykép = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\kép";
-                if (Directory.Exists(helykép) == false)
+                if (!Directory.Exists(helykép))
                 {
                     // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
                     System.IO.Directory.CreateDirectory(helykép);
@@ -1052,7 +1086,7 @@ namespace Villamos.Villamos_Ablakok
                     throw new HibásBevittAdat("Nincs kijelölve egy kép sem.");
 
                 string helykép = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\kép";
-                if (Directory.Exists(helykép) == false)
+                if (!Directory.Exists(helykép))
                     throw new HibásBevittAdat("A tárhely nem létezik.");
 
                 string hova = "";
@@ -1148,7 +1182,7 @@ namespace Villamos.Villamos_Ablakok
                 if (Feltöltendő.Text.Trim() == "") throw new HibásBevittAdat("Nincs feltöltendő fájl.");
 
                 string helypdf = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\pdf";
-                if (Directory.Exists(helypdf) == false) Directory.CreateDirectory(helypdf);
+                if (!Directory.Exists(helypdf)) Directory.CreateDirectory(helypdf);
 
                 // A tervezett fájlnévnek megfelelően szűrjük a könyvtár tartalmát
                 Szűrés.Items.Clear();
@@ -1223,11 +1257,14 @@ namespace Villamos.Villamos_Ablakok
             {
                 if (Pályaszám.Text.Trim() == "") return;
 
-                string szöveg = "SELECT * FROM Állománytábla WHERE azonosító='" + Pályaszám.Text.Trim() + "'";
-                string hely = Application.StartupPath + @"\" + Cmbtelephely.Text.Trim() + @"\Adatok\Villamos\Villamos.mdb";
-                string jelszó = "pozsgaii";
+                ListaVillamos();
 
-                if (Adatbázis.ABvanilyen(hely, jelszó, szöveg)) PDF_megnevezés.Text = Adatbázis.ABkiolvasásszöveg(hely, jelszó, szöveg, "típus");
+                Adat_Jármű AdatJármű = (from a in AdatokJármű
+                                        where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                        select a).FirstOrDefault();
+
+                if (AdatJármű != null) PDF_megnevezés.Text = AdatJármű.Típus;
+
                 PDF_lista_szűrés();
             }
             catch (HibásBevittAdat ex)
@@ -1316,9 +1353,11 @@ namespace Villamos.Villamos_Ablakok
 
                     MyA.ABMódosítás(hely, jelszó, lista);
                 }
+
                 // az excel tábla bezárása
                 MyE.ExcelBezárás();
                 Holtart.Visible = false;
+
                 // kitöröljük a betöltött fájlt
                 //if (File.Exists(fájlexc) == true)
                 //    File.Delete(fájlexc);
@@ -1351,16 +1390,13 @@ namespace Villamos.Villamos_Ablakok
                 // naplózás
                 string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló";
                 helynapló += @"\" + DateTime.Now.ToString("yyyyMM") + "hibanapló.mdb";
-                if (Exists(helynapló) == false)
+                if (!Exists(helynapló))
                     Adatbázis_Létrehozás.Hibatáblalap(helynapló);
 
                 Holtart.Visible = true;
                 Holtart.Maximum = 100;
 
                 string szöveg;
-                string szöveg0;
-                string szöveg1;
-                string szöveg2;
                 int talált;
                 int státus;
                 string típusa;
@@ -1371,46 +1407,56 @@ namespace Villamos.Villamos_Ablakok
 
                 //Hiba -- Itt meg kéne vizsgálnia, hogy melyik a következő esedékes vizsgálat / Le kéne szűrnie, hogy a 3 közül melyik következzen be
 
-                szöveg1 = "Noszt-";
+                szöveg = "Noszt-";
                 if (Cmb_FutCiklusE_Cnév.Text != string.Empty && Cmb_FutCiklusE.Text != string.Empty)
                 {
-                    szöveg1 += Cmb_FutCiklusE.Text;
-                    szöveg1 += $"-{Fut_dátum.Value:yyyy.MM.dd}-";
+                    szöveg += Cmb_FutCiklusE.Text;
+                    szöveg += $"-{Fut_dátum.Value:yyyy.MM.dd}-";
                     volt = 1;
                 }
                 if (Cmb_KmCiklus_V1.Text != string.Empty && Cmb_KmCiklus_V1_Cnév.Text != string.Empty)
                 {
-                    szöveg1 += Cmb_KmCiklus_V1.Text;
-                    szöveg1 += $"-{Txt_V1_dátum.Value:yyyy.MM.dd}-";
+                    szöveg += Cmb_KmCiklus_V1.Text;
+                    szöveg += $"-{Txt_V1_dátum.Value:yyyy.MM.dd}-";
                     volt = 1;
                 }
                 if (Cmb_KmCiklus_V2.Text != string.Empty && Cmb_KmCiklus_V2_Cnév.Text != string.Empty)
                 {
-                    szöveg1 += Cmb_KmCiklus_V2.Text;
-                    szöveg1 += $"-{Txt_V2_dátum.Value:yyyy.MM.dd}";
+                    szöveg += Cmb_KmCiklus_V2.Text;
+                    szöveg += $"-{Txt_V2_dátum.Value:yyyy.MM.dd}";
                     volt = 1;
                 }
                 if (volt == 1)
                 {
                     // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
                     talált = 0;
-                    szöveg2 = "SELECT * FROM hibatábla where azonosító='" + ideig_psz.Trim() + "' AND (hibaleírása LIKE '%" + szöveg1.Trim() + "%' )";
-                    if (MyA.ABvanilyen(helyhiba, jelszó, szöveg2))
+
+                    ListaHiba();
+                    Adat_Jármű_hiba AdatHiba = (from a in AdatokHiba
+                                                where a.Azonosító.Trim() == ideig_psz.Trim()
+                                                && a.Hibaleírása.Contains(szöveg)
+                                                select a).FirstOrDefault();
+
+                    if (AdatHiba != null)
                         talált = 1;
+
                     // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
                     if (talált == 0)
                     {
-                        // hibák számát emeljük és státus állítjuk ha kell
-                        szöveg0 = "SELECT * FROM állománytábla where [azonosító]='" + ideig_psz.Trim() + "'";
-                        Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-                        Adat_Jármű AdatokJármű = KézJármű.Egy_Adat(hely, jelszó, szöveg0);
-                        if (AdatokJármű != null)
+
+                        ListaVillamos();
+                        Adat_Jármű AdatJármű = (from a in AdatokJármű
+                                                where a.Azonosító.Trim() == ideig_psz.Trim()
+                                                select a).FirstOrDefault();
+                        if (AdatJármű != null)
                         {
-                            if (!int.TryParse(AdatokJármű?.Hibák.ToString(), out hibáksorszáma)) hibáksorszáma = 0;
+                            string kiegSzöveg = szöveg;
+
+                            if (!int.TryParse(AdatJármű?.Hibák.ToString(), out hibáksorszáma)) hibáksorszáma = 0;
 
                             hiba = hibáksorszáma++;
-                            típusa = AdatokJármű.Típus ?? "";
-                            if (!int.TryParse(AdatokJármű.Státus.ToString(), out státus)) státus = 0;
+                            típusa = AdatJármű.Típus ?? "";
+                            if (!int.TryParse(AdatJármű.Státus.ToString(), out státus)) státus = 0;
 
 
                             if (státus < 3)
@@ -1427,7 +1473,7 @@ namespace Villamos.Villamos_Ablakok
                             szöveg = "INSERT INTO hibatábla (létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
                             szöveg += "'" + Program.PostásNév.Trim() + "', ";
                             szöveg += " 3, ";
-                            szöveg += "'" + szöveg1.Trim() + "', ";
+                            szöveg += "'" + kiegSzöveg.Trim() + "', ";
                             szöveg += "'" + DateTime.Now.ToString() + "', false, ";
                             szöveg += "'" + típusa.Trim() + "', ";
                             szöveg += "'" + ideig_psz.Trim() + "', " + hibáksorszáma.ToString() + ")";
