@@ -151,12 +151,6 @@ namespace Villamos
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -575,12 +569,6 @@ namespace Villamos
             // TabPage3
             // 
             this.TabPage3.BackColor = System.Drawing.Color.LightSalmon;
-            this.TabPage3.Controls.Add(this.textBox5);
-            this.TabPage3.Controls.Add(this.textBox4);
-            this.TabPage3.Controls.Add(this.textBox3);
-            this.TabPage3.Controls.Add(this.textBox2);
-            this.TabPage3.Controls.Add(this.textBox1);
-            this.TabPage3.Controls.Add(this.button1);
             this.TabPage3.Controls.Add(this.Bizt_frissít);
             this.TabPage3.Controls.Add(this.Label4);
             this.TabPage3.Controls.Add(this.Hova);
@@ -1409,54 +1397,6 @@ namespace Villamos
             this.Holtart.TabIndex = 1;
             this.Holtart.Visible = false;
             // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.button1.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(962, 295);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(45, 45);
-            this.button1.TabIndex = 125;
-            this.toolTip1.SetToolTip(this.button1, "Rögzíti/módosítja az adatokat");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(12, 314);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(944, 26);
-            this.textBox1.TabIndex = 126;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(12, 282);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(944, 26);
-            this.textBox2.TabIndex = 127;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(12, 250);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(944, 26);
-            this.textBox3.TabIndex = 128;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(12, 218);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(944, 26);
-            this.textBox4.TabIndex = 129;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(12, 186);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(944, 26);
-            this.textBox5.TabIndex = 130;
-            // 
             // Ablak_alap_program_egyéb
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1603,11 +1543,5 @@ namespace Villamos
         internal CheckBox Szűr_Érvényes;
         internal Button VégeÁrRögzítés;
         internal V_MindenEgyéb.MyProgressbar Holtart;
-        internal TextBox textBox1;
-        internal Button button1;
-        internal TextBox textBox2;
-        internal TextBox textBox4;
-        internal TextBox textBox3;
-        internal TextBox textBox5;
     }                    
 }

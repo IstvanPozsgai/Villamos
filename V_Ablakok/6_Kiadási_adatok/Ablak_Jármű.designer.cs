@@ -38,18 +38,6 @@ namespace Villamos
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Jármű));
             this.Fülek = new System.Windows.Forms.TabControl();
-            this.TabPage4 = new System.Windows.Forms.TabPage();
-            this.Label1 = new System.Windows.Forms.Label();
-            this.Label2 = new System.Windows.Forms.Label();
-            this.Label3 = new System.Windows.Forms.Label();
-            this.Label4 = new System.Windows.Forms.Label();
-            this.Telephelyi_típus = new System.Windows.Forms.ComboBox();
-            this.Lektelephely = new System.Windows.Forms.ComboBox();
-            this.Közös_járművek = new System.Windows.Forms.ListBox();
-            this.Command6 = new System.Windows.Forms.Button();
-            this.Saját_járművek = new System.Windows.Forms.ListBox();
-            this.Állkirak = new System.Windows.Forms.Button();
-            this.Állvesz = new System.Windows.Forms.Button();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.Panel3 = new System.Windows.Forms.Panel();
             this.MÓD_járműtípus = new System.Windows.Forms.ComboBox();
@@ -81,8 +69,19 @@ namespace Villamos
             this.Label11 = new System.Windows.Forms.Label();
             this.LÉT_Pályaszám = new System.Windows.Forms.TextBox();
             this.Label10 = new System.Windows.Forms.Label();
+            this.TabPage4 = new System.Windows.Forms.TabPage();
+            this.Label1 = new System.Windows.Forms.Label();
+            this.Label2 = new System.Windows.Forms.Label();
+            this.Label3 = new System.Windows.Forms.Label();
+            this.Label4 = new System.Windows.Forms.Label();
+            this.Telephelyi_típus = new System.Windows.Forms.ComboBox();
+            this.Lektelephely = new System.Windows.Forms.ComboBox();
+            this.Közös_járművek = new System.Windows.Forms.ListBox();
+            this.Command6 = new System.Windows.Forms.Button();
+            this.Saját_járművek = new System.Windows.Forms.ListBox();
+            this.Állkirak = new System.Windows.Forms.Button();
+            this.Állvesz = new System.Windows.Forms.Button();
             this.TabPage2 = new System.Windows.Forms.TabPage();
-            this.Szűrés = new System.Windows.Forms.ListBox();
             this.PDF_néző = new PdfiumViewer.PdfViewer();
             this.Label38 = new System.Windows.Forms.Label();
             this.Feltöltendő = new System.Windows.Forms.TextBox();
@@ -113,16 +112,17 @@ namespace Villamos
             this.Tábla_telephely = new System.Windows.Forms.DataGridView();
             this.Btn_súgó = new System.Windows.Forms.Button();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel4 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label5 = new System.Windows.Forms.Label();
+            this.Pdf_csere = new System.Windows.Forms.Button();
             this.Fülek.SuspendLayout();
-            this.TabPage4.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.Panel3.SuspendLayout();
             this.Panel2.SuspendLayout();
             this.Panel1.SuspendLayout();
+            this.TabPage4.SuspendLayout();
             this.TabPage2.SuspendLayout();
             this.TabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -137,8 +137,8 @@ namespace Villamos
             this.Fülek.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Fülek.Controls.Add(this.TabPage4);
             this.Fülek.Controls.Add(this.TabPage1);
+            this.Fülek.Controls.Add(this.TabPage4);
             this.Fülek.Controls.Add(this.TabPage2);
             this.Fülek.Controls.Add(this.TabPage5);
             this.Fülek.Controls.Add(this.TabPage6);
@@ -150,133 +150,6 @@ namespace Villamos
             this.Fülek.TabIndex = 129;
             this.Fülek.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.Fülek_DrawItem);
             this.Fülek.SelectedIndexChanged += new System.EventHandler(this.Fülek_SelectedIndexChanged);
-            // 
-            // TabPage4
-            // 
-            this.TabPage4.BackColor = System.Drawing.Color.LightGray;
-            this.TabPage4.Controls.Add(this.Label1);
-            this.TabPage4.Controls.Add(this.Label2);
-            this.TabPage4.Controls.Add(this.Label3);
-            this.TabPage4.Controls.Add(this.Label4);
-            this.TabPage4.Controls.Add(this.Telephelyi_típus);
-            this.TabPage4.Controls.Add(this.Lektelephely);
-            this.TabPage4.Controls.Add(this.Közös_járművek);
-            this.TabPage4.Controls.Add(this.Command6);
-            this.TabPage4.Controls.Add(this.Saját_járművek);
-            this.TabPage4.Controls.Add(this.Állkirak);
-            this.TabPage4.Controls.Add(this.Állvesz);
-            this.TabPage4.Location = new System.Drawing.Point(4, 29);
-            this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1180, 447);
-            this.TabPage4.TabIndex = 3;
-            this.TabPage4.Text = "Jármű átadás-átvétel";
-            // 
-            // Label1
-            // 
-            this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(10, 10);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(112, 20);
-            this.Label1.TabIndex = 129;
-            this.Label1.Text = "Jármű típusok:";
-            // 
-            // Label2
-            // 
-            this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(243, 70);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(199, 20);
-            this.Label2.TabIndex = 130;
-            this.Label2.Text = "Állományon kívüli járművek:";
-            // 
-            // Label3
-            // 
-            this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(10, 70);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(81, 20);
-            this.Label3.TabIndex = 131;
-            this.Label3.Text = "Járművek:";
-            // 
-            // Label4
-            // 
-            this.Label4.AutoSize = true;
-            this.Label4.Location = new System.Drawing.Point(10, 350);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(99, 20);
-            this.Label4.TabIndex = 132;
-            this.Label4.Text = "Céltelephely:";
-            // 
-            // Telephelyi_típus
-            // 
-            this.Telephelyi_típus.FormattingEnabled = true;
-            this.Telephelyi_típus.Location = new System.Drawing.Point(14, 33);
-            this.Telephelyi_típus.Name = "Telephelyi_típus";
-            this.Telephelyi_típus.Size = new System.Drawing.Size(197, 28);
-            this.Telephelyi_típus.TabIndex = 133;
-            this.Telephelyi_típus.SelectedIndexChanged += new System.EventHandler(this.Combo1_SelectedIndexChanged);
-            // 
-            // Lektelephely
-            // 
-            this.Lektelephely.FormattingEnabled = true;
-            this.Lektelephely.Location = new System.Drawing.Point(14, 373);
-            this.Lektelephely.Name = "Lektelephely";
-            this.Lektelephely.Size = new System.Drawing.Size(197, 28);
-            this.Lektelephely.TabIndex = 134;
-            // 
-            // Közös_járművek
-            // 
-            this.Közös_járművek.FormattingEnabled = true;
-            this.Közös_járművek.ItemHeight = 20;
-            this.Közös_járművek.Location = new System.Drawing.Point(247, 93);
-            this.Közös_járművek.Name = "Közös_járművek";
-            this.Közös_járművek.Size = new System.Drawing.Size(195, 244);
-            this.Közös_járművek.TabIndex = 135;
-            // 
-            // Command6
-            // 
-            this.Command6.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Command6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Command6.Location = new System.Drawing.Point(402, 26);
-            this.Command6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Command6.Name = "Command6";
-            this.Command6.Size = new System.Drawing.Size(40, 40);
-            this.Command6.TabIndex = 140;
-            this.ToolTip1.SetToolTip(this.Command6, "Frissíti a listákat");
-            this.Command6.UseVisualStyleBackColor = true;
-            this.Command6.Click += new System.EventHandler(this.Command6_Click);
-            // 
-            // Saját_járművek
-            // 
-            this.Saját_járművek.FormattingEnabled = true;
-            this.Saját_járművek.ItemHeight = 20;
-            this.Saját_járművek.Location = new System.Drawing.Point(16, 93);
-            this.Saját_járművek.Name = "Saját_járművek";
-            this.Saját_járművek.Size = new System.Drawing.Size(195, 244);
-            this.Saját_járművek.TabIndex = 136;
-            // 
-            // Állkirak
-            // 
-            this.Állkirak.BackColor = System.Drawing.Color.Red;
-            this.Állkirak.ForeColor = System.Drawing.Color.White;
-            this.Állkirak.Location = new System.Drawing.Point(16, 407);
-            this.Állkirak.Name = "Állkirak";
-            this.Állkirak.Size = new System.Drawing.Size(195, 35);
-            this.Állkirak.TabIndex = 137;
-            this.Állkirak.Text = "Állomámyból kirak";
-            this.Állkirak.UseVisualStyleBackColor = false;
-            this.Állkirak.Click += new System.EventHandler(this.Állkirak_Click);
-            // 
-            // Állvesz
-            // 
-            this.Állvesz.BackColor = System.Drawing.Color.Green;
-            this.Állvesz.Location = new System.Drawing.Point(247, 350);
-            this.Állvesz.Name = "Állvesz";
-            this.Állvesz.Size = new System.Drawing.Size(195, 35);
-            this.Állvesz.TabIndex = 138;
-            this.Állvesz.Text = "Állományba Vesz";
-            this.Állvesz.UseVisualStyleBackColor = false;
-            this.Állvesz.Click += new System.EventHandler(this.Állvesz_Click);
             // 
             // TabPage1
             // 
@@ -613,10 +486,137 @@ namespace Villamos
             this.Label10.TabIndex = 0;
             this.Label10.Text = "Pályaszám:";
             // 
+            // TabPage4
+            // 
+            this.TabPage4.BackColor = System.Drawing.Color.LightGray;
+            this.TabPage4.Controls.Add(this.Label1);
+            this.TabPage4.Controls.Add(this.Label2);
+            this.TabPage4.Controls.Add(this.Label3);
+            this.TabPage4.Controls.Add(this.Label4);
+            this.TabPage4.Controls.Add(this.Telephelyi_típus);
+            this.TabPage4.Controls.Add(this.Lektelephely);
+            this.TabPage4.Controls.Add(this.Közös_járművek);
+            this.TabPage4.Controls.Add(this.Command6);
+            this.TabPage4.Controls.Add(this.Saját_járművek);
+            this.TabPage4.Controls.Add(this.Állkirak);
+            this.TabPage4.Controls.Add(this.Állvesz);
+            this.TabPage4.Location = new System.Drawing.Point(4, 29);
+            this.TabPage4.Name = "TabPage4";
+            this.TabPage4.Size = new System.Drawing.Size(1180, 447);
+            this.TabPage4.TabIndex = 3;
+            this.TabPage4.Text = "Jármű átadás-átvétel";
+            // 
+            // Label1
+            // 
+            this.Label1.AutoSize = true;
+            this.Label1.Location = new System.Drawing.Point(10, 10);
+            this.Label1.Name = "Label1";
+            this.Label1.Size = new System.Drawing.Size(112, 20);
+            this.Label1.TabIndex = 129;
+            this.Label1.Text = "Jármű típusok:";
+            // 
+            // Label2
+            // 
+            this.Label2.AutoSize = true;
+            this.Label2.Location = new System.Drawing.Point(243, 70);
+            this.Label2.Name = "Label2";
+            this.Label2.Size = new System.Drawing.Size(199, 20);
+            this.Label2.TabIndex = 130;
+            this.Label2.Text = "Állományon kívüli járművek:";
+            // 
+            // Label3
+            // 
+            this.Label3.AutoSize = true;
+            this.Label3.Location = new System.Drawing.Point(10, 70);
+            this.Label3.Name = "Label3";
+            this.Label3.Size = new System.Drawing.Size(81, 20);
+            this.Label3.TabIndex = 131;
+            this.Label3.Text = "Járművek:";
+            // 
+            // Label4
+            // 
+            this.Label4.AutoSize = true;
+            this.Label4.Location = new System.Drawing.Point(10, 350);
+            this.Label4.Name = "Label4";
+            this.Label4.Size = new System.Drawing.Size(99, 20);
+            this.Label4.TabIndex = 132;
+            this.Label4.Text = "Céltelephely:";
+            // 
+            // Telephelyi_típus
+            // 
+            this.Telephelyi_típus.FormattingEnabled = true;
+            this.Telephelyi_típus.Location = new System.Drawing.Point(14, 33);
+            this.Telephelyi_típus.Name = "Telephelyi_típus";
+            this.Telephelyi_típus.Size = new System.Drawing.Size(197, 28);
+            this.Telephelyi_típus.TabIndex = 133;
+            this.Telephelyi_típus.SelectedIndexChanged += new System.EventHandler(this.Combo1_SelectedIndexChanged);
+            // 
+            // Lektelephely
+            // 
+            this.Lektelephely.FormattingEnabled = true;
+            this.Lektelephely.Location = new System.Drawing.Point(14, 373);
+            this.Lektelephely.Name = "Lektelephely";
+            this.Lektelephely.Size = new System.Drawing.Size(197, 28);
+            this.Lektelephely.TabIndex = 134;
+            // 
+            // Közös_járművek
+            // 
+            this.Közös_járművek.FormattingEnabled = true;
+            this.Közös_járművek.ItemHeight = 20;
+            this.Közös_járművek.Location = new System.Drawing.Point(247, 93);
+            this.Közös_járművek.Name = "Közös_járművek";
+            this.Közös_járművek.Size = new System.Drawing.Size(195, 244);
+            this.Közös_járművek.TabIndex = 135;
+            // 
+            // Command6
+            // 
+            this.Command6.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Command6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Command6.Location = new System.Drawing.Point(402, 26);
+            this.Command6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Command6.Name = "Command6";
+            this.Command6.Size = new System.Drawing.Size(40, 40);
+            this.Command6.TabIndex = 140;
+            this.ToolTip1.SetToolTip(this.Command6, "Frissíti a listákat");
+            this.Command6.UseVisualStyleBackColor = true;
+            this.Command6.Click += new System.EventHandler(this.Command6_Click);
+            // 
+            // Saját_járművek
+            // 
+            this.Saját_járművek.FormattingEnabled = true;
+            this.Saját_járművek.ItemHeight = 20;
+            this.Saját_járművek.Location = new System.Drawing.Point(16, 93);
+            this.Saját_járművek.Name = "Saját_járművek";
+            this.Saját_járművek.Size = new System.Drawing.Size(195, 244);
+            this.Saját_járművek.TabIndex = 136;
+            // 
+            // Állkirak
+            // 
+            this.Állkirak.BackColor = System.Drawing.Color.Red;
+            this.Állkirak.ForeColor = System.Drawing.Color.White;
+            this.Állkirak.Location = new System.Drawing.Point(16, 407);
+            this.Állkirak.Name = "Állkirak";
+            this.Állkirak.Size = new System.Drawing.Size(195, 35);
+            this.Állkirak.TabIndex = 137;
+            this.Állkirak.Text = "Állomámyból kirak";
+            this.Állkirak.UseVisualStyleBackColor = false;
+            this.Állkirak.Click += new System.EventHandler(this.Állkirak_Click);
+            // 
+            // Állvesz
+            // 
+            this.Állvesz.BackColor = System.Drawing.Color.Green;
+            this.Állvesz.Location = new System.Drawing.Point(247, 350);
+            this.Állvesz.Name = "Állvesz";
+            this.Állvesz.Size = new System.Drawing.Size(195, 35);
+            this.Állvesz.TabIndex = 138;
+            this.Állvesz.Text = "Állományba Vesz";
+            this.Állvesz.UseVisualStyleBackColor = false;
+            this.Állvesz.Click += new System.EventHandler(this.Állvesz_Click);
+            // 
             // TabPage2
             // 
             this.TabPage2.BackColor = System.Drawing.Color.YellowGreen;
-            this.TabPage2.Controls.Add(this.Szűrés);
+            this.TabPage2.Controls.Add(this.Pdf_csere);
             this.TabPage2.Controls.Add(this.PDF_néző);
             this.TabPage2.Controls.Add(this.Label38);
             this.TabPage2.Controls.Add(this.Feltöltendő);
@@ -633,19 +633,7 @@ namespace Villamos
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Size = new System.Drawing.Size(1180, 447);
             this.TabPage2.TabIndex = 6;
-            this.TabPage2.Text = "PDF";
-            // 
-            // Szűrés
-            // 
-            this.Szűrés.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.Szűrés.FormattingEnabled = true;
-            this.Szűrés.ItemHeight = 20;
-            this.Szűrés.Location = new System.Drawing.Point(379, 96);
-            this.Szűrés.Name = "Szűrés";
-            this.Szűrés.Size = new System.Drawing.Size(163, 244);
-            this.Szűrés.TabIndex = 162;
-            this.Szűrés.Visible = false;
+            this.TabPage2.Text = "Jármű dokumentáció";
             // 
             // PDF_néző
             // 
@@ -686,7 +674,7 @@ namespace Villamos
             this.BtnPDF.Name = "BtnPDF";
             this.BtnPDF.Size = new System.Drawing.Size(45, 45);
             this.BtnPDF.TabIndex = 159;
-            this.ToolTip1.SetToolTip(this.BtnPDF, "PDF fájl kiválasztása");
+            this.ToolTip1.SetToolTip(this.BtnPDF, "PDF fájl tallózása");
             this.BtnPDF.UseVisualStyleBackColor = true;
             this.BtnPDF.Click += new System.EventHandler(this.BtnPDF_Click);
             // 
@@ -707,6 +695,7 @@ namespace Villamos
             this.Pdf_listbox.ItemHeight = 20;
             this.Pdf_listbox.Location = new System.Drawing.Point(3, 160);
             this.Pdf_listbox.Name = "Pdf_listbox";
+            this.Pdf_listbox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.Pdf_listbox.Size = new System.Drawing.Size(259, 284);
             this.Pdf_listbox.TabIndex = 157;
             this.Pdf_listbox.SelectedIndexChanged += new System.EventHandler(this.Filelistbox_SelectedIndexChanged);
@@ -751,7 +740,7 @@ namespace Villamos
             this.PDF_rögzít.Name = "PDF_rögzít";
             this.PDF_rögzít.Size = new System.Drawing.Size(45, 45);
             this.PDF_rögzít.TabIndex = 153;
-            this.ToolTip1.SetToolTip(this.PDF_rögzít, "Módosítja a típusokat");
+            this.ToolTip1.SetToolTip(this.PDF_rögzít, "Feltölti a pdf fájlt");
             this.PDF_rögzít.UseVisualStyleBackColor = true;
             this.PDF_rögzít.Click += new System.EventHandler(this.PDF_rögzít_Click);
             // 
@@ -797,10 +786,15 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla.FilterAndSortEnabled = true;
+            this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.Location = new System.Drawing.Point(154, 2);
+            this.Tábla.MaxFilterButtonImageHeight = 23;
             this.Tábla.Name = "Tábla";
+            this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.Size = new System.Drawing.Size(1023, 442);
+            this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 170;
             // 
             // Mozg_lista
@@ -1033,6 +1027,18 @@ namespace Villamos
             this.Label5.TabIndex = 17;
             this.Label5.Text = "Telephelyi beállítás:";
             // 
+            // Pdf_csere
+            // 
+            this.Pdf_csere.BackgroundImage = global::Villamos.Properties.Resources.Mimetype_recycled;
+            this.Pdf_csere.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Pdf_csere.Location = new System.Drawing.Point(110, 3);
+            this.Pdf_csere.Name = "Pdf_csere";
+            this.Pdf_csere.Size = new System.Drawing.Size(45, 45);
+            this.Pdf_csere.TabIndex = 242;
+            this.ToolTip1.SetToolTip(this.Pdf_csere, "A feltöltött két PDF fájl sorrendjét megcseréli");
+            this.Pdf_csere.UseVisualStyleBackColor = true;
+            this.Pdf_csere.Click += new System.EventHandler(this.Pdf_csere_Click);
+            // 
             // Ablak_Jármű
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1055,8 +1061,6 @@ namespace Villamos
             this.Shown += new System.EventHandler(this.Ablak_Jármű_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ablak_Jármű_KeyDown);
             this.Fülek.ResumeLayout(false);
-            this.TabPage4.ResumeLayout(false);
-            this.TabPage4.PerformLayout();
             this.TabPage1.ResumeLayout(false);
             this.Panel3.ResumeLayout(false);
             this.Panel3.PerformLayout();
@@ -1064,6 +1068,8 @@ namespace Villamos
             this.Panel2.PerformLayout();
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
+            this.TabPage4.ResumeLayout(false);
+            this.TabPage4.PerformLayout();
             this.TabPage2.ResumeLayout(false);
             this.TabPage2.PerformLayout();
             this.TabPage5.ResumeLayout(false);
@@ -1161,7 +1167,7 @@ namespace Villamos
         internal Button BtnPDF;
         internal TextBox Feltöltendő;
         internal Label Label38;
-        internal ListBox Szűrés;
         private PdfiumViewer.PdfViewer PDF_néző;
+        internal Button Pdf_csere;
     }
 }

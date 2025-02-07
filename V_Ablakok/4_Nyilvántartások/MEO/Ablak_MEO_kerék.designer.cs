@@ -104,7 +104,7 @@ namespace Villamos
             this.Btn_Jog_Hatarnap_Rogzit = new System.Windows.Forms.Button();
             this.Btn_Jog_Tipus_Rogzit = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -301,7 +301,7 @@ namespace Villamos
             this.Tábla.Name = "Tábla";
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.RowHeadersWidth = 51;
-            this.Tábla.Size = new System.Drawing.Size(1005, 235);
+            this.Tábla.Size = new System.Drawing.Size(1005, 228);
             this.Tábla.TabIndex = 83;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -325,10 +325,10 @@ namespace Villamos
             this.TabPage2.Controls.Add(this.Label5);
             this.TabPage2.Controls.Add(this.Label4);
             this.TabPage2.Controls.Add(this.Excellekérdezés);
-            this.TabPage2.Location = new System.Drawing.Point(4, 22);
+            this.TabPage2.Location = new System.Drawing.Point(4, 29);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(1278, 305);
+            this.TabPage2.Size = new System.Drawing.Size(1278, 298);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Rögzítési listák";
             // 
@@ -387,7 +387,7 @@ namespace Villamos
             this.TelephelyList.Location = new System.Drawing.Point(266, 33);
             this.TelephelyList.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TelephelyList.Name = "TelephelyList";
-            this.TelephelyList.Size = new System.Drawing.Size(250, 4);
+            this.TelephelyList.Size = new System.Drawing.Size(250, 25);
             this.TelephelyList.TabIndex = 142;
             this.TelephelyList.MouseLeave += new System.EventHandler(this.TelephelyList_MouseLeave);
             this.TelephelyList.MouseHover += new System.EventHandler(this.TelephelyList_MouseHover);
@@ -399,7 +399,7 @@ namespace Villamos
             this.Típuslista.Location = new System.Drawing.Point(10, 33);
             this.Típuslista.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Típuslista.Name = "Típuslista";
-            this.Típuslista.Size = new System.Drawing.Size(148, 4);
+            this.Típuslista.Size = new System.Drawing.Size(148, 25);
             this.Típuslista.Sorted = true;
             this.Típuslista.TabIndex = 140;
             this.Típuslista.MouseLeave += new System.EventHandler(this.Típuslista_MouseLeave);
@@ -446,7 +446,7 @@ namespace Villamos
             this.ListaTábla.Name = "ListaTábla";
             this.ListaTábla.RowHeadersVisible = false;
             this.ListaTábla.RowHeadersWidth = 51;
-            this.ListaTábla.Size = new System.Drawing.Size(1266, 212);
+            this.ListaTábla.Size = new System.Drawing.Size(1266, 205);
             this.ListaTábla.TabIndex = 154;
             // 
             // Btn_Mérés_Lista_Frissit
@@ -538,9 +538,9 @@ namespace Villamos
             this.TabPage3.Controls.Add(this.Label10);
             this.TabPage3.Controls.Add(this.Btn_Mérés_Frissit);
             this.TabPage3.Controls.Add(this.Btn_Mérés_Excel);
-            this.TabPage3.Location = new System.Drawing.Point(4, 22);
+            this.TabPage3.Location = new System.Drawing.Point(4, 29);
             this.TabPage3.Name = "TabPage3";
-            this.TabPage3.Size = new System.Drawing.Size(1278, 305);
+            this.TabPage3.Size = new System.Drawing.Size(1278, 298);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Mérések listázása";
             // 
@@ -599,7 +599,7 @@ namespace Villamos
             this.TelephelyList1.Location = new System.Drawing.Point(338, 33);
             this.TelephelyList1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TelephelyList1.Name = "TelephelyList1";
-            this.TelephelyList1.Size = new System.Drawing.Size(250, 4);
+            this.TelephelyList1.Size = new System.Drawing.Size(250, 25);
             this.TelephelyList1.TabIndex = 159;
             this.TelephelyList1.MouseLeave += new System.EventHandler(this.TelephelyList1_MouseLeave);
             this.TelephelyList1.MouseHover += new System.EventHandler(this.TelephelyList1_MouseHover);
@@ -611,7 +611,7 @@ namespace Villamos
             this.Típuslista1.Location = new System.Drawing.Point(10, 33);
             this.Típuslista1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Típuslista1.Name = "Típuslista1";
-            this.Típuslista1.Size = new System.Drawing.Size(148, 4);
+            this.Típuslista1.Size = new System.Drawing.Size(148, 25);
             this.Típuslista1.Sorted = true;
             this.Típuslista1.TabIndex = 157;
             this.Típuslista1.MouseLeave += new System.EventHandler(this.Típuslista1_MouseLeave);
@@ -648,7 +648,7 @@ namespace Villamos
             this.LekérdTábla.Name = "LekérdTábla";
             this.LekérdTábla.RowHeadersVisible = false;
             this.LekérdTábla.RowHeadersWidth = 51;
-            this.LekérdTábla.Size = new System.Drawing.Size(1270, 225);
+            this.LekérdTábla.Size = new System.Drawing.Size(1270, 218);
             this.LekérdTábla.TabIndex = 167;
             // 
             // Label9
@@ -748,7 +748,7 @@ namespace Villamos
             this.FelhasználóTábla.Name = "FelhasználóTábla";
             this.FelhasználóTábla.RowHeadersVisible = false;
             this.FelhasználóTábla.RowHeadersWidth = 51;
-            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 268);
+            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 261);
             this.FelhasználóTábla.TabIndex = 82;
             this.FelhasználóTábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FelhasználóTábla_CellClick);
             // 
