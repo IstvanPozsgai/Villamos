@@ -59,7 +59,6 @@ namespace Villamos.Villamos_Ablakok
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Nosztalgia));
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
@@ -84,6 +83,7 @@ namespace Villamos.Villamos_Ablakok
             this.Kép_Listázás = new System.Windows.Forms.Button();
             this.Kép_rögzít = new System.Windows.Forms.Button();
             this.TabPage4 = new System.Windows.Forms.TabPage();
+            this.Dátum_ütem = new System.Windows.Forms.DateTimePicker();
             this.button2 = new System.Windows.Forms.Button();
             this.Dátum = new System.Windows.Forms.DateTimePicker();
             this.Tábla_lekérdezés = new Zuby.ADGV.AdvancedDataGridView();
@@ -101,7 +101,6 @@ namespace Villamos.Villamos_Ablakok
             this.Napi_Adatok_rögzítése = new System.Windows.Forms.Button();
             this.SAP_Beolv = new System.Windows.Forms.Button();
             this.Lekérdezés_lekérdezés = new System.Windows.Forms.Button();
-            this.accessDbLoaderBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -195,8 +194,6 @@ namespace Villamos.Villamos_Ablakok
             this.saveFileDialog3 = new System.Windows.Forms.SaveFileDialog();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
             this.saveFileDialog4 = new System.Windows.Forms.SaveFileDialog();
-            this.accessDbLoaderBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.Dátum_ütem = new System.Windows.Forms.DateTimePicker();
             this.Panel2.SuspendLayout();
             this.tabPage8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
@@ -204,7 +201,6 @@ namespace Villamos.Villamos_Ablakok
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_lekérdezés)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.accessDbLoaderBindingSource)).BeginInit();
             this.TabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel8.SuspendLayout();
@@ -216,7 +212,6 @@ namespace Villamos.Villamos_Ablakok
             this.Alap.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.accessDbLoaderBindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel2
@@ -471,6 +466,14 @@ namespace Villamos.Villamos_Ablakok
             this.TabPage4.Size = new System.Drawing.Size(1320, 538);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Lekérdezések";
+            // 
+            // Dátum_ütem
+            // 
+            this.Dátum_ütem.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.Dátum_ütem.Location = new System.Drawing.Point(286, 27);
+            this.Dátum_ütem.Name = "Dátum_ütem";
+            this.Dátum_ütem.Size = new System.Drawing.Size(109, 26);
+            this.Dátum_ütem.TabIndex = 223;
             // 
             // button2
             // 
@@ -1558,14 +1561,6 @@ namespace Villamos.Villamos_Ablakok
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // Dátum_ütem
-            // 
-            this.Dátum_ütem.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Dátum_ütem.Location = new System.Drawing.Point(286, 27);
-            this.Dátum_ütem.Name = "Dátum_ütem";
-            this.Dátum_ütem.Size = new System.Drawing.Size(109, 26);
-            this.Dátum_ütem.TabIndex = 223;
-            // 
             // Ablak_Nosztalgia
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1595,7 +1590,6 @@ namespace Villamos.Villamos_Ablakok
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.accessDbLoaderBindingSource)).EndInit();
             this.TabPage1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
@@ -1612,7 +1606,6 @@ namespace Villamos.Villamos_Ablakok
             this.Fülek.ResumeLayout(false);
             this.TabPage7.ResumeLayout(false);
             this.TabPage7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.accessDbLoaderBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1728,9 +1721,7 @@ namespace Villamos.Villamos_Ablakok
         internal GroupBox Idő_group;
         internal GroupBox Alap_group;
         internal GroupBox Km_group;
-        internal BindingSource accessDbLoaderBindingSource;
         internal Zuby.ADGV.AdvancedDataGridView Tábla_lekérdezés;
-        internal BindingSource accessDbLoaderBindingSource1;
         internal DateTimePicker Dátum;
         internal GroupBox groupBox2;
         internal Panel panel8;
