@@ -4,9 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;
@@ -17,24 +15,25 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
     {
         public string Cmbtelephely { get; private set; }
 
+        readonly Kezelő_Technológia_Változat KézVáltozat = new Kezelő_Technológia_Változat();
+
         List<Adat_Technológia_TípusT> AdatokTípusT = new List<Adat_Technológia_TípusT>();
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
         List<Adat_Technológia> AdatokTechnológia = new List<Adat_Technológia>();
         List<Adat_Technológia_Változat> AdatokVáltozat = new List<Adat_Technológia_Változat>();
         DataTable AdatTábla = new DataTable();
+
         public Ablak_Karbantartás_Csoport(string cmbTelephely)
         {
             InitializeComponent();
             Cmbtelephely = cmbTelephely;
         }
 
-
         private void Ablak_Karbantartás_Csoport_Load(object sender, EventArgs e)
         {
             Jogosultságkiosztás();
             Csoport_Típus_feltöltés();
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -63,7 +62,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             }
         }
 
-
         private void Csoport_Típus_feltöltés()
         {
             try
@@ -84,7 +82,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Csoport_Ciklus_feltöltés()
         {
@@ -109,13 +106,11 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             }
         }
 
-
         private void Csoport_típus_SelectedIndexChanged(object sender, EventArgs e)
         {
             Törli_Csoport_Mezőket();
             Csoport_Ciklus_feltöltés();
         }
-
 
         private void Törli_Csoport_Mezőket()
         {
@@ -126,12 +121,10 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             Label111.Text = "Sorszám:";
         }
 
-
         private void Csoport_Ciklus_SelectedIndexChanged(object sender, EventArgs e)
         {
             Csoport_Változat_feltöltés();
         }
-
 
         private void Csoport_Változat_feltöltés()
         {
@@ -139,15 +132,8 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             {
                 if (Csoport_típus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva járműtípus.");
                 if (Csoport_Ciklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva karbantartási ciklus.");
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Csoport_típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = $"SELECT * FROM {Cmbtelephely.Trim()}";
-                if (!MyA.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Technológia_Telep(hely, Cmbtelephely.Trim());
-
-                szöveg = $"SELECT DISTINCT változatnév FROM {Cmbtelephely.Trim()} WHERE Karbantartási_fokozat='{Csoport_Ciklus.Text.Trim()}'";
-                Kezelő_Technológia_Változat KézVáltozat = new Kezelő_Technológia_Változat();
-                List<string> Változatok = KézVáltozat.Lista_Adatok_Mező(hely, jelszó, szöveg, "változatnév");
+                List<Adat_Technológia_Változat> Adatok = KézVáltozat.Lista_Adatok(Csoport_típus.Text.Trim(), Cmbtelephely.Trim());
+                List<string> Változatok = Adatok.Where(a => a.Karbantartási_fokozat == Csoport_Ciklus.Text.Trim()).Select(a => a.Változatnév).Distinct().ToList();
 
                 Csoport_változat.Text = "";
                 Csoport_Végző.Text = "";
@@ -169,12 +155,10 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             }
         }
 
-
         private void Csoport_változat_SelectedIndexChanged(object sender, EventArgs e)
         {
             Végzi_feltöltés();
         }
-
 
         private void Végzi_feltöltés()
         {
@@ -184,19 +168,19 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 if (Csoport_Ciklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva karbantartási ciklus.");
                 if (Csoport_változat.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva csoport változatnév.");
 
-
-
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Csoport_típus.Text.Trim()}.mdb";
                 string jelszó = "Bezzegh";
                 string szöveg = $"SELECT DISTINCT végzi FROM {Cmbtelephely.Trim()} WHERE változatnév='{Csoport_változat.Text.Trim()}' ";
-                Kezelő_Technológia_Változat KézVáltozat = new Kezelő_Technológia_Változat();
                 List<string> Végzők = KézVáltozat.Lista_Adatok_Mező(hely, jelszó, szöveg, "végzi");
+
+                List<Adat_Technológia_Változat> Adatok = KézVáltozat.Lista_Adatok(Csoport_típus.Text.Trim(), Cmbtelephely.Trim());
+                List<string> Változatok = Adatok.Where(a => a.Változatnév == Csoport_változat.Text.Trim()).Select(a => a.Végzi).Distinct().ToList();
 
                 Csoport_Végző.Text = "";
                 Csoport_Végző.Items.Clear();
-                Csoport_Végző.BeginUpdate();
-                Csoport_Végző.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "végzi"));
-                Csoport_Végző.EndUpdate();
+                foreach (string rekord in Változatok)
+                    Csoport_Végző.Items.Add(rekord);
+
                 Csoport_Végző.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -211,7 +195,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
         }
 
-
         private void Csoport_rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -221,39 +204,35 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 if (Csoport_Ciklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva karbantartási ciklus.");
                 if (Csoport_változat.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve csoport változatnév.");
                 if (Csoport_Végző.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve munkát végző csoportnév.");
-                // if (Sorszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kivásztva a táblázatban érvényes sor.");
                 if (Csoport_Végző.Text.Trim().Length > 50) throw new HibásBevittAdat("Nem lehet 50 karakternél hosszabbb a munkát végző csoportnév.");
                 if (Csoport_változat.Text.Trim().Length > 50) throw new HibásBevittAdat("Nem lehet 50 karakternél hosszabbb a munkát végző csoportnév.");
 
-                //       if (!long.TryParse(Sorszám.Text.Trim(), out long MelyikSorszám)) MelyikSorszám = 0;
 
+                List<Adat_Technológia_Változat> AdatokMód = new List<Adat_Technológia_Változat>();
+                List<Adat_Technológia_Változat> AdatokRögz = new List<Adat_Technológia_Változat>();
                 for (int i = 0; i < Csoport_tábla.SelectedRows.Count; i++)
                 {
                     if (!long.TryParse(Csoport_tábla.SelectedRows[i].Cells[0].Value.ToString(), out long MelyikSorszám)) MelyikSorszám = 0;
-
-                    string szöveg;
                     Adat_Technológia_Változat Elem = (from a in AdatokVáltozat
                                                       where a.Karbantartási_fokozat == Csoport_Ciklus.Text.Trim()
                                                       && a.Változatnév == Csoport_változat.Text.Trim()
                                                       && a.Technológia_Id == MelyikSorszám
-                                                      //&& a.Végzi == Csoport_Végző.Text.Trim()// lehetővé teszi, hogy egy változathoz több végzit lehessen állítani, Excelbe nem kezeli.
                                                       select a).FirstOrDefault();
+
+                    Adat_Technológia_Változat ADAT = new Adat_Technológia_Változat(
+                                                    MelyikSorszám,
+                                                    Csoport_változat.Text.Trim(),
+                                                    Csoport_Végző.Text.Trim(),
+                                                    Csoport_Ciklus.Text.Trim());
+
                     if (Elem != null)
-                    {
-                        szöveg = $"UPDATE {Cmbtelephely.Trim()}  SET ";
-                        szöveg += $"Végzi='{Csoport_Végző.Text.Trim()}' ";
-                        szöveg += $"WHERE Karbantartási_fokozat = '{Csoport_Ciklus.Text.Trim()}' ";
-                        szöveg += $"AND Változatnév='{Csoport_változat.Text.Trim()}' AND technológia_Id={MelyikSorszám} ";
-                    }
+                        AdatokMód.Add(ADAT);
                     else
-                    {
-                        szöveg = $"INSERT INTO {Cmbtelephely.Trim()}  (technológia_Id, Karbantartási_fokozat, Változatnév, Végzi ) VALUES (";
-                        szöveg += $"{MelyikSorszám}, '{Csoport_Ciklus.Text.Trim()}', '{Csoport_változat.Text.Trim()}', '{Csoport_Végző.Text.Trim()}') ";
-                    }
-                    string hely = Application.StartupPath + @"\Főmérnökség\adatok\Technológia\" + Csoport_típus.Text.Trim() + ".mdb";
-                    string jelszó = "Bezzegh";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                        AdatokRögz.Add(ADAT);
                 }
+                if (AdatokMód.Count > 0) KézVáltozat.Módosítás(Csoport_típus.Text.Trim(), Cmbtelephely.Trim(), AdatokMód);
+                if (AdatokRögz.Count > 0) KézVáltozat.Rögzítés(Csoport_típus.Text.Trim(), Cmbtelephely.Trim(), AdatokRögz);
+
                 MessageBox.Show("Adatok rögzítése megtörtént", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Label111.Text = "Sorszám:";
             }
@@ -268,7 +247,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             }
         }
 
-
         private void Csoport_frissít_Click(object sender, EventArgs e)
         {
             Csoport_tábla_író();
@@ -280,7 +258,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             {
                 if (Csoport_típus.Text.Trim() == "") throw new HibásBevittAdat("Jármű típushoz tartozó címet választani kell.");
                 if (Csoport_Ciklus.Text.Trim() == "") throw new HibásBevittAdat("Karbantartási ciklusoz tartozó címet választani kell.");
-                Csoport_tábla.Visible = false ;
+                Csoport_tábla.Visible = false;
                 AdatTábla.Clear();
                 ABFejléc();
                 ABTartalom();
@@ -318,7 +296,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 AdatTábla.Columns.Add("Utasítás leírása");
                 AdatTábla.Columns.Add("Változatnév");
                 AdatTábla.Columns.Add("Csoportosítási elnevezés");
-                AdatTábla.Columns.Add("Dátumtól",typeof (DateTime ));
+                AdatTábla.Columns.Add("Dátumtól", typeof(DateTime));
                 AdatTábla.Columns.Add("Dátumig", typeof(DateTime));
                 AdatTábla.Columns.Add("Karb Fokozat");
             }
@@ -441,7 +419,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             }
         }
 
-
         private void Csoport_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -456,7 +433,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             {
                 if (Sorszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kivásztva a táblázatban érvényes sor.");
 
-
                 if (!long.TryParse(Sorszám.Text.Trim(), out long MelyikSorszám)) MelyikSorszám = 0;
 
                 Adat_Technológia_Változat Elem = (from a in AdatokVáltozat
@@ -465,15 +441,15 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                                                   && a.Technológia_Id == MelyikSorszám
                                                   && a.Végzi == Csoport_Végző.Text.Trim()
                                                   select a).FirstOrDefault();
+
+                Adat_Technológia_Változat ADAT = new Adat_Technológia_Változat(
+                                MelyikSorszám,
+                                Csoport_változat.Text.Trim(),
+                                Csoport_Végző.Text.Trim(),
+                                Csoport_Ciklus.Text.Trim());
                 if (Elem != null)
-                {
-                    string hely = Application.StartupPath + @"\Főmérnökség\adatok\Technológia\" + Csoport_típus.Text.Trim() + ".mdb";
-                    string jelszó = "Bezzegh";
-                    string szöveg = $"DELETE FROM  {Cmbtelephely.Trim()}  ";
-                    szöveg += $"WHERE Karbantartási_fokozat = '{Csoport_Ciklus.Text.Trim()}' ";
-                    szöveg += $"AND Változatnév='{Csoport_változat.Text.Trim()}' AND technológia_Id={MelyikSorszám}  AND végzi='{Csoport_Végző.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                    KézVáltozat.Törlés(Csoport_típus.Text.Trim(), Cmbtelephely.Trim(), ADAT);
+                Csoport_tábla_író();
             }
             catch (HibásBevittAdat ex)
             {
@@ -525,6 +501,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void BtnÜres_Click(object sender, EventArgs e)
         {
             Csoport_változat.Text = "";

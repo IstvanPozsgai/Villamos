@@ -797,6 +797,7 @@
     <Compile Include="V_Kezelők\Kezelő_T5C5_Göngyöl_DátumTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_BMR.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Opció.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Technológia_Változat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kieg_Fortetípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_E3típus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Kidobó.cs" />

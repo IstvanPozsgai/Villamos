@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Villamos.Adatszerkezet;
+﻿using Villamos.Adatszerkezet;
 
 namespace Villamos.Villamos_Adatbázis_Funkció
 {
@@ -42,7 +37,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += " [fokozat] char(20), ";
             szöveg += " [sorszám] short PRIMARY KEY, ";
             szöveg += " [csoportos] short, ";
-            szöveg += " [elérés] char(20)," ;
+            szöveg += " [elérés] char(20),";
             szöveg += " [verzió] char(20),)";
             //Létrehozzuk az adattáblát
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
@@ -104,7 +99,6 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             //Létrehozzuk az adattáblát
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-
 
         }
 
