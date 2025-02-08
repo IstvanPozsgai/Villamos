@@ -6,13 +6,16 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
-using MyA = Adatbázis;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;
 
 namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 {
     public partial class Ablak_Karbantartási_Rendelés : Form
     {
+        #region Kezelők
+        readonly Kezelő_Technológia_Rendelés KézRendelés = new Kezelő_Technológia_Rendelés();
+        #endregion
+
         public string CmbTelephely { get; private set; }
 
         List<Adat_Technológia_Rendelés> AdatokRendelés = new List<Adat_Technológia_Rendelés>();
@@ -50,9 +53,9 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             // módosítás 3 
             if (MyF.Vanjoga(melyikelem, 3))
             {
-             }
+            }
         }
- 
+
         private void Rendelés_Típus_feltöltés()
         {
             try
@@ -74,12 +77,12 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             }
         }
 
-        void Rendelés_Ciklus_feltöltés()
+        private void Rendelés_Ciklus_feltöltés()
         {
             try
             {
                 if (Rendelés_Típus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva járműtípus.");
-                AdatokCiklus= MyLista.KarbCiklusLista(Rendelés_Típus.Text.Trim());
+                AdatokCiklus = MyLista.KarbCiklusLista(Rendelés_Típus.Text.Trim());
                 Rendelés_Ciklus.Items.Clear();
 
                 foreach (Adat_technológia_Ciklus rekord in AdatokCiklus)
@@ -95,9 +98,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-
 
         private void Rendelés_Típus_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -115,24 +116,21 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
                 Adat_Technológia_Rendelés Elem = (from a in AdatokRendelés
                                                   where a.Év == Rendelés_Dátum.Value.Year
-                                                       && a.Technológia_típus == Rendelés_Típus.Text.Trim()
-                                                       && a.Karbantartási_fokozat == Rendelés_Ciklus.Text.Trim()
+                                                  && a.Technológia_típus == Rendelés_Típus.Text.Trim()
+                                                  && a.Karbantartási_fokozat == Rendelés_Ciklus.Text.Trim()
                                                   select a).FirstOrDefault();
-                string szöveg;
+
+                Adat_Technológia_Rendelés ADAT = new Adat_Technológia_Rendelés(
+                                           Rendelés_Dátum.Value.Year,
+                                           Rendelés_Ciklus.Text.Trim(),
+                                           Rendelés_Típus.Text.Trim(),
+                                           Rendelés_Rendelés.Text.Trim());
+
                 if (Elem != null)
-                {
-                    szöveg = $"UPDATE {CmbTelephely}  SET ";
-                    szöveg += $" Rendelésiszám='{Rendelés_Rendelés.Text.Trim()}' ";
-                    szöveg += $"  WHERE év = {Rendelés_Dátum.Value.Year} AND technológia_típus = '{Rendelés_Típus.Text.Trim()}' AND Karbantartási_fokozat='{Rendelés_Ciklus.Text.Trim()}' ";
-                }
+                    KézRendelés.Módosítás(CmbTelephely, ADAT);
                 else
-                {
-                    szöveg = $"INSERT INTO {CmbTelephely}  (Év, Karbantartási_fokozat, Technológia_típus, Rendelésiszám) VALUES (";
-                    szöveg += $" {Rendelés_Dátum.Value.Year}, '{Rendelés_Ciklus.Text.Trim()}', '{Rendelés_Típus.Text.Trim()}', '{Rendelés_Rendelés.Text.Trim()}')";
-                }
-                string hely = $@"{Application.StartupPath}\{CmbTelephely}\Adatok\\Munkalap\Rendelés.mdb";
-                string jelszó = "Bezzegh";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézRendelés.Rögzítés(CmbTelephely, ADAT);
+
                 Rendelés_tábla_frissít();
             }
             catch (HibásBevittAdat ex)
@@ -155,17 +153,19 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
                 Adat_Technológia_Rendelés Elem = (from a in AdatokRendelés
                                                   where a.Év == Rendelés_Dátum.Value.Year
-                                                       && a.Technológia_típus == Rendelés_Típus.Text.Trim()
-                                                       && a.Karbantartási_fokozat == Rendelés_Ciklus.Text.Trim()
+                                                  && a.Technológia_típus == Rendelés_Típus.Text.Trim()
+                                                  && a.Karbantartási_fokozat == Rendelés_Ciklus.Text.Trim()
                                                   select a).FirstOrDefault();
+
+                Adat_Technológia_Rendelés ADAT = new Adat_Technológia_Rendelés(
+                           Rendelés_Dátum.Value.Year,
+                           Rendelés_Ciklus.Text.Trim(),
+                           Rendelés_Típus.Text.Trim(),
+                           Rendelés_Rendelés.Text.Trim());
 
                 if (Elem != null)
                 {
-                    string hely = $@"{Application.StartupPath}\{CmbTelephely}\Adatok\\Munkalap\Rendelés.mdb";
-                    string jelszó = "Bezzegh";
-                    string szöveg = $"DELETE FROM  {CmbTelephely}  ";
-                    szöveg += $"  WHERE év={Rendelés_Dátum.Value.Year} AND technológia_típus='{Rendelés_Típus.Text.Trim()}' AND Karbantartási_fokozat='{Rendelés_Ciklus.Text.Trim()}' ";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    KézRendelés.Törlés(CmbTelephely, ADAT);
                     Rendelés_tábla_frissít();
                 }
                 else
@@ -192,7 +192,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
         {
             try
             {
-                AdatokRendelés= MyLista.RendelésLista(CmbTelephely, Rendelés_Dátum.Value);
+                AdatokRendelés = MyLista.RendelésLista(CmbTelephely, Rendelés_Dátum.Value);
                 List<Adat_Technológia_Rendelés> AdatokSzűrt = (from a in AdatokRendelés
                                                                where a.Év == Rendelés_Dátum.Value.Year
                                                                orderby a.Technológia_típus, a.Karbantartási_fokozat
