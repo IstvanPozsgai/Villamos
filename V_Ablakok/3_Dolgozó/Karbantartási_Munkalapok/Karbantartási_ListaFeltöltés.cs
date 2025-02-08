@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -11,18 +10,17 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 {
     public static class Karbantartási_ListaFeltöltés
     {
-
         public static List<Adat_Technológia_Rendelés> RendelésLista(string Telephely, DateTime Dátum)
         {
             Kezelő_Technológia_Rendelés KézRendelés = new Kezelő_Technológia_Rendelés();
             List<Adat_Technológia_Rendelés> AdatokRendelés = new List<Adat_Technológia_Rendelés>();
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\\Munkalap\Rendelés.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = $"SELECT * FROM {Telephely} WHERE év={Dátum.Year} ORDER BY Technológia_típus, Karbantartási_fokozat";
-
-                AdatokRendelés = KézRendelés.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokRendelés = KézRendelés.Lista_Adatok(Telephely);
+                AdatokRendelés = (from a in AdatokRendelés
+                                  where a.Év == (long)Dátum.Year
+                                  orderby a.Technológia_típus, a.Karbantartási_fokozat
+                                  select a).ToList();
             }
             catch (HibásBevittAdat ex)
             {
@@ -36,17 +34,13 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokRendelés;
         }
 
-
         public static List<Adat_technológia_Ciklus> KarbCiklusLista(string típus)
         {
             Kezelő_Technológia_Ciklus KézCiklus = new Kezelő_Technológia_Ciklus();
             List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{típus}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = "SELECT * FROM karbantartás ORDER BY sorszám";
-                AdatokCiklus = KézCiklus.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokCiklus = KézCiklus.Lista_Adatok(típus);
             }
             catch (HibásBevittAdat ex)
             {
@@ -60,17 +54,13 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokCiklus;
         }
 
-
         public static List<Adat_Technológia_TípusT> TípustáblaLista()
         {
-            Kezelő_Technológia_TípusT KézTípusT = new Kezelő_Technológia_TípusT();
+            Kezelő_Technológia_Típus KézTípus = new Kezelő_Technológia_Típus();
             List<Adat_Technológia_TípusT> AdatokTípusT = new List<Adat_Technológia_TípusT>();
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\technológia\technológia.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = "SELECT *  FROM Típus_tábla ORDER BY típus";
-                AdatokTípusT = KézTípusT.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTípusT = KézTípus.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {
@@ -84,17 +74,13 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokTípusT;
         }
 
-
         public static List<Adat_Technológia_TípusT> AlTípustáblaLista(string típus)
         {
             Kezelő_Technológia_TípusT KézTípusT = new Kezelő_Technológia_TípusT();
             List<Adat_Technológia_TípusT> AdatokTípusT = new List<Adat_Technológia_TípusT>();
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{típus}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = "SELECT * FROM típus_tábla";
-                AdatokTípusT = KézTípusT.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTípusT = KézTípusT.Lista_Adatok(típus);
             }
             catch (HibásBevittAdat ex)
             {
@@ -132,19 +118,13 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokVáltozat;
         }
 
-
         public static List<Adat_Technológia> TechnológiaLista(string típus)
         {
             Kezelő_Technológia KézTechnológia = new Kezelő_Technológia();
             List<Adat_Technológia> AdatokTechnológia = new List<Adat_Technológia>();
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{típus}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = $"SELECT * FROM Technológia ";
-                //    string szöveg = $"SELECT * FROM Technológia WHERE Érv_kezdete<=#{DateTime.Now:yyyy-MM-dd}# AND technológia.Érv_vége>=#{DateTime.Now:yyyy-MM-dd}# ";
-
-                AdatokTechnológia = KézTechnológia.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTechnológia = KézTechnológia.Lista_Adatok(típus);
             }
             catch (HibásBevittAdat ex)
             {
@@ -157,7 +137,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             }
             return AdatokTechnológia;
         }
-
 
         public static List<Adat_Technológia_Munkalap> Adatok_Egyesítése(List<Adat_Technológia> adatok_Tech, List<Adat_Technológia_Változat> adatok_telephely)
         {
@@ -240,18 +219,13 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return Adatok;
         }
 
-
         public static List<Adat_Dolgozó_Alap> DolgozóLista(string Telephely)
         {
             List<Adat_Dolgozó_Alap> AdatokDolgozó = new List<Adat_Dolgozó_Alap>();
             Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Dolgozók.mdb";
-                if (!File.Exists(hely)) return AdatokDolgozó;
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900#   order by DolgozóNév asc";
-                AdatokDolgozó = KézDolgozó.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Telephely).Where(a => a.Kilépésiidő.ToShortDateString() == new DateTime(1900, 1, 1).ToShortDateString()).OrderBy(a => a.DolgozóNév).ToList();
             }
             catch (HibásBevittAdat ex)
             {
@@ -265,17 +239,13 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokDolgozó;
         }
 
-
         public static List<Adat_Kiegészítő_Csoportbeosztás> CsoportLista(string Telephely)
         {
             Kezelő_Kiegészítő_Csoportbeosztás Kéz = new Kezelő_Kiegészítő_Csoportbeosztás();
             List<Adat_Kiegészítő_Csoportbeosztás> AdatokCsoport = new List<Adat_Kiegészítő_Csoportbeosztás>();
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM csoportbeosztás order by Sorszám";
-                AdatokCsoport = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokCsoport = Kéz.Lista_Adatok(Telephely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -289,7 +259,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokCsoport;
         }
 
-
         public static List<Adat_Technológia_Kivételek> KivételekLista(string típus)
         {
             Kezelő_Technológia_Kivételek KézKivételek = new Kezelő_Technológia_Kivételek();
@@ -297,12 +266,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             try
             {
                 AdatokKivétel.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{típus}.mdb";
-                if (!File.Exists(hely)) return AdatokKivétel;
-                string jelszó = "Bezzegh";
-                string szöveg = szöveg = $"SELECT * FROM kivételek";
-
-                AdatokKivétel = KézKivételek.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokKivétel = KézKivételek.Lista_Adatok(típus);
             }
             catch (HibásBevittAdat ex)
             {
@@ -316,18 +280,13 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokKivétel;
         }
 
-
         public static List<string> T5C5_minden(string Telephely, List<Adat_Technológia_TípusT> Típus)
         {
             List<string> Adatok = new List<string>();
-            Kezelő_Jármű Kéz = new Kezelő_Jármű();
+            Kezelő_Jármű KézJármű = new Kezelő_Jármű();
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "Select * FROM Állománytábla WHERE  törölt = 0 ORDER BY azonosító";
-
-                List<Adat_Jármű> IdeigAdatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű> IdeigAdatok = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).OrderBy(a => a.Azonosító).ToList();
                 List<string> IdeigPsz;
                 foreach (Adat_Technológia_TípusT rekord in Típus)
                 {
@@ -350,24 +309,20 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return Adatok;
         }
 
-
         public static List<string> T5C5_E2(string Telephely, DateTime Dátum, List<string> Pályaszám_Adatok_típus)
         {
-            Kezelő_Jármű2 KJAdat_2 = new Kezelő_Jármű2();
+            Kezelő_Jármű2 KézJármű2 = new Kezelő_Jármű2();
             List<string> Adatok = new List<string>();
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Villamos\Villamos2.mdb";
-                string jelszó = "pozsgaii";
+                List<Adat_Jármű_2> AdatokIdeig = KézJármű2.Lista_Adatok(Telephely);
                 //a dátum melyik nap
                 int[] nap = { 1, 2, 3, 1, 2, 3, 0 };
                 int hétnapja = (int)Dátum.DayOfWeek;
 
                 if (hétnapja != 0)
                 {
-                    string szöveg = $"SELECT * FROM Állománytábla WHERE haromnapos={nap[hétnapja - 1]} ORDER BY azonosító";
-
-                    List<Adat_Jármű_2> AdatokIdeig = KJAdat_2.Lista_Adatok(hely, jelszó, szöveg);
+                    AdatokIdeig = AdatokIdeig.Where(a => a.Haromnapos == nap[hétnapja - 1]).OrderBy(a => a.Azonosító).ToList();
                     foreach (Adat_Jármű_2 item in AdatokIdeig)
                     {
                         //csak a típusnak megfelelő pályaszámokat írja ki
@@ -390,15 +345,17 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
         public static List<string> T5C5_KarbFokozat(string Telephely, DateTime Dátum, string Fokozat, List<string> Pályaszám_Adatok_típus)
         {
-            Kezelő_Vezénylés KVAdat = new Kezelő_Vezénylés();
+            Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
             List<string> Adatok = new List<string>();
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\főkönyv\futás\{Dátum:yyyy}\Vezénylés{Dátum:yyyy}.mdb";
-                string jelszó = "tápijános";
-                string szöveg = $"SELECT * FROM vezényléstábla WHERE Dátum=#{Dátum:yyyy-MM-dd}# AND törlés=0 AND Vizsgálat='{Fokozat}' ORDER BY azonosító";
-
-                List<Adat_Vezénylés> AdatokJ = KVAdat.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Vezénylés> AdatokJ = KézVezénylés.Lista_Adatok(Telephely, Dátum);
+                AdatokJ = (from a in AdatokJ
+                           where a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
+                           && a.Törlés == 0
+                           && a.Vizsgálat == Fokozat
+                           orderby a.Azonosító
+                           select a).ToList();
                 foreach (Adat_Vezénylés item in AdatokJ)
                 {
                     //csak a típusnak megfelelő pályaszámokat írja ki
@@ -417,7 +374,5 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             }
             return Adatok;
         }
-
-
     }
 }

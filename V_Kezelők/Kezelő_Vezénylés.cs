@@ -103,5 +103,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+
     }
 }

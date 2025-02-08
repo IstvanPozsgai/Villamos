@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,14 +12,80 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Technológia
     {
-        #region Kezelők
+        readonly string jelszó = "Bezzegh";
+        string hely;
+
+        #region Kezelők és Lista
         readonly Kezelő_Technológia_Ciklus KézCiklus = new Kezelő_Technológia_Ciklus();
-        #endregion
-
-
-        #region Lista
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
         #endregion
+
+        private void FájlBeállítás(string Típus)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Típus}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Adat(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Technológia> Lista_Adatok(string Típus)
+        {
+            FájlBeállítás(Típus);
+            string szöveg = $"SELECT * FROM Technológia ";
+            List<Adat_Technológia> Adatok = new List<Adat_Technológia>();
+            Adat_Technológia Adat;
+            Kezelő_Technológia_Ciklus Kéz = new Kezelő_Technológia_Ciklus();
+            string másikszöveg = "SELECT * FROM karbantartás";
+            List<Adat_technológia_Ciklus> AdatokCiklus = Kéz.Lista_Adatok(hely, jelszó, másikszöveg);
+
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat_technológia_Ciklus AdatCikluse = (from a in AdatokCiklus
+                                                                       where a.Sorszám == rekord["Karb_ciklus_eleje"].ToÉrt_Int()
+                                                                       select a).FirstOrDefault();
+                                Adat_technológia_Ciklus AdatCiklusv = (from a in AdatokCiklus
+                                                                       where a.Sorszám == rekord["Karb_ciklus_vége"].ToÉrt_Int()
+                                                                       select a).FirstOrDefault();
+
+                                Adat = new Adat_Technológia(
+                                    rekord["id"].ToÉrt_Long(),
+                                    rekord["Részegység"].ToStrTrim(),
+                                    rekord["Munka_utasítás_szám"].ToStrTrim(),
+                                    rekord["Utasítás_Cím"].ToStrTrim(),
+                                    rekord["Utasítás_leírás"].ToStrTrim(),
+                                    rekord["Paraméter"].ToStrTrim(),
+                                    AdatCikluse,
+                                    AdatCiklusv,
+                                    rekord["Érv_kezdete"].ToÉrt_DaTeTime(),
+                                    rekord["Érv_vége"].ToÉrt_DaTeTime(),
+                                    rekord["Szakmai_bontás"].ToStrTrim(),
+                                    rekord["Munkaterületi_bontás"].ToStrTrim(),
+                                    rekord["Altípus"].ToStrTrim(),
+                                    rekord["Kenés"].ToÉrt_Bool());
+
+                                Adatok.Add(Adat);
+
+                            }
+                        }
+
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+
+
+
 
         public List<Adat_Technológia> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
@@ -73,35 +141,6 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-        public List<string> Lista_Szakmai_bontás(string hely, string jelszó, string szöveg)
-        {
-            List<string> Adatok = new List<string>();
-            string Adat;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = rekord["Szakmai_bontás"].ToStrTrim();
-                                Adatok.Add(Adat);
-
-                            }
-                        }
-
-                    }
-                }
-            }
-            return Adatok;
-        }
-
 
         public void Rögzít_Tech_típus(string hely, string jelszó, Adat_Technológia_TípusT adat)
         {
@@ -607,176 +646,5 @@ namespace Villamos.Kezelők
     }
 
 
-    public class Kezelő_Technológia_Kivételek
-    {
-        public List<Adat_Technológia_Kivételek> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Technológia_Kivételek> Adatok = new List<Adat_Technológia_Kivételek>();
-            Adat_Technológia_Kivételek Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-
-                                Adat = new Adat_Technológia_Kivételek(
-                                    rekord["Id"].ToÉrt_Long(),
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["Altípus"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
-
-    public class Kezelő_Technológia_Rendelés
-    {
-
-        public List<Adat_Technológia_Rendelés> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Technológia_Rendelés> Adatok = new List<Adat_Technológia_Rendelés>();
-            Adat_Technológia_Rendelés Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-
-                                Adat = new Adat_Technológia_Rendelés(
-                                    rekord["év"].ToÉrt_Long(),
-                                    rekord["Karbantartási_fokozat"].ToStrTrim(),
-                                    rekord["Technológia_típus"].ToStrTrim(),
-                                    rekord["Rendelésiszám"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
-
-    public class Kezelő_Technológia_TípusT
-    {
-        public List<Adat_Technológia_TípusT> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Technológia_TípusT> Adatok = new List<Adat_Technológia_TípusT>();
-            Adat_Technológia_TípusT Adat;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Technológia_TípusT(
-                                   rekord["id"].ToÉrt_Long(),
-                                    rekord["típus"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-    }
-
-    public class Kezelő_Technológia_Ciklus
-    {
-        public List<Adat_technológia_Ciklus> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_technológia_Ciklus> Adatok = new List<Adat_technológia_Ciklus>();
-            Adat_technológia_Ciklus Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_technológia_Ciklus(
-                                    rekord["sorszám"].ToÉrt_Int(),
-                                    rekord["fokozat"].ToStrTrim(),
-                                    rekord["csoportos"].ToÉrt_Int(),
-                                    rekord["elérés"].ToStrTrim(),
-                                    rekord["verzió"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public Adat_technológia_Ciklus Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_technológia_Ciklus Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_technológia_Ciklus(
-                                    rekord["sorszám"].ToÉrt_Int(),
-                                    rekord["fokozat"].ToStrTrim(),
-                                    rekord["csoportos"].ToÉrt_Int(),
-                                    rekord["elérés"].ToStrTrim(),
-                                     rekord["verzió"].ToStrTrim()
-                                    );
-                            }
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-    }
 }
