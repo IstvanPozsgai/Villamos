@@ -7,7 +7,7 @@ namespace Villamos
 {
     public class Listák
     {
-        public static AdatCombohoz[] TelephelyLista_Jármű()
+        public static List<string> TelephelyLista_Jármű()
         {
             Kezelő_Kiegészítő_Sérülés Kéz = new Kezelő_Kiegészítő_Sérülés();
             List<Adat_Kiegészítő_Sérülés> Adatok = Kéz.Lista_Adatok().OrderBy(a => a.Név).ToList();
@@ -44,16 +44,12 @@ namespace Villamos
                 Program.Postás_Vezér = true;
             }
 
-            AdatCombohoz[] Combo_lista = new AdatCombohoz[Eredmény.Count];
-
-            int i = 0;
+            List<string> Válasz = new List<string>();
             foreach (Adat_Kiegészítő_Sérülés rekord in Eredmény)
             {
-                Combo_lista[i] = new AdatCombohoz(rekord.Név.Trim(), i);
-                i += 1;
+                Válasz.Add(rekord.Név);
             }
-
-            return Combo_lista;
+            return Válasz;
         }
 
         public static List<Adat_Kiegészítő_Sérülés> TelephelyJármű()

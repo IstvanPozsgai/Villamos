@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
-using Villamos.V_MindenEgyéb;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
@@ -94,7 +94,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             try
             {
                 Színtelephely.Items.Clear();
-                Színtelephely.Items.AddRange(Listák.TelephelyLista_Jármű());
+                foreach (string Elem in Listák.TelephelyLista_Jármű())
+                    Színtelephely.Items.Add(Elem);
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
                 { Színtelephely.Text = Színtelephely.Items[0].ToString().Trim(); }
                 else
@@ -416,20 +417,20 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 if (!int.TryParse(Szín_jog.Text, out int szín_jog)) throw new HibásBevittAdat("§ szín mezőnek számnak kell lennie.");
                 if (!int.TryParse(Szín_nagyobb.Text, out int szín_nagyobb)) throw new HibásBevittAdat("> szín mezőnek számnak kell lennie.");
 
-                if (Színtelephely.Text.Trim() == "")                         throw new HibásBevittAdat("Telephely mező nem lehet üres.");
+                if (Színtelephely.Text.Trim() == "") throw new HibásBevittAdat("Telephely mező nem lehet üres.");
 
-       
+
 
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
                 string jelszó = "CzabalayL";
                 string szöveg;
                 SzínListaFeltöltés();
-                Adat_CAF_Szinezés Elem = (from a in AdatokSzín 
+                Adat_CAF_Szinezés Elem = (from a in AdatokSzín
                                           where a.Telephely == Színtelephely.Text.Trim()
-                                          select a).FirstOrDefault ();
+                                          select a).FirstOrDefault();
 
 
-                if (Elem==null)
+                if (Elem == null)
                 {
                     // új rögzítés
                     szöveg = "INSERT INTO szinezés (telephely, színpsz, színpszgar, színIstűrés, színIS, színP, színSzombat, színVasárnap, szín_e, szín_dollár, ";
@@ -490,7 +491,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Karb_töröl_Click(object sender, EventArgs e)
         {
-            if (Színtelephely.Text.Trim() == "")                  return;
+            if (Színtelephely.Text.Trim() == "") return;
 
             SzínListaFeltöltés();
             Adat_CAF_Szinezés Elem = (from a in AdatokSzín
@@ -500,9 +501,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
             string jelszó = "CzabalayL";
 
-            if (Elem!=null)
+            if (Elem != null)
             {
-           string      szöveg = $"DELETE FROM szinezés where telephely ='{Színtelephely.Text.Trim()}'";
+                string szöveg = $"DELETE FROM szinezés where telephely ='{Színtelephely.Text.Trim()}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
 
@@ -512,7 +513,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Szín_Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)                                   return;
+            if (e.RowIndex < 0) return;
 
             Színtelephely.Text = Szín_Tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
 

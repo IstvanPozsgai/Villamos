@@ -90,10 +90,12 @@ namespace Villamos
             try
             {
                 cmbtelephely.Items.Clear();
-                cmbtelephely.Items.AddRange(Listák.TelephelyLista_Jármű());
+                foreach (string Elem in Listák.TelephelyLista_Jármű())
+                    cmbtelephely.Items.Add(Elem);
 
                 cmbtelephely1.Items.Clear();
-                cmbtelephely1.Items.AddRange(Listák.TelephelyLista_Jármű());
+                foreach (string Elem in Listák.TelephelyLista_Jármű())
+                    cmbtelephely1.Items.Add(Elem);
                 cmbtelephely.Enabled = false;
 
                 if (Program.PostásTelephely == "Főmérnökség" || Program.PostásTelephely.Contains("törzs"))
