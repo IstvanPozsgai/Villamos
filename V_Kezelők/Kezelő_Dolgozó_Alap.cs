@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -457,6 +458,53 @@ namespace Villamos.Kezelők
             }
         }
 
+        public List<Adat_Dolgozó_Alap> MunkaVégzőLista(string Telephely, DateTime Dátum, List<Adat_Dolgozó_Alap> AdatokNévsor)
+        {
+            List<Adat_Dolgozó_Alap> Válasz = new List<Adat_Dolgozó_Alap>();
+            Kezelő_Kiegészítő_Beosztáskódok KézBeoKód = new Kezelő_Kiegészítő_Beosztáskódok();
+            Kezelő_Dolgozó_Beosztás_Új KézBeosztás = new Kezelő_Dolgozó_Beosztás_Új();
+            try
+            {
+                List<Adat_Kiegészítő_Beosztáskódok> BeosztáskódÖ = KézBeoKód.Lista_Adatok(Telephely);
+                BeosztáskódÖ = (from a in BeosztáskódÖ
+                                where a.Számoló == true
+                                orderby a.Beosztáskód
+                                select a).ToList();
+
+                List<Adat_Dolgozó_Beosztás_Új> DolgbeosztÖ = KézBeosztás.Lista_Adatok(Telephely, Dátum);
+                DolgbeosztÖ = (from a in DolgbeosztÖ
+                               where a.Nap == Dátum
+                               orderby a.Dolgozószám
+                               select a).ToList();
+
+                foreach (Adat_Dolgozó_Alap Elem in AdatokNévsor)
+                {
+                    string dolgozik = (from a in DolgbeosztÖ
+                                       where a.Dolgozószám.Trim() == Elem.Dolgozószám
+                                       select a.Beosztáskód).FirstOrDefault();
+                    //Van beosztása, akkor megnézzük, hogy az olyan amit be akarunk jelölni.
+                    if (dolgozik != null)
+                    {
+                        string biztosdolgozik = (from a in BeosztáskódÖ
+                                                 where dolgozik.Trim() == a.Beosztáskód.Trim()
+                                                 select a.Beosztáskód).FirstOrDefault();
+                        if (biztosdolgozik != null)
+                            Válasz.Add(Elem);
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
 
 
 
@@ -610,7 +658,6 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
-
     }
 
 

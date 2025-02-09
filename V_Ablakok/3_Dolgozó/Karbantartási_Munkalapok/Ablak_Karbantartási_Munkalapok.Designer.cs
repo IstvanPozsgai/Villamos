@@ -77,7 +77,8 @@
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.CHKMinta = new System.Windows.Forms.CheckBox();
             this.CHKKMU = new System.Windows.Forms.CheckBox();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Beosztás = new System.Windows.Forms.CheckBox();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_Beosztás)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_psz)).BeginInit();
@@ -626,12 +627,24 @@
             this.Holtart.TabIndex = 241;
             this.Holtart.Visible = false;
             // 
+            // Beosztás
+            // 
+            this.Beosztás.AutoSize = true;
+            this.Beosztás.Location = new System.Drawing.Point(820, 232);
+            this.Beosztás.Name = "Beosztás";
+            this.Beosztás.Size = new System.Drawing.Size(223, 24);
+            this.Beosztás.TabIndex = 242;
+            this.Beosztás.Text = "Beosztás szerint dolgoznak";
+            this.Beosztás.UseVisualStyleBackColor = true;
+            this.Beosztás.CheckedChanged += new System.EventHandler(this.Beosztás_CheckedChanged);
+            // 
             // Ablak_Karbantartási_Munkalapok
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGreen;
             this.ClientSize = new System.Drawing.Size(1307, 637);
+            this.Controls.Add(this.Beosztás);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.CHKKMU);
             this.Controls.Add(this.CHKMinta);
@@ -744,5 +757,6 @@
         private System.Windows.Forms.CheckBox CHKMinta;
         private System.Windows.Forms.CheckBox CHKKMU;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        private System.Windows.Forms.CheckBox Beosztás;
     }
 }

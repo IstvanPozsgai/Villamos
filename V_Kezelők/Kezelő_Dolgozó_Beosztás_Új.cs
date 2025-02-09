@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(hely.KönyvSzerk());
         }
 
         public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -172,6 +172,7 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
+
 
     }
 }

@@ -18,12 +18,10 @@ namespace Villamos.Villamos_Ablakok
 {
     public partial class Ablak_Karbantartási_Munkalapok : Form
     {
-        public Ablak_Karbantartási_Munkalapok()
-        {
-            InitializeComponent();
-        }
 
         readonly Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
+        readonly Kezelő_Dolgozó_Beosztás_Új KézBeosztás = new Kezelő_Dolgozó_Beosztás_Új();
+        readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
 
         List<Adat_Technológia_Rendelés> AdatokRendelés = new List<Adat_Technológia_Rendelés>();
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
@@ -52,6 +50,12 @@ namespace Villamos.Villamos_Ablakok
         long KM_korr = 0;
 
 
+
+        #region Alap
+        public Ablak_Karbantartási_Munkalapok()
+        {
+            InitializeComponent();
+        }
         private void Ablak_Karbantartási_Munkalapok_Load(object sender, EventArgs e)
         {
             Telephelyekfeltöltése();
@@ -66,15 +70,12 @@ namespace Villamos.Villamos_Ablakok
             CHKMinta.Checked = false;
         }
 
-
         private void Ablak_Karbantartási_Munkalapok_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Karbantartási_Rendelés?.Close();
             Új_Ablak_Karbantartás_Csoport?.Close();
         }
 
-
-        #region Alap
         private void Jogosultságkiosztás()
         {
             if (Program.PostásTelephely == "Főmérnökség")
@@ -135,8 +136,20 @@ namespace Villamos.Villamos_Ablakok
 
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Karbantartási_Munkalap.html";
-            Module_Excel.Megnyitás(hely);
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Karbantartási_Munkalap.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Dolgozók_KeyPress(object sender, KeyPressEventArgs e)
@@ -164,6 +177,7 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
+
         #region Feltöltések
         private void Irányítófeltöltés()
         {
@@ -187,8 +201,6 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
 
         private void Típus_feltöltés()
@@ -216,22 +228,34 @@ namespace Villamos.Villamos_Ablakok
 
         private void Járműtípus_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Járműtípus.Text.Trim() == "") return;
+            try
+            {
+                if (Járműtípus.Text.Trim() == "") return;
 
-            Pályaszám.Items.Clear();
-            Tábla_psz.Rows.Clear();
-            Tábla_psz.Columns.Clear();
-            AdatokTechnológia = MyLista.TechnológiaLista(Járműtípus.Text.Trim());
-            AdatokCiklus = MyLista.KarbCiklusLista(Járműtípus.Text.Trim());
-            AdatokVáltozat = MyLista.VáltozatLista(Járműtípus.Text.Trim(), Cmbtelephely.Text.Trim());
-            Ciklus_feltöltés();
+                Pályaszám.Items.Clear();
+                Tábla_psz.Rows.Clear();
+                Tábla_psz.Columns.Clear();
+                AdatokTechnológia = MyLista.TechnológiaLista(Járműtípus.Text.Trim());
+                AdatokCiklus = MyLista.KarbCiklusLista(Járműtípus.Text.Trim());
+                AdatokVáltozat = MyLista.VáltozatLista(Járműtípus.Text.Trim(), Cmbtelephely.Text.Trim());
+                Ciklus_feltöltés();
 
-            AdatokTípusT = MyLista.AlTípustáblaLista(Járműtípus.Text.Trim());
-            PályaszámLista = MyLista.T5C5_minden(Cmbtelephely.Text.Trim(), AdatokTípusT);
-            Pályaszám_feltöltés();
+                AdatokTípusT = MyLista.AlTípustáblaLista(Járműtípus.Text.Trim());
+                PályaszámLista = MyLista.T5C5_minden(Cmbtelephely.Text.Trim(), AdatokTípusT);
+                Pályaszám_feltöltés();
 
-            elérés = "Üres";
-            Pályaszám_Variáció();
+                elérés = "Üres";
+                Pályaszám_Variáció();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Ciklus_feltöltés()
@@ -247,23 +271,35 @@ namespace Villamos.Villamos_Ablakok
 
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
-            Járműtípus.Text = "";
-            Combo_KarbCiklus.Items.Clear();
-            Combo_KarbCiklus.Text = "";
-            Pályaszám.Items.Clear();
-            Tábla_psz.Rows.Clear();
-            Tábla_psz.Columns.Clear();
-
-            Pályaszám_TáblaAdatok.Clear();
-
-            if (Járműtípus.Text.Trim() != "")
+            try
             {
-                AdatokTechnológia = MyLista.TechnológiaLista(Járműtípus.Text.Trim());
-                AdatokTechnológia = (from a in AdatokTechnológia
-                                     where a.Érv_kezdete >= Dátum.Value && a.Érv_vége <= Dátum.Value
-                                     select a).ToList();
+                Járműtípus.Text = "";
+                Combo_KarbCiklus.Items.Clear();
+                Combo_KarbCiklus.Text = "";
+                Pályaszám.Items.Clear();
+                Tábla_psz.Rows.Clear();
+                Tábla_psz.Columns.Clear();
+
+                Pályaszám_TáblaAdatok.Clear();
+
+                if (Járműtípus.Text.Trim() != "")
+                {
+                    AdatokTechnológia = MyLista.TechnológiaLista(Járműtípus.Text.Trim());
+                    AdatokTechnológia = (from a in AdatokTechnológia
+                                         where a.Érv_kezdete >= Dátum.Value && a.Érv_vége <= Dátum.Value
+                                         select a).ToList();
+                }
+                AdatokRendelés = MyLista.RendelésLista(Cmbtelephely.Text.Trim(), Dátum.Value);
             }
-            AdatokRendelés = MyLista.RendelésLista(Cmbtelephely.Text.Trim(), Dátum.Value);
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Hiba_sor_ValueChanged(object sender, EventArgs e)
@@ -296,8 +332,8 @@ namespace Villamos.Villamos_Ablakok
             Tábla_Beosztás.ClearSelection();
             Személy.Clear();
         }
-
         #endregion
+
 
         #region Pályaszám kezelés
         private void Pályaszám_feltöltés()
@@ -515,6 +551,7 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
+
         #region Dolgozói adatok
         private void Csoport_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -534,6 +571,8 @@ namespace Villamos.Villamos_Ablakok
                     Adatok = (from a in AdatokDolgozó
                               where a.Csoport == Csoport.Text.Trim()
                               select a).ToList();
+
+                if (Beosztás.Checked) Adatok = KézDolgozó.MunkaVégzőLista(Cmbtelephely.Text.Trim(), Dátum.Value, Adatok);
 
                 foreach (Adat_Dolgozó_Alap A in Adatok)
                     Dolgozók.Items.Add(A.DolgozóNév.Trim() + "_" + A.Dolgozószám.Trim());
@@ -559,6 +598,11 @@ namespace Villamos.Villamos_Ablakok
             foreach (Adat_Kiegészítő_Csoportbeosztás rekord in AdatokCsoport)
                 Csoport.Items.Add(rekord.Csoportbeosztás);
             Csoport.EndUpdate();
+        }
+
+        private void Beosztás_CheckedChanged(object sender, EventArgs e)
+        {
+            Dolgozók_feltöltése();
         }
 
         private void Dolgozó_Hozzárendelés_Click(object sender, EventArgs e)
@@ -804,8 +848,8 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
-        #region Rendelés adatok
 
+        #region Rendelés adatok
         Ablak_Karbantartási_Rendelés Új_Ablak_Karbantartási_Rendelés;
         private void RendelésAdatok_Click(object sender, EventArgs e)
         {
@@ -819,8 +863,8 @@ namespace Villamos.Villamos_Ablakok
         {
             Új_Ablak_Karbantartási_Rendelés = null;
         }
-
         #endregion
+
 
         #region Csoportosítás
         Ablak_Karbantartás_Csoport Új_Ablak_Karbantartás_Csoport;
@@ -837,6 +881,7 @@ namespace Villamos.Villamos_Ablakok
             Új_Ablak_Karbantartás_Csoport = null;
         }
         #endregion
+
 
         #region Excel kimenet
         private void Excel_mentés_Click(object sender, EventArgs e)
@@ -895,7 +940,6 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Excel_tábla(string fájlexc)
         {
@@ -1132,7 +1176,6 @@ namespace Villamos.Villamos_Ablakok
             return sor;
         }
 
-
         private int SzerszámokSorok(int sor)
         {
             sor++;
@@ -1303,8 +1346,8 @@ namespace Villamos.Villamos_Ablakok
             return sor;
         }
 
-        int Részletes(string munkalap, List<Adat_Technológia> Adatok, List<Adat_Technológia_Kivételek> KivételAdatok, int sormagagasság,
-             List<Adat_Technológia_Változat> VÁLTAdatok, int sor)
+        private int Részletes(string munkalap, List<Adat_Technológia> Adatok, List<Adat_Technológia_Kivételek> KivételAdatok, int sormagagasság,
+                  List<Adat_Technológia_Változat> VÁLTAdatok, int sor)
         {
             Holtart.Be(Adatok.Count + 2, MyColor.ColorToHex(Color.DeepSkyBlue));
 
@@ -1393,7 +1436,7 @@ namespace Villamos.Villamos_Ablakok
             return sor;
         }
 
-        void Főcím_kiírása(int sor, int sormagasság, string munkalap, string Részegység, string Utasítás_Cím)
+        private void Főcím_kiírása(int sor, int sormagasság, string munkalap, string Részegység, string Utasítás_Cím)
         {
             //főcímsor
             MyE.Egyesít(munkalap, "B" + sor + ":Q" + sor);
@@ -1406,7 +1449,7 @@ namespace Villamos.Villamos_Ablakok
             MyE.Rácsoz($"A{sor}:Q{sor}");
         }
 
-        void Minden_kiírása(int sor, string Utasítás_Cím, string Utasítás_leírás, string szövegelem, string Paraméter)
+        private void Minden_kiírása(int sor, string Utasítás_Cím, string Utasítás_leírás, string szövegelem, string Paraméter)
         {
             //Minden kiírás
             MyE.Kiir(Utasítás_Cím.Trim() + "\n" + Utasítás_leírás.Trim() + szövegelem, "B" + sor);
@@ -1420,7 +1463,7 @@ namespace Villamos.Villamos_Ablakok
             MyE.Sormagasság($"{sor}:{sor}");
         }
 
-        string Dolgozónév_kiíratása(List<Adat_Technológia_Változat> VÁLTAdatok, long ID, Dictionary<string, string> Személy)
+        private string Dolgozónév_kiíratása(List<Adat_Technológia_Változat> VÁLTAdatok, long ID, Dictionary<string, string> Személy)
         {
             string ideigdolgozó = "";
             string Ideignév = "";
@@ -1444,7 +1487,7 @@ namespace Villamos.Villamos_Ablakok
             return ideigdolgozó;
         }
 
-        bool Ki_kell_írni(string Altípus, bool csoportos, List<Adat_Technológia_Kivételek> KivételAdatok)
+        private bool Ki_kell_írni(string Altípus, bool csoportos, List<Adat_Technológia_Kivételek> KivételAdatok)
         {
             bool válasz = false;
             if (CHKMinta.Checked) return true;
@@ -1461,8 +1504,7 @@ namespace Villamos.Villamos_Ablakok
             return válasz;
         }
 
-
-        public void ExcelMunkalap()
+        private void ExcelMunkalap()
         {
             MyE.Munkalap_betű("Arial", 12);
             MyE.Oszlopszélesség(munkalap, "A:A", 8);
@@ -1581,7 +1623,7 @@ namespace Villamos.Villamos_Ablakok
             return sor;
         }
 
-        public int Fejlécspec(int sor)
+        private int Fejlécspec(int sor)
         {
             sor++;
             MyE.Egyesít(munkalap, $"A{sor}:E{sor}");
@@ -1638,14 +1680,5 @@ namespace Villamos.Villamos_Ablakok
             return válasz;
         }
         #endregion
-
-        #region Névbeillesztés
-
-
-
-        #endregion
-
-
-
     }
 }
