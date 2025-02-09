@@ -65,7 +65,8 @@ namespace Villamos
             try
             {
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Személy(true));
+                foreach (string Elem in Listák.TelephelyLista_Személy(true))
+                    Cmbtelephely.Items.Add(Elem);
 
                 int i;
                 i = Cmbtelephely.FindString(Program.PostásTelephely);

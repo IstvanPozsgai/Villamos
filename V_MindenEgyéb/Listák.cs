@@ -104,7 +104,7 @@ namespace Villamos
         /// </summary>
         /// <param name="Főmérnök">igen benne van , ha nem Főmérnökség nincs benne</param>
         /// <returns></returns>
-        public static AdatCombohoz[] TelephelyLista_Személy(bool Főmérnök)
+        public static List<string> TelephelyLista_Személy(bool Főmérnök)
         {
 
             Kezelő_Kiegészítő_Könyvtár Kéz = new Kezelő_Kiegészítő_Könyvtár();
@@ -151,14 +151,12 @@ namespace Villamos
                 }
             }
 
-            AdatCombohoz[] Combo_lista = new AdatCombohoz[Adatok.Count];
-            int i = 0;
+            List<string> Válasz = new List<string>();
             foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
             {
-                Combo_lista[i] = new AdatCombohoz(rekord.Név, i);
-                i += 1;
+                Válasz.Add(rekord.Név);
             }
-            return Combo_lista;
+            return Válasz;
 
         }
     }

@@ -69,13 +69,17 @@ namespace Villamos
             try
             {
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Személy(true));
+                foreach (string Elem in Listák.TelephelyLista_Személy(true))
+                    Cmbtelephely.Items.Add(Elem);
 
                 Telephelybe.Items.Clear();
-                Telephelybe.Items.AddRange(Listák.TelephelyLista_Személy(true));
+                foreach (string Elem in Listák.TelephelyLista_Személy(true))
+                    Telephelybe.Items.Add(Elem);
 
                 Telephelyki.Items.Clear();
-                Telephelyki.Items.AddRange(Listák.TelephelyLista_Személy(true));
+                foreach (string Elem in Listák.TelephelyLista_Személy(true))
+                    Telephelybe.Items.Add(Elem);
+
 
                 if (Program.PostásTelephely == "Főmérnökség")
                 { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }

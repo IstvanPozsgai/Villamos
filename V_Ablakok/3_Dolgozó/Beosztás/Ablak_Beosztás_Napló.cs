@@ -23,7 +23,6 @@ namespace Villamos
             InitializeComponent();
         }
 
-
         private void Ablak_Beosztás_Napló_Load(object sender, EventArgs e)
         {
             Telephelyekfeltöltése();
@@ -40,7 +39,8 @@ namespace Villamos
             try
             {
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Személy(true));
+                foreach (string Elem in Listák.TelephelyLista_Személy(true))
+                    Cmbtelephely.Items.Add(Elem);
                 if (Program.PostásTelephely == "Főmérnökség")
                 { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
                 else

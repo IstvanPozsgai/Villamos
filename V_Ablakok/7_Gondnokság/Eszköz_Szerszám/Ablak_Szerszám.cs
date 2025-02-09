@@ -125,7 +125,8 @@ namespace Villamos
             try
             {
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Személy(true));
+                foreach (string Elem in Listák.TelephelyLista_Személy(true))
+                    Cmbtelephely.Items.Add(Elem);
 
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
                     Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim();

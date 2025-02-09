@@ -20,8 +20,6 @@ namespace Villamos
         readonly Kezelő_Jármű_Állomány_Típus KézJárműTípus = new Kezelő_Jármű_Állomány_Típus();
         readonly Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-        readonly Kezelő_Kiegészítő_Beosztáskódok KézBeoKód = new Kezelő_Kiegészítő_Beosztáskódok();
-        readonly Kezelő_Dolgozó_Beosztás_Új KézBeosztás = new Kezelő_Dolgozó_Beosztás_Új();
         readonly Kezelő_Munka_Szolgálat KézMunkaSzolg = new Kezelő_Munka_Szolgálat();
         readonly Kezelő_Jármű2ICS KézICS = new Kezelő_Jármű2ICS();
         readonly Kezelő_Jármű2 KézT5C5 = new Kezelő_Jármű2();

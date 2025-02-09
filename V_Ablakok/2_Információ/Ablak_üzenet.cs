@@ -67,7 +67,8 @@ namespace Villamos
             try
             {
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.Items.AddRange(Listák.TelephelyLista_Személy(false));
+                foreach (string Elem in Listák.TelephelyLista_Személy(true))
+                    Cmbtelephely.Items.Add(Elem);
                 if (Program.PostásTelephely == "Főmérnökség")
                 { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString(); }
                 else
@@ -77,7 +78,8 @@ namespace Villamos
 
 
                 ChkTelephely.Items.Clear();
-                ChkTelephely.Items.AddRange(Listák.TelephelyLista_Személy(false));
+                foreach (string Elem in Listák.TelephelyLista_Személy(false))
+                    ChkTelephely.Items.Add(Elem);
             }
             catch (HibásBevittAdat ex)
             {
