@@ -38,12 +38,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             try
             {
                 AdatokNapló.Clear();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\naplózás\{DateTime.Now:yyyyMM}napló.mdb";
-                string jelszó = "kerekeskút";
-                string szöveg = "Select * FROM adatok";
-
-                AdatokNapló = KézNapló.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokNapló = KézNapló.Lista_Adatok(Cmbtelephely.Trim(), DateTime.Now);
             }
             catch (HibásBevittAdat ex)
             {
