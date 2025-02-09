@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,10 +12,17 @@ namespace Villamos.Kezelők
     public class Kezelő_Váltós_Összesítő
     {
         readonly string jelszó = "katalin";
+        string hely;
+
+        private void FájlBeállítás(int Év)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely.KönyvSzerk());
+        }
 
         public List<Adat_Váltós_Összesítő> Lista_Adatok(int Év, string Tábla)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+            FájlBeállítás(Év);
             string szöveg = $"SELECT * FROM összesítő{Tábla}";
             List<Adat_Váltós_Összesítő> Adatok = new List<Adat_Váltós_Összesítő>();
             Adat_Váltós_Összesítő Adat;
@@ -47,6 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
+                FájlBeállítás(Év);
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
                 string szöveg = $"INSERT INTO összesítő{Tábla} (perc, dátum) VALUES (";
                 szöveg += $"{Adat.Perc}, ";
@@ -68,6 +78,7 @@ namespace Villamos.Kezelők
         {
             try
             {
+                FájlBeállítás(Év);
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE összesítő{Tábla} SET ";
                 szöveg += $" perc={Adat.Perc} ";
@@ -89,7 +100,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Összesítő Adat in Adatok)
                 {
@@ -115,7 +126,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Összesítő Adat in Adatok)
                 {
@@ -134,37 +145,6 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        public List<Adat_Váltós_Összesítő> Lista_Adatok(string hely, string jelszó, string szöveg, string csoport)
-        {
-            List<Adat_Váltós_Összesítő> Adatok = new List<Adat_Váltós_Összesítő>();
-            Adat_Váltós_Összesítő Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Váltós_Összesítő(
-                                          rekord["Perc"].ToÉrt_Long(),
-                                          rekord["Dátum"].ToÉrt_DaTeTime(),
-                                          csoport
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
         }
     }
 }

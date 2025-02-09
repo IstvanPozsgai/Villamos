@@ -2,7 +2,7 @@
 using System.Globalization;
 
 
-public static partial  class Függvénygyűjtemény
+public static partial class Függvénygyűjtemény
 {
     public static DateTime Év_elsőnapja(DateTime dateTime)
     {
@@ -10,9 +10,33 @@ public static partial  class Függvénygyűjtemény
         return datum;
     }
 
+    public static DateTime Év_elsőnapja(int Év)
+    {
+        DateTime datum = new DateTime(Év, 1, 1);
+        return datum;
+    }
+
+    public static DateTime Félév_utolsónapja(int Év)
+    {
+        DateTime datum = new DateTime(Év, 6, 30);
+        return datum;
+    }
+
+    public static DateTime Félév_elsőnapja(int Év)
+    {
+        DateTime datum = new DateTime(Év, 7, 1);
+        return datum;
+    }
+
     public static DateTime Év_utolsónapja(DateTime dateTime)
     {
         DateTime datum = new DateTime(dateTime.Year, 12, 31);
+        return datum;
+    }
+
+    public static DateTime Év_utolsónapja(int Év)
+    {
+        DateTime datum = new DateTime(Év, 12, 31);
         return datum;
     }
 
@@ -209,6 +233,9 @@ public static partial  class Függvénygyűjtemény
         return válasz;
     }
 
-
+    public static DateTime ElsőNap()
+    {
+        return new DateTime(1900, 1, 1);
+    }
 }
 

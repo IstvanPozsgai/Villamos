@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,6 +12,14 @@ namespace Villamos.Kezelők
     public class Kezelő_Váltós_Naptár
     {
         readonly string jelszó = "katalin";
+        string hely;
+
+        private void FájlBeállítás(int Év)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely.KönyvSzerk());
+        }
+
         public List<Adat_Váltós_Naptár> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Váltós_Naptár> Adatok = new List<Adat_Váltós_Naptár>();
@@ -42,7 +52,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Váltós_Naptár> Lista_Adatok(int Év, string Tábla)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+            FájlBeállítás(Év);
             string szöveg = $"SELECT * FROM naptár{Tábla}";
             List<Adat_Váltós_Naptár> Adatok = new List<Adat_Váltós_Naptár>();
             Adat_Váltós_Naptár Adat;
@@ -76,7 +86,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 string szöveg = $"INSERT INTO naptár{Tábla} (nap, dátum) VALUES (";
                 szöveg += $"'{Adat.Nap}', ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
@@ -97,7 +107,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 string szöveg = $"UPDATE  naptár{Tábla} SET ";
                 szöveg += $" nap='{Adat.Nap}'";
                 szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";
@@ -118,7 +128,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Naptár Adat in Adatok)
                 {
@@ -140,12 +150,11 @@ namespace Villamos.Kezelők
             }
         }
 
-
         public void Módosítás(int Év, string Tábla, List<Adat_Váltós_Naptár> Adatok)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Naptár Adat in Adatok)
                 {
@@ -166,6 +175,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }

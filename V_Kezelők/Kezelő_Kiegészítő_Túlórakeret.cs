@@ -9,8 +9,14 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Túlórakeret
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb";
         readonly string jelszó = "Mocó";
+
+        public Kezelő_Kiegészítő_Túlórakeret()
+        {
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás   (hely.KönyvSzerk());
+        }
 
         public List<Adat_Kiegészítő_Túlórakeret> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

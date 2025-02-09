@@ -38,7 +38,7 @@ public static partial class Függvénygyűjtemény
                 Soradat["TTP dátum"] = rekord.TTP_Dátum;
                 Soradat["TTP Javítás"] = rekord.TTP_Javítás == true ? "Igen" : "Nem";
                 Soradat["Rendelés"] = rekord.Rendelés;
-                if(rekord.TTP_Javítás)                        Soradat["Javítás befejező dátum"] = rekord.JavBefDát;
+                if (rekord.TTP_Javítás) Soradat["Javítás befejező dátum"] = rekord.JavBefDát;
 
                 Soradat["Szerelvény"] = rekord.Együtt;
                 Soradat["Státus"] = Enum.GetName(typeof(MyEn.TTP_Státus), rekord.Státus);
@@ -201,6 +201,7 @@ public static partial class Függvénygyűjtemény
             MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
+
 
 }
 

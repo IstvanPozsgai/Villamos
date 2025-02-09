@@ -9,8 +9,14 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Beosztásciklus
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
+
+        public Kezelő_Kiegészítő_Beosztásciklus()
+        {
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.  (hely.KönyvSzerk());
+        }
+
         public List<Adat_Kiegészítő_Beosztásciklus> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kiegészítő_Beosztásciklus> Adatok = new List<Adat_Kiegészítő_Beosztásciklus>();

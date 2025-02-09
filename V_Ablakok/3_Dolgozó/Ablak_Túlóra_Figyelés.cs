@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.Beosztás;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos
@@ -17,15 +14,29 @@ namespace Villamos
     public partial class Ablak_Túlóra_Figyelés
     {
         double Határ = 0;
+        #region Kezelők
+        readonly Kezelő_Kiegészítő_Túlórakeret KézTúl = new Kezelő_Kiegészítő_Túlórakeret();
+        readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
+        readonly Kezelő_Szatube_Túlóra KézTúlóra = new Kezelő_Szatube_Túlóra();
+        readonly Kezelő_Kiegészítő_Munkaidő KézMunka = new Kezelő_Kiegészítő_Munkaidő();
+        readonly Kezelő_Váltós_Naptár KézVáltósNaptár = new Kezelő_Váltós_Naptár();
+        readonly Kezelő_Váltós_Összesítő KézÖsszesítő = new Kezelő_Váltós_Összesítő();
+        readonly Kezelő_Dolgozó_Beosztás_Új KézBeosztás = new Kezelő_Dolgozó_Beosztás_Új();
+        readonly Kezelő_Váltós_Kijelöltnapok KézVáltKijelölt = new Kezelő_Váltós_Kijelöltnapok();
+        readonly Kezelő_Kiegészítő_Beosztásciklus KÉZBEO = new Kezelő_Kiegészítő_Beosztásciklus();
+        readonly Kezelő_Kiegészítő_Váltóstábla KézVáltBeo = new Kezelő_Kiegészítő_Váltóstábla();
+        readonly Kezelő_Kiegészítő_Beosegéd KézBEOsegéd = new Kezelő_Kiegészítő_Beosegéd();
+        readonly Kezelő_Kiegészítő_Turnusok KézTurnus = new Kezelő_Kiegészítő_Turnusok();
+        readonly Kezelő_Kiegészítő_Csoportbeosztás KézCSopBeo = new Kezelő_Kiegészítő_Csoportbeosztás();
+        #endregion
 
+
+        #region Alap
         public Ablak_Túlóra_Figyelés()
         {
             InitializeComponent();
         }
 
-
-
-        #region Alap
         private void Ablak_Túlóra_Figyelés_Load(object sender, EventArgs e)
         {
             Dátum.Value = DateTime.Today;
@@ -46,12 +57,10 @@ namespace Villamos
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
-
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
-
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -89,7 +98,6 @@ namespace Villamos
             BlackTextBrush.Dispose();
         }
 
-
         private void Telephelyekfeltöltése()
         {
             try
@@ -115,7 +123,6 @@ namespace Villamos
             }
         }
 
-
         private void Fülekkitöltése()
         {
             switch (Fülek.SelectedIndex)
@@ -137,7 +144,6 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
@@ -156,14 +162,12 @@ namespace Villamos
             }
         }
 
-
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
             Év_feltöltés();
             Kötelezőidők();
             Subtelephelyiváltozat();
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -185,9 +189,7 @@ namespace Villamos
             {
 
             }
-
         }
-
         #endregion
 
 
@@ -196,8 +198,7 @@ namespace Villamos
         {
             try
             {
-                if (Tábla2.Rows.Count <= 0)
-                    return;
+                if (Tábla2.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -230,23 +231,17 @@ namespace Villamos
             }
         }
 
-
         private void Command20_Click(object sender, EventArgs e)
         {
             Tábla2_egyik();
             Tábla2_másik();
         }
 
-
         private void Tábla2_egyik()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\kiegészítő1.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM túlórakeret";
-                Kezelő_Kiegészítő_Túlórakeret KézTúl = new Kezelő_Kiegészítő_Túlórakeret();
-                List<Adat_Kiegészítő_Túlórakeret> AdatokTúl = KézTúl.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Túlórakeret> AdatokTúl = KézTúl.Lista_Adatok();
                 if (AdatokTúl != null)
                 {
                     string ideig = (from a in AdatokTúl
@@ -267,10 +262,6 @@ namespace Villamos
                     Határ = Határ / 12 * DateTime.Today.Month;
                 }
 
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                jelszó = "forgalmiutasítás";
-                szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900#  ORDER BY DolgozóNév ";
-
                 Tábla2.Rows.Clear();
                 Tábla2.Columns.Clear();
                 Tábla2.Refresh();
@@ -288,8 +279,7 @@ namespace Villamos
                 Tábla2.Columns[4].HeaderText = "Rögzített túlórák [óra]";
                 Tábla2.Columns[4].Width = 200;
 
-                Kezelő_Dolgozó_Alap Kéz = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Kilépésiidő.ToShortDateString() == MyF.ElsőNap().ToShortDateString()).ToList();
 
                 foreach (Adat_Dolgozó_Alap rekord in Adatok)
                 {
@@ -316,18 +306,12 @@ namespace Villamos
             }
         }
 
-
         private void Tábla2_másik()
         {
 
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\szatubecs\{Dátum.Value.Year}szatubecs.mdb";
-                string jelszó = "kertitörpe";
-                string szöveg = "SELECT * FROM túlóra WHERE státus<>3";
-
-                Kezelő_Szatube_Túlóra Kéz = new Kezelő_Szatube_Túlóra();
-                List<Adat_Szatube_Túlóra> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Szatube_Túlóra> Adatok = KézTúlóra.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year).Where(a => a.Státus != 3).ToList();
 
                 Tábla2.Refresh();
 
@@ -371,24 +355,15 @@ namespace Villamos
         #region Munkaidő keret
         private void Kötelezőidők()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\adatok\kiegészítő2.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM munkaidő where munkarendelnevezés='8'";
-            Kezelő_Kiegészítő_Munkaidő KézMunka = new Kezelő_Kiegészítő_Munkaidő();
-            List<Adat_Kiegészítő_Munkaidő> AdatokMunka = KézMunka.Lista_Adatok(hely, jelszó, szöveg);
 
+            List<Adat_Kiegészítő_Munkaidő> AdatokMunka = KézMunka.Lista_Adatok();
             Adat_Kiegészítő_Munkaidő Elem = (from a in AdatokMunka
                                              where a.Munkarendelnevezés == "8"
                                              select a).FirstOrDefault();
             double óra;
             if (Elem != null) óra = Elem.Munkaidő; else óra = 0;
 
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
-            jelszó = "katalin";
-            szöveg = $" SELECT * from Naptár";
-
-            Kezelő_Váltós_Naptár Kéz = new Kezelő_Váltós_Naptár();
-            List<Adat_Váltós_Naptár> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Váltós_Naptár> Adatok = KézVáltósNaptár.Lista_Adatok(Dátum.Value.Year, "");
             int első = (from a in Adatok
                         where a.Dátum < new DateTime(Dátum.Value.Year, 7, 1) && a.Nap == "1"
                         select a).Count();
@@ -404,13 +379,11 @@ namespace Villamos
             Munkaév.Text = (első * óra + második * óra).ToString();
         }
 
-
         private void Excel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla3.Rows.Count <= 0)
-                    return;
+                if (Tábla3.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -443,7 +416,6 @@ namespace Villamos
             }
         }
 
-
         private void Ellenőrzés_Click(object sender, EventArgs e)
         {
             Tábla3_első_új();
@@ -451,25 +423,14 @@ namespace Villamos
             Tábla3_harmadik();
         }
 
-
         private void Tábla3_első_új()
         {
             try
             {
-                if (Dolgozónév.CheckedItems.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
+                if (Dolgozónév.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                string jelszó = "forgalmiutasítás";
-
-                string szöveg = "SELECT * FROM Dolgozóadatok ";
-                if (!Kilépettjel.Checked)
-                    szöveg += " WHERE kilépésiidő=#01-01-1900# ";
-                szöveg += " ORDER BY DolgozóNév asc";
-
-                Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolg.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+                if (!Kilépettjel.Checked) AdatokDolg = AdatokDolg.Where(a => a.Kilépésiidő.ToShortDateString() == MyF.ElsőNap().ToShortDateString()).ToList();
                 Holtart.Be();
 
                 Tábla3.Rows.Clear();
@@ -575,42 +536,31 @@ namespace Villamos
             }
         }
 
-
         private void Tábla3_második()
         {
             try
             {
                 // kiirjuk az előírásokat a nyolc órásoknak
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
-                string jelszó = "katalin";
-                string szöveg = " SELECT * FROM összesítő ORDER BY dátum";
-                Kezelő_Váltós_Összesítő Kéz = new Kezelő_Váltós_Összesítő();
                 List<Adat_Váltós_Összesítő> Adatok = new List<Adat_Váltós_Összesítő>();
-                List<Adat_Váltós_Összesítő> Ideig = Kéz.Lista_Adatok(hely, jelszó, szöveg, "N");
+                List<Adat_Váltós_Összesítő> Ideig = KézÖsszesítő.Lista_Adatok(Dátum.Value.Year, "");
                 Adatok.AddRange(Ideig);
 
-                szöveg = " SELECT * FROM összesítő1 ORDER BY dátum";
-                Ideig = Kéz.Lista_Adatok(hely, jelszó, szöveg, "6_1");
+                Ideig = KézÖsszesítő.Lista_Adatok(Dátum.Value.Year, "1");
                 Adatok.AddRange(Ideig);
 
-                szöveg = " SELECT * FROM összesítő2 ORDER BY dátum";
-                Ideig = Kéz.Lista_Adatok(hely, jelszó, szöveg, "6_2");
+                Ideig = KézÖsszesítő.Lista_Adatok(Dátum.Value.Year, "2");
                 Adatok.AddRange(Ideig);
 
-                szöveg = " SELECT * FROM összesítő3 ORDER BY dátum";
-                Ideig = Kéz.Lista_Adatok(hely, jelszó, szöveg, "6_3");
+                Ideig = KézÖsszesítő.Lista_Adatok(Dátum.Value.Year, "3");
                 Adatok.AddRange(Ideig);
 
-                szöveg = " SELECT * FROM összesítő4 ORDER BY dátum";
-                Ideig = Kéz.Lista_Adatok(hely, jelszó, szöveg, "6_4");
+                Ideig = KézÖsszesítő.Lista_Adatok(Dátum.Value.Year, "4");
                 Adatok.AddRange(Ideig);
 
-                szöveg = " SELECT * FROM összesítő5 ORDER BY dátum";
-                Ideig = Kéz.Lista_Adatok(hely, jelszó, szöveg, "É_1");
+                Ideig = KézÖsszesítő.Lista_Adatok(Dátum.Value.Year, "5");
                 Adatok.AddRange(Ideig);
 
-                szöveg = " SELECT * FROM összesítő6 ORDER BY dátum";
-                Ideig = Kéz.Lista_Adatok(hely, jelszó, szöveg, "É_2");
+                Ideig = KézÖsszesítő.Lista_Adatok(Dátum.Value.Year, "6");
                 Adatok.AddRange(Ideig);
 
                 if (Adatok != null)
@@ -686,38 +636,28 @@ namespace Villamos
                 for (int j = 4; j < 16; j++)
                 {
                     string hónap = j - 3 > 9 ? (j - 3).ToString() : "0" + (j - 3);
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value.Year}{hónap}.mdb";
-                    if (File.Exists(hely))
+                    List<Adat_Dolgozó_Beosztás_Új> Adatok = KézBeosztás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                    if (Adatok != null)
                     {
-                        string jelszó = "kiskakas";
-                        string szöveg = "SELECT * FROM beosztás";
-
-                        Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                        List<Adat_Dolgozó_Beosztás_Új> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-
-                        if (Adatok != null)
+                        for (int i = 0; i < Tábla3.Rows.Count; i += 3)
                         {
-                            for (int i = 0; i < Tábla3.Rows.Count; i += 3)
-                            {
-                                Holtart.Lép();
-                                string Hrazonosító = Tábla3.Rows[i].Cells[1].Value.ToString().Trim();
+                            Holtart.Lép();
+                            string Hrazonosító = Tábla3.Rows[i].Cells[1].Value.ToString().Trim();
 
-                                int vmunkaóra = (from a in Adatok
-                                                 where a.Dolgozószám.Trim() == Hrazonosító && !a.Beosztáskód.Contains("FÜ")
-                                                 select a).Sum(a => a.Ledolgozott);
+                            int vmunkaóra = (from a in Adatok
+                                             where a.Dolgozószám.Trim() == Hrazonosító && !a.Beosztáskód.Contains("FÜ")
+                                             select a).Sum(a => a.Ledolgozott);
 
-                                int velvont = (from a in Adatok
-                                               where a.Dolgozószám.Trim() == Hrazonosító && (a.Túlóraok.Contains("&EP") || a.Túlóraok.Contains("&EB"))
-                                               select a).Sum(a => a.Túlóra);
+                            int velvont = (from a in Adatok
+                                           where a.Dolgozószám.Trim() == Hrazonosító && (a.Túlóraok.Contains("&EP") || a.Túlóraok.Contains("&EB"))
+                                           select a).Sum(a => a.Túlóra);
 
-                                int vtúlóra = (from a in Adatok
-                                               where a.Dolgozószám.Trim() == Hrazonosító && a.Túlóraok.Contains("&T")
-                                               select a).Sum(a => a.Túlóra);
+                            int vtúlóra = (from a in Adatok
+                                           where a.Dolgozószám.Trim() == Hrazonosító && a.Túlóraok.Contains("&T")
+                                           select a).Sum(a => a.Túlóra);
 
-                                Tábla3.Rows[i + 1].Cells[j].Value = velvont + vtúlóra;
-                                Tábla3.Rows[i + 2].Cells[j].Value = vmunkaóra - (velvont + vtúlóra);
-                            }
+                            Tábla3.Rows[i + 1].Cells[j].Value = velvont + vtúlóra;
+                            Tábla3.Rows[i + 2].Cells[j].Value = vmunkaóra - (velvont + vtúlóra);
                         }
                     }
                 }
@@ -831,87 +771,69 @@ namespace Villamos
             Táblakiírás_feladás();
         }
 
-
         private void Táblakiírás_feladás()
         {
             try
             {
-                if (Csoport.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva listázandó csoport.");
-                if (Év.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva listázandó Év.");
-                if (Félév.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva listázandó Félév.");
-                if (TelephelyiVáltozat.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva listázandó telephelyi változat.");
+                if (Csoport.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva listázandó csoport.");
+                if (!int.TryParse(Év.Text.Trim(), out int ÉV)) throw new HibásBevittAdat("Nincs kiválasztva listázandó Év.");
+                if (!int.TryParse(Félév.Text.Trim(), out int FélÉV)) throw new HibásBevittAdat("Nincs kiválasztva listázandó Félév.");
+                if (TelephelyiVáltozat.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva listázandó telephelyi változat.");
 
-                string helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
-                string jelszóelv = "katalin";
-                string szövegelv = "SELECT * FROM kijelöltnapok ";
-                if (Félév.Text == "1")
-                    szövegelv += " where (dátum>=#1/1/" + Év.Text + "# and dátum  <=#6/30/" + Év.Text + "#)";
+                List<Adat_Váltós_Kijelöltnapok> AdatokVált = KézVáltKijelölt.Lista_Adatok(Dátum.Value.Year);
+                AdatokVált = (from a in AdatokVált
+                              where a.Telephely == TelephelyiVáltozat.Text.Trim()
+                              && a.Csoport == Csoport.Text.Trim()
+                              select a).ToList();
+
+                if (FélÉV == 1)
+                    AdatokVált = (from a in AdatokVált
+                                  where a.Dátum >= MyF.Év_elsőnapja(ÉV)
+                                  && a.Dátum <= MyF.Félév_utolsónapja(ÉV)
+                                  select a).ToList();
                 else
-                    szövegelv += " where (dátum>=#7/1/" + Év.Text + "# and dátum  <=#12/31/" + Év.Text + "#)";
+                    AdatokVált = (from a in AdatokVált
+                                  where a.Dátum >= MyF.Félév_elsőnapja(ÉV)
+                                  && a.Dátum <= MyF.Év_utolsónapja(ÉV)
+                                  select a).ToList();
 
-                szövegelv += $" and telephely='{TelephelyiVáltozat.Text.Trim()}'";
-                szövegelv += $" and csoport='{Csoport.Text.Trim()}'";
-                Kezelő_Váltós_Kijelöltnapok KézVált = new Kezelő_Váltós_Kijelöltnapok();
-                List<Adat_Váltós_Kijelöltnapok> AdatokVált = KézVált.Lista_Adatok(helyelv, jelszóelv, szövegelv) ?? throw new HibásBevittAdat("Nincs a feltételeknek megfelelő beállított érték.");
+                if (AdatokVált.Count == 0) throw new HibásBevittAdat("Nincs a feltételeknek megfelelő beállított érték.");
 
+                string szövegelv = "";
                 switch (Csoport.Text.Trim())
                 {
                     case "6.1":
-                        szövegelv = "SELECT * FROM Naptár1";
+                        szövegelv = "1";
                         break;
                     case "6.2":
-                        szövegelv = "SELECT * FROM Naptár2";
+                        szövegelv = "2";
                         break;
                     case "6.3":
-                        szövegelv = "SELECT * FROM Naptár3";
+                        szövegelv = "3";
                         break;
                     case "6.4":
-                        szövegelv = "SELECT * FROM Naptár4";
+                        szövegelv = "4";
                         break;
                     case "É.1":
-                        szövegelv = "SELECT * FROM Naptár5";
+                        szövegelv = "5";
                         break;
                     case "É.2":
-                        szövegelv = "SELECT * FROM Naptár6";
+                        szövegelv = "6";
                         break;
                 }
-                Kezelő_Váltós_Naptár KézNaptár = new Kezelő_Váltós_Naptár();
-                List<Adat_Váltós_Naptár> AdatokNaptár = KézNaptár.Lista_Adatok(helyelv, jelszóelv, szövegelv);
+                List<Adat_Váltós_Naptár> AdatokNaptár = KézVáltósNaptár.Lista_Adatok(ÉV, szövegelv);
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900#";
+                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Kilépésiidő == MyF.ElsőNap()).ToList();
                 if (Csoport.Text.Trim() == "Összes")
-                    szöveg += " and csoportkód<>''";
+                    AdatokDolg = AdatokDolg.Where(a => a.Csoport != "").ToList();
                 else
-                    szöveg += $" and csoportkód='{Csoport.Text.Trim()}'";
+                    AdatokDolg = AdatokDolg.Where(a => a.Csoport == Csoport.Text.Trim()).ToList();
+                if (AdatokDolg.Count == 0) throw new HibásBevittAdat("Nincs a feltételeknek megfelelő dolgozók listája.");
 
-                szöveg += " order by DolgozóNév asc ";
-
-                Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolg.Lista_Adatok(hely, jelszó, szöveg) ?? throw new HibásBevittAdat("Nincs a feltételeknek megfelelő dolgozók listája.");
-
-                hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
-                jelszó = "Mocó";
-                szöveg = "SELECT * FROM beosztásciklus";
-                Kezelő_Kiegészítő_Beosztásciklus KÉZBEO = new Kezelő_Kiegészítő_Beosztásciklus();
-                List<Adat_Kiegészítő_Beosztásciklus> AdatokVáltCiklus = KÉZBEO.Lista_Adatok(hely, jelszó, szöveg);
-
-                szöveg = "SELECT * FROM éjszakásCiklus";
-                List<Adat_Kiegészítő_Beosztásciklus> AdatokÉCiklus = KÉZBEO.Lista_Adatok(hely, jelszó, szöveg);
-
-                szöveg = "SELECT * FROM váltósbeosztás";
-                Kezelő_Kiegészítő_Váltóstábla KézVáltBeo = new Kezelő_Kiegészítő_Váltóstábla();
-                List<Adat_Kiegészítő_Váltóstábla> AdatokVáltBeo = KézVáltBeo.Lista_Adatok(hely, jelszó, szöveg);
-
-                hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő1.mdb";
-                szöveg = "SELECT * FROM beosegéd ";
-                Kezelő_Kiegészítő_Beosegéd KézBEOsegéd = new Kezelő_Kiegészítő_Beosegéd();
-                List<Adat_Kiegészítő_Beosegéd> AdatokBEOsegéd = KézBEOsegéd.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Beosztásciklus> AdatokVáltCiklus = KÉZBEO.Lista_Adatok("beosztásciklus");
+                List<Adat_Kiegészítő_Beosztásciklus> AdatokÉCiklus = KÉZBEO.Lista_Adatok("éjszakásCiklus");
+                List<Adat_Kiegészítő_Váltóstábla> AdatokVáltBeo = KézVáltBeo.Lista_Adatok();
+                List<Adat_Kiegészítő_Beosegéd> AdatokBEOsegéd = KézBEOsegéd.Lista_Adatok();
 
 
                 Tábla.Rows.Clear();
@@ -1013,13 +935,11 @@ namespace Villamos
             }
         }
 
-
         private void Excel_Elvont_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla.Rows.Count <= 0)
-                    return;
+                if (Tábla.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -1052,21 +972,17 @@ namespace Villamos
             }
         }
 
-
         private void Subtelephelyiváltozat()
         {
-            if (Év.Text.Trim() == "")
-                return;
+            if (Év.Text.Trim() == "") return;
             TelephelyiVáltozat.Items.Clear();
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
-            string jelszó = "katalin";
-            string szöveg = $"SELECT DISTINCT telephely FROM kijelöltnapok where (dátum>=#1/1/{Év.Text.Trim()}# and dátum<=#12/31/{Év.Text.Trim()}#) ORDER BY telephely";
 
-            TelephelyiVáltozat.BeginUpdate();
-            TelephelyiVáltozat.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "telephely"));
-            TelephelyiVáltozat.EndUpdate();
+            List<Adat_Váltós_Kijelöltnapok> Adatok = KézVáltKijelölt.Lista_Adatok(Dátum.Value.Year);
+            List<string> Lista = Adatok.Select(a => a.Telephely).Distinct().ToList();
+
+            foreach (string Elem in Lista)
+                TelephelyiVáltozat.Items.Add(Elem);
         }
-
 
         private void Félév_feltöltés()
         {
@@ -1078,7 +994,6 @@ namespace Villamos
             Félév.EndUpdate();
         }
 
-
         private void Év_feltöltés()
         {
             Év.Items.Clear();
@@ -1089,54 +1004,39 @@ namespace Villamos
             Év.Text = Év.Items[Év.Items.Count - 1].ToString();
         }
 
-
         private void Turnuskiirás()
         {
-            if (Év.Text.Trim() == "")
-                return;
+            if (Év.Text.Trim() == "") return;
             Csoport.Items.Clear();
-            string hely = Application.StartupPath + @"\Főmérnökség\adatok\kiegészítő1.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM turnusok order by csoport";
+            List<Adat_Kiegészítő_Turnusok> Adatok = KézTurnus.Lista_Adatok();
 
-            Csoport.BeginUpdate();
-            Csoport.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "csoport"));
-            Csoport.EndUpdate();
+            foreach (Adat_Kiegészítő_Turnusok Elem in Adatok)
+                Csoport.Items.Add(Elem.Csoport);
         }
 
-
+        //Ezt még egyesíteni kell a rögzítés során
         private void Rögzítés_Click(object sender, EventArgs e)
         {
             try
             {
-                if (!int.TryParse(Év.Text, out int VáltÉv))
-                    throw new HibásBevittAdat("Az évnek egész számnak kell lennie és a mező nem lehet üres.");
-                if (!int.TryParse(Félév.Text, out int VáltFélév))
-                    throw new HibásBevittAdat("Az félévnek egész számnak kell lennie és a mező nem lehet üres.");
-                if (TelephelyiVáltozat.Text.Trim() == "")
-                    throw new HibásBevittAdat("A telephelyi változat nem lehet üres.");
-                if (Csoport.Text.Trim() == "")
-                    throw new HibásBevittAdat("A csoport mező nem lehet üres.");
+                if (!int.TryParse(Év.Text, out int VáltÉv)) throw new HibásBevittAdat("Az évnek egész számnak kell lennie és a mező nem lehet üres.");
+                if (!int.TryParse(Félév.Text, out int VáltFélév)) throw new HibásBevittAdat("Az félévnek egész számnak kell lennie és a mező nem lehet üres.");
+                if (TelephelyiVáltozat.Text.Trim() == "") throw new HibásBevittAdat("A telephelyi változat nem lehet üres.");
+                if (Csoport.Text.Trim() == "") throw new HibásBevittAdat("A csoport mező nem lehet üres.");
 
                 Táblakiírás_feladás();
 
-                if (Tábla.Rows.Count < 1)
-                    throw new HibásBevittAdat("A táblázat nem tartalmaz elemet, így nincs mit rögzíteni.");
+                if (Tábla.Rows.Count < 1) throw new HibásBevittAdat("A táblázat nem tartalmaz elemet, így nincs mit rögzíteni.");
 
                 DateTime vdátum = DateTime.Parse(Tábla.Rows[0].Cells[3].Value.ToString());
-                // leellenőrizzük, hogy van-e adatbázis
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{vdátum.Year}";
-                if (!Exists(hely))
-                    Directory.CreateDirectory(hely);// Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
 
                 Beosztás_Rögzítés BR = new Beosztás_Rögzítés();
                 Holtart.Be();
                 for (int j = 0; j < Tábla.Rows.Count; j++)
                 {
                     vdátum = DateTime.Parse(Tábla.Rows[j].Cells[3].Value.ToString());
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{vdátum.Year}\Ebeosztás{vdátum:yyyyMM}.mdb";
-                    if (!Exists(hely))
-                        Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(hely);
+                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{vdátum.Year}\Ebeosztás{vdátum:yyyyMM}.mdb";
+
 
                     string dolgozónév = Tábla.Rows[j].Cells[0].Value.ToString().Trim();
                     string dolgozószám = Tábla.Rows[j].Cells[1].Value.ToString().Trim();
@@ -1168,16 +1068,11 @@ namespace Villamos
         private void Csoportfeltöltés()
         {
             Csoportlista.Items.Clear();
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-            string jelszó = "Mocó";
+            List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCSopBeo.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-            string szöveg = "SELECT * FROM csoportbeosztás order by Sorszám";
-
-            Csoportlista.BeginUpdate();
-            Csoportlista.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "csoportbeosztás"));
-            Csoportlista.EndUpdate();
+            foreach (Adat_Kiegészítő_Csoportbeosztás Elem in Adatok)
+                Csoportlista.Items.Add(Elem.Csoportbeosztás);
         }
-
 
         private void NyitCsoport_Click(object sender, EventArgs e)
         {
@@ -1186,12 +1081,10 @@ namespace Villamos
             NyitCsoport.Visible = false;
         }
 
-
         private void CsukCsoport_Click(object sender, EventArgs e)
         {
             Visszacsukcsoport();
         }
-
 
         private void Visszacsukcsoport()
         {
@@ -1199,7 +1092,6 @@ namespace Villamos
             CsukCsoport.Visible = false;
             NyitCsoport.Visible = true;
         }
-
 
         private void Csoportkijelölmind_Click(object sender, EventArgs e)
         {
@@ -1209,7 +1101,6 @@ namespace Villamos
             Csoport_listáz();
         }
 
-
         private void Csoportvissza_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Csoportlista.Items.Count; i++)
@@ -1217,7 +1108,6 @@ namespace Villamos
             Visszacsukcsoport();
             Csoport_listáz();
         }
-
 
         private void CsoportFrissít_Click(object sender, EventArgs e)
         {
@@ -1228,22 +1118,20 @@ namespace Villamos
             Cursor = Cursors.Default; // homokóra vége
         }
 
-
         private void Csoport_listáz()
         {
             // minden kijelölést töröl
             for (int i = 0; i < Dolgozónév.Items.Count; i++)
                 Dolgozónév.SetItemChecked(i, false);
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-            string jelszó = "forgalmiutasítás";
+
+            List<Adat_Dolgozó_Alap> AdatokÖ = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
 
             for (int j = 0; j < Csoportlista.CheckedItems.Count; j++)
             {
                 // lekéredezzük a csoport tagjait
-                string szöveg = $"SELECT * FROM  dolgozóadatok WHERE csoport='{Csoportlista.CheckedItems[j].ToString().Trim()}' order by dolgozónév";
-                Kezelő_Dolgozó_Alap Kéz = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Dolgozó_Alap> Adatok = (from a in AdatokÖ
+                                                  where a.Csoport == Csoportlista.CheckedItems[j].ToString().Trim()
+                                                  select a).ToList();
                 for (int i = 0; i < Dolgozónév.Items.Count; i++)
                 {
                     string[] darabol = Dolgozónév.Items[i].ToString().Split('=');
@@ -1263,24 +1151,16 @@ namespace Villamos
         {
             Dolgozónév.Items.Clear();
             Dolgozónév.BeginUpdate();
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-            string jelszó = "forgalmiutasítás";
 
-            string szöveg = "SELECT * FROM Dolgozóadatok ";
+            List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
             if (!Kilépettjel.Checked)
-                szöveg += " WHERE kilépésiidő=#01-01-1900# ";
-            szöveg += " ORDER BY DolgozóNév asc";
-
-            Kezelő_Dolgozó_Alap Kéz = new Kezelő_Dolgozó_Alap();
-            List<Adat_Dolgozó_Alap> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok = Adatok.Where(a => a.Kilépésiidő == MyF.ElsőNap()).ToList();
 
             foreach (Adat_Dolgozó_Alap rekord in Adatok)
-            {
                 Dolgozónév.Items.Add(rekord.DolgozóNév.Trim() + " = " + rekord.Dolgozószám.Trim());
-            }
+
             Dolgozónév.EndUpdate();
         }
-
 
         private void Nyitdolgozó_Click(object sender, EventArgs e)
         {
@@ -1289,12 +1169,10 @@ namespace Villamos
             NyitDolgozó.Visible = false;
         }
 
-
         private void Csukdolgozó_Click(object sender, EventArgs e)
         {
             Visszacsukjadolgozó();
         }
-
 
         private void Visszacsukjadolgozó()
         {
@@ -1303,14 +1181,12 @@ namespace Villamos
             NyitDolgozó.Visible = true;
         }
 
-
         private void Dolgozókijelölmind_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Dolgozónév.Items.Count; i++)
                 Dolgozónév.SetItemChecked(i, true);
             Visszacsukjadolgozó();
         }
-
 
         private void Dolgozóvissza_Click(object sender, EventArgs e)
         {
@@ -1319,7 +1195,6 @@ namespace Villamos
             Visszacsukjadolgozó();
         }
 
-
         private void CsoportFrissít_Click_1(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor; // homok óra kezdete
@@ -1327,7 +1202,6 @@ namespace Villamos
             Csoport_listáz();
             Cursor = Cursors.Default; // homokóra vége
         }
-
 
         private void Kilépettjel_CheckedChanged(object sender, EventArgs e)
         {

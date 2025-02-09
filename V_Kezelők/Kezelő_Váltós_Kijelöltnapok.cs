@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,6 +12,13 @@ namespace Villamos.Kezelők
     public class Kezelő_Váltós_Kijelöltnapok
     {
         readonly string jelszó = "katalin";
+        string hely;
+        private void FájlBeállítás(int Év)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely.KönyvSzerk());
+        }
+
         public List<Adat_Váltós_Kijelöltnapok> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Váltós_Kijelöltnapok> Adatok = new List<Adat_Váltós_Kijelöltnapok>();
@@ -44,7 +53,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Váltós_Kijelöltnapok> Lista_Adatok(int Év)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+            FájlBeállítás(Év);
             string szöveg = "SELECT * FROM kijelöltnapok ";
             List<Adat_Váltós_Kijelöltnapok> Adatok = new List<Adat_Váltós_Kijelöltnapok>();
             Adat_Váltós_Kijelöltnapok Adat;
@@ -80,7 +89,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 string szöveg = "INSERT INTO kijelöltnapok (dátum, csoport,  telephely ) VALUES ( ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Csoport}', ";
@@ -102,7 +111,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Kijelöltnapok Adat in Adatok)
                 {
@@ -128,7 +137,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 string szöveg = $"DELETE FROM kijelöltnapok  WHERE csoport='{Adat.Csoport}'";
                 szöveg += $" And Telephely='{Adat.Telephely}'";
                 szöveg += $" And dátum=#{Adat.Dátum:M-d-yy}#";

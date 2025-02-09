@@ -10,8 +10,13 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Váltóstábla
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
+
+        public Kezelő_Kiegészítő_Váltóstábla()
+        {
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás   (hely.KönyvSzerk());
+        }
 
         public List<Adat_Kiegészítő_Váltóstábla> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
@@ -141,7 +146,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
     }
 }
