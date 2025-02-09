@@ -26,6 +26,8 @@ namespace Villamos
         readonly Kezelő_Jármű2ICS KézICS = new Kezelő_Jármű2ICS();
         readonly Kezelő_Jármű2 KézT5C5 = new Kezelő_Jármű2();
 
+        List<Adat_Dolgozó_Alap> AdatokDolgozó = new List<Adat_Dolgozó_Alap>();
+
         #region Alap
         public Ablak_Munkalap_készítés()
         {
@@ -230,7 +232,7 @@ namespace Villamos
                 Csuk.Visible = false;
                 Nyit.Visible = true;
 
-                List<Adat_Dolgozó_Alap> AdatokÖ = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Dolgozónév.Rows.Clear();
                 Dolgozónév.Columns.Clear();
@@ -251,29 +253,49 @@ namespace Villamos
                         List<Adat_Dolgozó_Alap> Adatok = new List<Adat_Dolgozó_Alap>();
                         // csoporttagokat kiválogatja
                         if (Csoport.Items[j].ToStrTrim() == "Összes")
-                            Adatok = (from a in AdatokÖ
+                            Adatok = (from a in AdatokDolgozó
                                       where a.Kilépésiidő == new DateTime(1900, 1, 1)
                                       orderby a.DolgozóNév
                                       select a).ToList();
                         else
-                            Adatok = (from a in AdatokÖ
+                            Adatok = (from a in AdatokDolgozó
                                       where a.Kilépésiidő == new DateTime(1900, 1, 1)
                                       && a.Csoport == Csoport.Items[j].ToStrTrim()
                                       orderby a.DolgozóNév
                                       select a).ToList();
-
-                        foreach (Adat_Dolgozó_Alap rekord in Adatok)
-                        {
-                            Dolgozónév.RowCount++;
-                            int i = Dolgozónév.RowCount - 1;
-                            Dolgozónév.Rows[i].Cells[0].Value = rekord.Dolgozószám;
-                            Dolgozónév.Rows[i].Cells[1].Value = rekord.DolgozóNév;
-                        }
+                        AdatokDolgozó = Adatok;
+                        DolgozóListaFeltöltés(Adatok);
                     }
                 }
                 Dolgozónév.Visible = true;
                 Dolgozónév.Refresh();
                 Csoport.Height = 25;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DolgozóListaFeltöltés(List<Adat_Dolgozó_Alap> Adatok)
+        {
+
+            try
+            {
+                Dolgozónév.Rows.Clear();
+                foreach (Adat_Dolgozó_Alap rekord in Adatok)
+                {
+                    Dolgozónév.RowCount++;
+                    int i = Dolgozónév.RowCount - 1;
+                    Dolgozónév.Rows[i].Cells[0].Value = rekord.Dolgozószám;
+                    Dolgozónév.Rows[i].Cells[1].Value = rekord.DolgozóNév;
+                }
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -299,6 +321,32 @@ namespace Villamos
         {
             for (int i = 0; i < Dolgozónév.Rows.Count; i++)
                 Dolgozónév.Rows[i].Selected = false;
+        }
+
+        private void Benn_Lévők_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Holtart.Be();
+                // minden kijelölést töröl
+                for (int i = 0; i < Dolgozónév.Rows.Count; i++)
+                    Dolgozónév.Rows[i].Selected = false;
+
+
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.MunkaVégzőLista(Cmbtelephely.Text.Trim(), Dátum.Value, AdatokDolgozó);
+                DolgozóListaFeltöltés(Adatok);
+
+                Holtart.Ki();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
 
@@ -1480,78 +1528,6 @@ namespace Villamos
         }
         #endregion
 
-        private void Benn_Lévők_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Holtart.Be();
-                // minden kijelölést töröl
-                for (int i = 0; i < Dolgozónév.Rows.Count; i++)
-                    Dolgozónév.Rows[i].Selected = false;
 
-                Kiválogat_dolgozó();
-
-                Holtart.Lép();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Kiválogat_dolgozó()
-        {
-            try
-            {
-
-                List<Adat_Kiegészítő_Beosztáskódok> BeosztáskódÖ = KézBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
-                List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = (from a in BeosztáskódÖ
-                                                                   where a.Számoló == true
-                                                                   orderby a.Beosztáskód
-                                                                   select a).ToList();
-
-                List<Adat_Dolgozó_Beosztás_Új> DolgbeosztÖ = KézBeosztás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
-                List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = (from a in DolgbeosztÖ
-                                                             where a.Nap == Dátum.Value
-                                                             orderby a.Dolgozószám
-                                                             select a).ToList();
-
-
-                //ha ki van jelölve
-                for (int i = 0; i < Dolgozónév.Rows.Count; i++)
-                {
-                    string HRazonosító = Dolgozónév.Rows[i].Cells[0].Value.ToStrTrim();
-
-                    string dolgozik = (from a in Dolgbeoszt
-                                       where a.Dolgozószám.Trim() == HRazonosító.Trim()
-                                       select a.Beosztáskód).FirstOrDefault();
-                    //Van beosztása, akkor megnézzük, hogy az olyan amit be akarunk jelölni.
-                    if (dolgozik != null)
-                    {
-                        string biztosdolgozik = (from a in Beosztáskód
-                                                 where dolgozik.Trim() == a.Beosztáskód.Trim()
-                                                 select a.Beosztáskód).FirstOrDefault();
-                        if (biztosdolgozik != null)
-                            Dolgozónév.Rows[i].Selected = true;
-                    }
-                    Holtart.Lép();
-                }
-                Holtart.Ki();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }
