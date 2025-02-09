@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 
 
@@ -14,6 +13,7 @@ namespace Villamos
     public partial class Ablak_Beosztás_Napló
     {
         readonly Kezelő_Dolgozó_Beosztás_Napló Kéz = new Kezelő_Dolgozó_Beosztás_Napló();
+        readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
         readonly List<Adat_Dolgozó_Beosztás_Napló> Adatok = new List<Adat_Dolgozó_Beosztás_Napló>();
 
         readonly DataTable AdatTábla = new DataTable();
@@ -61,7 +61,6 @@ namespace Villamos
 
         private void Súgó_Click(object sender, EventArgs e)
         {
-
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\beosztás_napló.html";
@@ -77,9 +76,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
-
 
 
         #region listázza adatokat
@@ -88,20 +85,11 @@ namespace Villamos
             try
             {
                 Adatok.Clear();
-
-                DateTime ideigdátum = new DateTime(Kezdet.Year, Kezdet.Month, 1);
-
+                DateTime ideigdátum = MyF.Hónap_elsőnapja(Kezdet);
                 while (Vég > ideigdátum)
                 {
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\naplózás\{ideigdátum:yyyyMM}napló.mdb";
-                    if (Exists(hely))
-                    {
-                        string jelszó = "kerekeskút";
-                        string szöveg = $"SELECT * FROM adatok ";
-                        List<Adat_Dolgozó_Beosztás_Napló> AdatokRész = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-                        Adatok.AddRange(AdatokRész);
-
-                    }
+                    List<Adat_Dolgozó_Beosztás_Napló> AdatokRész = Kéz.Lista_Adatok(Cmbtelephely.Text.Trim(), ideigdátum);
+                    Adatok.AddRange(AdatokRész);
                     ideigdátum = ideigdátum.AddMonths(1);
                 }
             }
@@ -122,7 +110,6 @@ namespace Villamos
             {
                 Tábla.CleanFilterAndSort();
                 Kiírás();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -284,16 +271,10 @@ namespace Villamos
                 Dolgozónév.Items.Clear();
                 Dolgozónév.BeginUpdate();
                 Dolgozónév.Items.Add("");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg;
-                if (Kilépettjel.Checked)
-                    szöveg = "SELECT * FROM Dolgozóadatok ORDER BY DolgozóNév asc";
-                else
-                    szöveg = $"SELECT * FROM Dolgozóadatok WHERE kilépésiidő=#{new DateTime(1900, 1, 1):yyyy-MM-dd}# ORDER BY DolgozóNév asc";
 
-                Kezelő_Dolgozó_Alap Kéz = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+                if (!Kilépettjel.Checked)
+                    Adatok = Adatok.Where(a => a.Kilépésiidő.ToShortDateString() == new DateTime(1900, 1, 1).ToShortDateString()).ToList();
 
                 foreach (Adat_Dolgozó_Alap rekord in Adatok)
                     Dolgozónév.Items.Add(rekord.DolgozóNév.Trim() + " = " + rekord.Dolgozószám.Trim());
@@ -312,12 +293,10 @@ namespace Villamos
             }
         }
 
-
         private void Kilépettjel_CheckedChanged(object sender, EventArgs e)
         {
             Névfeltöltés();
         }
-
 
         private void Excel_Click(object sender, EventArgs e)
         {
