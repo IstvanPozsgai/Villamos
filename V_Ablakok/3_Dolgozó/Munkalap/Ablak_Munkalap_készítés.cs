@@ -245,6 +245,7 @@ namespace Villamos
                 Dolgozónév.Columns[1].HeaderText = "Dolgozónév";
                 Dolgozónév.Columns[1].Width = 230;
 
+                List<Adat_Dolgozó_Alap> AdatokÖ = new List<Adat_Dolgozó_Alap>();
                 for (int j = 0; j < Csoport.Items.Count; j++)
                 {
                     if (Csoport.GetItemChecked(j))
@@ -262,10 +263,12 @@ namespace Villamos
                                       && a.Csoport == Csoport.Items[j].ToStrTrim()
                                       orderby a.DolgozóNév
                                       select a).ToList();
-                        AdatokDolgozó = Adatok;
-                        DolgozóListaFeltöltés(Adatok);
+                        AdatokÖ.AddRange(Adatok);
+
                     }
                 }
+                AdatokDolgozó = AdatokÖ;
+                DolgozóListaFeltöltés(AdatokDolgozó);
                 Dolgozónév.Visible = true;
                 Dolgozónév.Refresh();
                 Csoport.Height = 25;
