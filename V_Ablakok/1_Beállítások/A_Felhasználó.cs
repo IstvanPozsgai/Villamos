@@ -965,6 +965,7 @@ namespace Villamos
         {
             try
             {
+                if (TextNév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva felhasználó");
                 //mielőtt rögzítjük sorba rendezzük az első oszlop szerint
                 Tábla.Sort(Tábla.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
 

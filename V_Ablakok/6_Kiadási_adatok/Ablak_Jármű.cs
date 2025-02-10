@@ -1899,19 +1899,20 @@ namespace Villamos
                 foreach (FileInfo file in fileInfo)
                     Szűrés.Add(file.Name);
 
-                int i = 1;
+                int max = 1;
                 if (fileInfo.Length >= 1)
                 {
                     foreach (string Elem in Szűrés)
                     {
                         string[] darab = Elem.Split('_');
-                        i = int.Parse(darab[2].Replace(".pdf", "")) + 1;
+                        int i = int.Parse(darab[2].Replace(".pdf", "")) + 1;
+                        if (max < i) max = i;
                     }
                 }
 
                 //létrehozzuk az új fájlnevet és átmásoljuk a tárhelyre
 
-                string újfájlnév = $@"{helypdf}\{PDF_pályaszám.Text.Trim()}_{Kiegészítő.Text.Trim()}_{i}.pdf";
+                string újfájlnév = $@"{helypdf}\{PDF_pályaszám.Text.Trim()}_{Kiegészítő.Text.Trim()}_{max}.pdf";
 
                 File.Copy(Feltöltendő.Text.Trim(), újfájlnév);
                 //kitöröljük a feltöltendő fájlt
