@@ -38,7 +38,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += " [sorszám] short PRIMARY KEY, ";
             szöveg += " [csoportos] short, ";
             szöveg += " [elérés] char(20),";
-            szöveg += " [verzió] char(20),)";
+            szöveg += " [verzió] char(20))";
             //Létrehozzuk az adattáblát
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
@@ -56,13 +56,13 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
             // másodlagos kulcsok
-            szöveg = "ALTER TABLE technológia ";
-            szöveg += "ADD FOREIGN KEY(Karb_ciklus_eleje) REFERENCES Karbantartás(sorszám)";
-            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
+            //szöveg = "ALTER TABLE technológia ";
+            //szöveg += "ADD FOREIGN KEY(Karb_ciklus_eleje) REFERENCES Karbantartás(sorszám)";
+            //ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
-            szöveg = "ALTER TABLE technológia ";
-            szöveg += "ADD FOREIGN KEY(Karb_ciklus_vége) REFERENCES Karbantartás(sorszám)";
-            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
+            //szöveg = "ALTER TABLE technológia ";
+            //szöveg += "ADD FOREIGN KEY(Karb_ciklus_vége) REFERENCES Karbantartás(sorszám)";
+            //ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
 
         public static void Technológia_ALAPAdat(string hely)
