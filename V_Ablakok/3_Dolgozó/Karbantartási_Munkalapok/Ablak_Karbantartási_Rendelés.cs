@@ -20,7 +20,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
         List<Adat_Technológia_Rendelés> AdatokRendelés = new List<Adat_Technológia_Rendelés>();
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
-        List<Adat_Technológia_TípusT> AdatokTípusT = new List<Adat_Technológia_TípusT>();
+        List<Adat_Technológia_Alap> AdatokTípusT = new List<Adat_Technológia_Alap>();
 
         public Ablak_Karbantartási_Rendelés(string cmbTelephely)
         {
@@ -62,7 +62,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             {
                 Rendelés_Típus.Items.Clear();
                 AdatokTípusT = MyLista.TípustáblaLista();
-                foreach (Adat_Technológia_TípusT rekord in AdatokTípusT)
+                foreach (Adat_Technológia_Alap rekord in AdatokTípusT)
                     Rendelés_Típus.Items.Add(rekord.Típus);
                 Rendelés_Típus.Refresh();
             }

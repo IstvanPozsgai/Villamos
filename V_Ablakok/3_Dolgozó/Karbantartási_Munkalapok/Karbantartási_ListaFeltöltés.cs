@@ -54,10 +54,10 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokCiklus;
         }
 
-        public static List<Adat_Technológia_TípusT> TípustáblaLista()
+        public static List<Adat_Technológia_Alap> TípustáblaLista()
         {
-            Kezelő_Technológia_Típus KézTípus = new Kezelő_Technológia_Típus();
-            List<Adat_Technológia_TípusT> AdatokTípusT = new List<Adat_Technológia_TípusT>();
+            Kezelő_Technológia_Alap KézTípus = new Kezelő_Technológia_Alap();
+            List<Adat_Technológia_Alap> AdatokTípusT = new List<Adat_Technológia_Alap>();
             try
             {
                 AdatokTípusT = KézTípus.Lista_Adatok();
@@ -74,10 +74,10 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokTípusT;
         }
 
-        public static List<Adat_Technológia_TípusT> AlTípustáblaLista(string típus)
+        public static List<Adat_Technológia_Alap> AlTípustáblaLista(string típus)
         {
             Kezelő_Technológia_TípusT KézTípusT = new Kezelő_Technológia_TípusT();
-            List<Adat_Technológia_TípusT> AdatokTípusT = new List<Adat_Technológia_TípusT>();
+            List<Adat_Technológia_Alap> AdatokTípusT = new List<Adat_Technológia_Alap>();
             try
             {
                 AdatokTípusT = KézTípusT.Lista_Adatok(típus);
@@ -118,10 +118,10 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokVáltozat;
         }
 
-        public static List<Adat_Technológia> TechnológiaLista(string típus)
+        public static List<Adat_Technológia_Új> TechnológiaLista(string típus)
         {
             Kezelő_Technológia KézTechnológia = new Kezelő_Technológia();
-            List<Adat_Technológia> AdatokTechnológia = new List<Adat_Technológia>();
+            List<Adat_Technológia_Új> AdatokTechnológia = new List<Adat_Technológia_Új>();
             try
             {
                 AdatokTechnológia = KézTechnológia.Lista_Adatok(típus);
@@ -138,14 +138,14 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokTechnológia;
         }
 
-        public static List<Adat_Technológia_Munkalap> Adatok_Egyesítése(List<Adat_Technológia> adatok_Tech, List<Adat_Technológia_Változat> adatok_telephely)
+        public static List<Adat_Technológia_Munkalap> Adatok_Egyesítése(List<Adat_Technológia_Új> adatok_Tech, List<Adat_Technológia_Változat> adatok_telephely)
         {
             List<Adat_Technológia_Munkalap> Adatok = new List<Adat_Technológia_Munkalap>();
             try
             {
                 Adat_Technológia_Munkalap Adat;
                 //Üres lista
-                foreach (Adat_Technológia Elem in adatok_Tech)
+                foreach (Adat_Technológia_Új Elem in adatok_Tech)
                 {
                     //Üresek, hogy lehessen mindenkinek szűrni
                     string Karbantartási_fokozat = "";
@@ -158,8 +158,8 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                               Elem.Utasítás_Cím,
                               Elem.Utasítás_leírás,
                               Elem.Paraméter,
-                              Elem.Karb_ciklus_eleje.Sorszám,
-                              Elem.Karb_ciklus_vége.Sorszám,
+                              Elem.Karb_ciklus_eleje,
+                              Elem.Karb_ciklus_vége,
                               Elem.Érv_kezdete,
                               Elem.Érv_vége,
                               Elem.Szakmai_bontás,
@@ -171,7 +171,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                               Végzi);
                     Adatok.Add(Adat);
                 }
-                foreach (Adat_Technológia Elem in adatok_Tech)
+                foreach (Adat_Technológia_Új Elem in adatok_Tech)
                 {
                     List<Adat_Technológia_Változat> Szűrt = (from a in adatok_telephely
                                                              where a.Technológia_Id == Elem.ID
@@ -190,8 +190,8 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                                   Elem.Utasítás_Cím,
                                   Elem.Utasítás_leírás,
                                   Elem.Paraméter,
-                                  Elem.Karb_ciklus_eleje.Sorszám,
-                                  Elem.Karb_ciklus_vége.Sorszám,
+                                  Elem.Karb_ciklus_eleje,
+                                  Elem.Karb_ciklus_vége,
                                   Elem.Érv_kezdete,
                                   Elem.Érv_vége,
                                   Elem.Szakmai_bontás,
@@ -280,7 +280,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokKivétel;
         }
 
-        public static List<string> T5C5_minden(string Telephely, List<Adat_Technológia_TípusT> Típus)
+        public static List<string> T5C5_minden(string Telephely, List<Adat_Technológia_Alap> Típus)
         {
             List<string> Adatok = new List<string>();
             Kezelő_Jármű KézJármű = new Kezelő_Jármű();
@@ -288,7 +288,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             {
                 List<Adat_Jármű> IdeigAdatok = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).OrderBy(a => a.Azonosító).ToList();
                 List<string> IdeigPsz;
-                foreach (Adat_Technológia_TípusT rekord in Típus)
+                foreach (Adat_Technológia_Alap rekord in Típus)
                 {
                     IdeigPsz = (from a in IdeigAdatok
                                 where a.Valóstípus == rekord.Típus && a.Üzem == Telephely

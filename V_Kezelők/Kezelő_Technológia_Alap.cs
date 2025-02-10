@@ -7,21 +7,21 @@ using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
 {
-    public class Kezelő_Technológia_Típus
+    public class Kezelő_Technológia_Alap
     {
         readonly string jelszó = "Bezzegh";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\technológia\technológia.mdb";
 
-        public Kezelő_Technológia_Típus()
+        public Kezelő_Technológia_Alap()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_ALAPAdat(hely.KönyvSzerk());
         }
 
-        public List<Adat_Technológia_TípusT> Lista_Adatok()
+        public List<Adat_Technológia_Alap> Lista_Adatok()
         {
             string szöveg = "SELECT *  FROM Típus_tábla ORDER BY típus";
-            List<Adat_Technológia_TípusT> Adatok = new List<Adat_Technológia_TípusT>();
-            Adat_Technológia_TípusT Adat;
+            List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
+            Adat_Technológia_Alap Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -34,7 +34,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Technológia_TípusT(
+                                Adat = new Adat_Technológia_Alap(
                                    rekord["id"].ToÉrt_Long(),
                                     rekord["típus"].ToStrTrim()
                                     );

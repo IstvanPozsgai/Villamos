@@ -17,9 +17,9 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
         readonly Kezelő_Technológia_Változat KézVáltozat = new Kezelő_Technológia_Változat();
 
-        List<Adat_Technológia_TípusT> AdatokTípusT = new List<Adat_Technológia_TípusT>();
+        List<Adat_Technológia_Alap> AdatokTípusT = new List<Adat_Technológia_Alap>();
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
-        List<Adat_Technológia> AdatokTechnológia = new List<Adat_Technológia>();
+        List<Adat_Technológia_Új> AdatokTechnológia = new List<Adat_Technológia_Új>();
         List<Adat_Technológia_Változat> AdatokVáltozat = new List<Adat_Technológia_Változat>();
         DataTable AdatTábla = new DataTable();
 
@@ -68,7 +68,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             {
                 Csoport_típus.Items.Clear();
                 AdatokTípusT = MyLista.TípustáblaLista();
-                foreach (Adat_Technológia_TípusT rekord in AdatokTípusT)
+                foreach (Adat_Technológia_Alap rekord in AdatokTípusT)
                     Csoport_típus.Items.Add(rekord.Típus);
                 Csoport_típus.Refresh();
             }
@@ -342,10 +342,10 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                                                       select a).FirstOrDefault();
                 if (ElemCiklus == null) return;
 
-                List<Adat_Technológia> Adatok_Tech = (from a in AdatokTechnológia
-                                                      where a.Karb_ciklus_eleje.Sorszám <= ElemCiklus.Sorszám && a.Karb_ciklus_vége.Sorszám >= ElemCiklus.Sorszám
-                                                      orderby a.ID, a.Részegység, a.Munka_utasítás_szám
-                                                      select a).ToList();
+                List<Adat_Technológia_Új> Adatok_Tech = (from a in AdatokTechnológia
+                                                         where a.Karb_ciklus_eleje <= ElemCiklus.Sorszám && a.Karb_ciklus_vége >= ElemCiklus.Sorszám
+                                                         orderby a.ID, a.Részegység, a.Munka_utasítás_szám
+                                                         select a).ToList();
 
                 Kezelő_Technológia_Munkalap Kéz_Munkalap = new Kezelő_Technológia_Munkalap();
                 List<Adat_Technológia_Munkalap> Adatok = MyLista.Adatok_Egyesítése(Adatok_Tech, AdatokVáltozat);

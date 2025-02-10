@@ -26,17 +26,11 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Adat(hely.KönyvSzerk());
         }
 
-        public List<Adat_Technológia> Lista_Adatok(string Típus)
+        public List<Adat_Technológia_Új> Lista_Adatok(string Típus)
         {
             FájlBeállítás(Típus);
             string szöveg = $"SELECT * FROM Technológia ";
-            List<Adat_Technológia> Adatok = new List<Adat_Technológia>();
-            Adat_Technológia Adat;
-            Kezelő_Technológia_Ciklus Kéz = new Kezelő_Technológia_Ciklus();
-            string másikszöveg = "SELECT * FROM karbantartás";
-            List<Adat_technológia_Ciklus> AdatokCiklus = Kéz.Lista_Adatok(hely, jelszó, másikszöveg);
-
-
+            List<Adat_Technológia_Új> Adatok = new List<Adat_Technológia_Új>();
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -49,34 +43,24 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat_technológia_Ciklus AdatCikluse = (from a in AdatokCiklus
-                                                                       where a.Sorszám == rekord["Karb_ciklus_eleje"].ToÉrt_Int()
-                                                                       select a).FirstOrDefault();
-                                Adat_technológia_Ciklus AdatCiklusv = (from a in AdatokCiklus
-                                                                       where a.Sorszám == rekord["Karb_ciklus_vége"].ToÉrt_Int()
-                                                                       select a).FirstOrDefault();
-
-                                Adat = new Adat_Technológia(
+                                Adat_Technológia_Új Adat = new Adat_Technológia_Új(
                                     rekord["id"].ToÉrt_Long(),
                                     rekord["Részegység"].ToStrTrim(),
                                     rekord["Munka_utasítás_szám"].ToStrTrim(),
                                     rekord["Utasítás_Cím"].ToStrTrim(),
                                     rekord["Utasítás_leírás"].ToStrTrim(),
                                     rekord["Paraméter"].ToStrTrim(),
-                                    AdatCikluse,
-                                    AdatCiklusv,
+                                    rekord["Karb_ciklus_eleje"].ToÉrt_Int(),
+                                    rekord["Karb_ciklus_vége"].ToÉrt_Int(),
                                     rekord["Érv_kezdete"].ToÉrt_DaTeTime(),
                                     rekord["Érv_vége"].ToÉrt_DaTeTime(),
                                     rekord["Szakmai_bontás"].ToStrTrim(),
                                     rekord["Munkaterületi_bontás"].ToStrTrim(),
                                     rekord["Altípus"].ToStrTrim(),
                                     rekord["Kenés"].ToÉrt_Bool());
-
                                 Adatok.Add(Adat);
-
                             }
                         }
-
                     }
                 }
             }
@@ -142,14 +126,14 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzít_Tech_típus(string hely, string jelszó, Adat_Technológia_TípusT adat)
+        public void Rögzít_Tech_típus(string hely, string jelszó, Adat_Technológia_Alap adat)
         {
             if (adat.Típus.Length > 20) throw new Exception("Azonosító maximum 20 karakter hosszú lehet!\n");
 
             string szöveg = $"SELECT * FROM Típus_tábla ";
             Kezelő_Technológia_TípusT KézTTípus = new Kezelő_Technológia_TípusT();
-            List<Adat_Technológia_TípusT> AdatokTípusT = KézTTípus.Lista_Adatok(hely, jelszó, szöveg);
-            Adat_Technológia_TípusT Elem = AdatokTípusT.FirstOrDefault(a => a.Típus == adat.Típus.Trim());
+            List<Adat_Technológia_Alap> AdatokTípusT = KézTTípus.Lista_Adatok(hely, jelszó, szöveg);
+            Adat_Technológia_Alap Elem = AdatokTípusT.FirstOrDefault(a => a.Típus == adat.Típus.Trim());
 
             if (Elem == null)
             {
@@ -164,8 +148,8 @@ namespace Villamos.Kezelők
         {
             string szöveg = $"SELECT * FROM Típus_tábla ";
             Kezelő_Technológia_TípusT KézTTípus = new Kezelő_Technológia_TípusT();
-            List<Adat_Technológia_TípusT> AdatokTípusT = KézTTípus.Lista_Adatok(hely, jelszó, szöveg);
-            Adat_Technológia_TípusT Elem = AdatokTípusT.FirstOrDefault(a => a.Típus == Típus.Trim());
+            List<Adat_Technológia_Alap> AdatokTípusT = KézTTípus.Lista_Adatok(hely, jelszó, szöveg);
+            Adat_Technológia_Alap Elem = AdatokTípusT.FirstOrDefault(a => a.Típus == Típus.Trim());
 
             if (Elem == null)
             {
@@ -179,10 +163,10 @@ namespace Villamos.Kezelők
 
         }
 
-        public List<Adat_Technológia_TípusT> List_Tech_típus(string hely, string jelszó, string szöveg)
+        public List<Adat_Technológia_Alap> List_Tech_típus(string hely, string jelszó, string szöveg)
         {
-            List<Adat_Technológia_TípusT> Adatok = new List<Adat_Technológia_TípusT>();
-            Adat_Technológia_TípusT Adat;
+            List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
+            Adat_Technológia_Alap Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -195,7 +179,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Technológia_TípusT(
+                                Adat = new Adat_Technológia_Alap(
                                    rekord["id"].ToÉrt_Long(),
                                     rekord["típus"].ToStrTrim()
                                     );
@@ -412,14 +396,14 @@ namespace Villamos.Kezelők
 
 
 
-        public void Egy_Beszúrás(string hely, string jelszó, long sorszám, List<Adat_Technológia> Adatok)
+        public void Egy_Beszúrás(string hely, string jelszó, long sorszám, List<Adat_Technológia_Új> Adatok)
         {
 
             //kitöröljük az adatokat a sorszámtól
             string szöveg = $"DELETE FROM technológia WHERE id>={sorszám}";
             MyA.ABtörlés(hely, jelszó, szöveg);
 
-            foreach (Adat_Technológia Adat in Adatok)
+            foreach (Adat_Technológia_Új Adat in Adatok)
             {
                 // Eggyel hátrébb rögzítjük az adatokat
                 szöveg = "INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
@@ -430,8 +414,8 @@ namespace Villamos.Kezelők
                 szöveg += "'" + Adat.Utasítás_Cím.Trim() + "', ";//   utasítás_Cím
                 szöveg += "'" + Adat.Utasítás_leírás.Trim() + "', ";//   utasítás_leírás
                 szöveg += "'" + Adat.Paraméter.Trim() + "', ";//   paraméter
-                szöveg += "'" + Adat.Karb_ciklus_eleje.Sorszám.ToString() + "', ";//  karb_ciklus_eleje
-                szöveg += "'" + Adat.Karb_ciklus_vége.Sorszám.ToString() + "', ";//  karb_ciklus_vége
+                szöveg += "'" + Adat.Karb_ciklus_eleje + "', ";//  karb_ciklus_eleje
+                szöveg += "'" + Adat.Karb_ciklus_vége + "', ";//  karb_ciklus_vége
                 szöveg += "'" + Adat.Érv_kezdete.ToString("yyyy.MM.dd") + "', ";//   érv_kezdete
                 szöveg += "'" + Adat.Érv_vége.ToString("yyyy.MM.dd") + "', ";//    érv_vége
                 szöveg += "'" + Adat.Szakmai_bontás.Trim() + "', ";//     szakmai_bontás
@@ -462,14 +446,14 @@ namespace Villamos.Kezelők
         }
 
 
-        public void Egy_Törlése(string hely, string jelszó, long sorszám, List<Adat_Technológia> Adatok)
+        public void Egy_Törlése(string hely, string jelszó, long sorszám, List<Adat_Technológia_Új> Adatok)
         {
 
             //kitöröljük a sorszám adatait
             string szöveg = $"DELETE FROM technológia WHERE id>={sorszám}";
             MyA.ABtörlés(hely, jelszó, szöveg);
 
-            foreach (Adat_Technológia Adat in Adatok)
+            foreach (Adat_Technológia_Új Adat in Adatok)
             {
                 // Eggyel előrébb rögzítjük az adatokat
                 szöveg = "INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
@@ -480,8 +464,8 @@ namespace Villamos.Kezelők
                 szöveg += "'" + Adat.Utasítás_Cím.Trim() + "', ";//   utasítás_Cím
                 szöveg += "'" + Adat.Utasítás_leírás.Trim() + "', ";//   utasítás_leírás
                 szöveg += "'" + Adat.Paraméter.Trim() + "', ";//   paraméter
-                szöveg += "'" + Adat.Karb_ciklus_eleje.Sorszám.ToString() + "', ";//  karb_ciklus_eleje
-                szöveg += "'" + Adat.Karb_ciklus_vége.Sorszám.ToString() + "', ";//  karb_ciklus_vége
+                szöveg += "'" + Adat.Karb_ciklus_eleje + "', ";//  karb_ciklus_eleje
+                szöveg += "'" + Adat.Karb_ciklus_vége + "', ";//  karb_ciklus_vége
                 szöveg += "'" + Adat.Érv_kezdete.ToString("yyyy.MM.dd") + "', ";//   érv_kezdete
                 szöveg += "'" + Adat.Érv_vége.ToString("yyyy.MM.dd") + "', ";//    érv_vége
                 szöveg += "'" + Adat.Szakmai_bontás.Trim() + "', ";//     szakmai_bontás

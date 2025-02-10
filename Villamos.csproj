@@ -801,7 +801,7 @@
     <Compile Include="V_Kezelők\Kezelő_Technológia_Ciklus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia_Kivételek.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia_Rendelés.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Technológia_Típus.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Technológia_Alap.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia_TípusT.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia_Változat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kieg_Fortetípus.cs" />

@@ -18,12 +18,12 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Adat(hely.KönyvSzerk());
         }
 
-        public List<Adat_Technológia_TípusT> Lista_Adatok(string Típus)
+        public List<Adat_Technológia_Alap> Lista_Adatok(string Típus)
         {
             FájlBeállítás(Típus);
             string szöveg = "SELECT * FROM típus_tábla";
-            List<Adat_Technológia_TípusT> Adatok = new List<Adat_Technológia_TípusT>();
-            Adat_Technológia_TípusT Adat;
+            List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
+            Adat_Technológia_Alap Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -36,7 +36,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Technológia_TípusT(
+                                Adat = new Adat_Technológia_Alap(
                                    rekord["id"].ToÉrt_Long(),
                                     rekord["típus"].ToStrTrim()
                                     );
@@ -49,10 +49,10 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public List<Adat_Technológia_TípusT> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public List<Adat_Technológia_Alap> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
-            List<Adat_Technológia_TípusT> Adatok = new List<Adat_Technológia_TípusT>();
-            Adat_Technológia_TípusT Adat;
+            List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
+            Adat_Technológia_Alap Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -65,7 +65,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Technológia_TípusT(
+                                Adat = new Adat_Technológia_Alap(
                                    rekord["id"].ToÉrt_Long(),
                                     rekord["típus"].ToStrTrim()
                                     );

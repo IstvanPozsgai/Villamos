@@ -27,9 +27,9 @@ namespace Villamos.Villamos_Ablakok
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
         List<Adat_Technológia_Kivételek> AdatokKivétel = new List<Adat_Technológia_Kivételek>();
         List<Adat_Dolgozó_Alap> AdatokDolgozó = new List<Adat_Dolgozó_Alap>();
-        List<Adat_Technológia_TípusT> AdatokTípusT = new List<Adat_Technológia_TípusT>();
+        List<Adat_Technológia_Alap> AdatokTípusT = new List<Adat_Technológia_Alap>();
         List<Adat_Technológia_Változat> AdatokVáltozat = new List<Adat_Technológia_Változat>();
-        List<Adat_Technológia> AdatokTechnológia = new List<Adat_Technológia>();
+        List<Adat_Technológia_Új> AdatokTechnológia = new List<Adat_Technológia_Új>();
         List<Adat_Kiegészítő_Csoportbeosztás> AdatokCsoport = new List<Adat_Kiegészítő_Csoportbeosztás>();
 
         List<string> PályaszámLista = new List<string>();
@@ -210,7 +210,7 @@ namespace Villamos.Villamos_Ablakok
                 Járműtípus.Items.Clear();
                 AdatokTípusT = MyLista.TípustáblaLista();
 
-                foreach (Adat_Technológia_TípusT rekord in AdatokTípusT)
+                foreach (Adat_Technológia_Alap rekord in AdatokTípusT)
                     Járműtípus.Items.Add(rekord.Típus);
 
                 Járműtípus.Refresh();
@@ -361,7 +361,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                List<Adat_Technológia_TípusT> AdatokTípus = MyLista.AlTípustáblaLista(Járműtípus.Text.Trim());
+                List<Adat_Technológia_Alap> AdatokTípus = MyLista.AlTípustáblaLista(Járműtípus.Text.Trim());
                 if (elérés == "Üres") return;
                 switch (elérés)
                 {
@@ -669,7 +669,7 @@ namespace Villamos.Villamos_Ablakok
 
                 Munka_végzi.Clear();
                 Munka_végzi = (from a in AdatokTechnológia
-                               where a.Karb_ciklus_eleje.Sorszám <= AdatCikk.Sorszám && a.Karb_ciklus_vége.Sorszám >= AdatCikk.Sorszám
+                               where a.Karb_ciklus_eleje <= AdatCikk.Sorszám && a.Karb_ciklus_vége >= AdatCikk.Sorszám
                                orderby a.Szakmai_bontás
                                select a.Szakmai_bontás
                                ).Distinct().ToList();
@@ -959,11 +959,11 @@ namespace Villamos.Villamos_Ablakok
                 //pályaszám kivételei
                 AdatokKivétel = MyLista.KivételekLista(Járműtípus.Text.Trim());
 
-                List<Adat_Technológia> Adatok = (from a in AdatokTechnológia
-                                                 where a.Karb_ciklus_eleje.Sorszám <= AdatCikk.Sorszám && a.Karb_ciklus_vége.Sorszám >= AdatCikk.Sorszám
-                                                 && a.Érv_kezdete <= Dátum.Value && a.Érv_vége >= Dátum.Value
-                                                 orderby a.Részegység, a.Munka_utasítás_szám, a.ID
-                                                 select a).ToList();
+                List<Adat_Technológia_Új> Adatok = (from a in AdatokTechnológia
+                                                    where a.Karb_ciklus_eleje <= AdatCikk.Sorszám && a.Karb_ciklus_vége >= AdatCikk.Sorszám
+                                                    && a.Érv_kezdete <= Dátum.Value && a.Érv_vége >= Dátum.Value
+                                                    orderby a.Részegység, a.Munka_utasítás_szám, a.ID
+                                                    select a).ToList();
                 KM_korr = 0;
                 if (CHKKMU.Checked && !csoportos)
                 {
@@ -1346,13 +1346,13 @@ namespace Villamos.Villamos_Ablakok
             return sor;
         }
 
-        private int Részletes(string munkalap, List<Adat_Technológia> Adatok, List<Adat_Technológia_Kivételek> KivételAdatok, int sormagagasság,
+        private int Részletes(string munkalap, List<Adat_Technológia_Új> Adatok, List<Adat_Technológia_Kivételek> KivételAdatok, int sormagagasság,
                   List<Adat_Technológia_Változat> VÁLTAdatok, int sor)
         {
             Holtart.Be(Adatok.Count + 2, MyColor.ColorToHex(Color.DeepSkyBlue));
 
             //munkalap érdemi része
-            foreach (Adat_Technológia a in Adatok)
+            foreach (Adat_Technológia_Új a in Adatok)
             {
                 //Ha speciális, akkor kiírja különben kihagy
                 if (Ki_kell_írni(a.Altípus, csoportos, KivételAdatok))
@@ -1426,7 +1426,8 @@ namespace Villamos.Villamos_Ablakok
                         }
                         MyE.Sormagasság($"{sor}:{sor}");
                         MyE.Igazít_vízszintes("B" + sor, "bal");
-                        MyE.Kiir(a.Karb_ciklus_eleje.Fokozat.Trim(), "J" + sor);
+                        Adat_technológia_Ciklus cikluselelje = AdatokCiklus.Where(B => B.Sorszám == a.Karb_ciklus_eleje).FirstOrDefault();
+                        if (cikluselelje != null) MyE.Kiir(cikluselelje.Fokozat, $"J{sor}");
                         MyE.Igazít_vízszintes("J" + sor, "közép");
                         MyE.Rácsoz($"A{sor}:Q{sor}");
                     }
