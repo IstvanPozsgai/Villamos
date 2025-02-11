@@ -16,10 +16,6 @@ namespace Villamos.Kezelők
         readonly string jelszó = "Bezzegh";
         string hely;
 
-        #region Kezelők és Lista
-        readonly Kezelő_Technológia_Ciklus KézCiklus = new Kezelő_Technológia_Ciklus();
-        List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
-        #endregion
 
         private void FájlBeállítás(string Típus)
         {
@@ -94,7 +90,7 @@ namespace Villamos.Kezelők
                     szöveg += $"'{Adat.Szakmai_bontás.Trim()}', ";//     szakmai_bontás
                     szöveg += $"'{Adat.Munkaterületi_bontás.Trim()}',";//     munkaterületi_bontás
                     szöveg += $"'{Adat.Altípus.Trim()}', ";//    altípus
-                    szöveg += $"{Adat.Kenés.ToString()}) ";//   kenés
+                    szöveg += $"{Adat.Kenés}) ";//   kenés
                     SzövegGy.Add(szöveg);
                     id++;
 
@@ -142,8 +138,10 @@ namespace Villamos.Kezelők
         {
             Törlés(Típus, sorszám, true);
             Adat_Technológia_Új Adat = new Adat_Technológia_Új(sorszám, "", "", "", "", "", 0, 0, MyF.ElsőNap(), MyF.ElsőNap(), "", "", "", true);
-            List<Adat_Technológia_Új> AdatokÚj = new List<Adat_Technológia_Új>();
-            AdatokÚj.Add(Adat);
+            List<Adat_Technológia_Új> AdatokÚj = new List<Adat_Technológia_Új>
+            {
+                Adat
+            };
 
             foreach (Adat_Technológia_Új ELem in Adatok)
             {

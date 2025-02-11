@@ -279,9 +279,11 @@ namespace Villamos.Villamos_Ablakok
                 SolidBrush BlackTextBrush = new SolidBrush(Color.Black);
 
                 // Állítsa be a szöveg igazítását
-                StringFormat sf = new StringFormat();
-                sf.Alignment = StringAlignment.Center;
-                sf.LineAlignment = StringAlignment.Center;
+                StringFormat sf = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center
+                };
 
                 // Festse meg a szöveget a megfelelő félkövér és szín beállítással
                 if ((e.State & DrawItemState.Selected) != 0)
@@ -602,7 +604,7 @@ namespace Villamos.Villamos_Ablakok
                 List<Adat_Technológia_Új> Adatok = new List<Adat_Technológia_Új>();
                 Adatok = KézAdat.Lista_Adatok(Járműtípus.Text.Trim());
 
-                KézAdat.Egy_Törlése(hely_, jelszó_, Kiválasztott_Sor, Adatok);
+                KézAdat.Egy_Törlése(Járműtípus.Text.Trim(), Kiválasztott_Sor, Adatok);
 
                 this.Invoke(callback, new object[] { });
             });

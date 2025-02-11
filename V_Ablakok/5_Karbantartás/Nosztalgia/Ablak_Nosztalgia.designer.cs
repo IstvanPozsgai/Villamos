@@ -7,49 +7,23 @@ namespace Villamos.Villamos_Ablakok
 {
     partial class Ablak_Nosztalgia : Form
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-        // Form overrides dispose to clean up the component list.
-        [DebuggerNonUserCode()]
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            try
+            if (disposing && (components != null))
             {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
+                components.Dispose();
             }
-            finally
-            {
-                base.Dispose(disposing);
-            }
+            base.Dispose(disposing);
         }
-
-        // Required by the Windows Form Designer
-        private System.ComponentModel.IContainer components;
-
-        // NOTE: The following procedure is required by the Windows Form Designer
-        // It can be modified using the Windows Form Designer.  
-        // Do not modify it using the code editor.
-        [DebuggerStepThrough()]
-
-        ///// <summary>
-        ///// Required designer variable.
-        ///// </summary>
-        //private System.ComponentModel.IContainer components = null;
-
-        ///// <summary>
-        ///// Clean up any resources being used.
-        ///// </summary>
-        ///// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing && (components != null))
-        //    {
-        //        components.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
 
         #region Windows Form Designer generated code
 
@@ -59,6 +33,7 @@ namespace Villamos.Villamos_Ablakok
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Nosztalgia));
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();

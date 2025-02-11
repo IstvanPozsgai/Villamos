@@ -347,7 +347,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                                                          orderby a.ID, a.Részegység, a.Munka_utasítás_szám
                                                          select a).ToList();
 
-                Kezelő_Technológia_Munkalap Kéz_Munkalap = new Kezelő_Technológia_Munkalap();
+
                 List<Adat_Technológia_Munkalap> Adatok = MyLista.Adatok_Egyesítése(Adatok_Tech, AdatokVáltozat);
                 Holtart.Be(Adatok.Count + 1);
 
