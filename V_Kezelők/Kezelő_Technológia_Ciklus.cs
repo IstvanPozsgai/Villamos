@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -54,6 +57,73 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
+
+        public void Rögzítés(string Típus, Adat_technológia_Ciklus Adat)
+        {
+            try
+            {
+                string szöveg;
+                List<Adat_technológia_Ciklus> AdatokCiklus = Lista_Adatok(Típus);
+                int sorszám = 1;
+                if (AdatokCiklus != null && AdatokCiklus.Count > 0)
+                    sorszám = AdatokCiklus.Max(a => a.Sorszám) + 1;
+                Adat_technológia_Ciklus Elem = AdatokCiklus.Where(a => a.Sorszám == Adat.Sorszám).FirstOrDefault();
+
+                if (Elem == null)
+                {
+                    szöveg = "INSERT INTO Karbantartás  (Sorszám, Fokozat, Csoportos, Elérés, Verzió) VALUES (";
+                    szöveg += $"{sorszám}, ";
+                    szöveg += $"'{Adat.Fokozat}', ";
+                    szöveg += $"{Adat.Csoportos}, ";
+                    szöveg += $"'{Adat.Elérés}', ";
+                    szöveg += $"'{Adat.Verzió}' )";
+                }
+                else
+                {
+                    szöveg = "UPDATE Karbantartás  SET ";
+                    szöveg += $"Fokozat='{Adat.Fokozat}', ";
+                    szöveg += $"Csoportos={Adat.Csoportos}, ";
+                    szöveg += $"Elérés='{Adat.Elérés}', ";
+                    szöveg += $"Verzió='{Adat.Verzió}' ";
+                    szöveg += $"WHERE Sorszám={Adat.Sorszám}";
+                }
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string Típus, int Sorszám)
+        {
+            try
+            {
+                List<Adat_technológia_Ciklus> AdatokCiklus = Lista_Adatok(Típus);
+                Adat_technológia_Ciklus Elem = AdatokCiklus.Where(a => a.Sorszám == Sorszám).FirstOrDefault();
+
+                if (Elem != null)
+                {
+                    string szöveg = $"DELETE FROM Karbantartás WHERE sorszám={Sorszám}";
+                    MyA.ABtörlés(hely, jelszó, szöveg);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         public List<Adat_technológia_Ciklus> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

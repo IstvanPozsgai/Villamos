@@ -36,7 +36,12 @@
             this.Fülek = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.CsoportosBefejezés = new System.Windows.Forms.Button();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.Adatok_beolvasása = new System.Windows.Forms.Button();
             this.UtasításSzám = new System.Windows.Forms.TextBox();
+            this.Beviteli_táblakészítés = new System.Windows.Forms.Button();
             this.Szűr_R_E = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.Érvényes = new System.Windows.Forms.CheckBox();
@@ -74,8 +79,6 @@
             this.Rich_UtasításLeírása = new System.Windows.Forms.RichTextBox();
             this.Text_id = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.Adatok_beolvasása = new System.Windows.Forms.Button();
-            this.Beviteli_táblakészítés = new System.Windows.Forms.Button();
             this.Új_elem = new System.Windows.Forms.Button();
             this.Adat_frissítés = new System.Windows.Forms.Button();
             this.Adat_Módosítás = new System.Windows.Forms.Button();
@@ -120,7 +123,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Fülek.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -167,7 +170,12 @@
             // 
             this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GroupBox1.Controls.Add(this.label21);
+            this.GroupBox1.Controls.Add(this.CsoportosBefejezés);
+            this.GroupBox1.Controls.Add(this.dateTimePicker1);
+            this.GroupBox1.Controls.Add(this.Adatok_beolvasása);
             this.GroupBox1.Controls.Add(this.UtasításSzám);
+            this.GroupBox1.Controls.Add(this.Beviteli_táblakészítés);
             this.GroupBox1.Controls.Add(this.Szűr_R_E);
             this.GroupBox1.Controls.Add(this.label20);
             this.GroupBox1.Controls.Add(this.Érvényes);
@@ -183,12 +191,65 @@
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Szűrés";
             // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.BackColor = System.Drawing.Color.Silver;
+            this.label21.Location = new System.Drawing.Point(949, 4);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(155, 20);
+            this.label21.TabIndex = 198;
+            this.label21.Text = "Csoportos befejezés";
+            // 
+            // CsoportosBefejezés
+            // 
+            this.CsoportosBefejezés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.CsoportosBefejezés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CsoportosBefejezés.Location = new System.Drawing.Point(1110, 13);
+            this.CsoportosBefejezés.Name = "CsoportosBefejezés";
+            this.CsoportosBefejezés.Size = new System.Drawing.Size(45, 45);
+            this.CsoportosBefejezés.TabIndex = 197;
+            this.toolTip1.SetToolTip(this.CsoportosBefejezés, "Rögzít/Módosít");
+            this.CsoportosBefejezés.UseVisualStyleBackColor = true;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePicker1.Location = new System.Drawing.Point(953, 32);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(108, 26);
+            this.dateTimePicker1.TabIndex = 196;
+            // 
+            // Adatok_beolvasása
+            // 
+            this.Adatok_beolvasása.BackgroundImage = global::Villamos.Properties.Resources.Custom_Icon_Design_Flatastic_1_Import;
+            this.Adatok_beolvasása.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Adatok_beolvasása.Location = new System.Drawing.Point(825, 13);
+            this.Adatok_beolvasása.Name = "Adatok_beolvasása";
+            this.Adatok_beolvasása.Size = new System.Drawing.Size(45, 45);
+            this.Adatok_beolvasása.TabIndex = 192;
+            this.toolTip1.SetToolTip(this.Adatok_beolvasása, "Beolvassa a programba az Excel táblába előszerkesztett adatokat");
+            this.Adatok_beolvasása.UseVisualStyleBackColor = true;
+            this.Adatok_beolvasása.Click += new System.EventHandler(this.Adatok_beolvasása_Click);
+            // 
             // UtasításSzám
             // 
             this.UtasításSzám.Location = new System.Drawing.Point(201, 32);
             this.UtasításSzám.Name = "UtasításSzám";
             this.UtasításSzám.Size = new System.Drawing.Size(110, 26);
             this.UtasításSzám.TabIndex = 195;
+            // 
+            // Beviteli_táblakészítés
+            // 
+            this.Beviteli_táblakészítés.BackgroundImage = global::Villamos.Properties.Resources.Custom_Icon_Design_Flatastic_1_Export;
+            this.Beviteli_táblakészítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Beviteli_táblakészítés.Location = new System.Drawing.Point(774, 13);
+            this.Beviteli_táblakészítés.Name = "Beviteli_táblakészítés";
+            this.Beviteli_táblakészítés.Size = new System.Drawing.Size(45, 45);
+            this.Beviteli_táblakészítés.TabIndex = 191;
+            this.toolTip1.SetToolTip(this.Beviteli_táblakészítés, "Beolvasáshoz készít Excel táblát");
+            this.Beviteli_táblakészítés.UseVisualStyleBackColor = true;
+            this.Beviteli_táblakészítés.Click += new System.EventHandler(this.Beviteli_táblakészítés_Click);
             // 
             // Szűr_R_E
             // 
@@ -221,10 +282,9 @@
             // 
             // Sor_törlés
             // 
-            this.Sor_törlés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Sor_törlés.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Table_row_delete_32;
             this.Sor_törlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Sor_törlés.Location = new System.Drawing.Point(784, 13);
+            this.Sor_törlés.Location = new System.Drawing.Point(566, 13);
             this.Sor_törlés.Name = "Sor_törlés";
             this.Sor_törlés.Size = new System.Drawing.Size(45, 45);
             this.Sor_törlés.TabIndex = 190;
@@ -234,10 +294,9 @@
             // 
             // Sor_beszúrás
             // 
-            this.Sor_beszúrás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Sor_beszúrás.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Table_row_insert;
             this.Sor_beszúrás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Sor_beszúrás.Location = new System.Drawing.Point(733, 13);
+            this.Sor_beszúrás.Location = new System.Drawing.Point(515, 13);
             this.Sor_beszúrás.Name = "Sor_beszúrás";
             this.Sor_beszúrás.Size = new System.Drawing.Size(45, 45);
             this.Sor_beszúrás.TabIndex = 3;
@@ -247,10 +306,9 @@
             // 
             // Excel_mentés
             // 
-            this.Excel_mentés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Excel_mentés.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel_mentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_mentés.Location = new System.Drawing.Point(663, 13);
+            this.Excel_mentés.Location = new System.Drawing.Point(723, 13);
             this.Excel_mentés.Name = "Excel_mentés";
             this.Excel_mentés.Size = new System.Drawing.Size(45, 45);
             this.Excel_mentés.TabIndex = 2;
@@ -270,10 +328,9 @@
             // 
             // Alap_Frissít
             // 
-            this.Alap_Frissít.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Alap_Frissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Alap_Frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Alap_Frissít.Location = new System.Drawing.Point(612, 13);
+            this.Alap_Frissít.Location = new System.Drawing.Point(432, 13);
             this.Alap_Frissít.Name = "Alap_Frissít";
             this.Alap_Frissít.Size = new System.Drawing.Size(45, 45);
             this.Alap_Frissít.TabIndex = 1;
@@ -291,11 +348,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla.FilterAndSortEnabled = true;
+            this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.Location = new System.Drawing.Point(6, 74);
+            this.Tábla.MaxFilterButtonImageHeight = 23;
             this.Tábla.Name = "Tábla";
-            this.Tábla.RowHeadersVisible = false;
-            this.Tábla.RowHeadersWidth = 51;
+            this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Tábla.RowHeadersWidth = 50;
             this.Tábla.Size = new System.Drawing.Size(1404, 334);
+            this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 0;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -329,8 +390,6 @@
             this.tabPage2.Controls.Add(this.Rich_UtasításLeírása);
             this.tabPage2.Controls.Add(this.Text_id);
             this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.Adatok_beolvasása);
-            this.tabPage2.Controls.Add(this.Beviteli_táblakészítés);
             this.tabPage2.Controls.Add(this.Új_elem);
             this.tabPage2.Controls.Add(this.Adat_frissítés);
             this.tabPage2.Controls.Add(this.Adat_Módosítás);
@@ -567,30 +626,6 @@
             this.label2.Size = new System.Drawing.Size(23, 20);
             this.label2.TabIndex = 195;
             this.label2.Text = "Id";
-            // 
-            // Adatok_beolvasása
-            // 
-            this.Adatok_beolvasása.BackgroundImage = global::Villamos.Properties.Resources.Custom_Icon_Design_Flatastic_1_Import;
-            this.Adatok_beolvasása.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Adatok_beolvasása.Location = new System.Drawing.Point(862, 26);
-            this.Adatok_beolvasása.Name = "Adatok_beolvasása";
-            this.Adatok_beolvasása.Size = new System.Drawing.Size(45, 45);
-            this.Adatok_beolvasása.TabIndex = 12;
-            this.toolTip1.SetToolTip(this.Adatok_beolvasása, "Beolvassa a programba az Excel táblába előszerkesztett adatokat");
-            this.Adatok_beolvasása.UseVisualStyleBackColor = true;
-            this.Adatok_beolvasása.Click += new System.EventHandler(this.Adatok_beolvasása_Click);
-            // 
-            // Beviteli_táblakészítés
-            // 
-            this.Beviteli_táblakészítés.BackgroundImage = global::Villamos.Properties.Resources.Custom_Icon_Design_Flatastic_1_Export;
-            this.Beviteli_táblakészítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Beviteli_táblakészítés.Location = new System.Drawing.Point(801, 26);
-            this.Beviteli_táblakészítés.Name = "Beviteli_táblakészítés";
-            this.Beviteli_táblakészítés.Size = new System.Drawing.Size(45, 45);
-            this.Beviteli_táblakészítés.TabIndex = 11;
-            this.toolTip1.SetToolTip(this.Beviteli_táblakészítés, "Beolvasáshoz készít Excel táblát");
-            this.Beviteli_táblakészítés.UseVisualStyleBackColor = true;
-            this.Beviteli_táblakészítés.Click += new System.EventHandler(this.Beviteli_táblakészítés_Click);
             // 
             // Új_elem
             // 
@@ -1104,7 +1139,7 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(375, 10);
+            this.Holtart.Location = new System.Drawing.Point(373, 9);
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(975, 30);
             this.Holtart.TabIndex = 193;
@@ -1189,9 +1224,7 @@
         private System.Windows.Forms.TextBox Text_id;
         private System.Windows.Forms.Label label2;
         internal System.Windows.Forms.Button Adat_frissítés;
-        internal System.Windows.Forms.Button Adatok_beolvasása;
         private System.Windows.Forms.ToolTip toolTip1;
-        internal System.Windows.Forms.Button Beviteli_táblakészítés;
         internal System.Windows.Forms.Button Új_elem;
         private System.Windows.Forms.CheckBox Check_Kenés;
         internal System.Windows.Forms.Button Excel_mentés;
@@ -1240,5 +1273,10 @@
         private System.Windows.Forms.TextBox TextVerzió;
         private System.Windows.Forms.Label label22;
         private V_MindenEgyéb.MyProgressbar Holtart;
+        internal System.Windows.Forms.Button Adatok_beolvasása;
+        internal System.Windows.Forms.Button Beviteli_táblakészítés;
+        internal System.Windows.Forms.Button CsoportosBefejezés;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        internal System.Windows.Forms.Label label21;
     }
 }

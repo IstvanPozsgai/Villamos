@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -21,9 +19,9 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Technológia_Ciklus KézCiklus = new Kezelő_Technológia_Ciklus();
         readonly Kezelő_Technológia_Kivételek KTK_kéz = new Kezelő_Technológia_Kivételek();
         readonly Kezelő_Technológia_Alap KézAlap = new Kezelő_Technológia_Alap();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Technológia_TípusT KézTípus = new Kezelő_Technológia_TípusT();
 
-
-        List<Adat_Technológia_Kivételek> AdatokKiv = new List<Adat_Technológia_Kivételek>();
 
         long Kiválasztott_Sor = -1;
         int Kivétel_sor = -1;
@@ -60,8 +58,6 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -113,7 +109,7 @@ namespace Villamos.Villamos_Ablakok
             Beviteli_táblakészítés.Enabled = false;
             Adatok_beolvasása.Enabled = false;
             Adat_Módosítás.Enabled = false;
-
+            CsoportosBefejezés.Enabled = false;
             Sor_beszúrás.Enabled = false;
             Sor_törlés.Enabled = false;
 
@@ -127,6 +123,8 @@ namespace Villamos.Villamos_Ablakok
 
             Típusok_rögzítése.Enabled = false;
             Törlés_JTípus.Enabled = false;
+
+
             // ide kell az összes gombot tenni amit szabályozni akarunk false
 
             // csak főmérnökségi belépéssel törölhető
@@ -137,7 +135,7 @@ namespace Villamos.Villamos_Ablakok
                 Adat_Módosítás.Visible = true;
                 Sor_beszúrás.Visible = true;
                 Sor_törlés.Visible = true;
-
+                CsoportosBefejezés.Visible = true;
                 Típus_Rögzítés.Visible = true;
 
                 Ciklus_rögzít.Visible = true;
@@ -157,7 +155,7 @@ namespace Villamos.Villamos_Ablakok
                 Adat_Módosítás.Visible = false;
                 Sor_beszúrás.Visible = false;
                 Sor_törlés.Visible = false;
-
+                CsoportosBefejezés.Visible = false;
                 Típus_Rögzítés.Visible = false;
 
                 Ciklus_rögzít.Visible = false;
@@ -179,6 +177,7 @@ namespace Villamos.Villamos_Ablakok
                 Adat_Módosítás.Enabled = true;
                 Sor_beszúrás.Enabled = true;
                 Sor_törlés.Enabled = true;
+                CsoportosBefejezés.Enabled = true;
             }
             // módosítás 2
             if (MyF.Vanjoga(melyikelem, 2))
@@ -468,16 +467,27 @@ namespace Villamos.Villamos_Ablakok
         {
             Járműtípus_ = Járműtípus.Text.Trim();
             Alap_tábla_író();
-
         }
 
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
-            long sorszám = long.Parse(Tábla.Rows[e.RowIndex].Cells[0].Value.ToString());
-            Egy_adat_Kiírása(sorszám);
-            Tábla.Rows[e.RowIndex].Selected = true;
-            Kiválasztott_Sor = sorszám;
+            try
+            {
+                if (e.RowIndex < 0) return;
+                if (!long.TryParse(Tábla.Rows[e.RowIndex].Cells[0].Value.ToString(), out long sorszám)) throw new HibásBevittAdat("Nincs kiválasztva egy sor sem.");
+                Egy_adat_Kiírása(sorszám);
+                Tábla.Rows[e.RowIndex].Selected = true;
+                Kiválasztott_Sor = sorszám;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Excel_mentés_Click(object sender, EventArgs e)
@@ -856,38 +866,39 @@ namespace Villamos.Villamos_Ablakok
 
                 int sormax = MyE.Utolsósor(munkalap);
                 Holtart.Be(sormax + 1);
-
+                List<Adat_Technológia_Új> BeAdatok = new List<Adat_Technológia_Új>();
                 for (int i = 2; i <= sormax; i++)
                 {
                     bool Kenés = bool.TryParse(MyE.Beolvas("N" + i.ToString()).Trim(), out bool result);
 
-                    string Karb_fok = MyE.Beolvas("G" + i.ToString()).Trim();
-                    int Karb_sor = Adatok_ciklus.First(x => x.Fokozat.Trim() == Karb_fok).Sorszám;
-                    Adat_technológia_Ciklus AdatCiklus1 = new Adat_technológia_Ciklus(Karb_sor, Karb_fok);
+                    string Karb_fok = MyE.Beolvas($"G{i}").Trim();
+                    int Karb_sor1 = Adatok_ciklus.First(x => x.Fokozat == Karb_fok).Sorszám;
 
-                    Karb_fok = MyE.Beolvas("H" + i.ToString()).Trim();
-                    Karb_sor = Adatok_ciklus.First(x => x.Fokozat.Trim() == Karb_fok).Sorszám;
-                    Adat_technológia_Ciklus AdatCiklus2 = new Adat_technológia_Ciklus(Karb_sor, Karb_fok);
+                    Karb_fok = MyE.Beolvas($"H{i}").Trim();
+                    int Karb_sor2 = Adatok_ciklus.First(x => x.Fokozat == Karb_fok).Sorszám;
 
-                    Adat_Technológia Adat = new Adat_Technológia(
-                        int.Parse(MyE.Beolvas("A" + i.ToString()).Trim()),
-                        MyE.Beolvas("B" + i.ToString()).Trim(),
-                        MyE.Beolvas("C" + i.ToString()).Trim(),
-                        MyE.Beolvas("D" + i.ToString()).Trim(),
-                        MyE.Beolvas("E" + i.ToString()).Trim(),
-                        MyE.Beolvas("F" + i.ToString()).Trim(),
-                        AdatCiklus1,
-                        AdatCiklus2,
-                        MyE.BeolvasDátum("I" + i.ToString()),
-                        MyE.BeolvasDátum("J" + i.ToString()),
-                        MyE.Beolvas("K" + i.ToString()).Trim(),
-                        MyE.Beolvas("L" + i.ToString()).Trim(),
-                        MyE.Beolvas("M" + i.ToString()).Trim(),
+
+                    Adat_Technológia_Új Adat = new Adat_Technológia_Új(
+                        int.Parse(MyE.Beolvas($"A{i}")),
+                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"B{i}").Trim(), 0, 10),
+                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"C{i}").Trim(), 0, 10),
+                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"D{i}").Trim(), 0, 250),
+                        MyE.Beolvas($"E{i}").Trim(),
+                        MyE.Beolvas($"F{i}").Trim(),
+                        Karb_sor1,
+                        Karb_sor2,
+                        MyE.BeolvasDátum($"I{i}"),
+                        MyE.BeolvasDátum($"J{i}"),
+                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"K{i}").Trim(), 0, 50),
+                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"L{i}").Trim(), 0, 50),
+                        MyE.Beolvas($"M{i}").Trim(),
                         result
                         );
+                    BeAdatok.Add(Adat);
                     Holtart.Lép();
-                    KézAdat.Rögzít_adat(hely, jelszó, Adat);
+
                 }
+                KézAdat.Rögzítés(Járműtípus.Text.Trim(), BeAdatok);
                 Holtart.Ki();
                 MyE.ExcelBezárás();
                 System.IO.File.Delete(fájlexc);
@@ -908,34 +919,20 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Típusok rögzítése
-
         private void Típus_Rögzítés_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Text_Típus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve a típus mező, így nem lehet rögzíteni");
+                if (Text_Típus.Text.Trim().Length > 20) throw new HibásBevittAdat("Azonosító maximum 20 karakter hosszú lehet!");
 
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Technológia\technológia.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = "SELECT * FROM Típus_tábla ";
-
-                Kezelő_Technológia_TípusT Kéz = new Kezelő_Technológia_TípusT();
-                List<Adat_Technológia_Alap> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                long id = 1;
-                if (Adatok.Count > 0) id = Adatok.Max(a => a.Id) + 1;
-
-                Adat_Technológia_Alap Adat = new Adat_Technológia_Alap(id, Text_Típus.Text.Trim());
-                KézAdat.Rögzít_Tech_típus(hely, jelszó, Adat);
-
-
-                //Létrehozzuk az adatbázist
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                if (!System.IO.File.Exists(hely))
-                    Adatbázis_Létrehozás.Technológia_Adat(hely);
-
-
+                Adat_Technológia_Alap Elem = KézAlap.Lista_Adatok().Where(a => a.Típus == Text_Típus.Text.Trim()).FirstOrDefault();
+                if (Elem == null)
+                {
+                    Adat_Technológia_Alap ADAT = new Adat_Technológia_Alap(0, Text_Típus.Text.Trim());
+                    KézAlap.Rögzítés(ADAT);
+                    MessageBox.Show("Az adatok rögzítése elkészült", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
                 Típus_feltöltés();
                 Text_Típus.Text = "";
             }
@@ -955,7 +952,6 @@ namespace Villamos.Villamos_Ablakok
             Típus_feltöltés();
         }
 
-
         private void List_típus_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (List_típus.SelectedItems.Count > 0)
@@ -973,8 +969,6 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Ciklus
-
-
         private void Elérés_feltöltés()
         {
             Combo_elérés.Items.Clear();
@@ -998,10 +992,6 @@ namespace Villamos.Villamos_Ablakok
                 if (Text_Típus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva egy típus sem.");
                 if (Combo_elérés.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva egy elérési mód sem.");
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                if (!System.IO.File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Adat(hely);
-                string jelszó = "Bezzegh";
                 int csoport;
                 if (Chk_csoportos.Checked)
                     csoport = 1;
@@ -1010,16 +1000,14 @@ namespace Villamos.Villamos_Ablakok
                 else
                     csoport = 3;
 
-
-                Adat_technológia_Ciklus Adat = new Adat_technológia_Ciklus(
+                Adat_technológia_Ciklus ADAT = new Adat_technológia_Ciklus(
                                 Sorszám,
                                 Text_fokozat.Text.Trim(),
                                 csoport,
                                 Combo_elérés.Text.Trim(),
                                 TextVerzió.Text.Trim()
                                 );
-
-                KézAdat.Rögzít_Ciklus(hely, jelszó, Adat);
+                KézCiklus.Rögzítés(Text_Típus.Text.Trim(), ADAT);
                 Ciklus_Lista();
             }
             catch (HibásBevittAdat ex)
@@ -1042,15 +1030,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                if (!File.Exists(hely)) throw new HibásBevittAdat("Nem létezik ehhez az adatbázishoz Ciklus besorolás!");
-
-                string szöveg = "SELECT * FROM karbantartás  ORDER BY sorszám";
-
-                List<Adat_technológia_Ciklus> Adatok = new List<Adat_technológia_Ciklus>();
-                Adatok = KézCiklus.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_technológia_Ciklus> Adatok = KézCiklus.Lista_Adatok(Text_Típus.Text.Trim());
                 Ciklus_tábla.Rows.Clear();
                 Ciklus_tábla.Columns.Clear();
                 Ciklus_tábla.Refresh();
@@ -1093,18 +1073,15 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void Ciklus_Törlés_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                if (!System.IO.File.Exists(hely)) throw new HibásBevittAdat("Nem létezik ehhez az adatbázishoz Ciklus besorolás!");
                 if (!int.TryParse(Text_sorszám.Text.Trim(), out int Sorszám)) throw new HibásBevittAdat("A Sorszámnak egész számnak kell lennie");
-                KézAdat.Törlés_Ciklus_adat(hely, jelszó, Sorszám);
+                KézCiklus.Törlés(Text_Típus.Text.Trim(), Sorszám);
+
                 Ciklus_Lista();
             }
             catch (HibásBevittAdat ex)
@@ -1116,7 +1093,6 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void Ciklus_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -1134,29 +1110,19 @@ namespace Villamos.Villamos_Ablakok
             }
 
         }
-
         #endregion
 
 
         #region Típus-Típus kapcsolat
-
         private void Típusok_feltöltése()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT DISTINCT(Valóstípus) FROM állománytábla ";
-
-            List<string> Adatok = new List<string>();
-            Kezelő_Jármű KEZJármű = new Kezelő_Jármű();
-            Adatok = KEZJármű.List_Jármű_típusok(hely, jelszó, szöveg);
-
             Combo_JTípus.Items.Clear();
-
+            List<Adat_Jármű> AdatokÖ = KézJármű.Lista_Adatok("Főmérnökség");
+            List<string> Adatok = AdatokÖ.Select(a => a.Típus).Distinct().ToList();
             foreach (string adat in Adatok)
             {
                 Combo_JTípus.Items.Add(adat);
             }
-
         }
 
         private void Típusok_rögzítése_Click(object sender, EventArgs e)
@@ -1167,25 +1133,8 @@ namespace Villamos.Villamos_Ablakok
                 if (Text_Típus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva Technológia!");
                 if (List_Típusok.Text.Contains(Combo_JTípus.Text.Trim())) throw new HibásBevittAdat("Van már ilyen típus hozzáadva a technológiához!");
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                if (!System.IO.File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Adat(hely);
-                string jelszó = "Bezzegh";
-                string szöveg = "SELECT * FROM típus_tábla ORDER BY id desc";
-
-                Kezelő_Technológia_TípusT Kéz = new Kezelő_Technológia_TípusT();
-                List<Adat_Technológia_Alap> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                long id = 1;
-                if (Adatok.Count > 0) id = Adatok.Max(a => a.Id) + 1;
-
-                Adat_Technológia_Alap Adat = new Adat_Technológia_Alap(
-                    id,
-                    Combo_JTípus.Text.Trim()
-                    );
-
-                KézAdat.Rögzít_Tech_típus(hely, jelszó, Adat);
-
+                Adat_Technológia_Alap ADAT = new Adat_Technológia_Alap(0, Combo_JTípus.Text.Trim());
+                KézTípus.Rögzítés(Combo_JTípus.Text.Trim(), ADAT);
                 Típus_listázása_kapcs();
             }
             catch (HibásBevittAdat ex)
@@ -1209,12 +1158,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = "SELECT * FROM típus_tábla ORDER BY típus";
-
-                List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
-                Adatok = KézAdat.List_Tech_típus(hely, jelszó, szöveg);
+                List<Adat_Technológia_Alap> Adatok = KézTípus.Lista_Adatok(Text_Típus.Text.Trim());
 
                 List_Típusok.Items.Clear();
                 foreach (Adat_Technológia_Alap elem in Adatok)
@@ -1237,12 +1181,8 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                if (List_Típusok.SelectedItems.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy elem sem a törléshez.");
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                KézAdat.Törlés_Technológia_Jtípus(hely, jelszó, List_Típusok.SelectedItem.ToString());
+                if (List_Típusok.SelectedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy elem sem a törléshez.");
+                KézTípus.Törlés(Text_Típus.Text.Trim(), List_Típusok.SelectedItem.ToString());
                 Típus_listázása_kapcs();
             }
 
@@ -1260,56 +1200,57 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Kivételek kezelése
-        void Altípusok_feltöltése()
-        {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-            string jelszó = "Bezzegh";
-            if (!System.IO.File.Exists(hely))
-                return;
-
-            string szöveg = "SELECT distinct technológia.Altípus FROM technológia WHERE technológia.Altípus<>'_' And technológia.Altípus Is Not Null And technológia.Altípus<>''";
-            Kivétel_ALtípus.Items.Clear();
-            Kivétel_ALtípus.BeginUpdate();
-            Kivétel_ALtípus.Items.Add("");
-            Kivétel_ALtípus.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "altípus"));
-            Kivétel_ALtípus.EndUpdate();
-            Kivétel_ALtípus.Refresh();
-        }
-
-        void Pályaszámok_feltöltése()
-        {
-            if (List_Típusok.Items.Count < 1) return;
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT Azonosító FROM állománytábla WHERE ";
-            szöveg += $" valóstípus='{List_Típusok.Items[0].ToString().Trim()}'";
-            if (List_Típusok.Items.Count > 1)
-            {
-                for (int i = 1; i < List_Típusok.Items.Count; i++)
-                {
-                    szöveg += $" Or valóstípus='{List_Típusok.Items[i].ToString().Trim()}'";
-                }
-            }
-            szöveg += " ORDER BY azonosító";
-
-            Kivétel_Pályaszám.Items.Clear();
-            Kivétel_Pályaszám.BeginUpdate();
-            Kivétel_Pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "Azonosító"));
-            Kivétel_Pályaszám.EndUpdate();
-            Kivétel_Pályaszám.Refresh();
-
-        }
-
-
-        private void KivételekListaFeltöltése()
+        private void Altípusok_feltöltése()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = $"SELECT * FROM Kivételek";
-                if (!System.IO.File.Exists(hely)) return;
-                AdatokKiv = KTK_kéz.Lista_Adatok(hely, jelszó, szöveg);
+                if (Text_Típus.Text.Trim() != "") return;
+                List<Adat_Technológia_Új> Adatok = KézAdat.Lista_Adatok(Text_Típus.Text.Trim());
+                List<string> Elemek = (from a in Adatok
+                                       where a.Altípus != "_"
+                                       && a.Altípus != ""
+                                       && a.Altípus != null
+                                       select a.Altípus).Distinct().ToList();
+
+                Kivétel_ALtípus.Items.Clear();
+                Kivétel_ALtípus.Items.Add("");
+                foreach (string Elem in Elemek)
+                    Kivétel_ALtípus.Items.Add(Elem);
+
+                Kivétel_ALtípus.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Pályaszámok_feltöltése()
+        {
+            try
+            {
+                if (List_Típusok.Items.Count < 1) return;
+
+                List<Adat_Jármű> AdatokÖ = KézJármű.Lista_Adatok("Főmérnökség");
+                List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
+
+                for (int i = 1; i < List_Típusok.Items.Count; i++)
+                {
+                    List<Adat_Jármű> Ideig = AdatokÖ.Where(a => a.Valóstípus == List_Típusok.Items[i].ToString().Trim()).ToList();
+                    if (Ideig != null) Adatok.AddRange(Ideig);
+                }
+
+                Adatok.OrderBy(a => a.Azonosító);
+                Kivétel_Pályaszám.Items.Clear();
+                foreach (Adat_Jármű elem in Adatok)
+                    Kivétel_Pályaszám.Items.Add(elem.Azonosító);
+
+                Kivétel_Pályaszám.Refresh();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1326,15 +1267,10 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = "SELECT * FROM kivételek Order By azonosító, id";
-                if (!System.IO.File.Exists(hely)) return;
-
                 if (Kivétel_Pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva egy pályaszám sem.");
                 if (Kivétel_ALtípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva egy altípus sem.");
 
-                KivételekListaFeltöltése();
+                List<Adat_Technológia_Kivételek> AdatokKiv = KTK_kéz.Lista_Adatok(Text_Típus.Text.Trim());
                 Adat_Technológia_Kivételek Elem = (from a in AdatokKiv
                                                    where a.Altípus == Kivétel_ALtípus.Text.Trim()
                                                    && a.Azonosító == Kivétel_Pályaszám.Text.Trim()
@@ -1342,11 +1278,8 @@ namespace Villamos.Villamos_Ablakok
 
                 if (Elem == null)
                 {
-                    // rögzítjuk új elemkésnt megkeressük az utolsó sorszámot;
-                    long ID = 1;
-                    if (AdatokKiv.Count > 0) ID = AdatokKiv.Max(a => a.Id) + 1;
-                    szöveg = $"INSERT INTO kivételek  (id, azonosító, altípus ) VALUES ({ID}, '{Kivétel_Pályaszám.Text.Trim()}', '{Kivétel_ALtípus.Text.Trim()}')";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Technológia_Kivételek ADAT = new Adat_Technológia_Kivételek(0, Kivétel_Pályaszám.Text.Trim(), Kivétel_ALtípus.Text.Trim());
+                    KTK_kéz.Rögzítés(Text_Típus.Text.Trim(), ADAT);
                     Kivétel_Tábla_kiírás();
                 }
             }
@@ -1361,18 +1294,16 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Kivétel_Frissít_Click(object sender, EventArgs e)
         {
             Kivétel_Tábla_kiírás();
         }
 
-
-        void Kivétel_Tábla_kiírás()
+        private void Kivétel_Tábla_kiírás()
         {
             try
             {
-                KivételekListaFeltöltése();
+                List<Adat_Technológia_Kivételek> AdatokKiv = KTK_kéz.Lista_Adatok(Text_Típus.Text.Trim());
 
                 Altípus_tábla.Rows.Clear();
                 Altípus_tábla.Columns.Clear();
@@ -1421,28 +1352,19 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Kivétel_töröl_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Kivétel_sor == -1) throw new HibásBevittAdat("Nincs kiválasztva a táblázat egy érvényes sora sem a törléshez.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Text_Típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                if (!System.IO.File.Exists(hely)) return;
-
-                KivételekListaFeltöltése();
+                List<Adat_Technológia_Kivételek> AdatokKiv = KTK_kéz.Lista_Adatok(Text_Típus.Text.Trim());
                 Adat_Technológia_Kivételek Elem = (from a in AdatokKiv
                                                    where a.Id == Kivétel_sor
                                                    select a).FirstOrDefault();
 
-
                 if (Elem != null)
-                {
-                    string szöveg = $"DELETE FROM Kivételek WHERE id={Kivétel_sor}";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                    KTK_kéz.Törlés(Text_Típus.Text.Trim(), Kivétel_sor);
                 Kivétel_sor = -1;
                 Kivétel_Tábla_kiírás();
             }

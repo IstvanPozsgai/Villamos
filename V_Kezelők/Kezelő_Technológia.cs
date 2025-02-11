@@ -67,6 +67,52 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public void Rögzítés(string Típus, List<Adat_Technológia_Új> BeAdatok)
+        {
+            try
+            {
+                List<Adat_Technológia_Új> Adatok = Lista_Adatok(Típus);
+                long id = 1;
+                if (Adatok != null && Adatok.Count > 0) id = Adatok.Max(a => a.ID) + 1;
+
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Technológia_Új Adat in BeAdatok)
+                {
+                    string szöveg = "INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
+                                " karb_ciklus_eleje,  karb_ciklus_vége,  érv_kezdete,  érv_vége,  szakmai_bontás,  munkaterületi_bontás,  altípus,  kenés ) VALUES (";
+                    szöveg += $"{id}, "; //id
+                    szöveg += $"'{Adat.Részegység.Trim()}', "; // részegység
+                    szöveg += $"'{Adat.Munka_utasítás_szám.Trim()}', ";//  munka_utasítás_szám
+                    szöveg += $"'{Adat.Utasítás_Cím.Trim()}', ";//   utasítás_Cím
+                    szöveg += $"'{Adat.Utasítás_leírás.Trim()}', ";//   utasítás_leírás
+                    szöveg += $"'{Adat.Paraméter.Trim()}', ";//   paraméter
+                    szöveg += $"{Adat.Karb_ciklus_eleje}, ";//  karb_ciklus_eleje
+                    szöveg += $"{Adat.Karb_ciklus_vége}, ";//  karb_ciklus_vége
+                    szöveg += $"'{Adat.Érv_kezdete:yyyy.MM.dd}', ";//   érv_kezdete
+                    szöveg += $"'{Adat.Érv_vége:yyyy.MM.dd}', ";//    érv_vége
+                    szöveg += $"'{Adat.Szakmai_bontás.Trim()}', ";//     szakmai_bontás
+                    szöveg += $"'{Adat.Munkaterületi_bontás.Trim()}',";//     munkaterületi_bontás
+                    szöveg += $"'{Adat.Altípus.Trim()}', ";//    altípus
+                    szöveg += $"{Adat.Kenés.ToString()}) ";//   kenés
+                    SzövegGy.Add(szöveg);
+                    id++;
+
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw new HibásBevittAdat("Az adatok nem kerültek rögzítésre.");
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new HibásBevittAdat("Az adatok nem kerültek rögzítésre.");
+            }
+
+        }
 
 
 
@@ -126,42 +172,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzít_Tech_típus(string hely, string jelszó, Adat_Technológia_Alap adat)
-        {
-            if (adat.Típus.Length > 20) throw new Exception("Azonosító maximum 20 karakter hosszú lehet!\n");
 
-            string szöveg = $"SELECT * FROM Típus_tábla ";
-            Kezelő_Technológia_TípusT KézTTípus = new Kezelő_Technológia_TípusT();
-            List<Adat_Technológia_Alap> AdatokTípusT = KézTTípus.Lista_Adatok(hely, jelszó, szöveg);
-            Adat_Technológia_Alap Elem = AdatokTípusT.FirstOrDefault(a => a.Típus == adat.Típus.Trim());
-
-            if (Elem == null)
-            {
-                szöveg = $"INSERT INTO Típus_tábla  (id, Típus) VALUES ({adat.Id}, '{adat.Típus.Trim()}' )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            else
-                throw new HibásBevittAdat("Van már ilyen típus létrehozva.");
-        }
-
-        public void Törlés_Technológia_Jtípus(string hely, string jelszó, string Típus)
-        {
-            string szöveg = $"SELECT * FROM Típus_tábla ";
-            Kezelő_Technológia_TípusT KézTTípus = new Kezelő_Technológia_TípusT();
-            List<Adat_Technológia_Alap> AdatokTípusT = KézTTípus.Lista_Adatok(hely, jelszó, szöveg);
-            Adat_Technológia_Alap Elem = AdatokTípusT.FirstOrDefault(a => a.Típus == Típus.Trim());
-
-            if (Elem == null)
-            {
-                throw new HibásBevittAdat("Nincs ilyen Jármű Típus adat az adatbázisban");
-            }
-            else
-            {
-                szöveg = $"DELETE FROM típus_tábla WHERE típus='{Típus}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-            }
-
-        }
 
         public List<Adat_Technológia_Alap> List_Tech_típus(string hely, string jelszó, string szöveg)
         {
@@ -320,6 +331,7 @@ namespace Villamos.Kezelők
         }
 
 
+
         #region Ciklus-Karbantartás
 
         public List<Adat_technológia_Ciklus> CiklusListaFeltöltés(string hely, string jelszó)
@@ -344,51 +356,10 @@ namespace Villamos.Kezelők
             return Válasz;
         }
 
-        public void Rögzít_Ciklus(string hely, string jelszó, Adat_technológia_Ciklus Adat)
-        {
-            string szöveg;
-            AdatokCiklus = CiklusListaFeltöltés(hely, jelszó);
-            Adat_technológia_Ciklus Elem = AdatokCiklus.FirstOrDefault(a => a.Sorszám == Adat.Sorszám);
-
-            if (Elem == null)
-            {
-                szöveg = "INSERT INTO Karbantartás  (Sorszám, Fokozat, Csoportos, Elérés, Verzió) VALUES (";
-                szöveg += $"{Adat.Sorszám}, ";
-                szöveg += $"'{Adat.Fokozat}', ";
-                szöveg += $"{Adat.Csoportos}, ";
-                szöveg += $"'{Adat.Elérés}', ";
-                szöveg += $"'{Adat.Verzió}' )";
-            }
-            else
-            {
-                szöveg = "UPDATE Karbantartás  SET ";
-                szöveg += $"Fokozat='{Adat.Fokozat}', ";
-                szöveg += $"Csoportos={Adat.Csoportos}, ";
-                szöveg += $"Elérés='{Adat.Elérés}', ";
-                szöveg += $"Verzió='{Adat.Verzió}' ";
-                szöveg += $"WHERE Sorszám={Adat.Sorszám}";
-            }
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
 
 
-        public void Törlés_Ciklus_adat(string hely, string jelszó, int Sorszám)
-        {
-            string szöveg;
-            AdatokCiklus = CiklusListaFeltöltés(hely, jelszó);
-            Adat_technológia_Ciklus Elem = AdatokCiklus.FirstOrDefault(a => a.Sorszám == Sorszám);
 
-            if (Elem == null)
-            {
-                throw new HibásBevittAdat("Nincs ilyen sorszámú adat az adatbázisban");
-            }
-            else
-            {
-                szöveg = $"DELETE FROM Karbantartás WHERE sorszám={Sorszám}";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-            }
 
-        }
 
 
 
