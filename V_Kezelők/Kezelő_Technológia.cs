@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők
 {
@@ -114,6 +115,62 @@ namespace Villamos.Kezelők
 
         }
 
+        public void Törlés(string Típus, long sorszám, bool végig)
+        {
+            try
+            {
+                FájlBeállítás(Típus);
+                string szöveg;
+                if (végig)
+                    szöveg = $"DELETE FROM technológia WHERE id={sorszám}";
+                else
+                    szöveg = $"DELETE FROM technológia WHERE id>={sorszám}";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Egy_Beszúrás(string Típus, long sorszám, List<Adat_Technológia_Új> Adatok)
+        {
+            Törlés(Típus, sorszám, true);
+            Adat_Technológia_Új Adat = new Adat_Technológia_Új(sorszám, "", "", "", "", "", 0, 0, MyF.ElsőNap(), MyF.ElsőNap(), "", "", "", true);
+            List<Adat_Technológia_Új> AdatokÚj = new List<Adat_Technológia_Új>();
+            AdatokÚj.Add(Adat);
+
+            foreach (Adat_Technológia_Új ELem in Adatok)
+            {
+                sorszám++;
+                Adat = new Adat_Technológia_Új(sorszám, ELem.Részegység, ELem.Munka_utasítás_szám, ELem.Utasítás_Cím, ELem.Utasítás_leírás, ELem.Paraméter, ELem.Karb_ciklus_eleje,
+                    ELem.Karb_ciklus_vége, ELem.Érv_kezdete, ELem.Érv_vége, ELem.Szakmai_bontás, ELem.Munkaterületi_bontás, ELem.Altípus, ELem.Kenés);
+                AdatokÚj.Add(Adat);
+            }
+            Rögzítés(Típus, AdatokÚj);
+        }
+
+        public void Egy_Törlése(string Típus, long sorszám, List<Adat_Technológia_Új> Adatok)
+        {
+            Törlés(Típus, sorszám, false);
+            sorszám--;
+            List<Adat_Technológia_Új> AdatokÚj = new List<Adat_Technológia_Új>();
+
+            foreach (Adat_Technológia_Új ELem in Adatok)
+            {
+                sorszám++;
+                Adat_Technológia_Új Adat = new Adat_Technológia_Új(sorszám, ELem.Részegység, ELem.Munka_utasítás_szám, ELem.Utasítás_Cím, ELem.Utasítás_leírás, ELem.Paraméter, ELem.Karb_ciklus_eleje,
+                    ELem.Karb_ciklus_vége, ELem.Érv_kezdete, ELem.Érv_vége, ELem.Szakmai_bontás, ELem.Munkaterületi_bontás, ELem.Altípus, ELem.Kenés);
+                AdatokÚj.Add(Adat);
+            }
+            Rögzítés(Típus, AdatokÚj);
+        }
+
 
 
 
@@ -170,83 +227,6 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
-        }
-
-
-
-        public List<Adat_Technológia_Alap> List_Tech_típus(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
-            Adat_Technológia_Alap Adat;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Technológia_Alap(
-                                   rekord["id"].ToÉrt_Long(),
-                                    rekord["típus"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public Adat_Technológia Egy_Adat(string hely, string jelszó, long id)
-        {
-            Adat_Technológia Adat = null;
-            string szöveg = "SELECT Karbantartás_1.fokozat, Karbantartás.fokozat, technológia.Id, technológia.* ";
-            szöveg += " FROM (Karbantartás RIGHT JOIN technológia ON Karbantartás.sorszám = technológia.Karb_ciklus_eleje) ";
-            szöveg += " LEFT JOIN Karbantartás AS Karbantartás_1 ON technológia.Karb_ciklus_vége = Karbantartás_1.sorszám ";
-            szöveg += $" WHERE technológia.Id= {id}";
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat_technológia_Ciklus AdatCikluse = new Adat_technológia_Ciklus(int.Parse(rekord["Karb_ciklus_eleje"].ToString()), rekord["Karbantartás.fokozat"].ToString());
-                            Adat_technológia_Ciklus AdatCiklusv = new Adat_technológia_Ciklus(int.Parse(rekord["Karb_ciklus_vége"].ToString()), rekord["Karbantartás_1.fokozat"].ToString());
-
-                            Adat = new Adat_Technológia(
-                                id,
-                                rekord["részegység"].ToStrTrim(),
-                                rekord["munka_utasítás_szám"].ToStrTrim(),
-                                rekord["utasítás_cím"].ToStrTrim(),
-                                rekord["utasítás_leírás"].ToStrTrim(),
-                                rekord["paraméter"].ToStrTrim(),
-                                AdatCikluse,
-                                AdatCiklusv,
-                                rekord["érv_kezdete"].ToÉrt_DaTeTime(),
-                                rekord["érv_vége"].ToÉrt_DaTeTime(),
-                                rekord["szakmai_bontás"].ToStrTrim(),
-                                rekord["munkaterületi_bontás"].ToStrTrim(),
-                                rekord["altípus"].ToStrTrim(),
-                                rekord["kenés"].ToÉrt_Bool()
-                                );
-                        }
-                    }
-                }
-            }
-            return Adat;
         }
 
         public void Rögzít_adat(string hely, string jelszó, Adat_Technológia Adat)
@@ -329,277 +309,5 @@ namespace Villamos.Kezelők
             }
 
         }
-
-
-
-        #region Ciklus-Karbantartás
-
-        public List<Adat_technológia_Ciklus> CiklusListaFeltöltés(string hely, string jelszó)
-        {
-            List<Adat_technológia_Ciklus> Válasz = new List<Adat_technológia_Ciklus>();
-            try
-            {
-
-                string szöveg = $"SELECT * FROM Karbantartás";
-                Válasz = KézCiklus.Lista_Adatok(hely, jelszó, szöveg);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Válasz;
-        }
-
-
-
-
-
-
-
-
-        #endregion
-
-
-
-        public void Egy_Beszúrás(string hely, string jelszó, long sorszám, List<Adat_Technológia_Új> Adatok)
-        {
-
-            //kitöröljük az adatokat a sorszámtól
-            string szöveg = $"DELETE FROM technológia WHERE id>={sorszám}";
-            MyA.ABtörlés(hely, jelszó, szöveg);
-
-            foreach (Adat_Technológia_Új Adat in Adatok)
-            {
-                // Eggyel hátrébb rögzítjük az adatokat
-                szöveg = "INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
-            " karb_ciklus_eleje,  karb_ciklus_vége,  érv_kezdete,  érv_vége,  szakmai_bontás,  munkaterületi_bontás,  altípus,  kenés ) VALUES (";
-                szöveg += (Adat.ID + 1).ToString() + ", "; //id
-                szöveg += "'" + Adat.Részegység.Trim() + "', "; // részegység
-                szöveg += "'" + Adat.Munka_utasítás_szám.Trim() + "', ";//  munka_utasítás_szám
-                szöveg += "'" + Adat.Utasítás_Cím.Trim() + "', ";//   utasítás_Cím
-                szöveg += "'" + Adat.Utasítás_leírás.Trim() + "', ";//   utasítás_leírás
-                szöveg += "'" + Adat.Paraméter.Trim() + "', ";//   paraméter
-                szöveg += "'" + Adat.Karb_ciklus_eleje + "', ";//  karb_ciklus_eleje
-                szöveg += "'" + Adat.Karb_ciklus_vége + "', ";//  karb_ciklus_vége
-                szöveg += "'" + Adat.Érv_kezdete.ToString("yyyy.MM.dd") + "', ";//   érv_kezdete
-                szöveg += "'" + Adat.Érv_vége.ToString("yyyy.MM.dd") + "', ";//    érv_vége
-                szöveg += "'" + Adat.Szakmai_bontás.Trim() + "', ";//     szakmai_bontás
-                szöveg += "'" + Adat.Munkaterületi_bontás.Trim() + "',";//     munkaterületi_bontás
-                szöveg += "'" + Adat.Altípus.Trim() + "', ";//    altípus
-                szöveg += Adat.Kenés.ToString() + ") ";//   kenés
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            //beszúrjuk az új sort
-            szöveg = "INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
-            " karb_ciklus_eleje,  karb_ciklus_vége,  érv_kezdete,  érv_vége,  szakmai_bontás,  munkaterületi_bontás,  altípus,  kenés ) VALUES (";
-            szöveg += sorszám.ToString() + ", "; //id
-            szöveg += "'', "; // részegység
-            szöveg += "'', ";//  munka_utasítás_szám
-            szöveg += "'', ";//   utasítás_Cím
-            szöveg += "'', ";//   utasítás_leírás
-            szöveg += "'', ";//   paraméter
-            szöveg += "'1', ";//  karb_ciklus_eleje
-            szöveg += "'1', ";//  karb_ciklus_vége
-            szöveg += "'1900.01.01', ";//   érv_kezdete
-            szöveg += "'1900.01.01', ";//    érv_vége
-            szöveg += "'', ";//     szakmai_bontás
-            szöveg += "'',";//     munkaterületi_bontás
-            szöveg += "'', ";//    altípus
-            szöveg += false + ") ";//   kenés
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-
-        }
-
-
-        public void Egy_Törlése(string hely, string jelszó, long sorszám, List<Adat_Technológia_Új> Adatok)
-        {
-
-            //kitöröljük a sorszám adatait
-            string szöveg = $"DELETE FROM technológia WHERE id>={sorszám}";
-            MyA.ABtörlés(hely, jelszó, szöveg);
-
-            foreach (Adat_Technológia_Új Adat in Adatok)
-            {
-                // Eggyel előrébb rögzítjük az adatokat
-                szöveg = "INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
-            " karb_ciklus_eleje,  karb_ciklus_vége,  érv_kezdete,  érv_vége,  szakmai_bontás,  munkaterületi_bontás,  altípus,  kenés ) VALUES (";
-                szöveg += (Adat.ID - 1).ToString() + ", "; //id
-                szöveg += "'" + Adat.Részegység.Trim() + "', "; // részegység
-                szöveg += "'" + Adat.Munka_utasítás_szám.Trim() + "', ";//  munka_utasítás_szám
-                szöveg += "'" + Adat.Utasítás_Cím.Trim() + "', ";//   utasítás_Cím
-                szöveg += "'" + Adat.Utasítás_leírás.Trim() + "', ";//   utasítás_leírás
-                szöveg += "'" + Adat.Paraméter.Trim() + "', ";//   paraméter
-                szöveg += "'" + Adat.Karb_ciklus_eleje + "', ";//  karb_ciklus_eleje
-                szöveg += "'" + Adat.Karb_ciklus_vége + "', ";//  karb_ciklus_vége
-                szöveg += "'" + Adat.Érv_kezdete.ToString("yyyy.MM.dd") + "', ";//   érv_kezdete
-                szöveg += "'" + Adat.Érv_vége.ToString("yyyy.MM.dd") + "', ";//    érv_vége
-                szöveg += "'" + Adat.Szakmai_bontás.Trim() + "', ";//     szakmai_bontás
-                szöveg += "'" + Adat.Munkaterületi_bontás.Trim() + "',";//     munkaterületi_bontás
-                szöveg += "'" + Adat.Altípus.Trim() + "', ";//    altípus
-                szöveg += Adat.Kenés.ToString() + ") ";//   kenés
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-        }
-
-        public List<string> Lista_Altípus(string hely, string jelszó, string szöveg)
-        {
-            List<string> Adatok = new List<string>();
-            string Adat;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = rekord["altípus"].ToStrTrim();
-                                Adatok.Add(Adat);
-
-                            }
-                        }
-
-                    }
-                }
-            }
-            return Adatok;
-        }
     }
-
-    public class Kezelő_Technológia_Munkalap
-    {
-        readonly Kezelő_Technológia MyTech = new Kezelő_Technológia();
-
-        public List<Adat_Technológia_Munkalap> Lista_Technológia(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Technológia_Munkalap> Adatok = new List<Adat_Technológia_Munkalap>();
-            Adat_Technológia_Munkalap Adat;
-
-            Kezelő_Technológia MyTech = new Kezelő_Technológia();
-            List<Adat_technológia_Ciklus> AdatokCiklus = MyTech.CiklusListaFeltöltés(hely, jelszó);
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                string eleje = "";
-                                string vége = "";
-                                Adat_technológia_Ciklus CiklusElem = AdatokCiklus.FirstOrDefault(a => a.Sorszám == rekord["Karb_ciklus_eleje"].ToÉrt_Int());
-                                if (CiklusElem != null) eleje = CiklusElem.Fokozat;
-                                CiklusElem = AdatokCiklus.FirstOrDefault(a => a.Sorszám == rekord["Karb_ciklus_vége"].ToÉrt_Int());
-                                if (CiklusElem != null) vége = CiklusElem.Fokozat;
-
-                                Adat_technológia_Ciklus AdatCikluse = new Adat_technológia_Ciklus(int.Parse(rekord["Karb_ciklus_eleje"].ToString()), eleje);
-                                Adat_technológia_Ciklus AdatCiklusv = new Adat_technológia_Ciklus(int.Parse(rekord["Karb_ciklus_vége"].ToString()), vége);
-
-                                Adat = new Adat_Technológia_Munkalap(
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["Részegység"].ToStrTrim(),
-                                    rekord["Munka_utasítás_szám"].ToStrTrim(),
-                                    rekord["Utasítás_Cím"].ToStrTrim(),
-                                    rekord["Utasítás_leírás"].ToStrTrim(),
-                                    rekord["Paraméter"].ToStrTrim(),
-                                    AdatCikluse.Sorszám,
-                                    AdatCiklusv.Sorszám,
-                                    rekord["Érv_kezdete"].ToÉrt_DaTeTime(),
-                                    rekord["Érv_vége"].ToÉrt_DaTeTime(),
-                                    rekord["Szakmai_bontás"].ToStrTrim(),
-                                    rekord["Munkaterületi_bontás"].ToStrTrim(),
-                                    rekord["Altípus"].ToStrTrim(),
-                                    rekord["Kenés"].ToÉrt_Bool(),
-                                    rekord["Változatnév"].ToStrTrim(),
-                                    rekord["végzi"].ToStrTrim()
-                                    );
-
-                                Adatok.Add(Adat);
-
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public List<Adat_Technológia_Munkalap> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Technológia_Munkalap> Adatok = new List<Adat_Technológia_Munkalap>();
-            Adat_Technológia_Munkalap Adat;
-
-            Kezelő_Technológia MyTech = new Kezelő_Technológia();
-            List<Adat_technológia_Ciklus> AdatokCiklus = MyTech.CiklusListaFeltöltés(hely, jelszó);
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                string eleje = "";
-                                string vége = "";
-                                Adat_technológia_Ciklus CiklusElem = AdatokCiklus.FirstOrDefault(a => a.Sorszám == rekord["Karb_ciklus_eleje"].ToÉrt_Int());
-                                if (CiklusElem != null) eleje = CiklusElem.Fokozat;
-                                CiklusElem = AdatokCiklus.FirstOrDefault(a => a.Sorszám == rekord["Karb_ciklus_vége"].ToÉrt_Int());
-                                if (CiklusElem != null) vége = CiklusElem.Fokozat;
-
-                                Adat_technológia_Ciklus AdatCikluse = new Adat_technológia_Ciklus(int.Parse(rekord["Karb_ciklus_eleje"].ToString()), eleje);
-                                Adat_technológia_Ciklus AdatCiklusv = new Adat_technológia_Ciklus(int.Parse(rekord["Karb_ciklus_vége"].ToString()), vége);
-
-                                Adat = new Adat_Technológia_Munkalap(
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["Részegység"].ToStrTrim(),
-                                    rekord["Munka_utasítás_szám"].ToStrTrim(),
-                                    rekord["Utasítás_Cím"].ToStrTrim(),
-                                    rekord["Utasítás_leírás"].ToStrTrim(),
-                                    rekord["Paraméter"].ToStrTrim(),
-                                    AdatCikluse.Sorszám,
-                                    AdatCiklusv.Sorszám,
-                                    rekord["Érv_kezdete"].ToÉrt_DaTeTime(),
-                                    rekord["Érv_vége"].ToÉrt_DaTeTime(),
-                                    rekord["Szakmai_bontás"].ToStrTrim(),
-                                    rekord["Munkaterületi_bontás"].ToStrTrim(),
-                                    rekord["Altípus"].ToStrTrim(),
-                                    rekord["Kenés"].ToÉrt_Bool(),
-                                    rekord["Karbantartási_fokozat"].ToStrTrim(),
-                                    rekord["Változatnév"].ToStrTrim(),
-                                    rekord["végzi"].ToStrTrim()
-                                    );
-
-                                Adatok.Add(Adat);
-
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
-
-
-
 }

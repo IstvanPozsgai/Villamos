@@ -25,9 +25,6 @@ namespace Villamos.Villamos_Ablakok
 
         long Kiválasztott_Sor = -1;
         int Kivétel_sor = -1;
-        string hely_;
-        string jelszó_;
-        string szöveg_;
         string Járműtípus_;
 
         #region Alap
@@ -560,10 +557,10 @@ namespace Villamos.Villamos_Ablakok
         {
             Thread proc = new Thread(() =>
             {
-                List<Adat_Technológia_Új> Adatok = new List<Adat_Technológia_Új>();
-                Adatok = KézAdat.Lista_Adatok(Járműtípus.Text.Trim());
+                List<Adat_Technológia_Új> Adatok = KézAdat.Lista_Adatok(Járműtípus.Text.Trim());
+                Adatok = Adatok.Where(a => a.ID >= Kiválasztott_Sor).ToList();
 
-                KézAdat.Egy_Beszúrás(hely_, jelszó_, Kiválasztott_Sor, Adatok);
+                KézAdat.Egy_Beszúrás(Járműtípus.Text.Trim(), Kiválasztott_Sor, Adatok);
                 this.Invoke(callback, new object[] { });
             });
             proc.Start();
