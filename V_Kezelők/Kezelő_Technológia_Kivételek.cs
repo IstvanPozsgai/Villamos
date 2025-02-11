@@ -79,7 +79,8 @@ namespace Villamos.Kezelők
             long Válasz = 1;
             try
             {
-                Válasz = Lista_Adatok(Típus).Max(a => a.Id) + 1;
+                List<Adat_Technológia_Kivételek> Adatok = Lista_Adatok(Típus);
+                if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(a => a.Id) + 1;
             }
             catch (HibásBevittAdat ex)
             {

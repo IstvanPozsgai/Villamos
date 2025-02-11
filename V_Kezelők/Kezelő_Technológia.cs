@@ -111,6 +111,72 @@ namespace Villamos.Kezelők
 
         }
 
+        public void Rögzítés(string Típus, Adat_Technológia_Új Adat)
+        {
+            try
+            {
+                List<Adat_Technológia_Új> Adatok = Lista_Adatok(Típus);
+                long id = 1;
+                string szöveg;
+                if (Adatok != null && Adatok.Count > 0)
+                    if (Adatok.Where(a => a.ID == Adat.ID).FirstOrDefault() != null)
+                        id = Adat.ID;
+                    else
+                        id = Adatok.Max(a => a.ID) + 1;
+
+                if (Adat.ID == 0 || Adatok.Where(a => a.ID == Adat.ID).FirstOrDefault() == null)
+                {
+
+                    szöveg = "INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
+                             " karb_ciklus_eleje,  karb_ciklus_vége,  érv_kezdete,  érv_vége,  szakmai_bontás,  munkaterületi_bontás,  altípus,  kenés ) VALUES (";
+                    szöveg += $"{id}, "; //id
+                    szöveg += $"'{Adat.Részegység.Trim()}', "; // részegység
+                    szöveg += $"'{Adat.Munka_utasítás_szám.Trim()}', ";//  munka_utasítás_szám
+                    szöveg += $"'{Adat.Utasítás_Cím.Trim()}', ";//   utasítás_Cím
+                    szöveg += $"'{Adat.Utasítás_leírás.Trim()}', ";//   utasítás_leírás
+                    szöveg += $"'{Adat.Paraméter.Trim()}', ";//   paraméter
+                    szöveg += $"{Adat.Karb_ciklus_eleje}, ";//  karb_ciklus_eleje
+                    szöveg += $"{Adat.Karb_ciklus_vége}, ";//  karb_ciklus_vége
+                    szöveg += $"'{Adat.Érv_kezdete:yyyy.MM.dd}', ";//   érv_kezdete
+                    szöveg += $"'{Adat.Érv_vége:yyyy.MM.dd}', ";//    érv_vége
+                    szöveg += $"'{Adat.Szakmai_bontás.Trim()}', ";//     szakmai_bontás
+                    szöveg += $"'{Adat.Munkaterületi_bontás.Trim()}',";//     munkaterületi_bontás
+                    szöveg += $"'{Adat.Altípus.Trim()}', ";//    altípus
+                    szöveg += $"{Adat.Kenés}) ";//   kenés
+                }
+                else
+                {
+                    szöveg = "UPDATE technológia SET ";
+                    szöveg += $"részegység='{Adat.Részegység.Trim()}', ";
+                    szöveg += $"munka_utasítás_szám='{Adat.Munka_utasítás_szám.Trim()}', ";
+                    szöveg += $"utasítás_Cím='{Adat.Utasítás_Cím.Trim()}', ";
+                    szöveg += $"utasítás_leírás='{Adat.Utasítás_leírás.Trim()}', ";
+                    szöveg += $"paraméter='{Adat.Paraméter.Trim()}', ";
+                    szöveg += $"karb_ciklus_eleje={Adat.Karb_ciklus_eleje}, ";
+                    szöveg += $"karb_ciklus_vége={Adat.Karb_ciklus_vége}, ";
+                    szöveg += $"érv_kezdete='{Adat.Érv_kezdete:yyyy.MM.dd}', ";
+                    szöveg += $"érv_vége='{Adat.Érv_vége:yyyy.MM.dd}', ";
+                    szöveg += $"szakmai_bontás='{Adat.Szakmai_bontás.Trim()}', ";
+                    szöveg += $"munkaterületi_bontás='{Adat.Munkaterületi_bontás.Trim()}', ";
+                    szöveg += $"altípus='{Adat.Altípus.Trim()}', ";
+                    szöveg += $"kenés={Adat.Kenés} ";
+                    szöveg += $" WHERE id={Adat.ID}";
+                }
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw new HibásBevittAdat("Az adatok nem kerültek rögzítésre.");
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new HibásBevittAdat("Az adatok nem kerültek rögzítésre.");
+            }
+        }
+
         public void Törlés(string Típus, long sorszám, bool végig)
         {
             try
@@ -118,9 +184,9 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Típus);
                 string szöveg;
                 if (végig)
-                    szöveg = $"DELETE FROM technológia WHERE id={sorszám}";
-                else
                     szöveg = $"DELETE FROM technológia WHERE id>={sorszám}";
+                else
+                    szöveg = $"DELETE FROM technológia WHERE id={sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -149,13 +215,14 @@ namespace Villamos.Kezelők
                 Adat = new Adat_Technológia_Új(sorszám, ELem.Részegység, ELem.Munka_utasítás_szám, ELem.Utasítás_Cím, ELem.Utasítás_leírás, ELem.Paraméter, ELem.Karb_ciklus_eleje,
                     ELem.Karb_ciklus_vége, ELem.Érv_kezdete, ELem.Érv_vége, ELem.Szakmai_bontás, ELem.Munkaterületi_bontás, ELem.Altípus, ELem.Kenés);
                 AdatokÚj.Add(Adat);
+
             }
             Rögzítés(Típus, AdatokÚj);
         }
 
         public void Egy_Törlése(string Típus, long sorszám, List<Adat_Technológia_Új> Adatok)
         {
-            Törlés(Típus, sorszám, false);
+            Törlés(Típus, sorszám, true);
             sorszám--;
             List<Adat_Technológia_Új> AdatokÚj = new List<Adat_Technológia_Új>();
 

@@ -211,6 +211,7 @@
             this.CsoportosBefejezés.TabIndex = 197;
             this.toolTip1.SetToolTip(this.CsoportosBefejezés, "Rögzít/Módosít");
             this.CsoportosBefejezés.UseVisualStyleBackColor = true;
+            this.CsoportosBefejezés.Click += new System.EventHandler(this.CsoportosBefejezés_Click);
             // 
             // dateTimePicker1
             // 
@@ -613,6 +614,7 @@
             // 
             // Text_id
             // 
+            this.Text_id.Enabled = false;
             this.Text_id.Location = new System.Drawing.Point(197, 21);
             this.Text_id.Name = "Text_id";
             this.Text_id.Size = new System.Drawing.Size(108, 26);
@@ -849,7 +851,7 @@
             this.List_Típusok.ItemHeight = 20;
             this.List_Típusok.Location = new System.Drawing.Point(6, 66);
             this.List_Típusok.Name = "List_Típusok";
-            this.List_Típusok.Size = new System.Drawing.Size(145, 304);
+            this.List_Típusok.Size = new System.Drawing.Size(145, 324);
             this.List_Típusok.TabIndex = 1;
             // 
             // Típusok_rögzítése
@@ -1072,7 +1074,7 @@
             this.List_típus.ItemHeight = 20;
             this.List_típus.Location = new System.Drawing.Point(6, 66);
             this.List_típus.Name = "List_típus";
-            this.List_típus.Size = new System.Drawing.Size(181, 304);
+            this.List_típus.Size = new System.Drawing.Size(181, 324);
             this.List_típus.TabIndex = 1;
             this.List_típus.SelectedIndexChanged += new System.EventHandler(this.List_típus_SelectedIndexChanged);
             // 
