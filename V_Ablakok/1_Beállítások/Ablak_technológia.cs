@@ -37,6 +37,8 @@ namespace Villamos.Villamos_Ablakok
             Jogosultságkiosztás();
             Típus_feltöltés();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+            DátumBef.Value = DateTime.Today;
+            DátumKezd.Value = DateTime.Today;
         }
 
         private void LapFülek_SelectedIndexChanged(object sender, EventArgs e)
@@ -591,8 +593,17 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                if (Tábla.SelectedRows.Count <= 0) throw new HibásBevittAdat("Nincs kijelölve a táblázatban egy sor sem.");
+                List<long> Sorszámok = new List<long>();
+                for (int i = 0; i < Tábla.SelectedRows.Count; i++)
+                {
+                    if (long.TryParse(Tábla.SelectedRows[i].Cells[0].Value.ToString(), out long sorszám))
+                        Sorszámok.Add(sorszám);
+                }
 
-
+                KézAdat.Befejezés(Járműtípus.Text.Trim(), Sorszámok, DátumBef.Value);
+                Alap_tábla_író();
+                MessageBox.Show("A kijelölt sorok befejező dátuma átállításra került!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -605,6 +616,32 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
+        private void CsoportosKezd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Tábla.SelectedRows.Count <= 0) throw new HibásBevittAdat("Nincs kijelölve a táblázatban egy sor sem.");
+                List<long> Sorszámok = new List<long>();
+                for (int i = 0; i < Tábla.SelectedRows.Count; i++)
+                {
+                    if (long.TryParse(Tábla.SelectedRows[i].Cells[0].Value.ToString(), out long sorszám))
+                        Sorszámok.Add(sorszám);
+                }
+
+                KézAdat.Kezdés(Járműtípus.Text.Trim(), Sorszámok, DátumKezd.Value);
+                Alap_tábla_író();
+                MessageBox.Show("A kijelölt sorok befejező dátuma átállításra került!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
@@ -1357,6 +1394,8 @@ namespace Villamos.Villamos_Ablakok
             if (e.RowIndex < 0) return;
             Kivétel_sor = int.Parse(Altípus_tábla.Rows[e.RowIndex].Cells[0].Value.ToString());
         }
+
+
         #endregion
 
 

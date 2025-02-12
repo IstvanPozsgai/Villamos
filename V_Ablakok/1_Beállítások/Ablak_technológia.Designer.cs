@@ -36,9 +36,12 @@
             this.Fülek = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.CsoportosKezd = new System.Windows.Forms.Button();
             this.label21 = new System.Windows.Forms.Label();
             this.CsoportosBefejezés = new System.Windows.Forms.Button();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.DátumKezd = new System.Windows.Forms.DateTimePicker();
+            this.DátumBef = new System.Windows.Forms.DateTimePicker();
             this.Adatok_beolvasása = new System.Windows.Forms.Button();
             this.UtasításSzám = new System.Windows.Forms.TextBox();
             this.Beviteli_táblakészítés = new System.Windows.Forms.Button();
@@ -170,9 +173,12 @@
             // 
             this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GroupBox1.Controls.Add(this.label23);
+            this.GroupBox1.Controls.Add(this.CsoportosKezd);
             this.GroupBox1.Controls.Add(this.label21);
             this.GroupBox1.Controls.Add(this.CsoportosBefejezés);
-            this.GroupBox1.Controls.Add(this.dateTimePicker1);
+            this.GroupBox1.Controls.Add(this.DátumKezd);
+            this.GroupBox1.Controls.Add(this.DátumBef);
             this.GroupBox1.Controls.Add(this.Adatok_beolvasása);
             this.GroupBox1.Controls.Add(this.UtasításSzám);
             this.GroupBox1.Controls.Add(this.Beviteli_táblakészítés);
@@ -191,11 +197,33 @@
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Szűrés";
             // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.BackColor = System.Drawing.Color.Silver;
+            this.label23.Location = new System.Drawing.Point(936, 4);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(137, 20);
+            this.label23.TabIndex = 201;
+            this.label23.Text = "Csoportos kezdés";
+            // 
+            // CsoportosKezd
+            // 
+            this.CsoportosKezd.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.CsoportosKezd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CsoportosKezd.Location = new System.Drawing.Point(1080, 13);
+            this.CsoportosKezd.Name = "CsoportosKezd";
+            this.CsoportosKezd.Size = new System.Drawing.Size(45, 45);
+            this.CsoportosKezd.TabIndex = 200;
+            this.toolTip1.SetToolTip(this.CsoportosKezd, "Rögzít/Módosít");
+            this.CsoportosKezd.UseVisualStyleBackColor = true;
+            this.CsoportosKezd.Click += new System.EventHandler(this.CsoportosKezd_Click);
+            // 
             // label21
             // 
             this.label21.AutoSize = true;
             this.label21.BackColor = System.Drawing.Color.Silver;
-            this.label21.Location = new System.Drawing.Point(949, 4);
+            this.label21.Location = new System.Drawing.Point(1151, 4);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(155, 20);
             this.label21.TabIndex = 198;
@@ -205,7 +233,7 @@
             // 
             this.CsoportosBefejezés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.CsoportosBefejezés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.CsoportosBefejezés.Location = new System.Drawing.Point(1110, 13);
+            this.CsoportosBefejezés.Location = new System.Drawing.Point(1308, 13);
             this.CsoportosBefejezés.Name = "CsoportosBefejezés";
             this.CsoportosBefejezés.Size = new System.Drawing.Size(45, 45);
             this.CsoportosBefejezés.TabIndex = 197;
@@ -213,13 +241,21 @@
             this.CsoportosBefejezés.UseVisualStyleBackColor = true;
             this.CsoportosBefejezés.Click += new System.EventHandler(this.CsoportosBefejezés_Click);
             // 
-            // dateTimePicker1
+            // DátumKezd
             // 
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(953, 32);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(108, 26);
-            this.dateTimePicker1.TabIndex = 196;
+            this.DátumKezd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DátumKezd.Location = new System.Drawing.Point(936, 32);
+            this.DátumKezd.Name = "DátumKezd";
+            this.DátumKezd.Size = new System.Drawing.Size(108, 26);
+            this.DátumKezd.TabIndex = 199;
+            // 
+            // DátumBef
+            // 
+            this.DátumBef.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DátumBef.Location = new System.Drawing.Point(1151, 32);
+            this.DátumBef.Name = "DátumBef";
+            this.DátumBef.Size = new System.Drawing.Size(108, 26);
+            this.DátumBef.TabIndex = 196;
             // 
             // Adatok_beolvasása
             // 
@@ -1278,7 +1314,10 @@
         internal System.Windows.Forms.Button Adatok_beolvasása;
         internal System.Windows.Forms.Button Beviteli_táblakészítés;
         internal System.Windows.Forms.Button CsoportosBefejezés;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker DátumBef;
         internal System.Windows.Forms.Label label21;
+        internal System.Windows.Forms.Label label23;
+        internal System.Windows.Forms.Button CsoportosKezd;
+        private System.Windows.Forms.DateTimePicker DátumKezd;
     }
 }
