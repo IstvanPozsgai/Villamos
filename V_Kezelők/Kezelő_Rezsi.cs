@@ -2,71 +2,13 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Rezsi
     {
-        public List<Adat_Rezsi_Törzs> Lista_Adatok_Törzs(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Rezsi_Törzs> Adatok = new List<Adat_Rezsi_Törzs>();
-            Adat_Rezsi_Törzs Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Rezsi_Törzs(
-                                       rekord["Azonosító"].ToStrTrim(),
-                                       rekord["Megnevezés"].ToStrTrim(),
-                                       rekord["Méret"].ToStrTrim(),
-                                       rekord["státus"].ToÉrt_Int(),
-                                       rekord["Csoport"].ToStrTrim());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-        public Adat_Rezsi_Törzs EgyAdat_Törzs(string hely, string jelszó, string szöveg)
-        {
-            Adat_Rezsi_Törzs Adat = null;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_Rezsi_Törzs(
-                                   rekord["Azonosító"].ToStrTrim(),
-                                   rekord["Megnevezés"].ToStrTrim(),
-                                   rekord["Méret"].ToStrTrim(),
-                                   rekord["státus"].ToÉrt_Int(),
-                                   rekord["Csoport"].ToStrTrim());
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
 
         public List<Adat_Rezsi_Hely> Lista_Adatok_Hely(string hely, string jelszó, string szöveg)
         {

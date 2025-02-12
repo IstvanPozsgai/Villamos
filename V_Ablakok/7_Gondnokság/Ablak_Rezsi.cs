@@ -19,16 +19,19 @@ namespace Villamos
     public partial class Ablak_Rezsi
     {
         readonly Kezelő_Rezsi KézRezsi = new Kezelő_Rezsi();
+        readonly Kezelő_Rezsi_Törzs KézTörzs = new Kezelő_Rezsi_Törzs();
 
         List<Adat_Rezsi_Törzs> AdatokTörzs = new List<Adat_Rezsi_Törzs>();
         List<Adat_Rezsi_Hely> AdatokHely = new List<Adat_Rezsi_Hely>();
         List<Adat_Rezsi_Lista> AdatokLista = new List<Adat_Rezsi_Lista>();
         List<Adat_Rezsi_Listanapló> AdatokNapló = new List<Adat_Rezsi_Listanapló>();
+
+
+        #region Alap
         public Ablak_Rezsi()
         {
             InitializeComponent();
         }
-
 
         private void Ablak_Rezsi_könyvelés_Load(object sender, EventArgs e)
         {
@@ -39,9 +42,6 @@ namespace Villamos
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi";
 
             if (!Exists(hely)) Directory.Exists(hely);
-
-            hely = Application.StartupPath + @"\Főmérnökség\adatok\Rezsi\rezsitörzs.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.Rezsitörzs(hely);
 
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi\rezsihely.mdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.Rezsihely(hely);
@@ -57,8 +57,7 @@ namespace Villamos
             Dátumtól.Value = new DateTime(DateTime.Now.Year, 1, 1);
             Dátumig.Value = DateTime.Today;
 
-            //listák feltöltése
-            AdatokTörzs = RezsiTörzsFeltöltés();
+            AdatokTörzs = KézTörzs.Lista_Adatok();
             AdatokHely = RezsiHelyFeltöltés();
             AdatokLista = RezsiKészletFeltöltés();
             AdatokNapló = RezsiNaplóFeltöltés();
@@ -68,7 +67,6 @@ namespace Villamos
 
             Jogosultságkiosztás();
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-
         }
 
         private void Ablak_Rezsi_FormClosed(object sender, FormClosedEventArgs e)
@@ -77,7 +75,6 @@ namespace Villamos
             Új_Ablak_Kereső?.Close();
         }
 
-        #region Alap
         private void Jogosultságkiosztás()
         {
             int melyikelem;
@@ -131,7 +128,6 @@ namespace Villamos
             }
         }
 
-
         private void Fülekkitöltése()
         {
             switch (Lapfülek.SelectedIndex)
@@ -182,13 +178,12 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\rezsi.html";
-                Module_Excel.Megnyitás(hely);
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\rezsi.html";
+                MyE.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -201,12 +196,10 @@ namespace Villamos
             }
         }
 
-
         private void LapFülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
-
 
         private void Telephelyekfeltöltése()
         {
@@ -232,7 +225,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void LapFülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -276,6 +268,7 @@ namespace Villamos
         #region Törzs karbantartás
         private void Törzs_azonosító_feltöltés()
         {
+            List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
             List<string> Adatok = (from a in AdatokTörzs
                                    orderby a.Azonosító
                                    select a.Azonosító).ToList().Distinct().ToList();
@@ -287,9 +280,9 @@ namespace Villamos
             Azonosító.Refresh();
         }
 
-
         private void Törzs_csoport_feltöltés()
         {
+            List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
             List<string> Adatok = (from a in AdatokTörzs
                                    where a.Státusz == 0
                                    orderby a.Csoport
@@ -302,7 +295,6 @@ namespace Villamos
             CsoportCombo.Refresh();
         }
 
-
         private void Rögzítteljes_Click(object sender, EventArgs e)
         {
             try
@@ -313,44 +305,23 @@ namespace Villamos
                 if (CsoportCombo.Text.Trim() == "") CsoportCombo.Text = "-";
                 Megnevezés.Text = MyF.Szöveg_Tisztítás(Megnevezés.Text);
                 Méret.Text = MyF.Szöveg_Tisztítás(Méret.Text);
-                Azonosító.Text = MyF.Szöveg_Tisztítás(Azonosító.Text);
+                Azonosító.Text = MyF.Szöveg_Tisztítás(Azonosító.Text).ToUpper();
 
+                List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
                 Adat_Rezsi_Törzs Elem = (from a in AdatokTörzs
                                          where a.Azonosító == Azonosító.Text.Trim()
                                          select a).FirstOrDefault();
-                string szöveg;
+                Adat_Rezsi_Törzs ADAT = new Adat_Rezsi_Törzs(
+                                        Azonosító.Text.Trim(),
+                                        Megnevezés.Text.Trim(),
+                                        Méret.Text.Trim(),
+                                        Aktív.Checked ? 1 : 0,
+                                        CsoportCombo.Text.Trim());
                 if (Elem != null)
-                {
-                    // ha van módosít
-                    szöveg = "UPDATE törzs  SET ";
-                    szöveg += $"megnevezés='{Megnevezés.Text.Trim()}', ";
-                    szöveg += $"Méret='{Méret.Text.Trim()}', ";
-                    szöveg += $"csoport='{CsoportCombo.Text.Trim()}', ";
-                    if (Aktív.Checked)
-                        szöveg += "státus=1 ";
-                    else
-                        szöveg += "státus=0 ";
-
-                    szöveg += $" WHERE  azonosító='{Azonosító.Text.Trim()}'";
-                }
+                    KézTörzs.Módosítás(ADAT);
                 else
-                {
-                    szöveg = "INSERT INTO törzs (azonosító, megnevezés, Méret, státus, csoport ) VALUES (";
-                    szöveg += $"'{Azonosító.Text.Trim()}', ";
-                    szöveg += $"'{Megnevezés.Text.Trim()}', ";
-                    szöveg += $"'{Méret.Text.Trim()}', ";
-                    if (Aktív.Checked)
-                        szöveg += "1, ";
-                    else
-                        szöveg += "0, ";
+                    KézTörzs.Rögzítés(ADAT);
 
-                    szöveg += $"'{CsoportCombo.Text.Trim()}') ";
-                }
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsi\rezsitörzs.mdb";
-                string jelszó = "csavarhúzó";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                AdatokTörzs = RezsiTörzsFeltöltés();
                 Törzs_azonosító_feltöltés();
                 Törzs_csoport_feltöltés();
                 Törzs_Ürít();
@@ -369,12 +340,10 @@ namespace Villamos
             }
         }
 
-
         private void Azonosító_SelectedIndexChanged(object sender, EventArgs e)
         {
             Azonosítókiirás();
         }
-
 
         private void Azonosítókiirás()
         {
@@ -387,6 +356,7 @@ namespace Villamos
 
                 if (Azonosító.Text.Trim() == "") throw new HibásBevittAdat("Az azonosító mező kitöltése kötelező.");
 
+                List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
                 Adat_Rezsi_Törzs rekord = (from a in AdatokTörzs
                                            where a.Azonosító == Azonosító.Text.Trim()
                                            select a).FirstOrDefault();
@@ -413,7 +383,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Törzs_excel_Click(object sender, EventArgs e)
         {
@@ -453,12 +422,10 @@ namespace Villamos
             }
         }
 
-
         private void Törzs_Új_adat_Click(object sender, EventArgs e)
         {
             Törzs_Ürít();
         }
-
 
         private void Törzs_Ürít()
         {
@@ -469,12 +436,10 @@ namespace Villamos
             Azonosító.Text = "";
         }
 
-
         private void Törzs_Frissít_Click(object sender, EventArgs e)
         {
             Törzs_tábla_kiíró();
         }
-
 
         private void Törzs_tábla_kiíró()
         {
@@ -497,7 +462,7 @@ namespace Villamos
                 Törzs_tábla.Columns[3].Width = 200;
                 Törzs_tábla.Columns[4].HeaderText = "Aktív";
                 Törzs_tábla.Columns[4].Width = 100;
-
+                List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
                 foreach (Adat_Rezsi_Törzs rekord in AdatokTörzs)
                 {
                     Törzs_tábla.RowCount++;
@@ -526,15 +491,12 @@ namespace Villamos
             }
         }
 
-
         private void Törzs_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) throw new HibásBevittAdat("A táblázatban megjelölt hely nem listázható.");
-
             Törzs_Ürít();
             Azonosító.Text = Törzs_tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
         }
-
 
         private void Törzs_tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -553,7 +515,6 @@ namespace Villamos
         #endregion
 
 
-
         #region Tárolási hely
         private void Tár_azonosító_feltöltés()
         {
@@ -569,12 +530,10 @@ namespace Villamos
             TárAzonosító.Refresh();
         }
 
-
         private void TárAzonosító_SelectedIndexChanged(object sender, EventArgs e)
         {
             Tárazonosítókiírás();
         }
-
 
         private void Tárürít()
         {
@@ -584,7 +543,6 @@ namespace Villamos
             Állvány.Text = "";
             Megjegyzés.Text = "";
         }
-
 
         private void Tárazonosítókiírás()
         {
@@ -621,7 +579,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Tár_excel_Click(object sender, EventArgs e)
         {
@@ -663,13 +620,11 @@ namespace Villamos
             }
         }
 
-
         private void Tár_frissít_Click(object sender, EventArgs e)
         {
             Tár_tábla_kiíró();
             Tárazonosítókiírás();
         }
-
 
         private void Tár_tábla_kiíró()
         {
@@ -727,7 +682,6 @@ namespace Villamos
             }
         }
 
-
         private void Tár_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
@@ -736,7 +690,6 @@ namespace Villamos
             Tárürít();
             TárAzonosító.Text = Tár_tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
         }
-
 
         private void Tárolásihelyrögzítés_Click(object sender, EventArgs e)
         {
@@ -1029,8 +982,6 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\Rezsi\rezsitörzs.mdb";
-
-                string jelszó = "csavarhúzó";
                 string szöveg = "SELECT * FROM törzs where státus=0 ";
                 if (ListaCsoportCombo.Text.Trim() != "")
                     szöveg += $" and csoport='{ListaCsoportCombo.Text.Trim()}'";
@@ -1053,9 +1004,9 @@ namespace Villamos
                 Tábla.Columns[2].Width = 100;
 
                 Kezelő_Rezsi kéz = new Kezelő_Rezsi();
-                List<Adat_Rezsi_Törzs> Adatok = kéz.Lista_Adatok_Törzs(hely, jelszó, szöveg);
 
-                foreach (Adat_Rezsi_Törzs rekord in Adatok)
+
+                foreach (Adat_Rezsi_Törzs rekord in AdatokTörzs)
                 {
                     // ha nincs kitöltve a mező , vagy  ha azt a szöveget tartalmazza
                     string ideigmegnevezés = rekord.Megnevezés.Trim().ToUpper();
@@ -1884,27 +1835,7 @@ namespace Villamos
 
         #region Listák
 
-        private List<Adat_Rezsi_Törzs> RezsiTörzsFeltöltés()
-        {
-            List<Adat_Rezsi_Törzs> Adatok = new List<Adat_Rezsi_Törzs>();
-            try
-            {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsi\rezsitörzs.mdb";
-                string jelszó = "csavarhúzó";
-                string szöveg = "SELECT * FROM törzs";
-                Adatok = KézRezsi.Lista_Adatok_Törzs(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Adatok;
-        }
+
 
         private List<Adat_Rezsi_Hely> RezsiHelyFeltöltés()
         {
