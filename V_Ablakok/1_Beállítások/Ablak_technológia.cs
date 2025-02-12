@@ -589,7 +589,6 @@ namespace Villamos.Villamos_Ablakok
 
         private void CsoportosBefejezés_Click(object sender, EventArgs e)
         {
-
             try
             {
 

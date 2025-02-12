@@ -761,6 +761,8 @@ namespace Villamos
                 AdatokMérés = (from a in AdatokMérés
                                orderby a.Gyáriszám descending, a.Mérésdátuma ascending
                                select a).ToList();
+                if (txtgyáriszám.Text.Trim() != "")
+                    Adatok = Adatok.Where(a => a.Gyáriszám.Contains(txtgyáriszám.Text.Trim().ToUpper())).ToList();
 
                 foreach (Adat_Akkumulátor rekord in Adatok)
                 {
@@ -1199,7 +1201,7 @@ namespace Villamos
                 Tábla_Beép.Columns.Clear();
                 Tábla_Beép.Refresh();
                 Tábla_Beép.Visible = false;
-                Tábla_Beép.ColumnCount = 12;
+                Tábla_Beép.ColumnCount = 13;
 
                 // fejléc elkészítése
                 Tábla_Beép.Columns[0].HeaderText = "Gyáriszám";
@@ -1226,6 +1228,15 @@ namespace Villamos
                 Tábla_Beép.Columns[10].Width = 120;
                 Tábla_Beép.Columns[11].HeaderText = "Telephely";
                 Tábla_Beép.Columns[11].Width = 120;
+                Tábla_Beép.Columns[12].HeaderText = "Uolsó Kapacitás";
+                Tábla_Beép.Columns[12].Width = 120;
+
+                List<Adat_Akkumulátor_Mérés> AdatokMérés = KézAkkuMér.Lista_Adatok(Dátumtól.Value.Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList();
+                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-1).Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
+                AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-2).Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
+                AdatokMérés = (from a in AdatokMérés
+                               orderby a.Gyáriszám descending, a.Mérésdátuma ascending
+                               select a).ToList();
 
                 foreach (Adat_Akkumulátor rekord in Adatok)
                 {
@@ -1243,6 +1254,10 @@ namespace Villamos
                     Tábla_Beép.Rows[i].Cells[4].Value = rekord.Megjegyzés.Trim();
                     Tábla_Beép.Rows[i].Cells[10].Value = rekord.Kapacitás;
                     Tábla_Beép.Rows[i].Cells[11].Value = rekord.Telephely.Trim();
+                    Adat_Akkumulátor_Mérés eredmény = (AdatokMérés.FirstOrDefault(a => a.Gyáriszám.Trim() == rekord.Gyáriszám.Trim()));
+
+                    if (eredmény != null)
+                        Tábla_Beép.Rows[i].Cells[12].Value = Math.Round(eredmény.Kapacitás / (double)rekord.Kapacitás, 4) * 100;
                     Holtart.Lép();
                 }
                 Tábla_Beép.Refresh();
