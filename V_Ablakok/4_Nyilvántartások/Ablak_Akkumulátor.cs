@@ -675,10 +675,7 @@ namespace Villamos
                 List<Adat_Akkumulátor> Adatok = (from a in AdatokÖ
                                                  where a.Beépítve != "_"
                                                  select a).ToList();
-                if (!Program.Postás_Vezér)
-                    Adatok = (from a in Adatok
-                              where a.Telephely != CmbTelephely.Text.Trim()
-                              select a).ToList();
+
                 int oszlop = 0;
                 foreach (Adat_Jármű rekord in Adatok_Jármű)
                 {
@@ -688,7 +685,7 @@ namespace Villamos
                     List<Adat_Akkumulátor> Akkuk = (from a in Adatok
                                                     where a.Beépítve.Trim() == rekord.Azonosító.Trim()
                                                     select a).ToList();
-                    if (Akkuk != null && Akkuk.Count > 0)
+                    if (Akkuk != null && Akkuk.Count != 0)
                     {
                         foreach (Adat_Akkumulátor elem in Akkuk)
                         {
