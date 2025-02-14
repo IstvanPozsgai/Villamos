@@ -80,6 +80,8 @@ namespace Villamos
             if (Application.StartupPath.Substring(0, 2) == @"\\")
             {
                 FigyKiírás("A programot csak hálózati meghajtón keresztül lehet elindítani. \n Kérem csatlakoztasson hálózati meghajtót.");
+                KönyvtárEllenőr KV = new KönyvtárEllenőr();
+                KV.Megfelelő(Application.StartupPath);
                 Beléphet = false;
             }
         }

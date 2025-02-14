@@ -1138,6 +1138,7 @@
     <Compile Include="V_MindenEgyéb\Kezelő_Pdf.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Szín.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Értékellenőrzés.cs" />
+    <Compile Include="V_MindenEgyéb\KönyvtárEllenőr.cs" />
     <Compile Include="V_MindenEgyéb\Listák.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="V_MindenEgyéb\Mentés_Ablak.cs" />
@@ -1679,6 +1680,15 @@
     <COMReference Include="ADOX">
       <Guid>{00000600-0000-0010-8000-00AA006D2EA4}</Guid>
       <VersionMajor>6</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>

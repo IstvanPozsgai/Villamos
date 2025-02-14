@@ -65,13 +65,6 @@ namespace Villamos
         List<Adat_Jármű_Takarítás_Kötbér> AdatokKötbér = new List<Adat_Jármű_Takarítás_Kötbér>();
         List<Adat_Kiegészítő_Jelenlétiív> AdatokJelen = new List<Adat_Kiegészítő_Jelenlétiív>();
 
-
-#pragma warning disable IDE0044 // Add readonly modifier
-        List<Adat_Jármű_Takarítás_TIG> AdatokTIG = new List<Adat_Jármű_Takarítás_TIG>();
-        List<string> TIGTípusok = new List<string>();
-        List<Adat_Jármű_Takarítás_Napló> AdatokNapl = new List<Adat_Jármű_Takarítás_Napló>();
-#pragma warning restore IDE0044 // Add readonly modifier
-
         private int SorIdx = 0;
         public string Telephely_ = "";
         public DateTime Dátum_ = new DateTime(1900, 1, 1);
