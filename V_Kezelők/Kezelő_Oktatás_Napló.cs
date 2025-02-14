@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely, int Év)
         {
             hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\Oktatásnapló_{Telephely}.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Oktatás_Napló(hely.KönyvSzerk());
         }
 
 

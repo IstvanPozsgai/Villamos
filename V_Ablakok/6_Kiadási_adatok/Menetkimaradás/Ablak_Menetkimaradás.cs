@@ -945,10 +945,8 @@ namespace Villamos
             try
             {
 
-                if (Pályaszámok.Text == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva pályaszám.");
-                if (cmbtelephely1.Text == "")
-                    throw new HibásBevittAdat("Nincs választva telephely, így a listázás nem lehetséges.");
+                if (Pályaszámok.Text == "") return;
+                if (cmbtelephely1.Text == "") throw new HibásBevittAdat("Nincs választva telephely, így a listázás nem lehetséges.");
 
                 Táblatörlése();
                 // telephelyi adatok

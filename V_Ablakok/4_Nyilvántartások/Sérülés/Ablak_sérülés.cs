@@ -2796,11 +2796,11 @@ namespace Villamos
 
                     Soradat["S.sz.       "] = rekord.Sorszám;
                     Soradat["Dátum       "] = rekord.Dátum.ToString("yyyy.MM.dd");
-                    Soradat["pályaszám   "] = rekord.Rendszám;
-                    Soradat["viszonylat  "] = rekord.Viszonylat;
-                    Soradat["telep       "] = rekord.Telephely;
-                    Soradat["rövid szöveg"] = rekord.Mivelütközött.ToStrTrim() != "_" ? $"Ütközött {rekord.Mivelütközött}" : $"{rekord.Esemény} {rekord.Balesethelyszín.Trim()}";
-                    Soradat["Járművezet  "] = rekord.Járművezető;
+                    Soradat["Pályaszám   "] = rekord.Rendszám;
+                    Soradat["Viszonylat  "] = rekord.Viszonylat;
+                    Soradat["Telep       "] = rekord.Telephely;
+                    Soradat["Rövid szöveg"] = rekord.Mivelütközött.ToStrTrim() != "_" ? $"Ütközött {rekord.Mivelütközött}" : $"{rekord.Esemény} {rekord.Balesethelyszín.Trim()}";
+                    Soradat["Járművezető "] = rekord.Járművezető;
 
                     AdatTábla.Rows.Add(Soradat);
 
@@ -2871,6 +2871,9 @@ namespace Villamos
                 MyE.Sormagasság("1:1", 25);
                 MyE.Sormagasság($"2:{utolsósor}", 18);
                 MyE.Betű("1:1", false, false, true);
+
+                MyE.Igazít_vízszintes("A:G", "közép");
+                MyE.CellaNincsHáttér("A1:G1");
 
                 // egész rácsoz és vastagkeret
                 MyE.Rácsoz("B1:" + MyE.Oszlopnév(utolsóoszlop) + utolsósor.ToStrTrim());

@@ -1069,7 +1069,14 @@ namespace Villamos
 
         }
 
+        public static void CellaNincsHáttér(string mit)
+        {
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Interior.Pattern = Constants.xlNone;
+            Táblaterület.Interior.TintAndShade = 0;
+            Táblaterület.Interior.PatternTintAndShade = 0;
 
+        }
         /// <summary>
         /// Sötét háttérhez világos betűt állít be
         /// </summary>

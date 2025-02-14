@@ -41,7 +41,7 @@ namespace Villamos
             this.Excel_gomb = new System.Windows.Forms.Button();
             this.Pályaszámkereső = new System.Windows.Forms.Button();
             this.Label15 = new System.Windows.Forms.Label();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
@@ -50,8 +50,8 @@ namespace Villamos
             this.Panel7 = new System.Windows.Forms.Panel();
             this.Kerékcsökkenés = new System.Windows.Forms.TextBox();
             this.Label39 = new System.Windows.Forms.Label();
-            this.FőHoltart = new V_MindenEgyéb.MyProgressbar();
-            this.AlHoltart = new V_MindenEgyéb.MyProgressbar();
+            this.FőHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.AlHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Command1 = new System.Windows.Forms.Button();
             this.Panel5 = new System.Windows.Forms.Panel();
             this.Text2 = new System.Windows.Forms.TextBox();
@@ -845,6 +845,7 @@ namespace Villamos
             // Vizsgfok
             // 
             this.Vizsgfok.Location = new System.Drawing.Point(230, 42);
+            this.Vizsgfok.MaxLength = 10;
             this.Vizsgfok.Name = "Vizsgfok";
             this.Vizsgfok.Size = new System.Drawing.Size(136, 26);
             this.Vizsgfok.TabIndex = 2;
