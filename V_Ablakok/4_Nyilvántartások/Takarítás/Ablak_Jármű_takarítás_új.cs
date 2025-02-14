@@ -5471,8 +5471,9 @@ namespace Villamos
                                                      státus);
                 if (AdatTakarítások != null)
                 {
-                    if (státus != AdatTakarítások.Státus)
+                    if (státus == 0)
                     {
+                        // ha módosítjuk
                         KézTak.Módosítás_Dátum(ADAT);
                         //Naplózás
                         Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
@@ -5484,6 +5485,51 @@ namespace Villamos
                                                             Program.PostásNév,
                                                             ADAT.Státus);
                         KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
+                    }
+                    else
+                    {
+                        //Kitöröljük a Naplóból
+                        Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
+                                    ADAT.Azonosító,
+                                    ADAT.Dátum,
+                                    ADAT.Takarítási_fajta,
+                                    ADAT.Telephely,
+                                    DateTime.Now,
+                                    Program.PostásNév,
+                                    ADAT.Státus);
+                        KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
+
+                        List<Adat_Jármű_Takarítás_Napló> AdatokNapló = KézTakNapló.Lista_Adatok(Gepi_datum.Value.Year).Where(a => a.Takarítási_fajta == "Gépi").ToList();
+                        List<Adat_Jármű_Takarítás_Napló> ideig = KézTakNapló.Lista_Adatok(Gepi_datum.Value.Year - 1).Where(a => a.Takarítási_fajta == "Gépi").ToList();
+                        AdatokNapló.AddRange(ideig);
+                        Adat_Jármű_Takarítás_Napló Előző = (from a in AdatokNapló
+                                                            where a.Azonosító == Gepi_pályaszám.Text.Trim()
+                                                            && a.Takarítási_fajta == "Gépi"
+                                                            && a.Telephely == Cmbtelephely.Text.Trim()
+                                                            && a.Státus == 0
+                                                            orderby a.Dátum descending
+                                                            select a).FirstOrDefault();
+                        if (Előző != null)
+                        {
+                            // ha töröljük, akkor vissza kell állítani az előző dátumot
+                            ADAT = new Adat_Jármű_Takarítás_Takarítások(
+                                Gepi_pályaszám.Text.Trim(),
+                                Előző.Dátum,
+                                "Gépi",
+                                Cmbtelephely.Text.Trim(),
+                                0);
+                            KézTak.Módosítás_Dátum(ADAT);
+
+                            ADATNAP = new Adat_Jármű_Takarítás_Napló(
+                                                ADAT.Azonosító,
+                                                ADAT.Dátum,
+                                                ADAT.Takarítási_fajta,
+                                                ADAT.Telephely,
+                                                DateTime.Now,
+                                                Program.PostásNév,
+                                                ADAT.Státus);
+                            KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
+                        }
                     }
                 }
                 else
