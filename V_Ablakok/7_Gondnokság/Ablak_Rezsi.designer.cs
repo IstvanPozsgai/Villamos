@@ -38,7 +38,7 @@ namespace Villamos
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Rezsi));
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
@@ -56,7 +56,7 @@ namespace Villamos
             this.Törzs_excel = new System.Windows.Forms.Button();
             this.Törzs_Új_adat = new System.Windows.Forms.Button();
             this.Törzs_Frissít = new System.Windows.Forms.Button();
-            this._Törzs_tábla = new System.Windows.Forms.DataGridView();
+            this.Törzs_tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.CsoportCombo = new System.Windows.Forms.ComboBox();
             this.Label9 = new System.Windows.Forms.Label();
             this.Méret = new System.Windows.Forms.TextBox();
@@ -142,7 +142,7 @@ namespace Villamos
             this.Panel2.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._Törzs_tábla)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Törzs_tábla)).BeginInit();
             this.TabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._Tár_tábla)).BeginInit();
             this.TabPage3.SuspendLayout();
@@ -288,7 +288,7 @@ namespace Villamos
             this.TabPage1.Controls.Add(this.Törzs_excel);
             this.TabPage1.Controls.Add(this.Törzs_Új_adat);
             this.TabPage1.Controls.Add(this.Törzs_Frissít);
-            this.TabPage1.Controls.Add(this._Törzs_tábla);
+            this.TabPage1.Controls.Add(this.Törzs_tábla);
             this.TabPage1.Controls.Add(this.CsoportCombo);
             this.TabPage1.Controls.Add(this.Label9);
             this.TabPage1.Controls.Add(this.Méret);
@@ -352,22 +352,27 @@ namespace Villamos
             this.Törzs_Frissít.UseVisualStyleBackColor = true;
             this.Törzs_Frissít.Click += new System.EventHandler(this.Törzs_Frissít_Click);
             // 
-            // _Törzs_tábla
+            // Törzs_tábla
             // 
-            this._Törzs_tábla.AllowUserToAddRows = false;
-            this._Törzs_tábla.AllowUserToDeleteRows = false;
-            this._Törzs_tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Törzs_tábla.AllowUserToAddRows = false;
+            this.Törzs_tábla.AllowUserToDeleteRows = false;
+            this.Törzs_tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._Törzs_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this._Törzs_tábla.Location = new System.Drawing.Point(6, 184);
-            this._Törzs_tábla.Name = "_Törzs_tábla";
-            this._Törzs_tábla.RowHeadersVisible = false;
-            this._Törzs_tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this._Törzs_tábla.Size = new System.Drawing.Size(1048, 224);
-            this._Törzs_tábla.TabIndex = 203;
-            this._Törzs_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Törzs_tábla_CellClick);
-            this._Törzs_tábla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Törzs_tábla_CellFormatting);
+            this.Törzs_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Törzs_tábla.FilterAndSortEnabled = true;
+            this.Törzs_tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Törzs_tábla.Location = new System.Drawing.Point(6, 184);
+            this.Törzs_tábla.MaxFilterButtonImageHeight = 23;
+            this.Törzs_tábla.Name = "Törzs_tábla";
+            this.Törzs_tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Törzs_tábla.RowHeadersVisible = false;
+            this.Törzs_tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.Törzs_tábla.Size = new System.Drawing.Size(1048, 238);
+            this.Törzs_tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Törzs_tábla.TabIndex = 203;
+            this.Törzs_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Törzs_tábla_CellClick);
+            this.Törzs_tábla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Törzs_tábla_CellFormatting);
             // 
             // CsoportCombo
             // 
@@ -1292,7 +1297,7 @@ namespace Villamos
             this.Lapfülek.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._Törzs_tábla)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Törzs_tábla)).EndInit();
             this.TabPage2.ResumeLayout(false);
             this.TabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this._Tár_tábla)).EndInit();
@@ -1425,33 +1430,7 @@ namespace Villamos
         internal Label Label33;
         internal ComboBox KiHovaRaktár;
         internal Label Label35;
-        internal DataGridView _Törzs_tábla;
-
-        public virtual DataGridView Törzs_tábla
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _Törzs_tábla;
-            }
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_Törzs_tábla != null)
-                {
-                    _Törzs_tábla.CellClick -= Törzs_tábla_CellClick;
-                    _Törzs_tábla.CellFormatting -= Törzs_tábla_CellFormatting;
-                }
-
-                _Törzs_tábla = value;
-                if (_Törzs_tábla != null)
-                {
-                    _Törzs_tábla.CellClick += Törzs_tábla_CellClick;
-                    _Törzs_tábla.CellFormatting += Törzs_tábla_CellFormatting;
-                }
-            }
-        }
+        internal Zuby.ADGV.AdvancedDataGridView Törzs_tábla;
         internal Button Törzs_excel;
         internal Button Törzs_Új_adat;
         internal Button Törzs_Frissít;
@@ -1488,5 +1467,5 @@ namespace Villamos
         internal Button Fényképfrissítés;
         internal ToolTip toolTip1;
         internal DataGridView Napló_tábla;
-    }
+     }
 }

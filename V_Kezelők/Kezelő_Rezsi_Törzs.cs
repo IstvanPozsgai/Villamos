@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Rezsi_Törzs> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM törzs";
+            string szöveg = "SELECT * FROM törzs ORDER BY Azonosító";
             List<Adat_Rezsi_Törzs> Adatok = new List<Adat_Rezsi_Törzs>();
             Adat_Rezsi_Törzs Adat;
 
@@ -86,6 +86,40 @@ namespace Villamos.Kezelők
                 szöveg += $"státus={Adat.Státusz} ";
                 szöveg += $" WHERE  azonosító='{Adat.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Nagybetűs()
+        {
+            try
+            {
+                List<Adat_Rezsi_Törzs> Adatok = Lista_Adatok();
+                foreach (Adat_Rezsi_Törzs rekord in Adatok)
+                {
+                    if (rekord.Azonosító != rekord.Azonosító.ToUpper())
+                    {
+                        Adat_Rezsi_Törzs Adat = new Adat_Rezsi_Törzs(
+                                                rekord.Azonosító.ToUpper(),
+                                                rekord.Megnevezés,
+                                                rekord.Méret,
+                                                rekord.Státusz,
+                                                rekord.Csoport);
+                        Rögzítés(Adat);
+
+                        string szöveg = $"DELETE FROM törzs WHERE Azonosító='{rekord.Azonosító}'";
+                        Adatbázis.ABtörlés(hely, jelszó, szöveg);
+                    }
+                }
+
             }
             catch (HibásBevittAdat ex)
             {

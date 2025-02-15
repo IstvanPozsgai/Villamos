@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Villamos
         List<Adat_Rezsi_Lista> AdatokLista = new List<Adat_Rezsi_Lista>();
         List<Adat_Rezsi_Listanapló> AdatokNapló = new List<Adat_Rezsi_Listanapló>();
 
-
+        DataTable AdatTáblaTörzs = new DataTable();
         #region Alap
         public Ablak_Rezsi()
         {
@@ -40,7 +41,6 @@ namespace Villamos
             if (!Exists(hely)) Directory.Exists(hely);
 
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi";
-
             if (!Exists(hely)) Directory.Exists(hely);
 
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi\rezsihely.mdb";
@@ -67,6 +67,12 @@ namespace Villamos
 
             Jogosultságkiosztás();
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+            AzonosítóRendez();
+        }
+
+        private void AzonosítóRendez()
+        {
+            KézTörzs.Nagybetűs();
         }
 
         private void Ablak_Rezsi_FormClosed(object sender, FormClosedEventArgs e)
@@ -268,6 +274,7 @@ namespace Villamos
         #region Törzs karbantartás
         private void Törzs_azonosító_feltöltés()
         {
+
             List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
             List<string> Adatok = (from a in AdatokTörzs
                                    orderby a.Azonosító
@@ -312,7 +319,7 @@ namespace Villamos
                                          where a.Azonosító == Azonosító.Text.Trim()
                                          select a).FirstOrDefault();
                 Adat_Rezsi_Törzs ADAT = new Adat_Rezsi_Törzs(
-                                        Azonosító.Text.Trim(),
+                                        Azonosító.Text.Trim().ToUpper(),
                                         Megnevezés.Text.Trim(),
                                         Méret.Text.Trim(),
                                         Aktív.Checked ? 1 : 0,
@@ -407,7 +414,7 @@ namespace Villamos
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, _Törzs_tábla, false);
+                MyE.EXCELtábla(fájlexc, Törzs_tábla, false);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc + ".xlsx");
             }
@@ -445,37 +452,11 @@ namespace Villamos
         {
             try
             {
-                Törzs_tábla.Rows.Clear();
-                Törzs_tábla.Columns.Clear();
-                Törzs_tábla.Refresh();
                 Törzs_tábla.Visible = false;
-                Törzs_tábla.ColumnCount = 5;
-
-                // fejléc elkészítése
-                Törzs_tábla.Columns[0].HeaderText = "Azonosító";
-                Törzs_tábla.Columns[0].Width = 150;
-                Törzs_tábla.Columns[1].HeaderText = "Megnevezés";
-                Törzs_tábla.Columns[1].Width = 400;
-                Törzs_tábla.Columns[2].HeaderText = "Méret";
-                Törzs_tábla.Columns[2].Width = 200;
-                Törzs_tábla.Columns[3].HeaderText = "Csoport";
-                Törzs_tábla.Columns[3].Width = 200;
-                Törzs_tábla.Columns[4].HeaderText = "Aktív";
-                Törzs_tábla.Columns[4].Width = 100;
-                List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
-                foreach (Adat_Rezsi_Törzs rekord in AdatokTörzs)
-                {
-                    Törzs_tábla.RowCount++;
-                    int i = Törzs_tábla.RowCount - 1;
-                    Törzs_tábla.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
-                    Törzs_tábla.Rows[i].Cells[1].Value = rekord.Megnevezés.Trim();
-                    Törzs_tábla.Rows[i].Cells[2].Value = rekord.Méret.Trim();
-                    Törzs_tábla.Rows[i].Cells[3].Value = rekord.Csoport.Trim();
-                    if (rekord.Státusz == 0)
-                        Törzs_tábla.Rows[i].Cells[4].Value = "Aktív";
-                    else
-                        Törzs_tábla.Rows[i].Cells[4].Value = "Törölt";
-                }
+                TözsTáblaFejléc();
+                TözsTáblaTartalom();
+                Törzs_tábla.DataSource = AdatTáblaTörzs;
+                TözsTáblaOszlopSzélesség();
 
                 Törzs_tábla.Visible = true;
                 Törzs_tábla.Refresh();
@@ -491,9 +472,68 @@ namespace Villamos
             }
         }
 
+        private void TözsTáblaTartalom()
+        {
+            try
+            {
+                AdatTáblaTörzs.Clear();
+                List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
+                foreach (Adat_Rezsi_Törzs rekord in AdatokTörzs)
+                {
+                    DataRow Soradat = AdatTáblaTörzs.NewRow();
+                    Soradat["Azonosító"] = rekord.Azonosító.Trim();
+                    Soradat["Megnevezés"] = rekord.Megnevezés.Trim();
+                    Soradat["Méret"] = rekord.Méret.Trim();
+                    Soradat["Csoport"] = rekord.Csoport.Trim();
+                    Soradat["Aktív"] = rekord.Státusz == 0 ? "Aktív" : "Törölt";
+                    AdatTáblaTörzs.Rows.Add(Soradat);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TözsTáblaOszlopSzélesség()
+        {
+            Törzs_tábla.Columns["Azonosító"].Width = 150;
+            Törzs_tábla.Columns["Megnevezés"].Width = 400;
+            Törzs_tábla.Columns["Méret"].Width = 200;
+            Törzs_tábla.Columns["Csoport"].Width = 200;
+            Törzs_tábla.Columns["Aktív"].Width = 100;
+        }
+
+        private void TözsTáblaFejléc()
+        {
+            try
+            {
+                AdatTáblaTörzs.Columns.Clear();
+                AdatTáblaTörzs.Columns.Add("Azonosító");
+                AdatTáblaTörzs.Columns.Add("Megnevezés");
+                AdatTáblaTörzs.Columns.Add("Méret");
+                AdatTáblaTörzs.Columns.Add("Csoport");
+                AdatTáblaTörzs.Columns.Add("Aktív");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Törzs_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) throw new HibásBevittAdat("A táblázatban megjelölt hely nem listázható.");
+            if (e.RowIndex < 0) return;
             Törzs_Ürít();
             Azonosító.Text = Törzs_tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
         }
