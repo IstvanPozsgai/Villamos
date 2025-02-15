@@ -21,13 +21,15 @@ namespace Villamos
     {
         readonly Kezelő_Rezsi KézRezsi = new Kezelő_Rezsi();
         readonly Kezelő_Rezsi_Törzs KézTörzs = new Kezelő_Rezsi_Törzs();
+        readonly Kezelő_Rezsi_Hely KézHely = new Kezelő_Rezsi_Hely();
 
         List<Adat_Rezsi_Törzs> AdatokTörzs = new List<Adat_Rezsi_Törzs>();
         List<Adat_Rezsi_Hely> AdatokHely = new List<Adat_Rezsi_Hely>();
         List<Adat_Rezsi_Lista> AdatokLista = new List<Adat_Rezsi_Lista>();
         List<Adat_Rezsi_Listanapló> AdatokNapló = new List<Adat_Rezsi_Listanapló>();
 
-        DataTable AdatTáblaTörzs = new DataTable();
+        readonly DataTable AdatTáblaTörzs = new DataTable();
+        readonly DataTable AdatTáblaTár = new DataTable();
         #region Alap
         public Ablak_Rezsi()
         {
@@ -43,8 +45,6 @@ namespace Villamos
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi";
             if (!Exists(hely)) Directory.Exists(hely);
 
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi\rezsihely.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.Rezsihely(hely);
 
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi\rezsinapló" + DateTime.Now.Year.ToString() + ".mdb";
             if (!Exists(hely)) Adatbázis_Létrehozás.Rezsilistanapló(hely);
@@ -58,7 +58,7 @@ namespace Villamos
             Dátumig.Value = DateTime.Today;
 
             AdatokTörzs = KézTörzs.Lista_Adatok();
-            AdatokHely = RezsiHelyFeltöltés();
+            AdatokHely = KézHely.Lista_Adatok(Cmbtelephely.Text.Trim()); ;
             AdatokLista = RezsiKészletFeltöltés();
             AdatokNapló = RezsiNaplóFeltöltés();
 
@@ -268,7 +268,6 @@ namespace Villamos
             BlackTextBrush.Dispose();
         }
         #endregion
-
 
 
         #region Törzs karbantartás
@@ -644,7 +643,7 @@ namespace Villamos
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, _Tár_tábla, false);
+                MyE.EXCELtábla(fájlexc, Tár_tábla, false);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
@@ -670,46 +669,89 @@ namespace Villamos
         {
             try
             {
-                Tár_tábla.Rows.Clear();
-                Tár_tábla.Columns.Clear();
-                Tár_tábla.Refresh();
                 Tár_tábla.Visible = false;
-                Tár_tábla.ColumnCount = 6;
+                TárTáblaFejléc();
+                TárTáblaTartalom();
+                Tár_tábla.DataSource = AdatTáblaTár;
+                TárTáblaOszlopSzélesség();
+                Tár_tábla.Visible = true;
+                Tár_tábla.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-                // fejléc elkészítése
-                Tár_tábla.Columns[0].HeaderText = "Azonosító";
-                Tár_tábla.Columns[0].Width = 150;
-                Tár_tábla.Columns[1].HeaderText = "Megnevezés";
-                Tár_tábla.Columns[1].Width = 400;
-                Tár_tábla.Columns[2].HeaderText = "Helység";
-                Tár_tábla.Columns[2].Width = 200;
-                Tár_tábla.Columns[3].HeaderText = "Állvány";
-                Tár_tábla.Columns[3].Width = 200;
-                Tár_tábla.Columns[4].HeaderText = "Polc";
-                Tár_tábla.Columns[4].Width = 100;
-                Tár_tábla.Columns[5].HeaderText = "Megjegyzés";
-                Tár_tábla.Columns[5].Width = 300;
-
+        private void TárTáblaTartalom()
+        {
+            try
+            {
+                AdatokHely = KézHely.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatTáblaTár.Clear();
+                List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();
                 foreach (Adat_Rezsi_Törzs rekord in AdatokTörzs)
                 {
-                    Tár_tábla.RowCount++;
-                    int i = Tár_tábla.RowCount - 1;
-                    Tár_tábla.Rows[i].Cells[0].Value = rekord.Azonosító;
-                    Tár_tábla.Rows[i].Cells[1].Value = rekord.Megnevezés;
-
+                    DataRow Soradat = AdatTáblaTár.NewRow();
+                    Soradat["Azonosító"] = rekord.Azonosító.Trim();
+                    Soradat["Megnevezés"] = rekord.Megnevezés.Trim();
                     Adat_Rezsi_Hely rekordszer = (from a in AdatokHely
                                                   where a.Azonosító == rekord.Azonosító
                                                   select a).FirstOrDefault();
-                    if (rekordszer != null)
+                    if (rekordszer == null)
                     {
-                        Tár_tábla.Rows[i].Cells[2].Value = rekordszer.Helyiség;
-                        Tár_tábla.Rows[i].Cells[3].Value = rekordszer.Állvány;
-                        Tár_tábla.Rows[i].Cells[4].Value = rekordszer.Polc;
-                        Tár_tábla.Rows[i].Cells[5].Value = rekordszer.Megjegyzés;
+                        Soradat["Helység"] = "";
+                        Soradat["Állvány"] = "";
+                        Soradat["Polc"] = "";
+                        Soradat["Megjegyzés"] = "";
                     }
+                    else
+                    {
+                        Soradat["Helység"] = rekordszer.Helyiség;
+                        Soradat["Állvány"] = rekordszer.Állvány;
+                        Soradat["Polc"] = rekordszer.Polc;
+                        Soradat["Megjegyzés"] = rekordszer.Megjegyzés;
+                    }
+                    AdatTáblaTár.Rows.Add(Soradat);
                 }
-                Tár_tábla.Visible = true;
-                Tár_tábla.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TárTáblaOszlopSzélesség()
+        {
+            Tár_tábla.Columns["Azonosító"].Width = 150;
+            Tár_tábla.Columns["Megnevezés"].Width = 400;
+            Tár_tábla.Columns["Helység"].Width = 200;
+            Tár_tábla.Columns["Állvány"].Width = 200;
+            Tár_tábla.Columns["Polc"].Width = 100;
+            Tár_tábla.Columns["Megjegyzés"].Width = 300;
+        }
+
+        private void TárTáblaFejléc()
+        {
+            try
+            {
+                AdatTáblaTár.Columns.Clear();
+                AdatTáblaTár.Columns.Add("Azonosító");
+                AdatTáblaTár.Columns.Add("Megnevezés");
+                AdatTáblaTár.Columns.Add("Helység");
+                AdatTáblaTár.Columns.Add("Állvány");
+                AdatTáblaTár.Columns.Add("Polc");
+                AdatTáblaTár.Columns.Add("Megjegyzés");
             }
             catch (HibásBevittAdat ex)
             {
@@ -744,30 +786,18 @@ namespace Villamos
                 Adat_Rezsi_Hely Elem = (from a in AdatokHely
                                         where a.Azonosító == TárAzonosító.Text.Trim()
                                         select a).FirstOrDefault();
-                string szöveg;
-                if (Elem != null)
-                {
-                    szöveg = "UPDATE tábla  SET ";
-                    szöveg += $"Helyiség='{Helyiség.Text.Trim()}', ";
-                    szöveg += $"Állvány='{Állvány.Text.Trim()} ', ";
-                    szöveg += $"polc='{Polc.Text.Trim()}', ";
-                    szöveg += $"Megjegyzés='{Megjegyzés.Text.Trim()}' ";
-                    szöveg += $" WHERE azonosító='{TárAzonosító.Text.Trim()}'";
-                }
-                else
-                {
-                    szöveg = "INSERT INTO tábla (azonosító, helyiség, állvány, polc, megjegyzés) VALUES (";
-                    szöveg += $"'{TárAzonosító.Text.Trim()}', ";
-                    szöveg += $"'{Helyiség.Text.Trim()}', ";
-                    szöveg += $"'{Állvány.Text.Trim()}', ";
-                    szöveg += $"'{Polc.Text.Trim()}', ";
-                    szöveg += $"'{Megjegyzés.Text.Trim()}') ";
-                }
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi\rezsihely.mdb";
-                string jelszó = "csavarhúzó";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-                AdatokHely = RezsiHelyFeltöltés();
+                Adat_Rezsi_Hely ADAT = new Adat_Rezsi_Hely(
+                                    TárAzonosító.Text.Trim(),
+                                    Állvány.Text.Trim(),
+                                    Polc.Text.Trim(),
+                                    Helyiség.Text.Trim(),
+                                    Megjegyzés.Text.Trim());
+
+                if (Elem != null)
+                    KézHely.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
+                else
+                    KézHely.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 MessageBox.Show("Az adat rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Tár_tábla_kiíró();
@@ -781,7 +811,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
         #endregion
 
@@ -793,7 +822,6 @@ namespace Villamos
             Fényazonosítókiírás();
             Képeklistázása();
         }
-
 
         private void Fény_azonosító_feltöltés()
         {
@@ -1875,30 +1903,6 @@ namespace Villamos
 
         #region Listák
 
-
-
-        private List<Adat_Rezsi_Hely> RezsiHelyFeltöltés()
-        {
-            List<Adat_Rezsi_Hely> Adatok = new List<Adat_Rezsi_Hely>();
-            try
-            {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Rezsi\rezsihely.mdb";
-                string jelszó = "csavarhúzó";
-                string szöveg = "SELECT * FROM tábla";
-                Adatok = KézRezsi.Lista_Adatok_Hely(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Adatok;
-
-        }
 
         private List<Adat_Rezsi_Lista> RezsiKészletFeltöltés()
         {
