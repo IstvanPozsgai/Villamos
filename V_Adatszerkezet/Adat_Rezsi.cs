@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Villamos.Villamos_Adatszerkezet
 {
-    public  class Adat_Rezsi_Törzs
+    public class Adat_Rezsi_Törzs
     {
-        public string Azonosító { get;private set; }
+        public string Azonosító { get; private set; }
         public string Megnevezés { get; set; }
         public string Méret { get; set; }
         public int Státusz { get; set; }
@@ -21,7 +17,7 @@ namespace Villamos.Villamos_Adatszerkezet
             Méret = méret;
             Státusz = státusz;
             Csoport = csoport;
-        }   
+        }
     }
 
 
@@ -39,7 +35,7 @@ namespace Villamos.Villamos_Adatszerkezet
             Állvány = állvány;
             Polc = polc;
             Helyiség = helyiség;
-            Megjegyzés = megjegyzés;      
+            Megjegyzés = megjegyzés;
         }
     }
 
@@ -49,13 +45,13 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Azonosító { get; private set; }
         public string Honnan { get; private set; }
         public string Hova { get; private set; }
-        public string Mennyiség { get; private set; }
+        public double Mennyiség { get; private set; }
         public string Mirehasznál { get; private set; }
         public string Módosította { get; private set; }
         public DateTime Módosításidátum { get; private set; }
         public bool Státus { get; private set; }
 
-        public Adat_Rezsi_Listanapló(string azonosító, string honnan, string hova, string mennyiség, string mirehasznál, string módosította, DateTime módosításidátum, bool státus)
+        public Adat_Rezsi_Listanapló(string azonosító, string honnan, string hova, double mennyiség, string mirehasznál, string módosította, DateTime módosításidátum, bool státus)
         {
             Azonosító = azonosító;
             Honnan = honnan;
@@ -72,16 +68,27 @@ namespace Villamos.Villamos_Adatszerkezet
     public class Adat_Rezsi_Lista
     {
         public string Azonosító { get; private set; }
-        public string Mennyiség { get; private set; }
+        public double Mennyiség { get; private set; }
         public DateTime Dátum { get; private set; }
         public bool Státus { get; private set; }
 
-        public Adat_Rezsi_Lista(string azonosító, string mennyiség, DateTime dátum, bool státus)
+        public string Telephely { get; private set; }
+
+        public Adat_Rezsi_Lista(string azonosító, double mennyiség, DateTime dátum, bool státus)
         {
             Azonosító = azonosító;
             Mennyiség = mennyiség;
             Dátum = dátum;
             Státus = státus;
+        }
+
+        public Adat_Rezsi_Lista(string azonosító, double mennyiség, DateTime dátum, bool státus, string telephely)
+        {
+            Azonosító = azonosító;
+            Mennyiség = mennyiség;
+            Dátum = dátum;
+            Státus = státus;
+            Telephely = telephely;
         }
     }
 

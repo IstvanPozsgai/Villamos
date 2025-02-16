@@ -99,9 +99,8 @@ namespace Villamos
             this.TabPage4 = new System.Windows.Forms.TabPage();
             this.Lista_megnevezés_szűrő = new System.Windows.Forms.TextBox();
             this.ListaCsoportCombo = new System.Windows.Forms.ComboBox();
-            this._Tábla = new System.Windows.Forms.DataGridView();
+            this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Excel = new System.Windows.Forms.Button();
-            this.Keresés = new System.Windows.Forms.Button();
             this.Command20 = new System.Windows.Forms.Button();
             this.TabPage5 = new System.Windows.Forms.TabPage();
             this.BehovaRaktár = new System.Windows.Forms.TextBox();
@@ -134,7 +133,7 @@ namespace Villamos
             this.Label35 = new System.Windows.Forms.Label();
             this.Kirögzít = new System.Windows.Forms.Button();
             this.TabPage7 = new System.Windows.Forms.TabPage();
-            this.Napló_tábla = new System.Windows.Forms.DataGridView();
+            this.Napló_tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Listáz = new System.Windows.Forms.Button();
             this.Excelclick = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -148,7 +147,7 @@ namespace Villamos
             this.TabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.KépKeret)).BeginInit();
             this.TabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._Tábla)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.TabPage5.SuspendLayout();
             this.TabPage6.SuspendLayout();
             this.TabPage7.SuspendLayout();
@@ -181,6 +180,7 @@ namespace Villamos
             this.Cmbtelephely.Name = "Cmbtelephely";
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
             // 
             // Label13
             // 
@@ -506,11 +506,16 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tár_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tár_tábla.FilterAndSortEnabled = true;
+            this.Tár_tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tár_tábla.Location = new System.Drawing.Point(7, 182);
+            this.Tár_tábla.MaxFilterButtonImageHeight = 23;
             this.Tár_tábla.Name = "Tár_tábla";
+            this.Tár_tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Tár_tábla.RowHeadersVisible = false;
             this.Tár_tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.Tár_tábla.Size = new System.Drawing.Size(1048, 238);
+            this.Tár_tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tár_tábla.TabIndex = 204;
             this.Tár_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tár_tábla_CellClick);
             // 
@@ -808,9 +813,8 @@ namespace Villamos
             this.TabPage4.BackColor = System.Drawing.Color.LightSalmon;
             this.TabPage4.Controls.Add(this.Lista_megnevezés_szűrő);
             this.TabPage4.Controls.Add(this.ListaCsoportCombo);
-            this.TabPage4.Controls.Add(this._Tábla);
+            this.TabPage4.Controls.Add(this.Tábla);
             this.TabPage4.Controls.Add(this.Excel);
-            this.TabPage4.Controls.Add(this.Keresés);
             this.TabPage4.Controls.Add(this.Command20);
             this.TabPage4.Location = new System.Drawing.Point(4, 29);
             this.TabPage4.Name = "TabPage4";
@@ -834,20 +838,25 @@ namespace Villamos
             this.ListaCsoportCombo.Size = new System.Drawing.Size(243, 28);
             this.ListaCsoportCombo.TabIndex = 116;
             // 
-            // _Tábla
+            // Tábla
             // 
-            this._Tábla.AllowUserToAddRows = false;
-            this._Tábla.AllowUserToDeleteRows = false;
-            this._Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Tábla.AllowUserToAddRows = false;
+            this.Tábla.AllowUserToDeleteRows = false;
+            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this._Tábla.Location = new System.Drawing.Point(6, 57);
-            this._Tábla.Name = "_Tábla";
-            this._Tábla.RowHeadersVisible = false;
-            this._Tábla.Size = new System.Drawing.Size(1048, 365);
-            this._Tábla.TabIndex = 202;
-            this._Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
+            this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla.FilterAndSortEnabled = true;
+            this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tábla.Location = new System.Drawing.Point(6, 57);
+            this.Tábla.MaxFilterButtonImageHeight = 23;
+            this.Tábla.Name = "Tábla";
+            this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Tábla.RowHeadersVisible = false;
+            this.Tábla.Size = new System.Drawing.Size(1048, 365);
+            this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tábla.TabIndex = 202;
+            this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
             // Excel
             // 
@@ -860,18 +869,6 @@ namespace Villamos
             this.toolTip1.SetToolTip(this.Excel, "A táblázatot Excelbe exportálja.");
             this.Excel.UseVisualStyleBackColor = true;
             this.Excel.Click += new System.EventHandler(this.Excel_Click);
-            // 
-            // Keresés
-            // 
-            this.Keresés.BackgroundImage = global::Villamos.Properties.Resources.Nagyító;
-            this.Keresés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Keresés.Location = new System.Drawing.Point(535, 6);
-            this.Keresés.Name = "Keresés";
-            this.Keresés.Size = new System.Drawing.Size(40, 40);
-            this.Keresés.TabIndex = 196;
-            this.toolTip1.SetToolTip(this.Keresés, "Megnyitja a keresőt.");
-            this.Keresés.UseVisualStyleBackColor = true;
-            this.Keresés.Click += new System.EventHandler(this.Keresés_Click);
             // 
             // Command20
             // 
@@ -1226,11 +1223,16 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Napló_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Napló_tábla.FilterAndSortEnabled = true;
+            this.Napló_tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Napló_tábla.Location = new System.Drawing.Point(6, 69);
+            this.Napló_tábla.MaxFilterButtonImageHeight = 23;
             this.Napló_tábla.Name = "Napló_tábla";
+            this.Napló_tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Napló_tábla.RowHeadersVisible = false;
             this.Napló_tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.Napló_tábla.Size = new System.Drawing.Size(1048, 353);
+            this.Napló_tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Napló_tábla.TabIndex = 204;
             // 
             // Listáz
@@ -1306,7 +1308,7 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.KépKeret)).EndInit();
             this.TabPage4.ResumeLayout(false);
             this.TabPage4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._Tábla)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.TabPage5.ResumeLayout(false);
             this.TabPage5.PerformLayout();
             this.TabPage6.ResumeLayout(false);
@@ -1374,33 +1376,8 @@ namespace Villamos
         internal Button KépHozzáad;
         internal ListBox FényképLista;
         internal ComboBox ListaCsoportCombo;
-        internal DataGridView _Tábla;
-
-        public virtual DataGridView Tábla
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _Tábla;
-            }
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_Tábla != null)
-                {
-                    _Tábla.CellClick -= Tábla_CellClick;
-                }
-
-                _Tábla = value;
-                if (_Tábla != null)
-                {
-                    _Tábla.CellClick += Tábla_CellClick;
-                }
-            }
-        }
+        internal Zuby.ADGV.AdvancedDataGridView Tábla;
         internal Button Excel;
-        internal Button Keresés;
         internal Button Command20;
         internal TextBox BehovaRaktár;
         internal TextBox BeMegnevezés;
@@ -1442,6 +1419,6 @@ namespace Villamos
         internal TextBox Lista_megnevezés_szűrő;
         internal Button Fényképfrissítés;
         internal ToolTip toolTip1;
-        internal DataGridView Napló_tábla;
+        internal Zuby.ADGV.AdvancedDataGridView Napló_tábla;
      }
 }

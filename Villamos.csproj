@@ -791,8 +791,9 @@
     <Compile Include="V_Kezelők\Kezelő_Osztály_Adat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Név.cs" />
     <Compile Include="V_Kezelők\Kezelő_Reklám.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Rezsi.cs" />
     <Compile Include="V_Kezelők\Kezelő_Rezsi_Hely.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Rezsi_Könyvelés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Rezsi_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Rezsi_Törzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Túlóra.cs" />
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
