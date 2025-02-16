@@ -883,6 +883,9 @@
     <Compile Include="V_Kezelők\Kezelő_kiegészítő_telephely.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia.cs" />
     <Compile Include="V_Kezelők\Kezelő_Vezénylés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Védő_Cikktörzs.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Védő_Könyvelés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Védő_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Általános.cs" />
     <Compile Include="V_Kezelők\Kezelő_Épület.cs" />
     <Compile Include="V_Kezelők\Kezelő_Épület_Takarítás.cs" />

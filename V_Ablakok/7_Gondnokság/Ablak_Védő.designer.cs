@@ -78,7 +78,7 @@ namespace Villamos
             this.Label18 = new System.Windows.Forms.Label();
             this.HonnanNév = new System.Windows.Forms.ComboBox();
             this.Label19 = new System.Windows.Forms.Label();
-            this.Tábla_Könyv = new System.Windows.Forms.DataGridView();
+            this.Tábla_Könyv = new Zuby.ADGV.AdvancedDataGridView();
             this.Honnan = new System.Windows.Forms.ComboBox();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.Alap_Szint = new System.Windows.Forms.TextBox();
@@ -91,7 +91,7 @@ namespace Villamos
             this.Label27 = new System.Windows.Forms.Label();
             this.Alap_Munk_Megnevezés = new System.Windows.Forms.TextBox();
             this.Label26 = new System.Windows.Forms.Label();
-            this.Alap_tábla = new System.Windows.Forms.DataGridView();
+            this.Alap_tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Alap_Költséghely = new System.Windows.Forms.TextBox();
             this.Alap_Méret = new System.Windows.Forms.TextBox();
             this.Alap_Megnevezés = new System.Windows.Forms.TextBox();
@@ -109,7 +109,7 @@ namespace Villamos
             this.TabPage2 = new System.Windows.Forms.TabPage();
             this.IDM_dolgozó = new System.Windows.Forms.Button();
             this.Könyv_excel = new System.Windows.Forms.Button();
-            this.Könyv_tábla = new System.Windows.Forms.DataGridView();
+            this.Könyv_tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Könyv_Felelős1 = new System.Windows.Forms.ComboBox();
             this.Label9 = new System.Windows.Forms.Label();
             this.Könyv_Töröltek = new System.Windows.Forms.CheckBox();
@@ -124,7 +124,7 @@ namespace Villamos
             this.TabPage4 = new System.Windows.Forms.TabPage();
             this.Lekérd_Munkáltatói = new System.Windows.Forms.Button();
             this.Lekérd_Szerszámkönyvszám = new System.Windows.Forms.CheckedListBox();
-            this.Lekérd_Tábla = new System.Windows.Forms.DataGridView();
+            this.Lekérd_Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Lekérd_Szerszámazonosító = new System.Windows.Forms.ComboBox();
             this.Lekérd_Megnevezés = new System.Windows.Forms.ComboBox();
             this.Lekérd_Töröltek = new System.Windows.Forms.CheckBox();
@@ -152,7 +152,7 @@ namespace Villamos
             this.Label12 = new System.Windows.Forms.Label();
             this.Napló_Dátumig = new System.Windows.Forms.DateTimePicker();
             this.Label11 = new System.Windows.Forms.Label();
-            this.Napló_Tábla = new System.Windows.Forms.DataGridView();
+            this.Napló_Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Napló_Dátumtól = new System.Windows.Forms.DateTimePicker();
             this.Napló_Nyomtat = new System.Windows.Forms.CheckBox();
             this.Label10 = new System.Windows.Forms.Label();
@@ -1693,7 +1693,7 @@ namespace Villamos
         internal Label Label4;
         internal Label Label3;
         internal Label Label2;
-        internal DataGridView Alap_tábla;
+        internal Zuby.ADGV.AdvancedDataGridView Alap_tábla;
         internal Button Könyv_új;
         internal Button Könyv_Rögzít;
         internal Button Frissít;
@@ -1703,7 +1703,7 @@ namespace Villamos
         internal CheckBox Könyv_Törlés;
         internal Label Label6;
         internal Label Label7;
-        internal DataGridView Könyv_tábla;
+        internal Zuby.ADGV.AdvancedDataGridView Könyv_tábla;
         internal ComboBox Könyv_Felelős1;
         internal Label Label9;
         internal TabPage TabPage3;
@@ -1721,7 +1721,7 @@ namespace Villamos
         internal Label Label12;
         internal DateTimePicker Napló_Dátumig;
         internal Label Label11;
-        internal DataGridView Napló_Tábla;
+        internal Zuby.ADGV.AdvancedDataGridView Napló_Tábla;
         internal Button Napló_Listáz;
         internal Button Napló_Excel_gomb;
         internal Button Napló_Nyomtatvány;
@@ -1743,7 +1743,7 @@ namespace Villamos
         internal Button Lekérd_Mindtöröl;
         internal Button Lekérd_Összeskijelöl;
         internal Button Lekérd_Lenyit;
-        internal DataGridView Lekérd_Tábla;
+        internal Zuby.ADGV.AdvancedDataGridView Lekérd_Tábla;
         internal ComboBox HováNév;
         internal ComboBox Hova;
         internal Label Label18;
@@ -1766,7 +1766,7 @@ namespace Villamos
         internal Button Lekérd_Munkáltatói;
         internal ToolTip ToolTip1;
         internal Button IDM_dolgozó;
-        internal DataGridView Tábla_Könyv;
+        internal Zuby.ADGV.AdvancedDataGridView Tábla_Könyv;
         internal Label Label20;
         internal Label Label21;
         internal Label HonnanMennyiség;

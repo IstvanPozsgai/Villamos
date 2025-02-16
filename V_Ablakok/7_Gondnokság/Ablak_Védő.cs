@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -26,11 +27,19 @@ namespace Villamos
         readonly Kezelő_Védő_Cikktörzs KézCikk = new Kezelő_Védő_Cikktörzs();
         readonly Kezelő_Védő_Könyv KézKönyv = new Kezelő_Védő_Könyv();
         readonly Kezelő_Védő_Könyvelés KézKönyvelés = new Kezelő_Védő_Könyvelés();
+        readonly Kezelő_Kiegészítő_Védelem KézVédelem = new Kezelő_Kiegészítő_Védelem();
 
         List<Adat_Védő_Cikktörzs> AdatokCikk = new List<Adat_Védő_Cikktörzs>();
         List<Adat_Védő_Könyv> AdatokKönyv = new List<Adat_Védő_Könyv>();
         List<Adat_Védő_Könyvelés> AdatokKönyvelés = new List<Adat_Védő_Könyvelés>();
 
+#pragma warning disable
+        DataTable AdatTáblaALap = new DataTable();
+
+#pragma warning restore
+
+
+        #region Alap
         public Ablak_védő()
         {
             InitializeComponent();
@@ -63,7 +72,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Ablak_védő_Load(object sender, EventArgs e)
         {
@@ -170,7 +178,6 @@ namespace Villamos
             }
         }
 
-        #region Alap
         private void Telephelyekfeltöltése()
         {
             try
@@ -196,7 +203,6 @@ namespace Villamos
             }
         }
 
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -207,7 +213,6 @@ namespace Villamos
             Lapfülek.SelectedIndex = 0;
             Fülekkitöltése();
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -256,19 +261,28 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\védőfelszerelés.html";
-            MyE.Megnyitás(hely);
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\védőfelszerelés.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         private void LapFülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
-
 
         private void Fülekkitöltése()
         {
@@ -314,9 +328,7 @@ namespace Villamos
                         }
                     case 4:
                         {
-
                             // Naplózás
-
                             Napló_könyv_feltöltés();
                             AcceptButton = Napló_Listáz;
                             break;
@@ -333,7 +345,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void LapFülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -378,7 +389,7 @@ namespace Villamos
         {
             try
             {
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Védő_Cikktörzs> Adatok;
                 if (!Alap_Töröltek.Checked)
                     Adatok = (from a in AdatokCikk
@@ -409,20 +420,15 @@ namespace Villamos
             }
         }
 
-
         private void VédeleM_feltöltés()
         {
             try
             {
-                string helyi = Application.StartupPath + @"\Főmérnökség\adatok\Kiegészítő2.mdb";
-                string jelszói = "Mocó";
-
-                string szöveg = "SELECT * FROM Védelem Order BY sorszám";
+                List<Adat_Kiegészítő_Védelem> Adatok = KézVédelem.Lista_Adatok();
 
                 Alap_védelem.Items.Clear();
-                Alap_védelem.BeginUpdate();
-                Alap_védelem.Items.AddRange(MyF.ComboFeltöltés(helyi, jelszói, szöveg, "Megnevezés"));
-                Alap_védelem.EndUpdate();
+                foreach (Adat_Kiegészítő_Védelem Elem in Adatok)
+                    Alap_védelem.Items.Add(Elem.Megnevezés);
                 Alap_védelem.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -435,7 +441,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Ürít()
         {
@@ -452,7 +457,6 @@ namespace Villamos
             Alap_Munk_Megnevezés.Text = "";
         }
 
-
         private void Ürít_kis()
         {
             Alap_Megnevezés.Text = "";
@@ -467,14 +471,12 @@ namespace Villamos
             Alap_Munk_Megnevezés.Text = "";
         }
 
-
         private void Töröltek_CheckedChanged(object sender, EventArgs e)
         {
             Azonosítók();
             Ürít();
             Alap_tábla_író();
         }
-
 
         private void Frissít_Click(object sender, EventArgs e)
         {
@@ -483,12 +485,10 @@ namespace Villamos
             Alap_tábla_író();
         }
 
-
         private void Azonosító_SelectedIndexChanged(object sender, EventArgs e)
         {
             Alap_azonosító_választó();
         }
-
 
         private void Alap_azonosító_választó()
         {
@@ -496,26 +496,27 @@ namespace Villamos
             {
                 if (Alap_Azonosító.Text.Trim() == "") return;
                 Ürít_kis();
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Védő_Cikktörzs rekord = (from a in AdatokCikk
                                               where a.Azonosító == Alap_Azonosító.Text.Trim()
                                               select a).FirstOrDefault();
-                if (rekord != null) { }
+                if (rekord != null)
+                {
+                    Alap_Megnevezés.Text = rekord.Megnevezés.Trim();
+                    Alap_Méret.Text = rekord.Méret.Trim();
+                    Alap_Költséghely.Text = rekord.Költséghely.Trim();
+                    if (rekord.Státus == 1)
+                        Alap_Aktív.Checked = true;
+                    else
+                        Alap_Aktív.Checked = false;
 
-                Alap_Megnevezés.Text = rekord.Megnevezés.Trim();
-                Alap_Méret.Text = rekord.Méret.Trim();
-                Alap_Költséghely.Text = rekord.Költséghely.Trim();
-                if (rekord.Státus == 1)
-                    Alap_Aktív.Checked = true;
-                else
-                    Alap_Aktív.Checked = false;
-
-                Alap_védelem.Text = rekord.Védelem.Trim();
-                Alap_kockázat.Text = rekord.Kockázat.Trim();
-                Alap_szabvány.Text = rekord.Szabvány.Trim();
-                Alap_Szint.Text = rekord.Szint.Trim();
-                Alap_Munk_Megnevezés.Text = rekord.Munk_megnevezés.Trim();
+                    Alap_védelem.Text = rekord.Védelem.Trim();
+                    Alap_kockázat.Text = rekord.Kockázat.Trim();
+                    Alap_szabvány.Text = rekord.Szabvány.Trim();
+                    Alap_Szint.Text = rekord.Szint.Trim();
+                    Alap_Munk_Megnevezés.Text = rekord.Munk_megnevezés.Trim();
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -528,88 +529,51 @@ namespace Villamos
             }
         }
 
-
         private void Új_adat_Click(object sender, EventArgs e)
         {
             Ürít();
         }
 
-
         private void Rögzít_Click(object sender, EventArgs e)
         {
             try
             {
-
-                if (Alap_Azonosító.Text.Trim() == "")
-                    throw new HibásBevittAdat("Azonosító mező kitöltése kötelező");
-                if (Alap_Megnevezés.Text.Trim() == "")
-                    throw new HibásBevittAdat("Megnevezés mező kitöltése kötelező");
+                if (Alap_Azonosító.Text.Trim() == "") throw new HibásBevittAdat("Azonosító mező kitöltése kötelező");
+                if (Alap_Megnevezés.Text.Trim() == "") throw new HibásBevittAdat("Megnevezés mező kitöltése kötelező");
 
                 Alap_Azonosító.Text = MyF.Szöveg_Tisztítás(Alap_Azonosító.Text, 0, 20);
                 Alap_Megnevezés.Text = MyF.Szöveg_Tisztítás(Alap_Megnevezés.Text, 0, 50);
                 Alap_Méret.Text = MyF.Szöveg_Tisztítás(Alap_Méret.Text, 0, 15);
 
-                if (Alap_Méret.Text.Trim() == "")
-                    Alap_Méret.Text = "-";
-                if (Alap_Költséghely.Text.Trim() == "")
-                    Alap_Költséghely.Text = "-";
-                if (Alap_védelem.Text.Trim() == "")
-                    Alap_védelem.Text = "-";
-                if (Alap_kockázat.Text.Trim() == "")
-                    Alap_kockázat.Text = "-";
-                if (Alap_szabvány.Text.Trim() == "")
-                    Alap_szabvány.Text = "-";
-                if (Alap_Szint.Text.Trim() == "")
-                    Alap_Szint.Text = "-";
-                if (Alap_Munk_Megnevezés.Text.Trim() == "")
-                    Alap_Munk_Megnevezés.Text = "-";
+                if (Alap_Méret.Text.Trim() == "") Alap_Méret.Text = "-";
+                if (Alap_Költséghely.Text.Trim() == "") Alap_Költséghely.Text = "-";
+                if (Alap_védelem.Text.Trim() == "") Alap_védelem.Text = "-";
+                if (Alap_kockázat.Text.Trim() == "") Alap_kockázat.Text = "-";
+                if (Alap_szabvány.Text.Trim() == "") Alap_szabvány.Text = "-";
+                if (Alap_Szint.Text.Trim() == "") Alap_Szint.Text = "-";
+                if (Alap_Munk_Megnevezés.Text.Trim() == "") Alap_Munk_Megnevezés.Text = "-";
 
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Védő_Cikktörzs rekord = (from a in AdatokCikk
                                               where a.Azonosító == Alap_Azonosító.Text.Trim()
                                               select a).FirstOrDefault();
-                string szöveg;
-                string hely = Alap_hely;
 
+                Adat_Védő_Cikktörzs ADAT = new Adat_Védő_Cikktörzs(
+                                    Alap_Azonosító.Text.Trim(),
+                                    Alap_Megnevezés.Text.Trim(),
+                                    Alap_Méret.Text.Trim(),
+                                    Alap_Aktív.Checked == true ? 1 : 0,
+                                    MyF.Szöveg_Tisztítás(Alap_Költséghely.Text.Trim(), 0, 6, true),
+                                    MyF.Szöveg_Tisztítás(Alap_védelem.Text.Trim(), 0, 20, true),
+                                    MyF.Szöveg_Tisztítás(Alap_kockázat.Text.Trim(), 0, 100, true),
+                                    MyF.Szöveg_Tisztítás(Alap_szabvány.Text.Trim(), 0, 50, true),
+                                    MyF.Szöveg_Tisztítás(Alap_Szint.Text.Trim(), 0, 50, true),
+                                    MyF.Szöveg_Tisztítás(Alap_Munk_Megnevezés.Text.Trim(), 0, 150, true));
 
                 if (rekord == null)
-                {
-                    szöveg = "INSERT INTO lista  (azonosító, megnevezés, méret,  státus, költséghely, Védelem, Kockázat, Szabvány, Szint, Munk_megnevezés ) VALUES (";
-                    szöveg += "'" + Alap_Azonosító.Text.Trim() + "', ";//azonosító
-                    szöveg += "'" + Alap_Megnevezés.Text.Trim() + "', "; //megnevezés
-                    szöveg += "'" + Alap_Méret.Text.Trim() + "', ";//méret
-                    if (Alap_Aktív.Checked == true)  //státus
-                        szöveg += "'1', ";
-                    else
-                        szöveg += "'0', ";
-                    szöveg += "'" + MyF.Szöveg_Tisztítás(Alap_Költséghely.Text.Trim(), 0, 6, true) + "', "; // költséghely
-                    szöveg += "'" + MyF.Szöveg_Tisztítás(Alap_védelem.Text.Trim(), 0, 20, true) + "', ";
-                    szöveg += "'" + MyF.Szöveg_Tisztítás(Alap_kockázat.Text.Trim(), 0, 100, true) + "', ";
-                    szöveg += "'" + MyF.Szöveg_Tisztítás(Alap_szabvány.Text.Trim(), 0, 50, true) + "', ";
-                    szöveg += "'" + MyF.Szöveg_Tisztítás(Alap_Szint.Text.Trim(), 0, 50, true) + "', ";
-                    szöveg += "'" + MyF.Szöveg_Tisztítás(Alap_Munk_Megnevezés.Text.Trim(), 0, 150, true) + "') ";
-                }
+                    KézCikk.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                {
-                    szöveg = "UPDATE lista  SET ";
-                    szöveg += "megnevezés='" + Alap_Megnevezés.Text.Trim() + "', ";
-                    szöveg += "méret='" + Alap_Méret.Text.Trim() + "', ";
-                    szöveg += "költséghely='" + MyF.Szöveg_Tisztítás(Alap_Költséghely.Text.Trim(), 0, 6, true) + "', ";
-                    if (Alap_Aktív.Checked == true)
-                        szöveg += "státus='1', ";
-                    else
-                        szöveg += "státus='0', ";
-
-                    szöveg += "védelem='" + MyF.Szöveg_Tisztítás(Alap_védelem.Text.Trim().Replace(",", ";"), 0, 20, true) + "', ";
-                    szöveg += "kockázat='" + MyF.Szöveg_Tisztítás(Alap_kockázat.Text.Trim().Replace(",", ";"), 0, 100, true) + "', ";
-                    szöveg += "szabvány='" + MyF.Szöveg_Tisztítás(Alap_szabvány.Text.Trim().Replace(",", ";"), 0, 50, true) + "', ";
-                    szöveg += "Szint='" + MyF.Szöveg_Tisztítás(Alap_Szint.Text.Trim().Replace(",", ";"), 0, 50, true) + "', ";
-                    szöveg += "Munk_Megnevezés='" + MyF.Szöveg_Tisztítás(Alap_Munk_Megnevezés.Text.Trim().Replace(",", ";"), 0, 150, true) + "' ";
-
-                    szöveg += " WHERE azonosító='" + Alap_Azonosító.Text.Trim() + "'";
-                }
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézCikk.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
 
                 Azonosítók();
                 Ürít();
@@ -627,81 +591,18 @@ namespace Villamos
             }
         }
 
-
         private void Alap_tábla_író()
         {
             try
             {
-                string hely = Alap_hely;
-                if (!File.Exists(hely)) return;
-                CikkLista_Feltöltés();
-
-                List<Adat_Védő_Cikktörzs> Adatok;
-                if (!Alap_Töröltek.Checked)
-                    Adatok = (from a in AdatokCikk
-                              where a.Státus == 0
-                              select a).ToList();
-                else
-                    Adatok = (from a in AdatokCikk
-                              where a.Státus == 1
-                              select a).ToList();
-
-                Alap_tábla.Rows.Clear();
-                Alap_tábla.Columns.Clear();
-                Alap_tábla.Refresh();
                 Alap_tábla.Visible = false;
-                Alap_tábla.ColumnCount = 10;
-
-                // fejléc elkészítése
-                Alap_tábla.Columns[0].HeaderText = "Azonosító";
-                Alap_tábla.Columns[0].Width = 130;
-                Alap_tábla.Columns[1].HeaderText = "Megnevezés";
-                Alap_tábla.Columns[1].Width = 500;
-                Alap_tábla.Columns[2].HeaderText = "Méret";
-                Alap_tábla.Columns[2].Width = 120;
-                Alap_tábla.Columns[3].HeaderText = "Költséghely";
-                Alap_tábla.Columns[3].Width = 100;
-                Alap_tábla.Columns[4].HeaderText = "Aktív";
-                Alap_tábla.Columns[4].Width = 70;
-                Alap_tábla.Columns[5].HeaderText = "Védelem";
-                Alap_tábla.Columns[5].Width = 120;
-                Alap_tábla.Columns[6].HeaderText = "Kockázat";
-                Alap_tábla.Columns[6].Width = 250;
-                Alap_tábla.Columns[7].HeaderText = "Szabvány";
-                Alap_tábla.Columns[7].Width = 250;
-                Alap_tábla.Columns[8].HeaderText = "Szint";
-                Alap_tábla.Columns[8].Width = 250;
-                Alap_tábla.Columns[9].HeaderText = "Munkavédelmi elnevezés";
-                Alap_tábla.Columns[9].Width = 500;
-
-                int i;
-
-                foreach (Adat_Védő_Cikktörzs rekord in Adatok)
-                {
-
-                    Alap_tábla.RowCount++;
-                    i = Alap_tábla.RowCount - 1;
-
-                    Alap_tábla.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
-                    Alap_tábla.Rows[i].Cells[1].Value = rekord.Megnevezés.Trim();
-                    Alap_tábla.Rows[i].Cells[2].Value = rekord.Méret.Trim();
-                    Alap_tábla.Rows[i].Cells[3].Value = rekord.Költséghely.Trim();
-                    if (rekord.Státus == 1)
-                        Alap_tábla.Rows[i].Cells[4].Value = "Törölt";
-                    else
-                        Alap_tábla.Rows[i].Cells[4].Value = "Élő";
-
-                    Alap_tábla.Rows[i].Cells[5].Value = rekord.Védelem.Trim();
-                    Alap_tábla.Rows[i].Cells[6].Value = rekord.Kockázat.Trim();
-                    Alap_tábla.Rows[i].Cells[7].Value = rekord.Szabvány.Trim();
-                    Alap_tábla.Rows[i].Cells[8].Value = rekord.Szint.Trim();
-                    Alap_tábla.Rows[i].Cells[9].Value = rekord.Munk_megnevezés.Trim();
-                }
-
-
+                Alap_tábla.CleanFilterAndSort();
+                AlapTáblaFejléc();
+                AlapTáblaTartalom();
+                Alap_tábla.DataSource = AdatTáblaALap;
+                AlapTáblaOszlopSzélesség();
                 Alap_tábla.Visible = true;
                 Alap_tábla.Refresh();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -714,6 +615,81 @@ namespace Villamos
             }
         }
 
+        private void AlapTáblaTartalom()
+        {
+            AdatTáblaALap.Clear();
+            AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+            List<Adat_Védő_Cikktörzs> Adatok;
+            if (!Alap_Töröltek.Checked)
+                Adatok = (from a in AdatokCikk
+                          where a.Státus == 0
+                          select a).ToList();
+            else
+                Adatok = (from a in AdatokCikk
+                          where a.Státus == 1
+                          select a).ToList();
+
+            foreach (Adat_Védő_Cikktörzs rekord in Adatok)
+            {
+                DataRow Soradat = AdatTáblaALap.NewRow();
+
+                Soradat["Azonosító"] = rekord.Azonosító;
+                Soradat["Megnevezés"] = rekord.Megnevezés;
+                Soradat["Méret"] = rekord.Méret;
+                Soradat["Költséghely"] = rekord.Költséghely;
+                Soradat["Aktív"] = rekord.Státus == 1 ? "Törölt" : "Élő";
+                Soradat["Védelem"] = rekord.Védelem;
+                Soradat["Kockázat"] = rekord.Kockázat;
+                Soradat["Szabvány"] = rekord.Szabvány;
+                Soradat["Szint"] = rekord.Szint;
+                Soradat["Munkavédelmi elnevezés"] = rekord.Munk_megnevezés;
+                AdatTáblaALap.Rows.Add(Soradat);
+            }
+
+
+        }
+
+        private void AlapTáblaFejléc()
+        {
+            try
+            {
+                AdatTáblaALap.Columns.Clear();
+                AdatTáblaALap.Columns.Add("Azonosító");
+                AdatTáblaALap.Columns.Add("Megnevezés");
+                AdatTáblaALap.Columns.Add("Méret");
+                AdatTáblaALap.Columns.Add("Költséghely");
+                AdatTáblaALap.Columns.Add("Aktív");
+                AdatTáblaALap.Columns.Add("Védelem");
+                AdatTáblaALap.Columns.Add("Kockázat");
+                AdatTáblaALap.Columns.Add("Szabvány");
+                AdatTáblaALap.Columns.Add("Szint");
+                AdatTáblaALap.Columns.Add("Munkavédelmi elnevezés");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AlapTáblaOszlopSzélesség()
+        {
+            Alap_tábla.Columns["Azonosító"].Width = 130;
+            Alap_tábla.Columns["Megnevezés"].Width = 500;
+            Alap_tábla.Columns["Méret"].Width = 120;
+            Alap_tábla.Columns["Költséghely"].Width = 100;
+            Alap_tábla.Columns["Aktív"].Width = 70;
+            Alap_tábla.Columns["Védelem"].Width = 120;
+            Alap_tábla.Columns["Kockázat"].Width = 250;
+            Alap_tábla.Columns["Szabvány"].Width = 250;
+            Alap_tábla.Columns["Szint"].Width = 250;
+            Alap_tábla.Columns["Munkavédelmi elnevezés"].Width = 500;
+        }
 
         private void Alap_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -721,7 +697,6 @@ namespace Villamos
             Alap_Azonosító.Text = Alap_tábla.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
             Alap_azonosító_választó();
         }
-
 
         private void Alap_excel_Click(object sender, EventArgs e)
         {
@@ -762,7 +737,7 @@ namespace Villamos
         }
         #endregion
 
-
+        //Itt tartok
         #region Könyv lap
         private void Szeszámkönyvfeltöltés()
         {
@@ -1166,7 +1141,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőnapló" + Napló_Dátumtól.Value.ToString("yyyy") + ".mdb";
                 if (!File.Exists(hely)) return;
 
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 string szöveg = "SELECT * FROM lista WHERE ";
                 szöveg += " (([módosításidátum]>#" + Napló_Dátumtól.Value.ToString("MM-dd-yyyy") + " 00:00:0#)";
@@ -1696,7 +1671,7 @@ namespace Villamos
         {
             try
             {
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Védő_Cikktörzs> Adatok;
                 if (!Lekérd_Töröltek.Checked)
                     Adatok = (from a in AdatokCikk
@@ -1765,7 +1740,7 @@ namespace Villamos
         {
             try
             {
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Védő_Cikktörzs> Adatok;
                 if (!Lekérd_Töröltek.Checked)
                     Adatok = (from a in AdatokCikk
@@ -2144,7 +2119,7 @@ namespace Villamos
 
                 double Összeg = 0;
                 Könyvelés_Feltöltés();
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 List<Adat_Védő_Könyvelés> Adatok;
                 if (Lekérd_Szerszámazonosító.Text.Trim() != "")
@@ -2629,7 +2604,7 @@ namespace Villamos
         {
             try
             {
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Védő_Cikktörzs> Adatok = (from a in AdatokCikk
                                                     where a.Státus == 1
                                                     select a).ToList();
@@ -2899,7 +2874,7 @@ namespace Villamos
                 Mennyiség.Enabled = true;
                 if (SzerszámAzonosító.Text.Trim() == "") return;
 
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Védő_Cikktörzs Elem = (from a in AdatokCikk
                                             where a.Azonosító == SzerszámAzonosító.Text.Trim()
                                             select a).FirstOrDefault();
@@ -3028,7 +3003,7 @@ namespace Villamos
             try
             {
                 string hely = Alap_hely;
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 List<Adat_Védő_Cikktörzs> Adatok = (from a in AdatokCikk
                                                     where a.Státus == 0 && a.Megnevezés.ToUpper().Contains(Könyv_SzűrőTXT.Text.Trim().ToUpper())
@@ -3062,7 +3037,7 @@ namespace Villamos
             try
             {
                 Könyvelés_Feltöltés();
-                CikkLista_Feltöltés();
+                AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 string szöveg = $"SELECT * FROM lista where szerszámkönyvszám='{Honnan.Text.Trim()}' and státus=false ";
                 szöveg += "Order By azonosító";
@@ -4033,7 +4008,6 @@ namespace Villamos
 
                 string hely = Alap_hely;
 
-                string szöveg = "SELECT * FROM lista ORDER BY azonosító";
 
                 // sorbarendezzük a táblát pályaszám szerint
 
@@ -4041,7 +4015,7 @@ namespace Villamos
                 Lekérd_Tábla.Visible = false;
 
                 Kezelő_Védő_Cikktörzs kéz = new Kezelő_Védő_Cikktörzs();
-                List<Adat_Védő_Cikktörzs> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Védő_Cikktörzs> Adatok = kéz.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 int hiba = 0;
                 int i = 0;
@@ -4105,26 +4079,6 @@ namespace Villamos
 
 
         #region listák feltöltése
-        private void CikkLista_Feltöltés()
-        {
-            try
-            {
-                AdatokCikk.Clear();
-                string hely = Alap_hely;
-
-                string szöveg = $"SELECT * FROM lista ORDER BY azonosító";
-                AdatokCikk = KézCikk.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
 
         private void Szervezet_Feltöltés()
