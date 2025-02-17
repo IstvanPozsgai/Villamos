@@ -1016,6 +1016,7 @@ namespace Villamos
                 Dolgozószámvezénylés.Text = "";
                 Dolgozóvez.Items.Clear();
 
+                if (Telephonnan.Text.Trim() == "BKV egyéb") return;
                 List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Telephonnan.Text.Trim());
                 if (Adatok != null)
                 {
@@ -1066,45 +1067,49 @@ namespace Villamos
                 if (Telephová.Text.Trim() == " ") throw new HibásBevittAdat("Hová mezőt ki kell tölteni.");
                 if (Dolgozószámvezénylés.Text.Trim() == "") throw new HibásBevittAdat("A HR azonósítót ki kell tölteni.");
                 if (Dolgozóvez.Text.Trim() == "") throw new HibásBevittAdat("Dolgozó neve mezőt ki kell tölteni.");
-
+                Adat_Dolgozó_Alap AdatDolgozó;
                 // sajátból kirak
-                AdatokDolgozó = KézDolgozó.Lista_Adatok(Telephonnan.Text.Trim());
-                if (AdatokDolgozó == null) return;
-                Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
-                                                 where a.Dolgozószám == Dolgozószámvezénylés.Text.Trim()
-                                                 select a).FirstOrDefault();
-
-                if (AdatDolgozó != null)
+                if (Telephonnan.Text.Trim() != "BKV egyéb")
                 {
-                    Adat_Dolgozó_Alap ADATDolg = new Adat_Dolgozó_Alap(Dolgozószámvezénylés.Text.Trim(),
-                                                                      "",
-                                                                      new DateTime(1900, 1, 1),
-                                                                      true,
-                                                                      false,
-                                                                      Telephová.Text.Trim());
-                    KézDolgozó.Módosít_Vezénylés_Saját(Telephonnan.Text.Trim(), ADATDolg);
-                }
+                    AdatokDolgozó = KézDolgozó.Lista_Adatok(Telephonnan.Text.Trim());
+                    if (AdatokDolgozó == null) return;
+                    AdatDolgozó = (from a in AdatokDolgozó
+                                   where a.Dolgozószám == Dolgozószámvezénylés.Text.Trim()
+                                   select a).FirstOrDefault();
 
+                    if (AdatDolgozó != null)
+                    {
+                        Adat_Dolgozó_Alap ADATDolg = new Adat_Dolgozó_Alap(Dolgozószámvezénylés.Text.Trim(),
+                                                                          "",
+                                                                          new DateTime(1900, 1, 1),
+                                                                          true,
+                                                                          false,
+                                                                          Telephová.Text.Trim());
+                        KézDolgozó.Módosít_Vezénylés_Saját(Telephonnan.Text.Trim(), ADATDolg);
+                    }
+                }
                 string[] darabol = Dolgozóvez.Text.Trim().Split('=');
                 // a kívánt telephelyre
-                AdatokDolgozó = KézDolgozó.Lista_Adatok(Telephová.Text.Trim());
+                if (Telephová.Text.Trim() != "BKV egyéb")
+                {
+                    AdatokDolgozó = KézDolgozó.Lista_Adatok(Telephová.Text.Trim());
 
-                if (AdatokDolgozó == null) return;
-                AdatDolgozó = (from a in AdatokDolgozó
-                               where a.Dolgozószám == Dolgozószámvezénylés.Text.Trim()
-                               select a).FirstOrDefault();
+                    if (AdatokDolgozó == null) return;
+                    AdatDolgozó = (from a in AdatokDolgozó
+                                   where a.Dolgozószám == Dolgozószámvezénylés.Text.Trim()
+                                   select a).FirstOrDefault();
 
-                Adat_Dolgozó_Alap ADATVBE = new Adat_Dolgozó_Alap(Dolgozószámvezénylés.Text.Trim(),
-                                              darabol[0].Trim(),
-                                              new DateTime(1900, 1, 1),
-                                              false,
-                                              true,
-                                              Telephonnan.Text.Trim());
-                if (AdatDolgozó != null)
-                    KézDolgozó.Módosít_Vezénylés(Telephová.Text.Trim(), ADATVBE);
-                else
-                    KézDolgozó.Rögzítés_Vezénylés(Telephová.Text.Trim(), ADATVBE);
-
+                    Adat_Dolgozó_Alap ADATVBE = new Adat_Dolgozó_Alap(Dolgozószámvezénylés.Text.Trim(),
+                                                  darabol[0].Trim(),
+                                                  new DateTime(1900, 1, 1),
+                                                  false,
+                                                  true,
+                                                  Telephonnan.Text.Trim());
+                    if (AdatDolgozó != null)
+                        KézDolgozó.Módosít_Vezénylés(Telephová.Text.Trim(), ADATVBE);
+                    else
+                        KézDolgozó.Rögzítés_Vezénylés(Telephová.Text.Trim(), ADATVBE);
+                }
                 Dolgozószámvezénylés.Text = "";
                 Dolgozóvez.Text = "";
                 Telephová.Text = "";
@@ -1193,27 +1198,31 @@ namespace Villamos
                                                                          "");
                         KézDolgozó.Módosít_Vezénylés(Cmbtelephely.Text.Trim(), ADATVS);
 
-                        // idegen telephely
-                        Adat_Dolgozó_Alap ADATV = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
-                                                                        "",
-                                                                        DateTime.Today,
-                                                                        false,
-                                                                        false,
-                                                                        "");
-                        KézDolgozó.Módosít_Vezénylés(lakcím.Trim(), ADATV);
-
+                        if (lakcím.Trim() != "BKV egyéb")
+                        {
+                            // idegen telephely
+                            Adat_Dolgozó_Alap ADATV = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
+                                                                            "",
+                                                                            DateTime.Today,
+                                                                            false,
+                                                                            false,
+                                                                            "");
+                            KézDolgozó.Módosít_Vezénylés(lakcím.Trim(), ADATV);
+                        }
                     }
                     else
                     {
-                        // a saját telephely
-                        Adat_Dolgozó_Alap ADATVS = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
+                        if (lakcím.Trim() != "BKV egyéb")
+                        {
+                            // a saját telephely
+                            Adat_Dolgozó_Alap ADATVS = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
                                                                          "",
                                                                          new DateTime(1900, 1, 1),
                                                                          false,
                                                                          false,
                                                                          "");
-                        KézDolgozó.Módosít_Vezénylés(lakcím.Trim(), ADATVS);
-
+                            KézDolgozó.Módosít_Vezénylés(lakcím.Trim(), ADATVS);
+                        }
                         // idegen telephely
                         Adat_Dolgozó_Alap ADATV = new Adat_Dolgozó_Alap(Label22text.Text.Trim(),
                                                                          "",
