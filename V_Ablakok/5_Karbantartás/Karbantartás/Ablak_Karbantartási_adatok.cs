@@ -1007,7 +1007,7 @@ namespace Villamos
                         Vizsgfoka_Jármű = tömb[0].ToStrTrim();
                         Vsorszám_Jármű = tömb[1].ToÉrt_Int();
                         Vütemezés_Jármű_Dátum = tömb[2].ToÉrt_DaTeTime();
-                        if (!Vizsgfoka_Jármű.Contains("Mosó")) TW6000elkészülés();
+                        if (!Vizsgfoka_Jármű.Contains("Mosó") && Vsorszám_Jármű != 0) TW6000elkészülés();
                     }
                 }
             }
