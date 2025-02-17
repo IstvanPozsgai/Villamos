@@ -50,7 +50,6 @@ namespace Villamos
                 {
                     hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\adatok\Hibanapló".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\napló\napló{DateTime.Now.Year}.mdb".KönyvSzerk();
                 }
                 else
                 {
