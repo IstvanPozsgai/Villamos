@@ -30,6 +30,7 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Védelem KézVédelem = new Kezelő_Kiegészítő_Védelem();
         readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
         readonly Kezelő_Védő_Napló KézNapló = new Kezelő_Védő_Napló();
+        readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
 
         List<Adat_Védő_Cikktörzs> AdatokCikk = new List<Adat_Védő_Cikktörzs>();
         List<Adat_Védő_Könyv> AdatokKönyv = new List<Adat_Védő_Könyv>();
@@ -39,6 +40,7 @@ namespace Villamos
         DataTable AdatTáblaALap = new DataTable();
         DataTable AdatTáblaKönyv = new DataTable();
         DataTable AdatTáblaNapló = new DataTable();
+        DataTable AdatTáblaLekérd = new DataTable();
 
 #pragma warning restore
 
@@ -80,7 +82,6 @@ namespace Villamos
         private void Ablak_védő_Load(object sender, EventArgs e)
         {
         }
-
 
         private void AlapAdatok_Rögzítés()
         {
@@ -1230,7 +1231,6 @@ namespace Villamos
             Napló_táblaíró();
         }
 
-        //itt tartok
         private void Nyomtatvány_Click(object sender, EventArgs e)
         {
             try
@@ -1293,7 +1293,6 @@ namespace Villamos
                 // beolvassuk a három szervezeti egységet, és a beosztásokat
                 Szervezet_Feltöltés();
 
-
                 // Szervezeti kiírások
                 MyE.Oszlopszélesség(munkalap, "a:a", 23);
                 MyE.Oszlopszélesség(munkalap, "b:b", 54);
@@ -1334,7 +1333,6 @@ namespace Villamos
                 // beírjuk a védőkönyv adatokat
                 AdatokKönyv = KézKönyv.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                string hely = Könyv_hely;
                 Adat_Védő_Könyv Elem = (from a in AdatokKönyv
                                         where a.Szerszámkönyvszám == milyenkönyv.Trim()
                                         select a).FirstOrDefault();
@@ -1495,8 +1493,6 @@ namespace Villamos
                     MessageBox.Show("A Védőeszköz bizonylat elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Holtart.Ki();
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1509,11 +1505,10 @@ namespace Villamos
             }
         }
 
-
         private void Napló_Tábla_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Napló_Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim() + ".pdf";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Napló_Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim()}.pdf";
             if (File.Exists(hely))
             {
                 Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
@@ -1563,7 +1558,6 @@ namespace Villamos
             }
         }
 
-
         private void Lekérd_Azonosítók()
         {
             try
@@ -1600,7 +1594,6 @@ namespace Villamos
             }
         }
 
-
         private void Lekérd_névfeltöltés()
         {
             try
@@ -1608,13 +1601,8 @@ namespace Villamos
                 Lekérd_Felelős1.Items.Clear();
                 Lekérd_Felelős1.BeginUpdate();
 
-                string helyi = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Dolgozók.mdb";
-                string jelszói = "forgalmiutasítás";
                 DateTime kilépett = new DateTime(1900, 1, 1);
-                string szöveg = $"SELECT * FROM Dolgozóadatok WHERE Kilépésiidő=#{kilépett:MM-dd-yyyy}# ORDER BY dolgozónév";
-
-                Kezelő_Dolgozó_Alap Kéz = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> Adatok = Kéz.Lista_Adatok(helyi, jelszói, szöveg);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Kilépésiidő <= kilépett).ToList();
 
                 foreach (Adat_Dolgozó_Alap rekord in Adatok)
                     Lekérd_Felelős1.Items.Add(rekord.DolgozóNév.Trim() + " = " + rekord.Dolgozószám.Trim());
@@ -1631,7 +1619,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Lekérd_megnevezések()
         {
@@ -1671,18 +1658,15 @@ namespace Villamos
             }
         }
 
-
         private void Lenyit_Click(object sender, EventArgs e)
         {
             Lekérd_Szerszámkönyvszám.Height = 500;
         }
 
-
         private void Visszacsuk_Click(object sender, EventArgs e)
         {
             Lekérd_Szerszámkönyvszám.Height = 25;
         }
-
 
         private void Összeskijelöl_Click(object sender, EventArgs e)
         {
@@ -1692,14 +1676,12 @@ namespace Villamos
             Lekérd_Szerszámkönyvszám.Height = 25;
         }
 
-
         private void Mindtöröl_Click(object sender, EventArgs e)
         {
             Lekérd_mindtöröl_esemény();
             Lekérd_Tábla.Rows.Clear();
             Lekérd_Tábla.Columns.Clear();
         }
-
 
         private void Lekérd_mindtöröl_esemény()
         {
@@ -1709,43 +1691,50 @@ namespace Villamos
             Lekérd_Szerszámkönyvszám.Height = 25;
         }
 
-
         private void Lekérd_táblaíró()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőkönyvelés.mdb";
-                if (!File.Exists(hely)) return;
-
-                if (Lekérd_Szerszámkönyvszám.CheckedItems.Count < 1)
-                    return;
-
-                Lekérd_Tábla.Rows.Clear();
-                Lekérd_Tábla.Columns.Clear();
-                Lekérd_Tábla.Refresh();
                 Lekérd_Tábla.Visible = false;
-                Lekérd_Tábla.ColumnCount = 9;
+                Lekérd_Tábla.CleanFilterAndSort();
+                LekérdTáblaFejléc();
+                LekérdTáblaTartalom();
+                Lekérd_Tábla.DataSource = AdatTáblaLekérd;
+                LekérdTáblaOszlopSzélesség();
+                Lekérd_Tábla_Színez();
+                Lekérd_Tábla.Visible = true;
+                Lekérd_Tábla.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-                // fejléc elkészítése
-                Lekérd_Tábla.Columns[0].HeaderText = "Azonosító";
-                Lekérd_Tábla.Columns[0].Width = 120;
-                Lekérd_Tábla.Columns[1].HeaderText = "Megnevezés";
-                Lekérd_Tábla.Columns[1].Width = 350;
-                Lekérd_Tábla.Columns[2].HeaderText = "Méret";
-                Lekérd_Tábla.Columns[2].Width = 100;
-                Lekérd_Tábla.Columns[3].HeaderText = "Mennyiség";
-                Lekérd_Tábla.Columns[3].Width = 100;
-                Lekérd_Tábla.Columns[4].HeaderText = "Bizonylatszám";
-                Lekérd_Tábla.Columns[4].Width = 130;
-                Lekérd_Tábla.Columns[5].HeaderText = "Dátum";
-                Lekérd_Tábla.Columns[5].Width = 100;
-                Lekérd_Tábla.Columns[6].HeaderText = "Könyvszám";
-                Lekérd_Tábla.Columns[6].Width = 100;
-                Lekérd_Tábla.Columns[7].HeaderText = "Könyv megnevezés";
-                Lekérd_Tábla.Columns[7].Width = 300;
-                Lekérd_Tábla.Columns[8].HeaderText = "Státus";
-                Lekérd_Tábla.Columns[8].Width = 100;
+        private void LekérdTáblaOszlopSzélesség()
+        {
+            Lekérd_Tábla.Columns["Azonosító"].Width = 120;
+            Lekérd_Tábla.Columns["Megnevezés"].Width = 350;
+            Lekérd_Tábla.Columns["Méret"].Width = 100;
+            Lekérd_Tábla.Columns["Mennyiség"].Width = 100;
+            Lekérd_Tábla.Columns["Bizonylatszám"].Width = 130;
+            Lekérd_Tábla.Columns["Dátum"].Width = 100;
+            Lekérd_Tábla.Columns["Könyvszám"].Width = 100;
+            Lekérd_Tábla.Columns["Könyv megnevezés"].Width = 300;
+            Lekérd_Tábla.Columns["Státus"].Width = 100;
+        }
 
+        private void LekérdTáblaTartalom()
+        {
+            try
+            {
+                if (Lekérd_Szerszámkönyvszám.CheckedItems.Count < 1) return;
+                AdatTáblaLekérd.Clear();
 
                 Könyvelés_Feltöltés();
                 AdatokKönyv = KézKönyv.Lista_Adatok(Cmbtelephely.Text.Trim());
@@ -1760,39 +1749,36 @@ namespace Villamos
                     Holtart.Be(Adatok.Count + 1);
                     foreach (Adat_Védő_Könyvelés rekord in Adatok)
                     {
-                        Lekérd_Tábla.RowCount++;
-                        int i = Lekérd_Tábla.RowCount - 1;
+                        DataRow Soradat = AdatTáblaLekérd.NewRow();
+
                         Adat_Védő_Cikktörzs CikkElem = (from a in AdatokCikk
                                                         where a.Azonosító == rekord.Azonosító
                                                         select a).FirstOrDefault();
 
-                        Lekérd_Tábla.Rows[i].Cells[0].Value = rekord.Azonosító;
+                        Soradat["Azonosító"] = rekord.Azonosító;
                         if (CikkElem != null)
                         {
-                            Lekérd_Tábla.Rows[i].Cells[1].Value = CikkElem.Megnevezés;
-                            Lekérd_Tábla.Rows[i].Cells[2].Value = CikkElem.Méret;
+                            Soradat["Megnevezés"] = CikkElem.Megnevezés;
+                            Soradat["Méret"] = CikkElem.Méret;
                         }
                         else
                         {
-                            Lekérd_Tábla.Rows[i].Cells[1].Value = "_";
-                            Lekérd_Tábla.Rows[i].Cells[2].Value = "_";
+                            Soradat["Megnevezés"] = "_";
+                            Soradat["Méret"] = "_";
                         }
-                        Lekérd_Tábla.Rows[i].Cells[3].Value = rekord.Mennyiség;
-                        Lekérd_Tábla.Rows[i].Cells[4].Value = rekord.Gyáriszám.Trim();
-                        Lekérd_Tábla.Rows[i].Cells[5].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                        Lekérd_Tábla.Rows[i].Cells[6].Value = rekord.Szerszámkönyvszám.Trim();
-                        Lekérd_Tábla.Rows[i].Cells[7].Value = darabol[1].Trim();
-                        Lekérd_Tábla.Rows[i].Cells[8].Value = !rekord.Státus ? "Aktív" : "Törölt";
+                        Soradat["Mennyiség"] = rekord.Mennyiség;
+                        Soradat["Bizonylatszám"] = rekord.Gyáriszám.Trim();
+                        Soradat["Dátum"] = rekord.Dátum.ToString("yyyy.MM.dd");
+                        Soradat["Könyvszám"] = rekord.Szerszámkönyvszám.Trim();
+                        Soradat["Könyv megnevezés"] = darabol[1].Trim();
+                        Soradat["Státus"] = !rekord.Státus ? "Aktív" : "Törölt";
 
+                        AdatTáblaLekérd.Rows.Add(Soradat);
                         Holtart.Lép();
                     }
-
                 }
-                Lekérd_Tábla_Színez();
-                Lekérd_Tábla.Visible = true;
-                Lekérd_Tábla.Refresh();
-
                 Holtart.Ki();
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -1805,7 +1791,19 @@ namespace Villamos
             }
         }
 
-
+        private void LekérdTáblaFejléc()
+        {
+            AdatTáblaLekérd.Columns.Clear();
+            AdatTáblaLekérd.Columns.Add("Azonosító");
+            AdatTáblaLekérd.Columns.Add("Megnevezés");
+            AdatTáblaLekérd.Columns.Add("Méret");
+            AdatTáblaLekérd.Columns.Add("Mennyiség");
+            AdatTáblaLekérd.Columns.Add("Bizonylatszám");
+            AdatTáblaLekérd.Columns.Add("Dátum");
+            AdatTáblaLekérd.Columns.Add("Könyvszám");
+            AdatTáblaLekérd.Columns.Add("Könyv megnevezés");
+            AdatTáblaLekérd.Columns.Add("Státus");
+        }
 
         private void Lekérd_Tábla_Színez()
         {
@@ -1841,19 +1839,16 @@ namespace Villamos
             }
         }
 
-
         private void Jelöltszersz_Click(object sender, EventArgs e)
         {
             Lekérd_táblaíró();
             Lekérd_Szerszámkönyvszám.Height = 25;
         }
 
-
         private void Töröltek_CheckedChanged_2(object sender, EventArgs e)
         {
             Lekérd_Szeszámkönyvfeltöltés();
         }
-
 
         private void Excelclick_Click(object sender, EventArgs e)
         {
@@ -1892,7 +1887,6 @@ namespace Villamos
             }
         }
 
-
         private void Nevekkiválasztása_Click(object sender, EventArgs e)
         {
             try
@@ -1928,7 +1922,6 @@ namespace Villamos
             }
         }
 
-
         private void Szerszámazonosító_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1937,9 +1930,7 @@ namespace Villamos
                 Adat_Védő_Cikktörzs Elem = (from a in AdatokCikk
                                             where a.Azonosító == MyF.Szöveg_Tisztítás(Lekérd_Szerszámazonosító.Text, 0, 20, true)
                                             select a).FirstOrDefault();
-                if (Elem != null)
-                    Lekérd_Megnevezés.Text = Elem.Megnevezés;
-
+                if (Elem != null) Lekérd_Megnevezés.Text = Elem.Megnevezés;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1951,7 +1942,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Megnevezés_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1962,9 +1952,7 @@ namespace Villamos
                 Adat_Védő_Cikktörzs Elem = (from a in AdatokCikk
                                             where a.Megnevezés == Lekérd_Megnevezés.Text.Trim()
                                             select a).FirstOrDefault();
-                if (Elem != null)
-                    Lekérd_Szerszámazonosító.Text = Elem.Azonosító;
-
+                if (Elem != null) Lekérd_Szerszámazonosító.Text = Elem.Azonosító;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1977,43 +1965,63 @@ namespace Villamos
             }
         }
 
-
         private void Anyagkiíró_Click(object sender, EventArgs e)
         {
             Lekérd_táblaíróanyagra();
         }
 
-
         private void Lekérd_táblaíróanyagra()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőkönyvelés.mdb";
-                if (!File.Exists(hely)) return;
-
-                Lekérd_Tábla.Rows.Clear();
-                Lekérd_Tábla.Columns.Clear();
-                Lekérd_Tábla.Refresh();
                 Lekérd_Tábla.Visible = false;
-                Lekérd_Tábla.ColumnCount = 8;
-                // fejléc elkészítése
-                Lekérd_Tábla.Columns[0].HeaderText = "Azonosító";
-                Lekérd_Tábla.Columns[0].Width = 120;
-                Lekérd_Tábla.Columns[1].HeaderText = "Megnevezés";
-                Lekérd_Tábla.Columns[1].Width = 350;
-                Lekérd_Tábla.Columns[2].HeaderText = "Méret";
-                Lekérd_Tábla.Columns[2].Width = 100;
-                Lekérd_Tábla.Columns[3].HeaderText = "Mennyiség";
-                Lekérd_Tábla.Columns[3].Width = 100;
-                Lekérd_Tábla.Columns[4].HeaderText = "Bizonylatszám";
-                Lekérd_Tábla.Columns[4].Width = 130;
-                Lekérd_Tábla.Columns[5].HeaderText = "Dátum";
-                Lekérd_Tábla.Columns[5].Width = 100;
-                Lekérd_Tábla.Columns[6].HeaderText = "Könyvszám";
-                Lekérd_Tábla.Columns[6].Width = 100;
-                Lekérd_Tábla.Columns[7].HeaderText = "Könyv megnevezés";
-                Lekérd_Tábla.Columns[7].Width = 200;
+                Lekérd_Tábla.CleanFilterAndSort();
+                LekérdAnyagTáblaFejléc();
+                LekérdAnyagTáblaTartalom();
+                Lekérd_Tábla.DataSource = AdatTáblaLekérd;
+                LekérdAnyagTáblaOszlopSzélesség();
+                Lekérd_Tábla.Visible = true;
+                Lekérd_Tábla.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        private void LekérdAnyagTáblaOszlopSzélesség()
+        {
+            try
+            {
+                Lekérd_Tábla.Columns["Azonosító"].Width = 120;
+                Lekérd_Tábla.Columns["Megnevezés"].Width = 350;
+                Lekérd_Tábla.Columns["Méret"].Width = 100;
+                Lekérd_Tábla.Columns["Mennyiség"].Width = 100;
+                Lekérd_Tábla.Columns["Bizonylatszám"].Width = 130;
+                Lekérd_Tábla.Columns["Dátum"].Width = 100;
+                Lekérd_Tábla.Columns["Könyvszám"].Width = 100;
+                Lekérd_Tábla.Columns["Könyv megnevezés"].Width = 200;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LekérdAnyagTáblaTartalom()
+        {
+            try
+            {
                 double Összeg = 0;
                 Könyvelés_Feltöltés();
                 AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
@@ -2037,61 +2045,59 @@ namespace Villamos
                 else
                     AdatokA = Adatok;
 
-
-
-
                 Holtart.Be(Adatok.Count + 1);
                 foreach (Adat_Védő_Könyvelés rekord in AdatokA)
                 {
-                    Lekérd_Tábla.RowCount++;
-                    int i = Lekérd_Tábla.RowCount - 1;
+                    DataRow Soradat = AdatTáblaLekérd.NewRow();
 
-                    Lekérd_Tábla.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
-                    Lekérd_Tábla.Rows[i].Cells[3].Value = rekord.Mennyiség;
+                    Soradat["Azonosító"] = rekord.Azonosító.Trim();
+                    Soradat["Mennyiség"] = rekord.Mennyiség;
                     if (rekord.Szerszámkönyvszám.Trim() != "Raktár")
-                        Lekérd_Tábla.Rows[i].Cells[4].Value = rekord.Gyáriszám.Trim();
-                    Lekérd_Tábla.Rows[i].Cells[5].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                    Lekérd_Tábla.Rows[i].Cells[6].Value = rekord.Szerszámkönyvszám;
+                        Soradat["Bizonylatszám"] = rekord.Gyáriszám.Trim();
+                    else
+                        Soradat["Bizonylatszám"] = "";
+
+                    Soradat["Dátum"] = rekord.Dátum.ToString("yyyy.MM.dd");
+                    Soradat["Könyvszám"] = rekord.Szerszámkönyvszám;
 
                     Adat_Védő_Cikktörzs CikkElem = (from a in AdatokCikk
                                                     where a.Azonosító == rekord.Azonosító
                                                     select a).FirstOrDefault();
                     if (CikkElem != null)
                     {
-                        Lekérd_Tábla.Rows[i].Cells[1].Value = CikkElem.Megnevezés;
-                        Lekérd_Tábla.Rows[i].Cells[2].Value = CikkElem.Méret;
+                        Soradat["Megnevezés"] = CikkElem.Megnevezés;
+                        Soradat["Méret"] = CikkElem.Méret;
                     }
                     else
                     {
-                        Lekérd_Tábla.Rows[i].Cells[1].Value = "_";
-                        Lekérd_Tábla.Rows[i].Cells[2].Value = "_";
+                        Soradat["Megnevezés"] = "_";
+                        Soradat["Méret"] = "_";
                     }
                     Adat_Védő_Könyv ElemKönyv = (from a in AdatokKönyv
                                                  where a.Szerszámkönyvszám == rekord.Szerszámkönyvszám
                                                  select a).FirstOrDefault();
                     if (ElemKönyv != null)
-                        Lekérd_Tábla.Rows[i].Cells[7].Value = ElemKönyv.Szerszámkönyvnév;
+                        Soradat["Könyv megnevezés"] = ElemKönyv.Szerszámkönyvnév;
                     else
-                        Lekérd_Tábla.Rows[i].Cells[7].Value = "_";
+                        Soradat["Könyv megnevezés"] = "_";
 
                     if (rekord.Szerszámkönyvszám.Trim() != "Selejt" && rekord.Szerszámkönyvszám.Trim() != "Érkezett")
                         Összeg += rekord.Mennyiség;
 
+                    AdatTáblaLekérd.Rows.Add(Soradat);
                     Holtart.Lép();
                 }
 
-                if (Lekérd_Tábla.Rows.Count > 0)
+                if (AdatTáblaLekérd.Rows.Count > 0)
                 {
-                    Lekérd_Tábla.RowCount++;
-                    int i = Lekérd_Tábla.RowCount - 1;
-                    Lekérd_Tábla.Rows[i].Cells[1].Value = "Összesen:";
-                    Lekérd_Tábla.Rows[i].Cells[3].Value = Összeg;
+                    DataRow Soradat = AdatTáblaLekérd.NewRow();
+                    Soradat["Azonosító"] = "Összesen:";
+                    Soradat["Mennyiség"] = Összeg;
+                    AdatTáblaLekérd.Rows.Add(Soradat);
 
                 }
-                Lekérd_Tábla.Visible = true;
-                Lekérd_Tábla.Refresh();
-
                 Holtart.Ki();
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -2104,6 +2110,30 @@ namespace Villamos
             }
         }
 
+        private void LekérdAnyagTáblaFejléc()
+        {
+            try
+            {
+                AdatTáblaLekérd.Columns.Clear();
+                AdatTáblaLekérd.Columns.Add("Azonosító");
+                AdatTáblaLekérd.Columns.Add("Megnevezés");
+                AdatTáblaLekérd.Columns.Add("Méret");
+                AdatTáblaLekérd.Columns.Add("Mennyiség");
+                AdatTáblaLekérd.Columns.Add("Bizonylatszám");
+                AdatTáblaLekérd.Columns.Add("Dátum");
+                AdatTáblaLekérd.Columns.Add("Könyvszám");
+                AdatTáblaLekérd.Columns.Add("Könyv megnevezés");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void Lekérd_Command1_Click(object sender, EventArgs e)
         {
@@ -2113,10 +2143,9 @@ namespace Villamos
             Lekérd_Szerszámkönyvszám.Height = 25;
 
             Lekérd_táblaíró_más();
-
         }
 
-
+        //itt tartok
         private void Lekérd_táblaíró_más()
         {
             try
@@ -2308,12 +2337,11 @@ namespace Villamos
             }
         }
 
-
         private void Lekérd_Tábla_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
                 return;
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Lekérd_Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim() + ".pdf";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Lekérd_Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim()}.pdf";
             if (File.Exists(hely))
             {
                 Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
@@ -3975,18 +4003,11 @@ namespace Villamos
 
 
         #region listák feltöltése
-
-
         private void Szervezet_Feltöltés()
         {
             try
             {
-                string helyi = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                string jelszói = "Mocó";
-                string szöveg = "SELECT * FROM jelenlétiív";
-
-                Kezelő_Kiegészítő_Jelenlétiív Kéz = new Kezelő_Kiegészítő_Jelenlétiív();
-                List<Adat_Kiegészítő_Jelenlétiív> Adatok = Kéz.Lista_Adatok(helyi, jelszói, szöveg);
+                List<Adat_Kiegészítő_Jelenlétiív> Adatok = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Szervezet1 = (from a in Adatok
                               where a.Id == 2

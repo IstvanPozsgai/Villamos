@@ -50,7 +50,7 @@ namespace Villamos
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Lapfülek = new System.Windows.Forms.TabControl();
             this.TabPage3 = new System.Windows.Forms.TabPage();
             this.Más_dátum = new System.Windows.Forms.CheckBox();
@@ -557,12 +557,17 @@ namespace Villamos
             this.Tábla_Könyv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.Tábla_Könyv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla_Könyv.EnableHeadersVisualStyles = false;
+            this.Tábla_Könyv.FilterAndSortEnabled = true;
+            this.Tábla_Könyv.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla_Könyv.Location = new System.Drawing.Point(6, 248);
+            this.Tábla_Könyv.MaxFilterButtonImageHeight = 23;
             this.Tábla_Könyv.Name = "Tábla_Könyv";
+            this.Tábla_Könyv.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Tábla_Könyv.RowHeadersVisible = false;
             this.Tábla_Könyv.RowHeadersWidth = 62;
             this.Tábla_Könyv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.Tábla_Könyv.Size = new System.Drawing.Size(1196, 113);
+            this.Tábla_Könyv.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla_Könyv.TabIndex = 198;
             this.Tábla_Könyv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_Könyv_CellClick);
             // 
@@ -726,12 +731,17 @@ namespace Villamos
             this.Alap_tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.Alap_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Alap_tábla.EnableHeadersVisualStyles = false;
+            this.Alap_tábla.FilterAndSortEnabled = true;
+            this.Alap_tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Alap_tábla.Location = new System.Drawing.Point(5, 209);
+            this.Alap_tábla.MaxFilterButtonImageHeight = 23;
             this.Alap_tábla.Name = "Alap_tábla";
+            this.Alap_tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Alap_tábla.RowHeadersVisible = false;
             this.Alap_tábla.RowHeadersWidth = 62;
             this.Alap_tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.Alap_tábla.Size = new System.Drawing.Size(1196, 156);
+            this.Alap_tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Alap_tábla.TabIndex = 168;
             this.Alap_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Alap_tábla_CellClick);
             // 
@@ -951,12 +961,17 @@ namespace Villamos
             this.Könyv_tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.Könyv_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Könyv_tábla.EnableHeadersVisualStyles = false;
+            this.Könyv_tábla.FilterAndSortEnabled = true;
+            this.Könyv_tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Könyv_tábla.Location = new System.Drawing.Point(5, 155);
+            this.Könyv_tábla.MaxFilterButtonImageHeight = 23;
             this.Könyv_tábla.Name = "Könyv_tábla";
+            this.Könyv_tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Könyv_tábla.RowHeadersVisible = false;
             this.Könyv_tábla.RowHeadersWidth = 62;
             this.Könyv_tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.Könyv_tábla.Size = new System.Drawing.Size(1196, 200);
+            this.Könyv_tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Könyv_tábla.TabIndex = 169;
             this.Könyv_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Könyv_tábla_CellClick);
             // 
@@ -1150,12 +1165,17 @@ namespace Villamos
             this.Lekérd_Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.Lekérd_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Lekérd_Tábla.EnableHeadersVisualStyles = false;
+            this.Lekérd_Tábla.FilterAndSortEnabled = true;
+            this.Lekérd_Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Lekérd_Tábla.Location = new System.Drawing.Point(5, 127);
+            this.Lekérd_Tábla.MaxFilterButtonImageHeight = 23;
             this.Lekérd_Tábla.Name = "Lekérd_Tábla";
+            this.Lekérd_Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Lekérd_Tábla.RowHeadersVisible = false;
             this.Lekérd_Tábla.RowHeadersWidth = 62;
             this.Lekérd_Tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.Lekérd_Tábla.Size = new System.Drawing.Size(1196, 234);
+            this.Lekérd_Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Lekérd_Tábla.TabIndex = 189;
             this.Lekérd_Tábla.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Lekérd_Tábla_CellDoubleClick);
             // 
@@ -1509,8 +1529,12 @@ namespace Villamos
             this.Napló_Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.Napló_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Napló_Tábla.EnableHeadersVisualStyles = false;
+            this.Napló_Tábla.FilterAndSortEnabled = true;
+            this.Napló_Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Napló_Tábla.Location = new System.Drawing.Point(6, 140);
+            this.Napló_Tábla.MaxFilterButtonImageHeight = 23;
             this.Napló_Tábla.Name = "Napló_Tábla";
+            this.Napló_Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle11.BackColor = System.Drawing.Color.MediumSeaGreen;
             dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -1521,6 +1545,7 @@ namespace Villamos
             this.Napló_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.Napló_Tábla.RowHeadersWidth = 30;
             this.Napló_Tábla.Size = new System.Drawing.Size(1195, 221);
+            this.Napló_Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Napló_Tábla.TabIndex = 170;
             this.Napló_Tábla.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Napló_Tábla_CellDoubleClick);
             // 
