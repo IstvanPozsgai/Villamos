@@ -1013,6 +1013,15 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void KérelemTábla_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0 && e.RowIndex >= 0)
+            {
+                if (KérelemTábla.Rows[e.RowIndex].Cells[0].Value.ToÉrt_Bool() == false)
+                    KérelemTábla.Rows[e.RowIndex].Cells[2].Value = 0;
+            }
+        }
         #endregion
 
 
@@ -3170,5 +3179,7 @@ namespace Villamos
             }
         }
         #endregion
+
+
     }
 }

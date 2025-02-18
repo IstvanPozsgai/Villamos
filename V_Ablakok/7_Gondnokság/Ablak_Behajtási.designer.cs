@@ -151,7 +151,7 @@ namespace Villamos
             this.LblNaplóEngedélySorsz = new System.Windows.Forms.Label();
             this.DataNapló = new System.Windows.Forms.DataGridView();
             this.BtnNaplóLista = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.PanelTelephely = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.LblTelephelyBeállítás = new System.Windows.Forms.Label();
@@ -498,6 +498,7 @@ namespace Villamos
             this.KérelemTábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.KérelemTábla.Size = new System.Drawing.Size(1253, 153);
             this.KérelemTábla.TabIndex = 211;
+            this.KérelemTábla.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.KérelemTábla_CellValueChanged);
             // 
             // Column1
             // 
