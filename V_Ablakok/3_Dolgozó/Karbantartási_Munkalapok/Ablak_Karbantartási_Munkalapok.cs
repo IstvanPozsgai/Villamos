@@ -1516,55 +1516,66 @@ namespace Villamos.Villamos_Ablakok
 
         private int Díszesblokk(int sor, string Verzió)
         {
-            string Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
-            MyE.Kép_beillesztés(munkalap, "A1", Kép, 5, 5, 50, 125);
+            try
+            {
+                string Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
+                MyE.Kép_beillesztés(munkalap, "A1", Kép, 5, 5, 50, 125);
 
-            sor++;
-            MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
-            MyE.Kiir("Budapesti Közlekedési Zártkörűen Működő Részvénytársaság", $"E{sor}");
-            MyE.Betű($"E{sor}", 12);
-            MyE.Betű($"E{sor}", false, false, true);
-            MyE.Igazít_vízszintes($"E{sor}", "jobb");
+                sor++;
+                MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
+                MyE.Kiir("Budapesti Közlekedési Zártkörűen Működő Részvénytársaság", $"E{sor}");
+                MyE.Betű($"E{sor}", 12);
+                MyE.Betű($"E{sor}", false, false, true);
+                MyE.Igazít_vízszintes($"E{sor}", "jobb");
 
-            sor++;
-            MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
-            MyE.Kiir("MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG", $"E{sor}");
-            MyE.Betű($"E{sor}", 12);
-            MyE.Betű($"E{sor}", false, false, true);
-            MyE.Betű($"E{sor}", Color.Green);
-            MyE.Igazít_vízszintes($"E{sor}", "jobb");
-            sor++;
-            MyE.Vastagkeret($"A1:Q{sor}");
+                sor++;
+                MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
+                MyE.Kiir("MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG", $"E{sor}");
+                MyE.Betű($"E{sor}", 12);
+                MyE.Betű($"E{sor}", false, false, true);
+                MyE.Betű($"E{sor}", Color.Green);
+                MyE.Igazít_vízszintes($"E{sor}", "jobb");
+                sor++;
+                MyE.Vastagkeret($"A1:Q{sor}");
 
-            sor += 5;
-            MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
-            MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
-            MyE.Kiir("Km óra állás:", $"A{sor}");
-            MyE.Betű($"{sor}:{sor}", false, true, true);
+                sor += 5;
+                MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
+                MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
+                MyE.Kiir("Km óra állás:", $"A{sor}");
+                MyE.Betű($"{sor}:{sor}", false, true, true);
 
-            MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
-            MyE.Kiir("Verzió:", $"N{sor}");
-            MyE.Betű($"{sor}:{sor}", false, true, true);
+                MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
+                MyE.Kiir("Verzió:", $"N{sor}");
+                MyE.Betű($"{sor}:{sor}", false, true, true);
 
-            sor++;
-            MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
-            MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
-            MyE.Rácsoz($"A{sor - 1}:D{sor}");
-            if (csoportos)
-                MyE.FerdeVonal($"A{sor}:D{sor}");
-            else
-                MyE.Kiir($"{KM_korr}", $"A{sor}");
+                sor++;
+                MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
+                MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
+                MyE.Rácsoz($"A{sor - 1}:D{sor}");
+                if (csoportos)
+                    MyE.FerdeVonal($"A{sor}:D{sor}");
+                else
+                    MyE.Kiir($"{KM_korr}", $"A{sor}");
 
-            MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
-            MyE.Kiir(Verzió, $"N{sor}");
-            MyE.Betű($"{sor}:{sor}", false, true, true);
-            MyE.Rácsoz($"N{sor - 1}:Q{sor}");
+                MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
+                MyE.Kiir(Verzió, $"N{sor}");
+                MyE.Betű($"{sor}:{sor}", false, true, true);
+                MyE.Rácsoz($"N{sor - 1}:Q{sor}");
 
-            sor++;
-            Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
-            MyE.Kép_beillesztés(munkalap, "F5", Kép, 245, 70, 100, 225);
-            MyE.Vastagkeret($"A5:Q{sor}");
-
+                sor++;
+                Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
+                if (File.Exists(Kép)) MyE.Kép_beillesztés(munkalap, "F5", Kép, 245, 70, 100, 225);
+                MyE.Vastagkeret($"A5:Q{sor}");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             return sor;
         }
 

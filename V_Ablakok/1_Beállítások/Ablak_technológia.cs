@@ -833,7 +833,7 @@ namespace Villamos.Villamos_Ablakok
             {
                 if (Járműtípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva/ megadva adatbázis a rögzítéshez.");
                 List<Adat_technológia_Ciklus> Adatok_ciklus = KézCiklus.Lista_Adatok(Járműtípus.Text.Trim());
-                if (Adatok_ciklus.Count != 0) throw new HibásBevittAdat("A Karbantartási ciklus adatokat először be kell állítani!");
+                if (Adatok_ciklus.Count == 0) throw new HibásBevittAdat("A Karbantartási ciklus adatokat először be kell állítani!");
 
                 // megpróbáljuk megnyitni az excel táblát.
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
@@ -852,7 +852,7 @@ namespace Villamos.Villamos_Ablakok
 
                 //megnézzük, hogy milyen az alap tábla
                 List<Adat_Alap_Beolvasás> Adatok = KKezelő.Lista_Adatok();
-                Adatok = Adatok.Where(a => a.Csoport == "technológi").ToList();
+                Adatok = Adatok.Where(a => a.Csoport == "Technológi").ToList();
 
                 string ellenőrző = "";
                 foreach (Adat_Alap_Beolvasás A in Adatok)
