@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely;
+                FájlBeállítás(Telephely);
                 string szöveg = "INSERT INTO lista (Azonosító, Szerszámkönyvszám, Mennyiség, gyáriszám, dátum, státus) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Szerszámkönyvszám}', ";
