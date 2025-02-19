@@ -1303,7 +1303,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Reklámnapló_export_" + Program.PostásNév.Trim() + "-" + DateTime.Today.ToString("yyyyMMddHHmmss"),
+                    FileName = "Reklámnapló_export_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
