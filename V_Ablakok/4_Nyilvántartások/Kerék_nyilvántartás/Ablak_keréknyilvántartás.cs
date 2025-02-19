@@ -2963,9 +2963,9 @@ namespace Villamos
         {
             try
             {
-                Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
+                if (Program.PostásTelephely != "Főmérnökség") Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
                 AdatokHiba.Clear();
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\villamos\Új_napihiba.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Új_napihiba.mdb";
                 string jelszó = "pozsgaii";
                 string szöveg = "SELECT * FROM hiba  ORDER BY azonosító";
                 AdatokHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
