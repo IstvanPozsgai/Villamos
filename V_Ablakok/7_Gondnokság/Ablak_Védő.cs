@@ -2145,94 +2145,39 @@ namespace Villamos
             Lekérd_táblaíró_más();
         }
 
-        //itt tartok
         private void Lekérd_táblaíró_más()
         {
             try
             {
                 string munkalap = "Munka1";
-
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőkönyvelés.mdb";
-                string helytörzs = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőtörzs.mdb";
-                string helykönyv = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőkönyv.mdb";
-                if (!File.Exists(hely)) return;
-                if (!File.Exists(helytörzs)) return;
-                if (!File.Exists(helykönyv)) return;
-
                 Könyvelés_Feltöltés();
                 AdatokKönyv = KézKönyv.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 string fájlexc;
                 string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-
                 // táblázatba kilistázzuk a könyv tartalmát
                 foreach (string Elem in Lekérd_Szerszámkönyvszám.CheckedItems)
                 {
                     string[] darabol = Elem.Split('=');
-                    Lekérd_Tábla.Rows.Clear();
-                    Lekérd_Tábla.Columns.Clear();
-                    Lekérd_Tábla.Refresh();
-                    Lekérd_Tábla.Visible = false;
-                    Lekérd_Tábla.ColumnCount = 8;
-
-                    // fejléc elkészítése
-                    Lekérd_Tábla.Columns[0].HeaderText = "Azonosító";
-                    Lekérd_Tábla.Columns[0].Width = 120;
-                    Lekérd_Tábla.Columns[1].HeaderText = "Megnevezés";
-                    Lekérd_Tábla.Columns[1].Width = 350;
-                    Lekérd_Tábla.Columns[2].HeaderText = "Méret";
-                    Lekérd_Tábla.Columns[2].Width = 100;
-                    Lekérd_Tábla.Columns[3].HeaderText = "Mennyiség";
-                    Lekérd_Tábla.Columns[3].Width = 100;
-                    Lekérd_Tábla.Columns[4].HeaderText = "Bizonylatszám";
-                    Lekérd_Tábla.Columns[4].Width = 100;
-                    Lekérd_Tábla.Columns[5].HeaderText = "Dátum";
-                    Lekérd_Tábla.Columns[5].Width = 100;
-                    Lekérd_Tábla.Columns[6].HeaderText = "Könyvszám";
-                    Lekérd_Tábla.Columns[6].Width = 100;
-                    Lekérd_Tábla.Columns[7].HeaderText = "Könyv megnevezés";
-                    Lekérd_Tábla.Columns[7].Width = 300;
-
-                    string szöveg = $"SELECT * FROM lista WHERE szerszámkönyvszám ='{darabol[0].Trim()}'  ORDER BY azonosító";
+                    //    string szöveg = $"SELECT * FROM lista WHERE szerszámkönyvszám ='{darabol[0].Trim()}'  ORDER BY azonosító";
                     List<Adat_Védő_Könyvelés> Adatok = (from a in AdatokKönyvelés
                                                         where a.Szerszámkönyvszám == darabol[0].Trim()
                                                         select a).ToList();
-
-                    Holtart.Be(Adatok.Count + 1);
-                    foreach (Adat_Védő_Könyvelés rekord in Adatok)
-                    {
-                        Lekérd_Tábla.RowCount++;
-                        int i = Lekérd_Tábla.RowCount - 1;
-
-                        Lekérd_Tábla.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
-                        Lekérd_Tábla.Rows[i].Cells[3].Value = rekord.Mennyiség;
-                        Lekérd_Tábla.Rows[i].Cells[4].Value = rekord.Gyáriszám.Trim();
-                        Lekérd_Tábla.Rows[i].Cells[5].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                        Lekérd_Tábla.Rows[i].Cells[6].Value = rekord.Szerszámkönyvszám.Trim();
-
-                        Adat_Védő_Cikktörzs CikkElem = (from a in AdatokCikk
-                                                        where a.Azonosító == rekord.Azonosító
-                                                        select a).FirstOrDefault();
-                        if (CikkElem != null)
-                        {
-                            Lekérd_Tábla.Rows[i].Cells[1].Value = CikkElem.Megnevezés;
-                            Lekérd_Tábla.Rows[i].Cells[2].Value = CikkElem.Méret;
-                        }
-                        Holtart.Lép();
-                    }
-
-
+                    Lekérd_Tábla.Visible = false;
+                    Lekérd_Tábla.CleanFilterAndSort();
+                    LekérdTáblaFejléc();
+                    LekérdTáblaTartalom();
+                    Lekérd_Tábla.DataSource = AdatTáblaLekérd;
+                    LekérdTáblaOszlopSzélesség();
+                    Lekérd_Tábla_Színez();
                     Lekérd_Tábla.Visible = true;
                     Lekérd_Tábla.Refresh();
-
                     // kiirt táblából készítünk excel táblát ha a címsoron kívül van tétel
                     if (Lekérd_Tábla.Rows.Count > 0)
                     {
                         // a fájlnév előkészítése
-
-                        fájlexc = könyvtár + $@"\Védőkönyv_{darabol[0].Trim()}_{Program.PostásTelephely.Trim()}.xlsx";
+                        fájlexc = $@"{könyvtár}\Védőkönyv_{darabol[0].Trim()}_{Program.PostásTelephely.Trim()}.xlsx";
                         if (File.Exists(fájlexc)) File.Delete(fájlexc);
 
                         // megnyitjuk az excelt
@@ -2260,7 +2205,6 @@ namespace Villamos
                         MyE.Kiir("Könyvért felelős", "a11");
 
                         // beírjuk a szerszámkönyv adatokat
-                        szöveg = $"SELECT * FROM lista WHERE szerszámKönyvszám='{darabol[0].Trim()}'";
                         Adat_Védő_Könyv Könyv = (from a in AdatokKönyv
                                                  where a.Szerszámkönyvszám == darabol[0].Trim()
                                                  select a).FirstOrDefault();
@@ -2278,7 +2222,6 @@ namespace Villamos
                         MyE.Kiir("Mennyiség:", "d15");
                         MyE.Kiir("Felvétel dátuma:", "f15");
                         // beírjuk a felvett védőeszközöket
-
 
                         for (int sorT = 0; sorT < Lekérd_Tábla.RowCount; sorT++)
                         {
@@ -2358,12 +2301,8 @@ namespace Villamos
         #region Rögzítés lapfül
         private void Más_dátum_CheckedChanged(object sender, EventArgs e)
         {
-            if (Más_dátum.Checked)
-                Könyvelési_dátum.Enabled = true;
-            else
-                Könyvelési_dátum.Enabled = false;
+            Könyvelési_dátum.Enabled = Más_dátum.Checked;
         }
-
 
         private void Honnan_feltöltések()
         {
@@ -2400,7 +2339,6 @@ namespace Villamos
             }
         }
 
-
         private void Hova_feltöltések()
         {
             try
@@ -2436,7 +2374,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void HonnanNév_SelectedIndexChanged_1(object sender, EventArgs e)
         {
@@ -2524,7 +2461,6 @@ namespace Villamos
             }
         }
 
-
         private void Rögzítés_azonosítók()
         {
             try
@@ -2555,7 +2491,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Honnan_SelectedIndexChanged_1(object sender, EventArgs e)
         {
@@ -2650,13 +2585,11 @@ namespace Villamos
             }
         }
 
-
         private void Hova_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             Hova_kiíró_név();
             Darabszámok_kiírása();
         }
-
 
         private void Hova_kiíró_név()
         {
@@ -2685,7 +2618,6 @@ namespace Villamos
             }
         }
 
-
         private void Hova_kiíró_kszám()
         {
             try
@@ -2711,7 +2643,6 @@ namespace Villamos
             }
         }
 
-
         private void Honnan_kiíró_név()
         {
             try
@@ -2736,7 +2667,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Honnan_kiíró_kszám()
         {
@@ -2766,13 +2696,11 @@ namespace Villamos
             }
         }
 
-
         private void HováNév_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             Hova_kiíró_kszám();
             Darabszámok_kiírása();
         }
-
 
         private void SzerszámAzonosító_SelectedIndexChanged_1(object sender, EventArgs e)
         {
@@ -2781,14 +2709,12 @@ namespace Villamos
             Mennyiség.Focus();
         }
 
-
         private void SzerszámAzonosító_DropDownClosed(object sender, EventArgs e)
         {
             SzAzonosító_kiíró();
             Darabszámok_kiírása();
             Mennyiség.Focus();
         }
-
 
         private void SzAzonosító_kiíró()
         {
@@ -2818,15 +2744,11 @@ namespace Villamos
             }
         }
 
-
         private void Darabszámok_kiírása()
         {
             try
             {
                 Könyvelés_Feltöltés();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\védőkönyvelés.mdb";
-                if (!File.Exists(hely)) return;
-
                 Adat_Védő_Könyvelés IdeigMennyi = (from a in AdatokKönyvelés
                                                    where a.Azonosító == SzerszámAzonosító.Text.Trim() && a.Szerszámkönyvszám == Honnan.Text.Trim() && a.Státus == false
                                                    select a).FirstOrDefault();
@@ -2856,7 +2778,6 @@ namespace Villamos
             }
         }
 
-
         private void Azonosítóhelyen()
         {
             try
@@ -2885,7 +2806,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Tábla_Könyv_fejléc()
         {
@@ -3006,32 +2926,21 @@ namespace Villamos
             }
         }
 
-
         private void Rögzít_Click_2(object sender, EventArgs e)
         {
             try
             {
 
-                if (Honnan.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva, hogy honnan könyvelünk.");
-                if (Hova.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva, hogy hova könyvelünk.");
-                if (Honnan.Text.Trim() == Hova.Text.Trim())
-                    throw new HibásBevittAdat("Önmagába könyvelés nem megengedett.");
-                if (Megnevezés.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva könyvelendő elem.");
-                if (Mennyiség.Text.Trim() == "")
-                    throw new HibásBevittAdat("A mennyiséget meg kell adni.");
-                if (!int.TryParse(Mennyiség.Text.Trim(), out int result))
-                    throw new HibásBevittAdat("A mennyiségnek egész számnak kell lennie.");
-                if (HováMennyiség.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva, hogy hova könyvelünk.");
-                if (HonnanMennyiség.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva, hogy honnankönyvelünk.");
-                if (!int.TryParse(HonnanMennyiség.Text.Trim(), out int result1))
-                    throw new HibásBevittAdat("Nincs kiválasztva, hogy honnankönyvelünk.");
-                if (Gyáriszám.Text == "")
-                    Gyáriszám.Text = "0";
+                if (Honnan.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva, hogy honnan könyvelünk.");
+                if (Hova.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva, hogy hova könyvelünk.");
+                if (Honnan.Text.Trim() == Hova.Text.Trim()) throw new HibásBevittAdat("Önmagába könyvelés nem megengedett.");
+                if (Megnevezés.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva könyvelendő elem.");
+                if (Mennyiség.Text.Trim() == "") throw new HibásBevittAdat("A mennyiséget meg kell adni.");
+                if (!int.TryParse(Mennyiség.Text.Trim(), out int result)) throw new HibásBevittAdat("A mennyiségnek egész számnak kell lennie.");
+                if (HováMennyiség.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva, hogy hova könyvelünk.");
+                if (HonnanMennyiség.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva, hogy honnankönyvelünk.");
+                if (!int.TryParse(HonnanMennyiség.Text.Trim(), out int result1)) throw new HibásBevittAdat("Nincs kiválasztva, hogy honnankönyvelünk.");
+                if (Gyáriszám.Text == "") Gyáriszám.Text = "0";
                 if (Gyáriszám.Text.Contains(@"/") || Gyáriszám.Text.Contains(@"\"))
                 {
                     Gyáriszám.Text = Gyáriszám.Text.Replace(@"\", "-").Replace(@"/", "-");
@@ -3049,9 +2958,8 @@ namespace Villamos
                         // ha van bizonylatszám akkor könyvel
                         // feltöljük a pdf-t
                         PDF_feltöltés();
-                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
-                        if (!File.Exists(hely))
-                            throw new HibásBevittAdat("Nem lett feltöltve az alapbizonylatról a PDF fájl, ezért nem lehet könyvelni.");
+                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Gyáriszám.Text.Trim()}.pdf";
+                        if (!File.Exists(hely)) throw new HibásBevittAdat("Nem lett feltöltve az alapbizonylatról a PDF fájl, ezért nem lehet könyvelni.");
 
                         Rögzítés_érkezettről();
                         Rögzítés();
@@ -3068,14 +2976,13 @@ namespace Villamos
                 // beraktározás storno
                 if (Hova.Text.Trim() == "Érkezett" && Honnan.Text.Trim() == "Raktár")
                 {
-                    if (Gyáriszám.Text == "0")
-                        throw new HibásBevittAdat("Bizonylatszám hiányában nem lehet stronózni a beraktározást!");
+                    if (Gyáriszám.Text == "0") throw new HibásBevittAdat("Bizonylatszám hiányában nem lehet stronózni a beraktározást!");
                     else
                     {
                         if (MessageBox.Show("Töröljük a bizonylatról készített PDF fájlt? ", "Kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\Törölt_" + Gyáriszám.Text.Trim() + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
-                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
+                            string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\Törölt_{Gyáriszám.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.pdf";
+                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Gyáriszám.Text.Trim()}.pdf";
                             File.Copy(hely, hova);
                             File.Delete(hely);
                         }
@@ -3146,9 +3053,8 @@ namespace Villamos
                         // ha van bizonylatszám akkor könyvel
                         // feltöljük a pdf-t
                         PDF_feltöltés();
-                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
-                        if (!File.Exists(hely))
-                            throw new HibásBevittAdat("Nem lett feltöltve az alapbizonylatról a PDF fájl, ezért nem lehet könyvelni.");
+                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Gyáriszám.Text.Trim()}.pdf";
+                        if (!File.Exists(hely)) throw new HibásBevittAdat("Nem lett feltöltve az alapbizonylatról a PDF fájl, ezért nem lehet könyvelni.");
 
                         Rögzítés_selejtre();
                         Készletcsökkentés();
@@ -3171,8 +3077,8 @@ namespace Villamos
                     {
                         if (MessageBox.Show("Töröljük a bizonylatról készített PDF fájlt? ", "Kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\Törölt_" + Gyáriszám.Text.Trim() + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
-                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
+                            string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\Törölt_{Gyáriszám.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.pdf";
+                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Gyáriszám.Text.Trim()}.pdf";
                             File.Copy(hely, hova);
                             File.Delete(hely);
                         }
@@ -3193,8 +3099,7 @@ namespace Villamos
                         // feltöljük a pdf-t
                         PDF_feltöltés();
                         string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
-                        if (!File.Exists(hely))
-                            throw new HibásBevittAdat("Nem lett feltöltve az alapbizonylatról a PDF fájl, ezért nem lehet könyvelni.");
+                        if (!File.Exists(hely)) throw new HibásBevittAdat("Nem lett feltöltve az alapbizonylatról a PDF fájl, ezért nem lehet könyvelni.");
 
                         Rögzítés_érkezettről();
                         Rögzítés();
@@ -3217,8 +3122,8 @@ namespace Villamos
                     {
                         if (MessageBox.Show("Töröljük a bizonylatról készített PDF fájlt? ", "Kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\Törölt_" + Gyáriszám.Text.Trim() + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
-                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
+                            string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\Törölt_{Gyáriszám.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.pdf";
+                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Gyáriszám.Text.Trim()}.pdf";
                             File.Copy(hely, hova);
                             File.Delete(hely);
                         }
@@ -3238,9 +3143,8 @@ namespace Villamos
                         // ha van bizonylatszám akkor könyvel
                         // feltöljük a pdf-t
                         PDF_feltöltés();
-                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
-                        if (!File.Exists(hely))
-                            throw new HibásBevittAdat("Nem lett feltöltve az alapbizonylatról a PDF fájl, ezért nem lehet könyvelni.");
+                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Gyáriszám.Text.Trim()}.pdf";
+                        if (!File.Exists(hely)) throw new HibásBevittAdat("Nem lett feltöltve az alapbizonylatról a PDF fájl, ezért nem lehet könyvelni.");
 
                         Rögzítés_átadás();
                         Készletcsökkentés();
@@ -3263,8 +3167,8 @@ namespace Villamos
                     {
                         if (MessageBox.Show("Töröljük a bizonylatról készített PDF fájlt? ", "Kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\Törölt_" + Gyáriszám.Text.Trim() + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
-                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
+                            string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\Törölt_{Gyáriszám.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.pdf";
+                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Gyáriszám.Text.Trim()}.pdf";
                             File.Copy(hely, hova);
                             File.Delete(hely);
                         }
@@ -3287,24 +3191,19 @@ namespace Villamos
             }
         }
 
-
         private void Könyvelés_Szűrés_Click(object sender, EventArgs e)
         {
             Tábla_Könyv_írás();
         }
 
-
-
         private void Tábla_Könyv_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
             SzerszámAzonosító.Text = Tábla_Könyv.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
             SzAzonosító_kiíró();
             Darabszámok_kiírása();
             Mennyiség.Focus();
         }
-
 
         private void Naplózás(bool állapot)
         {
@@ -3422,7 +3321,6 @@ namespace Villamos
             }
         }
 
-
         private void Készletcsökkentés()
         {
             try
@@ -3471,7 +3369,6 @@ namespace Villamos
             }
         }
 
-
         private void Érkezettről_storno()
         {
             try
@@ -3514,7 +3411,6 @@ namespace Villamos
             }
         }
 
-
         private void Rögzítés_selejtre()
         {
             try
@@ -3549,7 +3445,6 @@ namespace Villamos
             }
         }
 
-
         private void Rögzítés_átadás()
         {
             try
@@ -3583,7 +3478,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Selejt_storno()
         {
@@ -3630,7 +3524,6 @@ namespace Villamos
             }
         }
 
-
         private void Átadás_storno()
         {
             try
@@ -3675,13 +3568,11 @@ namespace Villamos
 
 
         #region PDF feltöltés megjelenítés
-
         private void PDF_feltöltés()
         {
 
-            if (Gyáriszám.Text.Trim() == "")
-                return;
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\" + Gyáriszám.Text.Trim() + ".pdf";
+            if (Gyáriszám.Text.Trim() == "") return;
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Védő\PDF\{Gyáriszám.Text.Trim()}.pdf";
             if (!File.Exists(hely))
             {
                 // ha nincs akkor feltöltjük
