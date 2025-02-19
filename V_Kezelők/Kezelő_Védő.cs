@@ -125,7 +125,7 @@ namespace Villamos.Kezelők
                 foreach (Adat_Védő_Könyv Elem in Adatok)
                 {
                     Adat = AdatokÖ.Where(a => a.Szerszámkönyvszám == Elem.Szerszámkönyvszám).FirstOrDefault();
-                    if (Adat != null) Rögzítés(Telephely, Adat);
+                    if (Adat == null) Rögzítés(Telephely, Elem);
                 }
             }
             catch (HibásBevittAdat ex)
