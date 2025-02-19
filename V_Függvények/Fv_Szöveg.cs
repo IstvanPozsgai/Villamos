@@ -86,7 +86,7 @@ public static partial class Függvénygyűjtemény
     }
 
     /// <summary>
-    /// Megtistítja a szöveget az olyan karakterektől amik nem láthatóak, vagy a rögzítés során problémat okozak.
+    /// Megtisztítja a szöveget az olyan karakterektől amik nem láthatóak, vagy a rögzítés során problémat okozak.
     /// Pl. ', ",
     /// </summary>
     /// <param name="szöveg"></param>
@@ -95,7 +95,9 @@ public static partial class Függvénygyűjtemény
     {
         string válasz = szöveg.Replace("'", "`");    // ' cseréli ki ''
         válasz = válasz.Replace("\"", "");  // " cseréli ki üres mezőre
-
+        válasz = válasz.Replace("/", "");
+        válasz = válasz.Replace(",", "");
+        válasz = válasz.Replace(@"\", "");
         return válasz.Trim();
     }
 }

@@ -935,7 +935,7 @@ namespace Villamos.Villamos_Ablakok
             {
                 if (Text_Típus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve a típus mező, így nem lehet rögzíteni");
                 if (Text_Típus.Text.Trim().Length > 20) throw new HibásBevittAdat("Azonosító maximum 20 karakter hosszú lehet!");
-
+                if (MyF.Szöveg_Tisztítás(Text_Típus.Text) != Text_Típus.Text) throw new HibásBevittAdat("Nem lehet különleges karakter pl. , ; / stb.");
                 Adat_Technológia_Alap Elem = KézAlap.Lista_Adatok().Where(a => a.Típus == Text_Típus.Text.Trim()).FirstOrDefault();
                 if (Elem == null)
                 {
@@ -966,7 +966,8 @@ namespace Villamos.Villamos_Ablakok
         {
             if (List_típus.SelectedItems.Count > 0)
             {
-                Text_Típus.Text = List_típus.SelectedItem.ToString().Trim();
+                Járműtípus.Text = List_típus.SelectedItem.ToStrTrim();
+                Text_Típus.Text = List_típus.SelectedItem.ToStrTrim();
                 Ciklus_Lista();
                 Típus_listázása_kapcs();
                 Altípusok_feltöltése();
@@ -1128,7 +1129,7 @@ namespace Villamos.Villamos_Ablakok
         {
             Combo_JTípus.Items.Clear();
             List<Adat_Jármű> AdatokÖ = KézJármű.Lista_Adatok("Főmérnökség");
-            List<string> Adatok = AdatokÖ.Select(a => a.Típus).Distinct().ToList();
+            List<string> Adatok = AdatokÖ.Select(a => a.Valóstípus).Distinct().OrderBy(a => a).ToList();
             foreach (string adat in Adatok)
             {
                 Combo_JTípus.Items.Add(adat);
@@ -1397,7 +1398,5 @@ namespace Villamos.Villamos_Ablakok
 
 
         #endregion
-
-
     }
 }
