@@ -930,7 +930,7 @@
             // 
             // TextVerzió
             // 
-            this.TextVerzió.Location = new System.Drawing.Point(360, 89);
+            this.TextVerzió.Location = new System.Drawing.Point(356, 89);
             this.TextVerzió.Name = "TextVerzió";
             this.TextVerzió.Size = new System.Drawing.Size(216, 26);
             this.TextVerzió.TabIndex = 206;
@@ -941,9 +941,9 @@
             this.label22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.label22.Location = new System.Drawing.Point(356, 65);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(96, 20);
+            this.label22.Size = new System.Drawing.Size(54, 20);
             this.label22.TabIndex = 205;
-            this.label22.Text = "Fokozat név";
+            this.label22.Text = "Verzió";
             // 
             // Combo_elérés
             // 

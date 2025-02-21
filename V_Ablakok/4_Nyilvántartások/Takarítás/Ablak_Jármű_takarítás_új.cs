@@ -24,6 +24,7 @@ namespace Villamos
     {
 #pragma warning disable IDE0044 // Add readonly modifier
         DataTable AdatTábla_Utolsó = new DataTable();
+        DataTable GépiTábla = new DataTable();
 #pragma warning restore IDE0044 // Add readonly modifier
 
         #region Kezelők-Adatok
@@ -5173,9 +5174,9 @@ namespace Villamos
 
             try
             {
-                if (Gepi_dataGrid_.RowCount > 0)
+                if (Gépi_Tábla.RowCount > 0)
                 {
-                    foreach (DataGridViewRow row in Gepi_dataGrid_.Rows)
+                    foreach (DataGridViewRow row in Gépi_Tábla.Rows)
                     {
                         if (row.Cells[5].Value.ToÉrt_Int() == 1)
                         {
@@ -5202,62 +5203,96 @@ namespace Villamos
         {
             try
             {
+                Gépi_Tábla.Visible = false;
+                Gépi_Tábla.CleanFilterAndSort();
+                GépiNaplóTáblaFejléc();
+                GépiNaplóTáblaTartalom();
+                Gépi_Tábla.DataSource = GépiTábla;
+                GépiNaplóTáblaSzélesség();
+                Gépi_Tábla.Visible = true;
+                Gépi_Tábla.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void GépiNaplóTáblaTartalom()
+        {
+            try
+            {
+
                 List<Adat_Jármű_Takarítás_Napló> AdatokNapló = KézTakNapló.Lista_Adatok(Gepi_datum.Value.Year).Where(a => a.Takarítási_fajta == "Gépi").ToList();
                 List<Adat_Jármű_Takarítás_Napló> ideig = KézTakNapló.Lista_Adatok(Gepi_datum.Value.Year - 1).Where(a => a.Takarítási_fajta == "Gépi").ToList();
                 AdatokNapló.AddRange(ideig);
 
-                if (Pály_TB.Text.Trim() != "")
-                    AdatokNapló = AdatokNapló.Where(a => a.Azonosító == Pály_TB.Text.Trim()).ToList();
+                if (Pály_TB.Text.Trim() != "") AdatokNapló = AdatokNapló.Where(a => a.Azonosító == Pály_TB.Text.Trim()).ToList();
 
-                if (Tel_TB.Text.Trim() != "")
-                    AdatokNapló = AdatokNapló.Where(a => a.Telephely == Tel_TB.Text.Trim()).ToList();
+                if (Tel_TB.Text.Trim() != "") AdatokNapló = AdatokNapló.Where(a => a.Telephely == Tel_TB.Text.Trim()).ToList();
 
                 AdatokNapló = (from a in AdatokNapló
                                orderby a.Azonosító, a.Takarítási_fajta, a.Dátum descending
                                select a).ToList();
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
 
-                Gepi_dataGrid_.Rows.Clear();
-                Gepi_dataGrid_.Columns.Clear();
-                Gepi_dataGrid_.Refresh();
-                Gepi_dataGrid_.Visible = false;
-                Gepi_dataGrid_.ColumnCount = 8;
-
-
-                // fejléc elkészítése
-                Gepi_dataGrid_.Columns[0].HeaderText = "Azonosító";
-                Gepi_dataGrid_.Columns[0].Width = 100;
-                Gepi_dataGrid_.Columns[1].HeaderText = "Típus";
-                Gepi_dataGrid_.Columns[1].Width = 100;
-                Gepi_dataGrid_.Columns[2].HeaderText = "Dátum";
-                Gepi_dataGrid_.Columns[2].Width = 100;
-                Gepi_dataGrid_.Columns[3].HeaderText = "Takarítási fajta";
-                Gepi_dataGrid_.Columns[3].Width = 100;
-                Gepi_dataGrid_.Columns[4].HeaderText = "Telephely";
-                Gepi_dataGrid_.Columns[4].Width = 150;
-                Gepi_dataGrid_.Columns[5].HeaderText = "Státus";
-                Gepi_dataGrid_.Columns[5].Width = 100;
-                Gepi_dataGrid_.Columns[6].HeaderText = "Rögzítő";
-                Gepi_dataGrid_.Columns[6].Width = 130;
-                Gepi_dataGrid_.Columns[7].HeaderText = "Mikor";
-                Gepi_dataGrid_.Columns[7].Width = 180;
-
-                for (int i = 0; i < AdatokNapló.Count; i++)
+                GépiTábla.Clear();
+                foreach (Adat_Jármű_Takarítás_Napló rekord in AdatokNapló)
                 {
-                    Gepi_dataGrid_.RowCount++;
-                    int j = Gepi_dataGrid_.RowCount - 1;
-                    Gepi_dataGrid_.Rows[i].Cells[0].Value = AdatokNapló[i].Azonosító.ToStrTrim();
-                    //
-                    Gepi_dataGrid_.Rows[i].Cells[2].Value = AdatokNapló[i].Dátum.ToString("yyyy.MM.dd");
-                    Gepi_dataGrid_.Rows[i].Cells[3].Value = AdatokNapló[i].Takarítási_fajta.ToStrTrim();
-                    Gepi_dataGrid_.Rows[i].Cells[4].Value = AdatokNapló[i].Telephely;
-                    Gepi_dataGrid_.Rows[i].Cells[5].Value = AdatokNapló[i].Státus;
-                    Gepi_dataGrid_.Rows[i].Cells[6].Value = AdatokNapló[i].Módosító;
-                    Gepi_dataGrid_.Rows[i].Cells[7].Value = AdatokNapló[i].Mikor.ToString();
-                }
+                    DataRow Soradat = GépiTábla.NewRow();
+                    Soradat["Azonosító"] = rekord.Azonosító.Trim();
 
-                Gepi_dataGrid_.Visible = true;
-                Gepi_dataGrid_.Refresh();
-                Mosás_Típusok();
+                    string Típus = (from a in AdatokJármű
+                                    where a.Azonosító == rekord.Azonosító
+                                    select a.Típus).FirstOrDefault();
+                    if (Típus.Trim() == "")
+                        Soradat["Típus"] = "";
+                    else
+                        Soradat["Típus"] = Típus;
+                    Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
+                    Soradat["Takarítási fajta"] = rekord.Takarítási_fajta;
+                    Soradat["Telephely"] = rekord.Telephely;
+                    Soradat["Státus"] = rekord.Státus;
+                    Soradat["Rögzítő"] = rekord.Módosító;
+                    Soradat["Mikor"] = rekord.Mikor;
+                    GépiTábla.Rows.Add(Soradat);
+                }
+                if (CmbGépiTíp.Text.Trim() != "")
+                {
+                    EnumerableRowCollection<DataRow> filteredRows = GépiTábla.AsEnumerable()
+                        .Where(a => a.Field<string>("Típus") == CmbGépiTíp.Text.Trim());
+                    GépiTábla = filteredRows.CopyToDataTable();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void GépiNaplóTáblaFejléc()
+        {
+            try
+            {
+                GépiTábla.Columns.Clear();
+                GépiTábla.Columns.Add("Azonosító");
+                GépiTábla.Columns.Add("Típus");
+                GépiTábla.Columns.Add("Dátum");
+                GépiTábla.Columns.Add("Takarítási fajta");
+                GépiTábla.Columns.Add("Telephely");
+                GépiTábla.Columns.Add("Státus");
+                GépiTábla.Columns.Add("Rögzítő");
+                GépiTábla.Columns.Add("Mikor");
 
             }
             catch (HibásBevittAdat ex)
@@ -5271,7 +5306,45 @@ namespace Villamos
             }
         }
 
+        private void GépiNaplóTáblaSzélesség()
+        {
+            Gépi_Tábla.Columns["Azonosító"].Width = 100;
+            Gépi_Tábla.Columns["Típus"].Width = 100;
+            Gépi_Tábla.Columns["Dátum"].Width = 100;
+            Gépi_Tábla.Columns["Takarítási fajta"].Width = 100;
+            Gépi_Tábla.Columns["Telephely"].Width = 150;
+            Gépi_Tábla.Columns["Státus"].Width = 100;
+            Gépi_Tábla.Columns["Rögzítő"].Width = 130;
+            Gépi_Tábla.Columns["Mikor"].Width = 180;
+        }
+
         private void Gepi_lista_Kocsik()
+        {
+            try
+            {
+                Gépi_Tábla.Visible = false;
+                Gépi_Tábla.CleanFilterAndSort();
+                GépiTáblaFejléc();
+                GépiTáblaTartalom();
+                Gépi_Tábla.DataSource = GépiTábla;
+                GépiTáblaOszlopSzélesség();
+                Gépi_Tábla.Visible = true;
+                Gépi_Tábla.Refresh();
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void GépiTáblaTartalom()
         {
             try
             {
@@ -5287,47 +5360,35 @@ namespace Villamos
                 if (Tel_TB.Text.Trim() != "") Adatok = (from a in Adatok
                                                         where a.Telephely == Tel_TB.Text.Trim()
                                                         select a).ToList();
-
-                Gepi_dataGrid_.Rows.Clear();
-                Gepi_dataGrid_.Columns.Clear();
-                Gepi_dataGrid_.Refresh();
-                Gepi_dataGrid_.Visible = false;
-                Gepi_dataGrid_.ColumnCount = 7;
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
 
 
-                // fejléc elkészítése
-                Gepi_dataGrid_.Columns[0].HeaderText = "Azonosító";
-                Gepi_dataGrid_.Columns[0].Width = 100;
-                Gepi_dataGrid_.Columns[1].HeaderText = "Típus";
-                Gepi_dataGrid_.Columns[1].Width = 100;
-                Gepi_dataGrid_.Columns[2].HeaderText = "Dátum";
-                Gepi_dataGrid_.Columns[2].Width = 100;
-                Gepi_dataGrid_.Columns[3].HeaderText = "Takarítási fajta";
-                Gepi_dataGrid_.Columns[3].Width = 100;
-                Gepi_dataGrid_.Columns[4].HeaderText = "Telephely";
-                Gepi_dataGrid_.Columns[4].Width = 150;
-                Gepi_dataGrid_.Columns[5].HeaderText = "Státus";
-                Gepi_dataGrid_.Columns[5].Width = 100;
-                Gepi_dataGrid_.Columns[6].HeaderText = "Eltelt napok";
-                Gepi_dataGrid_.Columns[6].Width = 100;
-
-
-
-                int j;
-                for (int i = 0; i < Adatok.Count; i++)
+                GépiTábla.Clear();
+                foreach (Adat_Jármű_Takarítás_Takarítások rekord in Adatok)
                 {
-                    Gepi_dataGrid_.RowCount++;
-                    j = Gepi_dataGrid_.RowCount - 1;
-                    Gepi_dataGrid_.Rows[i].Cells[0].Value = Adatok[i].Azonosító.ToStrTrim();
-                    //
-                    Gepi_dataGrid_.Rows[i].Cells[2].Value = Adatok[i].Dátum.ToString("yyyy.MM.dd");
-                    Gepi_dataGrid_.Rows[i].Cells[3].Value = Adatok[i].Takarítási_fajta.ToStrTrim();
-                    Gepi_dataGrid_.Rows[i].Cells[4].Value = Adatok[i].Telephely;
-                    Gepi_dataGrid_.Rows[i].Cells[5].Value = Adatok[i].Státus;
-                    Gepi_dataGrid_.Rows[i].Cells[6].Value = (DateTime.Today - Adatok[i].Dátum).Days;
+                    DataRow Soradat = GépiTábla.NewRow();
+                    Soradat["Azonosító"] = rekord.Azonosító.Trim();
+                    string Típus = (from a in AdatokJármű
+                                    where a.Azonosító == rekord.Azonosító
+                                    select a.Típus).FirstOrDefault();
+                    if (Típus.Trim() == "")
+                        Soradat["Típus"] = "";
+                    else
+                        Soradat["Típus"] = Típus;
+                    Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
+                    Soradat["Takarítási fajta"] = rekord.Takarítási_fajta.ToStrTrim();
+                    Soradat["Telephely"] = rekord.Telephely;
+                    Soradat["Státus"] = rekord.Státus;
+                    Soradat["Eltelt napok"] = (DateTime.Today - rekord.Dátum).Days;
+                    GépiTábla.Rows.Add(Soradat);
                 }
-                Gepi_dataGrid_.Visible = true;
-                Mosás_Típusok();
+                if (CmbGépiTíp.Text.Trim() != "")
+                {
+                    EnumerableRowCollection<DataRow> filteredRows = GépiTábla.AsEnumerable()
+                        .Where(a => a.Field<string>("Típus") == CmbGépiTíp.Text.Trim());
+                    GépiTábla = filteredRows.CopyToDataTable();
+                }
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -5338,6 +5399,41 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void GépiTáblaFejléc()
+        {
+            try
+            {
+                GépiTábla.Columns.Clear();
+                GépiTábla.Columns.Add("Azonosító");
+                GépiTábla.Columns.Add("Típus");
+                GépiTábla.Columns.Add("Dátum");
+                GépiTábla.Columns.Add("Takarítási fajta");
+                GépiTábla.Columns.Add("Telephely");
+                GépiTábla.Columns.Add("Státus");
+                GépiTábla.Columns.Add("Eltelt napok");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void GépiTáblaOszlopSzélesség()
+        {
+            Gépi_Tábla.Columns["Azonosító"].Width = 100;
+            Gépi_Tábla.Columns["Típus"].Width = 100;
+            Gépi_Tábla.Columns["Dátum"].Width = 100;
+            Gépi_Tábla.Columns["Takarítási fajta"].Width = 100;
+            Gépi_Tábla.Columns["Telephely"].Width = 150;
+            Gépi_Tábla.Columns["Státus"].Width = 100;
+            Gépi_Tábla.Columns["Eltelt napok"].Width = 130;
         }
 
         private void GépiTípusCmbFeltölt()
@@ -5353,59 +5449,11 @@ namespace Villamos
 
         }
 
-        private void Mosás_Típusok()
-        {
-            try
-            {
-                Gepi_dataGrid_.Visible = false;
-                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
-                int j = 0;
-                for (int i = 0; i < Gepi_dataGrid_.Rows.Count; i++)
-                {
-                    if (j >= AdatokJármű.Count)
-                    {
-                        j = 0;
-                    }
-                    while (j < AdatokJármű.Count)
-                    {
-                        if (Gepi_dataGrid_.Rows[i].Cells[0].Value.ToString() == AdatokJármű[j].Azonosító.ToString())
-                        {
-                            Gepi_dataGrid_.Rows[i].Cells[1].Value = AdatokJármű[j].Típus.ToStrTrim();
-                        }
-                        j++;
-                    }
-                }
-
-                if (CmbGépiTíp.Text.Trim() != "")
-                {
-                    for (int i = Gepi_dataGrid_.Rows.Count - 1; i >= 0; i--)
-                    {
-                        if (!Gepi_dataGrid_.Rows[i].Cells[1].Value.ToString().Contains(CmbGépiTíp.Text.Trim()))
-                        {
-                            Gepi_dataGrid_.Rows.RemoveAt(i);
-                        }
-                    }
-                }
-                Gepi_dataGrid_.Visible = true;
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
         private void Gepi_excel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Gepi_dataGrid_.Rows.Count <= 0) return;
+                if (Gépi_Tábla.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -5423,7 +5471,7 @@ namespace Villamos
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Gepi_dataGrid_, false);
+                MyE.EXCELtábla(fájlexc, Gépi_Tábla, false);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");

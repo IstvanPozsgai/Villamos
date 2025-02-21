@@ -16,8 +16,10 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Típus, string Telephely)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Típus}.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Telep(hely.KönyvSzerk(), Telephely);
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Típus}.mdb".KönyvSzerk();
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Telep(hely, Telephely);
+            string szöveg = $"SELECT * FROM {Telephely}";
+            if (!Adatbázis.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Technológia_Telep(hely, Telephely);
         }
 
         public List<Adat_Technológia_Változat> Lista_Adatok(string Típus, string Telephely)
@@ -127,71 +129,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
-        public List<Adat_Technológia_Változat> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Technológia_Változat> Adatok = new List<Adat_Technológia_Változat>();
-            Adat_Technológia_Változat Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Technológia_Változat(
-                                    rekord["technológia_Id"].ToÉrt_Long(),
-                                    rekord["változatnév"].ToStrTrim(),
-                                    rekord["végzi"].ToStrTrim(),
-                                    rekord["karbantartási_fokozat"].ToStrTrim()
-                                    );
-
-                                Adatok.Add(Adat);
-                            }
-                        }
-
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public List<string> Lista_Adatok_Mező(string hely, string jelszó, string szöveg, string Mező)
-        {
-            List<string> Adatok = new List<string>();
-            string Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = rekord[Mező].ToStrTrim();
-                                Adatok.Add(Adat);
-                            }
-                        }
-
-                    }
-                }
-            }
-            return Adatok;
-        }
-
     }
-
 }

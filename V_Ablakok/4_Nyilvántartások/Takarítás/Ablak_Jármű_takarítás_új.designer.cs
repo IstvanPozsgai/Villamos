@@ -64,6 +64,7 @@ namespace Villamos
             this.Ütem_kezdődátum = new System.Windows.Forms.DateTimePicker();
             this.Ütem_azonosító = new System.Windows.Forms.ComboBox();
             this.GroupBox5 = new System.Windows.Forms.GroupBox();
+            this.PályaszámTakarításai = new System.Windows.Forms.Button();
             this.Excel_Takarítás = new System.Windows.Forms.Button();
             this.Utolsó_telephely = new System.Windows.Forms.ComboBox();
             this.Utolsó_státus = new System.Windows.Forms.CheckBox();
@@ -154,7 +155,7 @@ namespace Villamos
             this.RadioButton2 = new System.Windows.Forms.RadioButton();
             this.RadioButton1 = new System.Windows.Forms.RadioButton();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.Gepi_dataGrid_ = new System.Windows.Forms.DataGridView();
+            this.Gépi_Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.CmbGépiTíp = new System.Windows.Forms.ComboBox();
@@ -177,7 +178,6 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.PályaszámTakarításai = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -201,7 +201,7 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.ListaTábla)).BeginInit();
             this.Panel6.SuspendLayout();
             this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Gepi_dataGrid_)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Gépi_Tábla)).BeginInit();
             this.groupBox8.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox9.SuspendLayout();
@@ -502,6 +502,19 @@ namespace Villamos
             this.GroupBox5.TabIndex = 0;
             this.GroupBox5.TabStop = false;
             this.GroupBox5.Text = "Utolsó takarítások";
+            // 
+            // PályaszámTakarításai
+            // 
+            this.PályaszámTakarításai.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PályaszámTakarításai.Image = global::Villamos.Properties.Resources.App_spreadsheet1;
+            this.PályaszámTakarításai.Location = new System.Drawing.Point(566, 120);
+            this.PályaszámTakarításai.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.PályaszámTakarításai.Name = "PályaszámTakarításai";
+            this.PályaszámTakarításai.Size = new System.Drawing.Size(40, 40);
+            this.PályaszámTakarításai.TabIndex = 192;
+            this.ToolTip1.SetToolTip(this.PályaszámTakarításai, "Utolsó takarítások");
+            this.PályaszámTakarításai.UseVisualStyleBackColor = true;
+            this.PályaszámTakarításai.Click += new System.EventHandler(this.PályaszámTakarításai_Click);
             // 
             // Excel_Takarítás
             // 
@@ -1566,7 +1579,7 @@ namespace Villamos
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.MediumSeaGreen;
-            this.tabPage5.Controls.Add(this.Gepi_dataGrid_);
+            this.tabPage5.Controls.Add(this.Gépi_Tábla);
             this.tabPage5.Controls.Add(this.groupBox8);
             this.tabPage5.Controls.Add(this.groupBox9);
             this.tabPage5.Controls.Add(this.Gepi_excel);
@@ -1577,20 +1590,20 @@ namespace Villamos
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Gépi Mosás";
             // 
-            // Gepi_dataGrid_
+            // Gépi_Tábla
             // 
-            this.Gepi_dataGrid_.AllowUserToAddRows = false;
-            this.Gepi_dataGrid_.AllowUserToDeleteRows = false;
-            this.Gepi_dataGrid_.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Gépi_Tábla.AllowUserToAddRows = false;
+            this.Gépi_Tábla.AllowUserToDeleteRows = false;
+            this.Gépi_Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Gepi_dataGrid_.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Gepi_dataGrid_.Location = new System.Drawing.Point(5, 110);
-            this.Gepi_dataGrid_.Name = "Gepi_dataGrid_";
-            this.Gepi_dataGrid_.RowHeadersVisible = false;
-            this.Gepi_dataGrid_.RowHeadersWidth = 62;
-            this.Gepi_dataGrid_.Size = new System.Drawing.Size(1295, 359);
-            this.Gepi_dataGrid_.TabIndex = 0;
+            this.Gépi_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Gépi_Tábla.Location = new System.Drawing.Point(5, 110);
+            this.Gépi_Tábla.Name = "Gépi_Tábla";
+            this.Gépi_Tábla.RowHeadersVisible = false;
+            this.Gépi_Tábla.RowHeadersWidth = 62;
+            this.Gépi_Tábla.Size = new System.Drawing.Size(1295, 359);
+            this.Gépi_Tábla.TabIndex = 0;
             // 
             // groupBox8
             // 
@@ -1825,19 +1838,6 @@ namespace Villamos
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
-            // PályaszámTakarításai
-            // 
-            this.PályaszámTakarításai.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.PályaszámTakarításai.Image = global::Villamos.Properties.Resources.App_spreadsheet1;
-            this.PályaszámTakarításai.Location = new System.Drawing.Point(566, 120);
-            this.PályaszámTakarításai.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.PályaszámTakarításai.Name = "PályaszámTakarításai";
-            this.PályaszámTakarításai.Size = new System.Drawing.Size(40, 40);
-            this.PályaszámTakarításai.TabIndex = 192;
-            this.ToolTip1.SetToolTip(this.PályaszámTakarításai, "Utolsó takarítások");
-            this.PályaszámTakarításai.UseVisualStyleBackColor = true;
-            this.PályaszámTakarításai.Click += new System.EventHandler(this.PályaszámTakarításai_Click);
-            // 
             // Ablak_Jármű_takarítás_új
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1895,7 +1895,7 @@ namespace Villamos
             this.Panel6.ResumeLayout(false);
             this.Panel6.PerformLayout();
             this.tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Gepi_dataGrid_)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Gépi_Tábla)).EndInit();
             this.groupBox8.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -2023,7 +2023,7 @@ namespace Villamos
         internal Button Btn_vezénylésexcel;
         internal DataGridView Opció_tábla;
         internal TabPage tabPage5;
-        internal DataGridView Gepi_dataGrid_;
+        internal Zuby.ADGV.AdvancedDataGridView Gépi_Tábla;
         internal GroupBox groupBox8;
         internal Label label24;
         internal Label label28;

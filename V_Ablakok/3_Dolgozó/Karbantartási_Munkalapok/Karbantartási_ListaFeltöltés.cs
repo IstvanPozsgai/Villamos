@@ -104,7 +104,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 string jelszó = "Bezzegh";
                 string szöveg = $"SELECT * FROM {telephely} ORDER BY technológia_Id ";
                 AdatokVáltozat.Clear();
-                AdatokVáltozat = KézVáltozat.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokVáltozat = KézVáltozat.Lista_Adatok(típus, telephely);
             }
             catch (HibásBevittAdat ex)
             {

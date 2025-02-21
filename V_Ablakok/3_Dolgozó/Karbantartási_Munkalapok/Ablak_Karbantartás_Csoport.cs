@@ -168,12 +168,11 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 if (Csoport_Ciklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva karbantartási ciklus.");
                 if (Csoport_változat.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva csoport változatnév.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Csoport_típus.Text.Trim()}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = $"SELECT DISTINCT végzi FROM {Cmbtelephely.Trim()} WHERE változatnév='{Csoport_változat.Text.Trim()}' ";
-                List<string> Végzők = KézVáltozat.Lista_Adatok_Mező(hely, jelszó, szöveg, "végzi");
-
                 List<Adat_Technológia_Változat> Adatok = KézVáltozat.Lista_Adatok(Csoport_típus.Text.Trim(), Cmbtelephely.Trim());
+                List<string> Végzők = (from a in Adatok
+                                       where a.Változatnév == Csoport_változat.Text.Trim()
+                                       orderby a.Végzi
+                                       select a.Végzi).Distinct().ToList();
                 List<string> Változatok = Adatok.Where(a => a.Változatnév == Csoport_változat.Text.Trim()).Select(a => a.Végzi).Distinct().ToList();
 
                 Csoport_Végző.Text = "";

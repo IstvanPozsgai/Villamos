@@ -93,7 +93,7 @@ namespace Villamos.Kezelők
                 szöveg += $"gyáriszám='{Adat.Gyáriszám}', ";
                 szöveg += $"dátum ='{Adat.Dátum}' ";
                 szöveg += $" WHERE Azonosító='{Adat.Azonosító}' ";
-                szöveg += $"' AND Szerszámkönyvszám='{Adat.Szerszámkönyvszám}'";
+                szöveg += $" AND Szerszámkönyvszám='{Adat.Szerszámkönyvszám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -113,8 +113,8 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = "DELETE FROM lista ";
-                szöveg += $" WHERE Azonosító='{Adat.Azonosító}'"; ;
-                szöveg += $"' AND Szerszámkönyvszám='{Adat.Szerszámkönyvszám}'";
+                szöveg += $" WHERE Azonosító='{Adat.Azonosító}'";
+                szöveg += $" AND Szerszámkönyvszám='{Adat.Szerszámkönyvszám}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
