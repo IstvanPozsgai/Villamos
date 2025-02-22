@@ -280,7 +280,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             return AdatokKivétel;
         }
 
-        public static List<string> T5C5_minden(string Telephely, List<Adat_Technológia_Alap> Típus)
+        public static List<string> Minden(string Telephely, List<Adat_Technológia_Alap> Típus)
         {
             List<string> Adatok = new List<string>();
             Kezelő_Jármű KézJármű = new Kezelő_Jármű();
@@ -295,7 +295,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                                 select a.Azonosító).ToList();
                     Adatok.AddRange(IdeigPsz);
                 }
-                Adatok.Sort();
+                if (Adatok.Count > 0) Adatok.Sort();
             }
             catch (HibásBevittAdat ex)
             {

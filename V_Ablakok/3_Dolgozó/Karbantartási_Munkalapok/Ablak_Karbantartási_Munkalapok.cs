@@ -241,7 +241,7 @@ namespace Villamos.Villamos_Ablakok
                 Ciklus_feltöltés();
 
                 AdatokTípusT = MyLista.AlTípustáblaLista(Járműtípus.Text.Trim());
-                PályaszámLista = MyLista.T5C5_minden(Cmbtelephely.Text.Trim(), AdatokTípusT);
+                PályaszámLista = MyLista.Minden(Cmbtelephely.Text.Trim(), AdatokTípusT);
                 Pályaszám_feltöltés();
 
                 elérés = "Üres";
@@ -367,7 +367,7 @@ namespace Villamos.Villamos_Ablakok
                 {
                     case "Alap":
                         {
-                            Pályaszám_TáblaAdatok = MyLista.T5C5_minden(Cmbtelephely.Text.Trim(), AdatokTípus);
+                            Pályaszám_TáblaAdatok = MyLista.Minden(Cmbtelephely.Text.Trim(), AdatokTípus);
                             break;
                         }
                     case "T5C5_E2":
@@ -1039,6 +1039,7 @@ namespace Villamos.Villamos_Ablakok
                 else
                     sor = Egyszerűsített(munkalap, sor);
 
+                Holtart.Be(7, MyColor.ColorToHex(Color.Green));
                 //Karbantartó tevékenység
                 if (Chk_hibássorok.Checked) sor = KarbantartóSorok(sor);
                 Holtart.Lép();
@@ -1365,9 +1366,9 @@ namespace Villamos.Villamos_Ablakok
                     }
                     else
                     {
-                        MyE.Egyesít(munkalap, "B" + sor + ":I" + sor);
-                        MyE.Egyesít(munkalap, "M" + sor + ":O" + sor);
-                        MyE.Egyesít(munkalap, "P" + sor + ":Q" + sor);
+                        MyE.Egyesít(munkalap, $"B{sor}:I{sor}");
+                        MyE.Egyesít(munkalap, $"M{sor}:O{sor}");
+                        MyE.Egyesít(munkalap, $"P{sor}:Q{sor}");
                         MyE.Kiir(a.Részegység.Trim() + ". " + a.Munka_utasítás_szám.Trim(), $"A{sor}");
                         string szövegelem = a.Paraméter.Trim() == "_" ? "" : "\n" + a.Paraméter.Trim();
                         if (Chk_paraméter.Checked && Chk_utasítás.Checked)
@@ -1453,15 +1454,14 @@ namespace Villamos.Villamos_Ablakok
         private void Minden_kiírása(int sor, string Utasítás_Cím, string Utasítás_leírás, string szövegelem, string Paraméter)
         {
             //Minden kiírás
-            MyE.Kiir(Utasítás_Cím.Trim() + "\n" + Utasítás_leírás.Trim() + szövegelem, "B" + sor);
+            MyE.Kiir($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}{szövegelem}", $"B{sor}");
             //vastag
-            MyE.Cella_Betű("B" + sor, false, false, true, 1, Utasítás_Cím.Trim().Length);
+            MyE.Cella_Betű($"B{sor}", false, false, true, 1, Utasítás_Cím.Trim().Length);
             //dőlt
-            MyE.Cella_Betű("B" + sor, false, true, false, (Utasítás_Cím.Trim() + "\n" + Utasítás_leírás.Trim()).Length + 2, Paraméter.Trim().Length);
-            MyE.Kiir(Utasítás_Cím.Trim() + "\n" + Utasítás_leírás.Trim() + szövegelem + "\n", "AS" + sor);
-            MyE.Betű("AS" + sor, false, false, true);
+            MyE.Cella_Betű($"B{sor}", false, true, false, (Utasítás_Cím.Trim() + "\n" + Utasítás_leírás.Trim()).Length + 2, Paraméter.Trim().Length);
 
-            MyE.Sormagasság($"{sor}:{sor}");
+            MyE.Kiir($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}{szövegelem}\n", $"AS{sor}");
+            MyE.Betű($"AS{sor}", false, false, true);
         }
 
         private string Dolgozónév_kiíratása(List<Adat_Technológia_Változat> VÁLTAdatok, long ID, Dictionary<string, string> Személy)
