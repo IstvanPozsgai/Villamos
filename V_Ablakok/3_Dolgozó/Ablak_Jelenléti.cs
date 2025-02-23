@@ -16,15 +16,20 @@ namespace Villamos
         {
             InitializeComponent();
         }
+        #region Kezelők és Listák
+
 
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
         readonly Kezelő_Kiegészítő_főkönyvtábla KézFőkönyv = new Kezelő_Kiegészítő_főkönyvtábla();
+        readonly Kezelő_Kiegészítő_Csoportbeosztás KézCsopBeo = new Kezelő_Kiegészítő_Csoportbeosztás();
+        readonly Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
 
         List<Adat_Kiegészítő_Jelenlétiív> AdatokJelenléti = new List<Adat_Kiegészítő_Jelenlétiív>();
         List<Adat_Kiegészítő_főkönyvtábla> AdatokFőkönyv = new List<Adat_Kiegészítő_főkönyvtábla>();
+        #endregion
+
 
         #region Alap
-
         private void Btn_Súgó_Click(object sender, EventArgs e)
         {
             try
@@ -56,7 +61,6 @@ namespace Villamos
             Aláíróbetöltés();
         }
 
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -68,7 +72,6 @@ namespace Villamos
             AláíróListaFeltöltés();
             Aláíróbetöltés();
         }
-
 
         private void Telephelyekfeltöltése()
         {
@@ -97,25 +100,28 @@ namespace Villamos
         #endregion
 
 
-
         #region Listák
-
-
         private void Csoportfeltöltés()
         {
-            ChkCsoport.Items.Clear();
-            ChkCsoport.BeginUpdate();
-            string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Segéd\kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM csoportbeosztás order by sorszám";
-            Kezelő_Kiegészítő_Csoportbeosztás kéz = new Kezelő_Kiegészítő_Csoportbeosztás();
-            List<Adat_Kiegészítő_Csoportbeosztás> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-            foreach (Adat_Kiegészítő_Csoportbeosztás rekord in Adatok)
-                ChkCsoport.Items.Add(rekord.Csoportbeosztás);
+            try
+            {
+                ChkCsoport.Items.Clear();
+                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsopBeo.Lista_Adatok(Cmbtelephely.Text.Trim());
+                foreach (Adat_Kiegészítő_Csoportbeosztás rekord in Adatok)
+                    ChkCsoport.Items.Add(rekord.Csoportbeosztás);
 
-            ChkCsoport.EndUpdate();
+                ChkCsoport.EndUpdate();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         void Névfeltöltés()
         {
@@ -123,12 +129,10 @@ namespace Villamos
             {
                 ChkDolgozónév.Items.Clear();
                 ChkDolgozónév.BeginUpdate();
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Dolgozók.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM Dolgozóadatok WHERE  kilépésiidő=#1/1/1900#  order by DolgozóNév asc";
-
-                Kezelő_Dolgozó_Alap kéz = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolg.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = (from a in Adatok
+                          where a.Kilépésiidő == new DateTime(1900, 1, 1)
+                          select a).ToList();
 
                 foreach (Adat_Dolgozó_Alap rekord in Adatok)
                     ChkDolgozónév.Items.Add(rekord.DolgozóNév.Trim() + "=" + rekord.Dolgozószám.Trim());
@@ -146,22 +150,19 @@ namespace Villamos
             }
         }
 
-
         private void Irányítófeltöltés()
         {
             LstKiadta.Items.Clear();
             LstKiadta.Items.Add("");
-            string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Dolgozók.mdb";
-            string jelszó = "forgalmiutasítás";
-            string szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900# and (főkönyvtitulus<>'' and főkönyvtitulus<>'_')  order by DolgozóNév asc";
-
-            Kezelő_Dolgozó_Alap kéz = new Kezelő_Dolgozó_Alap();
-            List<Adat_Dolgozó_Alap> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Dolgozó_Alap> Adatok = KézDolg.Lista_Adatok(Cmbtelephely.Text.Trim());
+            Adatok = (from a in Adatok
+                      where a.Kilépésiidő == new DateTime(1900, 1, 1)
+                      && (a.Főkönyvtitulus != "" || a.Főkönyvtitulus != "_")
+                      select a).ToList();
 
             foreach (Adat_Dolgozó_Alap rekord in Adatok)
                 LstKiadta.Items.Add(rekord.DolgozóNév.Trim());
         }
-
 
         private void Aláíróbetöltés()
         {
@@ -194,10 +195,7 @@ namespace Villamos
             try
             {
                 AdatokFőkönyv.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM főkönyvtábla ";
-                AdatokFőkönyv = KézFőkönyv.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokFőkönyv = KézFőkönyv.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -211,16 +209,12 @@ namespace Villamos
 
         }
 
-
-
-
         private void BtnKijelölcsop_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < ChkCsoport.Items.Count; i++)
                 ChkCsoport.SetItemChecked(i, true);
             Jelöltcsoport();
         }
-
 
         private void Btnkilelöltörlés_Click(object sender, EventArgs e)
         {
@@ -229,13 +223,11 @@ namespace Villamos
             Jelöltcsoport();
         }
 
-
         private void Btnmindkijelöl_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < ChkDolgozónév.Items.Count; i++)
                 ChkDolgozónév.SetItemChecked(i, true);
         }
-
 
         private void Btnkijelöléstöröl_Click(object sender, EventArgs e)
         {
@@ -243,12 +235,10 @@ namespace Villamos
                 ChkDolgozónév.SetItemChecked(i, false);
         }
 
-
         private void BtnKijelölésátjelöl_Click(object sender, EventArgs e)
         {
             Jelöltcsoport();
         }
-
 
         private void Jelöltcsoport()
         {
@@ -256,23 +246,19 @@ namespace Villamos
             {
                 ChkDolgozónév.Items.Clear();
                 ChkDolgozónév.BeginUpdate();
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Dolgozók.mdb";
-                string jelszó = "forgalmiutasítás";
 
-                Kezelő_Dolgozó_Alap kéz = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> Adatok;
+                List<Adat_Dolgozó_Alap> AdatokÖ = KézDolg.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokÖ = (from a in AdatokÖ
+                           where a.Kilépésiidő == new DateTime(1900, 1, 1)
+                           select a).ToList();
 
                 foreach (string Elem in ChkCsoport.CheckedItems)
                 {
-                    //csoporttagokat kiválogatja
-                    string szöveg = $"SELECT * FROM Dolgozóadatok where [csoport]='{Elem}' order by DolgozóNév";
-                    Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                    List<Adat_Dolgozó_Alap> Adatok = (from a in AdatokÖ
+                                                      where a.Csoport == Elem
+                                                      select a).ToList();
                     foreach (Adat_Dolgozó_Alap rekord in Adatok)
-                    {
-                        if (rekord.Kilépésiidő == new DateTime(1900, 1, 1))
-                            ChkDolgozónév.Items.Add(rekord.DolgozóNév.Trim() + " = " + rekord.Dolgozószám.Trim());
-                    }
+                        ChkDolgozónév.Items.Add(rekord.DolgozóNév.Trim() + " = " + rekord.Dolgozószám.Trim());
                 }
                 ChkDolgozónév.EndUpdate();
             }
@@ -286,7 +272,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion  
 
 
