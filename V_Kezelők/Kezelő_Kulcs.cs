@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kulcs
     {
-        readonly string hely = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Villamos\Kulcs.mdb";
+        readonly string hely = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Villamos\Kulcs.mdb";
         readonly string jelszó = "Tóth_Katalin";
 
         public Kezelő_Kulcs()

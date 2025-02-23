@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,11 +13,20 @@ namespace Villamos.Kezelők
     public class Kezelő_Létszám_Elrendezés_Változatok
     {
         readonly string jelszó = "repülő";
-        public List<Adat_Létszám_Elrendezés_Változatok> Lista_Adatok(string hely)
+        string hely;
+
+        private void FájlBeállítás(string Telephely)
         {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Segéd\megjelenfeláll.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Létszám_Elrendezés_Változatok(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Létszám_Elrendezés_Változatok> Lista_Adatok(string Telephely)
+        {
+            FájlBeállítás(Telephely);
             List<Adat_Létszám_Elrendezés_Változatok> Adatok = new List<Adat_Létszám_Elrendezés_Változatok>();
             Adat_Létszám_Elrendezés_Változatok Adat;
-            string szöveg = $"Select * FROM Alaplista";
+            string szöveg = $"Select * FROM Alaplista order by  id";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -45,10 +56,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Módosítás(string hely, Adat_Létszám_Elrendezés_Változatok Adat)
+        public void Módosítás(string Telephely, Adat_Létszám_Elrendezés_Változatok Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "UPDATE Alaplista SET  ";
                 szöveg += $" Csoportnév='{Adat.Csoportnév}', ";
                 szöveg += $" oszlop='{Adat.Oszlop}', ";
@@ -70,10 +82,11 @@ namespace Villamos.Kezelők
 
         }
 
-        public void Rögzítés(string hely, Adat_Létszám_Elrendezés_Változatok Adat)
+        public void Rögzítés(string Telephely, Adat_Létszám_Elrendezés_Változatok Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg = "INSERT INTO Változatok (Azonosító, változatnév) VALUES (";
                 szöveg = "INSERT INTO Alaplista ";
                 szöveg += "( id, csoportnév, oszlop, sor, szélesség, Változatnév) VALUES (";
@@ -96,10 +109,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(string hely, Adat_Létszám_Elrendezés_Változatok Adat)
+        public void Törlés(string Telephely, Adat_Létszám_Elrendezés_Változatok Adat)
         {
             try
             {
+                FájlBeállítás(Telephely);
                 string szöveg;
                 if (Adat.Id == 0)
                     szöveg = $"DELETE FROM Alaplista WHERE Változatnév='{Adat.Változatnév}'";
@@ -120,12 +134,12 @@ namespace Villamos.Kezelők
 
         }
 
-        private int Sorszám(string hely)
+        private int Sorszám(string Telephely)
         {
             int válasz = 1;
             try
             {
-                List<Adat_Létszám_Elrendezés_Változatok> Adatok = Lista_Adatok(hely);
+                List<Adat_Létszám_Elrendezés_Változatok> Adatok = Lista_Adatok(Telephely);
                 if (Adatok != null && Adatok.Count > 0) válasz = Adatok.Max(a => a.Id) + 1;
             }
             catch (HibásBevittAdat ex)

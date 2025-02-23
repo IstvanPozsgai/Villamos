@@ -119,39 +119,6 @@ namespace Villamos.Kezelők
         }
     }
 
-    public class Kezelő_Kiegészítő_Kiegmunkakör
-    {
-        public List<Adat_Kiegészítő_Kiegmunkakör> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            Adat_Kiegészítő_Kiegmunkakör Adat;
-            List<Adat_Kiegészítő_Kiegmunkakör> Adatok = new List<Adat_Kiegészítő_Kiegmunkakör>();
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Kiegmunkakör(
-                                           rekord["Id"].ToÉrt_Long(),
-                                           rekord["Megnevezés"].ToStrTrim(),
-                                           rekord["Id"].ToÉrt_Long()
-                                           );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
     public class Kezelő_Kiegészítő_Doksi
     {
