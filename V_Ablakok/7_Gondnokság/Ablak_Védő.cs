@@ -2461,7 +2461,7 @@ namespace Villamos
             {
                 AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
                 List<Adat_Védő_Cikktörzs> Adatok = (from a in AdatokCikk
-                                                    where a.Státus == 1
+                                                    where a.Státus == 0
                                                     select a).ToList();
 
                 SzerszámAzonosító.Items.Clear();
@@ -2498,7 +2498,8 @@ namespace Villamos
                 HonnanMennyiség.Text = 0.ToString();
                 HováMennyiség.Text = 0.ToString();
                 Megnevezés.Text = "";
-                switch (Honnan.Text.Trim() ?? "")
+                if (Honnan.Text.Trim() == "") return;
+                switch (Honnan.Text.Trim())
                 {
                     case "Érkezett":
                         {
@@ -2545,7 +2546,17 @@ namespace Villamos
                             Hova.Focus();
                             break;
                         }
-                    case "Átadás_Átv":
+                    case "Átadás":
+                        {
+                            Azonosítóhelyen();
+                            Hova.Text = "Raktár";
+                            HováNév.Text = "Védő Raktár";
+                            Hova.Enabled = false;
+                            HováNév.Enabled = false;
+                            SzerszámAzonosító.Focus();
+                            break;
+                        }
+                    case "Átvétel":
                         {
                             Rögzítés_azonosítók();
                             Hova.Text = "Raktár";
@@ -2555,7 +2566,6 @@ namespace Villamos
                             SzerszámAzonosító.Focus();
                             break;
                         }
-
                     default:
                         {
                             Azonosítóhelyen();
@@ -2827,7 +2837,6 @@ namespace Villamos
         {
             try
             {
-                Tábla_Könyv_fejléc();
                 Tábla_Könyv.Visible = false;
                 Tábla_Könyv.CleanFilterAndSort();
                 Tábla_Könyv_fejléc();
@@ -2860,7 +2869,7 @@ namespace Villamos
         private void TáblaTáblaTartalom()
         {
 
-            if (Honnan.Text.Trim() == "Érkezett" || Honnan.Text.Trim() == "Átadás_Átv")
+            if (Honnan.Text.Trim() == "Érkezett" || Honnan.Text.Trim() == "Átvétel")
                 Tábla_Könyv_Cikk_Érkezett();
             else
                 Tábla_Könyv_Cikk_Könyv();
@@ -3142,7 +3151,7 @@ namespace Villamos
                 // Másik telephelyre könyvelés storno
                 if (Hova.Text.Trim() == "Átvétel" && Honnan.Text.Trim() == "Raktár")
                 {
-                    if (Gyáriszám.Text != "0")
+                    if (Gyáriszám.Text == "0")
                         throw new HibásBevittAdat("Bizonylatszám hiányában nem lehet stronózni a beraktározást!");
                     else
                     {
@@ -3153,7 +3162,7 @@ namespace Villamos
                             File.Copy(hely, hova);
                             File.Delete(hely);
                         }
-                        Átadás_storno();
+                        Érkezettről_storno();
                         Mennyiség.Text = "";
                         Tábla_Könyv_írás();
                         return;
