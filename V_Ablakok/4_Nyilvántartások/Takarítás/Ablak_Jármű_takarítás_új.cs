@@ -5370,7 +5370,7 @@ namespace Villamos
                     Soradat["Azonosító"] = rekord.Azonosító.Trim();
                     string Típus = (from a in AdatokJármű
                                     where a.Azonosító == rekord.Azonosító
-                                    select a.Típus).FirstOrDefault();
+                                    select a.Típus).FirstOrDefault() ?? "";
                     if (Típus.Trim() == "")
                         Soradat["Típus"] = "";
                     else
@@ -5412,7 +5412,7 @@ namespace Villamos
                 GépiTábla.Columns.Add("Takarítási fajta");
                 GépiTábla.Columns.Add("Telephely");
                 GépiTábla.Columns.Add("Státus");
-                GépiTábla.Columns.Add("Eltelt napok");
+                GépiTábla.Columns.Add("Eltelt napok", System.Type.GetType("System.Int32"));
             }
             catch (HibásBevittAdat ex)
             {
