@@ -19,38 +19,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely.KönyvSzerk());
         }
 
-        public List<Adat_Váltós_Kijelöltnapok> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Váltós_Kijelöltnapok> Adatok = new List<Adat_Váltós_Kijelöltnapok>();
-            Adat_Váltós_Kijelöltnapok Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Váltós_Kijelöltnapok(
-                                          rekord["Telephely"].ToStrTrim(),
-                                          rekord["Csoport"].ToStrTrim(),
-                                          rekord["Dátum"].ToÉrt_DaTeTime()
-                                          );
-
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
         public List<Adat_Váltós_Kijelöltnapok> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);

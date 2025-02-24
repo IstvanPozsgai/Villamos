@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,6 +13,11 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb".KönyvSzerk();
         readonly string jelszó = "Gábor";
+
+        public Kezelő_Váltós_Váltóscsopitábla()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Váltóscsopitábla(hely.KönyvSzerk());
+        }
 
         public List<Adat_Váltós_Váltóscsopitábla> Lista_Adatok()
         {

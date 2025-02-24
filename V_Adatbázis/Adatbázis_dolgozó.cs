@@ -12,7 +12,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
 
-            string     szöveg = "CREATE TABLE Státustábla (";
+            string szöveg = "CREATE TABLE Státustábla (";
             szöveg += "[ID] long,";
             szöveg += "[Névki] CHAR(150), ";
             szöveg += "[Részmunkaidős] Decimal, ";
@@ -410,10 +410,5 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[név] CHAR(50))";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
-
-
-
-
-
     }
 }

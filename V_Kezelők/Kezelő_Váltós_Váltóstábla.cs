@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -13,9 +15,15 @@ namespace Villamos.Kezelők
         readonly string jelszó = "katalin";
         string hely;
 
-        public List<Adat_Váltós_Váltóstábla> Lista_Adatok(int Dátum)
+        private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Váltós_Váltóstábla> Lista_Adatok(int Év)
+        {
+            FájlBeállítás(Év);
 
             string szöveg = "SELECT * FROM Váltóstábla  ORDER BY telephely, év, félév, csoport";
             List<Adat_Váltós_Váltóstábla> Adatok = new List<Adat_Váltós_Váltóstábla>();
@@ -52,11 +60,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(int Dátum, Adat_Váltós_Váltóstábla Adat)
+        public void Rögzítés(int Év, Adat_Váltós_Váltóstábla Adat)
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
 
                 string szöveg = "INSERT INTO váltóstábla (év, félév, csoport, ZKnap, EPnap, Tperc, telephely ) VALUES (";
                 szöveg += $" VALUES ({Adat.Év},";
@@ -80,11 +88,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(int Dátum, Adat_Váltós_Váltóstábla Adat)
+        public void Módosítás(int Év, Adat_Váltós_Váltóstábla Adat)
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
+
                 string szöveg = " UPDATE  váltóstábla SET ";
                 szöveg += $" ZKnap={Adat.Zknap}, ";
                 szöveg += $" EPnap={Adat.Epnap}, ";
@@ -107,11 +116,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(int Dátum, Adat_Váltós_Váltóstábla Adat)
+        public void Törlés(int Év, Adat_Váltós_Váltóstábla Adat)
         {
             try
             {
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum}\munkaidőnaptár.mdb".KönyvSzerk();
+                FájlBeállítás(Év);
                 string szöveg = $"DELETE FROM váltóstábla where év={Adat.Év}";
                 szöveg += $" and félév={Adat.Félév}";
                 szöveg += $" and csoport='{Adat.Csoport}'";

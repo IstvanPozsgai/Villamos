@@ -12,8 +12,6 @@ namespace Villamos
 {
     internal partial class Ablak_Jelenléti
     {
-
-
         #region Kezelők és Listák
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
         readonly Kezelő_Kiegészítő_főkönyvtábla KézFőkönyv = new Kezelő_Kiegészítő_főkönyvtábla();

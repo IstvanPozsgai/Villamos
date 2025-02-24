@@ -77,9 +77,6 @@ namespace Villamos
 
         private void Ablak_Váltós_Load(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\munkaidőnaptár.mdb".KönyvSzerk();
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb".KönyvSzerk();
-
             Jogosultságkiosztás();
             Fülek.SelectedIndex = 0;
             Fülekkitöltése();
@@ -439,8 +436,7 @@ namespace Villamos
 
         private void Ablak_Váltós_KeyUp(object sender, KeyEventArgs e)
         {
-            if ((int)e.KeyCode == 17)
-                Chk_CTRL.Checked = false;
+            if ((int)e.KeyCode == 17) Chk_CTRL.Checked = false;
         }
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
@@ -1529,8 +1525,7 @@ namespace Villamos
                 Adat_Kiegészítő_Munkaidő Elem = (from a in AdatokMunkaidő
                                                  where a.Munkarendelnevezés == Munkarendelnevezés.Text.Trim()
                                                  select a).FirstOrDefault();
-                if (Elem != null)
-                    KézMunkaidő.Törlés(Munkarendelnevezés.Text.Trim());
+                if (Elem != null) KézMunkaidő.Törlés(Munkarendelnevezés.Text.Trim());
                 Munkarendelnevezés.Text = "";
                 Munkaidő.Text = "";
                 Tábla_Munkarend_kiirás();
@@ -2400,7 +2395,6 @@ namespace Villamos
                 VScrollX = e.NewValue;
             else
                 VScrollY = e.NewValue;
-
         }
 
         private void Tábla9_KeyDown(object sender, KeyEventArgs e)
@@ -2416,7 +2410,6 @@ namespace Villamos
 
         private void VáltóAlapszámolás()
         {
-
             try
             {
                 Nappalosszumma();
