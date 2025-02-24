@@ -192,7 +192,8 @@ internal static partial class Adatbázis
         }
         catch (Exception ex)
         {
-            HibaNapló.Log(ex.Message, "ABvanTábla", ex.StackTrace, ex.Source, ex.HResult);
+            //Ez nem kell mert azért kapjuk el, hogy létretudjuk hozni a nem létező táblát.
+            //  HibaNapló.Log(ex.Message, "ABvanTábla", ex.StackTrace, ex.Source, ex.HResult);
             return válasz;
         }
     }
