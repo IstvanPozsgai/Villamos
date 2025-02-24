@@ -12,17 +12,17 @@ namespace Villamos
 {
     internal partial class Ablak_Jelenléti
     {
-        public Ablak_Jelenléti()
-        {
-            InitializeComponent();
-        }
+
+
         #region Kezelők és Listák
-
-
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
         readonly Kezelő_Kiegészítő_főkönyvtábla KézFőkönyv = new Kezelő_Kiegészítő_főkönyvtábla();
         readonly Kezelő_Kiegészítő_Csoportbeosztás KézCsopBeo = new Kezelő_Kiegészítő_Csoportbeosztás();
         readonly Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
+        readonly Kezelő_Kiegészítő_Váltóstábla KézVáltó = new Kezelő_Kiegészítő_Váltóstábla();
+        readonly Kezelő_Kiegészítő_Beosztásciklus KézBeo = new Kezelő_Kiegészítő_Beosztásciklus();
+        readonly Kezelő_Kiegészítő_Beosztáskódok KézBeoKód = new Kezelő_Kiegészítő_Beosztáskódok();
+        readonly Kezelő_Dolgozó_Beosztás_Új KézBeosztásÚj = new Kezelő_Dolgozó_Beosztás_Új();
 
         List<Adat_Kiegészítő_Jelenlétiív> AdatokJelenléti = new List<Adat_Kiegészítő_Jelenlétiív>();
         List<Adat_Kiegészítő_főkönyvtábla> AdatokFőkönyv = new List<Adat_Kiegészítő_főkönyvtábla>();
@@ -30,6 +30,11 @@ namespace Villamos
 
 
         #region Alap
+        public Ablak_Jelenléti()
+        {
+            InitializeComponent();
+        }
+
         private void Btn_Súgó_Click(object sender, EventArgs e)
         {
             try
@@ -50,25 +55,23 @@ namespace Villamos
 
         private void AblakJelenléti_Load(object sender, EventArgs e)
         {
-
             Telephelyekfeltöltése();
             Csoportfeltöltés();
             Névfeltöltés();
             Irányítófeltöltés();
 
-            JelenlétiListaFeltöltés();
+            AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
             AláíróListaFeltöltés();
             Aláíróbetöltés();
         }
 
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             Csoportfeltöltés();
             Névfeltöltés();
             Irányítófeltöltés();
 
-            JelenlétiListaFeltöltés();
+            AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
             AláíróListaFeltöltés();
             Aláíróbetöltés();
         }
@@ -206,7 +209,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void BtnKijelölcsop_Click(object sender, EventArgs e)
@@ -272,21 +274,21 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion  
+        #endregion
 
 
+        #region Jelenléti ívek
         private void Btn_Heti_Click(object sender, EventArgs e)
         {
             try
             {
                 string munkalap = "Munka1";
                 int hányember = ChkDolgozónév.CheckedItems.Count;
-                if (hányember < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
+                if (hányember < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
                 Holtart.Be();
 
-                string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + "Jelenléti_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx";
+                string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Jelenléti_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}.xlsx";
                 MyE.ExcelLétrehozás();
 
                 MyE.Munkalap_betű("arial", 12);
@@ -484,19 +486,16 @@ namespace Villamos
             }
         }
 
-
         private void Btn_Szellemi_Click(object sender, EventArgs e)
         {
             try
             {
                 string munkalap = "Munka1";
                 int hányember = ChkDolgozónév.CheckedItems.Count;
-                if (hányember < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
+                if (hányember < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
                 Holtart.Be();
-                string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + "Jelenléti_Szellemi_"
-                    + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx";
+                string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Jelenléti_Szellemi_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}.xlsx";
 
                 MyE.ExcelLétrehozás();
 
@@ -671,8 +670,7 @@ namespace Villamos
                 MyE.Aktív_Cella(munkalap, "A1");
                 MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();
-                if (RdBtnFájlTöröl.Checked)
-                    File.Delete(fájlexc);
+                if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
 
                 MessageBox.Show("A nyomtatvány elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -687,7 +685,6 @@ namespace Villamos
             }
         }
 
-
         private void Btn_Váltós_Click(object sender, EventArgs e)
         {
             try
@@ -695,13 +692,12 @@ namespace Villamos
                 string munkalap = "Munka1";
 
                 int hányember = ChkDolgozónév.CheckedItems.Count;
-                if (hányember < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
+                if (hányember < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
                 Holtart.Be();
 
                 int i = 0;
-                string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + "Jelenléti_Váltó_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx";
+                string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Jelenléti_Váltó_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}.xlsx";
 
                 MyE.ExcelLétrehozás();
 
@@ -735,24 +731,10 @@ namespace Villamos
 
                 // sormagasság
                 MyE.Sormagasság("5:5", 120);
-                //int i = 0;
                 int oszlop = 3;
-                string helyváltó = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
                 int ciklusnap;
-
-                // Ha dolgozik és éjszakás
-                // kiirjuk a váltós munkarendeket
-
-                // ha nincs kijelölve váltós akkor nem írja ki
-                Kezelő_Kiegészítő_Váltóstábla kéz = new Kezelő_Kiegészítő_Váltóstábla();
-                Kezelő_Kiegészítő_Beosztásciklus KézBeo = new Kezelő_Kiegészítő_Beosztásciklus();
-
-                szöveg = "SELECT * FROM váltósbeosztás order by id";
-                List<Adat_Kiegészítő_Váltóstábla> Adatok = kéz.Lista_Adatok(helyváltó, jelszó, szöveg);
-
-                szöveg = "SELECT * FROM beosztásciklus  order by  id";
-                List<Adat_Kiegészítő_Beosztásciklus> AdatokBeo = KézBeo.Lista_Adatok(helyváltó, jelszó, szöveg);
+                List<Adat_Kiegészítő_Váltóstábla> Adatok = KézVáltó.Lista_Adatok();
+                List<Adat_Kiegészítő_Beosztásciklus> AdatokBeo = KézBeo.Lista_Adatok("beosztásciklus");
 
                 int volt = 0;
                 int melyikcsoport = 0;
@@ -1002,10 +984,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
 
 
         #region Ittaság vizsgálati
-
         private void Btn_Kiválogat_Click(object sender, EventArgs e)
         {
             Holtart.Be();
@@ -1018,28 +1000,21 @@ namespace Villamos
             MessageBox.Show("A dolgozók kijelölése elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
         private void Kiválogat_dolgozó()
         {
             try
             {
+                List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = KézBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Beosztáskód = (from a in Beosztáskód
+                               where a.Számoló == true
+                               orderby a.Beosztáskód
+                               select a).ToList();
 
-                string helynap = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
-                if (!File.Exists(helynap))
-                    return;
-                string jelszónap = "kiskakas";
-                string helykieg = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\adatok\segéd\Kiegészítő.mdb";
-                if (!File.Exists(helykieg))
-                    return;
-                string jelszókieg = "Mocó";
-                string szövegkieg = "SELECT * FROM Beosztáskódok WHERE Számoló = true order by BeosztásKód";
-                Kezelő_Kiegészítő_Beosztáskódok kéz = new Kezelő_Kiegészítő_Beosztáskódok();
-                List<Adat_Kiegészítő_Beosztáskódok> Beosztáskód = kéz.Lista_Adatok(helykieg, jelszókieg, szövegkieg);
-
-                string szövegnap = $"SELECT * FROM Beosztás WHERE Nap = #{Dátum.Value:M-d-yy}# order by Dolgozószám";
-                Kezelő_Dolgozó_Beosztás_Új kézbeoszt = new Kezelő_Dolgozó_Beosztás_Új();
-                List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = kézbeoszt.Lista_Adatok(helynap, jelszónap, szövegnap);
-
+                List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = KézBeosztásÚj.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                Dolgbeoszt = (from a in Dolgbeoszt
+                              where a.Nap == Dátum.Value
+                              orderby a.Dolgozószám
+                              select a).ToList();
                 Holtart.Be();
 
                 //ha ki van jelölve
@@ -1074,9 +1049,6 @@ namespace Villamos
             }
         }
 
-
-
-
         private void Btn_Ittasság_Click(object sender, EventArgs e)
         {
             if (Napi_ittas.Checked)
@@ -1085,7 +1057,6 @@ namespace Villamos
                 Heti_ittassági_excel();
         }
 
-
         private void Napi_ittassági_excel()
         {
             try
@@ -1093,12 +1064,10 @@ namespace Villamos
                 string munkalap = "Munka1";
 
                 int hányember = ChkDolgozónév.CheckedItems.Count;
-                if (hányember < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
+                if (hányember < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
                 Holtart.Be();
-                string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + "Ittaság-vizsgálati_"
-                    + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx";
+                string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Ittaság-vizsgálati_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}.xlsx";
                 MyE.ExcelLétrehozás();
                 MyE.Munkalap_betű("arial", 12);
                 MyE.Oszlopszélesség(munkalap, "a:a", 9);
@@ -1214,19 +1183,16 @@ namespace Villamos
             }
         }
 
-
         private void Heti_ittassági_excel()
         {
             try
             {
                 string munkalap = "Munka1";
                 int hányember = ChkDolgozónév.CheckedItems.Count;
-                if (hányember < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
+                if (hányember < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
                 Holtart.Be();
-                string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + "Ittassági_"
-                    + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".xlsx";
+                string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Ittassági_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}.xlsx";
                 MyE.ExcelLétrehozás();
                 MyE.Munkalap_betű("arial", 14);
                 MyE.Betű("a1", 14);
@@ -1367,31 +1333,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        #endregion
-
-        #region Listák
-
-        private void JelenlétiListaFeltöltés()
-        {
-            try
-            {
-                AdatokJelenléti.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM jelenlétiív ";
-                AdatokJelenléti = KézJelenléti.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
         }
         #endregion
     }
