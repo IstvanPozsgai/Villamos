@@ -18,7 +18,7 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely, int Év)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Rezsi\rezsinapló{Év}.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Rezsilistanapló(hely);
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Rezsilistanapló(hely.KönyvSzerk());
         }
 
         public List<Adat_Rezsi_Listanapló> Lista_Adatok(string Telephely, int Év)
@@ -100,7 +100,7 @@ namespace Villamos.Kezelők
                                                 rekord.Honnan,
                                                 rekord.Hova,
                                                 rekord.Mennyiség,
-                                                rekord.Mirehasznál,
+                                                rekord.Mirehasznál == null || rekord.Mirehasznál == "" ? "_" : rekord.Mirehasznál,
                                                 rekord.Módosította,
                                                 rekord.Módosításidátum,
                                                 rekord.Státus);
