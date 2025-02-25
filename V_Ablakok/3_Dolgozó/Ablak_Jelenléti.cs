@@ -1010,7 +1010,7 @@ namespace Villamos
 
                 List<Adat_Dolgozó_Beosztás_Új> Dolgbeoszt = KézBeosztásÚj.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
                 Dolgbeoszt = (from a in Dolgbeoszt
-                              where a.Nap == Dátum.Value
+                              where a.Nap.ToShortDateString() == Dátum.Value.ToShortDateString()
                               orderby a.Dolgozószám
                               select a).ToList();
                 Holtart.Be();
