@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
@@ -14,11 +13,7 @@ namespace Villamos
 
     public partial class Ablak_Felvétel
     {
-        public Ablak_Felvétel()
-        {
-            InitializeComponent();
-        }
-
+        #region Kezelő Lista
         readonly Kezelő_Dolgozó_Státus KézStátus = new Kezelő_Dolgozó_Státus();
         readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
@@ -28,7 +23,14 @@ namespace Villamos
         List<Adat_Dolgozó_Státus> AdatokStátus = new List<Adat_Dolgozó_Státus>();
         List<Adat_Kiegészítő_Könyvtár> AdatokKönyvtár = new List<Adat_Kiegészítő_Könyvtár>();
         List<Adat_Kulcs> AdatokKulcs = new List<Adat_Kulcs>();
+        #endregion
 
+
+        #region Alap
+        public Ablak_Felvétel()
+        {
+            InitializeComponent();
+        }
 
         private void AblakFelvétel_Load(object sender, EventArgs e)
         {
@@ -41,8 +43,6 @@ namespace Villamos
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
-
-        #region Alap
         private void Telephelyekfeltöltése()
         {
             try
@@ -583,18 +583,12 @@ namespace Villamos
                 }
 
                 // bér kiírás
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Villamos10.mdb";
+                AdatokKulcs = KézKulcs.Lista_Adatok();
+                Adat_Kulcs AdatKulcs = (from a in AdatokKulcs
+                                        where a.Adat1.Contains(MyF.Rövidkód(KilépDolgozószám.Text))
+                                        select a).FirstOrDefault();
 
-                if (File.Exists(hely))
-                {
-
-                    AdatokKulcs = KézKulcs.Lista_Adatok();
-                    Adat_Kulcs AdatKulcs = (from a in AdatokKulcs
-                                            where a.Adat1.Contains(MyF.Rövidkód(KilépDolgozószám.Text))
-                                            select a).FirstOrDefault();
-
-                    if (AdatKulcs != null) Bér.Text = MyF.Dekódolja(AdatKulcs.Adat2);
-                }
+                if (AdatKulcs != null) Bér.Text = MyF.Dekódolja(AdatKulcs.Adat2);
             }
             catch (HibásBevittAdat ex)
             {
@@ -788,7 +782,7 @@ namespace Villamos
             {
                 Hovába.Text = Program.PostásTelephely.Trim();
 
-                AdatokKönyvtárListázás();
+                AdatokKönyvtár = KézKönyvtár.Lista_Adatok();
                 if (AdatokKönyvtár == null) return;
                 Adat_Kiegészítő_Könyvtár AdatKönyvtár = (from a in AdatokKönyvtár
                                                          where a.Név == Program.PostásTelephely.Trim()
@@ -829,7 +823,7 @@ namespace Villamos
             try
             {
                 HonnanKi.Text = Program.PostásTelephely.Trim();
-                AdatokKönyvtárListázás();
+                AdatokKönyvtár = KézKönyvtár.Lista_Adatok();
                 if (AdatokKönyvtár == null) return;
                 Adat_Kiegészítő_Könyvtár AdatKönyvtár = (from a in AdatokKönyvtár
                                                          where a.Név == Program.PostásTelephely.Trim()
@@ -977,7 +971,7 @@ namespace Villamos
                 Telephová.Items.Add("BKV egyéb");
                 Telephonnan.Items.Add("BKV egyéb");
 
-                AdatokKönyvtárListázás();
+                AdatokKönyvtár = KézKönyvtár.Lista_Adatok();
                 if (AdatokKönyvtár == null) return;
                 Adat_Kiegészítő_Könyvtár AdatKönyvtár = (from a in AdatokKönyvtár
                                                          where a.Név == Cmbtelephely.Text.Trim()
@@ -1269,31 +1263,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
-
-
-        #region Listák feltöltése
-
-        private void AdatokKönyvtárListázás()
-        {
-            try
-            {
-                AdatokKönyvtár.Clear();
-                AdatokKönyvtár = KézKönyvtár.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-
         #endregion
     }
 }
