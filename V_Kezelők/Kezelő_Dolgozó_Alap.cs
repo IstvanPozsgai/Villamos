@@ -21,12 +21,16 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Adatok(hely.KönyvSzerk());
         }
 
-        public List<Adat_Dolgozó_Alap> Lista_Adatok(string Telephely)
+        public List<Adat_Dolgozó_Alap> Lista_Adatok(string Telephely, bool Aktív = false)
         {
             FájlBeállítás(Telephely);
             List<Adat_Dolgozó_Alap> Adatok = new List<Adat_Dolgozó_Alap>();
             Adat_Dolgozó_Alap Adat;
-            string szöveg = "SELECT * FROM Dolgozóadatok order by DolgozóNév asc";
+            string szöveg;
+            if (Aktív)
+                szöveg = "SELECT * FROM Dolgozóadatok WHERE Kilépésiidő=#1/1/1900# order by DolgozóNév ";
+            else
+                szöveg = "SELECT * FROM Dolgozóadatok order by DolgozóNév ";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))

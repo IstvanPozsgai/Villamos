@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Villamos.Villamos_Adatszerkezet
 {
@@ -47,9 +43,10 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Oktatóbeosztása { get; private set; }
         public string Egyébszöveg { get; private set; }
         public string Email { get; private set; }
-        public long Oktatás { get; private set; }
 
-        public Adat_OktatásiSegéd(long iDoktatás, string telephely, string oktatásoka, string oktatástárgya, string oktatáshelye, long oktatásidőtartama, string oktató, string oktatóbeosztása, string egyébszöveg, string email, long oktatás)
+
+        public Adat_OktatásiSegéd(long iDoktatás, string telephely, string oktatásoka, string oktatástárgya, string oktatáshelye,
+            long oktatásidőtartama, string oktató, string oktatóbeosztása, string egyébszöveg, string email)
         {
             IDoktatás = iDoktatás;
             Telephely = telephely;
@@ -61,7 +58,6 @@ namespace Villamos.Villamos_Adatszerkezet
             Oktatóbeosztása = oktatóbeosztása;
             Egyébszöveg = egyébszöveg;
             Email = email;
-            Oktatás = oktatás;
         }
     }
 

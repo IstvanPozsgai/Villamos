@@ -133,7 +133,7 @@ namespace Villamos
             this.Label8 = new System.Windows.Forms.Label();
             this.TabPage6 = new System.Windows.Forms.TabPage();
             this.PDF_néző = new PdfiumViewer.PdfViewer();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaOktatás)).BeginInit();
             this.Fülek.SuspendLayout();
@@ -1058,6 +1058,7 @@ namespace Villamos
             this.BizDátum.Name = "BizDátum";
             this.BizDátum.Size = new System.Drawing.Size(107, 26);
             this.BizDátum.TabIndex = 76;
+            this.BizDátum.ValueChanged += new System.EventHandler(this.BizDátum_ValueChanged);
             // 
             // Label1
             // 

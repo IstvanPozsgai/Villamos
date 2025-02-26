@@ -1,11 +1,58 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Oktatásrajelöltek
     {
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_oktatás.mdb";
+        readonly string jelszó = "pázmányt";
+
+        public Kezelő_Oktatásrajelöltek()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Oktatás_ALAP(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Oktatásrajelöltek> Lista_Adatok()
+        {
+            string szöveg = "SELECT * FROM oktatásrajelöltek";
+            List<Adat_Oktatásrajelöltek> Adatok = new List<Adat_Oktatásrajelöltek>();
+            Adat_Oktatásrajelöltek Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Oktatásrajelöltek(
+                                        rekord["HRazonosító"].ToStrTrim(),
+                                        rekord["IDoktatás"].ToÉrt_Long(),
+                                        rekord["mikortól"].ToÉrt_DaTeTime(),
+                                        rekord["Státus"].ToÉrt_Long(),
+                                        rekord["telephely"].ToStrTrim()
+                                        );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
         public List<Adat_Oktatásrajelöltek> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Oktatásrajelöltek> Adatok = new List<Adat_Oktatásrajelöltek>();
@@ -38,87 +85,59 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-    }
 
-
-    public class Kezelő_OktatásiSegéd
-    {
-        public List<Adat_OktatásiSegéd> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public void Rögzítés(List<Adat_Oktatásrajelöltek> Adatok)
         {
-            List<Adat_OktatásiSegéd> Adatok = new List<Adat_OktatásiSegéd>();
-            Adat_OktatásiSegéd Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Oktatásrajelöltek Adat in Adatok)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_OktatásiSegéd(
-                                    rekord["IDoktatás"].ToÉrt_Long(),
-                                    rekord["telephely"].ToStrTrim(),
-                                    rekord["oktatásoka"].ToStrTrim(),
-                                    rekord["Oktatástárgya"].ToStrTrim(),
-                                    rekord["Oktatáshelye"].ToStrTrim(),
-                                    rekord["oktatásidőtartama"].ToÉrt_Long(),
-                                    rekord["Oktató"].ToStrTrim(),
-                                    rekord["Oktatóbeosztása"].ToStrTrim(),
-                                    rekord["Egyébszöveg"].ToStrTrim(),
-                                    rekord["email"].ToStrTrim(),
-                                    rekord["oktatás"].ToÉrt_Long()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
+                    string szöveg = "INSERT INTO oktatásrajelöltek (HRazonosító, IDoktatás, Mikortól,  státus,  telephely)";
+                    szöveg += $" VALUES ('{Adat.HRazonosító}', ";
+                    szöveg += $"{Adat.IDoktatás}, ";
+                    szöveg += $"'{Adat.Mikortól:yyyy.MM.dd}', {Adat.Státus},";
+                    szöveg += $"'{Adat.Telephely}') ";
+                    SzövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
-        public Adat_OktatásiSegéd Egy_Adat(string hely, string jelszó, string szöveg)
+        public void Módosítás(List<Adat_Oktatásrajelöltek> Adatok)
         {
-
-            Adat_OktatásiSegéd Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Oktatásrajelöltek Adat in Adatok)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_OktatásiSegéd(
-                                rekord["IDoktatás"].ToÉrt_Long(),
-                                rekord["telephely"].ToStrTrim(),
-                                rekord["oktatásoka"].ToStrTrim(),
-                                rekord["Oktatástárgya"].ToStrTrim(),
-                                rekord["Oktatáshelye"].ToStrTrim(),
-                                rekord["oktatásidőtartama"].ToÉrt_Long(),
-                                rekord["Oktató"].ToStrTrim(),
-                                rekord["Oktatóbeosztása"].ToStrTrim(),
-                                rekord["Egyébszöveg"].ToStrTrim(),
-                                rekord["email"].ToStrTrim(),
-                                rekord["oktatás"].ToÉrt_Long()
-                                );
-                        }
-                    }
+                    string szöveg = $"UPDATE oktatásrajelöltek SET mikortól='{Adat.Mikortól:yyyy.MM.dd}'";
+                    szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
+                    szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
+                    szöveg += $" AND telephely='{Adat.Telephely}'";
+                    SzövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
-            return Adat;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
-
 }

@@ -786,6 +786,7 @@
     <Compile Include="V_Kezelők\Kezelő_Munka_Rendelés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_OktatásiSegéd.cs" />
     <Compile Include="V_Kezelők\Kezelő_OktatásTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Adat.cs" />

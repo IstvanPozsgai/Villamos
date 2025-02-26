@@ -19,7 +19,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Oktatás_Napló(hely.KönyvSzerk());
         }
 
-
         public List<Adat_Oktatás_Napló> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Oktatás_Napló> Adatok = new List<Adat_Oktatás_Napló>();
