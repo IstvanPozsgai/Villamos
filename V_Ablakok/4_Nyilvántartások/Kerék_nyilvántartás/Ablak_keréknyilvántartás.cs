@@ -1546,7 +1546,7 @@ namespace Villamos
                                                     where a.Azonosító == azonosító
                                                     select a).FirstOrDefault();
                     if (rekordszer != null)
-                        Tábla2.Rows[sor].Cells[4].Value = rekordszer.Adat5.Trim();
+                        Tábla2.Rows[sor].Cells[4].Value = rekordszer.Adatok(5).Trim();
                 }
             }
             catch (HibásBevittAdat ex)
