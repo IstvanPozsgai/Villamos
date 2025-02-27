@@ -47,7 +47,6 @@ namespace Villamos
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.Frissít = new System.Windows.Forms.Button();
             this.SAP_Betölt = new System.Windows.Forms.Button();
-            this.Telepadatok = new System.Windows.Forms.Button();
             this.PályaszámCombo1 = new System.Windows.Forms.ComboBox();
             this.Label1 = new System.Windows.Forms.Label();
             this.Tábla = new System.Windows.Forms.DataGridView();
@@ -60,7 +59,7 @@ namespace Villamos
             this.Osztálylista = new System.Windows.Forms.ListBox();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Súgó = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -89,7 +88,6 @@ namespace Villamos
             this.TabPage1.BackColor = System.Drawing.Color.Salmon;
             this.TabPage1.Controls.Add(this.Frissít);
             this.TabPage1.Controls.Add(this.SAP_Betölt);
-            this.TabPage1.Controls.Add(this.Telepadatok);
             this.TabPage1.Controls.Add(this.PályaszámCombo1);
             this.TabPage1.Controls.Add(this.Label1);
             this.TabPage1.Controls.Add(this.Tábla);
@@ -125,19 +123,6 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.SAP_Betölt, "SAP adatokat betölti");
             this.SAP_Betölt.UseVisualStyleBackColor = true;
             this.SAP_Betölt.Click += new System.EventHandler(this.SAP_Betölt_Click);
-            // 
-            // Telepadatok
-            // 
-            this.Telepadatok.BackgroundImage = global::Villamos.Properties.Resources.Action_configure;
-            this.Telepadatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Telepadatok.Location = new System.Drawing.Point(422, 8);
-            this.Telepadatok.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Telepadatok.Name = "Telepadatok";
-            this.Telepadatok.Size = new System.Drawing.Size(50, 50);
-            this.Telepadatok.TabIndex = 115;
-            this.ToolTip1.SetToolTip(this.Telepadatok, "Frissíti a jármű telephelyi adatait");
-            this.Telepadatok.UseVisualStyleBackColor = true;
-        
             // 
             // PályaszámCombo1
             // 
@@ -371,7 +356,6 @@ namespace Villamos
         internal DataGridView Tábla;
         internal Button Frissít;
         internal Button SAP_Betölt;
-        internal Button Telepadatok;
         internal ListBox Osztálylista;
         internal Button LekérdezFajta;
         internal Button Excel;

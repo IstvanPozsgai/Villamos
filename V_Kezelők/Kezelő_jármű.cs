@@ -370,6 +370,8 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+
+
         public List<Adat_Jármű> Lista_Adatok(string Telephely)
         {
             string szöveg = "SELECT * FROM állománytábla order by azonosító";

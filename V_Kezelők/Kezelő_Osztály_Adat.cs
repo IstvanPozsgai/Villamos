@@ -85,5 +85,60 @@ namespace Villamos.Kezelők
             }
             return Válasz;
         }
+
+
+        public void Módosítás(List<Adat_Osztály_Adat> Adatok)
+        {
+            try
+            {
+                //szöveg = "UPDATE osztályadatok SET ";
+                //for (int ki = 1; ki < AdatokNév.Count; ki++)
+                //{
+                //    if (Ideig[ki] != null)
+                //    {
+                //        if (Ideig[ki].Trim() != "")
+                //            szöveg += $"adat{ki}='{Ideig[ki].Trim()}', ";
+                //    }
+                //}
+                //szöveg = szöveg.Substring(0, szöveg.Length - 2); //az utolsó vesszőt eldobjuk
+                //szöveg += $" WHERE azonosító='{pályaszám.Trim()}'";
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void Rögzítés(List<Adat_Osztály_Adat> Adatok)
+        {
+            try
+            {
+                //szöveg = "INSERT INTO osztályadatok ( azonosító, típus, altípus, telephely, szolgálat ";
+                //for (int k = 1; k <= 40; k++)
+                //    szöveg += ", adat" + k.ToString();
+                //szöveg += ") VALUES (";
+                //szöveg += "'" + pályaszám + "', '?', '?', '?', '?'";
+                //for (int k = 1; k <= 40; k++)
+                //    szöveg += ", '?'";
+                //szöveg += ")";
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

@@ -15,45 +15,13 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Osztály_Név
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
         readonly string jelszó = "kéménybe";
 
 
         public Kezelő_Osztály_Név()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Osztálytábla(hely.KönyvSzerk());
-        }
-
-        public List<Adat_Osztály_Név> Lista_Adat(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Osztály_Név> Adatok = new List<Adat_Osztály_Név>();
-            Adat_Osztály_Név Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Osztály_Név(
-                                     MyF.Érték_INT(rekord["id"].ToStrTrim()),
-                                     rekord["Osztálynév"].ToStrTrim(),
-                                     rekord["Osztálymező"].ToStrTrim(),
-                                     rekord["Használatban"].ToÉrt_Bool()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
         }
 
         public List<Adat_Osztály_Név> Lista_Adat()

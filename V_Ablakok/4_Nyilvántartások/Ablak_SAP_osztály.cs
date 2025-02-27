@@ -7,7 +7,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -17,7 +16,7 @@ namespace Villamos
 
     public partial class Ablak_SAP_osztály
     {
-
+        #region Kezelő és lista
         readonly Kezelő_Osztály_Adat KézOsztály = new Kezelő_Osztály_Adat();
         readonly Kezelő_Osztály_Név KézNév = new Kezelő_Osztály_Név();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
@@ -26,6 +25,10 @@ namespace Villamos
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_Osztály_Adat> AdatokOsztály = new List<Adat_Osztály_Adat>();
         List<Adat_Osztály_Név> AdatokNév = new List<Adat_Osztály_Név>();
+        #endregion
+
+
+        #region Alap
         public Ablak_SAP_osztály()
         {
             InitializeComponent();
@@ -39,7 +42,7 @@ namespace Villamos
             Pályaszámfeltöltés();
 
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            ListákFeltöltése();
+            AdatokNév = KézNév.Lista_Adat();
             Osztályfeltöltés();
         }
 
@@ -48,13 +51,12 @@ namespace Villamos
 
         }
 
-        #region Alap
         private void Jogosultságkiosztás()
         {
             try
             {
                 SAP_Betölt.Visible = false;
-                Telepadatok.Visible = false;
+
                 int melyikelem = 189;
                 // módosítás 1
                 if (MyF.Vanjoga(melyikelem, 1))
@@ -65,7 +67,6 @@ namespace Villamos
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
-                    Telepadatok.Visible = true;
                 }
                 // módosítás 3
                 if (MyF.Vanjoga(melyikelem, 3))
@@ -83,7 +84,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Súgó_Click(object sender, EventArgs e)
         {
@@ -103,12 +103,10 @@ namespace Villamos
             }
         }
 
-
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
-
 
         private void Fülekkitöltése()
         {
@@ -135,7 +133,6 @@ namespace Villamos
                     }
             }
         }
-
 
         private void Lapfülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -175,21 +172,18 @@ namespace Villamos
         #endregion
 
 
-
         #region SAP osztály adatok
         private void Pályaszámfeltöltés()
         {
             try
             {
-                string hely, jelszó, szöveg;
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
-                jelszó = "pozsgaii";
-                szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
+                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).ToList();
 
                 PályaszámCombo1.Items.Clear();
-                PályaszámCombo1.BeginUpdate();
-                PályaszámCombo1.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                PályaszámCombo1.EndUpdate();
+                PályaszámCombo1.Items.Add("");
+
+                foreach (Adat_Jármű Elem in AdatokJármű)
+                    PályaszámCombo1.Items.Add(Elem.Azonosító);
             }
             catch (HibásBevittAdat ex)
             {
@@ -202,19 +196,17 @@ namespace Villamos
             }
         }
 
-
         private void Frissít_Click(object sender, EventArgs e)
         {
             Tábla_író();
         }
-
 
         private void Tábla_író()
         {
             try
             {
                 if (PályaszámCombo1.Text.Trim() == "") return;
-                ListákFeltöltése();
+                AdatokNév = KézNév.Lista_Adat();
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -228,7 +220,7 @@ namespace Villamos
                 Tábla.Columns[1].HeaderText = "Osztály érték";
                 Tábla.Columns[1].Width = 400;
 
-
+                AdatokOsztály = KézOsztály.Lista_Adat();
                 Adat_Osztály_Adat Elem = (from a in AdatokOsztály
                                           where a.Azonosító == PályaszámCombo1.Text.Trim()
                                           select a).FirstOrDefault();
@@ -268,7 +260,6 @@ namespace Villamos
             }
         }
 
-
         private void SAP_Betölt_Click(object sender, EventArgs e)
         {
             SAP_Betöltés();
@@ -294,17 +285,8 @@ namespace Villamos
                 else
                     return;
 
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                string jelszó = "kéménybe";
-
-                string szöveg = "SELECT * FROM osztálytábla ORDER BY id";
-                Kezelő_Osztály_Név KézONév = new Kezelő_Osztály_Név();
-                List<Adat_Osztály_Név> AdatokNév = KézONév.Lista_Adat();
-
-
-                Kezelő_Osztály_Adat KézAdat = new Kezelő_Osztály_Adat();
-                List<Adat_Osztály_Adat> AdatokAdat = KézAdat.Lista_Adat();
+                List<Adat_Osztály_Név> AdatokNév = KézNév.Lista_Adat();
+                List<Adat_Osztály_Adat> AdatokAdat = KézOsztály.Lista_Adat();
 
                 Holtart.Be();
                 // beolvassuk a szövegfájlt
@@ -313,33 +295,33 @@ namespace Villamos
 
                 //Fejléc adatok
                 string[] Soradatok = lines[3].ToString().Split('\t');
-                string[] Fejléc = new string[Soradatok.Length + 1];
+                List<string> Fejléc = new List<string>();
                 int fejléchossz = Soradatok.Length + 1;
                 int[] Sorszám = new int[Soradatok.Length + 1];
-                Fejléc[0] = "Megnevezés"; //Első elem
+                Fejléc.Add("Megnevezés"); //Első elem
 
                 for (int i = 0; i < Soradatok.Length; i++)
                 {
-                    if (Soradatok[i].Trim() == "Megnevezés")
-                        Sorszám[0] = i;
+                    if (Soradatok[i].Trim() == "Megnevezés") Sorszám[0] = i;
 
                     int Elem = (from a in AdatokNév
                                 where a.Osztálynév.Trim() == Soradatok[i].Trim()
                                 select a.Id).FirstOrDefault();
                     if (Elem != 0)
                     {
-
                         Fejléc[Elem] = Soradatok[i].Trim();
                         Sorszám[i] = Elem; //megadja , hogy az elemet hova rakjuk
                     }
                 }
-                List<string> SzövegGy = new List<string>();
+
+                List<Adat_Osztály_Adat> AdatokR = new List<Adat_Osztály_Adat>();
+                List<Adat_Osztály_Adat> AdatokM = new List<Adat_Osztály_Adat>();
                 for (int i = 5; i < lines.Length; i++)  // lines
                 {
 
                     Soradatok = lines[i].ToString().Split('\t');
 
-                    string[] Ideig = new string[fejléchossz];
+                    List<string> Ideig = new List<string>();
 
                     // Feldaraboljuk a sort elemekre és beletesszük a megfelelő helyre
                     for (int j = 0; j < Soradatok.Length; j++)
@@ -350,43 +332,27 @@ namespace Villamos
                     pályaszám = MyF.Szöveg_Tisztítás(Soradatok[Sorszám[0]], 1, 4);
 
                     // az új azonosító
-                    szöveg = "SELECT * FROM osztályadatok where azonosító='" + pályaszám.ToString().Trim() + "'";
                     Adat_Osztály_Adat Elem = (from a in AdatokAdat
                                               where a.Azonosító == pályaszám.ToStrTrim()
                                               select a).FirstOrDefault();
+
+                    Adat_Osztály_Adat Adat = new Adat_Osztály_Adat(
+                                        pályaszám,
+                                        Ideig,
+                                        Fejléc);
                     if (Elem == null)
-                    {
-                        szöveg = "INSERT INTO osztályadatok ( azonosító, típus, altípus, telephely, szolgálat ";
-                        for (int k = 1; k <= 40; k++)
-                            szöveg += ", adat" + k.ToString();
-                        szöveg += ") VALUES (";
-                        szöveg += "'" + pályaszám + "', '?', '?', '?', '?'";
-                        for (int k = 1; k <= 40; k++)
-                            szöveg += ", '?'";
-                        szöveg += ")";
-                    }
+                        AdatokR.Add(Adat);
                     else
-                    {
-                        szöveg = "UPDATE osztályadatok SET ";
-                        for (int ki = 1; ki < AdatokNév.Count; ki++)
-                        {
-                            if (Ideig[ki] != null)
-                            {
-                                if (Ideig[ki].Trim() != "")
-                                    szöveg += $"adat{ki}='{Ideig[ki].Trim()}', ";
-                            }
-                        }
-                        szöveg = szöveg.Substring(0, szöveg.Length - 2); //az utolsó vesszőt eldobjuk
-                        szöveg += $" WHERE azonosító='{pályaszám.Trim()}'";
-                    }
-                    SzövegGy.Add(szöveg);
+                        AdatokM.Add(Adat);
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+
+                if (AdatokR.Count > 0) KézOsztály.Rögzítés(AdatokR);
+                if (AdatokM.Count > 0) KézOsztály.Rögzítés(AdatokM);
                 Holtart.Ki();
                 // kitöröljük a betöltött fájlt
                 Delete(fájlexc);
-                ListákFeltöltése();
+                AdatokNév = KézNév.Lista_Adat();
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -399,7 +365,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void PályaszámCombo1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
@@ -422,7 +387,6 @@ namespace Villamos
             }
         }
         #endregion
-
 
 
         #region Lekérdezések
@@ -452,14 +416,13 @@ namespace Villamos
             }
         }
 
-
         private void LekérdezTelep_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Osztálylista.SelectedItems.Count < 1) return;
                 if (Osztálylista.Items.Count < 0) return;
-                ListákFeltöltése();
+                AdatokNév = KézNév.Lista_Adat();
 
 
                 string honnan = Osztálylista.SelectedItem.ToStrTrim();
@@ -525,7 +488,7 @@ namespace Villamos
             try
             {
                 if (Osztálylista.SelectedItems.Count < 1) return;
-                ListákFeltöltése();
+                AdatokNév = KézNév.Lista_Adat();
 
                 string honnan = Osztálylista.SelectedItem.ToStrTrim();
                 string helyhiba = (from a in AdatokNév
@@ -583,7 +546,7 @@ namespace Villamos
             try
             {
                 if (Osztálylista.SelectedItems.Count < 1) return;
-                ListákFeltöltése();
+                AdatokNév = KézNév.Lista_Adat();
 
 
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
@@ -669,55 +632,6 @@ namespace Villamos
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-
-        #region Listafeltöltések
-        private void ListákFeltöltése()
-        {
-            OsztályAdatFeltöltés();
-            AdatokNév = KézNév.Lista_Adat();
-        }
-
-        private void OsztályAdatFeltöltés()
-        {
-            try
-            {
-                AdatokOsztály.Clear();
-                AdatokOsztály = KézOsztály.Lista_Adat();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-
-        private void AdatokJárműLista()
-        {
-            try
-            {
-                AdatokJármű.Clear();
-                string hely = Application.StartupPath + @"\főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla ORDER BY azonosító";
-                AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
