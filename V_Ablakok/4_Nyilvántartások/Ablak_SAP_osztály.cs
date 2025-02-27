@@ -223,9 +223,9 @@ namespace Villamos
                 Tábla.ColumnCount = 2;
 
                 // fejléc elkészítése
-                Tábla.Columns[0].HeaderText = "Sorszám";
+                Tábla.Columns[0].HeaderText = "Osztály név";
                 Tábla.Columns[0].Width = 400;
-                Tábla.Columns[1].HeaderText = "Sorszám";
+                Tábla.Columns[1].HeaderText = "Osztály érték";
                 Tábla.Columns[1].Width = 400;
 
 
@@ -238,65 +238,20 @@ namespace Villamos
                     Tábla.Visible = true;
                     return;
                 }
-                Tábla.RowCount = 40;
-                for (int i = 1; i < Tábla.RowCount + 1; i++)
+
+                Tábla.RowCount = Elem.Adatok.Count;
+                for (int i = 0; i < Elem.Adatok.Count; i++)
                 {
                     string Név = (from a in AdatokNév
-                                  where a.Osztálymező.Trim() == $"Adat{i}"
+                                  where a.Osztálymező.Trim() == Elem.Mezőnév[i]
                                   select a.Osztálynév.Trim()).FirstOrDefault();
                     if (Név != null)
-                        Tábla.Rows[i - 1].Cells[0].Value = Név;
+                        Tábla.Rows[i].Cells[0].Value = Név;
+                    else
+                        Tábla.Rows[i].Cells[0].Value = Elem.Mezőnév[i];
 
-                    string Érték = "";
+                    Tábla.Rows[i].Cells[1].Value = Elem.Adatok[i];
 
-                    switch ($"Adat{i}")
-                    {
-                        case "Adat1": Érték = Elem.Adat1.Trim(); break;
-                        case "Adat2": Érték = Elem.Adat2.Trim(); break;
-                        case "Adat3": Érték = Elem.Adat3.Trim(); break;
-                        case "Adat4": Érték = Elem.Adat4.Trim(); break;
-                        case "Adat5": Érték = Elem.Adat5.Trim(); break;
-                        case "Adat6": Érték = Elem.Adat6.Trim(); break;
-                        case "Adat7": Érték = Elem.Adat7.Trim(); break;
-                        case "Adat8": Érték = Elem.Adat8.Trim(); break;
-                        case "Adat9": Érték = Elem.Adat9.Trim(); break;
-                        case "Adat10": Érték = Elem.Adat10.Trim(); break;
-
-                        case "Adat11": Érték = Elem.Adat11.Trim(); break;
-                        case "Adat12": Érték = Elem.Adat12.Trim(); break;
-                        case "Adat13": Érték = Elem.Adat13.Trim(); break;
-                        case "Adat14": Érték = Elem.Adat14.Trim(); break;
-                        case "Adat15": Érték = Elem.Adat15.Trim(); break;
-                        case "Adat16": Érték = Elem.Adat16.Trim(); break;
-                        case "Adat17": Érték = Elem.Adat17.Trim(); break;
-                        case "Adat18": Érték = Elem.Adat18.Trim(); break;
-                        case "Adat19": Érték = Elem.Adat19.Trim(); break;
-                        case "Adat20": Érték = Elem.Adat20.Trim(); break;
-
-                        case "Adat21": Érték = Elem.Adat21.Trim(); break;
-                        case "Adat22": Érték = Elem.Adat22.Trim(); break;
-                        case "Adat23": Érték = Elem.Adat23.Trim(); break;
-                        case "Adat24": Érték = Elem.Adat24.Trim(); break;
-                        case "Adat25": Érték = Elem.Adat25.Trim(); break;
-                        case "Adat26": Érték = Elem.Adat26.Trim(); break;
-                        case "Adat27": Érték = Elem.Adat27.Trim(); break;
-                        case "Adat28": Érték = Elem.Adat28.Trim(); break;
-                        case "Adat29": Érték = Elem.Adat29.Trim(); break;
-                        case "Adat30": Érték = Elem.Adat30.Trim(); break;
-
-                        case "Adat31": Érték = Elem.Adat31.Trim(); break;
-                        case "Adat32": Érték = Elem.Adat32.Trim(); break;
-                        case "Adat33": Érték = Elem.Adat33.Trim(); break;
-                        case "Adat34": Érték = Elem.Adat34.Trim(); break;
-                        case "Adat35": Érték = Elem.Adat35.Trim(); break;
-                        case "Adat36": Érték = Elem.Adat36.Trim(); break;
-                        case "Adat37": Érték = Elem.Adat37.Trim(); break;
-                        case "Adat38": Érték = Elem.Adat38.Trim(); break;
-                        case "Adat39": Érték = Elem.Adat39.Trim(); break;
-                        case "Adat40": Érték = Elem.Adat40.Trim(); break;
-
-                    }
-                    if (Érték != null) Tábla.Rows[i - 1].Cells[1].Value = Érték;
                 }
                 Tábla.Refresh();
                 Tábla.Visible = true;
@@ -317,9 +272,7 @@ namespace Villamos
         private void SAP_Betölt_Click(object sender, EventArgs e)
         {
             SAP_Betöltés();
-            Telepadatok_Ellen();
         }
-
 
         private void SAP_Betöltés()
         {
@@ -447,74 +400,6 @@ namespace Villamos
             }
         }
 
-
-        private void Telepadatok_Click(object sender, EventArgs e)
-        {
-            Telepadatok_Ellen();
-        }
-
-
-        private void Telepadatok_Ellen()
-        {
-            try
-            {
-                ListákFeltöltése();
-                AdatokJárműLista();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM szolgálattelepeitábla";
-
-                Kezelő_Kiegészítő_Szolgálattelepei KézKieg = new Kezelő_Kiegészítő_Szolgálattelepei();
-                List<Adat_Kiegészítő_Szolgálattelepei> AdatokKieg = KézKieg.Lista_Adatok(hely, jelszó, szöveg);
-
-                Holtart.Be(AdatokOsztály.Count + 1);
-                Cursor = Cursors.WaitCursor; // homok óra kezdete
-
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                jelszó = "kéménybe";
-
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Osztály_Adat rekord in AdatokOsztály)
-                {
-                    Adat_Jármű Kocsi = (from a in AdatokJármű
-                                        where a.Azonosító == rekord.Azonosító
-                                        select a).FirstOrDefault();
-
-                    if (Kocsi != null)
-                    {
-                        //leellnőrizzük, hogy jó helyen és típus alatt szerepel-
-                        if (Kocsi.Típus != rekord.Típus || Kocsi.Üzem != rekord.Telephely)
-                        {
-
-                            string szolgálatnév = (from a in AdatokKieg
-                                                   where a.Telephelynév == Kocsi.Üzem
-                                                   select a.Szolgálatnév).FirstOrDefault() ?? "_";
-
-                            szöveg = $"UPDATE osztályadatok SET típus='{Kocsi.Típus.Replace("\0", "_") ?? "_"}', altípus='{Kocsi.Valóstípus2 ?? "_"}', telephely='{Kocsi.Üzem ?? "_"}', szolgálat='{szolgálatnév ?? "_"}' ";
-                            szöveg += $" WHERE azonosító='{rekord.Azonosító}'";
-                            SzövegGy.Add(szöveg);
-                        }
-
-                    }
-                    Holtart.Lép();
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-
-                Holtart.Ki();
-                Cursor = Cursors.Default; // homokóra vége
-                MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void PályaszámCombo1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
@@ -722,7 +607,7 @@ namespace Villamos
                 if (helyhiba.Trim() == "") return;
 
                 List<Adat_Osztály_Adat> Adatok = (from a in AdatokOsztály
-                                                  where a.AlTípus != "?" && a.GetType().GetProperty(helyhiba).GetValue(a).ToStrTrim() != "?"
+                                                  where a.GetType().GetProperty(helyhiba).GetValue(a).ToStrTrim() != "?"
                                                   select a).ToList();
 
                 Tábla1.Rows.Clear();
@@ -745,8 +630,8 @@ namespace Villamos
                     Tábla1.RowCount++;
                     int i = Tábla1.RowCount - 1;
                     Tábla1.Rows[i].Cells[0].Value = rekord.Azonosító;
-                    Tábla1.Rows[i].Cells[1].Value = rekord.Telephely;
-                    Tábla1.Rows[i].Cells[2].Value = rekord.AlTípus;
+                    //Tábla1.Rows[i].Cells[1].Value = rekord.Telephely;
+                    //Tábla1.Rows[i].Cells[2].Value = rekord.AlTípus;
                     Tábla1.Rows[i].Cells[3].Value = rekord.GetType().GetProperty(helyhiba).GetValue(rekord);
                 }
 
@@ -823,7 +708,7 @@ namespace Villamos
                 if (!System.IO.File.Exists(hely)) return;
                 string jelszó = "kéménybe";
                 string szöveg = "select * from osztályadatok";
-                AdatokOsztály = KézOsztály.Lista_Adat(hely, jelszó, szöveg);
+                AdatokOsztály = KézOsztály.Lista_Adat();
             }
             catch (HibásBevittAdat ex)
             {

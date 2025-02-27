@@ -757,6 +757,11 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Osztály_Új_Click(object sender, EventArgs e)
+        {
+            KézOsztály.Rögzítés("Adat55");
+        }
         #endregion
 
 
@@ -1817,6 +1822,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
 
 

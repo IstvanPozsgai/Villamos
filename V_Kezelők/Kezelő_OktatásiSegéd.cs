@@ -46,8 +46,7 @@ namespace Villamos.Kezelők
                                     rekord["Oktató"].ToStrTrim(),
                                     rekord["Oktatóbeosztása"].ToStrTrim(),
                                     rekord["Egyébszöveg"].ToStrTrim(),
-                                    rekord["email"].ToStrTrim(),
-                                    rekord["oktatás"].ToÉrt_Long()
+                                    rekord["email"].ToStrTrim()
                                     );
                                 Adatok.Add(Adat);
                             }

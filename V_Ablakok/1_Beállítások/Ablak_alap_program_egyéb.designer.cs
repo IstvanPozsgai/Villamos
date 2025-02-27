@@ -72,6 +72,7 @@ namespace Villamos
             this.SAPTöröl = new System.Windows.Forms.Button();
             this.SAPRögzít = new System.Windows.Forms.Button();
             this.TabPage2 = new System.Windows.Forms.TabPage();
+            this.Osztály_Új = new System.Windows.Forms.Button();
             this.Osztályfrissít = new System.Windows.Forms.Button();
             this.OsztályRögzít = new System.Windows.Forms.Button();
             this.OsztályExcel = new System.Windows.Forms.Button();
@@ -411,6 +412,7 @@ namespace Villamos
             // TabPage2
             // 
             this.TabPage2.BackColor = System.Drawing.Color.SandyBrown;
+            this.TabPage2.Controls.Add(this.Osztály_Új);
             this.TabPage2.Controls.Add(this.Osztályfrissít);
             this.TabPage2.Controls.Add(this.OsztályRögzít);
             this.TabPage2.Controls.Add(this.OsztályExcel);
@@ -428,6 +430,19 @@ namespace Villamos
             this.TabPage2.Size = new System.Drawing.Size(1484, 356);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Osztály elemek kezelése";
+            // 
+            // Osztály_Új
+            // 
+            this.Osztály_Új.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Osztály_Új.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
+            this.Osztály_Új.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Osztály_Új.Location = new System.Drawing.Point(762, 75);
+            this.Osztály_Új.Name = "Osztály_Új";
+            this.Osztály_Új.Size = new System.Drawing.Size(45, 45);
+            this.Osztály_Új.TabIndex = 124;
+            this.toolTip1.SetToolTip(this.Osztály_Új, "Új adathoz a beviteli mezőket törli");
+            this.Osztály_Új.UseVisualStyleBackColor = true;
+            this.Osztály_Új.Click += new System.EventHandler(this.Osztály_Új_Click);
             // 
             // Osztályfrissít
             // 
@@ -447,7 +462,7 @@ namespace Villamos
             this.OsztályRögzít.BackColor = System.Drawing.Color.LightSeaGreen;
             this.OsztályRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.OsztályRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.OsztályRögzít.Location = new System.Drawing.Point(813, 13);
+            this.OsztályRögzít.Location = new System.Drawing.Point(762, 12);
             this.OsztályRögzít.Name = "OsztályRögzít";
             this.OsztályRögzít.Size = new System.Drawing.Size(45, 45);
             this.OsztályRögzít.TabIndex = 121;
@@ -1543,5 +1558,6 @@ namespace Villamos
         internal CheckBox Szűr_Érvényes;
         internal Button VégeÁrRögzítés;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal Button Osztály_Új;
     }                    
 }
