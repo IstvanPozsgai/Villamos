@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -44,7 +45,7 @@ namespace Villamos.Kezelők
                                      MyF.Érték_INT(rekord["id"].ToStrTrim()),
                                      rekord["Osztálynév"].ToStrTrim(),
                                      rekord["Osztálymező"].ToStrTrim(),
-                                     rekord["Használatban"].ToStrTrim()
+                                     rekord["Használatban"].ToÉrt_Bool()
                                     );
                                 Adatok.Add(Adat);
                             }
@@ -77,7 +78,7 @@ namespace Villamos.Kezelők
                                      MyF.Érték_INT(rekord["id"].ToStrTrim()),
                                      rekord["Osztálynév"].ToStrTrim(),
                                      rekord["Osztálymező"].ToStrTrim(),
-                                     rekord["Használatban"].ToStrTrim()
+                                     rekord["Használatban"].ToÉrt_Bool()
                                     );
                                 Adatok.Add(Adat);
                             }
@@ -110,14 +111,52 @@ namespace Villamos.Kezelők
             }
         }
 
-
-
-        public void Rögzítés(string név)
+        private void Rögzítés(Adat_Osztály_Név Adat)
         {
             try
             {
+                string szöveg = "INSERT INTO osztálytábla (id, osztálynév, osztálymező, használatban) VALUES (";
+                szöveg += $"{Adat.Id}, ";
+                szöveg += $"'{Adat.Osztálynév}', ";
+                szöveg += $"'{Adat.Osztálymező}', ";
+                szöveg += $"{Adat.Használatban}) ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void ÚjMező()
+        {
+            try
+            {
+                //Megkeressük, hogy melyik az utolsó Mezőnév
+                List<Adat_Osztály_Név> Adatok = Lista_Adat().OrderBy(a => a.Osztálymező).ToList();
+                int sorszám = 0;
+                foreach (Adat_Osztály_Név elem in Adatok)
+                    if (elem.Osztálymező.Substring(4).ToÉrt_Int() > sorszám) sorszám = elem.Osztálymező.Substring(4).ToÉrt_Int();
+
+                sorszám++;
+
+                //Létrehozzuk az új mezőt
+                string Mezőnév = $"Adat{sorszám}";
                 AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
-                ADAT.AB_Új_Oszlop(hely, jelszó, "osztálytábla", név, "char (50)");
+                ADAT.AB_Új_Oszlop(hely, jelszó, "osztályadatok", Mezőnév, "char (50)");
+
+                //Rögzítjük a mezőnevet az Osztálytáblában
+                Adat_Osztály_Név Adat = new Adat_Osztály_Név(
+                                    Sorszám(),
+                                    "_",
+                                    Mezőnév,
+                                    false);
+                Rögzítés(Adat);
 
             }
             catch (HibásBevittAdat ex)
@@ -129,6 +168,27 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private int Sorszám()
+        {
+            int Válasz = 1;
+            try
+            {
+                List<Adat_Osztály_Név> Adatok = Lista_Adat();
+                if (Adatok != null) Válasz = Adatok.Max(a => a.Id) + 1;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Osztály_Adat> Lista_Adat()
         {
-            string szöveg = "select * from osztályadatok";
+            string szöveg = "select * from osztályadatok ORDER BY azonosító";
             List<Adat_Osztály_Adat> Adatok = new List<Adat_Osztály_Adat>();
             Adat_Osztály_Adat Adat;
 
@@ -60,6 +61,29 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
+        }
+
+        public string Érték(Adat_Osztály_Adat rekord, string Mezőnév)
+        {
+            string Válasz = "?";
+            try
+            {
+                for (int i = 0; i < rekord.Mezőnév.Count; i++)
+                {
+                    if (rekord.Mezőnév[i].ToStrTrim() == Mezőnév)
+                        Válasz = rekord.Adatok[i].ToStrTrim();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
         }
     }
 }

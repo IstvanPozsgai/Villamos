@@ -628,7 +628,7 @@ namespace Villamos
                 Adat_Osztály_Név ADAT = new Adat_Osztály_Név(ID.Text.ToÉrt_Int(),
                                                              Osztálynév.Text,
                                                              Osztálymező.Text,
-                                                             Használatban.Checked ? "1" : "0");
+                                                             Használatban.Checked);
 
                 KézOsztály.Módosítás(ADAT);
                 Osztálytáblaíró();
@@ -697,7 +697,7 @@ namespace Villamos
                     TáblaOsztály.Rows[i].Cells[1].Value = rekord.Osztálynév;
                     TáblaOsztály.Rows[i].Cells[2].Value = rekord.Osztálymező;
 
-                    if ((rekord.Használatban).ToString() == "1")
+                    if (rekord.Használatban)
                         TáblaOsztály.Rows[i].Cells[3].Value = "Igen";
                     else
                         TáblaOsztály.Rows[i].Cells[3].Value = "Nem";
@@ -760,7 +760,21 @@ namespace Villamos
 
         private void Osztály_Új_Click(object sender, EventArgs e)
         {
-            KézOsztály.Rögzítés("Adat55");
+            try
+            {
+                KézOsztály.ÚjMező();
+                Osztálytáblaíró();
+                MessageBox.Show("Az új mező létrejött.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
 

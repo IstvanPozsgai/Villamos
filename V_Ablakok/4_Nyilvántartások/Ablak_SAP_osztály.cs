@@ -300,11 +300,11 @@ namespace Villamos
 
                 string szöveg = "SELECT * FROM osztálytábla ORDER BY id";
                 Kezelő_Osztály_Név KézONév = new Kezelő_Osztály_Név();
-                List<Adat_Osztály_Név> AdatokNév = KézONév.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Osztály_Név> AdatokNév = KézONév.Lista_Adat();
 
-                szöveg = "SELECT * FROM osztályadatok";
+
                 Kezelő_Osztály_Adat KézAdat = new Kezelő_Osztály_Adat();
-                List<Adat_Osztály_Adat> AdatokAdat = KézAdat.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Osztály_Adat> AdatokAdat = KézAdat.Lista_Adat();
 
                 Holtart.Be();
                 // beolvassuk a szövegfájlt
@@ -433,7 +433,7 @@ namespace Villamos
                 Osztálylista.Items.Clear();
                 Osztálylista.BeginUpdate();
                 List<Adat_Osztály_Név> Adatok = (from a in AdatokNév
-                                                 where a.Használatban == "1"
+                                                 where a.Használatban == true
                                                  select a).ToList();
 
                 foreach (Adat_Osztály_Név rekord in Adatok)
@@ -462,10 +462,6 @@ namespace Villamos
                 ListákFeltöltése();
 
 
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-                string jelszó = "kéménybe";
-
                 string honnan = Osztálylista.SelectedItem.ToStrTrim();
                 string helyhiba = (from a in AdatokNév
                                    where a.Osztálynév == honnan
@@ -478,9 +474,9 @@ namespace Villamos
                 szöveg += " Having ((altípus <> '?' )";
                 szöveg += " And (" + helyhiba + " <> '?' ))";
                 szöveg += " order by altípus";
+                List<Adat_Osztály_Adat> AdatokÖ = KézOsztály.Lista_Adat();
 
-                Kezelő_Osztály_Adat_Szum KézSzum = new Kezelő_Osztály_Adat_Szum();
-                List<Adat_Osztály_Adat_Szum> Adatok = KézSzum.Lista_Adat(hely, jelszó, szöveg, helyhiba);
+                List<Adat_Osztály_Adat> Adatok = (AdatokÖ);
 
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
@@ -498,14 +494,14 @@ namespace Villamos
                 Tábla1.Columns[3].HeaderText = "Darabszám";
                 Tábla1.Columns[3].Width = 100;
 
-                foreach (Adat_Osztály_Adat_Szum rekord in Adatok)
+                foreach (Adat_Osztály_Adat rekord in Adatok)
                 {
                     Tábla1.RowCount++;
                     int i = Tábla1.RowCount - 1;
-                    Tábla1.Rows[i].Cells[0].Value = rekord.Telephely;
-                    Tábla1.Rows[i].Cells[1].Value = rekord.AlTípus;
-                    Tábla1.Rows[i].Cells[2].Value = rekord.Adat;
-                    Tábla1.Rows[i].Cells[3].Value = rekord.Összeg;
+                    //Tábla1.Rows[i].Cells[0].Value = rekord.Telephely;
+                    //Tábla1.Rows[i].Cells[1].Value = rekord.AlTípus;
+                    //Tábla1.Rows[i].Cells[2].Value = rekord.Adat;
+                    //Tábla1.Rows[i].Cells[3].Value = rekord.Összeg;
                 }
 
                 Tábla1.Refresh();
@@ -530,12 +526,6 @@ namespace Villamos
             {
                 if (Osztálylista.SelectedItems.Count < 1) return;
                 ListákFeltöltése();
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-                string jelszó = "kéménybe";
-
-
 
                 string honnan = Osztálylista.SelectedItem.ToStrTrim();
                 string helyhiba = (from a in AdatokNév
@@ -563,16 +553,16 @@ namespace Villamos
                 Tábla1.Columns[1].HeaderText = "Darabszám";
                 Tábla1.Columns[1].Width = 140;
 
-                Kezelő_Osztály_Adat_Szum KézSzum = new Kezelő_Osztály_Adat_Szum();
-                List<Adat_Osztály_Adat_Szum> Adatok = KézSzum.Lista_Adat1(hely, jelszó, szöveg, helyhiba);
+                //Kezelő_Osztály_Adat_Szum KézSzum = new Kezelő_Osztály_Adat_Szum();
+                //List<Adat_Osztály_Adat_Szum> Adatok = KézSzum.Lista_Adat1(hely, jelszó, szöveg, helyhiba);
 
-                foreach (Adat_Osztály_Adat_Szum rekord in Adatok)
-                {
-                    Tábla1.RowCount++;
-                    int i = Tábla1.RowCount - 1;
-                    Tábla1.Rows[i].Cells[0].Value = rekord.Adat;
-                    Tábla1.Rows[i].Cells[1].Value = rekord.Összeg;
-                }
+                //foreach (Adat_Osztály_Adat_Szum rekord in Adatok)
+                //{
+                //    Tábla1.RowCount++;
+                //    int i = Tábla1.RowCount - 1;
+                //    Tábla1.Rows[i].Cells[0].Value = rekord.Adat;
+                //    Tábla1.Rows[i].Cells[1].Value = rekord.Összeg;
+                //}
                 Tábla1.Refresh();
                 Tábla1.Visible = true;
             }
@@ -696,7 +686,7 @@ namespace Villamos
         private void ListákFeltöltése()
         {
             OsztályAdatFeltöltés();
-            OsztályNévFeltöltés();
+            AdatokNév = KézNév.Lista_Adat();
         }
 
         private void OsztályAdatFeltöltés()
@@ -704,10 +694,6 @@ namespace Villamos
             try
             {
                 AdatokOsztály.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-                string jelszó = "kéménybe";
-                string szöveg = "select * from osztályadatok";
                 AdatokOsztály = KézOsztály.Lista_Adat();
             }
             catch (HibásBevittAdat ex)
@@ -721,28 +707,7 @@ namespace Villamos
             }
         }
 
-        private void OsztályNévFeltöltés()
-        {
-            try
-            {
-                AdatokNév.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-                string jelszó = "kéménybe";
-                string szöveg = "select * from osztálytábla";
 
-                AdatokNév = KézNév.Lista_Adat(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void AdatokJárműLista()
         {

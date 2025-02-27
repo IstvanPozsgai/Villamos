@@ -57,7 +57,6 @@ namespace Villamos.Adatszerkezet
             }
         }
 
-
         public void AB_Új_Oszlop(string hely, string jelszó, string Tábla, string Oszlop, string Típus)
         {
             try

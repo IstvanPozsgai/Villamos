@@ -433,7 +433,6 @@ namespace Villamos
             // 
             // Osztály_Új
             // 
-            this.Osztály_Új.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Osztály_Új.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
             this.Osztály_Új.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Osztály_Új.Location = new System.Drawing.Point(762, 75);
@@ -513,6 +512,7 @@ namespace Villamos
             // 
             // Osztálymező
             // 
+            this.Osztálymező.Enabled = false;
             this.Osztálymező.Location = new System.Drawing.Point(152, 75);
             this.Osztálymező.MaxLength = 50;
             this.Osztálymező.Name = "Osztálymező";
@@ -567,6 +567,7 @@ namespace Villamos
             this.TáblaOsztály.EnableHeadersVisualStyles = false;
             this.TáblaOsztály.Location = new System.Drawing.Point(6, 144);
             this.TáblaOsztály.Name = "TáblaOsztály";
+            this.TáblaOsztály.ReadOnly = true;
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);

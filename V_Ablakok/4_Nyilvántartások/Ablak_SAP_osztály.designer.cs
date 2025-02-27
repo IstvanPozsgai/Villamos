@@ -137,7 +137,7 @@ namespace Villamos
             this.Telepadatok.TabIndex = 115;
             this.ToolTip1.SetToolTip(this.Telepadatok, "Frissíti a jármű telephelyi adatait");
             this.Telepadatok.UseVisualStyleBackColor = true;
-            this.Telepadatok.Click += new System.EventHandler(this.Telepadatok_Click);
+        
             // 
             // PályaszámCombo1
             // 

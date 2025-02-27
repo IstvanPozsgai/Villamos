@@ -305,10 +305,7 @@ namespace Villamos
                 AdatokSzerElő = KézSzerElő.Lista_Adatok(hely, jelszó, szöveg);
 
                 //Csatolhat
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                jelszó = "kéménybe";
-                szöveg = "SELECT * FROM osztályadatok ORDER BY azonosító";
-                AdatokOszt = KézOszt.Lista_Adat(hely, jelszó, szöveg);
+                AdatokOszt = KézOszt.Lista_Adat();
 
                 //    Idegen 
                 hely = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
@@ -435,7 +432,7 @@ namespace Villamos
                                                  where a.Azonosító == rekord.Azonosító
                                                  select a).FirstOrDefault();
                     if (EgyOszt != null)
-                        Tábla.Rows[i].Cells[29].Value = EgyOszt.Adat5.Trim();
+                        Tábla.Rows[i].Cells[29].Value = KézOszt.Érték(EgyOszt, "Csatolhatóság");
 
                     Adat_Jármű_Vendég EgyIdegen = (from a in AdatokIdegen
                                                    where a.Azonosító == rekord.Azonosító

@@ -100,9 +100,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             List<Adat_Technológia_Változat> AdatokVáltozat = new List<Adat_Technológia_Változat>();
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{típus}.mdb";
-                string jelszó = "Bezzegh";
-                string szöveg = $"SELECT * FROM {telephely} ORDER BY technológia_Id ";
                 AdatokVáltozat.Clear();
                 AdatokVáltozat = KézVáltozat.Lista_Adatok(típus, telephely);
             }

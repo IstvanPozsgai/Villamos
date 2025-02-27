@@ -1545,8 +1545,7 @@ namespace Villamos
                     Adat_Osztály_Adat rekordszer = (from a in AdatokCsat
                                                     where a.Azonosító == azonosító
                                                     select a).FirstOrDefault();
-                    if (rekordszer != null)
-                        Tábla2.Rows[sor].Cells[4].Value = rekordszer.Adatok(5).Trim();
+                    if (rekordszer != null) Tábla2.Rows[sor].Cells[4].Value = KézCsat.Érték(rekordszer, "Csatolhatóság");
                 }
             }
             catch (HibásBevittAdat ex)
@@ -2869,10 +2868,7 @@ namespace Villamos
             try
             {
                 AdatokCsat.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                string jelszó = "kéménybe";
-                string szöveg = "SELECT * FROM osztályadatok ORDER BY azonosító";
-                AdatokCsat = KézCsat.Lista_Adat(hely, jelszó, szöveg);
+                AdatokCsat = KézCsat.Lista_Adat();
             }
             catch (HibásBevittAdat ex)
             {

@@ -1029,11 +1029,7 @@ namespace Villamos
             try
             {
                 AdatokCsatoló.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "kéménybe";
-                string szöveg = "SELECT * FROM osztályadatok ORDER BY azonosító";
-                AdatokCsatoló = KézCsat.Lista_Adat(hely, jelszó, szöveg);
+                AdatokCsatoló = KézCsat.Lista_Adat();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1325,7 +1321,7 @@ namespace Villamos
                                                 where a.Azonosító == azonosító
                                                 select a).FirstOrDefault();
                 if (rekordszer != null)
-                    Tábla.Rows[sor].Cells[16].Value = rekordszer.Adat5.Trim();
+                    Tábla.Rows[sor].Cells[16].Value = KézCsat.Érték(rekordszer, "Csatolhatóság");
             }
             catch (HibásBevittAdat ex)
             {
@@ -2194,16 +2190,12 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                string jelszó = "kéménybe";
-                string szöveg = "SELECT * FROM osztályadatok ORDER BY azonosító";
-
                 // sorbarendezzük a táblát pályaszám szerint
 
                 Tábla.Sort(Tábla.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
 
                 Kezelő_Osztály_Adat kéz = new Kezelő_Osztály_Adat();
-                List<Adat_Osztály_Adat> Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_Osztály_Adat> Adatok = kéz.Lista_Adat();
 
 
 
@@ -2260,7 +2252,7 @@ namespace Villamos
                             {
                                 if (Tábla.Rows[i].Cells[oszlop].Value.ToString().Trim() == rekordszer.Azonosító.Trim())
                                 {
-                                    Tábla.Rows[i].Cells[oszlop + 2].Value = rekordszer.Adat5.Trim();
+                                    Tábla.Rows[i].Cells[oszlop + 2].Value = KézCsat.Érték(rekordszer, "Csatolhatóság");
                                 }
                                 i += 1;
                                 if (i == Tábla.Rows.Count)
