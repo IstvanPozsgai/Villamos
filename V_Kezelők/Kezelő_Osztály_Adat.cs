@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -21,44 +21,56 @@ namespace Villamos.Kezelők
 
         public List<Adat_Osztály_Adat> Lista_Adat()
         {
-            string szöveg = "select * from osztályadatok ORDER BY azonosító";
             List<Adat_Osztály_Adat> Adatok = new List<Adat_Osztály_Adat>();
-            Adat_Osztály_Adat Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = "select * from osztályadatok ORDER BY azonosító";
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                List<string> AdatokGy = new List<string>();
-                                List<string> Mezőnevek = new List<string>();
-                                for (int i = 0; i < rekord.FieldCount; i++)
+                                while (rekord.Read())
                                 {
-                                    string Mezőnév = rekord.GetName(i).ToStrTrim();
-                                    if (Mezőnév.Contains("Adat"))
+                                    List<string> AdatokGy = new List<string>();
+                                    List<string> Mezőnevek = new List<string>();
+                                    for (int i = 0; i < rekord.FieldCount; i++)
                                     {
-                                        AdatokGy.Add(rekord.GetString(i).ToStrTrim());
-                                        Mezőnevek.Add(Mezőnév);
+                                        string Mezőnév = rekord.GetName(i).ToStrTrim();
+                                        string Érték = "?";
+                                        if (rekord.GetValue(i).GetType() != null) Érték = rekord.GetValue(i).ToStrTrim();
+                                        if (Mezőnév.Contains("Adat"))
+                                        {
+                                            AdatokGy.Add(Érték);
+                                            Mezőnevek.Add(Mezőnév);
+                                        }
                                     }
-                                }
 
-                                Adat = new Adat_Osztály_Adat(
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    AdatokGy,
-                                    Mezőnevek
-                                    );
-                                Adatok.Add(Adat);
+                                    Adat_Osztály_Adat Adat = new Adat_Osztály_Adat(
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        AdatokGy,
+                                        Mezőnevek
+                                        );
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return Adatok;
         }
@@ -91,7 +103,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                //szöveg = "UPDATE osztályadatok SET ";
+                //
                 //for (int ki = 1; ki < AdatokNév.Count; ki++)
                 //{
                 //    if (Ideig[ki] != null)
@@ -102,7 +114,22 @@ namespace Villamos.Kezelők
                 //}
                 //szöveg = szöveg.Substring(0, szöveg.Length - 2); //az utolsó vesszőt eldobjuk
                 //szöveg += $" WHERE azonosító='{pályaszám.Trim()}'";
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Osztály_Adat rekord in Adatok)
+                {
+                    string szöveg = "UPDATE osztályadatok SET ";
+                    foreach (string név in rekord.Mezőnév)
+                        szöveg += $", {név}";
 
+                    szöveg += ") VALUES (";
+                    szöveg += $"'{rekord.Azonosító}'";
+
+                    foreach (string érték in rekord.Adatok)
+                        szöveg += $", '{érték}'";
+                    szöveg += ")";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -120,15 +147,22 @@ namespace Villamos.Kezelők
         {
             try
             {
-                //szöveg = "INSERT INTO osztályadatok ( azonosító, típus, altípus, telephely, szolgálat ";
-                //for (int k = 1; k <= 40; k++)
-                //    szöveg += ", adat" + k.ToString();
-                //szöveg += ") VALUES (";
-                //szöveg += "'" + pályaszám + "', '?', '?', '?', '?'";
-                //for (int k = 1; k <= 40; k++)
-                //    szöveg += ", '?'";
-                //szöveg += ")";
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Osztály_Adat rekord in Adatok)
+                {
+                    string szöveg = "INSERT INTO osztályadatok ( azonosító";
+                    foreach (string név in rekord.Mezőnév)
+                        szöveg += $", {név}";
 
+                    szöveg += ") VALUES (";
+                    szöveg += $"'{rekord.Azonosító}'";
+
+                    foreach (string érték in rekord.Adatok)
+                        szöveg += $", '{érték}'";
+                    szöveg += ")";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {

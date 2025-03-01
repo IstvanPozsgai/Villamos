@@ -51,6 +51,9 @@ public static partial class Függvénygyűjtemény
             if (szöveg.Length > hossz)
                 válasz = szöveg.Substring(kezdő, hossz);
         }
+        else
+            válasz = szöveg.Substring(kezdő);
+
         válasz = válasz.Replace('\"', '`');
         válasz = válasz.Replace("'", "`");
 
@@ -73,6 +76,8 @@ public static partial class Függvénygyűjtemény
             if (szöveg.Length > hossz)
                 válasz = válasz.Substring(kezdő, hossz);
         }
+        else
+            válasz = szöveg.Substring(kezdő);
 
         válasz = válasz.Replace("'", "`");
         válasz = válasz.Replace("\"", "`");

@@ -37,12 +37,15 @@ namespace Villamos
 
         private void Start()
         {
+            AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).ToList();
+            AdatokOsztály = KézOsztály.Lista_Adat();
+            AdatokNév = KézNév.Lista_Adat();
+
             Jogosultságkiosztás();
             Fülekkitöltése();
             Pályaszámfeltöltés();
 
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            AdatokNév = KézNév.Lista_Adat();
             Osztályfeltöltés();
         }
 
@@ -177,8 +180,6 @@ namespace Villamos
         {
             try
             {
-                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).ToList();
-
                 PályaszámCombo1.Items.Clear();
                 PályaszámCombo1.Items.Add("");
 
@@ -211,7 +212,7 @@ namespace Villamos
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
-                Tábla.Visible = false;
+
                 Tábla.ColumnCount = 2;
 
                 // fejléc elkészítése
@@ -220,17 +221,14 @@ namespace Villamos
                 Tábla.Columns[1].HeaderText = "Osztály érték";
                 Tábla.Columns[1].Width = 400;
 
-                AdatokOsztály = KézOsztály.Lista_Adat();
+
                 Adat_Osztály_Adat Elem = (from a in AdatokOsztály
                                           where a.Azonosító == PályaszámCombo1.Text.Trim()
                                           select a).FirstOrDefault();
 
-                if (Elem == null)
-                {
-                    Tábla.Visible = true;
-                    return;
-                }
+                if (Elem == null) return;
 
+                Tábla.Visible = false;
                 Tábla.RowCount = Elem.Adatok.Count;
                 for (int i = 0; i < Elem.Adatok.Count; i++)
                 {
@@ -285,7 +283,7 @@ namespace Villamos
                 else
                     return;
 
-                List<Adat_Osztály_Név> AdatokNév = KézNév.Lista_Adat();
+
                 List<Adat_Osztály_Adat> AdatokAdat = KézOsztály.Lista_Adat();
 
                 Holtart.Be();
@@ -295,22 +293,23 @@ namespace Villamos
 
                 //Fejléc adatok
                 string[] Soradatok = lines[3].ToString().Split('\t');
-                List<string> Fejléc = new List<string>();
                 int fejléchossz = Soradatok.Length + 1;
-                int[] Sorszám = new int[Soradatok.Length + 1];
-                Fejléc.Add("Megnevezés"); //Első elem
+                string[] Fejléc = new string[fejléchossz];
+                int[] Sorszám = new int[fejléchossz];
+                Fejléc[0] = "azonosító"; //Első elem
 
                 for (int i = 0; i < Soradatok.Length; i++)
                 {
-                    if (Soradatok[i].Trim() == "Megnevezés") Sorszám[0] = i;
+                    string szó = Soradatok[i].Trim();
+                    if (szó == "Berendez.") Sorszám[0] = i;
 
-                    int Elem = (from a in AdatokNév
-                                where a.Osztálynév.Trim() == Soradatok[i].Trim()
-                                select a.Id).FirstOrDefault();
-                    if (Elem != 0)
+                    Adat_Osztály_Név Elem = (from a in AdatokNév
+                                             where a.Osztálynév.Trim() == szó
+                                             select a).FirstOrDefault();
+                    if (Elem != null)
                     {
-                        Fejléc[Elem] = Soradatok[i].Trim();
-                        Sorszám[i] = Elem; //megadja , hogy az elemet hova rakjuk
+                        Fejléc[i] = Elem.Osztálymező;
+                        Sorszám[i] = Elem.Id; //megadja , hogy az elemet hova rakjuk
                     }
                 }
 
@@ -318,18 +317,23 @@ namespace Villamos
                 List<Adat_Osztály_Adat> AdatokM = new List<Adat_Osztály_Adat>();
                 for (int i = 5; i < lines.Length; i++)  // lines
                 {
-
                     Soradatok = lines[i].ToString().Split('\t');
 
-                    List<string> Ideig = new List<string>();
-
+                    List<string> Értékek = new List<string>();
+                    List<string> Mezők = new List<string>();
                     // Feldaraboljuk a sort elemekre és beletesszük a megfelelő helyre
-                    for (int j = 0; j < Soradatok.Length; j++)
+                    for (int j = 1; j < Soradatok.Length; j++)
                     {
                         if (Sorszám[j] != 0)
-                            Ideig[Sorszám[j]] = Soradatok[j].ToStrTrim();
+                        {
+                            if (Soradatok[j].ToStrTrim() != "")
+                                Értékek.Add(Soradatok[j].ToStrTrim());
+                            else
+                                Értékek.Add("?");
+                            Mezők.Add(Fejléc[j].ToStrTrim());
+                        }
                     }
-                    pályaszám = MyF.Szöveg_Tisztítás(Soradatok[Sorszám[0]], 1, 4);
+                    pályaszám = MyF.Szöveg_Tisztítás(Soradatok[Sorszám[0]], 1, -1).Trim();
 
                     // az új azonosító
                     Adat_Osztály_Adat Elem = (from a in AdatokAdat
@@ -338,8 +342,8 @@ namespace Villamos
 
                     Adat_Osztály_Adat Adat = new Adat_Osztály_Adat(
                                         pályaszám,
-                                        Ideig,
-                                        Fejléc);
+                                        Értékek,
+                                        Mezők);
                     if (Elem == null)
                         AdatokR.Add(Adat);
                     else
@@ -348,10 +352,13 @@ namespace Villamos
                 }
 
                 if (AdatokR.Count > 0) KézOsztály.Rögzítés(AdatokR);
-                if (AdatokM.Count > 0) KézOsztály.Rögzítés(AdatokM);
+                if (AdatokM.Count > 0) KézOsztály.Módosítás(AdatokM);
                 Holtart.Ki();
                 // kitöröljük a betöltött fájlt
                 Delete(fájlexc);
+
+                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).ToList();
+                AdatokOsztály = KézOsztály.Lista_Adat();
                 AdatokNév = KézNév.Lista_Adat();
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

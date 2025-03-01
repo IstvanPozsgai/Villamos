@@ -64,7 +64,7 @@ namespace Villamos.Kezelők
                 string szöveg = "UPDATE  osztálytábla SET";
                 szöveg += $" osztálynév='{Adat.Osztálynév}', ";
                 szöveg += $" osztálymező='{Adat.Osztálymező}', ";
-                szöveg += $" használatban='{Adat.Használatban}' ";
+                szöveg += $" használatban={Adat.Használatban} ";
                 szöveg += $" where id={Adat.Id} ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

@@ -13,8 +13,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
             szöveg = "CREATE TABLE osztályadatok (";
-            szöveg += "[azonosító]  char (10), ";
-            szöveg += "[Adat1]  char (50)) ";
+            szöveg += "[Azonosító]  char (10)) ";
+
 
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
