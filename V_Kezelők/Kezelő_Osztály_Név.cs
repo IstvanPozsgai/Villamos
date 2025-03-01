@@ -159,5 +159,4 @@ namespace Villamos.Kezelők
             return Válasz;
         }
     }
-
 }

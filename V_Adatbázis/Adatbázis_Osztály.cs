@@ -23,7 +23,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[id] int,";
             szöveg += "[Osztálynév]  char (50), ";
             szöveg += "[Osztálymező]  char (50), ";
-            szöveg += "[Használatban]  char (1)) ";
+            szöveg += "[Használatban]  yesno) ";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }

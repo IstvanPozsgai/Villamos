@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -16,7 +17,7 @@ namespace Villamos
 
     public partial class Ablak_SAP_osztály
     {
-        #region Kezelő és lista
+        #region Kezelő és lista és változók
         readonly Kezelő_Osztály_Adat KézOsztály = new Kezelő_Osztály_Adat();
         readonly Kezelő_Osztály_Név KézNév = new Kezelő_Osztály_Név();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
@@ -25,6 +26,7 @@ namespace Villamos
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_Osztály_Adat> AdatokOsztály = new List<Adat_Osztály_Adat>();
         List<Adat_Osztály_Név> AdatokNév = new List<Adat_Osztály_Név>();
+        List<Adat_Osztály_Adat> AdatokLekérdezés = new List<Adat_Osztály_Adat>();
         #endregion
 
 
@@ -207,7 +209,6 @@ namespace Villamos
             try
             {
                 if (PályaszámCombo1.Text.Trim() == "") return;
-                AdatokNév = KézNév.Lista_Adat();
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -220,7 +221,6 @@ namespace Villamos
                 Tábla.Columns[0].Width = 400;
                 Tábla.Columns[1].HeaderText = "Osztály érték";
                 Tábla.Columns[1].Width = 400;
-
 
                 Adat_Osztály_Adat Elem = (from a in AdatokOsztály
                                           where a.Azonosító == PályaszámCombo1.Text.Trim()
@@ -423,13 +423,55 @@ namespace Villamos
             }
         }
 
+        private void LekérdezésAdatokFeltöltése()
+        {
+            try
+            {
+                Holtart.Be(AdatokOsztály.Count + 1);
+                //Tartalom
+                AdatokLekérdezés.Clear();
+                foreach (Adat_Osztály_Adat rekord in AdatokOsztály)
+                {
+                    string telephely = "";
+                    string típus = "";
+                    Adat_Jármű Jármű = (from a in AdatokJármű
+                                        where a.Azonosító == rekord.Azonosító
+                                        select a).FirstOrDefault();
+                    if (Jármű != null)
+                    {
+                        telephely = Jármű.Üzem;
+                        típus = Jármű.Valóstípus;
+                    }
+
+                    Adat_Osztály_Adat Lekérdezés = new Adat_Osztály_Adat(
+                                             rekord.Azonosító,
+                                             rekord.Adatok,
+                                             rekord.Mezőnév,
+                                             telephely,
+                                             típus);
+                    AdatokLekérdezés.Add(Lekérdezés);
+                    Holtart.Lép();
+                }
+                Holtart.Ki();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void LekérdezTelep_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Osztálylista.SelectedItems.Count < 1) return;
                 if (Osztálylista.Items.Count < 0) return;
-                AdatokNév = KézNév.Lista_Adat();
+                LekérdezésAdatokFeltöltése();
 
 
                 string honnan = Osztálylista.SelectedItem.ToStrTrim();
@@ -438,15 +480,15 @@ namespace Villamos
                                    select a.Osztálymező).FirstOrDefault() ?? "";
                 if (helyhiba.Trim() == "") return;
 
-                string szöveg = $"SELECT telephely, altípus, {helyhiba}, Count(osztályadatok.altípus) AS Összeg";
-                szöveg += "  From osztályadatok";
-                szöveg += " GROUP BY  telephely, típus, altípus, " + helyhiba;
-                szöveg += " Having ((altípus <> '?' )";
-                szöveg += " And (" + helyhiba + " <> '?' ))";
-                szöveg += " order by altípus";
-                List<Adat_Osztály_Adat> AdatokÖ = KézOsztály.Lista_Adat();
-
-                List<Adat_Osztály_Adat> Adatok = (AdatokÖ);
+                int sorszám = 0;
+                for (int i = 0; i < AdatokOsztály[0].Mezőnév.Count; i++)
+                {
+                    if (AdatokOsztály[0].Mezőnév[i] == helyhiba)
+                    {
+                        sorszám = i;
+                        break;
+                    }
+                }
 
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
@@ -464,14 +506,43 @@ namespace Villamos
                 Tábla1.Columns[3].HeaderText = "Darabszám";
                 Tábla1.Columns[3].Width = 100;
 
-                foreach (Adat_Osztály_Adat rekord in Adatok)
+                List<string> Elemek = AdatokLekérdezés.Select(a => a.Adatok[sorszám]).Distinct().ToList();
+
+                foreach (string elem in Elemek)
                 {
-                    Tábla1.RowCount++;
-                    int i = Tábla1.RowCount - 1;
-                    //Tábla1.Rows[i].Cells[0].Value = rekord.Telephely;
-                    //Tábla1.Rows[i].Cells[1].Value = rekord.AlTípus;
-                    //Tábla1.Rows[i].Cells[2].Value = rekord.Adat;
-                    //Tábla1.Rows[i].Cells[3].Value = rekord.Összeg;
+                    if (elem != "?" && elem != "")
+                    {
+
+                        List<Adat_Osztály_Adat> Szűrtlista = (from a in AdatokLekérdezés
+                                                              where a.Adatok[sorszám] == elem
+                                                              orderby a.Telephely, a.Típus
+                                                              select a).ToList();
+                        List<string> SzűrtTelep = Szűrtlista.Select(a => a.Telephely).Distinct().ToList();
+                        List<string> SzűrtTípus = Szűrtlista.Select(a => a.Típus).Distinct().ToList();
+                        for (int j = 0; j < SzűrtTelep.Count; j++)
+                        {
+                            for (int k = 0; k < SzűrtTípus.Count; k++)
+                            {
+                                List<Adat_Osztály_Adat> Eredmény = (from a in AdatokLekérdezés
+                                                                    where a.Adatok[sorszám] == elem
+                                                                    && a.Telephely == SzűrtTelep[j]
+                                                                    && a.Típus == SzűrtTípus[k]
+                                                                    orderby a.Telephely, a.Típus
+                                                                    select a).ToList();
+                                int darab = 0;
+                                if (Eredmény != null) darab = Eredmény.Count;
+                                if (darab != 0)
+                                {
+                                    Tábla1.RowCount++;
+                                    int i = Tábla1.RowCount - 1;
+                                    Tábla1.Rows[i].Cells[0].Value = SzűrtTelep[j];
+                                    Tábla1.Rows[i].Cells[1].Value = SzűrtTípus[k];
+                                    Tábla1.Rows[i].Cells[2].Value = elem;
+                                    Tábla1.Rows[i].Cells[3].Value = darab;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Tábla1.Refresh();
@@ -488,14 +559,12 @@ namespace Villamos
             }
         }
 
-
-
         private void LekérdezFajta_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Osztálylista.SelectedItems.Count < 1) return;
-                AdatokNév = KézNév.Lista_Adat();
+                LekérdezésAdatokFeltöltése();
 
                 string honnan = Osztálylista.SelectedItem.ToStrTrim();
                 string helyhiba = (from a in AdatokNév
@@ -503,13 +572,15 @@ namespace Villamos
                                    select a.Osztálymező).FirstOrDefault() ?? "";
                 if (helyhiba.Trim() == "") return;
 
-                string szöveg = $"SELECT  {helyhiba}, Count(osztályadatok.altípus) AS Összeg";
-                szöveg += "  From osztályadatok";
-                szöveg += " GROUP BY  " + helyhiba;
-                szöveg += " Having " + helyhiba + " <> '?'";
-                szöveg += " order by " + helyhiba;
-
-
+                int sorszám = 0;
+                for (int i = 0; i < AdatokOsztály[0].Mezőnév.Count; i++)
+                {
+                    if (AdatokOsztály[0].Mezőnév[i] == helyhiba)
+                    {
+                        sorszám = i;
+                        break;
+                    }
+                }
 
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
@@ -523,16 +594,23 @@ namespace Villamos
                 Tábla1.Columns[1].HeaderText = "Darabszám";
                 Tábla1.Columns[1].Width = 140;
 
-                //Kezelő_Osztály_Adat_Szum KézSzum = new Kezelő_Osztály_Adat_Szum();
-                //List<Adat_Osztály_Adat_Szum> Adatok = KézSzum.Lista_Adat1(hely, jelszó, szöveg, helyhiba);
+                List<string> Elemek = AdatokLekérdezés.Select(a => a.Adatok[sorszám]).Distinct().ToList();
 
-                //foreach (Adat_Osztály_Adat_Szum rekord in Adatok)
-                //{
-                //    Tábla1.RowCount++;
-                //    int i = Tábla1.RowCount - 1;
-                //    Tábla1.Rows[i].Cells[0].Value = rekord.Adat;
-                //    Tábla1.Rows[i].Cells[1].Value = rekord.Összeg;
-                //}
+                foreach (string elem in Elemek)
+                {
+                    if (elem != "?" && elem != "")
+                    {
+                        Tábla1.RowCount++;
+                        int i = Tábla1.RowCount - 1;
+                        Tábla1.Rows[i].Cells[0].Value = elem;
+                        int darab = 0;
+                        List<Adat_Osztály_Adat> Szűrtlista = (from a in AdatokLekérdezés
+                                                              where a.Adatok[sorszám] == elem
+                                                              select a).ToList();
+                        if (Szűrtlista != null) darab = Szűrtlista.Count;
+                        Tábla1.Rows[i].Cells[1].Value = darab;
+                    }
+                }
                 Tábla1.Refresh();
                 Tábla1.Visible = true;
             }
@@ -547,18 +625,12 @@ namespace Villamos
             }
         }
 
-
         private void LekérdezRészletes_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Osztálylista.SelectedItems.Count < 1) return;
-                AdatokNév = KézNév.Lista_Adat();
-
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\osztály.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-
+                LekérdezésAdatokFeltöltése();
 
                 string honnan = Osztálylista.SelectedItem.ToStrTrim();
                 string helyhiba = (from a in AdatokNév
@@ -566,9 +638,15 @@ namespace Villamos
                                    select a.Osztálymező).FirstOrDefault() ?? "";
                 if (helyhiba.Trim() == "") return;
 
-                List<Adat_Osztály_Adat> Adatok = (from a in AdatokOsztály
-                                                  where a.GetType().GetProperty(helyhiba).GetValue(a).ToStrTrim() != "?"
-                                                  select a).ToList();
+                int sorszám = 0;
+                for (int i = 0; i < AdatokOsztály[0].Mezőnév.Count; i++)
+                {
+                    if (AdatokOsztály[0].Mezőnév[i] == helyhiba)
+                    {
+                        sorszám = i;
+                        break;
+                    }
+                }
 
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
@@ -585,14 +663,31 @@ namespace Villamos
                 Tábla1.Columns[2].Width = 240;
                 Tábla1.Columns[3].HeaderText = honnan;
                 Tábla1.Columns[3].Width = 400;
-                foreach (Adat_Osztály_Adat rekord in Adatok)
+                foreach (Adat_Osztály_Adat rekord in AdatokLekérdezés)
                 {
-                    Tábla1.RowCount++;
-                    int i = Tábla1.RowCount - 1;
-                    Tábla1.Rows[i].Cells[0].Value = rekord.Azonosító;
-                    //Tábla1.Rows[i].Cells[1].Value = rekord.Telephely;
-                    //Tábla1.Rows[i].Cells[2].Value = rekord.AlTípus;
-                    Tábla1.Rows[i].Cells[3].Value = rekord.GetType().GetProperty(helyhiba).GetValue(rekord);
+                    if (Értelmes.Checked)
+                    {
+                        //Minden adat kiírása
+                        Tábla1.RowCount++;
+                        int j = Tábla1.RowCount - 1;
+                        Tábla1.Rows[j].Cells[0].Value = rekord.Azonosító;
+                        Tábla1.Rows[j].Cells[1].Value = rekord.Telephely;
+                        Tábla1.Rows[j].Cells[2].Value = rekord.Típus;
+                        Tábla1.Rows[j].Cells[3].Value = rekord.Adatok[sorszám];
+                    }
+                    else
+                    {
+                        // Nem írjuk ki aminek nincs telephelye és értelmes adata
+                        if (rekord.Telephely != "" && rekord.Adatok[sorszám] != "?" && rekord.Adatok[sorszám] != "")
+                        {
+                            Tábla1.RowCount++;
+                            int j = Tábla1.RowCount - 1;
+                            Tábla1.Rows[j].Cells[0].Value = rekord.Azonosító;
+                            Tábla1.Rows[j].Cells[1].Value = rekord.Telephely;
+                            Tábla1.Rows[j].Cells[2].Value = rekord.Típus;
+                            Tábla1.Rows[j].Cells[3].Value = rekord.Adatok[sorszám];
+                        }
+                    }
                 }
 
                 Tábla1.Refresh();
@@ -609,8 +704,6 @@ namespace Villamos
             }
 
         }
-
-
 
         private void Excel_Click(object sender, EventArgs e)
         {

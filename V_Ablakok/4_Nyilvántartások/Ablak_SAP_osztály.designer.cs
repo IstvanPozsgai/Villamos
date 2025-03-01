@@ -60,6 +60,7 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Súgó = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Értelmes = new System.Windows.Forms.CheckBox();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -182,6 +183,7 @@ namespace Villamos
             // TabPage2
             // 
             this.TabPage2.BackColor = System.Drawing.Color.Coral;
+            this.TabPage2.Controls.Add(this.Értelmes);
             this.TabPage2.Controls.Add(this.LekérdezFajta);
             this.TabPage2.Controls.Add(this.Excel);
             this.TabPage2.Controls.Add(this.LekérdezRészletes);
@@ -200,7 +202,7 @@ namespace Villamos
             this.LekérdezFajta.BackColor = System.Drawing.Color.DarkCyan;
             this.LekérdezFajta.BackgroundImage = global::Villamos.Properties.Resources.CARDFIL3;
             this.LekérdezFajta.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.LekérdezFajta.Location = new System.Drawing.Point(216, 70);
+            this.LekérdezFajta.Location = new System.Drawing.Point(272, 70);
             this.LekérdezFajta.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.LekérdezFajta.Name = "LekérdezFajta";
             this.LekérdezFajta.Size = new System.Drawing.Size(50, 50);
@@ -214,7 +216,7 @@ namespace Villamos
             this.Excel.BackColor = System.Drawing.Color.DarkCyan;
             this.Excel.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel.Location = new System.Drawing.Point(216, 190);
+            this.Excel.Location = new System.Drawing.Point(272, 190);
             this.Excel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Excel.Name = "Excel";
             this.Excel.Size = new System.Drawing.Size(50, 50);
@@ -228,7 +230,7 @@ namespace Villamos
             this.LekérdezRészletes.BackColor = System.Drawing.Color.DarkCyan;
             this.LekérdezRészletes.BackgroundImage = global::Villamos.Properties.Resources.Treetog_Junior_Document_scroll;
             this.LekérdezRészletes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.LekérdezRészletes.Location = new System.Drawing.Point(216, 130);
+            this.LekérdezRészletes.Location = new System.Drawing.Point(272, 130);
             this.LekérdezRészletes.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.LekérdezRészletes.Name = "LekérdezRészletes";
             this.LekérdezRészletes.Size = new System.Drawing.Size(50, 50);
@@ -242,7 +244,7 @@ namespace Villamos
             this.LekérdezTelep.BackColor = System.Drawing.Color.DarkCyan;
             this.LekérdezTelep.BackgroundImage = global::Villamos.Properties.Resources.BeCardStack;
             this.LekérdezTelep.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.LekérdezTelep.Location = new System.Drawing.Point(216, 10);
+            this.LekérdezTelep.Location = new System.Drawing.Point(272, 10);
             this.LekérdezTelep.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.LekérdezTelep.Name = "LekérdezTelep";
             this.LekérdezTelep.Size = new System.Drawing.Size(50, 50);
@@ -272,7 +274,7 @@ namespace Villamos
             this.Tábla1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.Tábla1.EnableHeadersVisualStyles = false;
-            this.Tábla1.Location = new System.Drawing.Point(273, 10);
+            this.Tábla1.Location = new System.Drawing.Point(329, 10);
             this.Tábla1.Name = "Tábla1";
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
@@ -283,7 +285,7 @@ namespace Villamos
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tábla1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.Tábla1.RowHeadersWidth = 20;
-            this.Tábla1.Size = new System.Drawing.Size(585, 347);
+            this.Tábla1.Size = new System.Drawing.Size(529, 347);
             this.Tábla1.TabIndex = 113;
             // 
             // Osztálylista
@@ -292,9 +294,9 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left)));
             this.Osztálylista.FormattingEnabled = true;
             this.Osztálylista.ItemHeight = 20;
-            this.Osztálylista.Location = new System.Drawing.Point(5, 10);
+            this.Osztálylista.Location = new System.Drawing.Point(5, 50);
             this.Osztálylista.Name = "Osztálylista";
-            this.Osztálylista.Size = new System.Drawing.Size(204, 324);
+            this.Osztálylista.Size = new System.Drawing.Size(260, 304);
             this.Osztálylista.TabIndex = 0;
             // 
             // Súgó
@@ -321,6 +323,16 @@ namespace Villamos
             this.Holtart.TabIndex = 118;
             this.Holtart.Visible = false;
             // 
+            // Értelmes
+            // 
+            this.Értelmes.AutoSize = true;
+            this.Értelmes.Location = new System.Drawing.Point(5, 10);
+            this.Értelmes.Name = "Értelmes";
+            this.Értelmes.Size = new System.Drawing.Size(218, 24);
+            this.Értelmes.TabIndex = 122;
+            this.Értelmes.Text = "Minden adat megjelenítése";
+            this.Értelmes.UseVisualStyleBackColor = true;
+            // 
             // Ablak_SAP_osztály
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -342,6 +354,7 @@ namespace Villamos
             this.TabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.TabPage2.ResumeLayout(false);
+            this.TabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
             this.ResumeLayout(false);
 
@@ -364,5 +377,6 @@ namespace Villamos
         internal DataGridView Tábla1;
         internal ToolTip ToolTip1;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        private CheckBox Értelmes;
     }
 }

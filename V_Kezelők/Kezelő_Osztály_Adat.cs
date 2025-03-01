@@ -103,30 +103,18 @@ namespace Villamos.Kezelők
         {
             try
             {
-                //
-                //for (int ki = 1; ki < AdatokNév.Count; ki++)
-                //{
-                //    if (Ideig[ki] != null)
-                //    {
-                //        if (Ideig[ki].Trim() != "")
-                //            szöveg += $"adat{ki}='{Ideig[ki].Trim()}', ";
-                //    }
-                //}
-                //szöveg = szöveg.Substring(0, szöveg.Length - 2); //az utolsó vesszőt eldobjuk
-                //szöveg += $" WHERE azonosító='{pályaszám.Trim()}'";
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Osztály_Adat rekord in Adatok)
                 {
                     string szöveg = "UPDATE osztályadatok SET ";
-                    foreach (string név in rekord.Mezőnév)
-                        szöveg += $", {név}";
+                    for (int i = 0; i < rekord.Mezőnév.Count; i++)
+                    {
+                        if (rekord.Mezőnév[i].ToStrTrim() != "")
+                            szöveg += $"{rekord.Mezőnév[i].ToStrTrim()}='{rekord.Adatok[i].ToStrTrim()}', ";
+                    }
+                    szöveg = szöveg.Substring(0, szöveg.Length - 2); //az utolsó vesszőt eldobjuk
+                    szöveg += $" WHERE azonosító='{rekord.Azonosító}'";
 
-                    szöveg += ") VALUES (";
-                    szöveg += $"'{rekord.Azonosító}'";
-
-                    foreach (string érték in rekord.Adatok)
-                        szöveg += $", '{érték}'";
-                    szöveg += ")";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
