@@ -114,7 +114,7 @@ namespace Villamos.Kezelők
         }
 
 
-        public void Módosítás(List<Adat_Oktatásrajelöltek> Adatok)
+        public void Módosítás_Ütem(List<Adat_Oktatásrajelöltek> Adatok)
         {
             try
             {
@@ -128,6 +128,102 @@ namespace Villamos.Kezelők
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Státus(List<Adat_Oktatásrajelöltek> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Oktatásrajelöltek Adat in Adatok)
+                {
+                    string szöveg = "UPDATE oktatásrajelöltek SET státus=1 ";
+                    szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
+                    szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
+                    szöveg += $" AND telephely='{Adat.Telephely}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Státus_Dátum(List<Adat_Oktatásrajelöltek> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Oktatásrajelöltek Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE oktatásrajelöltek SET mikortól='{Adat.Mikortól:yyyy.MM.dd}' ";
+                    szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
+                    szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
+                    szöveg += $" AND telephely='{Adat.Telephely}'";
+                    szöveg += $" AND státus={Adat.Státus} ";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Státus(Adat_Oktatásrajelöltek Adat)
+        {
+            try
+            {
+                string szöveg = "UPDATE oktatásrajelöltek SET státus=1 ";
+                szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
+                szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
+                szöveg += $" AND telephely='{Adat.Telephely}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Státus_Dátum(Adat_Oktatásrajelöltek Adat)
+        {
+            try
+            {
+                string szöveg = $"UPDATE oktatásrajelöltek SET mikortól='{Adat.Mikortól:yyyy.MM.dd}' ";
+                szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
+                szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
+                szöveg += $" AND telephely='{Adat.Telephely}'";
+                szöveg += $" AND státus={Adat.Státus} ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

@@ -110,5 +110,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Rögzítő = rögzítő;
             Megjegyzés = megjegyzés;
         }
+
+        public Adat_Oktatás_Napló(long iD, DateTime rögzítésdátuma, long státus, string rögzítő)
+        {
+            ID = iD;
+            Rögzítésdátuma = rögzítésdátuma;
+            Státus = státus;
+            Rögzítő = rögzítő;
+        }
     }
 }

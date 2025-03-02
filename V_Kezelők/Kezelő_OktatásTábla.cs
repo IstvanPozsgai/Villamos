@@ -20,44 +20,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Oktatás_ALAP(hely.KönyvSzerk());
         }
 
-        public List<Adat_OktatásTábla> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_OktatásTábla> Adatok = new List<Adat_OktatásTábla>();
-            Adat_OktatásTábla Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_OktatásTábla(
-                                    rekord["IDoktatás"].ToÉrt_Long(),
-                                    rekord["Téma"].ToStrTrim(),
-                                    rekord["Kategória"].ToStrTrim(),
-                                    rekord["gyakoriság"].ToStrTrim(),
-                                    rekord["státus"].ToStrTrim(),
-                                    rekord["dátum"].ToÉrt_DaTeTime(),
-                                    rekord["telephely"].ToStrTrim(),
-                                    rekord["listázásisorrend"].ToÉrt_Long(),
-                                    rekord["ismétlődés"].ToÉrt_Long(),
-                                    rekord["PDFfájl"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
         public List<Adat_OktatásTábla> Lista_Adatok()
         {
             string szöveg = $"SELECT * FROM Oktatástábla ";

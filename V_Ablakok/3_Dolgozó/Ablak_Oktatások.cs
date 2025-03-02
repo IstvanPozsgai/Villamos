@@ -7,9 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -956,7 +954,7 @@ namespace Villamos
                     }
                     if (AdatokM.Count > 0)
                     {
-                        Kéz_OktJelölt.Módosítás(AdatokM);
+                        Kéz_OktJelölt.Módosítás_Ütem(AdatokM);
                         MessageBox.Show("Az adatok módosítása megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -1002,7 +1000,7 @@ namespace Villamos
                     }
                     if (AdatokM.Count > 0)
                     {
-                        Kéz_OktJelölt.Módosítás(AdatokM);
+                        Kéz_OktJelölt.Módosítás_Ütem(AdatokM);
                         MessageBox.Show("Az adatok törlése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -1460,9 +1458,7 @@ namespace Villamos
         #endregion
 
 
-        //Itt tartok
         #region Oktatás Rögzítés
-
         private void BtnPdfÚjHasználClick(object sender, EventArgs e)
         {
             try
@@ -1566,15 +1562,9 @@ namespace Villamos
                     LSToktató.BackColor = Color.Yellow;
                     return;
                 }
+
                 if (Megjegyzés.Text.Trim() == "") Megjegyzés.Text = "_";
-                // megnézzük, hogy létezik-e a könyvtár
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Oktatás";
-                // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-                hely = $@"{Application.StartupPath}\Főmérnökség\Oktatás\{Cmbtelephely.Text}";
-                // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-                hely += $@"\{Txtmentett.Text.Trim()}";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Oktatás\{Cmbtelephely.Text}\{Txtmentett.Text.Trim()}";
                 // ha fel kell tölteni
                 if (!CHKpdfvan.Checked)
                 {
@@ -1589,123 +1579,96 @@ namespace Villamos
                     // ha nem létezik akkor odamásoljuk
                     File.Copy(Txtmegnyitott.Text, hely);
                 }
-                // Naplófájl ellenőrzése
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{DateTime.Now:yyyy}";
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{DateTime.Now:yyyy}\Oktatásnapló_{Cmbtelephely.Text}.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Oktatás_Napló(hely);
 
-                string jelszó = "pázmányt";
                 // adatbázis adatokat rögzítünk.
                 if (TáblaOktatás.SelectedRows.Count == 1)
                 {
                     // ha egy dolgozót töltünk fel.
                     // módosítjuk a tábla adatait
-                    hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_oktatás.mdb";
-                    string szöveg;
-                    if (int.Parse(TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[7].Value.ToString()) == 0)
+                    Adat_Oktatásrajelöltek ADATJelölt = new Adat_Oktatásrajelöltek(
+                                              TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[0].Value.ToString(),
+                                              TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[2].Value.ToÉrt_Long(),
+                                              TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[4].Value.ToÉrt_DaTeTime().AddMonths(TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[7].Value.ToÉrt_Int()),
+                                              TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[7].Value.ToÉrt_Int() == 0 ? 1 : 0,
+                                              Cmbtelephely.Text.Trim());
+
+                    if (TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[7].Value.ToÉrt_Int() == 0)
                     {
                         // ha csak egyszer kell feltölteni, akkor a státust átállítjuk 1-re
-                        szöveg = "UPDATE oktatásrajelöltek SET státus=1 ";
-                        szöveg += $" Where hrazonosító='{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[0].Value}'";
-                        szöveg += $" AND IDoktatás={TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[2].Value}";
-                        szöveg += $" AND telephely='{Cmbtelephely.Text}'";
+                        Kéz_OktJelölt.Módosítás_Státus(ADATJelölt);
                     }
                     else
                     {
                         // ha valamilyen rendszereséggel kell oktatni, akkor hozzáadjuk a dátumhoz
-                        szöveg = "UPDATE oktatásrajelöltek SET mikortól= '" + TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[4].Value.ToÉrt_DaTeTime()
-                                                    .AddMonths(int.Parse(TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[7].Value.ToString())).ToString() + "'";
-                        szöveg += $" Where hrazonosító='{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[0].Value}'";
-                        szöveg += $" AND IDoktatás={TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[2].Value}";
-                        szöveg += $" AND telephely='{Cmbtelephely.Text}'";
-                        szöveg += $" AND státus=0 ";
+                        Kéz_OktJelölt.Módosítás_Státus_Dátum(ADATJelölt);
                     }
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
                     // Naplózás
-                    // Melyik az utolsó ID
-                    hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{DateTime.Now:yyyy}\Oktatásnapló_{Cmbtelephely.Text}.mdb";
-                    szöveg = "SELECT * FROM oktatásnapló";
-                    Adatok_Okt_Nap = Kéz_Okt_Nap.Lista_Adatok(hely, jelszó, szöveg);
-                    long i = 1;
-                    if (Adatok_Okt_Nap.Count > 0) i = Adatok_Okt_Nap.Max(a => a.ID) + 1;
-
-                    szöveg = "INSERT INTO Oktatásnapló";
-                    szöveg += "( Id, Hrazonosító, IDoktatás, oktatásdátuma, kioktatta, rögzítésdátuma, telephely, PDFfájlneve, Számonkérés, státus, rögzítő, megjegyzés)";
-                    szöveg += " VALUES (";
-                    szöveg += $"{i}, "; //id
-                    szöveg += $"'{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[0].Value}', "; //Hrazonosító
-                    szöveg += $"{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[2].Value}, "; //IDoktatás
-                    szöveg += $"'{BizDátum.Value}', ";
-                    szöveg += $"'{LSToktató.Text.Trim()}', ";
-                    szöveg += $"'{DateTime.Now}', ";
-                    szöveg += $"'{Cmbtelephely.Text.Trim()}', ";
-                    szöveg += $"'{Txtmentett.Text.Trim()}', ";
-                    szöveg += $"{CMBszámon.Text.Substring(0, 1)}, 0, ";
-                    szöveg += $"'{Program.PostásNév.Trim()}', ";
-                    szöveg += $"'{Megjegyzés.Text.Trim()}'  )";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Oktatás_Napló ADATNAPLÓ = new Adat_Oktatás_Napló(
+                                                0,
+                                                TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[0].Value.ToStrTrim(),
+                                                TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[2].Value.ToÉrt_Long(),
+                                                BizDátum.Value,
+                                                LSToktató.Text.Trim(),
+                                                DateTime.Now,
+                                                Cmbtelephely.Text.Trim(),
+                                                Txtmentett.Text.Trim(),
+                                                CMBszámon.Text.Substring(0, 1).ToÉrt_Long(),
+                                                0,
+                                                Program.PostásNév.Trim(),
+                                                Megjegyzés.Text.Trim());
+                    Kéz_Okt_Nap.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Now.Year, ADATNAPLÓ);
                 }
                 else
                 {
                     // ha csoportosan töljük fel az adatokat
-                    List<string> szövegGy = new List<string>();
-                    List<string> szövegGyN = new List<string>();
-
-                    hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_oktatás.mdb";
-                    string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\{DateTime.Now:yyyy}\Oktatásnapló_{Cmbtelephely.Text}.mdb";
-                    if (!File.Exists(helynapló)) Adatbázis_Létrehozás.Oktatás_Napló(hely);
+                    List<Adat_Oktatásrajelöltek> AdatokMS = new List<Adat_Oktatásrajelöltek>();
+                    List<Adat_Oktatásrajelöltek> AdatokMD = new List<Adat_Oktatásrajelöltek>();
+                    List<Adat_Oktatás_Napló> AdatokNapló = new List<Adat_Oktatás_Napló>();
 
                     for (int i = 0; i < TáblaOktatás.SelectedRows.Count; i++)
                     {
-                        string szöveg;
-                        if (int.Parse(TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[7].Value.ToString()) == 0)
+                        int ideigHónap = TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[7].Value.ToÉrt_Int();
+                        DateTime ideigDátum = TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[4].Value.ToÉrt_DaTeTime();
+                        Adat_Oktatásrajelöltek ADATJelölt = new Adat_Oktatásrajelöltek(
+                                                  TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[0].Value.ToString(),
+                                                  TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[2].Value.ToÉrt_Long(),
+                                                  ideigDátum.AddMonths(ideigHónap),
+                                                  ideigHónap == 0 ? 1 : 0,
+                                                  Cmbtelephely.Text.Trim());
+
+
+                        if (ideigHónap == 0)
                         {
                             // ha csak egyszer kell feltölteni, akkor a státust átállítjuk 1-re
-                            szöveg = "UPDATE oktatásrajelöltek SET státus=1 ";
-                            szöveg += $" WHERE hrazonosító='{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[0].Value}'";
-                            szöveg += $" AND IDoktatás={TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[2].Value}";
-                            szöveg += $" AND telephely='{Cmbtelephely.Text}'";
+                            AdatokMS.Add(ADATJelölt);
                         }
                         else
                         {
                             // ha valamilyen rendszereséggel kell oktatni, akkor hozzáadjuk a dátumhoz
-                            DateTime ideigDátum = DateTime.Parse(TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[4].Value.ToString());
-                            int ideigHónap = int.Parse(TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[7].Value.ToString());
-
-                            szöveg = $"UPDATE oktatásrajelöltek SET mikortól='{ideigDátum.AddMonths(ideigHónap):yyyy.MM.dd}'";
-                            szöveg += $" Where hrazonosító='{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[0].Value}'";
-                            szöveg += $" AND IDoktatás={TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[2].Value}";
-                            szöveg += $" AND telephely='{Cmbtelephely.Text}'";
+                            AdatokMD.Add(ADATJelölt);
                         }
-                        szövegGy.Add(szöveg);
 
                         // Naplózás
-                        // Melyik az utolsó ID
-                        szöveg = "SELECT * FROM oktatásnapló";
-                        Adatok_Okt_Nap = Kéz_Okt_Nap.Lista_Adatok(helynapló, jelszó, szöveg);
-                        long j = 1;
-                        if (Adatok_Okt_Nap.Count > 0) j = Adatok_Okt_Nap.Max(a => a.ID) + 1;
-
-                        szöveg = "INSERT INTO Oktatásnapló";
-                        szöveg += "( Id, Hrazonosító, IDoktatás, oktatásdátuma, kioktatta, rögzítésdátuma, telephely, PDFfájlneve, Számonkérés, státus, rögzítő, megjegyzés)";
-                        szöveg += " VALUES (";
-                        szöveg += $"{j}, ";//id
-                        szöveg += $"'{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[0].Value}', ";//Hrazonosító
-                        szöveg += $"{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[2].Value}, ";//IDoktatás
-                        szöveg += $"'{BizDátum.Value}', ";
-                        szöveg += $"'{LSToktató.Text.Trim()}', ";
-                        szöveg += $"'{DateTime.Now}', ";
-                        szöveg += $"'{Cmbtelephely.Text.Trim()}', ";
-                        szöveg += $"'{Txtmentett.Text.Trim()}', ";
-                        szöveg += $"{CMBszámon.Text.Substring(0, 1)}, 0,";
-                        szöveg += $"'{Program.PostásNév.Trim()} ', ";
-                        szöveg += $"'{Megjegyzés.Text.Trim()} '  )";
-
-                        szövegGyN.Add(szöveg);
+                        Adat_Oktatás_Napló ADATNAPLÓ = new Adat_Oktatás_Napló(
+                                                    0,
+                                                    TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[0].Value.ToStrTrim(),
+                                                    TáblaOktatás.Rows[TáblaOktatás.SelectedRows[i].Index].Cells[2].Value.ToÉrt_Long(),
+                                                    BizDátum.Value,
+                                                    LSToktató.Text.Trim(),
+                                                    DateTime.Now,
+                                                    Cmbtelephely.Text.Trim(),
+                                                    Txtmentett.Text.Trim(),
+                                                    CMBszámon.Text.Substring(0, 1).ToÉrt_Long(),
+                                                    0,
+                                                    Program.PostásNév.Trim(),
+                                                    Megjegyzés.Text.Trim());
+                        AdatokNapló.Add(ADATNAPLÓ);
                     }
-                    MyA.ABMódosítás(hely, jelszó, szövegGy);
-                    MyA.ABMódosítás(helynapló, jelszó, szövegGyN);
+
+                    if (AdatokMS.Count > 0) Kéz_OktJelölt.Módosítás_Státus(AdatokMS);
+                    if (AdatokMD.Count > 0) Kéz_OktJelölt.Módosítás_Státus_Dátum(AdatokMD);
+                    if (AdatokNapló.Count > 0) Kéz_Okt_Nap.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Now.Year, AdatokNapló);
+
                 }
 
 
@@ -1729,7 +1692,6 @@ namespace Villamos
             }
         }
 
-
         private void Okatatófeltöltés()
         {
             Holtart.Be();
@@ -1737,12 +1699,7 @@ namespace Villamos
             LSToktató.Items.Add("");
             AdminOktató.Items.Clear();
             AdminOktató.Items.Add("");
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Dolgozók.mdb";
-            string jelszó = "forgalmiutasítás";
-            string szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900# order by DolgozóNév asc";
-
-
-            List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
             foreach (Adat_Dolgozó_Alap rekord in Adatok)
             {
                 LSToktató.Items.Add(rekord.DolgozóNév.Trim());
@@ -1757,7 +1714,6 @@ namespace Villamos
 
 
         #region Rögzítés Napló
-
         private void BtnNaplózásEredményTöröl_Click(object sender, EventArgs e)
         {
             try
@@ -1767,28 +1723,24 @@ namespace Villamos
 
                 DateTime dátumoktatás = new DateTime(1900, 1, 1);
                 if (TáblaOktatás.SelectedRows.Count == 0) return;
-                string helynapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátumtól.Value:yyyy}\Oktatásnapló_{Cmbtelephely.Text}.mdb";
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_oktatás.mdb";
-                string jelszó = "pázmányt";
 
-                List<string> szövegGy = new List<string>();
-                List<string> szövegGyN = new List<string>();
-
-                string szöveg = "SELECT * FROM oktatástábla";
-
-                List<Adat_OktatásTábla> Adatok = KézOktatás.Lista_Adatok(hely, jelszó, szöveg);
-
-                szöveg = "SELECT * FROM oktatásrajelöltek ";
-                Adatok_OktJelölt = Kéz_OktJelölt.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_OktatásTábla> AdatokOkt = new List<Adat_OktatásTábla>();
+                List<Adat_Oktatásrajelöltek> AdatokJelölt = new List<Adat_Oktatásrajelöltek>();
+                List<Adat_Oktatásrajelöltek> AdatokJelöltDát = new List<Adat_Oktatásrajelöltek>();
+                List<Adat_Oktatás_Napló> AdatokNapló = new List<Adat_Oktatás_Napló>();
+                List<Adat_OktatásTábla> Adatok = KézOktatás.Lista_Adatok();
+                Adatok_OktJelölt = Kéz_OktJelölt.Lista_Adatok();
 
 
                 foreach (DataGridViewRow row in TáblaOktatás.SelectedRows)
                 {
                     // a naplófájl módosítása törlésre 
-                    szöveg = $"UPDATE oktatásnapló SET státus= 1, rögzítő='{Program.PostásNév.Trim()}', ";
-                    szöveg += $" rögzítésdátuma='{DateTime.Now}'";
-                    szöveg += $" Where id={row.Cells[0].Value}";
-                    szövegGyN.Add(szöveg);
+                    Adat_Oktatás_Napló AdatNapló = new Adat_Oktatás_Napló(
+                                                 row.Cells[0].Value.ToÉrt_Long(),
+                                                 DateTime.Now,
+                                                 1,
+                                                 Program.PostásNév.Trim());
+                    AdatokNapló.Add(AdatNapló);
 
                     int oktatásism = 0;
                     int idoktatás = row.Cells[3].Value.ToÉrt_Int();
@@ -1805,26 +1757,23 @@ namespace Villamos
                                                          select a).FirstOrDefault();
                     if (ElemOktJel != null) dátumoktatás = ElemOktJel.Mikortól;
 
+                    Adat_Oktatásrajelöltek ADATJelölt = new Adat_Oktatásrajelöltek(
+                                                    row.Cells[1].Value.ToStrTrim(),
+                                                    row.Cells[3].Value.ToÉrt_Long(),
+                                                    dátumoktatás.AddMonths(-1 * oktatásism),
+                                                    oktatásism == 0 ? 0 : 1,
+                                                    Cmbtelephely.Text.Trim());
+
                     if (oktatásism == 0)
-                    {
-                        // ha csak egyszer kell feltölteni, akkor a státust átállítjuk 0-re, hisz töröltük az oktatást
-                        szöveg = "UPDATE oktatásrajelöltek SET státus=0 ";
-                        szöveg += $" WHERE hrazonosító='{row.Cells[1].Value}'";
-                        szöveg += $" AND IDoktatás={row.Cells[3].Value}";
-                        szöveg += $" AND telephely='{Cmbtelephely.Text}'";
-                    }
+                        AdatokJelölt.Add(ADATJelölt);       // ha csak egyszer kell feltölteni, akkor a státust átállítjuk 0-re, hisz töröltük az oktatást
                     else
-                    {
-                        // ha valamilyen rendszereséggel kell oktatni, akkor levonjuk a dátumból hisz töröljük
-                        szöveg = $"UPDATE oktatásrajelöltek SET mikortól='{dátumoktatás.AddMonths(-1 * oktatásism)}'";
-                        szöveg += $" WHERE hrazonosító='{row.Cells[1].Value}'";
-                        szöveg += $" AND IDoktatás={row.Cells[3].Value}";
-                        szöveg += $" AND telephely='{Cmbtelephely.Text}'";
-                    }
-                    szövegGy.Add(szöveg);
+                        AdatokJelöltDát.Add(ADATJelölt);    // ha valamilyen rendszereséggel kell oktatni, akkor levonjuk a dátumból hisz töröljük
+
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
-                MyA.ABMódosítás(helynapló, jelszó, szövegGyN);
+                if (AdatokNapló.Count > 0) Kéz_Okt_Nap.Törlés(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year, AdatokNapló);
+                if (AdatokJelölt.Count > 0) Kéz_OktJelölt.Módosítás_Státus(AdatokJelölt);
+                if (AdatokJelöltDát.Count > 0) Kéz_OktJelölt.Módosítás_Státus_Dátum(AdatokJelöltDát);
+
                 MessageBox.Show("Az adatok törlése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -1838,35 +1787,36 @@ namespace Villamos
             }
         }
 
-
         private void BtnRögzítFrissít_Click(object sender, EventArgs e)
         {
-            if (Dátumtól.Value.Year != Dátumig.Value.Year)
-                throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
-
+            if (Dátumtól.Value.Year != Dátumig.Value.Year) throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
             Listanapló();
         }
-
 
         private void Listanapló()
         {
             try
             {
+                if (ChkDolgozónév.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölove egy dolgozó sem.");
+
                 Holtart.Be();
                 CHkNapló.Checked = false;
                 Chkoktat.Checked = false;
                 Chkelrendelés.Checked = false;
 
-                // Naplófájl ellenőrzése
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátumtól.Value:yyyy}";
-                if (hely == null)
-                    Directory.CreateDirectory(hely);
+                List<Adat_Oktatás_Napló> Adatok = Kéz_Okt_Nap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Telephely == Cmbtelephely.Text.Trim()
+                          && a.Rögzítésdátuma > Dátumtól.Value
+                          && a.Rögzítésdátuma < Dátumig.Value.AddDays(1)
+                          orderby a.HRazonosító
+                          select a).ToList();
+                if (Cmboktatásrögz.Text.Trim() != "") Adatok = Adatok.Where(a => a.IDoktatás == Cmboktatásrögz.Text.Substring(0, Cmboktatásrögz.Text.IndexOf("-")).ToÉrt_Long()).ToList();
 
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátumtól.Value:yyyy}\Oktatásnapló_{Cmbtelephely.Text}.mdb";
-                if (!File.Exists(hely))
-                    throw new HibásBevittAdat("Nincs az időszakban naplózott események adatbázisa.");
+                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+                List<Adat_OktatásTábla> AdatokOkt = KézOktatás.Lista_Adatok();
 
-                string jelszó = "pázmányt";
+                if (Adatok == null || Adatok.Count < 1) throw new HibásBevittAdat("Nincs az időszakban naplózott események adatbázisa.");
 
                 TáblaOktatás.Rows.Clear();
                 TáblaOktatás.Columns.Clear();
@@ -1907,45 +1857,78 @@ namespace Villamos
                 TáblaOktatás.Columns[13].Width = 300;
                 CHkNapló.Checked = true;
 
-                string szöveg = "SELECT * FROM Oktatásnapló ";
-                szöveg += $@" WHERE telephely='{Cmbtelephely.Text}'";
-                szöveg += $" AND rögzítésdátuma >#{Dátumtól.Value:yyyy-MM-dd} 00:00:00#";
-                szöveg += $" AND rögzítésdátuma <#{Dátumig.Value:yyyy-MM-dd} 23:59:59#";
-                if (Cmboktatásrögz.Text.Trim() != "")
-                    szöveg += $" AND Idoktatás={Cmboktatásrögz.Text.Substring(0, Cmboktatásrögz.Text.IndexOf("-"))}";
-                szöveg += " ORDER BY Hrazonosító";
 
-                string helyalap = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\Dolgozók.mdb";
-                string jelszóalap = "forgalmiutasítás";
-                string helyoktatás = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_oktatás.mdb";
-
-                Kezelő_Oktatás_Napló kéz = new Kezelő_Oktatás_Napló();
-                List<Adat_Oktatás_Napló> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                if (ChkDolgozónév.CheckedItems.Count < 1)
+                for (int j = 0; j < ChkDolgozónév.CheckedItems.Count; j++)
                 {
-                    foreach (Adat_Oktatás_Napló rekord in Adatok)
+                    string[] darabol = ChkDolgozónév.CheckedItems[j].ToString().Split('=');
+                    List<Adat_Oktatás_Napló> AdatokSzűrt = (from ab in Adatok
+                                                            where ab.HRazonosító.Trim() == darabol[1].Trim()
+                                                            select ab).ToList();
+                    if (AdatokSzűrt != null)
                     {
-                        NaplóElem(rekord, helyalap, jelszóalap, helyoktatás, jelszó);
-                    }
-                }
-                else
-                {
-                    for (int j = 0; j < ChkDolgozónév.CheckedItems.Count; j++)
-                    {
-                        string[] darabol = ChkDolgozónév.CheckedItems[j].ToString().Split('=');
-                        List<Adat_Oktatás_Napló> AdatokSzűrt = (from ab in Adatok
-                                                                where ab.HRazonosító.Trim() == darabol[1].Trim()
-                                                                select ab).ToList();
-                        if (AdatokSzűrt != null)
+                        foreach (Adat_Oktatás_Napló rekord in AdatokSzűrt)
                         {
-                            foreach (Adat_Oktatás_Napló Rekordok in AdatokSzűrt)
-                                NaplóElem(Rekordok, helyalap, jelszóalap, helyoktatás, jelszó);
+                            int i = TáblaOktatás.Rows.Add();
+                            TáblaOktatás.Rows[i].Cells[0].Value = rekord.ID;
 
+                            Adat_Dolgozó_Alap Elem = (from a in AdatokDolg
+                                                      where a.Dolgozószám == rekord.HRazonosító
+                                                      select a).FirstOrDefault();
+
+                            if (Elem != null) TáblaOktatás.Rows[i].Cells[2].Value = Elem.DolgozóNév;
+
+                            TáblaOktatás.Rows[i].Cells[3].Value = rekord.IDoktatás;
+
+                            Adat_OktatásTábla ElemT = (from a in AdatokOkt
+                                                       where a.IDoktatás == rekord.IDoktatás
+                                                       select a).FirstOrDefault();
+
+                            if (Elem != null) TáblaOktatás.Rows[i].Cells[4].Value = ElemT.Téma;
+                            TáblaOktatás.Rows[i].Cells[5].Value = rekord.Oktatásdátuma.ToString("yyyy.MM.dd").Trim();
+                            TáblaOktatás.Rows[i].Cells[6].Value = rekord.Telephely.Trim();
+                            TáblaOktatás.Rows[i].Cells[7].Value = rekord.Kioktatta.Trim();
+                            TáblaOktatás.Rows[i].Cells[8].Value = rekord.PDFFájlneve.Trim();
+                            string válasz = "";
+                            switch (rekord.Számonkérés)
+                            {
+                                case 0:
+                                    {
+                                        válasz = "nem volt";
+                                        break;
+                                    }
+                                case 1:
+                                    {
+                                        válasz = "megfelelt";
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        válasz = "nem felelt meg";
+                                        break;
+                                    }
+                            }
+
+                            TáblaOktatás.Rows[i].Cells[9].Value = válasz.Trim();
+                            TáblaOktatás.Rows[i].Cells[10].Value = rekord.Rögzítő.Trim();
+                            TáblaOktatás.Rows[i].Cells[11].Value = rekord.Rögzítésdátuma;
+                            switch (rekord.Státus)
+                            {
+                                case 0:
+                                    {
+                                        válasz = "Érvényes";
+                                        break;
+                                    }
+                                case 1:
+                                    {
+                                        válasz = "Törölt";
+                                        break;
+                                    }
+                            }
+                            TáblaOktatás.Rows[i].Cells[12].Value = válasz.Trim();
+                            TáblaOktatás.Rows[i].Cells[13].Value = rekord.Megjegyzés.Trim();
                         }
                     }
                 }
-
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -1957,89 +1940,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        void NaplóElem(Adat_Oktatás_Napló rekord, string helyalap, string jelszóalap, string helyoktatás, string jelszó)
-        {
-            try
-            {
-                int i = TáblaOktatás.Rows.Add();
-                TáblaOktatás.Rows[i].Cells[0].Value = rekord.ID;
-                TáblaOktatás.Rows[i].Cells[1].Value = rekord.HRazonosító.Trim();
-
-                string szöveg = $"SELECT * FROM Dolgozóadatok";
-
-                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolgozó.Lista_Adatok(helyalap, jelszóalap, szöveg);
-
-                Adat_Dolgozó_Alap Elem = (from a in AdatokDolg
-                                          where a.Dolgozószám == rekord.HRazonosító
-                                          select a).FirstOrDefault();
-
-                if (Elem != null) TáblaOktatás.Rows[i].Cells[2].Value = Elem.DolgozóNév;
-
-                TáblaOktatás.Rows[i].Cells[3].Value = rekord.IDoktatás;
-
-                szöveg = "SELECT * FROM Oktatástábla ";
-
-                List<Adat_OktatásTábla> AdatokOkt = KézOktatás.Lista_Adatok(helyoktatás, jelszó, szöveg);
-                Adat_OktatásTábla ElemT = (from a in AdatokOkt
-                                           where a.IDoktatás == rekord.IDoktatás
-                                           select a).FirstOrDefault();
-
-                if (Elem != null) TáblaOktatás.Rows[i].Cells[4].Value = ElemT.Téma;
-                TáblaOktatás.Rows[i].Cells[5].Value = rekord.Oktatásdátuma.ToString("yyyy.MM.dd").Trim();
-                TáblaOktatás.Rows[i].Cells[6].Value = rekord.Telephely.Trim();
-                TáblaOktatás.Rows[i].Cells[7].Value = rekord.Kioktatta.Trim();
-                TáblaOktatás.Rows[i].Cells[8].Value = rekord.PDFFájlneve.Trim();
-                string válasz = "";
-                switch (rekord.Számonkérés)
-                {
-                    case 0:
-                        {
-                            válasz = "nem volt";
-                            break;
-                        }
-                    case 1:
-                        {
-                            válasz = "megfelelt";
-                            break;
-                        }
-                    case 2:
-                        {
-                            válasz = "nem felelt meg";
-                            break;
-                        }
-                }
-
-                TáblaOktatás.Rows[i].Cells[9].Value = válasz.Trim();
-                TáblaOktatás.Rows[i].Cells[10].Value = rekord.Rögzítő.Trim();
-                TáblaOktatás.Rows[i].Cells[11].Value = rekord.Rögzítésdátuma;
-                switch (rekord.Státus)
-                {
-                    case 0:
-                        {
-                            válasz = "Érvényes";
-                            break;
-                        }
-                    case 1:
-                        {
-                            válasz = "Törölt";
-                            break;
-                        }
-                }
-                TáblaOktatás.Rows[i].Cells[12].Value = válasz.Trim();
-                TáblaOktatás.Rows[i].Cells[13].Value = rekord.Megjegyzés.Trim();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
         }
         #endregion
     }

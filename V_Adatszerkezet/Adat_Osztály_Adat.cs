@@ -27,7 +27,6 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-
     public class Adat_Osztály_Név
     {
         public int Id { get; private set; }
@@ -43,34 +42,4 @@ namespace Villamos.Villamos_Adatszerkezet
             Használatban = használatban;
         }
     }
-
-
-    public class Adat_Osztály_Adat_Szum
-    {
-
-
-        public string AlTípus { get; private set; }
-        public string Telephely { get; private set; }
-
-        public string Adat { get; private set; }
-
-        public int Összeg { get; private set; }
-
-        public Adat_Osztály_Adat_Szum(string alTípus, string telephely, string adat, int összeg)
-        {
-
-            AlTípus = alTípus;
-            Telephely = telephely;
-            Adat = adat;
-            Összeg = összeg;
-        }
-
-        public Adat_Osztály_Adat_Szum(string adat, int összeg)
-        {
-            Adat = adat;
-            Összeg = összeg;
-        }
-    }
-
-
 }
