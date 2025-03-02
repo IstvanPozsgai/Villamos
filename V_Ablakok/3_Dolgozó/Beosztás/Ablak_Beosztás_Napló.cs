@@ -18,6 +18,7 @@ namespace Villamos
 
         readonly DataTable AdatTábla = new DataTable();
 
+        #region Alap
         public Ablak_Beosztás_Napló()
         {
             InitializeComponent();
@@ -32,8 +33,6 @@ namespace Villamos
             VizsgDátum.Value = DateTime.Today;
         }
 
-
-        #region Alap
         private void Telephelyekfeltöltése()
         {
             try
