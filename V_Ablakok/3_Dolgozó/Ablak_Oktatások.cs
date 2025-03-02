@@ -1719,6 +1719,7 @@ namespace Villamos
             try
             {
                 if (Chkelrendelés.Checked) return;
+                if (TáblaOktatás.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva Törölni kívűnt oktatás.");
                 // ha nincs kijelölve sor akkor kilép
 
                 DateTime dátumoktatás = new DateTime(1900, 1, 1);
@@ -1730,7 +1731,6 @@ namespace Villamos
                 List<Adat_Oktatás_Napló> AdatokNapló = new List<Adat_Oktatás_Napló>();
                 List<Adat_OktatásTábla> Adatok = KézOktatás.Lista_Adatok();
                 Adatok_OktJelölt = Kéz_OktJelölt.Lista_Adatok();
-
 
                 foreach (DataGridViewRow row in TáblaOktatás.SelectedRows)
                 {
@@ -1761,7 +1761,7 @@ namespace Villamos
                                                     row.Cells[1].Value.ToStrTrim(),
                                                     row.Cells[3].Value.ToÉrt_Long(),
                                                     dátumoktatás.AddMonths(-1 * oktatásism),
-                                                    oktatásism == 0 ? 0 : 1,
+                                                    oktatásism != 0 ? 0 : 1,
                                                     Cmbtelephely.Text.Trim());
 
                     if (oktatásism == 0)
@@ -1773,6 +1773,7 @@ namespace Villamos
                 if (AdatokNapló.Count > 0) Kéz_Okt_Nap.Törlés(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year, AdatokNapló);
                 if (AdatokJelölt.Count > 0) Kéz_OktJelölt.Módosítás_Státus(AdatokJelölt);
                 if (AdatokJelöltDát.Count > 0) Kéz_OktJelölt.Módosítás_Státus_Dátum(AdatokJelöltDát);
+                Listanapló();
 
                 MessageBox.Show("Az adatok törlése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1799,7 +1800,7 @@ namespace Villamos
             {
                 if (ChkDolgozónév.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölove egy dolgozó sem.");
 
-                Holtart.Be();
+
                 CHkNapló.Checked = false;
                 Chkoktat.Checked = false;
                 Chkelrendelés.Checked = false;
@@ -1818,6 +1819,7 @@ namespace Villamos
 
                 if (Adatok == null || Adatok.Count < 1) throw new HibásBevittAdat("Nincs az időszakban naplózott események adatbázisa.");
 
+                Holtart.Be();
                 TáblaOktatás.Rows.Clear();
                 TáblaOktatás.Columns.Clear();
                 ListaNév = "Napló";
@@ -1870,7 +1872,7 @@ namespace Villamos
                         {
                             int i = TáblaOktatás.Rows.Add();
                             TáblaOktatás.Rows[i].Cells[0].Value = rekord.ID;
-
+                            TáblaOktatás.Rows[i].Cells[1].Value = rekord.HRazonosító;
                             Adat_Dolgozó_Alap Elem = (from a in AdatokDolg
                                                       where a.Dolgozószám == rekord.HRazonosító
                                                       select a).FirstOrDefault();

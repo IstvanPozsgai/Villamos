@@ -109,12 +109,12 @@ namespace Villamos.Kezelők
                     string szöveg = "INSERT INTO Oktatásnapló";
                     szöveg += "( Id, Hrazonosító, IDoktatás, oktatásdátuma, kioktatta, rögzítésdátuma, telephely, PDFfájlneve, Számonkérés, státus, rögzítő, megjegyzés)";
                     szöveg += " VALUES (";
-                    szöveg += $"{Sorszám(Telephely, Év)}, "; //id
+                    szöveg += $"{sorszám}, "; //id
                     szöveg += $"'{Adat.HRazonosító}', "; //Hrazonosító
                     szöveg += $"{Adat.IDoktatás}, "; //IDoktatás
                     szöveg += $"'{Adat.Oktatásdátuma}', ";
                     szöveg += $"'{Adat.Kioktatta}', ";
-                    szöveg += $"'{DateTime.Now}', ";
+                    szöveg += $"'{Adat.Rögzítésdátuma}', ";
                     szöveg += $"'{Adat.Telephely}', ";
                     szöveg += $"'{Adat.PDFFájlneve}', ";
                     szöveg += $"{Adat.Számonkérés}, 0, ";
@@ -143,7 +143,7 @@ namespace Villamos.Kezelők
             {
                 List<Adat_Oktatás_Napló> Adatok = Lista_Adatok(Telephely, Év);
                 if (Adatok == null) return Válasz;
-                Válasz = Adatok.Max(a => a.ID) + 1;
+                if (Adatok.Count > 0) Válasz = Adatok.Max(a => a.ID) + 1;
             }
             catch (HibásBevittAdat ex)
             {
@@ -167,7 +167,7 @@ namespace Villamos.Kezelők
                 foreach (Adat_Oktatás_Napló Adat in Adatok)
                 {
                     string szöveg = $"UPDATE oktatásnapló SET státus={Adat.Státus}, ";
-                    szöveg = $" rögzítő='{Adat.Rögzítő}', ";
+                    szöveg += $" rögzítő='{Adat.Rögzítő}', ";
                     szöveg += $" rögzítésdátuma='{Adat.Rögzítésdátuma}'";
                     szöveg += $" Where id={Adat.ID}";
                     SzövegGy.Add(szöveg);
