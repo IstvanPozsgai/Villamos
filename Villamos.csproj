@@ -295,7 +295,6 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Jármű_Takarítás_Ütemezés_Segéd2.Designer.cs">
       <DependentUpon>Jármű_Takarítás_Ütemezés_Segéd2.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Takarítás_Eljárások.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Takarítás\Takarítás_teljesítés_Igazolás.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP.cs">
       <SubType>Form</SubType>

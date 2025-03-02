@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Ablakok._4_Nyilvántartások.Takarítás;
-using static System.IO.File;
+using Villamos.Kezelők;
+using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
 {
@@ -10,8 +10,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
     {
         private Ablak_Jármű_takarítás_új AblakTakFő { get; set; }
 
+        readonly Kezelő_Jármű_Takarítás_Vezénylés KézVezénylés = new Kezelő_Jármű_Takarítás_Vezénylés();
+
         public Esemény_Delegált Esemény;
-        string Ütem_szerelvényszám_2 = "";
+        long Ütem_szerelvényszám_2 = 0;
 
         public Jármű_Takarítás_Ütemezés_Segéd2(Form főTakAblak)
         {
@@ -52,17 +54,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
                 Segéd_tábla.Visible = true;
 
                 string T5C5Előterv = AblakTakFő.Tábla.Rows[sor].Cells[29].Value?.ToString();
-                string SzerelvénySzám = AblakTakFő.Tábla.Rows[sor].Cells[21].Value?.ToString();
+                long SzerelvénySzám = AblakTakFő.Tábla.Rows[sor].Cells[21].Value.ToÉrt_Long();
                 string Szerelvény = AblakTakFő.Tábla.Rows[sor].Cells[22].Value?.ToString();
                 string Pályaszám = AblakTakFő.Tábla.Rows[sor].Cells[0].Value?.ToString();
                 string[] psz = new string[6];
 
                 Kocsi_PSZ_2.Text = AblakTakFő.Tábla.Rows[sor].Cells[0].Value.ToString();
-
-                Ütem_szerelvényszám_2 = SzerelvénySzám ?? "0";
-                if (Ütem_szerelvényszám_2.Trim() == "") Ütem_szerelvényszám_2 = "0";
+                Ütem_szerelvényszám_2 = SzerelvénySzám;
                 Ütem_szerelvény_text2.Text = Szerelvény ?? Pályaszám;
-
                 psz = Ütem_szerelvény_text2.Text.Split('-');
 
                 for (int i = 0; i < psz.Length; i++)
@@ -99,7 +98,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
 
                     for (int j = 0; j < AblakTakFő.Tábla.RowCount; j++)
                     {
-                        if (AblakTakFő.Tábla.Rows[j].Cells[0].Value.ToStrTrim () == psz[i].Trim())
+                        if (AblakTakFő.Tábla.Rows[j].Cells[0].Value.ToStrTrim() == psz[i].Trim())
                         {
                             Segéd_tábla.Rows[0].Cells[i + 2].Value = AblakTakFő.Tábla.Rows[j].Cells[4].Value;
                             Segéd_tábla.Rows[1].Cells[i + 2].Value = AblakTakFő.Tábla.Rows[j].Cells[7].Value;
@@ -130,35 +129,35 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
 
                     if (AblakTakFő.Tábla.Rows[sor].Cells[5].Value != null)
                     {
-                        if (AblakTakFő.Tábla.Rows[sor].Cells[5].Value.ToStrTrim () == "")
+                        if (AblakTakFő.Tábla.Rows[sor].Cells[5].Value.ToStrTrim() == "")
                             Segéd_tábla.Rows[0].Cells[0].Value = false;
                         else
                             Segéd_tábla.Rows[0].Cells[0].Value = true;
                     }
                     if (AblakTakFő.Tábla.Rows[sor].Cells[8].Value != null)
                     {
-                        if (AblakTakFő.Tábla.Rows[sor].Cells[8].Value.ToStrTrim () == "")
+                        if (AblakTakFő.Tábla.Rows[sor].Cells[8].Value.ToStrTrim() == "")
                             Segéd_tábla.Rows[1].Cells[0].Value = false;
                         else
                             Segéd_tábla.Rows[1].Cells[0].Value = true;
                     }
                     if (AblakTakFő.Tábla.Rows[sor].Cells[11].Value != null)
                     {
-                        if (AblakTakFő.Tábla.Rows[sor].Cells[11].Value.ToStrTrim () == "")
+                        if (AblakTakFő.Tábla.Rows[sor].Cells[11].Value.ToStrTrim() == "")
                             Segéd_tábla.Rows[2].Cells[0].Value = false;
                         else
                             Segéd_tábla.Rows[2].Cells[0].Value = true;
                     }
                     if (AblakTakFő.Tábla.Rows[sor].Cells[14].Value != null)
                     {
-                        if (AblakTakFő.Tábla.Rows[sor].Cells[14].Value.ToStrTrim () == "")
+                        if (AblakTakFő.Tábla.Rows[sor].Cells[14].Value.ToStrTrim() == "")
                             Segéd_tábla.Rows[3].Cells[0].Value = false;
                         else
                             Segéd_tábla.Rows[3].Cells[0].Value = true;
                     }
                     if (AblakTakFő.Tábla.Rows[sor].Cells[17].Value != null)
                     {
-                        if (AblakTakFő.Tábla.Rows[sor].Cells[17].Value.ToStrTrim () == "")
+                        if (AblakTakFő.Tábla.Rows[sor].Cells[17].Value.ToStrTrim() == "")
                             Segéd_tábla.Rows[4].Cells[0].Value = false;
                         else
                             Segéd_tábla.Rows[4].Cells[0].Value = true;
@@ -180,10 +179,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
         {
             try
             {
-                Takarítás_Eljárások TakElj = new Takarítás_Eljárások();
-                string hely = $@"{Application.StartupPath}\{AblakTakFő.Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{AblakTakFő.Dátum.Value.Year}.mdb";
-                string jelszó = "seprűéslapát";
-                TakElj.Ütem_Töröl(hely, jelszó, AblakTakFő.Dátum.Value, pályaszám, takarításfajta);
+                Adat_Jármű_Takarítás_Vezénylés ADAT = new Adat_Jármű_Takarítás_Vezénylés(
+                                           0,
+                                           pályaszám,
+                                           AblakTakFő.Dátum.Value,
+                                           takarításfajta,
+                                           0,
+                                           0);
+                KézVezénylés.Törlés(AblakTakFő.Cmbtelephely.Text.Trim(), AblakTakFő.Dátum.Value.Year, ADAT);
                 AblakTakFő.Ütem_Tábla_törlés(pályaszám.Trim(), takarításfajta);
             }
             catch (HibásBevittAdat ex)
@@ -201,9 +204,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\" + AblakTakFő.Cmbtelephely.Text.Trim() + $@"\Adatok\Takarítás\Takarítás_{AblakTakFő.Dátum.Value:yyyy}.mdb";
-                if (!Exists(hely)) return;
-
                 string[] pályaszám = new string[6];
                 for (int i = 0; i < 6; i++)
                     pályaszám[i] = "";
@@ -238,14 +238,18 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
             Esemény?.Invoke();
         }
 
-        private void Ütem_rögzít_segéd(string pályaszám, string takarításfajta, string szerelvényszám)
+        private void Ütem_rögzít_segéd(string pályaszám, string takarításfajta, long szerelvényszám)
         {
             try
             {
-                Takarítás_Eljárások TakElj = new Takarítás_Eljárások();
-                string hely = $@"{Application.StartupPath}\{AblakTakFő.Cmbtelephely.Text.Trim()}\Adatok\Takarítás\Takarítás_{AblakTakFő.Dátum.Value.Year}.mdb";
-                string jelszó = "seprűéslapát";
-                TakElj.Ütem_Rögzít(hely, jelszó, AblakTakFő.Dátum.Value, pályaszám, takarításfajta, szerelvényszám);
+                Adat_Jármű_Takarítás_Vezénylés ADAT = new Adat_Jármű_Takarítás_Vezénylés(
+                                                   0,
+                                                   pályaszám,
+                                                   AblakTakFő.Dátum.Value,
+                                                   takarításfajta,
+                                                   szerelvényszám,
+                                                   0);
+                KézVezénylés.Döntés(AblakTakFő.Cmbtelephely.Text.Trim(), AblakTakFő.Dátum.Value.Year, ADAT);
                 AblakTakFő.Ütem_tábla_Rögzítés(pályaszám.Trim(), takarításfajta);
             }
             catch (HibásBevittAdat ex)
@@ -263,11 +267,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
         {
             try
             {
-                string hely;
-                hely = $@"{Application.StartupPath}\" + AblakTakFő.Cmbtelephely.Text.Trim() + $@"\Adatok\Takarítás\Takarítás_{DateTime.Today.Year}.mdb";
-                if (!Exists(hely))
-                    return;
-
                 string[] pályaszám = new string[6];
                 for (int i = 0; i < 6; i++)
                     pályaszám[i] = "";
@@ -280,12 +279,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
                 for (int i = 0; i < pályaszám.Count(); i++)
                 {
 
-                    if (pályaszám[i].ToStrTrim () == "") break;
-                    if (Segéd_tábla.Rows[0].Cells[0].Value != null && Segéd_tábla.Rows[0].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim (), "J2", Ütem_szerelvényszám_2.Trim());
-                    if (Segéd_tábla.Rows[1].Cells[0].Value != null && Segéd_tábla.Rows[1].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim (), "J3", Ütem_szerelvényszám_2.Trim());
-                    if (Segéd_tábla.Rows[2].Cells[0].Value != null && Segéd_tábla.Rows[2].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim (), "J4", Ütem_szerelvényszám_2.Trim());
-                    if (Segéd_tábla.Rows[3].Cells[0].Value != null && Segéd_tábla.Rows[3].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim (), "J5", Ütem_szerelvényszám_2.Trim());
-                    if (Segéd_tábla.Rows[4].Cells[0].Value != null && Segéd_tábla.Rows[4].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim (), "J6", Ütem_szerelvényszám_2.Trim());
+                    if (pályaszám[i].ToStrTrim() == "") break;
+                    if (Segéd_tábla.Rows[0].Cells[0].Value != null && Segéd_tábla.Rows[0].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim(), "J2", Ütem_szerelvényszám_2);
+                    if (Segéd_tábla.Rows[1].Cells[0].Value != null && Segéd_tábla.Rows[1].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim(), "J3", Ütem_szerelvényszám_2);
+                    if (Segéd_tábla.Rows[2].Cells[0].Value != null && Segéd_tábla.Rows[2].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim(), "J4", Ütem_szerelvényszám_2);
+                    if (Segéd_tábla.Rows[3].Cells[0].Value != null && Segéd_tábla.Rows[3].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim(), "J5", Ütem_szerelvényszám_2);
+                    if (Segéd_tábla.Rows[4].Cells[0].Value != null && Segéd_tábla.Rows[4].Cells[0].Value.ToÉrt_Bool()) Ütem_rögzít_segéd(pályaszám[i].ToStrTrim(), "J6", Ütem_szerelvényszám_2);
                     AblakTakFő.Ütemezettkocsik();
                 }
                 AblakTakFő.Ütemezettkocsik();

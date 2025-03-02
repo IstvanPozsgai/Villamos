@@ -3185,16 +3185,13 @@ namespace Villamos.Villamos_Nyomtatványok
             MyE.Kiir("Munkaruhát viselt  [Fő]:", "a3");
             MyE.Rácsoz("a1:c3");
 
-
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Takarítás\Takarítás_{DateTime.Now.Year}.mdb";
-            if (!System.IO.File.Exists(hely)) return;
-            string jelszó = "seprűéslapát";
-            string szöveg = "SELECT * FROM vezénylés where [státus]<>9 and [dátum]=#" + Dátum.ToString("M-d-yy") + "#";
-            szöveg += " ORDER BY takarítási_fajta, szerelvényszám, azonosító";
-
             Kezelő_Jármű_Takarítás_Vezénylés KJTV_kéz = new Kezelő_Jármű_Takarítás_Vezénylés();
-            List<Adat_Jármű_Takarítás_Vezénylés> Adatok = KJTV_kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+            List<Adat_Jármű_Takarítás_Vezénylés> Adatok = KJTV_kéz.Lista_Adatok(Cmbtelephely.Trim(), DateTime.Now.Year);
+            Adatok = (from a in Adatok
+                      where a.Státus != 9
+                      && a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
+                      orderby a.Takarítási_fajta, a.Szerelvényszám, a.Azonosító
+                      select a).ToList();
 
             string takarítási_fajta = "";
             int sor = 5;
