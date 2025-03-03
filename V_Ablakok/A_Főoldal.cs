@@ -371,7 +371,8 @@ namespace Villamos
 
         private void Könyvtárak_Létrehozása()
         {
-            Hely_Ellenőr.Könyvtárszerkezet(lbltelephely.Text.Trim());
+            if (lbltelephely.Text.Trim() != "")
+                Hely_Ellenőr.Könyvtárszerkezet(lbltelephely.Text.Trim());
         }
 
         private void AblakFőoldal_Resize(object sender, EventArgs e)

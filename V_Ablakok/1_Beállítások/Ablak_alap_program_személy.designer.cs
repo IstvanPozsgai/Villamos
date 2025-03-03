@@ -161,6 +161,7 @@ namespace Villamos
             this.TabPage4 = new System.Windows.Forms.TabPage();
             this.PDF_néző = new PdfiumViewer.PdfViewer();
             this.TabPage5 = new System.Windows.Forms.TabPage();
+            this.FeorStátus = new System.Windows.Forms.CheckBox();
             this.Feortörlés = new System.Windows.Forms.Button();
             this.FrissítMunkakör = new System.Windows.Forms.Button();
             this.FeorTábla = new Zuby.ADGV.AdvancedDataGridView();
@@ -255,13 +256,22 @@ namespace Villamos
             this.Label43 = new System.Windows.Forms.Label();
             this.Gondnok_frissít = new System.Windows.Forms.Button();
             this.Gondnok_tábla = new System.Windows.Forms.DataGridView();
+            this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.LábJobb = new System.Windows.Forms.TextBox();
+            this.LábKözép = new System.Windows.Forms.TextBox();
+            this.LábBal = new System.Windows.Forms.TextBox();
+            this.FejJobb = new System.Windows.Forms.TextBox();
+            this.FejKözép = new System.Windows.Forms.TextBox();
+            this.Szerszám_OK = new System.Windows.Forms.Button();
+            this.label51 = new System.Windows.Forms.Label();
+            this.FejBal = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Button13 = new System.Windows.Forms.Button();
-            this.Holtart = new Villamos. V_MindenEgyéb.MyProgressbar();
-            this.FeorStátus = new System.Windows.Forms.CheckBox();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CsoportTábla)).BeginInit();
@@ -285,6 +295,7 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.Védő_tábla)).BeginInit();
             this.TabPage12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Gondnok_tábla)).BeginInit();
+            this.tabPage13.SuspendLayout();
             this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -305,6 +316,7 @@ namespace Villamos
             this.Fülek.Controls.Add(this.TabPage9);
             this.Fülek.Controls.Add(this.TabPage11);
             this.Fülek.Controls.Add(this.TabPage12);
+            this.Fülek.Controls.Add(this.tabPage13);
             this.Fülek.HotTrack = true;
             this.Fülek.Location = new System.Drawing.Point(0, 65);
             this.Fülek.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -1376,6 +1388,16 @@ namespace Villamos
             this.TabPage5.TabIndex = 4;
             this.TabPage5.Text = "Munkakörök";
             // 
+            // FeorStátus
+            // 
+            this.FeorStátus.AutoSize = true;
+            this.FeorStátus.Location = new System.Drawing.Point(781, 50);
+            this.FeorStátus.Name = "FeorStátus";
+            this.FeorStátus.Size = new System.Drawing.Size(68, 24);
+            this.FeorStátus.TabIndex = 82;
+            this.FeorStátus.Text = "Törölt";
+            this.FeorStátus.UseVisualStyleBackColor = true;
+            // 
             // Feortörlés
             // 
             this.Feortörlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
@@ -1742,7 +1764,7 @@ namespace Villamos
             dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tábla1.RowHeadersDefaultCellStyle = dataGridViewCellStyle20;
             this.Tábla1.RowHeadersWidth = 51;
-            this.Tábla1.Size = new System.Drawing.Size(1180, 329);
+            this.Tábla1.Size = new System.Drawing.Size(1180, 354);
             this.Tábla1.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla1.TabIndex = 65;
             this.Tábla1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla1_CellClick);
@@ -1931,7 +1953,7 @@ namespace Villamos
             dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tábla3.RowHeadersDefaultCellStyle = dataGridViewCellStyle23;
             this.Tábla3.RowHeadersWidth = 51;
-            this.Tábla3.Size = new System.Drawing.Size(1176, 320);
+            this.Tábla3.Size = new System.Drawing.Size(1176, 345);
             this.Tábla3.TabIndex = 74;
             this.Tábla3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla3_CellClick);
             this.Tábla3.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla3_CellDoubleClick);
@@ -2558,6 +2580,103 @@ namespace Villamos
             this.Gondnok_tábla.TabIndex = 67;
             this.Gondnok_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Gondnok_tábla_CellClick);
             // 
+            // tabPage13
+            // 
+            this.tabPage13.BackColor = System.Drawing.Color.SandyBrown;
+            this.tabPage13.Controls.Add(this.LábJobb);
+            this.tabPage13.Controls.Add(this.LábKözép);
+            this.tabPage13.Controls.Add(this.LábBal);
+            this.tabPage13.Controls.Add(this.FejJobb);
+            this.tabPage13.Controls.Add(this.FejKözép);
+            this.tabPage13.Controls.Add(this.Szerszám_OK);
+            this.tabPage13.Controls.Add(this.label51);
+            this.tabPage13.Controls.Add(this.FejBal);
+            this.tabPage13.Controls.Add(this.label18);
+            this.tabPage13.Location = new System.Drawing.Point(4, 54);
+            this.tabPage13.Name = "tabPage13";
+            this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage13.Size = new System.Drawing.Size(1188, 462);
+            this.tabPage13.TabIndex = 12;
+            this.tabPage13.Text = "Eszköz";
+            // 
+            // LábJobb
+            // 
+            this.LábJobb.Location = new System.Drawing.Point(132, 265);
+            this.LábJobb.Multiline = true;
+            this.LábJobb.Name = "LábJobb";
+            this.LábJobb.Size = new System.Drawing.Size(1029, 33);
+            this.LábJobb.TabIndex = 89;
+            // 
+            // LábKözép
+            // 
+            this.LábKözép.Location = new System.Drawing.Point(132, 226);
+            this.LábKözép.Multiline = true;
+            this.LábKözép.Name = "LábKözép";
+            this.LábKözép.Size = new System.Drawing.Size(1029, 33);
+            this.LábKözép.TabIndex = 88;
+            // 
+            // LábBal
+            // 
+            this.LábBal.Location = new System.Drawing.Point(132, 187);
+            this.LábBal.Multiline = true;
+            this.LábBal.Name = "LábBal";
+            this.LábBal.Size = new System.Drawing.Size(1029, 33);
+            this.LábBal.TabIndex = 87;
+            // 
+            // FejJobb
+            // 
+            this.FejJobb.Location = new System.Drawing.Point(132, 112);
+            this.FejJobb.Multiline = true;
+            this.FejJobb.Name = "FejJobb";
+            this.FejJobb.Size = new System.Drawing.Size(1029, 33);
+            this.FejJobb.TabIndex = 86;
+            // 
+            // FejKözép
+            // 
+            this.FejKözép.Location = new System.Drawing.Point(132, 73);
+            this.FejKözép.Multiline = true;
+            this.FejKözép.Name = "FejKözép";
+            this.FejKözép.Size = new System.Drawing.Size(1029, 33);
+            this.FejKözép.TabIndex = 85;
+            // 
+            // Szerszám_OK
+            // 
+            this.Szerszám_OK.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Szerszám_OK.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Szerszám_OK.Location = new System.Drawing.Point(1116, 320);
+            this.Szerszám_OK.Name = "Szerszám_OK";
+            this.Szerszám_OK.Size = new System.Drawing.Size(45, 45);
+            this.Szerszám_OK.TabIndex = 84;
+            this.ToolTip1.SetToolTip(this.Szerszám_OK, "Rögzíti/módosítja az adatokat");
+            this.Szerszám_OK.UseVisualStyleBackColor = true;
+            this.Szerszám_OK.Click += new System.EventHandler(this.Szerszám_OK_Click);
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(18, 200);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(103, 20);
+            this.label51.TabIndex = 74;
+            this.label51.Text = "Lábléc felirat:";
+            // 
+            // FejBal
+            // 
+            this.FejBal.Location = new System.Drawing.Point(132, 34);
+            this.FejBal.Multiline = true;
+            this.FejBal.Name = "FejBal";
+            this.FejBal.Size = new System.Drawing.Size(1029, 33);
+            this.FejBal.TabIndex = 73;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(18, 47);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(98, 20);
+            this.label18.TabIndex = 72;
+            this.label18.Text = "Fejléc felirat:";
+            // 
             // Panel1
             // 
             this.Panel1.Controls.Add(this.Cmbtelephely);
@@ -2613,16 +2732,6 @@ namespace Villamos
             this.Holtart.TabIndex = 53;
             this.Holtart.Visible = false;
             // 
-            // FeorStátus
-            // 
-            this.FeorStátus.AutoSize = true;
-            this.FeorStátus.Location = new System.Drawing.Point(781, 50);
-            this.FeorStátus.Name = "FeorStátus";
-            this.FeorStátus.Size = new System.Drawing.Size(68, 24);
-            this.FeorStátus.TabIndex = 82;
-            this.FeorStátus.Text = "Törölt";
-            this.FeorStátus.UseVisualStyleBackColor = true;
-            // 
             // Ablak_alap_program_személy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -2674,6 +2783,8 @@ namespace Villamos
             this.TabPage12.ResumeLayout(false);
             this.TabPage12.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Gondnok_tábla)).EndInit();
+            this.tabPage13.ResumeLayout(false);
+            this.tabPage13.PerformLayout();
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -2872,5 +2983,15 @@ namespace Villamos
         internal TextBox Munka_Id;
         private ComboBox Munka_Kategória;
         private CheckBox FeorStátus;
+        private TabPage tabPage13;
+        internal Button Szerszám_OK;
+        internal Label label51;
+        internal TextBox FejBal;
+        internal Label label18;
+        internal TextBox LábJobb;
+        internal TextBox LábKözép;
+        internal TextBox LábBal;
+        internal TextBox FejJobb;
+        internal TextBox FejKözép;
     }
 }

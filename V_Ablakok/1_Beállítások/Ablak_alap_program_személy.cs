@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
@@ -30,6 +31,7 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Munkakör KézMunkakör = new Kezelő_Kiegészítő_Munkakör();
         readonly Kezelő_Behajtás_Engedélyezés KézBehEng = new Kezelő_Behajtás_Engedélyezés();
         readonly Kezelő_Kiegészítő_Csoportbeosztás KézCsoportbeosztás = new Kezelő_Kiegészítő_Csoportbeosztás();
+        readonly Kezelő_Szerszám_FejLáb KézSzerszámFejLáb = new Kezelő_Szerszám_FejLáb();
         #endregion
 
         #region Listák
@@ -371,6 +373,12 @@ namespace Villamos
                             Gond_ürít();
                             break;
                         }
+                    case 12:
+                        {
+                            // Eszköz Szerszám
+                            Szerszám_Kiírás();
+                            break;
+                        }
                 }
             }
             catch (HibásBevittAdat ex)
@@ -383,6 +391,8 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -3194,5 +3204,52 @@ namespace Villamos
         }
 
         #endregion
+
+
+        #region Eszköz és Szerszám
+        private void Szerszám_Kiírás()
+        {
+            Adat_Szerszám_FejLáb Adat = KézSzerszámFejLáb.Egy_Adat();
+            if (Adat != null)
+            {
+                FejBal.Text = Adat.Fejléc_Bal;
+                FejKözép.Text = Adat.Fejléc_Közép;
+                FejJobb.Text = Adat.Fejléc_Jobb;
+                LábBal.Text = Adat.Lábléc_Bal;
+                LábKözép.Text = Adat.Lábléc_Közép;
+                LábJobb.Text = Adat.Lábléc_Jobb;
+            }
+        }
+
+        private void Szerszám_OK_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Adat_Szerszám_FejLáb ADAT = new Adat_Szerszám_FejLáb(
+                    1,
+                    FejBal.Text.Trim(),
+                    FejKözép.Text.Trim(),
+                    FejJobb.Text.Trim(),
+                    LábBal.Text.Trim(),
+                    LábKözép.Text.Trim(),
+                    LábJobb.Text.Trim());
+                KézSzerszámFejLáb.Rögzítés(ADAT);
+
+                Szerszám_Kiírás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+        #endregion
+
+
     }
 }

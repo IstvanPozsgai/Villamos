@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -29,6 +30,7 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
         readonly Kezelő_Eszköz KézEszköz = new Kezelő_Eszköz();
         readonly Kezelő_Szerszám_Napló KézNapló = new Kezelő_Szerszám_Napló();
+        readonly Kezelő_Szerszám_FejLáb KézSzerszámFejLáb = new Kezelő_Szerszám_FejLáb();
 
         List<Adat_Kiegészítő_Jelenlétiív> AdatokJelenléti = new List<Adat_Kiegészítő_Jelenlétiív>();
         List<Adat_Szerszám_Cikktörzs> AdatokCikk = new List<Adat_Szerszám_Cikktörzs>();
@@ -3975,10 +3977,16 @@ namespace Villamos
                 MyE.Igazít_függőleges($"i{sor}:l{sor}", "közép");
                 MyE.Igazít_vízszintes($"i{sor}:l{sor}", "bal");
 
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:L" + sor, "", "", "&\"Calibri,Félkövér\"&12Budapesti Közlekedési Zártkörűen Működő Részvénytársaság",
-                    "", "&\"Calibri,Félkövér\"33/VU2019. 9/a. számú melléklete",
-                    "Jelen Utasítás hatályba lépésének dátuma:\r2023. év április hónap ,,19˝. napja (a 2 számú módosítással egységes szerkezetben)",
-                    "", "", "", 0.708661417322835, 0.708661417322835, 0, 0.669291338582677, 0.433070866141732, 0.15748031496063, false, false, "Fekvő");
+                Adat_Szerszám_FejLáb Adat = KézSzerszámFejLáb.Egy_Adat();
+                if (Adat != null)
+                    MyE.NyomtatásiTerület_részletes(munkalap, "A1:L" + sor, "", "",
+                        Adat.Fejléc_Bal,
+                        Adat.Fejléc_Közép,
+                        Adat.Fejléc_Jobb,
+                        Adat.Lábléc_Bal,
+                        Adat.Lábléc_Közép,
+                        Adat.Lábléc_Jobb,
+                        "", 0.708661417322835, 0.708661417322835, 0, 0.669291338582677, 0.433070866141732, 0.15748031496063, false, false, "Fekvő");
 
                 if (Napló_Nyomtat.Checked == true)
                 {
