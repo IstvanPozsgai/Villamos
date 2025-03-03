@@ -760,6 +760,15 @@ namespace Villamos
                                select a).ToList();
                 if (txtgyáriszám.Text.Trim() != "")
                     Adatok = Adatok.Where(a => a.Gyáriszám.Contains(txtgyáriszám.Text.Trim().ToUpper())).ToList();
+                if (TextPszlek.Text.Trim() != "")
+                    Adatok = Adatok.Where(a => a.Beépítve.Contains(TextPszlek.Text.Trim().ToUpper())).ToList();
+                if (ComboStátuslek.Text.Trim() != "")
+                {
+                    int státus = ComboStátuslek.Text.Trim().Substring(0, 1).ToÉrt_Int();
+                    Adatok = Adatok.Where(a => a.Státus == státus).ToList();
+                }
+                if (Telephely_Szűrő.Text.Trim() != "")
+                    Adatok = Adatok.Where(a => a.Telephely == Telephely_Szűrő.Text.Trim()).ToList();
 
                 foreach (Adat_Akkumulátor rekord in Adatok)
                 {
