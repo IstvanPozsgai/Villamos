@@ -70,14 +70,13 @@ namespace Villamos.Adatszerkezet
                 {
                     using (OleDbCommand cmdCreate = new OleDbCommand())
                     {
-                        string szöveg = $"ALTER TABLE [{Tábla}] ADD {Oszlop} {Típus} ";
+                        string szöveg = $"ALTER TABLE {Tábla} ADD COLUMN {Oszlop} {Típus} ";
                         cmdCreate.Connection = Kapcsolat;
                         cmdCreate.CommandText = szöveg;
                         Kapcsolat.Open();
                         cmdCreate.ExecuteNonQuery();
                     }
                 }
-
             }
 
             catch (Exception ex)
