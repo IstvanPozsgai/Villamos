@@ -1689,8 +1689,10 @@ namespace Villamos
         {
             try
             {
+
                 Lekérd_Tábla.Visible = false;
                 Lekérd_Tábla.CleanFilterAndSort();
+                AdatTáblaLekérd.Clear();
                 LekérdTáblaFejléc();
                 LekérdTáblaTartalom();
                 Lekérd_Tábla.DataSource = AdatTáblaLekérd;
@@ -2016,6 +2018,7 @@ namespace Villamos
         {
             try
             {
+                AdatTáblaLekérd.Clear();
                 double Összeg = 0;
                 AdatokKönyvelés = KézKönyvelés.Lista_Adatok(Cmbtelephely.Text.Trim());
                 AdatokCikk = KézCikk.Lista_Adatok(Cmbtelephely.Text.Trim());
