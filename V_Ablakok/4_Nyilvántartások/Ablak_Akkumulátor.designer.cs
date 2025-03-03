@@ -134,7 +134,7 @@ namespace Villamos
             this.TabPage4 = new System.Windows.Forms.TabPage();
             this.label30 = new System.Windows.Forms.Label();
             this.MérésLekGyári = new System.Windows.Forms.TextBox();
-            this.dátumig = new System.Windows.Forms.DateTimePicker();
+            this.Dátumig = new System.Windows.Forms.DateTimePicker();
             this.Dátumtól = new System.Windows.Forms.DateTimePicker();
             this.Tábla4 = new System.Windows.Forms.DataGridView();
             this.R_törlés = new System.Windows.Forms.Button();
@@ -145,7 +145,7 @@ namespace Villamos
             this.label23 = new System.Windows.Forms.Label();
             this.Súgó = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1068,7 +1068,7 @@ namespace Villamos
             this.txtgyáriszám.Size = new System.Drawing.Size(181, 26);
             this.txtgyáriszám.TabIndex = 67;
             // 
-            // tábla2
+            // Tábla2
             // 
             this.Tábla2.AllowUserToAddRows = false;
             this.Tábla2.AllowUserToDeleteRows = false;
@@ -1090,7 +1090,7 @@ namespace Villamos
             this.Tábla2.EnableHeadersVisualStyles = false;
             this.Tábla2.Location = new System.Drawing.Point(7, 63);
             this.Tábla2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Tábla2.Name = "tábla2";
+            this.Tábla2.Name = "Tábla2";
             this.Tábla2.ReadOnly = true;
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle6.BackColor = System.Drawing.Color.Silver;
@@ -1158,7 +1158,7 @@ namespace Villamos
             this.TabPage4.BackColor = System.Drawing.Color.Turquoise;
             this.TabPage4.Controls.Add(this.label30);
             this.TabPage4.Controls.Add(this.MérésLekGyári);
-            this.TabPage4.Controls.Add(this.dátumig);
+            this.TabPage4.Controls.Add(this.Dátumig);
             this.TabPage4.Controls.Add(this.Dátumtól);
             this.TabPage4.Controls.Add(this.Tábla4);
             this.TabPage4.Controls.Add(this.R_törlés);
@@ -1186,13 +1186,13 @@ namespace Villamos
             this.MérésLekGyári.Size = new System.Drawing.Size(181, 26);
             this.MérésLekGyári.TabIndex = 99;
             // 
-            // dátumig
+            // Dátumig
             // 
-            this.dátumig.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dátumig.Location = new System.Drawing.Point(128, 29);
-            this.dátumig.Name = "dátumig";
-            this.dátumig.Size = new System.Drawing.Size(107, 26);
-            this.dátumig.TabIndex = 39;
+            this.Dátumig.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.Dátumig.Location = new System.Drawing.Point(128, 29);
+            this.Dátumig.Name = "Dátumig";
+            this.Dátumig.Size = new System.Drawing.Size(107, 26);
+            this.Dátumig.TabIndex = 39;
             // 
             // Dátumtól
             // 
@@ -1379,7 +1379,7 @@ namespace Villamos
         internal TabPage TabPage2;
         internal TabPage TabPage3;
         internal TabPage TabPage4;
-        internal DateTimePicker dátumig;
+        internal DateTimePicker Dátumig;
         internal DateTimePicker Dátumtól;
         internal Button BtnMéréslista;
         internal DataGridView Tábla4;

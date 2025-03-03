@@ -238,7 +238,7 @@ namespace Villamos
                     {
                         //Mérések listázása
                         Dátumtól.Value = new DateTime(DateTime.Today.Year, 1, 1);
-                        dátumig.Value = new DateTime(DateTime.Today.Year, 12, 31);
+                        Dátumig.Value = new DateTime(DateTime.Today.Year, 12, 31);
                         break;
                     }
             }
@@ -848,7 +848,16 @@ namespace Villamos
                 Tábla4.Columns[14].Width = 120;
 
                 List<Adat_Akkumulátor_Mérés> Adatok = KézAkkuMér.Lista_Adatok(Dátumtól.Value.Year);
-                Adatok = Adatok.Where(a => a.Mérésdátuma >= Dátumtól.Value && a.Mérésdátuma < dátumig.Value.AddDays(1) && a.Rögzítő != "TÖRÖLT").OrderBy(a => a.Gyáriszám).ToList();
+                if (Dátumtól.Value.Year != Dátumig.Value.Year)
+                {
+                    for (int i = Dátumtól.Value.Year + 1; i <= Dátumig.Value.Year; i++)
+                    {
+                        List<Adat_Akkumulátor_Mérés> Ideig = KézAkkuMér.Lista_Adatok(i);
+                        Adatok.AddRange(Ideig);
+                    }
+                }
+
+                Adatok = Adatok.Where(a => a.Mérésdátuma >= Dátumtól.Value && a.Mérésdátuma < Dátumig.Value.AddDays(1) && a.Rögzítő != "TÖRÖLT").OrderBy(a => a.Gyáriszám).ToList();
                 if (MérésLekGyári.Text.Trim() != "")
                     Adatok = Adatok.Where(a => a.Gyáriszám.ToUpper().Contains(MérésLekGyári.Text.Trim().ToUpper())).ToList();
 
