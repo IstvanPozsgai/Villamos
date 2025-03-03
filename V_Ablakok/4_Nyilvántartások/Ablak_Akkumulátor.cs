@@ -1005,6 +1005,8 @@ namespace Villamos
                                              where a.Gyáriszám == Textgyárimérés.Text.Trim()
                                              select a).FirstOrDefault();
 
+                if (AdatAkku.Telephely != CmbTelephely.Text.Trim()) throw new HibásBevittAdat($"Ez az akkumulátor {AdatAkku.Telephely} telephelyen van.");
+
                 Adat_Akkumulátor_Mérés ADAT = new Adat_Akkumulátor_Mérés(
                                             Textgyárimérés.Text.Trim(),
                                             Kisütési,
