@@ -158,5 +158,27 @@ namespace Villamos.Kezelők
             }
             return Válasz;
         }
+
+        public string Mezőnév(string Leírás)
+        {
+            string Válasz = "";
+            try
+            {
+                List<Adat_Osztály_Név> Adatok = Lista_Adat();
+
+                Adat_Osztály_Név Adat = Adatok.Where(a => a.Osztálynév == Leírás).FirstOrDefault();
+                if (Adat != null) Válasz = Adat.Osztálymező;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Osztály_Adat
     {
+        Kezelő_Osztály_Név KézNév = new Kezelő_Osztály_Név();
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
         readonly string jelszó = "kéménybe";
 
@@ -75,14 +76,15 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public string Érték(Adat_Osztály_Adat rekord, string Mezőnév)
+        public string Érték(Adat_Osztály_Adat rekord, string Leírás)
         {
             string Válasz = "?";
             try
             {
+                string mezőnév = KézNév.Mezőnév(Leírás);
                 for (int i = 0; i < rekord.Mezőnév.Count; i++)
                 {
-                    if (rekord.Mezőnév[i].ToStrTrim() == Mezőnév)
+                    if (rekord.Mezőnév[i].ToStrTrim() == mezőnév)
                         Válasz = rekord.Adatok[i].ToStrTrim();
                 }
             }

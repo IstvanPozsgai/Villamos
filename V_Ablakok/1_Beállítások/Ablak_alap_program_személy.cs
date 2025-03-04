@@ -152,6 +152,8 @@ namespace Villamos
 
                     Gond_rögzít.Visible = true;
                     Gond_töröl.Visible = true;
+
+                    Szerszám_OK.Visible = true;
                 }
                 else
                 {
@@ -175,6 +177,7 @@ namespace Villamos
 
                     Gond_rögzít.Visible = false;
                     Gond_töröl.Visible = false;
+                    Szerszám_OK.Visible = false;
                 }
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 BtnOktatásFel.Enabled = false;
