@@ -3977,9 +3977,10 @@ namespace Villamos
                 MyE.Igazít_függőleges($"i{sor}:l{sor}", "közép");
                 MyE.Igazít_vízszintes($"i{sor}:l{sor}", "bal");
 
-                Adat_Szerszám_FejLáb Adat = KézSzerszámFejLáb.Egy_Adat();
+                List<Adat_Szerszám_FejLáb> Adatok = KézSzerszámFejLáb.Lista_Adatok();
+                Adat_Szerszám_FejLáb Adat = Adatok.Where(a => a.Típus == "9A").FirstOrDefault();
                 if (Adat != null)
-                    MyE.NyomtatásiTerület_részletes(munkalap, "A1:L" + sor, "", "",
+                    MyE.NyomtatásiTerület_részletes(munkalap, $"A1:L{sor}", "", "",
                         Adat.Fejléc_Bal,
                         Adat.Fejléc_Közép,
                         Adat.Fejléc_Jobb,
@@ -4367,12 +4368,18 @@ namespace Villamos
                 sor++;
                 MyE.Aláírásvonal($"E{sor}:H{sor}");
 
-
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:J" + sor, "", "", "",
-                "&\"Calibri,Normál\"&12Budapesti Közlekedési Zártkörűen Működő Részvénytársaság 33/VU/2019. 9/b. számú melléklete", "",
-                "&\"Calibri\"&12Jelen Utasítás hatályba lépésének dátuma: \r\n 2023. év április hónap „19”. napja (a 2 számú módosítással egységes szerkezetben)",
-                "", "", "", 0.393700787401575, 0.393700787401575, 0.748031496062992, 0.748031496062992, 0.31496062992126, 0.31496062992126, true, false, "Álló");
-
+                List<Adat_Szerszám_FejLáb> Adatok = KézSzerszámFejLáb.Lista_Adatok();
+                Adat_Szerszám_FejLáb Adat = Adatok.Where(a => a.Típus == "9B").FirstOrDefault();
+                if (Adat != null)
+                {
+                    MyE.NyomtatásiTerület_részletes(munkalap, $"A1:J{sor}", "", "",
+                        Adat.Fejléc_Bal,
+                        Adat.Fejléc_Közép,
+                        Adat.Fejléc_Jobb,
+                        Adat.Lábléc_Bal,
+                        Adat.Lábléc_Közép,
+                        Adat.Lábléc_Jobb, "", 0.393700787401575, 0.393700787401575, 0.748031496062992, 0.748031496062992, 0.31496062992126, 0.31496062992126, true, false, "Álló");
+                }
                 if (Napló_Nyomtat.Checked)
                 {
                     MyE.Nyomtatás("Munka1", 1, 1);

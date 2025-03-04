@@ -2,7 +2,7 @@
 {
     public class Adat_Szerszám_FejLáb
     {
-        public int Id { get; private set; }
+        public string Típus { get; private set; }
         public string Fejléc_Bal { get; private set; }
         public string Fejléc_Közép { get; private set; }
         public string Fejléc_Jobb { get; private set; }
@@ -10,9 +10,9 @@
         public string Lábléc_Közép { get; private set; }
         public string Lábléc_Jobb { get; private set; }
 
-        public Adat_Szerszám_FejLáb(int id, string fejléc_Bal, string fejléc_Közép, string fejléc_Jobb, string lábléc_Bal, string lábléc_Közép, string lábléc_Jobb)
+        public Adat_Szerszám_FejLáb(string típus, string fejléc_Bal, string fejléc_Közép, string fejléc_Jobb, string lábléc_Bal, string lábléc_Közép, string lábléc_Jobb)
         {
-            Id = id;
+            Típus = típus;
             Fejléc_Bal = fejléc_Bal;
             Fejléc_Közép = fejléc_Közép;
             Fejléc_Jobb = fejléc_Jobb;

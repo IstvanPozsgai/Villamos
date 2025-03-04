@@ -12,7 +12,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
 
             szöveg = $"CREATE TABLE Szerszám_FejLáb (";
-            szöveg += " [Id] short, ";
+            szöveg += " [Típus] char(25), ";
             szöveg += " [Fejléc_Bal] char(250), ";
             szöveg += " [Fejléc_Közép] char(250), ";
             szöveg += " [Fejléc_Jobb] char(250), ";

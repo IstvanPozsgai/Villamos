@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -18,10 +20,11 @@ namespace Villamos.Kezelők
             if (!Adatbázis.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Szerszám_FejLáb(hely);
         }
 
-        public Adat_Szerszám_FejLáb Egy_Adat()
+        public List<Adat_Szerszám_FejLáb> Lista_Adatok()
         {
-            Adat_Szerszám_FejLáb Adat = null;
-            string szöveg = $"SELECT * FROM Szerszám_FejLáb WHERE Id=1";
+            List<Adat_Szerszám_FejLáb> Adatok = new List<Adat_Szerszám_FejLáb>();
+            Adat_Szerszám_FejLáb Adat;
+            string szöveg = $"SELECT * FROM Szerszám_FejLáb ";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -32,32 +35,39 @@ namespace Villamos.Kezelők
                     {
                         if (rekord.HasRows)
                         {
-                            rekord.Read();
-
-                            Adat = new Adat_Szerszám_FejLáb(
-                                      rekord["Id"].ToÉrt_Int(),
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Szerszám_FejLáb(
+                                      rekord["Típus"].ToStrTrim(),
                                       rekord["Fejléc_Bal"].ToStrTrim(),
                                       rekord["Fejléc_Közép"].ToStrTrim(),
                                       rekord["Fejléc_Jobb"].ToStrTrim(),
                                       rekord["Lábléc_Bal"].ToStrTrim(),
                                       rekord["Lábléc_Közép"].ToStrTrim(),
                                       rekord["Lábléc_Jobb"].ToStrTrim()
-                                      );
+                                          );
+
+                                Adatok.Add(Adat);
+                            }
                         }
                     }
                 }
             }
-            return Adat;
+            return Adatok;
         }
 
         public void Rögzítés(Adat_Szerszám_FejLáb Adat)
         {
             try
             {
+                List<Adat_Szerszám_FejLáb> Adatok = Lista_Adatok();
+                Adat_Szerszám_FejLáb Egy_Adat = Adatok.Where(x => x.Típus == Adat.Típus).FirstOrDefault();
+
                 string szöveg;
-                if (Egy_Adat() == null)
+                if (Egy_Adat == null)
                 {
-                    szöveg = $"INSERT INTO Szerszám_FejLáb (Id, Fejléc_Bal, Fejléc_Közép, Fejléc_Jobb, Lábléc_Bal, Lábléc_Közép, Lábléc_Jobb) VALUES (1, ";
+                    szöveg = $"INSERT INTO Szerszám_FejLáb (Típus, Fejléc_Bal, Fejléc_Közép, Fejléc_Jobb, Lábléc_Bal, Lábléc_Közép, Lábléc_Jobb) VALUES (";
+                    szöveg += $"'{Adat.Típus}', ";
                     szöveg += $"'{Adat.Fejléc_Bal}', ";
                     szöveg += $"'{Adat.Fejléc_Közép}', ";
                     szöveg += $"'{Adat.Fejléc_Jobb}', ";
@@ -74,7 +84,7 @@ namespace Villamos.Kezelők
                     szöveg += $"Lábléc_Bal='{Adat.Lábléc_Bal}', ";
                     szöveg += $"Lábléc_Közép='{Adat.Lábléc_Közép}', ";
                     szöveg += $"Lábléc_Jobb='{Adat.Lábléc_Jobb}' ";
-                    szöveg += $"WHERE Id={Adat.Id} ";
+                    szöveg += $"WHERE Típus='{Adat.Típus}' ";
                 }
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 

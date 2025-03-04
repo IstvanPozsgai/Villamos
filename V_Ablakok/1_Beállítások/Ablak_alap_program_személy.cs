@@ -376,7 +376,7 @@ namespace Villamos
                     case 12:
                         {
                             // Eszköz Szerszám
-                            Szerszám_Kiírás();
+                            Eszköz_tábla_listázás();
                             break;
                         }
                 }
@@ -391,8 +391,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -3207,9 +3205,10 @@ namespace Villamos
 
 
         #region Eszköz és Szerszám
-        private void Szerszám_Kiírás()
+        private void Szerszám_Kiírás(string Típus)
         {
-            Adat_Szerszám_FejLáb Adat = KézSzerszámFejLáb.Egy_Adat();
+            List<Adat_Szerszám_FejLáb> Adatok = KézSzerszámFejLáb.Lista_Adatok();
+            Adat_Szerszám_FejLáb Adat = Adatok.Where(a => a.Típus == Típus).FirstOrDefault();
             if (Adat != null)
             {
                 FejBal.Text = Adat.Fejléc_Bal;
@@ -3225,8 +3224,10 @@ namespace Villamos
         {
             try
             {
+                if (Eszköz_Típus.Text.Trim() == "") throw new HibásBevittAdat("A nyomtatvány mező nem lehet üres.");
+
                 Adat_Szerszám_FejLáb ADAT = new Adat_Szerszám_FejLáb(
-                    1,
+                    Eszköz_Típus.Text.Trim(),
                     FejBal.Text.Trim(),
                     FejKözép.Text.Trim(),
                     FejJobb.Text.Trim(),
@@ -3235,7 +3236,8 @@ namespace Villamos
                     LábJobb.Text.Trim());
                 KézSzerszámFejLáb.Rögzítés(ADAT);
 
-                Szerszám_Kiírás();
+                Szerszám_Kiírás(Eszköz_Típus.Text.Trim());
+                Eszköz_tábla_listázás();
             }
             catch (HibásBevittAdat ex)
             {
@@ -3248,8 +3250,98 @@ namespace Villamos
             }
 
         }
+
+        private void Eszköz_Frissít_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Eszköz_tábla_listázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Eszköz_tábla_listázás()
+        {
+            try
+            {
+                List<Adat_Szerszám_FejLáb> Adatok = KézSzerszámFejLáb.Lista_Adatok();
+
+                Eszköz_Tábla.Rows.Clear();
+                Eszköz_Tábla.Columns.Clear();
+                Eszköz_Tábla.Refresh();
+                Eszköz_Tábla.Visible = false;
+                Eszköz_Tábla.ColumnCount = 7;
+
+                // fejléc elkészítése
+                Eszköz_Tábla.Columns[0].HeaderText = "Nyomtatvány";
+                Eszköz_Tábla.Columns[0].Width = 125;
+                Eszköz_Tábla.Columns[1].HeaderText = "Fejléc Bal";
+                Eszköz_Tábla.Columns[1].Width = 275;
+                Eszköz_Tábla.Columns[2].HeaderText = "Fejléc Közép";
+                Eszköz_Tábla.Columns[2].Width = 275;
+                Eszköz_Tábla.Columns[3].HeaderText = "Fejléc Jobb";
+                Eszköz_Tábla.Columns[3].Width = 275;
+                Eszköz_Tábla.Columns[4].HeaderText = "Lábléc Bal";
+                Eszköz_Tábla.Columns[4].Width = 275;
+                Eszköz_Tábla.Columns[5].HeaderText = "Lábléc Közép";
+                Eszköz_Tábla.Columns[5].Width = 275;
+                Eszköz_Tábla.Columns[6].HeaderText = "Lábléc Jobb";
+                Eszköz_Tábla.Columns[6].Width = 275;
+
+                foreach (Adat_Szerszám_FejLáb rekord in Adatok)
+                {
+                    Eszköz_Tábla.RowCount++;
+                    int i = Eszköz_Tábla.RowCount - 1;
+                    Eszköz_Tábla.Rows[i].Cells[0].Value = rekord.Típus;
+                    Eszköz_Tábla.Rows[i].Cells[1].Value = rekord.Fejléc_Bal;
+                    Eszköz_Tábla.Rows[i].Cells[2].Value = rekord.Fejléc_Közép;
+                    Eszköz_Tábla.Rows[i].Cells[3].Value = rekord.Fejléc_Jobb;
+                    Eszköz_Tábla.Rows[i].Cells[4].Value = rekord.Lábléc_Bal;
+                    Eszköz_Tábla.Rows[i].Cells[5].Value = rekord.Lábléc_Közép;
+                    Eszköz_Tábla.Rows[i].Cells[6].Value = rekord.Lábléc_Jobb;
+                }
+                Eszköz_Tábla.Visible = true;
+                Eszköz_Tábla.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Eszköz_Tábla_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (Eszköz_Tábla.Rows.Count < 1) return;
+                if (e.RowIndex < 0) return;
+
+                Eszköz_Típus.Text = Eszköz_Tábla.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
+                Szerszám_Kiírás(Eszköz_Típus.Text.Trim());
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
-
-
     }
 }

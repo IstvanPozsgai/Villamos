@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők
 {
@@ -52,50 +51,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_Épület_Adattábla Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Épület_Adattábla Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Épület_Adattábla(
-                                          rekord["ID"].ToÉrt_Int(),
-                                          rekord["Megnevezés"].ToStrTrim(),
-                                          rekord["Osztály"].ToStrTrim(),
-                                          rekord["Méret"].ToÉrt_Double(),
-                                          rekord["Helységkód"].ToStrTrim(),
-                                          rekord["Státus"].ToÉrt_Bool(),
-                                          rekord["E1évdb"].ToÉrt_Int(),
-                                          rekord["E2évdb"].ToÉrt_Int(),
-                                          rekord["E3évdb"].ToÉrt_Int(),
-                                          rekord["Kezd"].ToStrTrim(),
-                                          rekord["Végez"].ToStrTrim(),
-                                          rekord["Ellenőremail"].ToStrTrim(),
-                                          rekord["Ellenőrneve"].ToStrTrim(),
-                                          rekord["Ellenőrtelefonszám"].ToStrTrim(),
-                                          rekord["Szemetes"].ToÉrt_Bool(),
-                                          rekord["Kapcsolthelység"].ToStrTrim()
-                                          );
-
-
-                            }
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
     }
 
     public class Kezelő_Épület_Takarításosztály
@@ -280,7 +235,7 @@ namespace Villamos.Kezelők
                                           rekord["E3rekijelölt"].ToStrTrim(),
                                           rekord["Helységkód"].ToStrTrim(),
                                           rekord["Hónap"].ToÉrt_Int(),
-                                          rekord["Megnevezés"]  .ToStrTrim(),
+                                          rekord["Megnevezés"].ToStrTrim(),
                                           rekord["Osztály"].ToStrTrim()
                                           );
                             }
