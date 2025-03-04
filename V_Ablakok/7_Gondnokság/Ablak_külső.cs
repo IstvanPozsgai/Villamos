@@ -3256,7 +3256,7 @@ namespace Villamos
 
                 string szöveg = "SELECT * FROM Email";
                 Adatok_Külső_Email = Kéz_Külső_Email.Lista_Adatok(hely, jelszó, szöveg);
-                Adat_Külső_Email emailRecord = Adatok_Külső_Email.FirstOrDefault();
+                Adat_Külső_Email emailRecord = Adatok_Külső_Email.Where(a => a.Id == Email_id).FirstOrDefault();
 
                 Email_másolat.Text = "";
                 Email_Aláírás.Text = "";
