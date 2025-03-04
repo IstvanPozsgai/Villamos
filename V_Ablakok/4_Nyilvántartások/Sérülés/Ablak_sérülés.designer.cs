@@ -110,7 +110,6 @@ namespace Villamos
             this.Label43 = new System.Windows.Forms.Label();
             this.Label42 = new System.Windows.Forms.Label();
             this.Label41 = new System.Windows.Forms.Label();
-            this.Telephely = new System.Windows.Forms.TextBox();
             this.Típus = new System.Windows.Forms.TextBox();
             this.Pályaszám = new System.Windows.Forms.TextBox();
             this.Sorszám = new System.Windows.Forms.TextBox();
@@ -264,7 +263,8 @@ namespace Villamos
             this.CAFRögzít = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Btn_Súgó = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Telephely = new System.Windows.Forms.ComboBox();
             this.Panel1.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -344,6 +344,7 @@ namespace Villamos
             // 
             this.TabPage1.AutoScroll = true;
             this.TabPage1.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.TabPage1.Controls.Add(this.Telephely);
             this.TabPage1.Controls.Add(this.Label68);
             this.TabPage1.Controls.Add(this.Telephely1);
             this.TabPage1.Controls.Add(this.Költséghely);
@@ -394,7 +395,6 @@ namespace Villamos
             this.TabPage1.Controls.Add(this.Label43);
             this.TabPage1.Controls.Add(this.Label42);
             this.TabPage1.Controls.Add(this.Label41);
-            this.TabPage1.Controls.Add(this.Telephely);
             this.TabPage1.Controls.Add(this.Típus);
             this.TabPage1.Controls.Add(this.Pályaszám);
             this.TabPage1.Controls.Add(this.Sorszám);
@@ -1034,14 +1034,6 @@ namespace Villamos
             this.Label41.Size = new System.Drawing.Size(51, 20);
             this.Label41.TabIndex = 219;
             this.Label41.Text = "Típus:";
-            // 
-            // Telephely
-            // 
-            this.Telephely.Location = new System.Drawing.Point(367, 9);
-            this.Telephely.MaxLength = 15;
-            this.Telephely.Name = "Telephely";
-            this.Telephely.Size = new System.Drawing.Size(172, 26);
-            this.Telephely.TabIndex = 218;
             // 
             // Típus
             // 
@@ -2470,6 +2462,7 @@ namespace Villamos
             this.PDF_néző.Location = new System.Drawing.Point(220, 59);
             this.PDF_néző.Margin = new System.Windows.Forms.Padding(9, 12, 9, 12);
             this.PDF_néző.Name = "PDF_néző";
+            this.PDF_néző.ShowToolbar = false;
             this.PDF_néző.Size = new System.Drawing.Size(1008, 546);
             this.PDF_néző.TabIndex = 240;
             this.PDF_néző.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;
@@ -2718,6 +2711,15 @@ namespace Villamos
             this.Holtart.TabIndex = 272;
             this.Holtart.Visible = false;
             // 
+            // Telephely
+            // 
+            this.Telephely.Enabled = false;
+            this.Telephely.FormattingEnabled = true;
+            this.Telephely.Location = new System.Drawing.Point(367, 6);
+            this.Telephely.Name = "Telephely";
+            this.Telephely.Size = new System.Drawing.Size(186, 28);
+            this.Telephely.TabIndex = 272;
+            // 
             // Ablak_sérülés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -2904,7 +2906,6 @@ namespace Villamos
         internal Label Label43;
         internal Label Label42;
         internal Label Label41;
-        internal TextBox Telephely;
         internal TextBox Típus;
         internal TextBox Sorszám;
         internal Label Label40;
@@ -3004,5 +3005,6 @@ namespace Villamos
         private CheckBox ChckBxDigitális;
         internal Label label72;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal ComboBox Telephely;
     }
 }

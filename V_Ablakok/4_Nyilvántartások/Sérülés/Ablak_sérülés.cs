@@ -136,14 +136,21 @@ namespace Villamos
             try
             {
                 Cmbtelephely.Items.Clear();
+                Telephely.Items.Clear();
                 foreach (string Elem in Listák.TelephelyLista_Jármű())
+                {
                     Cmbtelephely.Items.Add(Elem);
+                    Telephely.Items.Add(Elem);
+                }
+
+
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
                     Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim();
                 else
                     Cmbtelephely.Text = Program.PostásTelephely;
 
                 Cmbtelephely.Enabled = Program.Postás_Vezér;
+                Telephely.Enabled = Program.Postás_Vezér;
             }
             catch (HibásBevittAdat ex)
             {
