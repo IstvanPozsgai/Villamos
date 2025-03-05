@@ -546,7 +546,7 @@ namespace Villamos
                 menünév[7] = "Ciklusrend";
                 menüleírás[7] = " 1- Rögzítés, 2-nincs , 3- nincs";
                 menünév[8] = "Program adatok Személy";
-                menüleírás[8] = " 1- Védő, 2- Gondnok , 3- ";
+                menüleírás[8] = " 1- Védő, 2- Gondnok , 3- Eszköz lap";
                 // 9
                 // 10
                 menünév[11] = "Váltós munkarend és Túlóra";

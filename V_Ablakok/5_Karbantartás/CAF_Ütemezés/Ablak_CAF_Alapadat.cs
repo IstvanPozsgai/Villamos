@@ -28,7 +28,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
-
         void Start()
         {
             Jogosultságkiosztás();
@@ -44,12 +43,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Ablak_CAF_Alapadat_Load(object sender, EventArgs e)
         {
 
         }
-
 
         private void Jogosultságkiosztás()
         {

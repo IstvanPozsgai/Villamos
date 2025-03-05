@@ -258,10 +258,8 @@ namespace Villamos
                     Gond_töröl.Enabled = true;
                 }
                 // módosítás 3
-                if (MyF.Vanjoga(melyikelem, 3))
-                {
 
-                }
+                Szerszám_OK.Enabled = MyF.Vanjoga(melyikelem, 3);
             }
             catch (HibásBevittAdat ex)
             {
