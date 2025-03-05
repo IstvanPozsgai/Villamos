@@ -1,12 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_CAF_alap
     {
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
+        readonly string jelszó = "CzabalayL";
+
+        public List<Adat_CAF_alap> Lista_Adatok()
+        {
+            string szöveg = $"SELECT * FROM alap ORDER BY azonosító";
+            List<Adat_CAF_alap> Adatok = new List<Adat_CAF_alap>();
+            Adat_CAF_alap Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_CAF_alap(
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["Ciklusnap"].ToStrTrim(),
+                                        rekord["Utolsó_Nap"].ToStrTrim(),
+                                        rekord["Utolsó_Nap_sorszám"].ToÉrt_Long(),
+                                        rekord["Végezte_nap"].ToStrTrim(),
+                                        rekord["Vizsgdátum_nap"].ToÉrt_DaTeTime(),
+                                        rekord["Cikluskm"].ToStrTrim(),
+                                        rekord["Utolsó_Km"].ToStrTrim(),
+                                        rekord["Utolsó_Km_sorszám"].ToÉrt_Long(),
+                                        rekord["Végezte_km"].ToStrTrim(),
+                                        rekord["Vizsgdátum_km"].ToÉrt_DaTeTime(),
+                                        rekord["Számláló"].ToÉrt_Long(),
+                                        rekord["havikm"].ToÉrt_Long(),
+                                        rekord["KMUkm"].ToÉrt_Long(),
+                                        rekord["KMUdátum"].ToÉrt_DaTeTime(),
+                                        rekord["fudátum"].ToÉrt_DaTeTime(),
+                                        rekord["Teljeskm"].ToÉrt_Long(),
+                                        rekord["Típus"].ToStrTrim(),
+                                        rekord["Garancia"].ToÉrt_Bool(),
+                                        rekord["törölt"].ToÉrt_Bool()
+                                        );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
         public List<Adat_CAF_alap> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_CAF_alap> Adatok = new List<Adat_CAF_alap>();
@@ -55,7 +108,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public Adat_CAF_alap Egy_Adat(string hely, string jelszó, string szöveg)
         {
             Adat_CAF_alap Adat = null;
@@ -100,6 +152,8 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
+
+
     }
 
     public class Kezelő_CAF_Adatok
@@ -183,9 +237,6 @@ namespace Villamos.Kezelők
             return Adat;
         }
     }
-
-
-
 
     public class Kezelő_CAF_Telephely
     {

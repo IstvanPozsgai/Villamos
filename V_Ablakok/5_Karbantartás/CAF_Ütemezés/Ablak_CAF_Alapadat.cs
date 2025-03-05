@@ -14,11 +14,18 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
     {
         public string Azonosító { get; private set; }
 
-        readonly Kezelő_Ciklus KezCiklus = new Kezelő_Ciklus();
-        readonly Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
+        #region Kezelők és Listák
 
+
+        readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
+        readonly Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
+        readonly Kezelő_CAF_alap KézCAFAlap = new Kezelő_CAF_alap();
+        readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
+
+        List<Adat_CAF_alap> AdatokCAFAlap = new List<Adat_CAF_alap>();
         List<Adat_Főkönyv_Zser_Km> AdatokZser = new List<Adat_Főkönyv_Zser_Km>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
+        #endregion
 
         public Ablak_CAF_Alapadat(string azonosító)
         {
@@ -34,6 +41,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Pályaszámokfeltöltése();
             Vizsgsorszámcombofeltölés();
             Üzemek_listázása();
+            AdatokCiklus = KézCiklus.Lista_Adatok();
+            AdatokCAFAlap = KézCAFAlap.Lista_Adatok();
+
             CiklusrendCombok_feltöltés();
             CiklusrendCombok_feltöltés();
             if (Azonosító.Trim() != "")
@@ -95,20 +105,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Pályaszámokfeltöltése()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg = "SELECT * FROM alap ORDER BY azonosító";
                 Alap_pályaszám.Items.Clear();
-                Alap_pályaszám.BeginUpdate();
-                Alap_pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                Alap_pályaszám.EndUpdate();
-                Alap_pályaszám.Refresh();
 
+                foreach (Adat_CAF_alap Elem in AdatokCAFAlap)
+                    Alap_pályaszám.Items.Add(Elem.Azonosító);
             }
             catch (HibásBevittAdat ex)
             {
@@ -120,7 +124,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Vizsgsorszámcombofeltölés()
         {
@@ -129,21 +132,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Alap_ciklus_idő.Items.Clear();
                 Alap_ciklus_km.Items.Clear();
 
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\ciklus.mdb";
-                string jelszó = "pocsaierzsi";
-
-                string szöveg = "SELECT DISTINCT típus FROM ciklusrendtábla WHERE  [törölt]='0' ORDER BY típus";
-
-                Alap_ciklus_idő.BeginUpdate();
-                Alap_ciklus_idő.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "típus"));
-                Alap_ciklus_idő.EndUpdate();
-                Alap_ciklus_idő.Refresh();
-
-                Alap_ciklus_km.BeginUpdate();
-                Alap_ciklus_km.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "típus"));
-                Alap_ciklus_km.EndUpdate();
-                Alap_ciklus_km.Refresh();
-
+                AdatokCiklus = KézCiklus.Lista_Adatok();
+                List<string> AdatokSzöveg = AdatokCiklus.OrderBy(a => a.Típus).Where(a => a.Törölt == "0").Select(t => t.Típus).Distinct().ToList();
+                foreach (string elem in AdatokSzöveg)
+                {
+                    Alap_ciklus_idő.Items.Add(elem);
+                    Alap_ciklus_km.Items.Add(elem);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -155,7 +150,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Üzemek_listázása()
         {
@@ -164,21 +158,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 ALAP_Üzemek_km.Items.Clear();
                 ALAP_Üzemek_nap.Items.Clear();
 
+                List<Adat_kiegészítő_telephely> Adatok = KézTelephely.Lista_adatok().OrderBy(a => a.Sorszám).ToList();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM telephelytábla order by sorszám";
-
-                ALAP_Üzemek_km.BeginUpdate();
-                ALAP_Üzemek_km.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "telephelykönyvtár"));
-                ALAP_Üzemek_km.EndUpdate();
-                ALAP_Üzemek_km.Refresh();
-
-                ALAP_Üzemek_nap.BeginUpdate();
-                ALAP_Üzemek_nap.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "telephelykönyvtár"));
-                ALAP_Üzemek_nap.EndUpdate();
-                ALAP_Üzemek_nap.Refresh();
-
+                foreach (Adat_kiegészítő_telephely Elem in Adatok)
+                {
+                    ALAP_Üzemek_km.Items.Add(Elem.Telephelykönyvtár);
+                    ALAP_Üzemek_nap.Items.Add(Elem.Telephelykönyvtár);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -190,7 +176,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Kalkulál_Click(object sender, EventArgs e)
         {
@@ -200,8 +185,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 string jelszó = "CzabalayL";
                 string szöveg = "SELECT * FROM alap WHERE törölt=false ORDER BY azonosító";
 
-                Kezelő_CAF_alap Kéz = new Kezelő_CAF_alap();
-                List<Adat_CAF_alap> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(hely, jelszó, szöveg);
 
                 NapiZSerListaFeltöltés();
                 if (Adatok != null)
@@ -252,31 +237,27 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Lekérdezés_lekérdezés_Click(object sender, EventArgs e)
         {
             Alapadatokat_kiír();
         }
-
 
         private void Alap_pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             Alapadatokat_kiír();
         }
 
-
         private void Alapadatokat_kiír()
         {
             try
             {
-                if (Alap_pályaszám.Text.Trim() == "")
-                    return;
+                if (Alap_pályaszám.Text.Trim() == "") return;
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
                 string jelszó = "CzabalayL";
                 string szöveg = "SELECT * FROM alap WHERE azonosító='" + Alap_pályaszám.Text.Trim() + "'";
 
-                Kezelő_CAF_alap Kéz = new Kezelő_CAF_alap();
-                Adat_CAF_alap Adat = Kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_CAF_alap Adat = KézCAFAlap.Egy_Adat(hely, jelszó, szöveg);
 
                 if (Adat != null)
                 {
@@ -333,8 +314,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             try
             {
                 Alap_vizsg_sorszám_idő.Items.Clear();
-                if (Alap_ciklus_idő.Text.Trim() == "")
-                    return;
+                if (Alap_ciklus_idő.Text.Trim() == "") return;
 
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\ciklus.mdb";
                 string jelszó = "pocsaierzsi";
@@ -386,8 +366,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
                 string jelszó = "CzabalayL";
                 string szöveg = $"SELECT * FROM alap";
-                Kezelő_CAF_alap KézCAFAlap = new Kezelő_CAF_alap();
-                List<Adat_CAF_alap> AdatokCAFAlap = KézCAFAlap.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_CAF_alap> AdatokCAFAlap = KézCAFAlap.Lista_Adatok();
                 bool vane = AdatokCAFAlap.Any(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
 
                 if (vane)
@@ -477,26 +457,22 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Alap_ciklus_idő_SelectedIndexChanged(object sender, EventArgs e)
         {
             Ciklus_IDŐ_Sorszám_feltöltés();
         }
-
 
         private void Alap_ciklus_km_SelectedIndexChanged(object sender, EventArgs e)
         {
             Ciklus_KM_Sorszám_feltöltés();
         }
 
-
         private void Ciklus_KM_Sorszám_feltöltés()
         {
             try
             {
                 Alap_vizsg_sorszám_km.Items.Clear();
-                if (Alap_ciklus_km.Text.Trim() == "")
-                    return;
+                if (Alap_ciklus_km.Text.Trim() == "") return;
 
                 string hely = Application.StartupPath + @"\Főmérnökség\adatok\ciklus.mdb";
                 string jelszó = "pocsaierzsi";
@@ -564,7 +540,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             string hely = Application.StartupPath + @"\Főmérnökség\adatok\ciklus.mdb";
             string jelszó = "pocsaierzsi";
             string szöveg = "SELECT * FROM ciklusrendtábla";
-            List<Adat_Ciklus> AdatokCiklus = KezCiklus.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Ciklus> AdatokCiklus = KézCiklus.Lista_Adatok(hely, jelszó, szöveg);
             if (!long.TryParse(Alap_vizsg_sorszám_idő.Text.Trim(), out long SorSzám)) SorSzám = 0;
             Adat_Ciklus vane = (from a in AdatokCiklus
                                 where a.Törölt == "0" &&
@@ -583,7 +559,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             string hely = Application.StartupPath + @"\Főmérnökség\adatok\ciklus.mdb";
             string jelszó = "pocsaierzsi";
             string szöveg = "SELECT * FROM ciklusrendtábla";
-            List<Adat_Ciklus> AdatokCiklus = KezCiklus.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Ciklus> AdatokCiklus = KézCiklus.Lista_Adatok(hely, jelszó, szöveg);
 
             if (!long.TryParse(Alap_vizsg_sorszám_idő.Text.Trim(), out long SorSzám)) SorSzám = 0;
             Adat_Ciklus vane = (from a in AdatokCiklus
