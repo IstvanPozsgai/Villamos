@@ -42,8 +42,6 @@
             this.Szín_dollár = new System.Windows.Forms.TextBox();
             this.Label57 = new System.Windows.Forms.Label();
             this.Szín_Kukac = new System.Windows.Forms.TextBox();
-            this.Színmező = new System.Windows.Forms.TextBox();
-            this.Színe = new System.Windows.Forms.TextBox();
             this.Label56 = new System.Windows.Forms.Label();
             this.Label55 = new System.Windows.Forms.Label();
             this.Label54 = new System.Windows.Forms.Label();
@@ -67,6 +65,8 @@
             this.Karb_töröl = new System.Windows.Forms.Button();
             this.Szín_tábla_lista = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Színe = new System.Windows.Forms.TextBox();
+            this.Színmező = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Szín_Tábla)).BeginInit();
             this.SuspendLayout();
             // 
@@ -171,23 +171,6 @@
             this.Szín_Kukac.Size = new System.Drawing.Size(115, 26);
             this.Szín_Kukac.TabIndex = 289;
             this.Szín_Kukac.Click += new System.EventHandler(this.Szín_Kukac_Click);
-            // 
-            // Színmező
-            // 
-            this.Színmező.Location = new System.Drawing.Point(118, 24);
-            this.Színmező.Name = "Színmező";
-            this.Színmező.Size = new System.Drawing.Size(22, 26);
-            this.Színmező.TabIndex = 288;
-            this.Színmező.Text = "1";
-            this.Színmező.Visible = false;
-            // 
-            // Színe
-            // 
-            this.Színe.Location = new System.Drawing.Point(146, 24);
-            this.Színe.Name = "Színe";
-            this.Színe.Size = new System.Drawing.Size(21, 26);
-            this.Színe.TabIndex = 287;
-            this.Színe.Visible = false;
             // 
             // Label56
             // 
@@ -404,6 +387,23 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
+            // Színe
+            // 
+            this.Színe.Location = new System.Drawing.Point(146, 24);
+            this.Színe.Name = "Színe";
+            this.Színe.Size = new System.Drawing.Size(21, 26);
+            this.Színe.TabIndex = 287;
+            this.Színe.Visible = false;
+            // 
+            // Színmező
+            // 
+            this.Színmező.Location = new System.Drawing.Point(118, 24);
+            this.Színmező.Name = "Színmező";
+            this.Színmező.Size = new System.Drawing.Size(22, 26);
+            this.Színmező.TabIndex = 288;
+            this.Színmező.Text = "1";
+            this.Színmező.Visible = false;
+            // 
             // Ablak_CAF_Szín
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -472,8 +472,6 @@
         internal System.Windows.Forms.TextBox Szín_dollár;
         internal System.Windows.Forms.Label Label57;
         internal System.Windows.Forms.TextBox Szín_Kukac;
-        internal System.Windows.Forms.TextBox Színmező;
-        internal System.Windows.Forms.TextBox Színe;
         internal System.Windows.Forms.Label Label56;
         internal System.Windows.Forms.Label Label55;
         internal System.Windows.Forms.Label Label54;
@@ -497,5 +495,7 @@
         internal System.Windows.Forms.Button Karb_töröl;
         internal System.Windows.Forms.Button Szín_tábla_lista;
         private System.Windows.Forms.ToolTip toolTip1;
+        internal System.Windows.Forms.TextBox Színe;
+        internal System.Windows.Forms.TextBox Színmező;
     }
 }

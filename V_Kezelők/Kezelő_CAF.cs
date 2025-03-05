@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők
 {
@@ -186,94 +185,6 @@ namespace Villamos.Kezelők
     }
 
 
-    public class Kezelő_CAF_Szinezés
-    {
-        public List<Adat_CAF_Szinezés> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_CAF_Szinezés> Adatok = new List<Adat_CAF_Szinezés>();
-            Adat_CAF_Szinezés Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_CAF_Szinezés(
-                                        rekord["telephely"].ToStrTrim(),
-                                        rekord["SzínPSZgar"].ToÉrt_Double(),
-                                        rekord["SzínPsz"].ToÉrt_Double(),
-                                        rekord["SzínIStűrés"].ToÉrt_Double(),
-                                        rekord["SzínIS"].ToÉrt_Double(),
-                                        rekord["SzínP"].ToÉrt_Double(),
-                                        rekord["Színszombat"].ToÉrt_Double(),
-                                        rekord["SzínVasárnap"].ToÉrt_Double(),
-                                        rekord["Szín_E"].ToÉrt_Double(),
-                                        rekord["Szín_dollár"].ToÉrt_Double(),
-                                        rekord["Szín_Kukac"].ToÉrt_Double(),
-                                        rekord["Szín_Hasteg"].ToÉrt_Double(),
-                                        rekord["Szín_jog"].ToÉrt_Double(),
-                                        rekord["Szín_nagyobb"].ToÉrt_Double()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-
-        public Adat_CAF_Szinezés Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_CAF_Szinezés Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_CAF_Szinezés(
-                                    rekord["telephely"].ToStrTrim(),
-                                    rekord["SzínPSZgar"].ToÉrt_Double(),
-                                    rekord["SzínPsz"].ToÉrt_Double(),
-                                    rekord["SzínIStűrés"].ToÉrt_Double(),
-                                    rekord["SzínIS"].ToÉrt_Double(),
-                                    rekord["SzínP"].ToÉrt_Double(),
-                                    rekord["Színszombat"].ToÉrt_Double(),
-                                    rekord["SzínVasárnap"].ToÉrt_Double(),
-                                    rekord["Szín_E"].ToÉrt_Double(),
-                                    rekord["Szín_dollár"].ToÉrt_Double(),
-                                    rekord["Szín_Kukac"].ToÉrt_Double(),
-                                    rekord["Szín_Hasteg"].ToÉrt_Double(),
-                                    rekord["Szín_jog"].ToÉrt_Double(),
-                                    rekord["Szín_nagyobb"].ToÉrt_Double()
-                                    );
-
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-    }
 
 
     public class Kezelő_CAF_Telephely

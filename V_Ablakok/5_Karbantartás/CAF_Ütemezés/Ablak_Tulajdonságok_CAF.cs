@@ -20,11 +20,15 @@ namespace Villamos
 
     public partial class Ablak_Tulajdonságok_CAF
     {
+        #region Kezelők
+        readonly Kezelő_CAF_Szinezés KézSzín = new Kezelő_CAF_Szinezés();
+        readonly Kezelő_CAF_Adatok KézCAF = new Kezelő_CAF_Adatok();
+        #endregion
+
+
         CAF_Segéd_Adat Posta_Segéd = null;
-        //Kezelő_Ciklus Kéz_ciklus = new Kezelő_Ciklus();
-        //List<Adat_Ciklus> Adat_ciklus_km = null;
-        //List<Adat_Ciklus> Adat_ciklus_idő = null;
-        Kezelő_CAF_Adatok KézCAF = new Kezelő_CAF_Adatok();
+
+
 
         List<Adat_CAF_Adatok> AdatokCaf = new List<Adat_CAF_Adatok>();
 
@@ -1346,8 +1350,6 @@ namespace Villamos
 
 
                 string munkalap = "Munka1";
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
 
                 // kimeneti fájl helye és neve
                 string fájlexc;
@@ -1378,10 +1380,8 @@ namespace Villamos
                 double szombat = 255;
                 double vasárnap = 255;
 
-                Kezelő_CAF_Szinezés kéz = new Kezelő_CAF_Szinezés();
-                string szöveg = $"SELECT * FROM  szinezés WHERE Telephely='{Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[3].Value.ToString().Trim()}'";
-
-                Adat_CAF_Szinezés Szín = kéz.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_CAF_Szinezés> AdatokSzín = KézSzín.Lista_Adatok();
+                Adat_CAF_Szinezés Szín = AdatokSzín.Where(a => a.Telephely == Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[3].Value.ToStrTrim()).FirstOrDefault();
                 if (Szín != null)
                 {
                     szombat = Szín.Színszombat;
@@ -1441,12 +1441,11 @@ namespace Villamos
 
                 for (int ii = 3; ii < Tábla_elő.ColumnCount; ii++)
                 {
-                    MyE.Kiir((Tábla_elő.Columns[ii].HeaderText.Trim()), "a" + sor.ToString());
+                    MyE.Kiir((Tábla_elő.Columns[ii].HeaderText.Trim()), $"a{sor}");
                     double PSZszín = 255;
                     double PSZgarszín = 255;
 
-                    szöveg = $"SELECT * FROM  szinezés WHERE Telephely='{Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[ii].Value.ToString().Trim()}'";
-                    Szín = kéz.Egy_Adat(hely, jelszó, szöveg);
+                    Szín = AdatokSzín.Where(a => a.Telephely == Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[ii].Value.ToStrTrim()).FirstOrDefault();
                     if (Szín != null)
                     {
                         PSZszín = Szín.SzínPsz;
@@ -1478,8 +1477,7 @@ namespace Villamos
                             double istűrésszín = 255d;
                             double Pszín = 255d;
 
-                            szöveg = $"SELECT * FROM  szinezés WHERE Telephely='{Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[j].Value.ToString().Trim()}'";
-                            Szín = kéz.Egy_Adat(hely, jelszó, szöveg);
+                            Szín = AdatokSzín.Where(a => a.Telephely == Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[j].Value.ToStrTrim()).FirstOrDefault();
                             if (Szín != null)
                             {
                                 isszín = Szín.SzínIS;
@@ -1491,7 +1489,7 @@ namespace Villamos
                             {
                                 if (Tábla_elő.Rows[i].Cells[j].Value != null)
                                 {
-                                    szöveg = Tábla_elő.Rows[i].Cells[j].Value.ToString().Trim();
+                                    string szöveg = Tábla_elő.Rows[i].Cells[j].Value.ToString().Trim();
                                     // ha a napi adatok között van vizsgálat akkor kiírjuk
                                     if (szöveg != "")
                                     {
@@ -1564,8 +1562,7 @@ namespace Villamos
                             double Szín_jog_v = 255d;
                             double Szín_nagyobb_v = 255d;
 
-                            szöveg = $"SELECT * FROM  szinezés WHERE Telephely='{Tábla_elő.Rows[Tábla_elő.RowCount - 1].Cells[j].Value.ToString().Trim()}'";
-                            Szín = kéz.Egy_Adat(hely, jelszó, szöveg);
+                            Szín = AdatokSzín.Where(a => a.Telephely == Tábla_elő.Rows[Tábla_elő.RowCount - 1].Cells[j].Value.ToStrTrim()).FirstOrDefault();
                             if (Szín != null)
                             {
                                 Szín_E_v = Szín.Szín_E;
@@ -1627,7 +1624,7 @@ namespace Villamos
                                                 }
 
                                         }
-                                        szöveg = Tábla_elő.Rows[i].Cells[j].Value.ToString().Trim();
+                                        string szöveg = Tábla_elő.Rows[i].Cells[j].Value.ToString().Trim();
                                         MyE.Kiir(szöveg, MyE.Oszlopnév(i + 2) + k.ToString());
                                     }
                                 }

@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyF = Függvénygyűjtemény;
 
@@ -18,25 +17,23 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         readonly Kezelő_CAF_Szinezés KézSzín = new Kezelő_CAF_Szinezés();
         List<Adat_CAF_Szinezés> AdatokSzín = new List<Adat_CAF_Szinezés>();
+
         public Ablak_CAF_Szín()
         {
             InitializeComponent();
             Start();
         }
 
-
-        void Start()
+        private void Start()
         {
             Telephelyekfeltöltése();
             Jogosultságkiosztás();
         }
 
-
         private void Ablak_CAF_Szín_Load(object sender, EventArgs e)
         {
 
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -119,34 +116,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Szín_tábla_kiírás();
         }
 
-        private void SzínListaFeltöltés()
-        {
-            try
-            {
-                AdatokSzín.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg = "SELECT * FROM szinezés order by Telephely";
-                AdatokSzín = KézSzín.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Szín_tábla_kiírás()
         {
             try
             {
-                SzínListaFeltöltés();
-
-
+                AdatokSzín = KézSzín.Lista_Adatok();
 
                 Szín_Tábla.Rows.Clear();
                 Szín_Tábla.Columns.Clear();
@@ -185,13 +159,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Szín_Tábla.Columns[13].HeaderText = "> beírás";
                 Szín_Tábla.Columns[13].Width = 75;
 
-
-                int i;
-
                 foreach (Adat_CAF_Szinezés rekord in AdatokSzín)
                 {
                     Szín_Tábla.RowCount++;
-                    i = Szín_Tábla.RowCount - 1;
+                    int i = Szín_Tábla.RowCount - 1;
                     Szín_Tábla.Rows[i].Cells[0].Value = rekord.Telephely;
                     Szín_Tábla.Rows[i].Cells[1].Value = rekord.SzínPsz;
                     Szín_Tábla.Rows[i].Cells[2].Value = rekord.SzínPSZgar;
@@ -250,7 +221,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Command17_Click(object sender, EventArgs e)
         {
@@ -365,7 +335,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Karb_új_Click(object sender, EventArgs e)
         {
             SzínPsz.Text = "";
@@ -383,7 +352,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Szín_jog.Text = "";
             Szín_nagyobb.Text = "";
         }
-
 
         private void Karb_rögzít_Click(object sender, EventArgs e)
         {
@@ -419,63 +387,26 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 if (Színtelephely.Text.Trim() == "") throw new HibásBevittAdat("Telephely mező nem lehet üres.");
 
-
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg;
-                SzínListaFeltöltés();
+                AdatokSzín = KézSzín.Lista_Adatok();
                 Adat_CAF_Szinezés Elem = (from a in AdatokSzín
                                           where a.Telephely == Színtelephely.Text.Trim()
                                           select a).FirstOrDefault();
 
-
+                Adat_CAF_Szinezés ADAT = new Adat_CAF_Szinezés(
+                                    Színtelephely.Text.Trim(),
+                                    színpsz,
+                                    színpszgar,
+                                    színistűrés,
+                                    színis,
+                                    színp,
+                                    színszombat,
+                                    színvasárnap,
+                                    szín_e, szín_dollár, szín_kukac, szín_hasteg, szín_jog, szín_nagyobb);
                 if (Elem == null)
-                {
-                    // új rögzítés
-                    szöveg = "INSERT INTO szinezés (telephely, színpsz, színpszgar, színIstűrés, színIS, színP, színSzombat, színVasárnap, szín_e, szín_dollár, ";
-                    szöveg += " szín_kukac, szín_hasteg, szín_jog, szín_nagyobb ) VALUES (";
-                    szöveg += "'" + Színtelephely.Text.Trim() + "', "; // telephely
-                    szöveg += színpsz + ", "; // színpsz
-                    szöveg += színpszgar + ", "; // színpszgar
-                    szöveg += színistűrés + ", "; // színIstűrés
-                    szöveg += színis + ", "; // színIS
-                    szöveg += színp + ", "; // színP
-                    szöveg += színszombat + ", "; // színSzombat
-                    szöveg += színvasárnap + ", "; // színVasárnap
-
-                    szöveg += szín_e + ", ";  // szín_e
-                    szöveg += szín_dollár + ", ";   // szín_dollár,
-                    szöveg += szín_kukac + ", ";  // szín_kukac
-                    szöveg += szín_hasteg + ", ";   // szín_hasteg
-                    szöveg += szín_jog + ", ";  // szín_jog
-                    szöveg += szín_nagyobb + ") ";  // szín_nagyobb
-                }
-
+                    KézSzín.Rögzítés(ADAT);
                 else
-                {
-                    // meglévő módosítás
-                    szöveg = "UPDATE  szinezés SET ";
-                    szöveg += "színpsz=" + színpsz + ", "; // színpsz
-                    szöveg += "színpszgar=" + színpszgar + ", "; // színpszgar
-                    szöveg += "színIstűrés=" + színistűrés + ", "; // színIstűrés
-                    szöveg += "színIS=" + színis + ", "; // színIS
-                    szöveg += "színP=" + színp + ", "; // színP
-                    szöveg += "színSzombat=" + színszombat + ", "; // színSzombat
-                    szöveg += "színVasárnap=" + színvasárnap + ", "; // színVasárnap
-
-                    szöveg += " szín_e=" + szín_e + ", ";  // szín_e
-                    szöveg += " szín_dollár=" + szín_dollár + ", ";   // szín_dollár,
-                    szöveg += " szín_kukac=" + szín_kukac + ", ";  // szín_kukac
-                    szöveg += " szín_hasteg=" + szín_hasteg + ", ";   // szín_hasteg
-                    szöveg += " szín_jog=" + szín_jog + ", ";  // szín_jog
-                    szöveg += " szín_nagyobb=" + szín_nagyobb;   // szín_nagyobb
-                    szöveg += " WHERE  telephely ='" + Színtelephely.Text.Trim() + "'";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                    KézSzín.Módosítás(ADAT);
                 Szín_tábla_kiírás();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -488,28 +419,31 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Karb_töröl_Click(object sender, EventArgs e)
         {
-            if (Színtelephely.Text.Trim() == "") return;
-
-            SzínListaFeltöltés();
-            Adat_CAF_Szinezés Elem = (from a in AdatokSzín
-                                      where a.Telephely == Színtelephely.Text.Trim()
-                                      select a).FirstOrDefault();
-
-            string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-            string jelszó = "CzabalayL";
-
-            if (Elem != null)
+            try
             {
-                string szöveg = $"DELETE FROM szinezés where telephely ='{Színtelephely.Text.Trim()}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                if (Színtelephely.Text.Trim() == "") return;
+
+                AdatokSzín = KézSzín.Lista_Adatok();
+                Adat_CAF_Szinezés Elem = (from a in AdatokSzín
+                                          where a.Telephely == Színtelephely.Text.Trim()
+                                          select a).FirstOrDefault();
+
+                if (Elem != null) KézSzín.Törlés(Színtelephely.Text.Trim());
+
+                Szín_tábla_kiírás();
             }
-
-            Szín_tábla_kiírás();
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         private void Szín_Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -570,84 +504,69 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Szín_nagyobb.BackColor = Color.FromArgb(Szín.Piros, Szín.Zöld, Szín.Kék);
         }
 
-
         private void SzínPsz_Click(object sender, EventArgs e)
         {
             Színmező.Text = 1.ToString();
         }
-
 
         private void SzínPszgar_Click(object sender, EventArgs e)
         {
             Színmező.Text = 2.ToString();
         }
 
-
         private void SzínIStűrés_Click(object sender, EventArgs e)
         {
             Színmező.Text = 3.ToString();
         }
-
 
         private void SzínIS_Click(object sender, EventArgs e)
         {
             Színmező.Text = 4.ToString();
         }
 
-
         private void SzínP_Click(object sender, EventArgs e)
         {
             Színmező.Text = 5.ToString();
         }
-
 
         private void SzínSzombat_Click(object sender, EventArgs e)
         {
             Színmező.Text = 6.ToString();
         }
 
-
         private void SzínVasárnap_Click(object sender, EventArgs e)
         {
             Színmező.Text = 7.ToString();
         }
-
 
         private void Szín_E_Click(object sender, EventArgs e)
         {
             Színmező.Text = 8.ToString();
         }
 
-
         private void Szín_dollár_Click(object sender, EventArgs e)
         {
             Színmező.Text = 9.ToString();
         }
-
 
         private void Szín_Kukac_Click(object sender, EventArgs e)
         {
             Színmező.Text = 10.ToString();
         }
 
-
         private void Szín_Hasteg_Click(object sender, EventArgs e)
         {
             Színmező.Text = 11.ToString();
         }
-
 
         private void Szín_jog_Click(object sender, EventArgs e)
         {
             Színmező.Text = 12.ToString();
         }
 
-
         private void Szín_nagyobb_Click(object sender, EventArgs e)
         {
             Színmező.Text = 13.ToString();
         }
-
-
     }
 }

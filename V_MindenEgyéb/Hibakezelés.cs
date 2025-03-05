@@ -34,8 +34,9 @@ namespace Villamos
         /// <param name="metodus">ex.StackTrace</param>
         /// <param name="névtér">ex.Source</param>
 
-        public static void Log(string hibaUzenet, string osztaly, string metodus, string névtér, int HibaKód, string Egyéb = "_")
+        public static void Log(string hibaUzenet, string osztaly, string metodus, string névtér, int HibaKód, string Egyéb = "_", bool Kell = true)
         {
+            if (!Kell) return;
             string Képernyőfájl = KépernyőKép();
 
             //Beírjuk a napi fájlba

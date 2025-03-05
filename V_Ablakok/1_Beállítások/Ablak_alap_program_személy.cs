@@ -3325,7 +3325,9 @@ namespace Villamos
             }
         }
 
-        private void Eszköz_Tábla_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+
+        private void Eszköz_Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {

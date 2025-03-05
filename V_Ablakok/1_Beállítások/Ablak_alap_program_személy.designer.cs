@@ -260,6 +260,10 @@ namespace Villamos
             this.Gondnok_frissít = new System.Windows.Forms.Button();
             this.Gondnok_tábla = new System.Windows.Forms.DataGridView();
             this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.Eszköz_Frissít = new System.Windows.Forms.Button();
+            this.Eszköz_Tábla = new System.Windows.Forms.DataGridView();
+            this.Eszköz_Típus = new System.Windows.Forms.TextBox();
+            this.label52 = new System.Windows.Forms.Label();
             this.LábJobb = new System.Windows.Forms.TextBox();
             this.LábKözép = new System.Windows.Forms.TextBox();
             this.LábBal = new System.Windows.Forms.TextBox();
@@ -275,10 +279,6 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Button13 = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.label52 = new System.Windows.Forms.Label();
-            this.Eszköz_Típus = new System.Windows.Forms.TextBox();
-            this.Eszköz_Tábla = new System.Windows.Forms.DataGridView();
-            this.Eszköz_Frissít = new System.Windows.Forms.Button();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CsoportTábla)).BeginInit();
@@ -303,8 +303,8 @@ namespace Villamos
             this.TabPage12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Gondnok_tábla)).BeginInit();
             this.tabPage13.SuspendLayout();
-            this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Eszköz_Tábla)).BeginInit();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Fülek
@@ -2611,51 +2611,115 @@ namespace Villamos
             this.tabPage13.TabIndex = 12;
             this.tabPage13.Text = "Eszköz";
             // 
+            // Eszköz_Frissít
+            // 
+            this.Eszköz_Frissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Eszköz_Frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Eszköz_Frissít.Location = new System.Drawing.Point(243, 6);
+            this.Eszköz_Frissít.Name = "Eszköz_Frissít";
+            this.Eszköz_Frissít.Size = new System.Drawing.Size(45, 45);
+            this.Eszköz_Frissít.TabIndex = 93;
+            this.ToolTip1.SetToolTip(this.Eszköz_Frissít, "Frissíti a táblázatot");
+            this.Eszköz_Frissít.UseVisualStyleBackColor = true;
+            this.Eszköz_Frissít.Click += new System.EventHandler(this.Eszköz_Frissít_Click);
+            // 
+            // Eszköz_Tábla
+            // 
+            this.Eszköz_Tábla.AllowUserToAddRows = false;
+            this.Eszköz_Tábla.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.Eszköz_Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle33;
+            this.Eszköz_Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Eszköz_Tábla.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle34.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle34.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle34.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle34.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle34.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Eszköz_Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle34;
+            this.Eszköz_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Eszköz_Tábla.EnableHeadersVisualStyles = false;
+            this.Eszköz_Tábla.Location = new System.Drawing.Point(15, 316);
+            this.Eszköz_Tábla.Name = "Eszköz_Tábla";
+            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle35.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle35.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle35.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle35.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle35.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Eszköz_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle35;
+            this.Eszköz_Tábla.RowHeadersVisible = false;
+            this.Eszköz_Tábla.RowHeadersWidth = 51;
+            this.Eszköz_Tábla.Size = new System.Drawing.Size(1164, 139);
+            this.Eszköz_Tábla.TabIndex = 92;
+            this.Eszköz_Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Eszköz_Tábla_CellClick);
+            // 
+            // Eszköz_Típus
+            // 
+            this.Eszköz_Típus.Location = new System.Drawing.Point(132, 25);
+            this.Eszköz_Típus.Name = "Eszköz_Típus";
+            this.Eszköz_Típus.Size = new System.Drawing.Size(105, 26);
+            this.Eszköz_Típus.TabIndex = 91;
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(23, 31);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(100, 20);
+            this.label52.TabIndex = 90;
+            this.label52.Text = "Nyomtatvány";
+            // 
             // LábJobb
             // 
-            this.LábJobb.Location = new System.Drawing.Point(132, 267);
+            this.LábJobb.Location = new System.Drawing.Point(805, 195);
             this.LábJobb.Multiline = true;
             this.LábJobb.Name = "LábJobb";
-            this.LábJobb.Size = new System.Drawing.Size(1029, 33);
+            this.LábJobb.Size = new System.Drawing.Size(374, 115);
             this.LábJobb.TabIndex = 89;
             // 
             // LábKözép
             // 
-            this.LábKözép.Location = new System.Drawing.Point(132, 228);
+            this.LábKözép.Location = new System.Drawing.Point(414, 195);
             this.LábKözép.Multiline = true;
             this.LábKözép.Name = "LábKözép";
-            this.LábKözép.Size = new System.Drawing.Size(1029, 33);
+            this.LábKözép.Size = new System.Drawing.Size(374, 115);
             this.LábKözép.TabIndex = 88;
             // 
             // LábBal
             // 
-            this.LábBal.Location = new System.Drawing.Point(132, 189);
+            this.LábBal.Location = new System.Drawing.Point(15, 195);
             this.LábBal.Multiline = true;
             this.LábBal.Name = "LábBal";
-            this.LábBal.Size = new System.Drawing.Size(1029, 33);
+            this.LábBal.Size = new System.Drawing.Size(374, 115);
             this.LábBal.TabIndex = 87;
             // 
             // FejJobb
             // 
-            this.FejJobb.Location = new System.Drawing.Point(132, 141);
+            this.FejJobb.Location = new System.Drawing.Point(805, 57);
             this.FejJobb.Multiline = true;
             this.FejJobb.Name = "FejJobb";
-            this.FejJobb.Size = new System.Drawing.Size(1029, 33);
+            this.FejJobb.Size = new System.Drawing.Size(374, 112);
             this.FejJobb.TabIndex = 86;
             // 
             // FejKözép
             // 
-            this.FejKözép.Location = new System.Drawing.Point(132, 102);
+            this.FejKözép.Location = new System.Drawing.Point(414, 57);
             this.FejKözép.Multiline = true;
             this.FejKözép.Name = "FejKözép";
-            this.FejKözép.Size = new System.Drawing.Size(1029, 33);
+            this.FejKözép.Size = new System.Drawing.Size(374, 112);
             this.FejKözép.TabIndex = 85;
             // 
             // Szerszám_OK
             // 
             this.Szerszám_OK.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Szerszám_OK.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Szerszám_OK.Location = new System.Drawing.Point(1116, 12);
+            this.Szerszám_OK.Location = new System.Drawing.Point(1116, 6);
             this.Szerszám_OK.Name = "Szerszám_OK";
             this.Szerszám_OK.Size = new System.Drawing.Size(45, 45);
             this.Szerszám_OK.TabIndex = 84;
@@ -2666,7 +2730,7 @@ namespace Villamos
             // label51
             // 
             this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(18, 202);
+            this.label51.Location = new System.Drawing.Point(564, 172);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(103, 20);
             this.label51.TabIndex = 74;
@@ -2674,16 +2738,16 @@ namespace Villamos
             // 
             // FejBal
             // 
-            this.FejBal.Location = new System.Drawing.Point(132, 63);
+            this.FejBal.Location = new System.Drawing.Point(15, 57);
             this.FejBal.Multiline = true;
             this.FejBal.Name = "FejBal";
-            this.FejBal.Size = new System.Drawing.Size(1029, 33);
+            this.FejBal.Size = new System.Drawing.Size(374, 112);
             this.FejBal.TabIndex = 73;
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(18, 76);
+            this.label18.Location = new System.Drawing.Point(569, 31);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(98, 20);
             this.label18.TabIndex = 72;
@@ -2744,70 +2808,6 @@ namespace Villamos
             this.Holtart.TabIndex = 53;
             this.Holtart.Visible = false;
             // 
-            // label52
-            // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(23, 29);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(100, 20);
-            this.label52.TabIndex = 90;
-            this.label52.Text = "Nyomtatvány";
-            // 
-            // Eszköz_Típus
-            // 
-            this.Eszköz_Típus.Location = new System.Drawing.Point(132, 23);
-            this.Eszköz_Típus.Name = "Eszköz_Típus";
-            this.Eszköz_Típus.Size = new System.Drawing.Size(105, 26);
-            this.Eszköz_Típus.TabIndex = 91;
-            // 
-            // Eszköz_Tábla
-            // 
-            this.Eszköz_Tábla.AllowUserToAddRows = false;
-            this.Eszköz_Tábla.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.Eszköz_Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle33;
-            this.Eszköz_Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Eszköz_Tábla.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle34.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            dataGridViewCellStyle34.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle34.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle34.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle34.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Eszköz_Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle34;
-            this.Eszköz_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Eszköz_Tábla.EnableHeadersVisualStyles = false;
-            this.Eszköz_Tábla.Location = new System.Drawing.Point(3, 306);
-            this.Eszköz_Tábla.Name = "Eszköz_Tábla";
-            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle35.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            dataGridViewCellStyle35.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle35.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle35.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle35.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Eszköz_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle35;
-            this.Eszköz_Tábla.RowHeadersVisible = false;
-            this.Eszköz_Tábla.RowHeadersWidth = 51;
-            this.Eszköz_Tábla.Size = new System.Drawing.Size(1176, 150);
-            this.Eszköz_Tábla.TabIndex = 92;
-            this.Eszköz_Tábla.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Eszköz_Tábla_CellContentClick);
-            // 
-            // Eszköz_Frissít
-            // 
-            this.Eszköz_Frissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Eszköz_Frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Eszköz_Frissít.Location = new System.Drawing.Point(243, 12);
-            this.Eszköz_Frissít.Name = "Eszköz_Frissít";
-            this.Eszköz_Frissít.Size = new System.Drawing.Size(45, 45);
-            this.Eszköz_Frissít.TabIndex = 93;
-            this.ToolTip1.SetToolTip(this.Eszköz_Frissít, "Frissíti a táblázatot");
-            this.Eszköz_Frissít.UseVisualStyleBackColor = true;
-            this.Eszköz_Frissít.Click += new System.EventHandler(this.Eszköz_Frissít_Click);
-            // 
             // Ablak_alap_program_személy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -2861,9 +2861,9 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.Gondnok_tábla)).EndInit();
             this.tabPage13.ResumeLayout(false);
             this.tabPage13.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Eszköz_Tábla)).EndInit();
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Eszköz_Tábla)).EndInit();
             this.ResumeLayout(false);
 
         }
