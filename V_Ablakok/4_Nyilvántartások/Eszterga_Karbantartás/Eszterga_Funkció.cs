@@ -1,31 +1,30 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using Villamos.Kezelők;
+using Villamos.Villamos_Kezelők;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 {
     static class Eszterga_Funkció
     {
-        readonly static string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
-        readonly static string jelszó = "bozaim";
         public static List<Adat_Eszterga_Műveletek> Eszterga_KarbantartasFeltölt()
         {
-            Kezelő_Eszterga_Műveletek KézAlap = new Kezelő_Eszterga_Műveletek();
-            List<Adat_Eszterga_Műveletek> AdatokAlap = new List<Adat_Eszterga_Műveletek>();
-
-            string szöveg = "SELECT * FROM Műveletek ORDER BY ID";
-            AdatokAlap = KézAlap.Lista_Adatok(hely, jelszó, szöveg);
-            return AdatokAlap;
+            Kezelő_Eszterga_Műveletek Kéz = new Kezelő_Eszterga_Műveletek();
+            List<Adat_Eszterga_Műveletek> Adatok = Kéz.Lista_Adatok();
+            return Adatok;
         }
         public static List<Adat_Eszterga_Üzemóra> Eszterga_ÜzemóraFeltölt()
         {
-            Kezelő_Eszterga_Üzemóra KézAlap = new Kezelő_Eszterga_Üzemóra();
-            List<Adat_Eszterga_Üzemóra> AdatokAlap = new List<Adat_Eszterga_Üzemóra>();
+            Kezelő_Eszterga_Üzemóra Kéz = new Kezelő_Eszterga_Üzemóra();
+            List<Adat_Eszterga_Üzemóra> Adatok = Kéz.Lista_Adatok();
 
-            string szöveg = "SELECT * FROM Üzemóra";
-            AdatokAlap = KézAlap.Lista_Adatok(hely, jelszó, szöveg);
-            return AdatokAlap;
+            return Adatok;
+        }
+        public static List<Adat_Eszterga_Műveletek_Napló> Eszterga_KarbantartasNaplóFeltölt()
+        {
+            Kezelő_Eszterga_Műveletek_Napló Kéz = new Kezelő_Eszterga_Műveletek_Napló();
+            List<Adat_Eszterga_Műveletek_Napló> Adatok = Kéz.Lista_Adatok();
+
+            return Adatok;
         }
     }
 }

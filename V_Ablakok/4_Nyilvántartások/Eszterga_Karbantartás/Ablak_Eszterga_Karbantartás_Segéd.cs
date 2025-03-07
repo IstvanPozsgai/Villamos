@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
+using Villamos.Villamos_Kezelők;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 {
     public partial class Ablak_Eszterga_Karbantartás_Segéd : Form
     {
         #region osztalyszintű elemek
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
-        readonly string jelszó = "bozaim";
-        readonly string MaiDátum = DateTime.Today.ToShortDateString();
+        readonly DateTime MaiDátum = DateTime.Now;
         private List<Adat_Eszterga_Üzemóra> AdatokÜzemóra;
+        readonly private Kezelő_Eszterga_Üzemóra Kéz_Üzemóra = new Kezelő_Eszterga_Üzemóra();
+        readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         public int Üzemóra { get; private set; }
         #endregion
 
@@ -21,9 +22,56 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         public Ablak_Eszterga_Karbantartás_Segéd()
         {
             InitializeComponent();
+            Jogosultságkiosztás();
+        }
+        private void Jogosultságkiosztás()
+        {
+            try
+            {
+                int melyikelem;
+                melyikelem = 160;
+                BtnRogzit.Visible = Baross;
+                TxtBxUzemOra.Enabled = Baross;
+
+                //módosítás 1
+                BtnRogzit.Enabled = MyF.Vanjoga(melyikelem, 1);
+
+                //módosítás 2
+                //Ablak_Eszterga_Karbantartás oldalon felhasználva.
+
+                //módosítás 3
+                //Ablak_Eszterga_Karbantartás_Módosít oldalon felhasználva.
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void Ablak_Eszterga_Karbantartás_Segéd_Load(object sender, EventArgs e)
         {
+            if (!Baross || !MyF.Vanjoga(160, 1))
+            {
+                AdatokÜzemóra = Eszterga_Funkció.Eszterga_ÜzemóraFeltölt();
+                Adat_Eszterga_Üzemóra Uzemora = (from a in AdatokÜzemóra
+                                                where a.Státus != true
+                                                orderby a.Dátum descending 
+                                                select a).FirstOrDefault();
+
+                if (Uzemora != null)
+                    LblElözö.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Üzemóra}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
+                else
+                    LblElözö.Text = "Nincs előző napi üzemóra rögzítve.";
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+                return;
+            }
+
             LblSzöveg.Text = $"Írja be mai napi Üzemóra állását.";
 
             AdatokÜzemóra = Eszterga_Funkció.Eszterga_ÜzemóraFeltölt();
@@ -36,7 +84,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 LblElözö.Text = "Még nem volt üzemóra rögzítés\n az adatbázisban.";
                 return;
             }
-            else if (rekord != null && rekord.Dátum.ToShortDateString() == DateTime.Today.ToShortDateString())
+            else if (rekord != null && rekord.Dátum == MaiDátum)
             {
                 MessageBox.Show("A mai napon már rögzítettek üzemóra adatot.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.Cancel;
@@ -47,7 +95,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
         private void Ablak_Eszterga_Karbantartás_Segéd_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            if (!Baross && e.CloseReason == CloseReason.UserClosing)
+                this.DialogResult = DialogResult.OK;
+
+            else if (e.CloseReason == CloseReason.UserClosing)
             {
                 if (this.DialogResult != DialogResult.OK)
                     this.DialogResult = DialogResult.Cancel;
@@ -58,11 +109,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #region Gombok
         private void BtnRogzit_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(TxtBxUzemOra.Text, out int uzemOra))
+            if (int.TryParse(TxtBxUzemOra.Text, out int uzemOra) && uzemOra >= 0)
             {
                 AdatokÜzemóra = Eszterga_Funkció.Eszterga_ÜzemóraFeltölt();
 
-                Adat_Eszterga_Üzemóra rekord = AdatokÜzemóra.OrderByDescending(a => a.Üzemóra).FirstOrDefault();
+                Adat_Eszterga_Üzemóra rekord = (from a in AdatokÜzemóra
+                                                where !a.Státus
+                                                orderby a.Üzemóra descending
+                                                select a).FirstOrDefault();
 
                 if (rekord != null && uzemOra < rekord.Üzemóra)
                 {
@@ -72,10 +126,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 }
                 Üzemóra = uzemOra;
 
-                string szöveg = $"INSERT INTO Üzemóra (Üzemóra, Dátum) VALUES(";
-                szöveg += $"'{uzemOra}', ";
-                szöveg += $"'{DateTime.Today.ToShortDateString()}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Eszterga_Üzemóra ADAT = new Adat_Eszterga_Üzemóra(0,
+                                                              uzemOra,
+                                                              MaiDátum, 
+                                                              false);
+                Kéz_Üzemóra.Rögzítés (ADAT);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
