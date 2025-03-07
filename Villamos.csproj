@@ -212,23 +212,21 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_reklám.designer.cs">
       <DependentUpon>Ablak_reklám.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Módosít.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Segéd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Adatbázis_Eszterga.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Adat_Eszterga.cs" />
@@ -1200,6 +1198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.resx">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Segéd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.resx">
+      <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Baross.resx">
       <DependentUpon>Ablak_Eszterga_Adatok_Baross.cs</DependentUpon>
