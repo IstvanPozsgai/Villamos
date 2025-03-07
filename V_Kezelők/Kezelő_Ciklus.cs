@@ -85,9 +85,13 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
-        public List<Adat_Ciklus> Lista_Adatok()
+        public List<Adat_Ciklus> Lista_Adatok(bool Aktív = false)
         {
-            string szöveg = $"SELECT * FROM ciklusrendtábla";
+            string szöveg;
+            if (Aktív)
+                szöveg = $"SELECT * FROM ciklusrendtábla WHERE [Törölt]='0' ORDER BY sorszám";
+            else
+                szöveg = $"SELECT * FROM ciklusrendtábla ORDER BY sorszám";
             List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
             Adat_Ciklus Adat;
 

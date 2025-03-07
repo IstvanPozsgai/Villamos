@@ -15,15 +15,16 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         public event Event_Kidobó Változás;
         public CAF_Segéd_Adat Adat { get; private set; }
 
-        readonly Kezelő_CAF_Adatok Kéz = new Kezelő_CAF_Adatok();
+        readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
 
         public DateTime Dátumig { get; private set; }
 
-
-
-        readonly string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
+        //Törölni kell
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
+
+
 
         public Ablak_CAF_Segéd(CAF_Segéd_Adat adat, DateTime dátumig)
         {
@@ -31,11 +32,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Adat = adat;
             Dátumig = dátumig;
             Start();
-
         }
 
-
-        void Start()
+        private void Start()
         {
             Jogosultságkiosztás();
 
@@ -82,14 +81,48 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Ablak_CAF_Segéd_Load(object sender, EventArgs e)
         {
             try
             {
-                if (Adat != null)
+                if (Adat != null) Kiír();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Kiír()
+        {
+            try
+            {
+                Segéd_dátum.Text = Adat.Dátum.ToString("yyyy.MM.dd");
+                Segéd_pályaszám.Text = Adat.Azonosító.Trim();
+                Adatok = KézAdatok.Lista_Adatok();
+                Adat_CAF_Adatok rekord;
+
+                if (Adat.Sorszám != 0)
+                    rekord = (from a in Adatok
+                              where a.Id == Adat.Sorszám
+                              select a).FirstOrDefault();
+                else
+                    rekord = (from a in Adatok
+                              where a.Azonosító == Adat.Azonosító
+                              && a.Dátum.ToShortDateString() == Adat.Dátum.ToShortDateString()
+                              && a.Státus < 9
+                              select a).FirstOrDefault();
+
+                if (rekord != null)
                 {
-                    Kiír();
+                    Segéd_sorszám.Text = rekord.Id.ToString();
+                    Segéd_Vizsg.Text = rekord.Vizsgálat.Trim();
+                    Segéd_darab.Text = "1";
                 }
             }
             catch (HibásBevittAdat ex)
@@ -102,53 +135,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        private void AdatokListaFeltöltés()
-        {
-            try
-            {
-                Adatok.Clear();
-                string szöveg = "SELECT * FROM adatok";
-                Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void Kiír()
-        {
-            Segéd_dátum.Text = Adat.Dátum.ToString("yyyy.MM.dd");
-            Segéd_pályaszám.Text = Adat.Azonosító.Trim();
-            AdatokListaFeltöltés();
-            Adat_CAF_Adatok rekord;
-
-            if (Adat.Sorszám != 0)
-                rekord = (from a in Adatok
-                          where a.Id == Adat.Sorszám
-                          select a).FirstOrDefault();
-            else
-                rekord = (from a in Adatok
-                          where a.Azonosító == Adat.Azonosító
-                          && a.Dátum.ToShortDateString() == Adat.Dátum.ToShortDateString()
-                          && a.Státus < 9
-                          select a).FirstOrDefault();
-
-            if (rekord != null)
-            {
-                Segéd_sorszám.Text = rekord.Id.ToString();
-                Segéd_Vizsg.Text = rekord.Vizsgálat.Trim();
-                Segéd_darab.Text = "1";
-            }
-        }
-
 
         private void Jogosultságkiosztás()
         {
@@ -229,7 +215,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Segéd_Pót_Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -245,18 +230,17 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     DateTime újnap = Segéd_dátum.Value.AddDays(i);
 
                     // következő sorszám
-
-                    double Segéd_Sorszám = MyCaf.Köv_Sorszám(hely, jelszó);
+                    double Segéd_Sorszám = KézAdatok.Sorszám();
                     Segéd_sorszám.Text = Segéd_Sorszám.ToString();
 
                     Adat_CAF_Adatok rekord = new Adat_CAF_Adatok(
-                        Segéd_Sorszám,
+                        0,
                         Segéd_pályaszám.Text.Trim(),
                         Segéd_Vizsg.Text.Trim(),
                         újnap,
                         new DateTime(1900, 1, 1), 0, 8, 0, 0, 0,
                         "Ütemezési Segéd");
-                    MyCaf.RögzítiMódosít(rekord, hely, jelszó);
+                    KézAdatok.Döntés(rekord);
                 }
 
                 Változás?.Invoke();
@@ -273,16 +257,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Segéd_Töröl_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Segéd_sorszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs törlendő elem.");
-
-                string szöveg = "UPDATE adatok  SET státus=9 WHERE id=" + Segéd_sorszám.Text.Trim();
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                if (!double.TryParse(Segéd_sorszám.Text.Trim(), out double sorszám)) throw new HibásBevittAdat("Nincs törlendő elem.");
+                KézAdatok.Módosítás_Státus(sorszám, 9);
                 Változás?.Invoke();
                 MessageBox.Show("Az adatok törlés befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -297,16 +277,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Segéd_ütemez_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Segéd_sorszám.Text.Trim() == "") throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
-
-                string szöveg = "UPDATE adatok  SET státus=2 WHERE id=" + Segéd_sorszám.Text.Trim();
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                if (!double.TryParse(Segéd_sorszám.Text.Trim(), out double sorszám)) throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
+                KézAdatok.Módosítás_Státus(sorszám, 2);
                 Változás?.Invoke();
                 MessageBox.Show("Az kocsi ütemezése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -321,8 +297,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
-
         private void Segéd_átütemez_Click(object sender, EventArgs e)
         {
             try
@@ -330,7 +304,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 if (Segéd_sorszám.Text.Trim() == "") throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
                 if (!double.TryParse(Segéd_sorszám.Text.Trim(), out double Sorszám)) throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
 
-                AdatokListaFeltöltés();
+                Adatok = KézAdatok.Lista_Adatok();
 
                 Adat_CAF_Adatok rekord = (from a in Adatok
                                           where a.Id == Sorszám
@@ -371,7 +345,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 if (Adat.Dátum == Dátumra) throw new HibásBevittAdat("Nem történt meg az átütemezés");
 
                 MyCaf.IDŐ_Átütemez(hely, jelszó, Adat, Dátumra, Dátumig);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -389,15 +362,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                AdatokListaFeltöltés();
+                Adatok = KézAdatok.Lista_Adatok();
                 string szöveg;
                 if (Adat.Dátum_program != Dátumra)
                 {
                     if (Adat != null)
                     {
                         // töröltre állítjuk az aktuális sorszámot
-                        szöveg = "UPDATE adatok  SET státus=9 WHERE id=" + Adat.Id;
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        KézAdatok.Módosítás_Státus(Adat.Id, 9);
 
                         // rögzítjük az új dátumra az adatot
 
@@ -426,7 +398,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                           0,
                           Adat.IDŐvKM,
                           "Átütemezés");
-                        MyCaf.RögzítiMódosít(Új_adat, hely, jelszó);
+                        KézAdatok.Döntés(Új_adat);
                     }
                 }
 

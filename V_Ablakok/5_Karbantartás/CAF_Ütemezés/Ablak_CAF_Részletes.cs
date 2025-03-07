@@ -19,6 +19,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
         string jelszó = "CzabalayL";
 
+        readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
+
         Kezelő_CAF_alap AlapKéz = new Kezelő_CAF_alap();
         Adat_CAF_alap EgyCAF;
         Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
@@ -676,7 +678,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     MyA.ABMódosítás(hely, jelszó, szöveg);
 
                     // az új sorszám
-                    double sorszám = MyCaf.Köv_Sorszám(hely, jelszó);
+                    double sorszám = KézAdatok.Sorszám();
 
                     // rögzítjük az új dátumra az adatot
 
@@ -776,7 +778,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         }
 
                         // az új sorszám
-                        double sorszám = MyCaf.Köv_Sorszám(hely, jelszó);
+                        double sorszám = KézAdatok.Sorszám();
                         // az új sorszám
                         szöveg = "SELECT * FROM adatok ORDER BY id desc";
                         Ütem_köv_sorszám.Text = sorszám.ToString();
