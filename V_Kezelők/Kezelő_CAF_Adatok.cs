@@ -182,6 +182,26 @@ namespace Villamos.Kezelők
             }
         }
 
+
+        public void Törlés(DateTime Dátum, string Azonosító)
+        {
+            try
+            {
+                string szöveg = $"DELETE FROM adatok WHERE [Dátum]>=#{Dátum:MM-dd-yyyy}# AND azonosító='{Azonosító}' And státus=0";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
         public List<Adat_CAF_Adatok> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();

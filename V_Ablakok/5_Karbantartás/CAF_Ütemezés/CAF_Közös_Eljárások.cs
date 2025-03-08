@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 {
@@ -279,55 +277,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        public static void IDŐ_Átütemez(string hely, string jelszó, Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime Elő_Dátumig)
-        {
-            if (Adat != null)
-            {
-
-                // rögzítjük az új dátumra az adatot
-                // újat hoz létre
-                Adat_CAF_Adatok Új_adat = new Adat_CAF_Adatok(
-                    Adat.Id,
-                    Adat.Azonosító,
-                    Adat.Vizsgálat,
-                    Dátumra,
-                    Adat.Dátum_program,
-                    Adat.Számláló,
-                    Adat.Státus,
-                    Adat.KM_Sorszám,
-                    Adat.IDŐ_Sorszám,
-                    Adat.IDŐvKM,
-                    "Átütemezés");
-                Kéz_Adatok.Döntés(Adat);
-
-                // töröljük az új dátum utáni tervet
-                string szöveg = $"SELECT * FROM adatok";
-                List<Adat_CAF_Adatok> Adatok = Kéz_Adatok.Lista_Adatok(hely, jelszó, szöveg);
-                Adat_CAF_Adatok Elem = (from a in Adatok
-                                        where a.Azonosító == Adat.Azonosító.Trim()
-                                        && a.Dátum > Dátumra
-                                        && a.Státus == 0
-                                        select a).FirstOrDefault();
-
-                if (Elem != null)
-                {
-                    szöveg = $"DELETE  FROM adatok WHERE azonosító='{Adat.Azonosító.Trim()}' AND dátum>#";
-                    szöveg += Dátumra.ToString("MM-dd-yyyy") + "# AND státus=0";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
-                // ütemezzük újra a kocsikat
-
-                // idő szerit
-                IDŐ_Eltervező_EgyKocsi(Adat.Azonosító.Trim(), Elő_Dátumig);
-
-                // km szerint
-                KM_Eltervező_EgyKocsi(Adat.Azonosító.Trim(), Elő_Dátumig);
-            }
-
-        }
-
-
 
     }
 }
