@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -12,6 +14,12 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
+
+
+        public Kezelő_CAF_alap()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
+        }
 
         public List<Adat_CAF_alap> Lista_Adatok(bool Aktív = true)
         {
@@ -67,12 +75,12 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_CAF_alap Egy_Adat(string Azonosító)
+        public Adat_CAF_alap Egy_Adat(string Azonosító, bool Aktív = false)
         {
             Adat_CAF_alap Adat = null;
             try
             {
-                List<Adat_CAF_alap> Adatok = Lista_Adatok(false);
+                List<Adat_CAF_alap> Adatok = Lista_Adatok(Aktív);
                 if (Adatok.Count > 0) Adat = Adatok.FirstOrDefault(x => x.Azonosító == Azonosító);
             }
             catch (HibásBevittAdat ex)

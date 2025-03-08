@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -10,36 +11,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
     {
         readonly static Kezelő_CAF_Adatok Kéz_Adatok = new Kezelő_CAF_Adatok();
         readonly static Kezelő_CAF_alap KézAlap = new Kezelő_CAF_alap();
+        readonly static Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
 
-        public static Adat_CAF_Adatok Utolsó_ütemezett(string pályaszám, string időVSkm)
-        {
-            Adat_CAF_Adatok válasz = null;
-            try
-            {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg = $"SELECT * FROM adatok WHERE azonosító='{pályaszám.Trim()}' ";
-                switch (időVSkm)
-                {
-                    case "km":
-                        szöveg += " AND Idővkm=2 ";
-                        break;
-                }
-                szöveg += " AND státus<9 ORDER BY dátum desc";
-
-
-                Adat_CAF_Adatok Adat = Kéz_Adatok.Egy_Adat(hely, jelszó, szöveg);
-                válasz = Adat;
-                return válasz;
-            }
-
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Utolsó_ütemezett", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return válasz;
-            }
-        }
+        readonly static List<Adat_Ciklus> Ciklus = Kéz_Ciklus.Lista_Adatok(true);
 
         public static Adat_CAF_Adatok Következő_Idő(List<Adat_Ciklus> Ciklus, Adat_CAF_Adatok Előző, Adat_CAF_alap Kocsi)
         {
@@ -104,7 +78,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 // ha az utolsó ütem akkor lenullázuk az értéket
                 int következő;
-
                 if (Ciklus[Ciklus.Count - 1].Sorszám == Előző.KM_Sorszám)
                     következő = 1;
                 else
@@ -149,35 +122,16 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
                 bool vége = true;
-                string szöveg;
-
-                Adat_CAF_Adatok AlapAdat;
-                Adat_CAF_alap EgyCAF;
-                List<Adat_Ciklus> Ciklus_Idő;
-                Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
-
-                string helycik = Application.StartupPath + @"\Főmérnökség\adatok\ciklus.mdb";
-                string jelszócik = "pocsaierzsi";
-
-
-                szöveg = $"SELECT * FROM Alap WHERE azonosító='{pályaszám.Trim()}' AND törölt=false ";
-                EgyCAF = KézAlap.Egy_Adat(hely, jelszó, szöveg);
-
-                szöveg = $"SELECT * FROM adatok WHERE azonosító='{pályaszám.Trim()}' AND státus<9 ORDER BY dátum desc";
-                AlapAdat = Kéz_Adatok.Egy_Adat(hely, jelszó, szöveg);
-
-                szöveg = $"SELECT * FROM ciklusrendtábla WHERE  [törölt]='0' AND típus='{EgyCAF.Ciklusnap}' ORDER BY sorszám";
-                Ciklus_Idő = Kéz_Ciklus.Lista_Adatok(helycik, jelszócik, szöveg);
+                Adat_CAF_alap EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim(), true);
+                List<Adat_Ciklus> Ciklus_Idő = Ciklus.Where(a => a.Típus == EgyCAF.Ciklusnap).OrderBy(a => a.Sorszám).ToList();
 
                 while (vége == true)
                 {
                     //Jármű tulajdonsága
                     EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim());
                     // utolsó ütemezett
-                    Adat_CAF_Adatok Előző = Utolsó_ütemezett(pályaszám.Trim(), "");
+                    Adat_CAF_Adatok Előző = Kéz_Adatok.Egy_Adat(pályaszám.Trim());
                     // következő idő szerinti
                     Adat_CAF_Adatok Adat = Következő_Idő(Ciklus_Idő, Előző, EgyCAF);
 
@@ -186,7 +140,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         Kéz_Adatok.Döntés(Adat);
                     else
                         vége = false;
-
                 }
             }
             catch (Exception ex)
@@ -200,38 +153,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
                 bool vége = true;
-                string szöveg;
-
-
-
-                Adat_CAF_Adatok AlapAdat;
-                Adat_CAF_alap EgyCAF;
-
-                string helycik = Application.StartupPath + @"\Főmérnökség\adatok\ciklus.mdb";
-                string jelszócik = "pocsaierzsi";
-                Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
-                List<Adat_Ciklus> Ciklus_Km;
-
-
-                szöveg = $"SELECT * FROM Alap WHERE azonosító='{pályaszám.Trim()}' AND törölt=false ";
-                EgyCAF = KézAlap.Egy_Adat(hely, jelszó, szöveg);
-
-                szöveg = $"SELECT * FROM adatok WHERE azonosító='{pályaszám.Trim()}' AND státus<9 ORDER BY dátum desc";
-                AlapAdat = Kéz_Adatok.Egy_Adat(hely, jelszó, szöveg);
-
-                szöveg = $"SELECT * FROM ciklusrendtábla WHERE  [törölt]='0' AND típus='{EgyCAF.Cikluskm}' ORDER BY sorszám";
-                Ciklus_Km = Kéz_Ciklus.Lista_Adatok(helycik, jelszócik, szöveg);
-
+                Adat_CAF_alap EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim(), true);
+                List<Adat_Ciklus> Ciklus_Km = Ciklus.Where(a => a.Típus == EgyCAF.Cikluskm).OrderBy(a => a.Sorszám).ToList();
                 while (vége == true)
                 {
                     //Jármű tulajdonsága
                     EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim());
                     // utolsó ütemezett
-                    Adat_CAF_Adatok Előző = Utolsó_ütemezett(pályaszám.Trim(), "km");
-
+                    Adat_CAF_Adatok Előző = Kéz_Adatok.Egy_Adat(pályaszám.Trim(), 2);
                     // következő km szerinti
                     Adat_CAF_Adatok Adat = Következő_Km(Ciklus_Km, Előző, EgyCAF);
                     // ha belefér az időbe akkor rögzítjük

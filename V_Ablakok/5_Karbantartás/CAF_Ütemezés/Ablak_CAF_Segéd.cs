@@ -394,17 +394,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         // töröltre állítjuk az aktuális sorszámot
                         KézAdatok.Módosítás_Státus(Adat.Id, 9);
 
-                        // rögzítjük az új dátumra az adatot
-
                         // ezen a napon ha van már idő alapú akkor töröljük
                         Adat_CAF_Adatok rekord = (from a in Adatok
                                                   where a.Dátum >= Dátumra
                                                   && a.Azonosító == Adat.Azonosító.Trim()
                                                   && a.Státus == 0
                                                   select a).FirstOrDefault();
-
                         if (rekord != null) KézAdatok.Törlés(Dátumra, Adat.Azonosító.Trim());
 
+                        // rögzítjük az új dátumra az adatot
                         Adat_CAF_Adatok Új_adat = new Adat_CAF_Adatok(
                           Adat.Id,
                           Adat.Azonosító,

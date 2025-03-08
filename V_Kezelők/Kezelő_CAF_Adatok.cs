@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -15,9 +17,8 @@ namespace Villamos.Kezelők
 
         public Kezelő_CAF_Adatok()
         {
-            //Ellenőrzés
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
         }
-
 
         public List<Adat_CAF_Adatok> Lista_Adatok()
         {
@@ -57,6 +58,39 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
+        }
+
+        public Adat_CAF_Adatok Egy_Adat(string Azonosító, int IDŐvKM = 1)
+        {
+            Adat_CAF_Adatok Adat = null;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0)
+                    if (IDŐvKM == 1)
+                        Adat = (from a in Adatok
+                                where a.Azonosító == Azonosító
+                                && a.Státus < 9
+                                orderby a.Dátum descending
+                                select a).FirstOrDefault();
+                    else
+                        Adat = (from a in Adatok
+                                where a.Azonosító == Azonosító
+                                && a.Státus < 9
+                                && a.IDŐvKM == 2
+                                orderby a.Dátum descending
+                                select a).FirstOrDefault();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
         }
 
         public double Sorszám()

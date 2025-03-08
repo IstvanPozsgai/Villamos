@@ -616,7 +616,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 EgyCAF = AlapKéz.Egy_Adat(Ütem_pályaszám.Text.Trim());
 
                 // utolsó ütemezett
-                Adat_CAF_Adatok Előző = MyCaf.Utolsó_ütemezett(Ütem_pályaszám.Text.Trim(), "km");
+                Adat_CAF_Adatok Előző = KézAdatok.Egy_Adat(Ütem_pályaszám.Text.Trim(), 2);
                 KiírElőzőAdatot(Előző);
 
                 // következő km szerinti
@@ -841,14 +841,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
 
         #region Rögzítés
-
-
         private void Ütem_Rögzít_Click(object sender, EventArgs e)
         {
             Rögzíti_ütemet();
             MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
 
         private void Rögzíti_ütemet()
         {
@@ -931,13 +928,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
         #region IdőUgrás
-
-
         private void IDŐ_Click(object sender, EventArgs e)
         {
             try
@@ -947,7 +941,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 //Jármű tulajdonsága
                 EgyCAF = AlapKéz.Egy_Adat(Ütem_pályaszám.Text.Trim());
                 // utolsó ütemezett
-                Adat_CAF_Adatok Előző = MyCaf.Utolsó_ütemezett(Ütem_pályaszám.Text.Trim(), "");
+                Adat_CAF_Adatok Előző = KézAdatok.Egy_Adat(Ütem_pályaszám.Text.Trim());
                 KiírElőzőAdatot(Előző);
 
                 // következő idő szerinti
@@ -966,33 +960,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void Utolsó_ütemezett_kiírása()
-        {
-            try
-            {
-                if (Ütem_pályaszám.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva pályaszám.");
-                Adat_CAF_Adatok Adat = MyCaf.Utolsó_ütemezett(Ütem_pályaszám.Text.Trim(), "");
-                KiírEgyAdatot(Adat);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
         #endregion
-
-        private void Segéd_Töröl_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
