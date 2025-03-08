@@ -16,14 +16,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         public CAF_Segéd_Adat Posta_Segéd { get; private set; }
         public DateTime Elő_Dátumig { get; private set; }
 
-        string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-        string jelszó = "CzabalayL";
+        readonly string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
+        readonly string jelszó = "CzabalayL";
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
+        readonly Kezelő_CAF_alap AlapKéz = new Kezelő_CAF_alap();
+        readonly Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
 
-        Kezelő_CAF_alap AlapKéz = new Kezelő_CAF_alap();
         Adat_CAF_alap EgyCAF;
-        Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
+
         List<Adat_Ciklus> Ciklus_Idő = null;
         List<Adat_Ciklus> Ciklus_Km = null;
 
@@ -415,7 +416,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                string szöveg = $"SELECT * FROM adatok WHERE Azonosító='{Posta_Segéd.Azonosító}' AND  Dátum=#{Posta_Segéd.Dátum.ToString("MM-dd-yyyy")}# AND Státus<8";
+                string szöveg = $"SELECT * FROM adatok WHERE Azonosító='{Posta_Segéd.Azonosító}' AND  Dátum=#{Posta_Segéd.Dátum:MM-dd-yyyy}# AND Státus<8";
 
                 Kezelő_CAF_Adatok kéz = new Kezelő_CAF_Adatok();
                 Adat_CAF_Adatok Adat = kéz.Egy_Adat(hely, jelszó, szöveg);
@@ -474,7 +475,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     return;
 
 
-                EgyCAF = MyCaf.Villamos_tulajdonság(Ütem_pályaszám.Text.Trim());
+                EgyCAF = AlapKéz.Egy_Adat(Ütem_pályaszám.Text.Trim());
 
                 if (EgyCAF != null)
                 {
@@ -612,7 +613,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 if (Ütem_pályaszám.Text.Trim() == "")
                     throw new HibásBevittAdat("Nincs kitöltve a pályaszám mező.");
                 //Jármű tulajdonsága
-                EgyCAF = MyCaf.Villamos_tulajdonság(Ütem_pályaszám.Text.Trim());
+                EgyCAF = AlapKéz.Egy_Adat(Ütem_pályaszám.Text.Trim());
 
                 // utolsó ütemezett
                 Adat_CAF_Adatok Előző = MyCaf.Utolsó_ütemezett(Ütem_pályaszám.Text.Trim(), "km");
@@ -622,7 +623,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Adat_CAF_Adatok Adat = MyCaf.Következő_Km(Ciklus_Km, Előző, EgyCAF);
                 KiírEgyAdatot(Adat);
 
-                if (Változás != null) Változás();
+                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {
@@ -720,7 +721,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     // km szerint
                     MyCaf.KM_Eltervező_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
                 }
-                if (Változás != null) Változás();
+                Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -773,7 +774,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                         if (IdőTöröl != null)
                         {
-                            szöveg = $"DELETE FROM adatok WHERE [Dátum]=#{Ütem_Köv_Dátum.Value.ToString("MM-dd-yyyy")}# AND azonosító='{Ütem_pályaszám.Text.Trim()}'";
+                            szöveg = $"DELETE FROM adatok WHERE [Dátum]=#{Ütem_Köv_Dátum.Value:MM-dd-yyyy}# AND azonosító='{Ütem_pályaszám.Text.Trim()}'";
                             MyA.ABtörlés(hely, jelszó, szöveg);
                         }
 
@@ -823,7 +824,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MyCaf.KM_Eltervező_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
 
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (Változás != null) Változás();
+                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {
@@ -917,7 +918,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 }
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
-                if (Változás != null) Változás();
+                Változás?.Invoke();
 
             }
             catch (HibásBevittAdat ex)
@@ -941,11 +942,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                if (Ütem_pályaszám.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kitöltve a pályaszám mező.");
+                if (Ütem_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve a pályaszám mező.");
 
                 //Jármű tulajdonsága
-                EgyCAF = MyCaf.Villamos_tulajdonság(Ütem_pályaszám.Text.Trim());
+                EgyCAF = AlapKéz.Egy_Adat(Ütem_pályaszám.Text.Trim());
                 // utolsó ütemezett
                 Adat_CAF_Adatok Előző = MyCaf.Utolsó_ütemezett(Ütem_pályaszám.Text.Trim(), "");
                 KiírElőzőAdatot(Előző);
@@ -954,7 +954,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Adat_CAF_Adatok Adat = MyCaf.Következő_Idő(Ciklus_Idő, Előző, EgyCAF);
                 KiírEgyAdatot(Adat);
 
-                if (Változás != null) Változás();
+                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {

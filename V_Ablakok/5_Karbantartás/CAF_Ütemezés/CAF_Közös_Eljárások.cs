@@ -11,28 +11,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         readonly static Kezelő_CAF_Adatok Kéz_Adatok = new Kezelő_CAF_Adatok();
         readonly static Kezelő_CAF_alap KézAlap = new Kezelő_CAF_alap();
 
-
-        static public Adat_CAF_alap Villamos_tulajdonság(string pályaszám)
-        {
-            Adat_CAF_alap válasz = null;
-            try
-            {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg = $"SELECT * FROM alap WHERE azonosító='{pályaszám.Trim()}'";
-
-                Adat_CAF_alap rekord = KézAlap.Egy_Adat(hely, jelszó, szöveg);
-                válasz = rekord;
-                return válasz;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Villamos_tulajdonság", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return válasz;
-            }
-        }
-
         public static Adat_CAF_Adatok Utolsó_ütemezett(string pályaszám, string időVSkm)
         {
             Adat_CAF_Adatok válasz = null;
@@ -62,7 +40,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 return válasz;
             }
         }
-
 
         public static Adat_CAF_Adatok Következő_Idő(List<Adat_Ciklus> Ciklus, Adat_CAF_Adatok Előző, Adat_CAF_alap Kocsi)
         {
@@ -112,7 +89,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
 
         }
-
 
         public static Adat_CAF_Adatok Következő_Km(List<Adat_Ciklus> Ciklus, Adat_CAF_Adatok Előző, Adat_CAF_alap Kocsi)
         {
@@ -169,11 +145,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
-
-
-
-
-
         public static void IDŐ_Eltervező_EgyKocsi(string pályaszám, DateTime Elő_Dátumig)
         {
             try
@@ -204,7 +175,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 while (vége == true)
                 {
                     //Jármű tulajdonsága
-                    EgyCAF = Villamos_tulajdonság(pályaszám.Trim());
+                    EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim());
                     // utolsó ütemezett
                     Adat_CAF_Adatok Előző = Utolsó_ütemezett(pályaszám.Trim(), "");
                     // következő idő szerinti
@@ -224,7 +195,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         public static void KM_Eltervező_EgyKocsi(string pályaszám, DateTime Elő_Dátumig)
         {
@@ -258,7 +228,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 while (vége == true)
                 {
                     //Jármű tulajdonsága
-                    EgyCAF = Villamos_tulajdonság(pályaszám.Trim());
+                    EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim());
                     // utolsó ütemezett
                     Adat_CAF_Adatok Előző = Utolsó_ütemezett(pályaszám.Trim(), "km");
 
@@ -277,7 +247,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }
 

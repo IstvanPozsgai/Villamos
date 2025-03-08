@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -63,6 +65,26 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
+        }
+
+        public Adat_CAF_alap Egy_Adat(string Azonosító)
+        {
+            Adat_CAF_alap Adat = null;
+            try
+            {
+                List<Adat_CAF_alap> Adatok = Lista_Adatok(false);
+                if (Adatok.Count > 0) Adat = Adatok.FirstOrDefault(x => x.Azonosító == Azonosító);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
         }
 
         public List<Adat_CAF_alap> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -237,24 +259,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        public void Törlés(Adat_CAF_alap Adat)
-        {
-            try
-            {
-
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 
 
