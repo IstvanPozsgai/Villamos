@@ -38,7 +38,7 @@ namespace Villamos
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Tulajdonságok_CAF));
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
@@ -60,8 +60,6 @@ namespace Villamos
             this.Előtervet_készít = new System.Windows.Forms.Button();
             this.Elő_tervező_telephely = new System.Windows.Forms.Button();
             this.Elő_ütemez = new System.Windows.Forms.Button();
-            this.Eszterga_Beállítás = new System.Windows.Forms.Button();
-            this.Eszterga_Ütemez = new System.Windows.Forms.Button();
             this.Segédablak_hívó = new System.Windows.Forms.Button();
             this.Elő_törölt = new System.Windows.Forms.CheckBox();
             this.Elő_pályaszám = new System.Windows.Forms.CheckedListBox();
@@ -335,30 +333,6 @@ namespace Villamos
             this.Elő_ütemez.UseVisualStyleBackColor = true;
             this.Elő_ütemez.Click += new System.EventHandler(this.Elő_ütemez_Click);
             // 
-            // Eszterga_Beállítás
-            // 
-            this.Eszterga_Beállítás.BackgroundImage = global::Villamos.Properties.Resources.kerékeszterga_Beáll_32;
-            this.Eszterga_Beállítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Eszterga_Beállítás.Location = new System.Drawing.Point(942, 78);
-            this.Eszterga_Beállítás.Name = "Eszterga_Beállítás";
-            this.Eszterga_Beállítás.Size = new System.Drawing.Size(40, 40);
-            this.Eszterga_Beállítás.TabIndex = 241;
-            this.ToolTip1.SetToolTip(this.Eszterga_Beállítás, "A járművek esztergálási beállításai");
-            this.Eszterga_Beállítás.UseVisualStyleBackColor = true;
-            this.Eszterga_Beállítás.Click += new System.EventHandler(this.Eszterga_Beállítás_Click);
-            // 
-            // Eszterga_Ütemez
-            // 
-            this.Eszterga_Ütemez.BackgroundImage = global::Villamos.Properties.Resources.kerékeszterga_32;
-            this.Eszterga_Ütemez.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Eszterga_Ütemez.Location = new System.Drawing.Point(896, 77);
-            this.Eszterga_Ütemez.Name = "Eszterga_Ütemez";
-            this.Eszterga_Ütemez.Size = new System.Drawing.Size(40, 40);
-            this.Eszterga_Ütemez.TabIndex = 242;
-            this.ToolTip1.SetToolTip(this.Eszterga_Ütemez, "Kerékesztergára soros járművek beütemezése");
-            this.Eszterga_Ütemez.UseVisualStyleBackColor = true;
-            this.Eszterga_Ütemez.Click += new System.EventHandler(this.Eszterga_Ütemez_Click);
-            // 
             // Segédablak_hívó
             // 
             this.Segédablak_hívó.BackgroundImage = global::Villamos.Properties.Resources.BeCardStack;
@@ -500,8 +474,6 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.BurlyWood;
             this.ClientSize = new System.Drawing.Size(1268, 333);
-            this.Controls.Add(this.Eszterga_Ütemez);
-            this.Controls.Add(this.Eszterga_Beállítás);
             this.Controls.Add(this.Caf_Listák);
             this.Controls.Add(this.Színbeállítás);
             this.Controls.Add(this.Alap_adatok);
@@ -582,7 +554,5 @@ namespace Villamos
         internal Button Tábla_frissítés;
         internal Button Előtervet_készít;
         private Timer timer1;
-        internal Button Eszterga_Beállítás;
-        internal Button Eszterga_Ütemez;
     }
 }
