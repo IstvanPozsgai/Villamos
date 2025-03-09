@@ -291,7 +291,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
         public void Törlés(DateTime Dátum, string Azonosító)
         {
             try
