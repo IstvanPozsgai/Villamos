@@ -93,6 +93,81 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
+        public Adat_CAF_Adatok Egy_Adat_Id(double Id)
+        {
+            Adat_CAF_Adatok Adat = null;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0)
+                    Adat = (from a in Adatok
+                            where a.Id == Id
+                            select a).FirstOrDefault();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
+        }
+
+        public Adat_CAF_Adatok Egy_Adat_Id_Előző(string Azonosító, double Id)
+        {
+            Adat_CAF_Adatok Adat = null;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0)
+                    Adat = (from a in Adatok
+                            where a.Id < Id
+                            && a.Azonosító == Azonosító
+                            && a.Státus < 9
+                            orderby a.Id descending
+                            select a).FirstOrDefault();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
+        }
+
+        public Adat_CAF_Adatok Egy_Adat_Spec(string Azonosító, DateTime Dátum)
+        {
+            Adat_CAF_Adatok Adat = null;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0)
+                    Adat = (from a in Adatok
+                            where a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
+                            && a.Azonosító == Azonosító
+                            && a.Státus < 8
+                            orderby a.Id descending
+                            select a).FirstOrDefault();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
+        }
+
         public double Sorszám()
         {
             double válasz = 1;
