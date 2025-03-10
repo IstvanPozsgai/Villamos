@@ -275,7 +275,7 @@ namespace Villamos
 
                 //Feltöltjük a munkanap táblát
                 List<Adat_Váltós_Naptár> AdatokNaptár = new List<Adat_Váltós_Naptár>();
-                for (int év = Elő_Dátumtól.Value.Year; év < Elő_Dátumig.Value.Year; év++)
+                for (int év = Elő_Dátumtól.Value.Year; év <= Elő_Dátumig.Value.Year; év++)
                 {
                     List<Adat_Váltós_Naptár> IdeigÉv = KézVáltós.Lista_Adatok(év, "");
                     AdatokNaptár.AddRange(IdeigÉv);
@@ -321,7 +321,7 @@ namespace Villamos
                 Adatok = (from a in Adatok
                           where a.Dátum >= Elő_Dátumtól.Value
                           && a.Dátum <= Elő_Dátumig.Value
-                          orderby a.Azonosító, a.Dátum
+                          orderby a.Azonosító, a.Dátum, a.Státus
                           select a).ToList();
                 if (!Elő_Mind.Checked)
                 {
@@ -355,10 +355,10 @@ namespace Villamos
                         {
                             string ideig = "";
                             foreach (Adat_CAF_Adatok item in Szűrt1)
-                                ideig += string.Join("-", item.Vizsgálat, item.IDŐ_Sorszám, item.Státus == 9 ? "X" : "");
+                                ideig += string.Join("-", item.Vizsgálat, item.IDŐ_Sorszám);
 
                             Tábla_elő.Rows[sor].Cells[oszlop + o - 1].Value = ideig;
-                            //Cella_formátum(sor, oszlop+o-1, rekord.Státus);
+                            Cella_formátum(sor, oszlop + o - 1, Szűrt1[0].Státus);
                         }
                     }
                     Holtart.Lép();
@@ -1083,7 +1083,7 @@ namespace Villamos
                 string szöveg;
                 Holtart.Be();
 
-                foreach (AdatCombohoz elem in Elő_pályaszám.CheckedItems)
+                foreach (string elem in Elő_pályaszám.CheckedItems)
                 {
                     Adat_CAF_Adatok AdatCaf = (from a in AdatokCaf
                                                where a.Azonosító == elem.ToStrTrim()
