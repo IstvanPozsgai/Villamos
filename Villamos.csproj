@@ -343,6 +343,7 @@
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.designer.cs">
       <DependentUpon>Ablak_Tulajdonságok_CAF.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Class1.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_IcsKcsv.cs">
       <SubType>Form</SubType>
     </Compile>

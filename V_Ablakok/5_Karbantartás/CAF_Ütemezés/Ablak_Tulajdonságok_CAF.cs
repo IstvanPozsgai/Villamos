@@ -25,6 +25,7 @@ namespace Villamos
         readonly Kezelő_CAF_alap KézAlap = new Kezelő_CAF_alap();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Váltós_Naptár KézVáltós = new Kezelő_Váltós_Naptár();
+        readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         #endregion
 
 
@@ -230,6 +231,11 @@ namespace Villamos
         #region Táblázat Listázás    
         private void Tábla_frissítés_Click(object sender, EventArgs e)
         {
+            ListázzaElőtervet();
+        }
+
+        private void ListázzaElőtervet()
+        {
             try
             {
                 Holtart.Be();
@@ -252,7 +258,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //Itt van még mit csinálni, Hogyan színezek?
+
         private void Előterv_listázás()
         {
             try
@@ -273,49 +279,7 @@ namespace Villamos
                 Tábla_elő.Columns[2].Width = 30;
                 Tábla_elő.Columns[2].Frozen = true;
 
-                //Feltöltjük a munkanap táblát
-                List<Adat_Váltós_Naptár> AdatokNaptár = new List<Adat_Váltós_Naptár>();
-                for (int év = Elő_Dátumtól.Value.Year; év <= Elő_Dátumig.Value.Year; év++)
-                {
-                    List<Adat_Váltós_Naptár> IdeigÉv = KézVáltós.Lista_Adatok(év, "");
-                    AdatokNaptár.AddRange(IdeigÉv);
-                }
-
-                // elkészítjük a dátumokat
-                DateTime ideigdát = Elő_Dátumtól.Value;
-                int i = 0;
-
-                while (Elő_Dátumig.Value >= ideigdát)
-                {
-                    Tábla_elő.RowCount++;
-                    i = Tábla_elő.RowCount - 1;
-                    Tábla_elő.Rows[i].Cells[0].Value = ideigdát.ToString("yyyy.MM.dd");
-                    //kiszínezzük
-                    Adat_Váltós_Naptár Nap = AdatokNaptár.FirstOrDefault(x => x.Dátum == ideigdát);
-                    if (Nap != null)
-                    {
-                        switch (Nap.Nap)
-                        {
-                            case "P":
-                                {
-                                    Tábla_elő.Rows[i].DefaultCellStyle.BackColor = Color.Beige;
-                                    break;
-                                }
-                            case "V":
-                                {
-                                    Tábla_elő.Rows[i].DefaultCellStyle.BackColor = Color.BurlyWood;
-                                    break;
-                                }
-                            case "Ü":
-                                {
-                                    Tábla_elő.Rows[i].DefaultCellStyle.BackColor = Color.IndianRed;
-                                    break;
-                                }
-                        }
-                    }
-                    ideigdát = ideigdát.AddDays(1);
-                    Holtart.Lép();
-                }
+                Munkaidő_naptár();
 
                 List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
                 Adatok = (from a in Adatok
@@ -381,41 +345,32 @@ namespace Villamos
             }
         }
 
-
-        private void Munkaidő_naptár(string hely_a, string jelszó_a)
+        private void Munkaidő_naptár()
         {
             try
             {
-                string szöveg = " SELECT * from naptár ";
-                szöveg += " WHERE (dátum>=#" + Elő_Dátumtól.Value.ToString("M-d-yy");
-                szöveg += "# And dátum<=#" + Elő_Dátumig.Value.ToString("M-d-yy") + "#)";
-
-
-                List<Adat_Váltós_Naptár> Adatok = KézVáltós.Lista_Adatok(hely_a, jelszó_a, szöveg);
-
-                Holtart.Be();
-                int i = 0;
-                foreach (Adat_Váltós_Naptár rekord in Adatok)
+                //Feltöltjük a munkanap táblát
+                List<Adat_Váltós_Naptár> AdatokNaptár = new List<Adat_Váltós_Naptár>();
+                for (int év = Elő_Dátumtól.Value.Year; év <= Elő_Dátumig.Value.Year; év++)
                 {
-                    bool exitDo = false;
-                    while (rekord.Dátum > DateTime.Parse(Tábla_elő.Rows[i].Cells[0].Value.ToString()))
-                    {
-                        i += 1;
-                        if (Tábla_elő.Rows.Count - 1 <= i)
-                        {
-                            exitDo = true;
-                            break;
-                        }
-                    }
+                    List<Adat_Váltós_Naptár> IdeigÉv = KézVáltós.Lista_Adatok(év, "");
+                    AdatokNaptár.AddRange(IdeigÉv);
+                }
 
-                    if (exitDo)
+                // elkészítjük a dátumokat
+                DateTime ideigdát = Elő_Dátumtól.Value;
+                int i = 0;
+
+                while (Elő_Dátumig.Value >= ideigdát)
+                {
+                    Tábla_elő.RowCount++;
+                    i = Tábla_elő.RowCount - 1;
+                    Tábla_elő.Rows[i].Cells[0].Value = ideigdát.ToString("yyyy.MM.dd");
+                    //kiszínezzük
+                    Adat_Váltós_Naptár Nap = AdatokNaptár.FirstOrDefault(x => x.Dátum == ideigdát);
+                    if (Nap != null)
                     {
-                        break;
-                    }
-                    if (rekord.Dátum == DateTime.Parse(Tábla_elő.Rows[i].Cells[0].Value.ToString()))
-                    {
-                        Tábla_elő.Rows[i].Cells[0].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                        switch (rekord.Nap)
+                        switch (Nap.Nap)
                         {
                             case "P":
                                 {
@@ -434,9 +389,9 @@ namespace Villamos
                                 }
                         }
                     }
+                    ideigdát = ideigdát.AddDays(1);
                     Holtart.Lép();
                 }
-                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -448,7 +403,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void IS_P_összesítés()
         {
@@ -491,79 +445,40 @@ namespace Villamos
             }
         }
 
-        private void IS_P_összesítésCSakEgySor()
-        {
-            try
-            {
-                int isdb = 0;
-                int pdb = 0;
-
-                for (int i = 3; i < Tábla_elő.Columns.Count; i++)
-                {
-                    if (Tábla_elő.Rows[SOR].Cells[i].Value != null)
-                    {
-                        if (Tábla_elő.Rows[SOR].Cells[i].Value.ToStrTrim().Contains("IS") && !Tábla_elő.Rows[SOR].Cells[i].Value.ToStrTrim().Contains("X"))
-                        {
-                            isdb += 1;
-                        }
-                        if (Tábla_elő.Rows[SOR].Cells[i].Value.ToStrTrim().Contains("P") && !Tábla_elő.Rows[SOR].Cells[i].Value.ToStrTrim().Contains("X"))
-                        {
-                            pdb += 1;
-                        }
-                    }
-                }
-                Tábla_elő.Rows[SOR].Cells[1].Value = isdb;
-                Tábla_elő.Rows[SOR].Cells[2].Value = pdb;
-
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Cella_formátum(int sor_a, int oszlop_a, int státus_a)
         {
             try
             {
-                {
-                    switch (státus_a)
-                    {
-                        case 0:
-                            {
-                                Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f);
-                                break;
-                            }
-                        case 2:
-                            {
-                                Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Italic);
-                                break;
-                            }
-                        case 4:
-                            {
-                                Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Underline);
-                                break;
-                            }
-                        case 6:
-                            {
-                                Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Bold);
-                                break;
-                            }
-                        case 9:
-                            {
-                                Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Strikeout);
-                                Tábla_elő.Rows[sor_a].Cells[oszlop_a].Value += "X";
-                                break;
-                            }
-                    }
-                }
 
+                switch (státus_a)
+                {
+                    case 0:
+                        {
+                            Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f);
+                            break;
+                        }
+                    case 2:
+                        {
+                            Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Italic);
+                            break;
+                        }
+                    case 4:
+                        {
+                            Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Underline);
+                            break;
+                        }
+                    case 6:
+                        {
+                            Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Bold);
+                            break;
+                        }
+                    case 9:
+                        {
+                            Tábla_elő.Rows[sor_a].Cells[oszlop_a].Style.Font = new Font("Microsoft Sans Serif", 10f, FontStyle.Strikeout);
+                            Tábla_elő.Rows[sor_a].Cells[oszlop_a].Value += "X";
+                            break;
+                        }
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -575,28 +490,21 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         private void Tábla_elő_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (e.RowIndex < 0)
-                    return;
-                if (e.ColumnIndex < 3)
-                    return;
+                if (e.RowIndex < 0) return;
+                if (e.ColumnIndex < 3) return;
 
                 SOR = e.RowIndex;
                 OSZLOP = e.ColumnIndex;
                 DateTime dátum = DateTime.TryParse(Tábla_elő.Rows[e.RowIndex].Cells[0].Value.ToString(), out dátum) ? dátum : new DateTime(1900, 1, 1);
                 string pályaszám = Tábla_elő.Columns[e.ColumnIndex].HeaderText.Trim();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg = $"SELECT * FROM adatok where azonosító='{pályaszám}' AND dátum=#{dátum:MM-dd-yyyy}# AND Státus<9";
-
-                Adat_CAF_Adatok rekord = KézAdatok.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                Adat_CAF_Adatok rekord = KézAdatok.Egy_Adat_Spec(pályaszám, dátum, 9);
                 double sorszám = 0;
                 if (rekord != null) sorszám = rekord.Id;
 
@@ -616,123 +524,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        #endregion
-
-
-        #region Tábla Rögzítés Után újraírja
-
-        void Tábla_Frissítés()
-        {
-            Tábla_oszlop_újraírás();
-            Tábla_Sor_újraÍrás();
-        }
-
-
-        private void Tábla_Sor_újraÍrás()
-        {
-            // összesítjük
-            if (SOR == -1 || OSZLOP == -1)
-                return;
-
-            IS_P_összesítésCSakEgySor();
-
-        }
-
-
-        private void Tábla_oszlop_újraírás()
-        {
-            try
-            {
-                if (SOR == -1 || OSZLOP == -1)
-                    return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-
-                // kiürítjük az előzményt
-                for (int sor = 0; sor < Tábla_elő.Rows.Count; sor++)
-                    Tábla_elő.Rows[sor].Cells[OSZLOP].Value = "";
-
-                string szöveg = "SELECT * FROM Adatok WHERE ";
-                if (Elő_Km.Checked == true)
-                    szöveg += " IDŐvKM=2 AND ";
-                if (Elő_Idő.Checked == true)
-                    szöveg += " IDŐvKM=1 AND ";
-                szöveg += " (([Dátum]>=#" + Elő_Dátumtól.Value.ToString("MM-dd-yyyy") + "#)";
-                szöveg += " AND ([Dátum]<=#" + Elő_Dátumig.Value.ToString("MM-dd-yyyy") + "#))";
-                if (Elő_törölt.Checked == false)
-                    szöveg += " AND státus<9 ";
-                szöveg += "  AND azonosító='" + Tábla_elő.Columns[OSZLOP].HeaderText.Trim() + "'";
-                szöveg += "  ORDER BY dátum ";
-
-                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok(hely, jelszó, szöveg);
-
-                int i = 0;
-
-                foreach (Adat_CAF_Adatok rekord in Adatok)
-                {
-
-                    while (i < Tábla_elő.RowCount)
-                    {
-                        if (DateTime.Parse(Tábla_elő.Rows[i].Cells[0].Value.ToString()) >= rekord.Dátum)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            i += 1;
-                        }
-                    }
-                    if (DateTime.Parse(Tábla_elő.Rows[i].Cells[0].Value.ToString()).ToString("yyyy.MM.dd") == rekord.Dátum.ToString("yyyy.MM.dd"))
-                    {
-                        // ha egyforma akkor kiírjuk
-                        string ideig = rekord.Vizsgálat.Trim();
-                        switch (rekord.IDŐvKM)
-                        {
-                            case 0:
-                                {
-                                    break;
-                                }
-
-                            case 1:
-                                {
-                                    ideig += "-" + rekord.IDŐ_Sorszám;
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    ideig += "-" + rekord.KM_Sorszám;
-                                    break;
-                                }
-
-                        }
-                        Tábla_elő.Rows[i].Cells[OSZLOP].Value = ideig;
-
-                        Cella_formátum(i, OSZLOP, rekord.Státus);
-
-                    }
-                    if (i >= Tábla_elő.RowCount)
-                        break;
-                }
-
-
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion
 
 
         #region Alapadatok ablak
-
         Ablak_CAF_Alapadat Új_Ablak_CAF_Alapadat;
         private void Alap_adatok_Click(object sender, EventArgs e)
         {
@@ -748,12 +543,10 @@ namespace Villamos
         {
             Új_Ablak_CAF_Alapadat = null;
         }
-
         #endregion
 
 
         #region Szín ablak
-
         Ablak_CAF_Szín Új_Ablak_CAF_Szín;
         private void Színbeállítás_Click(object sender, EventArgs e)
         {
@@ -774,8 +567,6 @@ namespace Villamos
 
 
         #region Listák ablak
-
-
         Ablak_Caf_Lista Új_Ablak_Caf_Lista;
         private void Caf_Listák_Click(object sender, EventArgs e)
         {
@@ -796,8 +587,6 @@ namespace Villamos
 
 
         #region Segéd ablak
-
-
         Ablak_CAF_Segéd Új_Ablak_CAF_Segéd;
         private void Segédablak_hívó_Click(object sender, EventArgs e)
         {
@@ -805,18 +594,16 @@ namespace Villamos
             SegédAblakKezelés();
         }
 
-
-        void SegédAblakKezelés()
+        private void SegédAblakKezelés()
         {
             Új_Ablak_CAF_Segéd?.Close();
 
             Új_Ablak_CAF_Segéd = new Ablak_CAF_Segéd(Posta_Segéd, Elő_Dátumig.Value);
             Új_Ablak_CAF_Segéd.FormClosed += Ablak_CAF_Segéd_Closed;
-            Új_Ablak_CAF_Segéd.Változás += Tábla_Frissítés;
+            Új_Ablak_CAF_Segéd.Változás += Előterv_listázás;
             Új_Ablak_CAF_Segéd.StartPosition = FormStartPosition.CenterScreen;
             Új_Ablak_CAF_Segéd.Show();
         }
-
 
         private void Ablak_CAF_Segéd_Closed(object sender, FormClosedEventArgs e)
         {
@@ -836,14 +623,12 @@ namespace Villamos
             Elő_pályaszám.Height = 25;
         }
 
-
         private void Elő_Összeskijelöl_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Elő_pályaszám.Items.Count; i++)
                 Elő_pályaszám.SetItemChecked(i, true);
             Elő_pályaszám.Height = 25;
         }
-
 
         private void Elő_Mindtöröl_Click(object sender, EventArgs e)
         {
@@ -852,52 +637,21 @@ namespace Villamos
             Elő_pályaszám.Height = 25;
         }
 
-
         private void Elő_tervező_telephely_Click(object sender, EventArgs e)
         {
             try
             {
                 // ki jelöli a telephelyhez tartozó kocsikat
-                if (Cmbtelephely.Text.Trim() == "")
-                    return;
+                if (Cmbtelephely.Text.Trim() == "") return;
 
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                // ha nem telephelyról kérdezzük le akkor minden kocsit kiír
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Üzem == Cmbtelephely.Text.Trim()).ToList();
 
-
-                string szöveg = $"Select * FROM Állománytábla WHERE Üzem='{Cmbtelephely.Text.Trim()}' AND ";
-                szöveg += " törölt=0 AND valóstípus Like  '%CAF%' ORDER BY azonosító";
-
-                Kezelő_Jármű kéz = new Kezelő_Jármű();
-                List<Adat_Jármű> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                int i = 0;
-                int volt = 0;
-
-                foreach (Adat_Jármű rekord in Adatok)
+                for (int i = 0; i < Elő_pályaszám.Items.Count; i++)
                 {
-
-                    // ha a beolvasott nagyobb mint a sorban lévő akkor léptetjük
-                    while (String.Compare(Elő_pályaszám.Items[i].ToString().Trim(), rekord.Azonosító.Trim()) < 0)
-                    {
-                        i += 1;
-                        if (Elő_pályaszám.Items.Count == i)
-                        {
-                            volt = 1;
-                            break;
-                        }
-                    }
-                    // ha egyforma akkor bejelöljük
-                    if (Elő_pályaszám.Items[i].ToString().Trim() == rekord.Azonosító.Trim())
-                    {
-                        Elő_pályaszám.SetItemChecked(i, true);
-                    }
-                    if (volt == 1)
-                        break;
+                    Adat_Jármű Adat = Adatok.FirstOrDefault(a => a.Azonosító == Elő_pályaszám.Items[i].ToStrTrim());
+                    if (Adat != null) Elő_pályaszám.SetItemChecked(i, true);
                 }
                 Elő_pályaszám.Height = 25;
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -909,16 +663,13 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
         #region Sima Excel
-
         private void Elő_Excel_Click(object sender, EventArgs e)
         {
-            if (Tábla_elő.Rows.Count <= 0)
-                return;
+            if (Tábla_elő.Rows.Count <= 0) return;
             string fájlexc;
 
             // kimeneti fájl helye és neve
@@ -926,7 +677,7 @@ namespace Villamos
             {
                 InitialDirectory = "MyDocuments",
                 Title = "Listázott tartalom mentése Excel fájlba",
-                FileName = "CAF_ütemzés_Adatok" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                FileName = $"CAF_ütemzés_Adatok{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                 Filter = "Excel |*.xlsx"
             };
             // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -945,9 +696,6 @@ namespace Villamos
 
 
         #region Előtervet készít
-
-
-
         private void Előtervet_készít_Click(object sender, EventArgs e)
         {
             Elő_pályaszám.Height = 25;
@@ -958,8 +706,6 @@ namespace Villamos
             Holtart.Ki();
             MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-
 
         private void Eltervező_IDŐ_gyűjtő()
         {
@@ -991,7 +737,6 @@ namespace Villamos
                     MyCaf.KM_Eltervező_EgyKocsi(Elem.ToString().Trim(), Elő_Dátumig.Value);
                     Holtart.Lép();
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1003,8 +748,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
@@ -1014,15 +757,11 @@ namespace Villamos
             try
             {
                 if (Elő_pályaszám.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy jármű sem.");
-                // táblázat minden elemén végig megyünk
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg;
 
-                CafAdatokListázása();
-
+                AdatokCaf = KézAdatok.Lista_Adatok();
                 Holtart.Be();
-                foreach (AdatCombohoz elem in Elő_pályaszám.CheckedItems)
+                List<Adat_CAF_Adatok_Pót> ADATOK = new List<Adat_CAF_Adatok_Pót>();
+                foreach (string elem in Elő_pályaszám.CheckedItems)
                 {
                     Adat_CAF_Adatok AdatCaf = (from a in AdatokCaf
                                                where a.Azonosító == elem.ToStrTrim()
@@ -1032,10 +771,11 @@ namespace Villamos
 
                     if (AdatCaf != null)
                     {
-                        szöveg = "DELETE  FROM adatok ";
-                        szöveg += $" WHERE azonosító='{elem}' AND ";
-                        szöveg += $" dátum>=#{Elő_Dátumtól.Value:MM-dd-yyyy}# AND  státus=0";
-                        MyA.ABtörlés(hely, jelszó, szöveg);
+                        Adat_CAF_Adatok_Pót ADAT = new Adat_CAF_Adatok_Pót(
+                                                    elem,
+                                                    Elő_Dátumtól.Value,
+                                                    0);
+                        ADATOK.Add(ADAT);
                     }
 
                     AdatCaf = (from a in AdatokCaf
@@ -1046,14 +786,21 @@ namespace Villamos
 
                     if (AdatCaf != null)
                     {
-                        szöveg = "DELETE  FROM adatok ";
-                        szöveg += $" WHERE azonosító='{elem}' AND ";
-                        szöveg += $" dátum>=#{Elő_Dátumtól.Value:MM-dd-yyyy}# AND státus>=8";
-                        MyA.ABtörlés(hely, jelszó, szöveg);
+                        Adat_CAF_Adatok_Pót ADAT = new Adat_CAF_Adatok_Pót(
+                                            elem,
+                                            Elő_Dátumtól.Value,
+                                            8);
+                        ADATOK.Add(ADAT);
+
+                        ADAT = new Adat_CAF_Adatok_Pót(
+                                            elem,
+                                            Elő_Dátumtól.Value,
+                                            9);
+                        ADATOK.Add(ADAT);
                     }
                     Holtart.Lép();
                 }
-
+                KézAdatok.Törlés(ADATOK);
                 Holtart.Ki();
                 Előterv_listázás();
                 Elő_pályaszám.Height = 25;
@@ -1075,14 +822,11 @@ namespace Villamos
             try
             {
                 // a listázott vizsgálatok státusát átállítjuk ütemezettre
-                if (Elő_pályaszám.SelectedItems.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy jármű sem.");
+                if (Elő_pályaszám.SelectedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy jármű sem.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg;
                 Holtart.Be();
-
+                AdatokCaf = KézAdatok.Lista_Adatok();
+                List<Adat_CAF_Adatok_Pót> ADATOK = new List<Adat_CAF_Adatok_Pót>();
                 foreach (string elem in Elő_pályaszám.CheckedItems)
                 {
                     Adat_CAF_Adatok AdatCaf = (from a in AdatokCaf
@@ -1094,13 +838,15 @@ namespace Villamos
 
                     if (AdatCaf != null)
                     {
-                        szöveg = "UPDATE adatok  SET Státus=2 ";
-                        szöveg += $" WHERE azonosító='{elem}' AND dátum>=#{Elő_Dátumtól.Value:MM-dd-yyyy}# ";
-                        szöveg += $" AND dátum<=#{Elő_Dátumig.Value:MM-dd-yyyy}# AND Státus=0";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        Adat_CAF_Adatok_Pót ADAT = new Adat_CAF_Adatok_Pót(
+                                                    elem,
+                                                    Elő_Dátumtól.Value,
+                                                    Elő_Dátumig.Value,
+                                                    0);
                     }
                     Holtart.Lép();
                 }
+                KézAdatok.Ütemez(ADATOK);
                 Holtart.Ki();
                 Előterv_listázás();
                 Elő_pályaszám.Height = 25;
@@ -1143,9 +889,9 @@ namespace Villamos
                 if (Exists(helynapló) == false) Adatbázis_Létrehozás.Hibatáblalap(helynapló);
 
                 Holtart.Be();
-                CafAdatokListázása();
+                AdatokCaf = KézAdatok.Lista_Adatok();
 
-                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+
 
                 string szöveg1;
 
@@ -1241,7 +987,6 @@ namespace Villamos
 
 
         #region Részletes
-
         Ablak_CAF_Részletes Új_Ablak_CAF_Részletes;
         private void RészletesKezelés()
         {
@@ -1249,10 +994,9 @@ namespace Villamos
             Új_Ablak_CAF_Részletes = new Ablak_CAF_Részletes(Posta_Segéd, Elő_Dátumig.Value);
             Új_Ablak_CAF_Részletes.FormClosed += Ablak_CAF_Részletes_Closed;
             Új_Ablak_CAF_Részletes.StartPosition = FormStartPosition.CenterScreen;
-            Új_Ablak_CAF_Részletes.Változás += Tábla_Frissítés;
+            Új_Ablak_CAF_Részletes.Változás += ListázzaElőtervet;
             Új_Ablak_CAF_Részletes.Show();
         }
-
 
         private void Ablak_CAF_Részletes_Closed(object sender, FormClosedEventArgs e)
         {
@@ -1262,17 +1006,13 @@ namespace Villamos
 
 
         #region Excel előterv
-
-
         private void Elő_havi_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Elő_pályaszám.CheckedItems.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy kocsi sem.");
+                if (Elő_pályaszám.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy kocsi sem.");
                 Elő_pályaszám.Height = 25;
                 Előterv_listázás_excelhez();
-
 
                 string munkalap = "Munka1";
 
@@ -1584,7 +1324,6 @@ namespace Villamos
             }
         }
 
-
         private void Előterv_listázás_excelhez()
         {
             try
@@ -1607,29 +1346,7 @@ namespace Villamos
                 Tábla_elő.Columns[2].Width = 30;
 
                 // elkészítjük a dátumokat
-                DateTime ideigdát = Elő_Dátumtól.Value;
-                int i = 0;
-
-                while (Elő_Dátumig.Value >= ideigdát)
-                {
-                    Tábla_elő.RowCount++;
-                    i = Tábla_elő.RowCount - 1;
-                    Tábla_elő.Rows[i].Cells[0].Value = ideigdát.ToString("yyyy.MM.dd");
-                    ideigdát = ideigdát.AddDays(1);
-                    Holtart.Lép();
-                }
-                // elkészítjük a dátumokat
-                // dátumok színezése
-
-                string jelszómunka = "katalin";
-                string helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Elő_Dátumtól.Value.Year}\munkaidőnaptár.mdb";
-                if (Exists(helyelv) == true)
-                    Munkaidő_naptár(helyelv, jelszómunka);
-
-                // ha átnyúlik a következő évre 
-                helyelv = Application.StartupPath + @"\Főmérnökség\adatok\" + (System.Threading.Thread.CurrentThread.CurrentCulture.Calendar.GetYear(Elő_Dátumtól.Value) + 1).ToString() + @"\munkaidőnaptár.mdb";
-                if (Exists(helyelv) == true)
-                    Munkaidő_naptár(helyelv, jelszómunka);
+                Munkaidő_naptár();
 
                 Excel_Psz_kiírás();
                 CAF_telephelykiírása();
@@ -1657,56 +1374,26 @@ namespace Villamos
             }
         }
 
-
         private void CAF_telephelykiírása()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "Select * FROM Állománytábla order by azonosító";
-
-                Kezelő_Jármű Kéz = new Kezelő_Jármű();
-                List<Adat_Jármű> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                int oszlop = 3;
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
 
                 Tábla_elő.RowCount += 1;
                 int vége = Tábla_elő.RowCount - 1;
-
-                int hiba = 0;
-
-                foreach (Adat_Jármű rekord in Adatok)
+                for (int i = 3; i < Tábla_elő.Columns.Count; i++)
                 {
-                    // ha kisebb a pályaszám akkor arább megyünk egy oszloppal
-                    while (String.Compare(Tábla_elő.Columns[oszlop].HeaderText.Trim(), rekord.Azonosító.Trim()) < 0)
+                    Adat_Jármű Adat = (from a in Adatok
+                                       where a.Azonosító == Tábla_elő.Columns[i].HeaderText.Trim()
+                                       select a).FirstOrDefault();
+                    if (Adat != null)
                     {
-                        oszlop += 1;
-                        if (oszlop >= Tábla_elő.ColumnCount - 1)
-                        {
-                            oszlop -= 1;
-                            break;
-                        }
+                        Tábla_elő.Rows[vége].Cells[i].Value = Adat.Üzem.Trim();
                     }
-
-                    // ha egyforma akkor kiírja a pszt-ot
-                    if (Tábla_elő.Columns[oszlop].HeaderText.Trim() == rekord.Azonosító.Trim())
-                    {
-                        Tábla_elő.Rows[vége].Cells[oszlop].Value = rekord.Üzem.Trim();
-                        oszlop += 1;
-                        if (oszlop == Tábla_elő.ColumnCount)
-                        {
-                            hiba = 1;
-                            break;
-                        }
-                    }
-                    if (hiba == 1)
-                        break;
                 }
 
                 Tábla_elő.Refresh();
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1719,17 +1406,16 @@ namespace Villamos
             }
         }
 
-
         private void Excel_Psz_kiírás()
         {
             int oszlop = 3;
             {
                 for (int i = 0; i < Elő_pályaszám.Items.Count; i++)
                 {
-                    if (Elő_pályaszám.GetItemChecked(i) == true)
+                    if (Elő_pályaszám.GetItemChecked(i))
                     {
                         Tábla_elő.ColumnCount += 1;
-                        Tábla_elő.Columns[oszlop].HeaderText = Elő_pályaszám.Items[i].ToString().Trim();
+                        Tábla_elő.Columns[oszlop].HeaderText = Elő_pályaszám.Items[i].ToStrTrim();
                         Tábla_elő.Columns[oszlop].Width = 45;
                         oszlop += 1;
                     }
@@ -1738,18 +1424,11 @@ namespace Villamos
             }
         }
 
-
         private void Psz_tűrés()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-
-                string szöveg = "SELECT * FROM Alap";
-                Kezelő_CAF_alap KézCafAlap = new Kezelő_CAF_alap();
-                List<Adat_CAF_alap> AdatokCafAlap = KézCafAlap.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_CAF_alap> AdatokCafAlap = KézAlap.Lista_Adatok();
 
                 // létrehozunk egy sor a ciklusnak
                 Tábla_elő.RowCount += 2;
@@ -1796,15 +1475,11 @@ namespace Villamos
             }
         }
 
-
         private void PSZ_Tűrés_nap()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\ciklus.mdb";
-                string jelszó = "pocsaierzsi";
-                Kezelő_Ciklus kéz = new Kezelő_Ciklus();
-                Adat_Ciklus Elem;
+                List<Adat_Ciklus> Adatok = KézCiklus.Lista_Adatok(true);
 
                 // létrehozunk egy sor a ciklusnak
                 Tábla_elő.RowCount += 2;
@@ -1825,8 +1500,11 @@ namespace Villamos
                     }
                     else
                     {
-                        string szöveg = "SELECT * FROM ciklusrendtábla WHERE Típus='" + Tábla_elő.Rows[vége - 2].Cells[oszlop].Value.ToString().Trim() + "' AND sorszám=1 AND törölt='0'";
-                        Elem = kéz.Egy_Adat(hely, jelszó, szöveg);
+                        Adat_Ciklus Elem = (from a in Adatok
+                                            where a.Típus == Tábla_elő.Rows[vége - 2].Cells[oszlop].Value.ToStrTrim()
+                                            && a.Sorszám == 1
+                                            && a.Törölt == "0"
+                                            select a).FirstOrDefault();
                         if (Elem != null)
                         {
                             min = Elem.Alsóérték;
@@ -1852,106 +1530,54 @@ namespace Villamos
             }
         }
 
-
         private void IS_tűréskiírása_táblába()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-
-                int hiba = 0;
-
-                int oszlop = 3;
-                int sor = 0;
-
-                string szöveg = "SELECT * FROM Adatok WHERE ";
-                szöveg += " IDŐvKM=1 AND ";
-                szöveg += " (([Dátum]>=#" + Elő_Dátumtól.Value.ToString("MM-dd-yyyy") + "#)";
-                szöveg += " AND ([Dátum]<=#" + Elő_Dátumig.Value.ToString("MM-dd-yyyy") + "#))";
-                szöveg += " AND státus<8";
-                szöveg += "  ORDER BY azonosító,dátum asc, IDŐvKM desc  ";
-
-
-
-                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Dátum >= Elő_Dátumtól.Value
+                          && a.Dátum <= Elő_Dátumig.Value
+                          && a.Státus < 8
+                          && a.IDŐvKM == 1
+                          orderby a.Azonosító, a.Dátum ascending, a.IDŐvKM descending
+                          select a).ToList();
                 // előterv kiírása csak az IS listázása
 
                 Holtart.Be();
-                foreach (Adat_CAF_Adatok rekord in Adatok)
+                for (int oszlop = 3; oszlop < Tábla_elő.Columns.Count; oszlop++)
                 {
-                    // ha kisebb a listában lévő szám akkor léptetjük 
-                    string ideig = rekord.Azonosító.Trim();
-                    DateTime ideigdát = rekord.Dátum_program;
-                    if (ideigdát.ToString("yyyy.MM.dd") == "1900.01.01")
-                        ideigdát = rekord.Dátum;
-                    hiba = 0;
-
-                    while (String.Compare(Tábla_elő.Columns[oszlop].HeaderText.Trim(), rekord.Azonosító.Trim()) < 0)
+                    List<Adat_CAF_Adatok> AdatokSzűrt = (from a in Adatok
+                                                         where a.Azonosító == Tábla_elő.Columns[oszlop].HeaderText.Trim()
+                                                         select a).ToList();
+                    foreach (Adat_CAF_Adatok rekord in AdatokSzűrt)
                     {
-                        sor = 0;
-                        oszlop += 1;
-                        if (oszlop > Tábla_elő.ColumnCount - 1)
+                        for (int sor = 0; sor < Tábla_elő.Rows.Count - 5; sor++)
                         {
-                            hiba = 1;
-                            break;
-                        }
-                    }
-                    if (hiba == 1)
-                        break;
-                    // ha a pályaszámnak megfelelő oszlopban vagyunk
-                    if (Tábla_elő.Columns[oszlop].HeaderText.Trim() == rekord.Azonosító.Trim())
-                    {
-                        // ha kisebb a táblázatban lévő szám akkor addig növeljük amíg egyenlő nem lesz
-                        while (sor <= Tábla_elő.Rows.Count - 5 && DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) < ideigdát)
-                        {
-                            sor += 1;
-                            if (sor == Tábla_elő.Rows.Count - 5)
-                            {
-                                hiba = 1;
-                                break;
-                            }
-                        }
-
-                        // ha egyforma akkor kiírjuk
-                        if (sor <= Tábla_elő.Rows.Count - 5 && hiba != 1 && DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) == ideigdát)
-                        {
-                            // névleges
-                            Tábla_elő.Rows[sor].Cells[oszlop].Value = "/";
-                            // alsóérték 
-                            int alsó = int.Parse(Tábla_elő.Rows[Tábla_elő.Rows.Count - 2].Cells[oszlop].Value.ToString());
-                            for (int i = 1; i <= alsó; i++)
-                            {
-                                if (sor - i >= 0)
+                            if (DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) == rekord.Dátum)
+                            {   // névleges
+                                Tábla_elő.Rows[sor].Cells[oszlop].Value = "/";
+                                // alsóérték 
+                                int alsó = int.Parse(Tábla_elő.Rows[Tábla_elő.Rows.Count - 2].Cells[oszlop].Value.ToString());
+                                for (int i = 1; i <= alsó; i++)
                                 {
-                                    Tábla_elő.Rows[sor - i].Cells[oszlop].Value = "/";
+                                    if (sor - i >= 0)
+                                    {
+                                        Tábla_elő.Rows[sor - i].Cells[oszlop].Value = "/";
+                                    }
+                                }
+                                // felsőérték
+                                int felső = int.Parse(Tábla_elő.Rows[Tábla_elő.Rows.Count - 1].Cells[oszlop].Value.ToString());
+                                for (int i = 1; i <= felső; i++)
+                                {
+                                    if (sor + i < Tábla_elő.Rows.Count - 5)
+                                    {
+                                        Tábla_elő.Rows[sor + i].Cells[oszlop].Value = "/";
+                                    }
                                 }
                             }
-                            // felsőérték
-                            int felső = int.Parse(Tábla_elő.Rows[Tábla_elő.Rows.Count - 1].Cells[oszlop].Value.ToString());
-                            for (int i = 1; i <= felső; i++)
-                            {
-                                if (sor + i < Tábla_elő.Rows.Count - 5)
-                                {
-                                    Tábla_elő.Rows[sor + i].Cells[oszlop].Value = "/";
-                                }
-                            }
-
                         }
-                        sor += 1;
                     }
-                    if (sor >= Tábla_elő.Rows.Count - 5)
-                    {
-                        oszlop += 1;
-                        if (oszlop == Tábla_elő.ColumnCount - 1)
-                        {
-                            hiba = 1;
-                            break;
-                        }
-                        sor = 0;
-                    }
-                    Holtart.Lép();
                 }
                 Tábla_elő.Refresh();
                 Holtart.Ki();
@@ -1967,90 +1593,36 @@ namespace Villamos
             }
         }
 
-
         private void Excel_előterv_kiírás()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Dátum >= Elő_Dátumtól.Value
+                          && a.Dátum <= Elő_Dátumig.Value
+                          && a.Státus < 9
+                          orderby a.Azonosító, a.Dátum ascending
+                          select a).ToList();
+                // előterv kiírása csak az IS listázása
+
+                Holtart.Be();
+                for (int oszlop = 3; oszlop < Tábla_elő.Columns.Count; oszlop++)
                 {
-
-                    string szöveg = "SELECT * FROM Adatok WHERE ";
-                    szöveg += " (([Dátum]>=#" + Elő_Dátumtól.Value.ToString("MM-dd-yyyy") + "#)";
-                    szöveg += " AND ([Dátum]<=#" + Elő_Dátumig.Value.ToString("MM-dd-yyyy") + "#))";
-                    szöveg += " AND státus<9";
-                    szöveg += "  ORDER BY azonosító,dátum asc, IDŐvKM desc  ";
-
-                    int oszlop = 3;
-                    int sor = 0;
-                    int hiba = 0;
-
-                    List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok(hely, jelszó, szöveg);
-
-                    Holtart.Be();
-
-                    foreach (Adat_CAF_Adatok rekord in Adatok)
+                    List<Adat_CAF_Adatok> AdatokSzűrt = (from a in Adatok
+                                                         where a.Azonosító == Tábla_elő.Columns[oszlop].HeaderText.Trim()
+                                                         select a).ToList();
+                    foreach (Adat_CAF_Adatok rekord in AdatokSzűrt)
                     {
-
-
-                        // ha kisebb a listában lévő szám akkor léptetjük 
-                        string ideig = rekord.Azonosító.Trim();
-                        DateTime ideigdát = rekord.Dátum;
-
-                        while (String.Compare(Tábla_elő.Columns[oszlop].HeaderText.Trim(), rekord.Azonosító.Trim()) < 0)
+                        for (int sor = 0; sor < Tábla_elő.Rows.Count - 5; sor++)
                         {
-                            sor = 0;
-                            oszlop += 1;
-                            if (oszlop > Tábla_elő.ColumnCount - 1)
-                            {
-                                oszlop -= 1;
-                                break;
-                            }
-
-                        }
-
-                        // ha a pályaszámnak megfelelő oszlopban vagyunk
-                        if (Tábla_elő.Columns[oszlop].HeaderText.Trim() == rekord.Azonosító.Trim())
-                        {
-                            // ha kisebb a táblázatban lévő szám akkor addig növeljük amíg egyenlő nem lesz
-                            while (DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) < ideigdát)
-                            {
-                                sor += 1;
-                                if (sor == Tábla_elő.Rows.Count - 5)
-                                {
-                                    hiba = 1;
-                                    break;
-                                }
-                            }
-
-                            // ha egyforma akkor kiírjuk
-                            if (DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) == ideigdát)
-                            {
-                                // Vizsgálat
+                            if (DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) == rekord.Dátum)
                                 Tábla_elő.Rows[sor].Cells[oszlop].Value = rekord.Vizsgálat.Trim();
-                            }
-                            sor += 1;
                         }
-
-                        if (sor == Tábla_elő.Rows.Count - 5)
-                        {
-                            oszlop += 1;
-                            if (oszlop > Tábla_elő.ColumnCount - 1)
-                            {
-                                hiba = 1;
-                                break;
-                            }
-                            sor = 0;
-                        }
-                        if (hiba == 1)
-                            break;
-                        Holtart.Lép();
                     }
-                    Holtart.Ki();
-
                 }
-
+                Tábla_elő.Refresh();
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -2062,7 +1634,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Előterv_listázás_excelhez_negát()
         {
@@ -2085,31 +1656,7 @@ namespace Villamos
                 Tábla_elő.Columns[2].Width = 30;
 
                 // elkészítjük a dátumokat
-                DateTime ideigdát = Elő_Dátumtól.Value;
-                int i = 0;
-
-                while (Elő_Dátumig.Value >= ideigdát)
-                {
-                    Tábla_elő.RowCount++;
-                    i = Tábla_elő.RowCount - 1;
-                    Tábla_elő.Rows[i].Cells[0].Value = ideigdát.ToString("yyyy.MM.dd");
-                    ideigdát = ideigdát.AddDays(1);
-                    Holtart.Lép();
-                }
-
-                // elkészítjük a dátumokat
-                // dátumok színezése
-
-                string jelszómunka = "katalin";
-                string helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Elő_Dátumtól.Value.Year}\munkaidőnaptár.mdb";
-                if (Exists(helyelv) == true)
-                    Munkaidő_naptár(helyelv, jelszómunka);
-
-                // ha átnyúlik a következő évre 
-                helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Elő_Dátumtól.Value.AddYears(1).Year}\munkaidőnaptár.mdb";
-                if (Exists(helyelv) == true)
-                    Munkaidő_naptár(helyelv, jelszómunka);
-
+                Munkaidő_naptár();
                 Excel_Psz_kiírás();
                 Extra_kiírás();
                 Tábla_elő.Visible = true;
@@ -2117,7 +1664,6 @@ namespace Villamos
 
                 CAF_telephelykiírása();
                 Holtart.Ki();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -2130,70 +1676,43 @@ namespace Villamos
             }
         }
 
-
         private void Extra_kiírás()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Dátum >= Elő_Dátumtól.Value
+                          && a.Dátum <= Elő_Dátumig.Value
+                          && a.Státus == 8
+                          orderby a.Azonosító, a.Dátum ascending
+                          select a).ToList();
+                // előterv kiírása csak az IS listázása
+
                 Holtart.Be();
-
-                int oszlop = 3;
-                int sor = 0;
-
-                string szöveg = "SELECT * FROM Adatok WHERE ";
-                szöveg += " (([Dátum]>=#" + Elő_Dátumtól.Value.ToString("MM-dd-yyyy") + "#)";
-                szöveg += " AND ([Dátum]<=#" + Elő_Dátumig.Value.ToString("MM-dd-yyyy") + "#))";
-                szöveg += " AND státus=8";
-                szöveg += "  ORDER BY azonosító,dátum asc ";
-
-
-                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok(hely, jelszó, szöveg);
-
-                foreach (Adat_CAF_Adatok rekord in Adatok)
+                for (int oszlop = 3; oszlop < Tábla_elő.Columns.Count; oszlop++)
                 {
-                    // ha kisebb a listában lévő szám akkor léptetjük 
-                    string ideig = rekord.Azonosító.Trim();
-                    DateTime ideigdát = rekord.Dátum;
-                    // megkeressük, hogy melyik oszlopba kell írni.
-
-                    while (String.Compare(Tábla_elő.Columns[oszlop].HeaderText.Trim(), rekord.Azonosító.Trim()) < 0)
+                    List<Adat_CAF_Adatok> AdatokSzűrt = (from a in Adatok
+                                                         where a.Azonosító == Tábla_elő.Columns[oszlop].HeaderText.Trim()
+                                                         select a).ToList();
+                    foreach (Adat_CAF_Adatok rekord in AdatokSzűrt)
                     {
-                        sor = 0;
-                        oszlop += 1; // melyik oszlopba kell majd kiírni
-                        if (oszlop > Tábla_elő.ColumnCount - 1)
+                        for (int sor = 0; sor < Tábla_elő.Rows.Count - 5; sor++)
                         {
-                            oszlop -= 1;
-                            break;
-                        }
-                    }
-
-                    // ha a pályaszámnak megfelelő oszlopban vagyunk
-                    if (Tábla_elő.Columns[oszlop].HeaderText.Trim() == rekord.Azonosító.Trim())
-                    {
-                        // ha kisebb a táblázatban lévő szám akkor addig növeljük amíg egyenlő nem lesz
-                        while (DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) < ideigdát)
-                        {
-                            sor += 1;
-                            if (sor == Tábla_elő.Rows.Count - 5)
-                                break;
-                        }
-
-                        // ha egyforma akkor kiírjuk
-                        if (DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) == ideigdát)
-                        {
-                            // tábláőzat tartalma
-                            // csak azokat írjuk ki e, $, @, #, §, >
-                            string miazeleje = rekord.Vizsgálat.Substring(0, 1);
-                            if (miazeleje == "E" || miazeleje == "e" || miazeleje == "$" || miazeleje == "@" || miazeleje == "#" || miazeleje == "§" || miazeleje == ">")
+                            if (DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString()) == rekord.Dátum)
                             {
-                                Tábla_elő.Rows[sor].Cells[oszlop].Value = rekord.Vizsgálat.Trim();
+                                // tábláőzat tartalma
+                                // csak azokat írjuk ki e, $, @, #, §, >
+                                string miazeleje = rekord.Vizsgálat.Substring(0, 1);
+                                if (miazeleje == "E" || miazeleje == "e" || miazeleje == "$" || miazeleje == "@" || miazeleje == "#" || miazeleje == "§" || miazeleje == ">")
+                                {
+                                    Tábla_elő.Rows[sor].Cells[oszlop].Value = rekord.Vizsgálat.Trim();
+                                }
                             }
                         }
                     }
-                    Holtart.Lép();
                 }
+                Tábla_elő.Refresh();
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -2207,52 +1726,18 @@ namespace Villamos
             }
         }
 
-
         private void Button2_Click(object sender, EventArgs e)
         {
-            if (Elő_pályaszám.CheckedItems.Count < 1)
-                return;
+            if (Elő_pályaszám.CheckedItems.Count < 1) return;
             Elő_pályaszám.Height = 25;
             Előterv_listázás_excelhez();
         }
 
-
         private void Button3_Click(object sender, EventArgs e)
         {
-            if (Elő_pályaszám.CheckedItems.Count < 1)
-                return;
+            if (Elő_pályaszám.CheckedItems.Count < 1) return;
             Elő_pályaszám.Height = 25;
             Előterv_listázás_excelhez_negát();
-        }
-
-        #endregion
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            Holtart.Lép();
-        }
-
-        #region Listák
-        private void CafAdatokListázása()
-        {
-            try
-            {
-                AdatokCaf.Clear();
-                string szöveg = "SELECT * FROM adatok ";
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-
-                AdatokCaf = KézAdatok.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
         #endregion
     }

@@ -355,7 +355,6 @@ namespace Villamos
             this.Elő_törölt.TabIndex = 230;
             this.Elő_törölt.Text = "Töröltek";
             this.Elő_törölt.UseVisualStyleBackColor = false;
-            this.Elő_törölt.Click += new System.EventHandler(this.Elő_ütemez_Click);
             // 
             // Elő_pályaszám
             // 
