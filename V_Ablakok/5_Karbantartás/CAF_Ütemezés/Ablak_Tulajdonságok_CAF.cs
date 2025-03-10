@@ -26,6 +26,7 @@ namespace Villamos
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Váltós_Naptár KézVáltós = new Kezelő_Váltós_Naptár();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
+        readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
         #endregion
 
 
@@ -863,6 +864,7 @@ namespace Villamos
             }
         }
 
+        //Ezt kell befejezni
         private void Elő_Lehívás_Click(object sender, EventArgs e)
         {
             try
@@ -874,9 +876,9 @@ namespace Villamos
                 // Módosítjuk a jármű státuszát
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 string jelszó = "pozsgaii";
-                string helyütem = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-
                 if (!Exists(hely)) return;
+
+                string helyütem = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
                 string jelszóütem = "CzabalayL";
                 string szöveg = $"SELECT * FROM adatok where STÁTUS=2 and [dátum]=#{Dátum_ütem:M-d-yy}# order by  azonosító";
 
@@ -890,10 +892,13 @@ namespace Villamos
 
                 Holtart.Be();
                 AdatokCaf = KézAdatok.Lista_Adatok();
+                List<Adat_CAF_Adatok> AdatokCafSzűrt = (from a in AdatokCaf
+                                                        where a.Státus == 2
+                                                        && a.Dátum == Dátum_ütem
+                                                        orderby a.Azonosító
+                                                        select a).ToList();
 
 
-
-                string szöveg1;
 
                 string szöveg0 = $"SELECT * FROM állománytábla";
                 List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg0);
@@ -901,7 +906,7 @@ namespace Villamos
 
                 string szöveg2 = $"SELECT * FROM hibatábla";
 
-                Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
+
                 List<Adat_Jármű_hiba> AdatokJárműHiba = KézJárműHiba.Lista_adatok(helyhiba, jelszó, szöveg2);
 
 
@@ -920,7 +925,7 @@ namespace Villamos
                     {
                         // ha telephelyen van a kocsi
                         // hiba leírása
-                        szöveg1 = rekordütemez.Vizsgálat.Trim() + "-" + rekordütemez.Id.ToString() + "-" + rekordütemez.Dátum.ToString();
+                        string szöveg1 = rekordütemez.Vizsgálat.Trim() + "-" + rekordütemez.Id.ToString() + "-" + rekordütemez.Dátum.ToString();
 
                         // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
 
