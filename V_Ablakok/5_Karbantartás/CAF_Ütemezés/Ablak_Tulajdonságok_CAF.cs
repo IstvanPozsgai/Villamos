@@ -304,9 +304,9 @@ namespace Villamos
                     string pályaszám = Elő_pályaszám.CheckedItems[o].ToStrTrim();
 
                     //Fejléc kiírása
-                    Tábla_elő.ColumnCount = oszlop + o;
-                    Tábla_elő.Columns[oszlop + o - 1].HeaderText = pályaszám;
-                    Tábla_elő.Columns[oszlop + o - 1].Width = 45;
+                    Tábla_elő.ColumnCount = oszlop + o + 1;
+                    Tábla_elő.Columns[oszlop + o].HeaderText = pályaszám;
+                    Tábla_elő.Columns[oszlop + o].Width = 45;
 
                     //Szűrés pályaszámra
                     List<Adat_CAF_Adatok> Szűrt = Adatok.Where(x => x.Azonosító == pályaszám).ToList();
@@ -322,8 +322,8 @@ namespace Villamos
                             foreach (Adat_CAF_Adatok item in Szűrt1)
                                 ideig += string.Join("-", item.Vizsgálat, item.IDŐ_Sorszám);
 
-                            Tábla_elő.Rows[sor].Cells[oszlop + o - 1].Value = ideig;
-                            Cella_formátum(sor, oszlop + o - 1, Szűrt1[0].Státus);
+                            Tábla_elő.Rows[sor].Cells[oszlop + o].Value = ideig;
+                            Cella_formátum(sor, oszlop + o, Szűrt1[0].Státus);
                         }
                     }
                     Holtart.Lép();
