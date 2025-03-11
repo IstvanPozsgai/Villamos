@@ -125,7 +125,7 @@ namespace Villamos
             // 
             this.Caf_Listák.BackgroundImage = global::Villamos.Properties.Resources.CARDFIL3;
             this.Caf_Listák.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Caf_Listák.Location = new System.Drawing.Point(1128, 75);
+            this.Caf_Listák.Location = new System.Drawing.Point(1026, 78);
             this.Caf_Listák.Name = "Caf_Listák";
             this.Caf_Listák.Size = new System.Drawing.Size(40, 40);
             this.Caf_Listák.TabIndex = 240;
@@ -137,7 +137,7 @@ namespace Villamos
             // 
             this.Színbeállítás.BackgroundImage = global::Villamos.Properties.Resources.Dtafalonso_Modern_Xp_ModernXP_12_Workstation_Desktop_Colors;
             this.Színbeállítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Színbeállítás.Location = new System.Drawing.Point(1220, 76);
+            this.Színbeállítás.Location = new System.Drawing.Point(1118, 79);
             this.Színbeállítás.Name = "Színbeállítás";
             this.Színbeállítás.Size = new System.Drawing.Size(40, 40);
             this.Színbeállítás.TabIndex = 239;
@@ -149,7 +149,7 @@ namespace Villamos
             // 
             this.Alap_adatok.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
             this.Alap_adatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Alap_adatok.Location = new System.Drawing.Point(1174, 76);
+            this.Alap_adatok.Location = new System.Drawing.Point(1072, 79);
             this.Alap_adatok.Name = "Alap_adatok";
             this.Alap_adatok.Size = new System.Drawing.Size(40, 40);
             this.Alap_adatok.TabIndex = 238;
@@ -161,7 +161,7 @@ namespace Villamos
             // 
             this.Button3.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button3.Location = new System.Drawing.Point(1082, 41);
+            this.Button3.Location = new System.Drawing.Point(980, 44);
             this.Button3.Name = "Button3";
             this.Button3.Size = new System.Drawing.Size(30, 30);
             this.Button3.TabIndex = 237;
@@ -174,7 +174,7 @@ namespace Villamos
             // 
             this.Button2.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button2.Location = new System.Drawing.Point(1036, 41);
+            this.Button2.Location = new System.Drawing.Point(665, 41);
             this.Button2.Name = "Button2";
             this.Button2.Size = new System.Drawing.Size(30, 30);
             this.Button2.TabIndex = 236;
@@ -213,7 +213,7 @@ namespace Villamos
             // 
             this.Elő_havi.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Large_Seo_SEO;
             this.Elő_havi.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Elő_havi.Location = new System.Drawing.Point(1015, 78);
+            this.Elő_havi.Location = new System.Drawing.Point(921, 78);
             this.Elő_havi.Name = "Elő_havi";
             this.Elő_havi.Size = new System.Drawing.Size(40, 40);
             this.Elő_havi.TabIndex = 231;
@@ -337,7 +337,7 @@ namespace Villamos
             // 
             this.Segédablak_hívó.BackgroundImage = global::Villamos.Properties.Resources.BeCardStack;
             this.Segédablak_hívó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Segédablak_hívó.Location = new System.Drawing.Point(1082, 75);
+            this.Segédablak_hívó.Location = new System.Drawing.Point(980, 78);
             this.Segédablak_hívó.Name = "Segédablak_hívó";
             this.Segédablak_hívó.Size = new System.Drawing.Size(40, 40);
             this.Segédablak_hívó.TabIndex = 234;

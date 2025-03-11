@@ -699,24 +699,41 @@ namespace Villamos
         #region Előtervet készít
         private void Előtervet_készít_Click(object sender, EventArgs e)
         {
-            Elő_pályaszám.Height = 25;
-            Holtart.Be();
-            Eltervező_IDŐ_gyűjtő();
-            Eltervező_KM_gyűjtő();
-            Előterv_listázás();
-            Holtart.Ki();
-            MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                Elő_pályaszám.Height = 25;
+                Holtart.Be();
+                Eltervező_IDŐ_gyűjtő();
+                Eltervező_KM_gyűjtő();
+                Előterv_listázás();
+                Holtart.Ki();
+                MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Eltervező_IDŐ_gyűjtő()
         {
             try
             {
-                foreach (AdatCombohoz Elem in Elő_pályaszám.CheckedItems)
+                Holtart.Be();
+                List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
+                foreach (string Elem in Elő_pályaszám.CheckedItems)
                 {
-                    MyCaf.IDŐ_Eltervező_EgyKocsi(Elem.ToString().Trim(), Elő_Dátumig.Value);
+                    List<Adat_CAF_Adatok> AdatokEgy = MyCaf.IDŐ_EgyKocsi(Elem.ToStrTrim(), Elő_Dátumig.Value);
+                    Adatok.AddRange(AdatokEgy);
                     Holtart.Lép();
                 }
+                KézAdatok.Rögzítés(Adatok);
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -733,11 +750,16 @@ namespace Villamos
         {
             try
             {
-                foreach (AdatCombohoz Elem in Elő_pályaszám.CheckedItems)
+                Holtart.Be();
+                List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
+                foreach (string Elem in Elő_pályaszám.CheckedItems)
                 {
-                    MyCaf.KM_Eltervező_EgyKocsi(Elem.ToString().Trim(), Elő_Dátumig.Value);
+                    List<Adat_CAF_Adatok> AdatokEgy = MyCaf.KM_EgyKocsi(Elem.ToStrTrim(), Elő_Dátumig.Value);
+                    Adatok.AddRange(AdatokEgy);
                     Holtart.Lép();
                 }
+                KézAdatok.Rögzítés(Adatok);
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1736,6 +1758,7 @@ namespace Villamos
             if (Elő_pályaszám.CheckedItems.Count < 1) return;
             Elő_pályaszám.Height = 25;
             Előterv_listázás_excelhez();
+
         }
 
         private void Button3_Click(object sender, EventArgs e)

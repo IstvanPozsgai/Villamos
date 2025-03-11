@@ -225,15 +225,51 @@ namespace Villamos.Kezelők
                 szöveg += $"{Sorszám}, "; // id 
                 szöveg += $"'{Adat.Azonosító}', "; // azonosító
                 szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
-                szöveg += $" '{Adat.Dátum:yyyy.MM.dd}', "; // Dátum
+                szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // Dátum
                 szöveg += $"{Adat.Számláló}, "; // számláló
                 szöveg += $"{Adat.Státus}, "; // státus 
                 szöveg += $"{Adat.KM_Sorszám}, "; // km_sorszám
                 szöveg += $"{Adat.IDŐ_Sorszám}, "; // idő_sorszám
                 szöveg += $"{Adat.IDŐvKM}, ";// idővKM
-                szöveg += "'{Adat.Megjegyzés}', "; // megjegyzés
-                szöveg += " '{Adat.Dátum_program:yyyy.MM.dd}') ";
+                szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
+                szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(List<Adat_CAF_Adatok> Adatok)
+        {
+            try
+            {
+                double sorszám = Sorszám();
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_CAF_Adatok Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program) VALUES (";
+                    szöveg += $"{sorszám}, "; // id 
+                    szöveg += $"'{Adat.Azonosító}', "; // azonosító
+                    szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
+                    szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // Dátum
+                    szöveg += $"{Adat.Számláló}, "; // számláló
+                    szöveg += $"{Adat.Státus}, "; // státus 
+                    szöveg += $"{Adat.KM_Sorszám}, "; // km_sorszám
+                    szöveg += $"{Adat.IDŐ_Sorszám}, "; // idő_sorszám
+                    szöveg += $"{Adat.IDŐvKM}, ";// idővKM
+                    szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
+                    szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
+                    SzövegGy.Add(szöveg);
+                    sorszám++;
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
