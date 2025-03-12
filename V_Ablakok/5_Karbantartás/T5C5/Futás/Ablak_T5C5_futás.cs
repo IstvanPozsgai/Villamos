@@ -53,6 +53,7 @@ namespace Villamos
                 Táblaellenőrzés1();
             }
 
+
             Pályaszám = T5C5.Pályaszám_feltöltés(Cmbtelephely.Text.Trim());
         }
 
