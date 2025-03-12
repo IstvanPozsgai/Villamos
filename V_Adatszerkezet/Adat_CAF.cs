@@ -48,6 +48,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Garancia = garancia;
             Törölt = törölt;
         }
+
+        public Adat_CAF_alap(string azonosító, long havikm, long kMUkm, DateTime kMUdátum)
+        {
+            Azonosító = azonosító;
+            Havikm = havikm;
+            KMUkm = kMUkm;
+            KMUdátum = kMUdátum;
+        }
     }
 
     public class Adat_CAF_Adatok

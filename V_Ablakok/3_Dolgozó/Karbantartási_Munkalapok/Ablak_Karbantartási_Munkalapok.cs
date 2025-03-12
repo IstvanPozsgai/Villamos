@@ -977,18 +977,12 @@ namespace Villamos.Villamos_Ablakok
                     if (EgyKmAdat != null) KM_korr = EgyKmAdat.KMUkm;
 
                     //KMU korrekció
-                    List<Adat_Főkönyv_Zser_Km> AdatokZSER = new List<Adat_Főkönyv_Zser_Km>();
-                    helykm = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\Napi_km_Zser_{Dátum.Value.Year}.mdb";
-                    if (File.Exists(helykm)) AdatokZSER = KézZser.Lista_adatok(helykm);
+                    List<Adat_Főkönyv_Zser_Km> AdatokZSER = KézZser.Lista_adatok(Dátum.Value.Year);
                     if (Dátum.Value.Month < 4)
                     {
                         helykm = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year - 1}\Napi_km_Zser_{Dátum.Value.Year - 1}.mdb";
-                        List<Adat_Főkönyv_Zser_Km> AdatokZSERelőző = new List<Adat_Főkönyv_Zser_Km>();
-                        if (File.Exists(helykm))
-                        {
-                            AdatokZSERelőző = KézZser.Lista_adatok(helykm);
-                            AdatokZSER.AddRange(AdatokZSERelőző);
-                        }
+                        List<Adat_Főkönyv_Zser_Km> AdatokZSERelőző = KézZser.Lista_adatok(Dátum.Value.Year - 1);
+                        AdatokZSER.AddRange(AdatokZSERelőző);
                     }
 
 

@@ -34,8 +34,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             InitializeComponent();
 
             Posta_Segéd = posta_Segéd;
-            Start();
             Elő_Dátumig = elő_Dátumig;
+            Start();
+
         }
 
         private void Ablak_CAF_Részletes_Load(object sender, EventArgs e)

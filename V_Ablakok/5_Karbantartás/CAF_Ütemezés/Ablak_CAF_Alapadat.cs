@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
@@ -21,6 +19,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         readonly Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
         readonly Kezelő_CAF_alap KézCAFAlap = new Kezelő_CAF_alap();
         readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
+        readonly Kezelő_Főkönyv_Zser_Km KézZSerKm = new Kezelő_Főkönyv_Zser_Km();
 
         List<Adat_CAF_alap> AdatokCAFAlap = new List<Adat_CAF_alap>();
         List<Adat_Főkönyv_Zser_Km> AdatokZser = new List<Adat_Főkönyv_Zser_Km>();
@@ -35,7 +34,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
-        void Start()
+        private void Start()
         {
             Jogosultságkiosztás();
             Pályaszámokfeltöltése();
@@ -44,7 +43,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             AdatokCiklus = KézCiklus.Lista_Adatok(true);
             AdatokCAFAlap = KézCAFAlap.Lista_Adatok();
 
-            CiklusrendCombok_feltöltés();
             CiklusrendCombok_feltöltés();
             if (Azonosító.Trim() != "")
             {
@@ -181,21 +179,21 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg = "SELECT * FROM alap WHERE törölt=false ORDER BY azonosító";
+                List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(true);
 
-                List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok();
+                AdatokZser.Clear();
+                AdatokZser = KézZSerKm.Lista_adatok(DateTime.Today.Year - 1);
+                List<Adat_Főkönyv_Zser_Km> Ideig = KézZSerKm.Lista_adatok(DateTime.Today.Year);
+                AdatokZser.AddRange(Ideig);
 
-                NapiZSerListaFeltöltés();
                 if (Adatok != null)
                 {
                     Holtart.Be();
-                    List<string> SzövegGy = new List<string>();
+                    List<Adat_CAF_alap> AdatokGy = new List<Adat_CAF_alap>();
                     foreach (Adat_CAF_alap rekord in Adatok)
                     {
                         long havikm = 0;
-                        double kmukm = 0;
+                        long kmukm = 0;
 
                         List<Adat_Főkönyv_Zser_Km> vane = (from a in AdatokZser
                                                            where a.Azonosító.Trim() == rekord.Azonosító.Trim()
@@ -207,19 +205,18 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                 where t.Azonosító.Trim() == rekord.Azonosító.Trim()
                                 && t.Dátum > rekord.Vizsgdátum_km
                                 select t).ToList();
-                        if (vane != null) kmukm = vane.Sum(t => t.Napikm);
 
-                        // módosítjuk az adatokat
-                        szöveg = "UPDATE alap  SET ";
-                        szöveg += $" kmukm={kmukm}, ";
-                        szöveg += $" havikm={havikm}, ";
-                        szöveg += $" KMUdátum=#{DateTime.Today:M-d-yy}# ";
-                        szöveg += $" WHERE azonosító='{rekord.Azonosító.Trim()}'";
-                        SzövegGy.Add(szöveg);
+                        if (vane != null) kmukm = rekord.Számláló + vane.Sum(t => t.Napikm);
 
+                        Adat_CAF_alap ADAT = new Adat_CAF_alap(
+                                            rekord.Azonosító.Trim(),
+                                            havikm,
+                                            kmukm,
+                                            DateTime.Today);
+                        AdatokGy.Add(ADAT);
                         Holtart.Lép();
                     }
-                    MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                    KézCAFAlap.Módosítás_kmAdat(AdatokGy);
                 }
 
                 Holtart.Ki();
@@ -399,7 +396,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 List<Adat_Ciklus> Adatok = AdatokCiklus.Where(a => a.Típus.Trim() == Alap_ciklus_km.Text.Trim()).ToList();
                 foreach (Adat_Ciklus item in Adatok)
-                    Alap_vizsg_sorszám_idő.Items.Add(item.Sorszám);
+                    Alap_vizsg_sorszám_km.Items.Add(item.Sorszám);
             }
             catch (HibásBevittAdat ex)
             {
@@ -500,29 +497,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        private void NapiZSerListaFeltöltés()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year - 1}\Napi_km_Zser_{DateTime.Today.Year - 1}.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM Tábla";
-                List<Adat_Főkönyv_Zser_Km> Ideig = new List<Adat_Főkönyv_Zser_Km>();
-                AdatokZser.Clear();
-                if (File.Exists(hely)) AdatokZser = KézZser.Lista_adatok(hely, jelszó, szöveg);
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\Napi_km_Zser_{DateTime.Today.Year}.mdb";
-                if (File.Exists(hely)) Ideig = KézZser.Lista_adatok(hely, jelszó, szöveg);
-                if (Ideig.Any()) AdatokZser.AddRange(Ideig);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+
     }
 }

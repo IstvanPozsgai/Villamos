@@ -15,7 +15,6 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
 
-
         public Kezelő_CAF_alap()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
@@ -222,6 +221,32 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás_kmAdat(List<Adat_CAF_alap> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_CAF_alap Adat in Adatok)
+                {
+                    string szöveg = "UPDATE alap  SET ";
+                    szöveg += $"havikm={Adat.Havikm}, "; // havikm,
+                    szöveg += $"KMUkm={Adat.KMUkm}, ";  // KMUkm
+                    szöveg += $"KMUdátum='{Adat.KMUdátum:MM-dd-yyyy}' "; // KMUdátum,
+                    szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 
 
