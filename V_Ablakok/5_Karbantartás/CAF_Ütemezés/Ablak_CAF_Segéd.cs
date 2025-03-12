@@ -309,7 +309,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         Idő_átütemezés(rekord, Segéd_dátum.Value);
                         break;
                     case 2:
-                        Km_átütemezés(rekord, Segéd_dátum.Value, Dátumig);
+                        Km_átütemezés(rekord, Segéd_dátum.Value);
                         break;
                 }
 
@@ -352,7 +352,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         Adat.IDŐ_Sorszám,
                         Adat.IDŐvKM,
                         "Átütemezés");
-                    KézAdatok.Döntés(Adat);
+                    KézAdatok.Döntés(Új_adat);
 
                     // töröljük az új dátum utáni tervet
                     List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
@@ -361,15 +361,17 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                             && a.Dátum > Dátumra
                                             && a.Státus == 0
                                             select a).FirstOrDefault();
-                    if (Elem != null) KézAdatok.Törlés(Dátumra, Adat.Azonosító.Trim());
+                    if (Elem != null) KézAdatok.Törlés(Dátumra.AddDays(1), Adat.Azonosító.Trim());
 
                     // ütemezzük újra a kocsikat
                     // idő szerit
-                    MyCaf.IDŐ_Eltervező_EgyKocsi(Adat.Azonosító.Trim(), Dátumig);
-                    // km szerint
-                    MyCaf.KM_Eltervező_EgyKocsi(Adat.Azonosító.Trim(), Dátumig);
-                }
+                    List<Adat_CAF_Adatok> IdőAdatok = MyCaf.IDŐ_EgyKocsi(Adat.Azonosító.Trim(), Dátumig, Dátumra);
 
+                    // km szerint
+                    List<Adat_CAF_Adatok> KMAdatok = MyCaf.KM_EgyKocsi(Adat.Azonosító.Trim(), Dátumig);
+                    IdőAdatok.AddRange(KMAdatok);
+                    KézAdatok.Rögzítés(IdőAdatok);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -382,7 +384,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        private void Km_átütemezés(Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime DátumIg)
+        private void Km_átütemezés(Adat_CAF_Adatok Adat, DateTime Dátumra)
         {
             try
             {
@@ -420,9 +422,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 }
                 // ütemezzük újra a kocsikat
                 // idő szerit
-                MyCaf.IDŐ_Eltervező_EgyKocsi(Adat.Azonosító, DátumIg);
+                List<Adat_CAF_Adatok> IdőAdatok = MyCaf.IDŐ_EgyKocsi(Adat.Azonosító.Trim(), Dátumig, new DateTime(1900, 1, 1));
+
                 // km szerint
-                MyCaf.KM_Eltervező_EgyKocsi(Adat.Azonosító, DátumIg);
+                List<Adat_CAF_Adatok> KMAdatok = MyCaf.KM_EgyKocsi(Adat.Azonosító.Trim(), Dátumig);
+                IdőAdatok.AddRange(KMAdatok);
+                KézAdatok.Rögzítés(IdőAdatok);
             }
             catch (HibásBevittAdat ex)
             {

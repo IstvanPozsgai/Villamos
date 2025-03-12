@@ -116,38 +116,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
-        public static void IDŐ_Eltervező_EgyKocsi(string pályaszám, DateTime Elő_Dátumig)
-        {
-            try
-            {
-                bool vége = true;
-                Adat_CAF_alap EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim(), true);
-                List<Adat_Ciklus> Ciklus_Idő = Ciklus.Where(a => a.Típus == EgyCAF.Ciklusnap).OrderBy(a => a.Sorszám).ToList();
-
-                while (vége == true)
-                {
-                    //Jármű tulajdonsága
-                    EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim());
-                    // utolsó ütemezett
-                    Adat_CAF_Adatok Előző = Kéz_Adatok.Egy_Adat(pályaszám.Trim());
-                    // következő idő szerinti
-                    Adat_CAF_Adatok Adat = Következő_Idő(Ciklus_Idő, Előző, EgyCAF);
-
-                    // ha belefér az időbe akkor rögzítjük
-                    if (Elő_Dátumig >= Adat.Dátum)
-                        Kéz_Adatok.Döntés(Adat);
-                    else
-                        vége = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "IDŐ_Eltervező_EgyKocsi", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public static List<Adat_CAF_Adatok> IDŐ_EgyKocsi(string pályaszám, DateTime Elő_Dátumig)
+        public static List<Adat_CAF_Adatok> IDŐ_EgyKocsi(string pályaszám, DateTime Elő_Dátumig, DateTime ELŐDátumtól)
         {
             List<Adat_CAF_Adatok> Válasz = new List<Adat_CAF_Adatok>();
             try
@@ -163,7 +132,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 long Számláló = Előző.Számláló;
                 int Idő_sorszám = Előző.IDŐ_Sorszám;
                 int KM_Sorszám = Előző.KM_Sorszám;
-                DateTime Dátum = Előző.Dátum;
+                DateTime Dátum;
+                if (ELŐDátumtól == new DateTime(1900, 1, 1))
+                    Dátum = Előző.Dátum;
+                else
+                    Dátum = ELŐDátumtól;
                 // ha az utolsó ütem akkor lenullázuk az értéket
                 int következő;
                 if (Előző.IDŐvKM == 2)
@@ -204,35 +177,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return Válasz;
-        }
-
-        public static void KM_Eltervező_EgyKocsi(string pályaszám, DateTime Elő_Dátumig)
-        {
-            try
-            {
-                bool vége = true;
-                Adat_CAF_alap EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim(), true);
-                List<Adat_Ciklus> Ciklus_Km = Ciklus.Where(a => a.Típus == EgyCAF.Cikluskm).OrderBy(a => a.Sorszám).ToList();
-                while (vége == true)
-                {
-                    //Jármű tulajdonsága
-                    EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim());
-                    // utolsó ütemezett
-                    Adat_CAF_Adatok Előző = Kéz_Adatok.Egy_Adat(pályaszám.Trim(), 2);
-                    // következő km szerinti
-                    Adat_CAF_Adatok Adat = Következő_Km(Ciklus_Km, Előző, EgyCAF);
-                    // ha belefér az időbe akkor rögzítjük
-                    if (Elő_Dátumig >= Adat.Dátum)
-                        Kéz_Adatok.Döntés(Adat);
-                    else
-                        vége = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "KM_Eltervező_EgyKocsi", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         public static List<Adat_CAF_Adatok> KM_EgyKocsi(string pályaszám, DateTime Elő_Dátumig)
