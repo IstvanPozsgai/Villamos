@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
@@ -17,6 +18,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         readonly Kezelő_CAF_alap KézAlap = new Kezelő_CAF_alap();
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         CAF_Segéd_Adat Posta_adat;
         int Kijelölt_Sor = -1;
@@ -63,6 +65,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             try
             {
                 List<Adat_CAF_alap> Adatok = KézAlap.Lista_Adatok();
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 KiÍrás = "Alap";
 
                 Tábla_lista.Rows.Clear();
@@ -123,7 +126,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Tábla_lista.RowCount++;
                     int i = Tábla_lista.RowCount - 1;
                     Tábla_lista.Rows[i].Cells[0].Value = rekord.Azonosító;
-                    Tábla_lista.Rows[i].Cells[1].Value = rekord.Típus;
+                    Adat_Jármű Elem = AdatokJármű.FirstOrDefault(a => a.Azonosító == rekord.Azonosító);
+                    if (Elem != null)
+                        Tábla_lista.Rows[i].Cells[1].Value = Elem.Valóstípus;
 
                     Tábla_lista.Rows[i].Cells[2].Value = rekord.Ciklusnap;
                     Tábla_lista.Rows[i].Cells[3].Value = rekord.Utolsó_Nap;
