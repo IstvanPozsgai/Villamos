@@ -6,10 +6,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.CAF_Ütemezés;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
-using MyA = Adatbázis;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -27,6 +24,7 @@ namespace Villamos
         readonly Kezelő_Váltós_Naptár KézVáltós = new Kezelő_Váltós_Naptár();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
+        readonly Kezelő_Jármű_Hiba_Napló KézJárműHibaNapló = new Kezelő_Jármű_Hiba_Napló();
         #endregion
 
 
@@ -728,7 +726,7 @@ namespace Villamos
                 List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
                 foreach (string Elem in Elő_pályaszám.CheckedItems)
                 {
-                    List<Adat_CAF_Adatok> AdatokEgy = MyCaf.IDŐ_EgyKocsi(Elem.ToStrTrim(), Elő_Dátumig.Value);
+                    List<Adat_CAF_Adatok> AdatokEgy = MyCaf.IDŐ_EgyKocsi(Elem.ToStrTrim(), Elő_Dátumig.Value, new DateTime(1900, 1, 1));
                     Adatok.AddRange(AdatokEgy);
                     Holtart.Lép();
                 }
@@ -886,52 +884,27 @@ namespace Villamos
             }
         }
 
-        //Ezt kell befejezni
+
         private void Elő_Lehívás_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Cmbtelephely.Text.Trim() == "") return;
 
-                DateTime Dátum_ütem = Elő_Dátumtól.Value.AddDays(0);
+                DateTime Dátum_ütem = Elő_Dátumtól.Value;
 
-                // Módosítjuk a jármű státuszát
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                if (!Exists(hely)) return;
+                List<Adat_CAF_Adatok> AdatokCaf = KézAdatok.Lista_Adatok();
+                AdatokCaf = (from a in AdatokCaf
+                             where a.Státus == 2
+                             && a.Dátum == Dátum_ütem
+                             orderby a.Azonosító
+                             select a).ToList();
+                if (AdatokCaf.Count == 0) throw new HibásBevittAdat($"Nincs a {Dátum_ütem:yyyy.MM.dd} napra egy jármű sem amit ütemezni kell.");
 
-                string helyütem = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszóütem = "CzabalayL";
-                string szöveg = $"SELECT * FROM adatok where STÁTUS=2 and [dátum]=#{Dátum_ütem:M-d-yy}# order by  azonosító";
-
-
-                // megnyitjuk a hibákat
-                string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
-
-                // naplózás
-                string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Now:yyyyMM}hibanapló.mdb";
-                if (Exists(helynapló) == false) Adatbázis_Létrehozás.Hibatáblalap(helynapló);
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                List<Adat_Jármű_hiba> AdatokJárműHiba = KézJárműHiba.Lista_adatok(Cmbtelephely.Text.Trim());
 
                 Holtart.Be();
-                AdatokCaf = KézAdatok.Lista_Adatok();
-                List<Adat_CAF_Adatok> AdatokCafSzűrt = (from a in AdatokCaf
-                                                        where a.Státus == 2
-                                                        && a.Dátum == Dátum_ütem
-                                                        orderby a.Azonosító
-                                                        select a).ToList();
-
-
-
-                string szöveg0 = $"SELECT * FROM állománytábla";
-                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg0);
-
-
-                string szöveg2 = $"SELECT * FROM hibatábla";
-
-
-                List<Adat_Jármű_hiba> AdatokJárműHiba = KézJárműHiba.Lista_adatok(helyhiba, jelszó, szöveg2);
-
-
                 // ha van ütemezett kocsi
                 foreach (Adat_CAF_Adatok rekordütemez in AdatokCaf)
                 {
@@ -940,22 +913,19 @@ namespace Villamos
                     // megnézzük, hogy a telephelyen van-e a kocsi
                     Adat_Jármű Kocsi = (from a in AdatokJármű
                                         where a.Azonosító == rekordütemez.Azonosító.Trim()
-                                        && a.Státus == 2
                                         select a).FirstOrDefault();
 
                     if (Kocsi != null)
                     {
                         // ha telephelyen van a kocsi
                         // hiba leírása
-                        string szöveg1 = rekordütemez.Vizsgálat.Trim() + "-" + rekordütemez.Id.ToString() + "-" + rekordütemez.Dátum.ToString();
+                        string szöveg1 = $"{rekordütemez.Vizsgálat.Trim()}-{rekordütemez.Id}-{rekordütemez.Dátum:yyyy.MM.dd}";
 
                         // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
-
                         // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
-
                         Adat_Jármű_hiba AdatHiba = (from a in AdatokJárműHiba
                                                     where a.Azonosító == rekordütemez.Azonosító.Trim()
-                                                    && a.Hibaleírása.Contains(szöveg1.Trim())
+                                                    && a.Hibaleírása.Contains(szöveg1)
                                                     select a).FirstOrDefault();
 
                         if (AdatHiba == null)
@@ -967,28 +937,30 @@ namespace Villamos
 
                             if (Kocsi != null)
                             {
-                                // rögzítjük a villamos.mdb-be
-                                szöveg = "UPDATE állománytábla SET ";
-                                szöveg += $" hibák={Kocsi.Hibák + 1},  státus=3 ";
-                                szöveg += $" WHERE  [azonosító]='{rekordütemez.Azonosító.Trim()}'";
-                                MyA.ABMódosítás(hely, jelszó, szöveg);
+                                Adat_Jármű ADAT_Jármű = new Adat_Jármű(
+                                                    rekordütemez.Azonosító.Trim(),
+                                                    Kocsi.Hibák + 1,
+                                                    3);
+                                KézJármű.Módosítás_Hiba(Cmbtelephely.Text.Trim(), ADAT_Jármű);
                             }
 
                             // beírjuk a hibákat
-                            szöveg = "INSERT INTO hibatábla (létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
-                            szöveg += $"'{Program.PostásTelephely.Trim()}', 3, ";
-                            szöveg += $"'{szöveg1.Trim()}', ";
-                            szöveg += $"'{DateTime.Now}', false, ";
-                            szöveg += $"'{Kocsi.Típus.Trim()}', ";
-                            szöveg += $"'{rekordütemez.Azonosító.Trim()}', {Kocsi.Hibák + 1})";
-                            MyA.ABMódosítás(helyhiba, jelszó, szöveg);
+                            Adat_Jármű_hiba ADATHIBA = new Adat_Jármű_hiba(
+                                                   Program.PostásNév,
+                                                   3,
+                                                   szöveg1,
+                                                   DateTime.Now,
+                                                   false,
+                                                   Kocsi.Típus.Trim(),
+                                                   rekordütemez.Azonosító.Trim(),
+                                                   Kocsi.Hibák + 1);
+                            KézJárműHiba.Rögzítés(Cmbtelephely.Text.Trim(), ADATHIBA);
+
                             // naplózzuk a hibákat
-                            MyA.ABMódosítás(helynapló, jelszó, szöveg);
+                            KézJárműHibaNapló.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today, ADATHIBA);
 
                             // módosítjuk az ütemezett adatokat is
-                            szöveg = $"UPDATE adatok  SET Státus=4  WHERE id={rekordütemez.Id}";
-                            MyA.ABMódosítás(helyütem, jelszóütem, szöveg);
-
+                            KézAdatok.Módosítás_Státus(rekordütemez.Id, 4);
                             // Ha lesz naplózás akkor ide kell írni
 
                         }

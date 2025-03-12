@@ -15,9 +15,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         public CAF_Segéd_Adat Posta_Segéd { get; private set; }
         public DateTime Elő_Dátumig { get; private set; }
 
-        readonly string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-        readonly string jelszó = "CzabalayL";
-
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         readonly Kezelő_CAF_alap AlapKéz = new Kezelő_CAF_alap();
         readonly Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
@@ -97,7 +94,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        void Start()
+        private void Start()
         {
             EgyCAF = AlapKéz.Egy_Adat(Posta_Segéd.Azonosító.Trim());
 
@@ -365,7 +362,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        void AdatokKeresés()
+        private void AdatokKeresés()
         {
             try
             {
@@ -565,10 +562,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                     // ütemezzük újra a kocsikat
                     // idő szerit
-                    MyCaf.IDŐ_Eltervező_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
+                    List<Adat_CAF_Adatok> IdőAdatok = MyCaf.IDŐ_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig, new DateTime(1900, 1, 1));
 
                     // km szerint
-                    MyCaf.KM_Eltervező_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
+                    List<Adat_CAF_Adatok> KMAdatok = MyCaf.KM_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
+                    IdőAdatok.AddRange(KMAdatok);
+                    KézAdatok.Rögzítés(IdőAdatok);
                 }
                 Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -604,9 +603,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 if (Ütem_megjegyzés.Text.Trim() == "") Ütem_megjegyzés.Text = "_";
                 Ütem_megjegyzés.Text = MyF.Szöveg_Tisztítás(Ütem_megjegyzés.Text, 0, 254);
 
-                string szöveg = "SELECT * FROM adatok";
-
-                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
                 Adat_CAF_Adatok Adat = (from a in Adatok
                                         where a.Id == ÜtemKövSorszám
                                         select a).FirstOrDefault();
@@ -654,10 +651,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 // ütemezzük újra a kocsikat
                 // idő szerit
-                MyCaf.IDŐ_Eltervező_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
+                List<Adat_CAF_Adatok> IdőAdatok = MyCaf.IDŐ_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig, new DateTime(1900, 1, 1));
 
                 // km szerint
-                MyCaf.KM_Eltervező_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
+                List<Adat_CAF_Adatok> KMAdatok = MyCaf.KM_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
+                IdőAdatok.AddRange(KMAdatok);
+                KézAdatok.Rögzítés(IdőAdatok);
 
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Változás?.Invoke();
