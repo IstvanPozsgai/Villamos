@@ -264,19 +264,19 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     következő = 1;
                 else
                     következő = Előző.KM_Sorszám + 1;
-
+                DateTime Dátum = Előző.Dátum;
                 while (vége == true)
                 {
                     int KM_Sorszám = következő;
                     string Vizsgálat = Ciklus_Km[következő - 1].Vizsgálatfok.Trim();
                     double futhatmég_Nap = (Ciklus_Km[következő - 1].Felsőérték - Vizsgálat_Óta_km) / NapiKm;
-                    DateTime Dátum = Előző.Dátum.AddDays(futhatmég_Nap);
+                    Dátum = Dátum.AddDays(futhatmég_Nap);
                     Adat_CAF_Adatok ADAT = new Adat_CAF_Adatok(0, pályaszám, Vizsgálat, Dátum, Dátum, Számláló, Státus, KM_Sorszám, IDŐ_Sorszám, IDŐvKM, Megjegyzés);
                     Válasz.Add(ADAT);
                     // ha belefér az időbe akkor rögzítjük
                     if (Elő_Dátumig < ADAT.Dátum) vége = false;
                     következő++;
-                    if (Ciklus_Km.Count > következő) következő = 1;
+                    if (Ciklus_Km.Count < következő) következő = 1;
                 }
 
             }
