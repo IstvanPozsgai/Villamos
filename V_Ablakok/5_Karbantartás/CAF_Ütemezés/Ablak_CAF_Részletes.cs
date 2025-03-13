@@ -506,8 +506,27 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         #region Ütemezés
         private void Ütem_átütemezés_Click(object sender, EventArgs e)
         {
-            if (Ütem_Köv_IDŐvKM.Text.Trim() == "Idő") Idő_átütemezés();
-            if (Ütem_Köv_IDŐvKM.Text.Trim() == "Km") Km_átütemezés();
+            if (Ütem_köv_sorszám.Text.Trim() == "") throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
+            if (!double.TryParse(Ütem_köv_sorszám.Text.Trim(), out double Sorszám)) throw new HibásBevittAdat("Az elemet nem lehet ütemezni.");
+
+            List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+
+            Adat_CAF_Adatok rekord = (from a in Adatok
+                                      where a.Id == Sorszám
+                                      select a).FirstOrDefault();
+
+            switch (rekord.IDŐvKM)
+            {
+                case 1:
+                    Idő_átütemezés();
+                    break;
+                case 2:
+                    Km_átütemezés();
+                    break;
+            }
+
+            Változás?.Invoke();
+            MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void Idő_átütemezés()
@@ -530,19 +549,16 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                         where a.Id == ÜtemKövSorszám
                                         select a).FirstOrDefault();
                 // ha nem raktuk át másik napra akkor kilépünk
-                if (Adat.Dátum_program == Ütem_Köv_Dátum.Value) throw new HibásBevittAdat("Nem történt meg az átütemezés");
+                if (Adat.Dátum == Ütem_Köv_Dátum.Value) throw new HibásBevittAdat("Nem történt meg az átütemezés");
 
                 if (Adat != null)
                 {
-                    // töröltre állítjuk az aktuális sorszámot
-                    KézAdatok.Módosítás_Státus(ÜtemKövSorszám, 9);
-
                     // rögzítjük az új dátumra az adatot
                     Adat_CAF_Adatok ADAT = new Adat_CAF_Adatok(
-                           0,
+                           ÜtemKövSorszám,
                            Ütem_pályaszám.Text.Trim(),
                            Ütem_Köv_Vizsgálat.Text.Trim(),
-                           Ütem_Köv_Dátum.Value,
+                           Adat.Dátum, //Külön küldöm
                            Adat.Dátum_program,
                            számláló,
                            státus,
@@ -550,27 +566,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                            Idősorszám,
                            Ütem_Köv_IDŐvKM.Text.Trim() == "Idő" ? 1 : 2,
                            Ütem_megjegyzés.Text.Trim());
-                    KézAdatok.Döntés(ADAT);
 
-                    // töröljük az új dátum utáni tervet
-                    Adat_CAF_Adatok Töröl = (from a in Adatok
-                                             where a.Azonosító == Ütem_pályaszám.Text.Trim()
-                                             && a.Dátum > Ütem_Köv_Dátum.Value
-                                             && a.Státus == 0
-                                             select a).FirstOrDefault();
-                    if (Töröl != null) KézAdatok.Törlés(Ütem_Köv_Dátum.Value, Ütem_pályaszám.Text.Trim());
 
-                    // ütemezzük újra a kocsikat
-                    // idő szerit
-                    List<Adat_CAF_Adatok> IdőAdatok = MyCaf.IDŐ_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig, new DateTime(1900, 1, 1));
-
-                    // km szerint
-                    List<Adat_CAF_Adatok> KMAdatok = MyCaf.KM_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
-                    IdőAdatok.AddRange(KMAdatok);
-                    KézAdatok.Rögzítés(IdőAdatok);
+                    MyCaf.Idő_átütemezés(ADAT, Ütem_Köv_Dátum.Value, Elő_Dátumig);
                 }
-                Változás?.Invoke();
-                MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -608,58 +607,25 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                         where a.Id == ÜtemKövSorszám
                                         select a).FirstOrDefault();
 
-                if (Adat.Dátum_program != Ütem_Köv_Dátum.Value)
+                if (Adat.Dátum != Ütem_Köv_Dátum.Value)
                 {
                     if (Adat != null)
                     {
-                        // töröltre állítjuk az aktuális sorszámot
-                        KézAdatok.Módosítás_Státus(ÜtemKövSorszám, 9);
-
-                        // rögzítjük az új dátumra az adatot
-
-                        // ezen a napon ha van már idő alapú akkor töröljük
-                        Adat_CAF_Adatok IdőTöröl = (from a in Adatok
-                                                    where a.Dátum.ToShortDateString() == Ütem_Köv_Dátum.Value.ToShortDateString()
-                                                    && a.Azonosító == Ütem_pályaszám.Text.Trim()
-                                                    select a).FirstOrDefault();
-                        if (IdőTöröl != null) KézAdatok.Törlés(Ütem_Köv_Dátum.Value, Ütem_pályaszám.Text.Trim());
-
-
                         Adat_CAF_Adatok ADAT = new Adat_CAF_Adatok(
-                                          0,
+                                          ÜtemKövSorszám,
                                           Ütem_pályaszám.Text.Trim(),
                                           Ütem_Köv_Vizsgálat.Text.Trim(),
-                                          Ütem_Köv_Dátum.Value,
-                                          new DateTime(1900, 1, 1),
+                                          Adat.Dátum, //Külön lesz küldve
+                                          Ütem_dátum_program.Value,
                                           számláló,
                                           státus,
                                           Kmsorszám,
                                           Idősorszám,
                                           Ütem_Köv_IDŐvKM.Text.Trim() == "Idő" ? 1 : 2,
                                           Ütem_megjegyzés.Text.Trim());
-                        KézAdatok.Döntés(ADAT);
+                        MyCaf.Km_átütemezés(ADAT, Ütem_Köv_Dátum.Value, Elő_Dátumig);
                     }
                 }
-                // töröljük az új dátum utáni tervet
-                Adat_CAF_Adatok Töröl = (from a in Adatok
-                                         where a.Dátum.ToShortDateString() == Ütem_Köv_Dátum.Value.ToShortDateString()
-                                         && a.Azonosító == Ütem_pályaszám.Text.Trim()
-                                         && a.Státus == 0
-                                         select a).FirstOrDefault();
-
-                if (Töröl != null) KézAdatok.Törlés(Ütem_Köv_Dátum.Value, Ütem_pályaszám.Text.Trim());
-
-                // ütemezzük újra a kocsikat
-                // idő szerit
-                List<Adat_CAF_Adatok> IdőAdatok = MyCaf.IDŐ_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig, new DateTime(1900, 1, 1));
-
-                // km szerint
-                List<Adat_CAF_Adatok> KMAdatok = MyCaf.KM_EgyKocsi(Ütem_pályaszám.Text.Trim(), Elő_Dátumig);
-                IdőAdatok.AddRange(KMAdatok);
-                KézAdatok.Rögzítés(IdőAdatok);
-
-                MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {

@@ -235,6 +235,117 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
             return Válasz;
         }
+
+        public static void Idő_átütemezés(Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime Dátumig)
+        {
+            try
+            {
+                // ha nem raktuk át másik napra akkor kilépünk
+                if (Adat.Dátum == Dátumra) throw new HibásBevittAdat("Nem történt meg az átütemezés");
+
+                if (Adat != null)
+                {
+
+                    // rögzítjük az új dátumra az adatot
+                    // újat hoz létre
+                    Adat_CAF_Adatok Új_adat = new Adat_CAF_Adatok(
+                        Adat.Id,
+                        Adat.Azonosító,
+                        Adat.Vizsgálat,
+                        Dátumra,
+                        Adat.Dátum_program,
+                        Adat.Számláló,
+                        Adat.Státus,
+                        Adat.KM_Sorszám,
+                        Adat.IDŐ_Sorszám,
+                        Adat.IDŐvKM,
+                        "Átütemezés");
+                    Kéz_Adatok.Döntés(Új_adat);
+
+                    // töröljük az új dátum utáni tervet
+                    List<Adat_CAF_Adatok> Adatok = Kéz_Adatok.Lista_Adatok();
+                    Adat_CAF_Adatok Elem = (from a in Adatok
+                                            where a.Azonosító == Adat.Azonosító.Trim()
+                                            && a.Dátum > Dátumra
+                                            && a.Státus == 0
+                                            select a).FirstOrDefault();
+                    if (Elem != null) Kéz_Adatok.Törlés(Dátumra.AddDays(1), Adat.Azonosító.Trim());
+
+                    // ütemezzük újra a kocsikat
+                    // idő szerit
+                    List<Adat_CAF_Adatok> IdőAdatok = IDŐ_EgyKocsi(Adat.Azonosító.Trim(), Dátumig, Dátumra);
+
+                    // km szerint
+                    List<Adat_CAF_Adatok> KMAdatok = KM_EgyKocsi(Adat.Azonosító.Trim(), Dátumig);
+                    IdőAdatok.AddRange(KMAdatok);
+                    Kéz_Adatok.Rögzítés(IdőAdatok);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Idő_átütemezés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public static void Km_átütemezés(Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime Dátumig)
+        {
+            try
+            {
+                if (Adat.Dátum != Dátumra)
+                {
+                    if (Adat != null)
+                    {
+                        // töröltre állítjuk az aktuális sorszámot
+                        Kéz_Adatok.Módosítás_Státus(Adat.Id, 9);
+                        List<Adat_CAF_Adatok> Adatok = Kéz_Adatok.Lista_Adatok();
+                        // ezen a napon ha van már idő alapú akkor töröljük
+                        Adat_CAF_Adatok rekord = (from a in Adatok
+                                                  where a.Dátum >= Dátumra
+                                                  && a.Azonosító == Adat.Azonosító.Trim()
+                                                  && a.Státus == 0
+                                                  select a).FirstOrDefault();
+                        if (rekord != null) Kéz_Adatok.Törlés(Dátumra, Adat.Azonosító.Trim());
+
+                        // rögzítjük az új dátumra az adatot
+                        Adat_CAF_Adatok Új_adat = new Adat_CAF_Adatok(
+                          Adat.Id,
+                          Adat.Azonosító,
+                          Adat.Vizsgálat,
+                          Dátumra,
+                          Adat.Dátum_program,
+                          Adat.Számláló,
+                          0,
+                          Adat.KM_Sorszám,
+                          Adat.IDŐ_Sorszám,
+                          Adat.IDŐvKM,
+                          "Átütemezés");
+                        Kéz_Adatok.Döntés(Új_adat);
+                    }
+                }
+                // ütemezzük újra a kocsikat
+                // idő szerit
+                List<Adat_CAF_Adatok> IdőAdatok = IDŐ_EgyKocsi(Adat.Azonosító.Trim(), Dátumig, new DateTime(1900, 1, 1));
+
+                // km szerint
+                List<Adat_CAF_Adatok> KMAdatok = KM_EgyKocsi(Adat.Azonosító.Trim(), Dátumig);
+                IdőAdatok.AddRange(KMAdatok);
+                Kéz_Adatok.Rögzítés(IdőAdatok);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_átütemezés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
 

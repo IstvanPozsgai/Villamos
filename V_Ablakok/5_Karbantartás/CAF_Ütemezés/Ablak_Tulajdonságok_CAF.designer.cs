@@ -443,6 +443,7 @@ namespace Villamos
             this.Tábla_elő.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla_elő.Location = new System.Drawing.Point(10, 124);
             this.Tábla_elő.Name = "Tábla_elő";
+            this.Tábla_elő.ReadOnly = true;
             this.Tábla_elő.RowHeadersVisible = false;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Tábla_elő.RowsDefaultCellStyle = dataGridViewCellStyle2;

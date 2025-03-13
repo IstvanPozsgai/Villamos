@@ -279,23 +279,7 @@ namespace Villamos
                 Tábla_elő.Columns[2].Frozen = true;
 
                 Munkaidő_naptár();
-
-                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
-                Adatok = (from a in Adatok
-                          where a.Dátum >= Elő_Dátumtól.Value
-                          && a.Dátum <= Elő_Dátumig.Value
-                          orderby a.Azonosító, a.Dátum, a.Státus
-                          select a).ToList();
-                if (!Elő_Mind.Checked)
-                {
-                    if (Elő_Km.Checked)
-                        Adatok = Adatok.Where(x => x.IDŐvKM == 2).ToList();
-                    if (Elő_Idő.Checked)
-                        Adatok = Adatok.Where(x => x.IDŐvKM == 1).ToList();
-                }
-                if (!Elő_törölt.Checked)
-                    Adatok = Adatok.Where(x => x.Státus < 9).ToList();
-
+                List<Adat_CAF_Adatok> Adatok = Szűrés();
                 //pályaszámok kiírása
                 for (int o = 0; o < Elő_pályaszám.CheckedItems.Count; o++)
                 {
@@ -308,22 +292,8 @@ namespace Villamos
 
                     //Szűrés pályaszámra
                     List<Adat_CAF_Adatok> Szűrt = Adatok.Where(x => x.Azonosító == pályaszám).ToList();
-
+                    EgyKocsiKiírás(Szűrt, oszlop + o);
                     //Napi szűrés
-                    for (int sor = 0; sor < Tábla_elő.Rows.Count; sor++)
-                    {
-                        DateTime Dátum = DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString());
-                        List<Adat_CAF_Adatok> Szűrt1 = Szűrt.Where(x => x.Dátum == Dátum).ToList();
-                        if (Szűrt1 != null && Szűrt1.Count > 0)
-                        {
-                            string ideig = "";
-                            foreach (Adat_CAF_Adatok item in Szűrt1)
-                                ideig += string.Join("-", item.Vizsgálat, item.IDŐ_Sorszám);
-
-                            Tábla_elő.Rows[sor].Cells[oszlop + o].Value = ideig;
-                            Cella_formátum(sor, oszlop + o, Szűrt1[0].Státus);
-                        }
-                    }
                     Holtart.Lép();
                 }
 
@@ -342,6 +312,89 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private List<Adat_CAF_Adatok> Szűrés()
+        {
+            List<Adat_CAF_Adatok> Válasz = new List<Adat_CAF_Adatok>();
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Dátum >= Elő_Dátumtól.Value
+                          && a.Dátum <= Elő_Dátumig.Value
+                          orderby a.Azonosító, a.Dátum, a.Státus
+                          select a).ToList();
+                if (!Elő_Mind.Checked)
+                {
+                    if (Elő_Km.Checked)
+                        Adatok = Adatok.Where(x => x.IDŐvKM == 2).ToList();
+                    if (Elő_Idő.Checked)
+                        Adatok = Adatok.Where(x => x.IDŐvKM == 1).ToList();
+                }
+                if (!Elő_törölt.Checked)
+                    Adatok = Adatok.Where(x => x.Státus < 9).ToList();
+                Válasz.AddRange(Adatok);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private void EgyKocsiKiírás(List<Adat_CAF_Adatok> Adatok, int Oszlop)
+        {
+            try
+            {
+                for (int sor = 0; sor < Tábla_elő.Rows.Count; sor++)
+                {
+                    Tábla_elő.Rows[sor].Cells[Oszlop].Value = "";
+                    DateTime Dátum = DateTime.Parse(Tábla_elő.Rows[sor].Cells[0].Value.ToString());
+                    List<Adat_CAF_Adatok> Szűrt1 = Adatok.Where(x => x.Dátum == Dátum).ToList();
+                    if (Szűrt1 != null && Szűrt1.Count > 0)
+                    {
+                        string ideig = "";
+                        foreach (Adat_CAF_Adatok item in Szűrt1)
+                        {
+                            if (item.IDŐvKM == 1)
+                                ideig += string.Join("-", item.Vizsgálat, item.IDŐ_Sorszám);
+                            else
+                                ideig += string.Join("-", item.Vizsgálat, item.KM_Sorszám);
+                        }
+
+                        Tábla_elő.Rows[sor].Cells[Oszlop].Value = ideig;
+                        Cella_formátum(sor, Oszlop, Szűrt1[0].Státus);
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Oszlop_újra()
+        {
+
+            string pályaszám = Tábla_elő.Columns[OSZLOP].HeaderText;
+            List<Adat_CAF_Adatok> Adatok = Szűrés();
+            Adatok = Adatok.Where(x => x.Azonosító == pályaszám).ToList();
+            EgyKocsiKiírás(Adatok, OSZLOP);
+
+            // összesítjük
+            IS_P_összesítés();
+            Tábla_elő.Refresh();
         }
 
         private void Munkaidő_naptár()
@@ -407,13 +460,11 @@ namespace Villamos
         {
             try
             {
-                int isdb;
-                int pdb;
                 {
                     for (int j = 0; j < Tábla_elő.Rows.Count; j++)
                     {
-                        isdb = 0;
-                        pdb = 0;
+                        int isdb = 0;
+                        int pdb = 0;
                         for (int i = 3; i < Tábla_elő.Columns.Count; i++)
                         {
                             if (Tábla_elő.Rows[j].Cells[i].Value != null)
@@ -599,7 +650,7 @@ namespace Villamos
 
             Új_Ablak_CAF_Segéd = new Ablak_CAF_Segéd(Posta_Segéd, Elő_Dátumig.Value);
             Új_Ablak_CAF_Segéd.FormClosed += Ablak_CAF_Segéd_Closed;
-            Új_Ablak_CAF_Segéd.Változás += Előterv_listázás;
+            Új_Ablak_CAF_Segéd.Változás += Oszlop_újra;
             Új_Ablak_CAF_Segéd.StartPosition = FormStartPosition.CenterScreen;
             Új_Ablak_CAF_Segéd.Show();
         }
@@ -993,7 +1044,7 @@ namespace Villamos
             Új_Ablak_CAF_Részletes = new Ablak_CAF_Részletes(Posta_Segéd, Elő_Dátumig.Value);
             Új_Ablak_CAF_Részletes.FormClosed += Ablak_CAF_Részletes_Closed;
             Új_Ablak_CAF_Részletes.StartPosition = FormStartPosition.CenterScreen;
-            Új_Ablak_CAF_Részletes.Változás += ListázzaElőtervet;
+            Új_Ablak_CAF_Részletes.Változás += Oszlop_újra;
             Új_Ablak_CAF_Részletes.Show();
         }
 
