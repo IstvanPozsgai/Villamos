@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
 using MyF = Függvénygyűjtemény;
 
@@ -14,17 +13,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
     {
         public event Event_Kidobó Változás;
         public CAF_Segéd_Adat Adat { get; private set; }
+        public DateTime Dátumig { get; private set; }
+
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
-
-        public DateTime Dátumig { get; private set; }
-
-        //Törölni kell
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
-        readonly string jelszó = "CzabalayL";
-
-
 
         public Ablak_CAF_Segéd(CAF_Segéd_Adat adat, DateTime dátumig)
         {
@@ -313,10 +306,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 switch (rekord.IDŐvKM)
                 {
                     case 1:
-                        Idő_átütemezés(rekord, Segéd_dátum.Value);
+                        MyCaf.Idő_átütemezés(rekord, Segéd_dátum.Value, Dátumig);
                         break;
                     case 2:
-                        Km_átütemezés(rekord, Segéd_dátum.Value, Dátumig);
+                        MyCaf.Km_átütemezés(rekord, Segéd_dátum.Value, Dátumig);
                         break;
                 }
 
@@ -335,93 +328,5 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
 
-
-        private void Idő_átütemezés(Adat_CAF_Adatok Adat, DateTime Dátumra)
-        {
-            try
-            {
-
-                // ha nem raktuk át másik napra akkor kilépünk
-                if (Adat.Dátum == Dátumra) throw new HibásBevittAdat("Nem történt meg az átütemezés");
-
-                MyCaf.IDŐ_Átütemez(hely, jelszó, Adat, Dátumra, Dátumig);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private void Km_átütemezés(Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime DátumIg)
-        {
-            try
-            {
-                Adatok = KézAdatok.Lista_Adatok();
-                string szöveg;
-                if (Adat.Dátum_program != Dátumra)
-                {
-                    if (Adat != null)
-                    {
-                        // töröltre állítjuk az aktuális sorszámot
-                        KézAdatok.Módosítás_Státus(Adat.Id, 9);
-
-                        // rögzítjük az új dátumra az adatot
-
-                        // ezen a napon ha van már idő alapú akkor töröljük
-                        Adat_CAF_Adatok rekord = (from a in Adatok
-                                                  where a.Dátum >= Dátumra
-                                                  && a.Azonosító == Adat.Azonosító.Trim()
-                                                  && a.Státus == 0
-                                                  select a).FirstOrDefault();
-
-                        if (rekord != null)
-                        {
-                            szöveg = $"DELETE FROM adatok WHERE [Dátum]>=#{Dátumra:MM-dd-yyyy}# AND azonosító='{Adat.Azonosító.Trim()}' And státus=0";
-                            MyA.ABtörlés(hely, jelszó, szöveg);
-                        }
-
-                        Adat_CAF_Adatok Új_adat = new Adat_CAF_Adatok(
-                          Adat.Id,
-                          Adat.Azonosító,
-                          Adat.Vizsgálat,
-                          Dátumra,
-                          Adat.Dátum_program,
-                          Adat.Számláló,
-                          0,
-                          Adat.KM_Sorszám,
-                          0,
-                          Adat.IDŐvKM,
-                          "Átütemezés");
-                        KézAdatok.Döntés(Új_adat);
-                    }
-                }
-
-
-                // ütemezzük újra a kocsikat
-
-                // idő szerit
-                MyCaf.IDŐ_Eltervező_EgyKocsi(Adat.Azonosító, DátumIg);
-
-                // km szerint
-                MyCaf.KM_Eltervező_EgyKocsi(Adat.Azonosító, DátumIg);
-
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }

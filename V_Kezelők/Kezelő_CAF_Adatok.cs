@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -15,9 +17,8 @@ namespace Villamos.Kezelők
 
         public Kezelő_CAF_Adatok()
         {
-            //Ellenőrzés
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
         }
-
 
         public List<Adat_CAF_Adatok> Lista_Adatok()
         {
@@ -57,6 +58,114 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
+        }
+
+        public Adat_CAF_Adatok Egy_Adat(string Azonosító, int IDŐvKM = 1)
+        {
+            Adat_CAF_Adatok Adat = null;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0)
+                    if (IDŐvKM == 1)
+                        Adat = (from a in Adatok
+                                where a.Azonosító == Azonosító
+                                && a.Státus < 9
+                                orderby a.Dátum descending
+                                select a).FirstOrDefault();
+                    else
+                        Adat = (from a in Adatok
+                                where a.Azonosító == Azonosító
+                                && a.Státus < 9
+                                && a.IDŐvKM == 2
+                                orderby a.Dátum descending
+                                select a).FirstOrDefault();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
+        }
+
+        public Adat_CAF_Adatok Egy_Adat_Id(double Id)
+        {
+            Adat_CAF_Adatok Adat = null;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0)
+                    Adat = (from a in Adatok
+                            where a.Id == Id
+                            select a).FirstOrDefault();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
+        }
+
+        public Adat_CAF_Adatok Egy_Adat_Id_Előző(string Azonosító, double Id)
+        {
+            Adat_CAF_Adatok Adat = null;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0)
+                    Adat = (from a in Adatok
+                            where a.Id < Id
+                            && a.Azonosító == Azonosító
+                            && a.Státus < 9
+                            orderby a.Id descending
+                            select a).FirstOrDefault();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
+        }
+
+        public Adat_CAF_Adatok Egy_Adat_Spec(string Azonosító, DateTime Dátum, int státus = 8)
+        {
+            Adat_CAF_Adatok Adat = null;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0)
+                    Adat = (from a in Adatok
+                            where a.Dátum == Dátum
+                            && a.Azonosító == Azonosító
+                            && a.Státus < státus
+                            orderby a.Id descending
+                            select a).FirstOrDefault();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
         }
 
         public double Sorszám()
@@ -116,15 +225,51 @@ namespace Villamos.Kezelők
                 szöveg += $"{Sorszám}, "; // id 
                 szöveg += $"'{Adat.Azonosító}', "; // azonosító
                 szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
-                szöveg += $" '{Adat.Dátum:yyyy.MM.dd}', "; // Dátum
+                szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // Dátum
                 szöveg += $"{Adat.Számláló}, "; // számláló
                 szöveg += $"{Adat.Státus}, "; // státus 
                 szöveg += $"{Adat.KM_Sorszám}, "; // km_sorszám
                 szöveg += $"{Adat.IDŐ_Sorszám}, "; // idő_sorszám
                 szöveg += $"{Adat.IDŐvKM}, ";// idővKM
-                szöveg += "'{Adat.Megjegyzés}', "; // megjegyzés
-                szöveg += " '{Adat.Dátum_program:yyyy.MM.dd}') ";
+                szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
+                szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(List<Adat_CAF_Adatok> Adatok)
+        {
+            try
+            {
+                double sorszám = Sorszám();
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_CAF_Adatok Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program) VALUES (";
+                    szöveg += $"{sorszám}, "; // id 
+                    szöveg += $"'{Adat.Azonosító}', "; // azonosító
+                    szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
+                    szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // Dátum
+                    szöveg += $"{Adat.Számláló}, "; // számláló
+                    szöveg += $"{Adat.Státus}, "; // státus 
+                    szöveg += $"{Adat.KM_Sorszám}, "; // km_sorszám
+                    szöveg += $"{Adat.IDŐ_Sorszám}, "; // idő_sorszám
+                    szöveg += $"{Adat.IDŐvKM}, ";// idővKM
+                    szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
+                    szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
+                    SzövegGy.Add(szöveg);
+                    sorszám++;
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -182,6 +327,74 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Törlés(DateTime Dátum, string Azonosító, int státus = 0)
+        {
+            try
+            {
+                string szöveg = $"DELETE FROM adatok WHERE [Dátum]>=#{Dátum:MM-dd-yyyy}# AND azonosító='{Azonosító}' And státus={státus}";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(List<Adat_CAF_Adatok_Pót> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_CAF_Adatok_Pót Adat in Adatok)
+                {
+                    string szöveg = $"DELETE FROM adatok WHERE [Dátum]>=#{Adat.Dátum:MM-dd-yyyy}# AND azonosító='{Adat.Azonosító}' And státus={Adat.Státus}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABtörlés(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Ütemez(List<Adat_CAF_Adatok_Pót> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_CAF_Adatok_Pót Adat in Adatok)
+                {
+                    string szöveg = "UPDATE adatok  SET Státus=2 ";
+                    szöveg += $" WHERE azonosító='{Adat.Azonosító}' AND dátum>=#{Adat.Dátumtól:MM-dd-yyyy}# ";
+                    szöveg += $" AND dátum<=#{Adat.Dátumig:MM-dd-yyyy}# AND Státus={Adat.Státus}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
         public List<Adat_CAF_Adatok> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
@@ -223,43 +436,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_CAF_Adatok Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_CAF_Adatok Adat = null;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            DateTime dátum = DateTime.TryParse(rekord["dátum"].ToString(), out dátum) ? dátum : new DateTime(1900, 1, 1);
-                            DateTime Dátum_program = DateTime.TryParse(rekord["Dátum_program"].ToString(), out Dátum_program) ? Dátum_program : new DateTime(1900, 1, 1);
-                            Adat = new Adat_CAF_Adatok(
-                                    rekord["id"].ToÉrt_Double(),
-                                    rekord["azonosító"].ToStrTrim(),
-                                    rekord["Vizsgálat"].ToStrTrim(),
-                                    rekord["dátum"].ToÉrt_DaTeTime(),
-                                    rekord["Dátum_program"].ToÉrt_DaTeTime(),
-                                    rekord["Számláló"].ToÉrt_Long(),
-                                    rekord["Státus"].ToÉrt_Int(),
-                                    rekord["KM_Sorszám"].ToÉrt_Int(),
-                                    rekord["IDŐ_Sorszám"].ToÉrt_Int(),
-                                    rekord["IDŐvKM"].ToÉrt_Int(),
-                                    rekord["Megjegyzés"].ToStrTrim()
-                                    );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
     }
-
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
@@ -15,6 +16,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         public DateTime Végdát { get; private set; }
         public DateTime Elsődát { get; private set; }
 
+        readonly Kezelő_CAF_alap KézAlap = new Kezelő_CAF_alap();
+        readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         CAF_Segéd_Adat Posta_adat;
         int Kijelölt_Sor = -1;
@@ -28,7 +32,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Elsődát = elsődát;
             Start();
         }
-
 
         void Start()
         {
@@ -48,34 +51,21 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Új_Ablak_CAF_Részletes?.Close();
         }
 
-
         private void Lista_Pályaszámokfeltöltése()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-            string jelszó = "CzabalayL";
-            string szöveg = "SELECT * FROM alap WHERE törölt=false ORDER BY azonosító";
+            List<Adat_CAF_alap> Adatok = KézAlap.Lista_Adatok(true);
             Lista_Pályaszám.Items.Clear();
-            Lista_Pályaszám.BeginUpdate();
-            Lista_Pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-            Lista_Pályaszám.EndUpdate();
-            Lista_Pályaszám.Refresh();
-        }
 
+            foreach (Adat_CAF_alap item in Adatok)
+                Lista_Pályaszám.Items.Add(item.Azonosító);
+        }
 
         private void Alapadatok_listázása()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg = "SELECT * FROM alap ORDER BY azonosító";
-
-                Kezelő_CAF_alap kéz = new Kezelő_CAF_alap();
-                List<Adat_CAF_alap> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-
-                if (!File.Exists(hely) )
-                    return;
+                List<Adat_CAF_alap> Adatok = KézAlap.Lista_Adatok();
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 KiÍrás = "Alap";
 
                 Tábla_lista.Rows.Clear();
@@ -131,14 +121,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Tábla_lista.Columns[20].HeaderText = "Utolsó Vizsgálat óta futott";
                 Tábla_lista.Columns[20].Width = 100;
 
-                int i;
                 foreach (Adat_CAF_alap rekord in Adatok)
                 {
-
                     Tábla_lista.RowCount++;
-                    i = Tábla_lista.RowCount - 1;
+                    int i = Tábla_lista.RowCount - 1;
                     Tábla_lista.Rows[i].Cells[0].Value = rekord.Azonosító;
-                    Tábla_lista.Rows[i].Cells[1].Value = rekord.Típus;
+                    Adat_Jármű Elem = AdatokJármű.FirstOrDefault(a => a.Azonosító == rekord.Azonosító);
+                    if (Elem != null)
+                        Tábla_lista.Rows[i].Cells[1].Value = Elem.Valóstípus;
 
                     Tábla_lista.Rows[i].Cells[2].Value = rekord.Ciklusnap;
                     Tábla_lista.Rows[i].Cells[3].Value = rekord.Utolsó_Nap;
@@ -185,28 +175,26 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Ütem_frissít_Click(object sender, EventArgs e)
         {
             Alapadatok_listázása();
         }
 
-
         private void Lista_excel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla_lista.Rows.Count <= 0)
-                    return;
+                if (Tábla_lista.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
-
-                SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = "CAF_ütemzés_Adatok" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMdd");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"CAF_ütemzés_Adatok_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -228,49 +216,38 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Tábla_lista_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
             Kijelölt_Sor = e.RowIndex;
         }
-
 
         private void Lista_Pályaszám_friss_Click(object sender, EventArgs e)
         {
             Pályaszám_lista_tábla();
         }
 
-
         private void Pályaszám_lista_tábla()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                if (!File.Exists(hely) )
-                    return;
+                List<Adat_CAF_Adatok> AdatokÖ = KézAdatok.Lista_Adatok();
 
-                string szöveg = "SELECT * FROM Adatok WHERE ";
-                if (Radio_km.Checked == true)
-                    szöveg += " IDŐvKM=2 AND ";
-                if (Radio_idő.Checked == true)
-                    szöveg += " IDŐvKM=1 AND ";
-                szöveg += " (([Dátum]>#" + Lista_Dátumtól.Value.ToString("MM-dd-yyyy") + "#)";
-                szöveg += " AND ([Dátum]<#" + Lista_Dátumig.Value.ToString("MM-dd-yyyy") + "#))";
+                List<Adat_CAF_Adatok> Adatok = (from a in AdatokÖ
+                                                where a.Dátum >= Lista_Dátumtól.Value
+                                                && a.Dátum <= Lista_Dátumig.Value
+                                                orderby a.Dátum
+                                                select a).ToList();
+
+                if (!Radio_mind.Checked && Radio_km.Checked)
+                    Adatok = Adatok.Where(a => a.IDŐvKM == 2).ToList();
+                if (!Radio_mind.Checked && Radio_idő.Checked)
+                    Adatok = Adatok.Where(a => a.IDŐvKM == 1).ToList();
                 if (Lista_Pályaszám.Text.Trim() != "")
-                    szöveg += " AND azonosító='" + Lista_Pályaszám.Text.Trim() + "'";
-
-                szöveg += "  ORDER BY dátum ";
-
-                Kezelő_CAF_Adatok kéz = new Kezelő_CAF_Adatok();
-                List<Adat_CAF_Adatok> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                    Adatok = Adatok.Where(a => a.Azonosító == Lista_Pályaszám.Text.Trim()).ToList();
 
                 KiÍrás = "Pályaszám";
-
                 Holtart.Be(20);
-
 
                 Tábla_lista.Rows.Clear();
                 Tábla_lista.Columns.Clear();
@@ -301,14 +278,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Tábla_lista.Columns[9].Width = 200;
                 Tábla_lista.Columns[10].HeaderText = "Generált dátum";
                 Tábla_lista.Columns[10].Width = 200;
-                int i;
+
                 foreach (Adat_CAF_Adatok rekord in Adatok)
                 {
 
                     Tábla_lista.RowCount++;
-                    i = Tábla_lista.RowCount - 1;
+                    int i = Tábla_lista.RowCount - 1;
                     Tábla_lista.Rows[i].Cells[0].Value = rekord.Id;
-                    Tábla_lista.Rows[i].Cells[1].Value = rekord.Azonosító.Trim ();
+                    Tábla_lista.Rows[i].Cells[1].Value = rekord.Azonosító.Trim();
                     Tábla_lista.Rows[i].Cells[2].Value = rekord.Vizsgálat.Trim();
                     Tábla_lista.Rows[i].Cells[3].Value = rekord.Dátum.ToString("yyyy.MM.dd");
                     Tábla_lista.Rows[i].Cells[4].Value = rekord.Számláló;
@@ -371,13 +348,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Holtart.Lép();
                 }
 
-
                 Tábla_lista.Visible = true;
                 Tábla_lista.Refresh();
-
-
                 Holtart.Ki();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -390,11 +363,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
         private void Tábla_lista_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (Tábla_lista.Rows.Count < 1)
-                return;
+            if (Tábla_lista.Rows.Count < 1) return;
             // egész sor színezése ha törölt
             foreach (DataGridViewRow row in Tábla_lista.Rows)
             {
@@ -407,22 +378,22 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
+
         Ablak_CAF_Részletes Új_Ablak_CAF_Részletes;
         private void Átírja_Módosításhoz_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Kijelölt_Sor == -1)
-                    throw new HibásBevittAdat("Nincs kijelölve érvényes adat.");
+                if (Kijelölt_Sor == -1) throw new HibásBevittAdat("Nincs kijelölve érvényes adat.");
                 Új_Ablak_CAF_Részletes?.Close();
                 if (KiÍrás == "Pályaszám")
                 {
                     int sorszám = int.Parse(Tábla_lista.Rows[Kijelölt_Sor].Cells[0].Value.ToString());
                     string pályaszám = Tábla_lista.Rows[Kijelölt_Sor].Cells[1].Value.ToString();
-                    DateTime dátum= DateTime.Parse(Tábla_lista.Rows[Kijelölt_Sor].Cells[3].Value.ToString());
+                    DateTime dátum = DateTime.Parse(Tábla_lista.Rows[Kijelölt_Sor].Cells[3].Value.ToString());
                     Posta_adat = new CAF_Segéd_Adat(pályaszám, dátum, sorszám);
 
-                    Új_Ablak_CAF_Részletes = new Ablak_CAF_Részletes(Posta_adat, Lista_Dátumig.Value  );
+                    Új_Ablak_CAF_Részletes = new Ablak_CAF_Részletes(Posta_adat, Lista_Dátumig.Value);
                     Új_Ablak_CAF_Részletes.FormClosed += Ablak_CAF_Részletes_Closed;
                     Új_Ablak_CAF_Részletes.StartPosition = FormStartPosition.CenterScreen;
                     Új_Ablak_CAF_Részletes.Show();
@@ -444,18 +415,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Új_Ablak_CAF_Részletes = null;
         }
 
-        private void Lista_Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
         Ablak_CAF_Alapadat Új_Ablak_CAF_Alapadat;
         private void Alap_adatok_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Kijelölt_Sor == -1)
-                    throw new HibásBevittAdat("Nincs kijelölve érvényes adat.");
+                if (Kijelölt_Sor == -1) throw new HibásBevittAdat("Nincs kijelölve érvényes adat.");
 
                 string azonosító;
                 if (KiÍrás == "Alap")
@@ -485,7 +451,5 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             Új_Ablak_CAF_Alapadat = null;
         }
-
-
     }
 }

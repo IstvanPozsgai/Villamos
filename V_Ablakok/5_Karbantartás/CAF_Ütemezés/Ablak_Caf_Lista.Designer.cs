@@ -108,7 +108,6 @@
             this.Lista_Pályaszám.Name = "Lista_Pályaszám";
             this.Lista_Pályaszám.Size = new System.Drawing.Size(121, 28);
             this.Lista_Pályaszám.TabIndex = 194;
-            this.Lista_Pályaszám.SelectedIndexChanged += new System.EventHandler(this.Lista_Pályaszám_SelectedIndexChanged);
             // 
             // Label19
             // 

@@ -38,7 +38,7 @@ namespace Villamos
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Tulajdonságok_CAF));
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
@@ -60,8 +60,6 @@ namespace Villamos
             this.Előtervet_készít = new System.Windows.Forms.Button();
             this.Elő_tervező_telephely = new System.Windows.Forms.Button();
             this.Elő_ütemez = new System.Windows.Forms.Button();
-            this.Eszterga_Beállítás = new System.Windows.Forms.Button();
-            this.Eszterga_Ütemez = new System.Windows.Forms.Button();
             this.Segédablak_hívó = new System.Windows.Forms.Button();
             this.Elő_törölt = new System.Windows.Forms.CheckBox();
             this.Elő_pályaszám = new System.Windows.Forms.CheckedListBox();
@@ -127,7 +125,7 @@ namespace Villamos
             // 
             this.Caf_Listák.BackgroundImage = global::Villamos.Properties.Resources.CARDFIL3;
             this.Caf_Listák.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Caf_Listák.Location = new System.Drawing.Point(1128, 75);
+            this.Caf_Listák.Location = new System.Drawing.Point(1026, 78);
             this.Caf_Listák.Name = "Caf_Listák";
             this.Caf_Listák.Size = new System.Drawing.Size(40, 40);
             this.Caf_Listák.TabIndex = 240;
@@ -139,7 +137,7 @@ namespace Villamos
             // 
             this.Színbeállítás.BackgroundImage = global::Villamos.Properties.Resources.Dtafalonso_Modern_Xp_ModernXP_12_Workstation_Desktop_Colors;
             this.Színbeállítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Színbeállítás.Location = new System.Drawing.Point(1220, 76);
+            this.Színbeállítás.Location = new System.Drawing.Point(1118, 79);
             this.Színbeállítás.Name = "Színbeállítás";
             this.Színbeállítás.Size = new System.Drawing.Size(40, 40);
             this.Színbeállítás.TabIndex = 239;
@@ -151,7 +149,7 @@ namespace Villamos
             // 
             this.Alap_adatok.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
             this.Alap_adatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Alap_adatok.Location = new System.Drawing.Point(1174, 76);
+            this.Alap_adatok.Location = new System.Drawing.Point(1072, 79);
             this.Alap_adatok.Name = "Alap_adatok";
             this.Alap_adatok.Size = new System.Drawing.Size(40, 40);
             this.Alap_adatok.TabIndex = 238;
@@ -163,7 +161,7 @@ namespace Villamos
             // 
             this.Button3.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button3.Location = new System.Drawing.Point(1082, 41);
+            this.Button3.Location = new System.Drawing.Point(980, 44);
             this.Button3.Name = "Button3";
             this.Button3.Size = new System.Drawing.Size(30, 30);
             this.Button3.TabIndex = 237;
@@ -176,7 +174,7 @@ namespace Villamos
             // 
             this.Button2.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button2.Location = new System.Drawing.Point(1036, 41);
+            this.Button2.Location = new System.Drawing.Point(665, 41);
             this.Button2.Name = "Button2";
             this.Button2.Size = new System.Drawing.Size(30, 30);
             this.Button2.TabIndex = 236;
@@ -215,7 +213,7 @@ namespace Villamos
             // 
             this.Elő_havi.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Large_Seo_SEO;
             this.Elő_havi.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Elő_havi.Location = new System.Drawing.Point(1015, 78);
+            this.Elő_havi.Location = new System.Drawing.Point(921, 78);
             this.Elő_havi.Name = "Elő_havi";
             this.Elő_havi.Size = new System.Drawing.Size(40, 40);
             this.Elő_havi.TabIndex = 231;
@@ -335,35 +333,11 @@ namespace Villamos
             this.Elő_ütemez.UseVisualStyleBackColor = true;
             this.Elő_ütemez.Click += new System.EventHandler(this.Elő_ütemez_Click);
             // 
-            // Eszterga_Beállítás
-            // 
-            this.Eszterga_Beállítás.BackgroundImage = global::Villamos.Properties.Resources.kerékeszterga_Beáll_32;
-            this.Eszterga_Beállítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Eszterga_Beállítás.Location = new System.Drawing.Point(942, 78);
-            this.Eszterga_Beállítás.Name = "Eszterga_Beállítás";
-            this.Eszterga_Beállítás.Size = new System.Drawing.Size(40, 40);
-            this.Eszterga_Beállítás.TabIndex = 241;
-            this.ToolTip1.SetToolTip(this.Eszterga_Beállítás, "A járművek esztergálási beállításai");
-            this.Eszterga_Beállítás.UseVisualStyleBackColor = true;
-            this.Eszterga_Beállítás.Click += new System.EventHandler(this.Eszterga_Beállítás_Click);
-            // 
-            // Eszterga_Ütemez
-            // 
-            this.Eszterga_Ütemez.BackgroundImage = global::Villamos.Properties.Resources.kerékeszterga_32;
-            this.Eszterga_Ütemez.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Eszterga_Ütemez.Location = new System.Drawing.Point(896, 77);
-            this.Eszterga_Ütemez.Name = "Eszterga_Ütemez";
-            this.Eszterga_Ütemez.Size = new System.Drawing.Size(40, 40);
-            this.Eszterga_Ütemez.TabIndex = 242;
-            this.ToolTip1.SetToolTip(this.Eszterga_Ütemez, "Kerékesztergára soros járművek beütemezése");
-            this.Eszterga_Ütemez.UseVisualStyleBackColor = true;
-            this.Eszterga_Ütemez.Click += new System.EventHandler(this.Eszterga_Ütemez_Click);
-            // 
             // Segédablak_hívó
             // 
             this.Segédablak_hívó.BackgroundImage = global::Villamos.Properties.Resources.BeCardStack;
             this.Segédablak_hívó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Segédablak_hívó.Location = new System.Drawing.Point(1082, 75);
+            this.Segédablak_hívó.Location = new System.Drawing.Point(980, 78);
             this.Segédablak_hívó.Name = "Segédablak_hívó";
             this.Segédablak_hívó.Size = new System.Drawing.Size(40, 40);
             this.Segédablak_hívó.TabIndex = 234;
@@ -381,7 +355,6 @@ namespace Villamos
             this.Elő_törölt.TabIndex = 230;
             this.Elő_törölt.Text = "Töröltek";
             this.Elő_törölt.UseVisualStyleBackColor = false;
-            this.Elő_törölt.Click += new System.EventHandler(this.Elő_ütemez_Click);
             // 
             // Elő_pályaszám
             // 
@@ -470,6 +443,7 @@ namespace Villamos
             this.Tábla_elő.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla_elő.Location = new System.Drawing.Point(10, 124);
             this.Tábla_elő.Name = "Tábla_elő";
+            this.Tábla_elő.ReadOnly = true;
             this.Tábla_elő.RowHeadersVisible = false;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Tábla_elő.RowsDefaultCellStyle = dataGridViewCellStyle2;
@@ -500,8 +474,6 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.BurlyWood;
             this.ClientSize = new System.Drawing.Size(1268, 333);
-            this.Controls.Add(this.Eszterga_Ütemez);
-            this.Controls.Add(this.Eszterga_Beállítás);
             this.Controls.Add(this.Caf_Listák);
             this.Controls.Add(this.Színbeállítás);
             this.Controls.Add(this.Alap_adatok);
@@ -582,7 +554,5 @@ namespace Villamos
         internal Button Tábla_frissítés;
         internal Button Előtervet_készít;
         private Timer timer1;
-        internal Button Eszterga_Beállítás;
-        internal Button Eszterga_Ütemez;
     }
 }

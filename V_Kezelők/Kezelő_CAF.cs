@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -10,6 +14,11 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
+
+        public Kezelő_CAF_alap()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
+        }
 
         public List<Adat_CAF_alap> Lista_Adatok(bool Aktív = true)
         {
@@ -65,6 +74,26 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public Adat_CAF_alap Egy_Adat(string Azonosító, bool Aktív = false)
+        {
+            Adat_CAF_alap Adat = null;
+            try
+            {
+                List<Adat_CAF_alap> Adatok = Lista_Adatok(Aktív);
+                if (Adatok.Count > 0) Adat = Adatok.FirstOrDefault(x => x.Azonosító == Azonosító);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adat;
+        }
+
         public List<Adat_CAF_alap> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_CAF_alap> Adatok = new List<Adat_CAF_alap>();
@@ -111,51 +140,6 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
-        }
-
-        public Adat_CAF_alap Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_CAF_alap Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_CAF_alap(
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["Ciklusnap"].ToStrTrim(),
-                                    rekord["Utolsó_Nap"].ToStrTrim(),
-                                    rekord["Utolsó_Nap_sorszám"].ToÉrt_Long(),
-                                    rekord["Végezte_nap"].ToStrTrim(),
-                                    rekord["Vizsgdátum_nap"].ToÉrt_DaTeTime(),
-                                    rekord["Cikluskm"].ToStrTrim(),
-                                    rekord["Utolsó_Km"].ToStrTrim(),
-                                    rekord["Utolsó_Km_sorszám"].ToÉrt_Long(),
-                                    rekord["Végezte_km"].ToStrTrim(),
-                                    rekord["Vizsgdátum_km"].ToÉrt_DaTeTime(),
-                                    rekord["Számláló"].ToÉrt_Long(),
-                                    rekord["havikm"].ToÉrt_Long(),
-                                    rekord["KMUkm"].ToÉrt_Long(),
-                                    rekord["KMUdátum"].ToÉrt_DaTeTime(),
-                                    rekord["fudátum"].ToÉrt_DaTeTime(),
-                                    rekord["Teljeskm"].ToÉrt_Long(),
-                                    rekord["Típus"].ToStrTrim(),
-                                    rekord["Garancia"].ToÉrt_Bool(),
-                                    rekord["törölt"].ToÉrt_Bool()
-                                    );
-                        }
-                    }
-                }
-            }
-            return Adat;
         }
 
 
@@ -237,13 +221,21 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        public void Törlés(Adat_CAF_alap Adat)
+        public void Módosítás_kmAdat(List<Adat_CAF_alap> Adatok)
         {
             try
             {
-
-
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_CAF_alap Adat in Adatok)
+                {
+                    string szöveg = "UPDATE alap  SET ";
+                    szöveg += $"havikm={Adat.Havikm}, "; // havikm,
+                    szöveg += $"KMUkm={Adat.KMUkm}, ";  // KMUkm
+                    szöveg += $"KMUdátum='{Adat.KMUdátum:MM-dd-yyyy}' "; // KMUdátum,
+                    szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
