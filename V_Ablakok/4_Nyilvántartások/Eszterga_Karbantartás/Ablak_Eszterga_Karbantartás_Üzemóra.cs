@@ -11,6 +11,7 @@ using Villamos.Villamos_Kezelők;
 using Application = System.Windows.Forms.Application;
 using Funkció = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
 using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 {
@@ -54,9 +55,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 // módosítás 1 
                 //Ablak_Eszterga_Karbantartás_Segéd oldal használja az 1. módosításokat
+                Btn_Excel.Enabled = MyF.Vanjoga(melyikelem, 1);
 
                 // módosítás 2
                 //Ablak_Eszterga_Karbantartás oldal használja a 2. módosításokat
+                Btn_Módosít.Enabled = MyF.Vanjoga(melyikelem, 2);
+                Btn_ÚjFelvétel.Enabled = MyF.Vanjoga(melyikelem, 2);
 
                 // módosítás 3 
             }

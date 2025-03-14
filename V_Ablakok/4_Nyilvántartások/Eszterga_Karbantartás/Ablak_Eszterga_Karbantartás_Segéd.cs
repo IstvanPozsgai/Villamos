@@ -34,10 +34,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 TxtBxUzemOra.Enabled = Baross;
 
                 //módosítás 1
-                BtnRogzit.Enabled = MyF.Vanjoga(melyikelem, 1);
+                //Ablak_Eszterga_Karbantartás oldalon is felhasználva.
 
                 //módosítás 2
-                //Ablak_Eszterga_Karbantartás oldalon felhasználva.
+                BtnRogzit.Enabled = MyF.Vanjoga(melyikelem, 2);
 
                 //módosítás 3
                 //Ablak_Eszterga_Karbantartás_Módosít oldalon felhasználva.
