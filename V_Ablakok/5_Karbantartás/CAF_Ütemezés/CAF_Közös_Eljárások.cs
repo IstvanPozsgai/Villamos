@@ -236,7 +236,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             return Válasz;
         }
 
-        public static void Idő_átütemezés(Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime Dátumig)
+        public static void Idő_átütemezés(List<Adat_CAF_Adatok> Adatok, Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime Dátumig)
         {
             try
             {
@@ -245,7 +245,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 if (Adat != null)
                 {
-
                     // rögzítjük az új dátumra az adatot
                     // újat hoz létre
                     Adat_CAF_Adatok Új_adat = new Adat_CAF_Adatok(
@@ -260,10 +259,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         Adat.IDŐ_Sorszám,
                         Adat.IDŐvKM,
                         "Átütemezés");
-                    Kéz_Adatok.Döntés(Új_adat);
+                    Kéz_Adatok.Döntés(Adatok, Új_adat);
 
                     // töröljük az új dátum utáni tervet
-                    List<Adat_CAF_Adatok> Adatok = Kéz_Adatok.Lista_Adatok();
+
                     Adat_CAF_Adatok Elem = (from a in Adatok
                                             where a.Azonosító == Adat.Azonosító.Trim()
                                             && a.Dátum > Dátumra
@@ -292,7 +291,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        public static void Km_átütemezés(Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime Dátumig)
+        public static void Km_átütemezés(List<Adat_CAF_Adatok> Adatok, Adat_CAF_Adatok Adat, DateTime Dátumra, DateTime Dátumig)
         {
             try
             {
@@ -302,7 +301,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     {
                         // töröltre állítjuk az aktuális sorszámot
                         Kéz_Adatok.Módosítás_Státus(Adat.Id, 9);
-                        List<Adat_CAF_Adatok> Adatok = Kéz_Adatok.Lista_Adatok();
+
                         // ezen a napon ha van már idő alapú akkor töröljük
                         Adat_CAF_Adatok rekord = (from a in Adatok
                                                   where a.Dátum >= Dátumra
@@ -324,7 +323,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                           Adat.IDŐ_Sorszám,
                           Adat.IDŐvKM,
                           "Átütemezés");
-                        Kéz_Adatok.Döntés(Új_adat);
+                        Kéz_Adatok.Döntés(Adatok, Új_adat);
                     }
                 }
                 // ütemezzük újra a kocsikat

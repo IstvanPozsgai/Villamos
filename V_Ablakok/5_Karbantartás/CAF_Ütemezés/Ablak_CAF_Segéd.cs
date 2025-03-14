@@ -306,10 +306,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 switch (rekord.IDŐvKM)
                 {
                     case 1:
-                        MyCaf.Idő_átütemezés(rekord, Segéd_dátum.Value, Dátumig);
+                        MyCaf.Idő_átütemezés(Adatok, rekord, Segéd_dátum.Value, Dátumig);
                         break;
                     case 2:
-                        MyCaf.Km_átütemezés(rekord, Segéd_dátum.Value, Dátumig);
+                        MyCaf.Km_átütemezés(Adatok, rekord, Segéd_dátum.Value, Dátumig);
                         break;
                 }
 

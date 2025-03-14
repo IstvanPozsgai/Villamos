@@ -217,6 +217,35 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Döntés(List<Adat_CAF_Adatok> Adatok, Adat_CAF_Adatok Adat)
+        {
+            try
+            {
+                double sorszám;
+                // ha nincs kitöltve az id, megkeressük a következő számot
+                if (Adat.Id == 0)
+                    sorszám = Sorszám();
+                else
+                    sorszám = Adat.Id;
+
+                //   List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
+
+                Adat_CAF_Adatok Elem = (from a in Adatok
+                                        where a.Id == sorszám
+                                        select a).FirstOrDefault();
+
+                if (Elem != null)
+                    Módosítás(Adat);
+                else
+                    Rögzítés(Adat, sorszám);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "RögzítiMódosít", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Rögzítés(Adat_CAF_Adatok Adat, double Sorszám)
         {
             try

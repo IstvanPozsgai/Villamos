@@ -568,7 +568,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                            Ütem_megjegyzés.Text.Trim());
 
 
-                    MyCaf.Idő_átütemezés(ADAT, Ütem_Köv_Dátum.Value, Elő_Dátumig);
+                    MyCaf.Idő_átütemezés(Adatok, ADAT, Ütem_Köv_Dátum.Value, Elő_Dátumig);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -623,7 +623,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                           Idősorszám,
                                           Ütem_Köv_IDŐvKM.Text.Trim() == "Idő" ? 1 : 2,
                                           Ütem_megjegyzés.Text.Trim());
-                        MyCaf.Km_átütemezés(ADAT, Ütem_Köv_Dátum.Value, Elő_Dátumig);
+                        MyCaf.Km_átütemezés(Adatok, ADAT, Ütem_Köv_Dátum.Value, Elő_Dátumig);
                     }
                 }
             }
