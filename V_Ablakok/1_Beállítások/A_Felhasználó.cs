@@ -725,7 +725,7 @@ namespace Villamos
                 menüleírás[119] = " 1-, 2- , 3- Színválasztás ";
 
                 menünév[125] = "Nosztalgia";
-                menüleírás[125] = " 1-, 2- , 3-  ";
+                menüleírás[125] = " 1- Oldalak megtekintése listázása, 2- Alap adatok rögzítése módosítása, 3-  ";
 
                 menünév[130] = "TTP";
                 menüleírás[130] = " 1- Alap adatok rögzítése, 2- Munkanap beállítás, 3-Jármű alapadatok beállítása";

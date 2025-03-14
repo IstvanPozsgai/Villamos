@@ -107,12 +107,13 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 //módosítás 1
                 //Ablak_Eszterga_Karbantartás_Segéd oldal használja az 1. módosításokat
+                Btn_Módosítás.Enabled = MyF.Vanjoga(melyikelem, 1);
 
                 //módosítás 2
                 Btn_Rögzít.Enabled = MyF.Vanjoga(melyikelem, 2);
 
                 //módosítás 3
-                Btn_Módosítás.Enabled = MyF.Vanjoga(melyikelem, 3);
+                
                 //Ablak_Eszterga_Karbantartás_Módosít oldalon is felhasználva.
             }
             catch (HibásBevittAdat ex)
