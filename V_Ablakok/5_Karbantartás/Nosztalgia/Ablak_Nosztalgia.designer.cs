@@ -458,7 +458,7 @@ namespace Villamos.Villamos_Ablakok
             this.button2.Size = new System.Drawing.Size(50, 50);
             this.button2.TabIndex = 222;
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // Dátum
             // 
@@ -654,7 +654,7 @@ namespace Villamos.Villamos_Ablakok
             this.button3.Size = new System.Drawing.Size(50, 50);
             this.button3.TabIndex = 260;
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // groupBox2
             // 

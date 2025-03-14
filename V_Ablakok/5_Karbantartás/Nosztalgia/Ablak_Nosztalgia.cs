@@ -8,32 +8,23 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-//using Villamos.Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-//using Villamos.Villamos_Kezelők;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok
 {
     public partial class Ablak_Nosztalgia : Form
     {
-
-        //!
-        //felvenni barossi kocsit -- 1233 1820 2806 3720 5005 5884ű
-        // Dócs Endrével beszélni, valós zser adatok lekéréséről
-        //!
-
         #region Kezelők - Listák
 
-        Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-        Kezelő_Nosztalgia_Állomány KézÁllomány = new Kezelő_Nosztalgia_Állomány();
-        Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
-        Kezelő_Nosztagia_Futás KézFutás = new Kezelő_Nosztagia_Futás();
-        Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Nosztalgia_Állomány KézÁllomány = new Kezelő_Nosztalgia_Állomány();
+        readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
+        readonly Kezelő_Nosztagia_Futás KézFutás = new Kezelő_Nosztagia_Futás();
+        readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_Nosztalgia_Állomány> AdatokÁllomány = new List<Adat_Nosztalgia_Állomány>();
@@ -177,12 +168,12 @@ namespace Villamos.Villamos_Ablakok
             {
                 Pályaszám.Items.Clear();
 
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
-                string jelszó = "kloczkal";
-                string szöveg = $"SELECT * FROM Állomány";
+                ListaFutásNapNoszt();
+                string[] Azonosító = (from a in AdatokÁllomány
+                                      select a.Azonosító).ToArray();
 
                 Pályaszám.BeginUpdate();
-                Pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító").ToArray());
+                Pályaszám.Items.AddRange(Azonosító);
                 Pályaszám.EndUpdate();
             }
             catch (HibásBevittAdat ex)
@@ -426,16 +417,12 @@ namespace Villamos.Villamos_Ablakok
                 if (Gyártó_text.Text.Trim().Length > 11) hibaszöveg += "A gyártó maximum 10 karakter lehet.\n";
                 if (hibaszöveg.Trim() != string.Empty) throw new HibásBevittAdat(hibaszöveg);
 
-                // leellenőrizzük, hogy létezik-e a kocsi
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
-                string jelszó = "kloczkal";
-                string szöveg = "";
-
                 ListaFutásNapNoszt();
-                AdatokÁllomány = (from a in AdatokÁllomány
-                                  where a.Azonosító.Trim() == Pályaszám.Text.Trim()
-                                  select a).ToList();
+                Adat_Nosztalgia_Állomány AdatÁllomány = (from a in AdatokÁllomány
+                                                         where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                                         select a).FirstOrDefault();
 
+                string szöveg = "";
                 if (AdatokÁllomány.Count() != 0)
                 {
                     // módosítás
@@ -456,6 +443,9 @@ namespace Villamos.Villamos_Ablakok
                     szöveg += $"'{Pályaszám.Text.Trim()}', '{Gyártó_text.Text.Trim()}', {év}, '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}',";
                     szöveg += "'1900.01.01', '', '', '1900.01.01', 0, 0, 0, '1900.01.01', '' )";
                 }
+
+                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
+                string jelszó = "kloczkal";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 Típus_text.Text = "";
@@ -497,17 +487,11 @@ namespace Villamos.Villamos_Ablakok
                     throw new HibásBevittAdat(hibaszöveg);
                 }
 
-                // leellenőrizzük, hogy létezik-e a kocsi
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
-                string jelszó = "kloczkal";
-                string szöveg = "";
-
                 ListaFutásNapNoszt();
-                AdatokÁllomány = (from a in AdatokÁllomány
-                                  where a.Azonosító.Trim() == Pályaszám.Text.Trim()
-                                  select a).ToList();
-
-
+                Adat_Nosztalgia_Állomány AdatÁllomány = (from a in AdatokÁllomány
+                                                         where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                                         select a).FirstOrDefault();
+                string szöveg = "";
                 if (AdatokÁllomány.Count() != 0)
                 {
                     // módosítás
@@ -524,6 +508,9 @@ namespace Villamos.Villamos_Ablakok
                     szöveg = "INSERT INTO Állomány (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
                     szöveg += $"'{Pályaszám.Text.Trim()} ', '{Gyártó_text.Text.Trim()}', '{Év_text.Text.Trim()}', '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}')";
                 }
+
+                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
+                string jelszó = "kloczkal";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -549,16 +536,12 @@ namespace Villamos.Villamos_Ablakok
                     throw new HibásBevittAdat(hibaszöveg);
                 }
 
-                // leellenőrizzük, hogy létezik-e a kocsi
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
-                string jelszó = "kloczkal";
-                string szöveg = "";
-
                 ListaFutásNapNoszt();
                 AdatokÁllomány = (from a in AdatokÁllomány
                                   where a.Azonosító.Trim() == Pályaszám.Text.Trim()
                                   select a).ToList();
 
+                string szöveg = "";
                 if (AdatokÁllomány.Count() != 0)
                 {
                     // módosítás
@@ -576,8 +559,10 @@ namespace Villamos.Villamos_Ablakok
                     // új adat
                     szöveg = "INSERT INTO Állomány (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
                     szöveg += $"'{Pályaszám.Text.Trim()} ', '{Gyártó_text.Text.Trim()}', '{Év_text.Text.Trim()}', '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}')";
-
                 }
+
+                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
+                string jelszó = "kloczkal";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -599,16 +584,10 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb";
-                string jelszó = "kloczkal";
-
-
                 string azon = Tábla_lekérdezés.CurrentRow?.Cells[0].Value?.ToString();
                 if (azon == null) { MessageBox.Show("Nincs kiválasztott kocsi", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
 
                 DateTime celldate = Tábla_lekérdezés.CurrentRow.Cells[1].Value.ToÉrt_DaTeTime();
-
-                string szöveg;
 
                 ListaÉvesFutás();
                 Adat_Nosztagia_Futás AdatFutás = (from a in AdatokFutás
@@ -616,6 +595,7 @@ namespace Villamos.Villamos_Ablakok
                                                   && a.Dátum == celldate
                                                   select a).FirstOrDefault();
 
+                string szöveg;
                 if (AdatFutás != null)
                 {
                     szöveg = "UPDATE Futás SET ";
@@ -634,11 +614,15 @@ namespace Villamos.Villamos_Ablakok
                     szöveg += $"'{Nap_Dátum.Value:yyyy.MM.dd}', ";
                     if (Nap_törlés.Checked == true) szöveg += " true, ";
                     else szöveg += " false, ";
-                    szöveg += $"'{DateTime.Now.ToString()}', ";
+                    szöveg += $"'{DateTime.Now}', ";
                     szöveg += $"'{Program.PostásNév.Trim()}', ";
                     szöveg += $"'{Cmbtelephely.Text.Trim()}') ";
                 }
+
+                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb";
+                string jelszó = "kloczkal";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Lekérdezés_lekérdezés_listázás();
             }
@@ -1301,7 +1285,7 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             //kmu és dátum adatokat rögzíti
 
@@ -1309,7 +1293,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 //// megnézzük, hogy létezik-e adott új helyen napi tábla
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
+
 
                 // megpróbáljuk megnyitni az excel táblát.
                 openFileDialog1.InitialDirectory = "MyDocuments";
@@ -1351,7 +1335,7 @@ namespace Villamos.Villamos_Ablakok
                         i++;
                         if (Holtart.Value >= Holtart.Maximum) Holtart.Value = 1;
                     }
-
+                    string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
                     MyA.ABMódosítás(hely, jelszó, lista);
                 }
 
@@ -1359,9 +1343,6 @@ namespace Villamos.Villamos_Ablakok
                 MyE.ExcelBezárás();
                 Holtart.Visible = false;
 
-                // kitöröljük a betöltött fájlt
-                //if (File.Exists(fájlexc) == true)
-                //    File.Delete(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1374,7 +1355,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1399,9 +1380,7 @@ namespace Villamos.Villamos_Ablakok
 
                 string szöveg;
                 int talált;
-                int státus;
                 string típusa;
-                int hibáksorszáma;
                 int hiba;
                 int volt = 0;
                 string ideig_psz = Pályaszám.Text;
@@ -1453,11 +1432,11 @@ namespace Villamos.Villamos_Ablakok
                         {
                             string kiegSzöveg = szöveg;
 
-                            if (!int.TryParse(AdatJármű?.Hibák.ToString(), out hibáksorszáma)) hibáksorszáma = 0;
+                            if (!int.TryParse(AdatJármű?.Hibák.ToString(), out int hibáksorszáma)) hibáksorszáma = 0;
 
                             hiba = hibáksorszáma++;
                             típusa = AdatJármű.Típus ?? "";
-                            if (!int.TryParse(AdatJármű.Státus.ToString(), out státus)) státus = 0;
+                            if (!int.TryParse(AdatJármű.Státus.ToString(), out int státus)) státus = 0;
 
 
                             if (státus < 3)
