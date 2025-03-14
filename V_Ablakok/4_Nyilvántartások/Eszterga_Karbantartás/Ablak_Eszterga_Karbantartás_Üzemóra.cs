@@ -49,7 +49,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
-                //    int melyikelem = 160;
+                int melyikelem = 160;
                 Btn_Módosít.Visible = Baross;
 
                 // módosítás 1 
