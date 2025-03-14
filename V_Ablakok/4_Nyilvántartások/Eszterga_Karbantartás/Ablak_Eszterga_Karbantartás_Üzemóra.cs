@@ -82,6 +82,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 AdatTábla.Columns.Clear();
+                AdatTábla.Rows.Clear();
                 AdatTábla.Columns.Add("ID");
                 AdatTábla.Columns.Add("Üzemóra");
                 AdatTábla.Columns.Add("Dátum");
@@ -104,6 +105,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 Tábla.DataSource = AdatTábla;
                 OszlopSzélesség();
+                Tábla.Visible = true;
                 Tábla.ClearSelection();
             }
             catch (Exception ex)
