@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Villamos.Adatszerkezet;
+﻿using Villamos.Adatszerkezet;
 
 namespace Villamos.Villamos_Adatbázis_Funkció
 {
@@ -105,53 +100,26 @@ namespace Villamos.Villamos_Adatbázis_Funkció
 
         }
 
-        public static void CAFtáblanapló(string hely)
+        public static void CAFAdatokArchív(string hely)
         {
             string szöveg;
-            string jelszó = "czapmiklós";
+            string jelszó = "CzabalayL";
 
             AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
-            // tábla létrehozása
-            szöveg = "CREATE TABLE Alapnapló (";
+            // Adatok létrehozása
+            szöveg = "CREATE TABLE Adatok (";
+            szöveg += "[Id] Double,";
             szöveg += "[azonosító]  char (10),";
-            szöveg += "[Ciklusrend]  char (10),";
-            szöveg += "[kötöttstart] YESNO, ";
-            szöveg += "[megállítás] YESNO, ";
-            szöveg += "[Oka]  char (255),";
-            szöveg += "[rögzítésiidő] DATE,";
-            szöveg += "[rögzítő]  char (255),";
-            szöveg += "[start] DATE,";
-            szöveg += "[vizsgdátum] DATE,";
-            szöveg += "[vizsgnév]  char (10),";
-            szöveg += "[vizsgsorszám] Long)";
-
-            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-
-        }
-
-        public static void CAFütemnapló(string hely)
-        {
-            string szöveg;
-            string jelszó = "czapmiklós";
-
-            AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
-            ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
-            // tábla létrehozása
-            szöveg = "CREATE TABLE ütemezésnapló (";
-            szöveg += "[azonosító]  char (10),";
-            szöveg += "[Ciklusrend]  char (10),";
-            szöveg += "[Elkészült] YESNO, ";
-            szöveg += "[Megjegyzés]  char (255),";
-            szöveg += "[rögzítésideje] DATE,";
-            szöveg += "[rögzítő]  char (50),";
-            szöveg += "[státus] Long,";
-            szöveg += "[velkészülés] DATE,";
-            szöveg += "[vesedékesség] DATE,";
-            szöveg += "[vizsgfoka]  char (10),";
-            szöveg += "[vsorszám] Long,";
-            szöveg += "[vütemezés] DATE,";
-            szöveg += "[Vvégezte]  char (50))";
+            szöveg += "[Vizsgálat]  char (10),";
+            szöveg += "[Dátum] DATE,";
+            szöveg += "[Dátum_program] DATE,";
+            szöveg += "[Számláló] Long,";
+            szöveg += "[Státus] SHORT,";
+            szöveg += "[KM_Sorszám] SHORT,";
+            szöveg += "[IDŐ_Sorszám] SHORT,";
+            szöveg += "[IDŐvKM] SHORT,";
+            szöveg += "[Megjegyzés]  char (255))";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 

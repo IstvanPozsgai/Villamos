@@ -38,13 +38,14 @@
             this.Lista_Pályaszám = new System.Windows.Forms.ComboBox();
             this.Label19 = new System.Windows.Forms.Label();
             this.Tábla_lista = new System.Windows.Forms.DataGridView();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Archíválás = new System.Windows.Forms.Button();
+            this.Alap_adatok = new System.Windows.Forms.Button();
             this.Átírja_Módosításhoz = new System.Windows.Forms.Button();
             this.Lista_Pályaszám_friss = new System.Windows.Forms.Button();
             this.Lista_excel = new System.Windows.Forms.Button();
             this.Ütem_frissít = new System.Windows.Forms.Button();
-            this.Alap_adatok = new System.Windows.Forms.Button();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_lista)).BeginInit();
             this.SuspendLayout();
             // 
@@ -135,6 +136,44 @@
             this.Tábla_lista.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_lista_CellClick);
             this.Tábla_lista.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_lista_CellFormatting);
             // 
+            // toolTip1
+            // 
+            this.toolTip1.IsBalloon = true;
+            // 
+            // Holtart
+            // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Holtart.Location = new System.Drawing.Point(30, 240);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(950, 25);
+            this.Holtart.TabIndex = 213;
+            this.Holtart.Visible = false;
+            // 
+            // Archíválás
+            // 
+            this.Archíválás.BackgroundImage = global::Villamos.Properties.Resources.Graphicloads_Colorful_Long_Shadow_Arrow_download_3;
+            this.Archíválás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Archíválás.Location = new System.Drawing.Point(93, 12);
+            this.Archíválás.Name = "Archíválás";
+            this.Archíválás.Size = new System.Drawing.Size(40, 40);
+            this.Archíválás.TabIndex = 214;
+            this.toolTip1.SetToolTip(this.Archíválás, "A kezdő dátumnak megfelelően Archíválja az adatokat 1 év eltéréssel.");
+            this.Archíválás.UseVisualStyleBackColor = true;
+            this.Archíválás.Click += new System.EventHandler(this.Archíválás_Click);
+            // 
+            // Alap_adatok
+            // 
+            this.Alap_adatok.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
+            this.Alap_adatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Alap_adatok.Location = new System.Drawing.Point(139, 13);
+            this.Alap_adatok.Name = "Alap_adatok";
+            this.Alap_adatok.Size = new System.Drawing.Size(40, 40);
+            this.Alap_adatok.TabIndex = 212;
+            this.toolTip1.SetToolTip(this.Alap_adatok, "Kijelölt alapadatokat rögzítési felületen jeleníti meg.");
+            this.Alap_adatok.UseVisualStyleBackColor = true;
+            this.Alap_adatok.Click += new System.EventHandler(this.Alap_adatok_Click);
+            // 
             // Átírja_Módosításhoz
             // 
             this.Átírja_Módosításhoz.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -186,38 +225,13 @@
             this.Ütem_frissít.UseVisualStyleBackColor = true;
             this.Ütem_frissít.Click += new System.EventHandler(this.Ütem_frissít_Click);
             // 
-            // Alap_adatok
-            // 
-            this.Alap_adatok.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
-            this.Alap_adatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Alap_adatok.Location = new System.Drawing.Point(139, 13);
-            this.Alap_adatok.Name = "Alap_adatok";
-            this.Alap_adatok.Size = new System.Drawing.Size(40, 40);
-            this.Alap_adatok.TabIndex = 212;
-            this.toolTip1.SetToolTip(this.Alap_adatok, "Kijelölt alapadatokat rögzítési felületen jeleníti meg.");
-            this.Alap_adatok.UseVisualStyleBackColor = true;
-            this.Alap_adatok.Click += new System.EventHandler(this.Alap_adatok_Click);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.IsBalloon = true;
-            // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(30, 240);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(950, 25);
-            this.Holtart.TabIndex = 213;
-            this.Holtart.Visible = false;
-            // 
             // Ablak_Caf_Lista
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Peru;
             this.ClientSize = new System.Drawing.Size(1003, 428);
+            this.Controls.Add(this.Archíválás);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Alap_adatok);
             this.Controls.Add(this.Lista_Dátumig);
@@ -261,5 +275,6 @@
         internal System.Windows.Forms.Button Alap_adatok;
         private System.Windows.Forms.ToolTip toolTip1;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal System.Windows.Forms.Button Archíválás;
     }
 }

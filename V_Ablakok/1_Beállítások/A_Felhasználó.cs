@@ -722,7 +722,7 @@ namespace Villamos
                 menünév[118] = "CAF karbantartás";
                 menüleírás[118] = " 1-Ütemezés módosítás , 2-, 3- ";
                 menünév[119] = "CAF karbantartás";
-                menüleírás[119] = " 1-, 2- , 3- Színválasztás ";
+                menüleírás[119] = " 1-Archíválás, 2- , 3- Színválasztás ";
 
                 menünév[125] = "Nosztalgia";
                 menüleírás[125] = " 1-, 2- , 3-  ";

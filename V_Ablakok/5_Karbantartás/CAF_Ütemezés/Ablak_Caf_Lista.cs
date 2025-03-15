@@ -31,6 +31,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Végdát = végdát;
             Elsődát = elsődát;
             Start();
+            Jogosultságkiosztás();
         }
 
         void Start()
@@ -39,6 +40,46 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Lista_Dátumtól.Value = Elsődát;
             Lista_Pályaszámokfeltöltése();
         }
+
+        private void Jogosultságkiosztás()
+        {
+            try
+            {
+                int melyikelem;
+                // ide kell az összes gombot tenni amit szabályozni akarunk false
+                Archíválás.Enabled = false;
+
+                // csak főmérnökségi belépéssel módosítható
+
+                if (Program.PostásTelephely.Trim() == "Főmérnökség")
+                {
+                    Archíválás.Visible = true;
+                }
+                else
+                {
+                    Archíválás.Visible = false;
+
+                }
+
+
+                melyikelem = 119;
+                // módosítás 1 
+                if (MyF.Vanjoga(melyikelem, 1))
+                {
+                    Archíválás.Enabled = true;
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void Ablak_Caf_Lista_Load(object sender, EventArgs e)
         {
@@ -231,7 +272,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                List<Adat_CAF_Adatok> AdatokÖ = KézAdatok.Lista_Adatok();
+                List<Adat_CAF_Adatok> AdatokÖ = KézAdatok.Lista_Adatok(Lista_Dátumtól.Value.Year);
 
                 List<Adat_CAF_Adatok> Adatok = (from a in AdatokÖ
                                                 where a.Dátum >= Lista_Dátumtól.Value
@@ -450,6 +491,30 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         private void Ablak_CAF_Alapadat_Closed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_CAF_Alapadat = null;
+        }
+
+        private void Archíválás_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Lista_Dátumtól.Value.Year >= DateTime.Today.Year - 1) throw new HibásBevittAdat("A kívánt időszakot még nem lehet archíválni.");
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Dátum >= MyF.Év_elsőnapja(Lista_Dátumtól.Value)
+                          && a.Dátum <= MyF.Év_utolsónapja(Lista_Dátumtól.Value)
+                          select a).ToList();
+                KézAdatok.Archíválás(Lista_Dátumtól.Value, Adatok);
+                MessageBox.Show("Az adatok Archíválása elkészült. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
