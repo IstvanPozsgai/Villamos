@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using Villamos;
 
 
 
@@ -15,33 +16,44 @@ public class ScreenshotHelper
     {
         Image img = null;
 
+        try
+        {
+            IntPtr handle = GetWindowHandle(processName);
 
-        IntPtr handle = GetWindowHandle(processName);
+            //Check if window is minimized and show it if needed
+            if (User32.IsIconic(handle)) User32.ShowWindowAsync(handle, User32.SHOWNORMAL);
 
-        //Check if window is minimized and show it if needed
-        if (User32.IsIconic(handle)) User32.ShowWindowAsync(handle, User32.SHOWNORMAL);
+            User32.SetForegroundWindow(handle);
 
-        User32.SetForegroundWindow(handle);
+            //ALT + PRINT SCREEN gets screenshot of focused window
+            //See this article for key list
+            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=windowsdesktop-6.0#remarks
+            SendKeys.SendWait("%({PRTSC})");
+            Thread.Sleep(200);
 
-        //ALT + PRINT SCREEN gets screenshot of focused window
-        //See this article for key list
-        //https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=windowsdesktop-6.0#remarks
-        SendKeys.SendWait("%({PRTSC})");
-        Thread.Sleep(200);
+            //The GetImage function in WPF gets a bitmapsource image
+            //This could be replaced with the Winforms getimage since that returns an image
 
-        //The GetImage function in WPF gets a bitmapsource image
-        //This could be replaced with the Winforms getimage since that returns an image
+            img = Clipboard.GetImage();
 
-        img = Clipboard.GetImage();
+            //Uses the user32.dll to make sure the clipboard is empty and closed 
+            //Without this you might get errors that the clipboard is already open
+            IntPtr clipWindow = User32.GetOpenClipboardWindow();
+            User32.OpenClipboard(clipWindow);
+            User32.EmptyClipboard();
+            User32.CloseClipboard();
+            //Thread.Sleep(100);
 
-        //Uses the user32.dll to make sure the clipboard is empty and closed 
-        //Without this you might get errors that the clipboard is already open
-        IntPtr clipWindow = User32.GetOpenClipboardWindow();
-        User32.OpenClipboard(clipWindow);
-        User32.EmptyClipboard();
-        User32.CloseClipboard();
-        //Thread.Sleep(100);
-
+        }
+        catch (HibásBevittAdat ex)
+        {
+            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show("\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
         return img;
     }
     /*
