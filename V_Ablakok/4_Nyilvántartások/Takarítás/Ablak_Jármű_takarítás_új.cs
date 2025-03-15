@@ -5384,9 +5384,13 @@ namespace Villamos
                 }
                 if (CmbGépiTíp.Text.Trim() != "")
                 {
-                    EnumerableRowCollection<DataRow> filteredRows = GépiTábla.AsEnumerable()
-                        .Where(a => a.Field<string>("Típus") == CmbGépiTíp.Text.Trim());
-                    GépiTábla = filteredRows.CopyToDataTable();
+                    EnumerableRowCollection<DataRow> filteredRows = GépiTábla.AsEnumerable().Where(a => a.Field<string>("Típus") == CmbGépiTíp.Text.Trim());
+
+                    List<DataRow> AdatokS = filteredRows.ToList();
+                    if (AdatokS != null && AdatokS.Count > 0)
+                        GépiTábla = filteredRows.CopyToDataTable();
+                    else
+                        throw new HibásBevittAdat($"{CmbGépiTíp.Text.Trim()} típusra nem lehet szűrni.");
                 }
 
             }
