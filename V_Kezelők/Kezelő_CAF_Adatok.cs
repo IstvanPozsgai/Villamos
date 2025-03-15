@@ -514,7 +514,7 @@ namespace Villamos.Kezelők
                 string helyNapló = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF_{Dátum.Year}.mdb";
                 if (File.Exists(helyNapló)) throw new HibásBevittAdat("Már az archiválás bevefejőzött.");
                 //Adattábla létrehozása
-                Adatbázis_Létrehozás.CAFtábla(helyNapló.KönyvSzerk());
+                Adatbázis_Létrehozás.CAFAdatokArchív(helyNapló.KönyvSzerk());
                 //Rögzítjük az adatokat
                 Rögzítés(Adatok, helyNapló);
                 //Töröljük az adatokat

@@ -74,30 +74,6 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[Szín_nagyobb] DOUBLE)";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-
-            // tábla létrehozása
-            szöveg = "CREATE TABLE telephely (";
-            szöveg += "[sorrend] Long,";
-            szöveg += "[telephely]  char (50))";
-
-            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-
-            // tábla létrehozása
-            szöveg = "CREATE TABLE Ütemezés (";
-            szöveg += "[azonosító]  char (10),";
-            szöveg += "[Ciklusrend]  char (10),";
-            szöveg += "[Elkészült] YESNO, ";
-            szöveg += "[Megjegyzés]  char (255),";
-            szöveg += "[státus] Long,";
-            szöveg += "[velkészülés] DATE,";
-            szöveg += "[vesedékesség] DATE,";
-            szöveg += "[vizsgfoka]  char (10),";
-            szöveg += "[vsorszám] Long,";
-            szöveg += "[vütemezés] DATE,";
-            szöveg += "[Vvégezte]  char (50))";
-
-            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-
         }
 
         public static void CAFAdatokArchív(string hely)
