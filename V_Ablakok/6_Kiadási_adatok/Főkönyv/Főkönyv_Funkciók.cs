@@ -16,6 +16,7 @@ namespace Villamos
 {
     public static class Főkönyv_Funkciók
     {
+        readonly static Kezelő_Főkönyv_Zser_Km KézFőZserKm = new Kezelő_Főkönyv_Zser_Km();
 
         public static void Napiállók(string telephely)
         {
@@ -697,25 +698,15 @@ namespace Villamos
             int i = 0;
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Year}\Napi_km_Zser_{Dátum.Year}.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.ZSER_km(hely);
-                string jelszó = "pozsgaii";
-                szöveg = "SELECT * FROM tábla";
-
-                Kezelő_Főkönyv_Zser_Km Kéz = new Kezelő_Főkönyv_Zser_Km();
-                List<Adat_Főkönyv_Zser_Km> Adatok = Kéz.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Főkönyv_Zser_Km> Adatok = KézFőZserKm.Lista_adatok(Dátum.Year);
 
                 List<Adat_Főkönyv_Zser_Km> Elemek = (from a in Adatok
                                                      where a.Telephely == Telephely.Trim() && a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
-                                                     select a).ToList(); ;
+                                                     select a).ToList();
 
                 // leellenőrizzük, hogy van-e már erre a napra rögzítve adat ha van töröljük
 
-                if (Elemek != null)
-                {
-                    szöveg = $"DELETE FROM tábla WHERE telephely='{Telephely.Trim()}' AND dátum=#{Dátum:MM-dd-yyyy}#";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                if (Elemek != null) KézFőZserKm.Törlés(Telephely.Trim(), Dátum);
 
                 string[] oszlopok = new string[7];
                 oszlopok[1] = "S";
@@ -727,7 +718,7 @@ namespace Villamos
 
                 // beolvassuk az excel tábla szükséges adatait
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Főkönyv_Zser_Km> AdatokGy = new List<Adat_Főkönyv_Zser_Km>();
                 for (i = 2; i <= sormax; i++)
                 {
                     DateTime idegignap = MyE.Beolvas("D" + i).ToÉrt_DaTeTime();
@@ -780,15 +771,16 @@ namespace Villamos
                             }
                             else
                                 azonosító = szövegideig.Trim();
-
-                            szöveg = "INSERT INTO tábla (azonosító, dátum, napikm, telephely ) VALUES (";
-                            szöveg += $"'{azonosító.Trim()}', '{tervindulás:yyyy.MM.dd}', {km}, '{Telephely.Trim()}')";
-
-                            SzövegGy.Add(szöveg);
+                            Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(
+                                                     azonosító.Trim(),
+                                                     tervindulás,
+                                                     km,
+                                                     Telephely.Trim());
+                            AdatokGy.Add(ADAT);
                         }
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                KézFőZserKm.Rögzítés(AdatokGy, Dátum.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -801,6 +793,5 @@ namespace Villamos
                 throw new Exception("MyA rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
             }
         }
-
     }
 }

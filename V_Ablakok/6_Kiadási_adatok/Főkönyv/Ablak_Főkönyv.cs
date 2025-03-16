@@ -43,6 +43,7 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Takarítás KézTakarításTípus = new Kezelő_Kiegészítő_Takarítás();
         readonly Kezelő_Jármű_Vendég KézFőJárműVendég = new Kezelő_Jármű_Vendég();
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
+        readonly Kezelő_Kiegészítő_Idő_Kor KézKor = new Kezelő_Kiegészítő_Idő_Kor();
 
 
         public List<Adat_Reklám> AdatokReklám = new List<Adat_Reklám>();
@@ -986,7 +987,6 @@ namespace Villamos
             try
             {
                 // Idő korrekciók
-                Kezelő_Kiegészítő_Idő_Kor KézKor = new Kezelő_Kiegészítő_Idő_Kor();
                 List<Adat_Kiegészítő_Idő_Kor> AdatokKor = KézKor.Lista_Adatok();
 
                 Adat_Kiegészítő_Idő_Kor Elem = (from a in AdatokKor
