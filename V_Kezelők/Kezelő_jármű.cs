@@ -450,7 +450,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely);
                 string szöveg = "UPDATE állománytábla SET ";
                 szöveg += $" hibák={Adat.Hibák}, ";
-                szöveg += $" miótaáll={Adat.Miótaáll} ";
+                szöveg += $" miótaáll='{Adat.Miótaáll}' ";
                 szöveg += $" WHERE  [azonosító]='{Adat.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

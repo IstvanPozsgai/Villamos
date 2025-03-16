@@ -19,8 +19,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kmfutástábla(hely.KönyvSzerk());
         }
 
-
-
         public List<Adat_T5C5_Kmadatok> Lista_Adat()
         {
             string szöveg = "SELECT * FROM kmtábla";
@@ -119,7 +117,25 @@ namespace Villamos.Kezelők
             }
         }
 
-
+        public void Módosítás(long Id, long korrekció)
+        {
+            try
+            {
+                string szöveg = " UPDATE kmtábla SET ";
+                szöveg += $" KMUkm={korrekció}";
+                szöveg += $" WHERE id={Id}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 
         //Elkopó
@@ -269,6 +285,39 @@ namespace Villamos.Kezelők
             szöveg += " WHERE id=" + Rekord.ID;
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
+
+        public List<Adat_T5C5_Kmadatok> Lista_Szűrt_Adat(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_T5C5_Kmadatok> Adatok = new List<Adat_T5C5_Kmadatok>();
+            Adat_T5C5_Kmadatok Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_T5C5_Kmadatok(
+                                    rekord["ID"].ToÉrt_Long(),
+                                    rekord["Azonosító"].ToStrTrim(),
+                                    rekord["vizsgdátumk"].ToÉrt_DaTeTime()
+                                    ); ;
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+
     }
 
 }

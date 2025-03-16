@@ -58,6 +58,7 @@ namespace Villamos
         long KövV_Sorszám = 0;
         long KövV2_számláló = 0;
         string KövV = "";
+        int Korrekció = 0;
 
         string szűrő = "";
         string sorba = "";
@@ -1276,8 +1277,8 @@ namespace Villamos
                         szöveg += $"kövv='{Vizsgfoka_Jármű}' AND ";
                         szöveg += $"kövv_sorszám={Vsorszám_Jármű}";
                         szöveg += $" ORDER BY ID desc";
-                        Kezelő_T5C5_Kmadatok KéZKm = new Kezelő_T5C5_Kmadatok();
-                        Adat_T5C5_Kmadatok EgyAdat = KéZKm.Egy_Adat(hely, jelszó, szöveg);
+
+                        Adat_T5C5_Kmadatok EgyAdat = KéZT5C5.Egy_Adat(hely, jelszó, szöveg);
 
                         if (EgyAdat != null)
                         {
@@ -1386,27 +1387,30 @@ namespace Villamos
                         // ellenőrizzük, hogy szám-e
                         // rögzítendő adatokat ellenőrizzük, hogy tényleg azt akarjuk
 
-                        string hely = Application.StartupPath + @"\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
-                        string jelszó = "pocsaierzsi";
-                        string szöveg = $"Select * FROM KMtábla where törölt=false AND [azonosító]='{Pályaszám.Text.Trim()}' AND ";
-                        szöveg += $"kövv='{Vizsgfoka_Jármű}' AND ";
-                        szöveg += $"kövv_sorszám={Vsorszám_Jármű}";
-                        szöveg += $" ORDER BY ID desc";
                         //A következő vizsgálatot nézzük, ami soron következne, ha van ilyen legalább egy akkor rögzítjük,
                         //így biztosítja a program, hogy a ciklusterv szerint legyen végezve.
-                        Kezelő_T5C5_Kmadatok KéZKm = new Kezelő_T5C5_Kmadatok();
-                        Adat_T5C5_Kmadatok EgyAdat = KéZKm.Egy_Adat(hely, jelszó, szöveg);
+                        List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adat();
+                        Adat_T5C5_Kmadatok EgyAdat = (from a in AdatokT5C5
+                                                      where a.Törölt == false
+                                                      && a.Azonosító == Pályaszám.Text.Trim()
+                                                      && a.KövV == Vizsgfoka_Jármű
+                                                      && a.KövV_sorszám == Vsorszám_Jármű
+                                                      orderby a.ID descending
+                                                      select a).FirstOrDefault();
                         if (EgyAdat != null)
                         {
                             // kiírjuk az örökítendő adatokat
                             CiklusrendCombo = EgyAdat.Ciklusrend;
                             VizsgKm_Jármű = EgyAdat.KMUkm;
+                            Korrekció = KézFőkönyvKm.FutottKm(Pályaszám.Text.Trim(), EgyAdat.KMUdátum);
 
                             // ha V2/V3 volt akkor változik, ha nem akkor marad 
                             if (Vizsgfoka_Jármű.Contains("V2") || Vizsgfoka_Jármű.Contains("V3"))
-                                KövV2_számláló = VizsgKm_Jármű;       // V2/V3 volt
+                                KövV2_számláló = VizsgKm_Jármű + Korrekció;       // V2/V3 volt
                             else
-                                KövV2_számláló = EgyAdat.V2V3Számláló;      // minden egyéb
+                                KövV2_számláló = EgyAdat.V2V3Számláló + Korrekció;      // minden egyéb
+
+                            KéZT5C5.Módosítás(EgyAdat.ID, EgyAdat.KMUkm + Korrekció);
 
                             List<Adat_Ciklus> SzűrtCiklus = (from a in AdatokCiklus
                                                              where a.Típus == CiklusrendCombo
@@ -1712,15 +1716,6 @@ namespace Villamos
                     List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adat();
                     long i = 1;
                     if (AdatokT5C5.Count > 0) i = AdatokT5C5.Max(a => a.ID) + 1;
-                    Adat_T5C5_Kmadatok AdatUtolsó = AdatokT5C5.Where(a => a.Azonosító == Pályaszám.Text.Trim()).OrderByDescending(a => a.Vizsgdátumk).FirstOrDefault();
-
-                    List<Adat_Főkönyv_Zser_Km> AdatokKM = KézFőkönyvKm.Lista_adatok(DateTime.Today.Year);
-                    int Korrekció = 0;
-                    if (AdatokKM != null && AdatokKM.Count > 0 && AdatUtolsó != null)
-                    {
-                        Korrekció = AdatokKM.Where(a => a.Azonosító == Pályaszám.Text.Trim() && a.Dátum > AdatUtolsó.KMUdátum).Sum(a => a.Napikm);
-                    }
-
 
                     // Új adat
                     Adat_T5C5_Kmadatok ADATÚJ = new Adat_T5C5_Kmadatok(
@@ -1732,7 +1727,7 @@ namespace Villamos
                                          Vizsgfoka_Jármű,
                                          Vütemezés_Jármű_Dátum,
                                          DateTime.Today,
-                                         VizsgKm_Jármű,
+                                         VizsgKm_Jármű + Korrekció,
                                          0,
                                          Vsorszám_Jármű,
                                          new DateTime(1900, 1, 1),
@@ -1762,7 +1757,7 @@ namespace Villamos
                                                 Vizsgfoka_Jármű,
                                                 Vütemezés_Jármű_Dátum,
                                                 DateTime.Today,
-                                                VizsgKm_Jármű,
+                                                VizsgKm_Jármű + Korrekció,
                                                 0,
                                                 Vsorszám_Jármű,
                                                 new DateTime(1900, 1, 1),
@@ -1810,8 +1805,7 @@ namespace Villamos
                     string jelszó = "pocsaierzsi";
                     string szöveg = "SELECT * FROM kmtábla";
 
-                    Kezelő_T5C5_Kmadatok KéZKm = new Kezelő_T5C5_Kmadatok();
-                    List<Adat_T5C5_Kmadatok> Adatok = KéZKm.Lista_Adat(hely, jelszó, szöveg);
+                    List<Adat_T5C5_Kmadatok> Adatok = KéZT5C5.Lista_Adat(hely, jelszó, szöveg);
 
                     long i = 1;
                     if (Adatok.Count > 0) i = Adatok.Max(a => a.ID) + 1;
