@@ -992,7 +992,7 @@ namespace Villamos
                                                     rekordütemez.Azonosító.Trim(),
                                                     Kocsi.Hibák + 1,
                                                     3);
-                                KézJármű.Módosítás_Hiba(Cmbtelephely.Text.Trim(), ADAT_Jármű);
+                                KézJármű.Módosítás_Hiba_Státus(Cmbtelephely.Text.Trim(), ADAT_Jármű);
                             }
 
                             // beírjuk a hibákat

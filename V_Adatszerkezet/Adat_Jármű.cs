@@ -101,6 +101,13 @@ namespace Villamos.Adatszerkezet
             Hibák = hibák;
             Státus = státus;
         }
+
+        public Adat_Jármű(string azonosító, long státus, DateTime miótaáll)
+        {
+            Azonosító = azonosító;
+            Státus = státus;
+            Miótaáll = miótaáll;
+        }
     }
 
     /// <summary>

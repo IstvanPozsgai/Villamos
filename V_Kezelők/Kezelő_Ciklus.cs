@@ -54,37 +54,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_Ciklus Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Ciklus Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    Kapcsolat.Open();
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_Ciklus(
-                                       rekord["Típus"].ToStrTrim(),
-                                       rekord["Sorszám"].ToÉrt_Long(),
-                                       rekord["Vizsgálatfok"].ToStrTrim(),
-                                       rekord["Törölt"].ToStrTrim(),
-                                       rekord["Névleges"].ToÉrt_Long(),
-                                       rekord["Alsóérték"].ToÉrt_Long(),
-                                       rekord["Felsőérték"].ToÉrt_Long()
-                                   );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-
         public List<Adat_Ciklus> Lista_Adatok(bool Aktív = false)
         {
             string szöveg;

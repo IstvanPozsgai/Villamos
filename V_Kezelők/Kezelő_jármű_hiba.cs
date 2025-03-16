@@ -13,11 +13,17 @@ namespace Villamos.Kezelők
     public class Kezelő_jármű_hiba
     {
         readonly string jelszó = "pozsgaii";
-        string hely;
+        string hely, helynapló;
 
         private void FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\hiba.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Hibatáblalap(hely.KönyvSzerk());
+        }
+
+        private void FájlBeállítás(string Telephely, DateTime Dátum)
+        {
+            helynapló = $@"{Application.StartupPath}\{Telephely}\adatok\hibanapló\{Dátum:yyyyMM}hibanapló.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Hibatáblalap(hely.KönyvSzerk());
         }
 
@@ -144,11 +150,48 @@ namespace Villamos.Kezelők
             }
         }
 
+        public List<Adat_Jármű_hiba> Lista_adatok(string Telephely, DateTime Dátum)
+        {
+            FájlBeállítás(Telephely, Dátum);
+            List<Adat_Jármű_hiba> Adatok = new List<Adat_Jármű_hiba>();
+            string szöveg = "SELECT * FROM hibatábla";
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{helynapló}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat_Jármű_hiba adat = new Adat_Jármű_hiba(
+                                    rekord["létrehozta"].ToStrTrim(),
+                                    rekord["korlát"].ToÉrt_Long(),
+                                    rekord["hibaleírása"].ToStrTrim(),
+                                    rekord["idő"].ToÉrt_DaTeTime(),
+                                    rekord["javítva"].ToÉrt_Bool(),
+                                    rekord["típus"].ToStrTrim(),
+                                    rekord["azonosító"].ToStrTrim(),
+                                    rekord["hibáksorszáma"].ToÉrt_Long()
+                                    );
+                                Adatok.Add(adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
         public List<Adat_Jármű_hiba> Lista_adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
             List<Adat_Jármű_hiba> Adatok = new List<Adat_Jármű_hiba>();
-            string szöveg = "SELECT * FROM hibatábla";
+            string szöveg = "SELECT * FROM hibatábla ORDER BY Azonosító";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))

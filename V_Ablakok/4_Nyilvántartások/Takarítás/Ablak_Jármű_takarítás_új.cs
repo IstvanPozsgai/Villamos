@@ -1414,7 +1414,7 @@ namespace Villamos
 
                                 // rögzítjük a villamos.mdb-be
                                 Adat_Jármű ADATJármű = new Adat_Jármű(ideig_psz.Trim(), hiba, státus);
-                                KézJármű.Módosítás_Hiba(Cmbtelephely.Text.Trim(), ADATJármű);
+                                KézJármű.Módosítás_Hiba_Státus(Cmbtelephely.Text.Trim(), ADATJármű);
 
                                 // beírjuk a hibákat
                                 Adat_Jármű_hiba ADATHiba = new Adat_Jármű_hiba(

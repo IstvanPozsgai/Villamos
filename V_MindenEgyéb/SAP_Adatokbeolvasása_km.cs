@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;

@@ -804,6 +804,8 @@
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Göngyöl_DátumTábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Kmadatok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Kmadatok_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_BMR.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia_Ciklus.cs" />
