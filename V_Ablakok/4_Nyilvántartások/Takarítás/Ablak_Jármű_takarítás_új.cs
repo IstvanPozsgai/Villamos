@@ -1348,7 +1348,7 @@ namespace Villamos
                 string ideig_psz;
                 int volt = 0;
 
-                AdatokJárműHiba = KézJárműHiba.Lista_adatok(Cmbtelephely.Text.Trim());
+                AdatokJárműHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
                 AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 for (int i = 0; i < Tábla.Rows.Count; i++)

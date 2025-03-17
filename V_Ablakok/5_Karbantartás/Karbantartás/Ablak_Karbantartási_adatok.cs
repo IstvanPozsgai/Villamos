@@ -470,7 +470,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Típus_lista_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Típus_lista_{Program.PostásNév}-{DateTime.Now.ToString("yyyyMMddHHmmss")}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -554,7 +554,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //itt tartok
+
         private void Hibák_kiírása()
         {
             try
@@ -646,7 +646,12 @@ namespace Villamos
                 }
                 JárművekLista();
 
-                if (figyel) Újrasorszámoz();
+                if (figyel)
+                {
+                    KézHiba.Újrasorszámoz(Cmbtelephely.Text.Trim(), Pályaszám.Text.Trim());
+                    HibaListázás();
+                    Hibák_kiírása();
+                }
                 Sorszám.Text = (Utolsóhiba + 1).ToString();
                 Tábla_Hibalista_Színezés();
             }
@@ -686,41 +691,6 @@ namespace Villamos
                                select a).FirstOrDefault();
             if (Elem != null) return Elem.Hibáksorszáma;
             return 1;
-        }
-
-        private void Újrasorszámoz()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Hiba.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
-
-                List<Adat_Jármű_hiba> Adatok = (from a in AdatokHiba
-                                                where a.Azonosító == Pályaszám.Text.Trim()
-                                                orderby a.Hibáksorszáma
-                                                select a).ToList();
-
-                List<string> szövegGy = new List<string>();
-                for (int i = 0; i < Adatok.Count; i++)
-                {
-                    szöveg = $"UPDATE Hibatábla SET hibáksorszáma={i + 1} WHERE azonosító='{Pályaszám.Text.Trim()}'";
-                    szöveg += $" And  hibaleírása='{Adatok[i].Hibaleírása}' AND idő=#{Adatok[i].Idő:MM-dd-yyyy HH:mm:ss}#";
-                    szövegGy.Add(szöveg);
-                }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
-                HibaListázás();
-                Hibák_kiírása();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void Pályaszám_TextUpdate(object sender, EventArgs e)
@@ -828,7 +798,7 @@ namespace Villamos
             Hibaterv_feltöltés();
             Hibaterv_combo.Visible = true;
         }
-
+        //
         private void Hibaterv_feltöltés()
         {
             Hibaterv_combo.Items.Clear();
@@ -848,7 +818,7 @@ namespace Villamos
             Hibaszöveg.Text = Hibaterv_combo.Text;
             Hibaterv_combo.Visible = false;
         }
-
+        //
         private void Egysorfel_Click(object sender, EventArgs e)
         {
             try
@@ -894,7 +864,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Rögzít_Módosít_Click(object sender, EventArgs e)
         {
             try
@@ -1030,7 +1000,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Napi_Törlés()
         {
             try
@@ -1075,7 +1045,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Napi_Módosítás()
         {
             try
@@ -1108,7 +1078,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Napi_Rögzítés()
         {
             try
@@ -1145,6 +1115,7 @@ namespace Villamos
         {
             try
             {
+                Hiba_státus = 0;
                 if (Jel1.Checked)
                     Hiba_státus = 1;
                 else if (Jel3.Checked)
@@ -1162,10 +1133,7 @@ namespace Villamos
                                  Pályaszám.Text.Trim(),
                                  1);
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-                if (!File.Exists(hely)) Hiba_státus = 0;
-                string jelszó = "pozsgaii";
-                KézHiba.Rögzítés(hely, jelszó, Elem);
+                KézHiba.Rögzítés(Cmbtelephely.Text.Trim(), Elem);
 
                 HibaListázás();
             }
@@ -1185,9 +1153,6 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-                string jelszó = "pozsgaii";
-
                 if (Jel1.Checked)
                 {
                     Hiba_státus = 1;
@@ -1212,7 +1177,7 @@ namespace Villamos
                      long.Parse(Sorszám.Text));
 
 
-                KézHiba.Módosítás(hely, jelszó, Elem);
+                KézHiba.Módosítás(Cmbtelephely.Text.Trim(), Elem);
                 HibaListázás();
 
             }
@@ -1241,9 +1206,7 @@ namespace Villamos
                                                           Egyed_Típus,
                                                           Pályaszám.Text.Trim(),
                                                           long.Parse(Sorszám.Text));
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-                string jelszó = "pozsgaii";
-                KézHiba.Törlés(hely, jelszó, Elem);
+                KézHiba.Törlés(Cmbtelephely.Text.Trim(), Elem);
                 HibaListázás();
             }
             catch (HibásBevittAdat ex)
@@ -1257,7 +1220,7 @@ namespace Villamos
             }
             return Hiba_státus = 0;
         }
-
+        //
         private void Terv_lezárás_ICS()
         {
             try
@@ -1433,7 +1396,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Hiba_Rögzítés_Napló()
         {
             try
@@ -1492,7 +1455,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Karbantartás_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Karbantartás_{Program.PostásNév}-{DateTime.Now.ToString("yyyyMMddHHmmss")}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1521,7 +1484,7 @@ namespace Villamos
 
 
         #region Ellenőrzések
-
+        //
         private void CAFelkészülés()
         {
             try
@@ -1596,7 +1559,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void TW6000elkészülés()
         {
             try
@@ -1789,7 +1752,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void ICSelkészülés()
         {
             try
@@ -1855,7 +1818,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
@@ -1873,7 +1835,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Karbantartási_Napló_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Karbantartási_Napló_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -2179,7 +2141,6 @@ namespace Villamos
                         i += 1;
                         darab += 1;
                     }
-
                 }
             }
             catch (HibásBevittAdat ex)
@@ -2208,7 +2169,7 @@ namespace Villamos
             try
             {
                 AdatokHiba.Clear();
-                AdatokHiba = KézHiba.Lista_adatok(Cmbtelephely.Text.Trim());
+                AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -2283,7 +2244,7 @@ namespace Villamos
                 DateTime ideigdátum = Dátumtól.Value;
                 while (Dátumig.Value > ideigdátum)
                 {
-                    List<Adat_Jármű_hiba> Ideig = KézHiba.Lista_adatok(Cmbtelephely.Text.Trim(), ideigdátum);
+                    List<Adat_Jármű_hiba> Ideig = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim(), ideigdátum);
                     if (Ideig != null) AdatokNapló.AddRange(Ideig);
                     ideigdátum = ideigdátum.AddMonths(1);
                 }
