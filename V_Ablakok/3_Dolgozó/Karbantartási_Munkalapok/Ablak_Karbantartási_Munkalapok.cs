@@ -986,7 +986,7 @@ namespace Villamos.Villamos_Ablakok
                     }
 
 
-                    if (AdatokZSER != null)
+                    if (AdatokZSER != null && EgyKmAdat != null)
                     {
                         List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER
                                                                      where a.Azonosító == Pályaszám.Text.Trim() && a.Dátum > EgyKmAdat.KMUdátum

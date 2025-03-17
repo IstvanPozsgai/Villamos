@@ -983,6 +983,8 @@ namespace Villamos.Villamos_Ablakok
         private void Elérés_feltöltés()
         {
             Combo_elérés.Items.Clear();
+            Combo_elérés.Items.Add("");
+            Combo_elérés.Items.Add("Nincs");
             Combo_elérés.Items.Add("Alap");
             Combo_elérés.Items.Add("T5C5_E2");
             Combo_elérés.Items.Add("T5C5_E3");
