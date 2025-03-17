@@ -27,6 +27,7 @@ namespace Villamos
         readonly Kezelő_T5C5_Kmadatok KéZT5C5 = new Kezelő_T5C5_Kmadatok();
         readonly Kezelő_T5C5_Kmadatok_Napló KézKmNapló = new Kezelő_T5C5_Kmadatok_Napló();
         readonly Kezelő_Főkönyv_Zser_Km KézFőkönyvKm = new Kezelő_Főkönyv_Zser_Km();
+        readonly Kezelő_kiegészítő_Hibaterv KézHibaterv = new Kezelő_kiegészítő_Hibaterv();
 
         List<Adat_Szerelvény> AdatokSzer = new List<Adat_Szerelvény>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
@@ -798,19 +799,26 @@ namespace Villamos
             Hibaterv_feltöltés();
             Hibaterv_combo.Visible = true;
         }
-        //
+
         private void Hibaterv_feltöltés()
         {
-            Hibaterv_combo.Items.Clear();
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-            string jelszó = "Mocó";
-
-            string szöveg = "SELECT * FROM Hibaterv order by id";
-
-            Hibaterv_combo.BeginUpdate();
-            Hibaterv_combo.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "szöveg"));
-            Hibaterv_combo.EndUpdate();
-            Hibaterv_combo.Refresh();
+            try
+            {
+                Hibaterv_combo.Items.Clear();
+                List<Adat_Kiegészítő_Hibaterv> Adatok = KézHibaterv.Lista_Adatok(Cmbtelephely.Text.Trim());
+                foreach (Adat_Kiegészítő_Hibaterv Adat in Adatok)
+                    Hibaterv_combo.Items.Add(Adat.Szöveg);
+                Hibaterv_combo.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Hibaterv_combo_SelectedIndexChanged(object sender, EventArgs e)
@@ -864,7 +872,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Rögzít_Módosít_Click(object sender, EventArgs e)
         {
             try
