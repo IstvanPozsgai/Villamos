@@ -1463,7 +1463,7 @@ namespace Villamos
                 if (AdatokZSER == null) return;
 
                 List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER
-                                                             where a.Azonosító == azonosító && a.Dátum >= Tábla.Rows[sor].Cells[37].Value.ToÉrt_DaTeTime()
+                                                             where a.Azonosító == azonosító && a.Dátum > Tábla.Rows[sor].Cells[37].Value.ToÉrt_DaTeTime()
                                                              select a).ToList();
                 long KorNapikm = 0;
                 if (KorNapikmLista != null)

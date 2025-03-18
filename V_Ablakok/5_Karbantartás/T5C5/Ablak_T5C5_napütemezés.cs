@@ -285,7 +285,7 @@ namespace Villamos
                 FutásAdatok_Feltöltése();
                 JárműAdatok_Feltöltése();
                 SzerelvényListaFeltöltése();    // Szerelvény
-
+                AdatokZserKm = KézKorr.Lista_adatok(Dátum.Value.Year);
 
                 //    Hiba
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Új_napihiba.mdb";
@@ -459,16 +459,16 @@ namespace Villamos
                         Tábla.Rows[i].Cells[18].Value = EgyKm.KMUkm - EgyKm.V2V3Számláló;
                         Tábla.Rows[i].Cells[30].Value = EgyKm.KMUkm - EgyKm.Vizsgkm;
                         Tábla.Rows[i].Cells[32].Value = EgyKm.KMUdátum.ToString("yyyy.MM.dd");
-                        Adat_Általános_String_Dátum ideig = new Adat_Általános_String_Dátum(
-                                                          EgyKm.KMUdátum,
-                                                          rekord.Azonosító
-                                                         );
-                        Frissítés.Add(ideig);
+
+                        List<Adat_Főkönyv_Zser_Km> SzűrtAdat = (from a in AdatokZserKm
+                                                                where a.Dátum > EgyKm.KMUdátum &&
+                                                                a.Azonosító == rekord.Azonosító.Trim()
+                                                                select a).ToList();
+                        int Napikm = SzűrtAdat.Sum(a => a.Napikm);
+                        Tábla.Rows[i].Cells[31].Value = Napikm;
+                        Tábla.Rows[i].Cells[11].Value = (EgyKm.KMUkm - EgyKm.Vizsgkm) + Napikm;
                     }
                 }
-
-                KorrekcióListaFeltöltés();
-                Korrekció_km();
 
                 // futásnap emelkedő
                 Tábla.Sort(Tábla.Columns[5], System.ComponentModel.ListSortDirection.Descending);
@@ -545,85 +545,6 @@ namespace Villamos
             string szöveg = "Select * FROM szerelvénytábla ORDER BY id";
             string jelszó = "pozsgaii";
             AdatokSzerelvény = KézSzerelvény.Lista_Adatok(hely, jelszó, szöveg);
-        }
-
-        private void KorrekcióListaFeltöltés()
-        {
-            try
-            {
-                AdatokZserKm.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\Napi_km_Zser_{Dátum.Value.Year}.mdb";
-                if (!Exists(hely)) return;
-
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM Tábla";
-                AdatokZserKm = KézKorr.Lista_adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        private void Korrekció_km()
-        {
-            try
-            {
-                Holtart.Be(Frissítés.Count + 1);
-
-                foreach (Adat_Általános_String_Dátum elem in Frissítés)
-                {
-                    List<Adat_Főkönyv_Zser_Km> SzűrtAdat = (from a in AdatokZserKm
-                                                            where a.Dátum >= elem.Dátum &&
-                                                            a.Azonosító == elem.Szöveg.Trim()
-                                                            select a).ToList();
-                    int Napikm = SzűrtAdat.Sum(a => a.Napikm);
-                    Adat_Főkönyv_Zser_Km ideig = new Adat_Főkönyv_Zser_Km(
-                                  elem.Szöveg.Trim(),
-                                  elem.Dátum,
-                                  Napikm,
-                                  "");
-                    AdatokKorr.Add(ideig);
-
-                    Holtart.Lép();
-                }
-
-                Holtart.Be(Tábla.Rows.Count + 1);
-
-                for (int sor = 0; sor < Tábla.Rows.Count; sor++)
-                {
-                    string pályaszám = Tábla.Rows[sor].Cells[0].Value.ToStrTrim();
-
-                    Adat_T5C5_Kmadatok EgyKm = (from a in AdatokKM
-                                                where a.Azonosító == pályaszám
-                                                select a).FirstOrDefault();
-                    if (EgyKm != null)
-                    {
-                        int Napikm = (from a in AdatokKorr
-                                      where a.Azonosító == pályaszám
-                                      select a.Napikm).FirstOrDefault();
-                        Tábla.Rows[sor].Cells[31].Value = Napikm;
-                        Tábla.Rows[sor].Cells[11].Value = (EgyKm.KMUkm - EgyKm.Vizsgkm) + Napikm;
-                    }
-                    Holtart.Lép();
-                }
-                Holtart.Ki();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void Vezénylés_Lista_feltöltés()
