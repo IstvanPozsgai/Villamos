@@ -628,18 +628,18 @@ namespace Villamos
                 Hiba_státus = státushiba;
                 Egyed_Státus = JárműStátusz();
 
-                if (státushiba != Egyed_Státus && !(státushiba == 4 || Egyed_Státus == 4))
+                if (státushiba != Egyed_Státus)
                 {
                     Adat_Jármű ADAT = new Adat_Jármű(Pályaszám.Text.Trim(), 0, státushiba);
-                    KéZJármű.Módosítás_Hiba(Cmbtelephely.Text.Trim(), ADAT);
+                    KéZJármű.Módosítás_Hiba_Státus(Cmbtelephely.Text.Trim(), ADAT);
                 }
-                if (státushiba != Egyed_Státus && státushiba == 4)
+                if (státushiba == 4)
                 {
                     // ha megállt módosítjuk a miótaállt is
                     Adat_Jármű ADAT = new Adat_Jármű(Pályaszám.Text.Trim(), státushiba, DateTime.Now);
                     KéZJármű.Módosítás_Státus_Dátum(Cmbtelephely.Text.Trim(), ADAT);
                 }
-                if (státushiba != Egyed_Státus && Egyed_Státus == 4)
+                if (Egyed_Státus == 4)
                 {
                     // ha elindult
                     Adat_Jármű ADAT = new Adat_Jármű(Pályaszám.Text.Trim(), státushiba, new DateTime(1900, 1, 1));
