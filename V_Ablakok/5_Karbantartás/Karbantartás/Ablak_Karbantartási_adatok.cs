@@ -471,7 +471,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = $"Típus_lista_{Program.PostásNév}-{DateTime.Now.ToString("yyyyMMddHHmmss")}",
+                    FileName = $"Típus_lista_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1424,7 +1424,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = $"Karbantartás_{Program.PostásNév}-{DateTime.Now.ToString("yyyyMMddHHmmss")}",
+                    FileName = $"Karbantartás_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép

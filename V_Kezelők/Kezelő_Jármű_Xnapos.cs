@@ -108,7 +108,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE xnapostábla SET hibaleírása='{Adat.Hibaleírása}}' ";
+                string szöveg = $"UPDATE xnapostábla SET hibaleírása='{Adat.Hibaleírása}' ";
                 szöveg += $" WHERE [azonosító]='{Adat.Azonosító}' ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
