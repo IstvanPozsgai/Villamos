@@ -1,15 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
-using MyA = Adatbázis;
+using System.IO;
 using System.Linq;
+using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
+using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Kerék_Mérés
     {
+        readonly string jelszó = "szabólászló";
+        string hely;
+
+        private void FájlBeállítás(int Év)
+        {
+            hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Év}\telepikerék.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Méréstáblakerék(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Kerék_Mérés> Lista_Adatok(int Év)
+        {
+            FájlBeállítás(Év);
+            string szöveg = "SELECT * FROM keréktábla order by azonosító,pozíció ";
+
+            List<Adat_Kerék_Mérés> Adatok = new List<Adat_Kerék_Mérés>();
+            Adat_Kerék_Mérés Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Kerék_Mérés(
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["Pozíció"].ToStrTrim(),
+                                        rekord["Kerékberendezés"].ToStrTrim(),
+                                        rekord["Kerékgyártásiszám"].ToStrTrim(),
+                                        rekord["Állapot"].ToStrTrim(),
+                                        rekord["Méret"].ToÉrt_Int(),
+                                        rekord["Módosító"].ToStrTrim(),
+                                        rekord["Mikor"].ToÉrt_DaTeTime(),
+                                        rekord["Oka"].ToStrTrim(),
+                                        rekord["SAP"].ToÉrt_Int()
+                                          );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
         public List<Adat_Kerék_Mérés> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kerék_Mérés> Adatok = new List<Adat_Kerék_Mérés>();
@@ -342,9 +394,9 @@ namespace Villamos.Kezelők
             string szöveg = $"SELECT * FROM Eszterga_Beállítás";
             Kezelő_Kerék_Eszterga_Beállítás Kezelő = new Kezelő_Kerék_Eszterga_Beállítás();
             List<Adat_Kerék_Eszterga_Beállítás> Adatok = Kezelő.Lista_Adatok(hely, jelszó, szöveg);
-            Adat_Kerék_Eszterga_Beállítás Elem  = (from a in Adatok
-                                                        where a.Azonosító== Adat.Azonosító
-                                                        select a).FirstOrDefault();
+            Adat_Kerék_Eszterga_Beállítás Elem = (from a in Adatok
+                                                  where a.Azonosító == Adat.Azonosító
+                                                  select a).FirstOrDefault();
 
             if (Elem == null)
             {

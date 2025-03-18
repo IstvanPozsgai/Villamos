@@ -1813,10 +1813,7 @@ namespace Villamos
         {
             try
             {
-                string hely, jelszó, szöveg;
-                hely = Application.StartupPath + @"\főmérnökség\adatok\" + Dátumtól.Value.Year + @"\telepikerék.mdb";
-                jelszó = "szabólászló";
-
+                if (Dátumtól.Value == Dátumig.Value) throw new HibásBevittAdat("A kezdő és a vég dátumnak különbözőnek kell lennie.");
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
                 Tábla1.Refresh();
@@ -1845,32 +1842,28 @@ namespace Villamos
                 Tábla1.Columns[8].HeaderText = "Mérés Oka";
                 Tábla1.Columns[8].Width = 170;
 
-                int i;
+                List<Adat_Kerék_Mérés> Adatok = new List<Adat_Kerék_Mérés>();
+                for (int Év = Dátumtól.Value.Year; Év <= Dátumig.Value.Year; Év++)
+                {
+                    List<Adat_Kerék_Mérés> Ideig = KézMérés.Lista_Adatok(Év);
+                    Adatok.AddRange(Ideig);
 
-                szöveg = "SELECT * FROM keréktábla where ";
+                }
+
+                Adatok = (from a in Adatok
+                          where a.Mikor >= Dátumtól.Value
+                          && a.Mikor <= Dátumig.Value
+                          orderby a.Azonosító, a.Pozíció
+                          select a).ToList();
+
+
                 if (PályaszámCombo2.Text.Trim() != "")
-                {
-                    szöveg += " azonosító='" + PályaszámCombo2.Text.Trim() + "' and ";
-                }
-                if (Dátumtól.Value == Dátumig.Value)
-                {
-                    szöveg += " mikor>= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 00:00:00#";
-                    szöveg += " and mikor<= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 23:59:59#";
-                }
-                else
-                {
-                    szöveg += " mikor>= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 00:00:00#";
-                    szöveg += " and mikor<= #" + Dátumig.Value.ToString("yyyy-MM-dd") + " 23:59:59#";
-                }
-                szöveg += " order by azonosító,pozíció ";
-
-                Kezelő_Kerék_Mérés kéz = new Kezelő_Kerék_Mérés();
-                List<Adat_Kerék_Mérés> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                    Adatok = Adatok.Where(a => a.Azonosító == PályaszámCombo2.Text.Trim()).ToList();
 
                 foreach (Adat_Kerék_Mérés rekord in Adatok)
                 {
                     Tábla1.RowCount++;
-                    i = Tábla1.RowCount - 1;
+                    int i = Tábla1.RowCount - 1;
                     Tábla1.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
                     Tábla1.Rows[i].Cells[1].Value = rekord.Kerékberendezés.Trim();
                     Tábla1.Rows[i].Cells[2].Value = rekord.Kerékgyártásiszám.Trim();
@@ -2070,8 +2063,8 @@ namespace Villamos
                 }
                 szöveg += " order by azonosító,pozíció ";
 
-                Kezelő_Kerék_Mérés Kéz = new Kezelő_Kerék_Mérés();
-                List<Adat_Kerék_Mérés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Kerék_Mérés> Adatok = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
 
                 foreach (Adat_Kerék_Mérés rekord in Adatok)
                 {
@@ -2133,8 +2126,8 @@ namespace Villamos
                 }
                 szöveg += " order by azonosító,pozíció ";
 
-                Kezelő_Kerék_Mérés kéz = new Kezelő_Kerék_Mérés();
-                List<Adat_Kerék_Mérés> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Kerék_Mérés> Adatok = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
 
                 foreach (Adat_Kerék_Mérés rekord in Adatok)
                 {
@@ -2390,8 +2383,8 @@ namespace Villamos
                     szöveg += " and kerékberendezés='" + Berendezés.Text.Trim() + "' ";
                     szöveg += " order by mikor desc";
 
-                    Kezelő_Kerék_Mérés KézMér = new Kezelő_Kerék_Mérés();
-                    Adat_Kerék_Mérés Mérés = KézMér.Egy_Adat(hely, jelszó, szöveg);
+
+                    Adat_Kerék_Mérés Mérés = KézMérés.Egy_Adat(hely, jelszó, szöveg);
 
                     if (Mérés != null)
                     {
@@ -2570,8 +2563,7 @@ namespace Villamos
             try
             {
 
-                if (RögzítPályaszám.Text.Trim() == "")
-                    throw new HibásBevittAdat("A jármű pályaszámát meg kell adni.");
+                if (RögzítPályaszám.Text.Trim() == "") throw new HibásBevittAdat("A jármű pályaszámát meg kell adni.");
                 if (!long.TryParse(KMU_új.Text.Trim(), out long KMU_érték))
                 {
                     KMU_új.Text = "0";
