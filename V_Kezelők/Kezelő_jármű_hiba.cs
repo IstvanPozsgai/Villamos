@@ -305,5 +305,41 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Csere(string Telephely, int Sorszám, string Azonosító)
+        {
+            try
+            {
+                List<Adat_Jármű_hiba> Adatok = Lista_Adatok(Telephely);
+                Adat_Jármű_hiba Előző = (from a in Adatok
+                                         where a.Hibáksorszáma == Sorszám - 1 && a.Azonosító == Azonosító
+                                         select a).FirstOrDefault();
+                Adat_Jármű_hiba Következő = (from a in Adatok
+                                             where a.Hibáksorszáma == Sorszám && a.Azonosító == Azonosító
+                                             select a).FirstOrDefault();
+
+                if (Előző == null || Következő == null) return;         //Ha valamelyik nincs akkor kilép
+
+                string szöveg = "UPDATE hibatábla  SET ";
+                szöveg += $"hibáksorszáma={Következő.Hibáksorszáma} ";
+                szöveg += $" WHERE létrehozta='{Előző.Létrehozta}' AND hibaleírása='{Előző.Hibaleírása}' AND azonosító='{Előző.Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+                szöveg = "UPDATE hibatábla  SET ";
+                szöveg += $"hibáksorszáma={Előző.Hibáksorszáma} ";
+                szöveg += $" WHERE létrehozta='{Következő.Létrehozta}' AND hibaleírása='{Következő.Hibaleírása}' AND azonosító='{Következő.Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

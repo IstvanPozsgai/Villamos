@@ -826,7 +826,7 @@ namespace Villamos
             Hibaszöveg.Text = Hibaterv_combo.Text;
             Hibaterv_combo.Visible = false;
         }
-        //
+
         private void Egysorfel_Click(object sender, EventArgs e)
         {
             try
@@ -836,28 +836,7 @@ namespace Villamos
                 if (sorszám <= 1) throw new HibásBevittAdat("Az első elemet nem lehet előrébb tenni.");
                 if (Utolsóhiba < sorszám) return;
 
-                Adat_Jármű_hiba Előző = (from a in AdatokHiba
-                                         where a.Hibáksorszáma == sorszám - 1 && a.Azonosító == Pályaszám.Text.Trim()
-                                         select a).FirstOrDefault();
-                Adat_Jármű_hiba Következő = (from a in AdatokHiba
-                                             where a.Hibáksorszáma == sorszám && a.Azonosító == Pályaszám.Text.Trim()
-                                             select a).FirstOrDefault();
-
-                if (Előző == null || Következő == null) return;         //Ha valamelyik nincs akkor kilép
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-                string jelszó = "pozsgaii";
-
-                string szöveg = "UPDATE hibatábla  SET ";
-                szöveg += $"hibáksorszáma={Következő.Hibáksorszáma} ";
-                szöveg += $" WHERE létrehozta='{Előző.Létrehozta}' AND hibaleírása='{Előző.Hibaleírása}' AND azonosító='{Előző.Azonosító}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                szöveg = "UPDATE hibatábla  SET ";
-                szöveg += $"hibáksorszáma={Előző.Hibáksorszáma} ";
-                szöveg += $" WHERE létrehozta='{Következő.Létrehozta}' AND hibaleírása='{Következő.Hibaleírása}' AND azonosító='{Következő.Azonosító}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                KézHiba.Csere(Cmbtelephely.Text.Trim(), sorszám, Pályaszám.Text.Trim());
                 HibaListázás();
                 Hibák_kiírása();
                 Bevitelimezők_alap();
@@ -1008,14 +987,12 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Napi_Törlés()
         {
             try
-            {        // kitöröljük a napos listából
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\napi.mdb";
-                string jelszó = "plédke";
-
+            {
+                // kitöröljük a napos listából
                 // leellenőrizzük, hogy biztos nincs
                 Adat_Jármű_Xnapos Elem = (from a in AdatokXnapos
                                           where a.Azonosító == Pályaszám.Text.Trim()
@@ -1027,20 +1004,12 @@ namespace Villamos
                     string hibaleírása = Elem.Hibaleírása;
 
                     //Kitöröljük a táblából
-                    string szöveg = $"DELETE FROM xnapostábla WHERE [azonosító]='{Pályaszám.Text.Trim()}' ";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    KézXnapos.Törlés(Cmbtelephely.Text.Trim(), Pályaszám.Text.Trim());
                     Napi_Feltölése();
 
                     // beírjuk a gyűjtőbe ha kell
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\Elkészült{DateTime.Today.Year}.mdb";
-                    if (!File.Exists(hely)) Adatbázis_Létrehozás.Javításiátfutástábla(hely);
-
-                    szöveg = "INSERT INTO xnapostábla (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
-                    szöveg += $"'{kezdődátum}', ";
-                    szöveg += $"'{DateTime.Now}', ";
-                    szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                    szöveg += $"'{hibaleírása}')";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Jármű_Xnapos ADAT = new Adat_Jármű_Xnapos(kezdődátum, DateTime.Now, Pályaszám.Text.Trim(), hibaleírása);
+                    KézXnapos.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today.Year, ADAT);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1053,13 +1022,11 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Napi_Módosítás()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\napi.mdb";
-                string jelszó = "plédke";
                 // leellenőrizzük, hogy biztos nincs
                 Adat_Jármű_Xnapos Elem = (from a in AdatokXnapos
                                           where a.Azonosító == Pályaszám.Text.Trim()
@@ -1069,9 +1036,8 @@ namespace Villamos
                 {
                     if (Elem.Hibaleírása.Contains(Hibaszöveg.Text))
                     {
-                        string szöveg = $"UPDATE xnapostábla SET hibaleírása='{Elem.Hibaleírása}-{Hibaszöveg.Text.Trim()}' ";
-                        szöveg += $" WHERE [azonosító]='{Pályaszám.Text.Trim()}' ";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        Adat_Jármű_Xnapos ADAT = new Adat_Jármű_Xnapos(DateTime.Now, new DateTime(1900, 1, 1), Pályaszám.Text.Trim(), $"{Elem.Hibaleírása}-{Hibaszöveg.Text.Trim()}");
+                        KézXnapos.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                         Napi_Feltölése();
                     }
                 }
@@ -1086,13 +1052,11 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Napi_Rögzítés()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló\napi.mdb";
-                string jelszó = "plédke";
                 // leellenőrizzük, hogy biztos nincs
                 Adat_Jármű_Xnapos Elem = (from a in AdatokXnapos
                                           where a.Azonosító == Pályaszám.Text.Trim()
@@ -1100,11 +1064,8 @@ namespace Villamos
 
                 if (Elem == null)
                 {
-                    string szöveg = "INSERT INTO xnapostábla (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
-                    szöveg += $"'{DateTime.Now}', '1900.01.01', ";
-                    szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                    szöveg += $"'{Hibaszöveg.Text.Trim()}')";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Jármű_Xnapos ADAT = new Adat_Jármű_Xnapos(DateTime.Now, new DateTime(1900, 1, 1), Pályaszám.Text.Trim(), Hibaszöveg.Text.Trim());
+                    KézXnapos.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                     Napi_Feltölése();
                 }
             }
