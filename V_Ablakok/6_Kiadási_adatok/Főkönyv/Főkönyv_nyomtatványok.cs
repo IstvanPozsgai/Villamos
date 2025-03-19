@@ -178,6 +178,13 @@ namespace Villamos.Villamos_Nyomtatványok
                             if (rekord.Státus == 3)
                                 MyE.Betű(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), false, true, true);
 
+                            //Ha rossz kocsi van forgalomban
+                            if (rekord.Státus == 4)
+                            {
+                                MyE.Betű(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), false, true, true);
+                                MyE.Háttérszín(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), System.Drawing.Color.Red);
+                                MyE.Betű(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), System.Drawing.Color.Yellow);
+                            }
 
                             if (rekord.Megjegyzés.Trim().ToUpper().Substring(0, 1) == "T") // ha T betűvel kezdődik többlet kiadás
                             {
@@ -348,36 +355,6 @@ namespace Villamos.Villamos_Nyomtatványok
                             }
 
                         }
-                        //// személyzet hiány
-                        //if (rekord.Megjegyzés.Trim() != "_")
-                        //{
-                        //    MyE.Háttérszín(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), System.Drawing.Color.GreenYellow);
-                        //    MyE.Betű(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), false, false, true);
-                        //    for (int j = 0; j < típus.Count; j++)
-                        //    {
-                        //        // megkeressük a típust és emeljük a darabszámot
-                        //        if (rekord.Típus.Trim() == típus[j].Típus.Trim())
-                        //        {
-                        //            személyzet[j] = személyzet[j] + 1;
-                        //            break;
-                        //        }
-                        //    }
-                        //}
-
-                        //else
-                        //{
-                        //    // megkeressük, hogy melyik típusba tartozik majd emeljük a darabszámot
-                        //    // ha személyzet hiányos akkor nem emeljük a darabszámokat
-                        //    for (int j = 0; j < típus.Count; j++)
-                        //    {
-                        //        // megkeressük a típust és emeljük a darabszámot
-                        //        if (rekord.Típus.Trim() == típus[j].Típus.Trim())
-                        //        {
-                        //            sordarab[j] = sordarab[j] + 1;
-                        //            break;
-                        //        }
-                        //    }
-                        //}
                         if (rekord.Kocsikszáma == 1)
                             oszlop1 += 1; // ha egy kocsiból áll a szerelvény akkor a következőkocsit felül írja az elsőt
                         szerelvényhossz += 1;
