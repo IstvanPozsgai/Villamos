@@ -372,6 +372,7 @@
             // 
             // Járműtípus
             // 
+            this.Járműtípus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Járműtípus.FormattingEnabled = true;
             this.Járműtípus.Location = new System.Drawing.Point(169, 100);
             this.Járműtípus.Name = "Járműtípus";
@@ -463,6 +464,7 @@
             // 
             // Combo_KarbCiklus
             // 
+            this.Combo_KarbCiklus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_KarbCiklus.FormattingEnabled = true;
             this.Combo_KarbCiklus.Location = new System.Drawing.Point(169, 134);
             this.Combo_KarbCiklus.Name = "Combo_KarbCiklus";
