@@ -53,15 +53,14 @@ namespace Villamos
         List<Adat_Általános_String_Dátum> Frissítés = new List<Adat_Általános_String_Dátum>();
         List<Adat_T5C5_Posta> Posta_lista = new List<Adat_T5C5_Posta>();
 #pragma warning restore IDE0044 // Add readonly modifier
+
+        #region Alap
         public Ablak_T5C5_napütemezés()
         {
             InitializeComponent();
             Start();
-
         }
-
-
-        #region Alap
+        //
         private void Start()
         {
             Telephelyekfeltöltése();
@@ -75,24 +74,19 @@ namespace Villamos
                 Adatbázis_Létrehozás.Vezényléstábla(hely);
 
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos6.mdb";
-            if (!Exists(hely))
-                Adatbázis_Létrehozás.Járműtulajdonságoktábla(hely);
+            if (!Exists(hely)) Adatbázis_Létrehozás.Járműtulajdonságoktábla(hely);
 
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-            if (!Exists(hely))
-                Adatbázis_Létrehozás.Szerelvénytáblalap(hely);
+            if (!Exists(hely)) Adatbázis_Létrehozás.Szerelvénytáblalap(hely);
 
             Jogosultságkiosztás();
             Dátum.Value = DateTime.Today;
         }
 
-
-
         private void Ablak_T5C5_napütemezés_Load(object sender, EventArgs e)
         {
 
         }
-
 
         private void Telephelyekfeltöltése()
         {
@@ -119,12 +113,11 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\T5C5_futás_ütemez.html";
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\T5C5_futás_ütemez.html";
                 Module_Excel.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
@@ -137,7 +130,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Ablak_T5C5_napütemezés_KeyDown(object sender, KeyEventArgs e)
         {
@@ -155,7 +147,6 @@ namespace Villamos
                 Keresés_metódus();
             }
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -186,7 +177,6 @@ namespace Villamos
         private void Ablak_T5C5_napütemezés_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Kereső?.Close();
-
             Új_Ablak_T5C5_Segéd?.Close();
         }
         #endregion
@@ -197,7 +187,6 @@ namespace Villamos
         {
             Kocsikkirása();
         }
-
 
         private void Kocsikkirása()
         {
