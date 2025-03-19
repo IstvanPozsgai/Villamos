@@ -35,6 +35,7 @@ namespace Villamos
                 long korlát = 0;
 
                 List<Adat_Nap_Hiba> AdatokGy = new List<Adat_Nap_Hiba>();
+                Adat_Nap_Hiba ADAT;
                 foreach (Adat_Jármű_hiba rekord in AdatokJármű)
                 {
                     if (azonosító.Trim() == "")
@@ -46,7 +47,7 @@ namespace Villamos
                     if (azonosító != rekord.Azonosító)
                     {
                         // rögzítjük az előzőt
-                        Adat_Nap_Hiba ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
+                        ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
                         AdatokGy.Add(ADAT);
 
                         beálló = "_";
@@ -95,7 +96,7 @@ namespace Villamos
                 }
 
                 // rögzítjük az utolsót
-                Adat_Nap_Hiba ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
+                ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
                 AdatokGy.Add(ADAT);
 
                 KézHibaÚj.Rögzítés(telephely, AdatokGy);
@@ -230,7 +231,7 @@ namespace Villamos
 
         public static void Napiadatokmentése(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
         {
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum.ToString("yyyy")}\nap\{KÜLDdátum.ToString("yyyyMMdd")}{KÜLDreggel}nap.mdb";
+            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
             string jelszó = "lilaakác";
 
 
@@ -497,7 +498,7 @@ namespace Villamos
         public static void Napitöbblet(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
         {
 
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum.ToString("yyyy")}\nap\{KÜLDdátum.ToString("yyyyMMdd")}{KÜLDreggel}nap.mdb";
+            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
             if (!File.Exists(hely))
                 return;
 
