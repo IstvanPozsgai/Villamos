@@ -779,11 +779,11 @@ namespace Villamos
         {
             try
             {
-                Adat_Kiegészítő_főkönyvtábla ADAT = new Adat_Kiegészítő_főkönyvtábla(2, txtnév2.Text.Trim(), txtbeosztás2.Text.Trim());
+                Adat_Kiegészítő_főkönyvtábla ADAT = new Adat_Kiegészítő_főkönyvtábla(2, txtnév2.Text.Trim(), txtbeosztás2.Text.Trim(), Email2.Text.Trim());
 
                 Kézfőkönyvtábla.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
 
-                ADAT = new Adat_Kiegészítő_főkönyvtábla(3, txtnév3.Text.Trim(), txtbeosztás3.Text.Trim());
+                ADAT = new Adat_Kiegészítő_főkönyvtábla(3, txtnév3.Text.Trim(), txtbeosztás3.Text.Trim(), Email3.Text.Trim());
                 Kézfőkönyvtábla.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
 
 
@@ -817,6 +817,7 @@ namespace Villamos
                 {
                     txtnév2.Text = Adat.Név;
                     txtbeosztás2.Text = Adat.Beosztás;
+                    Email2.Text = Adat.Email;
                 }
 
                 Adat = (from a in Adatok
@@ -827,6 +828,7 @@ namespace Villamos
                 {
                     txtnév3.Text = Adat.Név;
                     txtbeosztás3.Text = Adat.Beosztás;
+                    Email3.Text = Adat.Email;
                 }
             }
             catch (HibásBevittAdat ex)

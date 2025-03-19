@@ -38,12 +38,21 @@ namespace Villamos.Villamos_Adatszerkezet
         public long Id { get; private set; }
         public string Név { get; private set; }
         public string Beosztás { get; private set; }
+        public string Email { get; private set; }
 
         public Adat_Kiegészítő_főkönyvtábla(long id, string név, string beosztás)
         {
             Id = id;
             Név = név;
             Beosztás = beosztás;
+        }
+
+        public Adat_Kiegészítő_főkönyvtábla(long id, string név, string beosztás, string email)
+        {
+            Id = id;
+            Név = név;
+            Beosztás = beosztás;
+            Email = email;
         }
     }
 

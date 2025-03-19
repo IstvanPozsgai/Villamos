@@ -78,6 +78,9 @@ namespace Villamos
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_alap_program_kiadás));
             this.Fülek = new System.Windows.Forms.TabControl();
             this.FÜLAláírások = new System.Windows.Forms.TabPage();
+            this.Email2 = new System.Windows.Forms.TextBox();
+            this.Email3 = new System.Windows.Forms.TextBox();
+            this.label78 = new System.Windows.Forms.Label();
             this.Label12 = new System.Windows.Forms.Label();
             this.txtbeosztás2 = new System.Windows.Forms.TextBox();
             this.txtnév3 = new System.Windows.Forms.TextBox();
@@ -413,6 +416,9 @@ namespace Villamos
             // FÜLAláírások
             // 
             this.FÜLAláírások.BackColor = System.Drawing.Color.YellowGreen;
+            this.FÜLAláírások.Controls.Add(this.Email2);
+            this.FÜLAláírások.Controls.Add(this.Email3);
+            this.FÜLAláírások.Controls.Add(this.label78);
             this.FÜLAláírások.Controls.Add(this.Label12);
             this.FÜLAláírások.Controls.Add(this.txtbeosztás2);
             this.FÜLAláírások.Controls.Add(this.txtnév3);
@@ -430,6 +436,29 @@ namespace Villamos
             this.FÜLAláírások.Size = new System.Drawing.Size(1366, 525);
             this.FÜLAláírások.TabIndex = 1;
             this.FÜLAláírások.Text = "Főkönyvi aláírások";
+            // 
+            // Email2
+            // 
+            this.Email2.Location = new System.Drawing.Point(602, 105);
+            this.Email2.Name = "Email2";
+            this.Email2.Size = new System.Drawing.Size(216, 24);
+            this.Email2.TabIndex = 16;
+            // 
+            // Email3
+            // 
+            this.Email3.Location = new System.Drawing.Point(602, 155);
+            this.Email3.Name = "Email3";
+            this.Email3.Size = new System.Drawing.Size(217, 24);
+            this.Email3.TabIndex = 17;
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(599, 68);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(73, 18);
+            this.label78.TabIndex = 18;
+            this.label78.Text = "Email cím";
             // 
             // Label12
             // 
@@ -508,7 +537,7 @@ namespace Villamos
             // 
             this.Btnfőkönyv.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Btnfőkönyv.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btnfőkönyv.Location = new System.Drawing.Point(624, 105);
+            this.Btnfőkönyv.Location = new System.Drawing.Point(848, 105);
             this.Btnfőkönyv.Name = "Btnfőkönyv";
             this.Btnfőkönyv.Size = new System.Drawing.Size(45, 45);
             this.Btnfőkönyv.TabIndex = 4;
@@ -3842,5 +3871,8 @@ namespace Villamos
         internal Button Telep_Rögzít;
         internal TextBox Telep_Költséghely;
         internal Label label77;
+        internal TextBox Email2;
+        internal TextBox Email3;
+        internal Label label78;
     }
 }

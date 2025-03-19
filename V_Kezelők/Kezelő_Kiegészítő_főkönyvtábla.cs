@@ -76,9 +76,8 @@ namespace Villamos.Kezelők
                                     Adat = new Adat_Kiegészítő_főkönyvtábla(
                                               rekord["id"].ToÉrt_Long(),
                                               rekord["név"].ToStrTrim(),
-                                              rekord["beosztás"].ToStrTrim()
-                                              );
-
+                                              rekord["beosztás"].ToStrTrim(),
+                                              rekord["email"].ToStrTrim());
                                     Adatok.Add(Adat);
                                 }
                             }
@@ -104,7 +103,8 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = $"UPDATE Főkönyvtábla SET név='{Adat.Név}',";
-                szöveg += $" beosztás='{Adat.Beosztás}'";
+                szöveg += $" beosztás='{Adat.Beosztás}', ";
+                szöveg += $" email='{Adat.Email}'";
                 szöveg += $" WHERE id={Adat.Id} ";
 
                 MyA.ABMódosítás(hely, jelszó, szöveg);
