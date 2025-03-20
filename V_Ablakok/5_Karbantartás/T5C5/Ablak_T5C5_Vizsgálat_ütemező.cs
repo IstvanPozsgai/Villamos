@@ -86,9 +86,6 @@ namespace Villamos
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadáshétvége(hely);
 
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos6.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Járműtulajdonságoktábla(hely);
-
             Fülek.SelectedIndex = 0;
             Fülekkitöltése();
 

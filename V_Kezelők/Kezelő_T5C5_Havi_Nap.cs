@@ -1,10 +1,88 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 
 namespace Villamos.Villamos_Adatszerkezet
 {
     public class Kezelő_T5C5_Havi_Nap
     {
+        readonly string jelszó = "pozsgaii";
+        string hely;
+
+        private void FájlBeállítás(DateTime Dátum)
+        {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\{Dátum.Year}\havi{Dátum:yyyyMM}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Havifutástábla_Létrehozás(hely.KönyvSzerk());
+        }
+
+        public List<Adat_T5C5_Havi_Nap> Lista_Adat(DateTime Dátum)
+        {
+            FájlBeállítás(Dátum);
+            string szöveg = "SELECT * FROM állománytábla ORDER BY azonosító";
+            List<Adat_T5C5_Havi_Nap> Adatok = new List<Adat_T5C5_Havi_Nap>();
+            Adat_T5C5_Havi_Nap Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_T5C5_Havi_Nap(
+                                    rekord["Azonosító"].ToStrTrim(),
+                                    rekord["N1"].ToStrTrim(),
+                                    rekord["N2"].ToStrTrim(),
+                                    rekord["N3"].ToStrTrim(),
+                                    rekord["N4"].ToStrTrim(),
+                                    rekord["N5"].ToStrTrim(),
+                                    rekord["N6"].ToStrTrim(),
+                                    rekord["N7"].ToStrTrim(),
+                                    rekord["N8"].ToStrTrim(),
+                                    rekord["N9"].ToStrTrim(),
+                                    rekord["N10"].ToStrTrim(),
+                                    rekord["N11"].ToStrTrim(),
+                                    rekord["N12"].ToStrTrim(),
+                                    rekord["N13"].ToStrTrim(),
+                                    rekord["N14"].ToStrTrim(),
+                                    rekord["N15"].ToStrTrim(),
+                                    rekord["N16"].ToStrTrim(),
+                                    rekord["N17"].ToStrTrim(),
+                                    rekord["N18"].ToStrTrim(),
+                                    rekord["N19"].ToStrTrim(),
+                                    rekord["N20"].ToStrTrim(),
+                                    rekord["N21"].ToStrTrim(),
+                                    rekord["N22"].ToStrTrim(),
+                                    rekord["N23"].ToStrTrim(),
+                                    rekord["N24"].ToStrTrim(),
+                                    rekord["N25"].ToStrTrim(),
+                                    rekord["N26"].ToStrTrim(),
+                                    rekord["N27"].ToStrTrim(),
+                                    rekord["N28"].ToStrTrim(),
+                                    rekord["N29"].ToStrTrim(),
+                                    rekord["N30"].ToStrTrim(),
+                                    rekord["N31"].ToStrTrim(),
+                                    rekord["Futásnap"].ToÉrt_Int(),
+                                    rekord["Telephely"].ToStrTrim()
+                                    );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
+        //elkopó
         public List<Adat_T5C5_Havi_Nap> Lista_Adat(string hely, string jelszó, string szöveg)
         {
             List<Adat_T5C5_Havi_Nap> Adatok = new List<Adat_T5C5_Havi_Nap>();
@@ -102,6 +180,7 @@ namespace Villamos.Villamos_Adatszerkezet
             return Adatok;
         }
     }
+
     public class Kezelő_T5C5_Futás1
     {
         public List<Adat_T5C5_Futás1> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -158,7 +237,6 @@ namespace Villamos.Villamos_Adatszerkezet
             return Adat;
         }
     }
-
 
 
     public class Kezelő_T5C5_Előterv
@@ -285,6 +363,5 @@ namespace Villamos.Villamos_Adatszerkezet
             return Adat;
         }
     }
-
 
 }

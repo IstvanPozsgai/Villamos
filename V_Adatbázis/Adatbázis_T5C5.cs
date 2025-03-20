@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Villamos.Adatszerkezet;
+﻿using Villamos.Adatszerkezet;
 
 namespace Villamos.Villamos_Adatbázis_Funkció
 {
@@ -244,21 +239,6 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[törlés] SHORT, ";
             szöveg += "[szerelvényszám] Long, ";
             szöveg += "[típus] char(10))";
-            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-        }
-
-        public static void Járműtulajdonságoktábla(string hely)
-        {
-            string szöveg;
-            string jelszó = "nagyontitkos";
-            AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
-
-            ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
-
-            szöveg = "CREATE TABLE tulajdonságtábla (";
-            szöveg += "[azonosító] CHAR(10),";
-            szöveg += "[csatolható]  CHAR(10) )";
-
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
 
