@@ -483,7 +483,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 if (rekord != null)
                 {
-                    Adat_Eszterga_Műveletek ADAT = new Adat_Eszterga_Műveletek(0,
+                    Adat_Eszterga_Műveletek ADAT = new Adat_Eszterga_Műveletek(TxtBxId.Text.ToÉrt_Int(),
                                                                                 TxtBxMűvelet.Text.ToStrTrim(),
                                                                                 (int)CmbxEgység.SelectedItem,
                                                                                 TxtBxMennyiNap.Text.ToÉrt_Int(),
@@ -498,7 +498,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     Adat_Eszterga_Műveletek ADAT = new Adat_Eszterga_Műveletek(0,
                                                                                TxtBxMűvelet.Text.ToStrTrim(),
-                                                                               CmbxEgység.SelectedItem.ToÉrt_Int(),
+                                                                               (int)CmbxEgység.SelectedItem,
                                                                                TxtBxMennyiNap.Text.ToÉrt_Int(),
                                                                                TxtBxMennyiÓra.Text.ToÉrt_Int(),
                                                                                (ChckBxStátus.Checked ? "True" : "False").ToÉrt_Bool(),
