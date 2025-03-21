@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -826,7 +827,8 @@ namespace Villamos
                     {
                         TW6000ütemezés();
                         ICSÜtemezés();
-                        T5C5Ütemezés();
+                        //T5C5Ütemezés();
+                        Vezénylés.T5C5(Cmbtelephely.Text.Trim(), Dátum.Value);
                         CAFÜtemezés();
                     }
                 }

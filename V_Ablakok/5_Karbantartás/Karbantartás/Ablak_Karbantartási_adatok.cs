@@ -649,6 +649,7 @@ namespace Villamos
 
                 if (figyel)
                 {
+                    KézHiba.Ismétlődő_Elemek(Cmbtelephely.Text.Trim());
                     KézHiba.Újrasorszámoz(Cmbtelephely.Text.Trim(), Pályaszám.Text.Trim());
                     HibaListázás();
                     Hibák_kiírása();
@@ -690,7 +691,7 @@ namespace Villamos
             Adat_Jármű Elem = (from a in AdatokJármű
                                where a.Azonosító == Pályaszám.Text.Trim()
                                select a).FirstOrDefault();
-            if (Elem != null) return Elem.Hibáksorszáma;
+            if (Elem != null) return Elem.Hibák;
             return 1;
         }
 

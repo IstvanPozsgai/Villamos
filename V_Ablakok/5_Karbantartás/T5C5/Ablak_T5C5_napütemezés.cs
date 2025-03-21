@@ -8,10 +8,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -29,7 +26,6 @@ namespace Villamos
 
         readonly Kezelő_T5C5_Állomány KézÁllomány = new Kezelő_T5C5_Állomány();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-        readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
         readonly Kezelő_Szerelvény KézSzerelvény = new Kezelő_Szerelvény();
         readonly Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
         readonly Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
@@ -516,7 +512,7 @@ namespace Villamos
                 //    Vezénylés
                 AdatokVezénylésN = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
                 AdatokVezénylésN = (from a in AdatokVezénylésN
-                                    where a.Dátum > Dátum.Value
+                                    where a.Dátum >= Dátum.Value
                                     && a.Törlés == 0
                                     orderby a.Szerelvényszám, a.Azonosító
                                     select a).ToList();
@@ -1452,186 +1448,18 @@ namespace Villamos
 
 
         #region Gombok
-        //
         private void Btn_Vezénylésbeírás_Click(object sender, EventArgs e)
         {
             try
             {
                 DateTime holnap = DateTime.Today.AddDays(1);
-                if (holnap.ToString("yyyy.MM.dd") != Dátum.Value.ToString("yyyy.MM.dd"))
+                if (holnap != Dátum.Value)
                 {
-                    if (MessageBox.Show("Biztos, hogy akarunk ütemezni " + Dátum.Value.ToString("yyyy.MM.dd") + " napra ?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
-                    {
-                        // Nemet választottuk
-                        return;
-                    }
+                    if (MessageBox.Show($"Biztos, hogy akarunk ütemezni {Dátum.Value:yyyy.MM.dd} napra ?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                        return;   // Nemet választottuk
                 }
+                Vezénylés.T5C5(Cmbtelephely.Text.Trim(), Dátum.Value);
 
-                string helyütemez = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}\vezénylés{Dátum.Value.Year}.mdb";
-                string jelszóütemez = "tápijános";
-                string szöveg = $"SELECT * FROM vezényléstábla where [törlés]=0 and [dátum]=#{Dátum.Value:M-d-yy}# order by  azonosító";
-
-                List<Adat_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(helyütemez, jelszóütemez, szöveg);
-
-
-                // Módosítjuk a jármű státuszát
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                szöveg = "SELECT * FROM állománytábla ";
-
-                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
-
-                // megnyitjuk a hibákat
-                string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
-                szöveg = "SELECT * FROM hibatábla";
-
-                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_adatok(helyhiba, jelszó, szöveg);
-
-                // naplózás
-                string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló";
-                helynapló += @"\" + DateTime.Now.ToString("yyyyMM") + "hibanapló.mdb";
-                if (!Exists(helynapló)) Adatbázis_Létrehozás.Hibatáblalap(helynapló);
-                Holtart.Be();
-
-                string szöveg1;
-                string szöveg3;
-                int talált;
-                int szín;
-                long státus;
-                int újstátus = 0;
-                string típusa = "";
-                long hibáksorszáma;
-                long hiba;
-                DateTime mikor;
-
-                // ha van ütemezett kocsi
-                foreach (Adat_Vezénylés rekordütemez in Adatok)
-                {
-
-                    if (rekordütemez.Vizsgálatraütemez == 1)
-                    {
-                        // hiba leírása
-                        szöveg1 = "";
-                        szöveg3 = "KARÓRARUGÓ";
-                        if (rekordütemez.Vizsgálatraütemez == 1)
-                        {
-                            if (rekordütemez.Vizsgálat.Contains("V1"))
-                            {
-                                for (int j = 0; j < Tábla.Rows.Count; j++)
-                                {
-                                    if (Tábla.Rows[j].Cells[0].Value.ToStrTrim() == rekordütemez.Azonosító.Trim())
-                                    {
-                                        szöveg1 += Tábla.Rows[j].Cells[10].Value.ToStrTrim() + "-" + Tábla.Rows[j].Cells[28].Value.ToStrTrim();
-                                        szöveg3 = szöveg1;
-                                        break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                szöveg1 += rekordütemez.Vizsgálat.Trim() + " ";
-                            }
-                        }
-
-                        if (rekordütemez.Státus == 4)
-                        {
-                            szöveg1 += "-" + rekordütemez.Dátum.ToString("yyyy.MM.dd.") + " Maradjon benn ";
-                        }
-                        else
-                        {
-                            szöveg1 += "-" + rekordütemez.Dátum.ToString("yyyy.MM.dd.") + " Beálló ";
-                        }
-                        // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
-                        talált = 0;
-                        Adat_Jármű_hiba HibaElem = (from a in AdatokHiba
-                                                    where a.Azonosító == rekordütemez.Azonosító
-                                                    && (a.Hibaleírása.Contains(szöveg3.Trim()) || a.Hibaleírása.Contains(szöveg1.Trim()))
-                                                    select a).FirstOrDefault();
-                        if (HibaElem != null) talált = 1;
-
-                        szín = 0;
-                        // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
-                        if (talált == 0)
-                        {
-                            // hibák számát emeljük és státus állítjuk ha kell
-                            Adat_Jármű ElemJármű = (from a in AdatokJármű
-                                                    where a.Azonosító == rekordütemez.Azonosító
-                                                    select a).FirstOrDefault();
-                            if (ElemJármű != null)
-                            {
-                                szín = 1;
-                                hibáksorszáma = ElemJármű.Hibák;
-                                hiba = ElemJármű.Hibák + 1;
-                                típusa = ElemJármű.Típus;
-                                státus = ElemJármű.Státus;
-                                újstátus = 0;
-                                if (státus != 4) // ha 4 státusa akkor nem kell módosítani.
-                                {
-                                    // ha a következő napra ütemez
-                                    if (DateTime.Today.AddDays(1).ToString("yyyy.MM.dd") == Dátum.Value.ToString("yyyy.MM.dd"))
-                                    {
-                                        if (rekordütemez.Státus == 4)
-                                        {
-                                            státus = 4;
-                                            mikor = DateTime.Now;
-                                        }
-                                        else
-                                        {
-                                            státus = 3;
-                                        }
-                                    }
-                                    else if (státus < 4)
-                                        státus = 3;
-                                }
-                                else
-                                {
-                                    újstátus = 1;
-                                }
-
-                                // rögzítjük a villamos.mdb-be
-                                szöveg = $"UPDATE állománytábla SET hibák={hiba}, ";
-                                // csak akkor módosítkjuk a dátumot, ha nem áll
-                                if (státus == 4 && újstátus == 0)
-                                    szöveg += $" miótaáll='{DateTime.Now:yyyy.MM.dd}', ";
-                                szöveg += $" státus={státus} ";
-                                szöveg += $" WHERE  [azonosító]='{rekordütemez.Azonosító.Trim()}'";
-                                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-
-                                // beírjuk a hibákat
-                                // ha 7-nál kevesebb hibája van akkor rögzítjük
-                                if (szín == 1)
-                                {
-                                    szöveg = "INSERT INTO hibatábla (létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
-                                    szöveg += $"'{Program.PostásNév.Trim()}', ";
-                                    // ha a következő napra ütemez
-                                    if (DateTime.Today.AddDays(1).ToString("yyyy.MM.dd") == Dátum.Value.ToString("yyyy.MM.dd"))
-                                    {
-                                        if (rekordütemez.Státus == 4)
-                                            szöveg += " 4, ";
-                                        else
-                                            szöveg += " 3, ";
-
-                                    }
-                                    else
-                                    {
-                                        szöveg += " 3, ";
-                                    }
-                                    szöveg += $"'{szöveg1.Trim()}', ";
-                                    szöveg += $"'{DateTime.Now}', false, ";
-                                    szöveg += $"'{típusa.Trim()}', ";
-                                    szöveg += $"'{rekordütemez.Azonosító.Trim()}', {hibáksorszáma})";
-                                    MyA.ABMódosítás(helyhiba, jelszó, szöveg);
-                                    // naplózzuk a hibákat
-                                    MyA.ABMódosítás(helynapló, jelszó, szöveg);
-                                }
-                            }
-                        }
-                    }
-                    Holtart.Lép();
-                }
-
-                Holtart.Ki();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

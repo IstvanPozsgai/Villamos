@@ -465,6 +465,29 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás_Státus_Hiba_Dátum(string Telephely, Adat_Jármű Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE állománytábla SET ";
+                szöveg += $" hibák={Adat.Hibák}, ";
+                szöveg += $" státus={Adat.Státus}, ";
+                szöveg += $" miótaáll='{Adat.Miótaáll}' ";
+                szöveg += $" WHERE  [azonosító]='{Adat.Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Módosítás_Hiba(string Telephely, Adat_Jármű Adat)
         {
             try

@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
             helynapló = $@"{Application.StartupPath}\{Telephely}\adatok\hibanapló\{Dátum:yyyyMM}hibanapló.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Hibatáblalap(hely.KönyvSzerk());
+            if (!File.Exists(helynapló)) Adatbázis_Létrehozás.Hibatáblalap(helynapló.KönyvSzerk());
         }
 
         public List<Adat_Jármű_hiba> Lista_adatok(string hely, string jelszó, string szöveg)
@@ -229,6 +229,51 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Rögzítés_Napló(string Telephely, DateTime Dátum, Adat_Jármű_hiba Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+                List<Adat_Jármű_hiba> Adatok = Lista_Adatok(Telephely, Dátum);
+
+                Adat_Jármű_hiba Elem = (from a in Adatok
+                                        where a.Azonosító == Adat.Azonosító
+                                        && a.Hibaleírása.Contains(Adat.Hibaleírása)
+                                        select a).FirstOrDefault();
+
+                if (Elem == null)
+                {
+                    long Sorszám = 1;
+                    Adatok = (from a in Adatok
+                              where a.Azonosító == Adat.Azonosító
+                              select a).ToList();
+
+                    if (Adatok != null && Adatok.Count > 0)
+                        Sorszám = Adatok.Max(a => a.Hibáksorszáma) + 1;
+                    // ha nem létezik 
+                    string szöveg = "INSERT INTO hibatábla  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
+                    szöveg += $"'{Adat.Létrehozta.Trim()}', ";
+                    szöveg += $"{Adat.Korlát}, ";
+                    szöveg += $"'{Adat.Hibaleírása.Trim()}', ";
+                    szöveg += $"'{Adat.Idő}', ";
+                    szöveg += $"{Adat.Javítva}, ";
+                    szöveg += $"'{Adat.Típus.Trim()}', ";
+                    szöveg += $"'{Adat.Azonosító.Trim()}', ";
+                    szöveg += $"{Sorszám})";
+                    MyA.ABMódosítás(helynapló, jelszó, szöveg);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Törlés(string Telephely, Adat_Jármű_hiba Adat)
         {
             try
@@ -294,6 +339,37 @@ namespace Villamos.Kezelők
                     szövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, szövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Ismétlődő_Elemek(string Telephely)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                List<Adat_Jármű_hiba> Adatok = Lista_Adatok(Telephely);
+                for (int i = 0; i < Adatok.Count; i++)
+                {
+                    List<Adat_Jármű_hiba> Ismétlődés = (from a in Adatok
+                                                        where a.Azonosító == Adatok[i].Azonosító
+                                                        && a.Hibaleírása == Adatok[i].Hibaleírása
+                                                        && a.Hibáksorszáma == Adatok[i].Hibáksorszáma
+                                                        select a).ToList();
+                    if (Ismétlődés != null && Ismétlődés.Count > 1)
+                    {
+                        Törlés(Telephely, Ismétlődés[0]);
+                        Rögzítés(Telephely, Ismétlődés[0]);
+                    }
+                }
             }
             catch (HibásBevittAdat ex)
             {
