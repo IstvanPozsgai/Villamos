@@ -108,9 +108,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 Tábla.Visible = true;
                 Tábla.ClearSelection();
             }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void OszlopSzélesség()
@@ -202,8 +207,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            Eszterga_Változás?.Invoke();
-            TáblaListázás();
         }
         private void Btn_Excel_Click(object sender, EventArgs e)
         {
@@ -284,31 +287,38 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
             Adat_Eszterga_Üzemóra VanID = AdatokÜzemóra.FirstOrDefault(a => a.ID == AktivID);
 
-            if (VanID != null)
+            if (VanID == null)
+                return false;
+
+            DateTime EredetiDatum = VanID.Dátum;
+            long EredetiUzemora = VanID.Üzemóra;
+            bool EredetiStatusz = VanID.Státus;
+
+            if (EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
             {
-                DateTime EredetiDatum = VanID.Dátum;
-                long EredetiUzemora = VanID.Üzemóra;
+                if (UjStatus)
+                    KézÜzemóra.Törlés(new Adat_Eszterga_Üzemóra(AktivID));
+                else
+                    KézÜzemóra.Rögzítés(new Adat_Eszterga_Üzemóra(0, EredetiUzemora, EredetiDatum, false));
+            }
+            else
+            {
                 if (UjStatus && VanID.Dátum == MaiDatum)
-                {
                     UtolsoUzemoraTorles(AktivID);
-                    return true;
-                }
+
                 else
                 {
-                    Adat_Eszterga_Üzemóra ADATTörlés = new Adat_Eszterga_Üzemóra(AktivID);
-                    KézÜzemóra.Törlés(ADATTörlés);
-
-                    Adat_Eszterga_Üzemóra ADATTörlésÚjLétrehoz = new Adat_Eszterga_Üzemóra(0, UjUzemora, UjDatum, false);
-                    KézÜzemóra.Rögzítés(ADATTörlésÚjLétrehoz);
-
-                    Frissít_Táblázat(EredetiDatum, UjDatum, EredetiUzemora, UjUzemora);
+                    KézÜzemóra.Törlés(new Adat_Eszterga_Üzemóra(AktivID));
+                    KézÜzemóra.Rögzítés(new Adat_Eszterga_Üzemóra(0, UjUzemora, UjDatum, false));
                     MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return true;
                 }
             }
-            return false;
+            TáblaListázás();
+            Frissít_MűveletTáblázat(EredetiDatum, UjDatum, EredetiUzemora, UjUzemora);
+            Eszterga_Változás?.Invoke();
+            return true;
         }
-        private void Frissít_Táblázat(DateTime EredetiDatum, DateTime UjDatum, long EredetiUzemora, long UjUzemora)
+        private void Frissít_MűveletTáblázat(DateTime EredetiDatum, DateTime UjDatum, long EredetiUzemora, long UjUzemora)
         {
             AdatokMűvelet = Funkció.Eszterga_KarbantartasFeltölt();
             if (UjDatum != EredetiDatum || UjUzemora != EredetiUzemora)

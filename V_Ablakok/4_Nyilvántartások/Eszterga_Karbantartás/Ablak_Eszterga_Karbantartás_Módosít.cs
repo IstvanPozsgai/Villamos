@@ -422,24 +422,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             return true;
         }
-        private void FrissítMűveletTáblázat(DateTime EredetiDatum, DateTime UjDatum, long EredetiUzemora, long UjUzemora)
-        {
-            if (UjDatum != EredetiDatum || UjUzemora != EredetiUzemora)
-            {
-                List<Adat_Eszterga_Műveletek> rekord = (from a in AdatokMűvelet
-                                                        where (a.Utolsó_Dátum == EredetiDatum || a.Utolsó_Üzemóra_Állás == EredetiUzemora)
-                                                        && a.Státus != true
-                                                        select a).ToList();
-
-                foreach (Adat_Eszterga_Műveletek Muvelet in rekord)
-                {
-                    Adat_Eszterga_Műveletek ADAT = new Adat_Eszterga_Műveletek(UjDatum, UjUzemora, Muvelet.ID);
-                    KézMűveletek.Módosítás(ADAT);
-                }
-            }
-            else
-                return;
-        }
         private void TöröltTáblaSzínezés(Zuby.ADGV.AdvancedDataGridView tábla, DataGridViewCellFormattingEventArgs e, string státuszOszlop)
         {
             if (tábla.Columns[e.ColumnIndex].Name == státuszOszlop && e.Value is string státusz)
