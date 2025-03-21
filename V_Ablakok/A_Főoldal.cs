@@ -1641,6 +1641,28 @@ namespace Villamos
         {
             Új_Ablak_Eszterga_Karbantartás = null;
         }
+
+
+        Villamos.V_Ablakok._4_Nyilvántartások.Nóta.Ablak_Fődarab Új_Ablak_Fődarab;
+        private void FődarabNótaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Fődarab == null)
+            {
+                Új_Ablak_Fődarab = new V_Ablakok._4_Nyilvántartások.Nóta.Ablak_Fődarab();
+                Új_Ablak_Fődarab.FormClosed += Új_Ablak_FődarabNóta_FormClosed;
+                Új_Ablak_Fődarab.Show();
+            }
+            else
+            {
+                Új_Ablak_Fődarab.Activate();
+                Új_Ablak_Fődarab.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Új_Ablak_FődarabNóta_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Fődarab = null;
+        }
         #endregion
 
 
@@ -2479,5 +2501,7 @@ namespace Villamos
         }
 
         #endregion
+
+
     }
 }

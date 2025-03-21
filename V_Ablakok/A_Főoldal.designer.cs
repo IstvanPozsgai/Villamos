@@ -179,6 +179,8 @@ namespace Villamos
             this.Btnüzenetfrissítés = new System.Windows.Forms.Button();
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
+            this.toolStripSeparator35 = new System.Windows.Forms.ToolStripSeparator();
+            this.fődarabNótaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -508,7 +510,9 @@ namespace Villamos
             this.ToolStripSeparator18,
             this.SAPOsztályToolStripMenuItem,
             this.toolStripSeparator32,
-            this.TTTPToolStripMenuItem});
+            this.TTTPToolStripMenuItem,
+            this.toolStripSeparator35,
+            this.fődarabNótaToolStripMenuItem});
             this.JárműAdatokToolStripMenuItem.Name = "JárműAdatokToolStripMenuItem";
             this.JárműAdatokToolStripMenuItem.Size = new System.Drawing.Size(112, 20);
             this.JárműAdatokToolStripMenuItem.Text = "Nyilvántartások";
@@ -1388,6 +1392,18 @@ namespace Villamos
             this.Képkeret1.TabIndex = 27;
             this.Képkeret1.TabStop = false;
             // 
+            // toolStripSeparator35
+            // 
+            this.toolStripSeparator35.Name = "toolStripSeparator35";
+            this.toolStripSeparator35.Size = new System.Drawing.Size(350, 6);
+            // 
+            // fődarabNótaToolStripMenuItem
+            // 
+            this.fődarabNótaToolStripMenuItem.Name = "fődarabNótaToolStripMenuItem";
+            this.fődarabNótaToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
+            this.fődarabNótaToolStripMenuItem.Text = "Fődarab Nóta";
+            this.fődarabNótaToolStripMenuItem.Click += new System.EventHandler(this.FődarabNótaToolStripMenuItem_Click);
+            // 
             // A_Főoldal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1574,5 +1590,7 @@ namespace Villamos
         internal ToolStripMenuItem TTTPToolStripMenuItem;
         internal ToolStripSeparator toolStripSeparator34;
         internal ToolStripMenuItem EsztergaKarbantartásToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator35;
+        private ToolStripMenuItem fődarabNótaToolStripMenuItem;
     }
 }
