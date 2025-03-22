@@ -103,6 +103,7 @@
             this.Excel_gomb.Size = new System.Drawing.Size(45, 45);
             this.Excel_gomb.TabIndex = 183;
             this.Excel_gomb.UseVisualStyleBackColor = true;
+            this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
             // 
             // BtnSAP
             // 

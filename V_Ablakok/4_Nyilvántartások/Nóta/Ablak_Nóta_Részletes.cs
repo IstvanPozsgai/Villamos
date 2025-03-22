@@ -21,6 +21,7 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Nóta KézNóta = new Kezelő_Nóta();
         readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
+        readonly Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
         #endregion
 
         public Ablak_Nóta_Részletes(int sorszám)
@@ -100,10 +101,10 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Telephely.Items.Clear();
-                foreach (string Elem in Listák.TelephelyLista_Jármű())
-                    Telephely.Items.Add(Elem);
+                List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok().Where(a => a.Vezér1 == false).OrderBy(a => a.Név).ToList();
+                foreach (Adat_Kiegészítő_Sérülés Elem in Adatok)
+                    Telephely.Items.Add(Elem.Név);
                 Telephely.Items.Add("VJSZ");
-
             }
             catch (HibásBevittAdat ex)
             {
