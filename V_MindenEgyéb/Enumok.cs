@@ -119,5 +119,11 @@
             Forgalomképtelen_azonnali_esztergálást_igényel = 4
         }
 
+        public enum Nóta_Státus
+        {
+            Új = 1,
+            Javítandó = 2,
+            Lezárt = 9
+        }
     }
 }

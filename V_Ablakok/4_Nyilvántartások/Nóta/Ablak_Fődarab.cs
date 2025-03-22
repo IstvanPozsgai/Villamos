@@ -19,6 +19,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         readonly Kezelő_Nóta KézNóta = new Kezelő_Nóta();
         readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
+        int id = 0;
 
         #region Alap
         public Ablak_Fődarab()
@@ -35,6 +36,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         private void Ablak_Fődarab_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void Ablak_Fődarab_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Nóta_Részletes?.Close();
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)
@@ -203,42 +209,31 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             }
         }
 
-        string MilyenÁllapot(string Állapot)
+        private void Táblalista_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            string MilyenÁllapot = ""; try
-            {
-                switch (Állapot.Trim().Substring(0, 1))
-                {
-                    case "1":
-                        MilyenÁllapot = "1 Frissen esztergált";
-                        break;
-                    case "2":
-                        MilyenÁllapot = "2 Üzemszerűen kopott forgalomban";
-                        break;
-                    case "3":
-                        MilyenÁllapot = "3 Forgalomképes esztergálandó";
-                        break;
-                    case "4":
-                        MilyenÁllapot = "4 Forgalomképtelen azonnali esztergálást igényel";
-                        break;
-                }
-
-
-
-
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return MilyenÁllapot;
+            if (e.RowIndex < 0) return;
+            id = Táblalista.Rows[e.RowIndex].Cells[0].Value.ToString().ToÉrt_Int();
         }
         #endregion
+
+        #region Módosítás
+        Ablak_Nóta_Részletes Új_Ablak_Nóta_Részletes;
+        private void Módosítás_Click(object sender, EventArgs e)
+        {
+            if (id == 0) return;
+            Új_Ablak_Nóta_Részletes?.Close();
+
+            Új_Ablak_Nóta_Részletes = new Ablak_Nóta_Részletes(id);
+            Új_Ablak_Nóta_Részletes.FormClosed += Ablak_Kerék_Gyűjtő_Closed;
+            Új_Ablak_Nóta_Részletes.Show();
+        }
+
+        private void Ablak_Kerék_Gyűjtő_Closed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Nóta_Részletes = null;
+        }
+        #endregion
+
+
     }
 }

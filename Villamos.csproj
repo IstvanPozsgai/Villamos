@@ -277,6 +277,12 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Fődarab.Designer.cs">
       <DependentUpon>Ablak_Fődarab.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Részletes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Részletes.Designer.cs">
+      <DependentUpon>Ablak_Nóta_Részletes.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1237,6 +1243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Fődarab.resx">
       <DependentUpon>Ablak_Fődarab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Részletes.resx">
+      <DependentUpon>Ablak_Nóta_Részletes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.resx">
       <DependentUpon>Ablak_sérülés.cs</DependentUpon>
