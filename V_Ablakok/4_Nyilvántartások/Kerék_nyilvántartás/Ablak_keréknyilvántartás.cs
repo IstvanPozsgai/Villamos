@@ -456,8 +456,8 @@ namespace Villamos
                     default:
                         break;
                 }
-                Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
-                List<Adat_Kerék_Tábla> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok(hely, jelszó, szöveg);
                 MérésiListázás();
 
 
@@ -520,8 +520,8 @@ namespace Villamos
                 string jelszó = "szabólászló";
                 string szöveg = "SELECT * FROM tábla ORDER BY kerékberendezés";
 
-                Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
-                List<Adat_Kerék_Tábla> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok(hely, jelszó, szöveg);
 
                 string előző = "";
                 List<string> SzövegMásolGY = new List<string>();
@@ -1219,8 +1219,8 @@ namespace Villamos
                 string jelszó = "szabólászló";
                 string szöveg = "SELECT * FROM tábla ";
 
-                Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
-                List<Adat_Kerék_Tábla> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok(hely, jelszó, szöveg);
                 List<string> szövegGY = new List<string>();
                 if (Adatok != null)
                 {
@@ -2351,8 +2351,8 @@ namespace Villamos
                 szöveg = "SELECT * FROM tábla where [azonosító]='" + RögzítPályaszám.Text.Trim() + "' ";
                 szöveg += " and pozíció='" + Rögzítpozíció.Text.Trim() + "'";
 
-                Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
-                Adat_Kerék_Tábla Elem = kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_Kerék_Tábla Elem = KézKerék.Egy_Adat(hely, jelszó, szöveg);
 
                 Gyártási.Text = "";
                 Megnevezés.Text = "";

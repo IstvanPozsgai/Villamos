@@ -656,6 +656,7 @@
     <Compile Include="V_Adatbázis\Adatbázis_Kulcs.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Külső.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Létszám.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Nóta.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Oktatás.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Rezsi.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Szerszám_FejLáb.cs" />
@@ -678,6 +679,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Létszám.cs" />
     <Compile Include="V_Adatszerkezet\Adat_MEO.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Munkakör.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Nóta.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Oktatás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Reklám.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Rezsi.cs" />
@@ -742,6 +744,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kerék.cs" />
     <Compile Include="V_Kezelők\Kezelő_KerékMérő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiadás_Összesítő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kidobó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kidobó_Segéd.cs" />
@@ -794,6 +797,7 @@
     <Compile Include="V_Kezelők\Kezelő_Munka_Idő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Rendelés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Szolgálat.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Nóta.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
     <Compile Include="V_Kezelők\Kezelő_OktatásiSegéd.cs" />
     <Compile Include="V_Kezelők\Kezelő_OktatásTábla.cs" />
