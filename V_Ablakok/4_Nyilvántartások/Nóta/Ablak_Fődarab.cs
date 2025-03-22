@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
+using Villamos.Villamos_Adatszerkezet;
+using static Villamos.V_MindenEgyéb.Enumok;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -14,7 +17,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         DataTable AdatTábla = new DataTable();
 
         readonly Kezelő_Nóta KézNóta = new Kezelő_Nóta();
-
+        readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
+        readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
 
         #region Alap
         public Ablak_Fődarab()
@@ -25,38 +29,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
         private void Start()
         {
-            Telephelyekfeltöltése();
             Jogosultságkiosztás();
         }
 
         private void Ablak_Fődarab_Load(object sender, EventArgs e)
         {
 
-        }
-
-        private void Telephelyekfeltöltése()
-        {
-            try
-            {
-                Cmbtelephely.Items.Clear();
-                foreach (string Elem in Listák.TelephelyLista_Jármű())
-                    Cmbtelephely.Items.Add(Elem);
-                if (Program.PostásTelephely == "Főmérnökség" || Program.PostásTelephely.Contains("törzs"))
-                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
-                else
-                { Cmbtelephely.Text = Program.PostásTelephely; }
-
-                Cmbtelephely.Enabled = Program.Postás_Vezér;
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)
@@ -100,7 +78,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             { }
 
         }
-
         #endregion
 
 
@@ -138,9 +115,33 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             try
             {
                 List<Adat_Nóta> Adatok = KézNóta.Lista_Adat();
+                List<Adat_Kerék_Tábla> AdatokKerék = KézKerék.Lista_Adatok();
+
+                List<Adat_Kerék_Mérés> AdatokMérés = KézMérés.Lista_Adatok(DateTime.Today.Year - 1);
+                List<Adat_Kerék_Mérés> Ideig = KézMérés.Lista_Adatok(DateTime.Today.Year);
+                AdatokMérés.AddRange(Ideig);
+                AdatokMérés = AdatokMérés.OrderBy(a => a.Mikor).ToList();
                 AdatTábla.Clear();
+
                 foreach (Adat_Nóta rekord in Adatok)
                 {
+                    Adat_Kerék_Tábla EgyKerék = AdatokKerék.FirstOrDefault(x => x.Kerékberendezés == rekord.Berendezés);
+                    string gyáriszám = "";
+                    if (EgyKerék != null) gyáriszám = EgyKerék.Kerékgyártásiszám;
+
+                    Adat_Kerék_Mérés Mérés = (from a in AdatokMérés
+                                              where a.Kerékberendezés == rekord.Berendezés
+                                              orderby a.Mikor ascending
+                                              select a).LastOrDefault();
+                    int átmérő = 0;
+                    string állapot = "";
+                    if (Mérés != null)
+                    {
+                        átmérő = Mérés.Méret;
+                        állapot = $"{Mérés.Állapot}-{Enum.GetName(typeof(Kerék_Állapot), Mérés.Állapot.ToÉrt_Int()).Replace('_', ' ')}";
+                    }
+
+
                     DataRow Soradat = AdatTábla.NewRow();
                     Soradat["Id"] = rekord.Id;
                     Soradat["Berendezés"] = rekord.Berendezés;
@@ -148,14 +149,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                     Soradat["Raktár"] = rekord.Raktár;
                     Soradat["Telephely"] = rekord.Telephely;
                     Soradat["Forgóváz"] = rekord.Forgóváz;
-                    Soradat["Gyártási Szám"] = "";
+                    Soradat["Gyártási Szám"] = gyáriszám;
                     Soradat["Beépíthető"] = rekord.Beépíthető ? "Igen" : "Nem";
                     Soradat["Műszaki Megjegyzés"] = rekord.MűszakiM;
                     Soradat["Osztási Megjegyzés"] = rekord.OsztásiM;
                     Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
                     Soradat["Státus"] = rekord.Státus;
-
-
+                    Soradat["Átmérő"] = átmérő;
+                    Soradat["Állapot"] = állapot;
                     AdatTábla.Rows.Add(Soradat);
                 }
             }
@@ -182,6 +183,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 AdatTábla.Columns.Add("Telephely");
                 AdatTábla.Columns.Add("Gyártási Szám");
                 AdatTábla.Columns.Add("Forgóváz");
+                AdatTábla.Columns.Add("Átmérő");
+                AdatTábla.Columns.Add("Állapot");
                 AdatTábla.Columns.Add("Beépíthető");
                 AdatTábla.Columns.Add("Műszaki Megjegyzés");
                 AdatTábla.Columns.Add("Osztási Megjegyzés");
@@ -198,6 +201,43 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        string MilyenÁllapot(string Állapot)
+        {
+            string MilyenÁllapot = ""; try
+            {
+                switch (Állapot.Trim().Substring(0, 1))
+                {
+                    case "1":
+                        MilyenÁllapot = "1 Frissen esztergált";
+                        break;
+                    case "2":
+                        MilyenÁllapot = "2 Üzemszerűen kopott forgalomban";
+                        break;
+                    case "3":
+                        MilyenÁllapot = "3 Forgalomképes esztergálandó";
+                        break;
+                    case "4":
+                        MilyenÁllapot = "4 Forgalomképtelen azonnali esztergálást igényel";
+                        break;
+                }
+
+
+
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return MilyenÁllapot;
         }
         #endregion
     }

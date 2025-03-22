@@ -1893,6 +1893,8 @@ namespace Villamos
 
         string MilyenÁllapot(string Állapot)
         {
+
+            //Van rá enum
             string MilyenÁllapot = "";
             switch (Állapot.Trim().Substring(0, 1))
             {

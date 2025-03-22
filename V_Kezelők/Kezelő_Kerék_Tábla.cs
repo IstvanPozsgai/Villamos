@@ -18,7 +18,6 @@ namespace Villamos.Kezelők
         }
 
 
-
         public List<Adat_Kerék_Tábla> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM tábla";

@@ -111,5 +111,13 @@
             KiadottSzabadnap_Z = 6
         }
 
+        public enum Kerék_Állapot
+        {
+            Frissen_esztergált = 1,
+            Üzemszerűen_kopott_forgalomban = 2,
+            Forgalomképes_esztergálandó = 3,
+            Forgalomképtelen_azonnali_esztergálást_igényel = 4
+        }
+
     }
 }
