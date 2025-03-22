@@ -306,6 +306,11 @@ namespace Villamos
             else
                 UtasításokToolStripMenuItem.Enabled = true;
 
+            if (panels2.Text.Substring(209, 1) == "0")
+                fődarabNótaToolStripMenuItem.Enabled = false;
+            else
+                fődarabNótaToolStripMenuItem.Enabled = true;
+
             if (panels2.Text.Substring(219, 1) == "0")
                 RezsiRaktárToolStripMenuItem.Enabled = false;
             else

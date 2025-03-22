@@ -198,7 +198,6 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                )
                 if (!int.TryParse(Id.Text, out int Sorszám)) Sorszám = 0;
                 if (Sorszám == 0) return;
                 Adat_Nóta ADAT = new Adat_Nóta(

@@ -787,7 +787,8 @@ namespace Villamos
                 menüleírás[203] = " 1- Utasítás rögzítés , 2- Utasítás visszavonás, 3- Nincs";
 
 
-
+                menünév[210] = "Fődarab Nóta";
+                menüleírás[210] = " 1-SAP adatok frissítése, 2-Módosítások, 3- ";
 
 
 
