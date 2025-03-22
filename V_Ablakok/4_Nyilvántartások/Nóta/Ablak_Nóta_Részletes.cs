@@ -7,6 +7,7 @@ using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using static Villamos.V_MindenEgyéb.Enumok;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok
 {
@@ -26,6 +27,18 @@ namespace Villamos.Villamos_Ablakok
         {
             InitializeComponent();
             Sorszám = sorszám;
+            Jogosultságkiosztás();
+        }
+
+        private void Jogosultságkiosztás()
+        {
+
+            // ide kell az összes gombot tenni amit szabályozni akarunk false
+            int melyikelem = 210;
+
+            // módosítás 2 
+            Rögzít.Visible = MyF.Vanjoga(melyikelem, 2);
+            KerékRögzít.Visible = MyF.Vanjoga(melyikelem, 2);
         }
 
         private void Ablak_Nóta_Részletes_Load(object sender, EventArgs e)

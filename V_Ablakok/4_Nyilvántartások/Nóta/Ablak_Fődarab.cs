@@ -64,26 +64,13 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
         private void Jogosultságkiosztás()
         {
-            int melyikelem;
 
             // ide kell az összes gombot tenni amit szabályozni akarunk false
-
-
-            melyikelem = 99;
+            int melyikelem = 210;
 
             // módosítás 1 
-            if (MyF.Vanjoga(melyikelem, 1))
-            {
-
-            }
-            // módosítás 2 
-            if (MyF.Vanjoga(melyikelem, 2))
-            { }
-
-            // módosítás 3
-            if (MyF.Vanjoga(melyikelem, 3))
-            { }
-
+            BtnSAP.Enabled = MyF.Vanjoga(melyikelem, 1);
+            BtnSAP.Visible = MyF.Vanjoga(melyikelem, 1);
         }
         #endregion
 

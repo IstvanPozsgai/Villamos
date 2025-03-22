@@ -55,12 +55,12 @@
             this.label15 = new System.Windows.Forms.Label();
             this.Telephely = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.Átmérő = new System.Windows.Forms.TextBox();
+            this.KerékRögzít = new System.Windows.Forms.Button();
             this.Állapot = new System.Windows.Forms.ComboBox();
+            this.Átmérő = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.Rögzít = new System.Windows.Forms.Button();
-            this.KerékRögzít = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -330,13 +330,16 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(829, 312);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
-            // Átmérő
+            // KerékRögzít
             // 
-            this.Átmérő.Location = new System.Drawing.Point(70, 231);
-            this.Átmérő.Multiline = true;
-            this.Átmérő.Name = "Átmérő";
-            this.Átmérő.Size = new System.Drawing.Size(100, 26);
-            this.Átmérő.TabIndex = 4;
+            this.KerékRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.KerékRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.KerékRögzít.Location = new System.Drawing.Point(428, 263);
+            this.KerékRögzít.Name = "KerékRögzít";
+            this.KerékRögzít.Size = new System.Drawing.Size(45, 45);
+            this.KerékRögzít.TabIndex = 121;
+            this.KerékRögzít.UseVisualStyleBackColor = true;
+            this.KerékRögzít.Click += new System.EventHandler(this.KerékRögzít_Click);
             // 
             // Állapot
             // 
@@ -345,6 +348,14 @@
             this.Állapot.Name = "Állapot";
             this.Állapot.Size = new System.Drawing.Size(352, 28);
             this.Állapot.TabIndex = 3;
+            // 
+            // Átmérő
+            // 
+            this.Átmérő.Location = new System.Drawing.Point(70, 231);
+            this.Átmérő.Multiline = true;
+            this.Átmérő.Name = "Átmérő";
+            this.Átmérő.Size = new System.Drawing.Size(100, 26);
+            this.Átmérő.TabIndex = 4;
             // 
             // tableLayoutPanel2
             // 
@@ -391,17 +402,6 @@
             this.Rögzít.TabIndex = 120;
             this.Rögzít.UseVisualStyleBackColor = true;
             this.Rögzít.Click += new System.EventHandler(this.Rögzít_Click);
-            // 
-            // KerékRögzít
-            // 
-            this.KerékRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.KerékRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.KerékRögzít.Location = new System.Drawing.Point(428, 263);
-            this.KerékRögzít.Name = "KerékRögzít";
-            this.KerékRögzít.Size = new System.Drawing.Size(45, 45);
-            this.KerékRögzít.TabIndex = 121;
-            this.KerékRögzít.UseVisualStyleBackColor = true;
-            this.KerékRögzít.Click += new System.EventHandler(this.KerékRögzít_Click);
             // 
             // Ablak_Nóta_Részletes
             // 

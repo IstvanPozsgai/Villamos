@@ -790,8 +790,6 @@ namespace Villamos
                 menünév[210] = "Fődarab Nóta";
                 menüleírás[210] = " 1-SAP adatok frissítése, 2-Módosítások, 3- ";
 
-
-
                 menünév[220] = "Rezsi raktár";
                 menüleírás[220] = " 1-Alapadatok rögzítése, 2-Tárolási hely rögzítése, 3- Képfeltöltés";
                 menünév[221] = "Rezsi raktár";
