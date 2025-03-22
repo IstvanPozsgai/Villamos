@@ -227,6 +227,7 @@
             // 
             // Dátum
             // 
+            this.Dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Dátum.Location = new System.Drawing.Point(90, 3);
             this.Dátum.Name = "Dátum";
             this.Dátum.Size = new System.Drawing.Size(152, 26);

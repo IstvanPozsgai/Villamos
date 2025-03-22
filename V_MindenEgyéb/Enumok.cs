@@ -121,8 +121,9 @@
 
         public enum Nóta_Státus
         {
-            Új = 1,
-            Javítandó = 2,
+            Új_Elem = 1,
+            Javítandó = 3,
+            Felújítandó = 5,
             Lezárt = 9
         }
     }

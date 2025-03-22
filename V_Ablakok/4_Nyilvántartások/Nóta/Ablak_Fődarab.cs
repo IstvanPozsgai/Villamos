@@ -160,7 +160,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                     Soradat["Műszaki Megjegyzés"] = rekord.MűszakiM;
                     Soradat["Osztási Megjegyzés"] = rekord.OsztásiM;
                     Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
-                    Soradat["Státus"] = rekord.Státus;
+                    Soradat["Státus"] = $"{rekord.Státus} - {((Nóta_Státus)rekord.Státus).ToStrTrim().Replace('_', ' ')}";
                     Soradat["Átmérő"] = átmérő;
                     Soradat["Állapot"] = állapot;
                     AdatTábla.Rows.Add(Soradat);
