@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
+using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using static Villamos.V_MindenEgyéb.Enumok;
 using MyE = Villamos.Module_Excel;
@@ -90,6 +91,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         #region Táblázat
         private void Frissíti_táblalistát_Click(object sender, EventArgs e)
         {
+            TáblázatÍrás();
+        }
+
+        private void TáblázatÍrás()
+        {
             ABFejléc();
             ABFeltöltése();
             Táblalista.DataSource = AdatTábla;
@@ -113,7 +119,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             Táblalista.Columns["Műszaki Megjegyzés"].Width = 250;
             Táblalista.Columns["Osztási Megjegyzés"].Width = 250;
             Táblalista.Columns["Dátum"].Width = 120;
-            Táblalista.Columns["Státus"].Width = 80;
+            Táblalista.Columns["Státus"].Width = 150;
         }
 
         private void ABFeltöltése()
@@ -225,6 +231,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
             Új_Ablak_Nóta_Részletes = new Ablak_Nóta_Részletes(id);
             Új_Ablak_Nóta_Részletes.FormClosed += Ablak_Kerék_Gyűjtő_Closed;
+            Új_Ablak_Nóta_Részletes.Változás += TáblázatÍrás;
             Új_Ablak_Nóta_Részletes.Show();
         }
 

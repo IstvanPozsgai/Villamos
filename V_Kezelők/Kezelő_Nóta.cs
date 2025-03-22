@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -60,5 +62,68 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
+
+
+        public void Módosítás(Adat_Nóta Adat)
+        {
+            try
+            {
+                string szöveg;
+                if (Program.Postás_Vezér)
+                {
+                    szöveg = "UPDATE Nóta_Adatok SET ";
+                    szöveg += $"Berendezés='{Adat.Berendezés}', ";
+                    szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
+                    szöveg += $"Raktár='{Adat.Raktár}', ";
+                    szöveg += $"Telephely='{Adat.Telephely}', ";
+                    szöveg += $"Forgóváz='{Adat.Forgóváz}', ";
+                    szöveg += $"Beépíthető={Adat.Beépíthető}, ";
+                    szöveg += $"MűszakiM='{Adat.MűszakiM}', ";
+                    szöveg += $"OsztásiM='{Adat.OsztásiM}', ";
+                    szöveg += $"Dátum='{Adat.Dátum:yyyy.MM.dd}', ";
+                    szöveg += $"Státus={Adat.Státus} ";
+                    szöveg += $" WHERE [Id] ={Adat.Id}";
+                }
+                else
+                {
+                    szöveg = "UPDATE Nóta_Adatok SET ";
+                    szöveg += $"Telephely='{Adat.Telephely}', ";
+                    szöveg += $"Forgóváz='{Adat.Forgóváz}', ";
+                    szöveg += $"Beépíthető={Adat.Beépíthető}, ";
+                    szöveg += $"MűszakiM='{Adat.MűszakiM}' ";
+                    szöveg += $" WHERE [Id] ={Adat.Id}";
+                }
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void Rögzítés(Adat_Nóta Adat)
+        {
+            try
+            {
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

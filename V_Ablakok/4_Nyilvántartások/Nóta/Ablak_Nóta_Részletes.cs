@@ -8,10 +8,13 @@ using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using static Villamos.V_MindenEgyéb.Enumok;
 
-namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
+namespace Villamos.Villamos_Ablakok
 {
     public partial class Ablak_Nóta_Részletes : Form
     {
+        public event Event_Kidobó Változás;
+
+        public int Sorszám { get; private set; }
 
         #region Kezelők
         readonly Kezelő_Nóta KézNóta = new Kezelő_Nóta();
@@ -19,9 +22,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
         #endregion
 
-
-
-        public int Sorszám { get; private set; }
         public Ablak_Nóta_Részletes(int sorszám)
         {
             InitializeComponent();
@@ -167,7 +167,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         {
             try
             {
-                if (int.TryParse(Átmérő.Text, out int Méret)) Méret = 0;
+                if (!int.TryParse(Átmérő.Text, out int Méret)) Méret = 0;
 
                 Adat_Kerék_Mérés ADAT = new Adat_Kerék_Mérés(
                     "Kiépített",
@@ -181,7 +181,42 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                     "Nóta adatok",
                     0);
                 KézMérés.Rögzítés(DateTime.Today.Year, ADAT);
+                Változás?.Invoke();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        private void Rögzít_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                )
+                if (!int.TryParse(Id.Text, out int Sorszám)) Sorszám = 0;
+                if (Sorszám == 0) return;
+                Adat_Nóta ADAT = new Adat_Nóta(
+                                Sorszám,
+                                Berendezés.Text.Trim(),
+                                KészletSarzs.Text.Trim(),
+                                Raktár.Text.Trim(),
+                                Telephely.Text.Trim(),
+                                Forgóváz.Text.Trim(),
+                                Beépíthető.Text.Trim() == "Igen",
+                                Műszaki.Text.Trim(),
+                                Osztási.Text.Trim(),
+                                Dátum.Value,
+                                Státus.Text.Trim().Substring(0, 1).ToÉrt_Int());
+
+                KézNóta.Módosítás(ADAT);
+                Változás?.Invoke();
+                MessageBox.Show("Az adatok rögzítése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
