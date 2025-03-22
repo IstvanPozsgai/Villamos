@@ -185,6 +185,7 @@
             // 
             // Id
             // 
+            this.Id.Enabled = false;
             this.Id.Location = new System.Drawing.Point(70, 3);
             this.Id.Name = "Id";
             this.Id.Size = new System.Drawing.Size(100, 26);
@@ -192,6 +193,7 @@
             // 
             // Berendezés
             // 
+            this.Berendezés.Enabled = false;
             this.Berendezés.Location = new System.Drawing.Point(584, 3);
             this.Berendezés.Name = "Berendezés";
             this.Berendezés.Size = new System.Drawing.Size(164, 26);
@@ -199,6 +201,7 @@
             // 
             // KészletSarzs
             // 
+            this.KészletSarzs.Enabled = false;
             this.KészletSarzs.Location = new System.Drawing.Point(584, 35);
             this.KészletSarzs.Name = "KészletSarzs";
             this.KészletSarzs.Size = new System.Drawing.Size(164, 26);
@@ -206,6 +209,7 @@
             // 
             // Raktár
             // 
+            this.Raktár.Enabled = false;
             this.Raktár.Location = new System.Drawing.Point(584, 67);
             this.Raktár.Name = "Raktár";
             this.Raktár.Size = new System.Drawing.Size(164, 26);
@@ -213,6 +217,7 @@
             // 
             // GyártásiSzám
             // 
+            this.GyártásiSzám.Enabled = false;
             this.GyártásiSzám.Location = new System.Drawing.Point(584, 133);
             this.GyártásiSzám.Name = "GyártásiSzám";
             this.GyártásiSzám.Size = new System.Drawing.Size(164, 26);
@@ -394,6 +399,7 @@
             this.KerékRögzít.Size = new System.Drawing.Size(45, 45);
             this.KerékRögzít.TabIndex = 121;
             this.KerékRögzít.UseVisualStyleBackColor = true;
+            this.KerékRögzít.Click += new System.EventHandler(this.KerékRögzít_Click);
             // 
             // Ablak_Nóta_Részletes
             // 

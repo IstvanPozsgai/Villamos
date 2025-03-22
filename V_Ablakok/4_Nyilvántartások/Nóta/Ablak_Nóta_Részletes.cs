@@ -163,6 +163,35 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             }
         }
 
+        private void KerékRögzít_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (int.TryParse(Átmérő.Text, out int Méret)) Méret = 0;
 
+                Adat_Kerék_Mérés ADAT = new Adat_Kerék_Mérés(
+                    "Kiépített",
+                    "-",
+                    Berendezés.Text.Trim(),
+                    GyártásiSzám.Text.Trim(),
+                    Állapot.Text.Trim().Substring(0, 1),
+                    Méret,
+                    Program.PostásNév,
+                    DateTime.Now,
+                    "Nóta adatok",
+                    0);
+                KézMérés.Rögzítés(DateTime.Today.Year, ADAT);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

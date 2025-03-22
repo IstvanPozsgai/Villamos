@@ -62,6 +62,39 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public void Rögzítés(int Év, Adat_Kerék_Mérés Adat)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                string szöveg = "INSERT INTO keréktábla  (Azonosító, pozíció, kerékberendezés, kerékgyártásiszám, állapot, méret, mikor, Módosító, Oka, SAP) VALUES (";
+
+                szöveg += $"'{Adat.Azonosító.Trim()}', ";
+                szöveg += $"'{Adat.Pozíció.Trim()}', ";
+                szöveg += $"'{Adat.Kerékberendezés.Trim()}', ";
+                szöveg += $"'{Adat.Kerékgyártásiszám.Trim()}', ";
+                szöveg += $"'{Adat.Állapot}', ";
+                szöveg += $"{Adat.Méret}, ";
+                szöveg += $"'{DateTime.Now}', ";
+                szöveg += $"'{Program.PostásNév.Trim()}', ";
+                szöveg += $"'{Adat.Oka.Trim()}', ";
+                szöveg += $"{Adat.SAP} )";
+
+                Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        //Elkopó
         public List<Adat_Kerék_Mérés> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kerék_Mérés> Adatok = new List<Adat_Kerék_Mérés>();

@@ -2430,46 +2430,30 @@ namespace Villamos
             try
             {
                 string hely, jelszó, szöveg;
-                if (RögzítPályaszám.Text.Trim() == "")
-                    throw new HibásBevittAdat("A jármű pályaszámát meg kell adni.");
-                if (Rögzítpozíció.Text.Trim() == "")
-                    throw new HibásBevittAdat("A poizíciót meg kell adni.");
-                if (RögzítÁllapot.Text.Trim() == "")
-                    throw new HibásBevittAdat("Az állapotot meg kell adni.");
-                if (RögzítOka.Text.Trim() == "")
-                    throw new HibásBevittAdat("A rögzítés okát meg kell adni.");
-                if (!int.TryParse(RögzítMéret.Text, out int Méret))
-                    throw new HibásBevittAdat("A méret mezőnek egész számnak kell lennie.");
-                if (Méret > 1000)
-                    throw new HibásBevittAdat("Biztos, hogy a kerék mérete 1000 mm-nél nagyobb?");
+                if (RögzítPályaszám.Text.Trim() == "") throw new HibásBevittAdat("A jármű pályaszámát meg kell adni.");
+                if (Rögzítpozíció.Text.Trim() == "") throw new HibásBevittAdat("A poizíciót meg kell adni.");
+                if (RögzítÁllapot.Text.Trim() == "") throw new HibásBevittAdat("Az állapotot meg kell adni.");
+                if (RögzítOka.Text.Trim() == "") throw new HibásBevittAdat("A rögzítés okát meg kell adni.");
+                if (!int.TryParse(RögzítMéret.Text, out int Méret)) throw new HibásBevittAdat("A méret mezőnek egész számnak kell lennie.");
+                if (Méret > 1000) throw new HibásBevittAdat("Biztos, hogy a kerék mérete 1000 mm-nél nagyobb?");
                 if (Új_Gyári.Visible == true)
                 {
-                    if (Új_Gyári.Text.Trim() == "")
-                        throw new HibásBevittAdat("A gyári szám mezót ki kell tölteni.");
-
+                    if (Új_Gyári.Text.Trim() == "") throw new HibásBevittAdat("A gyári szám mezót ki kell tölteni.");
                     ÚjGyáriKitöltése();
                 }
 
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\" + DateTime.Today.Year + @"\telepikerék.mdb";
-
-                jelszó = "szabólászló";
-
-                szöveg = "INSERT INTO keréktábla  (Azonosító, pozíció, kerékberendezés, kerékgyártásiszám, állapot, méret, mikor, Módosító, Oka, SAP) VALUES (";
-                szöveg += $"'{RögzítPályaszám.Text.Trim()}', ";
-                szöveg += $"'{Rögzítpozíció.Text.Trim()}', ";
-                szöveg += $"'{Berendezés.Text.Trim()}', ";
-                szöveg += $"'{Gyártási.Text.Trim()}', ";
-                szöveg += $"'{RögzítÁllapot.Text.Trim().Substring(0, 1)}', ";
-                szöveg += $"{Méret}, ";
-                szöveg += $"'{DateTime.Now}', ";
-                szöveg += $"'{Program.PostásNév}', ";
-                szöveg += $"'{RögzítOka.Text.Trim()}', ";
-                if (Új_Gyári.Visible == true)
-                    szöveg += $" 1)";       // Ha még nincs kész az SAP berendezés akkor nem kell SAPba rögzíteni
-                else
-                    szöveg += $" 0)";
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Kerék_Mérés ADAT = new Adat_Kerék_Mérés(
+                                        RögzítPályaszám.Text.Trim(),
+                                        Rögzítpozíció.Text.Trim(),
+                                        Berendezés.Text.Trim(),
+                                        Gyártási.Text.Trim(),
+                                        RögzítÁllapot.Text.Trim().Substring(0, 1),
+                                        Méret,
+                                        Program.PostásNév,
+                                        DateTime.Now,
+                                        RögzítOka.Text.Trim(),
+                                        Új_Gyári.Visible ? 1 : 0);
+                KézMérés.Rögzítés(DateTime.Today.Year, ADAT);
 
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Rögzítpozíció.Text = "";
