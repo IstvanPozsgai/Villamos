@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
@@ -265,6 +266,122 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        private void BtnSAP_Click(object sender, EventArgs e)
+        {
+            string fájlexc = "";
+            try
+            {
+                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "SAP-s Adatok betöltése",
+                    FileName = "",
+                    Filter = "Excel |*.xlsx"
+                };
+
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = OpenFileDialog1.FileName;
+                else
+                    return;
+
+                DateTime Eleje = DateTime.Now;
+                //Adattáblába tesszük
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexc);
+
+                if (!MyF.Betöltéshelyes("Nóta", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+
+                //Készítünk egy listát az adatszerkezetnek megfelelően
+                List<Adat_Nóta_SAP> Excel_Listában = Excel_Beolvas(Tábla);
+
+                if (Excel_Listában != null) SAP(Excel_Listában);
+
+                DateTime Vége = DateTime.Now;
+
+                //kitöröljük a betöltött fájlt
+                File.Delete(fájlexc);
+
+                MessageBox.Show($"Az adat konvertálás befejeződött!\nidő:{Vége - Eleje}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                if (ex.StackTrace.Contains("System.IO.File.InternalDelete"))
+                    MessageBox.Show($"A programnak a beolvasott adatokat tartalmazó fájlt nem sikerült törölni.\n Valószínüleg a {fájlexc} nyitva van.\n\nAz adat konvertálás befejeződött!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                {
+                    HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                    MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+        }
+
+        private void SAP(List<Adat_Nóta_SAP> Adatok)
+        {
+            try
+            {
+                List<Adat_Nóta> AdatokNóta = KézNóta.Lista_Adat(true);
+                List<Adat_Nóta> AdatokM = new List<Adat_Nóta>();
+                List<Adat_Nóta> AdatokR = new List<Adat_Nóta>();
+                foreach (Adat_Nóta_SAP rekord in Adatok)
+                {
+                    //Feltételek ami után rögzítünk vagy sem
+                    bool kell = false;
+                    if (rekord.Rendszerstátus == "RAKT" && !rekord.Rendezési.ToUpper().Contains("SEL")) kell = true;
+                    else if (rekord.Rendszerstátus == "RNDÁ" && !rekord.Rendezési.ToUpper().Contains("SEL")) kell = true;
+
+                    if (kell)
+                    {
+                        Adat_Nóta adat_Nóta = AdatokNóta.FirstOrDefault(x => x.Berendezés == rekord.Berendezés);
+                        Adat_Nóta ADAT = new Adat_Nóta(
+                                   adat_Nóta != null ? adat_Nóta.Id : 0,
+                                   rekord.Berendezés,
+                                   rekord.Készlet_Sarzs,
+                                   rekord.Raktár,
+                                   adat_Nóta != null ? 0 : 1);
+                        if (adat_Nóta != null)
+                            AdatokM.Add(ADAT);
+                        else
+                            AdatokR.Add(ADAT);
+                    }
+                }
+                if (AdatokM != null && AdatokM.Count > 0) KézNóta.Módosítás(AdatokM);
+                if (AdatokR != null && AdatokR.Count > 0) KézNóta.Rögzítés(AdatokR);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private List<Adat_Nóta_SAP> Excel_Beolvas(DataTable EgyTábla)
+        {
+            List<Adat_Nóta_SAP> Adatok = new List<Adat_Nóta_SAP>();
+            if (EgyTábla != null)
+            {
+                for (int i = 0; i < EgyTábla.Rows.Count; i++)
+                {
+                    Adat_Nóta_SAP Adat = new Adat_Nóta_SAP(
+                                                EgyTábla.Rows[i]["Berendezés"].ToStrTrim(),
+                                                EgyTábla.Rows[i]["Rendszerstátus"].ToStrTrim(),
+                                                EgyTábla.Rows[i]["Készletsarzs"].ToStrTrim(),
+                                                EgyTábla.Rows[i]["Raktárhely"].ToStrTrim(),
+                                                EgyTábla.Rows[i]["Rendezési mező"].ToStrTrim());
+                    Adatok.Add(Adat);
+                }
+            }
+            return Adatok;
         }
     }
 }

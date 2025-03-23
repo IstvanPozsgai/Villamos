@@ -114,6 +114,7 @@
             this.BtnSAP.Size = new System.Drawing.Size(45, 45);
             this.BtnSAP.TabIndex = 186;
             this.BtnSAP.UseVisualStyleBackColor = true;
+            this.BtnSAP.Click += new System.EventHandler(this.BtnSAP_Click);
             // 
             // Módosítás
             // 

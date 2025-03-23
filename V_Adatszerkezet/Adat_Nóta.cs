@@ -30,5 +30,32 @@ namespace Villamos.V_Adatszerkezet
             Dátum = dátum;
             Státus = státus;
         }
+
+        public Adat_Nóta(long id, string berendezés, string készlet_Sarzs, string raktár, int státus)
+        {
+            Id = id;
+            Berendezés = berendezés;
+            Készlet_Sarzs = készlet_Sarzs;
+            Raktár = raktár;
+            Státus = státus;
+        }
+    }
+
+    public class Adat_Nóta_SAP
+    {
+        public string Berendezés { get; private set; }
+        public string Rendszerstátus { get; private set; }
+        public string Készlet_Sarzs { get; private set; }
+        public string Raktár { get; private set; }
+        public string Rendezési { get; private set; }
+
+        public Adat_Nóta_SAP(string berendezés, string rendszerstátus, string készlet_Sarzs, string raktár, string rendezési)
+        {
+            Berendezés = berendezés;
+            Rendszerstátus = rendszerstátus;
+            Készlet_Sarzs = készlet_Sarzs;
+            Raktár = raktár;
+            Rendezési = rendezési;
+        }
     }
 }

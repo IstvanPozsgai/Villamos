@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -111,8 +112,20 @@ namespace Villamos.Kezelők
         {
             try
             {
-
-
+                string szöveg = "INSERT  INTO Nóta_Adatok ";
+                szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id) VALUES (";
+                szöveg += $"'{Adat.Berendezés}', ";      // Berendezés
+                szöveg += $"'{Adat.Készlet_Sarzs}', ";   // Készlet_Sarzs
+                szöveg += $"'{Adat.Raktár}', ";          // Raktár
+                szöveg += $"'{Adat.Telephely}', ";           // Telephely
+                szöveg += $"'{Adat.Forgóváz}', ";             // Forgóváz
+                szöveg += $"{Adat.Beépíthető}, ";           // Beépíthető
+                szöveg += $"'{Adat.MűszakiM}', ";             // MűszakiM
+                szöveg += $"'{Adat.OsztásiM}', ";             // OsztásiM
+                szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";        // Dátum
+                szöveg += $"{Adat.Státus}, ";                    // Státus
+                szöveg += $"{Sorszám()})";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -125,5 +138,94 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(List<Adat_Nóta> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGY = new List<string>();
+                foreach (Adat_Nóta Adat in Adatok)
+                {
+                    string szöveg = "UPDATE Nóta_Adatok SET ";
+                    szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
+                    szöveg += $"Raktár='{Adat.Raktár}', ";
+                    szöveg += $"Telephely='{Adat.Telephely}', ";
+                    szöveg += $"Státus={Adat.Státus} ";
+                    szöveg += $" WHERE [Id] ={Adat.Id}";
+                    SzövegGY.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGY);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(List<Adat_Nóta> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGY = new List<string>();
+                foreach (Adat_Nóta Adat in Adatok)
+                {
+                    string szöveg = "INSERT  INTO Nóta_Adatok ";
+                    szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id) VALUES (";
+                    szöveg += $"'{Adat.Berendezés}', ";      // Berendezés
+                    szöveg += $"'{Adat.Készlet_Sarzs}', ";   // Készlet_Sarzs
+                    szöveg += $"'{Adat.Raktár}', ";          // Raktár
+                    szöveg += $"'{Megkeressük()}', ";           // Telephely
+                    szöveg += $"'', ";             // Forgóváz
+                    szöveg += $"false, ";           // Beépíthető
+                    szöveg += $"'', ";             // MűszakiM
+                    szöveg += $"'', ";             // OsztásiM
+                    szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";        // Dátum
+                    szöveg += $"1, ";                    // Státus
+                    szöveg += $"{Sorszám()})";                  // Id
+                    SzövegGY.Add(szöveg);
+
+                }
+
+                MyA.ABMódosítás(hely, jelszó, SzövegGY);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private long Sorszám()
+        {
+            long Válasz = 1;
+            try
+            {
+                List<Adat_Nóta> Adatok = Lista_Adat();
+                if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(x => x.Id) + 1;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private object Megkeressük()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
