@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Holtart = new System.Windows.Forms.ProgressBar();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Táblalista = new Zuby.ADGV.AdvancedDataGridView();
@@ -36,6 +36,7 @@
             this.Excel_gomb = new System.Windows.Forms.Button();
             this.BtnSAP = new System.Windows.Forms.Button();
             this.Módosítás = new System.Windows.Forms.Button();
+            this.Aktív = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Táblalista)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,8 +66,8 @@
             // 
             this.Táblalista.AllowUserToAddRows = false;
             this.Táblalista.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.Táblalista.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.Táblalista.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.Táblalista.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -86,7 +87,7 @@
             // 
             this.Frissíti_táblalistát.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Frissíti_táblalistát.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Frissíti_táblalistát.Location = new System.Drawing.Point(12, 51);
+            this.Frissíti_táblalistát.Location = new System.Drawing.Point(164, 51);
             this.Frissíti_táblalistát.Name = "Frissíti_táblalistát";
             this.Frissíti_táblalistát.Size = new System.Drawing.Size(45, 45);
             this.Frissíti_táblalistát.TabIndex = 184;
@@ -97,7 +98,7 @@
             // 
             this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_gomb.Location = new System.Drawing.Point(63, 51);
+            this.Excel_gomb.Location = new System.Drawing.Point(215, 51);
             this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Excel_gomb.Name = "Excel_gomb";
             this.Excel_gomb.Size = new System.Drawing.Size(45, 45);
@@ -127,12 +128,23 @@
             this.Módosítás.UseVisualStyleBackColor = true;
             this.Módosítás.Click += new System.EventHandler(this.Módosítás_Click);
             // 
+            // Aktív
+            // 
+            this.Aktív.AutoSize = true;
+            this.Aktív.Location = new System.Drawing.Point(12, 62);
+            this.Aktív.Name = "Aktív";
+            this.Aktív.Size = new System.Drawing.Size(146, 24);
+            this.Aktív.TabIndex = 188;
+            this.Aktív.Text = "Történeti elemek";
+            this.Aktív.UseVisualStyleBackColor = true;
+            // 
             // Ablak_Fődarab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(906, 252);
+            this.Controls.Add(this.Aktív);
             this.Controls.Add(this.Módosítás);
             this.Controls.Add(this.BtnSAP);
             this.Controls.Add(this.Táblalista);
@@ -149,6 +161,7 @@
             this.Load += new System.EventHandler(this.Ablak_Fődarab_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Táblalista)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -161,5 +174,6 @@
         internal System.Windows.Forms.Button Excel_gomb;
         internal System.Windows.Forms.Button BtnSAP;
         internal System.Windows.Forms.Button Módosítás;
+        private System.Windows.Forms.CheckBox Aktív;
     }
 }

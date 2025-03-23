@@ -84,6 +84,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
         private void TáblázatÍrás()
         {
+            Táblalista.CleanFilterAndSort();
             ABFejléc();
             ABFeltöltése();
             Táblalista.DataSource = AdatTábla;
@@ -114,7 +115,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         {
             try
             {
-                List<Adat_Nóta> Adatok = KézNóta.Lista_Adat();
+                List<Adat_Nóta> Adatok = KézNóta.Lista_Adat(!Aktív.Checked);
                 List<Adat_Kerék_Tábla> AdatokKerék = KézKerék.Lista_Adatok();
 
                 List<Adat_Kerék_Mérés> AdatokMérés = KézMérés.Lista_Adatok(DateTime.Today.Year - 1);
@@ -302,7 +303,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
                 //kitöröljük a betöltött fájlt
                 File.Delete(fájlexc);
-
+                TáblázatÍrás();
                 MessageBox.Show($"Az adat konvertálás befejeződött!\nidő:{Vége - Eleje}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -326,6 +327,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         {
             try
             {
+                // Új vagy módosuló adatok rögzítése
                 List<Adat_Nóta> AdatokNóta = KézNóta.Lista_Adat(true);
                 List<Adat_Nóta> AdatokM = new List<Adat_Nóta>();
                 List<Adat_Nóta> AdatokR = new List<Adat_Nóta>();
@@ -353,6 +355,34 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 }
                 if (AdatokM != null && AdatokM.Count > 0) KézNóta.Módosítás(AdatokM);
                 if (AdatokR != null && AdatokR.Count > 0) KézNóta.Rögzítés(AdatokR);
+
+                //Amik beépítésre kerültek kisorolása
+                AdatokNóta = KézNóta.Lista_Adat(true);
+                List<long> IDK = new List<long>();
+                foreach (Adat_Nóta rekord in AdatokNóta)
+                {
+                    Adat_Nóta_SAP Elem = Adatok.FirstOrDefault(a => a.Berendezés == rekord.Berendezés);
+                    if (Elem == null)
+                        IDK.Add(rekord.Id);       //Ha nincs ilyen elem akkor felvesszük a listára
+                    else
+                    {
+                        bool kell = false;
+                        //ha időközben selejtezésre került
+                        if (Elem.Rendszerstátus == "RAKT" && Elem.Rendezési.ToUpper().Contains("SEL")) kell = true;
+                        if (Elem.Rendszerstátus == "RNDÁ" && Elem.Rendezési.ToUpper().Contains("SEL")) kell = true;
+                        //ha véletlenül tartalmazza a lista a beépített elemet
+                        if (Elem.Rendszerstátus == "EHEQ") kell = true;
+                        if (kell)
+                        {
+                            Adat_Nóta adat_Nóta = AdatokNóta.FirstOrDefault(x => x.Berendezés == rekord.Berendezés);
+                            if (adat_Nóta != null) IDK.Add(adat_Nóta.Id);
+                        }
+                    }
+                }
+                if (IDK != null && IDK.Count > 0) KézNóta.Módosítás(IDK);
+
+
+
             }
             catch (HibásBevittAdat ex)
             {

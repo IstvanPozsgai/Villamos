@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
+using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -14,6 +15,8 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "TörökKasos";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Nóta\NótaT5C5.mdb";
+
+        readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgálattelepei = new Kezelő_Kiegészítő_Szolgálattelepei();
 
         public Kezelő_Nóta()
         {
@@ -70,7 +73,7 @@ namespace Villamos.Kezelők
             try
             {
                 string szöveg;
-                if (Program.Postás_Vezér)
+                if (Program.Postás_Vezér || Program.PostásTelephely == "Főmérnökség")
                 {
                     szöveg = "UPDATE Nóta_Adatok SET ";
                     szöveg += $"Berendezés='{Adat.Berendezés}', ";
@@ -107,7 +110,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
         public void Rögzítés(Adat_Nóta Adat)
         {
             try
@@ -142,17 +144,36 @@ namespace Villamos.Kezelők
         {
             try
             {
+                List<Adat_Kiegészítő_Szolgálattelepei> AdatokRaktár = KézSzolgálattelepei.Lista_Adatok();
+
                 List<string> SzövegGY = new List<string>();
                 foreach (Adat_Nóta Adat in Adatok)
                 {
-                    string szöveg = "UPDATE Nóta_Adatok SET ";
-                    szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
-                    szöveg += $"Raktár='{Adat.Raktár}', ";
-                    szöveg += $"Telephely='{Adat.Telephely}', ";
-                    szöveg += $"Státus={Adat.Státus} ";
-                    szöveg += $" WHERE [Id] ={Adat.Id}";
-                    SzövegGY.Add(szöveg);
+                    string Telephely = "";
+                    if (Adat.Raktár != "")
+                    {
+                        Adat_Kiegészítő_Szolgálattelepei AdatRaktár = AdatokRaktár.FirstOrDefault(x => x.Raktár == Adat.Raktár);
+                        if (AdatRaktár != null) Telephely = AdatRaktár.Telephelynév;
+                    }
+                    if (Telephely == "")
+                    {
+                        string szöveg = "UPDATE Nóta_Adatok SET ";
+                        szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
+                        szöveg += $"Raktár='{Adat.Raktár}' ";
+                        szöveg += $" WHERE [Id] ={Adat.Id}";
+                        SzövegGY.Add(szöveg);
+                    }
+                    else
+                    {
+                        string szöveg = "UPDATE Nóta_Adatok SET ";
+                        szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
+                        szöveg += $"Raktár='{Adat.Raktár}', ";
+                        szöveg += $"Telephely='{Telephely}' ";
+                        szöveg += $" WHERE [Id] ={Adat.Id}";
+                        SzövegGY.Add(szöveg);
+                    }
                 }
+
                 MyA.ABMódosítás(hely, jelszó, SzövegGY);
             }
             catch (HibásBevittAdat ex)
@@ -170,26 +191,36 @@ namespace Villamos.Kezelők
         {
             try
             {
+                List<Adat_Kiegészítő_Szolgálattelepei> AdatokRaktár = KézSzolgálattelepei.Lista_Adatok();
+
                 List<string> SzövegGY = new List<string>();
+                long id = Sorszám();
                 foreach (Adat_Nóta Adat in Adatok)
                 {
+                    string Telephely = "";
+                    if (Adat.Raktár != "")
+                    {
+                        Adat_Kiegészítő_Szolgálattelepei AdatRaktár = AdatokRaktár.FirstOrDefault(x => x.Raktár == Adat.Raktár);
+                        if (AdatRaktár != null) Telephely = AdatRaktár.Telephelynév;
+                    }
+
                     string szöveg = "INSERT  INTO Nóta_Adatok ";
                     szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id) VALUES (";
                     szöveg += $"'{Adat.Berendezés}', ";      // Berendezés
                     szöveg += $"'{Adat.Készlet_Sarzs}', ";   // Készlet_Sarzs
                     szöveg += $"'{Adat.Raktár}', ";          // Raktár
-                    szöveg += $"'{Megkeressük()}', ";           // Telephely
+                    szöveg += $"'{Telephely}', ";           // Telephely
                     szöveg += $"'', ";             // Forgóváz
                     szöveg += $"false, ";           // Beépíthető
                     szöveg += $"'', ";             // MűszakiM
                     szöveg += $"'', ";             // OsztásiM
                     szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";        // Dátum
                     szöveg += $"1, ";                    // Státus
-                    szöveg += $"{Sorszám()})";                  // Id
+                    szöveg += $"{id})";                  // Id
                     SzövegGY.Add(szöveg);
+                    id++;
 
                 }
-
                 MyA.ABMódosítás(hely, jelszó, SzövegGY);
             }
             catch (HibásBevittAdat ex)
@@ -223,9 +254,30 @@ namespace Villamos.Kezelők
             return Válasz;
         }
 
-        private object Megkeressük()
+        public void Módosítás(List<long> IDk)
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<string> SzövegGY = new List<string>();
+                foreach (long Id in IDk)
+                {
+                    string szöveg = "UPDATE Nóta_Adatok SET Státus=9 ";
+                    szöveg += $" WHERE [Id] ={Id}";
+                    SzövegGY.Add(szöveg);
+                }
+
+                MyA.ABMódosítás(hely, jelszó, SzövegGY);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

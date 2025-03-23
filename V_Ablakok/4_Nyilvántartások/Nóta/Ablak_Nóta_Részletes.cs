@@ -121,7 +121,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                List<Adat_Nóta> Adatok = KézNóta.Lista_Adat();
+                List<Adat_Nóta> Adatok = KézNóta.Lista_Adat(false);
                 List<Adat_Kerék_Tábla> AdatokKerék = KézKerék.Lista_Adatok();
 
                 List<Adat_Kerék_Mérés> AdatokMérés = KézMérés.Lista_Adatok(DateTime.Today.Year - 1);
