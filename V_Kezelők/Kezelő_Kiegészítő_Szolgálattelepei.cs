@@ -75,7 +75,8 @@ namespace Villamos.Kezelők
                                            rekord["sorszám"].ToÉrt_Int(),
                                            rekord["telephelynév"].ToStrTrim(),
                                            rekord["szolgálatnév"].ToStrTrim(),
-                                           rekord["felelősmunkahely"].ToStrTrim()
+                                           rekord["felelősmunkahely"].ToStrTrim(),
+                                           rekord["raktár"].ToStrTrim()
                                            );
                                 Adatok.Add(Adat);
                             }
@@ -90,11 +91,12 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO szolgálattelepeitábla ( sorszám, szolgálatnév, telephelynév, felelősmunkahely )";
+                string szöveg = "INSERT INTO szolgálattelepeitábla ( sorszám, szolgálatnév, telephelynév, felelősmunkahely, raktár )";
                 szöveg += $" VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Szolgálatnév}', ";
                 szöveg += $"'{Adat.Telephelynév}', ";
-                szöveg += $"'{Adat.Felelősmunkahely}')";
+                szöveg += $"'{Adat.Felelősmunkahely}',";
+                szöveg += $"'{Adat.Raktár}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -115,7 +117,8 @@ namespace Villamos.Kezelők
                 string szöveg = "UPDATE szolgálattelepeitábla SET ";
                 szöveg += $" sorszám={Adat.Sorszám},";
                 szöveg += $" szolgálatnév='{Adat.Szolgálatnév}', ";
-                szöveg += $" felelősmunkahely='{Adat.Felelősmunkahely}' ";
+                szöveg += $" felelősmunkahely='{Adat.Felelősmunkahely}', ";
+                szöveg += $" raktár='{Adat.Raktár}' ";
                 szöveg += $" WHERE telephelynév='{Adat.Telephelynév}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

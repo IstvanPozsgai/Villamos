@@ -3236,6 +3236,7 @@ namespace Villamos
                     CmbSzolgtelepSZOL.Text = TáblaSzolgtelep.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
                     CmbSzolgtelepTELEP.Text = TáblaSzolgtelep.Rows[e.RowIndex].Cells[2].Value.ToStrTrim();
                     txtSzolgtelepFelelősmunkahely.Text = TáblaSzolgtelep.Rows[e.RowIndex].Cells[3].Value.ToStrTrim();
+                    txtSzolgtelepRaktár.Text = TáblaSzolgtelep.Rows[e.RowIndex].Cells[4].Value.ToStrTrim();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -3258,17 +3259,19 @@ namespace Villamos
                 List<Adat_Kiegészítő_Szolgálattelepei> Adatok = KézSzolgálattelepei.Lista_Adatok();
 
                 TáblaSzolgtelep.Visible = false;
-                TáblaSzolgtelep.ColumnCount = 4;
+                TáblaSzolgtelep.ColumnCount = 5;
                 TáblaSzolgtelep.RowCount = 0;
                 // ' fejléc elkészítése
                 TáblaSzolgtelep.Columns[0].HeaderText = "Sorszám";
                 TáblaSzolgtelep.Columns[0].Width = 80;
                 TáblaSzolgtelep.Columns[1].HeaderText = "Szolgálat";
-                TáblaSzolgtelep.Columns[1].Width = 150;
+                TáblaSzolgtelep.Columns[1].Width = 120;
                 TáblaSzolgtelep.Columns[2].HeaderText = "Telephely";
-                TáblaSzolgtelep.Columns[2].Width = 150;
+                TáblaSzolgtelep.Columns[2].Width = 120;
                 TáblaSzolgtelep.Columns[3].HeaderText = "Felelősmunkahely";
-                TáblaSzolgtelep.Columns[3].Width = 150;
+                TáblaSzolgtelep.Columns[3].Width = 120;
+                TáblaSzolgtelep.Columns[4].HeaderText = "Raktár";
+                TáblaSzolgtelep.Columns[4].Width = 120;
 
                 foreach (Adat_Kiegészítő_Szolgálattelepei rekord in Adatok)
                 {
@@ -3278,6 +3281,7 @@ namespace Villamos
                     TáblaSzolgtelep.Rows[i].Cells[1].Value = rekord.Szolgálatnév;
                     TáblaSzolgtelep.Rows[i].Cells[2].Value = rekord.Telephelynév;
                     TáblaSzolgtelep.Rows[i].Cells[3].Value = rekord.Felelősmunkahely;
+                    TáblaSzolgtelep.Rows[i].Cells[4].Value = rekord.Raktár;
                 }
                 TáblaSzolgtelep.Visible = true;
             }
@@ -3358,7 +3362,8 @@ namespace Villamos
                 Adat_Kiegészítő_Szolgálattelepei ADAT = new Adat_Kiegészítő_Szolgálattelepei(Sorszám,
                                                                                              CmbSzolgtelepTELEP.Text.Trim(),
                                                                                              CmbSzolgtelepSZOL.Text.Trim(),
-                                                                                             txtSzolgtelepFelelősmunkahely.Text.Trim());
+                                                                                             txtSzolgtelepFelelősmunkahely.Text.Trim(),
+                                                                                             txtSzolgtelepRaktár.Text.Trim());
                 if (Elem != null)
                     KézSzolgálattelepei.Módosítás(ADAT);
                 else
@@ -3404,12 +3409,14 @@ namespace Villamos
                     Adat_Kiegészítő_Szolgálattelepei ADAT = new Adat_Kiegészítő_Szolgálattelepei(Elem.Sorszám,
                                                                                                  ElőzőElem.Telephelynév,
                                                                                                  ElőzőElem.Szolgálatnév,
-                                                                                                 ElőzőElem.Felelősmunkahely);
+                                                                                                 ElőzőElem.Felelősmunkahely,
+                                                                                                 ElőzőElem.Raktár);
                     KézSzolgálattelepei.Módosítás(ADAT);
                     ADAT = new Adat_Kiegészítő_Szolgálattelepei(ElőzőElem.Sorszám,
                                                                 Elem.Telephelynév,
                                                                 Elem.Szolgálatnév,
-                                                                Elem.Felelősmunkahely);
+                                                                Elem.Felelősmunkahely,
+                                                                Elem.Raktár);
                     KézSzolgálattelepei.Módosítás(ADAT);
                     Szolgálattelephelylista();
                 }
