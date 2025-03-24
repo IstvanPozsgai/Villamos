@@ -94,7 +94,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             Táblalista.ClearSelection();
         }
 
-
         private void OszlopSzélesség()
         {
             Táblalista.Columns["Id"].Width = 50;
@@ -413,5 +412,24 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             }
             return Adatok;
         }
+
+        #region Összesítés ablak
+        Ablak_Nóta_Összesítés Új_Ablak_Nóta_Összesítés;
+
+        private void Ablak_Nóta_Összesítés_Closed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Nóta_Összesítés = null;
+        }
+
+        private void Összesítés_Click(object sender, EventArgs e)
+        {
+
+            Új_Ablak_Nóta_Összesítés?.Close();
+
+            Új_Ablak_Nóta_Összesítés = new Ablak_Nóta_Összesítés();
+            Új_Ablak_Nóta_Összesítés.FormClosed += Ablak_Nóta_Összesítés_Closed;
+            Új_Ablak_Nóta_Összesítés.Show();
+        }
+        #endregion
     }
 }

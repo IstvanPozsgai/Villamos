@@ -37,6 +37,7 @@
             this.BtnSAP = new System.Windows.Forms.Button();
             this.Módosítás = new System.Windows.Forms.Button();
             this.Aktív = new System.Windows.Forms.CheckBox();
+            this.Összesítés = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Táblalista)).BeginInit();
             this.SuspendLayout();
             // 
@@ -110,7 +111,7 @@
             // 
             this.BtnSAP.BackgroundImage = global::Villamos.Properties.Resources.SAP;
             this.BtnSAP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSAP.Location = new System.Drawing.Point(302, 51);
+            this.BtnSAP.Location = new System.Drawing.Point(391, 51);
             this.BtnSAP.Name = "BtnSAP";
             this.BtnSAP.Size = new System.Drawing.Size(45, 45);
             this.BtnSAP.TabIndex = 186;
@@ -121,7 +122,7 @@
             // 
             this.Módosítás.BackgroundImage = global::Villamos.Properties.Resources.Action_configure;
             this.Módosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Módosítás.Location = new System.Drawing.Point(353, 51);
+            this.Módosítás.Location = new System.Drawing.Point(442, 51);
             this.Módosítás.Name = "Módosítás";
             this.Módosítás.Size = new System.Drawing.Size(45, 45);
             this.Módosítás.TabIndex = 187;
@@ -138,12 +139,24 @@
             this.Aktív.Text = "Történeti elemek";
             this.Aktív.UseVisualStyleBackColor = true;
             // 
+            // Összesítés
+            // 
+            this.Összesítés.BackgroundImage = global::Villamos.Properties.Resources.justice_297629_1280;
+            this.Összesítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Összesítés.Location = new System.Drawing.Point(266, 51);
+            this.Összesítés.Name = "Összesítés";
+            this.Összesítés.Size = new System.Drawing.Size(45, 45);
+            this.Összesítés.TabIndex = 189;
+            this.Összesítés.UseVisualStyleBackColor = true;
+            this.Összesítés.Click += new System.EventHandler(this.Összesítés_Click);
+            // 
             // Ablak_Fődarab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(906, 252);
+            this.Controls.Add(this.Összesítés);
             this.Controls.Add(this.Aktív);
             this.Controls.Add(this.Módosítás);
             this.Controls.Add(this.BtnSAP);
@@ -175,5 +188,6 @@
         internal System.Windows.Forms.Button BtnSAP;
         internal System.Windows.Forms.Button Módosítás;
         private System.Windows.Forms.CheckBox Aktív;
+        internal System.Windows.Forms.Button Összesítés;
     }
 }
