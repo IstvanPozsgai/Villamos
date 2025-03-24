@@ -700,8 +700,7 @@ namespace Villamos
 
         private void Pályaszám_TextUpdate(object sender, EventArgs e)
         {
-            if (Pályaszám.Text.Trim() == "") return;
-            Hibák_kiírása();
+            if (Pályaszám.Items.Contains(Pályaszám.Text.Trim())) Hibák_kiírása();
         }
 
         private void Lekérdez_Click(object sender, EventArgs e)
