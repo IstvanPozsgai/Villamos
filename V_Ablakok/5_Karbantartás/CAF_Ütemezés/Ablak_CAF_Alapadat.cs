@@ -36,12 +36,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Start()
         {
+            AdatokCiklus = KézCiklus.Lista_Adatok(true);
+            AdatokCAFAlap = KézCAFAlap.Lista_Adatok();
             Jogosultságkiosztás();
             Pályaszámokfeltöltése();
             Vizsgsorszámcombofeltölés();
             Üzemek_listázása();
-            AdatokCiklus = KézCiklus.Lista_Adatok(true);
-            AdatokCAFAlap = KézCAFAlap.Lista_Adatok();
+
 
             CiklusrendCombok_feltöltés();
             if (Azonosító.Trim() != "")
@@ -103,25 +104,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        private void Pályaszámokfeltöltése()
-        {
-            try
-            {
-                Alap_pályaszám.Items.Clear();
-
-                foreach (Adat_CAF_alap Elem in AdatokCAFAlap)
-                    Alap_pályaszám.Items.Add(Elem.Azonosító);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Vizsgsorszámcombofeltölés()
         {
@@ -238,10 +220,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Alapadatokat_kiír();
         }
 
-        private void Alap_pályaszám_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Alapadatokat_kiír();
-        }
+
 
         private void Alapadatokat_kiír()
         {
@@ -497,6 +476,69 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
+        private void TörliBeviteliMezőket()
+        {
+            Alap_ciklus_idő.Text = "";
 
+            Alap_vizsg_idő.Text = "";
+            Alap_vizsg_sorszám_idő.Text = "";
+            ALAP_Üzemek_nap.Text = "";
+            Alap_dátum_idő.Value = new DateTime(1900, 1, 1);
+
+            Alap_ciklus_km.Text = "";
+
+            Alap_vizsg_km.Text = "";
+            Alap_vizsg_sorszám_km.Text = "";
+            ALAP_Üzemek_km.Text = "";
+            Alap_dátum_km.Value = new DateTime(1900, 1, 1);
+            Alap_KM_számláló.Text = "";
+
+            Alap_Havi_km.Text = "";
+            Alap_KMU.Text = "";
+            Alap_Össz_km.Text = "";
+            Alap_Dátum_frissítés.Value = new DateTime(1900, 1, 1);
+            Alap_Típus.Text = "";
+            Alap_felújítás.Value = new DateTime(1900, 1, 1);
+
+            Utolsó_vizsgóta.Text = "";
+            Alap_Státus.Checked = false;
+            Alap_Garancia.Checked = false;
+        }
+
+
+        #region Pályaszám
+        private void Alap_pályaszám_TextUpdate(object sender, EventArgs e)
+        {
+            if (Alap_pályaszám.Items.Contains(Alap_pályaszám.Text))
+                Alapadatokat_kiír();
+            else
+                TörliBeviteliMezőket();
+        }
+
+        private void Pályaszámokfeltöltése()
+        {
+            try
+            {
+                Alap_pályaszám.Items.Clear();
+
+                foreach (Adat_CAF_alap Elem in AdatokCAFAlap)
+                    Alap_pályaszám.Items.Add(Elem.Azonosító);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Alap_pályaszám_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Alapadatokat_kiír();
+        }
+        #endregion
     }
 }
