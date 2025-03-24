@@ -328,7 +328,7 @@ namespace Villamos.Kezelők
                 List<Adat_Jármű_hiba> Adatok = Lista_Adatok(Telephely);
                 Adatok = (from a in Adatok
                           where a.Azonosító == Azonosító
-                          orderby a.Hibáksorszáma
+                          orderby a.Korlát descending, a.Hibáksorszáma
                           select a).ToList();
 
                 List<string> szövegGy = new List<string>();

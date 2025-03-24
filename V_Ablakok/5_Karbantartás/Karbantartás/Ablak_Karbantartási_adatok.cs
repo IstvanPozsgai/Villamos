@@ -886,7 +886,7 @@ namespace Villamos
                     // új hiba rögzítése
                     Hiba_státus = HibaRögzítés();
                 }
-
+                KézHiba.Újrasorszámoz(Cmbtelephely.Text.Trim(), Pályaszám.Text.Trim());
                 Hiba_Rögzítés_Napló();
                 HibaListázás();
 
