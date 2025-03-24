@@ -561,7 +561,7 @@ namespace Villamos
             try
             {
                 Bevitelimezők_alap();
-                HibaListázás();
+
                 JárművekLista();
 
                 long státushiba = 0;
@@ -592,7 +592,8 @@ namespace Villamos
                 Tábla_Hibalista.Columns[5].HeaderText = "Típus";
                 Tábla_Hibalista.Columns[5].Width = 80;
                 #endregion
-
+                KézHiba.Újrasorszámoz(Cmbtelephely.Text.Trim(), Pályaszám.Text.Trim());
+                HibaListázás();
                 List<Adat_Jármű_hiba> Adatok = (from a in AdatokHiba
                                                 where a.Azonosító == Pályaszám.Text.Trim()
                                                 orderby a.Hibáksorszáma
@@ -645,7 +646,7 @@ namespace Villamos
                     Adat_Jármű ADAT = new Adat_Jármű(Pályaszám.Text.Trim(), státushiba, new DateTime(1900, 1, 1));
                     KéZJármű.Módosítás_Státus_Dátum(Cmbtelephely.Text.Trim(), ADAT);
                 }
-                JárművekLista();
+
 
                 if (figyel)
                 {
@@ -654,6 +655,8 @@ namespace Villamos
                     HibaListázás();
                     Hibák_kiírása();
                 }
+
+                JárművekLista();
                 Sorszám.Text = (Utolsóhiba + 1).ToString();
                 Tábla_Hibalista_Színezés();
             }

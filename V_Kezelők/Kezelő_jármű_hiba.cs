@@ -215,6 +215,7 @@ namespace Villamos.Kezelők
                     szöveg += $"'{Adat.Azonosító.Trim()}', ";
                     szöveg += $"{Sorszám})";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Újrasorszámoz(Telephely, Adat.Azonosító);
                 }
 
             }
@@ -307,6 +308,8 @@ namespace Villamos.Kezelők
                 szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
                 szöveg += $" AND hibáksorszáma={Adat.Hibáksorszáma}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+                Újrasorszámoz(Telephely, Adat.Azonosító);
+
             }
             catch (HibásBevittAdat ex)
             {
