@@ -196,6 +196,7 @@ namespace Villamos.Villamos_Ablakok
                     0);
                 KézMérés.Rögzítés(DateTime.Today.Year, ADAT);
                 Változás?.Invoke();
+                MessageBox.Show("Az adatok rögzítése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
