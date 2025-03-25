@@ -32,6 +32,8 @@ namespace Villamos
         List<Adat_T5C5_Göngyöl_DátumTábla> AdatokGöngyöl = new List<Adat_T5C5_Göngyöl_DátumTábla>();
         List<Adat_T5C5_Futás> AdatokFutás = new List<Adat_T5C5_Futás>();
 
+        readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
+
         public Ablak_T5C5_futás()
         {
             InitializeComponent();
@@ -724,11 +726,7 @@ namespace Villamos
 
                 Holtart.Be(Pályaszám.Count + 1);
 
-
-                string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
-                Kezelő_jármű_hiba kézhiba = new Kezelő_jármű_hiba();
-                szöveg = "SELECT * FROM Hibatábla";
-                List<Adat_Jármű_hiba> HibaAdat = kézhiba.Lista_adatok(helyhiba, jelszó, szöveg);
+                List<Adat_Jármű_hiba> HibaAdat = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 SzövegGy.Clear();
                 foreach (string elem in Pályaszám)

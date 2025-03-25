@@ -1387,11 +1387,7 @@ namespace Villamos
         {
             foreach (Adat_kiegészítő_telephely rekord in AdatokKiegTelephely)
             {
-                string hely = $@"{Application.StartupPath}\{rekord.Telephelynév}\adatok\villamos\hiba.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg2 = "SELECT * FROM hibatábla";
-                List<Adat_Jármű_hiba> Adatok = KézHiba.Lista_adatok(hely, jelszó, szöveg2);
-
+                List<Adat_Jármű_hiba> Adatok = KézHiba.Lista_Adatok(rekord.Telephelynév);
                 AdatokHIBA.AddRange(Adatok);
             }
         }

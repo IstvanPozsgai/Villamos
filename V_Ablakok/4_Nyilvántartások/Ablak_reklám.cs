@@ -1408,13 +1408,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM hibatábla ";
-
-
                 AdatokHiba.Clear();
-                AdatokHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
+                AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {

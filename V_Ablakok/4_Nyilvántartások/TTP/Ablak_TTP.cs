@@ -326,17 +326,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 AdatokHiba.Clear();
                 foreach (Adat_Kiegészítő_Sérülés rekord in AdatokTelep)
                 {
-                    string hely = $@"{Application.StartupPath}\{rekord.Név}\adatok\Villamos\hiba.mdb";
-                    if (File.Exists(hely))
-                    {
-                        string jelszó = "pozsgaii";
-                        string szöveg = $"SELECT * FROM Hibatábla";
-
-                        List<Adat_Jármű_hiba> AdatokIdeig = KézHiba.Lista_adatok(hely, jelszó, szöveg);
-                        AdatokHiba.AddRange(AdatokIdeig);
-                    }
+                    List<Adat_Jármű_hiba> AdatokIdeig = KézHiba.Lista_Adatok(rekord.Név);
+                    AdatokHiba.AddRange(AdatokIdeig);
                 }
-
             }
             catch (HibásBevittAdat ex)
             {

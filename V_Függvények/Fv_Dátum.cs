@@ -237,5 +237,25 @@ public static partial class Függvénygyűjtemény
     {
         return new DateTime(1900, 1, 1);
     }
+
+    public static DateTime Nap0000(this DateTime dátum)
+    {
+        DateTime datum = new DateTime(dátum.Year, dátum.Month, dátum.Day, 0, 0, 0);
+        return datum;
+    }
+
+    public static DateTime Nap2359(this DateTime dátum)
+    {
+        DateTime datum = new DateTime(dátum.Year, dátum.Month, dátum.Day, 23, 59, 59);
+        return datum;
+    }
+
+    public static DateTime Nap0600(this DateTime dátum)
+    {
+        DateTime datum = new DateTime(dátum.Year, dátum.Month, 1, 6, 0, 0);
+        return datum;
+    }
+
+
 }
 

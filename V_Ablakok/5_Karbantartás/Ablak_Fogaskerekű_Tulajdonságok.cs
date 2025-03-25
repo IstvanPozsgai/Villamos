@@ -23,6 +23,7 @@ namespace Villamos
         int utolsósor;
         readonly Kezelő_Fogas_km KézKmadatok = new Kezelő_Fogas_km();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
+        readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
         List<Adat_Fogas_Km> AdatokFogas = new List<Adat_Fogas_Km>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
@@ -439,13 +440,8 @@ namespace Villamos
                 string jelszóhonnan = "pozsgaii";
                 string jelszó = "pocsaierzsi";
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4Fogas.mdb";
-                string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
 
-                //Új
-
-                string szöveghiba = "SELECT * FROM hibatábla";
-                Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-                List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_adatok(helyhiba, jelszóhonnan, szöveghiba);
+                List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Tábla_lekérdezés.Rows.Clear();
                 Tábla_lekérdezés.Columns.Clear();

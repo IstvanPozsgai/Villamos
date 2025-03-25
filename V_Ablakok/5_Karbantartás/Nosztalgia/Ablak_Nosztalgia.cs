@@ -29,11 +29,11 @@ namespace Villamos.Villamos_Ablakok
 
         #region Kezelők - Listák
 
-        Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-        Kezelő_Nosztalgia_Állomány KézÁllomány = new Kezelő_Nosztalgia_Állomány();
-        Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
-        Kezelő_Nosztagia_Futás KézFutás = new Kezelő_Nosztagia_Futás();
-        Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Nosztalgia_Állomány KézÁllomány = new Kezelő_Nosztalgia_Állomány();
+        readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
+        readonly Kezelő_Nosztagia_Futás KézFutás = new Kezelő_Nosztagia_Futás();
+        readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_Nosztalgia_Állomány> AdatokÁllomány = new List<Adat_Nosztalgia_Állomány>();
@@ -76,12 +76,8 @@ namespace Villamos.Villamos_Ablakok
         }
         private void ListaHiba()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = $"SELECT * FROM hibatábla";
             AdatokHiba.Clear();
-            AdatokHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
-
+            AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
         }
         private void ListaFeltöltés()
         {
@@ -634,7 +630,7 @@ namespace Villamos.Villamos_Ablakok
                     szöveg += $"'{Nap_Dátum.Value:yyyy.MM.dd}', ";
                     if (Nap_törlés.Checked == true) szöveg += " true, ";
                     else szöveg += " false, ";
-                    szöveg += $"'{DateTime.Now.ToString()}', ";
+                    szöveg += $"'{DateTime.Now}', ";
                     szöveg += $"'{Program.PostásNév.Trim()}', ";
                     szöveg += $"'{Cmbtelephely.Text.Trim()}') ";
                 }
@@ -1398,10 +1394,7 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Maximum = 100;
 
                 string szöveg;
-                int talált;
-                int státus;
                 string típusa;
-                int hibáksorszáma;
                 int hiba;
                 int volt = 0;
                 string ideig_psz = Pályaszám.Text;
@@ -1430,7 +1423,7 @@ namespace Villamos.Villamos_Ablakok
                 if (volt == 1)
                 {
                     // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
-                    talált = 0;
+                    int talált = 0;
 
                     ListaHiba();
                     Adat_Jármű_hiba AdatHiba = (from a in AdatokHiba
@@ -1453,11 +1446,11 @@ namespace Villamos.Villamos_Ablakok
                         {
                             string kiegSzöveg = szöveg;
 
-                            if (!int.TryParse(AdatJármű?.Hibák.ToString(), out hibáksorszáma)) hibáksorszáma = 0;
+                            if (!int.TryParse(AdatJármű?.Hibák.ToString(), out int hibáksorszáma)) hibáksorszáma = 0;
 
                             hiba = hibáksorszáma++;
                             típusa = AdatJármű.Típus ?? "";
-                            if (!int.TryParse(AdatJármű.Státus.ToString(), out státus)) státus = 0;
+                            if (!int.TryParse(AdatJármű.Státus.ToString(), out int státus)) státus = 0;
 
 
                             if (státus < 3)

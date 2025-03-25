@@ -35,6 +35,7 @@ namespace Villamos
         readonly Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
         readonly Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
         readonly Kezelő_Főkönyv_Zser_Km KézKorr = new Kezelő_Főkönyv_Zser_Km();
+        readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
 
         List<Adat_T5C5_Kmadatok> AdatokICSKmadatok = new List<Adat_T5C5_Kmadatok>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
@@ -3766,10 +3767,7 @@ namespace Villamos
                 JárműListaFeltöltés();
 
                 // megnyitjuk a hibákat
-                string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
-                szöveg = "SELECT * FROM hibatábla  ";
-                Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-                List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_adatok(helyhiba, jelszó, szöveg);
+                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 // naplózás
                 string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Now:yyyyMM}hibanapló.mdb";

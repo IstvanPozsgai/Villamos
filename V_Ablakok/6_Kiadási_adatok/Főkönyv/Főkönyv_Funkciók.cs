@@ -128,7 +128,7 @@ namespace Villamos
             string helyhiba = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\villamos\hiba.mdb";
             string jelszóhiba = "pozsgaii";
             szöveg = "SELECT * FROM hibatábla ";
-            List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_adatok(helyhiba, jelszóhiba, szöveg);
+            List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(telephely.Trim());
 
             string helyvill = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\villamos\villamos.mdb";
             szöveg = "SELECT * FROM állománytábla where státus=4 ";

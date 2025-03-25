@@ -2850,7 +2850,7 @@ namespace Villamos
             string jelszóhiba = "pozsgaii";
             string szöveg = "SELECT * FROM hibatábla ";
             Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_adatok(helyhiba, jelszóhiba, szöveg);
+            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
             // naplózás
             string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Now:yyyyMM}hibanapló.mdb";
@@ -2988,10 +2988,8 @@ namespace Villamos
 
             // megnyitjuk a hibákat
             string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-            string jelszóhiba = "pozsgaii";
-            szöveg = "SELECT * FROM hibatábla ";
             Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_adatok(helyhiba, jelszóhiba, szöveg);
+            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
 
             // naplózás
@@ -3147,10 +3145,9 @@ namespace Villamos
 
             // megnyitjuk a hibákat
             string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-            string jelszóhiba = "pozsgaii";
             szöveg = "SELECT * FROM hibatábla ";
             Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_adatok(helyhiba, jelszóhiba, szöveg);
+            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
             // naplózás
             string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Now:yyyyMM}hibanapló.mdb";

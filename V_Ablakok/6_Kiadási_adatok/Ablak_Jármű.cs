@@ -1426,9 +1426,10 @@ namespace Villamos
             try
             {
                 // hibákat átmásoljuk az állományba
-                string szöveg = $"SELECT * FROM hibatábla where [azonosító]='{azonosító}'";
-                string jelszó = "pozsgaii";
-                List<Adat_Jármű_hiba> JHadatok = Kéz_JHadat.Lista_adatok(honnan, jelszó, szöveg);
+                List<Adat_Jármű_hiba> JHadatok = Kéz_JHadat.Lista_Adatok(honnan);
+                JHadatok = (from a in JHadatok
+                            where a.Azonosító == azonosító
+                            select a).ToList();
 
                 foreach (Adat_Jármű_hiba item in JHadatok)
                 {
