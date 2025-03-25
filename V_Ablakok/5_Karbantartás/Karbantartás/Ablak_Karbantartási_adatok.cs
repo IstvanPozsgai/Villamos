@@ -889,7 +889,6 @@ namespace Villamos
                     Hiba_státus = HibaRögzítés();
                 }
                 KézHiba.Újrasorszámoz(Cmbtelephely.Text.Trim(), Pályaszám.Text.Trim());
-                Hiba_Rögzítés_Napló();
                 HibaListázás();
 
 
@@ -1106,8 +1105,6 @@ namespace Villamos
                                  1);
 
                 KézHiba.Rögzítés(Cmbtelephely.Text.Trim(), Elem);
-
-                HibaListázás();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1150,8 +1147,6 @@ namespace Villamos
 
 
                 KézHiba.Módosítás(Cmbtelephely.Text.Trim(), Elem);
-                HibaListázás();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1179,7 +1174,6 @@ namespace Villamos
                                                           Pályaszám.Text.Trim(),
                                                           long.Parse(Sorszám.Text));
                 KézHiba.Törlés(Cmbtelephely.Text.Trim(), Elem);
-                HibaListázás();
             }
             catch (HibásBevittAdat ex)
             {

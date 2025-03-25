@@ -1169,8 +1169,8 @@ namespace Villamos
                 TípusDB(true);
 
                 // hibákat átmásoljuk az állományba
-                string hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-                string honnan = $@"{Application.StartupPath}\Főmérnökség\adatok\hiba.mdb";
+                string hova = Cmbtelephely.Text.Trim();
+                string honnan = "Főmérnökség";
                 HibákMásolása(honnan, hova, Közös_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.Text.Trim());
 
                 //E2 másolás
@@ -1246,8 +1246,8 @@ namespace Villamos
                 TípusDB(false);
 
                 //Hibák másolás
-                string honnan = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\hiba.mdb";
-                string hova = $@"{Application.StartupPath}\Főmérnökség\adatok\hiba.mdb";
+                string honnan = Cmbtelephely.Text.Trim();
+                string hova = "Főmérnökség";
                 HibákMásolása(honnan, hova, Saját_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.Text.Trim());
 
                 //E2 másolás
@@ -1442,7 +1442,7 @@ namespace Villamos
                                            item.Azonosító,
                                            item.Hibáksorszáma
                                            );
-                    Kéz_JHadat.Rögzítés(hova, jelszó, Küld);
+                    Kéz_JHadat.Rögzítés(hova, Küld);
                 }
 
                 //kitöröljük pályaszámhoz tartozó az összes hibát

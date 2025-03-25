@@ -27,88 +27,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(helynapló)) Adatbázis_Létrehozás.Hibatáblalap(helynapló.KönyvSzerk());
         }
 
-        public List<Adat_Jármű_hiba> Lista_adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Jármű_hiba> Adatok = new List<Adat_Jármű_hiba>();
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat_Jármű_hiba adat = new Adat_Jármű_hiba(
-                                    rekord["létrehozta"].ToStrTrim(),
-                                    rekord["korlát"].ToÉrt_Long(),
-                                    rekord["hibaleírása"].ToStrTrim(),
-                                    rekord["idő"].ToÉrt_DaTeTime(),
-                                    rekord["javítva"].ToÉrt_Bool(),
-                                    rekord["típus"].ToStrTrim(),
-                                    rekord["azonosító"].ToStrTrim(),
-                                    rekord["hibáksorszáma"].ToÉrt_Long()
-                                    );
-                                Adatok.Add(adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public void Rögzítés(string hely, string jelszó, Adat_Jármű_hiba Adat)
-        {
-            try
-            {    // rögzítjük az adatot
-                string szöveg = "SELECT * FROM hibatábla";
-                List<Adat_Jármű_hiba> Adatok = Lista_adatok(hely, jelszó, szöveg);
-
-                Adat_Jármű_hiba Elem = (from a in Adatok
-                                        where a.Azonosító == Adat.Azonosító
-                                        && a.Hibaleírása.Contains(Adat.Hibaleírása)
-                                        select a).FirstOrDefault();
-
-                if (Elem == null)
-                {
-                    long Sorszám = 1;
-                    Adatok = (from a in Adatok
-                              where a.Azonosító == Adat.Azonosító
-                              select a).ToList();
-
-                    if (Adatok != null && Adatok.Count > 0)
-                        Sorszám = Adatok.Max(a => a.Hibáksorszáma) + 1;
-                    // ha nem létezik 
-                    szöveg = "INSERT INTO hibatábla  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
-                    szöveg += $"'{Adat.Létrehozta.Trim()}', ";
-                    szöveg += $"{Adat.Korlát}, ";
-                    szöveg += $"'{Adat.Hibaleírása.Trim()}', ";
-                    szöveg += $"'{Adat.Idő}', ";
-                    szöveg += $"{Adat.Javítva}, ";
-                    szöveg += $"'{Adat.Típus.Trim()}', ";
-                    szöveg += $"'{Adat.Azonosító.Trim()}', ";
-                    szöveg += $"{Sorszám})";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Hiba Rögzítés", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        //Új
         public List<Adat_Jármű_hiba> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
@@ -216,7 +134,7 @@ namespace Villamos.Kezelők
                     szöveg += $"{Sorszám})";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
                     Újrasorszámoz(Telephely, Adat.Azonosító);
-                    Rögzítés_Napló(Telephely, DateTime.Now, Adat)
+                    Rögzítés_Napló(Telephely, DateTime.Now, Adat);
                 }
 
             }
@@ -265,7 +183,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(string Telephely, Adat_Jármű_hiba Adat)
+        public void Törlés(string Telephely, Adat_Jármű_hiba Adat, bool naplóz = true)
         {
             try
             {
@@ -273,6 +191,7 @@ namespace Villamos.Kezelők
                 string szöveg = "DELETE FROM Hibatábla ";
                 szöveg += $" WHERE azonosító='{Adat.Azonosító}' AND hibáksorszáma={Adat.Hibáksorszáma}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
+                if (naplóz) Rögzítés_Napló(Telephely, DateTime.Now, Adat);
             }
             catch (HibásBevittAdat ex)
             {
@@ -285,7 +204,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string Telephely, Adat_Jármű_hiba Adat)
+        public void Módosítás(string Telephely, Adat_Jármű_hiba Adat, bool naplóz = true)
         {
             try
             {
@@ -298,8 +217,8 @@ namespace Villamos.Kezelők
                 szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
                 szöveg += $" AND hibáksorszáma={Adat.Hibáksorszáma}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (naplóz) Rögzítés_Napló(Telephely, DateTime.Now, Adat);
                 Újrasorszámoz(Telephely, Adat.Azonosító);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -359,7 +278,7 @@ namespace Villamos.Kezelők
                                                         select a).ToList();
                     if (Ismétlődés != null && Ismétlődés.Count > 1)
                     {
-                        Törlés(Telephely, Ismétlődés[0]);
+                        Törlés(Telephely, Ismétlődés[0], false);
                         Rögzítés(Telephely, Ismétlődés[0]);
                     }
                 }
@@ -410,5 +329,42 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        //elkopó
+        public List<Adat_Jármű_hiba> Lista_adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Jármű_hiba> Adatok = new List<Adat_Jármű_hiba>();
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat_Jármű_hiba adat = new Adat_Jármű_hiba(
+                                    rekord["létrehozta"].ToStrTrim(),
+                                    rekord["korlát"].ToÉrt_Long(),
+                                    rekord["hibaleírása"].ToStrTrim(),
+                                    rekord["idő"].ToÉrt_DaTeTime(),
+                                    rekord["javítva"].ToÉrt_Bool(),
+                                    rekord["típus"].ToStrTrim(),
+                                    rekord["azonosító"].ToStrTrim(),
+                                    rekord["hibáksorszáma"].ToÉrt_Long()
+                                    );
+                                Adatok.Add(adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
     }
 }

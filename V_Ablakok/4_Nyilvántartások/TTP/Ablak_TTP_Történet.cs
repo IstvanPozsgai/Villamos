@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -23,6 +22,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         public List<Adat_Jármű> AdatokJármű { get; set; }
         public string Művelet { get; set; }
         public DateTime ÜtemezésDátum { get; set; }
+
+        readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
         public Ablak_TTP_Történet(string azonosító, List<Adat_Jármű> adatokJármű, List<Adat_TTP_Tábla> adatokTeljes, string művelet, DateTime ütemezésDátum)
         {
@@ -390,10 +391,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                                     select a).FirstOrDefault();
                 if (Egyed != null)
                 {
-                    string hely = $@"{Application.StartupPath}\{Egyed.Üzem.Trim()}\adatok\villamos\hiba.mdb";
-                    if (!File.Exists(hely)) return;
-                    string jelszó = "pozsgaii";
-
                     Adat_Jármű_hiba Elem = new Adat_Jármű_hiba(
                                          Program.PostásNév.Trim(),
                                          1,
@@ -403,9 +400,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                                          Egyed.Valóstípus,
                                          CmbAzonosító.Text.Trim(),
                                          1);
-                    Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-
-                    KézHiba.Rögzítés(hely, jelszó, Elem);
+                    KézHiba.Rögzítés(Egyed.Üzem.Trim(), Elem);
                 }
             }
             catch (HibásBevittAdat ex)
