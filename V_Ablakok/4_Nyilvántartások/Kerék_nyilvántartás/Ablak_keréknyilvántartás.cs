@@ -926,7 +926,7 @@ namespace Villamos
             string jelszó = "pocsaierzsi";
             string szöveg = "Select * FROM KMtábla";
 
-            Kezelő_T5C5_Kmadatok KézT5C5Elő = new Kezelő_T5C5_Kmadatok();
+            Kezelő_T5C5_Kmadatok KézT5C5Elő = new Kezelő_T5C5_Kmadatok("T5C5");
             List<Adat_T5C5_Kmadatok> AdatokT5CElő = KézT5C5Elő.Lista_Adat(hely, jelszó, szöveg);
 
             Adat_T5C5_Kmadatok AdatT5C5Elő = (from a in AdatokT5CElő
@@ -2429,7 +2429,6 @@ namespace Villamos
         {
             try
             {
-                string hely, jelszó, szöveg;
                 if (RögzítPályaszám.Text.Trim() == "") throw new HibásBevittAdat("A jármű pályaszámát meg kell adni.");
                 if (Rögzítpozíció.Text.Trim() == "") throw new HibásBevittAdat("A poizíciót meg kell adni.");
                 if (RögzítÁllapot.Text.Trim() == "") throw new HibásBevittAdat("Az állapotot meg kell adni.");

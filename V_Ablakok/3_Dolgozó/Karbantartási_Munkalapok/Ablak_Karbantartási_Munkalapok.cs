@@ -971,7 +971,7 @@ namespace Villamos.Villamos_Ablakok
                     string helykm = Application.StartupPath + @"\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
                     string jelszókm = "pocsaierzsi";
                     string szövegkm = $"SELECT * FROM KMtábla Where azonosító='{Pályaszám.Text.Trim()}' order by  vizsgdátumk  desc";
-                    Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok();
+                    Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok("T5C5");
                     Adat_T5C5_Kmadatok EgyKmAdat = KézKM.Egy_Adat(helykm, jelszókm, szövegkm);
                     KM_korr = 0;
                     if (EgyKmAdat != null) KM_korr = EgyKmAdat.KMUkm;

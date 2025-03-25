@@ -31,7 +31,7 @@ namespace Villamos
         readonly Kezelő_Szerelvény KézSzerElő = new Kezelő_Szerelvény();
         readonly Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
         readonly Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
-        readonly Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok();
+        readonly Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly Kezelő_Osztály_Adat KézCsat = new Kezelő_Osztály_Adat();
         readonly Kezelő_T5C5_Állomány KézFutás = new Kezelő_T5C5_Állomány();
         readonly Kezelő_Hétvége_Előírás KézElőírás = new Kezelő_Hétvége_Előírás();
@@ -2080,7 +2080,7 @@ namespace Villamos
 
                 Tábla.Sort(Tábla.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
 
-                Kezelő_T5C5_Kmadatok kéz = new Kezelő_T5C5_Kmadatok();
+                Kezelő_T5C5_Kmadatok kéz = new Kezelő_T5C5_Kmadatok("T5C5");
                 List<Adat_T5C5_Kmadatok> Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
 
 

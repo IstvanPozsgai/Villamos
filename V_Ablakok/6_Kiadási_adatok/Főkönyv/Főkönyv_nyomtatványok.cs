@@ -17,6 +17,7 @@ namespace Villamos.Villamos_Nyomtatványok
         #region Kezelők
         readonly Kezelő_Jármű_Állomány_Típus KézJárműÁllTípus = new Kezelő_Jármű_Állomány_Típus();
         readonly Kezelő_Főkönyv_SegédTábla KézSegédTábla = new Kezelő_Főkönyv_SegédTábla();
+        readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
         #endregion
 
 
@@ -1573,14 +1574,13 @@ namespace Villamos.Villamos_Nyomtatványok
 
 
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló" + @"\" + Dátum.ToString("yyyyMM") + "hibanapló.mdb";
-            string jelszó = "pozsgaii";
+
             int mennyi;
             if (System.IO.File.Exists(hely))
             {
 
                 // csak azokat listázzuk amik be vannak jelölve
-                string szöveg = "SELECT * FROM hibaterv WHERE főkönyv = true ORDER BY id";
-                Kezelő_jármű_hiba KJH_kéz = new Kezelő_jármű_hiba();
+
                 List<Adat_Jármű_hiba> Adatok;
 
                 Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
@@ -1604,7 +1604,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     //szöveg += " order by azonosító";
                     //Adatok = KJH_kéz.Lista_adatok(hely, jelszó, szöveg);
 
-                    Adatok = KJH_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                    Adatok = KézJárműHiba.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                     Adatok = (from a in Adatok
                               where a.Idő >= MyF.Nap0600(Dátum)
                               && a.Idő < MyF.Nap0600(Dátum.AddDays(1))
@@ -1981,6 +1981,8 @@ namespace Villamos.Villamos_Nyomtatványok
 
     public class Főkönyv_Háromnapos
     {
+        readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
+
         public void Három_Nyomtatvány(string fájlneve, string Cmbtelephely, string papírméret, string papírelrendezés)
         {
 
@@ -1992,8 +1994,8 @@ namespace Villamos.Villamos_Nyomtatványok
             string[] mit = { "Hétfő-Csütörtök", "Kedd-Péntek", "Szerda-Szombat" };
 
             // kiírjuk a kocsikat
-            Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Trim());
+
+            List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Trim());
 
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\villamos\villamos2.mdb";
             string jelszó = "pozsgaii";

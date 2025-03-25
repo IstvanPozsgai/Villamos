@@ -23,7 +23,7 @@ namespace Villamos
         string _hely, _jelszó, _szöveg, _fájlexc;
         int utolsósor;
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-        readonly Kezelő_T5C5_Kmadatok KézKmAdatok = new Kezelő_T5C5_Kmadatok();
+        readonly Kezelő_T5C5_Kmadatok KézKmAdatok = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
 
@@ -783,7 +783,7 @@ namespace Villamos
                 szöveg += " WHERE törölt=False ORDER BY KMtábla.azonosító";
 
                 Holtart.Be();
-                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok();
+                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok("T5C5");
                 List<Adat_T5C5_Kmadatok> Adatok = Kéz.Lista_Adat(hely, jelszó, szöveg);
 
                 string helykerék = $@"{Application.StartupPath}\Főmérnökség\adatok\" + DateTime.Today.Year + @"\telepikerék.mdb";
@@ -1212,7 +1212,7 @@ namespace Villamos
                     hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Villamos4T5C5.mdb";
                     jelszó = "pocsaierzsi";
                     szöveg = "SELECT * FROM kmtábla order by id desc ";
-                    Kezelő_T5C5_Kmadatok KézT5C5Kmadatok = new Kezelő_T5C5_Kmadatok();
+                    Kezelő_T5C5_Kmadatok KézT5C5Kmadatok = new Kezelő_T5C5_Kmadatok("T5C5");
                     List<Adat_T5C5_Kmadatok> AdatokT5C5Kmadatok = KézT5C5Kmadatok.Lista_Adat(hely, jelszó, szöveg);
 
                     if (!long.TryParse(Sorszám.Text, out long sorszám))
@@ -1243,7 +1243,7 @@ namespace Villamos
                         MyF.Szöveg_Tisztítás(KövV.Text.Trim()),
                         false,
                         kövV2_számláló);
-                    Kezelő_T5C5_Kmadatok kéz = new Kezelő_T5C5_Kmadatok();
+                    Kezelő_T5C5_Kmadatok kéz = new Kezelő_T5C5_Kmadatok("T5C5");
 
                     if (Sorszám.Text == "")
                     {
@@ -2717,7 +2717,7 @@ namespace Villamos
                 string jelszó = "pocsaierzsi";
                 string szöveg = "SELECT * FROM KMtábla order by azonosító";
 
-                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok();
+                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok("T5C5");
                 List<Adat_T5C5_Kmadatok> Adatok = Kéz.Lista_Adat(hely, jelszó, szöveg);
 
                 utolsósor = MyE.EXCELtábla(hely, jelszó, szöveg) + 1;

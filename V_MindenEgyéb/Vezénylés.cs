@@ -13,7 +13,7 @@ namespace Villamos.V_MindenEgyéb
         readonly static Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly static Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
         readonly static Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
-        readonly static Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok();
+        readonly static Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok("T5C5");
 
         public static void T5C5(string Telephely, DateTime Dátum)
         {

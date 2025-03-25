@@ -32,7 +32,7 @@ namespace Villamos
         readonly Kezelő_Szerelvény KézSzerElő = new Kezelő_Szerelvény();
         readonly Kezelő_Osztály_Adat KézOszt = new Kezelő_Osztály_Adat();
         readonly Kezelő_Jármű_Vendég KézIdegen = new Kezelő_Jármű_Vendég();
-        readonly Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok();
+        readonly Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly Kezelő_Főkönyv_Zser_Km KézKorr = new Kezelő_Főkönyv_Zser_Km();
         readonly Kezelő_T5C5_Havi_Nap KézNapok = new Kezelő_T5C5_Havi_Nap();
         readonly Kezelő_Menetkimaradás KézMenet = new Kezelő_Menetkimaradás();

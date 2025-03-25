@@ -204,6 +204,25 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Törlés(string Telephely, string Azonosító)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = $"DELETE FROM hibatábla WHERE [azonosító]='{Azonosító}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Hiba Törlés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Módosítás(string Telephely, Adat_Jármű_hiba Adat, bool naplóz = true)
         {
             try

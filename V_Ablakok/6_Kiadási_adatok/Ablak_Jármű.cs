@@ -1447,9 +1447,8 @@ namespace Villamos
                 }
 
                 //kitöröljük pályaszámhoz tartozó az összes hibát
+                Kéz_JHadat.Törlés(hova, azonosító);
 
-                szöveg = $"DELETE FROM hibatábla WHERE [azonosító]='{azonosító}'";
-                MyA.ABtörlés(honnan, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

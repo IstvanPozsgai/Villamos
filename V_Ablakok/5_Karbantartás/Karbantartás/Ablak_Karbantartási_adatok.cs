@@ -24,7 +24,7 @@ namespace Villamos
         readonly Kezelő_Jármű_Állomány_Típus KézTípus = new Kezelő_Jármű_Állomány_Típus();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_Jármű_Xnapos KézXnapos = new Kezelő_Jármű_Xnapos();
-        readonly Kezelő_T5C5_Kmadatok KéZT5C5 = new Kezelő_T5C5_Kmadatok();
+        readonly Kezelő_T5C5_Kmadatok KéZT5C5 = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly Kezelő_T5C5_Kmadatok_Napló KézKmNapló = new Kezelő_T5C5_Kmadatok_Napló();
         readonly Kezelő_Főkönyv_Zser_Km KézFőkönyvKm = new Kezelő_Főkönyv_Zser_Km();
         readonly Kezelő_kiegészítő_Hibaterv KézHibaterv = new Kezelő_kiegészítő_Hibaterv();
@@ -1351,46 +1351,6 @@ namespace Villamos
                         }
                     }
                 }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        //
-        private void Hiba_Rögzítés_Napló()
-        {
-            try
-            {
-                // Naplózás
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Today:yyyyMM}hibanapló.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Hibatáblalap(hely);
-                string jelszó = "pozsgaii";
-                string szöveg = "INSERT INTO Hibatábla (létrehozta,Korlát,hibaleírása,javítva,típus,azonosító,hibáksorszáma, idő) VALUES (";
-                szöveg += $"'{Program.PostásNév}', ";
-                if (Jel1.Checked)
-                    szöveg += "1, ";
-                else if (Jel3.Checked)
-                    szöveg += "3, ";
-                else
-                    szöveg += "4, ";
-
-                szöveg += $"'{Hibaszöveg.Text.Trim()}',  ";
-                if (!Javítva.Checked)
-                    szöveg += "false, ";
-                else
-                    szöveg += "true, ";
-
-                szöveg += $"'{Egyed_Típus}', ";
-                szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                szöveg += Sorszám.Text + ", ";
-                szöveg += $"'{DateTime.Now}' )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
