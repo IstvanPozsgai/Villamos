@@ -157,7 +157,7 @@ namespace Villamos.V_MindenEgyéb
                                                         hibáksorszáma);
                                 }
                                 KézJárműHiba.Rögzítés(Telephely, AdatJármű);
-                                KézJárműHiba.Rögzítés_Napló(Telephely, DateTime.Now, AdatJármű);       // naplózzuk a hibákat
+
                             }
                         }
                     }

@@ -216,6 +216,7 @@ namespace Villamos.Kezelők
                     szöveg += $"{Sorszám})";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
                     Újrasorszámoz(Telephely, Adat.Azonosító);
+                    Rögzítés_Napló(Telephely, DateTime.Now, Adat)
                 }
 
             }
@@ -235,34 +236,23 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                List<Adat_Jármű_hiba> Adatok = Lista_Adatok(Telephely, Dátum);
 
-                Adat_Jármű_hiba Elem = (from a in Adatok
-                                        where a.Azonosító == Adat.Azonosító
-                                        && a.Hibaleírása.Contains(Adat.Hibaleírása)
-                                        select a).FirstOrDefault();
+                List<Adat_Jármű_hiba> AdatokNapló = Lista_Adatok(Telephely, Dátum);
+                long Sorszám = 1;
 
-                if (Elem == null)
-                {
-                    long Sorszám = 1;
-                    Adatok = (from a in Adatok
-                              where a.Azonosító == Adat.Azonosító
-                              select a).ToList();
+                if (AdatokNapló != null && AdatokNapló.Count > 0) Sorszám = AdatokNapló.Max(a => a.Hibáksorszáma) + 1;
+                // ha nem létezik 
+                string szöveg = "INSERT INTO hibatábla  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
+                szöveg += $"'{Adat.Létrehozta.Trim()}', ";
+                szöveg += $"{Adat.Korlát}, ";
+                szöveg += $"'{Adat.Hibaleírása.Trim()}', ";
+                szöveg += $"'{Adat.Idő}', ";
+                szöveg += $"{Adat.Javítva}, ";
+                szöveg += $"'{Adat.Típus.Trim()}', ";
+                szöveg += $"'{Adat.Azonosító.Trim()}', ";
+                szöveg += $"{Sorszám})";
+                MyA.ABMódosítás(helynapló, jelszó, szöveg);
 
-                    if (Adatok != null && Adatok.Count > 0)
-                        Sorszám = Adatok.Max(a => a.Hibáksorszáma) + 1;
-                    // ha nem létezik 
-                    string szöveg = "INSERT INTO hibatábla  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
-                    szöveg += $"'{Adat.Létrehozta.Trim()}', ";
-                    szöveg += $"{Adat.Korlát}, ";
-                    szöveg += $"'{Adat.Hibaleírása.Trim()}', ";
-                    szöveg += $"'{Adat.Idő}', ";
-                    szöveg += $"{Adat.Javítva}, ";
-                    szöveg += $"'{Adat.Típus.Trim()}', ";
-                    szöveg += $"'{Adat.Azonosító.Trim()}', ";
-                    szöveg += $"{Sorszám})";
-                    MyA.ABMódosítás(helynapló, jelszó, szöveg);
-                }
             }
             catch (HibásBevittAdat ex)
             {
