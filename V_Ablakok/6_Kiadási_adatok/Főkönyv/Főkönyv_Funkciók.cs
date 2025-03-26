@@ -28,8 +28,12 @@ namespace Villamos
                 List<Adat_Jármű_hiba> AdatokJármű = KézJárműHiba.Lista_Adatok(telephely);
                 AdatokJármű = (from a in AdatokJármű
                                orderby a.Azonosító, a.Korlát descending
+<<<<<<< HEAD
+                               select a).ToList(); string beálló = "_";
+=======
                                select a).ToList();
                 string beálló = "_";
+>>>>>>> 0e86582684ec25d8e69d765f7539cf9c4c1578c2
                 string üzemképtelen = "_";
                 string Üzemképes = "_";
                 string azonosító = "";

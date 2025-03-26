@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kmfutástábla(hely.KönyvSzerk());
         }
 
-        public List<Adat_T5C5_Kmadatok> Lista_Adat()
+        public List<Adat_T5C5_Kmadatok> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM kmtábla";
             List<Adat_T5C5_Kmadatok> Adatok = new List<Adat_T5C5_Kmadatok>();

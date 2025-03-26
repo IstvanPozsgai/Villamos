@@ -674,10 +674,12 @@
     <Compile Include="V_Adatbázis\Adatbázis_Szerszám_FejLáb.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Takarítás_BMR.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Takarítás_Opcionális.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_DigitálisMunkalap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Akkumulátor.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Behajtás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Belépés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_DigitálisMunkalap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Státus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jogosítvány.cs" />
@@ -718,6 +720,7 @@
     <Compile Include="V_Kezelők\Kezelő_Belépés_Verzió.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_WinTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_Adatok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />

@@ -30,7 +30,7 @@ namespace Villamos.V_MindenEgyéb
 
                 List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(Telephely); // Módosítjuk a jármű státuszát
                 List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Telephely);  // megnyitjuk a hibákat
-                List<Adat_T5C5_Kmadatok> AdatokKM = KézKM.Lista_Adat();
+                List<Adat_T5C5_Kmadatok> AdatokKM = KézKM.Lista_Adatok();
 
                 // ha van ütemezett kocsi
                 foreach (Adat_Vezénylés rekordütemez in AdatokVezénylés)

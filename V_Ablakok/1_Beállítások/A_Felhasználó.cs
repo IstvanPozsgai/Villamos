@@ -745,7 +745,7 @@ namespace Villamos
 
 
                 menünév[170] = "Karbantartási Munkalapok";
-                menüleírás[170] = " 1- Csoportosítás, 2- , 3- ";
+                menüleírás[170] = " 1- Csoportosítás, 2- , 3-Digitális munkalap";
 
                 menünév[177] = "T5C5 Fűtés ellenőrzés";
                 menüleírás[177] = " 1- Rögzítés, 2-, 3- ";

@@ -266,7 +266,7 @@ namespace Villamos
                 AdatokSzerElő = KézSzerElő.Lista_Adatok(Cmbtelephely.Text.Trim(), true);     //Előírt szerelvény
                 AdatokOszt = KézOszt.Lista_Adat();   //Csatolhat
                 AdatokIdegen = KézIdegen.Lista_Adatok();        //Idegen 
-                AdatokKM = KézKM.Lista_Adat();      //           KM tábla
+                AdatokKM = KézKM.Lista_Adatok();      //           KM tábla
 
                 Holtart.Be(Adatok.Count + 2);
 

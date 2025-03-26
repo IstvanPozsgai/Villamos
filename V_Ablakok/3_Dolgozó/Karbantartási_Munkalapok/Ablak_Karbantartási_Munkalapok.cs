@@ -78,6 +78,7 @@ namespace Villamos.Villamos_Ablakok
 
         private void Jogosultságkiosztás()
         {
+            Digitális.Visible = false;
             if (Program.PostásTelephely == "Főmérnökség")
                 CHKMinta.Visible = true;
             else
@@ -100,7 +101,7 @@ namespace Villamos.Villamos_Ablakok
             // módosítás 3 
             if (MyF.Vanjoga(melyikelem, 3))
             {
-
+                Digitális.Visible = true;
             }
         }
 
@@ -189,7 +190,7 @@ namespace Villamos.Villamos_Ablakok
                                                   where a.Főkönyvtitulus != "" && a.Főkönyvtitulus != "_"
                                                   select a).ToList();
                 foreach (Adat_Dolgozó_Alap rekord in Adatok)
-                    Kiadta.Items.Add(rekord.DolgozóNév + "-" + rekord.Főkönyvtitulus);
+                    Kiadta.Items.Add($"{rekord.DolgozóNév}_{rekord.Dolgozószám}-{rekord.Főkönyvtitulus}");
                 Kiadta.EndUpdate();
             }
             catch (HibásBevittAdat ex)
@@ -1686,5 +1687,57 @@ namespace Villamos.Villamos_Ablakok
             return válasz;
         }
         #endregion
+
+
+        private void Digitális_Click(object sender, EventArgs e)
+        {
+            if (Combo_KarbCiklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy ciklus fokozat sem!");
+            if (Járműtípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy járműtípus sem!");
+            if (Pályaszám_TáblaAdatok.Count < 1) throw new HibásBevittAdat("Nincs a táblázatba felvéve egy pályaszám sem!");
+            if (Kiadta.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve az ellenőrző személy!");
+
+            Kezelő_DigitálisMunkalap_Dolgozó KézDigDolg = new Kezelő_DigitálisMunkalap_Dolgozó();
+            Kezelő_DigitálisMunkalap_Fej KézDigFej = new Kezelő_DigitálisMunkalap_Fej();
+            Kezelő_DigitálisMunkalap_Kocsik KézDigKocsi = new Kezelő_DigitálisMunkalap_Kocsik();
+
+            long Sorszám = KézDigFej.Sorszám();
+
+            Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok("T5C5");
+            List<Adat_T5C5_Kmadatok> AdatokKmAdatok = KézKM.Lista_Adatok();
+
+
+            string[] darabol = Kiadta.Text.Split('-');
+            string[] darabol2 = darabol[0].Split('_');
+            Adat_DigitálisMunkalap_Fej ADAT = new Adat_DigitálisMunkalap_Fej(
+                                    Sorszám,
+                                    Járműtípus.Text.Trim(),
+                                    Combo_KarbCiklus.Text.Trim(),
+                                    darabol2[0],
+                                    darabol2[1],
+                                    Cmbtelephely.Text.Trim(),
+                                    Dátum.Value
+                                    );
+            KézDigFej.Rögzítés(ADAT);
+
+            List<Adat_DigitálisMunkalap_Kocsik> AdatokKocsik = new List<Adat_DigitálisMunkalap_Kocsik>();
+            foreach (string azonosító in Pályaszám_TáblaAdatok)
+            {
+                Adat_T5C5_Kmadatok Adatkm = AdatokKmAdatok.Where(a => a.Azonosító == azonosító).FirstOrDefault();
+                long KMU = 0;
+                if (Adatkm != null) KMU = Adatkm.KMUkm;
+
+                string rendelés = Rendelés_Keresés();
+
+                Adat_DigitálisMunkalap_Kocsik AdatKocsik = new Adat_DigitálisMunkalap_Kocsik(
+                                        Sorszám,
+                                        azonosító,
+                                        KMU,
+                                        rendelés);
+
+                AdatokKocsik.Add(AdatKocsik);
+            }
+            KézDigKocsi.Rögzítés(AdatokKocsik);
+            MessageBox.Show($"Az adatok mentése elkészült", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

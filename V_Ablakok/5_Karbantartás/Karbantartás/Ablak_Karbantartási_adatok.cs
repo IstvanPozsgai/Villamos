@@ -1318,7 +1318,7 @@ namespace Villamos
 
                         //A következő vizsgálatot nézzük, ami soron következne, ha van ilyen legalább egy akkor rögzítjük,
                         //így biztosítja a program, hogy a ciklusterv szerint legyen végezve.
-                        List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adat();
+                        List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adatok();
                         Adat_T5C5_Kmadatok EgyAdat = (from a in AdatokT5C5
                                                       where a.Törölt == false
                                                       && a.Azonosító == Pályaszám.Text.Trim()
@@ -1602,7 +1602,7 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adat();
+                    List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adatok();
                     long i = 1;
                     if (AdatokT5C5.Count > 0) i = AdatokT5C5.Max(a => a.ID) + 1;
 
