@@ -25,8 +25,10 @@ namespace Villamos
             {
                 // kitöröljük az előzményt
                 KézHibaÚj.Törlés(telephely);
-                List<Adat_Jármű_hiba> AdatokJármű = KézJárműHiba.Lista_Adatok(telephely).OrderBy(a => a.Korlát).ToList();
-
+                List<Adat_Jármű_hiba> AdatokJármű = KézJárműHiba.Lista_Adatok(telephely);
+                AdatokJármű = (from a in AdatokJármű
+                               orderby a.Azonosító, a.Korlát descending
+                               select a).ToList();
                 string beálló = "_";
                 string üzemképtelen = "_";
                 string Üzemképes = "_";
