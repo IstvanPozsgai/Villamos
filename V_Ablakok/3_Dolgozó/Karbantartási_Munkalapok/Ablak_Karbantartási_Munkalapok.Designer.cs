@@ -223,7 +223,7 @@
             this.Tábla_Beosztás.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.Tábla_Beosztás.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla_Beosztás.EnableHeadersVisualStyles = false;
-            this.Tábla_Beosztás.Location = new System.Drawing.Point(760, 265);
+            this.Tábla_Beosztás.Location = new System.Drawing.Point(760, 262);
             this.Tábla_Beosztás.Name = "Tábla_Beosztás";
             this.Tábla_Beosztás.RowHeadersVisible = false;
             this.Tábla_Beosztás.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
