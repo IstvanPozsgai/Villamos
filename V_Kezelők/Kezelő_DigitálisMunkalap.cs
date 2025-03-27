@@ -169,7 +169,7 @@ namespace Villamos.Kezelők
                     szöveg += $"'{Adat.DolgozóNév}', ";  //DolgozóNév
                     szöveg += $"'{Adat.Dolgozószám}', ";  //Dolgozószám
                     szöveg += $"{Adat.Technológia_Id}) ";  //Technológia_Id
-
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }

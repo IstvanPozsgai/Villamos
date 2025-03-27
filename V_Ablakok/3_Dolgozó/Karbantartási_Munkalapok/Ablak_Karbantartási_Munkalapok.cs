@@ -1737,6 +1737,63 @@ namespace Villamos.Villamos_Ablakok
                 AdatokKocsik.Add(AdatKocsik);
             }
             KézDigKocsi.Rögzítés(AdatokKocsik);
+
+
+            //Változatok
+            AdatokVáltozat = MyLista.VáltozatLista(Járműtípus.Text.Trim(), Cmbtelephely.Text.Trim());
+            List<Adat_Technológia_Változat> VÁLTAdatok = (from a in AdatokVáltozat
+                                                          where a.Változatnév == Munkalap_Változatnév.Text.Trim()
+                                                          select a).ToList();
+
+            //pályaszám kivételei
+            AdatokKivétel = MyLista.KivételekLista(Járműtípus.Text.Trim());
+
+            AdatokCiklus = MyLista.KarbCiklusLista(Járműtípus.Text.Trim());
+            Adat_technológia_Ciklus AdatCikk = (from a in AdatokCiklus
+                                                where a.Fokozat == Combo_KarbCiklus.Text.Trim()
+                                                select a).FirstOrDefault();
+
+            AdatokTechnológia = MyLista.TechnológiaLista(Járműtípus.Text.Trim());
+            List<Adat_Technológia_Új> Adatok = (from a in AdatokTechnológia
+                                                where a.Karb_ciklus_eleje <= AdatCikk.Sorszám && a.Karb_ciklus_vége >= AdatCikk.Sorszám
+                                                && a.Érv_kezdete <= Dátum.Value && a.Érv_vége >= Dátum.Value
+                                                orderby a.Részegység, a.Munka_utasítás_szám, a.ID
+                                                select a).ToList();
+
+
+            List<Adat_DigitálisMunkalap_Dolgozó> AdatokDolgozó = new List<Adat_DigitálisMunkalap_Dolgozó>();
+
+            //munkalap érdemi része
+            foreach (Adat_Technológia_Új a in Adatok)
+            {
+                //Ha speciális, akkor kiírja különben kihagy
+                if (Ki_kell_írni(a.Altípus, csoportos, AdatokKivétel))
+                {
+                    string dolgozónév = "";
+                    string dolgozószám = "";
+
+                    //if (VÁLTAdatok.Count > 0)
+                    //{
+                    //    string ideignév = Dolgozónév_kiíratása(VÁLTAdatok, a.ID, Személy);
+                    //    ideignév = ideignév.Trim() != "_" ? ideignév : "";
+                    //    MyE.Kiir(ideignév.Replace("_", "\n"), "M" + sor);// kicseréljük a _-t sortörésre, hogy a cella magassága jó legyen.
+                    //    MyE.Kiir(ideignév.Replace("_", "\n"), "AT" + sor);
+
+                    //}
+
+
+                    Adat_DigitálisMunkalap_Dolgozó ADATDOLGOZÓ = new Adat_DigitálisMunkalap_Dolgozó(
+                          dolgozónév,
+                          dolgozószám,
+                          Sorszám,
+                          a.ID);
+                    AdatokDolgozó.Add(ADATDOLGOZÓ);
+
+                }
+
+            }
+            KézDigDolg.Rögzítés(AdatokDolgozó);
+
             MessageBox.Show($"Az adatok mentése elkészült", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
