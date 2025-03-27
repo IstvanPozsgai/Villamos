@@ -549,8 +549,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        //elkopó
         public List<Adat_CAF_Adatok> Lista_Adatok(string hely)
         {
             List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
@@ -591,47 +589,6 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-        public List<Adat_CAF_Adatok> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
-            Adat_CAF_Adatok Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                //DateTime dátum = DateTime.TryParse(rekord["dátum"].ToString(), out dátum) ? dátum : new DateTime(1900, 1, 1);
-                                //DateTime Dátum_program = DateTime.TryParse(rekord["Dátum_program"].ToString(), out Dátum_program) ? Dátum_program : new DateTime(1900, 1, 1);
-                                Adat = new Adat_CAF_Adatok(
-                                        rekord["id"].ToÉrt_Double(),
-                                        rekord["azonosító"].ToStrTrim(),
-                                        rekord["Vizsgálat"].ToStrTrim(),
-                                        rekord["dátum"].ToÉrt_DaTeTime(),
-                                        rekord["Dátum_program"].ToÉrt_DaTeTime(),
-                                        rekord["Számláló"].ToÉrt_Long(),
-                                        rekord["Státus"].ToÉrt_Int(),
-                                        rekord["KM_Sorszám"].ToÉrt_Int(),
-                                        rekord["IDŐ_Sorszám"].ToÉrt_Int(),
-                                        rekord["IDŐvKM"].ToÉrt_Int(),
-                                        rekord["Megjegyzés"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
 
     }
 }

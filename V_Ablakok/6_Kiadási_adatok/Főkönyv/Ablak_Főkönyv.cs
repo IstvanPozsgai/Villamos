@@ -45,6 +45,7 @@ namespace Villamos
         readonly Kezelő_Jármű_Vendég KézFőJárműVendég = new Kezelő_Jármű_Vendég();
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
         readonly Kezelő_Kiegészítő_Idő_Kor KézKor = new Kezelő_Kiegészítő_Idő_Kor();
+        readonly Kezelő_CAF_Adatok KézCAF = new Kezelő_CAF_Adatok();
 
 
         public List<Adat_Reklám> AdatokReklám = new List<Adat_Reklám>();
@@ -3154,9 +3155,14 @@ namespace Villamos
             if (!File.Exists(helynapló)) Adatbázis_Létrehozás.Hibatáblalap(helynapló);
 
             Holtart.Be(100);
-            Kezelő_CAF_Adatok kéz = new Kezelő_CAF_Adatok();
-            szöveg = $"SELECT * FROM adatok where STÁTUS=2 and [dátum]=#{Dátum_ütem:M-d-yy}# order by  azonosító";
-            List<Adat_CAF_Adatok> Adatok = kéz.Lista_Adatok(helyütem, jelszóütem, szöveg);
+
+
+            List<Adat_CAF_Adatok> Adatok = KézCAF.Lista_Adatok();
+            Adatok = (from a in Adatok
+                      where a.Státus == 2
+                      && a.Dátum.ToShortDateString() == Dátum_ütem.ToShortDateString()
+                      orderby a.Azonosító
+                      select a).ToList();
 
             foreach (Adat_CAF_Adatok rekordütemez in Adatok)
             {

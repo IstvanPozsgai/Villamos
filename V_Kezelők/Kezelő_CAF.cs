@@ -94,55 +94,6 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
-        public List<Adat_CAF_alap> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_CAF_alap> Adatok = new List<Adat_CAF_alap>();
-            Adat_CAF_alap Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_CAF_alap(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["Ciklusnap"].ToStrTrim(),
-                                        rekord["Utolsó_Nap"].ToStrTrim(),
-                                        rekord["Utolsó_Nap_sorszám"].ToÉrt_Long(),
-                                        rekord["Végezte_nap"].ToStrTrim(),
-                                        rekord["Vizsgdátum_nap"].ToÉrt_DaTeTime(),
-                                        rekord["Cikluskm"].ToStrTrim(),
-                                        rekord["Utolsó_Km"].ToStrTrim(),
-                                        rekord["Utolsó_Km_sorszám"].ToÉrt_Long(),
-                                        rekord["Végezte_km"].ToStrTrim(),
-                                        rekord["Vizsgdátum_km"].ToÉrt_DaTeTime(),
-                                        rekord["Számláló"].ToÉrt_Long(),
-                                        rekord["havikm"].ToÉrt_Long(),
-                                        rekord["KMUkm"].ToÉrt_Long(),
-                                        rekord["KMUdátum"].ToÉrt_DaTeTime(),
-                                        rekord["fudátum"].ToÉrt_DaTeTime(),
-                                        rekord["Teljeskm"].ToÉrt_Long(),
-                                        rekord["Típus"].ToStrTrim(),
-                                        rekord["Garancia"].ToÉrt_Bool(),
-                                        rekord["törölt"].ToÉrt_Bool()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-
         public void Rögzítés(Adat_CAF_alap Adat)
         {
             try

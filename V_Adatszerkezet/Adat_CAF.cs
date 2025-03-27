@@ -68,12 +68,12 @@ namespace Villamos.Villamos_Adatszerkezet
 
         public Adat_CAF_alap(string azonosító, string utolsó_Km, long utolsó_Km_sorszám, string végezte_km, DateTime vizsgdátum_km, long számláló)
         {
+            Azonosító = azonosító;
             Számláló = számláló;
             Utolsó_Km = utolsó_Km;
             Utolsó_Km_sorszám = utolsó_Km_sorszám;
             Végezte_km = végezte_km;
             Vizsgdátum_km = vizsgdátum_km;
-            Számláló = számláló;
         }
     }
 
