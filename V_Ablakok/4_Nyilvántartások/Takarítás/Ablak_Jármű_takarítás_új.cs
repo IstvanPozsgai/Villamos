@@ -10,9 +10,7 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._4_Nyilvántartások.Takarítás;
 using Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
@@ -82,13 +80,10 @@ namespace Villamos
         private void Ablak_Jármű_takarítás_új_Load(object sender, EventArgs e)
         {
             Telephelyekfeltöltése();
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\BMR.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.TakarításBMRlétrehozás(hely);
         }
 
         private void Ablak_Jármű_takarítás_új_Shown(object sender, EventArgs e)
         {
-            HelyekEllenőrzése();
             Jogosultságkiosztás();
             Fülekkitöltése();
 
@@ -117,31 +112,8 @@ namespace Villamos
             IdegenLista();
         }
 
-        private void HelyekEllenőrzése()
-        {
-            try
-            {
-                if (Cmbtelephely.Text.Trim() == "") return;
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\";
-                hely += $"Takarítás_{DateTime.Now.Year + 1}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Telephely_tábla(hely);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
-            HelyekEllenőrzése();
             Fülekkitöltése();
         }
 
@@ -1304,7 +1276,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "T5C5_Nap_futás_" + Program.PostásNév.ToStrTrim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    FileName = $"T5C5_Nap_futás_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -2607,7 +2579,7 @@ namespace Villamos
             {
                 InitialDirectory = "MyDocuments",
                 Title = "Listázott tartalom mentése Excel fájlba",
-                FileName = "Takarítás_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                FileName = $"Takarítás_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                 Filter = "Excel |*.xlsx"
             };
             // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -2936,8 +2908,7 @@ namespace Villamos
         {
             try
             {
-                if (Ütem_Tábla.Rows.Count <= 0)
-                    return;
+                if (Ütem_Tábla.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -2945,7 +2916,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Takarítás" + Program.PostásNév.ToStrTrim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    FileName = $"Takarítás{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -3390,7 +3361,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Jármű Takarítási teljesítési igazolás készítés",
-                    FileName = "Jármű Takarítási teljesítési igazolás_" + ListaDátum.Value.ToString("yyyyMM") + "_" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Jármű Takarítási teljesítési igazolás_{ListaDátum.Value:yyyyMM}_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -3581,7 +3552,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void J1_excel()
         {
@@ -4768,8 +4738,6 @@ namespace Villamos
             }
         }
 
-
-
         private void Button5_Click(object sender, EventArgs e)
         {
             try
@@ -4783,7 +4751,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Takarítás_" + Program.PostásNév.ToStrTrim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Takarítás_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -4951,7 +4919,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Takarítás-" + Program.PostásNév.ToStrTrim() + "-" + Dátum.Value.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Takarítás-{Program.PostásNév.Trim()}-{Dátum.Value:yyyyMMdd}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -5465,7 +5433,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Takarítás_Gépi_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    FileName = $"Takarítás_Gépi_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -5628,7 +5596,6 @@ namespace Villamos
 
         #region Lista
 
-
         readonly List<string> típusnév = new List<string>();
 
         public void IdegenLista()
@@ -5652,7 +5619,5 @@ namespace Villamos
             }
         }
         #endregion
-
-
     }
 }
