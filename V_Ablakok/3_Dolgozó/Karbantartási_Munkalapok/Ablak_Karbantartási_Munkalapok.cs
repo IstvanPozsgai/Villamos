@@ -1764,33 +1764,55 @@ namespace Villamos.Villamos_Ablakok
             List<Adat_DigitálisMunkalap_Dolgozó> AdatokDolgozó = new List<Adat_DigitálisMunkalap_Dolgozó>();
 
             //munkalap érdemi része
-            foreach (Adat_Technológia_Új a in Adatok)
+            foreach (Adat_Technológia_Új Rekorda in Adatok)
             {
                 //Ha speciális, akkor kiírja különben kihagy
-                if (Ki_kell_írni(a.Altípus, csoportos, AdatokKivétel))
+                if (Ki_kell_írni(Rekorda.Altípus, csoportos, AdatokKivétel))
                 {
                     string dolgozónév = "";
                     string dolgozószám = "";
 
-                    //if (VÁLTAdatok.Count > 0)
-                    //{
-                    //    string ideignév = Dolgozónév_kiíratása(VÁLTAdatok, a.ID, Személy);
-                    //    ideignév = ideignév.Trim() != "_" ? ideignév : "";
-                    //    MyE.Kiir(ideignév.Replace("_", "\n"), "M" + sor);// kicseréljük a _-t sortörésre, hogy a cella magassága jó legyen.
-                    //    MyE.Kiir(ideignév.Replace("_", "\n"), "AT" + sor);
-
-                    //}
-
-
-                    Adat_DigitálisMunkalap_Dolgozó ADATDOLGOZÓ = new Adat_DigitálisMunkalap_Dolgozó(
-                          dolgozónév,
-                          dolgozószám,
-                          Sorszám,
-                          a.ID);
-                    AdatokDolgozó.Add(ADATDOLGOZÓ);
-
+                    if (VÁLTAdatok.Count > 0)
+                    {
+                        string Ideignév = (from b in VÁLTAdatok
+                                           where b.Technológia_Id == Rekorda.ID
+                                           select b.Végzi).FirstOrDefault();
+                        if (Ideignév != null)
+                        {
+                            List<string> Elem = (from a in Személy
+                                                 where a.Key.Contains(Ideignév.Trim())
+                                                 select a.Value).ToList();
+                            foreach (string item in Elem)
+                            {
+                                string[] Darabol = item.Split('_');
+                                Adat_DigitálisMunkalap_Dolgozó ADATDOLGOZÓ = new Adat_DigitálisMunkalap_Dolgozó(
+                                                                 Darabol[0].Trim(),
+                                                                 Darabol[1].Trim(),
+                                                                 Sorszám,
+                                                                 Rekorda.ID);
+                                AdatokDolgozó.Add(ADATDOLGOZÓ);
+                            }
+                            if (Elem.Count == 0)
+                            {
+                                Adat_DigitálisMunkalap_Dolgozó ADATDOLGOZÓ = new Adat_DigitálisMunkalap_Dolgozó(
+                                                                  dolgozónév,
+                                                                  dolgozószám,
+                                                                  Sorszám,
+                                                                  Rekorda.ID);
+                                AdatokDolgozó.Add(ADATDOLGOZÓ);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Adat_DigitálisMunkalap_Dolgozó ADATDOLGOZÓ = new Adat_DigitálisMunkalap_Dolgozó(
+                              dolgozónév,
+                              dolgozószám,
+                              Sorszám,
+                              Rekorda.ID);
+                        AdatokDolgozó.Add(ADATDOLGOZÓ);
+                    }
                 }
-
             }
             KézDigDolg.Rögzítés(AdatokDolgozó);
 
