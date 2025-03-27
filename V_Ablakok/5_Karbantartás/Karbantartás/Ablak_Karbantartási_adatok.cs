@@ -25,9 +25,12 @@ namespace Villamos
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_Jármű_Xnapos KézXnapos = new Kezelő_Jármű_Xnapos();
         readonly Kezelő_T5C5_Kmadatok KéZT5C5 = new Kezelő_T5C5_Kmadatok("T5C5");
+        readonly Kezelő_T5C5_Kmadatok KéZICS = new Kezelő_T5C5_Kmadatok("ICS");
         readonly Kezelő_T5C5_Kmadatok_Napló KézKmNapló = new Kezelő_T5C5_Kmadatok_Napló();
         readonly Kezelő_Főkönyv_Zser_Km KézFőkönyvKm = new Kezelő_Főkönyv_Zser_Km();
         readonly Kezelő_kiegészítő_Hibaterv KézHibaterv = new Kezelő_kiegészítő_Hibaterv();
+        readonly Kezelő_CAF_Adatok KézCAFAdatok = new Kezelő_CAF_Adatok();
+        readonly Kezelő_CAF_alap KézCALAlap = new Kezelő_CAF_alap();
 
         List<Adat_Szerelvény> AdatokSzer = new List<Adat_Szerelvény>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
@@ -1186,7 +1189,7 @@ namespace Villamos
             }
             return Hiba_státus = 0;
         }
-        //
+
         private void Terv_lezárás_ICS()
         {
             try
@@ -1200,14 +1203,14 @@ namespace Villamos
                     {
                         Vütemezés_Jármű_Dátum = MyF.Szöveg_Tisztítás(tömb[2], 0, 11).ToÉrt_DaTeTime();
 
-                        string hely = Application.StartupPath + @"\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-                        string jelszó = "pocsaierzsi";
-                        string szöveg = $"Select * FROM KMtábla where törölt=false AND [azonosító]='{Pályaszám.Text.Trim()}' AND ";
-                        szöveg += $"kövv='{Vizsgfoka_Jármű}' AND ";
-                        szöveg += $"kövv_sorszám={Vsorszám_Jármű}";
-                        szöveg += $" ORDER BY ID desc";
-
-                        Adat_T5C5_Kmadatok EgyAdat = KéZT5C5.Egy_Adat(hely, jelszó, szöveg);
+                        List<Adat_T5C5_Kmadatok> Adatok = KéZICS.Lista_Adatok();
+                        Adat_T5C5_Kmadatok EgyAdat = (from a in Adatok
+                                                      where a.Törölt == false
+                                                      && a.Azonosító == Pályaszám.Text.Trim()
+                                                      && a.KövV == Vizsgfoka_Jármű
+                                                      && a.KövV_sorszám == Vsorszám_Jármű
+                                                      orderby a.ID descending
+                                                      select a).FirstOrDefault();
 
                         if (EgyAdat != null)
                         {
@@ -1410,21 +1413,13 @@ namespace Villamos
 
 
         #region Ellenőrzések
-        //
+
         private void CAFelkészülés()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\CAF\CAF.mdb";
-                string jelszó = "CzabalayL";
-                string szöveg = $"SELECT * FROM adatok";
-
-                Kezelő_CAF_Adatok KézCAFAdatok = new Kezelő_CAF_Adatok();
-                List<Adat_CAF_Adatok> Adatok = KézCAFAdatok.Lista_Adatok(hely, jelszó, szöveg);
-
-                szöveg = $"SELECT * FROM Alap";
-                Kezelő_CAF_alap KézCALAlap = new Kezelő_CAF_alap();
-                List<Adat_CAF_alap> AdatokAlap = KézCALAlap.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_CAF_Adatok> Adatok = KézCAFAdatok.Lista_Adatok();
+                List<Adat_CAF_alap> AdatokAlap = KézCALAlap.Lista_Adatok();
 
                 Adat_CAF_Adatok Elem = (from a in Adatok
                                         where a.Azonosító == Pályaszám.Text.Trim() && a.Id == Vsorszám_Jármű
@@ -1432,19 +1427,18 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    szöveg = "UPDATE adatok  SET Státus=6 ";
-                    szöveg += $" WHERE azonosító='{Pályaszám.Text.Trim()}' AND id={Vsorszám_Jármű}";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézCAFAdatok.Módosítás_Státus(Vsorszám_Jármű, Pályaszám.Text.Trim(), 6);
 
                     // alaptáblában is módosítunk
                     if (Elem.IDŐvKM == 1)
                     {
-                        szöveg = "UPDATE alap  SET ";
-                        szöveg += $" Utolsó_nap='{Elem.Vizsgálat}', "; // vizsgálatot kapott
-                        szöveg += $" Utolsó_Nap_sorszám={Elem.IDŐ_Sorszám}, ";  // vizsgálat sorszáma
-                        szöveg += $" Vizsgdátum_nap='{Elem.Dátum:yyyy.MM.dd}', ";
-                        szöveg += $" Végezte_nap='{Cmbtelephely.Text.Trim()}' ";
-                        szöveg += $" WHERE azonosító='{Pályaszám.Text.Trim()}'";
+                        Adat_CAF_alap ADAT = new Adat_CAF_alap(
+                                            Pályaszám.Text.Trim(),
+                                            Elem.Vizsgálat,
+                                            Elem.IDŐ_Sorszám,
+                                            Cmbtelephely.Text.Trim(),
+                                            Elem.Dátum);
+                        KézCALAlap.Módosítás_Kész_Idő(ADAT);
                     }
                     else
                     {
@@ -1454,25 +1448,24 @@ namespace Villamos
                         DateTime vizsgdátum = new DateTime(1900, 1, 1);
                         long számlálo_old = 0;
                         long számláló = 0;
-
-                        szöveg = "UPDATE alap  SET ";
-                        szöveg += $" Utolsó_km='{Elem.Vizsgálat}', "; // vizsgálatot kapott
-                        szöveg += $" Utolsó_km_sorszám={Elem.KM_Sorszám}, ";  // vizsgálat sorszáma
-                        szöveg += $" Vizsgdátum_km='{Elem.Dátum:yyyy.MM.dd}', ";
-                        szöveg += $" Végezte_km='{Cmbtelephely.Text.Trim()}', ";
-
                         // számláló állás meghatározása
                         if (rekord != null)
                         {
                             vizsgdátum = rekord.Vizsgdátum_km;
                             számlálo_old = rekord.Számláló;
                             számláló = számlálo_old + MyF.Futás_km(Pályaszám.Text.Trim(), vizsgdátum);
-                            szöveg += $" számláló={számláló}";
                         }
 
-                        szöveg += $" WHERE azonosító='{Pályaszám.Text.Trim()}'";
+                        Adat_CAF_alap ADAT = new Adat_CAF_alap(
+                                      Pályaszám.Text.Trim(),
+                                      Elem.Vizsgálat,
+                                      Elem.KM_Sorszám,
+                                      Cmbtelephely.Text.Trim(),
+                                      Elem.Dátum,
+                                      számláló);
+                        KézCALAlap.Módosítás_Kész_Km(ADAT);
                     }
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1633,7 +1626,7 @@ namespace Villamos
 
 
                     // naplózás
-                    List<Adat_T5C5_Kmadatok_Napló> AdatokNapló = KézKmNapló.Lista_Adat(DateTime.Today.Year);
+                    List<Adat_T5C5_Kmadatok_Napló> AdatokNapló = KézKmNapló.Lista_Adatok(DateTime.Today.Year);
                     i = 1;
                     if (AdatokNapló.Count > 0) i = AdatokT5C5.Max(a => a.ID) + 1;
 
@@ -1661,7 +1654,7 @@ namespace Villamos
                                                 KövV2_számláló,
                                                 Program.PostásNév.Trim(),
                                                 DateTime.Now);
-                    KézKmNapló.Beosztás_Rögzítés(DateTime.Today.Year, ADATNAPLÓ);
+                    KézKmNapló.Rögzítés(DateTime.Today.Year, ADATNAPLÓ);
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -1678,7 +1671,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void ICSelkészülés()
         {
             try
@@ -1690,43 +1683,33 @@ namespace Villamos
                                    select a).FirstOrDefault();
                 if (Elem != null)
                 {
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-                    string jelszó = "pocsaierzsi";
-                    string szöveg = "SELECT * FROM kmtábla";
-
-                    List<Adat_T5C5_Kmadatok> Adatok = KéZT5C5.Lista_Adat(hely, jelszó, szöveg);
+                    List<Adat_T5C5_Kmadatok> Adatok = KéZICS.Lista_Adatok();
 
                     long i = 1;
                     if (Adatok.Count > 0) i = Adatok.Max(a => a.ID) + 1;
 
                     // Új adat
-                    szöveg = "INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
-                    szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
-                    szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
-                    szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
-                    szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt) VALUES (";
-                    szöveg += $"{i}, '{Pályaszám.Text.Trim()}', 0, {VizsgKm_Jármű}, '{DateTime.Today:yyyy.MM.dd}', ";
-                    szöveg += $"'{Vizsgfoka_Jármű}', '{Vütemezés_Jármű_Dátum:yyyy.MM.dd}', '{DateTime.Today:yyyy.MM.dd}', ";
-                    szöveg += $"{VizsgKm_Jármű}, 0, {Vsorszám_Jármű}, '1900.01.01', ";
-                    szöveg += $" 0, '{CiklusrendCombo}', '{Program.PostásTelephely.Trim()}', {KövV2_Sorszám}, '{KövV2}', ";
-                    szöveg += $"{KövV_Sorszám}, '{KövV.Trim()}', {KövV2_számláló}, false)";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_T5C5_Kmadatok ADAT = new Adat_T5C5_Kmadatok(
+                                           i, Pályaszám.Text.Trim(), 0, VizsgKm_Jármű, DateTime.Today,
+                                           Vizsgfoka_Jármű, Vütemezés_Jármű_Dátum, DateTime.Today,
+                                           VizsgKm_Jármű, 0, Vsorszám_Jármű, new DateTime(1900, 1, 1),
+                                           0, CiklusrendCombo, Program.PostásTelephely.Trim(), KövV2_Sorszám, KövV2,
+                                           KövV_Sorszám, KövV, false, KövV2_számláló);
+                    KéZICS.Rögzít(ADAT);
 
                     // naplózás
-                    hely = $@"{Application.StartupPath}\Főmérnökség\Napló\2021Kmnapló{DateTime.Today.Year}.mdb";
-                    if (!File.Exists(hely)) Adatbázis_Létrehozás.KmfutástáblaNapló(hely);
+                    List<Adat_T5C5_Kmadatok_Napló> AdatokNapló = KézKmNapló.Lista_Adatok(DateTime.Today.Year);
+                    i = 1;
+                    if (AdatokNapló.Count > 0) i = AdatokNapló.Max(a => a.ID) + 1;
+                    Adat_T5C5_Kmadatok_Napló ADATNapló = new Adat_T5C5_Kmadatok_Napló(
+                              i, Pályaszám.Text.Trim(), 0, VizsgKm_Jármű, DateTime.Today,
+                              Vizsgfoka_Jármű, Vütemezés_Jármű_Dátum, DateTime.Today,
+                              VizsgKm_Jármű, 0, Vsorszám_Jármű, new DateTime(1900, 1, 1),
+                              0, CiklusrendCombo, Program.PostásTelephely.Trim(), KövV2_Sorszám, KövV2,
+                              KövV_Sorszám, KövV, false, KövV2_számláló, Program.PostásNév.Trim(), DateTime.Now);
+                    KézKmNapló.Rögzítés(DateTime.Today.Year, ADATNapló);
 
-                    szöveg = "INSERT INTO kmtáblaNapló  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
-                    szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
-                    szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
-                    szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
-                    szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt, Módosító, Mikor) VALUES (";
-                    szöveg += $"{i}, '{Pályaszám.Text.Trim()}', 0, {VizsgKm_Jármű}, '{DateTime.Today:yyyy.MM.dd}', ";
-                    szöveg += $"'{Vizsgfoka_Jármű}', '{Vütemezés_Jármű_Dátum:yyyy.MM.dd}', '{DateTime.Today:yyyy.MM.dd}', ";
-                    szöveg += $"{VizsgKm_Jármű}, 0, {Vsorszám_Jármű}, '1900.01.01', ";
-                    szöveg += $" 0, '{CiklusrendCombo}', '{Program.PostásTelephely.Trim()}', {KövV2_Sorszám}, '{KövV2}', ";
-                    szöveg += $"{KövV_Sorszám}, '{KövV.Trim()}', {KövV2_számláló}, false, '{Program.PostásNév.Trim()}', '{DateTime.Now}')";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+
 
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

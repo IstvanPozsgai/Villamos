@@ -56,6 +56,25 @@ namespace Villamos.Villamos_Adatszerkezet
             KMUkm = kMUkm;
             KMUdátum = kMUdátum;
         }
+
+        public Adat_CAF_alap(string azonosító, string utolsó_Nap, long utolsó_Nap_sorszám, string végezte_nap, DateTime vizsgdátum_nap)
+        {
+            Azonosító = azonosító;
+            Utolsó_Nap = utolsó_Nap;
+            Utolsó_Nap_sorszám = utolsó_Nap_sorszám;
+            Végezte_nap = végezte_nap;
+            Vizsgdátum_nap = vizsgdátum_nap;
+        }
+
+        public Adat_CAF_alap(string azonosító, string utolsó_Km, long utolsó_Km_sorszám, string végezte_km, DateTime vizsgdátum_km, long számláló)
+        {
+            Számláló = számláló;
+            Utolsó_Km = utolsó_Km;
+            Utolsó_Km_sorszám = utolsó_Km_sorszám;
+            Végezte_km = végezte_km;
+            Vizsgdátum_km = vizsgdátum_km;
+            Számláló = számláló;
+        }
     }
 
     public class Adat_CAF_Adatok

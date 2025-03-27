@@ -418,6 +418,24 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás_Státus(double Sorszám, string Azonosító, int státus)
+        {
+            try
+            {
+                string szöveg = $"UPDATE adatok  SET Státus={státus}  WHERE azonosító='{Azonosító}' AND id={Sorszám}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Törlés(DateTime Dátum, string Azonosító, int státus = 0)
         {
             try
@@ -531,6 +549,8 @@ namespace Villamos.Kezelők
             }
         }
 
+
+        //elkopó
         public List<Adat_CAF_Adatok> Lista_Adatok(string hely)
         {
             List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();

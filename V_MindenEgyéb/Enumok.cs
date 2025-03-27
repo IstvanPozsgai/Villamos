@@ -121,10 +121,12 @@
 
         public enum Nóta_Státus
         {
-            Új_Elem = 1,
-            Javítandó = 3,
-            Felújítandó = 5,
-            Lezárt = 9
+            Feldolgozandó = 1,
+            Telephelyi_Javítás = 3,
+            Esztergálandó = 4,
+            VJSZ_Javítás = 5,
+            Felhasználható = 7,
+            Lezárt_Selejt = 9
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.KmfutástáblaNapló(hely.KönyvSzerk());
         }
 
-        public List<Adat_T5C5_Kmadatok_Napló> Lista_Adat(int Év)
+        public List<Adat_T5C5_Kmadatok_Napló> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
             string szöveg = "SELECT * FROM kmtáblaNapló";
@@ -77,7 +77,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Beosztás_Rögzítés(int Év, Adat_T5C5_Kmadatok_Napló Adat)
+        public void Rögzítés(int Év, Adat_T5C5_Kmadatok_Napló Adat)
         {
             try
             {
@@ -128,6 +128,7 @@ namespace Villamos.Kezelők
             }
         }
 
+        //elkopó
         public List<Adat_T5C5_Kmadatok_Napló> Lista_Adat(string hely, string jelszó, string szöveg)
         {
             List<Adat_T5C5_Kmadatok_Napló> Adatok = new List<Adat_T5C5_Kmadatok_Napló>();
