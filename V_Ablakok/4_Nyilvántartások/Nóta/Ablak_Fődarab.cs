@@ -16,12 +16,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 {
     public partial class Ablak_Fődarab : Form
     {
-        DataTable AdatTábla = new DataTable();
-
         readonly Kezelő_Nóta KézNóta = new Kezelő_Nóta();
         readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
         int id = 0;
+        string szűrő = "";
+        string sorba = "";
 
         #region Alap
         public Ablak_Fődarab()
@@ -84,14 +84,37 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
         private void TáblázatÍrás()
         {
-            Táblalista.CleanFilterAndSort();
-            ABFejléc();
-            ABFeltöltése();
-            Táblalista.DataSource = AdatTábla;
+            if (!ChkSzűrés.Checked)
+                szűrő = "";
+            else
+                szűrő = Táblalista.FilterString;
+
+            if (!ChkRendezés.Checked)
+                sorba = "";
+            else
+                sorba = Táblalista.SortString;
+
+            if (!ChkRendezés.Checked && !ChkSzűrés.Checked)
+                Táblalista.CleanFilterAndSort();
+            else
+                Táblalista.LoadFilterAndSort(szűrő, sorba);
+
+            KötésiOsztály.DataSource = AdatTáblaFeltöltés();
+            Táblalista.DataSource = KötésiOsztály;
             OszlopSzélesség();
+
+            for (int i = 0; i < Táblalista.Columns.Count; i++)
+            {
+                Táblalista.SetFilterEnabled(Táblalista.Columns[i], true);
+                Táblalista.SetSortEnabled(Táblalista.Columns[i], true);
+                Táblalista.SetFilterCustomEnabled(Táblalista.Columns[i], true);
+
+            }
+
             Táblalista.Refresh();
             Táblalista.Visible = true;
             Táblalista.ClearSelection();
+
         }
 
         private void OszlopSzélesség()
@@ -110,10 +133,27 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             Táblalista.Columns["Státus"].Width = 150;
         }
 
-        private void ABFeltöltése()
+        private DataTable AdatTáblaFeltöltés()
         {
+            DataTable AdatTábla = new DataTable();
             try
             {
+                AdatTábla.Columns.Clear();
+                AdatTábla.Columns.Add("Id", typeof(long));
+                AdatTábla.Columns.Add("Berendezés", typeof(string));
+                AdatTábla.Columns.Add("Készlet Sarzs", typeof(string));
+                AdatTábla.Columns.Add("Raktár", typeof(string));
+                AdatTábla.Columns.Add("Telephely", typeof(string));
+                AdatTábla.Columns.Add("Forgóváz", typeof(string));
+                AdatTábla.Columns.Add("Gyártási Szám", typeof(long));
+                AdatTábla.Columns.Add("Átmérő", typeof(int));
+                AdatTábla.Columns.Add("Állapot", typeof(string));
+                AdatTábla.Columns.Add("Beépíthető", typeof(string));
+                AdatTábla.Columns.Add("Műszaki Megjegyzés", typeof(string));
+                AdatTábla.Columns.Add("Osztási Megjegyzés", typeof(string));
+                AdatTábla.Columns.Add("Dátum", typeof(DateTime));
+                AdatTábla.Columns.Add("Státus", typeof(string));
+
                 List<Adat_Nóta> Adatok = KézNóta.Lista_Adat(!Aktív.Checked);
                 List<Adat_Kerék_Tábla> AdatokKerék = KézKerék.Lista_Adatok();
 
@@ -121,7 +161,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 List<Adat_Kerék_Mérés> Ideig = KézMérés.Lista_Adatok(DateTime.Today.Year);
                 AdatokMérés.AddRange(Ideig);
                 AdatokMérés = AdatokMérés.OrderBy(a => a.Mikor).ToList();
-                AdatTábla.Clear();
 
                 foreach (Adat_Nóta rekord in Adatok)
                 {
@@ -149,14 +188,15 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                     Soradat["Raktár"] = rekord.Raktár;
                     Soradat["Telephely"] = rekord.Telephely;
                     Soradat["Forgóváz"] = rekord.Forgóváz;
-                    Soradat["Gyártási Szám"] = gyáriszám;
+                    Soradat["Gyártási Szám"] = gyáriszám.ToÉrt_Long();
                     Soradat["Beépíthető"] = rekord.Beépíthető ? "Igen" : "Nem";
                     Soradat["Műszaki Megjegyzés"] = rekord.MűszakiM;
                     Soradat["Osztási Megjegyzés"] = rekord.OsztásiM;
-                    Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
+                    Soradat["Dátum"] = rekord.Dátum;
                     Soradat["Státus"] = $"{rekord.Státus} - {((Nóta_Státus)rekord.Státus).ToStrTrim().Replace('_', ' ')}";
-                    Soradat["Átmérő"] = átmérő;
+                    Soradat["Átmérő"] = átmérő.ToÉrt_Int();
                     Soradat["Állapot"] = állapot;
+
                     AdatTábla.Rows.Add(Soradat);
                 }
             }
@@ -169,38 +209,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void ABFejléc()
-        {
-            try
-            {
-                AdatTábla.Columns.Clear();
-                AdatTábla.Columns.Add("Id");
-                AdatTábla.Columns.Add("Berendezés");
-                AdatTábla.Columns.Add("Készlet Sarzs");
-                AdatTábla.Columns.Add("Raktár");
-                AdatTábla.Columns.Add("Telephely");
-                AdatTábla.Columns.Add("Gyártási Szám");
-                AdatTábla.Columns.Add("Forgóváz");
-                AdatTábla.Columns.Add("Átmérő");
-                AdatTábla.Columns.Add("Állapot");
-                AdatTábla.Columns.Add("Beépíthető");
-                AdatTábla.Columns.Add("Műszaki Megjegyzés");
-                AdatTábla.Columns.Add("Osztási Megjegyzés");
-                AdatTábla.Columns.Add("Dátum");
-                AdatTábla.Columns.Add("Státus");
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            return AdatTábla;
         }
 
         private void Táblalista_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -252,7 +261,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Táblalista, false);
+                MyE.EXCELtábla(fájlexc, Táblalista, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc + ".xlsx");
             }
@@ -431,5 +440,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             Új_Ablak_Nóta_Összesítés.Show();
         }
         #endregion
+
+
     }
 }
