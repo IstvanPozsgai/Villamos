@@ -21,16 +21,18 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         private bool frissul = false;
         readonly DataTable AdatTábla = new DataTable();
+        readonly DataTable AdatTáblaUtólag = new DataTable();
         #endregion
 
         #region Listák
         private List<Adat_Eszterga_Műveletek> AdatokMűvelet;
         private List<Adat_Eszterga_Üzemóra> AdatokÜzemóra;
+        private List<Adat_Eszterga_Műveletek_Napló> AdatokNapló;
         #endregion
 
         #region Kezelők
         private Kezelő_Eszterga_Műveletek KézMűveletek = new Kezelő_Eszterga_Műveletek();
-        private Kezelő_Eszterga_Üzemóra KézÜzemóra = new Kezelő_Eszterga_Üzemóra();
+        private Kezelő_Eszterga_Műveletek_Napló KézNapló = new Kezelő_Eszterga_Műveletek_Napló();
         #endregion
 
         #region Alap
@@ -38,6 +40,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             InitializeComponent();
             TáblaListázásMűvelet();
+            TáblaNaplóListázás();
+            TáblaListázásMűveletUtólag();
             TxtBxId.Enabled = false;
             CmbxEgység.DataSource = Enum.GetValues(typeof(EsztergaEgyseg));
         }
@@ -233,6 +237,101 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TáblaMűvelet.Columns["Státusz"].Width = 85;
             TáblaMűvelet.Columns["Utolsó Dátum"].Width = 120;
             TáblaMűvelet.Columns["Utolsó Üzemóra"].Width = 160;
+        }
+        private void TáblaNaplóListázás()
+        {
+            TáblaNapló.DataSource = null;
+            TáblaNapló.Rows.Clear();
+            TáblaNapló.Columns.Clear();
+            DataTable AdatTábla = new DataTable();
+            AdatTábla.Columns.Clear();
+            AdatTábla.Columns.Add("Művelet Sorszáma");
+            AdatTábla.Columns.Add("Művelet");
+            AdatTábla.Columns.Add("Utolsó Dátum");
+            AdatTábla.Columns.Add("Utolsó Üzemóra");
+            AdatTábla.Columns.Add("Megjegyzés");
+            AdatTábla.Columns.Add("Rögzítő");
+            AdatTábla.Columns.Add("Rögzítés Dátuma");
+
+            AdatokNapló = Funkció.Eszterga_KarbantartasNaplóFeltölt();
+            List<DataRow> RendezettSorok = new List<DataRow>();
+            foreach (Adat_Eszterga_Műveletek_Napló rekord in AdatokNapló)
+            {
+                DataRow Soradat = AdatTábla.NewRow();
+
+                Soradat["Művelet Sorszáma"] = rekord.ID;
+                Soradat["Művelet"] = rekord.Művelet;
+                Soradat["Utolsó Dátum"] = rekord.Utolsó_Dátum.ToShortDateString();
+                Soradat["Utolsó Üzemóra"] = rekord.Utolsó_Üzemóra_Állás;
+                Soradat["Megjegyzés"] = rekord.Megjegyzés;
+                Soradat["Rögzítő"] = rekord.Rögzítő;
+                Soradat["Rögzítés Dátuma"] = rekord.Rögzítés_Dátuma.ToShortDateString();
+
+                RendezettSorok.Add(Soradat);
+            }
+            IEnumerable<DataRow> RendezettAdatok = RendezettSorok
+                .OrderBy(sor => DateTime.Parse(sor["Utolsó Dátum"].ToStrTrim()))
+                .ThenBy(sor => int.Parse(sor["Művelet Sorszáma"].ToStrTrim()));
+
+            foreach (DataRow sor in RendezettAdatok)
+                AdatTábla.Rows.Add(sor);
+
+            TáblaNapló.DataSource = AdatTábla;
+
+            TáblaNapló.Columns["Művelet Sorszáma"].Width = 110;
+            TáblaNapló.Columns["Művelet"].Width = 550;
+            TáblaNapló.Columns["Utolsó Dátum"].Width = 105;
+            TáblaNapló.Columns["Utolsó Üzemóra"].Width = 120;
+            TáblaNapló.Columns["Megjegyzés"].Width = 221;
+            TáblaNapló.Columns["Rögzítő"].Width = 150;
+            TáblaNapló.Columns["Rögzítés Dátuma"].Width = 115;
+            for (int i = 0; i < 7; i++)
+                TáblaNapló.Columns[i].ReadOnly = true;
+            TáblaNapló.Visible = true;
+            TáblaNapló.ClearSelection();
+        }
+        private void TáblaListázásMűveletUtólag()
+        {
+            try
+            {
+                AdatTáblaUtólag.Columns.Clear();
+                AdatTáblaUtólag.Columns.Add("Sorszám");
+                AdatTáblaUtólag.Columns.Add("Művelet");
+                AdatTáblaUtólag.Columns.Add("Státusz");
+
+                AdatokMűvelet = Funkció.Eszterga_KarbantartasFeltölt();
+                AdatTáblaUtólag.Clear();
+
+                foreach (Adat_Eszterga_Műveletek rekord in AdatokMűvelet)
+                {
+                    DataRow Soradat = AdatTáblaUtólag.NewRow();
+
+                    Soradat["Sorszám"] = rekord.ID;
+                    Soradat["Művelet"] = rekord.Művelet;
+                    Soradat["Státusz"] = rekord.Státus ? "Törölt" : "Aktív";
+                    AdatTáblaUtólag.Rows.Add(Soradat);
+                }
+
+                TáblaUtólagMűvelet.DataSource = AdatTáblaUtólag;
+                OszlopSzélességMűveletUtólag();
+                TáblaUtólagMűvelet.Visible = true;
+                TáblaUtólagMűvelet.ClearSelection();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void OszlopSzélességMűveletUtólag()
+        {
+            TáblaUtólagMűvelet.Columns["Sorszám"].Width = 100;
+            TáblaUtólagMűvelet.Columns["Művelet"].Width = 900;
+            TáblaUtólagMűvelet.Columns["Státusz"].Width = 100;
         }
         #endregion
 
@@ -791,6 +890,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 frissul = false;
             }
         }
+        private void DtmPckrUtolagos_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void BttnUtolag_Modosit_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region Ablakok
@@ -819,6 +926,5 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             Új_ablak_EsztergaÜzemóra = null;
         }
         #endregion
-
     }
 }
