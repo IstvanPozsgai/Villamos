@@ -67,12 +67,8 @@ namespace Villamos.Villamos_Ablakok
         }
         private void ListaHiba()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = $"SELECT * FROM hibatábla";
             AdatokHiba.Clear();
-            AdatokHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
-
+            AdatokHiba = KézHiba.Lista_adatok(Cmbtelephely.Text.Trim());
         }
         private void ListaFeltöltés()
         {
@@ -448,19 +444,32 @@ namespace Villamos.Villamos_Ablakok
                 string jelszó = "kloczkal";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
-                Típus_text.Text = "";
-                Gyártó_text.Text = "";
-                Év_text.Text = "";
-                EszkSz_text.Text = "";
-                LeltSz_text.Text = "";
-                TárH_text.Text = "";
-                Státus_text.Text = "";
-                Miótaáll_text.Text = "";
-                Takarítás_text.Text = "";
-                Főmérnökség_text.Text = "";
-                Járműtípus_text.Text = "";
-                ut_forg_text.Text = "";
-                Fut_nap_text.Text = "";
+                //Típus_text.Text = "";
+                //Gyártó_text.Text = "";
+                //Év_text.Text = "";
+                //EszkSz_text.Text = "";
+                //LeltSz_text.Text = "";
+                //TárH_text.Text = "";
+                //Státus_text.Text = "";
+                //Miótaáll_text.Text = "";
+                //Takarítás_text.Text = "";
+                //Főmérnökség_text.Text = "";
+                //Járműtípus_text.Text = "";
+                //ut_forg_text.Text = "";
+                //Fut_nap_text.Text = "";
+
+                Action<Control.ControlCollection> func = null;
+
+                func = (controls) =>
+                {
+                    foreach (Control control in controls)
+                        if (control is TextBox)
+                            (control as TextBox).Clear();
+                        else
+                            func(control.Controls);
+                };
+
+                func(Controls);
 
                 Pályaszám_feltöltés();
 
