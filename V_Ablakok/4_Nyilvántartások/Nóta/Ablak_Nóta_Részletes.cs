@@ -37,6 +37,17 @@ namespace Villamos.Villamos_Ablakok
             // ide kell az összes gombot tenni amit szabályozni akarunk false
             int melyikelem = 210;
 
+            if (Program.Postás_Vezér || Program.PostásTelephely == "Főmérnökség")
+            {
+                Osztási.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+                Státus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            }
+            else
+            {
+                Osztási.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+                Státus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            }
+
             // módosítás 2 
             Rögzít.Visible = MyF.Vanjoga(melyikelem, 2);
             KerékRögzít.Visible = MyF.Vanjoga(melyikelem, 2);

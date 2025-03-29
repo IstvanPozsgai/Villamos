@@ -240,6 +240,7 @@
             // 
             // Osztási
             // 
+            this.Osztási.BackColor = System.Drawing.SystemColors.Window;
             this.Osztási.Location = new System.Drawing.Point(181, 109);
             this.Osztási.Multiline = true;
             this.Osztási.Name = "Osztási";
