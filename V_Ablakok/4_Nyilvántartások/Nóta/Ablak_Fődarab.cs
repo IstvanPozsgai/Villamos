@@ -388,9 +388,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                     }
                 }
                 if (IDK != null && IDK.Count > 0) KézNóta.Módosítás(IDK);
-
-
-
             }
             catch (HibásBevittAdat ex)
             {

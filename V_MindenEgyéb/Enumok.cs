@@ -122,6 +122,7 @@
         public enum Nóta_Státus
         {
             Feldolgozandó = 1,
+            Koordináció = 2,
             Telephelyi_Javítás = 3,
             Esztergálandó = 4,
             VJSZ_Javítás = 5,

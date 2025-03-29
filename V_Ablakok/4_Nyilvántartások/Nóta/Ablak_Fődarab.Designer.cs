@@ -43,17 +43,19 @@
             this.ChkRendezés = new System.Windows.Forms.CheckBox();
             this.ChkSzűrés = new System.Windows.Forms.CheckBox();
             this.KötésiOsztály = new System.Windows.Forms.BindingSource(this.components);
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.Táblalista)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Holtart
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(12, 12);
+            this.Holtart.Location = new System.Drawing.Point(174, 12);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(825, 27);
+            this.Holtart.Size = new System.Drawing.Size(663, 27);
             this.Holtart.TabIndex = 172;
             this.Holtart.Visible = false;
             // 
@@ -94,9 +96,9 @@
             // 
             this.Frissíti_táblalistát.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Frissíti_táblalistát.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Frissíti_táblalistát.Location = new System.Drawing.Point(309, 51);
+            this.Frissíti_táblalistát.Location = new System.Drawing.Point(174, 51);
             this.Frissíti_táblalistát.Name = "Frissíti_táblalistát";
-            this.Frissíti_táblalistát.Size = new System.Drawing.Size(45, 45);
+            this.Frissíti_táblalistát.Size = new System.Drawing.Size(47, 45);
             this.Frissíti_táblalistát.TabIndex = 184;
             this.toolTip1.SetToolTip(this.Frissíti_táblalistát, "Frissíti a táblázat elemeit");
             this.Frissíti_táblalistát.UseVisualStyleBackColor = true;
@@ -106,10 +108,10 @@
             // 
             this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_gomb.Location = new System.Drawing.Point(360, 51);
+            this.Excel_gomb.Location = new System.Drawing.Point(225, 51);
             this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Excel_gomb.Name = "Excel_gomb";
-            this.Excel_gomb.Size = new System.Drawing.Size(45, 45);
+            this.Excel_gomb.Size = new System.Drawing.Size(47, 45);
             this.Excel_gomb.TabIndex = 183;
             this.toolTip1.SetToolTip(this.Excel_gomb, "Excel kimenetet készít a táblázat adatai alapján");
             this.Excel_gomb.UseVisualStyleBackColor = true;
@@ -142,7 +144,7 @@
             // Aktív
             // 
             this.Aktív.AutoSize = true;
-            this.Aktív.Location = new System.Drawing.Point(12, 62);
+            this.Aktív.Location = new System.Drawing.Point(12, 3);
             this.Aktív.Name = "Aktív";
             this.Aktív.Size = new System.Drawing.Size(146, 24);
             this.Aktív.TabIndex = 188;
@@ -164,7 +166,7 @@
             // ChkRendezés
             // 
             this.ChkRendezés.AutoSize = true;
-            this.ChkRendezés.Location = new System.Drawing.Point(164, 42);
+            this.ChkRendezés.Location = new System.Drawing.Point(6, 38);
             this.ChkRendezés.Name = "ChkRendezés";
             this.ChkRendezés.Size = new System.Drawing.Size(145, 24);
             this.ChkRendezés.TabIndex = 192;
@@ -174,12 +176,23 @@
             // ChkSzűrés
             // 
             this.ChkSzűrés.AutoSize = true;
-            this.ChkSzűrés.Location = new System.Drawing.Point(164, 72);
+            this.ChkSzűrés.Location = new System.Drawing.Point(6, 12);
             this.ChkSzűrés.Name = "ChkSzűrés";
             this.ChkSzűrés.Size = new System.Drawing.Size(78, 24);
             this.ChkSzűrés.TabIndex = 191;
             this.ChkSzűrés.Text = "Szűrés";
             this.ChkSzűrés.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.BackColor = System.Drawing.Color.BurlyWood;
+            this.groupBox1.Controls.Add(this.ChkSzűrés);
+            this.groupBox1.Controls.Add(this.ChkRendezés);
+            this.groupBox1.Location = new System.Drawing.Point(12, 31);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(156, 65);
+            this.groupBox1.TabIndex = 193;
+            this.groupBox1.TabStop = false;
             // 
             // Ablak_Fődarab
             // 
@@ -187,8 +200,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(906, 252);
-            this.Controls.Add(this.ChkRendezés);
-            this.Controls.Add(this.ChkSzűrés);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Összesítés);
             this.Controls.Add(this.Aktív);
             this.Controls.Add(this.Módosítás);
@@ -207,6 +219,8 @@
             this.Load += new System.EventHandler(this.Ablak_Fődarab_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Táblalista)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -227,5 +241,6 @@
         internal System.Windows.Forms.CheckBox ChkRendezés;
         internal System.Windows.Forms.CheckBox ChkSzűrés;
         internal System.Windows.Forms.BindingSource KötésiOsztály;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

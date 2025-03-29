@@ -269,6 +269,7 @@
             this.Beépíthető.Name = "Beépíthető";
             this.Beépíthető.Size = new System.Drawing.Size(121, 28);
             this.Beépíthető.TabIndex = 3;
+            this.Beépíthető.SelectedIndexChanged += new System.EventHandler(this.Beépíthető_SelectedIndexChanged);
             // 
             // label15
             // 

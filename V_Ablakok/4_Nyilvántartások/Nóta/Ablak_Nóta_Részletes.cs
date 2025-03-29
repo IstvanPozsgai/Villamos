@@ -242,5 +242,13 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Beépíthető_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Beépíthető.Text.Trim() == "Igen")
+                Státus.Text = "7 - Felhasználható";
+            else
+                Státus.Text = "1 - Feldolgozandó";
+        }
     }
 }

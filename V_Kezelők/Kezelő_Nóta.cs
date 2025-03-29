@@ -157,20 +157,45 @@ namespace Villamos.Kezelők
                     }
                     if (Telephely == "")
                     {
-                        string szöveg = "UPDATE Nóta_Adatok SET ";
-                        szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
-                        szöveg += $"Raktár='{Adat.Raktár}' ";
-                        szöveg += $" WHERE [Id] ={Adat.Id}";
-                        SzövegGY.Add(szöveg);
+                        if (Adat.Készlet_Sarzs.Trim() == "02")
+                        {
+                            string szöveg = "UPDATE Nóta_Adatok SET ";
+                            szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
+                            szöveg += $"Raktár='{Adat.Raktár}', ";
+                            szöveg += $"Státus=7 ";
+                            szöveg += $" WHERE [Id] ={Adat.Id}";
+                            SzövegGY.Add(szöveg);
+                        }
+                        else
+                        {
+                            string szöveg = "UPDATE Nóta_Adatok SET ";
+                            szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
+                            szöveg += $"Raktár='{Adat.Raktár}' ";
+                            szöveg += $" WHERE [Id] ={Adat.Id}";
+                            SzövegGY.Add(szöveg);
+                        }
                     }
                     else
                     {
-                        string szöveg = "UPDATE Nóta_Adatok SET ";
-                        szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
-                        szöveg += $"Raktár='{Adat.Raktár}', ";
-                        szöveg += $"Telephely='{Telephely}' ";
-                        szöveg += $" WHERE [Id] ={Adat.Id}";
-                        SzövegGY.Add(szöveg);
+                        if (Adat.Készlet_Sarzs.Trim() == "02")
+                        {
+                            string szöveg = "UPDATE Nóta_Adatok SET ";
+                            szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
+                            szöveg += $"Raktár='{Adat.Raktár}', ";
+                            szöveg += $"Telephely='{Telephely}', ";
+                            szöveg += $"Státus=7 ";
+                            szöveg += $" WHERE [Id] ={Adat.Id}";
+                            SzövegGY.Add(szöveg);
+                        }
+                        else
+                        {
+                            string szöveg = "UPDATE Nóta_Adatok SET ";
+                            szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
+                            szöveg += $"Raktár='{Adat.Raktár}', ";
+                            szöveg += $"Telephely='{Telephely}' ";
+                            szöveg += $" WHERE [Id] ={Adat.Id}";
+                            SzövegGY.Add(szöveg);
+                        }
                     }
                 }
 
