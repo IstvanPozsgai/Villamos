@@ -1133,7 +1133,6 @@
     <Compile Include="V_Adatszerkezet\Adat_Alap_Egyéb.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Alap_kiadás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Nap.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Fő_Forte.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nap_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_2.cs" />
@@ -1154,7 +1153,6 @@
     <Compile Include="V_Ablakok\A_Főoldal.designer.cs">
       <DependentUpon>A_Főoldal.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Kezelők\Kezelő_Fő_Forte.cs" />
     <Compile Include="V_Kezelők\Kezelő_jármű.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerelvény.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerszám.cs" />
