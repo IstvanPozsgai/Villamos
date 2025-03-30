@@ -4019,11 +4019,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "Select * FROM vendégtábla";
                 AdatokFőVendég.Clear();
-                AdatokFőVendég = KézFőJárműVendég.Lista_adatok(hely, jelszó, szöveg);
+                AdatokFőVendég = KézFőJárműVendég.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {
