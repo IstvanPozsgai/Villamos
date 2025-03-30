@@ -933,10 +933,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             try
             {
                 AdatokBMR.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\BMR.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM TakarításBMR ORDER BY ID";
-                AdatokBMR = KézBMR.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokBMR = KézBMR.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {
