@@ -19,7 +19,7 @@ namespace Villamos.Kezelők
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Egyéb_beolvasás(hely.KönyvSzerk());
         }
-
+        //elkopó
         public List<Adat_Alap_Beolvasás> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Alap_Beolvasás> Adatok = new List<Adat_Alap_Beolvasás>();

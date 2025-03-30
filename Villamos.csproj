@@ -732,8 +732,7 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Alap_egyéb.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Alap_Kiadás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF.cs" />

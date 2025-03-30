@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -511,12 +510,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Takarítás\Takarítás_{Dátum.Year}.mdb";
-                if (!Exists(hely)) return;
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM J1adatok ";
                 AdatokJ1.Clear();
-                AdatokJ1 = KézJ1.Lista_Adat(hely, jelszó, szöveg);
+                AdatokJ1 = KézJ1.Lista_Adat(Telephely, Dátum.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -533,13 +528,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Takarítás\Takarítás_{Dátum.Year}.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM Teljesítés";
-                if (!Exists(hely)) return;
-
                 AdatokTelj.Clear();
-                AdatokTelj = KézTelj.Lista_Adat(hely, jelszó, szöveg);
+                AdatokTelj = KézTelj.Lista_Adatok(Telephely, Dátum.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -556,13 +546,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = $"SELECT * FROM árak ";
-                if (!Exists(hely)) return;
-
                 AdatokÁr.Clear();
-                AdatokÁr = KézTakÁr.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokÁr = KézTakÁr.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {

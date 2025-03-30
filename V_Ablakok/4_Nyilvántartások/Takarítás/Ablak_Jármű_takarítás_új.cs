@@ -1525,7 +1525,7 @@ namespace Villamos
                     JK_Azonosító.Text = JK_List.SelectedItems[sorszám].ToString();
 
                     if (Jnappal.Checked) napszak = 1; else napszak = 2;
-                    AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                    AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
 
                     Adat_Jármű_Takarítás_Teljesítés AdatTelj = (from a in AdatokTelj
                                                                 where a.Dátum == JDátum.Value
@@ -1595,7 +1595,7 @@ namespace Villamos
                 int napszak = 2;
                 if (Jnappal.Checked) napszak = 1;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adat_Jármű_Takarítás_Teljesítés AdatTelj = (from a in AdatokTelj
                                                             where a.Dátum == JDátum.Value
                                                             && a.Napszak == napszak
@@ -1770,7 +1770,7 @@ namespace Villamos
             try
             {
                 if (JK_Kategória.Text.ToStrTrim() == "") return;
-                List<Adat_Jármű_Takarítás_Teljesítés> Adatok = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                List<Adat_Jármű_Takarítás_Teljesítés> Adatok = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adatok = Adatok.Where(a => a.Dátum.ToShortDateString() == JDátum.Value.ToShortDateString()).ToList();
 
                 int napszak = 2;
@@ -1810,7 +1810,7 @@ namespace Villamos
         {
             try
             {
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 foreach (Adat_Jármű_Takarítás_Teljesítés rekord in AdatokTelj)
                 {
                     int napsz = 2;
@@ -2054,7 +2054,7 @@ namespace Villamos
                 int napszak = 2;
                 if (Jnappal.Checked) napszak = 1;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adat_Jármű_Takarítás_Teljesítés AdatTakTelj = (from a in AdatokTelj
                                                                where a.Dátum == JDátum.Value
                                                                && a.Napszak == napszak
@@ -2099,7 +2099,7 @@ namespace Villamos
             {
                 if (Opció_lista.Text.ToStrTrim() == "") return;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
 
                 Opció_tábla.Rows.Clear();
                 Opció_tábla.Columns.Clear();
@@ -2178,7 +2178,7 @@ namespace Villamos
                 int napszak = 2;
                 if (Jnappal.Checked) napszak = 1;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adat_Jármű_Takarítás_Teljesítés AdatTeljes = (from a in AdatokTelj
                                                               where a.Dátum == JDátum.Value
                                                               && a.Napszak == napszak
@@ -3093,7 +3093,7 @@ namespace Villamos
             try
             {
                 AdatokTelj?.Clear();
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
 
                 if (AdatokTelj?.Count <= 0)
                 {
@@ -3204,7 +3204,7 @@ namespace Villamos
             try
             {
                 AdatokTelj?.Clear();
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
 
                 if (AdatokTelj?.Count <= 0)
                 {
@@ -3765,7 +3765,7 @@ namespace Villamos
                 int volt = 0;
                 double mennyi;
                 Holtart.Be(hónapnap + 1);
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
 
                 AdatokTelj = (from a in AdatokTelj
                               where a.Dátum >= ideig
@@ -4161,7 +4161,7 @@ namespace Villamos
                             }
                             ideig = new DateTime(ListaDátum.Value.Year, ListaDátum.Value.Month, 1);
                             AdatokTelj.Clear();
-                            AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                            AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
                             AdatokTelj = (from a in AdatokTelj
                                           where a.Dátum >= ideig
                                           && a.Dátum <= hónaputolsónapja
@@ -4219,7 +4219,7 @@ namespace Villamos
 
 
                             AdatokTelj.Clear();
-                            AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                            AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
                             AdatokTelj = (from a in AdatokTelj
                                           where a.Dátum >= ideig
                                           && a.Dátum <= hónaputolsónapja
@@ -4656,7 +4656,7 @@ namespace Villamos
 
                 int i = 0;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
 
                 AdatokTelj = (from a in AdatokTelj
                               where a.Dátum >= ideig

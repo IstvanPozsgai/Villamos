@@ -20,7 +20,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely.KönyvSzerk());
         }
 
-
         public void Rögzítés(int Év, Adat_Jármű_Napló Adat)
         {
             try
@@ -88,6 +87,33 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+
+        public void Módosítás(int Év, List<Adat_Jármű_Napló> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Jármű_Napló rekord in Adatok)
+                {
+                    string szöveg = $"UPDATE állománytáblanapló  SET üzenet=1 WHERE üzenet=0 AND céltelep='{rekord.Céltelep}' AND Azonosító='{rekord.Azonosító}'";
+                    SzövegGy.Add(szöveg);
+                }
+                string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{Év}.mdb".KönyvSzerk();
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        //elkopó
         public List<Adat_Jármű_Napló> Lista_adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Jármű_Napló> Adatok = new List<Adat_Jármű_Napló>();
@@ -123,32 +149,5 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-        public void Módosítás(int Év, List<Adat_Jármű_Napló> Adatok)
-        {
-            try
-            {
-                FájlBeállítás(Év);
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Jármű_Napló rekord in Adatok)
-                {
-                    string szöveg = $"UPDATE állománytáblanapló  SET üzenet=1 WHERE üzenet=0 AND céltelep='{rekord.Céltelep}' AND Azonosító='{rekord.Azonosító}'";
-                    SzövegGy.Add(szöveg);
-                }
-                string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{Év}.mdb".KönyvSzerk();
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
     }
-
 }
