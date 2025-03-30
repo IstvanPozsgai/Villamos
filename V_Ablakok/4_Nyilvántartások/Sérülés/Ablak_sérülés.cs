@@ -31,6 +31,7 @@ namespace Villamos
         readonly Kezelő_Sérülés_Anyag KézSérülésAnyag = new Kezelő_Sérülés_Anyag();
         readonly Kezelő_Sérülés_Művelet KézSérülésMűvelet = new Kezelő_Sérülés_Művelet();
         readonly Kezelő_Sérülés_Visszajelentés KézSérülésVisszajelentés = new Kezelő_Sérülés_Visszajelentés();
+        readonly Kezelő_Alap_Beolvasás KézBeolvas = new Kezelő_Alap_Beolvasás();
 
         List<Adat_Kiegészítő_SérülésSzöveg> AdatokSérülésSzöveg = new List<Adat_Kiegészítő_SérülésSzöveg>();
         List<Adat_Telep_Kiegészítő_SérülésCaf> AdatokSérülésCaf = new List<Adat_Telep_Kiegészítő_SérülésCaf>();
@@ -2319,14 +2320,16 @@ namespace Villamos
                 Holtart.Be();
                 MyE.ExcelLétrehozás();
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = "SELECT * FROM tábla WHERE [csoport]='SérülésAny' AND [törölt]='0' ORDER BY oszlop";
+                List<Adat_Alap_Beolvasás> Adatok = KézBeolvas.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Csoport == "SérülésAny"
+                          && a.Törölt == "0"
+                          orderby a.Oszlop
+                          select a).ToList();
 
                 int i = 1;
-                Kezelő_Alap_Beolvasás Kéz = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+
                 foreach (Adat_Alap_Beolvasás rekord in Adatok)
                 {
                     MyE.Kiir(rekord.Fejléc.ToStrTrim(), MyE.Oszlopnév(i) + "1");

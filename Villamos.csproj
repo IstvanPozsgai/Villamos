@@ -725,6 +725,7 @@
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Személyes.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Forte_Kiadási_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Főkönyv_Zser_Km.cs" />
     <Compile Include="V_Kezelők\Kezelő_JogosítványVonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű2ICS.cs" />

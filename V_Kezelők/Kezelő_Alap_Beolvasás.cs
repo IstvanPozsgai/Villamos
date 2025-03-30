@@ -19,39 +19,6 @@ namespace Villamos.Kezelők
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Egyéb_beolvasás(hely.KönyvSzerk());
         }
-        //elkopó
-        public List<Adat_Alap_Beolvasás> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Alap_Beolvasás> Adatok = new List<Adat_Alap_Beolvasás>();
-            Adat_Alap_Beolvasás Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Alap_Beolvasás(
-                                        rekord["csoport"].ToStrTrim(),
-                                        rekord["oszlop"].ToÉrt_Int(),
-                                        rekord["fejléc"].ToStrTrim(),
-                                        rekord["törölt"].ToStrTrim(),
-                                        rekord["kell"].ToÉrt_Long()
-                                     );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Alap_Beolvasás> Lista_Adatok()
         {
@@ -140,5 +107,6 @@ namespace Villamos.Kezelők
             }
 
         }
+
     }
 }

@@ -3182,24 +3182,11 @@ namespace Villamos
                 // ***********************************
                 // ***** Ellenőrzés eleje ************
                 // ***********************************
-                // Feltöltjük a fejléc válozót adattal
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = "SELECT * FROM tábla where [csoport]='KM adatok' AND [törölt]=false ORDER BY oszlop";
-
-
-                Kezelő_Alap_Beolvasás Kéz = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> fejléc = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                // beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
-                int utolsó = 0;
+                string fejlécell = "";
                 for (int ii = 0; ii < 7; ii++)
-                {
-                    if (MyE.Beolvas(MyE.Oszlopnév(ii + 1) + "1").Trim() == fejléc[ii].Fejléc.Trim())
-                        utolsó += 1;
-                }
-                if (utolsó != 7)
+                    fejlécell += MyE.Beolvas(MyE.Oszlopnév(ii + 1) + "1").Trim();
+
+                if (MyF.Betöltéshelyes("KM adatok", fejlécell))
                 {
                     MessageBox.Show("Nem megfelelő a betölteni kívánt adatok formátuma ! ", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     // az excel tábla bezárása
@@ -3213,8 +3200,8 @@ namespace Villamos
 
                 Holtart.Be();
                 KarbListaFeltöltés();
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-                jelszó = "pocsaierzsi";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
+                string jelszó = "pocsaierzsi";
                 string beopályaszám = "";
                 // Első adattól végig pörgetjüka beolvasást
                 int i = 2;
@@ -3236,7 +3223,7 @@ namespace Villamos
                     {
                         long utolsórögzítés = Elem.ID;
 
-                        szöveg = "UPDATE kmtábla SET ";
+                        string szöveg = "UPDATE kmtábla SET ";
                         if (!DateTime.TryParse(MyE.Beolvas($"C{i}"), out DateTime KMUdátum)) KMUdátum = new DateTime(1900, 1, 1);
 
                         szöveg += $" KMUdátum='{KMUdátum:yyyy.MM.dd}', ";

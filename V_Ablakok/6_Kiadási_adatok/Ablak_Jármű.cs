@@ -9,7 +9,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -746,28 +745,13 @@ namespace Villamos
                 // ***********************************
                 // ***** Ellenőrzés       ************
                 // ***********************************
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = "SELECT * FROM tábla where [csoport]='Üzembehely' and [törölt]='0' AND kell=1 ORDER BY oszlop";
-
-                List<Adat_Alap_Beolvasás> Adatok = KAAdat.Lista_Adatok(hely, jelszó, szöveg);
-
-                string előírtfejléc = "";
-
-                foreach (Adat_Alap_Beolvasás item in Adatok)
-                {
-                    előírtfejléc += item.Fejléc.Trim();
-                }
-
-
                 string kapottfejléc = "";
                 // beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
                 for (int i = 1; i <= 2; i++) // a max jelöli a helyes oszlopokat
-                {
                     kapottfejléc += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
-                }
 
-                if (előírtfejléc.Trim() != kapottfejléc.Trim())
+
+                if (MyF.Betöltéshelyes("Üzembehely", kapottfejléc))
                 {
                     MyE.ExcelBezárás();
                     throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma");
@@ -779,9 +763,9 @@ namespace Villamos
                 // megnézzük, hogy hány sorból áll a tábla
                 int utolsó = MyE.Utolsósor("Sheet1");
 
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                jelszó = "pozsgaii";
-                szöveg = $"SELECT * FROM állománytábla ";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
+                string jelszó = "pozsgaii";
+                string szöveg = $"SELECT * FROM állománytábla ";
                 Adatok_Állomány.Clear();
                 Adatok_Állomány = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
 
