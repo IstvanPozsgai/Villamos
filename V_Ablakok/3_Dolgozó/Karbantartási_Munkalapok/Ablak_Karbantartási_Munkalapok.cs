@@ -26,6 +26,7 @@ namespace Villamos.Villamos_Ablakok
         List<Adat_Technológia_Rendelés> AdatokRendelés = new List<Adat_Technológia_Rendelés>();
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
         List<Adat_Technológia_Kivételek> AdatokKivétel = new List<Adat_Technológia_Kivételek>();
+        List<string> AdatokKivételCsop = new List<string>();
         List<Adat_Dolgozó_Alap> AdatokDolgozó = new List<Adat_Dolgozó_Alap>();
         List<Adat_Technológia_Alap> AdatokTípusT = new List<Adat_Technológia_Alap>();
         List<Adat_Technológia_Változat> AdatokVáltozat = new List<Adat_Technológia_Változat>();
@@ -959,6 +960,8 @@ namespace Villamos.Villamos_Ablakok
 
                 //pályaszám kivételei
                 AdatokKivétel = MyLista.KivételekLista(Járműtípus.Text.Trim());
+                AdatokKivételCsop = CsoportosKivételek();
+
 
                 List<Adat_Technológia_Új> Adatok = (from a in AdatokTechnológia
                                                     where a.Karb_ciklus_eleje <= AdatCikk.Sorszám && a.Karb_ciklus_vége >= AdatCikk.Sorszám
@@ -1075,6 +1078,30 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private List<string> CsoportosKivételek()
+        {
+            List<string> Válasz = new List<string>();
+            try
+            {
+                foreach (string Elem in PályaszámLista)
+                {
+                    Adat_Technológia_Kivételek AdatPSz = AdatokKivétel.FirstOrDefault(a => a.Azonosító == Elem);
+                    if (AdatPSz != null) Válasz.Add(AdatPSz.Altípus);
+                }
+                Válasz = Válasz.Distinct().ToList();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
         }
 
         private int MunkaFejléc(int sor)
@@ -1487,16 +1514,24 @@ namespace Villamos.Villamos_Ablakok
         {
             bool válasz = false;
             if (CHKMinta.Checked) return true;
-            if (csoportos) return true;  // csoportos esetén nem vizsgálunk
             if (Altípus.Trim() == "" || Altípus.Trim() == "_") return true; //alap beállítást mindig kiírjuk
             if (Altípus.Trim() != "" && KivételAdatok.Count == 0) return válasz; //Ha nincs kivétel akkor ki kell írni
 
-            //ha volt altípus a kivétel listában akkor kiírjuk 
-            List<Adat_Technológia_Kivételek> Szűrt = (from a in KivételAdatok
-                                                      where a.Altípus == Altípus.Trim()
-                                                      && a.Azonosító == Pályaszám.Text.Trim()
-                                                      select a).ToList();
-            if (Szűrt != null && Szűrt.Count != 0) válasz = true;
+            if (!csoportos)
+            {  //ha volt altípus a kivétel listában akkor kiírjuk 
+                List<Adat_Technológia_Kivételek> Szűrt = (from a in KivételAdatok
+                                                          where a.Altípus == Altípus.Trim()
+                                                          && a.Azonosító == Pályaszám.Text.Trim()
+                                                          select a).ToList();
+                if (Szűrt != null && Szűrt.Count != 0) válasz = true;
+            }
+            else
+            {
+                // csoportos esetén nem vizsgálunk, de vizsgáljuk
+                if (AdatokKivételCsop.Contains(Altípus)) return true;
+            }
+
+
             return válasz;
         }
 
@@ -1747,6 +1782,7 @@ namespace Villamos.Villamos_Ablakok
 
             //pályaszám kivételei
             AdatokKivétel = MyLista.KivételekLista(Járműtípus.Text.Trim());
+            AdatokKivételCsop = CsoportosKivételek();
 
             AdatokCiklus = MyLista.KarbCiklusLista(Járműtípus.Text.Trim());
             Adat_technológia_Ciklus AdatCikk = (from a in AdatokCiklus
