@@ -751,7 +751,7 @@ namespace Villamos
                     kapottfejléc += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
 
 
-                if (MyF.Betöltéshelyes("Üzembehely", kapottfejléc))
+                if (!MyF.Betöltéshelyes("Üzembehely", kapottfejléc))
                 {
                     MyE.ExcelBezárás();
                     throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma");

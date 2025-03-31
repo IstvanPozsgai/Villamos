@@ -3186,7 +3186,7 @@ namespace Villamos
                 for (int ii = 0; ii < 7; ii++)
                     fejlécell += MyE.Beolvas(MyE.Oszlopnév(ii + 1) + "1").Trim();
 
-                if (MyF.Betöltéshelyes("KM adatok", fejlécell))
+                if (!MyF.Betöltéshelyes("KM adatok", fejlécell))
                 {
                     MessageBox.Show("Nem megfelelő a betölteni kívánt adatok formátuma ! ", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     // az excel tábla bezárása

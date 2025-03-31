@@ -859,7 +859,7 @@ namespace Villamos.Villamos_Ablakok
                     valós += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
                 }
 
-                if (MyF.Betöltéshelyes("Technológi", valós))
+                if (!MyF.Betöltéshelyes("Technológi", valós))
                 {
                     MyE.ExcelBezárás();
                     throw new HibásBevittAdat("A beolvasanó Exceltábla nem egyezik meg a várt formátummal.");

@@ -260,7 +260,7 @@ namespace Villamos.Villamos_Ablakok
                 for (int i = 1; i <= 29; i++)
                     fejlécbeolvas += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
 
-                if (MyF.Betöltéshelyes("Eszköz", fejlécbeolvas))
+                if (!MyF.Betöltéshelyes("Eszköz", fejlécbeolvas))
                 {
                     MyE.ExcelBezárás();
                     throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
