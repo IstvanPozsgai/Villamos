@@ -96,13 +96,18 @@ public static partial class Függvénygyűjtemény
     /// </summary>
     /// <param name="szöveg"></param>
     /// <returns></returns>
-    public static string Szöveg_Tisztítás(string szöveg)
+    public static string Szöveg_Tisztítás(string szöveg, bool sortörés = false)
     {
         string válasz = szöveg.Replace("'", "`");    // ' cseréli ki ''
         válasz = válasz.Replace("\"", "");  // " cseréli ki üres mezőre
         válasz = válasz.Replace("/", "");
         válasz = válasz.Replace(",", "");
         válasz = válasz.Replace(@"\", "");
+        if (sortörés)
+        {
+            válasz = válasz.Replace("\n", " ");
+            válasz = válasz.Replace("\r", " ");
+        }
         return válasz.Trim();
     }
 }

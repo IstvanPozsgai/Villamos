@@ -122,12 +122,12 @@
         public enum Nóta_Státus
         {
             Feldolgozandó = 1,
-            Koordináció = 2,
+            Fődarabos_koordicációra_vár = 2,
             Telephelyi_Javítás = 3,
             Esztergálandó = 4,
             VJSZ_Javítás = 5,
             Felhasználható = 7,
-            Lezárt_Selejt = 9
+            Beépítve_vagy_Selejt = 9
         }
     }
 }

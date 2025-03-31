@@ -190,8 +190,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                     Soradat["Forgóváz"] = rekord.Forgóváz;
                     Soradat["Gyártási Szám"] = gyáriszám.ToÉrt_Long();
                     Soradat["Beépíthető"] = rekord.Beépíthető ? "Igen" : "Nem";
-                    Soradat["Műszaki Megjegyzés"] = rekord.MűszakiM;
-                    Soradat["Osztási Megjegyzés"] = rekord.OsztásiM;
+                    Soradat["Műszaki Megjegyzés"] = MyF.Szöveg_Tisztítás(rekord.MűszakiM, true);
+                    Soradat["Osztási Megjegyzés"] = MyF.Szöveg_Tisztítás(rekord.OsztásiM, true);
                     Soradat["Dátum"] = rekord.Dátum;
                     Soradat["Státus"] = $"{rekord.Státus} - {((Nóta_Státus)rekord.Státus).ToStrTrim().Replace('_', ' ')}";
                     Soradat["Átmérő"] = átmérő.ToÉrt_Int();
