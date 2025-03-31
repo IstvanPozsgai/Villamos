@@ -578,14 +578,17 @@ namespace Villamos
                         {
                             for (int j = 1; j <= 12; j++)
                             {
-                                double kötelező = (from a in Adatok
-                                                   where a.Dátum.Month == j && a.Csoport.Trim() == beolvasott.Trim()
-                                                   select a.Perc).FirstOrDefault();
-                                Tábla3.Rows[i].Cells[j + 3].Value = kötelező.ToString();
-                                if (j < 7)
-                                    első += kötelező;
-                                else
-                                    második += kötelező;
+                                Adat_Váltós_Összesítő kötelező = (from a in Adatok
+                                                                  where a.Dátum.Month == j && a.Csoport.Trim() == beolvasott.Trim()
+                                                                  select a).FirstOrDefault();
+                                if (kötelező != null)
+                                {
+                                    Tábla3.Rows[i].Cells[j + 3].Value = kötelező.Perc.ToString();
+                                    if (j < 7)
+                                        első += kötelező.Perc;
+                                    else
+                                        második += kötelező.Perc;
+                                }
                             }
                         }
                         else
@@ -593,16 +596,19 @@ namespace Villamos
                         {
                             for (int j = 1; j <= 12; j++)
                             {
-                                double kötelező = (from a in Adatok
-                                                   where a.Dátum.Month == j && a.Csoport.Trim() == "N"
-                                                   select a.Perc).FirstOrDefault();
-                                if (!double.TryParse(beolvasott.Substring(1, beolvasott.Length - 1), out double Keret)) Keret = 1;
-                                double részidő = kötelező / 480 * Keret;
-                                Tábla3.Rows[i].Cells[j + 3].Value = részidő;
-                                if (j < 7)
-                                    első += részidő;
-                                else
-                                    második += részidő;
+                                Adat_Váltós_Összesítő kötelező = (from a in Adatok
+                                                                  where a.Dátum.Month == j && a.Csoport.Trim() == "N"
+                                                                  select a).FirstOrDefault();
+                                if (kötelező != null)
+                                {
+                                    if (!double.TryParse(beolvasott.Substring(1, beolvasott.Length - 1), out double Keret)) Keret = 1;
+                                    double részidő = kötelező.Perc / 480 * Keret;
+                                    Tábla3.Rows[i].Cells[j + 3].Value = részidő;
+                                    if (j < 7)
+                                        első += részidő;
+                                    else
+                                        második += részidő;
+                                }
                             }
                         }
                         Tábla3.Rows[i].Cells[16].Value = első;
