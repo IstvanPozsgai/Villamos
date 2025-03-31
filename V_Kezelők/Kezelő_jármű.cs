@@ -31,6 +31,57 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás_Telephely(string Telephely, List<string> Üzemek, List<string> Azonosítók)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                List<string> SzövegGy = new List<string>();
+                for (int i = 0; i < Üzemek.Count; i++)
+                {
+                    string szöveg = "UPDATE Állománytábla SET ";
+                    szöveg += $"üzem='{Üzemek[i].Trim()}' ";
+                    szöveg += $" WHERE [azonosító] ='{Azonosítók[i]}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(string Telephely, Adat_Jármű Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2, üzembehelyezés) VALUES (";
+                szöveg += $"'{Adat.Azonosító.Trim()}', 0, 0, 'Nincs', 'Közös', false, 0, false, 0, '1900.01.01', ";
+                szöveg += $"'{Adat.Valóstípus.Trim()}', ";
+                szöveg += $"'{Adat.Valóstípus2.Trim()}', '1900.01.01')";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+        //Elkopó
         public List<Adat_Jármű> Lista_Jármű_állomány(string hely, string jelszó, string szöveg)
         {
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
@@ -135,24 +186,6 @@ namespace Villamos.Kezelők
             }
             return list;
         }
-
-
-        public void Rögzítés(string hely, string jelszó, Adat_Jármű Adat)
-        {
-            try
-            {
-                string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2, üzembehelyezés) VALUES (";
-                szöveg += $"'{Adat.Azonosító.Trim()}', 0, 0, 'Nincs', 'Közös', false, 0, false, 0, '1900.01.01', ";
-                szöveg += $"'{Adat.Valóstípus.Trim()}', ";
-                szöveg += $"'{Adat.Valóstípus2.Trim()}', '1900.01.01')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Rögzítés\n", ex.StackTrace, ex.Source, ex.HResult);
-            }
-        }
-
 
         public void Áthelyezés_új(string hely, string jelszó, Adat_Jármű Adat)
         {
