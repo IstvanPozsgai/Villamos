@@ -67,6 +67,7 @@ namespace Villamos
                 BtnkérelemRögzítés.Visible = false;
                 BtnKérelemPDF.Visible = false;
                 BtnSzakszeng.Visible = false;
+                Elutasít_gomb.Visible = false;
                 BtnDolgozóilsta.Visible = false;
                 PanelEngedély.Visible = false;
                 BtnDolgozóilsta.Visible = false;
@@ -83,6 +84,7 @@ namespace Villamos
                     BtnkérelemRögzítés.Visible = true;
                     BtnKérelemPDF.Visible = true;
                     BtnSzakszeng.Visible = true;
+                    Elutasít_gomb.Visible = true;
                     BtnDolgozóilsta.Visible = true;
                     PanelEngedély.Visible = true;
                     BtnDolgozóilsta.Visible = true;
@@ -94,7 +96,10 @@ namespace Villamos
                 }
 
                 if (Program.PostásTelephely.ToUpper().Contains("VONTATÁSI TÖRZS"))
+                {
                     BtnSzakszeng.Visible = true;
+                    Elutasít_gomb.Visible = true;
+                }
 
                 // nem látszanak a gombok amik státus vezéreltek
                 Gombok_kikapcs();
@@ -158,6 +163,7 @@ namespace Villamos
                     {
                         // Szakszolgálat
                         Listafeltöltésszaksz();
+                        if (Cmbtelephely.Text.ToUpper().Contains("VONTATÁSI TÖRZS")) Szakszlista();
                         LblSzakszGondnokiFelülbírálás.Text = "Gondoki engedélyezést felül lehet bírálni a szakszolgálat-vezetői engedélyezést megelőzően.\n Telephelyen beírt 2,3 státust át lehet írni a táblázatban, majd a felülbírálás gombbal kell rögzíteni.";
                         break;
                     }
@@ -225,6 +231,7 @@ namespace Villamos
             BtnGondnokSave.Enabled = false;
             BtnSzakszeng.Enabled = false;
             BtnEngedélySzakBírál.Enabled = false;
+            Elutasít_gomb.Enabled = false;
 
             // Kérelem
             BtnOktatásÚj.Enabled = false;
@@ -289,6 +296,7 @@ namespace Villamos
             {
                 BtnSzakszeng.Enabled = true;
                 BtnEngedélySzakBírál.Enabled = true;
+                Elutasít_gomb.Enabled = true;
             }
             // módosítás 3  
             if (MyF.Vanjoga(melyikelem, 3))
@@ -1348,6 +1356,7 @@ namespace Villamos
             BtnEngedélyListaÁtvételKüld.Visible = false;
             BtnEngedélyListaÁtvételMegtörtént.Visible = false;
             BtnEngedélyListaTörlés.Visible = false;
+
         }
 
         private void CmbEngedélylistaszűrő_SelectedIndexChanged(object sender, EventArgs e)
@@ -2465,6 +2474,18 @@ namespace Villamos
 
         private void BtnSzakszeng_Click(object sender, EventArgs e)
         {
+            CmbSzakszlista.Text = CmbSzakszlista.Items[0].ToString();
+            SzakengEljárás();
+        }
+
+        private void Elutasít_gomb_Click(object sender, EventArgs e)
+        {
+            CmbSzakszlista.Text = CmbSzakszlista.Items[1].ToString();
+            SzakengEljárás();
+        }
+
+        private void SzakengEljárás()
+        {
             try
             {
                 if (CmbSzakszlista.Text.Trim() == "") return;
@@ -3178,6 +3199,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
 
 
