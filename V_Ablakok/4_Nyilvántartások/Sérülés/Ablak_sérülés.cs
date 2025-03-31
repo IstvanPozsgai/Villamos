@@ -4415,7 +4415,11 @@ namespace Villamos
                 if (KmóraÁllás.Text.Trim() == "") KmóraÁllás.Text = "_";
                 if (!int.TryParse(Forgalmiakadály.Text, out int fresult)) throw new HibásBevittAdat("A forgalmi akadálynak egész számnak kell lennie!");
                 if (Járművezető.Text.Trim() == "") throw new HibásBevittAdat("A járművezető nevét meg kell adni!");
-                if (Rendelésszám.Text.Trim() != "" && !int.TryParse(Rendelésszám.Text.Trim(), out int result)) throw new HibásBevittAdat("A rendelési szám mezőnek számnak kell lennie.");
+                if (!int.TryParse(Rendelésszám.Text.Trim(), out int rendelésszám))
+                {
+                    rendelésszám = 0;
+                    Rendelésszám.Text = "0";
+                }
                 if (Helyszín.Text.Trim() == "") throw new HibásBevittAdat("A helyszínt meg kell adni!");
                 if (Ütközött.Text.Trim() == "" && Esemény.Text.Trim() != "") throw new HibásBevittAdat("Ha esemény nem üres, akkor az ütközött mező nem lehet üres!");
                 else if (Ütközött.Text.Trim() == "") throw new HibásBevittAdat("Az ütközött mező nem lehet üres!");
