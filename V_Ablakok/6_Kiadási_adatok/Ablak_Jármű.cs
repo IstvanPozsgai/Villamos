@@ -9,6 +9,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
+using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -22,6 +23,8 @@ namespace Villamos
         readonly Kezelő_Jármű_Napló KadatNapló = new Kezelő_Jármű_Napló();
         readonly Kezelő_jármű_hiba Kéz_JHadat = new Kezelő_jármű_hiba();
         readonly Kezelő_Alap_Beolvasás KAAdat = new Kezelő_Alap_Beolvasás();
+        readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
+        readonly Kezelő_Jármű_Állomány_Típus KézÁllomány = new Kezelő_Jármű_Állomány_Típus();
 
 
         List<Adat_Jármű> Adatok_Állomány = new List<Adat_Jármű>();
@@ -504,45 +507,24 @@ namespace Villamos
             TÖR_Text1.Text = TÖR_List1.SelectedItem.ToString().Trim();
         }
 
-        //
         private void TÖR_töröl_Click(object sender, EventArgs e)
         {
             try
             {
                 if (TÖR_Text1.Text.Trim() == "") return;
+                KézJármű.Törlés("Főmérnökség", TÖR_Text1.Text.Trim());
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
-                Adat_Jármű Elem = (from a in Adatok_Állomány
-                                   where a.Azonosító == TÖR_Text1.Text.Trim()
-                                   select a).FirstOrDefault();
-
-
-                if (Elem != null)
-                {
-                    if (Elem.Törölt)
-                        szöveg = $"UPDATE Állománytábla SET törölt=false WHERE [azonosító]='{TÖR_Text1.Text.Trim()}'";
-                    else
-                        szöveg = $"UPDATE Állománytábla SET törölt=true WHERE [azonosító]='{TÖR_Text1.Text.Trim()}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                }
-                else
-                    return;
-
-                // naplózás
-                hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
-
-
-                szöveg = "INSERT INTO Állománytáblanapló (azonosító, típus, honnan, hova, törölt, Módosító, mikor, céltelep, üzenet) VALUES (";
-                szöveg += $"'{TÖR_Text1.Text.Trim()}', 'Új', 'Közös', 'Törölt', ";
-                if (Elem.Törölt)
-                    szöveg += "false,";
-                else
-                    szöveg += "true,";
-                szöveg += $" '{Program.PostásNév}', '{DateTime.Now}', 'Közös', 0)";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Jármű_Napló ADATNapló = new Adat_Jármű_Napló(
+                              TÖR_Text1.Text.Trim(),
+                              "Új",
+                              "Közös",
+                              "Törölt",
+                              false,
+                              Program.PostásNév.Trim(),
+                              DateTime.Now,
+                              "Közös",
+                              0);
+                KadatNapló.Rögzítés(DateTime.Today.Year, ADATNapló);
 
                 Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
                 LÉT_listáz();
@@ -937,18 +919,15 @@ namespace Villamos
 
 
         #region Átadás-átvétel fül
-        //
         private void Telephelyeklistázasa()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM telephelytábla  order by sorszám";
+                List<Adat_kiegészítő_telephely> Adatok = KézTelephely.Lista_adatok();
+
                 Lektelephely.Items.Clear();
-                Lektelephely.BeginUpdate();
-                Lektelephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "Telephelynév"));
-                Lektelephely.EndUpdate();
+                foreach (Adat_kiegészítő_telephely Elem in Adatok)
+                    Lektelephely.Items.Add(Elem.Telephelynév);
                 Lektelephely.Refresh();
 
                 Lektelephely.Items.Add("Értékesítés");
@@ -991,19 +970,16 @@ namespace Villamos
             }
         }
 
-        //
         private void ComboListáz()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM típustábla  order by id";
+                List<Adat_Jármű_Állomány_Típus> Adatok = KézÁllomány.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Telephelyi_típus.Items.Clear();
-                Telephelyi_típus.BeginUpdate();
-                Telephelyi_típus.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "típus"));
-                Telephelyi_típus.EndUpdate();
+                foreach (Adat_Jármű_Állomány_Típus Elem in Adatok)
+                    Telephelyi_típus.Items.Add(Elem.Típus);
+
                 Telephelyi_típus.Refresh();
             }
             catch (HibásBevittAdat ex)
