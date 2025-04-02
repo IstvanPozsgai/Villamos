@@ -37,6 +37,12 @@ namespace Villamos.Villamos_Ablakok
         List<string> Pályaszám_TáblaAdatok = new List<string>();
         Dictionary<string, string> Személy = new Dictionary<string, string>();
 
+        #region Digi
+        List<Adat_DigitálisMunkalap_Kocsik> AdatokDigiKocsik = new List<Adat_DigitálisMunkalap_Kocsik>();
+        Adat_DigitálisMunkalap_Fej ADATDigiFej = null;
+        List<Adat_DigitálisMunkalap_Dolgozó> AdatokDigiDolgozó = new List<Adat_DigitálisMunkalap_Dolgozó>();
+        #endregion
+
         readonly int sormagagasság = 30;
         readonly string munkalap = "Munka1";
 
@@ -1721,6 +1727,8 @@ namespace Villamos.Villamos_Ablakok
             }
             return válasz;
         }
+
+
         #endregion
 
 
@@ -1743,7 +1751,7 @@ namespace Villamos.Villamos_Ablakok
 
             string[] darabol = Kiadta.Text.Split('-');
             string[] darabol2 = darabol[0].Split('_');
-            Adat_DigitálisMunkalap_Fej ADAT = new Adat_DigitálisMunkalap_Fej(
+            Adat_DigitálisMunkalap_Fej ADATDigiFej = new Adat_DigitálisMunkalap_Fej(
                                     Sorszám,
                                     Járműtípus.Text.Trim(),
                                     Combo_KarbCiklus.Text.Trim(),
@@ -1752,9 +1760,9 @@ namespace Villamos.Villamos_Ablakok
                                     Cmbtelephely.Text.Trim(),
                                     Dátum.Value
                                     );
-            KézDigFej.Rögzítés(ADAT);
+            KézDigFej.Rögzítés(ADATDigiFej);
 
-            List<Adat_DigitálisMunkalap_Kocsik> AdatokKocsik = new List<Adat_DigitálisMunkalap_Kocsik>();
+
             foreach (string azonosító in Pályaszám_TáblaAdatok)
             {
                 Adat_T5C5_Kmadatok Adatkm = AdatokKmAdatok.Where(a => a.Azonosító == azonosító).FirstOrDefault();
@@ -1769,9 +1777,9 @@ namespace Villamos.Villamos_Ablakok
                                         KMU,
                                         rendelés);
 
-                AdatokKocsik.Add(AdatKocsik);
+                AdatokDigiKocsik.Add(AdatKocsik);
             }
-            KézDigKocsi.Rögzítés(AdatokKocsik);
+            KézDigKocsi.Rögzítés(AdatokDigiKocsik);
 
 
             //Változatok
@@ -1795,9 +1803,6 @@ namespace Villamos.Villamos_Ablakok
                                                 && a.Érv_kezdete <= Dátum.Value && a.Érv_vége >= Dátum.Value
                                                 orderby a.Részegység, a.Munka_utasítás_szám, a.ID
                                                 select a).ToList();
-
-
-            List<Adat_DigitálisMunkalap_Dolgozó> AdatokDolgozó = new List<Adat_DigitálisMunkalap_Dolgozó>();
 
             //munkalap érdemi része
             foreach (Adat_Technológia_Új Rekorda in Adatok)
@@ -1826,7 +1831,7 @@ namespace Villamos.Villamos_Ablakok
                                                                  Darabol[1].Trim(),
                                                                  Sorszám,
                                                                  Rekorda.ID);
-                                AdatokDolgozó.Add(ADATDOLGOZÓ);
+                                AdatokDigiDolgozó.Add(ADATDOLGOZÓ);
                             }
                             if (Elem.Count == 0)
                             {
@@ -1835,7 +1840,7 @@ namespace Villamos.Villamos_Ablakok
                                                                   dolgozószám,
                                                                   Sorszám,
                                                                   Rekorda.ID);
-                                AdatokDolgozó.Add(ADATDOLGOZÓ);
+                                AdatokDigiDolgozó.Add(ADATDOLGOZÓ);
                             }
                         }
                     }
@@ -1846,11 +1851,11 @@ namespace Villamos.Villamos_Ablakok
                               dolgozószám,
                               Sorszám,
                               Rekorda.ID);
-                        AdatokDolgozó.Add(ADATDOLGOZÓ);
+                        AdatokDigiDolgozó.Add(ADATDOLGOZÓ);
                     }
                 }
             }
-            KézDigDolg.Rögzítés(AdatokDolgozó);
+            KézDigDolg.Rögzítés(AdatokDigiDolgozó);
 
             MessageBox.Show($"Az adatok mentése elkészült", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

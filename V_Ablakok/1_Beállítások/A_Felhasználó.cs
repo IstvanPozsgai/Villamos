@@ -758,11 +758,11 @@ namespace Villamos
                 menünév[181] = "Jármű takarítás";
                 menüleírás[181] = " 1- Alapadatok  , 2- Ütemezés, 3- Elkészült takarítás rögzítés";
 
-                menünév[183] = "Főmérnökségi összesített adatok";
+                menünév[183] = "Főmérnökségi adatok";
                 menüleírás[183] = " 1- , 2-, 3-";
-                menünév[184] = "Napi adatok Főmérnökségi rögzítése";
+                menünév[184] = "Telephelyi adatok összesítése";
                 menüleírás[184] = " 1-Adatok módosítás, rögzítése , 2-, 3-";
-                menünév[185] = "Forte kiadási adatok feltöltése Főmérnökség";
+                menünév[185] = "Kiadási Forte adatok feltöltése Főmérnökség";
                 menüleírás[185] = " 1-Adatok módosítás, rögzítése , 2-, 3-";
                 menünév[186] = "Kerékméretek nyilvántartása";
                 menüleírás[186] = " 1- Adatok Exportálása SAP-ba , 2- nincs , 3- Főmérnökségi rögzítés";
