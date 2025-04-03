@@ -1776,7 +1776,6 @@ namespace Villamos.Villamos_Ablakok
                                         azonosító,
                                         KMU,
                                         rendelés);
-
                 AdatokDigiKocsik.Add(AdatKocsik);
             }
             KézDigKocsi.Rögzítés(AdatokDigiKocsik);

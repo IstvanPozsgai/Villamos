@@ -5218,7 +5218,7 @@ namespace Villamos
                     string Típus = (from a in AdatokJármű
                                     where a.Azonosító == rekord.Azonosító
                                     select a.Típus).FirstOrDefault();
-                    if (Típus.Trim() == "")
+                    if (Típus == null || Típus.Trim() == "")
                         Soradat["Típus"] = "";
                     else
                         Soradat["Típus"] = Típus;
