@@ -721,6 +721,8 @@
     <Compile Include="V_Kezelők\Kezelő_Belépés_WinTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap.cs" />
+    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap_Dolgozó.cs" />
+    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap_Kocsik.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
