@@ -2810,7 +2810,7 @@ namespace Villamos
                     Soradat["Viszonylat  "] = rekord.Viszonylat;
                     Soradat["Telep       "] = rekord.Telephely;
                     Soradat["Rövid szöveg"] = rekord.Mivelütközött.ToStrTrim() != "_" ? $"Ütközött {rekord.Mivelütközött}" : $"{rekord.Esemény} {rekord.Balesethelyszín.Trim()}";
-                    Soradat["Járművezető "] = rekord.Járművezető;
+                    Soradat["Járművezet  "] = rekord.Járművezető;
 
                     AdatTábla.Rows.Add(Soradat);
 
