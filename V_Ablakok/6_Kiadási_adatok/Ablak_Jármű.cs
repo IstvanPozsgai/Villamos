@@ -19,7 +19,7 @@ namespace Villamos
     public partial class Ablak_Jármű
     {
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-        readonly Kezelő_Jármű2 Kadat2 = new Kezelő_Jármű2();
+        readonly Kezelő_Jármű2 KézJármű2 = new Kezelő_Jármű2();
         readonly Kezelő_Jármű_Napló KadatNapló = new Kezelő_Jármű_Napló();
         readonly Kezelő_jármű_hiba Kéz_JHadat = new Kezelő_jármű_hiba();
         readonly Kezelő_Alap_Beolvasás KAAdat = new Kezelő_Alap_Beolvasás();
@@ -259,10 +259,8 @@ namespace Villamos
             Fülekkitöltése();
         }
 
-        //
         private void Fülekkitöltése()
         {
-            string hely;
             switch (Fülek.SelectedIndex)
             {
                 case 0:
@@ -276,18 +274,6 @@ namespace Villamos
 
                 case 1:
                     {
-                        // jármű létrehozás, törlés, módosítás
-                        hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-
-                        if (File.Exists(hely))
-                            LÉT_listáz();
-                        else
-                            Adatbázis_Létrehozás.KocsikTípusa(hely);
-
-                        // megnézzük, hogy létezik-e naplófájl
-                        hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
-                        if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
-                        // feltöltjük a típusokat
                         Típusfeltöltés();
                         Mód_üzembehelyezésdátuma.Value = new DateTime(1900, 1, 1);
                         Listáz_psz_();
@@ -305,8 +291,6 @@ namespace Villamos
                     {
                         // napló listázása               
                         Mozg_Dátum.Value = DateTime.Today;
-                        hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{DateTime.Today.Year}.mdb";
-                        if (!File.Exists(hely)) Adatbázis_Létrehozás.Kocsitípusanapló(hely);
                         Adatok_Napló = KadatNapló.Lista_adatok(Mozg_Dátum.Value.Year);
                         break;
                     }
@@ -607,7 +591,6 @@ namespace Villamos
                 Mód_pályaszám.Items.Add(Elem.Azonosító);
         }
 
-        //
         private void MÓD_rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -616,22 +599,18 @@ namespace Villamos
                 if (MÓD_főmérnökségitípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva a főmérnökségi típus.");
                 if (Mód_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("A pályaszám mezőben nincs érték.");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
-
                 Adat_Jármű Elem = (from a in Adatok_Állomány
                                    where a.Azonosító == Mód_pályaszám.Text.Trim()
                                    select a).FirstOrDefault();
 
                 if (Elem != null)
                 {
-                    szöveg = "UPDATE állománytábla SET ";
-                    szöveg += "valóstípus='" + MÓD_főmérnökségitípus.Text.Trim() + "', ";
-                    szöveg += "valóstípus2='" + MÓD_járműtípus.Text.Trim() + "', ";
-                    szöveg += "üzembehelyezés='" + Mód_üzembehelyezésdátuma.Value.ToString("yyyy.MM.dd") + "' ";
-                    szöveg += "where [azonosító] ='" + Mód_pályaszám.Text.Trim() + "'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Jármű ADAT = new Adat_Jármű(
+                            Mód_pályaszám.Text.Trim(),
+                            MÓD_főmérnökségitípus.Text.Trim(),
+                            MÓD_járműtípus.Text.Trim(),
+                            Mód_üzembehelyezésdátuma.Value);
+                    KézJármű.Módosítás_Típus("Főmérnökség", ADAT);
                 }
                 else
                 {
@@ -643,11 +622,8 @@ namespace Villamos
                 if (!(Mód_telephely.Text.Trim() == "" || Mód_telephely.Text.Trim() == "Közös"))
                 {
                     // telephelyi adatokban is módosít
-                    hely = $@"{Application.StartupPath}\{Mód_telephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                    szöveg = "SELECT * FROM állománytábla ";
-
                     Adatok_Állomány.Clear();
-                    Adatok_Állomány = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
+                    Adatok_Állomány = KézJármű.Lista_Adatok(Mód_telephely.Text.Trim());
 
                     Elem = (from a in Adatok_Állomány
                             where a.Azonosító == Mód_pályaszám.Text.Trim()
@@ -655,11 +631,12 @@ namespace Villamos
 
                     if (Elem != null)
                     {
-                        szöveg = "UPDATE állománytábla SET ";
-                        szöveg += "valóstípus='" + MÓD_főmérnökségitípus.Text.Trim() + "', ";
-                        szöveg += "valóstípus2='" + MÓD_járműtípus.Text.Trim() + "' ";
-                        szöveg += "where [azonosító] ='" + Mód_pályaszám.Text.Trim() + "'";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        Adat_Jármű ADAT = new Adat_Jármű(
+                                 Mód_pályaszám.Text.Trim(),
+                                 MÓD_főmérnökségitípus.Text.Trim(),
+                                 MÓD_járműtípus.Text.Trim(),
+                                 Mód_üzembehelyezésdátuma.Value);
+                        KézJármű.Módosítás_Típus(Mód_telephely.Text.Trim(), ADAT);
                     }
                     MessageBox.Show("Az adatok a telephelyi adatokban is módosultak!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -676,7 +653,6 @@ namespace Villamos
             }
         }
 
-        //
         private void MÓD_SAP_adatok_Click(object sender, EventArgs e)
         {
             try
@@ -721,22 +697,19 @@ namespace Villamos
                 // megnézzük, hogy hány sorból áll a tábla
                 int utolsó = MyE.Utolsósor("Sheet1");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = $"SELECT * FROM állománytábla ";
                 Adatok_Állomány.Clear();
-                Adatok_Állomány = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
 
                 Holtart.Be(utolsó + 2);
                 // Első adattól végig pörgetjüka beolvasást
 
 
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Jármű> AdatokGy = new List<Adat_Jármű>();
                 for (int i = 2; i < utolsó; i++)
                 {
-                    string pályaszám = MyE.Beolvas("a" + i.ToString()).Substring(1, 4);
-                    DateTime Dátum = DateTime.Parse(MyE.Beolvas("B" + i.ToString()));
+                    string pályaszám = MyE.Beolvas($"a{i}").Substring(1, 4);
+                    DateTime Dátum = DateTime.Parse(MyE.Beolvas($"B{i}"));
 
                     Adat_Jármű AdatJármű = (from a in Adatok_Állomány
                                             where a.Azonosító == pályaszám.Trim()
@@ -744,14 +717,14 @@ namespace Villamos
 
                     if (AdatJármű != null)
                     {
-                        szöveg = "UPDATE állománytábla SET ";
-                        szöveg += $" üzembehelyezés='{Dátum:yyyy.MM.dd}' ";
-                        szöveg += $"where [azonosító] ='{pályaszám.Trim()}'";
-                        SzövegGy.Add(szöveg);
+                        Adat_Jármű ADAT = new Adat_Jármű(Dátum, pályaszám.Trim());
+
+                        AdatokGy.Add(ADAT);
                     }
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                KézJármű.Módosítás("Főmérnökség", AdatokGy);
+
 
                 Holtart.Ki();
                 MyE.ExcelBezárás();
@@ -1003,19 +976,21 @@ namespace Villamos
             Listáztípus();
         }
 
-        //
         private void Listáztípus()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = $"SELECT * FROM Állománytábla where [típus]='{Telephelyi_típus.Text.Trim()}'  and [törölt]=false  ORDER BY azonosító";
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = (from a in Adatok
+                          where a.Típus == Telephelyi_típus.Text.Trim()
+                          && a.Törölt == false
+                          orderby a.Azonosító
+                          select a).ToList();
 
                 Saját_járművek.Items.Clear();
-                Saját_járművek.BeginUpdate();
-                Saját_járművek.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                Saját_járművek.EndUpdate();
+                foreach (Adat_Jármű Elem in Adatok)
+                    Saját_járművek.Items.Add(Elem.Azonosító);
+
                 Saját_járművek.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -1393,10 +1368,10 @@ namespace Villamos
                 string jelszó = "pozsgaii";
                 string szöveg = $"SELECT * FROM állománytábla where [azonosító]='{azonosító}'";
 
-                Adat_Jármű_2 adat = Kadat2.Egy_Adat(honnan, jelszó, szöveg);
+                Adat_Jármű_2 adat = KézJármű2.Egy_Adat(honnan, jelszó, szöveg);
                 if (adat != null)
                 {
-                    Kadat2.Módosít(hova, jelszó, adat);
+                    KézJármű2.Módosít(hova, jelszó, adat);
                     // kitöröljük
                     szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{azonosító}'";
                     MyA.ABtörlés(honnan, jelszó, szöveg);
@@ -1715,7 +1690,7 @@ namespace Villamos
 
             PDF_pályaszám.Refresh();
         }
-        //
+
         private void PDF_lista_szűrés()
         {
             try

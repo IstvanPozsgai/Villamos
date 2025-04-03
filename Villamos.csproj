@@ -827,6 +827,7 @@
     <Compile Include="V_Kezelők\Kezelő_Rezsi_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Rezsi_Törzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Túlóra.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szerelvény_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerszám_FejLáb.cs" />
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />

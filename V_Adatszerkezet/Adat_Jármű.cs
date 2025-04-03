@@ -116,6 +116,20 @@ namespace Villamos.Adatszerkezet
             Miótaáll = miótaáll;
             Hibák = hibák;
         }
+
+        public Adat_Jármű(DateTime üzembehelyezés, string azonosító)
+        {
+            Azonosító = azonosító;
+            Üzembehelyezés = üzembehelyezés;
+        }
+
+        public Adat_Jármű(string azonosító, string valóstípus, string valóstípus2, DateTime üzembehelyezés)
+        {
+            Azonosító = azonosító;
+            Valóstípus2 = valóstípus2;
+            Valóstípus = valóstípus;
+            Üzembehelyezés = üzembehelyezés;
+        }
     }
 
     /// <summary>
