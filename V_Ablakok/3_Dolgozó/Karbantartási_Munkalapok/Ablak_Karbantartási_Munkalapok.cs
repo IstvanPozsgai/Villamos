@@ -25,6 +25,8 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_DigitálisMunkalap_Dolgozó KézDigDolg = new Kezelő_DigitálisMunkalap_Dolgozó();
         readonly Kezelő_DigitálisMunkalap_Fej KézDigFej = new Kezelő_DigitálisMunkalap_Fej();
         readonly Kezelő_DigitálisMunkalap_Kocsik KézDigKocsi = new Kezelő_DigitálisMunkalap_Kocsik();
+        readonly Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok("T5C5");
+        readonly Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
 
         List<Adat_Technológia_Rendelés> AdatokRendelés = new List<Adat_Technológia_Rendelés>();
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
@@ -976,11 +978,11 @@ namespace Villamos.Villamos_Ablakok
                 if (CHKKMU.Checked && !csoportos)
                 {
                     //KMU érték
-                    string helykm = Application.StartupPath + @"\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
-                    string jelszókm = "pocsaierzsi";
-                    string szövegkm = $"SELECT * FROM KMtábla Where azonosító='{Pályaszám.Text.Trim()}' order by  vizsgdátumk  desc";
-                    Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok("T5C5");
-                    Adat_T5C5_Kmadatok EgyKmAdat = KézKM.Egy_Adat(helykm, jelszókm, szövegkm);
+                    List<Adat_T5C5_Kmadatok> KmAdatok = KézKM.Lista_Adatok();
+                    Adat_T5C5_Kmadatok EgyKmAdat = (from a in KmAdatok
+                                                    where a.Azonosító == Pályaszám.Text.Trim()
+                                                    orderby a.Vizsgdátumk descending
+                                                    select a).FirstOrDefault();
                     KM_korr = 0;
                     if (EgyKmAdat != null) KM_korr = EgyKmAdat.KMUkm;
 
@@ -988,7 +990,6 @@ namespace Villamos.Villamos_Ablakok
                     List<Adat_Főkönyv_Zser_Km> AdatokZSER = KézZser.Lista_adatok(Dátum.Value.Year);
                     if (Dátum.Value.Month < 4)
                     {
-                        helykm = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year - 1}\Napi_km_Zser_{Dátum.Value.Year - 1}.mdb";
                         List<Adat_Főkönyv_Zser_Km> AdatokZSERelőző = KézZser.Lista_adatok(Dátum.Value.Year - 1);
                         AdatokZSER.AddRange(AdatokZSERelőző);
                     }
@@ -1709,12 +1710,7 @@ namespace Villamos.Villamos_Ablakok
                     switch (válasz)
                     {
                         case "T5C5":
-                            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value:yyyy}\Vezénylés{Dátum.Value:yyyy}.mdb";
-                            string jelszó = "tápijános";
-                            string szöveg = $"SELECT * FROM vezényléstábla";
-
-                            Kezelő_Vezénylés Kéz = new Kezelő_Vezénylés();
-                            List<Adat_Vezénylés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                            List<Adat_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
 
                             Adat_Vezénylés Adat = (from a in Adatok
                                                    where a.Dátum == Dátum.Value && a.Törlés == 0 && a.Vizsgálat == Combo_KarbCiklus.Text.Trim() && a.Azonosító == Pályaszám.Text.Trim()
