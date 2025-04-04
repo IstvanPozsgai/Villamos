@@ -178,7 +178,7 @@ namespace Villamos.Kezelők
 
 
 
-
+        //Elkopó
         public List<Adat_Szerelvény> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Szerelvény> AdatKocsik = new List<Adat_Szerelvény>();

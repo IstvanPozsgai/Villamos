@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -59,8 +58,17 @@ namespace Villamos.Ablakok
             try
             {
                 Ellenőrzés();
-                HibásTábla.Visible = Exists(hely);
-                Label3.Visible = Exists(hely);
+                List<Adat_Szerelvény> Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
+                if (Adatok != null && Adatok.Count > 0)
+                {
+                    HibásTábla.Visible = true;
+                    Label3.Visible = true;
+                }
+                else
+                {
+                    HibásTábla.Visible = false;
+                    Label3.Visible = false;
+                }
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
                 Képernyő_frissítés_Tényleges();
             }
@@ -745,6 +753,7 @@ namespace Villamos.Ablakok
                 }
                 Szerelvénylista.Visible = true;
                 Szerelvénylista.Refresh();
+                Szerelvénylista.ClearSelection();
 
                 Hibás_csatolások();
             }
@@ -846,6 +855,7 @@ namespace Villamos.Ablakok
                     }
                 }
                 HibásTábla.Visible = true;
+                HibásTábla.ClearSelection();
                 HibásTábla.Refresh();
             }
             catch (Exception ex)
@@ -883,6 +893,7 @@ namespace Villamos.Ablakok
             Szerelvénytáblasor.Columns[7].Visible = false;
             Szerelvénytáblasor.Visible = true;
             Szerelvénytáblasor.Refresh();
+            Szerelvénytáblasor.ClearSelection();
         }
 
         private void Szerelvénylista_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -927,6 +938,7 @@ namespace Villamos.Ablakok
 
                 Szerelvénytáblasor.Rows[0].Cells[6].Value = Adat.Szerelvény_ID.ToString();
                 Szerelvénytáblasor.Rows[0].Cells[7].Value = Adat.Szerelvényhossz.ToString();
+                Szerelvénytáblasor.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1201,7 +1213,7 @@ namespace Villamos.Ablakok
             try
             {
                 if (Azonosító == "_" || Azonosító == "0") return false;
-                Adat_Jármű Ideig = (from a in AdatokJár
+                Adat_Jármű Ideig = (from a in Adatok
                                     where a.Azonosító == Azonosító
                                     select a).FirstOrDefault();
                 if (Ideig == null) Válasz = true;
@@ -1546,6 +1558,7 @@ namespace Villamos.Ablakok
                 }
                 Előírt_Szerelvénylista.Visible = true;
                 Előírt_Szerelvénylista.Refresh();
+                Előírt_Szerelvénylista.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1624,7 +1637,9 @@ namespace Villamos.Ablakok
             Előírt_Szerelvénytáblasor.Columns[7].Width = 60;
             Előírt_Szerelvénytáblasor.Columns[7].Visible = false;
             Előírt_Szerelvénytáblasor.Visible = true;
+            Előírt_Szerelvénytáblasor.ClearSelection();
             Előírt_Szerelvénytáblasor.Refresh();
+
         }
 
         private void Button4_Click(object sender, EventArgs e)

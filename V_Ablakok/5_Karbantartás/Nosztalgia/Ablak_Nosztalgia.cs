@@ -68,7 +68,7 @@ namespace Villamos.Villamos_Ablakok
         private void ListaHiba()
         {
             AdatokHiba.Clear();
-            AdatokHiba = KézHiba.Lista_adatok(Cmbtelephely.Text.Trim());
+            AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
         }
         private void ListaFeltöltés()
         {
