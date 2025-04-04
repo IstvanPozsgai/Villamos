@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -57,6 +59,124 @@ namespace Villamos.Kezelők
             }
             return AdatKocsik;
         }
+
+        public void Törlés(string Telephely, long Id, bool előírt = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, előírt);
+                string szöveg = $"DELETE FROM szerelvénytábla WHERE id={Id}";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string Telephely, List<long> Idk, bool előírt = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, előírt);
+                List<string> SzövegGy = new List<string>();
+                foreach (long Id in Idk)
+                {
+                    string szöveg = $"DELETE FROM szerelvénytábla WHERE id={Id}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABtörlés(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string Telephely, Adat_Szerelvény Adat, bool előírt = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, előírt);
+                string szöveg = "UPDATE szerelvénytábla SET ";
+                szöveg += $"kocsi1='{Adat.Kocsi1}', ";
+                szöveg += $"kocsi2='{Adat.Kocsi2}', ";
+                szöveg += $"kocsi3='{Adat.Kocsi3}', ";
+                szöveg += $"kocsi4='{Adat.Kocsi4}', ";
+                szöveg += $"kocsi5='{Adat.Kocsi5}', ";
+                szöveg += $"kocsi6='{Adat.Kocsi6}', ";
+                szöveg += $"szerelvényhossz={Adat.Szerelvényhossz} ";
+                szöveg += $" WHERE id={Adat.Szerelvény_ID}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(string Telephely, Adat_Szerelvény Adat, bool előírt = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, előírt);
+                string szöveg = "INSERT INTO szerelvénytábla (id, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, szerelvényhossz) VALUES (";
+                szöveg += $"{Adat.Szerelvény_ID}, '{Adat.Kocsi1}', '{Adat.Kocsi2}', '{Adat.Kocsi3}', '{Adat.Kocsi4}', '{Adat.Kocsi5}', '{Adat.Kocsi6}', {Adat.Szerelvényhossz})";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void MódosításHossz(string Telephely, List<Adat_Szerelvény> Adatok, bool előírt = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, előírt);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Szerelvény Adat in Adatok)
+                {
+                    string szöveg = "UPDATE szerelvénytábla SET ";
+                    szöveg += $"szerelvényhossz={Adat.Szerelvényhossz} ";
+                    szöveg += $" WHERE id={Adat.Szerelvény_ID}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
 
 
         public List<Adat_Szerelvény> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -157,37 +277,6 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
-
-        public void Szerelvény_módosítás(string hely, string jelszó, Adat_Szerelvény Adat)
-        {
-            string szöveg;
-            szöveg = "UPDATE szerelvénytábla SET ";
-            szöveg += "kocsi1='" + Adat.Kocsi1 + "', ";
-            szöveg += "kocsi2='" + Adat.Kocsi2 + "', ";
-            szöveg += "kocsi3='" + Adat.Kocsi3 + "', ";
-            szöveg += "kocsi4='" + Adat.Kocsi4 + "', ";
-            szöveg += "kocsi5='" + Adat.Kocsi5 + "', ";
-            szöveg += "kocsi6='" + Adat.Kocsi6 + "', ";
-            szöveg += "szerelvényhossz=" + Adat.Szerelvényhossz.ToString() + " ";
-            szöveg += " WHERE id=" + Adat.Szerelvény_ID.ToString();
-
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        public void Új_Szerelvény(string hely, string jelszó, Adat_Szerelvény Adat)
-        {
-            string szöveg;
-            szöveg = "INSERT INTO szerelvénytábla (id, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, szerelvényhossz) VALUES (";
-
-            szöveg += Adat.Szerelvény_ID.ToString() + ", '"
-                    + Adat.Kocsi1 + "', '" + Adat.Kocsi2 + "', '"
-                    + Adat.Kocsi3 + "', '" + Adat.Kocsi4 + "', '"
-                    + Adat.Kocsi5 + "', '" + Adat.Kocsi6 + "', "
-                    + Adat.Szerelvényhossz.ToString() + "  )";
-
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
-        }
-
 
     }
 }

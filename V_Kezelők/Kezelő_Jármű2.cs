@@ -53,6 +53,59 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public void Módosítás(string Telephely, List<Adat_Jármű_2> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Jármű_2 Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE Állománytábla SET haromnapos={Adat.Haromnapos} WHERE azonosító='{Adat.Azonosító}'";
+                    SzövegGy.Add(szöveg);
+                }
+
+
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(string Telephely, List<Adat_Jármű_2> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                List<string> SzövegGY = new List<string>();
+                foreach (Adat_Jármű_2 Adat in Adatok)
+                {
+                    // ha nem létezik 
+                    string szöveg = "INSERT INTO állománytábla (azonosító, takarítás, haromnapos) VALUES (";
+                    szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
+                    szöveg += $"'{Adat.Takarítás}', "; // takarítás
+                    szöveg += $"{Adat.Haromnapos}) "; // haromnapos
+                    SzövegGY.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGY);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 
         //Elkopó
@@ -139,35 +192,5 @@ namespace Villamos.Kezelők
             szöveg += $" WHERE azonosító='{Adat.Azonosító.Trim()}'";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
-
-        public void MódosítHárom(string hely, string jelszó, List<Adat_Jármű_2> Adatok)
-        {
-            List<string> SzövegGY = new List<string>();
-            foreach (Adat_Jármű_2 Adat in Adatok)
-            {
-                string szöveg = "UPDATE állománytábla  SET ";
-                szöveg += $"haromnapos='{Adat.Haromnapos}' "; // haromnapos
-                szöveg += $" WHERE azonosító='{Adat.Azonosító.Trim()}'";
-                SzövegGY.Add(szöveg);
-            }
-            MyA.ABMódosítás(hely, jelszó, SzövegGY);
-        }
-
-        public void Rögzítés(string hely, string jelszó, List<Adat_Jármű_2> Adatok)
-        {
-            List<string> SzövegGY = new List<string>();
-            foreach (Adat_Jármű_2 Adat in Adatok)
-            {
-                // ha nem létezik 
-                string szöveg = "INSERT INTO állománytábla  (  azonosító, takarítás, haromnapos ) VALUES (";
-                szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
-                szöveg += $"'{Adat.Takarítás}', "; // takarítás
-                szöveg += $"{Adat.Haromnapos}) "; // haromnapos
-                SzövegGY.Add(szöveg);
-            }
-            MyA.ABMódosítás(hely, jelszó, SzövegGY);
-        }
     }
-
-
 }

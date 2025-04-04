@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -18,8 +15,8 @@ namespace Villamos.Ablakok
 {
     public partial class Ablak_szerelvény : Form
     {
-        Adat_Szerelvény szAdat = new Adat_Szerelvény();
-        Adat_Szerelvény ESZAdat = new Adat_Szerelvény();
+        Adat_Szerelvény szAdat = null;
+        Adat_Szerelvény ESZAdat = null;
         Ablak_Kereső Új_Ablak_Kereső;
 
         string Melyik_azonosító = "";
@@ -32,6 +29,8 @@ namespace Villamos.Ablakok
         readonly Kezelő_Jármű2 KézJármű2 = new Kezelő_Jármű2();
         readonly Kezelő_Kiegészítő_Igen_Nem KézIgenNem = new Kezelő_Kiegészítő_Igen_Nem();
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
+        readonly Kezelő_Jármű_Állomány_Típus KézTípus = new Kezelő_Jármű_Állomány_Típus();
+
 
         List<Adat_Jármű_2> AdatokJ2 = new List<Adat_Jármű_2>();
         List<Adat_Szerelvény> Elő_Szer_Adatok = new List<Adat_Szerelvény>();
@@ -55,16 +54,11 @@ namespace Villamos.Ablakok
             Új_Ablak_Kereső?.Close();
         }
 
-        //
         private void Ablak_szerelvény_Shown(object sender, EventArgs e)
         {
             try
             {
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Szerelvénytáblalap(hely);
                 Ellenőrzés();
-
                 HibásTábla.Visible = Exists(hely);
                 Label3.Visible = Exists(hely);
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
@@ -81,21 +75,13 @@ namespace Villamos.Ablakok
             }
         }
 
-        //     
-        void Start()
+        private void Start()
         {
             Telephelyekfeltöltése();
-
-            // megnézzük, hogy van-e szerelvény tábla
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.Szerelvénytáblalap(hely);
-
-
-
             Jogosultságkiosztás();
         }
 
-        public void Fülek_DrawItem(object sender, DrawItemEventArgs e)
+        private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
             // Határozza meg, hogy melyik lap van jelenleg kiválasztva
             TabPage SelectedTab = Fülek.TabPages[e.Index];
@@ -346,21 +332,17 @@ namespace Villamos.Ablakok
             Szerelvénytábla_listázás();
             Hibás_csatolások();
         }
-        //
+
         private void ComboListáz()
         {
             try
             {
-
                 Combo1.Items.Clear();
+                List<Adat_Jármű_Állomány_Típus> Adatok = KézTípus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM típustábla order by id";
+                foreach (Adat_Jármű_Állomány_Típus Elem in Adatok)
+                    Combo1.Items.Add(Elem.Típus);
 
-                Combo1.BeginUpdate();
-                Combo1.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "típus"));
-                Combo1.EndUpdate();
                 Combo1.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -374,7 +356,6 @@ namespace Villamos.Ablakok
             }
         }
 
-        //
         private void Hozzáad_Click(object sender, EventArgs e)
         {
             try
@@ -426,14 +407,11 @@ namespace Villamos.Ablakok
                 Kocsi_rendező(kocsik, "0");
 
                 Adat_Szerelvény Adat = new Adat_Szerelvény(Szerelvény_ID, Szerelvény_hossz, kocsik[0], kocsik[1], kocsik[2], kocsik[3], kocsik[4], kocsik[5]);
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-                string jelszó = "pozsgaii";
                 // Rögzítjük, vagy módosítjuk
                 if (szAdat.Szerelvény_ID == 0)
-                    KézSzerelvény.Új_Szerelvény(hely, jelszó, Adat);
+                    KézSzerelvény.Rögzítés(Cmbtelephely.Text.Trim(), Adat);
                 else
-                    KézSzerelvény.Szerelvény_módosítás(hely, jelszó, Adat);
+                    KézSzerelvény.Módosítás(Cmbtelephely.Text.Trim(), Adat);
 
                 //Alapértéket beállítjuk és naplózzuk
                 szAdat = new Adat_Szerelvény(Szerelvény_ID, Szerelvény_hossz, kocsik[0], kocsik[1], kocsik[2], kocsik[3], kocsik[4], kocsik[5]);
@@ -441,11 +419,8 @@ namespace Villamos.Ablakok
 
 
                 // átállítjuk a jármű tulajdonságait
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string szöveg = "UPDATE  állománytábla SET ";
-                szöveg += $" szerelvény=true, szerelvénykocsik={Szerelvény_ID}";
-                szöveg += $" WHERE azonosító='{Pályaszám.Text.Trim()}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Jármű ADAT = new Adat_Jármű(Pályaszám.Text.Trim(), true, Szerelvény_ID);
+                KézJármű.Módosítás_Szerelvény(Cmbtelephely.Text.Trim(), ADAT);
 
                 Képernyő_frissítés_Tényleges_rész();
                 Szerelvénytáblasor_kiírása(szAdat);
@@ -513,35 +488,27 @@ namespace Villamos.Ablakok
             Törli_szerelvényt();
         }
 
-        //
         private void Törli_szerelvényt()
         {
             try
             {
                 if (Szerelvénytáblasor.Rows[0].Cells[0].Value == null || Szerelvénytáblasor.Rows[0].Cells[0].Value.ToStrTrim() == "") throw new HibásBevittAdat("Nincs kijelölve egy szerelvény sem.");
 
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-                if (!Exists(hely)) return;
-
-                string jelszó = "pozsgaii";
-                string szöveg = "DELETE FROM szerelvénytábla WHERE id=" + szAdat.Szerelvény_ID.ToString();
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                KézSzerelvény.Törlés(Cmbtelephely.Text.Trim(), szAdat.Szerelvény_ID);
 
                 //Módosítjuk a villamos táblát
                 string[] kocsik = new string[] { szAdat.Kocsi1, szAdat.Kocsi2, szAdat.Kocsi3, szAdat.Kocsi4, szAdat.Kocsi5, szAdat.Kocsi6 };
 
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                List<string> szövegGy = new List<string>();
+                List<Adat_Jármű> AdatokGy = new List<Adat_Jármű>();
                 for (int i = 0; i < kocsik.Length; i++)
                 {
                     if (kocsik[i] != null)
                     {
-                        szöveg = $"UPDATE  állománytábla SET szerelvény=false, szerelvénykocsik=0 WHERE azonosító='{kocsik[i]}'";
-                        szövegGy.Add(szöveg);
+                        Adat_Jármű ADAT = new Adat_Jármű(kocsik[i], false, 0);
+                        AdatokGy.Add(ADAT);
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                KézJármű.Módosítás_Szerelvény(Cmbtelephely.Text.Trim(), AdatokGy);
 
                 KézSzerNapló.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today, szAdat);
 
@@ -621,7 +588,6 @@ namespace Villamos.Ablakok
             }
         }
 
-        //
         private void Egyszerelvényminusz_Click(object sender, EventArgs e)
         {
             try
@@ -647,19 +613,16 @@ namespace Villamos.Ablakok
                 long Szerelvény_hossz = szAdat.Szerelvényhossz - 1;
 
                 //rögzítjük a módosítást
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-                string jelszó = "pozsgaii";
-                Adat_Szerelvény szerelvény = new Adat_Szerelvény(szAdat.Szerelvény_ID, Szerelvény_hossz, kocsik[0], kocsik[1], kocsik[2], kocsik[3], kocsik[4], kocsik[5]);
-                KézSzerelvény.Szerelvény_módosítás(hely, jelszó, szerelvény);
+                Adat_Szerelvény ADAT = new Adat_Szerelvény(szAdat.Szerelvény_ID, Szerelvény_hossz, kocsik[0], kocsik[1], kocsik[2], kocsik[3], kocsik[4], kocsik[5]);
+                KézSzerelvény.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
 
 
                 // átállítjuk a jármű tulajdonságait
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string szöveg = $"UPDATE állománytábla SET szerelvénykocsik=0, szerelvény=false WHERE azonosító='{Melyik_azonosító.Trim()}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Jármű ADATJármű = new Adat_Jármű(Melyik_azonosító.Trim(), false, 0);
+                KézJármű.Módosítás_Szerelvény(Cmbtelephely.Text.Trim(), ADATJármű);
 
                 //Átállítjuk a osztályszintű értéket és naplózzuk a módosítást
-                szAdat = szerelvény;
+                szAdat = ADAT;
                 KézSzerNapló.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today, szAdat);
 
                 Szerelvénytábla_listázás();
@@ -687,7 +650,6 @@ namespace Villamos.Ablakok
             Kiírja_pályaszámokat();
         }
 
-        //
         private void Kiírja_pályaszámokat()
         {
             try
@@ -695,12 +657,7 @@ namespace Villamos.Ablakok
                 Pályaszám.Items.Clear();
                 if (Combo1.SelectedIndex < 0 && Combo1.Text.Trim() == "") return;
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = $"SELECT * FROM állománytábla";
-
-                Kezelő_Jármű Kéz = new Kezelő_Jármű();
-                List<Adat_Jármű> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 List<Adat_Jármű> Elemek = (from a in Adatok
                                            where a.Típus == Combo1.Text.Trim()
@@ -798,14 +755,10 @@ namespace Villamos.Ablakok
             }
         }
 
-        //
         private void Hibás_csatolások()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-                if (!Exists(hely)) return;
-
                 Elő_Szer_Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
                 AdatokSzer = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());
 
@@ -932,7 +885,6 @@ namespace Villamos.Ablakok
             Szerelvénytáblasor.Refresh();
         }
 
-        //
         private void Szerelvénylista_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -945,13 +897,15 @@ namespace Villamos.Ablakok
                     else
                         szerelvényID = Szerelvénylista.Rows[e.RowIndex].Cells[6].Value.ToÉrt_Long();
 
+                    List<Adat_Szerelvény> Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());
+                    szAdat = Adatok.FirstOrDefault(a => a.Szerelvény_ID == szerelvényID);
 
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-                    string jelszó = "pozsgaii";
-                    szAdat = KézSzerelvény.SzerelvényEgy(hely, jelszó, szerelvényID);
-
-                    Szerelvénytáblasor_kiírása(szAdat);
+                    if (szAdat != null) Szerelvénytáblasor_kiírása(szAdat);
                 }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -1030,8 +984,8 @@ namespace Villamos.Ablakok
             this.Cursor = Cursors.WaitCursor; // homok óra kezdete
 
             //kitöröljük azokat a szerelvényeket, melynek valamelyik eleme elment a telephelyről
-            Ellenőrző3();
-            Ellenőrző4();
+            Ellenőrző4(true);
+            Ellenőrző4(false);
             Ellenőrző2();
             Ellenőrző();
             Ellenőrző1();
@@ -1041,7 +995,6 @@ namespace Villamos.Ablakok
             this.Refresh();
         }
 
-        //
         private void Ellenőrző()
         {
             try
@@ -1055,10 +1008,7 @@ namespace Villamos.Ablakok
                 // végig pörgetjük a kocsikat és közben ellenőrizzük, hogy a kocsihoz letárolt szerelvény szám létezik-e,
                 // ha nem létezik, akkor a kocsit egy kocsiként fogjuk kezelni.
 
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                List<string> szövegGy = new List<string>();
+                List<Adat_Jármű> AdatokGy = new List<Adat_Jármű>();
                 foreach (Adat_Jármű rekord in AdatokJár)
                 {
                     if (rekord.Szerelvénykocsik != 0)
@@ -1069,8 +1019,8 @@ namespace Villamos.Ablakok
                         // ha nincs akkor kitöröljük a villamosból
                         if (Elem == null)
                         {
-                            string szöveg = $"UPDATE állománytábla SET szerelvénykocsik=0, szerelvény=false WHERE azonosító='{rekord.Azonosító.Trim()}'";
-                            szövegGy.Add(szöveg);
+                            Adat_Jármű ADAT = new Adat_Jármű(rekord.Azonosító.Trim(), false, 0);
+                            AdatokGy.Add(ADAT);
                         }
                         else
                         {
@@ -1078,14 +1028,15 @@ namespace Villamos.Ablakok
                             if (!(Elem.Kocsi1 == rekord.Azonosító || Elem.Kocsi2 == rekord.Azonosító || Elem.Kocsi3 == rekord.Azonosító ||
                                  Elem.Kocsi4 == rekord.Azonosító || Elem.Kocsi5 == rekord.Azonosító || Elem.Kocsi6 == rekord.Azonosító))
                             {
-                                string szöveg = $"UPDATE állománytábla SET szerelvénykocsik=0, szerelvény=false WHERE azonosító='{rekord.Azonosító.Trim()}'";
-                                szövegGy.Add(szöveg);
+                                Adat_Jármű ADAT = new Adat_Jármű(rekord.Azonosító.Trim(), false, 0);
+                                AdatokGy.Add(ADAT);
                             }
                         }
                     }
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                if (AdatokGy != null && AdatokGy.Count > 0) KézJármű.Módosítás_Szerelvény(Cmbtelephely.Text.Trim(), AdatokGy);
+
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -1097,7 +1048,6 @@ namespace Villamos.Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void Ellenőrző1()
@@ -1134,16 +1084,12 @@ namespace Villamos.Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
-        //
         private void Elem_Vizs(string kocsi, long szerelvényszám)
         {
             try
             {
-                string jelszó = "pozsgaii";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
                 if (kocsi.Trim() != "0")
                 {
                     Adat_Jármű Ideig = (from a in AdatokJár
@@ -1152,8 +1098,9 @@ namespace Villamos.Ablakok
                     if (Ideig == null)
                     {
                         // ha nem egyezik meg akkor berögzítjük 
-                        string szöveg = $"UPDATE állománytábla SET szerelvény=true,  szerelvénykocsik={szerelvényszám} WHERE azonosító= '{kocsi.Trim()}'";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        Adat_Jármű ADAT = new Adat_Jármű(kocsi.Trim(), true, szerelvényszám);
+                        KézJármű.Módosítás_Szerelvény(Cmbtelephely.Text.Trim(), ADAT);
+
                     }
                 }
             }
@@ -1166,10 +1113,8 @@ namespace Villamos.Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
-        //
         private void Ellenőrző2()
         {
             try
@@ -1181,24 +1126,23 @@ namespace Villamos.Ablakok
                 List<Adat_Szerelvény> ideig = (from a in AdatokSzer
                                                where a.Szerelvényhossz == 0
                                                select a).ToList();
-                if (ideig != null)
-                {
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-                    string jelszó = "pozsgaii";
-                    string szöveg = "DELETE FROM szerelvénytábla WHERE  Szerelvényhossz=0";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                List<long> Sorszámok = new List<long>();
+                foreach (Adat_Szerelvény Elem in ideig)
+                    Sorszámok.Add(Elem.Szerelvény_ID);
+
+                if (Sorszámok != null && Sorszámok.Count > 0)
+                    KézSzerelvény.Törlés(Cmbtelephely.Text.Trim(), Sorszámok);
+
 
                 ideig = (from a in Elő_Szer_Adatok
                          where a.Szerelvényhossz == 0
                          select a).ToList();
-                if (ideig != null)
-                {
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-                    string jelszó = "pozsgaii";
-                    string szöveg = "DELETE FROM szerelvénytábla WHERE  Szerelvényhossz=0";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                Sorszámok.Clear();
+                foreach (Adat_Szerelvény Elem in ideig)
+                    Sorszámok.Add(Elem.Szerelvény_ID);
+
+                if (Sorszámok != null && Sorszámok.Count > 0)
+                    KézSzerelvény.Törlés(Cmbtelephely.Text.Trim(), Sorszámok, true);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1209,100 +1153,40 @@ namespace Villamos.Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
-        //
-        private void Ellenőrző3()
+        private void Ellenőrző4(bool előírt)
         {
             try
             {
-                AdatokSzer = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Elő_Szer_Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), előírt);
                 AdatokJár = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-                // A szerelvényt töröljük, ha olyan eleme van ami nincs a telephelyen
-
-                Holtart.Be(AdatokSzer.Count + 1);
-
-                foreach (Adat_Szerelvény rekord in AdatokSzer)
-                {
-                    bool Töröltünk = false;
-                    //Csak egyszer törlünk ki egy szerelvényt
-                    if (rekord.Kocsi1 != "0") Töröltünk = Ittvan(hely, rekord.Kocsi1, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi2 != "0" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi2, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi3 != "0" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi3, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi4 != "0" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi4, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi5 != "0" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi5, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi6 != "0" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi6, rekord.Szerelvény_ID);
-
-                    Holtart.Lép();
-                }
-                Holtart.Ki();
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        //
-        private bool Ittvan(string hely, string kocsi, long szerelvény_Id)
-        {
-            bool Volt = false;
-            try
-            {
-                Adat_Jármű Ideig = (from a in AdatokJár
-                                    where a.Azonosító == kocsi
-                                    select a).FirstOrDefault();
-                if (Ideig == null)
-                {
-                    string jelszó = "pozsgaii";
-                    string szöveg = $"DELETE FROM szerelvénytábla WHERE [ID]={szerelvény_Id}";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                    Volt = true;
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Volt;
-        }
-
-        //
-        private void Ellenőrző4()
-        {
-            try
-            {
-                Elő_Szer_Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
-                AdatokJár = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\Szerelvényelőírt.mdb";
                 // A szerelvényt töröljük, ha olyan eleme van ami nincs a telephelyen
 
                 Holtart.Be(Elő_Szer_Adatok.Count + 1);
+                List<long> Sorszámok = new List<long>();
 
                 foreach (Adat_Szerelvény rekord in Elő_Szer_Adatok)
                 {
-                    bool Töröltünk = false;
                     //Csak egyszer törlünk ki egy szerelvényt
-                    if (rekord.Kocsi1 != "_") Töröltünk = Ittvan(hely, rekord.Kocsi1, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi2 != "_" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi2, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi3 != "_" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi3, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi4 != "_" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi4, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi5 != "_" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi5, rekord.Szerelvény_ID);
-                    if (rekord.Kocsi6 != "_" && !Töröltünk) Töröltünk = Ittvan(hely, rekord.Kocsi6, rekord.Szerelvény_ID);
-
+                    if (NincsItt(AdatokJár, rekord.Kocsi1)) Sorszámok.Add(rekord.Szerelvény_ID);
+                    if (NincsItt(AdatokJár, rekord.Kocsi2)) Sorszámok.Add(rekord.Szerelvény_ID);
+                    if (NincsItt(AdatokJár, rekord.Kocsi3)) Sorszámok.Add(rekord.Szerelvény_ID);
+                    if (NincsItt(AdatokJár, rekord.Kocsi4)) Sorszámok.Add(rekord.Szerelvény_ID);
+                    if (NincsItt(AdatokJár, rekord.Kocsi5)) Sorszámok.Add(rekord.Szerelvény_ID);
+                    if (NincsItt(AdatokJár, rekord.Kocsi6)) Sorszámok.Add(rekord.Szerelvény_ID);
                     Holtart.Lép();
                 }
                 Holtart.Ki();
+                if (Sorszámok != null && Sorszámok.Count > 0)
+                {
+                    Sorszámok.OrderBy(a => a).Distinct().ToList();
+                    KézSzerelvény.Törlés(Cmbtelephely.Text.Trim(), Sorszámok, előírt);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -1311,7 +1195,29 @@ namespace Villamos.Ablakok
             }
         }
 
-        //
+        private bool NincsItt(List<Adat_Jármű> Adatok, string Azonosító)
+        {
+            bool Válasz = false;
+            try
+            {
+                if (Azonosító == "_" || Azonosító == "0") return false;
+                Adat_Jármű Ideig = (from a in AdatokJár
+                                    where a.Azonosító == Azonosító
+                                    select a).FirstOrDefault();
+                if (Ideig == null) Válasz = true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
         private void Ellenőrző5()
         {
             try
@@ -1319,9 +1225,8 @@ namespace Villamos.Ablakok
                 //leellenörizzük, hogy a szerelvény hossza jó-e
                 AdatokSzer = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Holtart.Be(AdatokSzer.Count + 1);
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-                string jelszó = "pozsgaii";
-                List<string> szövegGy = new List<string>();
+
+                List<Adat_Szerelvény> AdatokGy = new List<Adat_Szerelvény>();
                 foreach (Adat_Szerelvény rekord in AdatokSzer)
                 {
                     long hossz = 0;
@@ -1334,21 +1239,18 @@ namespace Villamos.Ablakok
 
                     if (hossz != rekord.Szerelvényhossz)
                     {
-                        string szöveg = $"UPDATE szerelvénytábla SET Szerelvényhossz={hossz} WHERE id={rekord.Szerelvény_ID} ";
-                        szövegGy.Add(szöveg);
+                        Adat_Szerelvény ADAT = new Adat_Szerelvény(rekord.Szerelvény_ID, hossz);
+                        AdatokGy.Add(ADAT);
                     }
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                if (AdatokGy.Count > 0) KézSzerelvény.MódosításHossz(Cmbtelephely.Text.Trim(), AdatokGy);
 
                 //Előírt
-
                 Elő_Szer_Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
                 Holtart.Be(Elő_Szer_Adatok.Count + 1);
 
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\Szerelvényelőírt.mdb";
-                jelszó = "pozsgaii";
-                szövegGy.Clear();
+                AdatokGy.Clear();
                 foreach (Adat_Szerelvény rekord in Elő_Szer_Adatok)
                 {
                     long hossz = 0;
@@ -1361,12 +1263,12 @@ namespace Villamos.Ablakok
 
                     if (hossz != rekord.Szerelvényhossz)
                     {
-                        string szöveg = $"UPDATE szerelvénytábla SET Szerelvényhossz={hossz} WHERE id={rekord.Szerelvény_ID} ";
-                        szövegGy.Add(szöveg);
+                        Adat_Szerelvény ADAT = new Adat_Szerelvény(rekord.Szerelvény_ID, hossz);
+                        AdatokGy.Add(ADAT);
                     }
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                if (AdatokGy.Count > 0) KézSzerelvény.MódosításHossz(Cmbtelephely.Text.Trim(), AdatokGy, true);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -1522,19 +1424,16 @@ namespace Villamos.Ablakok
 
 
         #region Előírt
-        //
         private void TípuCombo_Listáz()
         {
             try
             {
                 Előírt_Combo1.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM típustábla order by id";
+                List<Adat_Jármű_Állomány_Típus> Adatok = KézTípus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                Előírt_Combo1.BeginUpdate();
-                Előírt_Combo1.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "típus"));
-                Előírt_Combo1.EndUpdate();
+                foreach (Adat_Jármű_Állomány_Típus Elem in Adatok)
+                    Előírt_Combo1.Items.Add(Elem.Típus);
+
                 Előírt_Combo1.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -1546,7 +1445,6 @@ namespace Villamos.Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void Előírt_pályaszám_MouseEnter(object sender, EventArgs e)
@@ -1558,16 +1456,12 @@ namespace Villamos.Ablakok
         {
             AcceptButton = Előírt_hozzáad;
         }
-        //
+
         private void Előírt_Szerelvénytábla_listázás()
         {
             try
             {
                 Elő_Szer_Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-                if (!Exists(hely)) return;
-
                 AdatokJ2 = KézJármű2.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Előírt_Szerelvénylista.Rows.Clear();
@@ -1774,15 +1668,10 @@ namespace Villamos.Ablakok
             }
         }
 
-        //
         private void Előírt_hozzáad_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-                string jelszó = "pozsgaii";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Szerelvénytáblalap(hely);
-
                 if (Előírt_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy jármű sem.");
                 if (ESZAdat.Szerelvényhossz >= 6) throw new HibásBevittAdat("Több járművet nem lehet a szerelvényhez adni!");
 
@@ -1829,13 +1718,12 @@ namespace Villamos.Ablakok
 
                 // Rögzítjük, vagy módosítjuk
                 if (ESZAdat.Szerelvény_ID == 0)
-                    KézSzerelvény.Új_Szerelvény(hely, jelszó, Adat);
+                    KézSzerelvény.Rögzítés(Cmbtelephely.Text.Trim(), Adat, true);
                 else
-                    KézSzerelvény.Szerelvény_módosítás(hely, jelszó, Adat);
+                    KézSzerelvény.Módosítás(Cmbtelephely.Text.Trim(), Adat, true);
 
                 //Ha E2-t manuálisan állítjuk be
-                if (Osztás)
-                    E2_rögzítés_Eljárás();
+                if (Osztás) E2_rögzítés_Eljárás();
 
                 //Alapértéket beállítjuk 
                 ESZAdat = new Adat_Szerelvény(Szerelvény_ID, Szerelvény_hossz, kocsik[0], kocsik[1], kocsik[2], kocsik[3], kocsik[4], kocsik[5]);
@@ -1918,13 +1806,11 @@ namespace Villamos.Ablakok
             }
         }
 
-        //
         private void Előírt_Egyszerelvénymnusz_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Melyik_azonosító == "0")
-                    throw new HibásBevittAdat("Nincs kijelölve egy jármű sem.");
+                if (Melyik_azonosító == "0") throw new HibásBevittAdat("Nincs kijelölve egy jármű sem.");
 
                 if (Előírt_Szerelvénytáblasor.Rows[0].Cells[7].Value.ToÉrt_Int() == 1)
                 {
@@ -1943,13 +1829,10 @@ namespace Villamos.Ablakok
                 Kocsi_rendező(kocsik, "_");
                 long Szerelvény_hossz = szAdat.Szerelvényhossz - 1;
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-                string jelszó = "pozsgaii";
-                Adat_Szerelvény szerelvény = new Adat_Szerelvény(ESZAdat.Szerelvény_ID, Szerelvény_hossz, kocsik[0], kocsik[1], kocsik[2], kocsik[3], kocsik[4], kocsik[5]);
-                KézSzerelvény.Szerelvény_módosítás(hely, jelszó, szerelvény);
-                ESZAdat = szerelvény;
+                Adat_Szerelvény ADAT = new Adat_Szerelvény(ESZAdat.Szerelvény_ID, Szerelvény_hossz, kocsik[0], kocsik[1], kocsik[2], kocsik[3], kocsik[4], kocsik[5]);
+                KézSzerelvény.Módosítás(Cmbtelephely.Text.Trim(), ADAT, true);
 
-                E_Szerelvénytáblasor_kiírása(ESZAdat);
+                E_Szerelvénytáblasor_kiírása(ADAT);
                 Képernyő_frissítés_Előírt_rész();
 
                 Előírt_pályaszám.Text = "";
@@ -1971,28 +1854,20 @@ namespace Villamos.Ablakok
             Előírt_Törli_szerelvényt();
         }
 
-        //
         private void Előírt_Törli_szerelvényt()
         {
             try
             {
                 if (Előírt_Szerelvénytáblasor.Rows[0].Cells[6].Value == null || Előírt_Szerelvénytáblasor.Rows[0].Cells[6].Value.ToStrTrim() == "")
                     throw new HibásBevittAdat("Nincs kijelölve egy szerelvény sem.");
+                if (!long.TryParse(Előírt_Szerelvénytáblasor.Rows[0].Cells[6].Value.ToStrTrim(), out long Id)) throw new HibásBevittAdat("Nincs kijelölve egy szerelvény sem.");
 
-                // töröljük
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-                if (!Exists(hely)) return;
-
-                string jelszó = "pozsgaii";
-                string szöveg = $"DELETE FROM szerelvénytábla WHERE id={Előírt_Szerelvénytáblasor.Rows[0].Cells[6].Value.ToStrTrim()}";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-
+                KézSzerelvény.Törlés(Cmbtelephely.Text.Trim(), Id, true);
                 Képernyő_frissítés_Előírt();
 
                 Előírt_pályaszám.Text = "";
                 Előírt_pályaszám.Focus();
             }
-
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2017,7 +1892,6 @@ namespace Villamos.Ablakok
             }
         }
 
-        //
         private void Előírt_Szerelvénylista_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -2053,12 +1927,9 @@ namespace Villamos.Ablakok
                                 break;
                             }
                     }
-
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-                    string jelszó = "pozsgaii";
-                    ESZAdat = KézSzerelvény.SzerelvényEgy(hely, jelszó, szerelvényID);
-
-                    E_Szerelvénytáblasor_kiírása(ESZAdat);
+                    List<Adat_Szerelvény> AdatokSzerElő = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
+                    ESZAdat = AdatokSzerElő.FirstOrDefault(a => a.Szerelvény_ID == szerelvényID);
+                    if (ESZAdat != null) E_Szerelvénytáblasor_kiírása(ESZAdat);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -2134,14 +2005,12 @@ namespace Villamos.Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void E2_rögzítés_Eljárás()
         {
             try
             {
                 // rögzítjük E2 vizsgálatot
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
-                string jelszó = "pozsgaii";
                 AdatokJ2 = KézJármű2.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 List<Adat_Jármű_2> Módosít = new List<Adat_Jármű_2>();
@@ -2171,8 +2040,8 @@ namespace Villamos.Ablakok
                             Rögzít.Add(Adat);
                     }
                 }
-                if (Módosít.Count > 0) KézJármű2.MódosítHárom(hely, jelszó, Módosít);
-                if (Rögzít.Count > 0) KézJármű2.Rögzítés(hely, jelszó, Rögzít);
+                if (Módosít.Count > 0) KézJármű2.Módosítás(Cmbtelephely.Text.Trim(), Módosít);
+                if (Rögzít.Count > 0) KézJármű2.Rögzítés(Cmbtelephely.Text.Trim(), Rögzít);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2199,21 +2068,20 @@ namespace Villamos.Ablakok
             }
         }
 
-        //
         private void E2_Törlés_Click(object sender, EventArgs e)
         {
             try
             {
                 AdatokJ2 = KézJármű2.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Holtart.Be(AdatokJ2.Count + 1);
+                List<Adat_Jármű_2> AdatokGy = new List<Adat_Jármű_2>();
                 foreach (Adat_Jármű_2 rekord in AdatokJ2)
                 {
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
-                    string jelszó = "pozsgaii";
-                    string szöveg = $"UPDATE Állománytábla SET haromnapos=0 WHERE azonosító='{rekord.Azonosító}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Jármű_2 ADAT = new Adat_Jármű_2(rekord.Azonosító, new DateTime(1900, 1, 1), 0);
+                    AdatokGy.Add(ADAT);
                     Holtart.Lép();
                 }
+                KézJármű2.Módosítás(Cmbtelephely.Text.Trim(), AdatokGy);
                 Holtart.Ki();
                 Előírt_Szerelvénytábla_listázás();
             }

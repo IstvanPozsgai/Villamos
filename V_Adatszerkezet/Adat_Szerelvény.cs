@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using A = Adatbázis;
 
 namespace Villamos.Adatszerkezet
 {
- public   class Adat_Szerelvény
+    public class Adat_Szerelvény
     {
         public long Szerelvény_ID { get; private set; }
 
@@ -40,33 +37,13 @@ namespace Villamos.Adatszerkezet
             Kocsi6 = kocsi6;
         }
 
-        public Adat_Szerelvény()
+        public Adat_Szerelvény(long szerelvény_ID, long szerelvényhossz)
         {
-
+            Szerelvény_ID = szerelvény_ID;
+            Szerelvényhossz = szerelvényhossz;
         }
-
-
-        public void Módosítás(string hely, string jelszó, Adat_Szerelvény Adat)
-        {
-            string szöveg;
-            szöveg = "UPDATE szerelvénytábla SET ";
-            szöveg += "kocsi1='" + Adat.Kocsi1 + "', ";
-            szöveg += "kocsi2='" + Adat.Kocsi2 + "', ";
-            szöveg += "kocsi3='" + Adat.Kocsi3 + "', ";
-            szöveg += "kocsi4='" + Adat.Kocsi4 + "', ";
-            szöveg += "kocsi5='" + Adat.Kocsi5 + "', ";
-            szöveg += "kocsi6='" + Adat.Kocsi6 + "', ";
-            szöveg += "szerelvényhossz=" + Adat.Szerelvényhossz.ToString() + ", ";
-            szöveg += " WHERE id=" + Adat.Szerelvény_ID.ToString();
-
-            A.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-
-
-
     }
-  public  class Adat_Szerelvény_Napló
+    public class Adat_Szerelvény_Napló
     {
         public long ID { get; private set; }
         public long Szerelvényhossz { get; private set; }
