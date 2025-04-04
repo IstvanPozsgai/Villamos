@@ -988,6 +988,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (TáblaUtólagMűvelet.SelectedRows.Count == 0)
                     throw new HibásBevittAdat("Kérlek, válassz ki egy sort a listából!");
 
+                if (DtmPckrUtolagos.Value > MaiDatum)
+                    throw new HibásBevittAdat("A kiválasztott dátum nem lehet későbbi, mint a mai dátum.");
+
                 DateTime datum = DtmPckrUtolagos.Value;
                 string megjegyzes = TxtBxUtolagMegjegyzes.Text.Trim();
 
