@@ -2796,7 +2796,7 @@ namespace Villamos
                 AdatTábla.Columns.Add("viszonylat  ");
                 AdatTábla.Columns.Add("telep       ");
                 AdatTábla.Columns.Add("rövid szöveg");
-                AdatTábla.Columns.Add("Járművezet  ");
+                AdatTábla.Columns.Add("Járművezető ");
 
                 AdatokKöltségNullás_Feltöltés();
                 AdatTábla.Clear();
@@ -2810,7 +2810,7 @@ namespace Villamos
                     Soradat["Viszonylat  "] = rekord.Viszonylat;
                     Soradat["Telep       "] = rekord.Telephely;
                     Soradat["Rövid szöveg"] = rekord.Mivelütközött.ToStrTrim() != "_" ? $"Ütközött {rekord.Mivelütközött}" : $"{rekord.Esemény} {rekord.Balesethelyszín.Trim()}";
-                    Soradat["Járművezet  "] = rekord.Járművezető;
+                    Soradat["Járművezető "] = rekord.Járművezető;
 
                     AdatTábla.Rows.Add(Soradat);
 
@@ -2824,7 +2824,7 @@ namespace Villamos
                 Tábla2.Columns["viszonylat  "].Width = 100;
                 Tábla2.Columns["telep       "].Width = 200;
                 Tábla2.Columns["rövid szöveg"].Width = 400;
-                Tábla2.Columns["Járművezet  "].Width = 200;
+                Tábla2.Columns["Járművezető "].Width = 200;
 
                 Tábla2.Refresh();
                 Tábla2.Visible = true;
