@@ -163,6 +163,19 @@
         SKaFqD3QurEUBLVrANF+91xhHDyImxiLZ4TIfgJwhqQV8jc4V5jJUeL7MQAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Gyors Súgó(Törölve lesz): Ha utólagosan szeretnénk
+ műveletet beírni akkor a Művelet táblában lévő
+rögzíteni kívánt műveletet kijelöljük, kiválasztjuk
+ a dátumot(ha az adott dátumon nincsen üzemóra 
+akkor egy 0 értéket fog kiadni az üzemóra állásnál 
+akkor lehet utólagosan üzemórát is beírni,
+ a megjegyzéshez pedig bármit lehet írni. Majd a pipa
+ megnyomásával naplózva lesz a művelet. 
+A Naplózási táblában lehet látni az eddigi
+ naplózott műveleteket ellenőrzésként.
+</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>42</value>
   </metadata>

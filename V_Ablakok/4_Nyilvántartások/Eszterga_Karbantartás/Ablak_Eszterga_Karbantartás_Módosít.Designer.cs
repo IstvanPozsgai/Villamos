@@ -68,6 +68,7 @@
             this.LblDatumUtolag = new System.Windows.Forms.Label();
             this.TáblaNapló = new Zuby.ADGV.AdvancedDataGridView();
             this.DtmPckrUtolagos = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaMűvelet)).BeginInit();
             this.GrpBxMűveletek.SuspendLayout();
             this.GrpBxUtolagos.SuspendLayout();
@@ -404,6 +405,8 @@
             this.GrpBxUtolagos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GrpBxUtolagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
+            this.GrpBxUtolagos.Controls.Add(this.BttnUtolag_Modosit);
+            this.GrpBxUtolagos.Controls.Add(this.label1);
             this.GrpBxUtolagos.Controls.Add(this.TxtBxUtolagMegjegyzes);
             this.GrpBxUtolagos.Controls.Add(this.LblMegjegyzes);
             this.GrpBxUtolagos.Controls.Add(this.LblUtolagMuvelet);
@@ -411,7 +414,6 @@
             this.GrpBxUtolagos.Controls.Add(this.LblAznapiUzemora);
             this.GrpBxUtolagos.Controls.Add(this.TxtBxUtolagUzemora);
             this.GrpBxUtolagos.Controls.Add(this.TáblaUtólagMűvelet);
-            this.GrpBxUtolagos.Controls.Add(this.BttnUtolag_Modosit);
             this.GrpBxUtolagos.Controls.Add(this.LblDatumUtolag);
             this.GrpBxUtolagos.Controls.Add(this.TáblaNapló);
             this.GrpBxUtolagos.Controls.Add(this.DtmPckrUtolagos);
@@ -423,16 +425,18 @@
             // 
             // TxtBxUtolagMegjegyzes
             // 
-            this.TxtBxUtolagMegjegyzes.Location = new System.Drawing.Point(10, 90);
+            this.TxtBxUtolagMegjegyzes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.TxtBxUtolagMegjegyzes.Location = new System.Drawing.Point(791, 87);
             this.TxtBxUtolagMegjegyzes.Multiline = true;
             this.TxtBxUtolagMegjegyzes.Name = "TxtBxUtolagMegjegyzes";
-            this.TxtBxUtolagMegjegyzes.Size = new System.Drawing.Size(352, 134);
+            this.TxtBxUtolagMegjegyzes.Size = new System.Drawing.Size(369, 137);
             this.TxtBxUtolagMegjegyzes.TabIndex = 53;
             // 
             // LblMegjegyzes
             // 
+            this.LblMegjegyzes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LblMegjegyzes.AutoSize = true;
-            this.LblMegjegyzes.Location = new System.Drawing.Point(6, 67);
+            this.LblMegjegyzes.Location = new System.Drawing.Point(787, 64);
             this.LblMegjegyzes.Name = "LblMegjegyzes";
             this.LblMegjegyzes.Size = new System.Drawing.Size(97, 20);
             this.LblMegjegyzes.TabIndex = 52;
@@ -441,7 +445,7 @@
             // LblUtolagMuvelet
             // 
             this.LblUtolagMuvelet.AutoSize = true;
-            this.LblUtolagMuvelet.Location = new System.Drawing.Point(381, 26);
+            this.LblUtolagMuvelet.Location = new System.Drawing.Point(10, 20);
             this.LblUtolagMuvelet.Name = "LblUtolagMuvelet";
             this.LblUtolagMuvelet.Size = new System.Drawing.Size(107, 20);
             this.LblUtolagMuvelet.TabIndex = 51;
@@ -450,7 +454,7 @@
             // LblUtolagNaplozasTabla
             // 
             this.LblUtolagNaplozasTabla.AutoSize = true;
-            this.LblUtolagNaplozasTabla.Location = new System.Drawing.Point(196, 243);
+            this.LblUtolagNaplozasTabla.Location = new System.Drawing.Point(0, 232);
             this.LblUtolagNaplozasTabla.Name = "LblUtolagNaplozasTabla";
             this.LblUtolagNaplozasTabla.Size = new System.Drawing.Size(121, 20);
             this.LblUtolagNaplozasTabla.TabIndex = 50;
@@ -458,8 +462,9 @@
             // 
             // LblAznapiUzemora
             // 
+            this.LblAznapiUzemora.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LblAznapiUzemora.AutoSize = true;
-            this.LblAznapiUzemora.Location = new System.Drawing.Point(196, 26);
+            this.LblAznapiUzemora.Location = new System.Drawing.Point(979, 20);
             this.LblAznapiUzemora.Name = "LblAznapiUzemora";
             this.LblAznapiUzemora.Size = new System.Drawing.Size(164, 20);
             this.LblAznapiUzemora.TabIndex = 49;
@@ -467,9 +472,10 @@
             // 
             // TxtBxUtolagUzemora
             // 
-            this.TxtBxUtolagUzemora.Location = new System.Drawing.Point(200, 49);
+            this.TxtBxUtolagUzemora.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.TxtBxUtolagUzemora.Location = new System.Drawing.Point(981, 43);
             this.TxtBxUtolagUzemora.Name = "TxtBxUtolagUzemora";
-            this.TxtBxUtolagUzemora.Size = new System.Drawing.Size(162, 26);
+            this.TxtBxUtolagUzemora.Size = new System.Drawing.Size(179, 26);
             this.TxtBxUtolagUzemora.TabIndex = 48;
             // 
             // TáblaUtólagMűvelet
@@ -482,7 +488,7 @@
             this.TáblaUtólagMűvelet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TáblaUtólagMűvelet.FilterAndSortEnabled = true;
             this.TáblaUtólagMűvelet.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.TáblaUtólagMűvelet.Location = new System.Drawing.Point(496, 20);
+            this.TáblaUtólagMűvelet.Location = new System.Drawing.Point(125, 20);
             this.TáblaUtólagMűvelet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.TáblaUtólagMűvelet.MaxFilterButtonImageHeight = 23;
             this.TáblaUtólagMűvelet.Name = "TáblaUtólagMűvelet";
@@ -495,12 +501,14 @@
             this.TáblaUtólagMűvelet.Size = new System.Drawing.Size(656, 204);
             this.TáblaUtólagMűvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TáblaUtólagMűvelet.TabIndex = 47;
+            this.TáblaUtólagMűvelet.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TáblaUtólagMűvelet_CellFormatting);
             // 
             // LblDatumUtolag
             // 
+            this.LblDatumUtolag.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LblDatumUtolag.AutoSize = true;
             this.LblDatumUtolag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.LblDatumUtolag.Location = new System.Drawing.Point(7, 26);
+            this.LblDatumUtolag.Location = new System.Drawing.Point(788, 23);
             this.LblDatumUtolag.Name = "LblDatumUtolag";
             this.LblDatumUtolag.Size = new System.Drawing.Size(61, 20);
             this.LblDatumUtolag.TabIndex = 30;
@@ -516,7 +524,7 @@
             this.TáblaNapló.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TáblaNapló.FilterAndSortEnabled = true;
             this.TáblaNapló.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.TáblaNapló.Location = new System.Drawing.Point(325, 232);
+            this.TáblaNapló.Location = new System.Drawing.Point(125, 232);
             this.TáblaNapló.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.TáblaNapló.MaxFilterButtonImageHeight = 23;
             this.TáblaNapló.Name = "TáblaNapló";
@@ -532,12 +540,24 @@
             // 
             // DtmPckrUtolagos
             // 
+            this.DtmPckrUtolagos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DtmPckrUtolagos.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtmPckrUtolagos.Location = new System.Drawing.Point(74, 25);
+            this.DtmPckrUtolagos.Location = new System.Drawing.Point(855, 20);
             this.DtmPckrUtolagos.Name = "DtmPckrUtolagos";
             this.DtmPckrUtolagos.Size = new System.Drawing.Size(107, 26);
             this.DtmPckrUtolagos.TabIndex = 26;
             this.DtmPckrUtolagos.ValueChanged += new System.EventHandler(this.DtmPckrUtolagos_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label1.Location = new System.Drawing.Point(786, 227);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(381, 200);
+            this.label1.TabIndex = 54;
+            this.label1.Text = resources.GetString("label1.Text");
             // 
             // Ablak_Eszterga_Karbantartás_Módosít
             // 
@@ -606,5 +626,6 @@
         internal System.Windows.Forms.Label LblUtolagNaplozasTabla;
         internal System.Windows.Forms.Label LblMegjegyzes;
         internal System.Windows.Forms.TextBox TxtBxUtolagMegjegyzes;
+        internal System.Windows.Forms.Label label1;
     }
 }
