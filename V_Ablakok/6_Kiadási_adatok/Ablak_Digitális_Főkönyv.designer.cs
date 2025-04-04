@@ -36,7 +36,7 @@ namespace Villamos
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Digitális_Főkönyv));
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Label5 = new System.Windows.Forms.Label();
             this.Délután = new System.Windows.Forms.RadioButton();

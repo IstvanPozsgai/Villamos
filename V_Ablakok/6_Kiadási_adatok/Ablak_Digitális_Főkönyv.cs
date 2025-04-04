@@ -22,9 +22,9 @@ namespace Villamos
             InitializeComponent();
         }
 
-        readonly Kezelő_kiegészítő_telephely KKT_Kéz = new Kezelő_kiegészítő_telephely();
+        readonly Kezelő_kiegészítő_telephely KézKiegTelephely = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_Főkönyv_Nap FN_Kéz = new Kezelő_Főkönyv_Nap();
-        readonly Kezelő_Kiadás_Összesítő KKÖ_kéz = new Kezelő_Kiadás_Összesítő();
+        readonly Kezelő_Kiadás_Összesítő KézKiadási = new Kezelő_Kiadás_Összesítő();
         readonly Kezelő_Jármű KJ_kéz = new Kezelő_Jármű();
         readonly Kezelő_összevont KÖ_kéz = new Kezelő_összevont();
         //    readonly Kezelő_FőKiadási_adatok KFK_Kéz = new Kezelő_FőKiadási_adatok();
@@ -60,7 +60,7 @@ namespace Villamos
             {
                 GombTároló.Controls.Clear();
                 int Gombokszáma = 0;
-                List<Adat_kiegészítő_telephely> Adatok = KKT_Kéz.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = KézKiegTelephely.Lista_adatok();
 
                 int i = 1;
                 foreach (Adat_kiegészítő_telephely item in Adatok)
@@ -75,13 +75,10 @@ namespace Villamos
                         Visible = true
                     };
 
-                    string helytelep = $@"{Application.StartupPath}\{item.Telephelykönyvtár.Trim()}\adatok\főkönyv\kiadás{Dátum.Value:yyyy}.mdb";
-                    if (File.Exists(helytelep))
-                    {
-                        string jelszótelep = "plédke";
-                        string szöveg = "SELECT * FROM tábla  ";
-                        List<Adat_Kiadás_összesítő> AdatokÖsszesítő = KKÖ_kéz.Lista_adatok(helytelep, jelszótelep, szöveg);
+                    List<Adat_Kiadás_összesítő> AdatokÖsszesítő = KézKiadási.Lista_adatok(item.Telephelykönyvtár.Trim(), Dátum.Value.Year);
 
+                    if (AdatokÖsszesítő != null)
+                    {
                         List<Adat_Kiadás_összesítő> Elemek = (from a in AdatokÖsszesítő
                                                               where a.Dátum.Date == Dátum.Value.Date
                                                               orderby a.Napszak, a.Típus
@@ -99,8 +96,6 @@ namespace Villamos
                         }
 
                         if (Elemek.Any())
-
-
                         {
                             Telephelygomb.BackColor = Color.MediumSpringGreen;
                             Telephelygomb.Enabled = true;
@@ -119,9 +114,7 @@ namespace Villamos
                     Telephelygomb.Click += Telephelyre_Click;
                     GombTároló.Controls.Add(Telephelygomb);
                     i += 1;
-
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -134,9 +127,6 @@ namespace Villamos
             }
         }
 
-
-
-
         private void Telephelyre_Click(object sender, EventArgs e)
         {
             // ha gombra kattintottunk
@@ -148,14 +138,12 @@ namespace Villamos
             }
         }
 
-
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
             Választott_Nap.Text = Dátum.Value.ToString("yyyy.MM.dd");
             Gombokfel();
             Kiirtáblák();
         }
-
         #endregion
 
 
@@ -168,7 +156,6 @@ namespace Villamos
             Tábla3.Visible = false;
         }
 
-
         private void Option2_CheckedChanged(object sender, EventArgs e)
         {
             Tábla.Visible = true;
@@ -176,7 +163,6 @@ namespace Villamos
             Tábla2.Visible = false;
             Tábla3.Visible = false;
         }
-
 
         private void Option3_CheckedChanged(object sender, EventArgs e)
         {
@@ -186,7 +172,6 @@ namespace Villamos
             Tábla3.Visible = false;
         }
 
-
         private void Option4_CheckedChanged(object sender, EventArgs e)
         {
             Tábla.Visible = false;
@@ -195,14 +180,12 @@ namespace Villamos
             Tábla3.Visible = true;
         }
 
-
         private void Délelőtt_CheckedChanged(object sender, EventArgs e)
         {
             Választott_napszak.Text = "Délelőtt";
             Gombokfel();
             Kiirtáblák();
         }
-
 
         private void Délután_CheckedChanged(object sender, EventArgs e)
         {
@@ -214,7 +197,6 @@ namespace Villamos
 
 
         #region kiirások
-
         private void Kiirtáblák()
         {
             try
@@ -245,7 +227,7 @@ namespace Villamos
             }
         }
 
-
+        //
         private void Kiirjavításon()
         {
             try
@@ -360,7 +342,6 @@ namespace Villamos
             }
         }
 
-
         private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (Tábla.Rows.Count > 1)
@@ -381,16 +362,22 @@ namespace Villamos
 
 
         #region Digitális Listázás másként
-
-
         private void Kiirösszesítő()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Választott_Telephely.Text.Trim()}\adatok\főkönyv\kiadás{Dátum.Value.Year}.mdb";
-                string helykiadás = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                if (!File.Exists(hely)) return;
-                if (!File.Exists(helykiadás)) return;
+                List<Adat_Kiadás_összesítő> Adatok = KézKiadási.Lista_adatok(Választott_Telephely.Text.Trim(), Dátum.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Dátum == Dátum.Value
+                          orderby a.Napszak, a.Típus
+                          select a).ToList();
+                if (Délelőtt.Checked)
+                    Adatok = Adatok.Where(a => a.Napszak == "de").ToList();
+                else
+                    Adatok = Adatok.Where(a => a.Napszak == "du").ToList();
+
+                List<Adat_Forte_Kiadási_Adatok> AdatokKiadási = KézForteKiadás.Lista_Adatok(Dátum.Value.Year);
+
 
                 Tábla2.Rows.Clear();
                 Tábla2.Columns.Clear();
@@ -423,25 +410,11 @@ namespace Villamos
                 Tábla2.Columns[10].Width = 140;
                 Tábla2.Columns[11].HeaderText = "Munkanap";
                 Tábla2.Columns[11].Width = 100;
-                string jelszó = "plédke";
-                string jelszókiadás = "gémkapocs";
-                string szöveg = "SELECT * FROM tábla where [dátum]=#" + Dátum.Value.ToString("M-d-yy") + "#";
-                if (Délelőtt.Checked)
-                    szöveg += " and napszak='de'";
-                else
-                    szöveg += " and napszak='du'";
-                szöveg += " ORDER BY napszak, típus";
 
-                List<Adat_Kiadás_összesítő> Adatok = KKÖ_kéz.Lista_adatok(hely, jelszó, szöveg);
-
-                szöveg = "SELECT * FROM fortekiadástábla";
-                List<Adat_Forte_Kiadási_Adatok> AdatokKiadási = KézForteKiadás.Lista_adatok(helykiadás, jelszókiadás, szöveg);
-
-                int i;
                 foreach (Adat_Kiadás_összesítő elem in Adatok)
                 {
                     Tábla2.RowCount++;
-                    i = Tábla2.RowCount - 1;
+                    int i = Tábla2.RowCount - 1;
                     Tábla2.Rows[i].Cells[0].Value = elem.Napszak.Trim();
                     Tábla2.Rows[i].Cells[1].Value = elem.Típus.Trim();
                     int munkanap = AdatokKiadási.Count(a =>
@@ -484,7 +457,6 @@ namespace Villamos
             }
         }
 
-
         private void Tábla2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             for (int j = 0; j < Tábla2.RowCount; j++)
@@ -503,8 +475,7 @@ namespace Villamos
                 }
             }
         }
-
-
+        //
         private void Kiirforgalomban()
         {
             try
@@ -761,7 +732,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Tartalékokkiírása()
         {
             try
@@ -967,13 +938,23 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Digitális_Főkönyv.html";
-            MyE.Megnyitás(hely);
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Digitális_Főkönyv.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         private void Járgomb_Click(object sender, EventArgs e)
         {
@@ -993,7 +974,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Button1_Click(object sender, EventArgs e)
         {
@@ -1017,7 +997,6 @@ namespace Villamos
                 Járgomb.Visible = true;
             }
         }
-
         #endregion
 
 
@@ -1026,7 +1005,6 @@ namespace Villamos
         {
             Kereső.Visible = false;
         }
-
 
         private void Keresőnév_MouseMove(object sender, MouseEventArgs e)
         {
@@ -1038,11 +1016,9 @@ namespace Villamos
             }
         }
 
-
         private void Szövegkeresés()
         {
-            if (TextKeres_Text.Text.Trim() == "")
-                return;
+            if (TextKeres_Text.Text.Trim() == "") return;
 
             if (Tábla.Visible == true)
             {
@@ -1129,17 +1105,15 @@ namespace Villamos
 
         }
 
-
         private void BtnKeres_command2_Click(object sender, EventArgs e)
         {
             Szövegkeresés();
         }
-
-
         #endregion
 
 
         #region Listázás másként
+        //
         private void Típusfeltöltés_melyik()
         {
             try
@@ -1165,8 +1139,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        //
         private void Telephelyfeltöltés_Melyik()
         {
             try
@@ -1193,20 +1166,17 @@ namespace Villamos
             }
         }
 
-
         private void CsoportkijelölMind_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Típuslista.Items.Count - 1; i++)
                 Típuslista.SetItemChecked(i, true);
         }
 
-
         private void CsoportVissza_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Típuslista.Items.Count - 1; i++)
                 Típuslista.SetItemChecked(i, false);
         }
-
 
         private void RadioButton2_CheckedChanged(object sender, EventArgs e)
         {
@@ -1222,7 +1192,7 @@ namespace Villamos
             }
         }
 
-
+        //
         private void Command3_Click(object sender, EventArgs e)
         {
             try
@@ -1388,7 +1358,7 @@ namespace Villamos
             }
         }
 
-
+        //
         private void Command4_Click(object sender, EventArgs e)
         {
             try
@@ -2065,7 +2035,8 @@ namespace Villamos
                         Tábla1.Rows[sor].Cells[2].Value = rekord.Azonosító.Trim();
                         Tábla1.Rows[sor].Cells[3].Value = rekord.Miótaáll.ToString("yyyy.MM.dd");
                         Tábla1.Rows[sor].Cells[4].Value = rekord.Hibaleírása.Trim();
-                    };
+                    }
+                    ;
                     Holtart.Lép();
                 }
                 Holtart.Ki();
@@ -2083,19 +2054,14 @@ namespace Villamos
             }
         }
 
-
         private void Excel_Melyik_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla.Visible == true & Tábla.Rows.Count <= 0)
-                    return;
-                if (Tábla1.Visible == true & Tábla1.Rows.Count <= 0)
-                    return;
-                if (Tábla2.Visible == true & Tábla2.Rows.Count <= 0)
-                    return;
-                if (Tábla3.Visible == true & Tábla3.Rows.Count <= 0)
-                    return;
+                if (Tábla.Visible == true & Tábla.Rows.Count <= 0) return;
+                if (Tábla1.Visible == true & Tábla1.Rows.Count <= 0) return;
+                if (Tábla2.Visible == true & Tábla2.Rows.Count <= 0) return;
+                if (Tábla3.Visible == true & Tábla3.Rows.Count <= 0) return;
 
                 string fájlexc;
 
@@ -2103,7 +2069,7 @@ namespace Villamos
                 SaveFileDialog1.InitialDirectory = "MyDocuments";
 
                 SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = "Járművek_Telephelyek_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                SaveFileDialog1.FileName = $"Járművek_Telephelyek_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}";
                 SaveFileDialog1.Filter = "Excel |*.xlsx";
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
@@ -2113,14 +2079,10 @@ namespace Villamos
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
 
-                if (Tábla.Visible == true)
-                    Module_Excel.EXCELtábla(fájlexc, Tábla, false);
-                if (Tábla1.Visible == true)
-                    Module_Excel.EXCELtábla(fájlexc, Tábla1, false);
-                if (Tábla2.Visible == true)
-                    Module_Excel.EXCELtábla(fájlexc, Tábla2, false);
-                if (Tábla3.Visible == true)
-                    Module_Excel.EXCELtábla(fájlexc, Tábla3, false);
+                if (Tábla.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla, false);
+                if (Tábla1.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla1, false);
+                if (Tábla2.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla2, false);
+                if (Tábla3.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla3, false);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -2136,7 +2098,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
     }
 }

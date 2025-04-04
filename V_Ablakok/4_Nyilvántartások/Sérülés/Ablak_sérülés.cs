@@ -31,6 +31,7 @@ namespace Villamos
         readonly Kezelő_Sérülés_Anyag KézSérülésAnyag = new Kezelő_Sérülés_Anyag();
         readonly Kezelő_Sérülés_Művelet KézSérülésMűvelet = new Kezelő_Sérülés_Művelet();
         readonly Kezelő_Sérülés_Visszajelentés KézSérülésVisszajelentés = new Kezelő_Sérülés_Visszajelentés();
+        readonly Kezelő_Alap_Beolvasás KézBeolvas = new Kezelő_Alap_Beolvasás();
 
         List<Adat_Kiegészítő_SérülésSzöveg> AdatokSérülésSzöveg = new List<Adat_Kiegészítő_SérülésSzöveg>();
         List<Adat_Telep_Kiegészítő_SérülésCaf> AdatokSérülésCaf = new List<Adat_Telep_Kiegészítő_SérülésCaf>();
@@ -2319,14 +2320,16 @@ namespace Villamos
                 Holtart.Be();
                 MyE.ExcelLétrehozás();
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = "SELECT * FROM tábla WHERE [csoport]='SérülésAny' AND [törölt]='0' ORDER BY oszlop";
+                List<Adat_Alap_Beolvasás> Adatok = KézBeolvas.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Csoport == "SérülésAny"
+                          && a.Törölt == "0"
+                          orderby a.Oszlop
+                          select a).ToList();
 
                 int i = 1;
-                Kezelő_Alap_Beolvasás Kéz = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+
                 foreach (Adat_Alap_Beolvasás rekord in Adatok)
                 {
                     MyE.Kiir(rekord.Fejléc.ToStrTrim(), MyE.Oszlopnév(i) + "1");
@@ -2807,7 +2810,7 @@ namespace Villamos
                     Soradat["Viszonylat  "] = rekord.Viszonylat;
                     Soradat["Telep       "] = rekord.Telephely;
                     Soradat["Rövid szöveg"] = rekord.Mivelütközött.ToStrTrim() != "_" ? $"Ütközött {rekord.Mivelütközött}" : $"{rekord.Esemény} {rekord.Balesethelyszín.Trim()}";
-                    Soradat["Járművezető "] = rekord.Járművezető;
+                    Soradat["Járművezet  "] = rekord.Járművezető;
 
                     AdatTábla.Rows.Add(Soradat);
 
@@ -4412,7 +4415,11 @@ namespace Villamos
                 if (KmóraÁllás.Text.Trim() == "") KmóraÁllás.Text = "_";
                 if (!int.TryParse(Forgalmiakadály.Text, out int fresult)) throw new HibásBevittAdat("A forgalmi akadálynak egész számnak kell lennie!");
                 if (Járművezető.Text.Trim() == "") throw new HibásBevittAdat("A járművezető nevét meg kell adni!");
-                if (Rendelésszám.Text.Trim() != "" && !int.TryParse(Rendelésszám.Text.Trim(), out int result)) throw new HibásBevittAdat("A rendelési szám mezőnek számnak kell lennie.");
+                if (!int.TryParse(Rendelésszám.Text.Trim(), out int rendelésszám))
+                {
+                    rendelésszám = 0;
+                    Rendelésszám.Text = "0";
+                }
                 if (Helyszín.Text.Trim() == "") throw new HibásBevittAdat("A helyszínt meg kell adni!");
                 if (Ütközött.Text.Trim() == "" && Esemény.Text.Trim() != "") throw new HibásBevittAdat("Ha esemény nem üres, akkor az ütközött mező nem lehet üres!");
                 else if (Ütközött.Text.Trim() == "") throw new HibásBevittAdat("Az ütközött mező nem lehet üres!");

@@ -255,31 +255,12 @@ namespace Villamos.Villamos_Ablakok
                 // ***********************************
                 // ***** Ellenőrzés eleje ************
                 // ***********************************
-                // Feltöltjük a fejléc válozót adattal
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = "SELECT * FROM tábla WHERE [csoport]='Eszköz' AND [törölt]=false ORDER BY oszlop";
-                string fejlécelőírt = "";
-
-                Kezelő_Alap_Beolvasás Kéz = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                foreach (Adat_Alap_Beolvasás rekord in Adatok)
-                {
-                    fejlécelőírt += rekord.Fejléc.Trim();
-                }
-
-
                 // beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
-
                 string fejlécbeolvas = "";
-
                 for (int i = 1; i <= 29; i++)
-                {
                     fejlécbeolvas += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
-                }
-                if (fejlécelőírt != fejlécbeolvas)
+
+                if (!MyF.Betöltéshelyes("Eszköz", fejlécbeolvas))
                 {
                     MyE.ExcelBezárás();
                     throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
@@ -290,10 +271,10 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Be(100);
 
                 //Beolvasás
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
-                jelszó = "TóthKatalin";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
+                string jelszó = "TóthKatalin";
 
-                szöveg = "SELECT * FROM Adatok ORDER BY eszköz";
+                string szöveg = "SELECT * FROM Adatok ORDER BY eszköz";
 
                 List<string> AdatokEszk = KézEszk.Lista_EszközNév(hely, jelszó, szöveg);
 

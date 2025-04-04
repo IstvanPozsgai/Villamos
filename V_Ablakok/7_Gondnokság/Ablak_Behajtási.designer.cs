@@ -157,6 +157,7 @@ namespace Villamos
             this.LblTelephelyBeállítás = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Elutasít_gomb = new System.Windows.Forms.Button();
             this.Fülek.SuspendLayout();
             this.Engedélyek.SuspendLayout();
             this.PanelEngedély.SuspendLayout();
@@ -970,6 +971,7 @@ namespace Villamos
             // TabPage2
             // 
             this.TabPage2.BackColor = System.Drawing.Color.MediumSpringGreen;
+            this.TabPage2.Controls.Add(this.Elutasít_gomb);
             this.TabPage2.Controls.Add(this.LblSzakszGondnokiFelülbírálás);
             this.TabPage2.Controls.Add(this.LblSzakszEngedély);
             this.TabPage2.Controls.Add(this.CmbSzakszlista);
@@ -986,16 +988,18 @@ namespace Villamos
             // LblSzakszGondnokiFelülbírálás
             // 
             this.LblSzakszGondnokiFelülbírálás.AutoSize = true;
-            this.LblSzakszGondnokiFelülbírálás.Location = new System.Drawing.Point(618, 7);
+            this.LblSzakszGondnokiFelülbírálás.Location = new System.Drawing.Point(528, 11);
             this.LblSzakszGondnokiFelülbírálás.Name = "LblSzakszGondnokiFelülbírálás";
-            this.LblSzakszGondnokiFelülbírálás.Size = new System.Drawing.Size(263, 20);
+            this.LblSzakszGondnokiFelülbírálás.Size = new System.Drawing.Size(684, 40);
             this.LblSzakszGondnokiFelülbírálás.TabIndex = 122;
-            this.LblSzakszGondnokiFelülbírálás.Text = "Gondoki engedélyezés felülbírálása:";
+            this.LblSzakszGondnokiFelülbírálás.Text = "Gondoki engedélyezést felül lehet bírálni a szakszolgálat-vezetői engedélyezést m" +
+    "egelőzően.\r\nTelephelyen beírt 2,3 státust át lehet írni a táblázatban, majd a fe" +
+    "lülbírálás gombbal kell rögzíteni.";
             // 
             // LblSzakszEngedély
             // 
             this.LblSzakszEngedély.AutoSize = true;
-            this.LblSzakszEngedély.Location = new System.Drawing.Point(78, 19);
+            this.LblSzakszEngedély.Location = new System.Drawing.Point(56, 35);
             this.LblSzakszEngedély.Name = "LblSzakszEngedély";
             this.LblSzakszEngedély.Size = new System.Drawing.Size(113, 20);
             this.LblSzakszEngedély.TabIndex = 119;
@@ -1004,10 +1008,11 @@ namespace Villamos
             // CmbSzakszlista
             // 
             this.CmbSzakszlista.FormattingEnabled = true;
-            this.CmbSzakszlista.Location = new System.Drawing.Point(197, 11);
+            this.CmbSzakszlista.Location = new System.Drawing.Point(277, 23);
             this.CmbSzakszlista.Name = "CmbSzakszlista";
-            this.CmbSzakszlista.Size = new System.Drawing.Size(269, 28);
+            this.CmbSzakszlista.Size = new System.Drawing.Size(161, 28);
             this.CmbSzakszlista.TabIndex = 118;
+            this.CmbSzakszlista.Visible = false;
             // 
             // Táblaszaksz
             // 
@@ -1039,7 +1044,7 @@ namespace Villamos
             // 
             this.BtnEngedélySzakBírál.BackgroundImage = global::Villamos.Properties.Resources.Iconarchive_Red_Orb_Alphabet_Exclamation_mark;
             this.BtnEngedélySzakBírál.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnEngedélySzakBírál.Location = new System.Drawing.Point(554, 11);
+            this.BtnEngedélySzakBírál.Location = new System.Drawing.Point(1215, 10);
             this.BtnEngedélySzakBírál.Name = "BtnEngedélySzakBírál";
             this.BtnEngedélySzakBírál.Size = new System.Drawing.Size(45, 45);
             this.BtnEngedélySzakBírál.TabIndex = 121;
@@ -1051,11 +1056,11 @@ namespace Villamos
             // 
             this.BtnSzakszeng.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.BtnSzakszeng.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSzakszeng.Location = new System.Drawing.Point(486, 11);
+            this.BtnSzakszeng.Location = new System.Drawing.Point(175, 11);
             this.BtnSzakszeng.Name = "BtnSzakszeng";
             this.BtnSzakszeng.Size = new System.Drawing.Size(45, 45);
             this.BtnSzakszeng.TabIndex = 120;
-            this.ToolTip1.SetToolTip(this.BtnSzakszeng, "Menti az engedélyezést");
+            this.ToolTip1.SetToolTip(this.BtnSzakszeng, "Engedélyezi a kérelmeket.");
             this.BtnSzakszeng.UseVisualStyleBackColor = true;
             this.BtnSzakszeng.Click += new System.EventHandler(this.BtnSzakszeng_Click);
             // 
@@ -1481,6 +1486,18 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
+            // Elutasít_gomb
+            // 
+            this.Elutasít_gomb.BackgroundImage = global::Villamos.Properties.Resources.bezár;
+            this.Elutasít_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Elutasít_gomb.Location = new System.Drawing.Point(226, 11);
+            this.Elutasít_gomb.Name = "Elutasít_gomb";
+            this.Elutasít_gomb.Size = new System.Drawing.Size(45, 45);
+            this.Elutasít_gomb.TabIndex = 123;
+            this.ToolTip1.SetToolTip(this.Elutasít_gomb, "Elutasítja a kérelmeket");
+            this.Elutasít_gomb.UseVisualStyleBackColor = true;
+            this.Elutasít_gomb.Click += new System.EventHandler(this.Elutasít_gomb_Click);
+            // 
             // Ablak_Behajtási
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1649,5 +1666,6 @@ namespace Villamos
         internal DataGridViewTextBoxColumn Column3;
         internal DataGridViewTextBoxColumn Column4;
         internal DataGridViewTextBoxColumn Column5;
+        internal Button Elutasít_gomb;
     }
 }

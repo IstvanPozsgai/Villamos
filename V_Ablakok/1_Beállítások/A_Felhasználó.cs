@@ -722,7 +722,7 @@ namespace Villamos
                 menünév[118] = "CAF karbantartás";
                 menüleírás[118] = " 1-Ütemezés módosítás , 2-, 3- ";
                 menünév[119] = "CAF karbantartás";
-                menüleírás[119] = " 1-, 2- , 3- Színválasztás ";
+                menüleírás[119] = " 1-Archíválás, 2- , 3- Színválasztás ";
 
                 menünév[125] = "Nosztalgia";
                 menüleírás[125] = " 1-, 2- , 3-  ";
@@ -745,7 +745,7 @@ namespace Villamos
 
 
                 menünév[170] = "Karbantartási Munkalapok";
-                menüleírás[170] = " 1- Csoportosítás, 2- , 3- ";
+                menüleírás[170] = " 1- Csoportosítás, 2- , 3-Digitális munkalap";
 
                 menünév[177] = "T5C5 Fűtés ellenőrzés";
                 menüleírás[177] = " 1- Rögzítés, 2-, 3- ";
@@ -758,11 +758,11 @@ namespace Villamos
                 menünév[181] = "Jármű takarítás";
                 menüleírás[181] = " 1- Alapadatok  , 2- Ütemezés, 3- Elkészült takarítás rögzítés";
 
-                menünév[183] = "Főmérnökségi összesített adatok";
+                menünév[183] = "Főmérnökségi adatok";
                 menüleírás[183] = " 1- , 2-, 3-";
-                menünév[184] = "Napi adatok Főmérnökségi rögzítése";
+                menünév[184] = "Telephelyi adatok összesítése";
                 menüleírás[184] = " 1-Adatok módosítás, rögzítése , 2-, 3-";
-                menünév[185] = "Forte kiadási adatok feltöltése Főmérnökség";
+                menünév[185] = "Kiadási Forte adatok feltöltése Főmérnökség";
                 menüleírás[185] = " 1-Adatok módosítás, rögzítése , 2-, 3-";
                 menünév[186] = "Kerékméretek nyilvántartása";
                 menüleírás[186] = " 1- Adatok Exportálása SAP-ba , 2- nincs , 3- Főmérnökségi rögzítés";
@@ -787,9 +787,8 @@ namespace Villamos
                 menüleírás[203] = " 1- Utasítás rögzítés , 2- Utasítás visszavonás, 3- Nincs";
 
 
-
-
-
+                menünév[210] = "Fődarab Nóta";
+                menüleírás[210] = " 1-SAP adatok frissítése, 2-Módosítások, 3- ";
 
                 menünév[220] = "Rezsi raktár";
                 menüleírás[220] = " 1-Alapadatok rögzítése, 2-Tárolási hely rögzítése, 3- Képfeltöltés";

@@ -30,11 +30,12 @@ namespace Villamos
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Jármű2 KézJármű2 = new Kezelő_Jármű2();
         readonly Kezelő_Jármű2ICS KézJármű2ICS = new Kezelő_Jármű2ICS();
-        readonly Kezelő_T5C5_Kmadatok KézICSKmadatok = new Kezelő_T5C5_Kmadatok();
+        readonly Kezelő_T5C5_Kmadatok KézICSKmadatok = new Kezelő_T5C5_Kmadatok("ICS");
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
         readonly Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
         readonly Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
         readonly Kezelő_Főkönyv_Zser_Km KézKorr = new Kezelő_Főkönyv_Zser_Km();
+        readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
 
         List<Adat_T5C5_Kmadatok> AdatokICSKmadatok = new List<Adat_T5C5_Kmadatok>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
@@ -851,8 +852,8 @@ namespace Villamos
                     Holtart.Lép();
                     string szöveg = $"SELECT * FROM KMtábla where [azonosító]='{Tábla_lekérdezés.Rows[i].Cells[0].Value.ToStrTrim()}' ORDER BY vizsgdátumk desc";
 
-                    Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok();
-                    Adat_T5C5_Kmadatok rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                    Adat_T5C5_Kmadatok rekord = KézICSKmadatok.Egy_Adat(hely, jelszó, szöveg);
 
                     if (rekord != null)
                     {
@@ -1171,9 +1172,8 @@ namespace Villamos
                 Kezelő_Jármű KézJ = new Kezelő_Jármű();
                 List<Adat_Jármű> AdatokJ = KézJ.Lista_Adatok(honnan, jelszóhonnan, szöveg);
 
-                Kezelő_T5C5_Kmadatok KézICS = new Kezelő_T5C5_Kmadatok();
                 szöveg = "SELECT * FROM KMtábla ";
-                List<Adat_T5C5_Kmadatok> AdatokICS = KézICS.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_T5C5_Kmadatok> AdatokICS = KézICSKmadatok.Lista_Adat(hely, jelszó, szöveg);
 
                 int i;
                 foreach (Adat_Jármű rekord in AdatokJ)
@@ -1758,8 +1758,7 @@ namespace Villamos
             Tábla1.Columns[20].HeaderText = "Utolsó V2-V3 számláló";
             Tábla1.Columns[20].Width = 120;
 
-            Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok();
-            List<Adat_T5C5_Kmadatok> Adatok = Kéz.Lista_Adat(hely, jelszó, szöveg);
+            List<Adat_T5C5_Kmadatok> Adatok = KézICSKmadatok.Lista_Adat(hely, jelszó, szöveg);
             int i;
             foreach (Adat_T5C5_Kmadatok rekord in Adatok)
             {
@@ -3071,8 +3070,7 @@ namespace Villamos
 
                 Holtart.Be();
 
-                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok();
-                List<Adat_T5C5_Kmadatok> Adatok = Kéz.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_T5C5_Kmadatok> Adatok = KézICSKmadatok.Lista_Adat(hely, jelszó, szöveg);
 
 
                 MyE.ExcelLétrehozás();
@@ -3184,24 +3182,11 @@ namespace Villamos
                 // ***********************************
                 // ***** Ellenőrzés eleje ************
                 // ***********************************
-                // Feltöltjük a fejléc válozót adattal
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\beolvasás.mdb";
-                string jelszó = "sajátmagam";
-                string szöveg = "SELECT * FROM tábla where [csoport]='KM adatok' AND [törölt]=false ORDER BY oszlop";
-
-
-                Kezelő_Alap_Beolvasás Kéz = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> fejléc = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                // beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
-                int utolsó = 0;
+                string fejlécell = "";
                 for (int ii = 0; ii < 7; ii++)
-                {
-                    if (MyE.Beolvas(MyE.Oszlopnév(ii + 1) + "1").Trim() == fejléc[ii].Fejléc.Trim())
-                        utolsó += 1;
-                }
-                if (utolsó != 7)
+                    fejlécell += MyE.Beolvas(MyE.Oszlopnév(ii + 1) + "1").Trim();
+
+                if (!MyF.Betöltéshelyes("KM adatok", fejlécell))
                 {
                     MessageBox.Show("Nem megfelelő a betölteni kívánt adatok formátuma ! ", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     // az excel tábla bezárása
@@ -3215,8 +3200,8 @@ namespace Villamos
 
                 Holtart.Be();
                 KarbListaFeltöltés();
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-                jelszó = "pocsaierzsi";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
+                string jelszó = "pocsaierzsi";
                 string beopályaszám = "";
                 // Első adattól végig pörgetjüka beolvasást
                 int i = 2;
@@ -3238,7 +3223,7 @@ namespace Villamos
                     {
                         long utolsórögzítés = Elem.ID;
 
-                        szöveg = "UPDATE kmtábla SET ";
+                        string szöveg = "UPDATE kmtábla SET ";
                         if (!DateTime.TryParse(MyE.Beolvas($"C{i}"), out DateTime KMUdátum)) KMUdátum = new DateTime(1900, 1, 1);
 
                         szöveg += $" KMUdátum='{KMUdátum:yyyy.MM.dd}', ";
@@ -3313,8 +3298,7 @@ namespace Villamos
                 string jelszó = "pocsaierzsi";
                 szöveg = "SELECT * FROM KMtábla ";
 
-                Kezelő_T5C5_Kmadatok KézICS = new Kezelő_T5C5_Kmadatok();
-                List<Adat_T5C5_Kmadatok> AdatokICS = KézICS.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_T5C5_Kmadatok> AdatokICS = KézICSKmadatok.Lista_Adat(hely, jelszó, szöveg);
 
                 Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
                 HibaListaFeltöltés();
@@ -3766,10 +3750,7 @@ namespace Villamos
                 JárműListaFeltöltés();
 
                 // megnyitjuk a hibákat
-                string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
-                szöveg = "SELECT * FROM hibatábla  ";
-                Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-                List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_adatok(helyhiba, jelszó, szöveg);
+                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 // naplózás
                 string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Now:yyyyMM}hibanapló.mdb";
@@ -3902,6 +3883,7 @@ namespace Villamos
                                 szöveg += "'" + DateTime.Now.ToString() + "', false, ";
                                 szöveg += "'" + típusa.Trim() + "', ";
                                 szöveg += "'" + rekordütemez.Azonosító.Trim() + "', " + hibáksorszáma.ToString() + ")";
+                                string helyhiba = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\hiba.mdb";
                                 MyA.ABMódosítás(helyhiba, jelszó, szöveg);
                                 // naplózzuk a hibákat
                                 MyA.ABMódosítás(helynapló, jelszó, szöveg);

@@ -31,7 +31,7 @@ namespace Villamos
         readonly Kezelő_Szerelvény KézSzerElő = new Kezelő_Szerelvény();
         readonly Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
         readonly Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
-        readonly Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok();
+        readonly Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly Kezelő_Osztály_Adat KézCsat = new Kezelő_Osztály_Adat();
         readonly Kezelő_T5C5_Állomány KézFutás = new Kezelő_T5C5_Állomány();
         readonly Kezelő_Hétvége_Előírás KézElőírás = new Kezelő_Hétvége_Előírás();
@@ -85,9 +85,6 @@ namespace Villamos
             // létrehozzuk azadatbázist
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadáshétvége(hely);
-
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos6.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Járműtulajdonságoktábla(hely);
 
             Fülek.SelectedIndex = 0;
             Fülekkitöltése();
@@ -1463,7 +1460,7 @@ namespace Villamos
                 if (AdatokZSER == null) return;
 
                 List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER
-                                                             where a.Azonosító == azonosító && a.Dátum >= Tábla.Rows[sor].Cells[37].Value.ToÉrt_DaTeTime()
+                                                             where a.Azonosító == azonosító && a.Dátum > Tábla.Rows[sor].Cells[37].Value.ToÉrt_DaTeTime()
                                                              select a).ToList();
                 long KorNapikm = 0;
                 if (KorNapikmLista != null)
@@ -2083,7 +2080,7 @@ namespace Villamos
 
                 Tábla.Sort(Tábla.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
 
-                Kezelő_T5C5_Kmadatok kéz = new Kezelő_T5C5_Kmadatok();
+                Kezelő_T5C5_Kmadatok kéz = new Kezelő_T5C5_Kmadatok("T5C5");
                 List<Adat_T5C5_Kmadatok> Adatok = kéz.Lista_Adat(hely, jelszó, szöveg);
 
 

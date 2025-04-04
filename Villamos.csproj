@@ -212,19 +212,27 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_reklám.designer.cs">
       <DependentUpon>Ablak_reklám.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Módosít.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Segéd.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </Compile>
@@ -262,6 +270,24 @@
     </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_MEO_kerék.designer.cs">
       <DependentUpon>Ablak_MEO_kerék.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Fődarab.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Fődarab.Designer.cs">
+      <DependentUpon>Ablak_Fődarab.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Részletes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Részletes.Designer.cs">
+      <DependentUpon>Ablak_Nóta_Részletes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Összesítés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Összesítés.Designer.cs">
+      <DependentUpon>Ablak_Nóta_Összesítés.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.cs">
       <SubType>Form</SubType>
@@ -642,15 +668,18 @@
     <Compile Include="V_Adatbázis\Adatbázis_Kulcs.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Külső.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Létszám.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Nóta.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Oktatás.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Rezsi.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Szerszám_FejLáb.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Takarítás_BMR.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Takarítás_Opcionális.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_DigitálisMunkalap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Akkumulátor.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Behajtás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Belépés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_DigitálisMunkalap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Státus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jogosítvány.cs" />
@@ -664,6 +693,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Létszám.cs" />
     <Compile Include="V_Adatszerkezet\Adat_MEO.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Munkakör.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Nóta.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Oktatás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Reklám.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Rezsi.cs" />
@@ -690,10 +720,14 @@
     <Compile Include="V_Kezelők\Kezelő_Belépés_Verzió.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_WinTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_Adatok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap.cs" />
+    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap_Dolgozó.cs" />
+    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap_Kocsik.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Személyes.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Forte_Kiadási_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Főkönyv_Zser_Km.cs" />
     <Compile Include="V_Kezelők\Kezelő_JogosítványVonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű2ICS.cs" />
@@ -701,8 +735,7 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Alap_egyéb.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Alap_Kiadás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF.cs" />
@@ -728,6 +761,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kerék.cs" />
     <Compile Include="V_Kezelők\Kezelő_KerékMérő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiadás_Összesítő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kidobó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kidobó_Segéd.cs" />
@@ -780,6 +814,7 @@
     <Compile Include="V_Kezelők\Kezelő_Munka_Idő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Rendelés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Szolgálat.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Nóta.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
     <Compile Include="V_Kezelők\Kezelő_OktatásiSegéd.cs" />
     <Compile Include="V_Kezelők\Kezelő_OktatásTábla.cs" />
@@ -792,10 +827,14 @@
     <Compile Include="V_Kezelők\Kezelő_Rezsi_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Rezsi_Törzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Túlóra.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szerelvény_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerszám_FejLáb.cs" />
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Göngyöl_DátumTábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Kmadatok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Kmadatok_Napló.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Állomány.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_BMR.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia_Ciklus.cs" />
@@ -1097,7 +1136,6 @@
     <Compile Include="V_Adatszerkezet\Adat_Alap_Egyéb.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Alap_kiadás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Nap.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Fő_Forte.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nap_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_2.cs" />
@@ -1118,7 +1156,6 @@
     <Compile Include="V_Ablakok\A_Főoldal.designer.cs">
       <DependentUpon>A_Főoldal.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Kezelők\Kezelő_Fő_Forte.cs" />
     <Compile Include="V_Kezelők\Kezelő_jármű.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerelvény.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerszám.cs" />
@@ -1147,6 +1184,7 @@
     <Compile Include="V_MindenEgyéb\Mentés_Ablak.cs" />
     <Compile Include="V_MindenEgyéb\SAP_Adatokbeolvasása_km.cs" />
     <Compile Include="V_MindenEgyéb\ScreenshotHelper.cs" />
+    <Compile Include="V_MindenEgyéb\Vezénylés.cs" />
     <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_nyomtatványok.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -1212,6 +1250,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_MEO_kerék.resx">
       <DependentUpon>Ablak_MEO_kerék.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Fődarab.resx">
+      <DependentUpon>Ablak_Fődarab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Részletes.resx">
+      <DependentUpon>Ablak_Nóta_Részletes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Összesítés.resx">
+      <DependentUpon>Ablak_Nóta_Összesítés.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.resx">
       <DependentUpon>Ablak_sérülés.cs</DependentUpon>
@@ -1505,6 +1552,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\justice-297629_1280.png" />
+    <None Include="Resources\Graphicloads-Colorful-Long-Shadow-Arrow-download-3.ico" />
     <None Include="Resources\shopping_cart.ico" />
     <None Include="Resources\19.bmp" />
     <None Include="lang_hu-HU.json" />

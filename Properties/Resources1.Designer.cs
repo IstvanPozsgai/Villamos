@@ -913,6 +913,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Graphicloads_Colorful_Long_Shadow_Arrow_download_3 {
+            get {
+                object obj = ResourceManager.GetObject("Graphicloads-Colorful-Long-Shadow-Arrow-download-3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Help_Support {
             get {
                 object obj = ResourceManager.GetObject("Help Support", resourceCulture);
@@ -986,6 +996,16 @@ namespace Villamos.Properties {
         internal static System.Drawing.Bitmap Junior_Icon_111 {
             get {
                 object obj = ResourceManager.GetObject("Junior Icon 111", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap justice_297629_1280 {
+            get {
+                object obj = ResourceManager.GetObject("justice-297629_1280", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

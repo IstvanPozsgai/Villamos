@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
@@ -23,11 +22,10 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Szerelvénytáblalap(hely.KönyvSzerk());
         }
 
-
         public List<Adat_Szerelvény> Lista_Adatok(string Telephely, bool előírt = false)
         {
             FájlBeállítás(Telephely, előírt);
-            string szöveg = "Select * FROM szerelvénytábla";
+            string szöveg = "Select * FROM szerelvénytábla ORDER BY kocsi1";
             List<Adat_Szerelvény> AdatKocsik = new List<Adat_Szerelvény>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -190,62 +188,6 @@ namespace Villamos.Kezelők
             Adatbázis.ABMódosítás(hely, jelszó, szöveg);
         }
 
-        public void Naplózás_Szerelvény(string hely, string jelszó, Adat_Szerelvény Adat)
-        {
-            string szöveg;
-            szöveg = "INSERT INTO szerelvénytáblanapló (id, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, szerelvényhossz, módosító, mikor) VALUES (";
-            szöveg += Adat.Szerelvény_ID.ToString() + ", ";
-            szöveg += "'" + Adat.Kocsi1 + "', ";
-            szöveg += "'" + Adat.Kocsi2 + "', ";
-            szöveg += "'" + Adat.Kocsi3 + "', ";
-            szöveg += "'" + Adat.Kocsi4 + "', ";
-            szöveg += "'" + Adat.Kocsi5 + "', ";
-            szöveg += "'" + Adat.Kocsi6 + "', ";
-            szöveg += Adat.Szerelvényhossz.ToString() + ", ";
-            szöveg += "'" + Program.PostásNév.Trim() + "', ";
-            szöveg += "'" + DateTime.Now.ToString() + "') ";
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
-        }
-    }
 
-    public class Kezelő_Szerelvény_Napló
-    {
-        public List<Adat_Szerelvény_Napló> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Szerelvény_Napló> Adatok = new List<Adat_Szerelvény_Napló>();
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat_Szerelvény_Napló Adat = new Adat_Szerelvény_Napló(
-                                                rekord["id"].ToÉrt_Long(),
-                                                rekord["szerelvényhossz"].ToÉrt_Long(),
-                                                rekord["Kocsi1"].ToStrTrim(),
-                                                rekord["Kocsi2"].ToStrTrim(),
-                                                rekord["Kocsi3"].ToStrTrim(),
-                                                rekord["Kocsi4"].ToStrTrim(),
-                                                rekord["Kocsi5"].ToStrTrim(),
-                                                rekord["Kocsi6"].ToStrTrim(),
-                                                rekord["Módosító"].ToStrTrim(),
-                                                rekord["mikor"].ToÉrt_DaTeTime()
-                                                );
-                                Adatok.Add(Adat);
-                            }
-
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
     }
 }

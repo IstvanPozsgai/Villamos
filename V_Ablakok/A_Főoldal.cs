@@ -306,6 +306,9 @@ namespace Villamos
             else
                 UtasításokToolStripMenuItem.Enabled = true;
 
+            fődarabNótaToolStripMenuItem.Enabled = panels2.Text.Substring(209, 1) != "0";
+
+
             if (panels2.Text.Substring(219, 1) == "0")
                 RezsiRaktárToolStripMenuItem.Enabled = false;
             else
@@ -1641,6 +1644,28 @@ namespace Villamos
         {
             Új_Ablak_Eszterga_Karbantartás = null;
         }
+
+
+        Villamos.V_Ablakok._4_Nyilvántartások.Nóta.Ablak_Fődarab Új_Ablak_Fődarab;
+        private void FődarabNótaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Fődarab == null)
+            {
+                Új_Ablak_Fődarab = new V_Ablakok._4_Nyilvántartások.Nóta.Ablak_Fődarab();
+                Új_Ablak_Fődarab.FormClosed += Új_Ablak_FődarabNóta_FormClosed;
+                Új_Ablak_Fődarab.Show();
+            }
+            else
+            {
+                Új_Ablak_Fődarab.Activate();
+                Új_Ablak_Fődarab.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Új_Ablak_FődarabNóta_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Fődarab = null;
+        }
         #endregion
 
 
@@ -2479,5 +2504,7 @@ namespace Villamos
         }
 
         #endregion
+
+
     }
 }

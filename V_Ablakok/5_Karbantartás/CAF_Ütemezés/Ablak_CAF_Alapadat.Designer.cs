@@ -74,14 +74,14 @@
             this.Alap_pályaszám = new System.Windows.Forms.ComboBox();
             this.Label1 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.SuspendLayout();
             // 
             // Kalkulál
             // 
             this.Kalkulál.BackgroundImage = global::Villamos.Properties.Resources.CALC1;
             this.Kalkulál.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Kalkulál.Location = new System.Drawing.Point(846, 168);
+            this.Kalkulál.Location = new System.Drawing.Point(846, 190);
             this.Kalkulál.Name = "Kalkulál";
             this.Kalkulál.Size = new System.Drawing.Size(50, 52);
             this.Kalkulál.TabIndex = 114;
@@ -125,7 +125,7 @@
             // 
             this.Alap_lekérdezés.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Alap_lekérdezés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Alap_lekérdezés.Location = new System.Drawing.Point(846, 112);
+            this.Alap_lekérdezés.Location = new System.Drawing.Point(846, 124);
             this.Alap_lekérdezés.Name = "Alap_lekérdezés";
             this.Alap_lekérdezés.Size = new System.Drawing.Size(50, 50);
             this.Alap_lekérdezés.TabIndex = 109;
@@ -457,6 +457,7 @@
             this.Alap_pályaszám.Size = new System.Drawing.Size(121, 28);
             this.Alap_pályaszám.TabIndex = 73;
             this.Alap_pályaszám.SelectedIndexChanged += new System.EventHandler(this.Alap_pályaszám_SelectedIndexChanged);
+            this.Alap_pályaszám.TextUpdate += new System.EventHandler(this.Alap_pályaszám_TextUpdate);
             // 
             // Label1
             // 

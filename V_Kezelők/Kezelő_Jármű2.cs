@@ -17,12 +17,12 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\villamos2.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Villamostábla(hely.KönyvSzerk());
         }
 
         public List<Adat_Jármű_2> Lista_Adatok(string Telephely)
         {
-            string szöveg = $"SELECT * FROM állománytábla ";
+            string szöveg = $"SELECT * FROM állománytábla ORDER BY Azonosító ";
             FájlBeállítás(Telephely);
             List<Adat_Jármű_2> Adatok = new List<Adat_Jármű_2>();
             Adat_Jármű_2 adat;
@@ -39,9 +39,6 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                if (!DateTime.TryParse(rekord["takarítás"].ToString(), out DateTime takarítás))
-                                    takarítás = new DateTime(1900, 1, 1);
-
                                 adat = new Adat_Jármű_2(
                                     rekord["Azonosító"].ToStrTrim(),
                                     rekord["takarítás"].ToÉrt_DaTeTime(),
@@ -56,6 +53,9 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+
+
+        //Elkopó
         public List<Adat_Jármű_2> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Jármű_2> Adatok = new List<Adat_Jármű_2>();

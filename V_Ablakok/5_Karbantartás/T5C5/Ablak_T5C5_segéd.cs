@@ -1505,12 +1505,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 AdatokJárműHiba.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\villamos\hiba.mdb";
-                string jelszó = "pozsgaii";
-
-                string szöveg = $"SELECT * FROM hibatábla";
-
-                AdatokJárműHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
+                AdatokJárműHiba = KézHiba.Lista_Adatok(Cmbtelephely.Trim());
             }
             catch (HibásBevittAdat ex)
             {

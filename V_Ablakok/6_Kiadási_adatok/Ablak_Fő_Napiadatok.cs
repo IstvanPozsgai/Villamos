@@ -32,6 +32,7 @@ namespace Villamos
         readonly Kezelő_Személyzet_Adatok KézSzeméyzet = new Kezelő_Személyzet_Adatok();
         readonly Kezelő_Típuscsere_Adatok KézTípuscsere = new Kezelő_Típuscsere_Adatok();
         readonly Kezelő_Kiadás_Összesítő KézTelepKiadás = new Kezelő_Kiadás_Összesítő();
+        readonly Kezelő_Forte_Kiadási_Adatok KézFőForte = new Kezelő_Forte_Kiadási_Adatok();
 
 
         List<Adat_Kiegészítő_Típusrendezéstábla> AdatokTipRend = new List<Adat_Kiegészítő_Típusrendezéstábla>();
@@ -199,12 +200,7 @@ namespace Villamos
                                                             orderby a.Napszak, a.Típus
                                                             select a).ToList();
 
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                jelszó = "gémkapocs";
-                szöveg = "SELECT * FROM fortekiadástábla";
-
-                Kezelő_Fő_Forte KézFőForte = new Kezelő_Fő_Forte();
-                List<Adat_Fő_Forte> AdatokFőForte = KézFőForte.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Forte_Kiadási_Adatok> AdatokFőForte = KézFőForte.Lista_Adatok(Dátum.Value.Year);
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -249,12 +245,15 @@ namespace Villamos
                     Tábla.Rows[i].Cells[0].Value = rekord.Napszak;
                     Tábla.Rows[i].Cells[1].Value = rekord.Típus;
 
-                    int Kiadás = 0;
+                    long Kiadás = 0;
 
-                    List<Adat_Fő_Forte> Elemek = (from a in AdatokFőForte
-                                                  where a.Dátum == Dátum.Value && a.Napszak == rekord.Napszak && a.Telephely == LabelTelephely.Text.Trim() && a.Típus == rekord.Típus
-                                                  select a).ToList();
-                    foreach (Adat_Fő_Forte Elem in Elemek)
+                    List<Adat_Forte_Kiadási_Adatok> Elemek = (from a in AdatokFőForte
+                                                              where a.Dátum == Dátum.Value
+                                                              && a.Napszak == rekord.Napszak
+                                                              && a.Telephely == LabelTelephely.Text.Trim()
+                                                              && a.Típus == rekord.Típus
+                                                              select a).ToList();
+                    foreach (Adat_Forte_Kiadási_Adatok Elem in Elemek)
                     {
                         if (Elem.Munkanap == 0)
                             Tábla.Rows[i].Cells[12].Value = "Munkanap";
@@ -527,15 +526,15 @@ namespace Villamos
                 foreach (Adat_kiegészítő_telephely rekord in AdatokTelep)
                 {
                     Telephelyekszáma++; ;
-                    Telephelygomb = new Button();
-                    Telephelygomb.Location = new Point(10 + 170 * (k - 1), 10 + (j - 1) * 40); ;
-                    Telephelygomb.Size = new Size(160, 35);
-                    Telephelygomb.Name = $"Telephelyek_{Telephelyekszáma}";
-                    Telephelygomb.Text = rekord.Telephelynév.Trim();
-
-
-                    // alapszín szürke
-                    Telephelygomb.BackColor = Color.Cornsilk;
+                    Telephelygomb = new Button
+                    {
+                        Location = new Point(10 + 170 * (k - 1), 10 + (j - 1) * 40),
+                        Size = new Size(160, 35),
+                        Name = $"Telephelyek_{Telephelyekszáma}",
+                        Text = rekord.Telephelynév.Trim(),
+                        // alapszín szürke
+                        BackColor = Color.Cornsilk
+                    };
                     string hely = $@"{Application.StartupPath}\{rekord.Telephelynév.Trim()}\adatok\főkönyv\kiadás{Dátum.Value.Year}.mdb";
                     if (File.Exists(hely))
                     {
@@ -641,13 +640,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                string jelszó = "gémkapocs";
-                string szöveg = $"SELECT * FROM fortekiadástábla  where [dátum]=#{Dátum.Value:M-d-yy}#";
-
-                Kezelő_Fő_Forte KézFőForte = new Kezelő_Fő_Forte();
-                Adat_Fő_Forte Elem = KézFőForte.Egy_Adat(hely, jelszó, szöveg);
-
+                List<Adat_Forte_Kiadási_Adatok> Adatok = KézFőForte.Lista_Adatok(Dátum.Value.Year);
+                Adat_Forte_Kiadási_Adatok Elem = Adatok.FirstOrDefault(a => a.Dátum == Dátum.Value);
                 Munkanap = "Munkanap";
                 if (Elem != null)
                     Munkanap = "Munkanap";

@@ -4,10 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -16,10 +13,11 @@ namespace Villamos
 
     public partial class Ablak_Fő_Kiadás_Forte
     {
+        readonly Kezelő_Forte_Kiadási_Adatok Kéz_Forte = new Kezelő_Forte_Kiadási_Adatok();
+        readonly Kezelő_Kiegészítő_Fortetípus KézTípus = new Kezelő_Kiegészítő_Fortetípus();
+        readonly Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
 
-        readonly Kezelő_Fő_Forte Kéz_Forte = new Kezelő_Fő_Forte();
-
-        List<Adat_Fő_Forte> Adatok_Forte = new List<Adat_Fő_Forte>();
+        List<Adat_Forte_Kiadási_Adatok> Adatok_Forte = new List<Adat_Forte_Kiadási_Adatok>();
 
         bool Figyel = false;
 
@@ -28,21 +26,13 @@ namespace Villamos
             InitializeComponent();
         }
 
-
         private void Ablak_Fő_Kiadás_Forte_Load(object sender, EventArgs e)
         {
             Dátum.Value = DateTime.Today;
             Dátumról.Value = DateTime.Today;
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}";
-            if (!Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely += $@"\{DateTime.Today.Year}_fortekiadási_adatok.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
-
             Jogosultságkiosztás();
-            Adatok_Forte_Feltöltés();
+            Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -96,21 +86,18 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-
 
         private void Lista_Click(object sender, EventArgs e)
         {
             Táblaírása();
         }
 
-
         private void Táblaírása()
         {
             try
             {
-                Adatok_Forte_Feltöltés();
+                Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -136,7 +123,7 @@ namespace Villamos
                 Tábla.Columns[7].HeaderText = "Munkanap";
                 Tábla.Columns[7].Width = 100;
 
-                List<Adat_Fő_Forte> Adatok;
+                List<Adat_Forte_Kiadási_Adatok> Adatok;
 
                 if (Délelőtt.Checked)
                     Adatok = (from a in Adatok_Forte
@@ -147,10 +134,10 @@ namespace Villamos
                               where a.Dátum == Dátum.Value && a.Napszak == "du"
                               select a).ToList();
 
-                int összesen = 0;
+                long összesen = 0;
                 int i = 0;
 
-                foreach (Adat_Fő_Forte Adat in Adatok)
+                foreach (Adat_Forte_Kiadási_Adatok Adat in Adatok)
                 {
                     Tábla.RowCount++;
                     i = Tábla.RowCount - 1;
@@ -186,20 +173,18 @@ namespace Villamos
             }
         }
 
-
         private void Command1_Click(object sender, EventArgs e)
         {
             Táblaírásahavi();
         }
 
-
         private void Táblaírásahavi()
         {
             try
             {
-                Adatok_Forte_Feltöltés();
+                Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
 
-                List<Adat_Fő_Forte> Adatok;
+                List<Adat_Forte_Kiadási_Adatok> Adatok;
 
                 if (Délelőtt.Checked)
                     Adatok = (from a in Adatok_Forte
@@ -241,7 +226,7 @@ namespace Villamos
                 Tábla.Columns[7].Width = 100;
 
                 int i;
-                foreach (Adat_Fő_Forte Adat in Adatok)
+                foreach (Adat_Forte_Kiadási_Adatok Adat in Adatok)
                 {
                     Tábla.RowCount++;
                     i = Tábla.RowCount - 1;
@@ -273,31 +258,21 @@ namespace Villamos
             }
         }
 
-
         private void Délelőtt_Click(object sender, EventArgs e)
         {
             Táblaírása();
         }
-
 
         private void Délután_Click(object sender, EventArgs e)
         {
             Táblaírása();
         }
 
-
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
             try
             {
-                string hely;
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
-                if (!Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely += $@"\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
-
-                Adatok_Forte_Feltöltés();
+                Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
                 Táblaírása();
             }
             catch (HibásBevittAdat ex)
@@ -310,7 +285,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Button3_Click(object sender, EventArgs e)
         {
@@ -350,13 +324,12 @@ namespace Villamos
             }
         }
 
-
         private void Fortebeolvasás_Click(object sender, EventArgs e)
         {
             try
             {
                 Excelbeolvasás();
-                if (Figyel == false)
+                if (!Figyel)
                 {
                     Adatokegyeztetése();
                     MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -374,19 +347,11 @@ namespace Villamos
             }
         }
 
-
         private void Excelbeolvasás()
         {
             string fájlexc = "";
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
-                string jelszó = "gémkapocs";
-                if (!Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
-
                 // megpróbáljuk megnyitni az excel táblát.
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
                 {
@@ -432,6 +397,8 @@ namespace Villamos
 
                 Napiadattörlés();
 
+                List<Adat_Forte_Kiadási_Adatok> AdatokGY = new List<Adat_Forte_Kiadási_Adatok>();
+
                 if (utolsó > 1)
                 {
                     i = első;
@@ -444,27 +411,25 @@ namespace Villamos
                         string típusforte_ = MyE.Beolvas($"e{i}").Trim();
                         string telephely_ = "_";
                         string típus_ = "_";
-                        if (!int.TryParse(MyE.Beolvas($"H{i}"), out int kiadás_))
-                            kiadás_ = 0;
-
+                        if (!int.TryParse(MyE.Beolvas($"H{i}"), out int kiadás_)) kiadás_ = 0;
                         int munkanap_ = Munkanap.Checked ? 0 : 1;
 
-                        Adat_Fő_Forte Adat = new Adat_Fő_Forte(dátum_, napszak_, telephelyforte_, típusforte_, telephely_, típus_, kiadás_, munkanap_);
-                        Kéz_Forte.Rögzít_Fő_forte(hely, jelszó, Adat);
-
+                        Adat_Forte_Kiadási_Adatok Adat = new Adat_Forte_Kiadási_Adatok(dátum_, napszak_, telephelyforte_, típusforte_, telephely_, típus_, kiadás_, munkanap_);
+                        AdatokGY.Add(Adat);
 
                         // délutáni adatok beolvasása
                         napszak_ = "du";
-                        kiadás_ = int.Parse(MyE.Beolvas("j" + i.ToString()).Trim());
+                        kiadás_ = int.Parse(MyE.Beolvas($"j{i}").Trim());
 
-                        Adat = new Adat_Fő_Forte(dátum_, napszak_, telephelyforte_, típusforte_, telephely_, típus_, kiadás_, munkanap_);
-                        Kéz_Forte.Rögzít_Fő_forte(hely, jelszó, Adat);
+                        Adat = new Adat_Forte_Kiadási_Adatok(dátum_, napszak_, telephelyforte_, típusforte_, telephely_, típus_, kiadás_, munkanap_);
+                        AdatokGY.Add(Adat);
 
                         Holtart.Lép();
                         i++;
                     }
                 }
                 MyE.ExcelBezárás();
+                if (AdatokGY != null && AdatokGY.Count > 0) Kéz_Forte.Rögzítés(Dátum.Value.Year, AdatokGY);
                 Figyel = false;
                 Holtart.Ki();
                 // kitöröljük a betöltött fájlt
@@ -486,35 +451,22 @@ namespace Villamos
             }
         }
 
-
         private void Adatokegyeztetése()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM fortetípus";
-
-                Kezelő_Kiegészítő_Fortetípus KézTípus = new Kezelő_Kiegészítő_Fortetípus();
                 List<Adat_Kiegészítő_Fortetípus> AdatokTípus = KézTípus.Lista_Adatok();
-
-
-                Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
                 List<Adat_kiegészítő_telephely> AdatokTelep = KézTelep.Lista_adatok();
-
-                Adatok_Forte_Feltöltés();
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                jelszó = "gémkapocs";
 
                 Holtart.Be();
 
-                List<Adat_Fő_Forte> Adatok = (from a in Adatok_Forte
-                                              where a.Dátum == Dátum.Value
-                                              select a).ToList();
+                Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
+                List<Adat_Forte_Kiadási_Adatok> Adatok = (from a in Adatok_Forte
+                                                          where a.Dátum == Dátum.Value
+                                                          select a).ToList();
 
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Fő_Forte rekord in Adatok)
+                List<Adat_Forte_Kiadási_Adatok> AdatokGY = new List<Adat_Forte_Kiadási_Adatok>();
+                foreach (Adat_Forte_Kiadási_Adatok rekord in Adatok)
                 {
 
                     string telephely = (from a in AdatokTelep
@@ -525,21 +477,18 @@ namespace Villamos
                                     where a.Ftípus == rekord.Típusforte && a.Telephely == telephely
                                     select a.Telephelyitípus.Trim()).FirstOrDefault() ?? "_";
 
-                    szöveg = "UPDATE fortekiadástábla  SET ";
-                    szöveg += $"telephely='{telephely}', ";
-                    szöveg += $"típus='{típus}' ";
-                    szöveg += $" WHERE [dátum]=#{Dátum.Value:M-d-yy}# AND napszak='{rekord.Napszak}' AND ";
-                    szöveg += $" telephelyforte='{rekord.Telephelyforte}' AND típusforte='{rekord.Típusforte}'";
-
-                    Adat_Fő_Forte Elem = (from a in Adatok_Forte
-                                          where a.Dátum == Dátum.Value && a.Napszak == rekord.Napszak && a.Telephelyforte == rekord.Telephelyforte && a.Típusforte == rekord.Típusforte
-                                          select a).FirstOrDefault();
-
-                    if (Elem != null)
-                        SzövegGy.Add(szöveg);
+                    Adat_Forte_Kiadási_Adatok ADAT = new Adat_Forte_Kiadási_Adatok(
+                                               Dátum.Value,
+                                               rekord.Napszak,
+                                               rekord.Telephelyforte,
+                                               rekord.Típusforte,
+                                               telephely,
+                                               típus,
+                                               0, 0);
+                    AdatokGY.Add(ADAT);
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (AdatokGY != null && AdatokGY.Count > 0) Kéz_Forte.Módosítás(Dátum.Value.Year, AdatokGY);
 
                 Holtart.Ki();
             }
@@ -554,29 +503,17 @@ namespace Villamos
             }
         }
 
-
         private void Napiadattörlés()
         {
             try
             {
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
-                if (!Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
-
-                Adatok_Forte_Feltöltés();
-
-
-                Adat_Fő_Forte Elem = (from a in Adatok_Forte
-                                      where a.Dátum == Dátum.Value
-                                      select a).FirstOrDefault();
+                Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
+                Adat_Forte_Kiadási_Adatok Elem = (from a in Adatok_Forte
+                                                  where a.Dátum == Dátum.Value
+                                                  select a).FirstOrDefault();
                 if (Elem != null)
                 {
-                    string jelszó = "gémkapocs";
-                    string szöveg = $"DELETE FROM fortekiadástábla where [dátum]=#{Dátum.Value:M-d-yy}#";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    Kéz_Forte.Törlés(Dátum.Value.Year, Dátum.Value);
                     Figyel = true;
                 }
             }
@@ -591,12 +528,10 @@ namespace Villamos
             }
         }
 
-
         private void Töröl_Click(object sender, EventArgs e)
         {
             try
             {
-
                 Figyel = false;
                 Napiadattörlés();
                 if (Figyel == true)
@@ -616,45 +551,36 @@ namespace Villamos
             }
         }
 
-
         private void AdatMásol_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
-                if (!Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
-
-                Napiadattörlés();
-                Adatok_Forte_Feltöltés();
                 // kitöröljük az adott napi adatokat
+                Napiadattörlés();
+                Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
 
-                List<Adat_Fő_Forte> Adatok = (from a in Adatok_Forte
-                                              where a.Dátum == Dátumról.Value
-                                              select a).ToList();
+                List<Adat_Forte_Kiadási_Adatok> Adatok = (from a in Adatok_Forte
+                                                          where a.Dátum == Dátumról.Value
+                                                          select a).ToList();
                 // rögzítjük az adatokat
-                string jelszó = "gémkapocs";
-
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Fő_Forte rekord in Adatok)
+                List<Adat_Forte_Kiadási_Adatok> AdatokGy = new List<Adat_Forte_Kiadási_Adatok>();
+                foreach (Adat_Forte_Kiadási_Adatok rekord in Adatok)
                 {
-                    string szöveg = "INSERT INTO fortekiadástábla  (dátum, napszak, telephelyforte, típusforte, telephely, típus, kiadás, munkanap  ) VALUES (";
-                    szöveg += $"'{Dátum.Value:yyyy.MM.dd}', ";
-                    szöveg += $"'{rekord.Napszak}', ";
-                    szöveg += $"'{rekord.Telephelyforte}', ";
-                    szöveg += $"'{rekord.Típusforte}', ";
-                    szöveg += $"'{rekord.Telephely}', ";
-                    szöveg += $"'{rekord.Típus}', ";
-                    szöveg += $"{rekord.Kiadás}, ";
-                    szöveg += $"{rekord.Munkanap}) ";
-                    SzövegGy.Add(szöveg);
+                    Adat_Forte_Kiadási_Adatok ADAT = new Adat_Forte_Kiadási_Adatok(
+                                              Dátum.Value,
+                                              rekord.Napszak,
+                                              rekord.Telephelyforte,
+                                              rekord.Típusforte,
+                                              rekord.Telephely,
+                                              rekord.Típus,
+                                              rekord.Kiadás,
+                                              rekord.Munkanap);
+                    AdatokGy.Add(ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (AdatokGy != null && AdatokGy.Count > 0) Kéz_Forte.Rögzítés(Dátum.Value.Year, AdatokGy);
 
                 MessageBox.Show("A napi adatok másolása megtörtént.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Adatok_Forte_Feltöltés();
+                Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
                 Táblaírása();
             }
             catch (HibásBevittAdat ex)
@@ -668,35 +594,23 @@ namespace Villamos
             }
         }
 
-
         private void MunkaHétvége_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
-                if (!Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
-
-
-                Adatok_Forte_Feltöltés();
+                Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
 
                 // 'módosítjuk a mukanapi adatokat
-                List<Adat_Fő_Forte> Elemek = (from a in Adatok_Forte
-                                              where a.Dátum == Dátum.Value
-                                              select a).ToList();
+                List<Adat_Forte_Kiadási_Adatok> Elemek = (from a in Adatok_Forte
+                                                          where a.Dátum == Dátum.Value
+                                                          select a).ToList();
                 int munkanap = 1;
                 if (Elemek != null)
                 {
                     //Megfordítjuk minden elemre                  
-                    if (Elemek[0].Munkanap == 1)
-                        munkanap = 0;
-                    string szöveg = "UPDATE fortekiadástábla  SET ";
-                    szöveg += $"munkanap={munkanap}";
-                    szöveg += $" WHERE [dátum]=#{Dátum.Value:M-d-yy}#";
-                    string jelszó = "gémkapocs";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    if (Elemek[0].Munkanap == 1) munkanap = 0;
+                    Kéz_Forte.Módosítás(Dátum.Value.Year, Dátum.Value, munkanap);
+
                     MessageBox.Show("A napi adatok munkanap állítása megtörtént.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Táblaírása();
@@ -711,7 +625,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
@@ -730,34 +643,5 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        #region Listákfeltöltése
-
-        private void Adatok_Forte_Feltöltés()
-        {
-            try
-            {
-                Adatok_Forte.Clear();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                if (!Exists(hely)) return;
-                string jelszó = "gémkapocs";
-                string szöveg = "SELECT * FROM fortekiadástábla ";
-
-                Adatok_Forte = Kéz_Forte.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-        #endregion
     }
 }

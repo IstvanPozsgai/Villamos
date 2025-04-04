@@ -52,8 +52,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
-
         public void Módosítás(Adat_Behajtás_Dolgozótábla Adat)
         {
             try
@@ -77,8 +75,6 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         public void Rögzítés(Adat_Behajtás_Dolgozótábla Adat)
         {

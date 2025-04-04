@@ -380,7 +380,7 @@ namespace Villamos
                 }
                 // formázunk
                 // fejléc rácsozás
-                Holtart.Value = 1;
+                Holtart.Lép();
                 MyE.Vastagkeret("a4:a5");
                 MyE.Vastagkeret("b4:b5");
                 oszlop = 3;
@@ -393,7 +393,7 @@ namespace Villamos
                 }
 
                 // középsőrész
-                Holtart.Value = 2;
+                Holtart.Lép();
                 MyE.Rácsoz("a6:" + MyE.Oszlopnév(2 + mennyi * 3) + (hanyadikember + 5).ToString());
                 MyE.Vastagkeret("A6:A" + (hanyadikember + 5).ToString());
                 MyE.Vastagkeret("B6:B" + (hanyadikember + 5).ToString());
@@ -405,7 +405,7 @@ namespace Villamos
                 }
 
                 // napok rácsozása
-                Holtart.Value = 3;
+                Holtart.Lép();
                 oszlop = 3;
                 for (int i = 0; i < mennyi; i++)
                 {
@@ -414,7 +414,7 @@ namespace Villamos
                 }
 
                 // igazoló rész
-                Holtart.Value = 4;
+                Holtart.Lép();
                 MyE.Sormagasság((hanyadikember + 6).ToString() + ":" + (hanyadikember + 6).ToString(), 36);
                 int vege = 2 + mennyi * 3;
                 MyE.Vastagkeret(MyE.Oszlopnév(1) + (hanyadikember + 6).ToString() + ":" + MyE.Oszlopnév(2).ToString() + (hanyadikember + 6).ToString());
@@ -427,7 +427,7 @@ namespace Villamos
                 MyE.Kiir(" Az igazoló aláírása:", "a" + MyE.sor.ToString());
 
                 // kiirjuk a személyeket az ellenőrző személyeket
-                Holtart.Value = 5;
+                Holtart.Lép();
 
                 Adat_Kiegészítő_főkönyvtábla Elem;
                 if (RdBtnÜzemvezető.Checked)
@@ -453,7 +453,7 @@ namespace Villamos
                 // **********************************************
                 // **Nyomtatási beállítások                    **
                 // **********************************************
-                Holtart.Value = 6;
+                Holtart.Lép();
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:" + MyE.Oszlopnév(2 + mennyi * 3) + (hanyadikember + 13).ToString(),
                     0.393700787401575d, 0.393700787401575, 0.590551181102362d, 0.590551181102362d, 0.511811023622047d, 0.511811023622047d,
                     "1", "1", false, RdBtnA4.Checked == true ? "A4" : "A3", true, false);
@@ -463,7 +463,7 @@ namespace Villamos
                 // **********************************************
                 if (RdBtnNyomtat.Checked) MyE.Nyomtatás(munkalap, 1, 1);
 
-                Holtart.Visible = false;
+                Holtart.Ki();
                 MyE.Aktív_Cella(munkalap, "A1");
                 MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();
@@ -861,7 +861,7 @@ namespace Villamos
                         }
                         l++;
                     }
-                    Holtart.Value = hanyadikember + 1;
+                    Holtart.Lép();
                     hanyadikember += 1;
                 }
                 hanyadikember += 2;
@@ -1159,7 +1159,7 @@ namespace Villamos
                 if (RdBtnNyomtat.Checked)
                     MyE.Nyomtatás(munkalap, 1, 1);
 
-                Holtart.Visible = false;
+                Holtart.Ki();
                 MyE.Aktív_Cella(munkalap, "A1");
                 MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();

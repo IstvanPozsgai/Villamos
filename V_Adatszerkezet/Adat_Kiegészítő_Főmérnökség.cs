@@ -9,13 +9,22 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Telephelynév { get; private set; }
         public string Szolgálatnév { get; private set; }
         public string Felelősmunkahely { get; private set; }
-
+        public string Raktár { get; private set; }
         public Adat_Kiegészítő_Szolgálattelepei(int sorszám, string telephelynév, string szolgálatnév, string felelősmunkahely)
         {
             Sorszám = sorszám;
             Telephelynév = telephelynév;
             Szolgálatnév = szolgálatnév;
             Felelősmunkahely = felelősmunkahely;
+        }
+
+        public Adat_Kiegészítő_Szolgálattelepei(int sorszám, string telephelynév, string szolgálatnév, string felelősmunkahely, string raktár)
+        {
+            Sorszám = sorszám;
+            Telephelynév = telephelynév;
+            Szolgálatnév = szolgálatnév;
+            Felelősmunkahely = felelősmunkahely;
+            Raktár = raktár;
         }
     }
 
@@ -387,13 +396,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Elérésiút = elérésiút;
         }
     }
- 
+
     public class Adat_Kiegészítő_Típuszínektábla
     {
         public string Típus { get; private set; }
         public long Színszám { get; private set; }
 
-        public Adat_Kiegészítő_Típuszínektábla(string  típus, long színszám)
+        public Adat_Kiegészítő_Típuszínektábla(string típus, long színszám)
         {
             Típus = típus;
             Színszám = színszám;
@@ -417,8 +426,8 @@ namespace Villamos.Villamos_Adatszerkezet
     public class Adat_Kiegészítő_Adatok_Terjesztés
     {
         public long Id { get; private set; }
-        public string  Szöveg { get; private set; }
-        public string  Email { get; private set; }
+        public string Szöveg { get; private set; }
+        public string Email { get; private set; }
 
         public Adat_Kiegészítő_Adatok_Terjesztés(long id, string szöveg, string email)
         {
@@ -442,13 +451,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Este = este;
             Délután = délután;
         }
-   
-    
+
+
     }
 
-    public class Adat_Kiegészítő_Reklám 
+    public class Adat_Kiegészítő_Reklám
     {
-        public string  Méret { get; private set; }
+        public string Méret { get; private set; }
 
         public Adat_Kiegészítő_Reklám(string méret)
         {

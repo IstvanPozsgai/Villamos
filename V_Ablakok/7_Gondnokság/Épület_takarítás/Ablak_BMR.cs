@@ -27,7 +27,6 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
             InitializeComponent();
         }
 
-
         private void Ablak_BMR_Load(object sender, EventArgs e)
         {
             if (Jármű)
@@ -51,7 +50,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
 
         private void Táblaírás()
         {
-          
+
             ABFejléc();
             ABFeltöltés();
             Tábla.DataSource = AdatTábla;
@@ -65,16 +64,16 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
                 AdatTábla.Clear();
                 List<Adat_Takarítás_BMR> Adatok;
                 if (Jármű)
-                    Adatok = AdatokBMR.Where(a => a.Telephely == Telephely && a.Dátum.Year  == Dátum.Year && a.JárműÉpület == "Jármű").ToList();
+                    Adatok = AdatokBMR.Where(a => a.Telephely == Telephely && a.Dátum.Year == Dátum.Year && a.JárműÉpület == "Jármű").ToList();
                 else
-                    Adatok = AdatokBMR.Where(a => a.Telephely == Telephely && a.Dátum.Year  == Dátum.Year && a.JárműÉpület == "Épület").ToList();
+                    Adatok = AdatokBMR.Where(a => a.Telephely == Telephely && a.Dátum.Year == Dátum.Year && a.JárműÉpület == "Épület").ToList();
                 if (Adatok != null && Adatok.Count == 0)
                 {
                     ÉvesAlap();
                     if (Jármű)
-                        Adatok = AdatokBMR.Where(a => a.Telephely == Telephely && a.Dátum .Year==Dátum.Year && a.JárműÉpület == "Jármű").ToList();
+                        Adatok = AdatokBMR.Where(a => a.Telephely == Telephely && a.Dátum.Year == Dátum.Year && a.JárműÉpület == "Jármű").ToList();
                     else
-                        Adatok = AdatokBMR.Where(a => a.Telephely == Telephely && a.Dátum.Year  == Dátum.Year && a.JárműÉpület == "Épület").ToList();
+                        Adatok = AdatokBMR.Where(a => a.Telephely == Telephely && a.Dátum.Year == Dátum.Year && a.JárműÉpület == "Épület").ToList();
                 }
 
 
@@ -86,7 +85,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
                     Soradat["BMR szám"] = rekord.BMRszám;
                     AdatTábla.Rows.Add(Soradat);
                 }
-             
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -103,8 +102,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\BMR.mdb";
-                string jelszó = "seprűéslapát";
+
                 int Sorszám = 0;
                 if (AdatokBMR.Count != 0) Sorszám = AdatokBMR.Max(a => a.Id);
 
@@ -115,11 +113,11 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
                                                                      Telephely,
                                                                      Jármű ? "Jármű" : "Épület",
                                                                      "",
-                                                                     new DateTime(Dátum.Year,i+1, 1));
+                                                                     new DateTime(Dátum.Year, i + 1, 1));
                     AdatokRögz.Add(Elem);
 
                 }
-                if (AdatokRögz.Count > 0) KézBMR.Rögzít (hely, jelszó, AdatokRögz);
+                if (AdatokRögz.Count > 0) KézBMR.Rögzít(AdatokRögz);
                 BMRListaFeltöltés();
             }
             catch (HibásBevittAdat ex)
@@ -163,16 +161,14 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
             Tábla.Columns["Hónap"].ReadOnly = true;
 
         }
+
         #region Listák
         private void BMRListaFeltöltés()
         {
             try
             {
                 AdatokBMR.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\BMR.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM TakarításBMR ORDER BY ID";
-                AdatokBMR = KézBMR.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokBMR = KézBMR.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {
@@ -191,12 +187,8 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\BMR.mdb";
-                string jelszó = "seprűéslapát";
-
-
                 List<Adat_Takarítás_BMR> AdatokRögz = new List<Adat_Takarítás_BMR>();
-                foreach (DataGridViewRow Sorelem in Tábla.Rows )
+                foreach (DataGridViewRow Sorelem in Tábla.Rows)
                 {
                     Adat_Takarítás_BMR Elem = new Adat_Takarítás_BMR(Sorelem.Cells["Sorszám"].Value.ToÉrt_Int(),
                                                   Telephely,
@@ -205,7 +197,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
                                                   Dátum);
                     AdatokRögz.Add(Elem);
                 }
-                if (AdatokRögz.Count > 0) KézBMR.Módosít (hely, jelszó, AdatokRögz);
+                if (AdatokRögz.Count > 0) KézBMR.Módosít(AdatokRögz);
                 BMRListaFeltöltés();
             }
             catch (HibásBevittAdat ex)

@@ -133,14 +133,14 @@
   <data name="#3B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\#3B.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="user_mindenjogtöröl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\user_mindenjogtöröl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Folder_" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Folder_.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CARDFIL3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CARDFIL3.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Document-write" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Document-write.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CAR52" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CAR52.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="E1_töröl" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\E1_töröl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,8 +154,8 @@
   <data name="New gyűjtemény" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\New gyűjtemény.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Document-write" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Document-write.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="shopping_cart" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\shopping_cart.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="fel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\fel1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -172,9 +172,6 @@
   <data name="Document Copy-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Document Copy-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SAPba 32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SAPba 32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Up gyűjtemény" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Up gyűjtemény.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -190,20 +187,23 @@
   <data name="kerékeszterga" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\kerékeszterga.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CALENDR1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CALENDR1.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="App-spreadsheet1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\App-spreadsheet.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Excel gyűjtő" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Excel gyűjtő.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="visszavonás" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\visszavonás.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Help Support" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Help Support.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Document-preferences" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Document-preferences.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Dolgozó_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dolgozó_32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Graphicloads-Colorful-Long-Shadow-Arrow-download-3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Graphicloads-Colorful-Long-Shadow-Arrow-download-3.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Button Previous-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Button Previous-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -220,11 +220,11 @@
   <data name="Ok gyűjtemény" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ok gyűjtemény.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CAR52" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CAR52.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="pdf 32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pdf 32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Device-zip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Device-zip.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="email" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\email.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -250,8 +250,8 @@
   <data name="lakatnyitva32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\lakatnyitva32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Yellow Glass Folders Icon 47" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Yellow Glass Folders Icon 47.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Button Forward-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Button Forward-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="frissít gyűjtemény" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frissít gyűjtemény.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -292,14 +292,11 @@
   <data name="Designcontest-Ecommerce-Business-Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Designcontest-Ecommerce-Business-Save.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BLOONS5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BLOONS5.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Clipboard Paste-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Clipboard Paste-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Go-back" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Go-back.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="részjelöl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\részjelöl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="#9_B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\#9_B.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -307,23 +304,23 @@
   <data name="process_accept" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\process_accept.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="shopping_cart" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\shopping_cart.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Icons-Land-Points-Of-Interest-Restaurant-Blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons-Land-Points-Of-Interest-Restaurant-Blue.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="szemetes64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\szemetes64.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Button Forward-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Button Forward-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Action-configure" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Action-configure.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CAR51" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CAR51.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="clear32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clear32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="App-spreadsheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\App-spreadsheet.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="részjelöl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\részjelöl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Yellow Glass Folders Icon 47" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Yellow Glass Folders Icon 47.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CALC1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CALC1.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -340,8 +337,8 @@
   <data name="Iconarchive-Red-Orb-Alphabet-Exclamation-mark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Iconarchive-Red-Orb-Alphabet-Exclamation-mark.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="kerékeszterga 32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\kerékeszterga 32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="visszavonás" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\visszavonás.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Dolgozó" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dolgozó.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -349,8 +346,8 @@
   <data name="App-ark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\App-ark.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Fatcow-Farm-Fresh-Table-row-delete.32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Fatcow-Farm-Fresh-Table-row-delete.32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="kerékeszterga 32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\kerékeszterga 32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="#1B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\#1B.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -358,8 +355,8 @@
   <data name="E1hp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\E1hp.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="bezár" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\bezár.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Fatcow-Farm-Fresh-Table-row-delete.32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Fatcow-Farm-Fresh-Table-row-delete.32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="E1minden" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\E1minden.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -379,14 +376,17 @@
   <data name="e3hp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\e3hp.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Nagyító" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\App-xmag-search.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CARDFIL3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CARDFIL3.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GANZ48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GANZ48.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Filesystem-blockdevice-cubes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Filesystem-blockdevice-cubes.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Action-configure" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Action-configure.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BLOONS5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BLOONS5.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Dtafalonso-Modern-Xp-ModernXP-12-Workstation-Desktop-Colors" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dtafalonso-Modern-Xp-ModernXP-12-Workstation-Desktop-Colors.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -406,9 +406,6 @@
   <data name="SAP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAP.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="kerékeszterga_Beáll_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\kerékeszterga_Beáll_32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Óra" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -421,8 +418,8 @@
   <data name="fogas logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\fogas logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Device-zip" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Device-zip.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SAPba 32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SAPba 32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CALENDR4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CALENDR4.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -433,20 +430,20 @@
   <data name="App-edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\App-edit.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CALENDR1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CALENDR1.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Nagyító" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\App-xmag-search.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Aha-Soft-Large-Seo-SEO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Aha-Soft-Large-Seo-SEO.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Help Support" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Help Support.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Clipboard Paste-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Clipboard Paste-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="App-warehause" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\App-warehause.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Yellow Glass Folders Icon 25" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Yellow Glass Folders Icon 25.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="App-spreadsheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\App-spreadsheet.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="#0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\#0.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -454,8 +451,8 @@
   <data name="clock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\clock.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="clear32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\clear32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CAR51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CAR51.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="felhasználók" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\felhasználók.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -463,8 +460,8 @@
   <data name="e2_töröl" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\e2_töröl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="alá" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\alá.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="user_mindenjogtöröl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\user_mindenjogtöröl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SAP32 jó" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAP32 jó.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -505,11 +502,14 @@
   <data name="Mimetype-recycled" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Mimetype-recycled.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="alá" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\alá.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="user_add_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\user_add_256.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="GANZ48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GANZ48.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="kerékeszterga_Beáll_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\kerékeszterga_Beáll_32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="App-aim-3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\App-aim-3.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -529,13 +529,19 @@
   <data name="felhasználók32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\felhasználók32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="bezár" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bezár.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Yellow Glass Folders Icon 25" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Yellow Glass Folders Icon 25.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Custom-Icon-Design-Flatastic-1-Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Custom-Icon-Design-Flatastic-1-Export.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="#2B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\#2B.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="App-spreadsheet1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\App-spreadsheet.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="justice-297629_1280" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\justice-297629_1280.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

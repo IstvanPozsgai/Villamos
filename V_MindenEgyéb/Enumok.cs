@@ -111,5 +111,23 @@
             KiadottSzabadnap_Z = 6
         }
 
+        public enum Kerék_Állapot
+        {
+            Frissen_esztergált = 1,
+            Üzemszerűen_kopott_forgalomban = 2,
+            Forgalomképes_esztergálandó = 3,
+            Forgalomképtelen_azonnali_esztergálást_igényel = 4
+        }
+
+        public enum Nóta_Státus
+        {
+            Feldolgozandó = 1,
+            Fődarabos_koordicációra_vár = 2,
+            Telephelyi_Javítás = 3,
+            Esztergálandó = 4,
+            VJSZ_Javítás = 5,
+            Felhasználható = 7,
+            Beépítve_vagy_Selejt = 9
+        }
     }
 }

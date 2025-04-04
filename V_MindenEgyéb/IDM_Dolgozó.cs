@@ -14,23 +14,24 @@ namespace Villamos.V_MindenEgyéb
 {
     public class IDM_Dolgozó
     {
+        readonly static Kezelő_Alap_Beolvasás KézBeolvasás = new Kezelő_Alap_Beolvasás();
 
         public static void Behajtási_beolvasás(string Excel_hely)
         {
             try
             {
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-                string jelszó = "egérpad";
+
                 string fájlexc = Excel_hely;
 
                 // hány elemből áll a adatsor
                 int vége;
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\beolvasás.mdb";
-                jelszó = "sajátmagam";
-
-                string szöveg = "SELECT * FROM tábla WHERE csoport= 'Behajtás' and törölt='0'";
-                Kezelő_Alap_Beolvasás Kéz = new Kezelő_Alap_Beolvasás();
-                List<Adat_Alap_Beolvasás> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Alap_Beolvasás> Adatok = KézBeolvasás.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Csoport == "Behajtás"
+                          && a.Törölt == "0"
+                          orderby a.Oszlop
+                          select a).ToList();
 
                 if (Adatok == null) return;
 
@@ -39,7 +40,7 @@ namespace Villamos.V_MindenEgyéb
                 MyE.ExcelMegnyitás(fájlexc);
 
                 // beolvassuk a fejlécet
-                szöveg = "";
+                string szöveg = "";
 
                 for (int i = 1; i <= vége; i++)
                     szöveg += MyE.Beolvas(MyE.Oszlopnév(i) + "1");
@@ -252,6 +253,4 @@ namespace Villamos.V_MindenEgyéb
             return válasz;
         }
     }
-
-
 }

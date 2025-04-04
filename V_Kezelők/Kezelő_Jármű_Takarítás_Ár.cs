@@ -18,41 +18,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Főmérnök_tábla(hely.KönyvSzerk());
         }
 
-        public List<Adat_Jármű_Takarítás_Árak> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Jármű_Takarítás_Árak> Adatok = new List<Adat_Jármű_Takarítás_Árak>();
-            Adat_Jármű_Takarítás_Árak Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Jármű_Takarítás_Árak(
-                                        rekord["id"].ToÉrt_Double(),
-                                        rekord["JárműTípus"].ToStrTrim(),
-                                        rekord["Takarítási_fajta"].ToStrTrim(),
-                                        rekord["napszak"].ToÉrt_Int(),
-                                        rekord["ár"].ToÉrt_Double(),
-                                        rekord["Érv_kezdet"].ToÉrt_DaTeTime(),
-                                        rekord["Érv_vég"].ToÉrt_DaTeTime()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
         public List<Adat_Jármű_Takarítás_Árak> Lista_Adatok()
         {
             string szöveg = $"SELECT * FROM árak";

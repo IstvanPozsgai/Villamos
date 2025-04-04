@@ -953,7 +953,7 @@ namespace Villamos
                 if (AdatokCaf.Count == 0) throw new HibásBevittAdat($"Nincs a {Dátum_ütem:yyyy.MM.dd} napra egy jármű sem amit ütemezni kell.");
 
                 List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
-                List<Adat_Jármű_hiba> AdatokJárműHiba = KézJárműHiba.Lista_adatok(Cmbtelephely.Text.Trim());
+                List<Adat_Jármű_hiba> AdatokJárműHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Holtart.Be();
                 // ha van ütemezett kocsi
@@ -992,7 +992,7 @@ namespace Villamos
                                                     rekordütemez.Azonosító.Trim(),
                                                     Kocsi.Hibák + 1,
                                                     3);
-                                KézJármű.Módosítás_Hiba(Cmbtelephely.Text.Trim(), ADAT_Jármű);
+                                KézJármű.Módosítás_Hiba_Státus(Cmbtelephely.Text.Trim(), ADAT_Jármű);
                             }
 
                             // beírjuk a hibákat

@@ -75,6 +75,7 @@
             this.Chk_szerszám = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Digitális = new System.Windows.Forms.Button();
             this.CHKMinta = new System.Windows.Forms.CheckBox();
             this.CHKKMU = new System.Windows.Forms.CheckBox();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
@@ -222,7 +223,7 @@
             this.Tábla_Beosztás.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.Tábla_Beosztás.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla_Beosztás.EnableHeadersVisualStyles = false;
-            this.Tábla_Beosztás.Location = new System.Drawing.Point(760, 265);
+            this.Tábla_Beosztás.Location = new System.Drawing.Point(760, 262);
             this.Tábla_Beosztás.Name = "Tábla_Beosztás";
             this.Tábla_Beosztás.RowHeadersVisible = false;
             this.Tábla_Beosztás.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
@@ -372,6 +373,7 @@
             // 
             // Járműtípus
             // 
+            this.Járműtípus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Járműtípus.FormattingEnabled = true;
             this.Járműtípus.Location = new System.Drawing.Point(169, 100);
             this.Járműtípus.Name = "Járműtípus";
@@ -463,6 +465,7 @@
             // 
             // Combo_KarbCiklus
             // 
+            this.Combo_KarbCiklus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_KarbCiklus.FormattingEnabled = true;
             this.Combo_KarbCiklus.Location = new System.Drawing.Point(169, 134);
             this.Combo_KarbCiklus.Name = "Combo_KarbCiklus";
@@ -592,6 +595,18 @@
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
+            // Digitális
+            // 
+            this.Digitális.BackgroundImage = global::Villamos.Properties.Resources.Device_zip;
+            this.Digitális.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Digitális.Location = new System.Drawing.Point(144, 538);
+            this.Digitális.Name = "Digitális";
+            this.Digitális.Size = new System.Drawing.Size(45, 45);
+            this.Digitális.TabIndex = 243;
+            this.toolTip1.SetToolTip(this.Digitális, "Munkalap készítés a beállítottaknak megfelelően.");
+            this.Digitális.UseVisualStyleBackColor = true;
+            this.Digitális.Click += new System.EventHandler(this.Digitális_Click);
+            // 
             // CHKMinta
             // 
             this.CHKMinta.AutoSize = true;
@@ -644,6 +659,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGreen;
             this.ClientSize = new System.Drawing.Size(1307, 637);
+            this.Controls.Add(this.Digitális);
             this.Controls.Add(this.Beosztás);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.CHKKMU);
@@ -758,5 +774,6 @@
         private System.Windows.Forms.CheckBox CHKKMU;
         internal V_MindenEgyéb.MyProgressbar Holtart;
         private System.Windows.Forms.CheckBox Beosztás;
+        internal System.Windows.Forms.Button Digitális;
     }
 }

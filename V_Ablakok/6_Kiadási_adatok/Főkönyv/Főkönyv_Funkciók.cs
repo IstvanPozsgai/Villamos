@@ -7,7 +7,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -16,121 +15,104 @@ namespace Villamos
 {
     public static class Főkönyv_Funkciók
     {
+        readonly static Kezelő_Főkönyv_Zser_Km KézFőZserKm = new Kezelő_Főkönyv_Zser_Km();
+        readonly static Kezelő_Nap_Hiba KézHibaÚj = new Kezelő_Nap_Hiba();
+        readonly static Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
 
         public static void Napiállók(string telephely)
         {
-
-            string helyhiba = $@"{Application.StartupPath}\" + telephely.ToStrTrim() + @"\Adatok\villamos\hiba.mdb";
-
-            string hely = $@"{Application.StartupPath}\" + telephely.ToStrTrim() + @"\Adatok\villamos\Új_napihiba.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM hiba ";
-
-            Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
-
-            if (!Exists(hely)) Adatbázis_Létrehozás.Napihibatábla(hely);
-            List<Adat_Nap_Hiba> AdatokHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
-
-            List<Adat_Nap_Hiba> Ideig = (from a in AdatokHiba
-                                         where a.Státus > 0
-                                         select a).ToList();
-            // kitöröljük az előzményt
-            if (Ideig != null)
+            try
             {
-                szöveg = "DELETE FROM hiba ";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                // kitöröljük az előzményt
+                KézHibaÚj.Törlés(telephely);
+                List<Adat_Jármű_hiba> AdatokJármű = KézJárműHiba.Lista_Adatok(telephely);
+                AdatokJármű = (from a in AdatokJármű
+                               orderby a.Azonosító, a.Korlát descending
+                               select a).ToList();
+
+                string beálló = "_";
+                string üzemképtelen = "_";
+                string Üzemképes = "_";
+                string azonosító = "";
+                string típus = "";
+                long korlát = 0;
+
+                List<Adat_Nap_Hiba> AdatokGy = new List<Adat_Nap_Hiba>();
+                Adat_Nap_Hiba ADAT;
+                foreach (Adat_Jármű_hiba rekord in AdatokJármű)
+                {
+                    if (azonosító.Trim() == "")
+                    {
+                        azonosító = rekord.Azonosító;
+                        típus = rekord.Típus;
+                        korlát = rekord.Korlát;
+                    }
+                    if (azonosító != rekord.Azonosító)
+                    {
+                        // rögzítjük az előzőt
+                        ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
+                        AdatokGy.Add(ADAT);
+
+                        beálló = "_";
+                        üzemképtelen = "_";
+                        Üzemképes = "_";
+                        azonosító = rekord.Azonosító;
+                        típus = rekord.Típus;
+                        korlát = rekord.Korlát;
+                    }
+                    if (korlát < rekord.Korlát) korlát = rekord.Korlát;
+                    switch (rekord.Korlát)
+                    {
+                        case 1:
+                            {
+                                if (Üzemképes == "_")
+                                    Üzemképes = rekord.Hibaleírása;
+                                else
+                                    Üzemképes += "+" + rekord.Hibaleírása;
+                                break;
+                            }
+                        case 2:
+                            {
+                                if (beálló == "_")
+                                    beálló = rekord.Hibaleírása;
+                                else
+                                    beálló += "+" + rekord.Hibaleírása;
+                                break;
+                            }
+                        case 3:
+                            {
+                                if (beálló == "_")
+                                    beálló = rekord.Hibaleírása;
+                                else
+                                    beálló += "+" + rekord.Hibaleírása;
+                                break;
+                            }
+                        case 4:
+                            {
+                                if (üzemképtelen == "_")
+                                    üzemképtelen = rekord.Hibaleírása;
+                                else
+                                    üzemképtelen += "+" + rekord.Hibaleírása;
+                                break;
+                            }
+                    }
+                }
+
+                // rögzítjük az utolsót
+                ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
+                AdatokGy.Add(ADAT);
+
+                KézHibaÚj.Rögzítés(telephely, AdatokGy);
             }
-
-
-
-            szöveg = "SELECT * FROM hibatábla ORDER BY azonosító, korlát";
-            Kezelő_jármű_hiba KézJármű = new Kezelő_jármű_hiba();
-            List<Adat_Jármű_hiba> AdatokJármű = KézJármű.Lista_adatok(helyhiba, jelszó, szöveg);
-
-
-            string beálló = "_";
-            string üzemképtelen = "_";
-            string Üzemképes = "_";
-            string azonosító = "";
-            string típus = "";
-            long korlát = 0;
-
-            foreach (Adat_Jármű_hiba rekord in AdatokJármű)
+            catch (HibásBevittAdat ex)
             {
-                if (azonosító.Trim() == "")
-                {
-                    azonosító = rekord.Azonosító;
-                    típus = rekord.Típus;
-                    korlát = rekord.Korlát;
-                }
-                if (azonosító != rekord.Azonosító)
-                {
-                    // rögzítjük az előzőt
-                    szöveg = "INSERT INTO Hiba (azonosító, mikori, beálló, üzemképtelen, üzemképeshiba, típus, státus ) VALUES (";
-                    szöveg += $"'{azonosító}', ";
-                    szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";
-                    szöveg += $"'{beálló}', ";
-                    szöveg += $"'{üzemképtelen}', ";
-                    szöveg += $"'{Üzemképes}', ";
-                    szöveg += $"'{típus}', ";
-                    szöveg += $"{korlát}) ";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                    beálló = "_";
-                    üzemképtelen = "_";
-                    Üzemképes = "_";
-                    azonosító = rekord.Azonosító;
-                    típus = rekord.Típus;
-                    korlát = rekord.Korlát;
-                }
-                if (korlát < rekord.Korlát) korlát = rekord.Korlát;
-                switch (rekord.Korlát)
-                {
-                    case 1:
-                        {
-                            if (Üzemképes == "_")
-                                Üzemképes = rekord.Hibaleírása;
-                            else
-                                Üzemképes += "+" + rekord.Hibaleírása;
-                            break;
-                        }
-                    case 2:
-                        {
-                            if (beálló == "_")
-                                beálló = rekord.Hibaleírása;
-                            else
-                                beálló += "+" + rekord.Hibaleírása;
-                            break;
-                        }
-                    case 3:
-                        {
-                            if (beálló == "_")
-                                beálló = rekord.Hibaleírása;
-                            else
-                                beálló += "+" + rekord.Hibaleírása;
-                            break;
-                        }
-                    case 4:
-                        {
-                            if (üzemképtelen == "_")
-                                üzemképtelen = rekord.Hibaleírása;
-                            else
-                                üzemképtelen += "+" + rekord.Hibaleírása;
-                            break;
-                        }
-                }
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            // rögzítjük az utolsót
-            szöveg = "INSERT INTO Hiba (azonosító, mikori, beálló, üzemképtelen, üzemképeshiba, típus, státus ) VALUES (";
-            szöveg += $"'{azonosító}', ";
-            szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";
-            szöveg += $"'{beálló}', ";
-            szöveg += $"'{üzemképtelen}', ";
-            szöveg += $"'{Üzemképes}', ";
-            szöveg += $"'{típus}', ";
-            szöveg += $"{korlát}) ";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Napi állók feltöltése", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -149,8 +131,7 @@ namespace Villamos
             string helyhiba = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\villamos\hiba.mdb";
             string jelszóhiba = "pozsgaii";
             szöveg = "SELECT * FROM hibatábla ";
-            Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_adatok(helyhiba, jelszóhiba, szöveg);
+            List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(telephely.Trim());
 
             string helyvill = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\villamos\villamos.mdb";
             szöveg = "SELECT * FROM állománytábla where státus=4 ";
@@ -253,7 +234,7 @@ namespace Villamos
 
         public static void Napiadatokmentése(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
         {
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum.ToString("yyyy")}\nap\{KÜLDdátum.ToString("yyyyMMdd")}{KÜLDreggel}nap.mdb";
+            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
             string jelszó = "lilaakác";
 
 
@@ -520,7 +501,7 @@ namespace Villamos
         public static void Napitöbblet(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
         {
 
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum.ToString("yyyy")}\nap\{KÜLDdátum.ToString("yyyyMMdd")}{KÜLDreggel}nap.mdb";
+            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
             if (!File.Exists(hely))
                 return;
 
@@ -697,25 +678,15 @@ namespace Villamos
             int i = 0;
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Year}\Napi_km_Zser_{Dátum.Year}.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.ZSER_km(hely);
-                string jelszó = "pozsgaii";
-                szöveg = "SELECT * FROM tábla";
-
-                Kezelő_Főkönyv_Zser_Km Kéz = new Kezelő_Főkönyv_Zser_Km();
-                List<Adat_Főkönyv_Zser_Km> Adatok = Kéz.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Főkönyv_Zser_Km> Adatok = KézFőZserKm.Lista_adatok(Dátum.Year);
 
                 List<Adat_Főkönyv_Zser_Km> Elemek = (from a in Adatok
                                                      where a.Telephely == Telephely.Trim() && a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
-                                                     select a).ToList(); ;
+                                                     select a).ToList();
 
                 // leellenőrizzük, hogy van-e már erre a napra rögzítve adat ha van töröljük
 
-                if (Elemek != null)
-                {
-                    szöveg = $"DELETE FROM tábla WHERE telephely='{Telephely.Trim()}' AND dátum=#{Dátum:MM-dd-yyyy}#";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                if (Elemek != null) KézFőZserKm.Törlés(Telephely.Trim(), Dátum);
 
                 string[] oszlopok = new string[7];
                 oszlopok[1] = "S";
@@ -727,7 +698,7 @@ namespace Villamos
 
                 // beolvassuk az excel tábla szükséges adatait
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Főkönyv_Zser_Km> AdatokGy = new List<Adat_Főkönyv_Zser_Km>();
                 for (i = 2; i <= sormax; i++)
                 {
                     DateTime idegignap = MyE.Beolvas("D" + i).ToÉrt_DaTeTime();
@@ -780,15 +751,16 @@ namespace Villamos
                             }
                             else
                                 azonosító = szövegideig.Trim();
-
-                            szöveg = "INSERT INTO tábla (azonosító, dátum, napikm, telephely ) VALUES (";
-                            szöveg += $"'{azonosító.Trim()}', '{tervindulás:yyyy.MM.dd}', {km}, '{Telephely.Trim()}')";
-
-                            SzövegGy.Add(szöveg);
+                            Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(
+                                                     azonosító.Trim(),
+                                                     tervindulás,
+                                                     km,
+                                                     Telephely.Trim());
+                            AdatokGy.Add(ADAT);
                         }
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                KézFőZserKm.Rögzítés(AdatokGy, Dátum.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -801,6 +773,5 @@ namespace Villamos
                 throw new Exception("MyA rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
             }
         }
-
     }
 }

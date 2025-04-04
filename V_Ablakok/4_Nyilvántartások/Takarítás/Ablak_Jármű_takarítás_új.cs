@@ -10,9 +10,7 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._4_Nyilvántartások.Takarítás;
 using Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
@@ -82,13 +80,10 @@ namespace Villamos
         private void Ablak_Jármű_takarítás_új_Load(object sender, EventArgs e)
         {
             Telephelyekfeltöltése();
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\BMR.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.TakarításBMRlétrehozás(hely);
         }
 
         private void Ablak_Jármű_takarítás_új_Shown(object sender, EventArgs e)
         {
-            HelyekEllenőrzése();
             Jogosultságkiosztás();
             Fülekkitöltése();
 
@@ -117,31 +112,8 @@ namespace Villamos
             IdegenLista();
         }
 
-        private void HelyekEllenőrzése()
-        {
-            try
-            {
-                if (Cmbtelephely.Text.Trim() == "") return;
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Takarítás\";
-                hely += $"Takarítás_{DateTime.Now.Year + 1}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Járműtakarító_Telephely_tábla(hely);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
-            HelyekEllenőrzése();
             Fülekkitöltése();
         }
 
@@ -1304,7 +1276,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "T5C5_Nap_futás_" + Program.PostásNév.ToStrTrim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    FileName = $"T5C5_Nap_futás_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1348,7 +1320,7 @@ namespace Villamos
                 string ideig_psz;
                 int volt = 0;
 
-                AdatokJárműHiba = KézJárműHiba.Lista_adatok(Cmbtelephely.Text.Trim());
+                AdatokJárműHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
                 AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 for (int i = 0; i < Tábla.Rows.Count; i++)
@@ -1414,7 +1386,7 @@ namespace Villamos
 
                                 // rögzítjük a villamos.mdb-be
                                 Adat_Jármű ADATJármű = new Adat_Jármű(ideig_psz.Trim(), hiba, státus);
-                                KézJármű.Módosítás_Hiba(Cmbtelephely.Text.Trim(), ADATJármű);
+                                KézJármű.Módosítás_Hiba_Státus(Cmbtelephely.Text.Trim(), ADATJármű);
 
                                 // beírjuk a hibákat
                                 Adat_Jármű_hiba ADATHiba = new Adat_Jármű_hiba(
@@ -1553,7 +1525,7 @@ namespace Villamos
                     JK_Azonosító.Text = JK_List.SelectedItems[sorszám].ToString();
 
                     if (Jnappal.Checked) napszak = 1; else napszak = 2;
-                    AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                    AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
 
                     Adat_Jármű_Takarítás_Teljesítés AdatTelj = (from a in AdatokTelj
                                                                 where a.Dátum == JDátum.Value
@@ -1623,7 +1595,7 @@ namespace Villamos
                 int napszak = 2;
                 if (Jnappal.Checked) napszak = 1;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adat_Jármű_Takarítás_Teljesítés AdatTelj = (from a in AdatokTelj
                                                             where a.Dátum == JDátum.Value
                                                             && a.Napszak == napszak
@@ -1798,7 +1770,7 @@ namespace Villamos
             try
             {
                 if (JK_Kategória.Text.ToStrTrim() == "") return;
-                List<Adat_Jármű_Takarítás_Teljesítés> Adatok = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                List<Adat_Jármű_Takarítás_Teljesítés> Adatok = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adatok = Adatok.Where(a => a.Dátum.ToShortDateString() == JDátum.Value.ToShortDateString()).ToList();
 
                 int napszak = 2;
@@ -1838,7 +1810,7 @@ namespace Villamos
         {
             try
             {
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 foreach (Adat_Jármű_Takarítás_Teljesítés rekord in AdatokTelj)
                 {
                     int napsz = 2;
@@ -2082,7 +2054,7 @@ namespace Villamos
                 int napszak = 2;
                 if (Jnappal.Checked) napszak = 1;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adat_Jármű_Takarítás_Teljesítés AdatTakTelj = (from a in AdatokTelj
                                                                where a.Dátum == JDátum.Value
                                                                && a.Napszak == napszak
@@ -2127,7 +2099,7 @@ namespace Villamos
             {
                 if (Opció_lista.Text.ToStrTrim() == "") return;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
 
                 Opció_tábla.Rows.Clear();
                 Opció_tábla.Columns.Clear();
@@ -2206,7 +2178,7 @@ namespace Villamos
                 int napszak = 2;
                 if (Jnappal.Checked) napszak = 1;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), JDátum.Value.Year);
                 Adat_Jármű_Takarítás_Teljesítés AdatTeljes = (from a in AdatokTelj
                                                               where a.Dátum == JDátum.Value
                                                               && a.Napszak == napszak
@@ -2607,7 +2579,7 @@ namespace Villamos
             {
                 InitialDirectory = "MyDocuments",
                 Title = "Listázott tartalom mentése Excel fájlba",
-                FileName = "Takarítás_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                FileName = $"Takarítás_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                 Filter = "Excel |*.xlsx"
             };
             // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -2936,8 +2908,7 @@ namespace Villamos
         {
             try
             {
-                if (Ütem_Tábla.Rows.Count <= 0)
-                    return;
+                if (Ütem_Tábla.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -2945,7 +2916,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Takarítás" + Program.PostásNév.ToStrTrim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    FileName = $"Takarítás{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -3122,7 +3093,7 @@ namespace Villamos
             try
             {
                 AdatokTelj?.Clear();
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
 
                 if (AdatokTelj?.Count <= 0)
                 {
@@ -3233,7 +3204,7 @@ namespace Villamos
             try
             {
                 AdatokTelj?.Clear();
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
 
                 if (AdatokTelj?.Count <= 0)
                 {
@@ -3390,7 +3361,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Jármű Takarítási teljesítési igazolás készítés",
-                    FileName = "Jármű Takarítási teljesítési igazolás_" + ListaDátum.Value.ToString("yyyyMM") + "_" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Jármű Takarítási teljesítési igazolás_{ListaDátum.Value:yyyyMM}_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -3581,7 +3552,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void J1_excel()
         {
@@ -3795,7 +3765,7 @@ namespace Villamos
                 int volt = 0;
                 double mennyi;
                 Holtart.Be(hónapnap + 1);
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
 
                 AdatokTelj = (from a in AdatokTelj
                               where a.Dátum >= ideig
@@ -4191,7 +4161,7 @@ namespace Villamos
                             }
                             ideig = new DateTime(ListaDátum.Value.Year, ListaDátum.Value.Month, 1);
                             AdatokTelj.Clear();
-                            AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                            AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
                             AdatokTelj = (from a in AdatokTelj
                                           where a.Dátum >= ideig
                                           && a.Dátum <= hónaputolsónapja
@@ -4249,7 +4219,7 @@ namespace Villamos
 
 
                             AdatokTelj.Clear();
-                            AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                            AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
                             AdatokTelj = (from a in AdatokTelj
                                           where a.Dátum >= ideig
                                           && a.Dátum <= hónaputolsónapja
@@ -4686,7 +4656,7 @@ namespace Villamos
 
                 int i = 0;
 
-                AdatokTelj = KézTakarításTelj.Lista_Adat(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
+                AdatokTelj = KézTakarításTelj.Lista_Adatok(Cmbtelephely.Text.Trim(), ListaDátum.Value.Year);
 
                 AdatokTelj = (from a in AdatokTelj
                               where a.Dátum >= ideig
@@ -4768,8 +4738,6 @@ namespace Villamos
             }
         }
 
-
-
         private void Button5_Click(object sender, EventArgs e)
         {
             try
@@ -4783,7 +4751,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Takarítás_" + Program.PostásNév.ToStrTrim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Takarítás_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -4951,7 +4919,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Takarítás-" + Program.PostásNév.ToStrTrim() + "-" + Dátum.Value.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Takarítás-{Program.PostásNév.Trim()}-{Dátum.Value:yyyyMMdd}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -5250,7 +5218,7 @@ namespace Villamos
                     string Típus = (from a in AdatokJármű
                                     where a.Azonosító == rekord.Azonosító
                                     select a.Típus).FirstOrDefault();
-                    if (Típus.Trim() == "")
+                    if (Típus == null || Típus.Trim() == "")
                         Soradat["Típus"] = "";
                     else
                         Soradat["Típus"] = Típus;
@@ -5384,9 +5352,13 @@ namespace Villamos
                 }
                 if (CmbGépiTíp.Text.Trim() != "")
                 {
-                    EnumerableRowCollection<DataRow> filteredRows = GépiTábla.AsEnumerable()
-                        .Where(a => a.Field<string>("Típus") == CmbGépiTíp.Text.Trim());
-                    GépiTábla = filteredRows.CopyToDataTable();
+                    EnumerableRowCollection<DataRow> filteredRows = GépiTábla.AsEnumerable().Where(a => a.Field<string>("Típus") == CmbGépiTíp.Text.Trim());
+
+                    List<DataRow> AdatokS = filteredRows.ToList();
+                    if (AdatokS != null && AdatokS.Count > 0)
+                        GépiTábla = filteredRows.CopyToDataTable();
+                    else
+                        throw new HibásBevittAdat($"{CmbGépiTíp.Text.Trim()} típusra nem lehet szűrni.");
                 }
 
             }
@@ -5461,7 +5433,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Takarítás_Gépi_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    FileName = $"Takarítás_Gépi_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -5624,7 +5596,6 @@ namespace Villamos
 
         #region Lista
 
-
         readonly List<string> típusnév = new List<string>();
 
         public void IdegenLista()
@@ -5648,7 +5619,5 @@ namespace Villamos
             }
         }
         #endregion
-
-
     }
 }

@@ -20,7 +20,6 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Technológia_Alap KézAlap = new Kezelő_Technológia_Alap();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Technológia_TípusT KézTípus = new Kezelő_Technológia_TípusT();
-        readonly Kezelő_Alap_Beolvasás KKezelő = new Kezelő_Alap_Beolvasás();
 
         long Kiválasztott_Sor = -1;
         int Kivétel_sor = -1;
@@ -850,14 +849,6 @@ namespace Villamos.Villamos_Ablakok
                 else
                     return;
 
-                //megnézzük, hogy milyen az alap tábla
-                List<Adat_Alap_Beolvasás> Adatok = KKezelő.Lista_Adatok();
-                Adatok = Adatok.Where(a => a.Csoport == "Technológi").ToList();
-
-                string ellenőrző = "";
-                foreach (Adat_Alap_Beolvasás A in Adatok)
-                    ellenőrző += A.Fejléc.Trim();
-
                 MyE.ExcelMegnyitás(fájlexc);
                 string munkalap = "Munka1";
                 string valós = "";
@@ -868,7 +859,7 @@ namespace Villamos.Villamos_Ablakok
                     valós += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
                 }
 
-                if (ellenőrző != valós)
+                if (!MyF.Betöltéshelyes("Technológi", valós))
                 {
                     MyE.ExcelBezárás();
                     throw new HibásBevittAdat("A beolvasanó Exceltábla nem egyezik meg a várt formátummal.");
@@ -983,6 +974,8 @@ namespace Villamos.Villamos_Ablakok
         private void Elérés_feltöltés()
         {
             Combo_elérés.Items.Clear();
+            Combo_elérés.Items.Add("");
+            Combo_elérés.Items.Add("Nincs");
             Combo_elérés.Items.Add("Alap");
             Combo_elérés.Items.Add("T5C5_E2");
             Combo_elérés.Items.Add("T5C5_E3");

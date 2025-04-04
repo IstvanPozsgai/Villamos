@@ -56,6 +56,25 @@ namespace Villamos.Villamos_Adatszerkezet
             KMUkm = kMUkm;
             KMUdátum = kMUdátum;
         }
+
+        public Adat_CAF_alap(string azonosító, string utolsó_Nap, long utolsó_Nap_sorszám, string végezte_nap, DateTime vizsgdátum_nap)
+        {
+            Azonosító = azonosító;
+            Utolsó_Nap = utolsó_Nap;
+            Utolsó_Nap_sorszám = utolsó_Nap_sorszám;
+            Végezte_nap = végezte_nap;
+            Vizsgdátum_nap = vizsgdátum_nap;
+        }
+
+        public Adat_CAF_alap(string azonosító, string utolsó_Km, long utolsó_Km_sorszám, string végezte_km, DateTime vizsgdátum_km, long számláló)
+        {
+            Azonosító = azonosító;
+            Számláló = számláló;
+            Utolsó_Km = utolsó_Km;
+            Utolsó_Km_sorszám = utolsó_Km_sorszám;
+            Végezte_km = végezte_km;
+            Vizsgdátum_km = vizsgdátum_km;
+        }
     }
 
     public class Adat_CAF_Adatok
@@ -122,48 +141,6 @@ namespace Villamos.Villamos_Adatszerkezet
             Szín_Hasteg = szín_Hasteg;
             Szín_jog = szín_jog;
             Szín_nagyobb = szín_nagyobb;
-        }
-    }
-
-    public class Adat_CAF_Telephely
-    {
-        public long Sorrend { get; private set; }
-        public string Telephely { get; private set; }
-
-        public Adat_CAF_Telephely(long sorrend, string telephely)
-        {
-            Sorrend = sorrend;
-            Telephely = telephely;
-        }
-    }
-
-    public class Adat_CAF_Ütemezés
-    {
-        public string Azonosító { get; private set; }
-        public string Ciklusrend { get; private set; }
-        public bool Elkészült { get; private set; }
-        public string Megjegyzés { get; private set; }
-        public long Státus { get; private set; }
-        public DateTime Velkészülés { get; private set; }
-        public DateTime Vesedékesség { get; private set; }
-        public string Vizsgfoka { get; private set; }
-        public long Vsorszám { get; private set; }
-        public DateTime Vütemezés { get; private set; }
-        public string Vvégezte { get; private set; }
-
-        public Adat_CAF_Ütemezés(string azonosító, string ciklusrend, bool elkészült, string megjegyzés, long státus, DateTime velkészülés, DateTime vesedékesség, string vizsgfoka, long vsorszám, DateTime vütemezés, string vvégezte)
-        {
-            Azonosító = azonosító;
-            Ciklusrend = ciklusrend;
-            Elkészült = elkészült;
-            Megjegyzés = megjegyzés;
-            Státus = státus;
-            Velkészülés = velkészülés;
-            Vesedékesség = vesedékesség;
-            Vizsgfoka = vizsgfoka;
-            Vsorszám = vsorszám;
-            Vütemezés = vütemezés;
-            Vvégezte = vvégezte;
         }
     }
 

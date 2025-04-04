@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
@@ -34,7 +35,7 @@ namespace Villamos.V_MindenEgyéb
                 string szöveg = $"SELECT * FROM kmtábla";
                 string beopályaszám;
 
-                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok();
+                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok("Fogas");
                 List<Adat_T5C5_Kmadatok> Adatok = Kéz.Lista_Adat(helye, jelszó, szöveg);
 
                 // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres
@@ -107,7 +108,7 @@ namespace Villamos.V_MindenEgyéb
                 szöveg += " INNER JOIN KMtábla ON (Rész.MaxOfvizsgdátumk = KMtábla.vizsgdátumk) AND (Rész.azonosító = KMtábla.azonosító) ";
                 szöveg += " WHERE törölt=False ORDER BY KMtábla.azonosító";
 
-                Kezelő_T5C5_Kmadatok KézT5 = new Kezelő_T5C5_Kmadatok();
+                Kezelő_T5C5_Kmadatok KézT5 = new Kezelő_T5C5_Kmadatok("T5C5");
                 List<Adat_T5C5_Kmadatok> AdatokT5 = KézT5.Lista_Szűrt_Adat(hely, jelszó, szöveg);
                 List<string> SzövegGy = new List<string>();
 

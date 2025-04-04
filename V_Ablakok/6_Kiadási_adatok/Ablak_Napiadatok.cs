@@ -930,9 +930,7 @@ namespace Villamos
             try
             {
                 string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\hibanapló" + @"\" + Dátum.Value.ToString("yyyyMM") + "hibanapló.mdb";
-                string jelszó = "pozsgaii";
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -957,8 +955,6 @@ namespace Villamos
                 Tábla.Columns[6].Width = 100;
 
                 // csak azokat listázzuk amik be vannak jelölve
-                string szöveg = "SELECT * FROM hibaterv where főkönyv = true ORDER BY id";
-
                 Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
                 List<Adat_Kiegészítő_Hibaterv> KAdatok = KKH_kéz.Lista_Adatok(Cmbtelephely.Text.Trim());
 
@@ -966,12 +962,13 @@ namespace Villamos
 
                 foreach (Adat_Kiegészítő_Hibaterv rekordkieg in KAdatok)
                 {
-                    szöveg = "SELECT * FROM hibatábla where idő>=#" + Dátum.Value.ToString("MM-dd-yyyy") + " 00:00:0#";
-                    szöveg += " and idő<#" + Dátum.Value.ToString("MM-dd-yyyy") + " 23:59:0#";
-                    szöveg += " and javítva=true";
-                    szöveg += " order by azonosító";
-
-                    List<Adat_Jármű_hiba> Adatok = KJH_kéz.Lista_adatok(hely, jelszó, szöveg);
+                    List<Adat_Jármű_hiba> Adatok = KJH_kéz.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                    Adatok = (from a in Adatok
+                              where a.Idő >= MyF.Nap0000(Dátum.Value)
+                              && a.Idő < MyF.Nap2359(Dátum.Value)
+                              && a.Javítva == true
+                              orderby a.Azonosító
+                              select a).ToList();
 
                     int i;
                     foreach (Adat_Jármű_hiba rekord in Adatok)

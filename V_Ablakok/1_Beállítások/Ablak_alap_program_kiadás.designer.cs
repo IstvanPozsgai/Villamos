@@ -78,6 +78,9 @@ namespace Villamos
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_alap_program_kiadás));
             this.Fülek = new System.Windows.Forms.TabControl();
             this.FÜLAláírások = new System.Windows.Forms.TabPage();
+            this.Email2 = new System.Windows.Forms.TextBox();
+            this.Email3 = new System.Windows.Forms.TextBox();
+            this.label78 = new System.Windows.Forms.Label();
             this.Label12 = new System.Windows.Forms.Label();
             this.txtbeosztás2 = new System.Windows.Forms.TextBox();
             this.txtnév3 = new System.Windows.Forms.TextBox();
@@ -244,6 +247,8 @@ namespace Villamos
             this.BtnForteVonalOk = new System.Windows.Forms.Button();
             this.TabPage8 = new System.Windows.Forms.TabPage();
             this.Panel12 = new System.Windows.Forms.Panel();
+            this.txtSzolgtelepRaktár = new System.Windows.Forms.TextBox();
+            this.label79 = new System.Windows.Forms.Label();
             this.Label62 = new System.Windows.Forms.Label();
             this.CmbSzolgtelepSZOL = new System.Windows.Forms.ComboBox();
             this.CmbSzolgtelepTELEP = new System.Windows.Forms.ComboBox();
@@ -413,6 +418,9 @@ namespace Villamos
             // FÜLAláírások
             // 
             this.FÜLAláírások.BackColor = System.Drawing.Color.YellowGreen;
+            this.FÜLAláírások.Controls.Add(this.Email2);
+            this.FÜLAláírások.Controls.Add(this.Email3);
+            this.FÜLAláírások.Controls.Add(this.label78);
             this.FÜLAláírások.Controls.Add(this.Label12);
             this.FÜLAláírások.Controls.Add(this.txtbeosztás2);
             this.FÜLAláírások.Controls.Add(this.txtnév3);
@@ -430,6 +438,29 @@ namespace Villamos
             this.FÜLAláírások.Size = new System.Drawing.Size(1366, 525);
             this.FÜLAláírások.TabIndex = 1;
             this.FÜLAláírások.Text = "Főkönyvi aláírások";
+            // 
+            // Email2
+            // 
+            this.Email2.Location = new System.Drawing.Point(602, 105);
+            this.Email2.Name = "Email2";
+            this.Email2.Size = new System.Drawing.Size(216, 24);
+            this.Email2.TabIndex = 16;
+            // 
+            // Email3
+            // 
+            this.Email3.Location = new System.Drawing.Point(602, 155);
+            this.Email3.Name = "Email3";
+            this.Email3.Size = new System.Drawing.Size(217, 24);
+            this.Email3.TabIndex = 17;
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(599, 68);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(73, 18);
+            this.label78.TabIndex = 18;
+            this.label78.Text = "Email cím";
             // 
             // Label12
             // 
@@ -508,7 +539,7 @@ namespace Villamos
             // 
             this.Btnfőkönyv.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Btnfőkönyv.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btnfőkönyv.Location = new System.Drawing.Point(624, 105);
+            this.Btnfőkönyv.Location = new System.Drawing.Point(848, 105);
             this.Btnfőkönyv.Name = "Btnfőkönyv";
             this.Btnfőkönyv.Size = new System.Drawing.Size(45, 45);
             this.Btnfőkönyv.TabIndex = 4;
@@ -2339,6 +2370,8 @@ namespace Villamos
             this.Panel12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.Panel12.BackColor = System.Drawing.Color.DarkOrange;
+            this.Panel12.Controls.Add(this.txtSzolgtelepRaktár);
+            this.Panel12.Controls.Add(this.label79);
             this.Panel12.Controls.Add(this.Label62);
             this.Panel12.Controls.Add(this.CmbSzolgtelepSZOL);
             this.Panel12.Controls.Add(this.CmbSzolgtelepTELEP);
@@ -2356,6 +2389,22 @@ namespace Villamos
             this.Panel12.Name = "Panel12";
             this.Panel12.Size = new System.Drawing.Size(610, 510);
             this.Panel12.TabIndex = 23;
+            // 
+            // txtSzolgtelepRaktár
+            // 
+            this.txtSzolgtelepRaktár.Location = new System.Drawing.Point(157, 160);
+            this.txtSzolgtelepRaktár.Name = "txtSzolgtelepRaktár";
+            this.txtSzolgtelepRaktár.Size = new System.Drawing.Size(187, 24);
+            this.txtSzolgtelepRaktár.TabIndex = 37;
+            // 
+            // label79
+            // 
+            this.label79.AutoSize = true;
+            this.label79.Location = new System.Drawing.Point(11, 166);
+            this.label79.Name = "label79";
+            this.label79.Size = new System.Drawing.Size(81, 18);
+            this.label79.TabIndex = 38;
+            this.label79.Text = "Raktár kód";
             // 
             // Label62
             // 
@@ -2435,7 +2484,7 @@ namespace Villamos
             this.TáblaSzolgtelep.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle20;
             this.TáblaSzolgtelep.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TáblaSzolgtelep.EnableHeadersVisualStyles = false;
-            this.TáblaSzolgtelep.Location = new System.Drawing.Point(14, 166);
+            this.TáblaSzolgtelep.Location = new System.Drawing.Point(14, 190);
             this.TáblaSzolgtelep.Name = "TáblaSzolgtelep";
             dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
@@ -2447,7 +2496,7 @@ namespace Villamos
             this.TáblaSzolgtelep.RowHeadersDefaultCellStyle = dataGridViewCellStyle21;
             this.TáblaSzolgtelep.RowHeadersVisible = false;
             this.TáblaSzolgtelep.RowHeadersWidth = 51;
-            this.TáblaSzolgtelep.Size = new System.Drawing.Size(580, 329);
+            this.TáblaSzolgtelep.Size = new System.Drawing.Size(580, 305);
             this.TáblaSzolgtelep.TabIndex = 29;
             this.TáblaSzolgtelep.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaSzolgtelep_CellClick);
             // 
@@ -2455,7 +2504,7 @@ namespace Villamos
             // 
             this.BtnSzolgtelepFel.BackgroundImage = global::Villamos.Properties.Resources.Up_gyűjtemény;
             this.BtnSzolgtelepFel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSzolgtelepFel.Location = new System.Drawing.Point(549, 110);
+            this.BtnSzolgtelepFel.Location = new System.Drawing.Point(549, 137);
             this.BtnSzolgtelepFel.Name = "BtnSzolgtelepFel";
             this.BtnSzolgtelepFel.Size = new System.Drawing.Size(45, 45);
             this.BtnSzolgtelepFel.TabIndex = 5;
@@ -2483,7 +2532,7 @@ namespace Villamos
             // 
             this.BtnSzolgtelepTöröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.BtnSzolgtelepTöröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSzolgtelepTöröl.Location = new System.Drawing.Point(498, 110);
+            this.BtnSzolgtelepTöröl.Location = new System.Drawing.Point(498, 137);
             this.BtnSzolgtelepTöröl.Name = "BtnSzolgtelepTöröl";
             this.BtnSzolgtelepTöröl.Size = new System.Drawing.Size(45, 45);
             this.BtnSzolgtelepTöröl.TabIndex = 6;
@@ -3842,5 +3891,10 @@ namespace Villamos
         internal Button Telep_Rögzít;
         internal TextBox Telep_Költséghely;
         internal Label label77;
+        internal TextBox Email2;
+        internal TextBox Email3;
+        internal Label label78;
+        internal TextBox txtSzolgtelepRaktár;
+        internal Label label79;
     }
 }

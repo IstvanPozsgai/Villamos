@@ -8,11 +8,19 @@ using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Nyomtatványok
 {
     public class Főkönyv_Főkönyv
     {
+        #region Kezelők
+        readonly Kezelő_Jármű_Állomány_Típus KézJárműÁllTípus = new Kezelő_Jármű_Állomány_Típus();
+        readonly Kezelő_Főkönyv_SegédTábla KézSegédTábla = new Kezelő_Főkönyv_SegédTábla();
+        readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
+        #endregion
+
+
         int oszlop;
         int eleje;
         int sor;
@@ -53,8 +61,8 @@ namespace Villamos.Villamos_Nyomtatványok
             oszlop = 12;
             eleje = 12;
 
-            Kezelő_Jármű_Állomány_Típus KJÁT_kéz = new Kezelő_Jármű_Állomány_Típus();
-            List<Adat_Jármű_Állomány_Típus> típus = KJÁT_kéz.Lista_Adatok(Cmbtelephely.Trim());
+
+            List<Adat_Jármű_Állomány_Típus> típus = KézJárműÁllTípus.Lista_Adatok(Cmbtelephely.Trim());
 
             foreach (Adat_Jármű_Állomány_Típus rekord in típus)
             {
@@ -74,7 +82,7 @@ namespace Villamos.Villamos_Nyomtatványok
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\főkönyv\{Dátum.Year}\nap\{Dátum:yyyyMMdd}{napszak.Trim()}nap.mdb";
             string jelszó = "lilaakác";
             string szöveg = "SELECT * FROM segédtábla WHERE id=1 ";
-            Kezelő_Főkönyv_SegédTábla KézSegédTábla = new Kezelő_Főkönyv_SegédTábla();
+
             Adat_Főkönyv_SegédTábla ElemSegéd = KézSegédTábla.Egy_Adat(hely, jelszó, szöveg);
 
             if (ElemSegéd != null)
@@ -178,6 +186,13 @@ namespace Villamos.Villamos_Nyomtatványok
                             if (rekord.Státus == 3)
                                 MyE.Betű(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), false, true, true);
 
+                            //Ha rossz kocsi van forgalomban
+                            if (rekord.Státus == 4)
+                            {
+                                MyE.Betű(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), false, true, true);
+                                MyE.Háttérszín(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), System.Drawing.Color.Red);
+                                MyE.Betű(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), System.Drawing.Color.Yellow);
+                            }
 
                             if (rekord.Megjegyzés.Trim().ToUpper().Substring(0, 1) == "T") // ha T betűvel kezdődik többlet kiadás
                             {
@@ -348,36 +363,6 @@ namespace Villamos.Villamos_Nyomtatványok
                             }
 
                         }
-                        //// személyzet hiány
-                        //if (rekord.Megjegyzés.Trim() != "_")
-                        //{
-                        //    MyE.Háttérszín(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), System.Drawing.Color.GreenYellow);
-                        //    MyE.Betű(MyE.Oszlopnév(oszlop1) + (sor + szerelvényhossz).ToString(), false, false, true);
-                        //    for (int j = 0; j < típus.Count; j++)
-                        //    {
-                        //        // megkeressük a típust és emeljük a darabszámot
-                        //        if (rekord.Típus.Trim() == típus[j].Típus.Trim())
-                        //        {
-                        //            személyzet[j] = személyzet[j] + 1;
-                        //            break;
-                        //        }
-                        //    }
-                        //}
-
-                        //else
-                        //{
-                        //    // megkeressük, hogy melyik típusba tartozik majd emeljük a darabszámot
-                        //    // ha személyzet hiányos akkor nem emeljük a darabszámokat
-                        //    for (int j = 0; j < típus.Count; j++)
-                        //    {
-                        //        // megkeressük a típust és emeljük a darabszámot
-                        //        if (rekord.Típus.Trim() == típus[j].Típus.Trim())
-                        //        {
-                        //            sordarab[j] = sordarab[j] + 1;
-                        //            break;
-                        //        }
-                        //    }
-                        //}
                         if (rekord.Kocsikszáma == 1)
                             oszlop1 += 1; // ha egy kocsiból áll a szerelvény akkor a következőkocsit felül írja az elsőt
                         szerelvényhossz += 1;
@@ -1589,14 +1574,13 @@ namespace Villamos.Villamos_Nyomtatványok
 
 
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló" + @"\" + Dátum.ToString("yyyyMM") + "hibanapló.mdb";
-            string jelszó = "pozsgaii";
+
             int mennyi;
             if (System.IO.File.Exists(hely))
             {
 
                 // csak azokat listázzuk amik be vannak jelölve
-                string szöveg = "SELECT * FROM hibaterv WHERE főkönyv = true ORDER BY id";
-                Kezelő_jármű_hiba KJH_kéz = new Kezelő_jármű_hiba();
+
                 List<Adat_Jármű_hiba> Adatok;
 
                 Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
@@ -1613,12 +1597,20 @@ namespace Villamos.Villamos_Nyomtatványok
                     MyE.Kiir(rekordkieg.Szöveg.Trim(), MyE.Oszlopnév(utolsó) + újsor.ToString());
                     MyE.Vastagkeret(MyE.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyE.Oszlopnév(utolsó + 3) + újsor.ToString());
                     MyE.Vastagkeret(MyE.Oszlopnév(utolsó + 4) + újsor.ToString() + ":" + MyE.Oszlopnév(utolsó + 14) + újsor.ToString());
-                    szöveg = "";
-                    szöveg = "SELECT * FROM hibatábla where idő>=#" + Dátum.ToString("MM-dd-yyyy") + " 06:00:0#";
-                    szöveg += " and idő<#" + Dátum.AddDays(1).ToString("MM-dd-yyyy") + " 06:00:0#";
-                    szöveg += " and javítva=true";
-                    szöveg += " order by azonosító";
-                    Adatok = KJH_kéz.Lista_adatok(hely, jelszó, szöveg);
+                    //szöveg = "";
+                    //szöveg = "SELECT * FROM hibatábla where idő>=#" + Dátum.ToString("MM-dd-yyyy") + " 06:00:0#";
+                    //szöveg += " and idő<#" + Dátum.AddDays(1).ToString("MM-dd-yyyy") + " 06:00:0#";
+                    //szöveg += " and javítva=true";
+                    //szöveg += " order by azonosító";
+                    //Adatok = KJH_kéz.Lista_adatok(hely, jelszó, szöveg);
+
+                    Adatok = KézJárműHiba.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                    Adatok = (from a in Adatok
+                              where a.Idő >= MyF.Nap0600(Dátum)
+                              && a.Idő < MyF.Nap0600(Dátum.AddDays(1))
+                              && a.Javítva == true
+                              orderby a.Azonosító
+                              select a).ToList();
                     foreach (Adat_Jármű_hiba rekord in Adatok)
                     {
                         if (rekord.Hibaleírása.Contains(rekordkieg.Szöveg.Trim()))
@@ -1989,6 +1981,8 @@ namespace Villamos.Villamos_Nyomtatványok
 
     public class Főkönyv_Háromnapos
     {
+        readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
+
         public void Három_Nyomtatvány(string fájlneve, string Cmbtelephely, string papírméret, string papírelrendezés)
         {
 
@@ -2001,15 +1995,11 @@ namespace Villamos.Villamos_Nyomtatványok
 
             // kiírjuk a kocsikat
 
-            string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\villamos\hiba.mdb";
-            string jelszóhiba = "pozsgaii";
-            string szöveg = "SELECT * FROM hibatábla ";
-            Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-            List<Adat_Jármű_hiba> AdatokHiba = KézHiba.Lista_adatok(helyhiba, jelszóhiba, szöveg);
+            List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Trim());
 
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\villamos\villamos2.mdb";
             string jelszó = "pozsgaii";
-            szöveg = $"SELECT * FROM állománytábla";
+            string szöveg = $"SELECT * FROM állománytábla";
 
             Kezelő_Jármű2 KézJármű = new Kezelő_Jármű2();
             List<Adat_Jármű_2> AdatokHárom = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
