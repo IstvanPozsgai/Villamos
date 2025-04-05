@@ -30,11 +30,13 @@ namespace Villamos
         /// <summary>
         /// Elindítjuk az Excel készítést egy üres munkafüzettel
         /// </summary>
-        public static void ExcelLétrehozás()
+        public static void ExcelLétrehozás(bool teszt = false)
         {
             //elindítjuk az alkalmazást. létrehozzuk a fájlt és a munkalapot.
-            xlApp = new MyExcel.Application();
-            //   xlApp.Visible = true;
+            xlApp = new MyExcel.Application
+            {
+                Visible = teszt
+            };
             Module_Excel.xlWorkBook = xlApp.Workbooks.Add(misValue);
             Module_Excel.xlWorkSheet = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets.get_Item(1);
 

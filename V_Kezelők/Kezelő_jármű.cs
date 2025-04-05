@@ -309,11 +309,19 @@ namespace Villamos.Kezelők
                 string szöveg;
                 if (Elem != null)
                 {
-                    if (Elem.Törölt)
-                        szöveg = $"UPDATE Állománytábla SET törölt=false WHERE [azonosító]='{Azonosító}'";
+                    if (Telephely == "Főmérnökség")
+                    {
+                        if (Elem.Törölt)
+                            szöveg = $"UPDATE Állománytábla SET törölt=false WHERE [azonosító]='{Azonosító}'";
+                        else
+                            szöveg = $"UPDATE Állománytábla SET törölt=true WHERE [azonosító]='{Azonosító}'";
+                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                    }
                     else
-                        szöveg = $"UPDATE Állománytábla SET törölt=true WHERE [azonosító]='{Azonosító}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    {
+                        szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{Azonosító}'";
+                        MyA.ABtörlés(hely, jelszó, szöveg);
+                    }
                 }
 
             }

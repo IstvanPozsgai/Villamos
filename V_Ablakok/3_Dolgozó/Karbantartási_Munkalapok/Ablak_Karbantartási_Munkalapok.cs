@@ -1402,6 +1402,7 @@ namespace Villamos.Villamos_Ablakok
                         {
                             //Minden kiírás
                             Minden_kiírása(sor, a.Utasítás_Cím, a.Utasítás_leírás, szövegelem, a.Paraméter);
+
                         }
                         else if (Chk_paraméter.Checked && !Chk_utasítás.Checked)
                         {
@@ -1481,7 +1482,7 @@ namespace Villamos.Villamos_Ablakok
         private void Minden_kiírása(int sor, string Utasítás_Cím, string Utasítás_leírás, string szövegelem, string Paraméter)
         {
             //Minden kiírás
-            MyE.Kiir($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}{szövegelem}", $"B{sor}");
+            MyE.Kiir($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}\n{szövegelem}\n", $"B{sor}");
             //vastag
             MyE.Cella_Betű($"B{sor}", false, false, true, 1, Utasítás_Cím.Trim().Length);
             //dőlt

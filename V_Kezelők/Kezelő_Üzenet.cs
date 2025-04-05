@@ -73,13 +73,16 @@ namespace Villamos.Kezelők
                 szöveg += $"'{DateTime.Now}', {Adat.Válaszsorszám}) ";  // mikor,válaszsorszám
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
-                Kezelő_Üzenet_Olvas Kéz = new Kezelő_Üzenet_Olvas();
-                Adat_Üzenet_Olvasás ADAT = new Adat_Üzenet_Olvasás(0,
-                                                   Program.PostásNév.Trim(),
-                                                   id,
-                                                   DateTime.Now,
-                                                   false);
-                Kéz.Rögzítés(Telephely, Év, ADAT);
+                if (Adat.Írta == Program.PostásNév)
+                {
+                    Kezelő_Üzenet_Olvas Kéz = new Kezelő_Üzenet_Olvas();
+                    Adat_Üzenet_Olvasás ADAT = new Adat_Üzenet_Olvasás(0,
+                                                       Program.PostásNév.Trim(),
+                                                       id,
+                                                       DateTime.Now,
+                                                       false);
+                    Kéz.Rögzítés(Telephely, Év, ADAT);
+                }
             }
             catch (HibásBevittAdat ex)
             {

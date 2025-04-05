@@ -1688,7 +1688,7 @@ namespace Villamos.Ablakok
             try
             {
                 if (Előírt_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy jármű sem.");
-                if (ESZAdat.Szerelvényhossz >= 6) throw new HibásBevittAdat("Több járművet nem lehet a szerelvényhez adni!");
+                if (ESZAdat == null || ESZAdat.Szerelvényhossz >= 6) throw new HibásBevittAdat("Több járművet nem lehet a szerelvényhez adni!");
 
                 // megnézzük, hogy létezik-e kocsi       
                 AdatokJár = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
