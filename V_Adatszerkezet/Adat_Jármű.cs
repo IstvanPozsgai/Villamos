@@ -130,6 +130,13 @@ namespace Villamos.Adatszerkezet
             Valóstípus = valóstípus;
             Üzembehelyezés = üzembehelyezés;
         }
+
+        public Adat_Jármű(string azonosító, string típus, string üzem)
+        {
+            Azonosító = azonosító;
+            Típus = típus;
+            Üzem = üzem;
+        }
     }
 
     /// <summary>

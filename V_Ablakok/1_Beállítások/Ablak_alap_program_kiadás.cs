@@ -1032,10 +1032,7 @@ namespace Villamos
                 if (rekord == null)
                 {
                     // ha nincs még ilyen típus akkor létrehozzuk
-                    // melyik az utolsó elem
-                    long i = 1;
-                    if (Adatok.Count > 0) i = Adatok.Max(a => a.Id) + 1;
-                    Adat_Jármű_Állomány_Típus ADAT = new Adat_Jármű_Állomány_Típus(i,
+                    Adat_Jármű_Állomány_Típus ADAT = new Adat_Jármű_Állomány_Típus(0,
                                                                                    0,
                                                                                    txtTípuslét.Text.Trim());
                     Kéz_Állomány_Típus.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);

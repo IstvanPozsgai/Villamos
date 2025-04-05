@@ -217,7 +217,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string Telephely, List<Adat_Jármű> Adatok)
+        public void Módosítás_ÜzemBe(string Telephely, List<Adat_Jármű> Adatok)
         {
             try
             {
@@ -231,6 +231,26 @@ namespace Villamos.Kezelők
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_ÜzemÁtvétel(string Telephely, Adat_Jármű Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE Állománytábla SET ";
+                szöveg += $" üzem='{Adat.Üzem}', típus='{Adat.Típus}' WHERE azonosító='{Adat.Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -345,6 +365,31 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(string Telephely, Adat_Jármű Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE Állománytábla SET ";
+                szöveg += $"hibák={Adat.Hibák}, ";
+                szöveg += $"státus={Adat.Státus}, ";
+                szöveg += $"törölt={Adat.Törölt}, ";
+                szöveg += $"hibáksorszáma={Adat.Hibáksorszáma}, ";
+                szöveg += $"szerelvény={Adat.Szerelvény}, ";
+                szöveg += $"valóstípus='{Adat.Valóstípus.Trim()}', ";
+                szöveg += $"valóstípus2='{Adat.Valóstípus2.Trim()}', ";
+                szöveg += $"szerelvénykocsik={Adat.Szerelvénykocsik}, ";
+                szöveg += $"miótaáll='{Adat.Miótaáll}', ";
+                szöveg += $"típus='{Adat.Típus.Trim()}', ";
+                szöveg += $"üzem='{Adat.Üzem.Trim()}' ";
+                szöveg += $" WHERE [azonosító] ='{Adat.Azonosító.Trim()}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Módosítás\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+        }
 
 
         //Elkopó
@@ -385,49 +430,9 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Áthelyezés_új(string hely, string jelszó, Adat_Jármű Adat)
-        {
-            try
-            {
-                string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2) VALUES (";
-                szöveg += $"'{Adat.Azonosító}', {Adat.Hibák}, {Adat.Státus}, '{Adat.Típus.Trim()}', '{Adat.Üzem.Trim()}'," +
-                    $" {Adat.Törölt}, {Adat.Hibáksorszáma}, {Adat.Szerelvény}, {Adat.Szerelvénykocsik}, '{Adat.Miótaáll}', ";
-                szöveg += $"'{Adat.Valóstípus.Trim()}', ";
-                szöveg += $"'{Adat.Valóstípus2.Trim()} ')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Rögzítés\n", ex.StackTrace, ex.Source, ex.HResult);
-            }
-        }
 
 
-        public void Módosítás(string hely, string jelszó, Adat_Jármű Adat)
-        {
-            string szöveg = "";
-            try
-            {
-                szöveg = "UPDATE Állománytábla SET ";
-                szöveg += $"hibák={Adat.Hibák}, ";
-                szöveg += $"státus={Adat.Státus}, ";
-                szöveg += $"törölt={Adat.Törölt}, ";
-                szöveg += $"hibáksorszáma={Adat.Hibáksorszáma}, ";
-                szöveg += $"szerelvény={Adat.Szerelvény}, ";
-                szöveg += $"valóstípus='{Adat.Valóstípus.Trim()}', ";
-                szöveg += $"valóstípus2='{Adat.Valóstípus2.Trim()}', ";
-                szöveg += $"szerelvénykocsik={Adat.Szerelvénykocsik}, ";
-                szöveg += $"miótaáll='{Adat.Miótaáll}', ";
-                szöveg += $"típus='{Adat.Típus.Trim()}', ";
-                szöveg += $"üzem='{Adat.Üzem.Trim()}' ";
-                szöveg += $" WHERE [azonosító] ='{Adat.Azonosító.Trim()}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Módosítás\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
-            }
-        }
+
 
 
         public Adat_Jármű Egy_Adat(string hely, string jelszó, string szöveg)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO típustábla (id, típus, állomány)";
-                szöveg += $" VALUES ({Adat.Id},";
+                szöveg += $" VALUES ({Sorszám(Telephely)},";
                 szöveg += $" '{Adat.Típus}',";
                 szöveg += $" {Adat.Állomány} )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -114,6 +115,26 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private long Sorszám(string Telephely)
+        {
+            long Válasz = 1;
+            try
+            {
+                List<Adat_Jármű_Állomány_Típus> Adatok = Lista_Adatok(Telephely);
+                if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(x => x.Id) + 1;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
         }
     }
 }

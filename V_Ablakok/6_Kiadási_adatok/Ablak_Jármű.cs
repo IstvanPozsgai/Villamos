@@ -8,9 +8,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -44,7 +42,6 @@ namespace Villamos
         {
         }
 
-        //
         private void Ablak_Jármű_Shown(object sender, EventArgs e)
         {
             Visible = false;
@@ -54,42 +51,10 @@ namespace Villamos
             Refresh();
             Visible = true;
             Cursor = Cursors.Default;
-            // telephely
-            // megnézzük, hogy van-e hiba tábla
-            string hely = $@"{Application.StartupPath}\{Program.PostásTelephely.Trim()}\Adatok\villamos\hiba.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Hibatáblalap(hely);
-
-            // megnézzük, hogy van-e villamos... tábla
-            hely = $@"{Application.StartupPath}\{Program.PostásTelephely.Trim()}\Adatok\villamos\villamos.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely);
-
-            hely = $@"{Application.StartupPath}\{Program.PostásTelephely.Trim()}\Adatok\villamos\villamos2.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Villamostábla(hely);
-
-            hely = $@"{Application.StartupPath}\{Program.PostásTelephely.Trim()}\Adatok\villamos\villamos3.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Villamostábla3(hely);
-
-            // Közös lista
-            // megnézzük, hogy van-e közös hiba tábla
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\hiba.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Hibatáblalap(hely);
-
-            // megnézzük, hogy van-e villamos... tábla
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely);
-
-            hely = Application.StartupPath + @"\Főmérnökség\adatok\villamos2.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Villamostábla(hely);
-
-            hely = Application.StartupPath + @"\Főmérnökség\adatok\villamos3.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Villamostábla3(hely);
-
             Telephelyekfeltöltése();
-
             Jogosultságkiosztás();
             Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
             Kocsilistaellenőrzés();
-
             Fülek.SelectedIndex = 0;
             Fülekkitöltése();
         }
@@ -723,7 +688,7 @@ namespace Villamos
                     }
                     Holtart.Lép();
                 }
-                KézJármű.Módosítás("Főmérnökség", AdatokGy);
+                KézJármű.Módosítás_ÜzemBe("Főmérnökség", AdatokGy);
 
 
                 Holtart.Ki();
@@ -1048,36 +1013,20 @@ namespace Villamos
             }
         }
 
-        //
         private void Subállveszvillamos()
         {
             try
             {
                 // megnézzük, hogy létezik-e az üzemben már a fájl, ha nem akkor létrehozzuk
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely);
-
-                string helyközös = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-
-                // áthelyezzük a fogadó telephelyre
-                ÁlllományLétrehozás(hely, Közös_járművek.SelectedItem.ToStrTrim());
-                ÁllományMódosítás(helyközös, Közös_járművek.SelectedItem.ToStrTrim(), Cmbtelephely.Text.Trim());
-
-                //Naplózzuk
-                ÁllományNaplózás(Közös_járművek.SelectedItem.ToStrTrim(), "Közös", Cmbtelephely.Text.Trim());
-
-                // Módosítjuk a típus darabszámát
-                TípusDB(true);
-
-                // hibákat átmásoljuk az állományba
                 string hova = Cmbtelephely.Text.Trim();
                 string honnan = "Főmérnökség";
-                HibákMásolása(honnan, hova, Közös_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.Text.Trim());
 
-                //E2 másolás
-                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
-                honnan = Application.StartupPath + @"\Főmérnökség\adatok\villamos2.mdb";
-                E2Másolása(honnan, hova, Közös_járművek.SelectedItem.ToStrTrim());
+                ÁlllományLétrehozás(hova, Közös_járművek.SelectedItem.ToStrTrim());      // áthelyezzük a fogadó telephelyre
+                ÁllományMódosítás(honnan, Közös_járművek.SelectedItem.ToStrTrim(), hova);
+                ÁllományNaplózás(Közös_járművek.SelectedItem.ToStrTrim(), "Közös", hova);   //Naplózzuk
+                TípusDB(true);   // Módosítjuk a típus darabszámát
+                HibákMásolása(honnan, hova, Közös_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.Text.Trim());   // hibákat átmásoljuk az állományba              
+                E2Másolása(honnan, hova, Közös_járművek.SelectedItem.ToStrTrim());  //E2 másolás
             }
             catch (HibásBevittAdat ex)
             {
@@ -1123,37 +1072,19 @@ namespace Villamos
             }
         }
 
-        //
         private void Subállkirakvillamos()
         {
             try
             {
-                // megnézzük, hogy létezik-e az üzemben már a fájl, ha nem akkor létrehozzuk
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.KocsikTípusa(hely);
-
-                // berakjuk közös állományba
-                string helyközös = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                ÁllományMódosítás(helyközös, Saját_járművek.SelectedItem.ToStrTrim(), "Közös");
-
-                // kitöröljük a telephelyről        
-                ÁlllományTörlés(hely, Saját_járművek.SelectedItem.ToStrTrim());
-
-                //Naplózzuk
-                ÁllományNaplózás(Saját_járművek.SelectedItem.ToStrTrim(), Cmbtelephely.Text.Trim(), "Közös");
-
-                // Módosítjuk a típus darabszámát
-                TípusDB(false);
-
-                //Hibák másolás
-                string honnan = Cmbtelephely.Text.Trim();
                 string hova = "Főmérnökség";
-                HibákMásolása(honnan, hova, Saját_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.Text.Trim());
+                string honnan = Cmbtelephely.Text.Trim();
 
-                //E2 másolás
-                hova = Application.StartupPath + @"\Főmérnökség\adatok\villamos2.mdb";
-                honnan = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
-                E2Másolása(honnan, hova, Saját_járművek.SelectedItem.ToStrTrim());
+                ÁllományMódosítás(hova, Saját_járművek.SelectedItem.ToStrTrim(), "Közös"); // berakjuk közös állományba             
+                KézJármű.Törlés(honnan, Saját_járművek.SelectedItem.ToStrTrim());     // kitöröljük a telephelyről             
+                ÁllományNaplózás(Saját_járművek.SelectedItem.ToStrTrim(), honnan, "Közös"); //Naplózzuk
+                TípusDB(false);    // Módosítjuk a típus darabszámát
+                HibákMásolása(honnan, hova, Saját_járművek.SelectedItem.ToStrTrim(), Telephelyi_típus.Text.Trim());  //Hibák másolás
+                E2Másolása(honnan, hova, Saját_járművek.SelectedItem.ToStrTrim());  //E2 másolás
             }
             catch (HibásBevittAdat ex)
             {
@@ -1165,52 +1096,29 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
-        private void ÁllományMódosítás(string hely, string azonosító, string Hova)
-        {
-            try
-            {
-                string jelszó = "pozsgaii";
-                string szöveg = "UPDATE Állománytábla SET ";
-                szöveg += $" üzem='{Hova}', típus='{Telephelyi_típus.Text.Trim()}' WHERE azonosító='{azonosító}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        //
-        private void ÁlllományTörlés(string hely, string azonosító)
-        {
-            try
-            {
-                string jelszó = "pozsgaii";
-                string szöveg = $"DELETE FROM Állománytábla WHERE [azonosító]='{azonosító}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
 
-        }
-        //
-        private void ÁlllományLétrehozás(string hely, string azonosító)
+        private void ÁllományMódosítás(string Telephely, string azonosító, string Hova)
         {
             try
             {
-                string jelszó = "pozsgaii";
+                Adat_Jármű ADAT = new Adat_Jármű(azonosító, Hova, Telephelyi_típus.Text.Trim());
+                KézJármű.Módosítás_ÜzemÁtvétel(Telephely, ADAT);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ÁlllományLétrehozás(string Telephely, string azonosító)
+        {
+            try
+            {
                 Adat_Jármű adat = (from a in Adatok_Állomány
                                    where a.Azonosító == azonosító
                                    select a).FirstOrDefault();
@@ -1220,14 +1128,14 @@ namespace Villamos
                     adat.Üzem = Cmbtelephely.Text.Trim();
                     adat.Típus = Telephelyi_típus.Text.Trim();
                     // ha van a telephelyen
-                    KézJármű.Módosítás(hely, jelszó, adat);
+                    KézJármű.Módosítás(Telephely, adat);
                 }
                 else
                 {
                     adat.Üzem = Cmbtelephely.Text.Trim();
                     adat.Típus = Telephelyi_típus.Text.Trim();
                     // ha nincs a telephelyen
-                    KézJármű.Áthelyezés_új(hely, jelszó, adat);
+                    KézJármű.Rögzítés(Telephely, adat);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1275,18 +1183,11 @@ namespace Villamos
             }
         }
 
-
-        //
         private void TípusDB(bool be)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Jármű.mdb";
-                string jelszó = "pozsgaii";
-
-                Kezelő_Jármű_Állomány_Típus kéz = new Kezelő_Jármű_Állomány_Típus();
-                List<Adat_Jármű_Állomány_Típus> Adatok = kéz.Lista_Adatok(Cmbtelephely.Text.Trim());
-
+                List<Adat_Jármű_Állomány_Típus> Adatok = KézÁllomány.Lista_Adatok(Cmbtelephely.Text.Trim()) ?? throw new HibásBevittAdat("Nincs telephelyi állomány.");
                 Adat_Jármű_Állomány_Típus EgyTípus = (from a in Adatok
                                                       where a.Típus == Telephelyi_típus.Text.Trim()
                                                       select a).FirstOrDefault();
@@ -1299,11 +1200,13 @@ namespace Villamos
                     else
                         állomány--;
                     if (állomány < 0) állomány = 0;
-
-                    string szöveg = "UPDATE típustábla SET ";
-                    szöveg += $" állomány={állomány} ";
-                    szöveg += $" WHERE [típus] ='{Telephelyi_típus.Text.Trim()}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Jármű_Állomány_Típus ADAT = new Adat_Jármű_Állomány_Típus(0, állomány, Telephelyi_típus.Text.Trim());
+                    KézÁllomány.Módosítás(Cmbtelephely.Text.Trim(), EgyTípus);
+                }
+                else
+                {
+                    Adat_Jármű_Állomány_Típus ADAT = new Adat_Jármű_Állomány_Típus(0, 1, Telephelyi_típus.Text.Trim());
+                    KézÁllomány.Rögzítés(Cmbtelephely.Text.Trim(), EgyTípus);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1317,13 +1220,13 @@ namespace Villamos
             }
         }
 
-        //
         private void HibákMásolása(string honnan, string hova, string azonosító, string típus)
         {
             try
             {
                 // hibákat átmásoljuk az állományba
                 List<Adat_Jármű_hiba> JHadatok = Kéz_JHadat.Lista_Adatok(honnan);
+                if (JHadatok == null) return;
                 JHadatok = (from a in JHadatok
                             where a.Azonosító == azonosító
                             select a).ToList();
@@ -1345,7 +1248,6 @@ namespace Villamos
 
                 //kitöröljük pályaszámhoz tartozó az összes hibát
                 Kéz_JHadat.Törlés(hova, azonosító);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1356,25 +1258,21 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
-        //
         private void E2Másolása(string honnan, string hova, string azonosító)
         {
             try
             {
-                // hibákat átmásoljuk az állományba
-                string jelszó = "pozsgaii";
-                string szöveg = $"SELECT * FROM állománytábla where [azonosító]='{azonosító}'";
-
-                Adat_Jármű_2 adat = KézJármű2.Egy_Adat(honnan, jelszó, szöveg);
+                // E2 napot átmásoljuk az állományba
+                List<Adat_Jármű_2> Adatok = KézJármű2.Lista_Adatok(honnan);
+                if (Adatok == null) return;
+                Adat_Jármű_2 adat = Adatok.FirstOrDefault(a => a.Azonosító == azonosító);
                 if (adat != null)
                 {
-                    KézJármű2.Módosít(hova, jelszó, adat);
+                    KézJármű2.Módosítás(hova, adat);
                     // kitöröljük
-                    szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{azonosító}'";
-                    MyA.ABtörlés(honnan, jelszó, szöveg);
+                    KézJármű2.Törlés(honnan, azonosító);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1386,7 +1284,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
         #endregion
 
