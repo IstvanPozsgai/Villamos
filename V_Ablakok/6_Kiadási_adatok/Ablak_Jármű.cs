@@ -886,7 +886,7 @@ namespace Villamos
             try
             {
                 List<Adat_Jármű> Elemek = (from a in Adatok_Állomány
-                                           where a.Üzem == "Közös" && !a.Törölt
+                                           where a.Üzem.Trim() == "Közös" && !a.Törölt
                                            orderby a.Azonosító
                                            select a).ToList();
 
@@ -1101,7 +1101,7 @@ namespace Villamos
         {
             try
             {
-                Adat_Jármű ADAT = new Adat_Jármű(azonosító, Hova, Telephelyi_típus.Text.Trim());
+                Adat_Jármű ADAT = new Adat_Jármű(azonosító, Telephelyi_típus.Text.Trim(), Hova);
                 KézJármű.Módosítás_ÜzemÁtvétel(Telephely, ADAT);
             }
             catch (HibásBevittAdat ex)
@@ -1247,7 +1247,7 @@ namespace Villamos
                 }
 
                 //kitöröljük pályaszámhoz tartozó az összes hibát
-                Kéz_JHadat.Törlés(hova, azonosító);
+                Kéz_JHadat.Törlés(honnan, azonosító);
             }
             catch (HibásBevittAdat ex)
             {

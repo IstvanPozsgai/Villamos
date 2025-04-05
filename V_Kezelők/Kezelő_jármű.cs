@@ -86,11 +86,22 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2, üzembehelyezés) VALUES (";
-                szöveg += $"'{Adat.Azonosító.Trim()}', 0, 0, 'Nincs', 'Közös', false, 0, false, 0, '1900.01.01', ";
-                szöveg += $"'{Adat.Valóstípus.Trim()}', ";
-                szöveg += $"'{Adat.Valóstípus2.Trim()}', '1900.01.01')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (Telephely == "Főmérnökség")
+                {
+                    string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2, üzembehelyezés) VALUES (";
+                    szöveg += $"'{Adat.Azonosító.Trim()}', 0, 0, 'Nincs', 'Közös', false, 0, false, 0, '1900.01.01', ";
+                    szöveg += $"'{Adat.Valóstípus.Trim()}', ";
+                    szöveg += $"'{Adat.Valóstípus2.Trim()}', '1900.01.01')";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
+                else
+                {
+                    string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2) VALUES (";
+                    szöveg += $"'{Adat.Azonosító.Trim()}', 0, 0, '{Adat.Típus}', '{Adat.Üzem}', false, 0, false, 0, '1900.01.01', ";
+                    szöveg += $"'{Adat.Valóstípus.Trim()}', ";
+                    szöveg += $"'{Adat.Valóstípus2.Trim()}')";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -385,9 +396,14 @@ namespace Villamos.Kezelők
                 szöveg += $" WHERE [azonosító] ='{Adat.Azonosító.Trim()}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "Módosítás\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -429,11 +445,6 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-
-
-
-
 
         public Adat_Jármű Egy_Adat(string hely, string jelszó, string szöveg)
         {
@@ -480,7 +491,6 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
-
         public Adat_Jármű Egy_Adat_fő(string hely, string jelszó, string szöveg)
         {
             Adat_Jármű Adat = null;
@@ -525,7 +535,6 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
-
 
         public List<Adat_Jármű> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
