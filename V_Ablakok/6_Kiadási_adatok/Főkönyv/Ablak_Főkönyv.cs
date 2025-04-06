@@ -46,6 +46,7 @@ namespace Villamos
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
         readonly Kezelő_Kiegészítő_Idő_Kor KézKor = new Kezelő_Kiegészítő_Idő_Kor();
         readonly Kezelő_CAF_Adatok KézCAF = new Kezelő_CAF_Adatok();
+        readonly Kezelő_Főkönyv_SegédTábla KézFőkönyvSegéd = new Kezelő_Főkönyv_SegédTábla();
 
 
         public List<Adat_Reklám> AdatokReklám = new List<Adat_Reklám>();
@@ -851,39 +852,36 @@ namespace Villamos
                 }
 
                 // rögzítjük a módosítót
-                string jelszó = "lilaakác";
-                string szöveg = $"INSERT INTO segédtábla (id, Bejelentkezésinév) VALUES (1, '{Program.PostásNév.Trim()}' )";
-                MyA.ABMódosítás(HelyNap, jelszó, szöveg);
+                Adat_Főkönyv_SegédTábla AdatSegéd = new Adat_Főkönyv_SegédTábla(1, Program.PostásNév.Trim());
+                KézFőkönyvSegéd.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", AdatSegéd);
 
                 // beolvassuk a villamos adatokat
-
                 Holtart.Be();
                 JárműListaFeltöltés();
                 NapiHibalistaFeltöltés();
                 SzerelvényListaFeltöltés();
-                List<string> SzövegGy = new List<string>();
+
+                List<Adat_Főkönyv_Nap> AdatokGy = new List<Adat_Főkönyv_Nap>();
                 foreach (Adat_Jármű rekord in AdatokJármű)
                 {
-
-                    szöveg = "INSERT INTO Adattábla  (Státus, hibaleírása, típus, azonosító, szerelvény, ";
-                    szöveg += "viszonylat, forgalmiszám, kocsikszáma, tervindulás, tényindulás, ";
-                    szöveg += "tervérkezés, tényérkezés, miótaáll, napszak, megjegyzés ) VALUES (";
-                    szöveg += $"{rekord.Státus}, '{Hiba_Leírás(rekord.Azonosító.Trim())}', '{rekord.Típus.Trim()}', '{rekord.Azonosító.Trim()}', {rekord.Szerelvénykocsik}, ";
-                    szöveg += $"'-', '-', {KocsikSzáma(rekord.Szerelvénykocsik)}, '1900.01.01. 00:00:00', '1900.01.01. 00:00:00', ";
-                    szöveg += "'1900.01.01. 00:00:00', '1900.01.01. 00:00:00', ";
-                    if (rekord.Miótaáll.ToString() != "")
-                    {
-                        szöveg += $"'{rekord.Miótaáll}', ";
-                    }
-                    else
-                    {
-                        szöveg += "'1900.01.01. 00:00:00', ";
-                    }
-                    szöveg += " '-', '*')";
-                    SzövegGy.Add(szöveg);
+                    Adat_Főkönyv_Nap ADATNAP = new Adat_Főkönyv_Nap(
+                                     rekord.Státus,
+                                     Hiba_Leírás(rekord.Azonosító.Trim()),
+                                     rekord.Típus,
+                                     rekord.Azonosító,
+                                     rekord.Szerelvénykocsik,
+                                     "-", "-",
+                                     KocsikSzáma(rekord.Szerelvénykocsik),
+                                     new DateTime(1900, 1, 1, 0, 0, 0),
+                                     new DateTime(1900, 1, 1, 0, 0, 0),
+                                     new DateTime(1900, 1, 1, 0, 0, 0),
+                                     new DateTime(1900, 1, 1, 0, 0, 0),
+                                     rekord.Miótaáll.ToString() != "" ? rekord.Miótaáll : new DateTime(1900, 1, 1, 0, 0, 0),
+                                     "-", "*");
+                    AdatokGy.Add(ADATNAP);
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(HelyNap, jelszó, SzövegGy);
+                KézFőkönyvNap.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", AdatokGy);
 
                 NapiTábla_kiírás(0);
                 Holtart.Ki();
@@ -2027,16 +2025,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\{Dátum.Value.Year}\nap\{Dátum.Value:yyyyMMdd}";
-
-                if (Délelőtt.Checked)
-                    hely += "denap.mdb";
-                else
-                    hely += "dunap.mdb";
-
-                if (!File.Exists(hely)) return;
-
-                List<Adat_Főkönyv_Nap> AdatokÖ = KézFőkönyvNap.Lista_adatok(hely);
+                List<Adat_Főkönyv_Nap> AdatokÖ = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+                if (AdatokÖ.Count > 0) return;
 
                 List<Adat_Főkönyv_Nap> Adatok;
                 if (változat == 0)
