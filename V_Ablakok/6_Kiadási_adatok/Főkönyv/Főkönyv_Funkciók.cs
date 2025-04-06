@@ -177,68 +177,66 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, "SUBnapihibagöngyölés", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         public static void SUBNapielkészültek(DateTime Dátum, string telephely)
         {
-            // az új megálló kocsikat rögzíti az MyAba és frissíti a hiba leírás szöveget
-            // xnapos tábla
-            string helyelk = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
-            if (!File.Exists(helyelk)) Adatbázis_Létrehozás.Javításiátfutástábla(helyelk);
+            try
+            {   // az új megálló kocsikat rögzíti az MyAba és frissíti a hiba leírás szöveget
+                // xnapos tábla
+                string helyelk = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
+                if (!File.Exists(helyelk)) Adatbázis_Létrehozás.Javításiátfutástábla(helyelk);
 
-            string hely = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\hibanapló\Napi.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Javításiátfutástábla(hely);
-            string jelszó = "plédke";
-            string szöveg = "SELECT * FROM xnapostábla ";
+                List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_Adatok(telephely.Trim());
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(telephely.Trim());
+                AdatokJármű = (from a in AdatokJármű
+                               where a.Státus == 4
+                               select a).ToList();
 
-            List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_adatok(hely, jelszó, szöveg);
-
-
-            string helyvill = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\villamos\villamos.mdb";
-            string jelszóvill = "pozsgaii";
-            szöveg = "SELECT * FROM állománytábla where státus=4 ";
-
-            List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(helyvill, jelszóvill, szöveg);
-
-
-
-            if (AdatokXnapos.Count >= 1)
-            {
-                List<string> SzövegGy = new List<string>();
-                List<string> SzövegGyT = new List<string>();
-                foreach (Adat_Jármű_Javításiátfutástábla rekord in AdatokXnapos)
+                if (AdatokXnapos.Count >= 1)
                 {
-                    // ha a státusa megváltozott akkor elkészült
-                    Adat_Jármű ElemJármű = (from a in AdatokJármű
-                                            where a.Státus == 4 && a.Azonosító == rekord.Azonosító
-                                            select a).FirstOrDefault();
-
-                    if (ElemJármű == null)
+                    List<Adat_Jármű_Javításiátfutástábla> AdatokGyR = new List<Adat_Jármű_Javításiátfutástábla>();
+                    List<string> AdatokGyT = new List<string>();
+                    foreach (Adat_Jármű_Javításiátfutástábla rekord in AdatokXnapos)
                     {
-                        // ha elkészült akkor átírjuk az éves táblázatba
-                        szöveg = "INSERT INTO xnapostábla (azonosító, kezdődátum, végdátum, hibaleírása) VALUES (";
-                        szöveg += $"'{rekord.Azonosító.Trim()}', ";
-                        szöveg += $"'{rekord.Kezdődátum:yyyy.MM.dd}', ";
-                        szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";
-                        szöveg += $"'{rekord.Hibaleírása.Trim()}' )";
-                        SzövegGy.Add(szöveg);
+                        // ha a státusa megváltozott akkor elkészült
+                        Adat_Jármű ElemJármű = (from a in AdatokJármű
+                                                where a.Státus == 4 && a.Azonosító == rekord.Azonosító
+                                                select a).FirstOrDefault();
 
-                        // kitöröljük a napi táblából a elkészülteket
-                        szöveg = $"DELETE FROM xnapostábla WHERE azonosító='{rekord.Azonosító.Trim()}'";
+                        if (ElemJármű == null)
+                        {
+                            // ha elkészült akkor átírjuk az éves táblázatba
+                            Adat_Jármű_Javításiátfutástábla ADAT = new Adat_Jármű_Javításiátfutástábla(
+                                                        rekord.Kezdődátum,
+                                                        DateTime.Today,
+                                                        rekord.Azonosító,
+                                                        rekord.Hibaleírása);
+                            AdatokGyR.Add(ADAT);
+                            //Kitöröljük a Napiból
+                            AdatokGyT.Add(rekord.Azonosító);
+                        }
 
-                        SzövegGyT.Add(szöveg);
                     }
-
+                    if (AdatokGyR.Count > 0) KézXnapos.Rögzítés(telephely, DateTime.Today.Year, AdatokGyR);
+                    if (AdatokGyT.Count > 0) KézXnapos.Törlés(telephely, AdatokGyT);
                 }
-                if (SzövegGy.Count > 0) MyA.ABMódosítás(helyelk, jelszó, SzövegGy);
-                if (SzövegGyT.Count > 0) MyA.ABtörlés(hely, jelszó, SzövegGyT);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "SUBNapielkészültek", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-
+        //
         public static void Napiadatokmentése(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
         {
             string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
@@ -351,7 +349,7 @@ namespace Villamos
             MyA.ABMódosítás(helykiadás, jelszókiadás, szöveg);
         }
 
-
+        //
         public static void Napitipuscsere(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
         {
             string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
@@ -457,7 +455,7 @@ namespace Villamos
             }
         }
 
-
+        //
         public static void Napiszemélyzet(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
         {
             string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum.Year}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
@@ -504,7 +502,7 @@ namespace Villamos
 
         }
 
-
+        //
         public static void Napitöbblet(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
         {
 
@@ -545,7 +543,7 @@ namespace Villamos
             }
         }
 
-
+        //
         public static void ZSER_Betöltés(string hely, string ExcelFájl, DateTime Dátum, string Telephely, long kiadási_korr = 0, long érkezési_korr = 0)
         {
 
@@ -674,10 +672,10 @@ namespace Villamos
                 if (mit.Length < 4)
                     mit = new string('0', 4 - mit.Length) + mit;
             }
-
             return mit;
         }
 
+        //
         private static void Km_adatok_beolvasása(int sormax, long kiadásikorr, long érkezésikorr, DateTime Dátum, string Telephely)
         {
             string szöveg = "";
