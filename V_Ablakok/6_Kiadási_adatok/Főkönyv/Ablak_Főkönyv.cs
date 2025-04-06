@@ -810,6 +810,7 @@ namespace Villamos
         }
         #endregion
 
+
         #region Program adatok fordítása
         private void Program_adatok_Click(object sender, EventArgs e)
         {
@@ -2025,8 +2026,9 @@ namespace Villamos
         {
             try
             {
+                NapiTábla.Visible = false;
                 List<Adat_Főkönyv_Nap> AdatokÖ = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
-                if (AdatokÖ.Count > 0) return;
+                if (AdatokÖ.Count < 1) return;
 
                 List<Adat_Főkönyv_Nap> Adatok;
                 if (változat == 0)

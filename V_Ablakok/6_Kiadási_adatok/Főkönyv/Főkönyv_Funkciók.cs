@@ -16,18 +16,22 @@ namespace Villamos
     public static class Főkönyv_Funkciók
     {
         readonly static Kezelő_Főkönyv_Zser_Km KézFőZserKm = new Kezelő_Főkönyv_Zser_Km();
+        readonly static Kezelő_Főkönyv_Nap KézFőkönyvNap = new Kezelő_Főkönyv_Nap();
         readonly static Kezelő_Nap_Hiba KézHibaÚj = new Kezelő_Nap_Hiba();
         readonly static Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
         readonly static Kezelő_Jármű_Javításiátfutástábla KézXnapos = new Kezelő_Jármű_Javításiátfutástábla();
         readonly static Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly static Kezelő_Kiadás_Összesítő KézKiadÖ = new Kezelő_Kiadás_Összesítő();
+        readonly static Kezelő_Főkönyv_Személyzet Kéz_Személy = new Kezelő_Főkönyv_Személyzet();
+        readonly static Kezelő_Főkönyv_Típuscsere Kéz_Típus = new Kezelő_Főkönyv_Típuscsere();
 
-        public static void Napiállók(string telephely)
+        public static void Napiállók(string Telephely)
         {
             try
             {
                 // kitöröljük az előzményt
-                KézHibaÚj.Törlés(telephely);
-                List<Adat_Jármű_hiba> AdatokJármű = KézJárműHiba.Lista_Adatok(telephely);
+                KézHibaÚj.Törlés(Telephely);
+                List<Adat_Jármű_hiba> AdatokJármű = KézJárműHiba.Lista_Adatok(Telephely);
                 AdatokJármű = (from a in AdatokJármű
                                orderby a.Azonosító, a.Korlát descending
                                select a).ToList();
@@ -104,7 +108,7 @@ namespace Villamos
                 ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
                 AdatokGy.Add(ADAT);
 
-                KézHibaÚj.Rögzítés(telephely, AdatokGy);
+                KézHibaÚj.Rögzítés(Telephely, AdatokGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -117,15 +121,15 @@ namespace Villamos
             }
         }
 
-        public static void SUBnapihibagöngyölés(string telephely)
+        public static void SUBnapihibagöngyölés(string Telephely)
         {
             try
             {
                 // napi állók xnapos tábla
-                List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_Adatok(telephely.Trim());
-                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(telephely.Trim());
+                List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_Adatok(Telephely.Trim());
+                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Telephely.Trim());
 
-                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(telephely.Trim());
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(Telephely.Trim());
                 AdatokJármű = (from a in AdatokJármű
                                where a.Státus == 4
                                select a).ToList();
@@ -167,8 +171,8 @@ namespace Villamos
                         AdatokGyM.Add(ADATM);
 
                     }
-                    if (AdatokGyR.Count > 0) KézXnapos.Rögzítés(telephely.Trim(), AdatokGyR);
-                    if (AdatokGyM.Count > 0) KézXnapos.Módosítás(telephely.Trim(), AdatokGyM);
+                    if (AdatokGyR.Count > 0) KézXnapos.Rögzítés(Telephely.Trim(), AdatokGyR);
+                    if (AdatokGyM.Count > 0) KézXnapos.Módosítás(Telephely.Trim(), AdatokGyM);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -182,16 +186,16 @@ namespace Villamos
             }
         }
 
-        public static void SUBNapielkészültek(DateTime Dátum, string telephely)
+        public static void SUBNapielkészültek(DateTime Dátum, string Telephely)
         {
             try
             {   // az új megálló kocsikat rögzíti az MyAba és frissíti a hiba leírás szöveget
                 // xnapos tábla
-                string helyelk = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
+                string helyelk = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
                 if (!File.Exists(helyelk)) Adatbázis_Létrehozás.Javításiátfutástábla(helyelk);
 
-                List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_Adatok(telephely.Trim());
-                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(telephely.Trim());
+                List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_Adatok(Telephely.Trim());
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(Telephely.Trim());
                 AdatokJármű = (from a in AdatokJármű
                                where a.Státus == 4
                                select a).ToList();
@@ -221,8 +225,8 @@ namespace Villamos
                         }
 
                     }
-                    if (AdatokGyR.Count > 0) KézXnapos.Rögzítés(telephely, DateTime.Today.Year, AdatokGyR);
-                    if (AdatokGyT.Count > 0) KézXnapos.Törlés(telephely, AdatokGyT);
+                    if (AdatokGyR.Count > 0) KézXnapos.Rögzítés(Telephely, DateTime.Today.Year, AdatokGyR);
+                    if (AdatokGyT.Count > 0) KézXnapos.Törlés(Telephely, AdatokGyT);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -237,9 +241,9 @@ namespace Villamos
         }
 
         //
-        public static void Napiadatokmentése(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
+        public static void Napiadatokmentése(string Napszak, DateTime KÜLDdátum, string Küldtelephely)
         {
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
+            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{Napszak}nap.mdb";
             string jelszó = "lilaakác";
 
 
@@ -247,8 +251,8 @@ namespace Villamos
             if (!File.Exists(hely)) return;
             string helykiadás = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\kiadás{KÜLDdátum:yyyy}.mdb";
             string jelszókiadás = "plédke";
-            string szöveg1 = $@"SELECT * FROM tábla where dátum=#{KÜLDdátum:MM-dd-yyyy}# and napszak='{KÜLDreggel.Trim()}'";
-            Kezelő_Kiadás_Összesítő KézKiadÖ = new Kezelő_Kiadás_Összesítő();
+            string szöveg1 = $@"SELECT * FROM tábla where dátum=#{KÜLDdátum:MM-dd-yyyy}# and napszak='{Napszak.Trim()}'";
+
             List<Adat_Kiadás_összesítő> AdatokKiadás = KézKiadÖ.Lista_adatok(helykiadás, jelszókiadás, szöveg1);
 
             int eforgalomban = 0;
@@ -264,13 +268,13 @@ namespace Villamos
             // ha van ilyen adat akkor kitöröljük az összes típust
             if (AdatokKiadás != null && AdatokKiadás.Count > 0)
             {
-                szöveg = $@"DELETE FROM tábla where dátum=#{KÜLDdátum:MM-dd-yyyy}# and napszak='{KÜLDreggel.Trim()}'";
+                szöveg = $@"DELETE FROM tábla where dátum=#{KÜLDdátum:MM-dd-yyyy}# and napszak='{Napszak.Trim()}'";
                 MyA.ABtörlés(helykiadás, jelszókiadás, szöveg);
             }
 
             szöveg = "SELECT * FROM adattábla order by típus";
-            Kezelő_Főkönyv_Nap KFN_kéz = new Kezelő_Főkönyv_Nap();
-            List<Adat_Főkönyv_Nap> Adatok = KFN_kéz.Lista_adatok(hely, jelszó, szöveg);
+
+            List<Adat_Főkönyv_Nap> Adatok = KézFőkönyvNap.Lista_adatok(hely, jelszó, szöveg);
 
             foreach (Adat_Főkönyv_Nap rekord in Adatok)
             {
@@ -280,7 +284,7 @@ namespace Villamos
                     // ha különböző akkor rögzíti a fájlba
                     szöveg = "INSERT INTO tábla (dátum, napszak, típus, forgalomban, tartalék, kocsiszíni, félreállítás, főjavítás, személyzet) VALUES (";
                     szöveg += "'" + KÜLDdátum.ToString("yyyy.MM.dd") + "', ";
-                    szöveg += "'" + KÜLDreggel.Trim() + "', ";
+                    szöveg += "'" + Napszak.Trim() + "', ";
                     szöveg += "'" + etípus.Trim() + "', ";
                     szöveg += eforgalomban.ToString() + ", ";
                     szöveg += etartalék.ToString() + ", ";
@@ -308,7 +312,7 @@ namespace Villamos
                     {
                         if (rekord.Megjegyzés.ToUpper().Trim().Substring(0, 1) == "S")
                             eszemélyzet += 1;
-                        else if (rekord.Napszak.Trim() == KÜLDreggel.ToUpper())
+                        else if (rekord.Napszak.Trim() == Napszak.ToUpper())
                         {
                             // ha forgalomban volt
                             eforgalomban += 1;
@@ -338,7 +342,7 @@ namespace Villamos
             // ha már nincs több akkor rögzíti az utolsó típus adatokat
             szöveg = "INSERT INTO tábla (dátum, napszak, típus, forgalomban, tartalék, kocsiszíni, félreállítás, főjavítás, személyzet) VALUES (";
             szöveg += "'" + KÜLDdátum.ToString("yyyy.MM.dd") + "', ";
-            szöveg += "'" + KÜLDreggel.Trim() + "', ";
+            szöveg += "'" + Napszak.Trim() + "', ";
             szöveg += "'" + etípus.Trim() + "', ";
             szöveg += eforgalomban.ToString() + ", ";
             szöveg += etartalék.ToString() + ", ";
@@ -348,40 +352,24 @@ namespace Villamos
             szöveg += eszemélyzet.ToString() + ") ";
             MyA.ABMódosítás(helykiadás, jelszókiadás, szöveg);
         }
-
         //
-        public static void Napitipuscsere(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
+        public static void Napitipuscsere(string Napszak, DateTime Dátum, string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
-            if (!File.Exists(hely)) return;
-            string jelszó = "lilaakác";
-            string szöveg = $"SELECT * FROM adattábla";
-            Kezelő_Főkönyv_Nap KézNap = new Kezelő_Főkönyv_Nap();
-            List<Adat_Főkönyv_Nap> AdatokNap = KézNap.Lista_adatok(hely, jelszó, szöveg);
+            List<Adat_Főkönyv_Nap> AdatokNap = KézFőkönyvNap.Lista_Adatok(Telephely, Dátum, Napszak);
 
-            string helyzser = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\zser\zser{KÜLDdátum:yyyyMMdd}{KÜLDreggel}.mdb";
+
+            string helyzser = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\főkönyv\{Dátum:yyyy}\zser\zser{Dátum:yyyyMMdd}{Napszak}.mdb";
             if (!File.Exists(helyzser)) return;
-
-            string helykieg = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\segéd\Kiegészítő.mdb";
+            string helykieg = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\segéd\Kiegészítő.mdb";
             Kezelő_Telep_Kieg_Fortetípus KézKiegTipus = new Kezelő_Telep_Kieg_Fortetípus();
-            List<Adat_Telep_Kieg_Fortetípus> AdatokKiegTipus = KézKiegTipus.Lista_Adatok(Küldtelephely.Trim());
+            List<Adat_Telep_Kieg_Fortetípus> AdatokKiegTipus = KézKiegTipus.Lista_Adatok(Telephely.Trim());
 
+            List<Adat_FőKönyv_Típuscsere> AdatokTípus = Kéz_Típus.Lista_Adatok(Telephely.Trim(), Dátum.Year);
+            bool vane = AdatokTípus.Any(t => t.Dátum == Dátum && t.Napszak.Trim() == Napszak.Trim());
+            if (vane) Kéz_Típus.Törlés(Telephely, Dátum.Year, Napszak, Dátum);    // Adott napi adatokat kitöröljük
 
-
-            string helytípus = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\típuscsere{KÜLDdátum:yyyy}.mdb";
-            string jelszótípus = "plédke";
-            szöveg = $@"SELECT * FROM típuscseretábla where dátum=#{KÜLDdátum:MM-dd-yyyy}# and napszak='{KÜLDreggel.Trim()}'";
-            Kezelő_Főkönyv_Típuscsere KézTípus = new Kezelő_Főkönyv_Típuscsere();
-            List<Adat_FőKönyv_Típuscsere> AdatokTípus = KézTípus.Lista_adatok(helytípus, jelszótípus, szöveg);
-
-            // adott napi és napszaki típuscseréket töröljük
-            if (AdatokTípus != null && AdatokTípus.Count > 0)
-            {
-                szöveg = $@"DELETE FROM típuscseretábla where dátum=#{KÜLDdátum:MM-dd-yyyy}# and napszak='{KÜLDreggel.Trim()}'";
-                MyA.ABtörlés(helytípus, jelszótípus, szöveg);
-            }
-
-            szöveg = "SELECT * FROM zseltábla ORDER BY  viszonylat,forgalmiszám,tervindulás";
+            string jelszó = "lilaakác";
+            string szöveg = "SELECT * FROM zseltábla ORDER BY  viszonylat,forgalmiszám,tervindulás";
             Kezelő_Főkönyv_ZSER KFZS_kéz = new Kezelő_Főkönyv_ZSER();
             List<Adat_Főkönyv_ZSER> Adatok = KFZS_kéz.Lista_adatok(helyzser, jelszó, szöveg);
 
@@ -438,8 +426,8 @@ namespace Villamos
                             if (jótípus.Trim() != jótípusalap.Trim())
                             {
                                 szöveg = "INSERT INTO típuscseretábla (dátum, napszak, típuselőírt, típuskiadott, viszonylat, forgalmiszám, tervindulás, azonosító, kocsi ) VALUES (";
-                                szöveg += "'" + KÜLDdátum.ToString("yyyy.MM.dd") + "', ";
-                                szöveg += "'" + KÜLDreggel.Trim() + "', ";
+                                szöveg += "'" + Dátum.ToString("yyyy.MM.dd") + "', ";
+                                szöveg += "'" + Napszak.Trim() + "', ";
                                 szöveg += "'" + jótípus.Trim() + "', ";
                                 szöveg += "'" + jótípusalap.Trim() + "', ";
                                 szöveg += "'" + rekord.Viszonylat.Trim() + "', ";
@@ -447,6 +435,8 @@ namespace Villamos
                                 szöveg += "'" + rekord.Tervindulás.ToString() + "', ";
                                 szöveg += "'" + ideigpsz.Trim() + "', ";
                                 szöveg += "'" + "kocsi" + i.ToString() + "') ";
+                                string helytípus = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\főkönyv\típuscsere{Dátum:yyyy}.mdb";
+                                string jelszótípus = "plédke";
                                 MyA.ABMódosítás(helytípus, jelszótípus, szöveg);
                             }
                         }
@@ -455,98 +445,83 @@ namespace Villamos
             }
         }
 
-        //
-        public static void Napiszemélyzet(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
+        public static void Napiszemélyzet(string Napszak, DateTime Dátum, string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum.Year}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
-
-            if (!File.Exists(hely)) return;
-            // ha nem létezik a fájl akkor kilép
-            string jelszó = "lilaakác";
-
-            string jelszószemélyzet = "plédke";
-            string helyszemélyzet = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\személyzet" + KÜLDdátum.ToString("yyyy") + ".mdb";
-
-            string szöveg = "SELECT * FROM tábla";
-            Kezelő_Főkönyv_Személyzet Kéz_Személy = new Kezelő_Főkönyv_Személyzet();
-            List<Adat_Főkönyv_Személyzet> Adatok_Személy = Kéz_Személy.Lista_adatok(helyszemélyzet, jelszószemélyzet, szöveg);
-            bool vane = Adatok_Személy.Any(t => t.Dátum.Date == KÜLDdátum.Date && t.Napszak.Trim() == KÜLDreggel.Trim());
-
-            if (vane)
+            try
             {
-                // Adott napi adatokat kitöröljük
-                szöveg = "DELETE FROM tábla where dátum=#" + KÜLDdátum.ToString("MM-dd-yyyy") + "#";
-                szöveg += " and napszak='" + KÜLDreggel.Trim() + "'";
-                MyA.ABtörlés(helyszemélyzet, jelszószemélyzet, szöveg);
-            }
-            szöveg = "SELECT * FROM adattábla WHERE megjegyzés<>'_'  and viszonylat<>'-'  order by típus";
+                List<Adat_Főkönyv_Személyzet> Adatok_Személy = Kéz_Személy.Lista_adatok(Telephely.Trim(), Dátum.Year);
+                bool vane = Adatok_Személy.Any(t => t.Dátum == Dátum && t.Napszak.Trim() == Napszak.Trim());
+                if (vane) Kéz_Személy.Törlés(Telephely, Dátum.Year, Napszak, Dátum);    // Adott napi adatokat kitöröljük
 
-            Kezelő_Főkönyv_Nap KFN_kéz = new Kezelő_Főkönyv_Nap();
-            List<Adat_Főkönyv_Nap> Adatok = KFN_kéz.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Főkönyv_Nap> Adatok = KézFőkönyvNap.Lista_Adatok(Telephely, Dátum, Napszak);
+                Adatok = (from a in Adatok
+                          where a.Megjegyzés.ToUpper().Substring(0, 1) == "S"
+                          orderby a.Típus
+                          select a).ToList();
 
-            foreach (Adat_Főkönyv_Nap rekord in Adatok)
-            {
-                if (rekord.Megjegyzés.ToUpper().Substring(0, 1) == "S") // ha s betűvel kezdődik
+                foreach (Adat_Főkönyv_Nap rekord in Adatok)
                 {
-                    szöveg = "INSERT INTO tábla (dátum, napszak, típus, viszonylat, forgalmiszám, tervindulás, azonosító) VALUES (";
-                    szöveg += "'" + KÜLDdátum.ToString("yyyy.MM.dd") + "', ";
-                    szöveg += "'" + KÜLDreggel.Trim() + "', ";
-                    szöveg += "'" + rekord.Típus.Trim() + "', ";
-                    szöveg += "'" + rekord.Viszonylat.Trim() + "', ";
-                    szöveg += "'" + rekord.Forgalmiszám.Trim() + "', ";
-                    szöveg += "'" + rekord.Tervindulás.ToString() + "', ";
-                    szöveg += "'" + rekord.Azonosító.Trim() + "') ";
-                    MyA.ABMódosítás(helyszemélyzet, jelszószemélyzet, szöveg);
+                    Adat_Főkönyv_Személyzet ADAT = new Adat_Főkönyv_Személyzet(
+                                           Dátum,
+                                           Napszak,
+                                           rekord.Típus.Trim(),
+                                           rekord.Viszonylat.Trim(),
+                                           rekord.Forgalmiszám.Trim(),
+                                           rekord.Tervindulás,
+                                           rekord.Azonosító.Trim());
+                    Kéz_Személy.Rögzítés(Telephely, Dátum.Year, ADAT);
                 }
             }
-
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Napiszemélyzet", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        //
-        public static void Napitöbblet(string KÜLDreggel, DateTime KÜLDdátum, string Küldtelephely)
+        public static void Napitöbblet(string Napszak, DateTime Dátum, string Telephely)
         {
-
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{KÜLDreggel}nap.mdb";
-            if (!File.Exists(hely))
-                return;
-
-            string jelszó = "lilaakác";
-            // ha nem létezik a fájl akkor kilép
-            string helytípus = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\típuscsere" + KÜLDdátum.ToString("yyyy") + ".mdb";
-            string jelszótípus = "plédke";
-
-            //   string szöveg = "select * from típuscseretábla where dátum=#" + KÜLDdátum.ToString("MM-dd-yyyy") + "#  and napszak='" + KÜLDreggel.Trim() + "'";
-
-            string szöveg = "SELECT * FROM adattábla WHERE megjegyzés<>'_' AND  viszonylat<>'-' order by típus";
-
-
-            Kezelő_Főkönyv_Nap KFN_kéz = new Kezelő_Főkönyv_Nap();
-            List<Adat_Főkönyv_Nap> Adatok = KFN_kéz.Lista_adatok(hely, jelszó, szöveg);
-
-            foreach (Adat_Főkönyv_Nap rekord in Adatok)
+            try
             {
-                if (rekord.Megjegyzés.ToUpper().Substring(0, 1) == "T")// ha t betűvel kezdődik
-                {
+                List<Adat_Főkönyv_Nap> Adatok = KézFőkönyvNap.Lista_Adatok(Telephely, Dátum, Napszak);
+                Adatok = (from a in Adatok
+                          where a.Megjegyzés.ToUpper().Substring(0, 1) == "T"
+                          orderby a.Típus
+                          select a).ToList();
 
-                    szöveg = "INSERT INTO típuscseretábla (dátum, napszak, típuselőírt, típuskiadott, viszonylat, forgalmiszám, tervindulás, azonosító, kocsi) VALUES (";
-                    szöveg += "'" + KÜLDdátum.ToString("yyyy.MM.dd") + "', ";
-                    szöveg += "'" + KÜLDreggel.Trim() + "', ";
-                    szöveg += "'Többlet kiadás', ";
-                    szöveg += "'" + rekord.Típus.Trim() + "', ";
-                    szöveg += "'" + rekord.Viszonylat.Trim() + "', ";
-                    szöveg += "'" + rekord.Forgalmiszám.Trim() + "', ";
-                    szöveg += "'" + rekord.Tervindulás.ToString() + "', ";
-                    szöveg += "'" + rekord.Azonosító.Trim() + "', ";
-                    szöveg += "'" + "kocsi1" + "') ";
-                    MyA.ABMódosítás(helytípus, jelszótípus, szöveg);
+                foreach (Adat_Főkönyv_Nap rekord in Adatok)
+                {
+                    Adat_FőKönyv_Típuscsere ADAT = new Adat_FőKönyv_Típuscsere(
+                                           Dátum,
+                                           Napszak,
+                                           "Többlet kiadás",
+                                           rekord.Típus.Trim(),
+                                           rekord.Viszonylat.Trim(),
+                                           rekord.Forgalmiszám.Trim(),
+                                           rekord.Tervindulás,
+                                           rekord.Azonosító.Trim(),
+                                           "kocsi1");
+                    Kéz_Típus.Rögzítés(Telephely, Dátum.Year, ADAT);
                 }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Napitöbblet", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         //
         public static void ZSER_Betöltés(string hely, string ExcelFájl, DateTime Dátum, string Telephely, long kiadási_korr = 0, long érkezési_korr = 0)
         {
-
             try
             {
                 // megnyitjuk a beolvasandó táblát
@@ -675,7 +650,6 @@ namespace Villamos
             return mit;
         }
 
-        //
         private static void Km_adatok_beolvasása(int sormax, long kiadásikorr, long érkezésikorr, DateTime Dátum, string Telephely)
         {
             string szöveg = "";

@@ -14,19 +14,19 @@ namespace Villamos.Kezelők
         readonly string jelszó = "lilaakác";
         string hely = "";
 
-        private void FájlBeállítás(string Telephely, DateTime Dátum, string Napszak)
+        private void FájlBeállítás(string Telephely, DateTime Dátum, string Napszak, bool Létrejön = true)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\{Dátum.Year}\nap\{Dátum:yyyyMMdd}{Napszak}nap.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Főkönyvtáblaalap(hely.KönyvSzerk());
+            if (!File.Exists(hely) && Létrejön) Adatbázis_Létrehozás.Főkönyvtáblaalap(hely.KönyvSzerk());
         }
 
         public List<Adat_Főkönyv_Nap> Lista_Adatok(string Telephely, DateTime Dátum, string Napszak)
         {
-            FájlBeállítás(Telephely, Dátum, Napszak);
+            FájlBeállítás(Telephely, Dátum, Napszak, false);
             string szöveg = "SELECT * FROM Adattábla ORDER BY azonosító";
             List<Adat_Főkönyv_Nap> Adatok = new List<Adat_Főkönyv_Nap>();
             Adat_Főkönyv_Nap Adat;
-
+            if (!File.Exists(hely)) return Adatok;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
