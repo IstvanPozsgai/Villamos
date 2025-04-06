@@ -242,6 +242,12 @@ namespace Villamos.Adatszerkezet
             Azonosító = azonosító;
             Hibaleírása = hibaleírása;
         }
+
+        public Adat_Jármű_Javításiátfutástábla(string azonosító, string hibaleírása)
+        {
+            Azonosító = azonosító;
+            Hibaleírása = hibaleírása;
+        }
     }
 
     public class Adat_Jármű_Állomány_Típus

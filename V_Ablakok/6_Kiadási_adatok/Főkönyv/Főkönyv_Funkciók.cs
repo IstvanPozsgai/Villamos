@@ -18,6 +18,8 @@ namespace Villamos
         readonly static Kezelő_Főkönyv_Zser_Km KézFőZserKm = new Kezelő_Főkönyv_Zser_Km();
         readonly static Kezelő_Nap_Hiba KézHibaÚj = new Kezelő_Nap_Hiba();
         readonly static Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
+        readonly static Kezelő_Jármű_Javításiátfutástábla KézXnapos = new Kezelő_Jármű_Javításiátfutástábla();
+        readonly static Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         public static void Napiállók(string telephely)
         {
@@ -115,63 +117,68 @@ namespace Villamos
             }
         }
 
-
         public static void SUBnapihibagöngyölés(string telephely)
         {
-            // napi állók
-            // xnapos tábla
-            string hely = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\hibanapló\Napi.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Javításiátfutástábla(hely);
-            string jelszó = "plédke";
-            string szöveg = "SELECT * FROM xnapostábla ";
-            Kezelő_Jármű_Javításiátfutástábla KézXnapos = new Kezelő_Jármű_Javításiátfutástábla();
-            List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_adatok(hely, jelszó, szöveg);
-
-
-            string helyhiba = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\villamos\hiba.mdb";
-            string jelszóhiba = "pozsgaii";
-            szöveg = "SELECT * FROM hibatábla ";
-            List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(telephely.Trim());
-
-            string helyvill = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\villamos\villamos.mdb";
-            szöveg = "SELECT * FROM állománytábla where státus=4 ";
-            Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-            List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(helyvill, jelszóhiba, szöveg);
-
-            // először az új elemeket rögzítése
-            List<string> SzövegGy = new List<string>();
-            if (AdatokJármű.Count >= 1)
+            try
             {
-                foreach (Adat_Jármű rekord in AdatokJármű)
+                // napi állók xnapos tábla
+                List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_Adatok(telephely.Trim());
+                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(telephely.Trim());
+
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(telephely.Trim());
+                AdatokJármű = (from a in AdatokJármű
+                               where a.Státus == 4
+                               select a).ToList();
+
+                // először az új elemeket rögzítése
+                List<Adat_Jármű_Javításiátfutástábla> AdatokGyM = new List<Adat_Jármű_Javításiátfutástábla>();
+                List<Adat_Jármű_Javításiátfutástábla> AdatokGyR = new List<Adat_Jármű_Javításiátfutástábla>();
+                if (AdatokJármű.Count >= 1)
                 {
-                    Adat_Jármű_Javításiátfutástábla ElemXnapos = (from a in AdatokXnapos
-                                                                  where a.Azonosító == rekord.Azonosító
-                                                                  select a).FirstOrDefault();
-                    // ha nincs ilyen pályaszám akkor rögzítjük
-                    if (ElemXnapos == null)
+                    foreach (Adat_Jármű rekord in AdatokJármű)
                     {
-                        szöveg = "INSERT INTO xnapostábla (azonosító, kezdődátum, végdátum, hibaleírása) VALUES (";
-                        szöveg += $"'{rekord.Azonosító.Trim()}', ";
-                        szöveg += $"'{rekord.Miótaáll:yyyy.MM.dd}', '1900.01.01', '?')";
-                        SzövegGy.Add(szöveg);
+                        Adat_Jármű_Javításiátfutástábla ElemXnapos = (from a in AdatokXnapos
+                                                                      where a.Azonosító == rekord.Azonosító
+                                                                      select a).FirstOrDefault();
+                        // ha nincs ilyen pályaszám akkor rögzítjük
+                        if (ElemXnapos == null)
+                        {
+                            Adat_Jármű_Javításiátfutástábla ADATR = new Adat_Jármű_Javításiátfutástábla(
+                                                    rekord.Miótaáll,
+                                                    new DateTime(1900, 1, 1),
+                                                    rekord.Azonosító.Trim(),
+                                                    "?");
+                            AdatokGyR.Add(ADATR);
+                        }
+
+                        // rögzítjük/módosítjuk a hibákat
+                        List<Adat_Jármű_hiba> HAdatok = (from a in AdatokHiba
+                                                         where a.Korlát == 4 && a.Azonosító == rekord.Azonosító
+                                                         select a).ToList();
+
+                        string hibaleírása = "";
+                        foreach (Adat_Jármű_hiba rekordhiba in HAdatok)
+                            hibaleírása += rekordhiba.Hibaleírása.Trim() + "-";
+
+                        if (hibaleírása.Trim() == "") hibaleírása = "?";
+                        Adat_Jármű_Javításiátfutástábla ADATM = new Adat_Jármű_Javításiátfutástábla(
+                                            rekord.Azonosító.Trim(),
+                                            hibaleírása);
+                        AdatokGyM.Add(ADATM);
+
                     }
-
-                    // rögzítjük/módosítjuk a hibákat
-                    List<Adat_Jármű_hiba> HAdatok = (from a in AdatokHiba
-                                                     where a.Korlát == 4 && a.Azonosító == rekord.Azonosító
-                                                     select a).ToList();
-
-                    string hibaleírása = "";
-                    foreach (Adat_Jármű_hiba rekordhiba in HAdatok)
-                    {
-                        hibaleírása += rekordhiba.Hibaleírása.Trim() + "-";
-                    }
-
-                    if (hibaleírása.Trim() == "") hibaleírása = "?";
-                    szöveg = $"UPDATE xnapostábla SET hibaleírása='{hibaleírása.Trim()}' WHERE [azonosító]='{rekord.Azonosító.Trim()}'";
-                    SzövegGy.Add(szöveg);
+                    if (AdatokGyR.Count > 0) KézXnapos.Rögzítés(telephely.Trim(), AdatokGyR);
+                    if (AdatokGyM.Count > 0) KézXnapos.Módosítás(telephely.Trim(), AdatokGyM);
                 }
-                if (SzövegGy.Count > 0) MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -186,14 +193,14 @@ namespace Villamos
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Javításiátfutástábla(hely);
             string jelszó = "plédke";
             string szöveg = "SELECT * FROM xnapostábla ";
-            Kezelő_Jármű_Javításiátfutástábla KézXnapos = new Kezelő_Jármű_Javításiátfutástábla();
+
             List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_adatok(hely, jelszó, szöveg);
 
 
             string helyvill = $@"{Application.StartupPath}\{telephely.Trim()}\adatok\villamos\villamos.mdb";
             string jelszóvill = "pozsgaii";
             szöveg = "SELECT * FROM állománytábla where státus=4 ";
-            Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+
             List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(helyvill, jelszóvill, szöveg);
 
 
