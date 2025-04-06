@@ -16,8 +16,8 @@ namespace Villamos
 
     public partial class Ablak_Fő_Egyesített
     {
-        readonly Kezelő_Személyzet_Adatok KézSzem = new Kezelő_Személyzet_Adatok();
-        readonly Kezelő_Típuscsere_Adatok KézTípCsere = new Kezelő_Típuscsere_Adatok();
+        readonly Kezelő_FőSzemélyzet_Adatok KézSzem = new Kezelő_FőSzemélyzet_Adatok();
+        readonly Kezelő_FőTípuscsere_Adatok KézTípCsere = new Kezelő_FőTípuscsere_Adatok();
         readonly Kezelő_FőKiadási_adatok KézKiad = new Kezelő_FőKiadási_adatok();
         readonly Kezelő_Forte_Kiadási_Adatok KézForteKiad = new Kezelő_Forte_Kiadási_Adatok();
         readonly Kezelő_Kiegészítő_Típusaltípustábla Kézkiegtípusal = new Kezelő_Kiegészítő_Típusaltípustábla();
@@ -2927,7 +2927,7 @@ namespace Villamos
                 Holtart.Maximum = 50;
                 Holtart.Value = 1;
 
-                Kezelő_Személyzet_Adatok KézSzemAd = new Kezelő_Személyzet_Adatok();
+                Kezelő_FőSzemélyzet_Adatok KézSzemAd = new Kezelő_FőSzemélyzet_Adatok();
                 List<Adat_Személyzet_Adatok> AdatokSzemAd = KézSzemAd.Lista_adatok(hely, jelszó, szöveg);
                 i = 6;
                 foreach (Adat_Személyzet_Adatok rekord in AdatokSzemAd)
@@ -3000,7 +3000,7 @@ namespace Villamos
                 Holtart.Maximum = 50;
                 Holtart.Value = 1;
 
-                Kezelő_Típuscsere_Adatok KézTípuscsereAdatok = new Kezelő_Típuscsere_Adatok();
+                Kezelő_FőTípuscsere_Adatok KézTípuscsereAdatok = new Kezelő_FőTípuscsere_Adatok();
                 List<Adat_Típuscsere_Adatok> AdatokTípuscsereAdatok = KézTípuscsereAdatok.Lista_adatok(hely, jelszó, szöveg);
                 i = 6;
                 foreach (Adat_Típuscsere_Adatok rekord in AdatokTípuscsereAdatok)

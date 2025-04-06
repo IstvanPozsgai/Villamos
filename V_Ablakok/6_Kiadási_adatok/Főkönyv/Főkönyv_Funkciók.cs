@@ -241,17 +241,17 @@ namespace Villamos
         }
 
         //
-        public static void Napiadatokmentése(string Napszak, DateTime KÜLDdátum, string Küldtelephely)
+        public static void Napiadatokmentése(string Napszak, DateTime Dátum, string Telephely)
         {
-            string hely = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\{KÜLDdátum:yyyy}\nap\{KÜLDdátum:yyyyMMdd}{Napszak}nap.mdb";
+            string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\főkönyv\{Dátum:yyyy}\nap\{Dátum:yyyyMMdd}{Napszak}nap.mdb";
             string jelszó = "lilaakác";
 
 
             // ha nem létezik a fájl akkor kilép
             if (!File.Exists(hely)) return;
-            string helykiadás = $@"{Application.StartupPath}\{Küldtelephely.Trim()}\adatok\főkönyv\kiadás{KÜLDdátum:yyyy}.mdb";
+            string helykiadás = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\főkönyv\kiadás{Dátum:yyyy}.mdb";
             string jelszókiadás = "plédke";
-            string szöveg1 = $@"SELECT * FROM tábla where dátum=#{KÜLDdátum:MM-dd-yyyy}# and napszak='{Napszak.Trim()}'";
+            string szöveg1 = $@"SELECT * FROM tábla where dátum=#{Dátum:MM-dd-yyyy}# and napszak='{Napszak.Trim()}'";
 
             List<Adat_Kiadás_összesítő> AdatokKiadás = KézKiadÖ.Lista_adatok(helykiadás, jelszókiadás, szöveg1);
 
@@ -268,7 +268,7 @@ namespace Villamos
             // ha van ilyen adat akkor kitöröljük az összes típust
             if (AdatokKiadás != null && AdatokKiadás.Count > 0)
             {
-                szöveg = $@"DELETE FROM tábla where dátum=#{KÜLDdátum:MM-dd-yyyy}# and napszak='{Napszak.Trim()}'";
+                szöveg = $@"DELETE FROM tábla where dátum=#{Dátum:MM-dd-yyyy}# and napszak='{Napszak.Trim()}'";
                 MyA.ABtörlés(helykiadás, jelszókiadás, szöveg);
             }
 
@@ -283,7 +283,7 @@ namespace Villamos
                 {
                     // ha különböző akkor rögzíti a fájlba
                     szöveg = "INSERT INTO tábla (dátum, napszak, típus, forgalomban, tartalék, kocsiszíni, félreállítás, főjavítás, személyzet) VALUES (";
-                    szöveg += "'" + KÜLDdátum.ToString("yyyy.MM.dd") + "', ";
+                    szöveg += "'" + Dátum.ToString("yyyy.MM.dd") + "', ";
                     szöveg += "'" + Napszak.Trim() + "', ";
                     szöveg += "'" + etípus.Trim() + "', ";
                     szöveg += eforgalomban.ToString() + ", ";
@@ -341,7 +341,7 @@ namespace Villamos
             }
             // ha már nincs több akkor rögzíti az utolsó típus adatokat
             szöveg = "INSERT INTO tábla (dátum, napszak, típus, forgalomban, tartalék, kocsiszíni, félreállítás, főjavítás, személyzet) VALUES (";
-            szöveg += "'" + KÜLDdátum.ToString("yyyy.MM.dd") + "', ";
+            szöveg += "'" + Dátum.ToString("yyyy.MM.dd") + "', ";
             szöveg += "'" + Napszak.Trim() + "', ";
             szöveg += "'" + etípus.Trim() + "', ";
             szöveg += eforgalomban.ToString() + ", ";

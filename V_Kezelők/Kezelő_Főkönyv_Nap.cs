@@ -106,6 +106,7 @@ namespace Villamos.Kezelők
             }
         }
 
+
         //Elkopó
         public List<Adat_Főkönyv_Nap> Lista_adatok(string hely, string jelszó, string szöveg)
         {
@@ -219,5 +220,4 @@ namespace Villamos.Kezelők
             return Adatok;
         }
     }
-
 }

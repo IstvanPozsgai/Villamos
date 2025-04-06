@@ -29,8 +29,8 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgTelep = new Kezelő_Kiegészítő_Szolgálattelepei();
         readonly Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_FőKiadási_adatok KézKiadás = new Kezelő_FőKiadási_adatok();
-        readonly Kezelő_Személyzet_Adatok KézSzeméyzet = new Kezelő_Személyzet_Adatok();
-        readonly Kezelő_Típuscsere_Adatok KézTípuscsere = new Kezelő_Típuscsere_Adatok();
+        readonly Kezelő_FőSzemélyzet_Adatok KézSzeméyzet = new Kezelő_FőSzemélyzet_Adatok();
+        readonly Kezelő_FőTípuscsere_Adatok KézTípuscsere = new Kezelő_FőTípuscsere_Adatok();
         readonly Kezelő_Kiadás_Összesítő KézTelepKiadás = new Kezelő_Kiadás_Összesítő();
         readonly Kezelő_Forte_Kiadási_Adatok KézFőForte = new Kezelő_Forte_Kiadási_Adatok();
 
