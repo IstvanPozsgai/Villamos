@@ -34,6 +34,64 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű> Lista_Adatok(string Telephely)
         {
+            if (Telephely == "Főmérnökség")
+                return Lista_AdatokFő(Telephely);
+            else
+                return Lista_AdatokTelephely(Telephely);
+        }
+
+        private List<Adat_Jármű> Lista_AdatokFő(string Telephely)
+        {
+            string szöveg = "SELECT * FROM állománytábla order by azonosító";
+            FájlBeállítás(Telephely);
+
+            List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
+            Adat_Jármű Adat;
+            try
+            {
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                    {
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                        {
+                            if (rekord.HasRows)
+                            {
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Jármű(
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["hibák"].ToÉrt_Long(),
+                                        rekord["státus"].ToÉrt_Long(),
+                                        rekord["Típus"].ToStrTrim(),
+                                        rekord["Üzem"].ToStrTrim(),
+                                        rekord["törölt"].ToÉrt_Bool(),
+                                        rekord["hibáksorszáma"].ToÉrt_Long(),
+                                        rekord["szerelvény"].ToÉrt_Bool(),
+                                        rekord["szerelvénykocsik"].ToÉrt_Long(),
+                                        rekord["miótaáll"].ToÉrt_DaTeTime(),
+                                        rekord["valóstípus"].ToStrTrim(),
+                                        rekord["valóstípus2"].ToStrTrim(),
+                                        rekord["Üzembehelyezés"].ToÉrt_DaTeTime()
+                                        );
+                                    Adatok.Add(Adat);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Lista_Adatok\n" + szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+            return Adatok;
+        }
+
+        private List<Adat_Jármű> Lista_AdatokTelephely(string Telephely)
+        {
             string szöveg = "SELECT * FROM állománytábla order by azonosító";
             FájlBeállítás(Telephely);
 

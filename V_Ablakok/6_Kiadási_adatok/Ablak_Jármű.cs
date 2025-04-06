@@ -36,27 +36,32 @@ namespace Villamos
         public Ablak_Jármű()
         {
             InitializeComponent();
+            Start();
         }
 
         private void Ablak_Átadás_átvétel_Load(object sender, EventArgs e)
         {
         }
 
-        private void Ablak_Jármű_Shown(object sender, EventArgs e)
+        private void Start()
         {
             Visible = false;
-            Cursor = Cursors.WaitCursor;
-
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            Refresh();
-            Visible = true;
-            Cursor = Cursors.Default;
+
             Telephelyekfeltöltése();
+            Telephelyeklistázasa();
             Jogosultságkiosztás();
             Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
             Kocsilistaellenőrzés();
-            Fülek.SelectedIndex = 0;
+            Fülek.SelectedIndex = 1;
             Fülekkitöltése();
+
+            Refresh();
+            Visible = true;
+        }
+
+        private void Ablak_Jármű_Shown(object sender, EventArgs e)
+        {
         }
 
         private void Ablak_Jármű_KeyDown(object sender, KeyEventArgs e)
@@ -234,6 +239,7 @@ namespace Villamos
                         Telephelyeklistázasa();
                         Listázközös();
                         ComboListáz();
+                        LÉT_listáz();
                         break;
                     }
 
@@ -423,6 +429,7 @@ namespace Villamos
         #region Jármű Törlés
         private void LÉT_listáz()
         {
+            Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
             List<Adat_Jármű> Adatok;
             if (TÖR_töröltek.Checked)
                 Adatok = (from a in Adatok_Állomány
@@ -520,7 +527,7 @@ namespace Villamos
             {
                 if (Mód_pályaszám.Text.Trim() == "") return;
                 Alapadat_ürítése();
-
+                Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
                 Adat_Jármű adat = (from a in Adatok_Állomány
                                    where a.Azonosító == Mód_pályaszám.Text.Trim()
                                    && a.Törölt == false
@@ -529,7 +536,7 @@ namespace Villamos
                 {
                     Mód_telephely.Text = adat.Üzem.Trim();
                     MÓD_típustext.Text = adat.Típus.Trim();
-                    Mód_üzembehelyezésdátuma.Value = adat.Üzembehelyezés < new DateTime(1900, 1, 1) ? new DateTime(1900, 1, 1) : adat.Üzembehelyezés;
+                    Mód_üzembehelyezésdátuma.Value = adat.Üzembehelyezés < new DateTime(1901, 1, 1) ? new DateTime(1900, 1, 1) : adat.Üzembehelyezés;
                     MÓD_főmérnökségitípus.Text = adat.Valóstípus.Trim();
                     MÓD_járműtípus.Text = adat.Valóstípus2.Trim();
                 }
