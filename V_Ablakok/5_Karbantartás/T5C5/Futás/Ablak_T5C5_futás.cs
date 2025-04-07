@@ -1561,7 +1561,7 @@ namespace Villamos
                     return;
                 DateTime Kezdet = DateTime.Now;
                 Holtart.Be();
-                Főkönyv_Funkciók.ZSER_Betöltés(hely, fájlexc, Dátum.Value, Cmbtelephely.Text.Trim());
+                Főkönyv_Funkciók.ZSER_Betöltés(Cmbtelephely.Text.Trim(), Dátum.Value, "", fájlexc);
                 Holtart.Ki();
                 DateTime Vég = DateTime.Now;
                 MessageBox.Show($"Az adat konvertálás befejeződött!\n Eltelt idő{Vég - Kezdet}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);

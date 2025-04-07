@@ -1038,7 +1038,7 @@ namespace Villamos
                     return;
 
                 DateTime Eleje = DateTime.Now;
-                Főkönyv_Funkciók.ZSER_Betöltés(hely, fájlexc, Dátum.Value, Cmbtelephely.Text.Trim(), kiadási_korr, érkezési_korr);
+                Főkönyv_Funkciók.ZSER_Betöltés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", fájlexc, kiadási_korr, érkezési_korr);
                 DateTime Vége = DateTime.Now;
 
                 // megnézzük, hogy előző éjszaka volt -e tábla, ha volt akkor hozzá fűzzük a napi adatokhoz.
