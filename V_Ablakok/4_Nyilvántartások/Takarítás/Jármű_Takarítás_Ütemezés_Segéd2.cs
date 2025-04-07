@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
@@ -163,6 +164,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
                             Segéd_tábla.Rows[4].Cells[0].Value = true;
                     }
                 }
+                ÜtemLista();
             }
             catch (HibásBevittAdat ex)
             {
@@ -304,6 +306,51 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
 
         private void Jármű_Takarítás_Ütemezés_Segéd2_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void ÜtemLista()
+        {
+            try
+            {
+                Tak_1.Visible = false;
+                Tak_2.Visible = false;
+                Tak_3.Visible = false;
+                Tak_4.Visible = false;
+                Tak_5.Visible = false;
+                Tak_6.Visible = false;
+
+                List<Adat_Jármű_Takarítás_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(AblakTakFő.Cmbtelephely.Text.Trim(), AblakTakFő.Dátum.Value.Year);
+                string[] psz = new string[6];
+                psz = Ütem_szerelvény_text2.Text.Split('-');
+
+                if (psz[0] != null)
+                {
+
+                    Adat_Jármű_Takarítás_Vezénylés ADAT = (from a in Adatok
+                                                           where a.Azonosító == psz[0]
+                                                           orderby a.Dátum descending
+                                                           select a).FirstOrDefault();
+                    if (ADAT != null)
+                    {
+                        Tak_1.Visible = true;
+                        Tak_1.Text = ADAT.Dátum.ToString("MM.dd");
+
+                    }
+                }
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
 
         }
     }
