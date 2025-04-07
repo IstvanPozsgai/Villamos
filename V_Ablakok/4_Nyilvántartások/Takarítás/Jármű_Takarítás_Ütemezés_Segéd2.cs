@@ -324,22 +324,37 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
                 string[] psz = new string[6];
                 psz = Ütem_szerelvény_text2.Text.Split('-');
 
-                if (psz[0] != null)
+                for (int i = 0; i < psz.Length; i++)
                 {
-
-                    Adat_Jármű_Takarítás_Vezénylés ADAT = (from a in Adatok
-                                                           where a.Azonosító == psz[0]
-                                                           orderby a.Dátum descending
-                                                           select a).FirstOrDefault();
-                    if (ADAT != null)
+                    DateTime Dátum = TakÜtem(Adatok, psz[i]);
+                    switch (i + 1)
                     {
-                        Tak_1.Visible = true;
-                        Tak_1.Text = ADAT.Dátum.ToString("MM.dd");
-
+                        case 1:
+                            Tak_1.Visible = Dátum != new DateTime(1900, 1, 1);
+                            Tak_1.Text = Dátum.ToString("MM.dd");
+                            break;
+                        case 2:
+                            Tak_2.Visible = Dátum != new DateTime(1900, 1, 1);
+                            Tak_2.Text = Dátum.ToString("MM.dd");
+                            break;
+                        case 3:
+                            Tak_3.Visible = Dátum != new DateTime(1900, 1, 1);
+                            Tak_3.Text = Dátum.ToString("MM.dd");
+                            break;
+                        case 4:
+                            Tak_4.Visible = Dátum != new DateTime(1900, 1, 1);
+                            Tak_4.Text = Dátum.ToString("MM.dd");
+                            break;
+                        case 5:
+                            Tak_5.Visible = Dátum != new DateTime(1900, 1, 1);
+                            Tak_5.Text = Dátum.ToString("MM.dd");
+                            break;
+                        case 6:
+                            Tak_6.Visible = Dátum != new DateTime(1900, 1, 1);
+                            Tak_6.Text = Dátum.ToString("MM.dd");
+                            break;
                     }
                 }
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -350,8 +365,30 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
 
-
+        private DateTime TakÜtem(List<Adat_Jármű_Takarítás_Vezénylés> Adatok, string Azonosító)
+        {
+            DateTime Válasz = new DateTime(1900, 1, 1);
+            try
+            {
+                Adat_Jármű_Takarítás_Vezénylés ADAT = (from a in Adatok
+                                                       where a.Azonosító == Azonosító
+                                                       && a.Dátum >= DateTime.Today.AddDays(-1)
+                                                       orderby a.Dátum descending
+                                                       select a).FirstOrDefault();
+                if (ADAT != null) Válasz = ADAT.Dátum;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
         }
     }
 }
