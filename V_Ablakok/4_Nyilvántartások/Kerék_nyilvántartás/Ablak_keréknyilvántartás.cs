@@ -1650,10 +1650,11 @@ namespace Villamos
 
                     int oszlop = 7;
                     string előző = "";
+                    int kerékszám = Tábla2.Rows[sor].Cells[5].Value.ToÉrt_Int();
                     foreach (Adat_Kerék_Mérés rekord in Mérések)
                     {
-                        if (Tábla2.Columns.Count <= oszlop + 2)
-                            break;
+                        if (Tábla2.Columns.Count <= oszlop + 2) break;
+                        if ((kerékszám * 3) + 5 < oszlop) break;
                         if (rekord.Pozíció.Trim() != előző)
                         {
                             Tábla2.Rows[sor].Cells[oszlop].Value = rekord.Pozíció;

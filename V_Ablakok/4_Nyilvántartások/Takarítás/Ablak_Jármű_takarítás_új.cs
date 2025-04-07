@@ -915,7 +915,7 @@ namespace Villamos
             {
                 Adat_Vezénylés Vezénylés = (from a in AdatokVez
                                             where a.Azonosító == pályaszám
-                                            && a.Dátum == DateTime.Today.AddDays(-1)
+                                            && a.Dátum >= DateTime.Today.AddDays(-1)
                                             && a.Törlés == 0
                                             orderby a.Azonosító
                                             select a).FirstOrDefault();
