@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Holtart = new System.Windows.Forms.ProgressBar();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Táblalista = new Zuby.ADGV.AdvancedDataGridView();
@@ -44,6 +44,7 @@
             this.ChkSzűrés = new System.Windows.Forms.CheckBox();
             this.KötésiOsztály = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.FődarabTípusok = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.Táblalista)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -75,8 +76,8 @@
             // 
             this.Táblalista.AllowUserToAddRows = false;
             this.Táblalista.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.Táblalista.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.Táblalista.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.Táblalista.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -96,7 +97,7 @@
             // 
             this.Frissíti_táblalistát.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Frissíti_táblalistát.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Frissíti_táblalistát.Location = new System.Drawing.Point(174, 51);
+            this.Frissíti_táblalistát.Location = new System.Drawing.Point(475, 50);
             this.Frissíti_táblalistát.Name = "Frissíti_táblalistát";
             this.Frissíti_táblalistát.Size = new System.Drawing.Size(47, 45);
             this.Frissíti_táblalistát.TabIndex = 184;
@@ -108,7 +109,7 @@
             // 
             this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_gomb.Location = new System.Drawing.Point(225, 51);
+            this.Excel_gomb.Location = new System.Drawing.Point(526, 50);
             this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Excel_gomb.Name = "Excel_gomb";
             this.Excel_gomb.Size = new System.Drawing.Size(47, 45);
@@ -121,7 +122,7 @@
             // 
             this.BtnSAP.BackgroundImage = global::Villamos.Properties.Resources.SAP;
             this.BtnSAP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSAP.Location = new System.Drawing.Point(643, 51);
+            this.BtnSAP.Location = new System.Drawing.Point(736, 50);
             this.BtnSAP.Name = "BtnSAP";
             this.BtnSAP.Size = new System.Drawing.Size(45, 45);
             this.BtnSAP.TabIndex = 186;
@@ -133,7 +134,7 @@
             // 
             this.Módosítás.BackgroundImage = global::Villamos.Properties.Resources.Action_configure;
             this.Módosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Módosítás.Location = new System.Drawing.Point(694, 51);
+            this.Módosítás.Location = new System.Drawing.Point(787, 50);
             this.Módosítás.Name = "Módosítás";
             this.Módosítás.Size = new System.Drawing.Size(45, 45);
             this.Módosítás.TabIndex = 187;
@@ -155,7 +156,7 @@
             // 
             this.Összesítés.BackgroundImage = global::Villamos.Properties.Resources.justice_297629_1280;
             this.Összesítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Összesítés.Location = new System.Drawing.Point(592, 51);
+            this.Összesítés.Location = new System.Drawing.Point(685, 50);
             this.Összesítés.Name = "Összesítés";
             this.Összesítés.Size = new System.Drawing.Size(45, 45);
             this.Összesítés.TabIndex = 189;
@@ -188,11 +189,19 @@
             this.groupBox1.BackColor = System.Drawing.Color.BurlyWood;
             this.groupBox1.Controls.Add(this.ChkSzűrés);
             this.groupBox1.Controls.Add(this.ChkRendezés);
-            this.groupBox1.Location = new System.Drawing.Point(12, 31);
+            this.groupBox1.Location = new System.Drawing.Point(12, 30);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(156, 65);
             this.groupBox1.TabIndex = 193;
             this.groupBox1.TabStop = false;
+            // 
+            // FődarabTípusok
+            // 
+            this.FődarabTípusok.FormattingEnabled = true;
+            this.FődarabTípusok.Location = new System.Drawing.Point(174, 67);
+            this.FődarabTípusok.Name = "FődarabTípusok";
+            this.FődarabTípusok.Size = new System.Drawing.Size(300, 28);
+            this.FődarabTípusok.TabIndex = 194;
             // 
             // Ablak_Fődarab
             // 
@@ -200,6 +209,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(906, 252);
+            this.Controls.Add(this.FődarabTípusok);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Összesítés);
             this.Controls.Add(this.Aktív);
@@ -242,5 +252,6 @@
         internal System.Windows.Forms.CheckBox ChkSzűrés;
         internal System.Windows.Forms.BindingSource KötésiOsztály;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ComboBox FődarabTípusok;
     }
 }

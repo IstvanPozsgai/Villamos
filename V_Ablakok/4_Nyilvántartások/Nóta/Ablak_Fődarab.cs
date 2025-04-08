@@ -33,6 +33,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         private void Start()
         {
             Jogosultságkiosztás();
+            FődarabTípusok_Feltöltése();
         }
 
         private void Ablak_Fődarab_Load(object sender, EventArgs e)
@@ -121,6 +122,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         {
             Táblalista.Columns["Id"].Width = 50;
             Táblalista.Columns["Berendezés"].Width = 100;
+            Táblalista.Columns["Megnevezés"].Width = 200;
             Táblalista.Columns["Készlet Sarzs"].Width = 80;
             Táblalista.Columns["Raktár"].Width = 80;
             Táblalista.Columns["Telephely"].Width = 120;
@@ -141,6 +143,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 AdatTábla.Columns.Clear();
                 AdatTábla.Columns.Add("Id", typeof(long));
                 AdatTábla.Columns.Add("Berendezés", typeof(string));
+                AdatTábla.Columns.Add("Megnevezés", typeof(string));
                 AdatTábla.Columns.Add("Készlet Sarzs", typeof(string));
                 AdatTábla.Columns.Add("Raktár", typeof(string));
                 AdatTábla.Columns.Add("Telephely", typeof(string));
@@ -154,6 +157,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 AdatTábla.Columns.Add("Dátum", typeof(DateTime));
                 AdatTábla.Columns.Add("Státus", typeof(string));
 
+                List<Adat_Kerék_Tábla> AdatokBer = KézKerék.Lista_Adatok();
                 List<Adat_Nóta> Adatok = KézNóta.Lista_Adat(!Aktív.Checked);
                 List<Adat_Kerék_Tábla> AdatokKerék = KézKerék.Lista_Adatok();
 
@@ -180,10 +184,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                         állapot = $"{Mérés.Állapot}-{Enum.GetName(typeof(Kerék_Állapot), Mérés.Állapot.ToÉrt_Int()).Replace('_', ' ')}";
                     }
 
+                    Adat_Kerék_Tábla Berendezés = AdatokBer.FirstOrDefault(x => x.Kerékberendezés == rekord.Berendezés);
+                    string BerMegnevezés = "?";
+                    if (Berendezés != null) BerMegnevezés = Berendezés.Kerékmegnevezés;
 
                     DataRow Soradat = AdatTábla.NewRow();
                     Soradat["Id"] = rekord.Id;
                     Soradat["Berendezés"] = rekord.Berendezés;
+                    Soradat["Megnevezés"] = BerMegnevezés;
                     Soradat["Készlet Sarzs"] = rekord.Készlet_Sarzs;
                     Soradat["Raktár"] = rekord.Raktár;
                     Soradat["Telephely"] = rekord.Telephely;
@@ -438,6 +446,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         }
         #endregion
 
-
+        #region TöbbFődarab
+        private void FődarabTípusok_Feltöltése()
+        {
+            List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
+            List<string> Objektumok = Adatok.OrderBy(a => a.Objektumfajta).Select(a => a.Objektumfajta).Distinct().ToList();
+            foreach (string objektum in Objektumok)
+                FődarabTípusok.Items.Add(objektum);
+        }
+        #endregion  
     }
 }

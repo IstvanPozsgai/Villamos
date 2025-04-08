@@ -31,8 +31,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             List<string> Objektumok = Adatok.OrderBy(a => a.Objektumfajta).Select(a => a.Objektumfajta).Distinct().ToList();
             foreach (string objektum in Objektumok)
                 FődarabTípusok.Items.Add(objektum);
-
-
         }
 
         private void Frissíti_táblalistát_Click(object sender, EventArgs e)
