@@ -983,7 +983,7 @@ namespace Villamos
             }
         }
 
-        void ZSER_Beolvasás()
+        private void ZSER_Beolvasás()
         {
             string fájlexc = "";
             try
