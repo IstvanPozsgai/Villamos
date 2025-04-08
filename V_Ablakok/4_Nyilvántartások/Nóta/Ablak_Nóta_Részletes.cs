@@ -159,8 +159,13 @@ namespace Villamos.Villamos_Ablakok
                         állapot = $"{Mérés.Állapot}-{Enum.GetName(typeof(Kerék_Állapot), Mérés.Állapot.ToÉrt_Int()).Replace('_', ' ')}";
                     }
 
+                    Adat_Kerék_Tábla BerendezésA = AdatokKerék.FirstOrDefault(x => x.Kerékberendezés == rekord.Berendezés);
+                    string BerMegnevezés = "?";
+                    if (Berendezés != null) BerMegnevezés = BerendezésA.Kerékmegnevezés;
+
                     Id.Text = rekord.Id.ToString();
                     Berendezés.Text = rekord.Berendezés;
+                    Megnevezés.Text = BerMegnevezés;
                     KészletSarzs.Text = rekord.Készlet_Sarzs;
                     Raktár.Text = rekord.Raktár;
                     Telephely.Text = rekord.Telephely;

@@ -157,7 +157,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 AdatTábla.Columns.Add("Dátum", typeof(DateTime));
                 AdatTábla.Columns.Add("Státus", typeof(string));
 
-                List<Adat_Kerék_Tábla> AdatokBer = KézKerék.Lista_Adatok();
                 List<Adat_Nóta> Adatok = KézNóta.Lista_Adat(!Aktív.Checked);
                 List<Adat_Kerék_Tábla> AdatokKerék = KézKerék.Lista_Adatok();
 
@@ -169,43 +168,46 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 foreach (Adat_Nóta rekord in Adatok)
                 {
                     Adat_Kerék_Tábla EgyKerék = AdatokKerék.FirstOrDefault(x => x.Kerékberendezés == rekord.Berendezés);
-                    string gyáriszám = "";
-                    if (EgyKerék != null) gyáriszám = EgyKerék.Kerékgyártásiszám;
-
-                    Adat_Kerék_Mérés Mérés = (from a in AdatokMérés
-                                              where a.Kerékberendezés == rekord.Berendezés
-                                              orderby a.Mikor ascending
-                                              select a).LastOrDefault();
-                    int átmérő = 0;
-                    string állapot = "";
-                    if (Mérés != null)
-                    {
-                        átmérő = Mérés.Méret;
-                        állapot = $"{Mérés.Állapot}-{Enum.GetName(typeof(Kerék_Állapot), Mérés.Állapot.ToÉrt_Int()).Replace('_', ' ')}";
-                    }
-
-                    Adat_Kerék_Tábla Berendezés = AdatokBer.FirstOrDefault(x => x.Kerékberendezés == rekord.Berendezés);
                     string BerMegnevezés = "?";
-                    if (Berendezés != null) BerMegnevezés = Berendezés.Kerékmegnevezés;
+                    string gyáriszám = "";
+                    if (EgyKerék != null && (FődarabTípusok.Text.Trim() == "" || EgyKerék.Objektumfajta == FődarabTípusok.Text))
+                    {
+                        gyáriszám = EgyKerék.Kerékgyártásiszám;
+                        BerMegnevezés = EgyKerék.Kerékmegnevezés;
 
-                    DataRow Soradat = AdatTábla.NewRow();
-                    Soradat["Id"] = rekord.Id;
-                    Soradat["Berendezés"] = rekord.Berendezés;
-                    Soradat["Megnevezés"] = BerMegnevezés;
-                    Soradat["Készlet Sarzs"] = rekord.Készlet_Sarzs;
-                    Soradat["Raktár"] = rekord.Raktár;
-                    Soradat["Telephely"] = rekord.Telephely;
-                    Soradat["Forgóváz"] = rekord.Forgóváz;
-                    Soradat["Gyártási Szám"] = gyáriszám.ToÉrt_Long();
-                    Soradat["Beépíthető"] = rekord.Beépíthető ? "Igen" : "Nem";
-                    Soradat["Műszaki Megjegyzés"] = MyF.Szöveg_Tisztítás(rekord.MűszakiM, true);
-                    Soradat["Osztási Megjegyzés"] = MyF.Szöveg_Tisztítás(rekord.OsztásiM, true);
-                    Soradat["Dátum"] = rekord.Dátum;
-                    Soradat["Státus"] = $"{rekord.Státus} - {((Nóta_Státus)rekord.Státus).ToStrTrim().Replace('_', ' ')}";
-                    Soradat["Átmérő"] = átmérő.ToÉrt_Int();
-                    Soradat["Állapot"] = állapot;
 
-                    AdatTábla.Rows.Add(Soradat);
+                        Adat_Kerék_Mérés Mérés = (from a in AdatokMérés
+                                                  where a.Kerékberendezés == rekord.Berendezés
+                                                  orderby a.Mikor ascending
+                                                  select a).LastOrDefault();
+                        int átmérő = 0;
+                        string állapot = "";
+                        if (Mérés != null)
+                        {
+                            átmérő = Mérés.Méret;
+                            állapot = $"{Mérés.Állapot}-{Enum.GetName(typeof(Kerék_Állapot), Mérés.Állapot.ToÉrt_Int()).Replace('_', ' ')}";
+                        }
+
+
+                        DataRow Soradat = AdatTábla.NewRow();
+                        Soradat["Id"] = rekord.Id;
+                        Soradat["Berendezés"] = rekord.Berendezés;
+                        Soradat["Megnevezés"] = BerMegnevezés;
+                        Soradat["Készlet Sarzs"] = rekord.Készlet_Sarzs;
+                        Soradat["Raktár"] = rekord.Raktár;
+                        Soradat["Telephely"] = rekord.Telephely;
+                        Soradat["Forgóváz"] = rekord.Forgóváz;
+                        Soradat["Gyártási Szám"] = gyáriszám.ToÉrt_Long();
+                        Soradat["Beépíthető"] = rekord.Beépíthető ? "Igen" : "Nem";
+                        Soradat["Műszaki Megjegyzés"] = MyF.Szöveg_Tisztítás(rekord.MűszakiM, true);
+                        Soradat["Osztási Megjegyzés"] = MyF.Szöveg_Tisztítás(rekord.OsztásiM, true);
+                        Soradat["Dátum"] = rekord.Dátum;
+                        Soradat["Státus"] = $"{rekord.Státus} - {((Nóta_Státus)rekord.Státus).ToStrTrim().Replace('_', ' ')}";
+                        Soradat["Átmérő"] = átmérő.ToÉrt_Int();
+                        Soradat["Állapot"] = állapot;
+
+                        AdatTábla.Rows.Add(Soradat);
+                    }
                 }
             }
             catch (HibásBevittAdat ex)
