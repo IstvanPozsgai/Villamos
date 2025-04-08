@@ -77,7 +77,7 @@ namespace Villamos.Kezelők
                     szöveg += "viszonylat, forgalmiszám, kocsikszáma, tervindulás, tényindulás, ";
                     szöveg += "tervérkezés, tényérkezés, miótaáll, napszak, megjegyzés ) VALUES (";
                     szöveg += $"{Adat.Státus},";              //  Státus
-                    szöveg += $" '{Adat.Azonosító}',";        //  hibaleírása
+                    szöveg += $" '{Adat.Hibaleírása}',";        //  hibaleírása
                     szöveg += $" '{Adat.Típus}',";            //  típus
                     szöveg += $" '{Adat.Azonosító}',";        //  azonosító
                     szöveg += $" {Adat.Szerelvény}, ";        //  szerelvény

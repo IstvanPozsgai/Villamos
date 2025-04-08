@@ -321,6 +321,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
                 Tak_6.Visible = false;
 
                 List<Adat_Jármű_Takarítás_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(AblakTakFő.Cmbtelephely.Text.Trim(), AblakTakFő.Dátum.Value.Year);
+                Adatok = Adatok.Where(a => a.Státus != 9).ToList();
                 string[] psz = new string[6];
                 psz = Ütem_szerelvény_text2.Text.Split('-');
 
