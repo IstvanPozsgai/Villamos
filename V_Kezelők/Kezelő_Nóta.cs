@@ -4,6 +4,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -17,6 +18,8 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Nóta\NótaT5C5.mdb";
 
         readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgálattelepei = new Kezelő_Kiegészítő_Szolgálattelepei();
+        readonly Kezelő_Kerék_Tábla KézBerendezés = new Kezelő_Kerék_Tábla();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         public Kezelő_Nóta()
         {
@@ -57,7 +60,8 @@ namespace Villamos.Kezelők
                                      rekord["MűszakiM"].ToStrTrim(),
                                      rekord["OsztásiM"].ToStrTrim(),
                                      rekord["Dátum"].ToÉrt_DaTeTime(),
-                                     rekord["Státus"].ToÉrt_Int());
+                                     rekord["Státus"].ToÉrt_Int(),
+                                     rekord["Cikkszám"].ToStrTrim());
                                 Adatok.Add(Adat);
                             }
                         }
@@ -86,6 +90,7 @@ namespace Villamos.Kezelők
                     szöveg += $"OsztásiM='{Adat.OsztásiM}', ";
                     szöveg += $"Dátum='{Adat.Dátum:yyyy.MM.dd}', ";
                     szöveg += $"Státus={Adat.Státus} ";
+                    szöveg += $"Státus={Adat.Cikkszám} ";
                     szöveg += $" WHERE [Id] ={Adat.Id}";
                 }
                 else
@@ -115,7 +120,7 @@ namespace Villamos.Kezelők
             try
             {
                 string szöveg = "INSERT  INTO Nóta_Adatok ";
-                szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id) VALUES (";
+                szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id, Cikkszám) VALUES (";
                 szöveg += $"'{Adat.Berendezés}', ";      // Berendezés
                 szöveg += $"'{Adat.Készlet_Sarzs}', ";   // Készlet_Sarzs
                 szöveg += $"'{Adat.Raktár}', ";          // Raktár
@@ -126,7 +131,8 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.OsztásiM}', ";             // OsztásiM
                 szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";        // Dátum
                 szöveg += $"{Adat.Státus}, ";                    // Státus
-                szöveg += $"{Sorszám()})";
+                szöveg += $"{Sorszám()}, ";
+                szöveg += $"'{Adat.Cikkszám}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -145,16 +151,30 @@ namespace Villamos.Kezelők
             try
             {
                 List<Adat_Kiegészítő_Szolgálattelepei> AdatokRaktár = KézSzolgálattelepei.Lista_Adatok();
+                List<Adat_Kerék_Tábla> AdatokKocsi = KézBerendezés.Lista_Adatok();
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
 
                 List<string> SzövegGY = new List<string>();
                 foreach (Adat_Nóta Adat in Adatok)
                 {
                     string Telephely = "";
+
                     if (Adat.Raktár != "")
                     {
                         Adat_Kiegészítő_Szolgálattelepei AdatRaktár = AdatokRaktár.FirstOrDefault(x => x.Raktár == Adat.Raktár);
                         if (AdatRaktár != null) Telephely = AdatRaktár.Telephelynév;
                     }
+
+                    if (Telephely == "")
+                    {
+                        Adat_Kerék_Tábla AdatBerendezés = AdatokKocsi.FirstOrDefault(a => a.Kerékberendezés == Adat.Berendezés);
+                        if (AdatBerendezés != null)
+                        {
+                            Adat_Jármű EgyKocsi = AdatokJármű.FirstOrDefault(a => a.Azonosító == AdatBerendezés.Azonosító);
+                            if (EgyKocsi != null) Telephely = EgyKocsi.Üzem;
+                        }
+                    }
+
                     if (Telephely == "")
                     {
                         if (Adat.Készlet_Sarzs.Trim() == "02")
@@ -230,7 +250,7 @@ namespace Villamos.Kezelők
                     }
 
                     string szöveg = "INSERT  INTO Nóta_Adatok ";
-                    szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id) VALUES (";
+                    szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id, cikkszám) VALUES (";
                     szöveg += $"'{Adat.Berendezés}', ";      // Berendezés
                     szöveg += $"'{Adat.Készlet_Sarzs}', ";   // Készlet_Sarzs
                     szöveg += $"'{Adat.Raktár}', ";          // Raktár
@@ -241,7 +261,8 @@ namespace Villamos.Kezelők
                     szöveg += $"'', ";             // OsztásiM
                     szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";        // Dátum
                     szöveg += $"1, ";                    // Státus
-                    szöveg += $"{id})";                  // Id
+                    szöveg += $"{id}, ";                  // Id
+                    szöveg += $"'{Adat.Cikkszám}') ";
                     SzövegGY.Add(szöveg);
                     id++;
 

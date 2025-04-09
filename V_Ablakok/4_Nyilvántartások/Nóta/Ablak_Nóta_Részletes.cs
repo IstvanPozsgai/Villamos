@@ -178,6 +178,7 @@ namespace Villamos.Villamos_Ablakok
                     Státus.Text = $"{rekord.Státus} - {((Nóta_Státus)rekord.Státus).ToStrTrim().Replace('_', ' ')}";
                     Átmérő.Text = átmérő.ToStrTrim();
                     Állapot.Text = állapot;
+                    Cikkszám.Text = rekord.Cikkszám;
 
                 }
 
@@ -242,7 +243,9 @@ namespace Villamos.Villamos_Ablakok
                                 Műszaki.Text.Trim(),
                                 Osztási.Text.Trim(),
                                 Dátum.Value,
-                                Státus.Text.Trim().Substring(0, 1).ToÉrt_Int());
+                                Státus.Text.Trim().Substring(0, 1).ToÉrt_Int(),
+                                Cikkszám.Text.Trim()
+                                );
 
                 KézNóta.Módosítás(ADAT);
                 Változás?.Invoke();

@@ -58,11 +58,13 @@
             this.KerékRögzít = new System.Windows.Forms.Button();
             this.Állapot = new System.Windows.Forms.ComboBox();
             this.Átmérő = new System.Windows.Forms.TextBox();
+            this.Megnevezés = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.Rögzít = new System.Windows.Forms.Button();
-            this.Megnevezés = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.Cikkszám = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -80,7 +82,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(428, 0);
+            this.label2.Location = new System.Drawing.Point(470, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(137, 20);
             this.label2.TabIndex = 0;
@@ -89,7 +91,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(428, 32);
+            this.label3.Location = new System.Drawing.Point(470, 32);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(106, 20);
             this.label3.TabIndex = 0;
@@ -98,7 +100,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(428, 64);
+            this.label4.Location = new System.Drawing.Point(470, 64);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(57, 20);
             this.label4.TabIndex = 0;
@@ -107,7 +109,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(428, 96);
+            this.label5.Location = new System.Drawing.Point(470, 96);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(76, 20);
             this.label5.TabIndex = 0;
@@ -116,7 +118,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(428, 130);
+            this.label6.Location = new System.Drawing.Point(470, 130);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(110, 20);
             this.label6.TabIndex = 0;
@@ -125,7 +127,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(428, 162);
+            this.label7.Location = new System.Drawing.Point(3, 96);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(103, 20);
             this.label7.TabIndex = 0;
@@ -134,7 +136,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 260);
+            this.label8.Location = new System.Drawing.Point(3, 214);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(61, 20);
             this.label8.TabIndex = 0;
@@ -143,7 +145,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 292);
+            this.label9.Location = new System.Drawing.Point(3, 248);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(58, 20);
             this.label9.TabIndex = 0;
@@ -188,7 +190,7 @@
             // Id
             // 
             this.Id.Enabled = false;
-            this.Id.Location = new System.Drawing.Point(70, 3);
+            this.Id.Location = new System.Drawing.Point(112, 3);
             this.Id.Name = "Id";
             this.Id.Size = new System.Drawing.Size(100, 26);
             this.Id.TabIndex = 1;
@@ -196,7 +198,7 @@
             // Berendezés
             // 
             this.Berendezés.Enabled = false;
-            this.Berendezés.Location = new System.Drawing.Point(584, 3);
+            this.Berendezés.Location = new System.Drawing.Point(626, 3);
             this.Berendezés.Name = "Berendezés";
             this.Berendezés.Size = new System.Drawing.Size(164, 26);
             this.Berendezés.TabIndex = 1;
@@ -204,7 +206,7 @@
             // KészletSarzs
             // 
             this.KészletSarzs.Enabled = false;
-            this.KészletSarzs.Location = new System.Drawing.Point(584, 35);
+            this.KészletSarzs.Location = new System.Drawing.Point(626, 35);
             this.KészletSarzs.Name = "KészletSarzs";
             this.KészletSarzs.Size = new System.Drawing.Size(164, 26);
             this.KészletSarzs.TabIndex = 1;
@@ -212,7 +214,7 @@
             // Raktár
             // 
             this.Raktár.Enabled = false;
-            this.Raktár.Location = new System.Drawing.Point(584, 67);
+            this.Raktár.Location = new System.Drawing.Point(626, 67);
             this.Raktár.Name = "Raktár";
             this.Raktár.Size = new System.Drawing.Size(164, 26);
             this.Raktár.TabIndex = 1;
@@ -220,14 +222,14 @@
             // GyártásiSzám
             // 
             this.GyártásiSzám.Enabled = false;
-            this.GyártásiSzám.Location = new System.Drawing.Point(584, 133);
+            this.GyártásiSzám.Location = new System.Drawing.Point(626, 133);
             this.GyártásiSzám.Name = "GyártásiSzám";
             this.GyártásiSzám.Size = new System.Drawing.Size(164, 26);
             this.GyártásiSzám.TabIndex = 1;
             // 
             // Forgóváz
             // 
-            this.Forgóváz.Location = new System.Drawing.Point(584, 197);
+            this.Forgóváz.Location = new System.Drawing.Point(626, 165);
             this.Forgóváz.Name = "Forgóváz";
             this.Forgóváz.Size = new System.Drawing.Size(164, 26);
             this.Forgóváz.TabIndex = 1;
@@ -268,7 +270,7 @@
             // Beépíthető
             // 
             this.Beépíthető.FormattingEnabled = true;
-            this.Beépíthető.Location = new System.Drawing.Point(584, 229);
+            this.Beépíthető.Location = new System.Drawing.Point(626, 217);
             this.Beépíthető.Name = "Beépíthető";
             this.Beépíthető.Size = new System.Drawing.Size(121, 28);
             this.Beépíthető.TabIndex = 3;
@@ -277,7 +279,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(428, 226);
+            this.label15.Location = new System.Drawing.Point(470, 194);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(87, 20);
             this.label15.TabIndex = 0;
@@ -286,7 +288,7 @@
             // Telephely
             // 
             this.Telephely.FormattingEnabled = true;
-            this.Telephely.Location = new System.Drawing.Point(584, 99);
+            this.Telephely.Location = new System.Drawing.Point(626, 99);
             this.Telephely.Name = "Telephely";
             this.Telephely.Size = new System.Drawing.Size(238, 28);
             this.Telephely.TabIndex = 3;
@@ -310,20 +312,22 @@
             this.tableLayoutPanel1.Controls.Add(this.label5, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.label6, 2, 4);
             this.tableLayoutPanel1.Controls.Add(this.GyártásiSzám, 3, 4);
-            this.tableLayoutPanel1.Controls.Add(this.KerékRögzít, 2, 9);
-            this.tableLayoutPanel1.Controls.Add(this.Állapot, 1, 9);
-            this.tableLayoutPanel1.Controls.Add(this.Átmérő, 1, 8);
-            this.tableLayoutPanel1.Controls.Add(this.label9, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.Beépíthető, 3, 7);
-            this.tableLayoutPanel1.Controls.Add(this.Forgóváz, 3, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label15, 2, 7);
-            this.tableLayoutPanel1.Controls.Add(this.label7, 2, 5);
-            this.tableLayoutPanel1.Controls.Add(this.Megnevezés, 3, 5);
-            this.tableLayoutPanel1.Controls.Add(this.label10, 2, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label8, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.label10, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label15, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.Forgóváz, 3, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label8, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.label9, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.Átmérő, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.Állapot, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.KerékRögzít, 2, 8);
+            this.tableLayoutPanel1.Controls.Add(this.label7, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.Megnevezés, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.Cikkszám, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label16, 0, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 10;
+            this.tableLayoutPanel1.RowCount = 9;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -334,14 +338,14 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(829, 344);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(829, 304);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // KerékRögzít
             // 
             this.KerékRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.KerékRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.KerékRögzít.Location = new System.Drawing.Point(428, 295);
+            this.KerékRögzít.Location = new System.Drawing.Point(470, 251);
             this.KerékRögzít.Name = "KerékRögzít";
             this.KerékRögzít.Size = new System.Drawing.Size(45, 45);
             this.KerékRögzít.TabIndex = 121;
@@ -351,18 +355,35 @@
             // Állapot
             // 
             this.Állapot.FormattingEnabled = true;
-            this.Állapot.Location = new System.Drawing.Point(70, 295);
+            this.Állapot.Location = new System.Drawing.Point(112, 251);
             this.Állapot.Name = "Állapot";
             this.Állapot.Size = new System.Drawing.Size(352, 28);
             this.Állapot.TabIndex = 3;
             // 
             // Átmérő
             // 
-            this.Átmérő.Location = new System.Drawing.Point(70, 263);
+            this.Átmérő.Location = new System.Drawing.Point(112, 217);
             this.Átmérő.Multiline = true;
             this.Átmérő.Name = "Átmérő";
             this.Átmérő.Size = new System.Drawing.Size(100, 26);
             this.Átmérő.TabIndex = 4;
+            // 
+            // Megnevezés
+            // 
+            this.Megnevezés.Enabled = false;
+            this.Megnevezés.Location = new System.Drawing.Point(112, 99);
+            this.Megnevezés.Name = "Megnevezés";
+            this.Megnevezés.Size = new System.Drawing.Size(352, 26);
+            this.Megnevezés.TabIndex = 122;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(470, 162);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(75, 20);
+            this.label10.TabIndex = 123;
+            this.label10.Text = "Forgóváz";
             // 
             // tableLayoutPanel2
             // 
@@ -373,7 +394,7 @@
             this.tableLayoutPanel2.Controls.Add(this.Műszaki, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label12, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.Osztási, 1, 1);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 359);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 319);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -392,7 +413,7 @@
             this.tableLayoutPanel3.Controls.Add(this.Dátum, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.label14, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.Státus, 3, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(12, 580);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(12, 540);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -410,29 +431,29 @@
             this.Rögzít.UseVisualStyleBackColor = true;
             this.Rögzít.Click += new System.EventHandler(this.Rögzít_Click);
             // 
-            // Megnevezés
+            // Cikkszám
             // 
-            this.Megnevezés.Enabled = false;
-            this.Megnevezés.Location = new System.Drawing.Point(584, 165);
-            this.Megnevezés.Name = "Megnevezés";
-            this.Megnevezés.Size = new System.Drawing.Size(238, 26);
-            this.Megnevezés.TabIndex = 122;
+            this.Cikkszám.Enabled = false;
+            this.Cikkszám.Location = new System.Drawing.Point(112, 133);
+            this.Cikkszám.Name = "Cikkszám";
+            this.Cikkszám.Size = new System.Drawing.Size(236, 26);
+            this.Cikkszám.TabIndex = 124;
             // 
-            // label10
+            // label16
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(428, 194);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(75, 20);
-            this.label10.TabIndex = 123;
-            this.label10.Text = "Forgóváz";
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(3, 130);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(81, 20);
+            this.label16.TabIndex = 125;
+            this.label16.Text = "Cikkszám:";
             // 
             // Ablak_Nóta_Részletes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
-            this.ClientSize = new System.Drawing.Size(899, 626);
+            this.ClientSize = new System.Drawing.Size(899, 588);
             this.Controls.Add(this.Rögzít);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);
@@ -490,5 +511,7 @@
         internal System.Windows.Forms.Button KerékRögzít;
         private System.Windows.Forms.TextBox Megnevezés;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox Cikkszám;
+        private System.Windows.Forms.Label label16;
     }
 }

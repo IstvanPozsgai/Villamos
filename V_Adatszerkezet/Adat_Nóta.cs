@@ -15,8 +15,9 @@ namespace Villamos.V_Adatszerkezet
         public string OsztásiM { get; private set; }
         public DateTime Dátum { get; private set; }
         public int Státus { get; private set; }
+        public string Cikkszám { get; private set; }
 
-        public Adat_Nóta(long id, string berendezés, string készlet_Sarzs, string raktár, string telephely, string forgóváz, bool beépíthető, string műszakiM, string osztásiM, DateTime dátum, int státus)
+        public Adat_Nóta(long id, string berendezés, string készlet_Sarzs, string raktár, string telephely, string forgóváz, bool beépíthető, string műszakiM, string osztásiM, DateTime dátum, int státus, string cikkszám)
         {
             Id = id;
             Berendezés = berendezés;
@@ -29,15 +30,17 @@ namespace Villamos.V_Adatszerkezet
             OsztásiM = osztásiM;
             Dátum = dátum;
             Státus = státus;
+            Cikkszám = cikkszám;
         }
 
-        public Adat_Nóta(long id, string berendezés, string készlet_Sarzs, string raktár, int státus)
+        public Adat_Nóta(long id, string berendezés, string készlet_Sarzs, string raktár, int státus, string cikkszám)
         {
             Id = id;
             Berendezés = berendezés;
             Készlet_Sarzs = készlet_Sarzs;
             Raktár = raktár;
             Státus = státus;
+            Cikkszám = cikkszám;
         }
     }
 
@@ -48,14 +51,16 @@ namespace Villamos.V_Adatszerkezet
         public string Készlet_Sarzs { get; private set; }
         public string Raktár { get; private set; }
         public string Rendezési { get; private set; }
+        public string Cikkszám { get; private set; }
 
-        public Adat_Nóta_SAP(string berendezés, string rendszerstátus, string készlet_Sarzs, string raktár, string rendezési)
+        public Adat_Nóta_SAP(string berendezés, string rendszerstátus, string készlet_Sarzs, string raktár, string rendezési, string cikkszám)
         {
             Berendezés = berendezés;
             Rendszerstátus = rendszerstátus;
             Készlet_Sarzs = készlet_Sarzs;
             Raktár = raktár;
             Rendezési = rendezési;
+            Cikkszám = cikkszám;
         }
     }
 }

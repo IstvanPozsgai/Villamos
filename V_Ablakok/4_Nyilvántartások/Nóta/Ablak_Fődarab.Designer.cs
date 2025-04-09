@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.Holtart = new System.Windows.Forms.ProgressBar();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Táblalista = new Zuby.ADGV.AdvancedDataGridView();
             this.Frissíti_táblalistát = new System.Windows.Forms.Button();
@@ -45,20 +44,11 @@
             this.KötésiOsztály = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.FődarabTípusok = new System.Windows.Forms.ComboBox();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             ((System.ComponentModel.ISupportInitialize)(this.Táblalista)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(174, 12);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(663, 27);
-            this.Holtart.TabIndex = 172;
-            this.Holtart.Visible = false;
             // 
             // BtnSúgó
             // 
@@ -203,12 +193,23 @@
             this.FődarabTípusok.Size = new System.Drawing.Size(300, 28);
             this.FődarabTípusok.TabIndex = 194;
             // 
+            // Holtart
+            // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Holtart.Location = new System.Drawing.Point(174, 16);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(658, 28);
+            this.Holtart.TabIndex = 195;
+            this.Holtart.Visible = false;
+            // 
             // Ablak_Fődarab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(906, 252);
+            this.Controls.Add(this.Holtart);
             this.Controls.Add(this.FődarabTípusok);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Összesítés);
@@ -218,7 +219,6 @@
             this.Controls.Add(this.Táblalista);
             this.Controls.Add(this.Frissíti_táblalistát);
             this.Controls.Add(this.Excel_gomb);
-            this.Controls.Add(this.Holtart);
             this.Controls.Add(this.BtnSúgó);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -237,8 +237,6 @@
         }
 
         #endregion
-
-        internal System.Windows.Forms.ProgressBar Holtart;
         internal System.Windows.Forms.Button BtnSúgó;
         private Zuby.ADGV.AdvancedDataGridView Táblalista;
         internal System.Windows.Forms.Button Frissíti_táblalistát;
@@ -253,5 +251,6 @@
         internal System.Windows.Forms.BindingSource KötésiOsztály;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox FődarabTípusok;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }

@@ -19,6 +19,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         readonly Kezelő_Nóta KézNóta = new Kezelő_Nóta();
         readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
+
+
         int id = 0;
         string szűrő = "";
         string sorba = "";
@@ -85,37 +87,48 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
         private void TáblázatÍrás()
         {
-            if (!ChkSzűrés.Checked)
-                szűrő = "";
-            else
-                szűrő = Táblalista.FilterString;
-
-            if (!ChkRendezés.Checked)
-                sorba = "";
-            else
-                sorba = Táblalista.SortString;
-
-            if (!ChkRendezés.Checked && !ChkSzűrés.Checked)
-                Táblalista.CleanFilterAndSort();
-            else
-                Táblalista.LoadFilterAndSort(szűrő, sorba);
-
-            KötésiOsztály.DataSource = AdatTáblaFeltöltés();
-            Táblalista.DataSource = KötésiOsztály;
-            OszlopSzélesség();
-
-            for (int i = 0; i < Táblalista.Columns.Count; i++)
+            try
             {
-                Táblalista.SetFilterEnabled(Táblalista.Columns[i], true);
-                Táblalista.SetSortEnabled(Táblalista.Columns[i], true);
-                Táblalista.SetFilterCustomEnabled(Táblalista.Columns[i], true);
+                if (!ChkSzűrés.Checked)
+                    szűrő = "";
+                else
+                    szűrő = Táblalista.FilterString;
 
+                if (!ChkRendezés.Checked)
+                    sorba = "";
+                else
+                    sorba = Táblalista.SortString;
+
+                if (!ChkRendezés.Checked && !ChkSzűrés.Checked)
+                    Táblalista.CleanFilterAndSort();
+                else
+                    Táblalista.LoadFilterAndSort(szűrő, sorba);
+
+                KötésiOsztály.DataSource = AdatTáblaFeltöltés();
+                Táblalista.DataSource = KötésiOsztály;
+                OszlopSzélesség();
+
+                for (int i = 0; i < Táblalista.Columns.Count; i++)
+                {
+                    Táblalista.SetFilterEnabled(Táblalista.Columns[i], true);
+                    Táblalista.SetSortEnabled(Táblalista.Columns[i], true);
+                    Táblalista.SetFilterCustomEnabled(Táblalista.Columns[i], true);
+
+                }
+
+                Táblalista.Refresh();
+                Táblalista.Visible = true;
+                Táblalista.ClearSelection();
             }
-
-            Táblalista.Refresh();
-            Táblalista.Visible = true;
-            Táblalista.ClearSelection();
-
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void OszlopSzélesség()
@@ -349,6 +362,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 List<Adat_Nóta> AdatokNóta = KézNóta.Lista_Adat(true);
                 List<Adat_Nóta> AdatokM = new List<Adat_Nóta>();
                 List<Adat_Nóta> AdatokR = new List<Adat_Nóta>();
+
+                Holtart.Be();
                 foreach (Adat_Nóta_SAP rekord in Adatok)
                 {
                     //Feltételek ami után rögzítünk vagy sem
@@ -364,12 +379,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                                    rekord.Berendezés,
                                    rekord.Készlet_Sarzs,
                                    rekord.Raktár,
-                                   adat_Nóta != null ? 0 : 1);
+                                   adat_Nóta != null ? 0 : 1,
+                                   MyF.Szöveg_Tisztítás(rekord.Cikkszám, 8, -1));
                         if (adat_Nóta != null)
                             AdatokM.Add(ADAT);
                         else
                             AdatokR.Add(ADAT);
                     }
+                    Holtart.Lép();
                 }
                 if (AdatokM != null && AdatokM.Count > 0) KézNóta.Módosítás(AdatokM);
                 if (AdatokR != null && AdatokR.Count > 0) KézNóta.Rögzítés(AdatokR);
@@ -396,8 +413,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                             if (adat_Nóta != null) IDK.Add(adat_Nóta.Id);
                         }
                     }
+                    Holtart.Lép();
                 }
                 if (IDK != null && IDK.Count > 0) KézNóta.Módosítás(IDK);
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -422,7 +441,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                                                 EgyTábla.Rows[i]["Rendszerstátus"].ToStrTrim(),
                                                 EgyTábla.Rows[i]["Készletsarzs"].ToStrTrim(),
                                                 EgyTábla.Rows[i]["Raktárhely"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Rendezési mező"].ToStrTrim());
+                                                EgyTábla.Rows[i]["Rendezési mező"].ToStrTrim(),
+                                                EgyTábla.Rows[i]["Anyag"].ToStrTrim());
                     Adatok.Add(Adat);
                 }
             }

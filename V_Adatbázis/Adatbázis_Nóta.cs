@@ -24,7 +24,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[MűszakiM]  LONGTEXT,";
             szöveg += "[OsztásiM]  LONGTEXT,";
             szöveg += "[Dátum] DATE,";
-            szöveg += "[Státus]  short)";
+            szöveg += "[Státus]  short, ";
+            szöveg += "[Cikkszám] char (20))";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
