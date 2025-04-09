@@ -512,7 +512,7 @@ namespace Villamos
 
                 // megnézzük, hogy hány sorból áll a tábla
                 List<Adat_Főkönyv_ZSER> AdatokGy = new List<Adat_Főkönyv_ZSER>();
-                for (int i = 2; i < utolsó; i++)
+                for (int i = 2; i <= utolsó; i++)
                 {
                     string viszonylat = MyE.Beolvas($"b{i}");
                     string forgalmiszám = MyE.Beolvas($"c{i}");
