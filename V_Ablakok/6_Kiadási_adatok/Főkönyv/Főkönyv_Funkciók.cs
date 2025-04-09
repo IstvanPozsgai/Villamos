@@ -37,12 +37,13 @@ namespace Villamos
                                orderby a.Azonosító, a.Korlát descending
                                select a).ToList();
 
-                string beálló = "_";
-                string üzemképtelen = "_";
-                string Üzemképes = "_";
+                string beálló = "";
+                string üzemképtelen = "";
+                string Üzemképes = "";
                 string azonosító = "";
                 string típus = "";
                 long korlát = 0;
+                DateTime Dátum = new DateTime(1900, 1, 1);
 
                 List<Adat_Nap_Hiba> AdatokGy = new List<Adat_Nap_Hiba>();
                 Adat_Nap_Hiba ADAT;
@@ -57,22 +58,23 @@ namespace Villamos
                     if (azonosító != rekord.Azonosító)
                     {
                         // rögzítjük az előzőt
-                        ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
+                        ADAT = new Adat_Nap_Hiba(azonosító, Dátum, beálló, üzemképtelen, Üzemképes, típus, korlát);
                         AdatokGy.Add(ADAT);
 
-                        beálló = "_";
-                        üzemképtelen = "_";
-                        Üzemképes = "_";
+                        beálló = "";
+                        üzemképtelen = "";
+                        Üzemképes = "";
                         azonosító = rekord.Azonosító;
                         típus = rekord.Típus;
                         korlát = rekord.Korlát;
+                        Dátum = new DateTime(1900, 1, 1);
                     }
                     if (korlát < rekord.Korlát) korlát = rekord.Korlát;
                     switch (rekord.Korlát)
                     {
                         case 1:
                             {
-                                if (Üzemképes == "_")
+                                if (Üzemképes.Trim() == "")
                                     Üzemképes = rekord.Hibaleírása;
                                 else
                                     Üzemképes += "+" + rekord.Hibaleírása;
@@ -80,7 +82,7 @@ namespace Villamos
                             }
                         case 2:
                             {
-                                if (beálló == "_")
+                                if (beálló.Trim() == "")
                                     beálló = rekord.Hibaleírása;
                                 else
                                     beálló += "+" + rekord.Hibaleírása;
@@ -88,7 +90,7 @@ namespace Villamos
                             }
                         case 3:
                             {
-                                if (beálló == "_")
+                                if (beálló.Trim() == "")
                                     beálló = rekord.Hibaleírása;
                                 else
                                     beálló += "+" + rekord.Hibaleírása;
@@ -96,17 +98,18 @@ namespace Villamos
                             }
                         case 4:
                             {
-                                if (üzemképtelen == "_")
+                                if (üzemképtelen.Trim() == "")
                                     üzemképtelen = rekord.Hibaleírása;
                                 else
                                     üzemképtelen += "+" + rekord.Hibaleírása;
+                                if (Dátum == new DateTime(1900, 1, 1) || Dátum >= rekord.Idő) Dátum = rekord.Idő;
                                 break;
                             }
                     }
                 }
 
                 // rögzítjük az utolsót
-                ADAT = new Adat_Nap_Hiba(azonosító, DateTime.Today, beálló, üzemképtelen, Üzemképes, típus, korlát);
+                ADAT = new Adat_Nap_Hiba(azonosító, Dátum, beálló, üzemképtelen, Üzemképes, típus, korlát);
                 AdatokGy.Add(ADAT);
 
                 KézHibaÚj.Rögzítés(Telephely, AdatokGy);
