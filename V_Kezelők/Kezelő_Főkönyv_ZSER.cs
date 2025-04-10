@@ -68,7 +68,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public void Rögzítés(string Telephely, DateTime Dátum, string Napszak, List<Adat_Főkönyv_ZSER> Adatok)
         {
             try
@@ -83,6 +82,37 @@ namespace Villamos.Kezelők
                     szöveg += $"'{Adat.Tervérkezés:yyyy.MM.dd HH:mm:ss}', '{Adat.Tényérkezés:yyyy.MM.dd HH:mm:ss}', '{Adat.Státus}', ";
                     szöveg += $"'{Adat.Szerelvénytípus}', {Adat.Kocsikszáma}, '{Adat.Megjegyzés}', '{Adat.Kocsi1}', '{Adat.Kocsi2}', '{Adat.Kocsi3}', '{Adat.Kocsi4}', ";
                     szöveg += $"'{Adat.Kocsi5}', '{Adat.Kocsi6}', '{Adat.Ellenőrző}', '{Adat.Napszak}')";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string Telephely, DateTime Dátum, string Napszak, List<Adat_Főkönyv_ZSER> Adatok, int Nap)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Napszak);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Főkönyv_ZSER Adat in Adatok)
+                {
+                    string szöveg = "UPDATE Zseltábla  SET ";
+                    szöveg += $" tervindulás='{Adat.Tervindulás.AddDays(Nap)}', ";
+                    szöveg += $" tényindulás='{Adat.Tényindulás.AddDays(Nap)}', ";
+                    szöveg += $" tervérkezés='{Adat.Tervérkezés.AddDays(Nap)}', ";
+                    szöveg += $" tényérkezés='{Adat.Tényérkezés.AddDays(Nap)}', ";
+                    szöveg += $" WHERE viszonylat='{Adat.Viszonylat}' AND ";
+                    szöveg += $" forgalmiszám='{Adat.Forgalmiszám}' AND ";
+                    szöveg += $" tervindulás=#{Adat.Tervindulás:MM-dd-yyyy HH:mm:ss}#";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);

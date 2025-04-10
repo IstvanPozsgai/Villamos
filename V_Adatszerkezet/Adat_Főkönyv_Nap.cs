@@ -145,6 +145,16 @@ namespace Villamos.Villamos_Adatszerkezet
             Ellenőrző = ellenőrző;
             Státus = státus;
         }
+
+        public Adat_Főkönyv_ZSER(string viszonylat, string forgalmiszám, DateTime tervindulás, DateTime tényindulás, DateTime tervérkezés, DateTime tényérkezés)
+        {
+            Viszonylat = viszonylat;
+            Forgalmiszám = forgalmiszám;
+            Tervindulás = tervindulás;
+            Tényindulás = tényindulás;
+            Tervérkezés = tervérkezés;
+            Tényérkezés = tényérkezés;
+        }
     }
 
     public class Adat_Főkönyv_Zser_Km
@@ -169,7 +179,7 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-    public class Adat_Főkönyv_SegédTábla 
+    public class Adat_Főkönyv_SegédTábla
     {
         public long Id { get; private set; }
         public string Bejelentkezésinév { get; private set; }

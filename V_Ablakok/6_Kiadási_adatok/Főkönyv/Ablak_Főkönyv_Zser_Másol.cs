@@ -4,14 +4,13 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
 {
     public partial class Ablak_Főkönyv_Zser_Másol : Form
     {
         public string Cmbtelephely { get; private set; }
-
+        readonly Kezelő_Főkönyv_ZSER Kéz = new Kezelő_Főkönyv_ZSER();
 
         public Ablak_Főkönyv_Zser_Másol(string cmbtelephely)
         {
@@ -25,7 +24,6 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             ZSER_dátumig.Value = DateTime.Today;
         }
 
-
         private void Zser_másol_Gomb_Click(object sender, EventArgs e)
         {
             try
@@ -38,8 +36,7 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
                 else
                     honnan += "du.mdb";
 
-                if (!File.Exists(honnan))
-                    throw new HibásBevittAdat("A másolandó adat állomány nem létezik.");
+                if (!File.Exists(honnan)) throw new HibásBevittAdat("A másolandó adat állomány nem létezik.");
 
                 string hova = $@"{Application.StartupPath}\{Cmbtelephely}\adatok\főkönyv\{ZSER_dátumig.Value.Year}\ZSER\zser{ZSER_dátumig.Value:yyyyMMdd}";
 
@@ -60,7 +57,7 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
                 File.Copy(honnan, hova);
                 ZSer_adatok_napolása();
                 MessageBox.Show("Az adatok másolása megtörtént.", "Rögzítés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-             }
+            }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -74,35 +71,35 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
 
         private void ZSer_adatok_napolása()
         {
-
-            int nap = (int)(ZSER_dátumig.Value - ZSER_dátumtól.Value).TotalDays; // ennyi napot kell arrébb tolni
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely}\adatok\főkönyv\{ZSER_dátumig.Value.Year}\ZSER\zser{ZSER_dátumig.Value:yyyyMMdd}";
-            
-            if (ZSER_De_ig.Checked )
-                hely += "de.mdb";
-            else
-                hely += "du.mdb";
-
-            string jelszó = "lilaakác";
-            string szöveg = "SELECT * FROM Zseltábla ORDER BY viszonylat, forgalmiszám, tervindulás ";
-
-            Kezelő_Főkönyv_ZSER KFZS_kéz = new Kezelő_Főkönyv_ZSER();
-            List<Adat_Főkönyv_ZSER> Adatok = KFZS_kéz.Lista_adatok(hely, jelszó, szöveg);
-
-            List<string> SzövegGy = new List<string>();
-            foreach (Adat_Főkönyv_ZSER rekord in Adatok)
+            try
             {
-                szöveg = "UPDATE Zseltábla  SET ";
-                szöveg += " tervindulás='" + rekord.Tervindulás.AddDays(nap).ToString() + "', ";
-                szöveg += " tényindulás='" + rekord.Tényindulás.AddDays(nap).ToString() + "', ";
-                szöveg += " tervérkezés='" + rekord.Tervérkezés.AddDays(nap).ToString() + "', ";
-                szöveg += " tényérkezés='" + rekord.Tényérkezés.AddDays(nap).ToString() + "' ";
-                szöveg += " WHERE viszonylat='" + rekord.Viszonylat.Trim() + "' AND ";
-                szöveg += "  forgalmiszám='" + rekord.Forgalmiszám.Trim() + "' AND ";
-                szöveg += "  tervindulás=#" + rekord.Tervindulás.ToString("MM-dd-yyyy HH:mm:ss") + "#";
-                SzövegGy.Add(szöveg);
+                int nap = ZSER_dátumig.Value.Day - ZSER_dátumtól.Value.Day; // ennyi napot kell arrébb tolni
+
+                List<Adat_Főkönyv_ZSER> Adatok = Kéz.Lista_adatok(Cmbtelephely, ZSER_dátumig.Value, ZSER_De_ig.Checked ? "de" : "du");
+
+                List<Adat_Főkönyv_ZSER> AdatokGy = new List<Adat_Főkönyv_ZSER>();
+                foreach (Adat_Főkönyv_ZSER rekord in Adatok)
+                {
+                    Adat_Főkönyv_ZSER ADAT = new Adat_Főkönyv_ZSER(
+                                        rekord.Viszonylat,
+                                        rekord.Forgalmiszám,
+                                        rekord.Tervindulás,
+                                        rekord.Tényindulás,
+                                        rekord.Tényérkezés,
+                                        rekord.Tényérkezés);
+                    AdatokGy.Add(ADAT);
+                }
+                Kéz.Módosítás(Cmbtelephely, ZSER_dátumig.Value, ZSER_De_ig.Checked ? "de" : "du", AdatokGy, nap);
             }
-            MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }
