@@ -198,7 +198,9 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                if (!int.TryParse(Átmérő.Text, out int Méret)) Méret = 0;
+                if (!int.TryParse(Átmérő.Text, out int Méret)) throw new HibásBevittAdat("Nincs az átmérő kitöltve.");
+                if (Állapot.Text.Trim() == "") throw new HibásBevittAdat("Nincs az állapot kitöltve.");
+                if (Állapot.Text.Contains("-")) throw new HibásBevittAdat("Nem megfelelő adat az állapot mezőben.");
 
                 Adat_Kerék_Mérés ADAT = new Adat_Kerék_Mérés(
                     "Kiépített",

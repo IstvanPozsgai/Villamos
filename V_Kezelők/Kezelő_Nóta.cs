@@ -89,8 +89,8 @@ namespace Villamos.Kezelők
                     szöveg += $"MűszakiM='{Adat.MűszakiM}', ";
                     szöveg += $"OsztásiM='{Adat.OsztásiM}', ";
                     szöveg += $"Dátum='{Adat.Dátum:yyyy.MM.dd}', ";
-                    szöveg += $"Státus={Adat.Státus} ";
-                    szöveg += $"Státus={Adat.Cikkszám} ";
+                    szöveg += $"Státus={Adat.Státus}, ";
+                    szöveg += $"Cikkszám='{Adat.Cikkszám}' ";
                     szöveg += $" WHERE [Id] ={Adat.Id}";
                 }
                 else
