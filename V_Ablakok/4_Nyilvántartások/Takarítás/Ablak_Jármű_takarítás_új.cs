@@ -75,15 +75,12 @@ namespace Villamos
         public Ablak_Jármű_takarítás_új()
         {
             InitializeComponent();
+            Start();
         }
 
-        private void Ablak_Jármű_takarítás_új_Load(object sender, EventArgs e)
+        private void Start()
         {
-            Telephelyekfeltöltése();
-        }
-
-        private void Ablak_Jármű_takarítás_új_Shown(object sender, EventArgs e)
-        {
+            Visible = false;
             Jogosultságkiosztás();
             Fülekkitöltése();
 
@@ -98,6 +95,21 @@ namespace Villamos
 
             Background_Process();
             this.KeyPreview = true;
+
+            Telephelyekfeltöltése();
+
+            Refresh();
+            Visible = true;
+        }
+
+        private void Ablak_Jármű_takarítás_új_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Ablak_Jármű_takarítás_új_Shown(object sender, EventArgs e)
+        {
+
         }
 
         public void Background_Process()

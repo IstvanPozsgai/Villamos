@@ -74,7 +74,7 @@ namespace Villamos
             Papír();
         }
 
-        void Papír()
+        private void Papír()
         {
             Papírméret.Items.Add("--");
             Papírméret.Items.Add("A4");
@@ -100,7 +100,7 @@ namespace Villamos
             Új_Ablak_Főkönyv_Napi_Adatok?.Close();
         }
 
-
+        //
         private void Ablak_Főkönyv_Shown(object sender, EventArgs e)
         {
             Dátum.Value = DateTime.Today;
