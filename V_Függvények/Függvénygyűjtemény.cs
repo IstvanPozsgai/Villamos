@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 
 
 public static partial class Függvénygyűjtemény
@@ -318,19 +317,15 @@ public static partial class Függvénygyűjtemény
 
     public static long Futás_km(string azonosító, DateTime dátum_érték)
     {
-        long mennyi = 0L;
-        string szöveg = "SELECT * FROM Tábla";
-        string jelszó = "pozsgaii";
-        string hely;
+        long mennyi = 0;
         Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
         List<Adat_Főkönyv_Zser_Km> AdatokZser = new List<Adat_Főkönyv_Zser_Km>();
         // ha volt előző év is
         if (dátum_érték.Year != DateTime.Today.Year)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{dátum_érték.Year}\Napi_km_Zser_{dátum_érték.Year}.mdb";
-            AdatokZser = KézZser.Lista_adatok(hely, jelszó, szöveg);
+            AdatokZser = KézZser.Lista_adatok(dátum_érték.Year);
             // ha volt előző évben
-            if (Exists(hely))
+            if (AdatokZser != null && AdatokZser.Count > 0)
             {
                 List<Adat_Főkönyv_Zser_Km> SzűrtAdatok = (from a in AdatokZser
                                                           where a.Azonosító == azonosító.Trim() &&
@@ -340,9 +335,10 @@ public static partial class Függvénygyűjtemény
             }
         }
         AdatokZser.Clear();
+
         // aktuális év
-        hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\Napi_km_Zser_{DateTime.Today.Year}.mdb";
-        if (Exists(hely))
+        AdatokZser = KézZser.Lista_adatok(DateTime.Today.Year);
+        if (AdatokZser != null && AdatokZser.Count > 0)
         {
             List<Adat_Főkönyv_Zser_Km> SzűrtAdatok = (from a in AdatokZser
                                                       where a.Azonosító == azonosító.Trim() &&

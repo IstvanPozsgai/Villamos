@@ -981,11 +981,7 @@ namespace Villamos
             try
             {
                 AdatokZSER.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\Napi_km_Zser_{DateTime.Today.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM tábla";
-                AdatokZSER = KézZser.Lista_adatok(hely, jelszó, szöveg);
+                AdatokZSER = KézZser.Lista_adatok(DateTime.Today.Year);
             }
             catch (HibásBevittAdat ex)
             {

@@ -3568,17 +3568,12 @@ namespace Villamos
         {
             NAPI_km_kiírás();
         }
-        //
+
         private void NAPI_km_kiírás()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{KM_dátum_kezd.Value.Year}\Napi_km_Zser_{KM_dátum_kezd.Value.Year}.mdb";
-                if (!System.IO.File.Exists(hely)) return;
-
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM tábla";
-                List<Adat_Főkönyv_Zser_Km> AdatokFőZserKm = KézFőZserKm.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Főkönyv_Zser_Km> AdatokFőZserKm = KézFőZserKm.Lista_adatok(KM_dátum_kezd.Value.Year);
 
                 List<Adat_Főkönyv_Zser_Km> AdatokFőZserKmSzűrt;
                 if (KM_pályaszám.Text.Trim() != "")

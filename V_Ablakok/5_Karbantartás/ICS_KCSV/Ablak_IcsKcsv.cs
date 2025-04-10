@@ -4216,18 +4216,10 @@ namespace Villamos
             try
             {
                 AdatokZserKm.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\Napi_km_Zser_{DateTime.Today.Year}.mdb";
-                if (!Exists(hely)) return;
-
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM Tábla";
-                List<Adat_Főkönyv_Zser_Km> Előző = KézKorr.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Főkönyv_Zser_Km> Előző = KézKorr.Lista_adatok(DateTime.Today.Year);
                 AdatokZserKm.AddRange(Előző);
 
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year - 1}\Napi_km_Zser_{DateTime.Today.Year - 1}.mdb";
-                if (!Exists(hely)) return;
-                Előző = KézKorr.Lista_adatok(hely, jelszó, szöveg);
+                Előző = KézKorr.Lista_adatok(DateTime.Today.Year - 1);
                 AdatokZserKm.AddRange(Előző);
             }
             catch (HibásBevittAdat ex)
