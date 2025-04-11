@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Zseltáblaalap(hely.KönyvSzerk());
         }
 
-        public List<Adat_Főkönyv_ZSER> Lista_adatok(string Telephely, DateTime Dátum, string Napszak)
+        public List<Adat_Főkönyv_ZSER> Lista_Adatok(string Telephely, DateTime Dátum, string Napszak)
         {
             FájlBeállítás(Telephely, Dátum, Napszak);
             string szöveg = "SELECT * FROM zseltábla Order By viszonylat,forgalmiszám,tervindulás";
@@ -102,20 +102,25 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Főkönyv_ZSER Adat in Adatok)
-                {
-                    string szöveg = "UPDATE Zseltábla  SET ";
-                    szöveg += $" tervindulás='{Adat.Tervindulás.AddDays(Nap)}', ";
-                    szöveg += $" tényindulás='{Adat.Tényindulás.AddDays(Nap)}', ";
-                    szöveg += $" tervérkezés='{Adat.Tervérkezés.AddDays(Nap)}', ";
-                    szöveg += $" tényérkezés='{Adat.Tényérkezés.AddDays(Nap)}', ";
-                    szöveg += $" WHERE viszonylat='{Adat.Viszonylat}' AND ";
-                    szöveg += $" forgalmiszám='{Adat.Forgalmiszám}' AND ";
-                    szöveg += $" tervindulás=#{Adat.Tervindulás:MM-dd-yyyy HH:mm:ss}#";
-                    SzövegGy.Add(szöveg);
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string Telephely, DateTime Dátum, string Napszak)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Napszak);
+                MyA.ABtörlés(hely, jelszó, "DELETE * FROM zseltábla");
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -175,6 +180,8 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
+
+
     }
 
 }

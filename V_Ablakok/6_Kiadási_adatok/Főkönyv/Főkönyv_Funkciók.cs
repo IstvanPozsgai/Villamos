@@ -344,7 +344,7 @@ namespace Villamos
         public static void Napitipuscsere(string Napszak, DateTime Dátum, string Telephely)
         {
             List<Adat_Főkönyv_Nap> AdatokNap = KézFőkönyvNap.Lista_Adatok(Telephely, Dátum, Napszak);
-            List<Adat_Főkönyv_ZSER> Adatok = KézFőZser.Lista_adatok(Telephely.Trim(), Dátum, Napszak);
+            List<Adat_Főkönyv_ZSER> Adatok = KézFőZser.Lista_Adatok(Telephely.Trim(), Dátum, Napszak);
             List<Adat_Telep_Kieg_Fortetípus> AdatokKiegTipus = KézKiegTipus.Lista_Adatok(Telephely.Trim());
             List<Adat_FőKönyv_Típuscsere> AdatokTípus = Kéz_Típus.Lista_Adatok(Telephely.Trim(), Dátum.Year);
 
