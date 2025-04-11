@@ -81,6 +81,7 @@ namespace Villamos
         private void Start()
         {
             Visible = false;
+            Telephelyekfeltöltése();
             Jogosultságkiosztás();
             Fülekkitöltése();
 
@@ -96,7 +97,7 @@ namespace Villamos
             Background_Process();
             this.KeyPreview = true;
 
-            Telephelyekfeltöltése();
+
 
             Refresh();
             Visible = true;
