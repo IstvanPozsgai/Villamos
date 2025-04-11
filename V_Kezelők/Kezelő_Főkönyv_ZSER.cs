@@ -97,11 +97,57 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string Telephely, DateTime Dátum, string Napszak, List<Adat_Főkönyv_ZSER> Adatok, int Nap)
+        public void Rögzítés(string Telephely, DateTime Dátum, string Napszak, Adat_Főkönyv_ZSER Adat)
         {
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
+
+                string szöveg = "INSERT INTO ZSELtábla (viszonylat, forgalmiszám, tervindulás, tényindulás, tervérkezés, tényérkezés, státus, ";
+                szöveg += " szerelvénytípus, kocsikszáma, megjegyzés, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, ellenőrző, napszak)  VALUES (";
+                szöveg += $"'{Adat.Viszonylat}', '{Adat.Forgalmiszám}', '{Adat.Tervindulás:yyyy.MM.dd HH:mm:ss}', '{Adat.Tényindulás:yyyy.MM.dd HH:mm:ss}', ";
+                szöveg += $"'{Adat.Tervérkezés:yyyy.MM.dd HH:mm:ss}', '{Adat.Tényérkezés:yyyy.MM.dd HH:mm:ss}', '{Adat.Státus}', ";
+                szöveg += $"'{Adat.Szerelvénytípus}', {Adat.Kocsikszáma}, '{Adat.Megjegyzés}', '{Adat.Kocsi1}', '{Adat.Kocsi2}', '{Adat.Kocsi3}', '{Adat.Kocsi4}', ";
+                szöveg += $"'{Adat.Kocsi5}', '{Adat.Kocsi6}', '{Adat.Ellenőrző}', '{Adat.Napszak}')";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string Telephely, DateTime Dátum, string Napszak, Adat_Főkönyv_ZSER Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Napszak);
+                string szöveg = "UPDATE zseltábla  SET ";
+                szöveg += $"tényindulás='{Adat.Tényindulás}', ";  // tényindulás
+                szöveg += $"tervérkezés='{Adat.Tervérkezés}', "; // tervérkezés
+                szöveg += $"tényérkezés='{Adat.Tényérkezés}', "; // tényérkezés
+                szöveg += $"napszak='{Adat.Napszak}', "; // napszak
+                szöveg += $"szerelvénytípus='{Adat.Szerelvénytípus}', "; // szerelvénytípus
+                szöveg += $"kocsikszáma={Adat.Kocsikszáma}, "; // kocsikszáma
+                szöveg += $"megjegyzés='{Adat.Megjegyzés}', "; // megjegyzés
+                szöveg += $"kocsi1='{Adat.Kocsi1}', ";// kocsi1
+                szöveg += $"kocsi2='{Adat.Kocsi2}', ";// kocsi2
+                szöveg += $"kocsi3='{Adat.Kocsi3}', ";// kocsi3
+                szöveg += $"kocsi4='{Adat.Kocsi4}', ";// kocsi4
+                szöveg += $"kocsi5='{Adat.Kocsi5}', ";// kocsi5
+                szöveg += $"kocsi6='{Adat.Kocsi6}', "; // kocsi6
+                szöveg += $"ellenőrző='{Adat.Ellenőrző}', "; // ellenőrző
+                szöveg += $"Státus='{Adat.Státus}'"; // Státus
+                szöveg += $" WHERE viszonylat='{Adat.Viszonylat}' ";
+                szöveg += $" And forgalmiszám='{Adat.Forgalmiszám}' ";
+                szöveg += $"And tervindulás=#{Adat.Tervindulás:MM-dd-yyyy HH:mm:ss}#";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -121,6 +167,27 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely, Dátum, Napszak);
                 MyA.ABtörlés(hely, jelszó, "DELETE * FROM zseltábla");
 
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string Telephely, DateTime Dátum, string Napszak, Adat_Főkönyv_ZSER Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Napszak);
+                string szöveg = $"DELETE FROM zseltábla  WHERE viszonylat='{Adat.Viszonylat}' ";
+                szöveg += $" And forgalmiszám='{Adat.Forgalmiszám}' ";
+                szöveg += $" And tervindulás=#{Adat.Tervindulás:MM-dd-yyyy HH:mm:ss}#";
+                MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -180,8 +247,5 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-
     }
-
 }

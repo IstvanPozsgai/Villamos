@@ -146,14 +146,11 @@ namespace Villamos.Villamos_Adatszerkezet
             Státus = státus;
         }
 
-        public Adat_Főkönyv_ZSER(string viszonylat, string forgalmiszám, DateTime tervindulás, DateTime tényindulás, DateTime tervérkezés, DateTime tényérkezés)
+        public Adat_Főkönyv_ZSER(string viszonylat, string forgalmiszám, DateTime tervindulás)
         {
             Viszonylat = viszonylat;
             Forgalmiszám = forgalmiszám;
             Tervindulás = tervindulás;
-            Tényindulás = tényindulás;
-            Tervérkezés = tervérkezés;
-            Tényérkezés = tényérkezés;
         }
     }
 

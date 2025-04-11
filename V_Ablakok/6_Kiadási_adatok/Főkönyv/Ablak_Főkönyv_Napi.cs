@@ -4,8 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
 {
@@ -18,6 +16,9 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
 
         public event Event_Kidobó Változás;
 
+        readonly Kezelő_Főkönyv_ZSER KézZser = new Kezelő_Főkönyv_ZSER();
+        readonly Kezelő_Telep_Kieg_Fortetípus KézForte = new Kezelő_Telep_Kieg_Fortetípus();
+
         public Ablak_Főkönyv_Napi(string cmbtelephely, bool délelőtt, DateTime dátum, Adat_Főkönyv_ZSER zserAdat)
         {
             Cmbtelephely = cmbtelephely;
@@ -25,31 +26,40 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             Dátum = dátum;
             ZserAdat = zserAdat;
             InitializeComponent();
+            Start();
         }
 
-
-
-
-        private void Ablak_Főkönyv_Napi_Load(object sender, EventArgs e)
+        private void Start()
         {
             Forte_típus_feltöltése();
             Napszak_feltöltés();
             ZSER_részletes_adatok();
         }
 
+        private void Ablak_Főkönyv_Napi_Load(object sender, EventArgs e)
+        {
+        }
 
         private void Forte_típus_feltöltése()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely}\adatok\segéd\Kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM fortetipus ORDER BY ftípus";
-            ZSER_fortetípus.Items.Clear();
-            ZSER_fortetípus.BeginUpdate();
-            ZSER_fortetípus.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "ftípus"));
-            ZSER_fortetípus.EndUpdate();
-            ZSER_fortetípus.Refresh();
+            try
+            {
+                List<Adat_Telep_Kieg_Fortetípus> Adatok = KézForte.Lista_Adatok(Cmbtelephely);
+                ZSER_fortetípus.Items.Clear();
+                foreach (Adat_Telep_Kieg_Fortetípus Elem in Adatok)
+                    ZSER_fortetípus.Items.Add(Elem.Ftípus);
+                ZSER_fortetípus.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         private void Napszak_feltöltés()
         {
@@ -59,16 +69,12 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             ZSER_napszak.Items.Add("É");
             ZSER_napszak.Items.Add("X");
             ZSER_napszak.Items.Add("*");
-
         }
-
 
         private void ZSER_részletes_adatok()
         {
             try
             {
-
-
                 ZSER_viszonylat.Text = ZserAdat.Viszonylat;
                 ZSER_forgalmiszám.Text = ZserAdat.Forgalmiszám;
                 ZSER_napszak.Text = ZserAdat.Napszak;
@@ -99,24 +105,12 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             }
         }
 
-
         private void ZSER_Töröl_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely}\adatok\főkönyv\{Dátum.Year}\zser\zser{Dátum:yyyyMMdd}";
-                if (Délelőtt)
-                    hely += "de.mdb";
-                else
-                    hely += "du.mdb";
-
-                if (!System.IO.File.Exists(hely)) return;
-
-                string jelszó = "lilaakác";
-
-                Kezelő_Főkönyv_ZSER KézZser = new Kezelő_Főkönyv_ZSER();
-                string szöveg = "SELECT * FROM zseltábla";
-                List<Adat_Főkönyv_ZSER> Adatok = KézZser.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Főkönyv_ZSER> Adatok = KézZser.Lista_Adatok(Cmbtelephely, Dátum, Délelőtt ? "de" : "du");
+                if (Adatok == null || Adatok.Count == 0) return;
 
                 Adat_Főkönyv_ZSER Elem = (from a in Adatok
                                           where a.Viszonylat == ZSER_viszonylat.Text.Trim()
@@ -126,10 +120,11 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
 
                 if (Elem != null)
                 {
-                    szöveg = "DELETE FROM zseltábla  WHERE viszonylat='" + ZSER_viszonylat.Text.Trim() + "' ";
-                    szöveg += " And forgalmiszám='" + ZSER_forgalmiszám.Text.Trim() + "' ";
-                    szöveg += "And tervindulás=#" + ZSER_tervindulás.Value.ToString("MM-dd-yyyy HH:mm:ss") + "#";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    Adat_Főkönyv_ZSER ADAT = new Adat_Főkönyv_ZSER(
+                             ZSER_viszonylat.Text.Trim(),
+                             ZSER_forgalmiszám.Text.Trim(),
+                             ZSER_tervindulás.Value);
+                    KézZser.Törlés(Cmbtelephely, Dátum, Délelőtt ? "de" : "du", ADAT);
                     MessageBox.Show("Az adat törlése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (Változás != null) Változás();
@@ -145,7 +140,6 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             }
         }
 
-
         private void ZSER_adat_rögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -155,7 +149,7 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
                 if (ZSER_napszak.Text.Trim() == "") ZSER_napszak.Text = "_";
                 if (ZSER_fortetípus.Text.Trim() == "") ZSER_fortetípus.Text = "_";
                 if (ZSER_kocsiszám.Text.Trim() == "") ZSER_napszak.Text = "0";
-                if (!int.TryParse(ZSER_kocsiszám.Text, out int result)) ZSER_napszak.Text = "0";
+                if (!long.TryParse(ZSER_kocsiszám.Text, out long kocsiszám)) ZSER_kocsiszám.Text = "0";
                 if (ZSER_megjegyzés.Text.Trim() == "") ZSER_megjegyzés.Text = "_";
                 if (ZSER_kocsi1.Text.Trim() == "") ZSER_kocsi1.Text = "_";
                 if (ZSER_kocsi2.Text.Trim() == "") ZSER_kocsi2.Text = "_";
@@ -166,18 +160,8 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
                 if (ZSER_státus.Text.Trim() == "") ZSER_státus.Text = "_";
                 if (ZSER_ellenőrző.Text.Trim() == "") ZSER_ellenőrző.Text = "_";
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely}\adatok\főkönyv\{Dátum.Year}\zser\zser{Dátum:yyyyMMdd}";
-
-                if (Délelőtt)
-                    hely += "de.mdb";
-                else
-                    hely += "du.mdb";
-
-                if (!System.IO.File.Exists(hely)) return;
-                string jelszó = "lilaakác";
-                Kezelő_Főkönyv_ZSER KézZser = new Kezelő_Főkönyv_ZSER();
-                string szöveg = "SELECT * FROM zseltábla";
-                List<Adat_Főkönyv_ZSER> Adatok = KézZser.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Főkönyv_ZSER> Adatok = KézZser.Lista_Adatok(Cmbtelephely, Dátum, Délelőtt ? "de" : "du");
+                if (Adatok == null || Adatok.Count == 0) return;
 
                 Adat_Főkönyv_ZSER Elem = (from a in Adatok
                                           where a.Viszonylat == ZSER_viszonylat.Text.Trim()
@@ -185,54 +169,31 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
                                           && a.Tervindulás.ToString("MM-dd-yyyy HH:mm:ss") == ZSER_tervindulás.Value.ToString("MM-dd-yyyy HH:mm:ss")
                                           select a).FirstOrDefault();
 
+                Adat_Főkönyv_ZSER ADAT = new Adat_Főkönyv_ZSER(
+                   ZSER_viszonylat.Text.Trim(),
+                   ZSER_forgalmiszám.Text.Trim(),
+                   ZSER_tervindulás.Value,
+                   ZSER_tényidulás.Value,
+                   ZSER_tervérkezés.Value,
+                   zser_tényérkezés.Value,
+                   ZSER_napszak.Text.Trim(),
+                   ZSER_fortetípus.Text.Trim(),
+                   kocsiszám,
+                   ZSER_megjegyzés.Text.Trim(),
+                   ZSER_kocsi1.Text.Trim(),
+                   ZSER_kocsi2.Text.Trim(),
+                   ZSER_kocsi3.Text.Trim(),
+                   ZSER_kocsi4.Text.Trim(),
+                   ZSER_kocsi5.Text.Trim(),
+                   ZSER_kocsi6.Text.Trim(),
+                   ZSER_ellenőrző.Text.Trim(),
+                   ZSER_státus.Text.Trim());
+
                 if (Elem != null)
-                {
-                    // ha van 
-                    szöveg = "UPDATE zseltábla  SET ";
-                    szöveg += "tényindulás='" + ZSER_tényidulás.Value.ToString("MM-dd-yyyy HH:mm:ss") + "', "; // tényindulás
-                    szöveg += "tervérkezés='" + ZSER_tervérkezés.Value.ToString("MM-dd-yyyy HH:mm:ss") + "', "; // tervérkezés
-                    szöveg += "tényérkezés='" + zser_tényérkezés.Value.ToString("MM-dd-yyyy HH:mm:ss") + "', "; // tényérkezés
-                    szöveg += "napszak='" + ZSER_napszak.Text.Trim() + "', "; // napszak
-                    szöveg += "szerelvénytípus='" + ZSER_fortetípus.Text.Trim() + "', "; // szerelvénytípus
-                    szöveg += "kocsikszáma=" + ZSER_kocsiszám.Text + ", "; // kocsikszáma
-                    szöveg += "megjegyzés='" + ZSER_megjegyzés.Text.Trim() + "', "; // megjegyzés
-                    szöveg += "kocsi1='" + ZSER_kocsi1.Text.Trim() + "', "; // kocsi1
-                    szöveg += "kocsi2='" + ZSER_kocsi2.Text.Trim() + "', "; // kocsi2
-                    szöveg += "kocsi3='" + ZSER_kocsi3.Text.Trim() + "', "; // kocsi3
-                    szöveg += "kocsi4='" + ZSER_kocsi4.Text.Trim() + "', "; // kocsi4
-                    szöveg += "kocsi5='" + ZSER_kocsi5.Text.Trim() + "', "; // kocsi5
-                    szöveg += "kocsi6='" + ZSER_kocsi6.Text.Trim() + "', "; // kocsi6
-                    szöveg += "ellenőrző='" + ZSER_ellenőrző.Text.Trim() + "', "; // ellenőrző
-                    szöveg += "Státus='" + ZSER_státus.Text.Trim() + "'"; // Státus
-                    szöveg += " WHERE viszonylat='" + ZSER_viszonylat.Text.Trim() + "' ";
-                    szöveg += " And forgalmiszám='" + ZSER_forgalmiszám.Text.Trim() + "' ";
-                    szöveg += "And tervindulás=#" + ZSER_tervindulás.Value.ToString("MM-dd-yyyy HH:mm:ss") + "#";
-                }
+                    KézZser.Módosítás(Cmbtelephely, Dátum, Délelőtt ? "de" : "du", ADAT);
                 else
-                {
-                    // ha nincs
-                    szöveg = "INSERT INTO zseltábla (viszonylat, forgalmiszám, tervindulás, tényindulás, tervérkezés,";
-                    szöveg += " tényérkezés, napszak, szerelvénytípus, kocsikszáma, megjegyzés, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, ellenőrző, Státus ) VALUES (";
-                    szöveg += "'" + ZSER_viszonylat.Text.Trim() + "', "; // viszonylat
-                    szöveg += "'" + ZSER_forgalmiszám.Text.Trim() + "', "; // forgalmiszám
-                    szöveg += "'" + ZSER_tervindulás.Value.ToString("MM-dd-yyyy HH:mm:ss") + "', "; // tervindulás
-                    szöveg += "'" + ZSER_tényidulás.Value.ToString("MM-dd-yyyy HH:mm:ss") + "', "; // tényindulás
-                    szöveg += "'" + ZSER_tervérkezés.Value.ToString("MM-dd-yyyy HH:mm:ss") + "', "; // tervérkezés
-                    szöveg += "'" + zser_tényérkezés.Value.ToString("MM-dd-yyyy HH:mm:ss") + "', "; // tényérkezés
-                    szöveg += "'" + ZSER_napszak.Text.Trim() + "', "; // napszak
-                    szöveg += "'" + ZSER_fortetípus.Text.Trim() + "', "; // szerelvénytípus
-                    szöveg += ZSER_kocsiszám.Text + ", "; // kocsikszáma
-                    szöveg += "'" + ZSER_megjegyzés.Text.Trim() + "', "; // megjegyzés
-                    szöveg += "'" + ZSER_kocsi1.Text.Trim() + "', "; // kocsi1
-                    szöveg += "'" + ZSER_kocsi2.Text.Trim() + "', "; // kocsi2
-                    szöveg += "'" + ZSER_kocsi3.Text.Trim() + "', "; // kocsi3
-                    szöveg += "'" + ZSER_kocsi4.Text.Trim() + "', "; // kocsi4
-                    szöveg += "'" + ZSER_kocsi5.Text.Trim() + "', "; // kocsi5
-                    szöveg += "'" + ZSER_kocsi6.Text.Trim() + "', "; // kocsi6
-                    szöveg += "'" + ZSER_ellenőrző.Text.Trim() + "', "; // ellenőrző
-                    szöveg += "'" + ZSER_státus.Text.Trim() + "')";
-                } // Státus
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézZser.Rögzítés(Cmbtelephely, Dátum, Délelőtt ? "de" : "du", ADAT);
+
                 MessageBox.Show("Az adat rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 if (Változás != null) Változás();
             }
@@ -246,6 +207,5 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }
