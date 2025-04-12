@@ -187,14 +187,9 @@ namespace Villamos
         {
             try
             {
-
-                string hely = $@"{Gyökér_telephely}\adatok\főkönyv\kiadás{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "plédke";
-                string szöveg = "SELECT * FROM tábla";
-
                 Kezelő_Kiadás_Összesítő KézKiadás = new Kezelő_Kiadás_Összesítő();
-                List<Adat_Kiadás_összesítő> AdatokKiad = KézKiadás.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_Kiadás_összesítő> AdatokKiad = KézKiadás.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                if (AdatokKiad == null || AdatokKiad.Count == 0) return;
                 List<Adat_Kiadás_összesítő> AdatokKiadás = (from a in AdatokKiad
                                                             where a.Dátum == Dátum.Value
                                                             orderby a.Napszak, a.Típus
@@ -529,10 +524,11 @@ namespace Villamos
                         // alapszín szürke
                         BackColor = Color.Cornsilk
                     };
-                    string hely = $@"{Application.StartupPath}\{rekord.Telephelynév.Trim()}\adatok\főkönyv\kiadás{Dátum.Value.Year}.mdb";
-                    if (File.Exists(hely))
+
+                    AdatokKiadásTelep = KézTelepKiadás.Lista_Adatok(rekord.Telephelynév.Trim(), Dátum.Value.Year);
+                    if (AdatokKiadásTelep != null && AdatokKiadásTelep.Count > 0)
                     {
-                        TelepKidásiListaFeltöltés(hely);
+
 
                         Adat_Kiadás_összesítő ElemKiad = (from a in AdatokKiadásTelep
                                                           where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString() &&
@@ -793,25 +789,22 @@ namespace Villamos
                 }
                 Kezelő_Kiadás_Összesítő KKö_kéz = new Kezelő_Kiadás_Összesítő();
                 List<Adat_Kiadás_összesítő> Adatok = new List<Adat_Kiadás_összesítő>();
+                DateTime Hónapelső = MyF.Hónap_elsőnapja(Dátum.Value);
 
                 for (int oszlop = 1; oszlop < Tábla.Columns.Count; oszlop++)
                 {
-                    string hely = $@"{Application.StartupPath}\{AdatokTelep[oszlop - 1].Telephelynév}\adatok\főkönyv\kiadás{Dátum.Value.Year}.mdb";
-                    string jelszó = "plédke";
-
                     Adatok.Clear();
-                    // ha létezik a fájl akkor kiolvaasuk
-                    if (File.Exists(hely))
-                    {
-                        DateTime Hónapelső = MyF.Hónap_elsőnapja(Dátum.Value);
-                        string szöveg = $@"SELECT * FROM tábla where [dátum]>=#{Hónapelső:M-d-yy}# AND [dátum]<=#{hónaputolsónapja:M-d-yy}#";
-                        if (Délelőtt.Checked)
-                            szöveg += " AND napszak ='de'";
-                        if (Délután.Checked == true)
-                            szöveg += " AND napszak='du'";
-                        szöveg += " order by dátum,napszak, típus";
-                        Adatok = KKö_kéz.Lista_adatok(hely, jelszó, szöveg);
+                    Adatok = KKö_kéz.Lista_Adatok(AdatokTelep[oszlop - 1].Telephelynév, Dátum.Value.Year);
 
+                    // ha létezik a fájl akkor kiolvaasuk
+                    if (Adatok != null && Adatok.Count > 0)
+                    {
+                        Adatok = (from a in Adatok
+                                  where a.Dátum >= MyF.Nap0000(Hónapelső)
+                                  && a.Dátum <= MyF.Nap2359(hónaputolsónapja)
+                                  && a.Napszak == (Délelőtt.Checked ? "de" : "du")
+                                  orderby a.Dátum, a.Napszak, a.Típus
+                                  select a).ToList();
                         foreach (Adat_Kiadás_összesítő rekord in Adatok)
                         {
                             int aktnap = rekord.Dátum.Day;
@@ -1469,26 +1462,6 @@ namespace Villamos
 
                 AdatokTípuscsere.Clear();
                 AdatokTípuscsere = KézTípuscsere.Lista_adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void TelepKidásiListaFeltöltés(string hely)
-        {
-            try
-            {
-                string jelszó = "plédke";
-                string szöveg = "SELECT * FROM tábla";
-                AdatokKiadásTelep.Clear();
-                AdatokKiadásTelep = KézTelepKiadás.Lista_adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
