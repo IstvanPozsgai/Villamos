@@ -385,14 +385,8 @@ namespace Villamos
         {
             try
             {
-
-                string hely = $@"{Gyökér_telephely}\adatok\főkönyv\típuscsere{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "plédke";
-                string szöveg = "SELECT * FROM típuscseretábla";
-
                 Kezelő_Főkönyv_Típuscsere KézCsere = new Kezelő_Főkönyv_Típuscsere();
-                List<Adat_FőKönyv_Típuscsere> AdatokCsere = KézCsere.Lista_adatok(hely, jelszó, szöveg);
+                List<Adat_FőKönyv_Típuscsere> AdatokCsere = KézCsere.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
 
                 List<Adat_FőKönyv_Típuscsere> Adatok = (from a in AdatokCsere
                                                         where a.Dátum == Dátum.Value
@@ -1278,9 +1272,6 @@ namespace Villamos
         {
             try
             {
-                string helytelep = Gyökér_telephely + $@"\adatok\főkönyv\típuscsere{Dátum.Value.Year}.mdb";
-                string jelszótelep = "plédke";
-
                 string hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_típuscsere_adatok.mdb";
                 string jelszó = "pozsi";
                 string szöveg = "SELECT * FROM típuscseretábla where [dátum]=#" + Dátum.Value.ToString("M-d-yy") + "#";
@@ -1311,16 +1302,12 @@ namespace Villamos
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
 
-
-                szöveg = "SELECT * FROM típuscseretábla where [dátum]=#" + Dátum.Value.ToString("M-d-yy") + "#";
-
-                if (Délelőtt.Checked)
-                    szöveg += " and napszak='de'";
-                else
-                    szöveg += " and napszak='du'";
-
                 Kezelő_Főkönyv_Típuscsere KFT_kéz = new Kezelő_Főkönyv_Típuscsere();
-                List<Adat_FőKönyv_Típuscsere> Adatok = KFT_kéz.Lista_adatok(helytelep, jelszótelep, szöveg);
+                List<Adat_FőKönyv_Típuscsere> Adatok = KFT_kéz.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
+                          && a.Napszak == (Délelőtt.Checked ? "de" : "du")
+                          select a).ToList();
 
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_FőKönyv_Típuscsere rekord in Adatok)

@@ -1732,12 +1732,12 @@ namespace Villamos.Villamos_Nyomtatványok
 
         private void Jobb_Típuscsere(string Cmbtelephely, DateTime Dátum)
         {
-
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\főkönyv\típuscsere" + Dátum.ToString("yyyy") + ".mdb";
-            string jelszó = "plédke";
-            string szöveg = "SELECT * FROM típuscseretábla where [dátum]=#" + Dátum.ToString("MM-dd-yyyy") + "# order by napszak, típuselőírt";
             Kezelő_Főkönyv_Típuscsere KFT_kéz = new Kezelő_Főkönyv_Típuscsere();
-            List<Adat_FőKönyv_Típuscsere> Adatok = KFT_kéz.Lista_adatok(hely, jelszó, szöveg);
+            List<Adat_FőKönyv_Típuscsere> Adatok = KFT_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+            Adatok = (from a in Adatok
+                      where a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
+                      orderby a.Napszak, a.Típuselőírt
+                      select a).ToList();
 
             int ik = 2;
             foreach (Adat_FőKönyv_Típuscsere rekord in Adatok)
