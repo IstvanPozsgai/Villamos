@@ -3620,12 +3620,8 @@ namespace Villamos
             try
             {
                 AdatokFortekiad.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-                if (!File.Exists(hely)) throw new HibásBevittAdat($"Nincs {Dátum.Value:yyyy} évnek megfelelő adat.");
-
-                string jelszó = "gémkapocs";
-                string szöveg = $"SELECT * FROM fortekiadástábla";
-                AdatokFortekiad = KézForteKiad.Lista_adatok(hely, jelszó, szöveg);
+                AdatokFortekiad = KézForteKiad.Lista_Adatok(Dátum.Value.Year);
+                if (AdatokFortekiad == null || AdatokFortekiad.Count == 0) throw new HibásBevittAdat($"Nincs {Dátum.Value:yyyy} évnek megfelelő adat.");
             }
             catch (HibásBevittAdat ex)
             {

@@ -1278,13 +1278,11 @@ namespace Villamos
 
             // megnézzük, hogy az adott nap munkanap, vagy hétvége
             int munkanap = 1;
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
-            string jelszó = "gémkapocs";
-            string szöveg = "SELECT * FROM fortekiadástábla";
-            if (File.Exists(hely))
+            Kezelő_Forte_Kiadási_Adatok KézForte = new Kezelő_Forte_Kiadási_Adatok();
+            List<Adat_Forte_Kiadási_Adatok> AdatokForte = KézForte.Lista_Adatok(Dátum.Value.Year);
+            if (AdatokForte != null && AdatokForte.Count > 0)
             {
-                Kezelő_Forte_Kiadási_Adatok KézForte = new Kezelő_Forte_Kiadási_Adatok();
-                List<Adat_Forte_Kiadási_Adatok> AdatokForte = KézForte.Lista_adatok(hely, jelszó, szöveg);
+
 
                 Adat_Forte_Kiadási_Adatok ElemForte = (from a in AdatokForte
                                                        where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
@@ -1315,7 +1313,7 @@ namespace Villamos
                 estedát = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, ideigdátum.Hour, ideigdátum.Minute, 0);
             }
             // megnézzük, hogy létezik-e adott napi tábla
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\ZSER\zser" + Dátum.Value.ToString("yyyyMMdd");
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\ZSER\zser" + Dátum.Value.ToString("yyyyMMdd");
             if (Délelőtt.Checked)
                 hely += "de.mdb";
             else
