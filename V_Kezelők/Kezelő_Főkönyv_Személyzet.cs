@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Személyzetösszesítőtábla(hely);
         }
 
-        public List<Adat_Főkönyv_Személyzet> Lista_adatok(string Telephely, int Év)
+        public List<Adat_Főkönyv_Személyzet> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
             string szöveg = "SELECT * FROM tábla";

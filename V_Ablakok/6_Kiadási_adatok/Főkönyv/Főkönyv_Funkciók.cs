@@ -246,7 +246,7 @@ namespace Villamos
 
         public static void Napiadatokmentése(string Napszak, DateTime Dátum, string Telephely)
         {
-            List<Adat_Kiadás_összesítő> AdatokKiadás = KézKiadÖ.Lista_adatok(Telephely, Dátum.Year);
+            List<Adat_Kiadás_összesítő> AdatokKiadás = KézKiadÖ.Lista_Adatok(Telephely, Dátum.Year);
             AdatokKiadás = (from a in AdatokKiadás
                             where a.Dátum == Dátum && a.Napszak.Trim() == Napszak.Trim()
                             select a).ToList();
@@ -423,7 +423,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Főkönyv_Személyzet> Adatok_Személy = Kéz_Személy.Lista_adatok(Telephely.Trim(), Dátum.Year);
+                List<Adat_Főkönyv_Személyzet> Adatok_Személy = Kéz_Személy.Lista_Adatok(Telephely.Trim(), Dátum.Year);
                 bool vane = Adatok_Személy.Any(t => t.Dátum == Dátum && t.Napszak.Trim() == Napszak.Trim());
                 if (vane) Kéz_Személy.Törlés(Telephely, Dátum.Year, Napszak, Dátum);    // Adott napi adatokat kitöröljük
 

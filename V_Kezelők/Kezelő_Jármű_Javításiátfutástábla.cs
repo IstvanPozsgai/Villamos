@@ -60,6 +60,39 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public List<Adat_Jármű_Javításiátfutástábla> Lista_Adatok(string Telephely, int Év)
+        {
+            FájlBeállítás(Telephely, Év);
+            string szöveg = "SELECT * FROM xnapostábla ";
+            List<Adat_Jármű_Javításiátfutástábla> Adatok = new List<Adat_Jármű_Javításiátfutástábla>();
+            Adat_Jármű_Javításiátfutástábla Adat;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Javításiátfutástábla(
+                                        rekord["kezdődátum"].ToÉrt_DaTeTime(),
+                                        rekord["végdátum"].ToÉrt_DaTeTime(),
+                                        rekord["Azonosító"].ToStrTrim(),
+                                        rekord["hibaleírása"].ToStrTrim()
+                                        );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
         public void Rögzítés(string Telephely, List<Adat_Jármű_Javításiátfutástábla> Adatok)
         {
             try
@@ -134,38 +167,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public List<Adat_Jármű_Javításiátfutástábla> Lista_Adatok(string Telephely, int Év)
-        {
-            FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM xnapostábla ";
-            List<Adat_Jármű_Javításiátfutástábla> Adatok = new List<Adat_Jármű_Javításiátfutástábla>();
-            Adat_Jármű_Javításiátfutástábla Adat;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Jármű_Javításiátfutástábla(
-                                        rekord["kezdődátum"].ToÉrt_DaTeTime(),
-                                        rekord["végdátum"].ToÉrt_DaTeTime(),
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["hibaleírása"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
+
 
         public void Rögzítés(string Telephely, int Év, List<Adat_Jármű_Javításiátfutástábla> Adatok)
         {
@@ -217,41 +219,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        //Elkopó
-        public List<Adat_Jármű_Javításiátfutástábla> Lista_adatok(string hely, string jelszó, string szöveg)
-        {
-
-
-
-            List<Adat_Jármű_Javításiátfutástábla> Adatok = new List<Adat_Jármű_Javításiátfutástábla>();
-            Adat_Jármű_Javításiátfutástábla Adat;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Jármű_Javításiátfutástábla(
-                                        rekord["kezdődátum"].ToÉrt_DaTeTime(),
-                                        rekord["végdátum"].ToÉrt_DaTeTime(),
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["hibaleírása"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
 
     }

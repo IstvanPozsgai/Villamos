@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiösszesítőtábla(hely.KönyvSzerk());
         }
 
-        public List<Adat_Kiadás_összesítő> Lista_adatok(string Telephely, int Év)
+        public List<Adat_Kiadás_összesítő> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
             string szöveg = "SELECT * FROM tábla  ";

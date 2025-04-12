@@ -75,7 +75,7 @@ namespace Villamos
                         Visible = true
                     };
 
-                    List<Adat_Kiadás_összesítő> AdatokÖsszesítő = KézKiadási.Lista_adatok(item.Telephelykönyvtár.Trim(), Dátum.Value.Year);
+                    List<Adat_Kiadás_összesítő> AdatokÖsszesítő = KézKiadási.Lista_Adatok(item.Telephelykönyvtár.Trim(), Dátum.Value.Year);
 
                     if (AdatokÖsszesítő != null)
                     {
@@ -366,7 +366,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Kiadás_összesítő> Adatok = KézKiadási.Lista_adatok(Választott_Telephely.Text.Trim(), Dátum.Value.Year);
+                List<Adat_Kiadás_összesítő> Adatok = KézKiadási.Lista_Adatok(Választott_Telephely.Text.Trim(), Dátum.Value.Year);
                 Adatok = (from a in Adatok
                           where a.Dátum == Dátum.Value
                           orderby a.Napszak, a.Típus
