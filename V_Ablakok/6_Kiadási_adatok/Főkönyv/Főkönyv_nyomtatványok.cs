@@ -1649,18 +1649,16 @@ namespace Villamos.Villamos_Nyomtatványok
             MyE.Vastagkeret(MyE.Oszlopnév(utolsó) + újsor.ToString());
             MyE.Vastagkeret(MyE.Oszlopnév(utolsó + 4) + újsor.ToString());
         }
-
+        //
         private void Jobb_Személyzet_Fejléc(string Cmbtelephely, DateTime Dátum)
         {
             // megnézzük, hogy volt-e személyzet hiány ezen a napon
-
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\főkönyv\személyzet" + Dátum.ToString("yyyy") + ".mdb";
-            string jelszó = "plédke";
-            string szöveg = "SELECT * FROM tábla where [dátum]=#" + Dátum.ToString("MM-dd-yyyy") + "#";
-            szöveg += " order by napszak, típus";
-
             Kezelő_Főkönyv_Személyzet KFS_kéz = new Kezelő_Főkönyv_Személyzet();
-            List<Adat_Főkönyv_Személyzet> SzAdatok = KFS_kéz.Lista_adatok(hely, jelszó, szöveg);
+            List<Adat_Főkönyv_Személyzet> SzAdatok = KFS_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+            SzAdatok = (from a in SzAdatok
+                        where a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
+                        orderby a.Napszak, a.Típus
+                        select a).ToList();
             int egyik = 1;
             foreach (Adat_Főkönyv_Személyzet rekord in SzAdatok)
             {

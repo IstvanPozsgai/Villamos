@@ -310,14 +310,9 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Gyökér_telephely}\adatok\főkönyv\személyzet{Dátum.Value.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "plédke";
-                string szöveg = "SELECT * FROM tábla";
-
                 Kezelő_Főkönyv_Személyzet KézSzem = new Kezelő_Főkönyv_Személyzet();
-                List<Adat_Főkönyv_Személyzet> AdatokSzem = KézSzem.Lista_adatok(hely, jelszó, szöveg);
-
+                List<Adat_Főkönyv_Személyzet> AdatokSzem = KézSzem.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                if (AdatokSzem == null || AdatokSzem.Count == 0) return;
                 List<Adat_Főkönyv_Személyzet> Adatok = (from a in AdatokSzem
                                                         where a.Dátum == Dátum.Value
                                                         orderby a.Napszak, a.Típus
@@ -1189,8 +1184,6 @@ namespace Villamos
         {
             try
             {
-                string helytelep = $@"{Gyökér_telephely}\adatok\főkönyv\személyzet{Dátum.Value.Year}.mdb";
-                string jelszótelep = "plédke";
                 string szöveg;
 
                 FőSzemélyzetListaFeltöltés();
@@ -1217,15 +1210,12 @@ namespace Villamos
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
 
-                szöveg = "SELECT * FROM tábla where [dátum]=#" + Dátum.Value.ToString("M-d-yy") + "#";
-
-                if (Délelőtt.Checked)
-                    szöveg += " and napszak='de'";
-                else
-                    szöveg += " and napszak='du'";
-
                 Kezelő_Főkönyv_Személyzet KFK_Kéz = new Kezelő_Főkönyv_Személyzet();
-                List<Adat_Főkönyv_Személyzet> Adatok = KFK_Kéz.Lista_adatok(helytelep, jelszótelep, szöveg);
+                List<Adat_Főkönyv_Személyzet> Adatok = KFK_Kéz.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
+                          && a.Napszak == (Délelőtt.Checked ? "de" : "du")
+                          select a).ToList();
 
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Főkönyv_Személyzet rekord in Adatok)
