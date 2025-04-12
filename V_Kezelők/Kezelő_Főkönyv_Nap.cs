@@ -124,6 +124,36 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(string Telephely, DateTime Dátum, string Napszak, List<string> Azonosítók)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Napszak);
+                List<string> SzövegGy = new List<string>();
+                foreach (string Azonosító in Azonosítók)
+                {
+                    string szöveg = "UPDATE Adattábla SET viszonylat='-', forgalmiszám='-',  ";
+                    szöveg += "tervindulás='1900.01.01 00:00:00', ";
+                    szöveg += "tényindulás='1900.01.01 00:00:00', ";
+                    szöveg += "tervérkezés='1900.01.01 00:00:00', ";
+                    szöveg += "tényérkezés='1900.01.01 00:00:00', ";
+                    szöveg += "napszak='_', ";
+                    szöveg += "megjegyzés='_' ";
+                    szöveg += $" WHERE azonosító='{Azonosító}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 
         //Elkopó
