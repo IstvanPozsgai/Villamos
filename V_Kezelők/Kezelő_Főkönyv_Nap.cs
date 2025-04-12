@@ -106,6 +106,25 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Törlés(string Telephely, DateTime Dátum, string Napszak)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Napszak);
+                MyA.ABtörlés(hely, jelszó, $"DELETE * FROM Adattábla");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
 
         //Elkopó
         public List<Adat_Főkönyv_Nap> Lista_adatok(string hely, string jelszó, string szöveg)
@@ -219,5 +238,7 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
+
+
     }
 }

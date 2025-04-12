@@ -1,6 +1,8 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using Villamos.Kezelők;
+using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
@@ -8,6 +10,9 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
     public partial class Ablak_Főkönyv_Napi_Adatok : Form
     {
         public string Cmbtelephely { get; private set; }
+
+        readonly Kezelő_Főkönyv_Nap Kéz = new Kezelő_Főkönyv_Nap();
+
         public Ablak_Főkönyv_Napi_Adatok(string cmbtelephely)
         {
             Cmbtelephely = cmbtelephely;
@@ -51,33 +56,42 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             try
             {
                 // leellenőrizzük, hogy létezik-e már a létrehozni kívánt adat
+                List<Adat_Főkönyv_Nap> Adatok = Kéz.Lista_Adatok(Cmbtelephely, Dátumról.Value, RadioButton1.Checked ? "de" : "du");
+                if (Adatok == null || Adatok.Count == 0) throw new HibásBevittAdat("A másolandó adat állomány nem létezik.");
 
-                string honnan = $@"{Application.StartupPath}\{Cmbtelephely}\adatok\főkönyv\{Dátumról.Value.Year}\nap\{Dátumról.Value.ToString("yyyyMMdd")}";
-                if (RadioButton1.Checked)
-                    honnan += "denap.mdb";
-                else
-                    honnan += "dunap.mdb";
-
-                if (!File.Exists(honnan))
-                    throw new HibásBevittAdat("A másolandó adat állomány nem létezik.");
+                List<Adat_Főkönyv_Nap> AdatokÚj = Kéz.Lista_Adatok(Cmbtelephely, Dátumra.Value, RadioButton4.Checked ? "de" : "du");
 
 
-                string hova = $@"{Application.StartupPath}\{Cmbtelephely}\adatok\főkönyv\{Dátumra.Value.Year}\nap\{Dátumra.Value.ToString("yyyyMMdd")}";
-                if (RadioButton4.Checked)
-                    hova += "denap.mdb";
-                else
-                    hova += "dunap.mdb";
-
-                if (File.Exists(hova))
+                if (AdatokÚj != null && AdatokÚj.Count > 0)
                 {
                     // ha létezik akkor töröljük
                     if (MessageBox.Show("Már van az adott napra feltöltve adat ! Módosítjuk az adatokat ?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                        File.Delete(hova);
+                        Kéz.Törlés(Cmbtelephely, Dátumra.Value, RadioButton4.Checked ? "de" : "du");
                     else
                         return;
                 }
 
-                File.Copy(honnan, hova);
+                AdatokÚj.Clear();
+                foreach (Adat_Főkönyv_Nap adat in Adatok)
+                {
+                    Adat_Főkönyv_Nap ADAT = new Adat_Főkönyv_Nap(
+                        adat.Státus,
+                        adat.Hibaleírása,
+                        adat.Típus,
+                        adat.Azonosító,
+                        adat.Szerelvény,
+                        adat.Viszonylat,
+                        adat.Forgalmiszám,
+                        adat.Kocsikszáma,
+                        new DateTime(1900, 1, 1, 0, 0, 0),
+                        new DateTime(1900, 1, 1, 0, 0, 0),
+                        new DateTime(1900, 1, 1, 0, 0, 0),
+                        new DateTime(1900, 1, 1, 0, 0, 0),
+                        adat.Miótaáll,
+                        "-", "*");
+                    AdatokÚj.Add(ADAT);
+                }
+                Kéz.Rögzítés(Cmbtelephely, Dátumra.Value, RadioButton4.Checked ? "de" : "du", AdatokÚj);
                 MessageBox.Show("Az adatok másolása megtörtént.", "Rögzítés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -90,7 +104,5 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
     }
 }
