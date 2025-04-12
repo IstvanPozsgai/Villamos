@@ -728,5 +728,38 @@ namespace Villamos
                 throw new Exception("MyA rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
             }
         }
+
+        public static void FőadatEllenőrzése(string Telephely)
+        {
+            try
+            {
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(Telephely.Trim());
+                AdatokJármű = AdatokJármű.Where(a => a.Státus == 4).ToList();
+                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Telephely.Trim());
+
+                foreach (Adat_Jármű Adat in AdatokJármű)
+                {
+                    // ha a jármű státusza 4 akkor megnézzük, hogy van-e hiba
+                    List<Adat_Jármű_hiba> AdatokGy = (from a in AdatokHiba
+                                                      where a.Korlát == 4 && a.Azonosító == Adat.Azonosító
+                                                      select a).ToList();
+                    DateTime Miótaáll = new DateTime(1900, 1, 1, 0, 0, 0);
+                    foreach (Adat_Jármű_hiba rekord in AdatokGy)
+                        if (Miótaáll == new DateTime(1900, 1, 1, 0, 0, 0) || Miótaáll > rekord.Idő) Miótaáll = rekord.Idő;
+
+                    if (Adat.Miótaáll == new DateTime(1900, 1, 1, 0, 0, 0) || Adat.Miótaáll > Miótaáll)
+                        KézJármű.Módosítás_Dátum(Telephely, Adat.Azonosító, Miótaáll);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "FőadatEllenőrzése", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

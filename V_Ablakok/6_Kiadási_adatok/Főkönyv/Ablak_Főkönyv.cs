@@ -841,6 +841,7 @@ namespace Villamos
             try
             {
                 Holtart.Be();
+                Főkönyv_Funkciók.FőadatEllenőrzése(Cmbtelephely.Text.Trim());
                 Főkönyv_Funkciók.SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
                 Főkönyv_Funkciók.SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
                 Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());

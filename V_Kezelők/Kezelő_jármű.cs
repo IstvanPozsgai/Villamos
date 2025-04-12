@@ -353,33 +353,15 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(string Telephely, string Azonosító)
+        public void Módosítás_Dátum(string Telephely, string Azonosító, DateTime Dátum)
         {
             try
             {
-                List<Adat_Jármű> Adatok = Lista_Adatok(Telephely);
-                Adat_Jármű Elem = (from a in Adatok
-                                   where a.Azonosító == Azonosító
-                                   select a).FirstOrDefault();
-
-                string szöveg;
-                if (Elem != null)
-                {
-                    if (Telephely == "Főmérnökség")
-                    {
-                        if (Elem.Törölt)
-                            szöveg = $"UPDATE Állománytábla SET törölt=false WHERE [azonosító]='{Azonosító}'";
-                        else
-                            szöveg = $"UPDATE Állománytábla SET törölt=true WHERE [azonosító]='{Azonosító}'";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
-                    }
-                    else
-                    {
-                        szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{Azonosító}'";
-                        MyA.ABtörlés(hely, jelszó, szöveg);
-                    }
-                }
-
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE állománytábla SET ";
+                szöveg += $"miótaáll='{Dátum}' ";
+                szöveg += $"where [azonosító] ='{Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -459,6 +441,45 @@ namespace Villamos.Kezelők
                 szöveg += $"üzem='{Adat.Üzem.Trim()}' ";
                 szöveg += $" WHERE [azonosító] ='{Adat.Azonosító.Trim()}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(string Telephely, string Azonosító)
+        {
+            try
+            {
+                List<Adat_Jármű> Adatok = Lista_Adatok(Telephely);
+                Adat_Jármű Elem = (from a in Adatok
+                                   where a.Azonosító == Azonosító
+                                   select a).FirstOrDefault();
+
+                string szöveg;
+                if (Elem != null)
+                {
+                    if (Telephely == "Főmérnökség")
+                    {
+                        if (Elem.Törölt)
+                            szöveg = $"UPDATE Állománytábla SET törölt=false WHERE [azonosító]='{Azonosító}'";
+                        else
+                            szöveg = $"UPDATE Állománytábla SET törölt=true WHERE [azonosító]='{Azonosító}'";
+                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                    }
+                    else
+                    {
+                        szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{Azonosító}'";
+                        MyA.ABtörlés(hely, jelszó, szöveg);
+                    }
+                }
+
             }
             catch (HibásBevittAdat ex)
             {

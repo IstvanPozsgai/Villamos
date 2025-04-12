@@ -50,7 +50,6 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             }
         }
 
-
         private void Adatok_Másolása_Click(object sender, EventArgs e)
         {
             try
@@ -80,8 +79,7 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
                         adat.Típus,
                         adat.Azonosító,
                         adat.Szerelvény,
-                        adat.Viszonylat,
-                        adat.Forgalmiszám,
+                        "-", "-",
                         adat.Kocsikszáma,
                         new DateTime(1900, 1, 1, 0, 0, 0),
                         new DateTime(1900, 1, 1, 0, 0, 0),
