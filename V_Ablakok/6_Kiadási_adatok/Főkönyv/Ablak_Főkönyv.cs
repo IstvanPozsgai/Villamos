@@ -1339,119 +1339,84 @@ namespace Villamos
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
         }
-        //
+
         private void Zser_ellenőrzés()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\nap\" + Dátum.Value.ToString("yyyyMMdd");
-            if (Délelőtt.Checked)
-                hely += "denap.mdb";
-            else
-                hely += "dunap.mdb";
-
-
-            string helyzser = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\ZSER\zser" + Dátum.Value.ToString("yyyyMMdd");
-            if (Délelőtt.Checked)
-                helyzser += "de.mdb";
-            else
-                helyzser += "du.mdb";
-
-            string jelszó = "lilaakác";
-
-            Holtart.Be(100);
-            // visszaállítjuk az összes ellenrőzőt alaphelyzetbe
-            string szöveg = "SELECT * FROM Zseltábla ";
-
-
-            List<Adat_Főkönyv_ZSER> Adatok = KézFőkönyvZSER.Lista_adatok(helyzser, jelszó, szöveg);
-
-            foreach (Adat_Főkönyv_ZSER rekord in Adatok)
+            try
             {
-                szöveg = "UPDATE zseltábla SET ellenőrző='_' ";
-                szöveg += " WHERE viszonylat='" + rekord.Viszonylat.Trim() + "' AND ";
-                szöveg += " forgalmiszám='" + rekord.Forgalmiszám.Trim() + "' AND ";
-                szöveg += " tervindulás=#" + rekord.Tervindulás.ToString("yyyy-MM-dd HH:mm:s") + "# ";
+                Holtart.Be();
+                // visszaállítjuk az összes ellenrőzőt alaphelyzetbe
+                List<Adat_Főkönyv_ZSER> AdatokZSER = KézFőkönyvZSER.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
 
-                MyA.ABMódosítás(helyzser, jelszó, szöveg);
-                Holtart.Lép();
-            }
-
-
-            // ellenőrizzük, hogy a pályaszámok a telephez tartoznak
-            // *******************************
-            // feltöltjük a pályaszám listába
-            // *******************************
-            szöveg = "SELECT * FROM Adattábla ORDER BY azonosító ";
-            Pályaszámok.Items.Clear();
-            Pályaszámok.BeginUpdate();
-            Pályaszámok.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-            Pályaszámok.EndUpdate();
-            Pályaszámok.Refresh();
-
-
-            szöveg = "SELECT * FROM Zseltábla ORDER BY viszonylat, forgalmiszám, tervindulás";
-            Adatok = KézFőkönyvZSER.Lista_adatok(helyzser, jelszó, szöveg);
-
-
-            string eredmény;
-            Holtart.Lép();
-
-            foreach (Adat_Főkönyv_ZSER rekord in Adatok)
-            {
-                eredmény = "_";
-                if (rekord.Napszak.Trim() == "DE" || rekord.Napszak.Trim() == "DU")
+                List<Adat_Főkönyv_ZSER> AdatokGy = new List<Adat_Főkönyv_ZSER>();
+                foreach (Adat_Főkönyv_ZSER rekord in AdatokZSER)
                 {
-                    eredmény += Pályaszám_vizsgálat(rekord.Kocsi1.Trim()) +
-                                Pályaszám_vizsgálat(rekord.Kocsi2.Trim()) +
-                                Pályaszám_vizsgálat(rekord.Kocsi3.Trim()) +
-                                Pályaszám_vizsgálat(rekord.Kocsi4.Trim()) +
-                                Pályaszám_vizsgálat(rekord.Kocsi5.Trim()) +
-                                Pályaszám_vizsgálat(rekord.Kocsi6.Trim());
-
-                    // módosítjuk az adatokat
-                    szöveg = "UPDATE zseltábla SET ellenőrző='" + eredmény.Trim() + "' ";
-                    szöveg += " WHERE viszonylat='" + rekord.Viszonylat.Trim() + "' AND ";
-                    szöveg += " forgalmiszám='" + rekord.Forgalmiszám.Trim() + "' AND ";
-                    szöveg += " tervindulás=#" + rekord.Tervindulás.ToString("yyyy-MM-dd HH:mm:s") + "# ";
-                    MyA.ABMódosítás(helyzser, jelszó, szöveg);
+                    Adat_Főkönyv_ZSER AdatEll = new Adat_Főkönyv_ZSER(
+                                     rekord.Viszonylat.Trim(),
+                                     rekord.Forgalmiszám.Trim(),
+                                     rekord.Tervindulás,
+                                     "_");
+                    AdatokGy.Add(AdatEll);
+                    Holtart.Lép();
                 }
+                if (AdatokGy.Count > 0) KézFőkönyvZSER.Módosítás_Ellenőr(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", AdatokGy);
+
+
+                // ellenőrizzük, hogy a pályaszámok a telephez tartoznak
+                // *******************************
+                // feltöltjük a pályaszám listába
+                // *******************************
+
+                List<Adat_Főkönyv_Nap> AdatokNap = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+                List<string> Pályaszámok = (from a in AdatokNap
+                                            orderby a.Azonosító
+                                            select a.Azonosító).ToList();
+
+                AdatokZSER = KézFőkönyvZSER.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+
                 Holtart.Lép();
+                AdatokGy.Clear();
+                foreach (Adat_Főkönyv_ZSER rekord in AdatokZSER)
+                {
+                    string eredmény = "_";
+                    if (rekord.Napszak.Trim() == "DE" || rekord.Napszak.Trim() == "DU")
+                    {
+                        eredmény += Pályaszám_vizsgálat(Pályaszámok, rekord.Kocsi1.Trim()) +
+                                    Pályaszám_vizsgálat(Pályaszámok, rekord.Kocsi2.Trim()) +
+                                    Pályaszám_vizsgálat(Pályaszámok, rekord.Kocsi3.Trim()) +
+                                    Pályaszám_vizsgálat(Pályaszámok, rekord.Kocsi4.Trim()) +
+                                    Pályaszám_vizsgálat(Pályaszámok, rekord.Kocsi5.Trim()) +
+                                    Pályaszám_vizsgálat(Pályaszámok, rekord.Kocsi6.Trim());
+
+                        // módosítjuk az adatokat
+                        Adat_Főkönyv_ZSER AdatEll = new Adat_Főkönyv_ZSER(
+                                  rekord.Viszonylat.Trim(),
+                                  rekord.Forgalmiszám.Trim(),
+                                  rekord.Tervindulás,
+                                  eredmény);
+                        AdatokGy.Add(AdatEll);
+                    }
+                    Holtart.Lép();
+                }
+                if (AdatokGy.Count > 0) KézFőkönyvZSER.Módosítás_Ellenőr(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", AdatokGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        /// <summary>
-        /// Azt vizsgláljuk, hogy a kapott pályaszám a telephely járműve-e.
-        /// Ha igaz, vagy ha nincs értelmezhető pályaszám, akkor 1 tér vissza 
-        /// Ha nem akkor 0
-        /// </summary>
-        /// <param name="pályaszám"></param>
-        /// <returns></returns>
-
-        string Pályaszám_vizsgálat(string pályaszám)
+        string Pályaszám_vizsgálat(List<string> Pályaszámok, string pályaszám)
         {
-            string válasz;
-            int voltdarab = 0;
-
-            if (pályaszám.Trim() != "_")
-            {
-                for (int i = 0; i < Pályaszámok.Items.Count; i++)
-                {
-                    if (pályaszám.Trim() == Pályaszámok.Items[i].ToString().Trim())
-                    {
-                        voltdarab = 1;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                // ha üres a mező akkor
-                voltdarab = 1;
-            }
-            if (voltdarab == 1)
-                válasz = "0";
-            else
-                válasz = "1";
-
+            string válasz = "0";
+            if (pályaszám.Trim() == "_") return válasz;         //ha nincs beosztva kocsi
+            if (Pályaszámok.Contains(pályaszám)) return válasz; //Ha a telephelyen van a kocsi akkor jó
+            válasz = "1";                                       // Nincs a telephelyen a kocsi ilyenkor nem jó
             return válasz;
         }
 

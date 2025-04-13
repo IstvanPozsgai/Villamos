@@ -89,7 +89,6 @@ namespace Villamos
             this.R_frissít = new System.Windows.Forms.Button();
             this.Panel4 = new System.Windows.Forms.Panel();
             this.Tiltott_vonalak = new System.Windows.Forms.ListBox();
-            this.Pályaszámok = new System.Windows.Forms.ListBox();
             this.Label19 = new System.Windows.Forms.Label();
             this.Label18 = new System.Windows.Forms.Label();
             this.R_miótaáll = new System.Windows.Forms.DateTimePicker();
@@ -793,7 +792,6 @@ namespace Villamos
             // 
             this.Panel4.BackColor = System.Drawing.Color.Coral;
             this.Panel4.Controls.Add(this.Tiltott_vonalak);
-            this.Panel4.Controls.Add(this.Pályaszámok);
             this.Panel4.Location = new System.Drawing.Point(821, 497);
             this.Panel4.Name = "Panel4";
             this.Panel4.Size = new System.Drawing.Size(101, 38);
@@ -808,15 +806,6 @@ namespace Villamos
             this.Tiltott_vonalak.Name = "Tiltott_vonalak";
             this.Tiltott_vonalak.Size = new System.Drawing.Size(43, 24);
             this.Tiltott_vonalak.TabIndex = 1;
-            // 
-            // Pályaszámok
-            // 
-            this.Pályaszámok.FormattingEnabled = true;
-            this.Pályaszámok.ItemHeight = 20;
-            this.Pályaszámok.Location = new System.Drawing.Point(52, 4);
-            this.Pályaszámok.Name = "Pályaszámok";
-            this.Pályaszámok.Size = new System.Drawing.Size(42, 24);
-            this.Pályaszámok.TabIndex = 0;
             // 
             // Label19
             // 
@@ -1478,7 +1467,6 @@ namespace Villamos
         internal Button Vezénylésbeírás;
         internal Panel Panel4;
         internal ListBox Tiltott_vonalak;
-        internal ListBox Pályaszámok;
         internal CheckBox Reklám_Check;
         internal Button Jegykezelő;
         internal Button Button1;
