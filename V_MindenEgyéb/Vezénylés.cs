@@ -25,6 +25,7 @@ namespace Villamos.V_MindenEgyéb
                                    && a.Dátum == Dátum
                                    && a.Vizsgálatraütemez == 1
                                    && a.Törlés == 0
+                                   && a.Típus == "T5C5"
                                    orderby a.Azonosító
                                    select a).ToList();
 

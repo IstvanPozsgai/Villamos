@@ -2694,7 +2694,6 @@ namespace Villamos
                                         rekordütemez.Azonosító,
                                         0);
                             KézHiba.Rögzítés(Cmbtelephely.Text.Trim(), AdatHiba);
-                            KézHiba.Rögzítés_Napló(Cmbtelephely.Text.Trim(), DateTime.Now, AdatHiba);
 
 
                             // módosítjuk az ütemezett adatokat is
@@ -2764,7 +2763,7 @@ namespace Villamos
             foreach (Adat_Vezénylés rekordütemez in Adatok)
             {
                 Holtart.Lép();
-                if (rekordütemez.Takarításraütemez == 1 || rekordütemez.Vizsgálatraütemez == 1)
+                if (rekordütemez.Vizsgálatraütemez == 1)
                 {
                     // hiba leírása
                     string szöveg1 = rekordütemez.Vizsgálat.Trim() + "-" + rekordütemez.Vizsgálatszám;
@@ -2775,18 +2774,12 @@ namespace Villamos
                     else
                         szöveg1 += "-" + rekordütemez.Dátum.ToString("yyyy.MM.dd.") + " Beálló ";
 
-                    if (rekordütemez.Takarításraütemez == 1)
-                        szöveg1 += "+Mosó ";
 
                     // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
 
                     Adat_Jármű_hiba ElemHiba = (from a in AdatokHiba
                                                 where a.Azonosító == rekordütemez.Azonosító && a.Hibaleírása.Contains(szöveg3.Trim())
                                                 select a).FirstOrDefault();
-
-                    ElemHiba = (from a in AdatokHiba
-                                where a.Azonosító == rekordütemez.Azonosító && a.Hibaleírása.Contains(szöveg1.Trim())
-                                select a).FirstOrDefault();
 
                     // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
                     if (ElemHiba == null)
@@ -2854,7 +2847,6 @@ namespace Villamos
                                     rekordütemez.Azonosító,
                                     0);
                         KézHiba.Rögzítés(Cmbtelephely.Text.Trim(), AdatHiba);
-                        KézHiba.Rögzítés_Napló(Cmbtelephely.Text.Trim(), DateTime.Now, AdatHiba);
                     }
                 }
             }
@@ -2949,7 +2941,6 @@ namespace Villamos
                                       rekordütemez.Azonosító,
                                       0);
                         KézHiba.Rögzítés(Cmbtelephely.Text.Trim(), AdatHiba);
-                        KézHiba.Rögzítés_Napló(Cmbtelephely.Text.Trim(), DateTime.Now, AdatHiba);
 
                         // módosítjuk az ütemezett adatokat is
                         KézCAF.Módosítás_Státus(rekordütemez.Id, 4);

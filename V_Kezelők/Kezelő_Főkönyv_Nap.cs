@@ -217,7 +217,7 @@ namespace Villamos.Kezelők
                 string szöveg = "UPDATE Adattábla SET ";
                 szöveg += $"viszonylat='{Adat.Viszonylat}', ";
                 szöveg += $"forgalmiszám='{Adat.Forgalmiszám}', ";
-                szöveg += $"kocsikszáma={Adat.Kocsikszáma}";
+                szöveg += $"kocsikszáma={Adat.Kocsikszáma}, ";
                 szöveg += $"tervindulás='{Adat.Tervindulás}', ";
                 szöveg += $"tényindulás='{Adat.Tényindulás}', ";
                 szöveg += $"tervérkezés='{Adat.Tervérkezés}', ";
@@ -249,11 +249,11 @@ namespace Villamos.Kezelők
                     string szöveg = "UPDATE Adattábla SET ";
                     szöveg += $"viszonylat='{Adat.Viszonylat}', ";
                     szöveg += $"forgalmiszám='{Adat.Forgalmiszám}', ";
-                    szöveg += $"kocsikszáma={Adat.Kocsikszáma}";
+                    szöveg += $"kocsikszáma={Adat.Kocsikszáma}, ";
                     szöveg += $"tervindulás='{Adat.Tervindulás}', ";
                     szöveg += $"tényindulás='{Adat.Tényindulás}', ";
                     szöveg += $"tervérkezés='{Adat.Tervérkezés}', ";
-                    szöveg += $"tényérkezés='{Adat.Tényérkezés}', ";
+                    szöveg += $"tényérkezés='{Adat.Tényérkezés}' ";
                     szöveg += $"WHERE azonosító='{Adat.Azonosító}'";
                     SzövegGy.Add(szöveg);
                 }
