@@ -62,6 +62,8 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+
+
         // Elkopó
         public List<Adat_Vezénylés> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

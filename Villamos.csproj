@@ -800,6 +800,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálattelepei.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Sérülés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Turnusok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típusaltípustábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típusrendezéstábla.cs" />

@@ -140,33 +140,7 @@ namespace Villamos.Kezelők
     }
 
 
-    public class Kezelő_Kiegészítő_Takarítás
-    {
-        public List<string> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<string> Adatok = new List<string>();
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adatok.Add(rekord["típus"].ToString());
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
 
     public class Kezelő_Kiegészítő_Feortipus
