@@ -187,6 +187,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Tervindulás = tervindulás;
             Ellenőrző = ellenőrző;
         }
+
+        public Adat_Főkönyv_ZSER(string napszak, string viszonylat, string forgalmiszám, DateTime tervindulás)
+        {
+            Viszonylat = viszonylat;
+            Forgalmiszám = forgalmiszám;
+            Tervindulás = tervindulás;
+            Napszak = napszak;
+        }
     }
 
     public class Adat_Főkönyv_Zser_Km

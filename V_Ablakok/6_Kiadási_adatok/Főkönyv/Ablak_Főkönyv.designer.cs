@@ -87,8 +87,6 @@ namespace Villamos
             this.Napi_adatok_listázása = new System.Windows.Forms.Button();
             this.TabPage3 = new System.Windows.Forms.TabPage();
             this.R_frissít = new System.Windows.Forms.Button();
-            this.Panel4 = new System.Windows.Forms.Panel();
-            this.Tiltott_vonalak = new System.Windows.Forms.ListBox();
             this.Label19 = new System.Windows.Forms.Label();
             this.Label18 = new System.Windows.Forms.Label();
             this.R_miótaáll = new System.Windows.Forms.DateTimePicker();
@@ -156,7 +154,6 @@ namespace Villamos
             this.Járműpanel_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NapiTábla)).BeginInit();
             this.TabPage3.SuspendLayout();
-            this.Panel4.SuspendLayout();
             this.TabPage5.SuspendLayout();
             this.TabPage4.SuspendLayout();
             this.TabPage8.SuspendLayout();
@@ -738,7 +735,6 @@ namespace Villamos
             // 
             this.TabPage3.BackColor = System.Drawing.Color.DarkOrange;
             this.TabPage3.Controls.Add(this.R_frissít);
-            this.TabPage3.Controls.Add(this.Panel4);
             this.TabPage3.Controls.Add(this.Label19);
             this.TabPage3.Controls.Add(this.Label18);
             this.TabPage3.Controls.Add(this.R_miótaáll);
@@ -787,25 +783,6 @@ namespace Villamos
             this.R_frissít.TabIndex = 205;
             this.R_frissít.UseVisualStyleBackColor = true;
             this.R_frissít.Click += new System.EventHandler(this.R_frissít_Click);
-            // 
-            // Panel4
-            // 
-            this.Panel4.BackColor = System.Drawing.Color.Coral;
-            this.Panel4.Controls.Add(this.Tiltott_vonalak);
-            this.Panel4.Location = new System.Drawing.Point(821, 497);
-            this.Panel4.Name = "Panel4";
-            this.Panel4.Size = new System.Drawing.Size(101, 38);
-            this.Panel4.TabIndex = 198;
-            this.Panel4.Visible = false;
-            // 
-            // Tiltott_vonalak
-            // 
-            this.Tiltott_vonalak.FormattingEnabled = true;
-            this.Tiltott_vonalak.ItemHeight = 20;
-            this.Tiltott_vonalak.Location = new System.Drawing.Point(3, 4);
-            this.Tiltott_vonalak.Name = "Tiltott_vonalak";
-            this.Tiltott_vonalak.Size = new System.Drawing.Size(43, 24);
-            this.Tiltott_vonalak.TabIndex = 1;
             // 
             // Label19
             // 
@@ -1378,7 +1355,6 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.NapiTábla)).EndInit();
             this.TabPage3.ResumeLayout(false);
             this.TabPage3.PerformLayout();
-            this.Panel4.ResumeLayout(false);
             this.TabPage5.ResumeLayout(false);
             this.TabPage4.ResumeLayout(false);
             this.TabPage4.PerformLayout();
@@ -1465,8 +1441,6 @@ namespace Villamos
         internal RichTextBox RichtextBox1;
         internal Button REklám_frissít;
         internal Button Vezénylésbeírás;
-        internal Panel Panel4;
-        internal ListBox Tiltott_vonalak;
         internal CheckBox Reklám_Check;
         internal Button Jegykezelő;
         internal Button Button1;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -10,10 +9,8 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Nyomtatványok;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
@@ -51,7 +48,9 @@ namespace Villamos
         readonly Kezelő_Vezénylés KézICSVezénylés = new Kezelő_Vezénylés();
         readonly Kezelő_TW6000_Ütemezés KézTW6000 = new Kezelő_TW6000_Ütemezés();
         readonly Kezelő_TW600_ÜtemNapló KézTwNapló = new Kezelő_TW600_ÜtemNapló();
-
+        readonly Kezelő_Forte_Kiadási_Adatok KézForte = new Kezelő_Forte_Kiadási_Adatok();
+        readonly Kezelő_Kiegészítő_Idő_Tábla KézKiegIdő = new Kezelő_Kiegészítő_Idő_Tábla();
+        readonly Kezelő_Kiegészítő_Forte_Vonal KézForte_Vonal = new Kezelő_Kiegészítő_Forte_Vonal();
 
 
         public List<Adat_Reklám> AdatokReklám = new List<Adat_Reklám>();
@@ -1167,176 +1166,147 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Osztályozúj()
         {
-
-            int éjszakavolt = 0;
-            DateTime reggeldát = new DateTime(1900, 1, 1, 0, 0, 0);
-            DateTime délutándát = new DateTime(1900, 1, 1, 0, 0, 0);
-            DateTime estedát = new DateTime(1900, 1, 1, 0, 0, 0);
-            string napszak;
-            DateTime ideigdátum;
-
-            // megnézzük, hogy az adott nap munkanap, vagy hétvége
-            int munkanap = 1;
-            Kezelő_Forte_Kiadási_Adatok KézForte = new Kezelő_Forte_Kiadási_Adatok();
-            List<Adat_Forte_Kiadási_Adatok> AdatokForte = KézForte.Lista_Adatok(Dátum.Value.Year);
-            if (AdatokForte != null && AdatokForte.Count > 0)
+            try
             {
+                int éjszakavolt = 0;
+                DateTime reggeldát = new DateTime(1900, 1, 1, 0, 0, 0);
+                DateTime délutándát = new DateTime(1900, 1, 1, 0, 0, 0);
+                DateTime estedát = new DateTime(1900, 1, 1, 0, 0, 0);
+                string napszak;
+                DateTime ideigdátum;
 
+                // megnézzük, hogy az adott nap munkanap, vagy hétvége
+                int munkanap = 1;
 
-                Adat_Forte_Kiadási_Adatok ElemForte = (from a in AdatokForte
-                                                       where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
-                                                       select a).FirstOrDefault();
-                // ha létezik a fájl akkor megnyitjuk
-                if (ElemForte != null)
+                List<Adat_Forte_Kiadási_Adatok> AdatokForte = KézForte.Lista_Adatok(Dátum.Value.Year);
+                if (AdatokForte != null && AdatokForte.Count > 0)
                 {
-                    // ha talált akkor a legelső adat alapján osztályoz
-                    // ha hétvége akkor módosítjuk a sorszámot 2-re, ha munkanap akkor marad 1.
-                    if (ElemForte.Munkanap == 1) munkanap = 2;
-                }
-            }
-            // betöltjük az időket
-            Kezelő_Kiegészítő_Idő_Tábla Kéz = new Kezelő_Kiegészítő_Idő_Tábla();
-            List<Adat_Kiegészítő_Idő_Tábla> AdatokIdő = Kéz.Lista_Adatok();
-            Adat_Kiegészítő_Idő_Tábla EgyAdat = (from a in AdatokIdő
-                                                 where a.Sorszám == munkanap
-                                                 select a).FirstOrDefault();
-            if (EgyAdat != null)
-            {
-                ideigdátum = EgyAdat.Reggel;
-                reggeldát = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, ideigdátum.Hour, ideigdátum.Minute, 0);
-
-                ideigdátum = EgyAdat.Délután;
-                délutándát = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, ideigdátum.Hour, ideigdátum.Minute, 0);
-
-                ideigdátum = EgyAdat.Este;
-                estedát = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, ideigdátum.Hour, ideigdátum.Minute, 0);
-            }
-            // megnézzük, hogy létezik-e adott napi tábla
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\ZSER\zser" + Dátum.Value.ToString("yyyyMMdd");
-            if (Délelőtt.Checked)
-                hely += "de.mdb";
-            else
-                hely += "du.mdb";
-
-            string jelszó = "lilaakác";
-
-            string szöveg = "SELECT * FROM zseltábla order by viszonylat,forgalmiszám, tervindulás";
 
 
-            List<Adat_Főkönyv_ZSER> Adatok = KézFőkönyvZSER.Lista_adatok(hely, jelszó, szöveg);
-
-
-            foreach (Adat_Főkönyv_ZSER rekord in Adatok)
-            {
-                napszak = "*";
-
-                if (rekord.Tényindulás <= délutándát && rekord.Tényérkezés >= délutándát && Délelőtt.Checked == false)
-                    napszak = "DU";
-
-                if (rekord.Tényindulás <= reggeldát && rekord.Tényérkezés >= reggeldát && Délelőtt.Checked)
-                    napszak = "DE";
-
-                if (rekord.Tényindulás >= estedát && napszak.Trim() == "*")
-                {
-                    napszak = "X";
-                    éjszakavolt = 1;
-                }
-
-                szöveg = "UPDATE zseltábla SET napszak='" + napszak.Trim() + "'";
-                szöveg += " WHERE viszonylat='" + rekord.Viszonylat.Trim() + "' AND ";
-                szöveg += " forgalmiszám='" + rekord.Forgalmiszám.Trim() + "' AND ";
-                szöveg += " tervindulás=#" + rekord.Tervindulás.ToString("M-d-yyyy HH:mm:s") + "# ";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-
-
-            // azokat a vonalakat amiket nem kell figyelembe venni kicsillagozzuk
-            Tiltott_vonalak.Items.Clear();
-
-            string helykieg = $@"{Application.StartupPath}\főmérnökség\adatok\Kiegészítő.mdb";
-            string jelszókieg = "Mocó";
-            szöveg = "SELECT * FROM fortevonal ";
-
-            Tiltott_vonalak.BeginUpdate();
-            Tiltott_vonalak.Items.AddRange(MyF.ComboFeltöltés(helykieg, jelszókieg, szöveg, "fortevonal"));
-            Tiltott_vonalak.EndUpdate();
-            Tiltott_vonalak.Refresh();
-
-            if (Tiltott_vonalak.Items.Count > 0)
-            {
-                szöveg = "SELECT * FROM zseltábla ORDER BY viszonylat";
-                Adatok = KézFőkönyvZSER.Lista_adatok(hely, jelszó, szöveg);
-                foreach (Adat_Főkönyv_ZSER rekord in Adatok)
-                {
-                    for (int i = 0; i < Tiltott_vonalak.Items.Count; i++)
+                    Adat_Forte_Kiadási_Adatok ElemForte = (from a in AdatokForte
+                                                           where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
+                                                           select a).FirstOrDefault();
+                    // ha létezik a fájl akkor megnyitjuk
+                    if (ElemForte != null)
                     {
-                        if (rekord.Viszonylat.Trim() == Tiltott_vonalak.Items[i].ToString())
-                        {
-                            szöveg = "UPDATE zseltábla SET napszak='*' ";
-                            szöveg += " WHERE viszonylat='" + rekord.Viszonylat.Trim() + "' AND ";
-                            szöveg += " forgalmiszám='" + rekord.Forgalmiszám.Trim() + "' AND ";
-                            szöveg += " tervindulás=#" + rekord.Tervindulás.ToString("yyyy-MM-dd HH:mm:s") + "# ";
-                            MyA.ABMódosítás(hely, jelszó, szöveg);
-                        }
+                        // ha talált akkor a legelső adat alapján osztályoz
+                        // ha hétvége akkor módosítjuk a sorszámot 2-re, ha munkanap akkor marad 1.
+                        if (ElemForte.Munkanap == 1) munkanap = 2;
                     }
                 }
+                // betöltjük az időket
+                List<Adat_Kiegészítő_Idő_Tábla> AdatokIdő = KézKiegIdő.Lista_Adatok();
+                Adat_Kiegészítő_Idő_Tábla EgyAdat = (from a in AdatokIdő
+                                                     where a.Sorszám == munkanap
+                                                     select a).FirstOrDefault();
+                if (EgyAdat != null)
+                {
+                    ideigdátum = EgyAdat.Reggel;
+                    reggeldát = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, ideigdátum.Hour, ideigdátum.Minute, 0);
+
+                    ideigdátum = EgyAdat.Délután;
+                    délutándát = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, ideigdátum.Hour, ideigdátum.Minute, 0);
+
+                    ideigdátum = EgyAdat.Este;
+                    estedát = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, ideigdátum.Hour, ideigdátum.Minute, 0);
+                }
+                // megnézzük, hogy létezik-e adott napi tábla
+                List<Adat_Főkönyv_ZSER> Adatok = KézFőkönyvZSER.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+
+                List<Adat_Főkönyv_ZSER> AdatokGy = new List<Adat_Főkönyv_ZSER>();
+                foreach (Adat_Főkönyv_ZSER rekord in Adatok)
+                {
+                    napszak = "*";
+
+                    if (rekord.Tényindulás <= délutándát && rekord.Tényérkezés >= délutándát && !Délelőtt.Checked) napszak = "DU";
+                    if (rekord.Tényindulás <= reggeldát && rekord.Tényérkezés >= reggeldát && Délelőtt.Checked) napszak = "DE";
+                    if (rekord.Tényindulás >= estedát && napszak.Trim() == "*")
+                    {
+                        napszak = "X";
+                        éjszakavolt = 1;
+                    }
+                    Adat_Főkönyv_ZSER ADAT = new Adat_Főkönyv_ZSER(napszak.Trim(), rekord.Viszonylat.Trim(), rekord.Forgalmiszám.Trim(), rekord.Tervindulás);
+                    AdatokGy.Add(ADAT);
+                }
+
+                // azokat a vonalakat amiket nem kell figyelembe venni kicsillagozzuk
+                List<string> Tiltott_vonalak = KézForte_Vonal.Lista_Adatok().Select(a => a.ForteVonal).ToList();
+                napszak = "*";
+                if (Tiltott_vonalak.Count > 0)
+                {
+                    foreach (Adat_Főkönyv_ZSER rekord in Adatok)
+                    {
+                        if (Tiltott_vonalak.Contains(rekord.Viszonylat.Trim()))
+                        { Adat_Főkönyv_ZSER ADAT = new Adat_Főkönyv_ZSER(napszak.Trim(), rekord.Viszonylat.Trim(), rekord.Forgalmiszám.Trim(), rekord.Tervindulás); }
+                    }
+                }
+
+                if (AdatokGy.Count > 0) KézFőkönyvZSER.Módosítás_Napszak(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", AdatokGy);
+                if (éjszakavolt == 1) Éjszakaijárat();
             }
-            if (éjszakavolt == 1)
-                Éjszakaijárat();
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-        //
+
         private void Éjszakaijárat()
         {
-            // osztályozásnál a napi éjszakait X-el jelöltük.
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\ZSER\zser" + Dátum.Value.ToString("yyyyMMdd") + "éj.mdb";
-            // ha van akkor töröljük
-            if (System.IO.File.Exists(hely))
-                File.Delete(hely);
-            Adatbázis_Létrehozás.Zseltáblaalap(hely);
-            // leellnőrizzük a zser adatokat hogy megvannak-e
-            string helyzser = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\" + Dátum.Value.ToString("yyyy") + @"\ZSER\zser" + Dátum.Value.ToString("yyyyMMdd");
-            if (Délelőtt.Checked)
-                helyzser += "de.mdb";
-            else
-                helyzser += "du.mdb";
-
-            string jelszó = "lilaakác";
-            string szöveg = "SELECT * FROM zseltábla where napszak='X'";
-
-
-            List<Adat_Főkönyv_ZSER> Adatok = KézFőkönyvZSER.Lista_adatok(helyzser, jelszó, szöveg);
-
-            foreach (Adat_Főkönyv_ZSER rekord in Adatok)
+            try
             {
+                // osztályozásnál a napi éjszakait X-el jelöltük.
 
-                szöveg = " INSERT INTO Zseltábla (";
-                szöveg += " viszonylat, forgalmiszám, tervindulás, tényindulás, tervérkezés, ";
-                szöveg += " tényérkezés, napszak, szerelvénytípus, kocsikszáma, megjegyzés, ";
-                szöveg += " kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, ";
-                szöveg += " ellenőrző, Státus) VALUES ( ";
-                szöveg += "'" + rekord.Viszonylat.Trim() + "', ";
-                szöveg += "'" + rekord.Forgalmiszám.Trim() + "', ";
-                szöveg += "'" + rekord.Tervindulás.ToString() + "', ";
-                szöveg += "'" + rekord.Tényindulás.ToString() + "', ";
-                szöveg += "'" + rekord.Tervérkezés.ToString() + "', ";
-                szöveg += "'" + rekord.Tényérkezés.ToString() + "', ";
-                szöveg += "'É', ";
-                szöveg += "'" + rekord.Szerelvénytípus.Trim() + "', ";
-                szöveg += rekord.Kocsikszáma.ToString() + ", ";
-                szöveg += "'" + rekord.Megjegyzés.Trim() + "', ";
-                szöveg += "'" + rekord.Kocsi1.Trim() + "', ";
-                szöveg += "'" + rekord.Kocsi2.Trim() + "', ";
-                szöveg += "'" + rekord.Kocsi3.Trim() + "', ";
-                szöveg += "'" + rekord.Kocsi4.Trim() + "', ";
-                szöveg += "'" + rekord.Kocsi5.Trim() + "', ";
-                szöveg += "'" + rekord.Kocsi6.Trim() + "', ";
-                szöveg += "'" + rekord.Ellenőrző.Trim() + "', ";
-                szöveg += "'" + rekord.Státus.Trim() + "') ";
+                List<Adat_Főkönyv_ZSER> AdatokÉj = KézFőkönyvZSER.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, "éj");
+                if (AdatokÉj.Count > 0) KézFőkönyvZSER.Törlés(Cmbtelephely.Text.Trim(), Dátum.Value, "éj");       //ha van éjszaki akkor először töröljük az adatokat
 
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+                // leellnőrizzük a zser adatokat hogy megvannak-e
+                List<Adat_Főkönyv_ZSER> Adatok = KézFőkönyvZSER.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+                Adatok = Adatok.Where(a => a.Napszak.Trim() == "X").ToList();
+
+                List<Adat_Főkönyv_ZSER> AdatokGy = new List<Adat_Főkönyv_ZSER>();
+                foreach (Adat_Főkönyv_ZSER rekord in Adatok)
+                {
+                    Adat_Főkönyv_ZSER AdatÉj = new Adat_Főkönyv_ZSER(
+                                rekord.Viszonylat,
+                                rekord.Forgalmiszám,
+                                rekord.Tervindulás,
+                                rekord.Tényindulás,
+                                rekord.Tervérkezés,
+                                rekord.Tényérkezés,
+                                "É",
+                                rekord.Szerelvénytípus,
+                                rekord.Kocsikszáma,
+                                rekord.Megjegyzés,
+                                rekord.Kocsi1,
+                                rekord.Kocsi2,
+                                rekord.Kocsi3,
+                                rekord.Kocsi4,
+                                rekord.Kocsi5,
+                                rekord.Kocsi6,
+                                rekord.Ellenőrző,
+                                rekord.Státus);
+
+                    AdatokGy.Add(AdatÉj);
+                }
+                if (AdatokGy.Count > 0) KézFőkönyvZSER.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, "éj", AdatokGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -2423,17 +2393,11 @@ namespace Villamos
             });
             proc.Start();
         }
-        //
+
         private void Főkönyv_Click(object sender, EventArgs e)
         {
-
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\{Dátum.Value.Year}\nap\{Dátum.Value:yyyyMMdd}";
-            if (Délelőtt.Checked)
-                hely += "denap.mdb";
-            else
-                hely += "dunap.mdb";
-
-            if (!System.IO.File.Exists(hely)) return;
+            List<Adat_Főkönyv_Nap> AdatokÖ = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+            if (AdatokÖ.Count < 1) return;
 
             string szövegd = Dátum.Value.ToString("yyyy.MM.dd");
             string fájlexc = Dátum.Value.ToString("yyyy.MM.dd") + "-Főkönyv-";
@@ -2451,7 +2415,6 @@ namespace Villamos
 
             // ha gyűjtő hely akkor odamentjük
             string ideig = "MyDocuments";
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő1.mdb";
             Kezelő_Kiegészítő_Mentésihelyek KézMentés = new Kezelő_Kiegészítő_Mentésihelyek();
             List<Adat_Kiegészítő_Mentésihelyek> AdatokMentés = KézMentés.Lista_Adatok(Cmbtelephely.Text.Trim());
             Adat_Kiegészítő_Mentésihelyek AdatMentés = (from a in AdatokMentés
