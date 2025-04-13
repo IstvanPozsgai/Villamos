@@ -52,7 +52,7 @@ namespace Villamos
             this.Beállólista = new System.Windows.Forms.Button();
             this.Meghagyás = new System.Windows.Forms.Button();
             this.Dátum = new System.Windows.Forms.DateTimePicker();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Label1 = new System.Windows.Forms.Label();
             this.Fülek = new System.Windows.Forms.TabControl();
             this.TabPage6 = new System.Windows.Forms.TabPage();
@@ -849,7 +849,7 @@ namespace Villamos
             this.R_Státus.FormattingEnabled = true;
             this.R_Státus.Location = new System.Drawing.Point(150, 50);
             this.R_Státus.Name = "R_Státus";
-            this.R_Státus.Size = new System.Drawing.Size(127, 28);
+            this.R_Státus.Size = new System.Drawing.Size(194, 28);
             this.R_Státus.TabIndex = 26;
             // 
             // R_napszak

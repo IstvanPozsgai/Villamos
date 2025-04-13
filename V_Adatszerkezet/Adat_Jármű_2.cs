@@ -16,23 +16,10 @@ namespace Villamos.Adatszerkezet
             Haromnapos = haromnapos;
         }
 
-        public static void Villamostábla(string hely)
+        public Adat_Jármű_2(string azonosító, int haromnapos)
         {
-            string szöveg;
-            string jelszó = "pozsgaii";
-
-            szöveg = "CREATE TABLE Állománytábla (";
-            szöveg += "[azonosító]  char (10), ";
-            szöveg += "[takarítás] DATE,";
-            szöveg += "[haromnapos]  Short)";
-
-            AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
-
-            //Létrehozzuk az adatbázist és beállítunk jelszót
-            ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
-
-            //Létrehozzuk az adatbázist
-            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
+            Azonosító = azonosító;
+            Haromnapos = haromnapos;
         }
     }
 

@@ -13,6 +13,7 @@
 
         public enum Jármű_Státus
         {
+            Nincs_beállítva = 0,
             Szabad = 1,
             Beálló = 3,
             Üzemképtelen = 4

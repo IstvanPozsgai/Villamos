@@ -264,6 +264,5 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
 
-
     }
 }

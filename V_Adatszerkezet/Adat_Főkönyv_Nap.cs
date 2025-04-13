@@ -51,6 +51,33 @@ namespace Villamos.Villamos_Adatszerkezet
             Napszak = napszak;
             Megjegyzés = megjegyzés;
         }
+
+        public Adat_Főkönyv_Nap(string viszonylat, string forgalmiszám, long kocsikszáma, DateTime tervindulás, DateTime tényindulás, DateTime tervérkezés, DateTime tényérkezés, string napszak,
+            string megjegyzés, string azonosító)
+        {
+            Viszonylat = viszonylat;
+            Forgalmiszám = forgalmiszám;
+            Kocsikszáma = kocsikszáma;
+            Tervindulás = tervindulás;
+            Tényindulás = tényindulás;
+            Tervérkezés = tervérkezés;
+            Tényérkezés = tényérkezés;
+            Napszak = napszak;
+            Megjegyzés = megjegyzés;
+            Azonosító = azonosító;
+        }
+
+        public Adat_Főkönyv_Nap(string viszonylat, string forgalmiszám, long kocsikszáma, DateTime tervindulás, DateTime tényindulás, DateTime tervérkezés, DateTime tényérkezés, string azonosító)
+        {
+            Viszonylat = viszonylat;
+            Forgalmiszám = forgalmiszám;
+            Kocsikszáma = kocsikszáma;
+            Tervindulás = tervindulás;
+            Tényindulás = tényindulás;
+            Tervérkezés = tervérkezés;
+            Tényérkezés = tényérkezés;
+            Azonosító = azonosító;
+        }
     }
 
 
@@ -151,6 +178,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Viszonylat = viszonylat;
             Forgalmiszám = forgalmiszám;
             Tervindulás = tervindulás;
+        }
+
+        public Adat_Főkönyv_ZSER(string viszonylat, string forgalmiszám, DateTime tervindulás, string ellenőrző)
+        {
+            Viszonylat = viszonylat;
+            Forgalmiszám = forgalmiszám;
+            Tervindulás = tervindulás;
+            Ellenőrző = ellenőrző;
         }
     }
 

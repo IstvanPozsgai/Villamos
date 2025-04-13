@@ -102,6 +102,48 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás99(string Telephely)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE Állománytábla SET Állománytábla.haromnapos = 99";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(string Telephely, Adat_Jármű_2 Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "INSERT INTO állománytábla (azonosító, takarítás, haromnapos) VALUES (";
+                szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
+                szöveg += $"'{Adat.Takarítás}', "; // takarítás
+                szöveg += $"{Adat.Haromnapos}) "; // haromnapos
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Rögzítés(string Telephely, List<Adat_Jármű_2> Adatok)
         {
             try
