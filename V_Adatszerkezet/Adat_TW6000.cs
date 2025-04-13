@@ -28,9 +28,9 @@ namespace Villamos.Villamos_Adatszerkezet
 
     public class Adat_TW6000_Színezés
     {
-        public double  Szín { get; set; }
+        public double Szín { get; set; }
         public string Vizsgálatnév { get; set; }
-        public Adat_TW6000_Színezés(double  szín, string vizsgálatnév)
+        public Adat_TW6000_Színezés(double szín, string vizsgálatnév)
         {
             Szín = szín;
             Vizsgálatnév = vizsgálatnév;
@@ -76,6 +76,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Vsorszám = vsorszám;
             Vütemezés = vütemezés;
             Vvégezte = vvégezte;
+        }
+
+        public Adat_TW6000_Ütemezés(string azonosító, string megjegyzés, long státus, DateTime vütemezés)
+        {
+            Azonosító = azonosító;
+            Megjegyzés = megjegyzés;
+            Státus = státus;
+            Vütemezés = vütemezés;
         }
     }
     public class Adat_TW6000_AlapNapló
