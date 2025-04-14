@@ -17,6 +17,7 @@ namespace Villamos
     public partial class Ablak_Fő_Napiadatok
     {
         string Gyökér_telephely = "";
+        string Telephely = "";
         string SzolgálatNév = "";
         string Vál_Telephely = "";
         string Főkategória = "";
@@ -188,7 +189,7 @@ namespace Villamos
             try
             {
                 Kezelő_Kiadás_Összesítő KézKiadás = new Kezelő_Kiadás_Összesítő();
-                List<Adat_Kiadás_összesítő> AdatokKiad = KézKiadás.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                List<Adat_Kiadás_összesítő> AdatokKiad = KézKiadás.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
                 if (AdatokKiad == null || AdatokKiad.Count == 0) return;
                 List<Adat_Kiadás_összesítő> AdatokKiadás = (from a in AdatokKiad
                                                             where a.Dátum == Dátum.Value
@@ -311,7 +312,7 @@ namespace Villamos
             try
             {
                 Kezelő_Főkönyv_Személyzet KézSzem = new Kezelő_Főkönyv_Személyzet();
-                List<Adat_Főkönyv_Személyzet> AdatokSzem = KézSzem.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                List<Adat_Főkönyv_Személyzet> AdatokSzem = KézSzem.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
                 if (AdatokSzem == null || AdatokSzem.Count == 0) return;
                 List<Adat_Főkönyv_Személyzet> Adatok = (from a in AdatokSzem
                                                         where a.Dátum == Dátum.Value
@@ -376,7 +377,7 @@ namespace Villamos
             try
             {
                 Kezelő_Főkönyv_Típuscsere KézCsere = new Kezelő_Főkönyv_Típuscsere();
-                List<Adat_FőKönyv_Típuscsere> AdatokCsere = KézCsere.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                List<Adat_FőKönyv_Típuscsere> AdatokCsere = KézCsere.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
 
                 List<Adat_FőKönyv_Típuscsere> Adatok = (from a in AdatokCsere
                                                         where a.Dátum == Dátum.Value
