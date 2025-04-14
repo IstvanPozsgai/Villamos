@@ -51,6 +51,7 @@ namespace Villamos
         readonly Kezelő_Forte_Kiadási_Adatok KézForte = new Kezelő_Forte_Kiadási_Adatok();
         readonly Kezelő_Kiegészítő_Idő_Tábla KézKiegIdő = new Kezelő_Kiegészítő_Idő_Tábla();
         readonly Kezelő_Kiegészítő_Forte_Vonal KézForte_Vonal = new Kezelő_Kiegészítő_Forte_Vonal();
+        readonly Kezelő_Üzenet KézÜzenet = new Kezelő_Üzenet();
 
 
         public List<Adat_Reklám> AdatokReklám = new List<Adat_Reklám>();
@@ -76,6 +77,7 @@ namespace Villamos
             Telephelyekfeltöltése();
             Jogosultságkiosztás();
             Papír();
+            Reklámot_üzen();
         }
 
         private void Papír()
@@ -799,7 +801,6 @@ namespace Villamos
                     {
                         TW6000ütemezés();
                         ICSÜtemezés();
-
                         Vezénylés.T5C5(Cmbtelephely.Text.Trim(), Dátum.Value.AddDays(1));
                         CAFÜtemezés();
                     }
@@ -3253,6 +3254,16 @@ namespace Villamos
                 if (!Volt)
                 {
                     RichtextBox1.Text = $"{Dátum.Value:yyyy.MM.dd}-n minden olyan jármű amin van reklám a megfelelő vonalra lett kiadva.";
+                }
+                else
+                {
+                    Adat_Üzenet ADAT = new Adat_Üzenet(
+                        0,
+                        RichtextBox1.Text.Trim(),
+                        "Program",
+                        DateTime.Now,
+                        0);
+                    KézÜzenet.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Now.Year, ADAT);
                 }
             }
             catch (HibásBevittAdat ex)
