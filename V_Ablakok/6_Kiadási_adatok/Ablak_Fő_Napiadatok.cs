@@ -1212,7 +1212,7 @@ namespace Villamos
                 }
 
                 Kezelő_Főkönyv_Személyzet KFK_Kéz = new Kezelő_Főkönyv_Személyzet();
-                List<Adat_Főkönyv_Személyzet> Adatok = KFK_Kéz.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                List<Adat_Főkönyv_Személyzet> Adatok = KFK_Kéz.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
                 Adatok = (from a in Adatok
                           where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
                           && a.Napszak == (Délelőtt.Checked ? "de" : "du")
@@ -1287,7 +1287,7 @@ namespace Villamos
                 }
 
                 Kezelő_Főkönyv_Típuscsere KFT_kéz = new Kezelő_Főkönyv_Típuscsere();
-                List<Adat_FőKönyv_Típuscsere> Adatok = KFT_kéz.Lista_Adatok(Gyökér_telephely, Dátum.Value.Year);
+                List<Adat_FőKönyv_Típuscsere> Adatok = KFT_kéz.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
                 Adatok = (from a in Adatok
                           where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
                           && a.Napszak == (Délelőtt.Checked ? "de" : "du")
