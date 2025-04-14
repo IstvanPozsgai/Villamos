@@ -1172,7 +1172,7 @@ namespace Villamos
                                                           Hiba_státus,
                                                           Hibaszöveg.Text.Trim(),
                                                           DateTime.Now,
-                                                          false,
+                                                          true,
                                                           Egyed_Típus,
                                                           Pályaszám.Text.Trim(),
                                                           long.Parse(Sorszám.Text));
