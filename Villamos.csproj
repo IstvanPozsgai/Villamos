@@ -487,6 +487,7 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Ablak_Főkönyv_Zser_Másol.Designer.cs">
       <DependentUpon>Ablak_Főkönyv_Zser_Másol.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Határérték.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Kidobó\Ablak_kidobó.cs">
       <SubType>Form</SubType>
     </Compile>
