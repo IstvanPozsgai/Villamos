@@ -472,6 +472,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
         private void FődarabTípusok_Feltöltése()
         {
             List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
+            FődarabTípusok.Items.Add("");
             List<string> Objektumok = Adatok.OrderBy(a => a.Objektumfajta).Select(a => a.Objektumfajta).Distinct().ToList();
             foreach (string objektum in Objektumok)
                 FődarabTípusok.Items.Add(objektum);

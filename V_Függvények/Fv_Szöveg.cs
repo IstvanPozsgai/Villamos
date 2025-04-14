@@ -99,7 +99,7 @@ public static partial class Függvénygyűjtemény
     public static string Szöveg_Tisztítás(string szöveg, bool sortörés = false)
     {
         string válasz = szöveg.Replace("'", "`");    // ' cseréli ki ''
-        válasz = válasz.Replace("\"", "");  // " cseréli ki üres mezőre
+        válasz = válasz.Replace("\"", "``");  // " cseréli ki üres mezőre
         válasz = válasz.Replace("/", "");
         válasz = válasz.Replace(",", "");
         válasz = válasz.Replace(@"\", "");

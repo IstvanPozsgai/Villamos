@@ -242,8 +242,8 @@ namespace Villamos.Villamos_Ablakok
                                 Telephely.Text.Trim(),
                                 Forgóváz.Text.Trim(),
                                 Beépíthető.Text.Trim() == "Igen",
-                                Műszaki.Text.Trim(),
-                                Osztási.Text.Trim(),
+                                MyF.Szöveg_Tisztítás(Műszaki.Text.Trim()),
+                                MyF.Szöveg_Tisztítás(Osztási.Text.Trim()),
                                 Dátum.Value,
                                 Státus.Text.Trim().Substring(0, 1).ToÉrt_Int(),
                                 Cikkszám.Text.Trim()
