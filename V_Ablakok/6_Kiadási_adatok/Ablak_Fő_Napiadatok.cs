@@ -17,7 +17,7 @@ namespace Villamos
     public partial class Ablak_Fő_Napiadatok
     {
         string Gyökér_telephely = "";
-        string Telephely = "";
+
         string SzolgálatNév = "";
         string Vál_Telephely = "";
         string Főkategória = "";

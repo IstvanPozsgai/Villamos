@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv;
 using Villamos.Villamos_Adatszerkezet;
@@ -826,6 +827,27 @@ namespace Villamos
                 Adat_Főkönyv_SegédTábla AdatSegéd = new Adat_Főkönyv_SegédTábla(1, Program.PostásNév.Trim());
                 KézFőkönyvSegéd.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", AdatSegéd);
 
+                NapiAdatokRögzítése();
+
+                NapiTábla_kiírás(0);
+                Holtart.Ki();
+                MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void NapiAdatokRögzítése()
+        {
+            try
+            {
                 // beolvassuk a villamos adatokat
                 Holtart.Be();
                 AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
@@ -853,10 +875,7 @@ namespace Villamos
                     Holtart.Lép();
                 }
                 KézFőkönyvNap.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", AdatokGy);
-
-                NapiTábla_kiírás(0);
                 Holtart.Ki();
-                MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -942,6 +961,14 @@ namespace Villamos
             try
             {
                 ZSER_Beolvasás();
+                List<Adat_Főkönyv_Nap> Adatok = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+                //Ha volt megállítani való jármű akkor a napi adatokat frissítjük
+                if (Főkönyv_Határérték.T5C5_Túllépés(Adatok, Cmbtelephely.Text.Trim()))
+                {
+                    KézFőkönyvNap.Törlés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+                    NapiAdatokRögzítése();
+                    MessageBox.Show("Zser adatok feldolgozása során járművek túlfutottak, ezért megállításra kerül(tek)!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -1153,7 +1180,9 @@ namespace Villamos
 
                 Holtart.Lép();
                 Eredménytábla();
-
+                Holtart.Lép();
+                // járműreklámot kiírjuk ha a feltétleknek megfelel
+                if (Dátum.Value == DateTime.Today && Reklám_Check.Checked) Reklám_eltérés();
                 Holtart.Lép();
                 Gombok();
             }
@@ -2465,16 +2494,6 @@ namespace Villamos
                 MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             });
 
-            // járműreklámot kiírjuk ha a feltétleknek megfelel
-            if (Dátum.Value == DateTime.Today)
-            {
-                if (Reklám_Check.Checked)
-                {
-                    Reklám_eltérés();
-
-                    Vezénylésbeírás_eljárás();
-                }
-            }
             Főkönyv.Visible = true;
         }
         #endregion
