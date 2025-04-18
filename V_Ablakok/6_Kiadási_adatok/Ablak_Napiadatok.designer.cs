@@ -59,7 +59,6 @@ namespace Villamos
             this.Tábla1 = new System.Windows.Forms.DataGridView();
             this.Tábla2 = new System.Windows.Forms.DataGridView();
             this.Holtart = new System.Windows.Forms.ProgressBar();
-            this.SaveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Panel2.SuspendLayout();
@@ -397,7 +396,6 @@ namespace Villamos
         internal DataGridView Tábla1;
         internal DataGridView Tábla2;
         internal ProgressBar Holtart;
-        internal SaveFileDialog SaveFileDialog1;
         private ToolTip toolTip1;
     }
 }

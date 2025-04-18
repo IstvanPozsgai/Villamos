@@ -21,7 +21,6 @@ namespace Villamos
         readonly Kezelő_Főkönyv_Típuscsere KézTípus = new Kezelő_Főkönyv_Típuscsere();
         readonly Kezelő_Forte_Kiadási_Adatok KézKiadási = new Kezelő_Forte_Kiadási_Adatok();
 
-
         public Ablak_Napiadatok()
         {
             InitializeComponent();
@@ -147,11 +146,13 @@ namespace Villamos
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
-
-                SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = $"Kiadási_Javítási_adatok_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}";
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"Kiadási_Javítási_adatok_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -572,8 +573,6 @@ namespace Villamos
                 Tábla2.Columns[6].Width = 100;
                 Tábla2.Columns[7].HeaderText = "Pályaszám";
                 Tábla2.Columns[7].Width = 100;
-
-
                 int i;
 
                 foreach (Adat_FőKönyv_Típuscsere rekord in Adatok)
@@ -590,7 +589,6 @@ namespace Villamos
                     Tábla2.Rows[i].Cells[6].Value = rekord.Tervindulás.ToString("HH:mm");
                     Tábla2.Rows[i].Cells[7].Value = rekord.Azonosító;
                 }
-
 
                 Tábla2.Top = 50;
                 Tábla2.Left = 230;
@@ -861,7 +859,6 @@ namespace Villamos
 
 
         #region Napi adatok stb
-
         private void Napielkészültek_Click(object sender, EventArgs e)
         {
             SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
