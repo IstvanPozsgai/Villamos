@@ -20,6 +20,8 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Napszak { get; private set; }
         public string Megjegyzés { get; private set; }
 
+        public string Telephely { get; private set; }
+
         public Adat_Főkönyv_Nap(long státus, string hibaleírása, string típus, string azonosító, long szerelvény, string viszonylat, string forgalmiszám, long kocsikszáma, DateTime tervindulás, DateTime tényindulás, DateTime tervérkezés, DateTime tényérkezés, DateTime miótaáll, string napszak, string megjegyzés)
         {
             Státus = státus;
@@ -77,6 +79,11 @@ namespace Villamos.Villamos_Adatszerkezet
             Tervérkezés = tervérkezés;
             Tényérkezés = tényérkezés;
             Azonosító = azonosító;
+        }
+
+        public Adat_Főkönyv_Nap(long státus, string hibaleírása, string típus, string azonosító, long szerelvény, string viszonylat, string forgalmiszám, long kocsikszáma, DateTime tervindulás, DateTime tényindulás, DateTime tervérkezés, DateTime tényérkezés, DateTime miótaáll, string napszak, string megjegyzés, string telephely) : this(státus, hibaleírása, típus, azonosító, szerelvény, viszonylat, forgalmiszám, kocsikszáma, tervindulás, tényindulás, tervérkezés, tényérkezés, miótaáll, napszak, megjegyzés)
+        {
+            Telephely = telephely;
         }
     }
 

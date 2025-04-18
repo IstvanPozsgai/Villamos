@@ -82,7 +82,6 @@ namespace Villamos
             this.Chk_CTRL = new System.Windows.Forms.CheckBox();
             this.Keresőnév = new System.Windows.Forms.Label();
             this.TextKeres_Text = new System.Windows.Forms.TextBox();
-            this.SaveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla2)).BeginInit();
@@ -754,6 +753,5 @@ namespace Villamos
         internal Button Becsukja;
         internal Button BtnKeres_command2;
         internal TextBox TextKeres_Text;
-        internal SaveFileDialog SaveFileDialog1;
     }
 }

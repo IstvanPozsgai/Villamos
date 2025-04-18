@@ -690,7 +690,7 @@ namespace Villamos
         {
             try
             {
-                AdatokKiegTelephely = KézKiegTelephely.Lista_adatok();
+                AdatokKiegTelephely = KézKiegTelephely.Lista_Adatok();
 
                 Telephely.Items.Clear();
                 Telephely.Items.Add("");
@@ -826,7 +826,7 @@ namespace Villamos
         {
             try
             {
-                AdatokKiegTelephely = KézKiegTelephely.Lista_adatok();
+                AdatokKiegTelephely = KézKiegTelephely.Lista_Adatok();
 
                 TelephelyList.Items.Clear();
                 TelephelyList.BeginUpdate();
@@ -1133,7 +1133,7 @@ namespace Villamos
         {
             try
             {
-                AdatokKiegTelephely = KézKiegTelephely.Lista_adatok();
+                AdatokKiegTelephely = KézKiegTelephely.Lista_Adatok();
 
                 TelephelyList1.Items.Clear();
                 TelephelyList1.BeginUpdate();

@@ -964,7 +964,7 @@ namespace Villamos
                 int sormax = sor;
 
                 Kezelő_kiegészítő_telephely KézKiegTelep = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokKiegTelep = KézKiegTelep.Lista_adatok();
+                List<Adat_kiegészítő_telephely> AdatokKiegTelep = KézKiegTelep.Lista_Adatok();
 
                 int oszlop = 3;
 
@@ -3046,7 +3046,7 @@ namespace Villamos
                 MunkaVHétvége();
 
                 Kezelő_kiegészítő_telephely KézKiegTeleph = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_adatok();
+                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_Adatok();
 
                 int oszlopmax = 0, eleje;
                 Holtart_Be(hónapnap + 1);
@@ -3235,7 +3235,7 @@ namespace Villamos
 
 
                 Kezelő_kiegészítő_telephely KézKiegTeleph = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_adatok();
+                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_Adatok();
 
                 int oszlopmax = 0, eleje;
                 Holtart_Be(hónapnap + 1);

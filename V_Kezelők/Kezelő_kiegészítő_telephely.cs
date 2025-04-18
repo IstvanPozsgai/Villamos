@@ -19,7 +19,7 @@ namespace Villamos.Kezelők
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
-        public List<Adat_kiegészítő_telephely> Lista_adatok()
+        public List<Adat_kiegészítő_telephely> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM telephelytábla order by sorszám";
             List<Adat_kiegészítő_telephely> Adatok = new List<Adat_kiegészítő_telephely>();

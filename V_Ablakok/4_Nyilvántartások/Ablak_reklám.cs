@@ -758,7 +758,7 @@ namespace Villamos
             {
                 TelephelyList.Items.Clear();
                 Kezelő_kiegészítő_telephely Kéz = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> Telephelyek = Kéz.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Telephelyek = Kéz.Lista_Adatok();
 
                 TelephelyList.BeginUpdate();
                 foreach (Adat_kiegészítő_telephely Elem in Telephelyek)

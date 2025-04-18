@@ -138,7 +138,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 ALAP_Üzemek_km.Items.Clear();
                 ALAP_Üzemek_nap.Items.Clear();
 
-                List<Adat_kiegészítő_telephely> Adatok = KézTelephely.Lista_adatok().OrderBy(a => a.Sorszám).ToList();
+                List<Adat_kiegészítő_telephely> Adatok = KézTelephely.Lista_Adatok().OrderBy(a => a.Sorszám).ToList();
 
                 foreach (Adat_kiegészítő_telephely Elem in Adatok)
                 {

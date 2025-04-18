@@ -5133,7 +5133,7 @@ namespace Villamos
 
         private void Telephelyek()
         {
-            List<Adat_kiegészítő_telephely> Adatok = Kéztelephely.Lista_adatok();
+            List<Adat_kiegészítő_telephely> Adatok = Kéztelephely.Lista_Adatok();
             Tel_TB.Items.Clear();
             foreach (Adat_kiegészítő_telephely Elem in Adatok)
                 Tel_TB.Items.Add(Elem.Telephelynév);

@@ -456,7 +456,7 @@ namespace Villamos
             try
             {
                 List<Adat_Kiegészítő_Fortetípus> AdatokTípus = KézTípus.Lista_Adatok();
-                List<Adat_kiegészítő_telephely> AdatokTelep = KézTelep.Lista_adatok();
+                List<Adat_kiegészítő_telephely> AdatokTelep = KézTelep.Lista_Adatok();
 
                 Holtart.Be();
 

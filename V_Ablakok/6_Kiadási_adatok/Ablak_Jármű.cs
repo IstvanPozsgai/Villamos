@@ -868,7 +868,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_kiegészítő_telephely> Adatok = KézTelephely.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = KézTelephely.Lista_Adatok();
 
                 Lektelephely.Items.Clear();
                 foreach (Adat_kiegészítő_telephely Elem in Adatok)

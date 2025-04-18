@@ -3061,7 +3061,7 @@ namespace Villamos
                 if (txtTelephelyekKönyvtár.Text.Trim() == "") throw new HibásBevittAdat("Telephely könyvtára mező nem lehet üres.");
                 if (txtTelephelyekForte.Text.Trim() == "") throw new HibásBevittAdat("Forte kód mező nem lehet üres.");
 
-                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_Adatok();
 
                 Adat_kiegészítő_telephely Elem = (from a in Adatok
                                                   where a.Telephelynév == txtTelephelyekNév.Text.Trim() && a.Sorszám == Sorszám
@@ -3104,7 +3104,7 @@ namespace Villamos
             {
                 if (!long.TryParse(txtTelephelyekID.Text.Trim(), out long sor1)) throw new HibásBevittAdat("Nincs kiválasztva érvényes elem.");
 
-                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_Adatok();
 
                 Adat_kiegészítő_telephely Elem = (from a in Adatok
                                                   where a.Telephelynév == txtTelephelyekNév.Text.Trim()
@@ -3147,7 +3147,7 @@ namespace Villamos
                 if (!int.TryParse(txtTelephelyekID.Text.Trim(), out int Sorszám)) throw new HibásBevittAdat("Nincs kiválasztva érvényes elem.");
                 if (txtTelephelyekNév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva érvényes elem.");
 
-                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_Adatok();
 
                 Adat_kiegészítő_telephely Elem = (from a in Adatok
                                                   where a.Telephelynév == txtTelephelyekNév.Text.Trim() && a.Sorszám == Sorszám
@@ -3182,7 +3182,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_Adatok();
 
                 TáblaTelephelyek.Visible = false;
                 TáblaTelephelyek.ColumnCount = 4;
@@ -3320,7 +3320,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_Adatok();
 
                 CmbSzolgtelepTELEP.Items.Clear();
 
@@ -3754,7 +3754,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_Adatok();
 
                 CmbFőforteTelephely.Items.Clear();
 
@@ -3973,7 +3973,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_adatok();
+                List<Adat_kiegészítő_telephely> Adatok = Kézkiegészítő_telephely.Lista_Adatok();
 
                 CmbKapcsolat.Items.Clear();
                 foreach (Adat_kiegészítő_telephely rekord in Adatok)

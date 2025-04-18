@@ -1387,7 +1387,7 @@ namespace Villamos
             try
             {
                 AdatokTelep.Clear();
-                AdatokTelep = KézTelep.Lista_adatok();
+                AdatokTelep = KézTelep.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {

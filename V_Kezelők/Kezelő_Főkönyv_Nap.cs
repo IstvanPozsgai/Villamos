@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely) && Létrejön) Adatbázis_Létrehozás.Főkönyvtáblaalap(hely.KönyvSzerk());
         }
 
-        public List<Adat_Főkönyv_Nap> Lista_Adatok(string Telephely, DateTime Dátum, string Napszak)
+        public List<Adat_Főkönyv_Nap> Lista_Adatok(string Telephely, DateTime Dátum, string Napszak, bool Eredeti = false)
         {
             FájlBeállítás(Telephely, Dátum, Napszak, false);
             string szöveg = "SELECT * FROM Adattábla ORDER BY azonosító";
@@ -39,24 +39,50 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Főkönyv_Nap(
-                                    rekord["státus"].ToÉrt_Long(),
-                                    rekord["hibaleírása"].ToStrTrim(),
-                                    rekord["típus"].ToStrTrim(),
-                                    rekord["azonosító"].ToStrTrim(),
-                                    rekord["szerelvény"].ToÉrt_Long(),
-                                    rekord["viszonylat"].ToStrTrim(),
-                                    rekord["forgalmiszám"].ToStrTrim(),
-                                    rekord["kocsikszáma"].ToÉrt_Long(),
-                                    rekord["tervindulás"].ToÉrt_DaTeTime(),
-                                    rekord["tényindulás"].ToÉrt_DaTeTime(),
-                                    rekord["tervérkezés"].ToÉrt_DaTeTime(),
-                                    rekord["tényérkezés"].ToÉrt_DaTeTime(),
-                                    rekord["miótaáll"].ToÉrt_DaTeTime(),
-                                    rekord["napszak"].ToString(),
-                                    rekord["megjegyzés"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
+                                if (Eredeti)
+                                {
+                                    Adat = new Adat_Főkönyv_Nap(
+                                               rekord["státus"].ToÉrt_Long(),
+                                               rekord["hibaleírása"].ToStrTrim(),
+                                               rekord["típus"].ToStrTrim(),
+                                               rekord["azonosító"].ToStrTrim(),
+                                               rekord["szerelvény"].ToÉrt_Long(),
+                                               rekord["viszonylat"].ToStrTrim(),
+                                               rekord["forgalmiszám"].ToStrTrim(),
+                                               rekord["kocsikszáma"].ToÉrt_Long(),
+                                               rekord["tervindulás"].ToÉrt_DaTeTime(),
+                                               rekord["tényindulás"].ToÉrt_DaTeTime(),
+                                               rekord["tervérkezés"].ToÉrt_DaTeTime(),
+                                               rekord["tényérkezés"].ToÉrt_DaTeTime(),
+                                               rekord["miótaáll"].ToÉrt_DaTeTime(),
+                                               rekord["napszak"].ToString(),
+                                               rekord["megjegyzés"].ToStrTrim()
+                                               );
+                                    Adatok.Add(Adat);
+                                }
+                                else
+                                {
+                                    Adat = new Adat_Főkönyv_Nap(
+                                              rekord["státus"].ToÉrt_Long(),
+                                              rekord["hibaleírása"].ToStrTrim(),
+                                              rekord["típus"].ToStrTrim(),
+                                              rekord["azonosító"].ToStrTrim(),
+                                              rekord["szerelvény"].ToÉrt_Long(),
+                                              rekord["viszonylat"].ToStrTrim(),
+                                              rekord["forgalmiszám"].ToStrTrim(),
+                                              rekord["kocsikszáma"].ToÉrt_Long(),
+                                              rekord["tervindulás"].ToÉrt_DaTeTime(),
+                                              rekord["tényindulás"].ToÉrt_DaTeTime(),
+                                              rekord["tervérkezés"].ToÉrt_DaTeTime(),
+                                              rekord["tényérkezés"].ToÉrt_DaTeTime(),
+                                              rekord["miótaáll"].ToÉrt_DaTeTime(),
+                                              rekord["napszak"].ToString(),
+                                              rekord["megjegyzés"].ToStrTrim(),
+                                              Telephely
+                                              );
+                                    Adatok.Add(Adat);
+
+                                }
                             }
                         }
                     }
