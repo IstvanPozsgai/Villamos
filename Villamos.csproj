@@ -938,7 +938,6 @@
     <Compile Include="V_Kezelők\Kezelő_Általános.cs" />
     <Compile Include="V_Kezelők\Kezelő_Épület.cs" />
     <Compile Include="V_Kezelők\Kezelő_Épület_Takarítás.cs" />
-    <Compile Include="V_Kezelők\Kezelő_összevont.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_Akkumulátor.cs">
       <SubType>Form</SubType>
     </Compile>

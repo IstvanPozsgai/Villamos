@@ -367,7 +367,7 @@ namespace Villamos
             this.Keresés.Name = "Keresés";
             this.Keresés.Size = new System.Drawing.Size(40, 40);
             this.Keresés.TabIndex = 179;
-            this.ToolTip1.SetToolTip(this.Keresés, "Frissíti a listákat");
+            this.ToolTip1.SetToolTip(this.Keresés, "Keresés a táblázatban");
             this.Keresés.UseVisualStyleBackColor = true;
             // 
             // Command3

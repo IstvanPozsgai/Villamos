@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 
 namespace Villamos
@@ -20,17 +17,22 @@ namespace Villamos
         readonly Kezelő_Főkönyv_Nap FN_Kéz = new Kezelő_Főkönyv_Nap();
         readonly Kezelő_Kiadás_Összesítő KézKiadási = new Kezelő_Kiadás_Összesítő();
         readonly Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
-        readonly Kezelő_összevont KÖ_kéz = new Kezelő_összevont();
         readonly Kezelő_Forte_Kiadási_Adatok KézForteKiadás = new Kezelő_Forte_Kiadási_Adatok();
 
-        List<string> Telephelykönyvtár = new List<string>();
+        readonly List<string> Telephelykönyvtár = new List<string>();
         #region Alap
         public Ablak_Digitális_Főkönyv()
         {
             InitializeComponent();
+            Start();
         }
 
         private void Ablak_Digitális_Főkönyv_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Start()
         {
             Gombokfel();
             Választot_értékek();
@@ -179,7 +181,7 @@ namespace Villamos
 
 
         #region Nézetek váltása
-        private void TábláKi()
+        private void TáblákKi()
         {
             Tábla.Visible = false;
             Tábla1.Visible = false;
@@ -189,25 +191,25 @@ namespace Villamos
 
         private void Option1_CheckedChanged(object sender, EventArgs e)
         {
-            TábláKi();
+            TáblákKi();
             Tábla1.Visible = true;
         }
 
         private void Option2_CheckedChanged(object sender, EventArgs e)
         {
-            TábláKi();
+            TáblákKi();
             Tábla.Visible = true;
         }
 
         private void Option3_CheckedChanged(object sender, EventArgs e)
         {
-            TábláKi();
+            TáblákKi();
             Tábla2.Visible = true;
         }
 
         private void Option4_CheckedChanged(object sender, EventArgs e)
         {
-            TábláKi();
+            TáblákKi();
             Tábla3.Visible = true;
         }
 
@@ -281,12 +283,11 @@ namespace Villamos
                 Tábla.Columns[3].Width = 670;
 
                 string[] fejléc = { "Kocsiszíni javítás",
-                                "Telephelyen kívüli javítás",
-                                "Félreállítás",
-                                "Főjavítás"            };
+                                    "Telephelyen kívüli javítás",
+                                    "Félreállítás",
+                                    "Főjavítás"            };
                 Adatok = (from a in Adatok
                           where a.Státus == 4
-                          && (a.Napszak == "-" || a.Napszak == "_")
                           orderby a.Típus, a.Azonosító
                           select a).ToList();
 
@@ -357,13 +358,12 @@ namespace Villamos
             {
                 foreach (DataGridViewRow row in Tábla.Rows)
                 {
-                    if (row.Cells[0].Value == null)
+                    if (row.Cells[1].Value == null)
                     {
                         row.DefaultCellStyle.ForeColor = Color.Black;
                         row.DefaultCellStyle.BackColor = Color.Yellow;
                         row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
                     }
-
                 }
             }
         }
@@ -1109,12 +1109,12 @@ namespace Villamos
             if (RadioButton2.Checked == true)
             {
                 Tábla.Visible = true;
-                Tábla1.Visible = false;
+                Tábla3.Visible = false;
             }
             else
             {
                 Tábla.Visible = false;
-                Tábla1.Visible = true;
+                Tábla3.Visible = true;
             }
         }
 
@@ -1142,7 +1142,7 @@ namespace Villamos
                           orderby a.Valóstípus, a.Üzem, a.Azonosító
                           select a).ToList();
 
-                TábláKi();
+                TáblákKi();
 
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
@@ -1251,176 +1251,213 @@ namespace Villamos
             }
         }
 
-
-
-        //
         private void Command4_Click(object sender, EventArgs e)
         {
             try
             {
                 RadioButton2.Checked = true;
-                int volt = 0;
-                int sor;
-                string szöveg, helyúj, jelszóúj;
-                List<Adat_Összevont> ÖAdatokÖ;
-                for (int i = 0; i < Típuslista.Items.Count; i++)
-                {
-                    if (Típuslista.GetItemChecked(i) == true)
-                    {
-                        volt += 1;
-                    }
-                }
-                if (volt == 0)
-                    return;
+                if (Típuslista.CheckedItems.Count == 0) return;
 
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\" + Dátum_Melyik.Value.ToString("yyyy");
-                if (System.IO.Directory.Exists(hely) == false)
-                    System.IO.Directory.CreateDirectory(hely);
-
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\" + Dátum_Melyik.Value.ToString("yyyy") + @"\napiadatok";
-                if (System.IO.Directory.Exists(hely) == false)
-                    System.IO.Directory.CreateDirectory(hely);
-
-
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\" + Dátum_Melyik.Value.ToString("yyyy") + @"\napiadatok\" + Dátum_Melyik.Value.ToString("yyyyMMdd") + ".mdb";
-                string jelszó = "pozsgaii";
-                // ha már van akkor töröljük, hogy frissüljön, így nem kell figyelni, hogy volt-e már olyan adat
-                if (File.Exists(hely))
-                    File.Delete(hely);
-                Adatbázis_Létrehozás.Összevonttáblakészítő(hely);
-
-                // áttöltjük az adatokat a villamos táblából
-                Tábla.Visible = false;
-                Tábla1.Visible = false;
-                Tábla2.Visible = false;
-                Tábla3.Visible = false;
-
+                TáblákKi();
                 Holtart.Be(Telephelykönyvtár.Count + 2);
 
-                List<string> szövegGy = new List<string>();
+                // áttöltjük az adatokat a villamos táblából
+                List<Adat_Jármű> Adatok = Kéz_Jármű.Lista_Adatok("Főmérnökség");
+
+                List<Adat_Összevont> ÖAdatokÖ = new List<Adat_Összevont>();
                 for (int i = 0; i < Telephelykönyvtár.Count; i++)
                 {
-                    helyúj = $@"{Application.StartupPath}\" + Telephelykönyvtár[i].ToString().Trim() + @"\adatok\főkönyv\" + Dátum_Melyik.Value.ToString("yyyy") + @"\nap\" + Dátum_Melyik.Value.ToString("yyyyMMdd") + "denap.mdb";
-                    jelszóúj = "lilaakác";
 
-                    // ha nincs az új helyen akkor nézi az régin
-                    if (!File.Exists(helyúj)) helyúj = $@"{Application.StartupPath}\" + Telephelykönyvtár[i].ToString().Trim() + @"\adatok\főkönyv\nap\" + Dátum_Melyik.Value.ToString("yyyyMMdd") + "denap.mdb";
-                    if (File.Exists(helyúj))
+                    List<Adat_Főkönyv_Nap> FAdatok = FN_Kéz.Lista_Adatok(Telephelykönyvtár[i].ToStrTrim(), Dátum_Melyik.Value, "de");
+                    foreach (Adat_Főkönyv_Nap Elem in FAdatok)
                     {
-
-                        szöveg = "SELECT * FROM adattábla ";
-                        List<Adat_Főkönyv_Nap> FAdatok = FN_Kéz.Lista_adatok(helyúj, jelszóúj, szöveg);
-
-                        szövegGy.Clear();
-                        foreach (Adat_Főkönyv_Nap rekord in FAdatok)
+                        Adat_Jármű Jármű = Adatok.FirstOrDefault(a => a.Azonosító.Trim() == Elem.Azonosító.Trim());
+                        DateTime MiótaÁll = new DateTime(1900, 1, 1);
+                        DateTime Üzembehelyezés = new DateTime(1900, 1, 1);
+                        string Valóstípus = "";
+                        if (Jármű != null)
                         {
-                            szöveg = "INSERT INTO tábla  (azonosító, státus, üzem, miótaáll, valóstípus, üzembehelyezés, hibaleírása ) VALUES (";
-                            szöveg += "'" + rekord.Azonosító.Trim() + "', ";
-                            szöveg += rekord.Státus.ToString() + ", ";
-                            szöveg += "'" + Telephelykönyvtár[i].ToString().Trim() + "', ";
-                            szöveg += "'" + rekord.Miótaáll.ToString() + "', ";
-                            szöveg += "'_', '1900.01.01',";
-                            szöveg += "'" + rekord.Hibaleírása.Trim() + "') ";
-                            szövegGy.Add(szöveg);
+                            MiótaÁll = Jármű.Miótaáll;
+                            Valóstípus = Jármű.Valóstípus;
+                            Üzembehelyezés = Jármű.Üzembehelyezés;
                         }
-                        MyA.ABMódosítás(hely, jelszó, szövegGy);
 
+
+                        Adat_Összevont ADAT = new Adat_Összevont(
+                                       Elem.Azonosító.Trim(),
+                                       Elem.Státus,
+                                       Telephelykönyvtár[i].ToStrTrim(),
+                                       MiótaÁll,
+                                       Valóstípus,
+                                       Üzembehelyezés,
+                                       Elem.Hibaleírása.Trim());
+                        ÖAdatokÖ.Add(ADAT);
                         Holtart.Lép();
                     }
                 }
+                TáblaMásik(ÖAdatokÖ);
+                Tábla1Másik(ÖAdatokÖ);
+                Tábla.Visible = true;
+                Holtart.Ki();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        private void TáblaMásik(List<Adat_Összevont> ÖAdatokÖ)
+        {
+            try
+            {
+                TáblaFejléc();
 
-                // összevetjük a főmérnökségi villamos adatokkal
-                helyúj = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
-                szöveg = "SELECT * FROM állománytábla ORDER BY azonosító ";
-
-
-                List<Adat_Jármű> Adatok = Kéz_Jármű.Lista_Adatok(helyúj, jelszó, szöveg);
                 Holtart.Be(20);
-                szövegGy.Clear();
-                foreach (Adat_Jármű rekord in Adatok)
-                {
-                    szöveg = "UPDATE tábla SET ";
-                    szöveg += "valóstípus='" + rekord.Valóstípus.Trim() + "', ";
-                    if (rekord.Üzembehelyezés == null)
-                        szöveg += " üzembehelyezés='1900.01.01' ";
-                    else
-                        szöveg += " üzembehelyezés='" + rekord.Üzembehelyezés.ToString("yyyy.MM.dd") + "' ";
-                    szöveg += " WHERE azonosító= '" + rekord.Azonosító.Trim() + "'";
-                    szövegGy.Add(szöveg);
-                    Holtart.Lép();
-                }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
-                // kiírjuk az adatokat
-
-
-
-                Tábla.Rows.Clear();
-                Tábla.Columns.Clear();
-                Tábla.Refresh();
-                Tábla.Visible = false;
-                Tábla.ColumnCount = 13;
-
-                // fejléc elkészítése
-                Tábla.Columns[0].HeaderText = "Típus";
-                Tábla.Columns[0].Width = 100;
-                Tábla.Columns[1].HeaderText = "Telephely";
-                Tábla.Columns[1].Width = 100;
-                Tábla.Columns[2].HeaderText = "";
-                Tábla.Columns[2].Width = 60;
-                Tábla.Columns[3].HeaderText = "";
-                Tábla.Columns[3].Width = 60;
-                Tábla.Columns[4].HeaderText = "";
-                Tábla.Columns[4].Width = 60;
-                Tábla.Columns[5].HeaderText = "";
-                Tábla.Columns[5].Width = 60;
-                Tábla.Columns[6].HeaderText = "";
-                Tábla.Columns[6].Width = 60;
-                Tábla.Columns[7].HeaderText = "";
-                Tábla.Columns[7].Width = 60;
-                Tábla.Columns[8].HeaderText = "";
-                Tábla.Columns[8].Width = 60;
-                Tábla.Columns[9].HeaderText = "";
-                Tábla.Columns[9].Width = 60;
-                Tábla.Columns[10].HeaderText = "";
-                Tábla.Columns[10].Width = 60;
-                Tábla.Columns[11].HeaderText = "";
-                Tábla.Columns[11].Width = 60;
-                Tábla.Columns[12].HeaderText = "Darabszám";
-                Tábla.Columns[12].Width = 100;
-
-                Tábla.RowCount += 2;
-                Tábla.Rows[0].Cells[0].Value = "Üzemképes";
-
-                int oszlop = 2;
-                sor = 1;
                 // kiírjuk az üzemképes kocsikat
-                Holtart.Lép();
-                int találó = 0;
-                szöveg = "SELECT * FROM tábla where státus<>4 AND ( ";
-
-                for (int ii = 0; ii < Típuslista.Items.Count; ii++)
+                Tábla.RowCount += 1;
+                int sor = Tábla.RowCount - 1;
+                Tábla.Rows[0].Cells[0].Value = "Üzemképes";
+                List<Adat_Összevont> ÖAdatokIdeig = (from a in ÖAdatokÖ
+                                                     where a.Státus != 4
+                                                     select a).ToList();
+                List<Adat_Összevont> ÖAdatokE = new List<Adat_Összevont>();
+                for (int ii = 0; ii < Típuslista.CheckedItems.Count; ii++)
                 {
-                    if (Típuslista.GetItemChecked(ii) == true)
-                    {
-                        if (találó == 0)
-                        {
-                            szöveg += "  valóstípus='" + Típuslista.Items[ii].ToString().Trim() + "'";
-                            találó = 1;
-                        }
-                        else
-                            szöveg += "OR valóstípus='" + Típuslista.Items[ii].ToString().Trim() + "'";
-                    }
+                    List<Adat_Összevont> Ideig = ÖAdatokIdeig.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ii].ToStrTrim()).ToList();
+                    ÖAdatokE.AddRange(Ideig);
                 }
-                szöveg += " ) order by valóstípus,üzem, azonosító";
+                ÖAdatokE = (from a in ÖAdatokE
+                            orderby a.Valóstípus, a.Üzem, a.Azonosító
+                            select a).ToList();
+                sor = TáblaÍrás(ÖAdatokE, sor);
 
-                Holtart.Be(20);
+                // üzemképtelen kocsik
+                Tábla.RowCount++;
+                sor = Tábla.RowCount - 1;
+                Tábla.Rows[sor].Cells[0].Value = "Üzemképtelen";
+                ÖAdatokIdeig = (from a in ÖAdatokÖ
+                                where a.Státus == 4
+                                && !a.Hibaleírása.Contains("§")
+                                && !a.Hibaleírása.Contains("#")
+                                && !a.Hibaleírása.Contains("&")
+                                select a).ToList();
+                ÖAdatokE.Clear();
+                for (int ii = 0; ii < Típuslista.CheckedItems.Count; ii++)
+                {
+                    List<Adat_Összevont> Ideig = ÖAdatokIdeig.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ii].ToStrTrim()).ToList();
+                    ÖAdatokE.AddRange(Ideig);
+                }
+                ÖAdatokE = (from a in ÖAdatokE
+                            orderby a.Valóstípus, a.Üzem, a.Azonosító
+                            select a).ToList();
+                sor = TáblaÍrás(ÖAdatokE, sor);
+
+                // ***   Telepkívül ****
+                Tábla.RowCount++;
+                sor = Tábla.RowCount - 1;
+                Tábla.Rows[sor].Cells[0].Value = "Telepkívül";
+                ÖAdatokIdeig = (from a in ÖAdatokÖ
+                                where a.Státus == 4
+                                && a.Hibaleírása.Contains("§")
+                                select a).ToList();
+                ÖAdatokE.Clear();
+                for (int ii = 0; ii < Típuslista.CheckedItems.Count; ii++)
+                {
+                    List<Adat_Összevont> Ideig = ÖAdatokIdeig.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ii].ToStrTrim()).ToList();
+                    ÖAdatokE.AddRange(Ideig);
+                }
+                ÖAdatokE = (from a in ÖAdatokE
+                            orderby a.Valóstípus, a.Üzem, a.Azonosító
+                            select a).ToList();
+                sor = TáblaÍrás(ÖAdatokE, sor);
+
+                // ***   Főjavítás ****
+                Tábla.RowCount++;
+                sor = Tábla.RowCount - 1;
+                Tábla.Rows[sor].Cells[0].Value = "Főjavítás";
+                ÖAdatokIdeig = (from a in ÖAdatokÖ
+                                where a.Státus == 4
+                                && a.Hibaleírása.Contains("#")
+                                select a).ToList();
+                ÖAdatokE.Clear();
+                for (int ii = 0; ii < Típuslista.CheckedItems.Count; ii++)
+                {
+                    List<Adat_Összevont> Ideig = ÖAdatokIdeig.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ii].ToStrTrim()).ToList();
+                    ÖAdatokE.AddRange(Ideig);
+                }
+                ÖAdatokE = (from a in ÖAdatokE
+                            orderby a.Valóstípus, a.Üzem, a.Azonosító
+                            select a).ToList();
+                sor = TáblaÍrás(ÖAdatokE, sor);
+
+
+                // ***   Félre állítás ****
+                Tábla.RowCount++;
+                sor = Tábla.RowCount - 1;
+                Tábla.Rows[sor].Cells[0].Value = "Félreállítás";
+                ÖAdatokIdeig = (from a in ÖAdatokÖ
+                                where a.Státus == 4
+                                && a.Hibaleírása.Contains("&")
+                                select a).ToList();
+                ÖAdatokE.Clear();
+                for (int ii = 0; ii < Típuslista.CheckedItems.Count; ii++)
+                {
+                    List<Adat_Összevont> Ideig = ÖAdatokIdeig.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ii].ToStrTrim()).ToList();
+                    ÖAdatokE.AddRange(Ideig);
+                }
+                ÖAdatokE = (from a in ÖAdatokE
+                            orderby a.Valóstípus, a.Üzem, a.Azonosító
+                            select a).ToList();
+                sor = TáblaÍrás(ÖAdatokE, sor);
+
+                // összesen
+                Holtart.Lép();
+
+                sor += 1;
+                Tábla.RowCount = sor + 1;
+                Tábla.Rows[sor].Cells[0].Value = "Összesen";
+
+                int oszlop = Tábla.Columns.Count - 1;
+                int darab = 0;
+                for (int ik = 1; ik < Tábla.Rows.Count; ik++)
+                    if (Tábla.Rows[ik].Cells[oszlop].Value != null && int.TryParse(Tábla.Rows[ik].Cells[oszlop].Value.ToString(), out int result)) darab += result;
+
+                if (darab != 0)
+                {
+                    if (oszlop == 2)
+                        Tábla.Rows[sor - 1].Cells[12].Value = darab;
+                    else
+                        Tábla.Rows[sor].Cells[12].Value = darab;
+                }
+                Tábla.Visible = true;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private int TáblaÍrás(List<Adat_Összevont> Adatok, int sor)
+        {
+            try
+            {
                 string előző = "";
                 string előzőüzem = "";
+                int oszlop = 2;
                 int darab = 0;
 
-                ÖAdatokÖ = KÖ_kéz.Lista_Adat(hely, jelszó, szöveg);
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
+                foreach (Adat_Összevont rekord in Adatok)
                 {
 
                     if (előző.Trim() == "")
@@ -1470,473 +1507,13 @@ namespace Villamos
                         Tábla.RowCount = sor + 1;
                     }
                     Holtart.Lép();
+
                 }
-
-
                 if (oszlop == 2)
                     Tábla.Rows[sor - 1].Cells[12].Value = darab;
                 else
                     Tábla.Rows[sor].Cells[12].Value = darab;
 
-                sor += 2;
-                Tábla.RowCount = sor + 1;
-                Tábla.Rows[sor].Cells[0].Value = "Üzemképtelen";
-                sor += 1;
-                Tábla.RowCount = sor + 1;
-                // üzemképtelen kocsik
-                Holtart.Lép();
-                találó = 0;
-                szöveg = "SELECT * FROM tábla where státus=4 and ( ";
-
-                for (int ij = 0; ij < Típuslista.Items.Count; ij++)
-                {
-                    if (Típuslista.GetItemChecked(ij) == true)
-                    {
-                        if (találó == 0)
-                        {
-                            szöveg += "  valóstípus='" + Típuslista.Items[ij].ToString() + "'";
-                            találó = 1;
-                        }
-                        else
-                            szöveg += " OR valóstípus='" + Típuslista.Items[ij].ToString() + "'";
-
-                    }
-                }
-                szöveg += " ) order by valóstípus,üzem, azonosító";
-                ÖAdatokÖ = KÖ_kéz.Lista_Adat(hely, jelszó, szöveg);
-
-                előző = "";
-                előzőüzem = "";
-                darab = 0;
-                oszlop = 2;
-
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
-                {
-                    if (rekord.Hibaleírása.Substring(0, 1) != "#" && rekord.Hibaleírása.Substring(0, 1) != "&" && rekord.Hibaleírása.Substring(0, 1) != "§")
-                    {
-                        if (előző.Trim() == "")
-                        {
-                            előző = rekord.Valóstípus.Trim();
-                            előzőüzem = rekord.Üzem.Trim();
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                        }
-                        // ha új típust ír ki
-                        if (előző.Trim() != rekord.Valóstípus.Trim())
-                        {
-                            Tábla.Rows[sor].Cells[12].Value = darab;
-                            darab = 0;
-                            előző = rekord.Valóstípus.Trim();
-                            előzőüzem = rekord.Üzem.Trim();
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                            oszlop = 2;
-                        }
-                        // ha másik üzemben van akkor új sor
-                        if (előzőüzem.Trim() != rekord.Üzem.Trim())
-                        {
-                            Tábla.Rows[sor].Cells[12].Value = darab;
-                            darab = 0;
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                            oszlop = 2;
-                            előzőüzem = rekord.Üzem.Trim();
-                        }
-
-                        Tábla.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
-                        Tábla.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
-                        Tábla.Rows[sor].Cells[oszlop].Value = rekord.Azonosító.Trim();
-                        oszlop += 1;
-                        darab += 1;
-
-                        if (oszlop == 12)
-                        {
-                            oszlop = 2;
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                        }
-                    }
-                    Holtart.Lép();
-                }
-
-                if (oszlop == 2)
-                    Tábla.Rows[sor - 1].Cells[12].Value = darab;
-                else
-                    Tábla.Rows[sor].Cells[12].Value = darab;
-
-
-
-                // ***   Telepkívül ****
-                Holtart.Lép();
-                sor += 1;
-                Tábla.RowCount = sor + 1;
-                Tábla.Rows[sor].Cells[0].Value = "Üzemképtelen";
-                sor += 1;
-                Tábla.RowCount = sor + 1;
-
-                előző = "";
-                előzőüzem = "";
-                darab = 0;
-                oszlop = 2;
-
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
-                {
-
-                    if (rekord.Hibaleírása.Substring(0, 1) == "§")
-                    {
-                        if (előző.Trim() == "")
-                        {
-                            előző = rekord.Valóstípus.Trim();
-                            előzőüzem = rekord.Üzem.Trim();
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                        }
-                        // ha új típust ír ki
-                        if (előző.Trim() != rekord.Valóstípus.Trim())
-                        {
-                            Tábla.Rows[sor].Cells[12].Value = darab;
-                            darab = 0;
-                            előző = rekord.Valóstípus.Trim();
-                            előzőüzem = rekord.Üzem.Trim();
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                            oszlop = 2;
-                        }
-                        // ha másik üzemben van akkor új sor
-                        if (előzőüzem.Trim() != rekord.Üzem.Trim())
-                        {
-                            Tábla.Rows[sor].Cells[12].Value = darab;
-                            darab = 0;
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                            oszlop = 2;
-                            előzőüzem = rekord.Üzem.Trim();
-                        }
-
-                        Tábla.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
-                        Tábla.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
-                        Tábla.Rows[sor].Cells[oszlop].Value = rekord.Azonosító.Trim();
-                        oszlop += 1;
-                        darab += 1;
-
-                        if (oszlop == 12)
-                        {
-                            oszlop = 2;
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                        }
-                    }
-                    Holtart.Lép();
-                }
-
-                if (oszlop == 2)
-                    Tábla.Rows[sor - 1].Cells[12].Value = darab;
-                else
-                    Tábla.Rows[sor].Cells[12].Value = darab;
-
-
-                // ***   Főjavítás ****
-                Holtart.Lép();
-                sor += 1;
-                Tábla.RowCount = sor + 1;
-                Tábla.Rows[sor].Cells[0].Value = "Főjavítás";
-                sor += 1;
-                Tábla.RowCount = sor + 1;
-
-                előző = "";
-                előzőüzem = "";
-                darab = 0;
-                oszlop = 2;
-
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
-                {
-
-                    if (rekord.Hibaleírása.Substring(0, 1) == "#")
-                    {
-
-                        if (előző.Trim() == "")
-                        {
-                            előző = rekord.Valóstípus.Trim();
-                            előzőüzem = rekord.Üzem.Trim();
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                        }
-                        // ha új típust ír ki
-                        if (előző.Trim() != rekord.Valóstípus.Trim())
-                        {
-                            Tábla.Rows[sor].Cells[12].Value = darab;
-                            darab = 0;
-                            előző = rekord.Valóstípus.Trim();
-                            előzőüzem = rekord.Üzem.Trim();
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                            oszlop = 2;
-                        }
-                        // ha másik üzemben van akkor új sor
-                        if (előzőüzem.Trim() != rekord.Üzem.Trim())
-                        {
-                            Tábla.Rows[sor].Cells[12].Value = darab;
-                            darab = 0;
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                            oszlop = 2;
-                            előzőüzem = rekord.Üzem.Trim();
-                        }
-                        Tábla.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
-                        Tábla.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
-                        Tábla.Rows[sor].Cells[oszlop].Value = rekord.Azonosító.Trim();
-                        oszlop += 1;
-                        darab += 1;
-
-
-                        if (oszlop == 12)
-                        {
-                            oszlop = 2;
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                        }
-                    }
-                    Holtart.Lép();
-                }
-
-                if (darab != 0)
-                {
-                    if (oszlop == 2)
-                        Tábla.Rows[sor - 1].Cells[12].Value = darab;
-                    else
-                        Tábla.Rows[sor].Cells[12].Value = darab;
-                }
-
-                // ***   Félre állítás ****
-                Holtart.Lép();
-                sor += 1;
-                Tábla.RowCount = sor + 1;
-                Tábla.Rows[sor].Cells[0].Value = "Félreállítás";
-                sor += 1;
-                Tábla.RowCount = sor + 1;
-
-                előző = "";
-                előzőüzem = "";
-                darab = 0;
-                oszlop = 2;
-
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
-                {
-
-                    if (rekord.Hibaleírása.Substring(0, 1) == "&")
-                    {
-                        if (előző.Trim() == "")
-                        {
-                            előző = rekord.Valóstípus.Trim();
-                            előzőüzem = rekord.Üzem.Trim();
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                        }
-                        // ha új típust ír ki
-                        if ((előző ?? "") != (rekord.Valóstípus.Trim() ?? ""))
-                        {
-                            Tábla.Rows[sor].Cells[12].Value = darab;
-                            darab = 0;
-                            előző = rekord.Valóstípus.Trim();
-                            előzőüzem = rekord.Üzem.Trim();
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                            oszlop = 2;
-                        }
-                        // ha másik üzemben van akkor új sor
-                        if ((előzőüzem ?? "") != (rekord.Üzem.Trim() ?? ""))
-                        {
-                            Tábla.Rows[sor].Cells[12].Value = darab;
-                            darab = 0;
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                            oszlop = 2;
-                            előzőüzem = rekord.Üzem.Trim();
-                        }
-                        Tábla.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
-                        Tábla.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
-                        Tábla.Rows[sor].Cells[oszlop].Value = rekord.Azonosító.Trim();
-                        oszlop += 1;
-                        darab += 1;
-
-                        if (oszlop == 12)
-                        {
-                            oszlop = 2;
-                            sor += 1;
-                            Tábla.RowCount = sor + 1;
-                        }
-                    }
-                    Holtart.Lép();
-                }
-
-                if (darab != 0)
-                {
-                    if (oszlop == 2)
-                        Tábla.Rows[sor - 1].Cells[12].Value = darab;
-                    else
-                        Tábla.Rows[sor].Cells[12].Value = darab;
-
-                }
-
-
-                // összesen
-                Holtart.Lép();
-
-                sor += 1;
-                Tábla.RowCount = sor + 1;
-                Tábla.Rows[sor].Cells[0].Value = "Összesen";
-
-                oszlop = Tábla.Columns.Count - 1;
-                darab = 0;
-                for (int ik = 1; ik < Tábla.Rows.Count; ik++)
-                {
-                    if (Tábla.Rows[ik].Cells[oszlop].Value != null)
-                    {
-                        if (int.TryParse(Tábla.Rows[ik].Cells[oszlop].Value.ToString(), out int result))
-                            darab += int.Parse(Tábla.Rows[ik].Cells[oszlop].Value.ToString());
-                    }
-                }
-                if (darab != 0)
-                {
-                    if (oszlop == 2)
-                        Tábla.Rows[sor - 1].Cells[12].Value = darab;
-                    else
-                        Tábla.Rows[sor].Cells[12].Value = darab;
-                }
-                Tábla.Visible = true;
-
-
-                // Részletes tábla
-
-                Tábla1.Rows.Clear();
-                Tábla1.Columns.Clear();
-                Tábla1.Refresh();
-                Tábla1.Visible = false;
-                Tábla1.ColumnCount = 5;
-
-                // fejléc elkészítése
-                Tábla1.Columns[0].HeaderText = "Típus";
-                Tábla1.Columns[0].Width = 100;
-                Tábla1.Columns[1].HeaderText = "Telephely";
-                Tábla1.Columns[1].Width = 100;
-                Tábla1.Columns[2].HeaderText = "Psz";
-                Tábla1.Columns[2].Width = 100;
-                Tábla1.Columns[3].HeaderText = "Dátum";
-                Tábla1.Columns[3].Width = 100;
-                Tábla1.Columns[4].HeaderText = "Javítás leírása";
-                Tábla1.Columns[4].Width = 700;
-                Tábla1.Columns[4].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                Tábla1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-                Tábla1.RowCount += 2;
-                sor = 0;
-                int talált = 0;
-                Tábla1.Rows[sor].Cells[4].Value = "Kocsiszíni javítás";
-
-                szöveg = "SELECT * FROM tábla where státus=4 and ( ";
-
-                for (int ij = 0; ij < Típuslista.Items.Count; ij++)
-                {
-                    if (Típuslista.GetItemChecked(ij) == true)
-                    {
-                        if (talált == 0)
-                        {
-                            szöveg += "  valóstípus='" + Típuslista.Items[ij].ToString() + "'";
-                            talált = 1;
-                        }
-                        else
-                            szöveg += " OR valóstípus='" + Típuslista.Items[ij].ToString() + "'";
-
-                    }
-                }
-                szöveg += " ) order by valóstípus,üzem, azonosító";
-                ÖAdatokÖ = KÖ_kéz.Lista_Adat(hely, jelszó, szöveg);
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
-                {
-                    if (rekord.Hibaleírása.Substring(0, 1) != "#" && rekord.Hibaleírása.Substring(0, 1) != "#" && rekord.Hibaleírása.Substring(0, 1) != "&"
-                        && rekord.Hibaleírása.Substring(0, 1) != "§")
-                    {
-                        sor += 1;
-                        Tábla1.RowCount = sor + 1;
-
-                        Tábla1.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
-                        Tábla1.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
-                        Tábla1.Rows[sor].Cells[2].Value = rekord.Azonosító.Trim();
-                        Tábla1.Rows[sor].Cells[3].Value = rekord.Miótaáll.ToString("yyyy.MM.dd");
-                        Tábla1.Rows[sor].Cells[4].Value = rekord.Hibaleírása.Trim();
-                    }
-                    Holtart.Lép();
-                }
-
-
-                sor += 1;
-                Tábla1.RowCount = sor + 1;
-                Tábla1.Rows[sor].Cells[4].Value = "Telephelyen kívüli javítás";
-
-
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
-                {
-                    if (rekord.Hibaleírása.Substring(0, 1) == "§")
-                    {
-                        sor += 1;
-                        Tábla1.RowCount = sor + 1;
-
-                        Tábla1.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
-                        Tábla1.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
-                        Tábla1.Rows[sor].Cells[2].Value = rekord.Azonosító.Trim();
-                        Tábla1.Rows[sor].Cells[3].Value = rekord.Miótaáll.ToString("yyyy.MM.dd");
-                        Tábla1.Rows[sor].Cells[4].Value = rekord.Hibaleírása.Trim();
-                    }
-                    Holtart.Lép();
-                }
-
-
-                sor += 1;
-                Tábla1.RowCount = sor + 1;
-                Tábla1.Rows[sor].Cells[4].Value = "Félreállítás";
-
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
-                {
-                    if (rekord.Hibaleírása.Substring(0, 1) == "&")
-
-                    {
-                        sor += 1;
-                        Tábla1.RowCount = sor + 1;
-
-                        Tábla1.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
-                        Tábla1.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
-                        Tábla1.Rows[sor].Cells[2].Value = rekord.Azonosító.Trim();
-                        Tábla1.Rows[sor].Cells[3].Value = rekord.Miótaáll.ToString("yyyy.MM.dd");
-                        Tábla1.Rows[sor].Cells[4].Value = rekord.Hibaleírása.Trim();
-                    }
-                    Holtart.Lép();
-                }
-
-
-                sor += 1;
-                Tábla1.RowCount = sor + 1;
-                Tábla1.Rows[sor].Cells[4].Value = "Főjavítás";
-
-                foreach (Adat_Összevont rekord in ÖAdatokÖ)
-                {
-                    if (rekord.Hibaleírása.Substring(0, 1) == "#")
-
-                    {
-                        sor += 1;
-                        Tábla1.RowCount = sor + 1;
-
-                        Tábla1.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
-                        Tábla1.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
-                        Tábla1.Rows[sor].Cells[2].Value = rekord.Azonosító.Trim();
-                        Tábla1.Rows[sor].Cells[3].Value = rekord.Miótaáll.ToString("yyyy.MM.dd");
-                        Tábla1.Rows[sor].Cells[4].Value = rekord.Hibaleírása.Trim();
-                    }
-                    ;
-                    Holtart.Lép();
-                }
-                Holtart.Ki();
-                Tábla.Visible = true;
-                Tábla1.Visible = false;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1947,6 +1524,197 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return sor;
+        }
+
+        private void TáblaFejléc()
+        {
+            // kiírjuk az adatokat
+            Tábla.Rows.Clear();
+            Tábla.Columns.Clear();
+            Tábla.Refresh();
+            Tábla.Visible = false;
+            Tábla.ColumnCount = 13;
+
+            // fejléc elkészítése
+            Tábla.Columns[0].HeaderText = "Típus";
+            Tábla.Columns[0].Width = 100;
+            Tábla.Columns[1].HeaderText = "Telephely";
+            Tábla.Columns[1].Width = 100;
+            Tábla.Columns[2].HeaderText = "";
+            Tábla.Columns[2].Width = 60;
+            Tábla.Columns[3].HeaderText = "";
+            Tábla.Columns[3].Width = 60;
+            Tábla.Columns[4].HeaderText = "";
+            Tábla.Columns[4].Width = 60;
+            Tábla.Columns[5].HeaderText = "";
+            Tábla.Columns[5].Width = 60;
+            Tábla.Columns[6].HeaderText = "";
+            Tábla.Columns[6].Width = 60;
+            Tábla.Columns[7].HeaderText = "";
+            Tábla.Columns[7].Width = 60;
+            Tábla.Columns[8].HeaderText = "";
+            Tábla.Columns[8].Width = 60;
+            Tábla.Columns[9].HeaderText = "";
+            Tábla.Columns[9].Width = 60;
+            Tábla.Columns[10].HeaderText = "";
+            Tábla.Columns[10].Width = 60;
+            Tábla.Columns[11].HeaderText = "";
+            Tábla.Columns[11].Width = 60;
+            Tábla.Columns[12].HeaderText = "Darabszám";
+            Tábla.Columns[12].Width = 100;
+        }
+
+        private void Tábla1Másik(List<Adat_Összevont> Adatok)
+        {
+            try
+            {
+                // Részletes tábla
+                Tábla1Fejléc();
+
+                Tábla3.RowCount += 2;
+                int sor = 0;
+                Tábla3.Rows[sor].Cells[4].Value = "Kocsiszíni javítás";
+                List<Adat_Összevont> Szűrt = (from a in Adatok
+                                              where a.Státus == 4
+                                              && !a.Hibaleírása.Contains("§")
+                                              && !a.Hibaleírása.Contains("#")
+                                              && !a.Hibaleírása.Contains("&")
+                                              select a).ToList();
+
+                List<Adat_Összevont> ListaAdatok = new List<Adat_Összevont>();
+                for (int ij = 0; ij < Típuslista.CheckedItems.Count; ij++)
+                {
+                    List<Adat_Összevont> Ideig = Szűrt.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ij].ToStrTrim()).ToList();
+                    ListaAdatok.AddRange(Ideig);
+                }
+                ListaAdatok = (from a in ListaAdatok
+                               orderby a.Valóstípus, a.Üzem, a.Azonosító
+                               select a).ToList();
+                sor = Tábla1Írás(ListaAdatok, sor);
+
+                sor += 1;
+                Tábla3.RowCount = sor + 1;
+                Tábla3.Rows[sor].Cells[4].Value = "Telephelyen kívüli javítás";
+                Szűrt = (from a in Adatok
+                         where a.Státus == 4
+                         && a.Hibaleírása.Contains("§")
+                         select a).ToList();
+
+                ListaAdatok = new List<Adat_Összevont>();
+                for (int ij = 0; ij < Típuslista.CheckedItems.Count; ij++)
+                {
+                    List<Adat_Összevont> Ideig = Szűrt.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ij].ToStrTrim()).ToList();
+                    ListaAdatok.AddRange(Ideig);
+                }
+                ListaAdatok = (from a in ListaAdatok
+                               orderby a.Valóstípus, a.Üzem, a.Azonosító
+                               select a).ToList();
+                sor = Tábla1Írás(ListaAdatok, sor);
+
+                sor += 1;
+                Tábla3.RowCount = sor + 1;
+                Tábla3.Rows[sor].Cells[4].Value = "Félreállítás";
+                Szűrt = (from a in Adatok
+                         where a.Státus == 4
+                         && a.Hibaleírása.Contains("&")
+                         select a).ToList();
+
+                ListaAdatok = new List<Adat_Összevont>();
+                for (int ij = 0; ij < Típuslista.CheckedItems.Count; ij++)
+                {
+                    List<Adat_Összevont> Ideig = Szűrt.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ij].ToStrTrim()).ToList();
+                    ListaAdatok.AddRange(Ideig);
+                }
+                ListaAdatok = (from a in ListaAdatok
+                               orderby a.Valóstípus, a.Üzem, a.Azonosító
+                               select a).ToList();
+                sor = Tábla1Írás(ListaAdatok, sor);
+
+                sor += 1;
+                Tábla3.RowCount = sor + 1;
+                Tábla3.Rows[sor].Cells[4].Value = "Főjavítás";
+                Szűrt = (from a in Adatok
+                         where a.Státus == 4
+                         && a.Hibaleírása.Contains("#")
+                         select a).ToList();
+
+                ListaAdatok = new List<Adat_Összevont>();
+                for (int ij = 0; ij < Típuslista.CheckedItems.Count; ij++)
+                {
+                    List<Adat_Összevont> Ideig = Szűrt.Where(a => a.Valóstípus.Trim() == Típuslista.CheckedItems[ij].ToStrTrim()).ToList();
+                    ListaAdatok.AddRange(Ideig);
+                }
+                ListaAdatok = (from a in ListaAdatok
+                               orderby a.Valóstípus, a.Üzem, a.Azonosító
+                               select a).ToList();
+                sor = Tábla1Írás(ListaAdatok, sor);
+                Holtart.Ki();
+                Tábla3_Formázás();
+                Tábla3.Refresh();
+                Tábla3.Visible = false;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private int Tábla1Írás(List<Adat_Összevont> Adatok, int sor)
+        {
+            try
+            {
+                foreach (Adat_Összevont rekord in Adatok)
+                {
+                    sor += 1;
+                    Tábla3.RowCount = sor + 1;
+                    Tábla3.Rows[sor].Cells[0].Value = rekord.Valóstípus.Trim();
+                    Tábla3.Rows[sor].Cells[1].Value = rekord.Üzem.Trim();
+                    Tábla3.Rows[sor].Cells[2].Value = rekord.Azonosító.Trim();
+                    Tábla3.Rows[sor].Cells[3].Value = rekord.Miótaáll.ToString("yyyy.MM.dd");
+                    Tábla3.Rows[sor].Cells[4].Value = rekord.Hibaleírása.Trim();
+                    Holtart.Lép();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return sor;
+        }
+
+        private void Tábla1Fejléc()
+        {
+            Tábla3.Rows.Clear();
+            Tábla3.Columns.Clear();
+            Tábla3.Refresh();
+            Tábla3.Visible = false;
+            Tábla3.ColumnCount = 5;
+
+            // fejléc elkészítése
+            Tábla3.Columns[0].HeaderText = "Típus";
+            Tábla3.Columns[0].Width = 100;
+            Tábla3.Columns[1].HeaderText = "Telephely";
+            Tábla3.Columns[1].Width = 100;
+            Tábla3.Columns[2].HeaderText = "Psz";
+            Tábla3.Columns[2].Width = 100;
+            Tábla3.Columns[3].HeaderText = "Dátum";
+            Tábla3.Columns[3].Width = 100;
+            Tábla3.Columns[4].HeaderText = "Javítás leírása";
+            Tábla3.Columns[4].Width = 700;
+            Tábla3.Columns[4].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            Tábla3.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
         private void Excel_Melyik_Click(object sender, EventArgs e)
@@ -1996,5 +1764,24 @@ namespace Villamos
             }
         }
         #endregion
+
+        private void Tábla3_Formázás()
+        {
+            if (Tábla3.Rows.Count == 0) return;
+
+            for (int i = 0; i < Tábla3.Rows.Count; i++)
+            {
+                if (Tábla3.Rows[i].Cells[0].Value.ToStrTrim() == "")
+                {
+                    for (int j = 0; j < Tábla3.Columns.Count; j++)
+                    {
+                        Tábla3.Rows[i].Cells[j].Style.ForeColor = Color.Black;
+                        Tábla3.Rows[i].Cells[j].Style.BackColor = Color.Yellow;
+                        Tábla3.Rows[i].Cells[j].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
+                    }
+
+                }
+            }
+        }
     }
 }
