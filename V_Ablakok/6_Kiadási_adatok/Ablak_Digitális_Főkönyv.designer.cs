@@ -77,7 +77,6 @@ namespace Villamos
             this.RadioButton4 = new System.Windows.Forms.RadioButton();
             this.Típuslista = new System.Windows.Forms.CheckedListBox();
             this.Label6 = new System.Windows.Forms.Label();
-            this.Telephelykönyvtár = new System.Windows.Forms.ComboBox();
             this.Kereső = new System.Windows.Forms.GroupBox();
             this.Chk_CTRL = new System.Windows.Forms.CheckBox();
             this.Keresőnév = new System.Windows.Forms.Label();
@@ -503,7 +502,6 @@ namespace Villamos
             this.Panel5.Controls.Add(this.CsoportVissza);
             this.Panel5.Controls.Add(this.Típuslista);
             this.Panel5.Controls.Add(this.Label6);
-            this.Panel5.Controls.Add(this.Telephelykönyvtár);
             this.Panel5.Location = new System.Drawing.Point(10, 63);
             this.Panel5.Name = "Panel5";
             this.Panel5.Size = new System.Drawing.Size(242, 437);
@@ -602,15 +600,6 @@ namespace Villamos
             this.Label6.Size = new System.Drawing.Size(109, 20);
             this.Label6.TabIndex = 0;
             this.Label6.Text = "Típus választó";
-            // 
-            // Telephelykönyvtár
-            // 
-            this.Telephelykönyvtár.FormattingEnabled = true;
-            this.Telephelykönyvtár.Location = new System.Drawing.Point(21, 331);
-            this.Telephelykönyvtár.Name = "Telephelykönyvtár";
-            this.Telephelykönyvtár.Size = new System.Drawing.Size(211, 28);
-            this.Telephelykönyvtár.TabIndex = 181;
-            this.Telephelykönyvtár.Visible = false;
             // 
             // Kereső
             // 
@@ -746,7 +735,6 @@ namespace Villamos
         internal Button CsoportVissza;
         internal CheckedListBox Típuslista;
         internal Label Label6;
-        internal ComboBox Telephelykönyvtár;
         internal GroupBox Kereső;
         internal CheckBox Chk_CTRL;
         internal Label Keresőnév;

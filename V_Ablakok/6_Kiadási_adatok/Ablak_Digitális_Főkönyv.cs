@@ -23,7 +23,7 @@ namespace Villamos
         readonly Kezelő_összevont KÖ_kéz = new Kezelő_összevont();
         readonly Kezelő_Forte_Kiadási_Adatok KézForteKiadás = new Kezelő_Forte_Kiadási_Adatok();
 
-
+        List<string> Telephelykönyvtár = new List<string>();
         #region Alap
         public Ablak_Digitális_Főkönyv()
         {
@@ -1077,11 +1077,9 @@ namespace Villamos
                 List<Adat_kiegészítő_telephely> Adatok = KézKiegTelephely.Lista_Adatok();
                 Adatok = Adatok.OrderBy(a => a.Telephelykönyvtár).ToList();
 
-                Telephelykönyvtár.Items.Clear();
+                Telephelykönyvtár.Clear();
                 foreach (Adat_kiegészítő_telephely Elem in Adatok)
-                    Telephelykönyvtár.Items.Add(Elem.Telephelykönyvtár);
-
-                Telephelykönyvtár.Refresh();
+                    Telephelykönyvtár.Add(Elem.Telephelykönyvtár);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1188,9 +1186,9 @@ namespace Villamos
 
                 int sor = 0;
                 List<Adat_Főkönyv_Nap> Fadatok = new List<Adat_Főkönyv_Nap>();
-                for (int i = 0; i < Telephelykönyvtár.Items.Count; i++)
+                for (int i = 0; i < Telephelykönyvtár.Count; i++)
                 {
-                    List<Adat_Főkönyv_Nap> FadatokIdeig = FN_Kéz.Lista_Adatok(Telephelykönyvtár.Items[i].ToStrTrim(), Dátum_Melyik.Value, "de", false);
+                    List<Adat_Főkönyv_Nap> FadatokIdeig = FN_Kéz.Lista_Adatok(Telephelykönyvtár[i].ToStrTrim(), Dátum_Melyik.Value, "de", false);
                     Fadatok.AddRange(FadatokIdeig);
                 }
 
@@ -1297,16 +1295,16 @@ namespace Villamos
                 Tábla2.Visible = false;
                 Tábla3.Visible = false;
 
-                Holtart.Be(Telephelykönyvtár.Items.Count + 2);
+                Holtart.Be(Telephelykönyvtár.Count + 2);
 
                 List<string> szövegGy = new List<string>();
-                for (int i = 0; i < Telephelykönyvtár.Items.Count; i++)
+                for (int i = 0; i < Telephelykönyvtár.Count; i++)
                 {
-                    helyúj = $@"{Application.StartupPath}\" + Telephelykönyvtár.Items[i].ToString().Trim() + @"\adatok\főkönyv\" + Dátum_Melyik.Value.ToString("yyyy") + @"\nap\" + Dátum_Melyik.Value.ToString("yyyyMMdd") + "denap.mdb";
+                    helyúj = $@"{Application.StartupPath}\" + Telephelykönyvtár[i].ToString().Trim() + @"\adatok\főkönyv\" + Dátum_Melyik.Value.ToString("yyyy") + @"\nap\" + Dátum_Melyik.Value.ToString("yyyyMMdd") + "denap.mdb";
                     jelszóúj = "lilaakác";
 
                     // ha nincs az új helyen akkor nézi az régin
-                    if (!File.Exists(helyúj)) helyúj = $@"{Application.StartupPath}\" + Telephelykönyvtár.Items[i].ToString().Trim() + @"\adatok\főkönyv\nap\" + Dátum_Melyik.Value.ToString("yyyyMMdd") + "denap.mdb";
+                    if (!File.Exists(helyúj)) helyúj = $@"{Application.StartupPath}\" + Telephelykönyvtár[i].ToString().Trim() + @"\adatok\főkönyv\nap\" + Dátum_Melyik.Value.ToString("yyyyMMdd") + "denap.mdb";
                     if (File.Exists(helyúj))
                     {
 
@@ -1319,7 +1317,7 @@ namespace Villamos
                             szöveg = "INSERT INTO tábla  (azonosító, státus, üzem, miótaáll, valóstípus, üzembehelyezés, hibaleírása ) VALUES (";
                             szöveg += "'" + rekord.Azonosító.Trim() + "', ";
                             szöveg += rekord.Státus.ToString() + ", ";
-                            szöveg += "'" + Telephelykönyvtár.Items[i].ToString().Trim() + "', ";
+                            szöveg += "'" + Telephelykönyvtár[i].ToString().Trim() + "', ";
                             szöveg += "'" + rekord.Miótaáll.ToString() + "', ";
                             szöveg += "'_', '1900.01.01',";
                             szöveg += "'" + rekord.Hibaleírása.Trim() + "') ";
