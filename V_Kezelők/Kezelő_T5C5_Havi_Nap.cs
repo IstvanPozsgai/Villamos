@@ -146,40 +146,6 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-    public class Kezelő_T5C5_Futás
-    {
-        public List<Adat_T5C5_Futás> Lista_Adat(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_T5C5_Futás> Adatok = new List<Adat_T5C5_Futás>();
-            Adat_T5C5_Futás Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_T5C5_Futás(
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["Dátum"].ToÉrt_DaTeTime(),
-                                    rekord["Futásstátus"].ToStrTrim(),
-                                    rekord["Státus"].ToÉrt_Long()
-                                    ); ;
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
     public class Kezelő_T5C5_Futás1
     {

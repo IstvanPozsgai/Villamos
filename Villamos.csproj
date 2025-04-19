@@ -841,6 +841,7 @@
     <Compile Include="V_Kezelők\Kezelő_Szerelvény_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerszám_FejLáb.cs" />
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Futás.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Göngyöl_DátumTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Kmadatok.cs" />

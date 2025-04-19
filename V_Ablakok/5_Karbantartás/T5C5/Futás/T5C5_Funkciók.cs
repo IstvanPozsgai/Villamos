@@ -53,32 +53,7 @@ namespace Villamos
             return Adatok;
         }
 
-        public static List<string> Pályaszám_feltöltés(string telephely)
-        {
-            List<string> Adatok = new List<string>();
-            try
-            {
-                if (telephely.Trim() == "") return Adatok;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = $"Select * FROM Állománytábla WHERE Üzem='{telephely.Trim()}' AND ";
-                szöveg += $" törölt=0 AND valóstípus Like  '%T5C5%' ORDER BY azonosító";
-
-                Kezelő_Jármű kéz = new Kezelő_Jármű();
-                Adatok = kéz.Lista_Pályaszámok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Pályaszám_feltöltés", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Adatok;
-        }
 
 
         public static void Zároljuk(List<Adat_T5C5_Göngyöl_DátumTábla> Adatok, string telephely)

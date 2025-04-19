@@ -20,6 +20,9 @@ namespace Villamos
 {
     public partial class Ablak_T5C5_futás
     {
+        readonly Kezelő_T5C5_Futás Kéz_Futás = new Kezelő_T5C5_Futás();
+        readonly Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
+        readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
         bool CTRL_le = false;
         private string FájlExcel_;
@@ -32,7 +35,6 @@ namespace Villamos
         List<Adat_T5C5_Göngyöl_DátumTábla> AdatokGöngyöl = new List<Adat_T5C5_Göngyöl_DátumTábla>();
         List<Adat_T5C5_Futás> AdatokFutás = new List<Adat_T5C5_Futás>();
 
-        readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
         public Ablak_T5C5_futás()
         {
@@ -40,23 +42,11 @@ namespace Villamos
             Start();
         }
 
-        void Start()
+        private void Start()
         {
             Telephelyekfeltöltése();
             Jogosultságkiosztás();
-
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5";
-            if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\villamos3.mdb";
-            if (!File.Exists(hely))
-            {
-                Adatbázis_Létrehozás.Futásnaptábla_Létrehozás(hely);
-                Táblaellenőrzés1();
-            }
-
-
-            Pályaszám = T5C5.Pályaszám_feltöltés(Cmbtelephely.Text.Trim());
+            Pályaszám = Pályaszám_feltöltés();
         }
 
         private void Ablak_T5C5_futás_Load(object sender, EventArgs e)
@@ -144,7 +134,6 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
@@ -163,13 +152,12 @@ namespace Villamos
             }
         }
 
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
                 Pályaszám.Clear();
-                Pályaszám = T5C5.Pályaszám_feltöltés(Cmbtelephely.Text.Trim());
+                Pályaszám = Pályaszám_feltöltés();
                 if (Gombok_száma != 0)
                 {
                     // ha nem nulla akkor előbb a gombokat le kell szedni
@@ -189,7 +177,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Ablak_T5C5_futás_KeyDown(object sender, KeyEventArgs e)
         {
@@ -233,6 +220,7 @@ namespace Villamos
 
 
         #region háttér folyamatok
+        //
         private void Táblaellenőrzés()
         {
             string jelszó = "pozsgaii";
@@ -283,7 +271,7 @@ namespace Villamos
                 }
             }
         }
-
+        //
         private void Táblaellenőrzés1()
         {
             try
@@ -318,7 +306,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Hónapkezdés()
         {
             try
@@ -490,7 +478,7 @@ namespace Villamos
             Kocsikiirása();
         }
 
-
+        //
         private void Kocsikiirása()
         {
             try
@@ -515,8 +503,8 @@ namespace Villamos
                 int j = 1;
                 int k = 1;
 
-                Kezelő_T5C5_Futás Kéz = new Kezelő_T5C5_Futás();
-                AdatokFutás = Kéz.Lista_Adat(hely, jelszó, szöveg);
+
+                AdatokFutás = Kéz_Futás.Lista_Adat(hely, jelszó, szöveg);
 
                 if (AdatokFutás.Count > 0)
                 {
@@ -627,15 +615,12 @@ namespace Villamos
             }
         }
 
-
-
         private void Napadatai_Click(object sender, EventArgs e)
         {
             Napadatai_eseménye();
             MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-
+        //
         private void Napadatai_eseménye()
         {
             try
@@ -668,8 +653,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        //
         private void Konvertálás()
         {
             try
@@ -797,8 +781,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        //
         private void Adatáttöltés(string Honnan)
         {
             try
@@ -869,43 +852,52 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
         #region Adatrögzítés
         private void Telephelyre_MouseDown(object sender, MouseEventArgs e)
         {
-            Rögzít.Visible = !Napkinyitása.Visible;
-            Bevitelilap.Visible = false;
-            GombNév = (sender as Button).Name;
-            Gombfelirat = (sender as Button).Text;
-            string[] név = GombNév.Split('_');
-            Utolsó_Gomb = int.Parse(név[1]) - 1;
-
-            // jobb egér gomb
-            if (e.Button == MouseButtons.Right) Panel3.Controls[Utolsó_Gomb].Visible = false;
-
-            // ha bal egérgomb
-            if (e.Button == MouseButtons.Left)
+            try
             {
-                Bevitelilap.Left = Panel3.Controls[Utolsó_Gomb].Left + Panel3.Left;
-                Bevitelilap.Top = Panel3.Controls[Utolsó_Gomb].Top + Panel3.Top;
-                Label4.Text = Gombfelirat;
+                Rögzít.Visible = !Napkinyitása.Visible;
+                Bevitelilap.Visible = false;
+                GombNév = (sender as Button).Name;
+                Gombfelirat = (sender as Button).Text;
+                string[] név = GombNév.Split('_');
+                Utolsó_Gomb = int.Parse(név[1]) - 1;
 
-                Adat_T5C5_Futás EgyElem = (from a in AdatokFutás
-                                           where a.Azonosító == Gombfelirat
-                                           select a).FirstOrDefault();
+                // jobb egér gomb
+                if (e.Button == MouseButtons.Right) Panel3.Controls[Utolsó_Gomb].Visible = false;
 
-                if (EgyElem != null) Kategória.Text = EgyElem.Futásstátus;
+                // ha bal egérgomb
+                if (e.Button == MouseButtons.Left)
+                {
+                    Bevitelilap.Left = Panel3.Controls[Utolsó_Gomb].Left + Panel3.Left;
+                    Bevitelilap.Top = Panel3.Controls[Utolsó_Gomb].Top + Panel3.Top;
+                    Label4.Text = Gombfelirat;
 
-                Bevitelilap.Refresh();
-                Bevitelilap.Visible = true;
+                    Adat_T5C5_Futás EgyElem = (from a in AdatokFutás
+                                               where a.Azonosító == Gombfelirat
+                                               select a).FirstOrDefault();
+
+                    if (EgyElem != null) Kategória.Text = EgyElem.Futásstátus;
+
+                    Bevitelilap.Refresh();
+                    Bevitelilap.Visible = true;
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        //
         private void Rögzít_Click(object sender, EventArgs e)
         {
             if (Kategória.Text.Trim() == "") return;
@@ -925,6 +917,7 @@ namespace Villamos
 
 
         #region Göngyölés gönygyölés
+        //
         private void Göngyölés_Click(object sender, EventArgs e)
         {
             try
@@ -961,7 +954,7 @@ namespace Villamos
                 T5C5.Kinyitjuk(Cmbtelephely.Text.Trim());
             }
         }
-
+        //
         private void TelepBeállítás(string hova)
         {
             try
@@ -996,7 +989,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Telepalaphelyzetbe(string hova)
         {
             try
@@ -1028,7 +1021,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Pályaszám_ellenőrzés()
         {
             try
@@ -1085,7 +1078,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Göngyöl()
         {
             try
@@ -1351,7 +1344,7 @@ namespace Villamos
                 T5C5.Kinyitjuk(Cmbtelephely.Text.Trim());
             }
         }
-
+        //
         private void Vissza_esemény()
         {
             try
@@ -1438,7 +1431,7 @@ namespace Villamos
         {
             Naplezárása_esemény();
         }
-
+        //
         private void Naplezárása_esemény()
         {
             try
@@ -1471,7 +1464,7 @@ namespace Villamos
         {
             Napkinyitása_esemény();
         }
-
+        //
         private void Napkinyitása_esemény()
         {
             try
@@ -1499,7 +1492,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private Adat_T5C5_Futás1 NapÁllapot()
         {
             Adat_T5C5_Futás1 Válasz = null;
@@ -1527,6 +1520,7 @@ namespace Villamos
 
 
         #region ZSER
+        //
         private void Zserbeolvasás_Click(object sender, EventArgs e)
         {
             try
@@ -1576,7 +1570,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Zseradategyeztetés_Click(object sender, EventArgs e)
         {
             try
@@ -1647,6 +1641,7 @@ namespace Villamos
 
 
         #region Funkciók
+        //
         private string Fájlnév_meghatározás()
         {
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\";
@@ -1804,7 +1799,7 @@ namespace Villamos
         {
             Holtart.Lép();
         }
-
+        //
         private void Label13_MouseClick(object sender, MouseEventArgs e)
         {
             try
@@ -1828,5 +1823,34 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        #region Listák
+        private List<string> Pályaszám_feltöltés()
+        {
+            List<string> Válasz = new List<string>();
+            try
+            {
+                if (Cmbtelephely.Text.Trim() == "") return Válasz;
+                List<Adat_Jármű> Adatok = Kéz_Jármű.Lista_Adatok("Főmérnökség");
+
+                Válasz = (from a in Adatok
+                          where a.Üzem == Cmbtelephely.Text.Trim()
+                          && a.Törölt == false
+                          && a.Valóstípus.Contains("T5C5")
+                          orderby a.Azonosító
+                          select a.Azonosító).ToList();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Pályaszám_feltöltés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+        #endregion
     }
 }
