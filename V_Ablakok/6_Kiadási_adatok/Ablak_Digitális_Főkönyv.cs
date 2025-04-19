@@ -179,35 +179,35 @@ namespace Villamos
 
 
         #region Nézetek váltása
-        private void Option1_CheckedChanged(object sender, EventArgs e)
+        private void TábláKi()
         {
-            Tábla1.Visible = true;
             Tábla.Visible = false;
+            Tábla1.Visible = false;
             Tábla2.Visible = false;
             Tábla3.Visible = false;
+        }
+
+        private void Option1_CheckedChanged(object sender, EventArgs e)
+        {
+            TábláKi();
+            Tábla1.Visible = true;
         }
 
         private void Option2_CheckedChanged(object sender, EventArgs e)
         {
+            TábláKi();
             Tábla.Visible = true;
-            Tábla1.Visible = false;
-            Tábla2.Visible = false;
-            Tábla3.Visible = false;
         }
 
         private void Option3_CheckedChanged(object sender, EventArgs e)
         {
-            Tábla.Visible = false;
-            Tábla1.Visible = false;
+            TábláKi();
             Tábla2.Visible = true;
-            Tábla3.Visible = false;
         }
 
         private void Option4_CheckedChanged(object sender, EventArgs e)
         {
-            Tábla.Visible = false;
-            Tábla1.Visible = false;
-            Tábla2.Visible = false;
+            TábláKi();
             Tábla3.Visible = true;
         }
 
@@ -1144,10 +1144,7 @@ namespace Villamos
                           orderby a.Valóstípus, a.Üzem, a.Azonosító
                           select a).ToList();
 
-                Tábla.Visible = false;
-                Tábla1.Visible = false;
-                Tábla2.Visible = false;
-                Tábla3.Visible = false;
+                TábláKi();
 
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
@@ -1255,6 +1252,8 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
         //
         private void Command4_Click(object sender, EventArgs e)
