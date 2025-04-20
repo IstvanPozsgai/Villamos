@@ -147,63 +147,6 @@ namespace Villamos.Villamos_Adatszerkezet
     }
 
 
-    public class Kezelő_T5C5_Futás1
-    {
-        public List<Adat_T5C5_Futás1> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_T5C5_Futás1> Adatok = new List<Adat_T5C5_Futás1>();
-            Adat_T5C5_Futás1 Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_T5C5_Futás1(
-                                    rekord["Státus"].ToÉrt_Long()
-                                    ); ;
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public Adat_T5C5_Futás1 Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_T5C5_Futás1 Adat = null;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_T5C5_Futás1(
-                                rekord["Státus"].ToÉrt_Long()
-                                ); ;
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-    }
-
 
     public class Kezelő_T5C5_Előterv
     {
