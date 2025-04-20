@@ -64,9 +64,10 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = $"INSERT INTO Dátumtábla (telephely, utolsórögzítés) ";
+                string szöveg = $"INSERT INTO Dátumtábla (telephely, utolsórögzítés, zárol) ";
                 szöveg += $"VALUES ('{Adat.Telephely}',";
-                szöveg += $"'{Adat.Utolsórögzítés}')";
+                szöveg += $"'{Adat.Utolsórögzítés}',";
+                szöveg += $"{Adat.Zárol})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

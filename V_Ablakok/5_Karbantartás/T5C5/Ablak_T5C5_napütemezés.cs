@@ -24,7 +24,7 @@ namespace Villamos
         #region Kezelők Listák
 
 
-        readonly Kezelő_T5C5_Állomány KézÁllomány = new Kezelő_T5C5_Állomány();
+        readonly Kezelő_T5C5_Göngyöl KézÁllomány = new Kezelő_T5C5_Göngyöl();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Szerelvény KézSzerelvény = new Kezelő_Szerelvény();
         readonly Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
@@ -256,7 +256,7 @@ namespace Villamos
                 Tábla.Columns[32].Width = 100;
 
                 Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
-                Adatok = KézÁllomány.Lista_Adatok().Where(a => a.Telephely == Cmbtelephely.Text.Trim()).ToList();
+                Adatok = KézÁllomány.Lista_Adatok("Főmérnökség", DateTime.Today).Where(a => a.Telephely == Cmbtelephely.Text.Trim()).ToList();
                 AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
                 AdatokSzerelvény = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());   // Szerelvény
                 AdatokZserKm = KézKorr.Lista_adatok(Dátum.Value.Year);      //Zser adatok
@@ -587,7 +587,7 @@ namespace Villamos
                 }
 
                 AdatokSzerelvény = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());
-                Adatok = KézÁllomány.Lista_Adatok().Where(a => a.Telephely == Cmbtelephely.Text.Trim()).ToList();
+                Adatok = KézÁllomány.Lista_Adatok("Főmérnökség", DateTime.Today).Where(a => a.Telephely == Cmbtelephely.Text.Trim()).ToList();
                 AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Holtart.Be(AdatokSzerelvény.Count + 1);
 

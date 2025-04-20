@@ -76,6 +76,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Futásnap = futásnap;
             Telephely = telephely;
         }
+
+        public Adat_T5C5_Havi_Nap(string azonosító, string n1, int futásnap, string telephely)
+        {
+            Azonosító = azonosító;
+            N1 = n1;
+            Futásnap = futásnap;
+            Telephely = telephely;
+        }
     }
 
     public class Adat_T5C5_Futás

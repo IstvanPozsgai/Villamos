@@ -143,71 +143,33 @@ namespace Villamos.Villamos_Adatszerkezet
             }
         }
 
-
-        //elkopó
-        public List<Adat_T5C5_Havi_Nap> Lista_Adat(string hely, string jelszó, string szöveg)
+        public void Módosítás(DateTime Dátum, List<Adat_T5C5_Havi_Nap> Adatok)
         {
-            List<Adat_T5C5_Havi_Nap> Adatok = new List<Adat_T5C5_Havi_Nap>();
-            Adat_T5C5_Havi_Nap Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                FájlBeállítás(Dátum);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_T5C5_Havi_Nap Adat in Adatok)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_T5C5_Havi_Nap(
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["N1"].ToStrTrim(),
-                                    rekord["N2"].ToStrTrim(),
-                                    rekord["N3"].ToStrTrim(),
-                                    rekord["N4"].ToStrTrim(),
-                                    rekord["N5"].ToStrTrim(),
-                                    rekord["N6"].ToStrTrim(),
-                                    rekord["N7"].ToStrTrim(),
-                                    rekord["N8"].ToStrTrim(),
-                                    rekord["N9"].ToStrTrim(),
-                                    rekord["N10"].ToStrTrim(),
-                                    rekord["N11"].ToStrTrim(),
-                                    rekord["N12"].ToStrTrim(),
-                                    rekord["N13"].ToStrTrim(),
-                                    rekord["N14"].ToStrTrim(),
-                                    rekord["N15"].ToStrTrim(),
-                                    rekord["N16"].ToStrTrim(),
-                                    rekord["N17"].ToStrTrim(),
-                                    rekord["N18"].ToStrTrim(),
-                                    rekord["N19"].ToStrTrim(),
-                                    rekord["N20"].ToStrTrim(),
-                                    rekord["N21"].ToStrTrim(),
-                                    rekord["N22"].ToStrTrim(),
-                                    rekord["N23"].ToStrTrim(),
-                                    rekord["N24"].ToStrTrim(),
-                                    rekord["N25"].ToStrTrim(),
-                                    rekord["N26"].ToStrTrim(),
-                                    rekord["N27"].ToStrTrim(),
-                                    rekord["N28"].ToStrTrim(),
-                                    rekord["N29"].ToStrTrim(),
-                                    rekord["N30"].ToStrTrim(),
-                                    rekord["N31"].ToStrTrim(),
-                                    rekord["Futásnap"].ToÉrt_Int(),
-                                    rekord["Telephely"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
+                    string szöveg = "UPDATE állománytábla SET ";
+                    szöveg += $" N{Dátum.Day}='{Adat.N1}', ";    //Megfelelő napra rögzítjük
+                    szöveg += $" futásnap={Adat.Futásnap}, ";
+                    szöveg += $" telephely='{Adat.Telephely}' ";
+                    szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
+                    SzövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-
     }
 
 

@@ -33,7 +33,7 @@ namespace Villamos
         readonly Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
         readonly Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly Kezelő_Osztály_Adat KézCsat = new Kezelő_Osztály_Adat();
-        readonly Kezelő_T5C5_Állomány KézFutás = new Kezelő_T5C5_Állomány();
+        readonly Kezelő_T5C5_Göngyöl KézFutás = new Kezelő_T5C5_Göngyöl();
         readonly Kezelő_Hétvége_Előírás KézElőírás = new Kezelő_Hétvége_Előírás();
         readonly Kezelő_Kerék_Mérés Mérés_kéz = new Kezelő_Kerék_Mérés();
         readonly Kezelő_Vezénylés KézVezény = new Kezelő_Vezénylés();
@@ -1334,8 +1334,8 @@ namespace Villamos
             {
                 if (AdatokFutás == null) return;
                 Adat_T5C5_Göngyöl rekordszer = (from a in AdatokFutás
-                                                 where a.Azonosító == azonosító
-                                                 select a).FirstOrDefault();
+                                                where a.Azonosító == azonosító
+                                                select a).FirstOrDefault();
                 if (rekordszer != null)
                 {
                     Tábla.Rows[sor].Cells[21].Value = rekordszer.Vizsgálatfokozata;
