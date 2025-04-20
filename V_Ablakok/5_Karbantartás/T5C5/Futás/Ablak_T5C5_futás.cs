@@ -1095,67 +1095,67 @@ namespace Villamos
                 MessageBox.Show($"A(z) {Cmbtelephely.Text.Trim()} telephelyi zárolás feloldásra került!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        //
+
         private void Vissza_esemény()
         {
             try
-            {        // a havi táblába kitöröljük az adatokat és visszaírjuk a futásnapot
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\{Dátum.Value.Year}\Havi{Dátum.Value:yyyyMM}.mdb";
+            {
+                // a havi táblába kitöröljük az adatokat és visszaírjuk a futásnapot
                 string helyhonnan = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}";
                 helyhonnan += $@"\Villamos3-{Dátum.Value.AddDays(-1):yyyyMMdd}.mdb";
-                string hova = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Villamos3.mdb";
 
-                string jelszó = "pozsgaii";
-                string szöveg = $"Select * FROM állománytábla WHERE telephely='{Cmbtelephely.Text.Trim()}' ORDER BY azonosító";
-
-
-                List<Adat_T5C5_Göngyöl> Áll_Adatok = Kéz_Göngyöl.Lista_Adat(helyhonnan, jelszó, szöveg);
-
+                List<Adat_T5C5_Göngyöl> Áll_Adatok = Kéz_Göngyöl.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                Áll_Adatok = (from a in Áll_Adatok
+                              where a.Telephely == Cmbtelephely.Text.Trim()
+                              orderby a.Azonosító
+                              select a).ToList();
 
                 Holtart.Be();
 
-                List<string> szövegGy = new List<string>();
-                List<string> szövegGy1 = new List<string>();
+                List<Adat_T5C5_Havi_Nap> AdatokGyHavi = new List<Adat_T5C5_Havi_Nap>();
+                List<Adat_T5C5_Göngyöl> AdatokGyBázis = new List<Adat_T5C5_Göngyöl>();
+
                 foreach (Adat_T5C5_Göngyöl rekord in Áll_Adatok)
                 {
                     Holtart.Lép();
-
                     // előző napi futás adatokat írjuk vissza a havi táblában
-                    szöveg = "UPDATE állománytábla SET ";
-                    szöveg += $" N{Dátum.Value.Day}='/', futásnap={rekord.Futásnap} ";
-                    szöveg += $" WHERE azonosító='{rekord.Azonosító}'";
-                    szövegGy.Add(szöveg);
+                    Adat_T5C5_Havi_Nap ADATHavi = new Adat_T5C5_Havi_Nap(
+                                       rekord.Azonosító,
+                                       "/",
+                                       rekord.Futásnap,
+                                       Cmbtelephely.Text.Trim());
+                    AdatokGyHavi.Add(ADATHavi);
 
                     // módosítjuk a villamos3 adatait
-                    szöveg = "UPDATE állománytábla SET ";
-                    szöveg += $" utolsórögzítés='{rekord.Utolsórögzítés}', ";
-                    szöveg += $" vizsgálatdátuma='{rekord.Vizsgálatdátuma}', ";
-                    szöveg += $" Vizsgálatfokozata='{rekord.Vizsgálatfokozata}', ";
-                    szöveg += $" utolsóforgalminap='{rekord.Utolsóforgalminap}', ";
-                    szöveg += $" vizsgálatszáma={rekord.Vizsgálatszáma}, ";
-                    szöveg += $" futásnap={rekord.Futásnap}, ";
-                    szöveg += $" telephely='{rekord.Telephely}' ";
-                    szöveg += $" WHERE azonosító='{rekord.Azonosító}'";
-                    szövegGy1.Add(szöveg);
+                    Adat_T5C5_Göngyöl ADATBázis = new Adat_T5C5_Göngyöl(
+                                      rekord.Azonosító,
+                                      rekord.Utolsórögzítés,
+                                      rekord.Vizsgálatdátuma,
+                                      rekord.Utolsóforgalminap,
+                                      rekord.Vizsgálatfokozata,
+                                      rekord.Vizsgálatszáma,
+                                      rekord.Futásnap,
+                                      rekord.Telephely);
+                    AdatokGyBázis.Add(ADATBázis);
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
-                MyA.ABMódosítás(hova, jelszó, szövegGy1);
+                if (AdatokGyBázis.Count > 0) Kéz_Göngyöl.Módosítás("Főmérnökség", DateTime.Today, AdatokGyBázis);
+                if (AdatokGyHavi.Count > 0) KézHavi.Módosítás(Dátum.Value, AdatokGyHavi);
 
                 Holtart.Ki();
-
 
                 // visszaállítjuk az utolsó napot Villamos3-naplófáljból
                 List<Adat_T5C5_Göngyöl_DátumTábla> ElőzőNapi = KézGöngyölDátum.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.AddDays(-1));
 
-
-                szöveg = $"Select * FROM dátumtábla WHERE telephely='{Cmbtelephely.Text.Trim()}'";
                 Adat_T5C5_Göngyöl_DátumTábla rögzítés = (from a in ElőzőNapi
                                                          where a.Telephely == Cmbtelephely.Text.Trim()
                                                          select a).FirstOrDefault();
                 if (rögzítés != null)
                 {
-                    szöveg = $"UPDATE dátumtábla SET utolsórögzítés='{rögzítés.Utolsórögzítés:yyyy.MM.dd}' WHERE telephely='{Cmbtelephely.Text.Trim()}'";
-                    MyA.ABMódosítás(hova, jelszó, szöveg);
+                    Adat_T5C5_Göngyöl_DátumTábla ADAT = new Adat_T5C5_Göngyöl_DátumTábla(
+                                                 Cmbtelephely.Text.Trim(),
+                                                 rögzítés.Utolsórögzítés,
+                                                 false);
+                    KézGöngyölDátum.Módosítás("Főmérnökség", DateTime.Today, ADAT);
 
                     // kitöröljük a Villamos3-naplófáljból fájlt miutón frissítettük a villamos3-t
                     if (File.Exists(helyhonnan)) File.Delete(helyhonnan);
@@ -1505,17 +1505,14 @@ namespace Villamos
         {
             Holtart.Lép();
         }
-        //
+
         private void Label13_MouseClick(object sender, MouseEventArgs e)
         {
             try
             {
                 if (CTRL_le)
                 {
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\villamos3.mdb";
-                    string szöveg = $" UPDATE Dátumtábla SET Zárol = False WHERE Zárol = True";
-                    string jelszó = "pozsgaii";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézGöngyölDátum.ZárolásFelold("Főmérnökség", DateTime.Today);
                     MessageBox.Show($"Minden telephelyi zárolás feloldásra került!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }

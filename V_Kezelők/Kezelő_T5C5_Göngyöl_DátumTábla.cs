@@ -18,12 +18,7 @@ namespace Villamos.Kezelők
                 hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
             else
                 hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\futás\{Dátum.Year}\Villamos3-{Dátum.AddDays(-1):yyyyMMdd}.mdb";
-
-
-            //nincs elkészítve
-            // if (!File.Exists(hely)) Adatbázis_Létrehozás   (hely.KönyvSzerk());
         }
-
 
         public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok(string Telephely, DateTime Dátum)
         {
@@ -66,7 +61,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely, Dátum);
                 string szöveg = $"INSERT INTO Dátumtábla (telephely, utolsórögzítés, zárol) ";
                 szöveg += $"VALUES ('{Adat.Telephely}',";
-                szöveg += $"'{Adat.Utolsórögzítés}',";
+                szöveg += $"'{Adat.Utolsórögzítés:yyyy.MM.dd}',";
                 szöveg += $"{Adat.Zárol})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -87,7 +82,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Dátum);
                 string szöveg = $"UPDATE Dátumtábla SET ";
-                szöveg += $"utolsórögzítés='{Adat.Utolsórögzítés}' ";
+                szöveg += $"utolsórögzítés='{Adat.Utolsórögzítés:yyyy.MM.dd}' ";
                 szöveg += $"WHERE telephely='{Adat.Telephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -108,6 +103,25 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Dátum);
                 string szöveg = $"UPDATE dátumtábla SET Zárol={Zárolás} WHERE telephely='{CMBTelephely}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void ZárolásFelold(string Telephely, DateTime Dátum)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+                string szöveg = $" UPDATE Dátumtábla SET Zárol = False WHERE Zárol = True";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

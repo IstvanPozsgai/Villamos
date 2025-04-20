@@ -1040,11 +1040,11 @@ namespace Villamos
             try
             {
                 AdatokFutás.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\T5C5\villamos3.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM Állománytábla where telephely= '" + Cmbtelephely.Text.Trim() + "' ORDER BY azonosító";
-                AdatokFutás = KézFutás.Lista_Adat(hely, jelszó, szöveg);
+                AdatokFutás = KézFutás.Lista_Adatok("Főmérnökség", DateTime.Today);
+                AdatokFutás = (from a in AdatokFutás
+                               where a.Telephely == Cmbtelephely.Text.Trim()
+                               orderby a.Azonosító
+                               select a).ToList();
             }
             catch (HibásBevittAdat ex)
             {
