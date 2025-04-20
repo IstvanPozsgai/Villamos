@@ -4,6 +4,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
+using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Adatszerkezet
 {
@@ -18,7 +19,7 @@ namespace Villamos.Villamos_Adatszerkezet
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Havifutástábla_Létrehozás(hely.KönyvSzerk());
         }
 
-        public List<Adat_T5C5_Havi_Nap> Lista_Adat(DateTime Dátum)
+        public List<Adat_T5C5_Havi_Nap> Lista_Adatok(DateTime Dátum)
         {
             FájlBeállítás(Dátum);
             string szöveg = "SELECT * FROM állománytábla ORDER BY azonosító";
@@ -82,6 +83,67 @@ namespace Villamos.Villamos_Adatszerkezet
             return Adatok;
         }
 
+        public void Rögzítés(DateTime Dátum, List<Adat_T5C5_Havi_Nap> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Dátum);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_T5C5_Havi_Nap Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO állománytábla (Azonosító, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10,";
+                    szöveg += "N11,N12,N13,N14,N15,N16,N17,N18,N19,N20,";
+                    szöveg += "N21,N22,N23,N24,N25,N26,N27,N28,N29,N30,N31,Futásnap,Telephely ) VALUES (";
+                    szöveg += $"'{Adat.Azonosító}',";
+                    szöveg += $"'{Adat.N1}',";
+                    szöveg += $"'{Adat.N2}',";
+                    szöveg += $"'{Adat.N3}',";
+                    szöveg += $"'{Adat.N4}',";
+                    szöveg += $"'{Adat.N5}',";
+                    szöveg += $"'{Adat.N6}',";
+                    szöveg += $"'{Adat.N7}',";
+                    szöveg += $"'{Adat.N8}',";
+                    szöveg += $"'{Adat.N9}',";
+                    szöveg += $"'{Adat.N10}',";
+                    szöveg += $"'{Adat.N11}',";
+                    szöveg += $"'{Adat.N12}',";
+                    szöveg += $"'{Adat.N13}',";
+                    szöveg += $"'{Adat.N14}',";
+                    szöveg += $"'{Adat.N15}',";
+                    szöveg += $"'{Adat.N16}',";
+                    szöveg += $"'{Adat.N17}',";
+                    szöveg += $"'{Adat.N18}',";
+                    szöveg += $"'{Adat.N19}',";
+                    szöveg += $"'{Adat.N20}',";
+                    szöveg += $"'{Adat.N21}',";
+                    szöveg += $"'{Adat.N22}',";
+                    szöveg += $"'{Adat.N23}',";
+                    szöveg += $"'{Adat.N24}',";
+                    szöveg += $"'{Adat.N25}',";
+                    szöveg += $"'{Adat.N26}',";
+                    szöveg += $"'{Adat.N27}',";
+                    szöveg += $"'{Adat.N28}',";
+                    szöveg += $"'{Adat.N29}',";
+                    szöveg += $"'{Adat.N30}',";
+                    szöveg += $"'{Adat.N31}',";
+                    szöveg += $"{Adat.Futásnap},";
+                    szöveg += $"'{Adat.Telephely}')";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
         //elkopó
         public List<Adat_T5C5_Havi_Nap> Lista_Adat(string hely, string jelszó, string szöveg)
         {
@@ -144,6 +206,8 @@ namespace Villamos.Villamos_Adatszerkezet
             }
             return Adatok;
         }
+
+
     }
 
 

@@ -671,7 +671,7 @@ namespace Villamos
             try
             {
                 AlsóPanel1 = "havi";
-                List<Adat_T5C5_Havi_Nap> AdatokNapok = KézNapok.Lista_Adat(Dátum.Value).Where(a => a.Telephely == Cmbtelephely.Text.Trim()).ToList();
+                List<Adat_T5C5_Havi_Nap> AdatokNapok = KézNapok.Lista_Adatok(Dátum.Value).Where(a => a.Telephely == Cmbtelephely.Text.Trim()).ToList();
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();

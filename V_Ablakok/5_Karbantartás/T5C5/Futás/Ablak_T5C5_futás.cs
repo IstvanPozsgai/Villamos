@@ -8,13 +8,10 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
-using T5C5 = Villamos.T5C5_Funkciók;
 
 namespace Villamos
 {
@@ -26,6 +23,8 @@ namespace Villamos
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
         readonly Kezelő_Főkönyv_ZSER KézZser = new Kezelő_Főkönyv_ZSER();
         readonly Kezelő_Főkönyv_Nap KézFőkönyv = new Kezelő_Főkönyv_Nap();
+        readonly Kezelő_T5C5_Havi_Nap KézHavi = new Kezelő_T5C5_Havi_Nap();
+        readonly Kezelő_T5C5_Göngyöl_DátumTábla KézGöngyöl = new Kezelő_T5C5_Göngyöl_DátumTábla();
 
         bool CTRL_le = false;
         private string FájlExcel_;
@@ -219,79 +218,38 @@ namespace Villamos
 
 
         #region háttér folyamatok
-        //
         private void Táblaellenőrzés()
-        {
-            string jelszó = "pozsgaii";
-
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\{Dátum.Value.Year}";
-            if (!Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-
-            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\{Dátum.Value.Year}\havi{Dátum.Value:yyyyMM}.mdb";
-            if (!File.Exists(hely))
-            {
-                //Ha nincs létrehozza az adattáblát
-                Adatbázis_Létrehozás.Havifutástábla_Létrehozás(hely);
-
-                //új hónap esetén a psz-okat feltölti
-                Hónapkezdés();
-
-                //előző hónap ha van akkor kiolvassa a az utolsó rögzített napot, ha nincs akkor az előző hónap utolsó napja
-                DateTime Előzőhónap = Dátum.Value.AddMonths(-1);
-
-                string helyhova = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\{Előzőhónap.Year}\havi{Előzőhónap:yyyyMM}.mdb";
-                string szöveg = "SELECT * FROM Állománytábla";
-                Kezelő_T5C5_Havi_Nap Fut_kéz = new Kezelő_T5C5_Havi_Nap();
-                List<Adat_T5C5_Havi_Nap> Fut_Adatok = Fut_kéz.Lista_Adat(helyhova, jelszó, szöveg);
-
-                if (File.Exists(helyhova))
-                {
-                    //megnézzük, hogy mi az utolsó rögzített adat
-                    Holtart.Be(Pályaszám.Count + 1);
-
-
-                    List<string> szövegGy = new List<string>();
-                    foreach (string elem in Pályaszám)
-                    {
-                        Adat_T5C5_Havi_Nap Rekord = (from a in Fut_Adatok
-                                                     where a.Azonosító == elem.Trim()
-                                                     select a).FirstOrDefault();
-                        if (Rekord != null)
-                        {
-                            szöveg = $"UPDATE Állománytábla SET futásnap={Rekord.Futásnap} WHERE azonosító='{elem}'";
-                            szövegGy.Add(szöveg);
-                        }
-                        Holtart.Lép();
-
-                    }
-                    MyA.ABMódosítás(hely, jelszó, szövegGy);
-                    Holtart.Ki();
-                }
-            }
-        }
-
-        private void Hónapkezdés()
         {
             try
             {
-                // elkészítjük az alaptábla adatait
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\{Dátum.Value.Year}\havi{Dátum.Value:yyyyMM}.mdb";
-                string jelszó = "pozsgaii";
+                //előző hónap ha van akkor kiolvassa a az utolsó rögzített napot, ha nincs akkor az előző hónap utolsó napja
+                DateTime Előzőhónap = Dátum.Value.AddMonths(-1);
+                List<Adat_T5C5_Havi_Nap> Fut_Adatok = KézHavi.Lista_Adatok(Előzőhónap);
 
+                //megnézzük, hogy mi az utolsó rögzített adat
                 Holtart.Be(Pályaszám.Count + 1);
 
-                List<string> szövegGy = new List<string>();
+
+                List<Adat_T5C5_Havi_Nap> AdatokGy = new List<Adat_T5C5_Havi_Nap>();
                 foreach (string elem in Pályaszám)
                 {
-                    string szöveg = "INSERT INTO Állománytábla (azonosító, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12, N13, N14, N15, N16, N17, N18, N19, N20, ";
-                    szöveg += "N21, N22, N23, N24, N25, N26, N27, N28, N29, N30, N31, futásnap ) VALUES (";
-                    szöveg += $"'{elem.Trim()}', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.',";
-                    szöveg += " '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 0)";
-                    szövegGy.Add(szöveg);
+                    Adat_T5C5_Havi_Nap Rekord = (from a in Fut_Adatok
+                                                 where a.Azonosító == elem.Trim()
+                                                 select a).FirstOrDefault();
+                    if (Rekord != null)
+                    {
+                        Adat_T5C5_Havi_Nap ADAT = new Adat_T5C5_Havi_Nap(elem,
+                                                                         ".", ".", ".", ".", ".", ".", ".", ".", ".", ".",
+                                                                         ".", ".", ".", ".", ".", ".", ".", ".", ".", ".",
+                                                                         ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".",
+                                                                         Rekord.Futásnap,
+                                                                         Cmbtelephely.Text.Trim());
+                        AdatokGy.Add(ADAT);
+                    }
                     Holtart.Lép();
 
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                KézHavi.Rögzítés(Dátum.Value, AdatokGy);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -329,13 +287,13 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Gombok_vezérlése()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\futás{Dátum.Value:yyyyMMdd}nap.mdb";
-                if (!File.Exists(hely))
+                List<Adat_T5C5_Futás> Adatok = Kéz_Futás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                if (Adatok == null || Adatok.Count == 0)
                 {
                     Lista.Visible = false;
                     Napkinyitása.Visible = false;
@@ -379,7 +337,7 @@ namespace Villamos
                         Vissza.Visible = false;
                     }
                     // gönygyölés csak akkor aktív ha a soron következő nap
-                    AdatokGöngyöl = T5C5.AdatokGöngyöl_feltöltése();
+                    AdatokGöngyöl = KézGöngyöl.Lista_Adatok();
 
                     Adat_T5C5_Göngyöl_DátumTábla EgyTelep = (from a in AdatokGöngyöl
                                                              where a.Telephely == Cmbtelephely.Text.Trim()
@@ -441,7 +399,6 @@ namespace Villamos
             Kocsikiirása();
         }
 
-        //
         private void Kocsikiirása()
         {
             try
@@ -451,23 +408,15 @@ namespace Villamos
                 if (Gombok_száma != 0) Gombok_száma = 0;
                 int darab = 0;
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\futás{Dátum.Value:yyyyMMdd}nap.mdb";
-
-                if (!File.Exists(hely))
-                    Napadatai_eseménye();
-
-                // ismét meg kell határozni, mert ha létrehoz elfelejti
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\futás{Dátum.Value:yyyyMMdd}nap.mdb";
-
-                string szöveg = "SELECT * FROM futástábla order by azonosító";
-                string jelszó = "lilaakác";
+                List<Adat_T5C5_Futás> Adatok = Kéz_Futás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                if (Adatok == null || Adatok.Count == 0) Napadatai_eseménye();
 
                 int i = 1;
                 int j = 1;
                 int k = 1;
 
 
-                AdatokFutás = Kéz_Futás.Lista_Adat(hely, jelszó, szöveg);
+                AdatokFutás = Kéz_Futás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
 
                 if (AdatokFutás.Count > 0)
                 {
@@ -781,18 +730,14 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Rögzít_Click(object sender, EventArgs e)
         {
             if (Kategória.Text.Trim() == "") return;
             if (Label4.Text.Trim() == "") return;
 
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\futás{Dátum.Value:yyyyMMdd}nap.mdb";
-            string jelszó = "lilaakác";
-            string szöveg = $"UPDATE futástábla  SET  futásstátus='{Kategória.Text.Trim()}' WHERE azonosító='{Label4.Text.Trim()}'";
-
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-
+            Adat_T5C5_Futás ADAT = new Adat_T5C5_Futás(Label4.Text.Trim(), Dátum.Value, Kategória.Text.Trim(), 0);
+            Kéz_Futás.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value, ADAT);
             Gombok_Színezése(Utolsó_Gomb, Kategória.Text.Trim());
 
             Bevitelilap.Visible = false;
@@ -806,9 +751,15 @@ namespace Villamos
         {
             try
             {
-                AdatokGöngyöl = T5C5.AdatokGöngyöl_feltöltése();
+                AdatokGöngyöl = KézGöngyöl.Lista_Adatok();
                 if (AdatokGöngyöl == null) return;
-                T5C5.Zároljuk(AdatokGöngyöl, Cmbtelephely.Text.Trim());
+                Adat_T5C5_Göngyöl_DátumTábla Elem = (from a in AdatokGöngyöl
+                                                     where a.Zárol == true
+                                                     select a).FirstOrDefault();
+
+                if (Elem != null) throw new HibásBevittAdat($"Az adatok göngyölése nem lehetséges, mert {Elem.Telephely} dolgozza fel az adatokat.");
+                KézGöngyöl.Zárolás(Cmbtelephely.Text.Trim(), true);
+
 
                 // a pályaszámokat ellenőrizzük
                 Pályaszám_ellenőrzés();
@@ -835,7 +786,8 @@ namespace Villamos
             }
             finally
             {
-                T5C5.Kinyitjuk(Cmbtelephely.Text.Trim());
+                KézGöngyöl.Zárolás(Cmbtelephely.Text.Trim(), false);
+                MessageBox.Show($"A(z) {Cmbtelephely.Text.Trim()} telephelyi zárolás feloldásra került!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         //
@@ -1207,11 +1159,17 @@ namespace Villamos
         #region Vissza gönygyölés
         private void Vissza_Click(object sender, EventArgs e)
         {
-            AdatokGöngyöl = T5C5.AdatokGöngyöl_feltöltése();
-            if (AdatokGöngyöl == null) return;
-            T5C5.Zároljuk(AdatokGöngyöl, Cmbtelephely.Text.Trim());
             try
             {
+                AdatokGöngyöl = KézGöngyöl.Lista_Adatok();
+                if (AdatokGöngyöl == null) return;
+                Adat_T5C5_Göngyöl_DátumTábla Elem = (from a in AdatokGöngyöl
+                                                     where a.Zárol == true
+                                                     select a).FirstOrDefault();
+
+                if (Elem != null) throw new HibásBevittAdat($"Az adatok göngyölése nem lehetséges, mert {Elem.Telephely} dolgozza fel az adatokat.");
+
+                KézGöngyöl.Zárolás(Cmbtelephely.Text.Trim(), true);
                 Vissza_esemény();
             }
             catch (HibásBevittAdat ex)
@@ -1225,7 +1183,8 @@ namespace Villamos
             }
             finally
             {
-                T5C5.Kinyitjuk(Cmbtelephely.Text.Trim());
+                KézGöngyöl.Zárolás(Cmbtelephely.Text.Trim(), false);
+                MessageBox.Show($"A(z) {Cmbtelephely.Text.Trim()} telephelyi zárolás feloldásra került!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         //
@@ -1278,7 +1237,7 @@ namespace Villamos
 
 
                 // visszaállítjuk az utolsó napot Villamos3-naplófáljból
-                List<Adat_T5C5_Göngyöl_DátumTábla> ElőzőNapi = T5C5.AdatokGöngyöl_feltöltése(helyhonnan);
+                List<Adat_T5C5_Göngyöl_DátumTábla> ElőzőNapi = KézGöngyöl.Lista_Adatok();
 
 
                 szöveg = $"Select * FROM dátumtábla WHERE telephely='{Cmbtelephely.Text.Trim()}'";

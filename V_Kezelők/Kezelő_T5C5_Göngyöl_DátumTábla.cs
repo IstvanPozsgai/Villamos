@@ -18,39 +18,6 @@ namespace Villamos.Kezelők
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
-        //Telephelyi adat vissza kell fejteni
-        public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = new List<Adat_T5C5_Göngyöl_DátumTábla>();
-            Adat_T5C5_Göngyöl_DátumTábla Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-
-                                Adat = new Adat_T5C5_Göngyöl_DátumTábla(
-                                    rekord["telephely"].ToStrTrim(),
-                                    rekord["utolsórögzítés"].ToÉrt_DaTeTime(),
-                                    rekord["Zárol"].ToÉrt_Bool()
-                                    ); ;
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
         public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok()
         {
             string szöveg = $"SELECT * From Dátumtábla ";
@@ -124,6 +91,22 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Zárolás(string Telephely, bool Zárolás)
+        {
+            try
+            {
+                string szöveg = $"UPDATE dátumtábla SET Zárol={Zárolás} WHERE telephely='{Telephely}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
-
 }

@@ -125,7 +125,24 @@ namespace Villamos.Kezelők
             }
         }
 
-
+        public void Módosítás(string Telephely, DateTime Dátum, Adat_T5C5_Futás Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+                string szöveg = $"UPDATE futástábla  SET  futásstátus='{Adat.Futásstátus}' WHERE azonosító='{Adat.Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         //Elkopó
         public List<Adat_T5C5_Futás> Lista_Adat(string hely, string jelszó, string szöveg)
