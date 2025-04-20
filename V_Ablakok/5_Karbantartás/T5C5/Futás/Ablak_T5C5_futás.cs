@@ -786,43 +786,34 @@ namespace Villamos
                 MessageBox.Show($"A(z) {Cmbtelephely.Text.Trim()} telephelyi zárolás feloldásra került!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        //
+
         private void Pályaszám_ellenőrzés()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\villamos3.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla ORDER BY azonosító";
-
-
-                List<Adat_T5C5_Göngyöl> Adatok = Kéz_Göngyöl.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_T5C5_Göngyöl> Adatok = Kéz_Göngyöl.Lista_Adatok("Főmérnökség", DateTime.Today);
 
                 string előző = "";
                 string előzőtelep = "";
-                string szövegmásol;
-                string szövegtöröl;
 
                 List<string> Töröl = new List<string>();
-                List<string> Másol = new List<string>();
+                List<Adat_T5C5_Göngyöl> RögzítAdatok = new List<Adat_T5C5_Göngyöl>();
                 foreach (Adat_T5C5_Göngyöl rekord in Adatok)
                 {
                     if (előző.Trim() == rekord.Azonosító.Trim() && előzőtelep.Trim() == rekord.Telephely.Trim())
                     {
                         // ha egyforma akkor töröljük
-                        szövegmásol = "INSERT INTO állománytábla (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely  ) VALUES (";
-                        szövegmásol += $"'{rekord.Azonosító}', ";                       // azonosító
-                        szövegmásol += $"'{rekord.Utolsórögzítés:yyyy.MM.dd}', ";       // utolsórögzítés
-                        szövegmásol += $"'{rekord.Vizsgálatdátuma:yyyy.MM.dd}', ";      // vizsgálatdátuma
-                        szövegmásol += $"'{rekord.Utolsóforgalminap:yyyy.MM.dd}', ";    // utolsóforgalminap
-                        szövegmásol += $"'{rekord.Vizsgálatfokozata}', ";               // Vizsgálatfokozata
-                        szövegmásol += $"{rekord.Vizsgálatszáma}, ";                    // vizsgálatszáma
-                        szövegmásol += $"{rekord.Futásnap}, ";                          // futásnap
-                        szövegmásol += $"'{rekord.Telephely}')";                        // telephely
-                        Másol.Add(szövegmásol);
-
-                        szövegtöröl = $"DELETE FROM állománytábla WHERE [azonosító]='{rekord.Azonosító.Trim()}'";
-                        Töröl.Add(szövegtöröl);
+                        Adat_T5C5_Göngyöl ADATRögz = new Adat_T5C5_Göngyöl(
+                                           rekord.Azonosító.Trim(),
+                                           rekord.Utolsórögzítés,
+                                           rekord.Vizsgálatdátuma,
+                                           rekord.Utolsóforgalminap,
+                                           rekord.Vizsgálatfokozata,
+                                           rekord.Vizsgálatszáma,
+                                           rekord.Futásnap,
+                                           rekord.Telephely);
+                        RögzítAdatok.Add(ADATRögz);
+                        Töröl.Add(rekord.Azonosító.Trim());
                     }
                     else
                     {
@@ -830,8 +821,10 @@ namespace Villamos
                         előzőtelep = rekord.Telephely.Trim();
                     }
                 }
-                MyA.ABtörlés(hely, jelszó, Töröl);
-                MyA.ABMódosítás(hely, jelszó, Másol);
+
+                if (Töröl.Count > 0) Kéz_Göngyöl.Törlés("Főmérnökség", DateTime.Today, Töröl);
+                if (RögzítAdatok.Count > 0) Kéz_Göngyöl.Rögzítés("Főmérnökség", DateTime.Today, RögzítAdatok);
+
             }
             catch (HibásBevittAdat ex)
             {

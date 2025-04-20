@@ -136,7 +136,29 @@ namespace Villamos.Kezelők
             }
         }
 
-
+        public void Törlés(string Telephely, DateTime Dátum, List<string> Azonosítók)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+                List<string> szövegGy = new List<string>();
+                foreach (string Adat in Azonosítók)
+                {
+                    string szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{Adat}'";
+                    szövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, szövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         //Elkopó
         public List<Adat_T5C5_Göngyöl> Lista_Adat(string hely, string jelszó, string szöveg)
         {
