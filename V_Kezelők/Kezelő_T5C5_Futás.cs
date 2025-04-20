@@ -144,40 +144,28 @@ namespace Villamos.Kezelők
             }
         }
 
-        //Elkopó
-        public List<Adat_T5C5_Futás> Lista_Adat(string hely, string jelszó, string szöveg)
+        public void Módosítás(string Telephely, DateTime Dátum, List<string> Azonosítók)
         {
-            List<Adat_T5C5_Futás> Adatok = new List<Adat_T5C5_Futás>();
-            Adat_T5C5_Futás Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                FájlBeállítás(Telephely, Dátum);
+                List<string> SzövegGy = new List<string>();
+                foreach (string Azonosító in Azonosítók)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_T5C5_Futás(
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["Dátum"].ToÉrt_DaTeTime(),
-                                    rekord["Futásstátus"].ToStrTrim(),
-                                    rekord["Státus"].ToÉrt_Long()
-                                    ); ;
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
+                    string szöveg = $"UPDATE futástábla  SET futásstátus='Forgalomban' WHERE azonosító='{Azonosító}'";
+                    SzövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-
     }
-
 }

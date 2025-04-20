@@ -9,7 +9,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -1289,38 +1288,30 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Zseradategyeztetés_Click(object sender, EventArgs e)
         {
             try
             {
                 // megnézzük, hogy létezik-e adott napi tábla
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\futás{Dátum.Value:yyyyMMdd}nap.mdb";
-                if (!File.Exists(hely)) throw new HibásBevittAdat("Hiányzonak a napi adatok!");
+                List<Adat_T5C5_Futás> AdatokFutás = Kéz_Futás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                if (AdatokFutás == null || AdatokFutás.Count == 0) throw new HibásBevittAdat("Hiányzonak a napi adatok!");
 
                 // leellnőrizzük a zser adatokat hogy megvannak-e
-                string helyzser = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\{Dátum.Value.Year}\ZSER\zser{Dátum.Value:yyyyMMdd}.mdb";
-                if (!File.Exists(helyzser))
+                List<Adat_Főkönyv_ZSER> AdatokZser = KézZser.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, "");
+                if (AdatokZser == null || AdatokZser.Count == 0)
                 {
-                    helyzser = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\{Dátum.Value.Year}\ZSER\zser{Dátum.Value:yyyyMMdd}du.mdb";
-                    if (!File.Exists(helyzser))
+                    AdatokZser = KézZser.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, "du");
+                    if (AdatokZser == null || AdatokZser.Count == 0)
                     {
-                        helyzser = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\{Dátum.Value.Year}\ZSER\zser{Dátum.Value:yyyyMMdd}de.mdb";
-                        if (!File.Exists(helyzser)) throw new HibásBevittAdat("Hiányzonak a napi ZSER adatok!");
+                        AdatokZser = KézZser.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, "de");
+                        if (AdatokZser == null || AdatokZser.Count == 0) throw new HibásBevittAdat("Hiányzonak a napi ZSER adatok!");
                     }
                 }
 
                 Holtart.Be();
 
-                string jelszó = "lilaakác";
-                string szöveg = "SELECT * FROM futástábla ORDER BY azonosító";
-
-                List<Adat_T5C5_Futás> AdatokFutás = Kéz_Futás.Lista_Adat(hely, jelszó, szöveg);
-
-
-                List<Adat_Főkönyv_ZSER> AdatokZser = KézZser.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, "");
-
-                List<string> szövegGy = new List<string>();
+                List<string> Azonosítók = new List<string>();
                 foreach (Adat_T5C5_Futás rekord in AdatokFutás)
                 {
                     Holtart.Lép();
@@ -1331,15 +1322,12 @@ namespace Villamos
                                                       a.Kocsi5 == rekord.Azonosító.Trim() || a.Kocsi6 == rekord.Azonosító.Trim()
                                                 select a).FirstOrDefault();
                     if (Kiadás != null)
-                    {
                         if (!(rekord.Futásstátus.Contains("E") || rekord.Futásstátus.Contains("V") || rekord.Futásstátus.Contains("J")))
-                        {
-                            szöveg = $"UPDATE futástábla  SET futásstátus='Forgalomban' WHERE azonosító='{rekord.Azonosító.Trim()}'";
-                            szövegGy.Add(szöveg);
-                        }
-                    }
+                            Azonosítók.Add(rekord.Azonosító.Trim());
+
+
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                if (Azonosítók.Count > 0) Kéz_Futás.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value, Azonosítók);
 
                 Holtart.Ki();
 
