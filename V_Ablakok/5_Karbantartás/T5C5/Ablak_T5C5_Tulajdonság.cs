@@ -600,7 +600,7 @@ namespace Villamos
                 szöveg = $"SELECT * FROM állománytábla WHERE azonosító='{Pályaszám.Text.Trim()}'";
 
                 Kezelő_T5C5_Állomány Kéz = new Kezelő_T5C5_Állomány();
-                Adat_T5C5_Állomány Rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_T5C5_Göngyöl Rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
                 if (Rekord != null)
                 {
                     Utolsóvizsgálatdátuma.Value = Rekord.Vizsgálatdátuma;
@@ -649,9 +649,9 @@ namespace Villamos
                 string szöveg = "SELECT * FROM állománytábla";
 
                 Kezelő_T5C5_Állomány KézT5C5Állomány = new Kezelő_T5C5_Állomány();
-                List<Adat_T5C5_Állomány> AdatokT5C5Állomány = KézT5C5Állomány.Lista_Adat(hely, jelszó, szöveg);
+                List<Adat_T5C5_Göngyöl> AdatokT5C5Állomány = KézT5C5Állomány.Lista_Adat(hely, jelszó, szöveg);
 
-                Adat_T5C5_Állomány Elem = (from a in AdatokT5C5Állomány
+                Adat_T5C5_Göngyöl Elem = (from a in AdatokT5C5Állomány
                                            where a.Azonosító == Pályaszám.Text.Trim()
                                            select a).FirstOrDefault();
                 if (Elem == null)

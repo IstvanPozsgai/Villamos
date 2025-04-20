@@ -168,7 +168,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
 
             szöveg = "CREATE TABLE Dátumtábla (";
             szöveg += "[telephely] CHAR(20),";
-            szöveg += "[utolsórögzítés] DATE)";
+            szöveg += "[utolsórögzítés] DATE,";
+            szöveg += "[Zárol] YESNO)";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
 

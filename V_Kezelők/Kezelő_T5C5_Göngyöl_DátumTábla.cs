@@ -9,17 +9,25 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_T5C5_Göngyöl_DátumTábla
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
+        string hely;
         readonly string jelszó = "pozsgaii";
 
-        public Kezelő_T5C5_Göngyöl_DátumTábla()
+        private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
+            if (Telephely == "Főmérnökség")
+                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
+            else
+                hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\futás\{Dátum.Year}\Villamos3-{Dátum.AddDays(-1):yyyyMMdd}.mdb";
+
+
             //nincs elkészítve
-            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás   (hely.KönyvSzerk());
         }
 
-        public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok()
+
+        public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok(string Telephely, DateTime Dátum)
         {
+            FájlBeállítás(Telephely, Dátum);
             string szöveg = $"SELECT * From Dátumtábla ";
             List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = new List<Adat_T5C5_Göngyöl_DátumTábla>();
             Adat_T5C5_Göngyöl_DátumTábla Adat;
@@ -51,10 +59,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(Adat_T5C5_Göngyöl_DátumTábla Adat)
+        public void Rögzítés(string Telephely, DateTime Dátum, Adat_T5C5_Göngyöl_DátumTábla Adat)
         {
             try
             {
+                FájlBeállítás(Telephely, Dátum);
                 string szöveg = $"INSERT INTO Dátumtábla (telephely, utolsórögzítés) ";
                 szöveg += $"VALUES ('{Adat.Telephely}',";
                 szöveg += $"'{Adat.Utolsórögzítés}')";
@@ -71,10 +80,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(Adat_T5C5_Göngyöl_DátumTábla Adat)
+        public void Módosítás(string Telephely, DateTime Dátum, Adat_T5C5_Göngyöl_DátumTábla Adat)
         {
             try
             {
+                FájlBeállítás(Telephely, Dátum);
                 string szöveg = $"UPDATE Dátumtábla SET ";
                 szöveg += $"utolsórögzítés='{Adat.Utolsórögzítés}' ";
                 szöveg += $"WHERE telephely='{Adat.Telephely}'";
@@ -91,11 +101,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Zárolás(string Telephely, bool Zárolás)
+        public void Zárolás(string Telephely, DateTime Dátum, string CMBTelephely, bool Zárolás)
         {
             try
             {
-                string szöveg = $"UPDATE dátumtábla SET Zárol={Zárolás} WHERE telephely='{Telephely}'";
+                FájlBeállítás(Telephely, Dátum);
+                string szöveg = $"UPDATE dátumtábla SET Zárol={Zárolás} WHERE telephely='{CMBTelephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

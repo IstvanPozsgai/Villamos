@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Villamos.Villamos_Adatszerkezet
 {
@@ -102,13 +98,13 @@ namespace Villamos.Villamos_Adatszerkezet
     {
         public long Státus { get; private set; }
 
-        public Adat_T5C5_Futás1( long státus)
+        public Adat_T5C5_Futás1(long státus)
         {
             Státus = státus;
         }
     }
 
-    public class Adat_T5C5_Állomány
+    public class Adat_T5C5_Göngyöl
     {
         public string Azonosító { get; private set; }
         public DateTime Utolsórögzítés { get; private set; }
@@ -119,7 +115,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public int Futásnap { get; private set; }
         public string Telephely { get; private set; }
 
-        public Adat_T5C5_Állomány(string azonosító, DateTime utolsórögzítés, DateTime vizsgálatdátuma, DateTime utolsóforgalminap, string vizsgálatfokozata, int vizsgálatszáma, int futásnap, string telephely)
+        public Adat_T5C5_Göngyöl(string azonosító, DateTime utolsórögzítés, DateTime vizsgálatdátuma, DateTime utolsóforgalminap, string vizsgálatfokozata, int vizsgálatszáma, int futásnap, string telephely)
         {
             Azonosító = azonosító;
             Utolsórögzítés = utolsórögzítés;
@@ -183,7 +179,7 @@ namespace Villamos.Villamos_Adatszerkezet
         }
 
 
-        public Adat_T5C5_Kmadatok(long iD, string azonosító, DateTime vizsgdátumk) 
+        public Adat_T5C5_Kmadatok(long iD, string azonosító, DateTime vizsgdátumk)
         {
             ID = iD;
             Azonosító = azonosító;
@@ -309,18 +305,18 @@ namespace Villamos.Villamos_Adatszerkezet
             V2V3Számláló = v2V3Számláló;
         }
     }
-  
-  
+
+
     public class Adat_T5C5_Posta
-    { 
-        public string Azonosító { get;private  set; }
+    {
+        public string Azonosító { get; private set; }
         public string Típus { get; private set; }
         public string Csatolható { get; private set; }
         public int V_Sorszám { get; private set; }
         public string V2_következő { get; private set; }
-        public int  V2_Futott_Km { get; private set; }
+        public int V2_Futott_Km { get; private set; }
         public string V_Következő { get; private set; }
-        public int  V_futott_Km { get; private set; }
+        public int V_futott_Km { get; private set; }
         public int Napszám { get; private set; }
         public string Terv_Nap { get; private set; }
         public string Hiba { get; private set; }
@@ -365,19 +361,19 @@ namespace Villamos.Villamos_Adatszerkezet
             Kiad = kiad;
             Vissza = vissza;
             Vonal = vonal;
-     
+
         }
     }
 
-    public class Adat_BEOLVAS_KM 
+    public class Adat_BEOLVAS_KM
     {
-        public string Azonosító { get;  set; }
-        public long Havikm { get;  set; }
-        public DateTime KMUdátum { get;  set; }
-        public long KMUkm { get;  set; }
-        public long Teljeskm { get;  set; }
-        public long Jjavszám { get;  set; }
-        public DateTime Fudátum { get;  set; }
+        public string Azonosító { get; set; }
+        public long Havikm { get; set; }
+        public DateTime KMUdátum { get; set; }
+        public long KMUkm { get; set; }
+        public long Teljeskm { get; set; }
+        public long Jjavszám { get; set; }
+        public DateTime Fudátum { get; set; }
 
         public Adat_BEOLVAS_KM(string azonosító, long havikm, DateTime kMUdátum, long kMUkm, long teljeskm, long jjavszám, DateTime fudátum)
         {
@@ -391,7 +387,7 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-    public class Adat_T5C5_Göngyöl_DátumTábla 
+    public class Adat_T5C5_Göngyöl_DátumTábla
     {
 
         public string Telephely { get; private set; }

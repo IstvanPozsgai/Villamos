@@ -45,7 +45,7 @@ namespace Villamos
         List<Adat_Főkönyv_Zser_Km> AdatokZSER = new List<Adat_Főkönyv_Zser_Km>();
         List<Adat_T5C5_Kmadatok> AdatokVkm = new List<Adat_T5C5_Kmadatok>();
         List<Adat_Osztály_Adat> AdatokCsatoló = new List<Adat_Osztály_Adat>();
-        List<Adat_T5C5_Állomány> AdatokFutás = new List<Adat_T5C5_Állomány>();
+        List<Adat_T5C5_Göngyöl> AdatokFutás = new List<Adat_T5C5_Göngyöl>();
         List<Adat_Hétvége_Beosztás> AdatokHBeosztás = new List<Adat_Hétvége_Beosztás>();
         List<Adat_Hétvége_Előírás> AdatokElőírás = new List<Adat_Hétvége_Előírás>();
         List<Adat_Kerék_Mérés> Mérés_Adatok = new List<Adat_Kerék_Mérés>();
@@ -1333,7 +1333,7 @@ namespace Villamos
             try
             {
                 if (AdatokFutás == null) return;
-                Adat_T5C5_Állomány rekordszer = (from a in AdatokFutás
+                Adat_T5C5_Göngyöl rekordszer = (from a in AdatokFutás
                                                  where a.Azonosító == azonosító
                                                  select a).FirstOrDefault();
                 if (rekordszer != null)

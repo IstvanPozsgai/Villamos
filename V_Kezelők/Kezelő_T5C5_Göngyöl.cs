@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
@@ -7,22 +8,30 @@ using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
 {
-    public class Kezelő_T5C5_Állomány
+    public class Kezelő_T5C5_Göngyöl
     {
+        string hely;
         readonly string jelszó = "pozsgaii";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\villamos3.mdb";
 
-        public Kezelő_T5C5_Állomány()
+        private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
+            if (Telephely == "Főmérnökség")
+                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
+            else
+                hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\futás\{Dátum.Year}\Villamos3-{Dátum.AddDays(-1):yyyyMMdd}.mdb";
+
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Futásnaptábla_Létrehozás(hely.KönyvSzerk());
+
         }
 
 
-        public List<Adat_T5C5_Állomány> Lista_Adatok()
+
+        public List<Adat_T5C5_Göngyöl> Lista_Adatok(string Telephely, DateTime Dátum)
         {
+            FájlBeállítás(Telephely, Dátum);
             string szöveg = $"SELECT * FROM Állománytábla ORDER BY azonosító";
-            List<Adat_T5C5_Állomány> Adatok = new List<Adat_T5C5_Állomány>();
-            Adat_T5C5_Állomány Adat;
+            List<Adat_T5C5_Göngyöl> Adatok = new List<Adat_T5C5_Göngyöl>();
+            Adat_T5C5_Göngyöl Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -36,7 +45,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_T5C5_Állomány(
+                                Adat = new Adat_T5C5_Göngyöl(
                                     rekord["Azonosító"].ToStrTrim(),
                                     rekord["Utolsórögzítés"].ToÉrt_DaTeTime(),
                                     rekord["Vizsgálatdátuma"].ToÉrt_DaTeTime(),
@@ -57,10 +66,10 @@ namespace Villamos.Kezelők
 
 
         //Elkopó
-        public List<Adat_T5C5_Állomány> Lista_Adat(string hely, string jelszó, string szöveg)
+        public List<Adat_T5C5_Göngyöl> Lista_Adat(string hely, string jelszó, string szöveg)
         {
-            List<Adat_T5C5_Állomány> Adatok = new List<Adat_T5C5_Állomány>();
-            Adat_T5C5_Állomány Adat;
+            List<Adat_T5C5_Göngyöl> Adatok = new List<Adat_T5C5_Göngyöl>();
+            Adat_T5C5_Göngyöl Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -74,7 +83,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_T5C5_Állomány(
+                                Adat = new Adat_T5C5_Göngyöl(
                                     rekord["Azonosító"].ToStrTrim(),
                                     rekord["Utolsórögzítés"].ToÉrt_DaTeTime(),
                                     rekord["Vizsgálatdátuma"].ToÉrt_DaTeTime(),
@@ -93,9 +102,9 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_T5C5_Állomány Egy_Adat(string hely, string jelszó, string szöveg)
+        public Adat_T5C5_Göngyöl Egy_Adat(string hely, string jelszó, string szöveg)
         {
-            Adat_T5C5_Állomány Adat = null;
+            Adat_T5C5_Göngyöl Adat = null;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -109,7 +118,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_T5C5_Állomány(
+                                Adat = new Adat_T5C5_Göngyöl(
                                     rekord["Azonosító"].ToStrTrim(),
                                     rekord["Utolsórögzítés"].ToÉrt_DaTeTime(),
                                     rekord["Vizsgálatdátuma"].ToÉrt_DaTeTime(),
@@ -127,6 +136,4 @@ namespace Villamos.Kezelők
             return Adat;
         }
     }
-
-
 }

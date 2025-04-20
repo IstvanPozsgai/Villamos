@@ -37,7 +37,7 @@ namespace Villamos
         readonly Kezelő_T5C5_Havi_Nap KézNapok = new Kezelő_T5C5_Havi_Nap();
         readonly Kezelő_Menetkimaradás KézMenet = new Kezelő_Menetkimaradás();
 
-        List<Adat_T5C5_Állomány> Adatok = new List<Adat_T5C5_Állomány>();
+        List<Adat_T5C5_Göngyöl> Adatok = new List<Adat_T5C5_Göngyöl>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_Szerelvény> AdatokSzerelvény = new List<Adat_Szerelvény>();
         List<Adat_Nap_Hiba> AdatokHiba = new List<Adat_Nap_Hiba>();
@@ -271,7 +271,7 @@ namespace Villamos
                 Holtart.Be(Adatok.Count + 2);
 
                 // kiírjuk az alapot
-                foreach (Adat_T5C5_Állomány rekord in Adatok)
+                foreach (Adat_T5C5_Göngyöl rekord in Adatok)
                 {
                     Holtart.Lép();
                     Tábla.RowCount++;
