@@ -72,17 +72,16 @@ namespace Villamos.Kezelők
             }
         }
 
-
         public void Rögzítés(string Telephely, DateTime Dátum, List<Adat_T5C5_Futás> Adatok)
         {
             try
             {
                 FájlBeállítás(Telephely, Dátum);
                 List<string> SzövegGy = new List<string>();
-                foreach (Adat_T5C5_Futás rekord in Adatok)
+                foreach (Adat_T5C5_Futás Adat in Adatok)
                 {
                     string szöveg = "INSERT INTO Futástábla (azonosító, Dátum, Futásstátus, Státus) VALUES ( ";
-                    szöveg += $"'{rekord.Azonosító}', '{rekord.Dátum:yyyy.MM.dd}', '{rekord.Futásstátus}', {rekord.Státus})";
+                    szöveg += $"'{Adat.Azonosító}', '{Adat.Dátum:yyyy.MM.dd}', '{Adat.Futásstátus}', {Adat.Státus})";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
@@ -97,6 +96,36 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Módosítás(string Telephely, DateTime Dátum, List<Adat_T5C5_Futás> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_T5C5_Futás Adat in Adatok)
+                {
+                    string szöveg = "UPDATE futástábla SET ";
+                    szöveg += $" dátum='{Adat.Dátum:yyyy.MM.dd}', ";
+                    szöveg += $" Futásstátus='{Adat.Futásstátus}', ";
+                    szöveg += $" státus={Adat.Státus} ";
+                    szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
 
         //Elkopó
         public List<Adat_T5C5_Futás> Lista_Adat(string hely, string jelszó, string szöveg)

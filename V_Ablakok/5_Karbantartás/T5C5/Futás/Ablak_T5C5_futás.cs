@@ -25,6 +25,7 @@ namespace Villamos
         readonly Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
         readonly Kezelő_Főkönyv_ZSER KézZser = new Kezelő_Főkönyv_ZSER();
+        readonly Kezelő_Főkönyv_Nap KézFőkönyv = new Kezelő_Főkönyv_Nap();
 
         bool CTRL_le = false;
         private string FájlExcel_;
@@ -581,26 +582,13 @@ namespace Villamos
             Napadatai_eseménye();
             MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        //
+
         private void Napadatai_eseménye()
         {
             try
             {
-                // elkészítjük az alaptáblát
                 Konvertálás();
-
-                // megnézzük, hogy készült-e az adott nap főkönyv ha készült akkor abból vesszük  át
-                //ha van délután akkor abból olvassa be
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\főkönyv\{Dátum.Value.Year}\Nap\{Dátum.Value:yyyyMMdd}dunap.mdb";
-                if (File.Exists(hely))
-                    Adatáttöltés(hely);
-                else
-                {
-                    //Han nincs akkor a délelőttivel próbálkozik
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\Adatok\főkönyv\{Dátum.Value.Year}\Nap\{Dátum.Value:yyyyMMdd}denap.mdb";
-                    if (File.Exists(hely)) Adatáttöltés(hely);
-                }
-
+                Adatáttöltés();
                 Gombok_vezérlése();
                 Napkinyitása.Visible = false;
             }
@@ -651,6 +639,7 @@ namespace Villamos
                     string futásstátus = "-";
                     List<Adat_Jármű_hiba> PályaszámRész = (from a in HibaAdatok
                                                            where a.Azonosító == rekord.Azonosító
+                                                           && a.Korlát == 4
                                                            select a).ToList();
                     string hibaszöveg = "";
                     foreach (Adat_Jármű_hiba rekordhiba in PályaszámRész)
@@ -670,6 +659,7 @@ namespace Villamos
                                    Dátum.Value,
                                    futásstátus,
                                    rekord.Státus);
+                    AdatokGy.Add(ADAT);
                     Holtart.Lép();
                 }
                 Kéz_Futás.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, AdatokGy);
@@ -689,24 +679,23 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
-        private void Adatáttöltés(string Honnan)
+
+        private void Adatáttöltés()
         {
             try
             {
-                // létrehozzuk a napi adatokat
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}\futás{Dátum.Value:yyyyMMdd}nap.mdb";
-                string jelszó = "lilaakác";
+                // megnézzük, hogy készült-e az adott nap főkönyv ha készült akkor abból vesszük  át
+                //ha van délután akkor abból olvassa be
+                List<Adat_Főkönyv_Nap> Adatok = KézFőkönyv.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, "du");
+                if (Adatok == null || Adatok.Count == 0) Adatok = KézFőkönyv.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, "de"); //délelőttit is megnézzük
+                if (Adatok == null || Adatok.Count == 0) return; //Nincs adat,akkor nem fárasztjuk magunkat.
 
                 Kocsikiirása();
                 Panel3.Refresh();
 
                 Holtart.Be(Panel3.Controls.Count + 1);
-                string szöveg = "SELECT * FROM adattábla";
 
-                Kezelő_Főkönyv_Nap kéz = new Kezelő_Főkönyv_Nap();
-                List<Adat_Főkönyv_Nap> Adatok = kéz.Lista_adatok(Honnan, jelszó, szöveg);
-                List<string> szövegGy = new List<string>();
+                List<Adat_T5C5_Futás> AdatokGy = new List<Adat_T5C5_Futás>();
                 for (int i = 0; i < Panel3.Controls.Count; i++)
                 {
                     Holtart.Lép();
@@ -719,33 +708,20 @@ namespace Villamos
                     if (rekord != null)
                     {
                         jármű_státus = rekord.Státus;
-                        if (rekord.Státus == 4)
-                            Futásstátus = "Hibás";
-                        if (rekord.Viszonylat.Trim() != "-")
-                            Futásstátus = "Forgalomban";
-                        if (rekord.Hibaleírása.ToUpper().Contains("E3"))
-                            Futásstátus = "E3";
-                        if (rekord.Hibaleírása.ToUpper().Contains("V1"))
-                            Futásstátus = "V1";
-                        if (rekord.Hibaleírása.ToUpper().Contains("V2"))
-                            Futásstátus = "V2";
-                        if (rekord.Hibaleírása.ToUpper().Contains("V3"))
-                            Futásstátus = "V3";
-                        if (rekord.Hibaleírása.ToUpper().Contains("#J"))
-                            Futásstátus = "J";
+                        if (rekord.Státus == 4) Futásstátus = "Hibás";
+                        if (rekord.Viszonylat.Trim() != "-") Futásstátus = "Forgalomban";
+                        if (rekord.Hibaleírása.ToUpper().Contains("E3")) Futásstátus = "E3";
+                        if (rekord.Hibaleírása.ToUpper().Contains("V1")) Futásstátus = "V1";
+                        if (rekord.Hibaleírása.ToUpper().Contains("V2")) Futásstátus = "V2";
+                        if (rekord.Hibaleírása.ToUpper().Contains("V3")) Futásstátus = "V3";
+                        if (rekord.Hibaleírása.ToUpper().Contains("#J")) Futásstátus = "J";
                     }
-
-                    szöveg = "UPDATE futástábla SET ";
-                    szöveg += $" dátum='{Dátum.Value:yyyy.MM.dd}', ";
-                    szöveg += $" Futásstátus='{Futásstátus}', ";
-                    szöveg += $" státus={jármű_státus} ";
-                    szöveg += $" WHERE azonosító='{Panel3.Controls[i].Text.Trim()}'";
-                    szövegGy.Add(szöveg);
-
+                    Adat_T5C5_Futás ADAT = new Adat_T5C5_Futás(Panel3.Controls[i].Text.Trim(), Dátum.Value, Futásstátus, jármű_státus);
+                    AdatokGy.Add(ADAT);
                     Panel3.Controls[i].Visible = false;
                     Panel3.Refresh();
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                Kéz_Futás.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value, AdatokGy);
                 Holtart.Ki();
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Kocsikiirása();
