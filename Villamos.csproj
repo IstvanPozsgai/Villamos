@@ -414,7 +414,6 @@
     <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Futás\Ablak_T5C5_futás.designer.cs">
       <DependentUpon>Ablak_T5C5_futás.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Futás\T5C5_Funkciók.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.cs">
       <SubType>Form</SubType>
     </Compile>
