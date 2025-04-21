@@ -1331,7 +1331,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = KézDátumTábla.Lista_Adatok();
+                List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = KézDátumTábla.Lista_Adatok("Főmérnökség", DateTime.Today);
 
                 Adat_T5C5_Göngyöl_DátumTábla rekord = (from a in Adatok
                                                        where a.Telephely == Cmbtelephely.Text.Trim()
@@ -1356,7 +1356,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = KézDátumTábla.Lista_Adatok();
+                List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = KézDátumTábla.Lista_Adatok("Főmérnökség", DateTime.Today);
 
                 Adat_T5C5_Göngyöl_DátumTábla rekord = (from a in Adatok
                                                        where a.Telephely == Cmbtelephely.Text.Trim()
@@ -1367,9 +1367,9 @@ namespace Villamos
                                                                                      false);
 
                 if (rekord != null)
-                    KézDátumTábla.Módosítás(ADAT);
+                    KézDátumTábla.Módosítás("Főmérnökség", DateTime.Today, ADAT);
                 else
-                    KézDátumTábla.Rögzítés(ADAT);
+                    KézDátumTábla.Rögzítés("Főmérnökség", DateTime.Today, ADAT);
 
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

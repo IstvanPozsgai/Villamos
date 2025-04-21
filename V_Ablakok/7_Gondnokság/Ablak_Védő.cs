@@ -2141,7 +2141,7 @@ namespace Villamos
 
             Lekérd_táblaíró_más();
         }
-
+        //itt is hibázik
         private void Lekérd_táblaíró_más()
         {
             try
@@ -3600,6 +3600,7 @@ namespace Villamos
             }
         }
 
+        //itt
 
         private void Lekérd_Munkáltatói_jegyzék()
         {
@@ -3613,7 +3614,7 @@ namespace Villamos
                 Adat_Védő_Könyv Könyv;
                 List<Adat_Védő_Könyvelés> AdatKönyvelés;
                 int i;
-
+                //Ezt kell javítani.
                 foreach (string Elem in Lekérd_Szerszámkönyvszám.CheckedItems)
                 {
                     string[] darabol = Elem.Split('=');

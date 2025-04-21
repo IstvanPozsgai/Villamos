@@ -26,6 +26,7 @@ namespace Villamos
         readonly Kezelő_T5C5_Kmadatok KézKmAdatok = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
+        readonly Kezelő_T5C5_Göngyöl KézGöngyöl = new Kezelő_T5C5_Göngyöl();
 
         List<Adat_T5C5_Kmadatok> AdatokKmAdatok = new List<Adat_T5C5_Kmadatok>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
@@ -591,16 +592,16 @@ namespace Villamos
                         Holtart.Lép();
                     }
                     Holtart.Ki();
-
                 }
 
-
-                if ((Pályaszám.Text) == "")
-                    return;
+                if ((Pályaszám.Text) == "") return;
                 szöveg = $"SELECT * FROM állománytábla WHERE azonosító='{Pályaszám.Text.Trim()}'";
 
-                Kezelő_T5C5_Állomány Kéz = new Kezelő_T5C5_Állomány();
-                Adat_T5C5_Göngyöl Rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                List<Adat_T5C5_Göngyöl> Adatok = KézGöngyöl.Lista_Adatok("Főmérnökség", DateTime.Today);
+                Adat_T5C5_Göngyöl Rekord = (from a in Adatok
+                                            where a.Azonosító == Pályaszám.Text.Trim()
+                                            select a).FirstOrDefault();
                 if (Rekord != null)
                 {
                     Utolsóvizsgálatdátuma.Value = Rekord.Vizsgálatdátuma;
@@ -648,12 +649,12 @@ namespace Villamos
                 string jelszó = "pozsgaii";
                 string szöveg = "SELECT * FROM állománytábla";
 
-                Kezelő_T5C5_Állomány KézT5C5Állomány = new Kezelő_T5C5_Állomány();
-                List<Adat_T5C5_Göngyöl> AdatokT5C5Állomány = KézT5C5Állomány.Lista_Adat(hely, jelszó, szöveg);
+
+                List<Adat_T5C5_Göngyöl> AdatokT5C5Állomány = KézGöngyöl.Lista_Adatok("Főmérnökség", DateTime.Today);
 
                 Adat_T5C5_Göngyöl Elem = (from a in AdatokT5C5Állomány
-                                           where a.Azonosító == Pályaszám.Text.Trim()
-                                           select a).FirstOrDefault();
+                                          where a.Azonosító == Pályaszám.Text.Trim()
+                                          select a).FirstOrDefault();
                 if (Elem == null)
                 {
                     szöveg = "INSERT INTO Állománytábla (azonosító, utolsórögzítés, vizsgálatdátuma, Vizsgálatfokozata, vizsgálatszáma, futásnap )  VALUES (";
