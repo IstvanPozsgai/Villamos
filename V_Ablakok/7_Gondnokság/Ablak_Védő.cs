@@ -1691,6 +1691,9 @@ namespace Villamos
             {
 
                 Lekérd_Tábla.Visible = false;
+                Lekérd_Tábla.DataSource = null;
+                Lekérd_Tábla.Rows.Clear();
+                Lekérd_Tábla.Columns.Clear();
                 Lekérd_Tábla.CleanFilterAndSort();
                 AdatTáblaLekérd.Clear();
                 LekérdTáblaFejléc();
@@ -2141,7 +2144,7 @@ namespace Villamos
 
             Lekérd_táblaíró_más();
         }
-        //itt is hibázik
+
         private void Lekérd_táblaíró_más()
         {
             try
@@ -2162,6 +2165,9 @@ namespace Villamos
                                                         where a.Szerszámkönyvszám == darabol[0].Trim()
                                                         select a).ToList();
                     Lekérd_Tábla.Visible = false;
+                    Lekérd_Tábla.Rows.Clear();
+                    Lekérd_Tábla.Columns.Clear();
+                    Lekérd_Tábla.DataSource = null;
                     Lekérd_Tábla.CleanFilterAndSort();
                     LekérdTáblaFejléc();
                     LekérdTáblaTartalom();
@@ -2276,6 +2282,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void Lekérd_Tábla_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -3600,7 +3607,20 @@ namespace Villamos
             }
         }
 
-        //itt
+
+        private void LekérdTáblaFejlécMunkáltatói()
+        {
+            AdatTáblaLekérd.Columns.Clear();
+            AdatTáblaLekérd.Columns.Add("Azonosító");
+            AdatTáblaLekérd.Columns.Add("Védelem");
+            AdatTáblaLekérd.Columns.Add("Kockázat");
+            AdatTáblaLekérd.Columns.Add("Szabvány");
+            AdatTáblaLekérd.Columns.Add("Szint");
+            AdatTáblaLekérd.Columns.Add("Munk_megnevezés");
+            AdatTáblaLekérd.Columns.Add("Könyvszám");
+            AdatTáblaLekérd.Columns.Add("Könyv megnevezés");
+            AdatTáblaLekérd.Columns.Add("Státus");
+        }
 
         private void Lekérd_Munkáltatói_jegyzék()
         {
@@ -3613,6 +3633,8 @@ namespace Villamos
 
                 Adat_Védő_Könyv Könyv;
                 List<Adat_Védő_Könyvelés> AdatKönyvelés;
+                Lekérd_Tábla.DataSource = null;
+
                 int i;
                 //Ezt kell javítani.
                 foreach (string Elem in Lekérd_Szerszámkönyvszám.CheckedItems)
@@ -3624,7 +3646,8 @@ namespace Villamos
                     Lekérd_Tábla.Visible = false;
                     Lekérd_Tábla.ColumnCount = 6;
 
-                    // fejléc elkészítése
+                    // fejléc elkészítése    
+                    //LekérdTáblaFejlécMunkáltatói();
                     Lekérd_Tábla.Columns[0].HeaderText = "Azonosító";
                     Lekérd_Tábla.Columns[0].Width = 120;
                     Lekérd_Tábla.Columns[1].HeaderText = "Védelem";
