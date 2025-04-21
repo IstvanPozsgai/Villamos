@@ -40,6 +40,7 @@ namespace Villamos
         readonly Kezelő_Vezénylés KézVezény = new Kezelő_Vezénylés();
         readonly Kezelő_Hétvége_Beosztás KézHBeosztás = new Kezelő_Hétvége_Beosztás();
         readonly Kezelő_Kiegészítő_Felmentés KézFelmentés = new Kezelő_Kiegészítő_Felmentés();
+        readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
 
         List<Adat_Szerelvény> AdatokSzer = new List<Adat_Szerelvény>();
         List<Adat_Szerelvény> AdatokSzerelvényElő = new List<Adat_Szerelvény>();
@@ -1487,8 +1488,8 @@ namespace Villamos
 
             Tábla.Sort(Tábla.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
 
-            Kezelő_Hétvége_Beosztás kéz = new Kezelő_Hétvége_Beosztás();
-            List<Adat_Hétvége_Beosztás> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+            List<Adat_Hétvége_Beosztás> Adatok = KézHBeosztás.Lista_Adatok(hely, jelszó, szöveg);
 
             Holtart.Be(100);
 
@@ -2272,24 +2273,19 @@ namespace Villamos
         {
             Utasítás_Írás();
         }
-        //
+
         private void Utasítás_Írás()
         {
             try
             {
                 Txtírásimező.Text = "";
                 // kiírja a hétvégi előírást
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                string jelszó = "pozsgaii";
 
                 string előzővonal = "";
                 Txtírásimező.Text = "";
                 string szöveg0;
                 int i = 0;
-                string szöveg = "SELECT * FROM beosztás order by vonal,id";
-
-                Kezelő_Hétvége_Beosztás kéz = new Kezelő_Hétvége_Beosztás();
-                List<Adat_Hétvége_Beosztás> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Hétvége_Beosztás> Adatok = KézHBeosztás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 szöveg0 = "20 -n forgalomba kell adni:\r\n";
 
@@ -2303,31 +2299,19 @@ namespace Villamos
                     }
                     i++;
                     szöveg0 += i.ToString() + "- ";
-                    if (rekord.Kocsi1.Trim() != "")
-                        szöveg0 += rekord.Kocsi1.Trim();
-                    if (rekord.Kocsi2.Trim() != "")
-                        szöveg0 += "-" + rekord.Kocsi2.Trim();
-                    if (rekord.Kocsi3.Trim() != "")
-                        szöveg0 += "-" + rekord.Kocsi3.Trim();
-                    if (rekord.Kocsi4.Trim() != "")
-                        szöveg0 += "-" + rekord.Kocsi4.Trim();
-                    if (rekord.Kocsi5.Trim() != "")
-                        szöveg0 += "-" + rekord.Kocsi5.Trim();
-                    if (rekord.Kocsi6.Trim() != "")
-                        szöveg0 += "-" + rekord.Kocsi6.Trim();
+                    if (rekord.Kocsi1.Trim() != "") szöveg0 += rekord.Kocsi1.Trim();
+                    if (rekord.Kocsi2.Trim() != "") szöveg0 += "-" + rekord.Kocsi2.Trim();
+                    if (rekord.Kocsi3.Trim() != "") szöveg0 += "-" + rekord.Kocsi3.Trim();
+                    if (rekord.Kocsi4.Trim() != "") szöveg0 += "-" + rekord.Kocsi4.Trim();
+                    if (rekord.Kocsi5.Trim() != "") szöveg0 += "-" + rekord.Kocsi5.Trim();
+                    if (rekord.Kocsi6.Trim() != "") szöveg0 += "-" + rekord.Kocsi6.Trim();
 
-                    if (rekord.Vissza1 == "1")
-                        szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi1.Trim();
-                    if (rekord.Vissza2 == "1")
-                        szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi2.Trim();
-                    if (rekord.Vissza3 == "1")
-                        szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi3.Trim();
-                    if (rekord.Vissza4 == "1")
-                        szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi4.Trim();
-                    if (rekord.Vissza5 == "1")
-                        szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi5.Trim();
-                    if (rekord.Vissza6 == "1")
-                        szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi6.Trim();
+                    if (rekord.Vissza1 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi1.Trim();
+                    if (rekord.Vissza2 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi2.Trim();
+                    if (rekord.Vissza3 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi3.Trim();
+                    if (rekord.Vissza4 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi4.Trim();
+                    if (rekord.Vissza5 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi5.Trim();
+                    if (rekord.Vissza6 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi6.Trim();
                     szöveg0 += "\r\n";
                 }
                 Txtírásimező.Text += szöveg0 + "\r\n";
@@ -2342,7 +2326,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Btnrögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -2352,36 +2336,15 @@ namespace Villamos
 
                 Txtírásimező.Text = Txtírásimező.Text.Replace('"', '°').Replace('\'', '°');
 
-                // csak aktuális évben tudunk rögzíteni
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\üzenetek\{DateTime.Now.Year}utasítás.mdb";
-                string jelszó = "katalin"; // módosít
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely);
-                string szöveg = "SELECT * From üzenetek";
-                Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
-                List<Adat_Utasítás> AdatokUtasítás = KézUtasítás.Lista_Adatok(Cmbtelephely.Text.Trim(), DateTime.Now.Year);
+                Adat_Utasítás ADAT = new Adat_Utasítás(
+                              0,
+                              Txtírásimező.Text.Trim(),
+                              Program.PostásNév.Trim(),
+                              DateTime.Now,
+                              0);
+                KézUtasítás.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today.Year, ADAT);
 
-                // megkeressük az utolsó sorszámot
-                Txtsorszám = 1;
-                if (AdatokUtasítás.Count > 0) Txtsorszám = AdatokUtasítás.Max(a => a.Sorszám) + 1;
-
-                // rögzítjuk az adatokat
-                szöveg = "INSERT INTO üzenetek (sorszám, szöveg, írta, mikor, érvényes)  VALUES ";
-                szöveg += $"({Txtsorszám}, '{Txtírásimező.Text.Trim()}', '{Program.PostásNév.Trim()}', '{DateTime.Now}', 0 )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                // ha már ő írta akkor rögzítette is
-                szöveg = "SELECT * From olvasás ";
-                Kezelő_utasítás_Olvasás KézOlvasás = new Kezelő_utasítás_Olvasás();
-                List<Adat_utasítás_olvasás> AdatokOlvasás = KézOlvasás.Lista_Adatok(Cmbtelephely.Text.Trim(), DateTime.Now.Year);
-
-                szöveg = "SELECT * From olvasás order by sorszám desc";
-                double i = 1;
-                if (AdatokOlvasás.Count > 0) i = AdatokOlvasás.Max(a => a.Sorszám) + 1;
-                szöveg = "INSERT INTO olvasás (sorszám, ki, üzenetid, mikor, olvasva) VALUES ";
-                szöveg += $"({i}, '{Program.PostásNév.Trim()}', {Txtsorszám}, '{DateTime.Now}', -1)";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                MessageBox.Show($"Az utasítás rögzítése {Txtsorszám} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Az utasítás rögzítése megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2393,20 +2356,13 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Utasítás_törlés_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                if (!File.Exists(hely))
-                    return;
-                string jelszó = "pozsgaii";
-                string szöveg = "DELETE FROM beosztás ";
                 if (MessageBox.Show("Valóban töröljük az eddigi adatokat?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                {
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                    KézHBeosztás.Törlés(Cmbtelephely.Text.Trim());
                 Utasítás_Írás();
             }
             catch (HibásBevittAdat ex)
