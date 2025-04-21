@@ -1038,10 +1038,10 @@ namespace Villamos
                                                            where a.Telephely == Cmbtelephely.Text.Trim()
                                                            select a).FirstOrDefault();
                 Adat_T5C5_Göngyöl_DátumTábla ADATGDátum = new Adat_T5C5_Göngyöl_DátumTábla(Cmbtelephely.Text.Trim(), Dátum.Value, false);
-                if (Telepdátum != null)
-                    KézGöngyölDátum.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, ADATGDátum);
+                if (Telepdátum == null)
+                    KézGöngyölDátum.Rögzítés("Főmérnökség", Dátum.Value, ADATGDátum);
                 else
-                    KézGöngyölDátum.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value, ADATGDátum);
+                    KézGöngyölDátum.Módosítás("Főmérnökség", Dátum.Value, ADATGDátum);
                 Gombok_vezérlése();
 
                 Holtart.Ki();
@@ -1103,7 +1103,7 @@ namespace Villamos
                 string helyhonnan = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}";
                 helyhonnan += $@"\Villamos3-{Dátum.Value.AddDays(-1):yyyyMMdd}.mdb";
 
-                List<Adat_T5C5_Göngyöl> Áll_Adatok = Kéz_Göngyöl.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                List<Adat_T5C5_Göngyöl> Áll_Adatok = Kéz_Göngyöl.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.AddDays(-1));
                 Áll_Adatok = (from a in Áll_Adatok
                               where a.Telephely == Cmbtelephely.Text.Trim()
                               orderby a.Azonosító
@@ -1143,7 +1143,7 @@ namespace Villamos
                 Holtart.Ki();
 
                 // visszaállítjuk az utolsó napot Villamos3-naplófáljból
-                List<Adat_T5C5_Göngyöl_DátumTábla> ElőzőNapi = KézGöngyölDátum.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.AddDays(-1));
+                List<Adat_T5C5_Göngyöl_DátumTábla> ElőzőNapi = KézGöngyölDátum.Lista_Adatok("Főmérnökség", DateTime.Today);
 
                 Adat_T5C5_Göngyöl_DátumTábla rögzítés = (from a in ElőzőNapi
                                                          where a.Telephely == Cmbtelephely.Text.Trim()
@@ -1152,7 +1152,7 @@ namespace Villamos
                 {
                     Adat_T5C5_Göngyöl_DátumTábla ADAT = new Adat_T5C5_Göngyöl_DátumTábla(
                                                  Cmbtelephely.Text.Trim(),
-                                                 rögzítés.Utolsórögzítés,
+                                                 rögzítés.Utolsórögzítés.AddDays(-1),
                                                  false);
                     KézGöngyölDátum.Módosítás("Főmérnökség", DateTime.Today, ADAT);
 

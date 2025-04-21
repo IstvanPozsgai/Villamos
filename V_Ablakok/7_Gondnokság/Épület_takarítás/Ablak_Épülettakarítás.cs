@@ -1485,12 +1485,11 @@ namespace Villamos
         {
             try
             {
-                if (Tábla_terv.Rows.Count < 1)
-                    return;
+                if (Tábla_terv.Rows.Count < 1) return;
 
                 for (int i = 0; i < Tábla_terv.Rows.Count; i++)
                 {
-                    if (!bool.Parse(Tábla_terv.Rows[i].Cells[4].Value.ToString()))
+                    if (Tábla_terv.Rows[i].Cells[4].Value != null && bool.Parse(Tábla_terv.Rows[i].Cells[4].Value.ToString()))
                         Tábla_terv.Rows[i].Cells[1].Value = true;
                     else
                         Tábla_terv.Rows[i].Cells[1].Value = false;
@@ -1513,12 +1512,11 @@ namespace Villamos
         {
             try
             {
-                if (Tábla_terv.Rows.Count < 1)
-                    return;
+                if (Tábla_terv.Rows.Count < 1) return;
                 {
                     for (int i = 0; i < Tábla_terv.Rows.Count; i++)
                     {
-                        if (!bool.Parse(Tábla_terv.Rows[i].Cells[4].Value.ToString()))
+                        if (Tábla_terv.Rows[i].Cells[4].Value != null && bool.Parse(Tábla_terv.Rows[i].Cells[4].Value.ToString()))
                             Tábla_terv.Rows[i].Cells[2].Value = true;
                         else
                             Tábla_terv.Rows[i].Cells[2].Value = false;
@@ -1547,7 +1545,7 @@ namespace Villamos
                 {
                     for (int i = 0; i < Tábla_terv.Rows.Count; i++)
                     {
-                        if (!bool.Parse(Tábla_terv.Rows[i].Cells[4].Value.ToString()))
+                        if (Tábla_terv.Rows[i].Cells[4].Value != null && bool.Parse(Tábla_terv.Rows[i].Cells[4].Value.ToString()))
                             Tábla_terv.Rows[i].Cells[3].Value = true;
                         else
                             Tábla_terv.Rows[i].Cells[3].Value = false;
@@ -1571,8 +1569,7 @@ namespace Villamos
         {
             try
             {
-                if (Tábla_terv.Rows.Count < 1)
-                    return;
+                if (Tábla_terv.Rows.Count < 1) return;
                 {
                     for (int i = 0; i < Tábla_terv.Rows.Count; i++)
                         Tábla_terv.Rows[i].Cells[1].Value = true;
