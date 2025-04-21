@@ -113,7 +113,8 @@ namespace Villamos
             this.CiklusFrissít = new System.Windows.Forms.Button();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Felmentés_Id = new System.Windows.Forms.TextBox();
             this.Panel2.SuspendLayout();
             this.MenuStrip1.SuspendLayout();
             this.Fülek.SuspendLayout();
@@ -596,6 +597,7 @@ namespace Villamos
             // TabPage4
             // 
             this.TabPage4.BackColor = System.Drawing.Color.LightSalmon;
+            this.TabPage4.Controls.Add(this.Felmentés_Id);
             this.TabPage4.Controls.Add(this.CiklusTípus);
             this.TabPage4.Controls.Add(this.label5);
             this.TabPage4.Controls.Add(this.Keréktábla);
@@ -897,6 +899,13 @@ namespace Villamos
             this.Holtart.TabIndex = 67;
             this.Holtart.Visible = false;
             // 
+            // Felmentés_Id
+            // 
+            this.Felmentés_Id.Location = new System.Drawing.Point(7, 525);
+            this.Felmentés_Id.Name = "Felmentés_Id";
+            this.Felmentés_Id.Size = new System.Drawing.Size(122, 26);
+            this.Felmentés_Id.TabIndex = 93;
+            // 
             // Ablak_T5C5_Vizsgálat_ütemező
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1015,5 +1024,6 @@ namespace Villamos
         internal TextBox CiklusTípus;
         internal Label label5;
         private V_MindenEgyéb.MyProgressbar Holtart;
+        internal TextBox Felmentés_Id;
     }
 }

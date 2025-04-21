@@ -736,6 +736,7 @@
     <Compile Include="V_Kezelők\Kezelő_Főkönyv_Zser_Km.cs" />
     <Compile Include="V_Kezelők\Kezelő_FőSzemélyzet_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_FőTípuscsere_Adatok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Hétvége_Beosztás.cs" />
     <Compile Include="V_Kezelők\Kezelő_JogosítványVonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű2ICS.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Hiba_Napló.cs" />
@@ -779,6 +780,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztásciklus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztáskódok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Felmentés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Feorszámok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Fortetípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Forte_Vonal.cs" />
