@@ -1403,11 +1403,6 @@ namespace Villamos.Villamos_Ablakok
 
         private void Színek_Betöltése()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-            if (!File.Exists(hely)) return;
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM előírás ORDER BY id";
-
             Kezelő_Hétvége_Előírás Kéz = new Kezelő_Hétvége_Előírás();
             Szín_Adatok = Kéz.Lista_Adatok(Cmbtelephely.Trim());
         }
