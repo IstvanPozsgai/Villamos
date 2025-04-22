@@ -21,7 +21,6 @@ namespace Villamos
         string AlsóPanel1;
         Ablak_Kereső Új_Ablak_Kereső;
         Ablak_T5C5_Segéd Új_Ablak_T5C5_Segéd;
-        List<Adat_Hétvége_Előírás> Szín_Adatok = null;
 #pragma warning disable IDE0044 // Add readonly modifier
         //      List<Adat_Általános_String_Dátum> Frissítés = new List<Adat_Általános_String_Dátum>();
         List<Adat_T5C5_Posta> Posta_lista = new List<Adat_T5C5_Posta>();
@@ -54,8 +53,6 @@ namespace Villamos
         List<Adat_Kerék_Mérés> Mérés_Adatok = new List<Adat_Kerék_Mérés>();
         List<Adat_Vezénylés> AdatokVezény = new List<Adat_Vezénylés>();
 
-
-        double Txtsorszám = 0;
         // alapkijelölés
         int Alap_red;
         int Alap_green;
@@ -89,32 +86,8 @@ namespace Villamos
             Vonal_tábla_író();
 
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-
-            Színek_Betöltése();
         }
-        //
-        private void Színek_Betöltése()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM előírás ORDER BY id";
 
-                Kezelő_Hétvége_Előírás Kéz = new Kezelő_Hétvége_Előírás();
-                Szín_Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Ablak_T5C5_Vizsgálat_ütemező_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -375,7 +348,7 @@ namespace Villamos
         {
             Vonal_kiürít();
         }
-        //
+
         private void Command7_Rögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -385,47 +358,33 @@ namespace Villamos
                 if (Vonal_red.Text.Trim() == "") throw new HibásBevittAdat("A Szín beviteli mező nem lehet üres.");
                 if (Vonal_green.Text.Trim() == "") throw new HibásBevittAdat("A Szín beviteli mező nem lehet üres.");
                 if (Vonal_blue.Text.Trim() == "") throw new HibásBevittAdat("A Szín beviteli mező nem lehet üres.");
+                if (!int.TryParse(Vonal_red.Text.Trim(), out int Red)) Red = 0;
+                if (!int.TryParse(Vonal_green.Text.Trim(), out int Green)) Green = 0;
+                if (!int.TryParse(Vonal_blue.Text.Trim(), out int Blue)) Blue = 0;
+                if (!long.TryParse(Vonal_Mennyiség.Text.Trim(), out long Mennyiség)) Mennyiség = 0;
+                if (!long.TryParse(Vonal_Id.Text.Trim(), out long Id)) Id = 0;
+
 
                 Vonal_Vonal.Text = MyF.Szöveg_Tisztítás(Vonal_Vonal.Text, 0, 20);
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM előírás ";
-                ElőírásListaFeltöltés();
-
-
-                long i = 1;
-                if (AdatokElőírás.Count > 0) i = AdatokElőírás.Max(a => a.Id) + 1;
-                Vonal_Id.Text = i.ToString();
-
-
+                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Hétvége_Előírás ElőírásElem = (from a in AdatokElőírás
-                                                    where a.Id == i
+                                                    where a.Id == Id
                                                     select a).FirstOrDefault();
 
+                Adat_Hétvége_Előírás ADAT = new Adat_Hétvége_Előírás(
+                    Id,
+                    Vonal_Vonal.Text.Trim(),
+                    Mennyiség,
+                    Red,
+                    Green,
+                    Blue);
+
                 if (ElőírásElem != null)
-                {
-                    // módosít
-                    szöveg = "UPDATE előírás SET ";
-                    szöveg += " vonal='" + Vonal_Vonal.Text.Trim() + "', ";
-                    szöveg += " mennyiség=" + Vonal_Mennyiség.Text.Trim() + ", ";
-                    szöveg += " red=" + Vonal_red.Text.Trim() + ", ";
-                    szöveg += " green=" + Vonal_green.Text.Trim() + ", ";
-                    szöveg += " blue=" + Vonal_blue.Text.Trim();
-                    szöveg += " WHERE id=" + Vonal_Id.Text.Trim();
-                }
+                    KézElőírás.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                {
-                    // új elem
-                    szöveg = "INSERT INTO előírás (id, vonal, mennyiség, red, green, blue ) VALUES (";
-                    szöveg += Vonal_Id.Text.Trim() + ", ";
-                    szöveg += "'" + Vonal_Vonal.Text.Trim() + "', ";
-                    szöveg += Vonal_Mennyiség.Text.Trim() + ", ";
-                    szöveg += Vonal_red.Text.Trim() + ", ";
-                    szöveg += Vonal_green.Text.Trim() + ", ";
-                    szöveg += Vonal_blue.Text.Trim() + ") ";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézElőírás.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
+
                 Vonal_tábla_író();
             }
             catch (HibásBevittAdat ex)
@@ -443,34 +402,12 @@ namespace Villamos
         {
             Vonal_tábla_író();
         }
-        //
-        private void ElőírásListaFeltöltés()
-        {
-            try
-            {
-                AdatokElőírás.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM előírás ORDER BY id";
-                AdatokElőírás = KézElőírás.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Vonal_tábla_író()
         {
             try
             {
-                ElőírásListaFeltöltés();
+                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Vonal_tábla.Rows.Clear();
                 Vonal_tábla.Columns.Clear();
@@ -522,26 +459,22 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Command10_Listát_töröl_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Vonal_Id.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelöve a törlendő tétel");
                 if (!long.TryParse(Vonal_Id.Text, out long Id)) throw new HibásBevittAdat("Nincs kijelöve a törlendő tétel");
-                ElőírásListaFeltöltés();
+                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Hétvége_Előírás ElőírásElem = (from a in AdatokElőírás
                                                     where a.Id == Id
                                                     select a).FirstOrDefault();
 
                 if (ElőírásElem != null)
-                {
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                    string jelszó = "pozsgaii";
-                    string szöveg = "DELETE FROM előírás where id=" + Vonal_Id.Text.Trim();
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                    KézElőírás.Törlés(Cmbtelephely.Text.Trim(), Id);
+
                 Vonal_tábla_író();
                 Vonal_kiürít();
             }
@@ -555,6 +488,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Vonal_kiürít()
         {
             Vonal_Id.Text = "";
@@ -566,16 +500,13 @@ namespace Villamos
             Vonal_red.BackColor = Color.White;
             Vonal_green.BackColor = Color.White;
             Vonal_blue.BackColor = Color.White;
-            Vonal_sor.Text = 0.ToString();
         }
 
         private void Vonal_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (e.RowIndex < 0)
-                    return;
-                Vonal_sor.Text = e.RowIndex.ToString();
+                if (e.RowIndex < 0) return;
 
                 Vonal_Id.Text = Vonal_tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
                 Vonal_Vonal.Text = Vonal_tábla.Rows[e.RowIndex].Cells[1].Value.ToString();
@@ -599,50 +530,15 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Vonal_fel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (int.Parse(Vonal_sor.Text) < 1)
-                    return;
-                if (Vonal_Id.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kijelölve Vonal.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                if (!File.Exists(hely))
-                    return;
-                string jelszó = "pozsgaii";
-                // rögzítjük egy sorral feljebb
-                string szöveg = "UPDATE előírás SET ";
-                szöveg += " vonal='" + Vonal_Vonal.Text.Trim() + "', ";
-                szöveg += " mennyiség=" + Vonal_Mennyiség.Text.Trim() + ", ";
-                szöveg += " red=" + Vonal_red.Text.Trim() + ", ";
-                szöveg += " green=" + Vonal_green.Text.Trim() + ", ";
-                szöveg += " blue=" + Vonal_blue.Text.Trim();
-                szöveg += " WHERE id=" + Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[0].Value.ToString();
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                // kiírjuk a következő sor adatait
-                Vonal_Id.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[0].Value.ToString();
-                Vonal_Vonal.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[1].Value.ToString();
-                Vonal_Mennyiség.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[2].Value.ToString();
-
-                Vonal_red.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[3].Value.ToString();
-                Vonal_green.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[4].Value.ToString();
-                Vonal_blue.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[5].Value.ToString();
-
-
-                // rögzítjük 
-                szöveg = "UPDATE előírás SET ";
-                szöveg += " vonal='" + Vonal_Vonal.Text.Trim() + "', ";
-                szöveg += " mennyiség=" + Vonal_Mennyiség.Text.Trim() + ", ";
-                szöveg += " red=" + Vonal_red.Text.Trim() + ", ";
-                szöveg += " green=" + Vonal_green.Text.Trim() + ", ";
-                szöveg += " blue=" + Vonal_blue.Text.Trim();
-                szöveg += " WHERE id=" + Vonal_tábla.Rows[int.Parse(Vonal_sor.Text)].Cells[0].Value.ToString();
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                if (Vonal_Id.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve Vonal.");
+                if (!long.TryParse(Vonal_Id.Text.Trim(), out long ID)) ID = 0;
+                if (ID <= 1) throw new HibásBevittAdat("Az elsőt nem lehet előrébb tenni.");
+                KézElőírás.Csere(Cmbtelephely.Text.Trim(), ID);
                 Vonal_tábla_író();
                 Vonal_kiürít();
             }
@@ -1576,7 +1472,7 @@ namespace Villamos
                 }
                 if (Tábla.Rows[e.RowIndex].Cells[20].Value != null)
                 {
-                    foreach (Adat_Hétvége_Előírás Elem in Szín_Adatok)
+                    foreach (Adat_Hétvége_Előírás Elem in AdatokElőírás)
                     {
                         if (Tábla.Rows[e.RowIndex].Cells[20].Value.ToString().Trim() == Elem.Vonal.Trim())
                         {
