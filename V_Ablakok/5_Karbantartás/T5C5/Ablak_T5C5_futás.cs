@@ -49,19 +49,14 @@ namespace Villamos
             Telephelyekfeltöltése();
             Jogosultságkiosztás();
             Pályaszám = Pályaszám_feltöltés();
+            Dátum.MaxDate = DateTime.Today;
+            Dátum.Value = DateTime.Today;
         }
 
         private void Ablak_T5C5_futás_Load(object sender, EventArgs e)
         {
             Combo_feltöltés();
             Táblaellenőrzés();
-
-            // létrehozzuk a gyűjtő adatbázist
-
-
-            Dátum.MaxDate = DateTime.Today;
-            Dátum.Value = DateTime.Today;
-
             Gombok_vezérlése();
         }
 
@@ -224,6 +219,8 @@ namespace Villamos
             {
                 //előző hónap ha van akkor kiolvassa a az utolsó rögzített napot, ha nincs akkor az előző hónap utolsó napja
                 DateTime Előzőhónap = Dátum.Value.AddMonths(-1);
+                if (Előzőhónap.Month == Dátum.Value.Month) return;
+
                 List<Adat_T5C5_Havi_Nap> Fut_Adatok = KézHavi.Lista_Adatok(Előzőhónap);
 
                 //megnézzük, hogy mi az utolsó rögzített adat

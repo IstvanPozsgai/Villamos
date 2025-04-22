@@ -408,10 +408,10 @@
     <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Vizsgálat_ütemező.designer.cs">
       <DependentUpon>Ablak_T5C5_Vizsgálat_ütemező.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Futás\Ablak_T5C5_futás.cs">
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_futás.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Futás\Ablak_T5C5_futás.designer.cs">
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_futás.designer.cs">
       <DependentUpon>Ablak_T5C5_futás.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.cs">
@@ -1329,7 +1329,7 @@
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Vizsgálat_ütemező.resx">
       <DependentUpon>Ablak_T5C5_Vizsgálat_ütemező.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Futás\Ablak_T5C5_futás.resx">
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_futás.resx">
       <DependentUpon>Ablak_T5C5_futás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.resx">
