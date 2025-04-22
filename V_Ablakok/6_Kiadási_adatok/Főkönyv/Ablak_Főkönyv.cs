@@ -824,6 +824,7 @@ namespace Villamos
                 }
 
                 // rögzítjük a módosítót
+                KézFőkönyvSegéd.Törlés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
                 Adat_Főkönyv_SegédTábla AdatSegéd = new Adat_Főkönyv_SegédTábla(1, Program.PostásNév.Trim());
                 KézFőkönyvSegéd.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", AdatSegéd);
 

@@ -70,6 +70,26 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        public void Törlés(string Telephely, DateTime Dátum, string Napszak)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Napszak);
+                string szöveg = "DELETE FROM segédtábla";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         //Elkopó
 
         public Adat_Főkönyv_SegédTábla Egy_Adat(string hely, string jelszó, string szöveg)
