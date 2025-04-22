@@ -1278,6 +1278,7 @@ namespace Villamos
                 KorrekcióListaFeltöltés();
 
                 int i = Kiirjaatörténelmet();
+                if (Tábla1.Rows.Count == 0) return;
                 int KöVsorszám = int.Parse(Tábla1.Rows[i].Cells[3].Value.ToString()) + 1;
                 string Köv_V_név = MyF.Szöveg_Tisztítás(Tábla1.Rows[i].Cells[2].Value.ToString(), 0, 2);
                 double kmu_km = double.Parse(Tábla1.Rows[i].Cells[8].Value.ToString())
