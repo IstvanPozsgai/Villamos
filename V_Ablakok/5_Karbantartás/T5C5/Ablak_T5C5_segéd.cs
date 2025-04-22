@@ -1409,7 +1409,7 @@ namespace Villamos.Villamos_Ablakok
             string szöveg = "SELECT * FROM előírás ORDER BY id";
 
             Kezelő_Hétvége_Előírás Kéz = new Kezelő_Hétvége_Előírás();
-            Szín_Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            Szín_Adatok = Kéz.Lista_Adatok(Cmbtelephely.Trim());
         }
 
         private void Panel_V_1_DoubleClick(object sender, EventArgs e)

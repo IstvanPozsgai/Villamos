@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>pvs</Title>
+			<Shortcut>pvs</Shortcut>
+			<Description>Public int Sorszám</Description>
+			<Author>Pozsgai István</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>expression</ID>
+					<ToolTip>Exception type</ToolTip>
+					<Function>SimpleTypeName(global::System.Exception)</Function>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+				<![CDATA[        public int Sorszám(string Telephely, int Év, DateTime Dátum , Adat Adat) 
+        {
+		int Válasz=1;
+            try
+            {
+                FájlBeállítás(Telephely,Év,Dátum);
+                List<adat>  Adatok=Lista_Adatok(Telephely, Év, Dátum);
+				if(Adatok.Count > 0) Válasz=Adatok.Max(a=>a.id)+1;
+				
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+			return Válasz;
+        }]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

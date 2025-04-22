@@ -60,7 +60,6 @@ namespace Villamos
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.Tábla = new System.Windows.Forms.DataGridView();
             this.TabPage2 = new System.Windows.Forms.TabPage();
-            this.Vonal_sor = new System.Windows.Forms.TextBox();
             this.Vonal_red = new System.Windows.Forms.TextBox();
             this.Vonal_green = new System.Windows.Forms.TextBox();
             this.Vonal_blue = new System.Windows.Forms.TextBox();
@@ -84,6 +83,7 @@ namespace Villamos
             this.Btnrögzítés = new System.Windows.Forms.Button();
             this.Utasítás_tervezet = new System.Windows.Forms.Button();
             this.TabPage4 = new System.Windows.Forms.TabPage();
+            this.Felmentés_Id = new System.Windows.Forms.TextBox();
             this.CiklusTípus = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.Keréktábla = new System.Windows.Forms.DataGridView();
@@ -114,7 +114,6 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.Felmentés_Id = new System.Windows.Forms.TextBox();
             this.Panel2.SuspendLayout();
             this.MenuStrip1.SuspendLayout();
             this.Fülek.SuspendLayout();
@@ -319,7 +318,6 @@ namespace Villamos
             // TabPage2
             // 
             this.TabPage2.BackColor = System.Drawing.Color.NavajoWhite;
-            this.TabPage2.Controls.Add(this.Vonal_sor);
             this.TabPage2.Controls.Add(this.Vonal_red);
             this.TabPage2.Controls.Add(this.Vonal_green);
             this.TabPage2.Controls.Add(this.Vonal_blue);
@@ -343,17 +341,6 @@ namespace Villamos
             this.TabPage2.Size = new System.Drawing.Size(1192, 557);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Vonalak";
-            // 
-            // Vonal_sor
-            // 
-            this.Vonal_sor.BackColor = System.Drawing.Color.White;
-            this.Vonal_sor.Enabled = false;
-            this.Vonal_sor.Location = new System.Drawing.Point(1036, 17);
-            this.Vonal_sor.Name = "Vonal_sor";
-            this.Vonal_sor.Size = new System.Drawing.Size(62, 26);
-            this.Vonal_sor.TabIndex = 78;
-            this.Vonal_sor.Text = "0";
-            this.Vonal_sor.Visible = false;
             // 
             // Vonal_red
             // 
@@ -632,6 +619,13 @@ namespace Villamos
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Ciklus eltolás";
             // 
+            // Felmentés_Id
+            // 
+            this.Felmentés_Id.Location = new System.Drawing.Point(7, 525);
+            this.Felmentés_Id.Name = "Felmentés_Id";
+            this.Felmentés_Id.Size = new System.Drawing.Size(122, 26);
+            this.Felmentés_Id.TabIndex = 93;
+            // 
             // CiklusTípus
             // 
             this.CiklusTípus.Enabled = false;
@@ -899,13 +893,6 @@ namespace Villamos
             this.Holtart.TabIndex = 67;
             this.Holtart.Visible = false;
             // 
-            // Felmentés_Id
-            // 
-            this.Felmentés_Id.Location = new System.Drawing.Point(7, 525);
-            this.Felmentés_Id.Name = "Felmentés_Id";
-            this.Felmentés_Id.Size = new System.Drawing.Size(122, 26);
-            this.Felmentés_Id.TabIndex = 93;
-            // 
             // Ablak_T5C5_Vizsgálat_ütemező
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1020,7 +1007,6 @@ namespace Villamos
         internal DataGridView Keréktábla;
         internal DataGridView Vizs_tábla;
         internal Button BtnSúgó;
-        internal TextBox Vonal_sor;
         internal TextBox CiklusTípus;
         internal Label label5;
         private V_MindenEgyéb.MyProgressbar Holtart;
