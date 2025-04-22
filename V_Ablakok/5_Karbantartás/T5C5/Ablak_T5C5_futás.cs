@@ -56,7 +56,7 @@ namespace Villamos
         private void Ablak_T5C5_futás_Load(object sender, EventArgs e)
         {
             Combo_feltöltés();
-            Táblaellenőrzés();
+            Új_Hónap();
             Gombok_vezérlése();
         }
 
@@ -213,24 +213,27 @@ namespace Villamos
 
 
         #region háttér folyamatok
-        private void Táblaellenőrzés()
+        private void Új_Hónap()
         {
             try
             {
+                List<Adat_T5C5_Havi_Nap> Fut_Adatok = KézHavi.Lista_Adatok(Dátum.Value);
+                Fut_Adatok = (from a in Fut_Adatok
+                              where a.Telephely == Cmbtelephely.Text.Trim()
+                              select a).ToList();
+                if (Fut_Adatok.Count != 0) return;   //Csak akkor fut le ha nincs abban a hónapban még adat
+
+                //Ennek akkor kell lefutnia amikor új hónapot készítünk, hogy legyen hova beírni az adatokat.
                 //előző hónap ha van akkor kiolvassa a az utolsó rögzített napot, ha nincs akkor az előző hónap utolsó napja
                 DateTime Előzőhónap = Dátum.Value.AddMonths(-1);
-                if (Előzőhónap.Month == Dátum.Value.Month) return;
+                List<Adat_T5C5_Havi_Nap> Fut_Adatok_Előző = KézHavi.Lista_Adatok(Előzőhónap);
 
-                List<Adat_T5C5_Havi_Nap> Fut_Adatok = KézHavi.Lista_Adatok(Előzőhónap);
-
-                //megnézzük, hogy mi az utolsó rögzített adat
-                Holtart.Be(Pályaszám.Count + 1);
-
+                Holtart.Be();
 
                 List<Adat_T5C5_Havi_Nap> AdatokGy = new List<Adat_T5C5_Havi_Nap>();
                 foreach (string elem in Pályaszám)
                 {
-                    Adat_T5C5_Havi_Nap Rekord = (from a in Fut_Adatok
+                    Adat_T5C5_Havi_Nap Rekord = (from a in Fut_Adatok_Előző
                                                  where a.Azonosító == elem.Trim()
                                                  select a).FirstOrDefault();
                     if (Rekord != null)
@@ -272,6 +275,7 @@ namespace Villamos
                     Gombok_száma = 0;
                 }
                 Bevitelilap.Visible = false;
+                Új_Hónap();
                 Gombok_vezérlése();
             }
             catch (HibásBevittAdat ex)
