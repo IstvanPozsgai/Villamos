@@ -535,10 +535,45 @@ namespace Villamos
         {
             try
             {
-                if (Vonal_Id.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve Vonal.");
-                if (!long.TryParse(Vonal_Id.Text.Trim(), out long ID)) ID = 0;
-                if (ID <= 1) throw new HibásBevittAdat("Az elsőt nem lehet előrébb tenni.");
-                KézElőírás.Csere(Cmbtelephely.Text.Trim(), ID);
+                if (int.Parse(Vonal_sor.Text) < 1)
+                    return;
+                if (Vonal_Id.Text.Trim() == "")
+                    throw new HibásBevittAdat("Nincs kijelölve Vonal.");
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
+                if (!File.Exists(hely))
+                    return;
+                string jelszó = "pozsgaii";
+                // rögzítjük egy sorral feljebb
+                string szöveg = "UPDATE előírás SET ";
+                szöveg += " vonal='" + Vonal_Vonal.Text.Trim() + "', ";
+                szöveg += " mennyiség=" + Vonal_Mennyiség.Text.Trim() + ", ";
+                szöveg += " red=" + Vonal_red.Text.Trim() + ", ";
+                szöveg += " green=" + Vonal_green.Text.Trim() + ", ";
+                szöveg += " blue=" + Vonal_blue.Text.Trim();
+                szöveg += " WHERE id=" + Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[0].Value.ToString();
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+                // kiírjuk a következő sor adatait
+                Vonal_Id.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[0].Value.ToString();
+                Vonal_Vonal.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[1].Value.ToString();
+                Vonal_Mennyiség.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[2].Value.ToString();
+
+                Vonal_red.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[3].Value.ToString();
+                Vonal_green.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[4].Value.ToString();
+                Vonal_blue.Text = Vonal_tábla.Rows[int.Parse(Vonal_sor.Text) - 1].Cells[5].Value.ToString();
+
+
+                // rögzítjük 
+                szöveg = "UPDATE előírás SET ";
+                szöveg += " vonal='" + Vonal_Vonal.Text.Trim() + "', ";
+                szöveg += " mennyiség=" + Vonal_Mennyiség.Text.Trim() + ", ";
+                szöveg += " red=" + Vonal_red.Text.Trim() + ", ";
+                szöveg += " green=" + Vonal_green.Text.Trim() + ", ";
+                szöveg += " blue=" + Vonal_blue.Text.Trim();
+                szöveg += " WHERE id=" + Vonal_tábla.Rows[int.Parse(Vonal_sor.Text)].Cells[0].Value.ToString();
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
                 Vonal_tábla_író();
                 Vonal_kiürít();
             }
