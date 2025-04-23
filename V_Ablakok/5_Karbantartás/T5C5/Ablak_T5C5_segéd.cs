@@ -26,7 +26,8 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Vezénylés KézVezény = new Kezelő_Vezénylés();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
         readonly Kezelő_Jármű KézÁllomány = new Kezelő_Jármű();
-        readonly Kezelő_Hétvége_Beosztás KézElőÍrt = new Kezelő_Hétvége_Beosztás();
+        readonly Kezelő_Hétvége_Beosztás KézHétBeosztás = new Kezelő_Hétvége_Beosztás();
+        readonly Kezelő_Hétvége_Előírás KézHétElőírás = new Kezelő_Hétvége_Előírás();
 
         List<Adat_Vezénylés> AdatokVezénylés = new List<Adat_Vezénylés>();
         List<Adat_Jármű_hiba> AdatokJárműHiba = new List<Adat_Jármű_hiba>();
@@ -248,22 +249,27 @@ namespace Villamos.Villamos_Ablakok
 
             }
         }
-        //
+
         private void Vonalfeltöltés()
         {
+            try
+            {
+                Ütemező_vonal.Items.Clear();
+                List<Adat_Hétvége_Előírás> Adatok = KézHétElőírás.Lista_Adatok(Cmbtelephely.Trim());
+                foreach (Adat_Hétvége_Előírás Elem in Adatok)
+                    Ütemező_vonal.Items.Add(Elem.Vonal);
 
-            Ütemező_vonal.Items.Clear();
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-            if (!File.Exists(hely))
-                return;
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM előírás ORDER BY id";
-
-
-            Ütemező_vonal.BeginUpdate();
-            Ütemező_vonal.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "vonal"));
-            Ütemező_vonal.EndUpdate();
-            Ütemező_vonal.Refresh();
+                Ütemező_vonal.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
 
@@ -1382,6 +1388,7 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
+        #region Ütemezés
         private void Ütemez_V_1_Click(object sender, EventArgs e)
         {
             Ütemezés_általános(true, true, Azonosító_1.Text.Trim(), V_Következő_1.Text.Trim(), V_Sorszám_1.Text.Trim());
@@ -1411,18 +1418,16 @@ namespace Villamos.Villamos_Ablakok
         {
             Ütemezés_általános(true, true, Azonosító_6.Text.Trim(), V_Következő_6.Text.Trim(), V_Sorszám_6.Text.Trim());
         }
+        #endregion
+
 
         #region Listák feltöltése
-        //
         private void Előíráslistázás()
         {
             try
             {
                 AdatokElőírt.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                string szöveg = "Select * FROM beosztás";
-                string jelszó = "pozsgaii";
-                AdatokElőírt = KézElőÍrt.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokElőírt = KézHétBeosztás.Lista_Adatok(Cmbtelephely.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -1434,20 +1439,13 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void AdatÁllományListázás()
         {
-
             try
             {
                 AdatokÁllomány.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\villamos\villamos.mdb";
-
-                string jelszó = "pozsgaii";
-
-                string szöveg = $"SELECT * FROM állománytábla";
-
-                AdatokÁllomány = KézÁllomány.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokÁllomány = KézÁllomány.Lista_Adatok(Cmbtelephely.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -1458,7 +1456,6 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void AdatJárműHibaListázás()
@@ -1480,19 +1477,13 @@ namespace Villamos.Villamos_Ablakok
             }
 
         }
-        //
+
         private void AdatokVezénylésListázás()
         {
             try
             {
                 AdatokVezénylés.Clear();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\főkönyv\futás\" + Dátum.Year + @"\vezénylés" + Dátum.Year + ".mdb";
-                string jelszó = "tápijános";
-
-                string szöveg = $"SELECT * FROM vezényléstábla";
-
-                AdatokVezénylés = KézVezény.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokVezénylés = KézVezény.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
             }
             catch (HibásBevittAdat ex)
             {
