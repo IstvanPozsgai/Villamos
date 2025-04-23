@@ -2205,5 +2205,29 @@ namespace Villamos
             }
         }
         #endregion
+
+        private void Label3_Click(object sender, EventArgs e)
+        {
+            AdatokNapló.Clear();
+            int i = 1;
+            // ideiglenes fájlt készít
+            foreach (string Telephely in Cmbtelephely.Items)
+            {
+                Holtart.Be();
+                AdatokNapló.Clear();
+                DateTime ideigdátum = Dátumtól.Value;
+                while (Dátumig.Value > ideigdátum)
+                {
+                    List<Adat_Jármű_hiba> Ideig = KézHiba.Lista_Adatok(Telephely, ideigdátum);
+                    if (Ideig != null) AdatokNapló.AddRange(Ideig);
+                    ideigdátum = ideigdátum.AddMonths(1);
+                    Holtart.Lép();
+                }
+                KézHiba.Rögzítés_Napló("Főmérnökség", new DateTime(2025, i, 1), AdatokNapló);
+
+                i++;
+            }
+            Holtart.Ki();
+        }
     }
 }

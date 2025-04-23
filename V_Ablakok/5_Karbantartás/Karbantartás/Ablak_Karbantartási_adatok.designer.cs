@@ -39,7 +39,6 @@ namespace Villamos
             this.Panel200 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
-            this.Holtart = new System.Windows.Forms.ProgressBar();
             this.Fülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.Táblalista = new Zuby.ADGV.AdvancedDataGridView();
@@ -82,6 +81,7 @@ namespace Villamos
             this.Label5 = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel200.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -121,16 +121,6 @@ namespace Villamos
             this.Label13.Size = new System.Drawing.Size(145, 20);
             this.Label13.TabIndex = 17;
             this.Label13.Text = "Telephelyi beállítás:";
-            // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(353, 13);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(871, 27);
-            this.Holtart.TabIndex = 169;
-            this.Holtart.Visible = false;
             // 
             // Fülek
             // 
@@ -491,6 +481,7 @@ namespace Villamos
             this.Label3.Size = new System.Drawing.Size(78, 20);
             this.Label3.TabIndex = 194;
             this.Label3.Text = "Dátumtól:";
+            this.Label3.Click += new System.EventHandler(this.Label3_Click);
             // 
             // Szűrés
             // 
@@ -637,6 +628,16 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
+            // Holtart
+            // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Holtart.Location = new System.Drawing.Point(353, 16);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(871, 28);
+            this.Holtart.TabIndex = 175;
+            this.Holtart.Visible = false;
+            // 
             // Ablak_Karbantartási_adatok
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -677,7 +678,6 @@ namespace Villamos
         internal Panel Panel200;
         internal ComboBox Cmbtelephely;
         internal Label Label13;
-        internal ProgressBar Holtart;
         internal Button BtnSúgó;
         internal TabControl Fülek;
         internal TabPage TabPage1;
@@ -720,5 +720,6 @@ namespace Villamos
         internal DataGridView Tábla_Hibalista;
         internal DataGridView Napló_tábla;
         private Zuby.ADGV.AdvancedDataGridView Táblalista;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
     }
 }
