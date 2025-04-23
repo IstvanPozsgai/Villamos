@@ -1110,7 +1110,7 @@ namespace Villamos.Villamos_Ablakok
                 AlapSzín();
                 if (Ütemező_vonal.Text.Trim() == "") throw new HibásBevittAdat("A vonalat meg kell adni.");
 
-                Előíráslistázás();
+                AdatokElőírt = KézHétBeosztás.Lista_Adatok(Cmbtelephely.Trim());
                 Adat_Hétvége_Beosztás AdatElőírt = (from a in AdatokElőírt
                                                     where a.Kocsi1 == Azonosító_1.Text.Trim()
                                                     select a).FirstOrDefault();
@@ -1215,13 +1215,15 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                Előíráslistázás();
+                AdatokElőírt = KézHétBeosztás.Lista_Adatok(Cmbtelephely.Trim());
 
                 Adat_Hétvége_Beosztás AdatElőírt = (from a in AdatokElőírt
                                                     where a.Kocsi1 == Azonosító_1.Text.Trim()
                                                     select a).FirstOrDefault();
 
                 if (AdatElőírt != null) KézHétBeosztás.Törlés(Cmbtelephely.Trim(), Azonosító_1.Text.Trim());
+
+                MessageBox.Show("Az adatok törlése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Változás?.Invoke();
             }
@@ -1284,23 +1286,6 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Listák feltöltése
-        private void Előíráslistázás()
-        {
-            try
-            {
-                AdatokElőírt.Clear();
-                AdatokElőírt = KézHétBeosztás.Lista_Adatok(Cmbtelephely.Trim());
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void AdatÁllományListázás()
         {

@@ -109,8 +109,8 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = "INSERT INTO beosztás (id, vonal, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, vissza1, vissza2, vissza3, vissza4, vissza5, vissza6) VALUES (";
-                szöveg += $"{Sorszám(Telephely)},";
-                szöveg += $"'{Adat.Vonal}, ";
+                szöveg += $"{Sorszám(Telephely)}, ";
+                szöveg += $"'{Adat.Vonal}', ";
                 szöveg += $"'{Adat.Kocsi1}', ";
                 szöveg += $"'{Adat.Kocsi2}', ";
                 szöveg += $"'{Adat.Kocsi3}', ";

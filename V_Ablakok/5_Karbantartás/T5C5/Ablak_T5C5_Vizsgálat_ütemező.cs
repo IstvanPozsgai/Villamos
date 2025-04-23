@@ -1324,9 +1324,12 @@ namespace Villamos
                         string ideig = rekordszer.Vissza1 + "-" + rekordszer.Vissza2 + "-" + rekordszer.Vissza3 + "-" + rekordszer.Vissza4 + "-" + rekordszer.Vissza5 + "-" + rekordszer.Vissza6;
                         Tábla.Rows[i].Cells[31].Value = ideig;
                     }
-
+                    else
+                    {
+                        Tábla.Rows[i].Cells[20].Value = "";
+                        Tábla.Rows[i].Cells[31].Value = "";
+                    }
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1431,12 +1434,18 @@ namespace Villamos
                 {
                     foreach (Adat_Hétvége_Előírás Elem in AdatokElőírás)
                     {
-                        if (Tábla.Rows[e.RowIndex].Cells[20].Value.ToString().Trim() == Elem.Vonal.Trim())
+                        if (Tábla.Rows[e.RowIndex].Cells[20].Value.ToStrTrim() == Elem.Vonal.Trim())
                         {
                             Tábla.Rows[e.RowIndex].Cells[0].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
                             Tábla.Rows[e.RowIndex].Cells[2].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
                             Tábla.Rows[e.RowIndex].Cells[15].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
-
+                            break;
+                        }
+                        if (Tábla.Rows[e.RowIndex].Cells[20].Value.ToStrTrim() == "")
+                        {
+                            Tábla.Rows[e.RowIndex].Cells[0].Style.BackColor = default;
+                            Tábla.Rows[e.RowIndex].Cells[2].Style.BackColor = default;
+                            Tábla.Rows[e.RowIndex].Cells[15].Style.BackColor = default;
                             break;
                         }
                     }
