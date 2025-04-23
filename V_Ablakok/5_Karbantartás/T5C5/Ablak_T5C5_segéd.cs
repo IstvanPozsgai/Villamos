@@ -1102,189 +1102,55 @@ namespace Villamos.Villamos_Ablakok
         {
             Rögzít_Metódus();
         }
-        //
+
         private void Rögzít_Metódus()
         {
             try
             {
                 AlapSzín();
                 if (Ütemező_vonal.Text.Trim() == "") throw new HibásBevittAdat("A vonalat meg kell adni.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                string jelszó = "pozsgaii";
-                string kapcsolót = "";
-
-                int volt = 0;
-                long voltid = 0;
-                string szöveg;
 
                 Előíráslistázás();
-
                 Adat_Hétvége_Beosztás AdatElőírt = (from a in AdatokElőírt
-                                                    orderby a.Id descending
+                                                    where a.Kocsi1 == Azonosító_1.Text.Trim()
                                                     select a).FirstOrDefault();
 
-                long sorszám = 1;
-                if (AdatElőírt != null) sorszám = AdatElőírt.Id + 1;
+                string vissza1 = Visszacsatol_1.Checked ? "1" : "0";
+                string vissza2 = Visszacsatol_2.Checked ? "1" : "0";
+                string vissza3 = Visszacsatol_3.Checked ? "1" : "0";
+                string vissza4 = Visszacsatol_4.Checked ? "1" : "0";
+                string vissza5 = Visszacsatol_5.Checked ? "1" : "0";
+                string vissza6 = Visszacsatol_6.Checked ? "1" : "0";
 
+                string kapcsolót = Visszacsatol_1.Checked ? "1" : "0";
+                kapcsolót += Visszacsatol_2.Checked ? "-1" : "-0";
+                kapcsolót += Visszacsatol_3.Checked ? "-1" : "-0";
+                kapcsolót += Visszacsatol_4.Checked ? "-1" : "-0";
+                kapcsolót += Visszacsatol_5.Checked ? "-1" : "-0";
+                kapcsolót += Visszacsatol_6.Checked ? "-1" : "-0";
 
-                AdatElőírt = (from a in AdatokElőírt
-                              where a.Kocsi1 == Azonosító_1.Text.Trim()
-                              select a).FirstOrDefault();
+                Adat_Hétvége_Beosztás ADAT = new Adat_Hétvége_Beosztás(
+                                       0,
+                                       Ütemező_vonal.Text.Trim(),
+                                       Azonosító_1.Text.Trim(),
+                                       Azonosító_2.Text.Trim(),
+                                       Azonosító_3.Text.Trim(),
+                                       Azonosító_4.Text.Trim(),
+                                       Azonosító_5.Text.Trim(),
+                                       Azonosító_6.Text.Trim(),
+                                       vissza1,
+                                       vissza2,
+                                       vissza3,
+                                       vissza4,
+                                       vissza5,
+                                       vissza6);
 
 
                 if (AdatElőírt != null)
-                {
-                    volt = 1;
-                    voltid = AdatElőírt.Id;
-                }
-                if (volt == 1)
-                {
-                    // Módosítunk
-                    szöveg = "UPDATE beosztás SET ";
-                    szöveg += " vonal ='" + Ütemező_vonal.Text.Trim() + "', ";
-                    szöveg += $" Kocsi2 ='{Azonosító_2.Text.Trim()}', ";
-                    szöveg += $" Kocsi3 ='{Azonosító_3.Text.Trim()}', ";
-                    szöveg += $" Kocsi4 ='{Azonosító_4.Text.Trim()}', ";
-                    szöveg += $" Kocsi5 ='{Azonosító_5.Text.Trim()}', ";
-                    szöveg += $" Kocsi6 ='{Azonosító_6.Text.Trim()}', ";
-                    if (Visszacsatol_1.Checked == true)
-                    {
-                        szöveg += " vissza1='1', ";
-                        kapcsolót += "1";
-                    }
-                    else
-                    {
-                        szöveg += " vissza1='0', ";
-                        kapcsolót += "0";
-                    }
-
-                    if (Visszacsatol_2.Checked == true)
-                    {
-                        szöveg += " vissza2='1', ";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += " vissza2='0', ";
-                        kapcsolót += "-0";
-                    }
-
-                    if (Visszacsatol_3.Checked == true)
-                    {
-                        szöveg += " vissza3='1', ";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += " vissza3='0', ";
-                        kapcsolót += "-0";
-                    }
-                    if (Visszacsatol_4.Checked == true)
-                    {
-                        szöveg += " vissza4='1', ";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += " vissza4='0', ";
-                        kapcsolót += "-0";
-                    }
-                    if (Visszacsatol_5.Checked == true)
-                    {
-                        szöveg += " vissza5='1', ";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += " vissza5='0', ";
-                        kapcsolót += "-0";
-                    }
-                    if (Visszacsatol_6.Checked == true)
-                    {
-                        szöveg += " vissza6='1' ";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += " vissza6='0'  ";
-                        kapcsolót += "-0";
-                    }
-                    szöveg += $" WHERE kocsi1='{Azonosító_1.Text.Trim()}'";
-                }
+                    KézHétBeosztás.Módosítás(Cmbtelephely.Trim(), ADAT);
                 else
-                {
-                    // Rögzítünk új adatot
-                    szöveg = "INSERT INTO beosztás (id, vonal, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, vissza1, vissza2, vissza3, vissza4, vissza5, vissza6 ) VALUES (";
-                    szöveg += sorszám.ToString() + ", '" + Ütemező_vonal.Text.Trim() + "', ";
-                    szöveg += $"'{Azonosító_1.Text.Trim()}', ";
-                    szöveg += $"'{Azonosító_2.Text.Trim()}', ";
-                    szöveg += $"'{Azonosító_3.Text.Trim()}', ";
-                    szöveg += $"'{Azonosító_4.Text.Trim()}', ";
-                    szöveg += $"'{Azonosító_5.Text.Trim()}', ";
-                    szöveg += $"'{Azonosító_6.Text.Trim()}', ";
-                    if (Visszacsatol_1.Checked == true)
-                    {
-                        szöveg += "'1', ";
-                        kapcsolót += "1";
-                    }
-                    else
-                    {
-                        szöveg += "'0', ";
-                        kapcsolót += "0";
-                    }
-                    if (Visszacsatol_2.Checked == true)
-                    {
-                        szöveg += "'1', ";
-                        kapcsolót += "-1";
-                    }
+                    KézHétBeosztás.Rögzítés(Cmbtelephely.Trim(), ADAT);
 
-                    else
-                    {
-                        szöveg += "'0', ";
-                        kapcsolót += "-0";
-                    }
-                    if (Visszacsatol_3.Checked == true)
-                    {
-                        szöveg += "'1', ";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += "'0', ";
-                        kapcsolót += "-0";
-                    }
-                    if (Visszacsatol_4.Checked == true)
-                    {
-                        szöveg += "'1', ";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += "'0', ";
-                        kapcsolót += "-0";
-                    }
-                    if (Visszacsatol_5.Checked == true)
-                    {
-                        szöveg += "'1', ";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += "'0', ";
-                        kapcsolót += "-0";
-                    }
-                    if (Visszacsatol_6.Checked == true)
-                    {
-                        szöveg += "'1' )";
-                        kapcsolót += "-1";
-                    }
-                    else
-                    {
-                        szöveg += "'0' )";
-                        kapcsolót += "-0";
-                    }
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
                 string[] darabol = kapcsolót.Split('-');
 
                 Palette_színezése(Ütemező_vonal.Text.Trim(), darabol);
@@ -1344,24 +1210,19 @@ namespace Villamos.Villamos_Ablakok
                 }
             }
         }
-        //
+
         private void Töröl_Vizsgálat(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-                string jelszó = "pozsgaii";
                 Előíráslistázás();
 
                 Adat_Hétvége_Beosztás AdatElőírt = (from a in AdatokElőírt
                                                     where a.Kocsi1 == Azonosító_1.Text.Trim()
                                                     select a).FirstOrDefault();
 
-                if (AdatElőírt != null)
-                {
-                    string szöveg = $"DELETE FROM beosztás where kocsi1='{Azonosító_1.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                if (AdatElőírt != null) KézHétBeosztás.Törlés(Cmbtelephely.Trim(), Azonosító_1.Text.Trim());
+
                 Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
@@ -1387,6 +1248,7 @@ namespace Villamos.Villamos_Ablakok
             Rögzít_Metódus();
         }
         #endregion
+
 
         #region Ütemezés
         private void Ütemez_V_1_Click(object sender, EventArgs e)

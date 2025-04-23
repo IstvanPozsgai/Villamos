@@ -1339,15 +1339,10 @@ namespace Villamos
             }
 
             // kiírja a hétvégi előírást
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\előírásgyűjteményúj.mdb";
-            string szöveg = "Select * FROM beosztás ORDER BY id";
-            string jelszó = "pozsgaii";
+            List<Adat_Hétvége_Beosztás> Adatok = KézHBeosztás.Lista_Adatok(Cmbtelephely.Text.Trim());
+
             // sorbarendezzük a táblát pályaszám szerint
-
             Tábla.Sort(Tábla.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
-
-
-            List<Adat_Hétvége_Beosztás> Adatok = KézHBeosztás.Lista_Adatok(hely, jelszó, szöveg);
 
             Holtart.Be(100);
 
