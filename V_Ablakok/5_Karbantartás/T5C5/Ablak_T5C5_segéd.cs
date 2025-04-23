@@ -34,6 +34,7 @@ namespace Villamos.Villamos_Ablakok
         List<Adat_Hétvége_Beosztás> AdatokElőírt = new List<Adat_Hétvége_Beosztás>();
         List<Adat_Hétvége_Előírás> Szín_Adatok = null;
 
+        #region Alap
         public Ablak_T5C5_Segéd(List<Adat_T5C5_Posta> postaAdat, string honnan, DateTime dátum, string telephely, bool terv)
         {
             PostaAdat = postaAdat;
@@ -47,10 +48,9 @@ namespace Villamos.Villamos_Ablakok
 
             Színek_Betöltése();
             Start();
-
         }
 
-        void Start()
+        private void Start()
         {
             string[] darab;
             if (Honnan == "Nap")
@@ -151,9 +151,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
-        #region Alap
-
         private void Ablak_T5C5_Segéd_Load(object sender, EventArgs e)
         {
 
@@ -236,9 +233,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
-
-
         private void Ablak_T5C5_Segéd_KeyDown(object sender, KeyEventArgs e)
         {
 
@@ -254,7 +248,7 @@ namespace Villamos.Villamos_Ablakok
 
             }
         }
-
+        //
         private void Vonalfeltöltés()
         {
 
@@ -271,13 +265,11 @@ namespace Villamos.Villamos_Ablakok
             Ütemező_vonal.EndUpdate();
             Ütemező_vonal.Refresh();
         }
-
-
         #endregion
 
 
         #region Kiírások
-        void Kiir_1()
+        private void Kiir_1()
         {
             try
             {
@@ -319,7 +311,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        void Kiir_2()
+        private void Kiir_2()
         {
             try
             {
@@ -357,7 +349,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        void Kiir_3()
+        private void Kiir_3()
         {
             try
             {
@@ -395,7 +387,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        void Kiir_4()
+        private void Kiir_4()
         {
             try
             {
@@ -432,7 +424,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        void Kiir_5()
+        private void Kiir_5()
         {
             try
             {
@@ -469,7 +461,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        void Kiir_6()
+        private void Kiir_6()
         {
             try
             {
@@ -507,7 +499,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private Color Színez_Ütemez(string Terv)
         {
             Color Válasz = Color.Silver;
@@ -533,7 +524,6 @@ namespace Villamos.Villamos_Ablakok
             return Válasz;
         }
 
-
         private Color Színez_Státus(int Státus)
         {
             Color Válasz = Color.Silver;
@@ -549,7 +539,6 @@ namespace Villamos.Villamos_Ablakok
             }
             return Válasz;
         }
-
         #endregion
 
 
@@ -583,7 +572,7 @@ namespace Villamos.Villamos_Ablakok
         {
             Rögzítés_Napi(Azonosító_6.Text.Trim(), BennMarad_6.Checked, VizsgálatÜtemez_6.Checked, Rendelésszám_6.Text.Trim(), Szerelvény_szám_6.Text.Trim(), int.Parse(V_Sorszám_6.Text));
         }
-
+        //
         private void Rögzítés_Napi(string azonosító, bool Bennmarad, bool Vizsgálatrütemez, string Rendelésiszám, string Szerelvényszám, int Következővizsgálatszám)
         {
             try
@@ -695,8 +684,6 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
@@ -731,8 +718,7 @@ namespace Villamos.Villamos_Ablakok
         {
             Töröl_napi(Azonosító_6.Text.Trim());
         }
-
-
+        //
         private void Töröl_napi(string azonosító)
         {
             try
@@ -769,13 +755,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
         #region Napi Ütemezés
-
         private void Ütemez_Nap_1_Click(object sender, EventArgs e)
         {
             try
@@ -797,7 +780,6 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Ütemez_Nap_2_Click(object sender, EventArgs e)
         {
@@ -821,7 +803,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Ütemez_Nap_3_Click(object sender, EventArgs e)
         {
             try
@@ -843,7 +824,6 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Ütemez_Nap_4_Click(object sender, EventArgs e)
         {
@@ -867,7 +847,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Ütemez_Nap_5_Click(object sender, EventArgs e)
         {
             try
@@ -890,7 +869,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Ütemez_Nap_6_Click(object sender, EventArgs e)
         {
             try
@@ -912,7 +890,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Ütemezés_általános(bool Vizsgálatraütemez, bool BennMarad, string Azonosító, string MireÜtemez, string Sorszám)
         {
             try
@@ -1058,14 +1036,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
         #endregion
 
 
         #region Vizsgálat rögzítés
-
         private void Kiírja_Vizsgálat()
         {
             try
@@ -1095,9 +1069,7 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-
 
         private void AlapSzín()
         {
@@ -1120,13 +1092,12 @@ namespace Villamos.Villamos_Ablakok
             Panel_V_6.BackColor = Color.Silver;
         }
 
-
         private void Rögzít_Vizsgálat(object sender, EventArgs e)
         {
             Rögzít_Metódus();
         }
-
-        void Rögzít_Metódus()
+        //
+        private void Rögzít_Metódus()
         {
             try
             {
@@ -1367,8 +1338,7 @@ namespace Villamos.Villamos_Ablakok
                 }
             }
         }
-
-
+        //
         private void Töröl_Vizsgálat(object sender, EventArgs e)
         {
             try
@@ -1399,8 +1369,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
-
         private void Színek_Betöltése()
         {
             Kezelő_Hétvége_Előírás Kéz = new Kezelő_Hétvége_Előírás();
@@ -1412,8 +1380,6 @@ namespace Villamos.Villamos_Ablakok
             Ütemező_vonal.Text = "Nem kiadható";
             Rögzít_Metódus();
         }
-
-
         #endregion
 
         private void Ütemez_V_1_Click(object sender, EventArgs e)
@@ -1447,6 +1413,7 @@ namespace Villamos.Villamos_Ablakok
         }
 
         #region Listák feltöltése
+        //
         private void Előíráslistázás()
         {
             try
@@ -1467,7 +1434,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void AdatÁllományListázás()
         {
 
@@ -1513,7 +1480,7 @@ namespace Villamos.Villamos_Ablakok
             }
 
         }
-
+        //
         private void AdatokVezénylésListázás()
         {
             try
@@ -1539,5 +1506,4 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
     }
-
 }
