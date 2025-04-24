@@ -666,15 +666,11 @@ namespace Villamos.Villamos_Ablakok
         {
             Töröl_napi(Azonosító_6.Text.Trim());
         }
-        //
+
         private void Töröl_napi(string azonosító)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\főkönyv\futás\{Dátum.Year}\vezénylés{Dátum.Year}.mdb";
-                string jelszó = "tápijános";
-
-                string szöveg;
                 AdatokVezénylés = KézVezény.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 if (AdatokVezénylés == null) return;
                 Adat_Vezénylés AdatVezénylés = (from a in AdatokVezénylés
@@ -682,16 +678,11 @@ namespace Villamos.Villamos_Ablakok
                                                 && a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
                                                 && a.Törlés == 0
                                                 select a).FirstOrDefault();
-
                 if (AdatVezénylés != null)
                 {
-                    szöveg = "UPDATE vezényléstábla SET törlés=1 ";
-                    szöveg += $" WHERE [azonosító] ='{azonosító.Trim()}' AND [dátum]=#" + Dátum.ToString("M-d-yy") + "#";
-                    szöveg += " AND [törlés]=0";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézVezény.Módosítás(Cmbtelephely.Trim(), Dátum, azonosító.Trim(), Dátum);
                     Változás?.Invoke();
                 }
-
             }
             catch (HibásBevittAdat ex)
             {

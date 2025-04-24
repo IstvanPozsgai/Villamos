@@ -63,7 +63,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public void Rögzítés(string Telephely, DateTime Dátum, Adat_Vezénylés Adat)
         {
             try
@@ -98,7 +97,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
         public void Módosítás(string Telephely, DateTime Dátum, Adat_Vezénylés Adat)
         {
             try
@@ -106,7 +104,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely, Dátum);
                 string szöveg = "UPDATE vezényléstábla SET ";
                 szöveg += $" Státus={Adat.Státus}, ";
-                szöveg += $" vizsgálatraütemez={Adat.Vizsgálatraütemez} ";
+                szöveg += $" vizsgálatraütemez={Adat.Vizsgálatraütemez}, ";
                 szöveg += $" takarításraütemez={Adat.Takarításraütemez}, ";
                 szöveg += $" vizsgálat ='{Adat.Vizsgálat}', ";
                 szöveg += $" vizsgálatszám={Adat.Vizsgálatszám}, ";
@@ -126,6 +124,30 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Módosítás(string Telephely, DateTime Dátum, string azonosító, DateTime dátum2)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+                string szöveg = "UPDATE vezényléstábla SET törlés=1 ";
+                szöveg += $" WHERE [azonosító] ='{azonosító.Trim()}' AND [dátum]=#{dátum2:M-d-yy}#";
+                szöveg += " AND [törlés]=0";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
 
         // Elkopó
         public List<Adat_Vezénylés> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -167,5 +189,7 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
+
+
     }
 }
