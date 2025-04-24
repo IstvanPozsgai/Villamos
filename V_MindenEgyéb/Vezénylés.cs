@@ -73,7 +73,6 @@ namespace Villamos.V_MindenEgyéb
                                                 && a.Hibaleírása.Contains(szöveg.Trim())
                                                 select a).FirstOrDefault();
 
-                    bool KellRögzíteni = false;
                     // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
                     if (HibaElem == null)
                     {
@@ -83,7 +82,6 @@ namespace Villamos.V_MindenEgyéb
                                                 select a).FirstOrDefault();
                         if (ElemJármű != null)
                         {
-                            KellRögzíteni = true;
                             long hibáksorszáma = ElemJármű.Hibák + 1;
                             long hiba = ElemJármű.Hibák + 1;
                             string típusa = ElemJármű.Típus;
@@ -131,35 +129,33 @@ namespace Villamos.V_MindenEgyéb
 
                             // beírjuk a hibákat
                             Adat_Jármű_hiba AdatJármű;
-                            if (KellRögzíteni == true)
-                            {
-                                if (DateTime.Today.AddDays(1) >= Dátum)
-                                {
-                                    AdatJármű = new Adat_Jármű_hiba(
-                                                       Program.PostásNév.Trim(),
-                                                       rekordütemez.Státus == 4 ? 4 : 3,
-                                                       szöveg.Trim(),
-                                                       DateTime.Now,
-                                                       false,
-                                                       típusa.Trim(),
-                                                       rekordütemez.Azonosító.Trim(),
-                                                       hibáksorszáma);
-                                }
-                                else
-                                {
-                                    AdatJármű = new Adat_Jármű_hiba(
-                                                        Program.PostásNév.Trim(),
-                                                        3,
-                                                        szöveg.Trim(),
-                                                        DateTime.Now,
-                                                        false,
-                                                        típusa.Trim(),
-                                                        rekordütemez.Azonosító.Trim(),
-                                                        hibáksorszáma);
-                                }
-                                KézJárműHiba.Rögzítés(Telephely, AdatJármű);
 
+                            if (DateTime.Today.AddDays(1) >= Dátum)
+                            {
+                                AdatJármű = new Adat_Jármű_hiba(
+                                                   Program.PostásNév.Trim(),
+                                                   rekordütemez.Státus == 4 ? 4 : 3,
+                                                   szöveg.Trim(),
+                                                   DateTime.Now,
+                                                   false,
+                                                   típusa.Trim(),
+                                                   rekordütemez.Azonosító.Trim(),
+                                                   hibáksorszáma);
                             }
+                            else
+                            {
+                                AdatJármű = new Adat_Jármű_hiba(
+                                                    Program.PostásNév.Trim(),
+                                                    3,
+                                                    szöveg.Trim(),
+                                                    DateTime.Now,
+                                                    false,
+                                                    típusa.Trim(),
+                                                    rekordütemez.Azonosító.Trim(),
+                                                    hibáksorszáma);
+                            }
+                            KézJárműHiba.Rögzítés(Telephely, AdatJármű);
+
                         }
                     }
                 }
