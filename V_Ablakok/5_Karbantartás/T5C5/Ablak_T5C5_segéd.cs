@@ -551,44 +551,39 @@ namespace Villamos.Villamos_Ablakok
         #region Napi rögzítések
         private void Rögzít_Click(object sender, EventArgs e)
         {
-            Rögzítés_Napi(Azonosító_1.Text.Trim(), BennMarad_1.Checked, VizsgálatÜtemez_1.Checked, Rendelésszám_1.Text.Trim(), Szerelvény_szám_1.Text.Trim(), int.Parse(V_Sorszám_1.Text));
+            Rögzítés_Napi(Azonosító_1.Text.Trim(), BennMarad_1.Checked, VizsgálatÜtemez_1.Checked, Rendelésszám_1.Text.Trim(), Szerelvény_szám_1.Text.Trim().ToÉrt_Long(), int.Parse(V_Sorszám_1.Text));
         }
 
         private void Rögzít_Nap_2_Click(object sender, EventArgs e)
         {
-            Rögzítés_Napi(Azonosító_2.Text.Trim(), BennMarad_2.Checked, VizsgálatÜtemez_2.Checked, Rendelésszám_2.Text.Trim(), Szerelvény_szám_2.Text.Trim(), int.Parse(V_Sorszám_2.Text));
+            Rögzítés_Napi(Azonosító_2.Text.Trim(), BennMarad_2.Checked, VizsgálatÜtemez_2.Checked, Rendelésszám_2.Text.Trim(), Szerelvény_szám_2.Text.Trim().ToÉrt_Long(), int.Parse(V_Sorszám_2.Text));
         }
 
         private void Rögzít_Nap_3_Click(object sender, EventArgs e)
         {
-            Rögzítés_Napi(Azonosító_3.Text.Trim(), BennMarad_3.Checked, VizsgálatÜtemez_3.Checked, Rendelésszám_3.Text.Trim(), Szerelvény_szám_3.Text.Trim(), int.Parse(V_Sorszám_3.Text));
+            Rögzítés_Napi(Azonosító_3.Text.Trim(), BennMarad_3.Checked, VizsgálatÜtemez_3.Checked, Rendelésszám_3.Text.Trim(), Szerelvény_szám_3.Text.Trim().ToÉrt_Long(), int.Parse(V_Sorszám_3.Text));
         }
 
         private void Rögzít_Nap_4_Click(object sender, EventArgs e)
         {
-            Rögzítés_Napi(Azonosító_4.Text.Trim(), BennMarad_4.Checked, VizsgálatÜtemez_4.Checked, Rendelésszám_4.Text.Trim(), Szerelvény_szám_4.Text.Trim(), int.Parse(V_Sorszám_4.Text));
+            Rögzítés_Napi(Azonosító_4.Text.Trim(), BennMarad_4.Checked, VizsgálatÜtemez_4.Checked, Rendelésszám_4.Text.Trim(), Szerelvény_szám_4.Text.Trim().ToÉrt_Long(), int.Parse(V_Sorszám_4.Text));
         }
 
         private void Rögzít_Nap_5_Click(object sender, EventArgs e)
         {
-            Rögzítés_Napi(Azonosító_5.Text.Trim(), BennMarad_5.Checked, VizsgálatÜtemez_5.Checked, Rendelésszám_5.Text.Trim(), Szerelvény_szám_5.Text.Trim(), int.Parse(V_Sorszám_5.Text));
+            Rögzítés_Napi(Azonosító_5.Text.Trim(), BennMarad_5.Checked, VizsgálatÜtemez_5.Checked, Rendelésszám_5.Text.Trim(), Szerelvény_szám_5.Text.Trim().ToÉrt_Long(), int.Parse(V_Sorszám_5.Text));
         }
 
         private void Rögzít_Nap_6_Click(object sender, EventArgs e)
         {
-            Rögzítés_Napi(Azonosító_6.Text.Trim(), BennMarad_6.Checked, VizsgálatÜtemez_6.Checked, Rendelésszám_6.Text.Trim(), Szerelvény_szám_6.Text.Trim(), int.Parse(V_Sorszám_6.Text));
+            Rögzítés_Napi(Azonosító_6.Text.Trim(), BennMarad_6.Checked, VizsgálatÜtemez_6.Checked, Rendelésszám_6.Text.Trim(), Szerelvény_szám_6.Text.Trim().ToÉrt_Long(), int.Parse(V_Sorszám_6.Text));
         }
-        //
-        private void Rögzítés_Napi(string azonosító, bool Bennmarad, bool Vizsgálatrütemez, string Rendelésiszám, string Szerelvényszám, int Következővizsgálatszám)
+
+        private void Rögzítés_Napi(string azonosító, bool Bennmarad, bool Vizsgálatrütemez, string Rendelésiszám, long Szerelvényszám, int Következővizsgálatszám)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\főkönyv\futás\{Dátum.Year}\vezénylés{Dátum.Year}.mdb";
-                string jelszó = "tápijános";
-
-                string szöveg;
-
-                AdatokVezénylésListázás();
+                AdatokVezénylés = KézVezény.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 if (AdatokVezénylés == null) return;
                 Adat_Vezénylés AdatVezénylés = (from a in AdatokVezénylés
                                                 where a.Azonosító == azonosító.Trim()
@@ -596,87 +591,34 @@ namespace Villamos.Villamos_Ablakok
                                                 && a.Törlés == 0
                                                 select a).FirstOrDefault();
 
+                string vizsgálat = "_";
+                if (Vizsgálatrütemez && (Rendelésiszám.Trim() == "" || Rendelésiszám.Trim() == "_"))
+                {
+                    if (Vizsgálatrütemez)
+                        vizsgálat = "E3";
+                    else
+                        vizsgálat = "_";
+                }
+                else
+                    vizsgálat = "V1";
+
+                Adat_Vezénylés ADAT = new Adat_Vezénylés(
+                               azonosító.Trim(),
+                               Dátum,
+                               Bennmarad ? 4 : 3,
+                               !Vizsgálatrütemez ? 0 : 1,
+                               0,
+                               vizsgálat,
+                               Következővizsgálatszám,
+                               Rendelésiszám.Trim() == "" ? "_" : Rendelésiszám.Trim(),
+                               0, 0, 0,
+                               Szerelvényszám,
+                               "T5C5");
 
                 if (AdatVezénylés == null)
-                {
-                    // ha van akkor rögzíteni kell
-                    szöveg = "INSERT INTO vezényléstábla ";
-                    szöveg += "(azonosító, Dátum, Státus, vizsgálatraütemez, takarításraütemez, vizsgálat, vizsgálatszám, rendelésiszám, törlés, szerelvényszám, fusson, álljon, típus) VALUES (";
-                    szöveg += $"'{azonosító.Trim()}',";
-                    szöveg += "'" + Dátum.ToString("yyyy.MM.dd") + "', ";
-                    if (Bennmarad)
-                        szöveg += "4, ";
-                    else
-                        szöveg += "3,";
-                    if (!Vizsgálatrütemez)
-                        szöveg += "0, ";
-                    else
-                        szöveg += "1,";
-                    szöveg += "0, "; // takarításraütemez nem használt
-                    if (Vizsgálatrütemez && (Rendelésiszám.Trim() == "" || Rendelésiszám.Trim() == "_"))
-                    {
-                        if (Vizsgálatrütemez)
-                        {
-                            szöveg += "'E3', ";
-                        }
-                        else
-                        {
-                            szöveg += "'_', ";
-                        }
-                    }
-                    else
-                    {
-                        szöveg += "'V1',";
-                    }
-                    szöveg += Következővizsgálatszám.ToString() + ", ";
-                    if (Rendelésiszám.Trim() == "")
-                        szöveg += "'_', ";
-                    else
-                        szöveg += "'" + Rendelésiszám.Trim() + "',";
-                    szöveg += "0, ";
-                    szöveg += Szerelvényszám.Trim() + ", ";
-                    szöveg += " 0, 0, 'T5C5')";
-                }
-
+                    KézVezény.Rögzítés(Cmbtelephely.Trim(), Dátum, ADAT);
                 else
-                {
-                    // módosítás
-                    szöveg = "UPDATE vezényléstábla SET ";
-                    if (Bennmarad)
-                        szöveg += " Státus=4, ";
-                    else
-                        szöveg += " Státus=3, ";
-                    if (!Vizsgálatrütemez)
-                        szöveg += " vizsgálatraütemez=0, ";
-                    else
-                        szöveg += " vizsgálatraütemez=1, ";
-                    szöveg += " takarításraütemez=0, ";
-                    if (Vizsgálatrütemez && (Rendelésiszám.Trim() == "" || Rendelésiszám.Trim() == "_"))
-                    {
-                        if (Vizsgálatrütemez)
-                        {
-                            szöveg += "vizsgálat ='E3', ";
-                        }
-                        else
-                        {
-                            szöveg += "vizsgálat ='_', ";
-                        }
-                    }
-
-                    else
-                    {
-                        szöveg += "vizsgálat ='V1', ";
-                    }
-                    szöveg += " vizsgálatszám=" + Következővizsgálatszám + ", ";
-                    if (Rendelésiszám.Trim() == "" || Rendelésiszám.Trim() == "_")
-                        szöveg += " rendelésiszám='_', ";
-                    else
-                        szöveg += " rendelésiszám='" + Rendelésiszám.Trim() + "', ";
-                    szöveg += " szerelvényszám=" + Szerelvényszám.Trim();
-                    szöveg += $" WHERE [azonosító] ='{azonosító.Trim()}' AND [dátum]=#" + Dátum.ToString("M-d-yy") + "#";
-                    szöveg += " AND [törlés]=0";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézVezény.Módosítás(Cmbtelephely.Trim(), Dátum, ADAT);
 
                 Változás?.Invoke();
             }
@@ -733,7 +675,7 @@ namespace Villamos.Villamos_Ablakok
                 string jelszó = "tápijános";
 
                 string szöveg;
-                AdatokVezénylésListázás();
+                AdatokVezénylés = KézVezény.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 if (AdatokVezénylés == null) return;
                 Adat_Vezénylés AdatVezénylés = (from a in AdatokVezénylés
                                                 where a.Azonosító == azonosító.Trim()
@@ -1325,23 +1267,6 @@ namespace Villamos.Villamos_Ablakok
 
         }
 
-        private void AdatokVezénylésListázás()
-        {
-            try
-            {
-                AdatokVezénylés.Clear();
-                AdatokVezénylés = KézVezény.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion
     }
 }
