@@ -33,11 +33,12 @@ namespace Villamos
         List<Adat_Kerék_Mérés> AdatokMérés = new List<Adat_Kerék_Mérés>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
 
+        #region Alap
         public Ablak_T5C5_Tulajdonság()
         {
             InitializeComponent();
         }
-
+        //
         private void Tulajdonság_T5C5_Load(object sender, EventArgs e)
         {
             try
@@ -74,12 +75,12 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Ablak_T5C5_Tulajdonság_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_PDF_Tallózó?.Close();
         }
 
-        #region Alap
         private void Telephelyekfeltöltése()
         {
             try
@@ -175,15 +176,27 @@ namespace Villamos
 
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Tulajdonság_T5C5.html";
-            MyE.Megnyitás(hely);
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Tulajdonság_T5C5.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             Pályaszám_feltöltés();
         }
-
+        //
         private void Pályaszám_feltöltés()
         {
             try
@@ -321,13 +334,13 @@ namespace Villamos
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
             // Határozza meg, hogy melyik lap van jelenleg kiválasztva
-            var SelectedTab = Fülek.TabPages[e.Index];
+            TabPage SelectedTab = Fülek.TabPages[e.Index];
 
             // Szerezze be a lap fejlécének területét
-            var HeaderRect = Fülek.GetTabRect(e.Index);
+            Rectangle HeaderRect = Fülek.GetTabRect(e.Index);
 
             // Hozzon létreecsetet a szöveg megfestéséhez
-            var BlackTextBrush = new SolidBrush(Color.Black);
+            SolidBrush BlackTextBrush = new SolidBrush(Color.Black);
 
             // Állítsa be a szöveg igazítását
             StringFormat sf = new StringFormat
@@ -339,10 +352,10 @@ namespace Villamos
             // Festse meg a szöveget a megfelelő félkövér és szín beállítással
             if ((e.State & DrawItemState.Selected) != 0)
             {
-                var BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
+                Font BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
                 // háttér szín beállítása
                 e.Graphics.FillRectangle(new SolidBrush(Color.DarkGray), e.Bounds);
-                var paddedBounds = e.Bounds;
+                Rectangle paddedBounds = e.Bounds;
                 paddedBounds.Inflate(0, 0);
                 e.Graphics.DrawString(SelectedTab.Text, BoldFont, BlackTextBrush, paddedBounds, sf);
             }
@@ -361,13 +374,10 @@ namespace Villamos
         {
             try
             {
-                if (Cmbtelephely.Text.Trim() == "")
-                    return;
-                if (Pályaszám.Text.Trim() == "")
-                    return;
+                if (Cmbtelephely.Text.Trim() == "") return;
+                if (Pályaszám.Text.Trim() == "") return;
                 Alap_Adat_Ürítés();
                 // ürítjük a mezőket
-
 
                 Alap_Adatok();
                 E2_Vizsgálat();
@@ -398,7 +408,7 @@ namespace Villamos
             Járműtípus_text.Text = "";
             ÜzembehelyezésiPDF.Visible = false;
         }
-
+        //
         private void E2_Vizsgálat()
         {
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\villamos\villamos2.mdb";
@@ -440,7 +450,7 @@ namespace Villamos
                 }
             }
         }
-
+        //
         private void Alap_Adatok()
         {
             long szerelvény = 0;
@@ -493,7 +503,7 @@ namespace Villamos
 
             Szerelvény_Kiírás(szerelvény);
         }
-
+        //
         private void Szerelvény_Kiírás(long szerelvény)
         {
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\szerelvény.mdb";
@@ -512,7 +522,7 @@ namespace Villamos
                 Szerelvény_text.Text += Szerel.Kocsi6.Trim() != "0" ? "-" + Szerel.Kocsi6.Trim() : "";
             }
         }
-
+        //
         private bool Üzembehelyzés(string azonosító)
         {
             bool válasz = false;
@@ -523,8 +533,8 @@ namespace Villamos
                 válasz = true;
             return válasz;
         }
-
-        void Előírt_Szerelvény_kiir()
+        //
+        private void Előírt_Szerelvény_kiir()
         {
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
             if (!File.Exists(hely)) return;
@@ -551,6 +561,7 @@ namespace Villamos
         }
 
         Ablak_PDF_Tallózó Új_Ablak_PDF_Tallózó;
+        //
         private void ÜzembehelyezésiPDF_Click(object sender, EventArgs e)
         {
             Új_Ablak_PDF_Tallózó?.Close();
@@ -572,6 +583,7 @@ namespace Villamos
 
 
         #region Futásadatok lapfül
+        //
         private void Kiír_Futásadatok()
         {
             try
@@ -629,7 +641,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Rögzítnap_Click(object sender, EventArgs e)
         {
             try
@@ -706,6 +718,7 @@ namespace Villamos
 
 
         #region Lekérdezések
+        //
         private void Lekérdezés_lekérdezés_Click(object sender, EventArgs e)
         {
             try
@@ -886,8 +899,7 @@ namespace Villamos
         {
             try
             {
-                if (Tábla_lekérdezés.Rows.Count <= 0)
-                    return;
+                if (Tábla_lekérdezés.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -896,7 +908,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "T5C5_futásadatok_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"T5C5_futásadatok_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -905,9 +917,9 @@ namespace Villamos
                 else
                     return;
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla_lekérdezés, false);
+                MyE.EXCELtábla(fájlexc, Tábla_lekérdezés, false);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
@@ -919,7 +931,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
         {
             SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -928,7 +940,7 @@ namespace Villamos
                 InitialDirectory = "MyDocuments",
 
                 Title = "Adatbázis mentése Excel fájlba",
-                FileName = "T5C5_adatbázis_mentés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                FileName = $"T5C5_adatbázis_mentés_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                 Filter = "Excel |*.xlsx"
             };
             // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -949,8 +961,6 @@ namespace Villamos
                  MessageBox.Show("Az Excel tábla elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
                  MyE.Megnyitás(_fájlexc);
              });
-
-
         }
 
         private void SZál_ABadatbázis(Action callback)
@@ -970,39 +980,37 @@ namespace Villamos
             try
             {
                 Kiüríti_lapfül();
-                if (e.RowIndex < 0)
-                    return;
-                {
-                    var withBlock = Tábla_lekérdezés;
-                    Sorszám.Text = withBlock.Rows[e.RowIndex].Cells[21].Value.ToString();
+                if (e.RowIndex < 0) return;
 
-                    Vizsgsorszám.Text = withBlock.Rows[e.RowIndex].Cells[2].Value.ToString();
-                    Vizsgfok.Text = withBlock.Rows[e.RowIndex].Cells[1].Value.ToString();
-                    Vizsgdátumk.Value = DateTime.Parse(withBlock.Rows[e.RowIndex].Cells[3].Value.ToString());
-                    Vizsgdátumv.Value = DateTime.Parse(withBlock.Rows[e.RowIndex].Cells[4].Value.ToString());
-                    VizsgKm.Text = withBlock.Rows[e.RowIndex].Cells[5].Value.ToString();
-                    Üzemek.Text = withBlock.Rows[e.RowIndex].Cells[22].Value.ToString();
+                Sorszám.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[21].Value.ToString();
 
-                    KMUkm.Text = withBlock.Rows[e.RowIndex].Cells[7].Value.ToString();
-                    Jjavszám.Text = withBlock.Rows[e.RowIndex].Cells[10].Value.ToString();
-                    Utolsófelújításdátuma.Value = DateTime.Parse(withBlock.Rows[e.RowIndex].Cells[11].Value.ToString());
+                Vizsgsorszám.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[2].Value.ToString();
+                Vizsgfok.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[1].Value.ToString();
+                Vizsgdátumk.Value = DateTime.Parse(Tábla_lekérdezés.Rows[e.RowIndex].Cells[3].Value.ToString());
+                Vizsgdátumv.Value = DateTime.Parse(Tábla_lekérdezés.Rows[e.RowIndex].Cells[4].Value.ToString());
+                VizsgKm.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[5].Value.ToString();
+                Üzemek.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[22].Value.ToString();
+
+                KMUkm.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[7].Value.ToString();
+                Jjavszám.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[10].Value.ToString();
+                Utolsófelújításdátuma.Value = DateTime.Parse(Tábla_lekérdezés.Rows[e.RowIndex].Cells[11].Value.ToString());
 
 
-                    TEljesKmText.Text = withBlock.Rows[e.RowIndex].Cells[13].Value.ToString();
-                    CiklusrendCombo.Text = withBlock.Rows[e.RowIndex].Cells[12].Value.ToString();
+                TEljesKmText.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[13].Value.ToString();
+                CiklusrendCombo.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[12].Value.ToString();
 
-                    HaviKm.Text = withBlock.Rows[e.RowIndex].Cells[9].Value.ToString();
-                    KMUdátum.Value = DateTime.Parse(withBlock.Rows[e.RowIndex].Cells[6].Value.ToString());
+                HaviKm.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[9].Value.ToString();
+                KMUdátum.Value = DateTime.Parse(Tábla_lekérdezés.Rows[e.RowIndex].Cells[6].Value.ToString());
 
-                    KövV.Text = withBlock.Rows[e.RowIndex].Cells[23].Value.ToString();
-                    KövV_Sorszám.Text = withBlock.Rows[e.RowIndex].Cells[24].Value.ToString();
-                    KövV2.Text = withBlock.Rows[e.RowIndex].Cells[25].Value.ToString();
-                    KövV2_Sorszám.Text = withBlock.Rows[e.RowIndex].Cells[26].Value.ToString();
-                    KövV2_számláló.Text = withBlock.Rows[e.RowIndex].Cells[27].Value.ToString();
+                KövV.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[23].Value.ToString();
+                KövV_Sorszám.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[24].Value.ToString();
+                KövV2.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[25].Value.ToString();
+                KövV2_Sorszám.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[26].Value.ToString();
+                KövV2_számláló.Text = Tábla_lekérdezés.Rows[e.RowIndex].Cells[27].Value.ToString();
 
-                    KövV1km.Text = (int.Parse(KMUkm.Text) - int.Parse(VizsgKm.Text)).ToString();
-                    KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
-                }
+                KövV1km.Text = (int.Parse(KMUkm.Text) - int.Parse(VizsgKm.Text)).ToString();
+                KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
+
 
                 Fülek.SelectedIndex = 3;
 
@@ -1051,7 +1059,7 @@ namespace Villamos
             KövV2_számláló.Text = "0";
             KövV2km.Text = "0";
         }
-
+        //
         private void Vizsgsorszámcombofeltölés()
         {
             try
@@ -1083,7 +1091,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void CiklusrendCombo_feltöltés()
         {
             CiklusrendCombo.Items.Clear();
@@ -1102,7 +1110,7 @@ namespace Villamos
         {
             Vizsgsorszámcombofeltölés();
         }
-
+        //
         private void Üzemek_listázása()
         {
             Üzemek.Items.Clear();
@@ -1115,7 +1123,7 @@ namespace Villamos
             Üzemek.EndUpdate();
             Üzemek.Refresh();
         }
-
+        //
         private void Vizsgsorszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1175,7 +1183,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Utolsó_V_rögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -1300,7 +1308,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Töröl_Click(object sender, EventArgs e)
         {
             string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Villamos4T5C5.mdb";
@@ -1462,38 +1470,37 @@ namespace Villamos
         private void Tábla1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             Kiüríti_lapfül();
-            if (e.RowIndex < 0)
-                return;
-            {
-                Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            if (e.RowIndex < 0) return;
 
-                Vizsgsorszám.Text = Tábla1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                Vizsgfok.Text = Tábla1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                Vizsgdátumk.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[4].Value.ToString());
-                Vizsgdátumv.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[5].Value.ToString());
-                VizsgKm.Text = Tábla1.Rows[e.RowIndex].Cells[6].Value.ToString();
-                Üzemek.Text = Tábla1.Rows[e.RowIndex].Cells[15].Value.ToString();
+            Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString();
 
-                KMUkm.Text = Tábla1.Rows[e.RowIndex].Cells[8].Value.ToString();
-                Jjavszám.Text = Tábla1.Rows[e.RowIndex].Cells[11].Value.ToString();
-                Utolsófelújításdátuma.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[12].Value.ToString());
+            Vizsgsorszám.Text = Tábla1.Rows[e.RowIndex].Cells[3].Value.ToString();
+            Vizsgfok.Text = Tábla1.Rows[e.RowIndex].Cells[2].Value.ToString();
+            Vizsgdátumk.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[4].Value.ToString());
+            Vizsgdátumv.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[5].Value.ToString());
+            VizsgKm.Text = Tábla1.Rows[e.RowIndex].Cells[6].Value.ToString();
+            Üzemek.Text = Tábla1.Rows[e.RowIndex].Cells[15].Value.ToString();
+
+            KMUkm.Text = Tábla1.Rows[e.RowIndex].Cells[8].Value.ToString();
+            Jjavszám.Text = Tábla1.Rows[e.RowIndex].Cells[11].Value.ToString();
+            Utolsófelújításdátuma.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[12].Value.ToString());
 
 
-                TEljesKmText.Text = Tábla1.Rows[e.RowIndex].Cells[14].Value.ToString();
-                CiklusrendCombo.Text = Tábla1.Rows[e.RowIndex].Cells[13].Value.ToString();
+            TEljesKmText.Text = Tábla1.Rows[e.RowIndex].Cells[14].Value.ToString();
+            CiklusrendCombo.Text = Tábla1.Rows[e.RowIndex].Cells[13].Value.ToString();
 
-                HaviKm.Text = Tábla1.Rows[e.RowIndex].Cells[10].Value.ToString();
-                KMUdátum.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[7].Value.ToString());
+            HaviKm.Text = Tábla1.Rows[e.RowIndex].Cells[10].Value.ToString();
+            KMUdátum.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[7].Value.ToString());
 
-                KövV.Text = Tábla1.Rows[e.RowIndex].Cells[16].Value.ToString();
-                KövV_Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[17].Value.ToString();
-                KövV2.Text = Tábla1.Rows[e.RowIndex].Cells[18].Value.ToString();
-                KövV2_Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[19].Value.ToString();
-                KövV2_számláló.Text = Tábla1.Rows[e.RowIndex].Cells[20].Value.ToString();
+            KövV.Text = Tábla1.Rows[e.RowIndex].Cells[16].Value.ToString();
+            KövV_Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[17].Value.ToString();
+            KövV2.Text = Tábla1.Rows[e.RowIndex].Cells[18].Value.ToString();
+            KövV2_Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[19].Value.ToString();
+            KövV2_számláló.Text = Tábla1.Rows[e.RowIndex].Cells[20].Value.ToString();
 
-                KövV1km.Text = (int.Parse(KMUkm.Text) - int.Parse(VizsgKm.Text)).ToString();
-                KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
-            }
+            KövV1km.Text = (int.Parse(KMUkm.Text) - int.Parse(VizsgKm.Text)).ToString();
+            KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
+
 
             Fülek.SelectedIndex = 3;
         }
@@ -1514,7 +1521,7 @@ namespace Villamos
                     // kimeneti fájl helye és neve
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Állománytábla_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Állománytábla_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1524,12 +1531,12 @@ namespace Villamos
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla_lekérdezés, false);
+                MyE.EXCELtábla(fájlexc, Tábla_lekérdezés, false);
                 Tábla_lekérdezés.Rows.Clear();
                 Tábla_lekérdezés.Columns.Clear();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
@@ -1541,7 +1548,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Táblázatlistázás()
         {
             try
@@ -1654,6 +1661,7 @@ namespace Villamos
 
 
         #region előtervező
+        //
         private void Pszlista()
         {
             try
@@ -1677,7 +1685,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Telephelylista()
         {
             try
@@ -1819,7 +1827,7 @@ namespace Villamos
         {
 
         }
-
+        //
         private void Frissíti_a_pályaszámokat()
         {
             try
@@ -1940,7 +1948,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Alaptábla()
         {
             try
@@ -2080,7 +2088,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Egyhónaprögzítése()
         {
             try
@@ -2426,7 +2434,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void Adatoklistázása()
         {
             try
@@ -2678,7 +2686,7 @@ namespace Villamos
                 InitialDirectory = "MyDocuments",
 
                 Title = "Vizsgálatok tény adatai",
-                FileName = "T5C5_adatbázis_mentés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                FileName = $"T5C5_adatbázis_mentés_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                 Filter = "Excel |*.xlsx"
             };
             // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -2709,8 +2717,8 @@ namespace Villamos
             });
             proc.Start();
         }
-
-        void SZál_Kimutatás_Eljárás()
+        //
+        private void SZál_Kimutatás_Eljárás()
         {
             try
             {
@@ -2842,7 +2850,7 @@ namespace Villamos
                     // kimeneti fájl helye és neve
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = $"{Pályaszám.Text.Trim()}_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"{Pályaszám.Text.Trim()}_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -2852,10 +2860,10 @@ namespace Villamos
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla1, false);
+                MyE.EXCELtábla(fájlexc, Tábla1, false);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
@@ -2869,7 +2877,9 @@ namespace Villamos
         }
         #endregion
 
+
         #region ListákFeltöltése
+        //
         private void KMAdatokListaFeltöltése()
         {
             try
@@ -2890,7 +2900,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void JárműListaFeltöltés()
         {
             try
@@ -2912,7 +2922,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void KerékadatokListaFeltöltés()
         {
             try
@@ -2938,7 +2948,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //
         private void CiklusListaFeltöltés()
         {
             try
@@ -2960,7 +2970,6 @@ namespace Villamos
             }
 
         }
-
         #endregion
     }
 }
