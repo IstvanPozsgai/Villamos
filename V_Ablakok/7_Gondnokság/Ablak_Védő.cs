@@ -2164,10 +2164,11 @@ namespace Villamos
                     List<Adat_Védő_Könyvelés> Adatok = (from a in AdatokKönyvelés
                                                         where a.Szerszámkönyvszám == darabol[0].Trim()
                                                         select a).ToList();
+                    Lekérd_Tábla.DataSource = null;
                     Lekérd_Tábla.Visible = false;
                     Lekérd_Tábla.Rows.Clear();
                     Lekérd_Tábla.Columns.Clear();
-                    Lekérd_Tábla.DataSource = null;
+
                     Lekérd_Tábla.CleanFilterAndSort();
                     LekérdTáblaFejléc();
                     LekérdTáblaTartalom();

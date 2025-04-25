@@ -210,9 +210,11 @@ namespace Villamos
             // 
             // Holtart
             // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Holtart.Location = new System.Drawing.Point(346, 7);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(703, 28);
+            this.Holtart.Size = new System.Drawing.Size(817, 28);
             this.Holtart.TabIndex = 172;
             this.Holtart.Visible = false;
             // 
