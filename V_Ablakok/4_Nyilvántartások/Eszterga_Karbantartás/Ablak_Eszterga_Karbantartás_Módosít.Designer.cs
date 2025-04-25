@@ -68,7 +68,6 @@
             this.LblDatumUtolag = new System.Windows.Forms.Label();
             this.TáblaNapló = new Zuby.ADGV.AdvancedDataGridView();
             this.DtmPckrUtolagos = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaMűvelet)).BeginInit();
             this.GrpBxMűveletek.SuspendLayout();
             this.GrpBxUtolagos.SuspendLayout();
@@ -406,7 +405,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GrpBxUtolagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
             this.GrpBxUtolagos.Controls.Add(this.BttnUtolag_Modosit);
-            this.GrpBxUtolagos.Controls.Add(this.label1);
             this.GrpBxUtolagos.Controls.Add(this.TxtBxUtolagMegjegyzes);
             this.GrpBxUtolagos.Controls.Add(this.LblMegjegyzes);
             this.GrpBxUtolagos.Controls.Add(this.LblUtolagMuvelet);
@@ -548,17 +546,6 @@
             this.DtmPckrUtolagos.TabIndex = 26;
             this.DtmPckrUtolagos.ValueChanged += new System.EventHandler(this.DtmPckrUtolagos_ValueChanged);
             // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label1.Location = new System.Drawing.Point(786, 227);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(381, 200);
-            this.label1.TabIndex = 54;
-            this.label1.Text = resources.GetString("label1.Text");
-            // 
             // Ablak_Eszterga_Karbantartás_Módosít
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -626,6 +613,5 @@
         internal System.Windows.Forms.Label LblUtolagNaplozasTabla;
         internal System.Windows.Forms.Label LblMegjegyzes;
         internal System.Windows.Forms.TextBox TxtBxUtolagMegjegyzes;
-        internal System.Windows.Forms.Label label1;
     }
 }

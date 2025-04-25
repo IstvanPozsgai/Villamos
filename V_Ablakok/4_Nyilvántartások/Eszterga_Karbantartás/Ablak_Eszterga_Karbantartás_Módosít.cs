@@ -293,9 +293,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TáblaNapló.Columns["Művelet"].Width = 550;
             TáblaNapló.Columns["Utolsó Dátum"].Width = 105;
             TáblaNapló.Columns["Utolsó Üzemóra"].Width = 120;
-            TáblaNapló.Columns["Megjegyzés"].Width = 221;
+            TáblaNapló.Columns["Megjegyzés"].Width = 220;
             TáblaNapló.Columns["Rögzítő"].Width = 150;
-            TáblaNapló.Columns["Rögzítés Dátuma"].Width = 115;
+            TáblaNapló.Columns["Rögzítés Dátuma"].Width = 105;
         }
         private void TáblaListázásMűveletUtólag()
         {
@@ -337,7 +337,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         private void OszlopSzélességMűveletUtólag()
         {
             TáblaUtólagMűvelet.Columns["Sorszám"].Width = 100;
-            TáblaUtólagMűvelet.Columns["Művelet"].Width = 900;
+            TáblaUtólagMűvelet.Columns["Művelet"].Width = 1160;
             TáblaUtólagMűvelet.Columns["Státusz"].Width = 100;
         }
         #endregion
