@@ -294,7 +294,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             long EredetiUzemora = VanID.Üzemóra;
             bool EredetiStatusz = VanID.Státus;
 
-            if (EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
+            if (EredetiDatum != MaiDatum && EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
             {
                 if (UjStatus)
                     KézÜzemóra.Törlés(new Adat_Eszterga_Üzemóra(AktivID));
@@ -303,7 +303,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             else
             {
-                if (UjStatus && VanID.Dátum == MaiDatum)
+                if (UjStatus && EredetiDatum == MaiDatum)
                     UtolsoUzemoraTorles(AktivID);
 
                 else
