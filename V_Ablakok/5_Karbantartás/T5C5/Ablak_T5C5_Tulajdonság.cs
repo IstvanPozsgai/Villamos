@@ -23,10 +23,12 @@ namespace Villamos
         string _hely, _jelszó, _szöveg, _fájlexc;
         int utolsósor;
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Jármű2 KézVizsgálat = new Kezelő_Jármű2();
         readonly Kezelő_T5C5_Kmadatok KézKmAdatok = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_T5C5_Göngyöl KézGöngyöl = new Kezelő_T5C5_Göngyöl();
+        readonly Kezelő_Szerelvény Kézszer = new Kezelő_Szerelvény();
 
         List<Adat_T5C5_Kmadatok> AdatokKmAdatok = new List<Adat_T5C5_Kmadatok>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
@@ -52,17 +54,9 @@ namespace Villamos
 
                 hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Villamos4T5C5.mdb";
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.Kmfutástábla(hely);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\" + DateTime.Today.Year;
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-                hely += @"\telepikerék.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Méréstáblakerék(hely);
-
                 Fülek.SelectedIndex = 0;
                 Fülekkitöltése();
-
                 Jogosultságkiosztás();
-
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             }
             catch (HibásBevittAdat ex)
@@ -415,62 +409,62 @@ namespace Villamos
             Járműtípus_text.Text = "";
             ÜzembehelyezésiPDF.Visible = false;
         }
-        //
+
         private void E2_Vizsgálat()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text}\adatok\villamos\villamos2.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM állománytábla";
-
-            Kezelő_Jármű2 KézVizsgálat = new Kezelő_Jármű2();
-            List<Adat_Jármű_2> AdatokVizsgálat = KézVizsgálat.Lista_Adatok(hely, jelszó, szöveg);
-
-            Adat_Jármű_2 ElemVizsgálat = (from a in AdatokVizsgálat
-                                          where a.Azonosító == Pályaszám.Text.Trim()
-                                          select a).FirstOrDefault();
-            if (ElemVizsgálat != null)
+            try
             {
-                Takarítás_text.Text = ElemVizsgálat.Takarítás.ToString();
-                switch (ElemVizsgálat.Haromnapos)
-                {
-                    case 1:
-                        {
-                            Vizsgálati_text.Text = "Hétfő- Csütörtök";
-                            break;
-                        }
-                    case 2:
-                        {
-                            Vizsgálati_text.Text = "Kedd- Péntek";
-                            break;
-                        }
-                    case 3:
-                        {
-                            Vizsgálati_text.Text = "Szerda- Szombat";
-                            break;
-                        }
+                List<Adat_Jármű_2> AdatokVizsgálat = KézVizsgálat.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                    default:
-                        {
-                            Vizsgálati_text.Text = "Nincs beállítva";
-                            break;
-                        }
+                Adat_Jármű_2 ElemVizsgálat = (from a in AdatokVizsgálat
+                                              where a.Azonosító == Pályaszám.Text.Trim()
+                                              select a).FirstOrDefault();
+                if (ElemVizsgálat != null)
+                {
+                    Takarítás_text.Text = ElemVizsgálat.Takarítás.ToString();
+                    switch (ElemVizsgálat.Haromnapos)
+                    {
+                        case 1:
+                            {
+                                Vizsgálati_text.Text = "Hétfő- Csütörtök";
+                                break;
+                            }
+                        case 2:
+                            {
+                                Vizsgálati_text.Text = "Kedd- Péntek";
+                                break;
+                            }
+                        case 3:
+                            {
+                                Vizsgálati_text.Text = "Szerda- Szombat";
+                                break;
+                            }
+
+                        default:
+                            {
+                                Vizsgálati_text.Text = "Nincs beállítva";
+                                break;
+                            }
+                    }
                 }
             }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-        //
+
         private void Alap_Adatok()
         {
-            long szerelvény = 0;
-
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = $"SELECT * FROM állománytábla where [azonosító]='{Pályaszám.Text.Trim()}'";
-
-            Kezelő_Jármű kéz = new Kezelő_Jármű();
-            Adat_Jármű rekord = kéz.Egy_Adat(hely, jelszó, szöveg);
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+            Adat_Jármű rekord = Adatok.FirstOrDefault(a => a.Azonosító == Pályaszám.Text.Trim());
             if (rekord != null)
             {
-                szerelvény = rekord.Szerelvénykocsik;
                 Típus_text.Text = rekord.Típus.Trim();
                 Járműtípus_text.Text = rekord.Valóstípus2.Trim();
                 Főmérnökség_text.Text = rekord.Valóstípus.Trim();
@@ -508,28 +502,43 @@ namespace Villamos
                     Miótaáll_text.Text = rekord.Miótaáll.ToString();
             }
 
-            Szerelvény_Kiírás(szerelvény);
+            Szerelvény_Kiírás();
         }
-        //
-        private void Szerelvény_Kiírás(long szerelvény)
+
+        private void Szerelvény_Kiírás()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\szerelvény.mdb";
-            string jelszó = "pozsgaii";
-            Kezelő_Szerelvény Kézszer = new Kezelő_Szerelvény();
-            Adat_Szerelvény Szerel = Kézszer.SzerelvényEgy(hely, jelszó, szerelvény);
-
-            if (szerelvény != 0 && Szerel != null)
+            try
             {
-
-                Szerelvény_text.Text = Szerel.Kocsi1.Trim();
-                Szerelvény_text.Text += Szerel.Kocsi2.Trim() != "0" ? "-" + Szerel.Kocsi2.Trim() : "";
-                Szerelvény_text.Text += Szerel.Kocsi3.Trim() != "0" ? "-" + Szerel.Kocsi3.Trim() : "";
-                Szerelvény_text.Text += Szerel.Kocsi4.Trim() != "0" ? "-" + Szerel.Kocsi4.Trim() : "";
-                Szerelvény_text.Text += Szerel.Kocsi5.Trim() != "0" ? "-" + Szerel.Kocsi5.Trim() : "";
-                Szerelvény_text.Text += Szerel.Kocsi6.Trim() != "0" ? "-" + Szerel.Kocsi6.Trim() : "";
+                List<Adat_Szerelvény> Adatok = Kézszer.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adat_Szerelvény Szerel = (from a in Adatok
+                                          where a.Kocsi1 == Pályaszám.Text.Trim()
+                                          || a.Kocsi2 == Pályaszám.Text.Trim()
+                                          || a.Kocsi3 == Pályaszám.Text.Trim()
+                                          || a.Kocsi4 == Pályaszám.Text.Trim()
+                                          || a.Kocsi5 == Pályaszám.Text.Trim()
+                                          || a.Kocsi6 == Pályaszám.Text.Trim()
+                                          select a).FirstOrDefault();
+                if (Szerel != null)
+                {
+                    Szerelvény_text.Text = Szerel.Kocsi1.Trim();
+                    Szerelvény_text.Text += Szerel.Kocsi2.Trim() != "0" ? "-" + Szerel.Kocsi2.Trim() : "";
+                    Szerelvény_text.Text += Szerel.Kocsi3.Trim() != "0" ? "-" + Szerel.Kocsi3.Trim() : "";
+                    Szerelvény_text.Text += Szerel.Kocsi4.Trim() != "0" ? "-" + Szerel.Kocsi4.Trim() : "";
+                    Szerelvény_text.Text += Szerel.Kocsi5.Trim() != "0" ? "-" + Szerel.Kocsi5.Trim() : "";
+                    Szerelvény_text.Text += Szerel.Kocsi6.Trim() != "0" ? "-" + Szerel.Kocsi6.Trim() : "";
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private bool Üzembehelyzés(string azonosító)
         {
             bool válasz = false;
@@ -540,23 +549,19 @@ namespace Villamos
                 válasz = true;
             return válasz;
         }
-        //
+
         private void Előírt_Szerelvény_kiir()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvényelőírt.mdb";
-            if (!File.Exists(hely)) return;
-            string jelszó = "pozsgaii";
-            string szöveg = $"SELECT * From szerelvénytábla WHERE kocsi1='{Pályaszám.Text.Trim()}'";
-            szöveg += $" or kocsi2='{Pályaszám.Text.Trim()}'";
-            szöveg += $" or kocsi3='{Pályaszám.Text.Trim()}'";
-            szöveg += $" or kocsi4='{Pályaszám.Text.Trim()}'";
-            szöveg += $" or kocsi5='{Pályaszám.Text.Trim()}'";
-            szöveg += $" or kocsi6='{Pályaszám.Text.Trim()}'";
-
-            Kezelő_Szerelvény kéz = new Kezelő_Szerelvény();
-            Adat_Szerelvény Szerel = kéz.Egy_Adat(hely, jelszó, szöveg);
-
-            if (Szerel != null && Szerel.Kocsi1 != null)
+            List<Adat_Szerelvény> Adatok = Kézszer.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
+            Adat_Szerelvény Szerel = (from a in Adatok
+                                      where a.Kocsi1 == Pályaszám.Text.Trim()
+                                      || a.Kocsi2 == Pályaszám.Text.Trim()
+                                      || a.Kocsi3 == Pályaszám.Text.Trim()
+                                      || a.Kocsi4 == Pályaszám.Text.Trim()
+                                      || a.Kocsi5 == Pályaszám.Text.Trim()
+                                      || a.Kocsi6 == Pályaszám.Text.Trim()
+                                      select a).FirstOrDefault();
+            if (Szerel != null)
             {
                 Elő_Szerelvény_text.Text = Szerel.Kocsi1.Trim();
                 Elő_Szerelvény_text.Text += Szerel.Kocsi2.Trim() != "_" ? "-" + Szerel.Kocsi2.Trim() : "";
@@ -568,7 +573,6 @@ namespace Villamos
         }
 
         Ablak_PDF_Tallózó Új_Ablak_PDF_Tallózó;
-        //
         private void ÜzembehelyezésiPDF_Click(object sender, EventArgs e)
         {
             Új_Ablak_PDF_Tallózó?.Close();
