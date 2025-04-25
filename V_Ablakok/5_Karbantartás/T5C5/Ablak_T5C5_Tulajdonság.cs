@@ -196,40 +196,47 @@ namespace Villamos
         {
             Pályaszám_feltöltés();
         }
-        //
+
         private void Pályaszám_feltöltés()
         {
             try
             {
                 Pályaszám.Items.Clear();
-                if ((Cmbtelephely.Text) == "")
-                    return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
-                // ha nem telephelyeól kérdezzük le akkor minden kocsit kiír
+                if ((Cmbtelephely.Text) == "") return;
+                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
+                List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
 
+                // ha nem telephelyeól kérdezzük le akkor minden kocsit kiír
                 if (Program.PostásTelephely == "Főmérnökség")
                 {
-                    szöveg = "Select * FROM Állománytábla WHERE  törölt=0 AND valóstípus Like  '%T5C5%' ORDER BY azonosító";
+                    Adatok = (from a in AdatokJármű
+                              where a.Törölt == false
+                              && a.Valóstípus.Contains("T5C5")
+                              orderby a.Azonosító
+                              select a).ToList();
                 }
                 else if (Program.Postás_Vezér)
                 {
                     // Szakszolgálat is 
-                    szöveg = "Select * FROM Állománytábla WHERE  törölt=0 AND valóstípus Like  '%T5C5%' ORDER BY azonosító";
+                    Adatok = (from a in AdatokJármű
+                              where a.Törölt == false
+                              && a.Valóstípus.Contains("T5C5")
+                              orderby a.Azonosító
+                              select a).ToList();
                 }
                 else
                 {
-                    szöveg = $"Select * FROM Állománytábla WHERE Üzem='{Cmbtelephely.Text.Trim()}' AND ";
-                    szöveg += " törölt=0 AND valóstípus Like  '%T5C5%' ORDER BY azonosító";
+                    Adatok = (from a in AdatokJármű
+                              where a.Törölt == false
+                              && a.Üzem == Cmbtelephely.Text.Trim()
+                              && a.Valóstípus.Contains("T5C5")
+                              orderby a.Azonosító
+                              select a).ToList();
                 }
+                foreach (Adat_Jármű elem in Adatok)
+                    Pályaszám.Items.Add(elem.Azonosító.Trim());
 
-                Pályaszám.BeginUpdate();
-                Pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                Pályaszám.EndUpdate();
                 Pályaszám.Refresh();
-
-                AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
