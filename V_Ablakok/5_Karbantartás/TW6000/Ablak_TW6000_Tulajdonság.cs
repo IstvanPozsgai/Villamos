@@ -347,7 +347,7 @@ namespace Villamos
                 //Színlista betöltése
                 szöveg = "SELECT * FROM szinezés";
                 Kezelő_TW600_Színezés KézSzín = new Kezelő_TW600_Színezés();
-                List<Adat_TW6000_Színezés> SzínAdatok = KézSzín.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_TW6000_Színezés> SzínAdatok = KézSzín.Lista_Adatok();
 
 
                 //listázzuk a járműveket, amik TW6000 típusúak

@@ -16,7 +16,6 @@ using MyF = Függvénygyűjtemény;
 
 namespace Villamos
 {
-
     public partial class Ablak_T5C5_Tulajdonság
     {
         string _fájlexc;
