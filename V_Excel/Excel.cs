@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using static System.IO.File;
+using DataTable = System.Data.DataTable;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
 
@@ -586,29 +587,50 @@ namespace Villamos
         /// <param name="hely"> Adatbázis elérhetősége</param>
         /// <param name="jelszó">Adatbázis jelszó</param>
         /// <param name="szöveg">Adatbázis sql</param>
-        public static void EXCELtábla(System.Data.DataTable Tábla, string fájlexc)
+        public static void EXCELtábla(DataTable Tábla, string fájlexc, List<string> Elemek = null)
         {
-
             MyExcel.Range MyRange;
             Module_Excel.ExcelLétrehozás();
 
             //Fejléc
+            int oszlop = 1;
             for (int j = 0; j < Tábla.Columns.Count; j++)
             {
-                xlWorkSheet.Cells[1, j + 1] = Tábla.Columns[j].ColumnName.ToString();
+                if (Elemek != null && Elemek.Count > 0 && Elemek.Contains(Tábla.Columns[j].ColumnName))
+                {
+                    xlWorkSheet.Cells[1, oszlop] = Tábla.Columns[j].ColumnName.ToString();
+                    oszlop++;
+                }
+
+                if (Elemek == null)
+                {
+                    xlWorkSheet.Cells[1, oszlop] = Tábla.Columns[j].ColumnName.ToString();
+                    oszlop++;
+                }
+
             }
 
 
             for (int i = 0; i < Tábla.Rows.Count; i++)
             {
+                oszlop = 1;
                 for (int j = 0; j < Tábla.Columns.Count; j++)
                 {
-                    xlWorkSheet.Cells[i + 2, j + 1] = Tábla.Rows[i].ItemArray[j];
+                    if (Elemek != null && Elemek.Count > 0 && Elemek.Contains(Tábla.Columns[j].ColumnName))
+                    {
+                        xlWorkSheet.Cells[i + 2, oszlop] = Tábla.Rows[i].ItemArray[j];
+                        oszlop++;
+                    }
+                    if (Elemek == null)
+                    {
+                        xlWorkSheet.Cells[i + 2, oszlop] = Tábla.Rows[i].ItemArray[j];
+                        oszlop++;
+                    }
                 }
             }
 
             //Utolsó oszlop és sor adatok
-            oszlop = Tábla.Columns.Count;
+            oszlop--;
             sor = Tábla.Rows.Count;
 
             // Kiszínezzük

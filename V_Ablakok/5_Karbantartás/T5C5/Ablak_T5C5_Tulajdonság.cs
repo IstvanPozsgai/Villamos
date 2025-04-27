@@ -1213,7 +1213,7 @@ namespace Villamos
                     if (Sorszám.Text == "")
                         KézKmAdatok.Rögzít(ADAT);                          // Új adat
                     else
-                        KézKmAdatok.Módosítás(sorszám, ADAT);  // módosítjuk az adatokat
+                        KézKmAdatok.Módosítás(ADAT);  // módosítjuk az adatokat
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -1422,9 +1422,9 @@ namespace Villamos
         {
             try
             {
-                Táblázatlistázás();
-                if (Tábla_lekérdezés.Rows.Count <= 0)
-                    return;
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                List<string> Elemek = new List<string> { "Azonosító", "Típus" };
+                if (Adatok.Count <= 0) return;
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
@@ -1439,63 +1439,14 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-
+                DataTable TáblaAdat = MyF.ToDataTable(Adatok);
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla_lekérdezés, false);
+                MyE.EXCELtábla(TáblaAdat, fájlexc, Elemek);
                 Tábla_lekérdezés.Rows.Clear();
                 Tábla_lekérdezés.Columns.Clear();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc + ".xlsx");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        //
-        private void Táblázatlistázás()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                if (!File.Exists(hely))
-                    return;
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla  order by típus, azonosító";
-
-                Tábla_lekérdezés.Rows.Clear();
-                Tábla_lekérdezés.Columns.Clear();
-                Tábla_lekérdezés.Refresh();
-                Tábla_lekérdezés.Visible = false;
-                Tábla_lekérdezés.ColumnCount = 2;
-
-                // fejléc elkészítése 
-                Tábla_lekérdezés.Columns[0].HeaderText = "Pályaszám";
-                Tábla_lekérdezés.Columns[0].Width = 120;
-                Tábla_lekérdezés.Columns[1].HeaderText = "Típus";
-                Tábla_lekérdezés.Columns[1].Width = 150;
-
-                Kezelő_Jármű kéz = new Kezelő_Jármű();
-                List<Adat_Jármű> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                int i;
-                foreach (Adat_Jármű rekord in Adatok)
-                {
-                    Tábla_lekérdezés.RowCount++;
-                    i = Tábla_lekérdezés.RowCount - 1;
-                    Tábla_lekérdezés.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
-                    Tábla_lekérdezés.Rows[i].Cells[1].Value = rekord.Típus.Trim();
-                }
-
-                Tábla_lekérdezés.Visible = true;
-                Tábla_lekérdezés.Refresh();
-
             }
             catch (HibásBevittAdat ex)
             {

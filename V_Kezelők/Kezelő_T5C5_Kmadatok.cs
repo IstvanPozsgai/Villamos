@@ -12,9 +12,9 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_T5C5_Kmadatok
     {
-        Kezelő_T5C5_Kmadatok_Napló KézT5C5Napló = new Kezelő_T5C5_Kmadatok_Napló();
+        readonly Kezelő_T5C5_Kmadatok_Napló KézT5C5Napló = new Kezelő_T5C5_Kmadatok_Napló();
         public string Típus { get; private set; }
-        string hely;
+        private string hely;
         readonly string jelszó = "pocsaierzsi";
 
         public Kezelő_T5C5_Kmadatok(string típus)
@@ -167,7 +167,7 @@ namespace Villamos.Kezelők
             szöveg += $" KövV_Sorszám={Adat.KövV_sorszám}, ";
             szöveg += $" KövV='{Adat.KövV.Trim()}', ";
             szöveg += $" törölt={Adat.Törölt}, ";
-            szöveg += $" V2V3Számláló={Adat.V2V3Számláló}} ";
+            szöveg += $" V2V3Számláló={Adat.V2V3Számláló} ";
             szöveg += $" WHERE id={Adat.ID}";
             MyA.ABMódosítás(hely, jelszó, szöveg);
             KézT5C5Napló.Rögzítés(DateTime.Today.Year, Adat);
