@@ -868,6 +868,7 @@
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000_Ütemezés.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_Színezés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TW600_Telephely.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_ÜtemNapló.cs" />
     <Compile Include="V_Kezelők\Kezelő_utasítás_Olvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós_Kijelöltnapok.cs" />

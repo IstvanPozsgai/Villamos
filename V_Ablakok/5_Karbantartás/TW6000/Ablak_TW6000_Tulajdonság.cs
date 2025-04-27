@@ -342,7 +342,7 @@ namespace Villamos
                 int oszlope = 2;
 
                 Kezelő_TW600_Telephely kézTel = new Kezelő_TW600_Telephely();
-                List<Adat_TW6000_Telephely> AdatokTel = kézTel.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_TW6000_Telephely> AdatokTel = kézTel.Lista_Adatok();
 
                 //Színlista betöltése
                 szöveg = "SELECT * FROM szinezés";
