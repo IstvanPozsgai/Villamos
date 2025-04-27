@@ -670,6 +670,30 @@ namespace Villamos
         }
 
 
+        public static int Munkalap(DataTable Tábla, int sor, string munkalap)
+        {
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            Munkalap.Select();
+
+            //Fejléc
+            for (int j = 0; j < Tábla.Columns.Count; j++)
+            {
+                Munkalap.Cells[sor, j + 1] = Tábla.Columns[j].ColumnName.ToString();
+            }
+
+
+            for (int i = 0; i < Tábla.Rows.Count; i++)
+            {
+                for (int j = 0; j < Tábla.Columns.Count; j++)
+                {
+                    Munkalap.Cells[i + sor + 1, j + 1] = Tábla.Rows[i].ItemArray[j];
+                }
+            }
+
+            int utolsó_sor = Tábla.Rows.Count;
+            return utolsó_sor;
+        }
+
 
         /// <summary>
         /// 
