@@ -1623,38 +1623,6 @@ namespace Villamos
                                          false,
                                          KövV2_számláló);
                     KéZT5C5.Rögzít(ADATÚJ);
-
-
-                    // naplózás
-                    List<Adat_T5C5_Kmadatok_Napló> AdatokNapló = KézKmNapló.Lista_Adatok(DateTime.Today.Year);
-                    i = 1;
-                    if (AdatokNapló.Count > 0) i = AdatokT5C5.Max(a => a.ID) + 1;
-
-                    Adat_T5C5_Kmadatok_Napló ADATNAPLÓ = new Adat_T5C5_Kmadatok_Napló(
-                                                i,
-                                                Pályaszám.Text.Trim(),
-                                                0,
-                                                VizsgKm_Jármű + Korrekció,
-                                                DateTime.Today,
-                                                Vizsgfoka_Jármű,
-                                                Vütemezés_Jármű_Dátum,
-                                                DateTime.Today,
-                                                VizsgKm_Jármű + Korrekció,
-                                                0,
-                                                Vsorszám_Jármű,
-                                                new DateTime(1900, 1, 1),
-                                                0,
-                                                CiklusrendCombo,
-                                                Program.PostásTelephely,
-                                                KövV2_Sorszám,
-                                                KövV2,
-                                                KövV_Sorszám,
-                                                KövV.Trim(),
-                                                false,
-                                                KövV2_számláló,
-                                                Program.PostásNév.Trim(),
-                                                DateTime.Now);
-                    KézKmNapló.Rögzítés(DateTime.Today.Year, ADATNAPLÓ);
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -1696,21 +1664,6 @@ namespace Villamos
                                            0, CiklusrendCombo, Program.PostásTelephely.Trim(), KövV2_Sorszám, KövV2,
                                            KövV_Sorszám, KövV, false, KövV2_számláló);
                     KéZICS.Rögzít(ADAT);
-
-                    // naplózás
-                    List<Adat_T5C5_Kmadatok_Napló> AdatokNapló = KézKmNapló.Lista_Adatok(DateTime.Today.Year);
-                    i = 1;
-                    if (AdatokNapló.Count > 0) i = AdatokNapló.Max(a => a.ID) + 1;
-                    Adat_T5C5_Kmadatok_Napló ADATNapló = new Adat_T5C5_Kmadatok_Napló(
-                              i, Pályaszám.Text.Trim(), 0, VizsgKm_Jármű, DateTime.Today,
-                              Vizsgfoka_Jármű, Vütemezés_Jármű_Dátum, DateTime.Today,
-                              VizsgKm_Jármű, 0, Vsorszám_Jármű, new DateTime(1900, 1, 1),
-                              0, CiklusrendCombo, Program.PostásTelephely.Trim(), KövV2_Sorszám, KövV2,
-                              KövV_Sorszám, KövV, false, KövV2_számláló, Program.PostásNév.Trim(), DateTime.Now);
-                    KézKmNapló.Rögzítés(DateTime.Today.Year, ADATNapló);
-
-
-
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else

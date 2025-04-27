@@ -77,7 +77,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(int Év, Adat_T5C5_Kmadatok_Napló Adat)
+        public void Rögzítés(int Év, Adat_T5C5_Kmadatok Adat)
         {
             try
             {
@@ -112,8 +112,8 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.KövV}', ";       //KövV
                 szöveg += $"{Adat.V2V3Számláló}, "; //V2V3Számláló
                 szöveg += $"{Adat.Törölt}, ";       //törölt
-                szöveg += $"'{Adat.Módosító}', ";   //Módosító
-                szöveg += $"'{Adat.Mikor}')";       //Mikor
+                szöveg += $"'{Program.PostásNév}', ";   //Módosító
+                szöveg += $"'{DateTime.Now}')";       //Mikor
 
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
