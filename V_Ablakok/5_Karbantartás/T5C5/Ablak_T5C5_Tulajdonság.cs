@@ -903,8 +903,9 @@ namespace Villamos
             else
                 return;
             _AdatTábla.Clear();
-            _AdatTábla = AdattáblaFeltöltés();
-
+            //    _AdatTábla = AdattáblaFeltöltés();
+            List<Adat_T5C5_Kmadatok> Adatok = KézKmAdatok.Lista_Adatok();
+            _AdatTábla = MyF.ToDataTable(Adatok);
             Holtart.Be();
             timer1.Enabled = true;
             SZál_ABadatbázis(() =>
@@ -926,81 +927,6 @@ namespace Villamos
                 this.Invoke(callback, new object[] { });
             });
             proc.Start();
-        }
-
-        private DataTable AdattáblaFeltöltés()
-        {
-            DataTable Válasz = new DataTable();
-            try
-            {
-                List<Adat_T5C5_Kmadatok> Adatok = KézKmAdatok.Lista_Adatok();
-                //fejléc
-
-                Válasz.Columns.Add("ID");
-                Válasz.Columns.Add("Azonosító");
-                Válasz.Columns.Add("Jjavszám");
-                Válasz.Columns.Add("KMUkm");
-                Válasz.Columns.Add("KMUdátum");
-                Válasz.Columns.Add("Vizsgfok");
-                Válasz.Columns.Add("Vizsgdátumk");
-                Válasz.Columns.Add("Vizsgdátumv");
-                Válasz.Columns.Add("Vizsgkm");
-                Válasz.Columns.Add("Havikm");
-                Válasz.Columns.Add("Vizsgsorszám");
-                Válasz.Columns.Add("Fudátum");
-                Válasz.Columns.Add("Teljeskm");
-                Válasz.Columns.Add("Ciklusrend");
-                Válasz.Columns.Add("V2végezte");
-                Válasz.Columns.Add("KövV2_sorszám");
-                Válasz.Columns.Add("KövV2");
-                Válasz.Columns.Add("KövV_sorszám");
-                Válasz.Columns.Add("KövV");
-                Válasz.Columns.Add("Törölt");
-                Válasz.Columns.Add("V2V3Számláló");
-                Holtart.Be();
-
-                //Tartalom
-                Válasz.Clear();
-                foreach (Adat_T5C5_Kmadatok rekord in Adatok)
-                {
-                    DataRow Soradat = Válasz.NewRow();
-
-                    Soradat["ID"] = rekord.ID;
-                    Soradat["Azonosító"] = rekord.Azonosító;
-                    Soradat["Jjavszám"] = rekord.Jjavszám;
-                    Soradat["KMUkm"] = rekord.KMUdátum;
-                    Soradat["KMUdátum"] = rekord.KMUdátum;
-                    Soradat["Vizsgfok"] = rekord.Vizsgfok;
-                    Soradat["Vizsgdátumk"] = rekord.Vizsgdátumk;
-                    Soradat["Vizsgdátumv"] = rekord.Vizsgdátumv;
-                    Soradat["Vizsgkm"] = rekord.Vizsgkm;
-                    Soradat["Havikm"] = rekord.Havikm;
-                    Soradat["Vizsgsorszám"] = rekord.Vizsgsorszám;
-                    Soradat["Fudátum"] = rekord.Fudátum;
-                    Soradat["Teljeskm"] = rekord.Teljeskm;
-                    Soradat["Ciklusrend"] = rekord.Ciklusrend;
-                    Soradat["V2végezte"] = rekord.V2végezte;
-                    Soradat["KövV2_sorszám"] = rekord.KövV2_sorszám;
-                    Soradat["KövV2"] = rekord.KövV2;
-                    Soradat["KövV_sorszám"] = rekord.KövV_sorszám;
-                    Soradat["KövV"] = rekord.KövV;
-                    Soradat["Törölt"] = rekord.Törölt;
-                    Soradat["V2V3Számláló"] = rekord.V2V3Számláló;
-                    Válasz.Rows.Add(Soradat);
-                    Holtart.Lép();
-                }
-                Holtart.Ki();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Válasz;
         }
 
         private void Tábla_lekérdezés_CellClick(object sender, DataGridViewCellEventArgs e)
