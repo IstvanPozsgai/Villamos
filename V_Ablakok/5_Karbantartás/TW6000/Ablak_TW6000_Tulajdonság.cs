@@ -33,6 +33,7 @@ namespace Villamos
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_TW600_Telephely KézTelep = new Kezelő_TW600_Telephely();
         readonly Kezelő_TW600_Színezés KézSzín = new Kezelő_TW600_Színezés();
+        readonly Kezelő_Váltós_Naptár KézVNaptár = new Kezelő_Váltós_Naptár();
 
         List<Adat_TW6000_Ütemezés> AdatokÜtem = new List<Adat_TW6000_Ütemezés>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
@@ -307,7 +308,6 @@ namespace Villamos
             Újkiíró();
         }
 
-        //
         private void Újkiíró()
         {
             try
@@ -332,21 +332,11 @@ namespace Villamos
 
                 // Dátumok kiírása // Hétvégék és munkaidő naptár színezése
                 KiírDátumok();
-
-                //telephelyek sorrendje
-                string hely = TW6000_Villamos;
-                string jelszó = "czapmiklós";
-                string szöveg = "SELECT * FROM telephely order by sorrend";
                 int oszlop = 2;
                 int oszlope = 2;
 
-
                 List<Adat_TW6000_Telephely> AdatokTel = KézTelep.Lista_Adatok();
-
-                //Színlista betöltése
-                szöveg = "SELECT * FROM szinezés";
-
-                List<Adat_TW6000_Színezés> SzínAdatok = KézSzín.Lista_Adatok();
+                List<Adat_TW6000_Színezés> SzínAdatok = KézSzín.Lista_Adatok();       //Színlista betöltése
 
                 //listázzuk a járműveket, amik TW6000 típusúak
                 List<Adat_Jármű> AdatokJ = KézJármű.Lista_Adatok("Főmérnökség");
@@ -355,11 +345,12 @@ namespace Villamos
                            && a.Törölt == false
                            select a).ToList();
 
-                szöveg = "SELECT * FROM ütemezés WHERE ";
-                szöveg += $" (vütemezés>=#{Ütemkezdete.Value:M-d-yy}";
-                szöveg += $"# AND vütemezés<=#{Ütemvége.Value:M-d-yy}#) ORDER BY azonosító";
-
-                AdatokÜtem = KézÜtem.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokÜtem = KézÜtem.Lista_Adatok();
+                AdatokÜtem = (from a in AdatokÜtem
+                              where a.Vütemezés >= Ütemkezdete.Value
+                              && a.Vütemezés <= Ütemkezdete.Value
+                              orderby a.Azonosító
+                              select a).ToList();
 
                 //Két listát egyesítjük 
                 List<Adat_TW6000_Ütemezés_Plusz> Egyesítettlista = Összesítvalami(AdatokJ, AdatokÜtem);
@@ -460,17 +451,15 @@ namespace Villamos
             }
         }
 
-        //
         private void Hétvége_Színezése()
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Ütemkezdete.Value:yyyy}\munkaidőnaptár.mdb";
-            if (!File.Exists(hely))
+            List<Adat_Váltós_Naptár> Adatok = KézVNaptár.Lista_Adatok(Ütemkezdete.Value.Year, "");
+            if (Adatok == null || Adatok.Count == 0)
                 SzínezHétvégét();
             else
                 SzínezMunkaidőNaptárt();
         }
 
-        //
         List<Adat_TW6000_Ütemezés_Plusz> Összesítvalami(List<Adat_Jármű> Alapadat, List<Adat_TW6000_Ütemezés> Ütemezés)
         {
             List<Adat_TW6000_Ütemezés_Plusz> Valami = new List<Adat_TW6000_Ütemezés_Plusz>(); // Inicializáld a listát
@@ -498,7 +487,6 @@ namespace Villamos
 
                 Valami.Add(Elem);
             }
-
             return Valami;
         }
 
@@ -530,21 +518,16 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void SzínezMunkaidőNaptárt()
         {
             try
             {
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Ütemkezdete.Value:yyyy}\munkaidőnaptár.mdb";
-                string jelszó = "katalin";
-                string szöveg = $"SELECT * FROM naptár ";
-                szöveg += $"WHERE (dátum>=#{Ütemkezdete.Value:M-d-yy}";
-                szöveg += $"# AND dátum<=#{Ütemvége.Value:M-d-yy}#)";
-
-                Kezelő_Váltós_Naptár Kéz = new Kezelő_Váltós_Naptár();
-                List<Adat_Váltós_Naptár> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Váltós_Naptár> Adatok = KézVNaptár.Lista_Adatok(Ütemkezdete.Value.Year, "");
+                Adatok = (from a in Adatok
+                          where a.Dátum >= Ütemkezdete.Value
+                          && a.Dátum <= Ütemvége.Value
+                          select a).ToList();
 
                 for (int sor = 0; sor < Táblaütemezés.RowCount; sor++)
                 {
@@ -614,7 +597,6 @@ namespace Villamos
             }
         }
 
-        //
         private void Excelkimenet_Click(object sender, EventArgs e)
         {
             try
@@ -696,7 +678,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
         private void Táblaütemezés_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -716,12 +698,11 @@ namespace Villamos
 
                 Ürítütemező();
 
-                string hely = TW6000_Villamos.Trim();
-                string jelszó = "czapmiklós";
-                string szöveg = $"SELECT * FROM ütemezés WHERE azonosító='{pszám.Trim()}' AND vütemezés=#{dátum:MM-dd-yyyy}#";
-
-
-                Adat_TW6000_Ütemezés rekordütem = KézÜtem.Egy_Adat(hely, jelszó, szöveg);
+                AdatokÜtem = KézÜtem.Lista_Adatok();
+                Adat_TW6000_Ütemezés rekordütem = (from a in AdatokÜtem
+                                                   where a.Azonosító == pszám.Trim()
+                                                   && a.Vütemezés == dátum
+                                                   select a).FirstOrDefault();
                 if (rekordütem != null)
                 {
                     Üazonosító.Text = rekordütem.Azonosító.Trim();

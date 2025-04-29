@@ -1738,7 +1738,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 if (AdatCsúsztatás != null)
                 {
                     szöveg = "UPDATE csúsztatás SET ";
-                    szöveg += $"Státus=3, ";   //Státus
+                    szöveg += $"Státus=3 ";   //Státus
                     szöveg += $" WHERE törzsszám='{Rekord_Új.Dolgozószám.Trim()}' AND [kezdődátum]=#{Rekord_Új.Nap:M-d-yy}# AND [státus]<>3";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
                 }
