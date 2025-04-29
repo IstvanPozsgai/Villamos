@@ -375,7 +375,7 @@ namespace Villamos
 
 
         #region Lekérdezés lapfül
-        //
+
         private void Lekérdezés_lekérdezés_Click(object sender, EventArgs e)
         {
             try
@@ -607,11 +607,10 @@ namespace Villamos
             });
             proc.Start();
         }
-        //
+
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            Holtart.Value++;
-            if (Holtart.Maximum <= Holtart.Value) Holtart.Value = 1;
+            Holtart.Lép();
         }
         #endregion
 
