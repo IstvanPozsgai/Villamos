@@ -1193,7 +1193,7 @@ namespace Villamos
 
 
                     if (Sorszám.Text == "")
-                        KézKmAdatok.Rögzít(ADAT);                          // Új adat
+                        KézKmAdatok.Rögzítés(ADAT);                          // Új adat
                     else
                         KézKmAdatok.Módosítás(ADAT);  // módosítjuk az adatokat
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);

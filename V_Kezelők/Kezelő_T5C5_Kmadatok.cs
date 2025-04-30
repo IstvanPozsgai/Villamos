@@ -81,7 +81,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzít(Adat_T5C5_Kmadatok Adat)
+        public void Rögzítés(Adat_T5C5_Kmadatok Adat)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace Villamos.Kezelők
                 szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
                 szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
                 szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt) VALUES (";
-                szöveg += $"{Adat.ID}, ";                        //ID
+                szöveg += $"{Sorszám()}, ";                        //ID
                 szöveg += $"'{Adat.Azonosító}', ";               // azonosító
                 szöveg += $"{Adat.Jjavszám}, ";                  // jjavszám
                 szöveg += $"{Adat.KMUkm}, ";                     // KMUkm
@@ -198,6 +198,27 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private long Sorszám()
+        {
+            long válasz = 1;
+            try
+            {
+                List<Adat_T5C5_Kmadatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0) válasz = Adatok.Max(x => x.ID) + 1;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return válasz;
+        }
+
 
 
         //Elkopó

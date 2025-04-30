@@ -1622,7 +1622,7 @@ namespace Villamos
                                          KövV.Trim(),
                                          false,
                                          KövV2_számláló);
-                    KéZT5C5.Rögzít(ADATÚJ);
+                    KéZT5C5.Rögzítés(ADATÚJ);
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -1663,7 +1663,7 @@ namespace Villamos
                                            VizsgKm_Jármű, 0, Vsorszám_Jármű, new DateTime(1900, 1, 1),
                                            0, CiklusrendCombo, Program.PostásTelephely.Trim(), KövV2_Sorszám, KövV2,
                                            KövV_Sorszám, KövV, false, KövV2_számláló);
-                    KéZICS.Rögzít(ADAT);
+                    KéZICS.Rögzítés(ADAT);
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
