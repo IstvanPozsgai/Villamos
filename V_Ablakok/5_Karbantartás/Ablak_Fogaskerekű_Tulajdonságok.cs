@@ -29,13 +29,12 @@ namespace Villamos
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
 
         List<Adat_T5C5_Kmadatok> AdatokKm = new List<Adat_T5C5_Kmadatok>();
-        List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_Kerék_Mérés> AdatokMérés = new List<Adat_Kerék_Mérés>();
         DataTable AdatTábla = new DataTable();
 
-        int Hónapok = 0;
-        int Havifutás = 0;
+        int Hónapok = 24;
+        int Havifutás = 1500;
 
         #region Alap
         public Ablak_Fogaskerekű_Tulajdonságok()
@@ -1306,9 +1305,15 @@ namespace Villamos
         private void Text2_Leave(object sender, EventArgs e)
         {
             if (!int.TryParse(Text2.Text, out int eredmény))
+            {
                 Text2.Text = "24";
+                Hónapok = 24;
+            }
             else
+            {
                 Text2.Text = eredmény.ToString();
+                Hónapok = eredmény;
+            }
         }
 
         /// <summary>
@@ -1320,11 +1325,15 @@ namespace Villamos
         {
 
             if (!int.TryParse(Text1.Text, out int szám))
+            {
                 Text1.Text = "";
+                Havifutás = 1500;
+            }
             else
+            {
                 Text1.Text = szám.ToString();
-
-            HaviKm.Text = Text1.Text;
+                Havifutás = szám;
+            }
             Option8.Checked = true;
         }
 
@@ -1453,8 +1462,7 @@ namespace Villamos
                 FőHoltart.Value = 2;
                 Egyhónaprögzítése();
                 Excel_előtervező();
-                AlHoltart.Visible = false;
-                FőHoltart.Visible = false;
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -1600,8 +1608,6 @@ namespace Villamos
         {
             try
             {
-
-
                 string hova = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
                 if (!File.Exists(hova)) return;
 
@@ -1661,7 +1667,7 @@ namespace Villamos
                         for (int i = 1; i < Hónapok; i++)
                         {
                             DateTime elődátum = DateTime.Today.AddMonths(i);
-                            Adat_Ciklus CiklusElem = (from a in AdatokCiklus
+                            Adat_Ciklus CiklusElem = (from a in CiklusAdat
                                                       where a.Típus == rekordhova.Ciklusrend
                                                       && a.Sorszám == ideigvizsgsorszám
                                                       select a).FirstOrDefault();
@@ -1683,7 +1689,7 @@ namespace Villamos
                             if (Option12.Checked) Mennyi = Felső;
 
                             // megnézzük a következő V-t
-                            CiklusElem = (from a in AdatokCiklus
+                            CiklusElem = (from a in CiklusAdat
                                           where a.Típus == rekordhova.Ciklusrend
                                           && a.Sorszám == sorszám + 1
                                           select a).FirstOrDefault();
@@ -1869,7 +1875,8 @@ namespace Villamos
                 MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();
                 MyE.Megnyitás(fájlexc);
-
+                AlHoltart.Visible = false;
+                FőHoltart.Visible = false;
                 MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
