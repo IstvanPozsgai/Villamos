@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -20,16 +18,24 @@ namespace Villamos
 
     public partial class Ablak_Fogaskerekű_Tulajdonságok
     {
-        string _fájlexc, _hely, _jelszó, _szöveg;
-        int utolsósor;
+        long utolsósor;
+        string _fájlexc;
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
         readonly Kezelő_T5C5_Kmadatok KézKMAdatok = new Kezelő_T5C5_Kmadatok("Fogas");
         readonly Kezelő_kiegészítő_telephely KézKieg = new Kezelő_kiegészítő_telephely();
+        readonly Kezelő_T5C5_Előterv KézElőterv = new Kezelő_T5C5_Előterv();
+        readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
 
         List<Adat_T5C5_Kmadatok> AdatokKm = new List<Adat_T5C5_Kmadatok>();
+        List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
+        List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
+        List<Adat_Kerék_Mérés> AdatokMérés = new List<Adat_Kerék_Mérés>();
         DataTable AdatTábla = new DataTable();
+
+        int Hónapok = 0;
+        int Havifutás = 0;
 
         #region Alap
         public Ablak_Fogaskerekű_Tulajdonságok()
@@ -568,6 +574,7 @@ namespace Villamos
         {
             try
             {
+
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     // kimeneti fájl helye és neve
@@ -593,6 +600,7 @@ namespace Villamos
                     Holtart.Be();
                     MessageBox.Show("Az Excel tábla elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     MyE.Megnyitás(_fájlexc);
+                    Holtart.Ki();
                 });
 
             }
@@ -744,7 +752,7 @@ namespace Villamos
             try
             {
                 Mezők_ürítése();
-                if (long.TryParse(Sorszám.Text, out long sorszám)) KiírjaAdatot(sorszám);
+                if (long.TryParse(Tábla1.Rows[e.RowIndex].Cells[15].Value.ToStrTrim(), out long sorszám)) KiírjaAdatot(sorszám);
                 Vizsgfokcombofeltölés();
                 Fülek.SelectedIndex = 1;
 
@@ -1111,7 +1119,7 @@ namespace Villamos
             Thread proc = new Thread(() =>
             {
                 //beolvassuk az adatokat
-                SAP_Adatokbeolvasása_km.Km_beolvasó(_fájlexc, _hely);
+                SAP_Adatokbeolvasása_km.Km_beolvasóFogas(_fájlexc);
                 this.Invoke(callback, new object[] { });
             });
             proc.Start();
@@ -1150,79 +1158,120 @@ namespace Villamos
 
 
         #region Kimutatások
-        //
+        /// <summary>
+        /// Kiválasztott pályaszámok listáját tölti fel a pszjelölőbe
+        /// </summary>
         private void Pszlista()
         {
-            PszJelölő.Items.Clear();
-            string hely = $@"{Application.StartupPath}\főmérnökség\adatok\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM Állománytábla where [törölt]= false AND valóstípus Like  '%SGP%'  ORDER BY azonosító ";
+            try
+            {
+                PszJelölő.Items.Clear();
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
+                Adatok = (from a in Adatok
+                          where a.Törölt == false
+                          && a.Valóstípus.Contains("SGP")
+                          orderby a.Azonosító
+                          select a).ToList();
 
-            PszJelölő.Items.Clear();
-            PszJelölő.BeginUpdate();
-            PszJelölő.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-            PszJelölő.EndUpdate();
-            PszJelölő.Refresh();
+                foreach (Adat_Jármű elem in Adatok)
+                    PszJelölő.Items.Add(elem.Azonosító);
+
+                PszJelölő.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        /// <summary>
+        /// Havi km 0-ra állítása
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Option5_Click(object sender, EventArgs e)
         {
             // Kocsi havi km
             Text1.Text = "0";
         }
 
+        /// <summary>
+        /// A típus átlagát számolja ki a táblázat adatai alapján
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Option7_Click(object sender, EventArgs e)
         {
-            // típusátlag
-            // kilistázzuk a adatbázis adatait
+            try
+            { // típusátlag
+              // kilistázzuk a adatbázis adatait
 
-            double típusátlag = 0d;
-            int i = 0;
-            FőHoltart.Maximum = PszJelölő.Items.Count + 1;
-            FőHoltart.Visible = true;
+                double típusátlag = 0d;
+                int i = 0;
+                FőHoltart.Maximum = PszJelölő.Items.Count + 1;
+                FőHoltart.Visible = true;
 
-            AdatokKm = KézKMAdatok.Lista_Adatok();
+                AdatokKm = KézKMAdatok.Lista_Adatok();
 
-            for (int j = 0; j < PszJelölő.Items.Count; j++)
-            {
-                FőHoltart.Value = j + 1;
-
-
-                Adat_T5C5_Kmadatok AdatFogas = (from a in AdatokKm
-                                                where a.Azonosító == PszJelölő.Items[j].ToStrTrim()
-                                                orderby a.Vizsgdátumk descending
-                                                select a).FirstOrDefault();
-
-                if (AdatFogas != null)
+                for (int j = 0; j < PszJelölő.Items.Count; j++)
                 {
-                    típusátlag += AdatFogas.Havikm; ;
-                    i += 1;
-                }
-            }
-            FőHoltart.Visible = false;
-            if (i != 0) típusátlag /= i;
-            Text1.Text = ((long)Math.Round(típusátlag)).ToString();
-        }
+                    FőHoltart.Value = j + 1;
 
-        private void Option9_Click(object sender, EventArgs e)
-        {
-            // 'kijelöltek átlaga
-
-            double típusátlag = 0d;
-            int i = 0;
-            FőHoltart.Maximum = PszJelölő.Items.Count + 1;
-            FőHoltart.Visible = true;
-
-            AdatokKm = KézKMAdatok.Lista_Adatok();
-
-            for (int j = 0; j < PszJelölő.Items.Count; j++)
-            {
-                FőHoltart.Value = j + 1;
-                if (PszJelölő.GetItemChecked(j))
-                {
 
                     Adat_T5C5_Kmadatok AdatFogas = (from a in AdatokKm
                                                     where a.Azonosító == PszJelölő.Items[j].ToStrTrim()
+                                                    orderby a.Vizsgdátumk descending
+                                                    select a).FirstOrDefault();
+
+                    if (AdatFogas != null)
+                    {
+                        típusátlag += AdatFogas.Havikm; ;
+                        i += 1;
+                    }
+                }
+                FőHoltart.Visible = false;
+                if (i != 0) típusátlag /= i;
+                Text1.Text = ((long)Math.Round(típusátlag)).ToString();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Kiválasztott pályaszámok átlagát számolja ki a táblázat adatai alapján
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Option9_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 'kijelöltek átlaga
+
+                double típusátlag = 0d;
+                int i = 0;
+                FőHoltart.Maximum = PszJelölő.Items.Count + 1;
+                FőHoltart.Visible = true;
+
+                AdatokKm = KézKMAdatok.Lista_Adatok();
+
+                for (int j = 0; j < PszJelölő.CheckedItems.Count; j++)
+                {
+                    FőHoltart.Value = j + 1;
+                    Adat_T5C5_Kmadatok AdatFogas = (from a in AdatokKm
+                                                    where a.Azonosító == PszJelölő.CheckedItems[j].ToStrTrim()
                                                     orderby a.Vizsgdátumk descending
                                                     select a).FirstOrDefault();
 
@@ -1232,14 +1281,28 @@ namespace Villamos
                         i += 1;
                     }
                 }
-            }
-            FőHoltart.Visible = false;
-            if (i != 0)
-                típusátlag /= i;
+                FőHoltart.Visible = false;
+                if (i != 0)
+                    típusátlag /= i;
 
-            Text1.Text = ((long)Math.Round(típusátlag)).ToString();
+                Text1.Text = ((long)Math.Round(típusátlag)).ToString();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        /// <summary>
+        /// Ha a mezőben nem egész szám van, akkor visszaírja a 24 számot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Text2_Leave(object sender, EventArgs e)
         {
             if (!int.TryParse(Text2.Text, out int eredmény))
@@ -1248,6 +1311,11 @@ namespace Villamos
                 Text2.Text = eredmény.ToString();
         }
 
+        /// <summary>
+        /// Ha a mezőben nem egész szám van, akkor visszaírja a 0 számot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Text1_Leave(object sender, EventArgs e)
         {
 
@@ -1260,12 +1328,22 @@ namespace Villamos
             Option8.Checked = true;
         }
 
+        /// <summary>
+        /// Kijelölést törli a pályaszám listából
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Kijelöléstörlése_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < PszJelölő.Items.Count; i++)
                 PszJelölő.SetItemChecked(i, false);
         }
 
+        /// <summary>
+        /// Kijelölést minden pályaszámra beállítja
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Mindentkijelöl_Click(object sender, EventArgs e)
         {
 
@@ -1273,14 +1351,18 @@ namespace Villamos
                 PszJelölő.SetItemChecked(i, true);
         }
 
-        //
+        /// <summary>
+        /// Adatbázis adatait írja ki excelbe és előre beállított kimutatást is készít hozzá.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Command3_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4Fogas.mdb";
-                string jelszó = "pocsaierzsi";
-                string szöveg = "SELECT * FROM KMtábla order by azonosító";
+                List<Adat_T5C5_Kmadatok> Adatok = KézKMAdatok.Lista_Adatok().OrderBy(a => a.Azonosító).ToList();
+                if (Adatok.Count < 1) return;
+                DataTable Tábla = MyF.ToDataTable(Adatok);
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -1288,7 +1370,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Vizsgálatok tény adatai",
-                    FileName = "Fogas_adatbázis_mentés_" + Program.PostásTelephely.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Fogas_adatbázis_mentés_{Program.PostásTelephely.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1297,16 +1379,14 @@ namespace Villamos
                 else
                     return;
 
-
                 Holtart.Be();
-
                 MyE.ExcelLétrehozás();
 
 
                 string munkalap = "Adatok";
                 MyE.Munkalap_átnevezés("Munka1", munkalap);
 
-                utolsósor = MyE.Tábla_Író(hely, jelszó, szöveg, 1, munkalap);
+                utolsósor = MyE.Munkalap(Tábla, 1, munkalap);
 
                 Holtart.Lép();
 
@@ -1354,26 +1434,17 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Előtervet készít a lap beállításainak megfelelően
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Command1_Click(object sender, EventArgs e)
         {
             try
             {
-                if (!int.TryParse(Text2.Text, out int Hónap))
-                    return;
-                int volt = 0;
-                for (int j = 0; j < PszJelölő.Items.Count; j++)
-                {
-                    if (PszJelölő.GetItemChecked(j) == true)
-                    {
-                        volt = 1;
-                        break;
-                    }
-                }
-                if (volt == 0)
-                {
-                    return;
-                }
-
+                if (!int.TryParse(Text2.Text, out int Hónap)) return;
+                if (PszJelölő.CheckedItems.Count == 0) return;
                 AlHoltart.Visible = true;
                 FőHoltart.Visible = true;
                 FőHoltart.Maximum = 10;
@@ -1397,158 +1468,122 @@ namespace Villamos
             }
         }
 
-        //
         private void Alaptábla()
         {
             try
             {
-                if (Check1.Checked) return;
                 string hova = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
+                if (File.Exists(hova) && !Check1.Checked) File.Delete(hova);
 
-                if (Exists(hova) && !Check1.Checked) Delete(hova);
-                if (!Exists(hova)) Adatbázis_Létrehozás.Előtervkmfutástábla(hova);
-
-                string helykerék = $@"{Application.StartupPath}\Főmérnökség\adatok\" + DateTime.Today.Year + @"\telepikerék.mdb";
-                string helykerékelőző = $@"{Application.StartupPath}\Főmérnökség\adatok\" + DateTime.Today.AddYears(-1).Year + @"\telepikerék.mdb";
-                string jelszókerék = "szabólászló";
                 double kerékminimum;
                 double Kerék_K11;
                 double Kerék_K12;
                 double Kerék_K21;
                 double Kerék_K22;
-                string szövegkerék = "SELECT * FROM keréktábla";
 
-                //Új
 
-                Kezelő_Kerék_Mérés KézKerékM = new Kezelő_Kerék_Mérés();
-                List<Adat_Kerék_Mérés> AdatokKerékM = KézKerékM.Lista_Adatok(helykerék, jelszókerék, szövegkerék);
-                List<Adat_Kerék_Mérés> AdatokKerékM_Előző = KézKerékM.Lista_Adatok(helykerékelőző, jelszókerék, szövegkerék);
-                AdatokKerékM.AddRange(AdatokKerékM_Előző);
+                AdatokKm = KézKMAdatok.Lista_Adatok().Where(a => a.Törölt == false).ToList();
+                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
+                KerékadatokListaFeltöltés();
 
                 // kilistázzuk a adatbázis adatait
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos4Fogas.mdb";
-                string jelszó = "pocsaierzsi";
-                string honnan = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszóhonnan = "pozsgaii";
-                string szöveg0 = "SELECT * FROM Állománytábla";
-
-
-                // adatbázis
-                Adat_T5C5_Kmadatok rekord;
-
-                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-
-                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(honnan, jelszóhonnan, szöveg0);
-
-
-                string szöveg;
-                AlHoltart.Maximum = PszJelölő.Items.Count + 1;
+                AlHoltart.Be(PszJelölő.Items.Count + 1);
+                AlHoltart.BackColor = Color.Yellow;
                 int i = 1;
-
-                List<string> SzövegGy = new List<string>();
-                for (int j = 0, loopTo = PszJelölő.Items.Count - 1; j <= loopTo; j++)
+                List<Adat_T5C5_Előterv> AdatokGy = new List<Adat_T5C5_Előterv>();
+                for (int j = 0; j < PszJelölő.Items.Count; j++)
                 {
-                    if (PszJelölő.GetItemChecked(j) == true)
+                    if (PszJelölő.GetItemChecked(j))
                     {
+                        Adat_T5C5_Kmadatok rekord = (from a in AdatokKm
+                                                     where a.Azonosító == PszJelölő.Items[j].ToStrTrim()
+                                                     orderby a.Vizsgdátumk descending
+                                                     select a).FirstOrDefault();
 
-                        Adat_Jármű AdatJármű = (from a in AdatokJármű
-                                                where a.Törölt == false
-                                                && a.Azonosító == PszJelölő.Items[j].ToStrTrim()
+                        Adat_Jármű JárműElem = (from a in AdatokJármű
+                                                where a.Azonosító == PszJelölő.Items[j].ToStrTrim()
                                                 select a).FirstOrDefault();
-
-                        szöveg = "SELECT * FROM KMtábla where [azonosító]='" + PszJelölő.Items[j].ToString().Trim() + "'";
-                        szöveg += " order by vizsgdátumk desc ";
-
-                        rekord = KézKMAdatok.Egy_Adat(hely, jelszó, szöveg);
 
                         if (rekord != null)
                         {
-                            // Új adat
-                            szöveg = "INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
-                            szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
-                            szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
-                            szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
-                            szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt, Honostelephely, tervsorszám, Kerék_K11, Kerék_K12, Kerék_K21, Kerék_K22, Kerék_min)";
-                            szöveg += " VALUES (";
-                            szöveg += i.ToString() + ", ";                                               // id
-                            szöveg += "'" + rekord.Azonosító + "', ";                            // azonosító
-                            szöveg += rekord.Jjavszám + ", ";                                   // jjavszám
-                            szöveg += rekord.KMUkm + ", ";                                     // KMUkm
-                            szöveg += "'" + rekord.KMUdátum.ToString("yyyy.MM.dd") + "', ";                 // KMUdátum
-                            szöveg += "'" + rekord.Vizsgfok + "', ";                            // vizsgfok
-                            szöveg += "'" + rekord.Vizsgdátumk.ToString("yyyy.MM.dd") + "', ";             // vizsgdátumk
-                            szöveg += "'" + rekord.Vizsgdátumv.ToString("yyyy.MM.dd") + "', ";              // vizsgdátumv
-                            szöveg += rekord.Vizsgkm + ", ";                                     // vizsgkm
-                            szöveg += rekord.Havikm + ", ";                                     // havikm
-                            szöveg += rekord.Vizsgsorszám + ", ";                              // vizsgsorszám
-                            szöveg += "'" + rekord.Fudátum.ToString("yyyy.MM.dd") + "', ";    // fudátum
-                            szöveg += rekord.Teljeskm + ", ";                               // Teljeskm
-                            szöveg += "'" + rekord.Ciklusrend.Trim() + "', ";                          // Ciklusrend
-                            szöveg += "'" + rekord.V2végezte.Trim() + "', ";                                    // V2végezte
-                            szöveg += " 0, ";                             // KövV2_Sorszám
-                            szöveg += " '_', ";                                     // KövV2
-                            szöveg += " 0, ";                               // KövV_Sorszám
-                            szöveg += " '_', ";                                      // KövV
-                            szöveg += "0, ";                                // V2V3Számláló
-                            szöveg += " false, ";                                                   // törölt
-                            szöveg += "'" + AdatJármű.Üzem.Trim() + "', "; // Honostelephely
-                            szöveg += "0, ";    // tervsorszám
-
                             Kerék_K11 = 0d;
                             Kerék_K12 = 0d;
                             Kerék_K21 = 0d;
                             Kerék_K22 = 0d;
                             kerékminimum = 1000d;
-                            //  kerék méretek
-                            if (AdatokKerékM != null)
+                            // kerék méretek
+                            if (AdatokMérés != null)
                             {
-                                Adat_Kerék_Mérés AdatKerékMérés = (from a in AdatokKerékM
-                                                                   where a.Azonosító == rekord.Azonosító.Trim()
-                                                                   && a.Pozíció == "K11"
-                                                                   orderby a.Mikor descending
-                                                                   select a).FirstOrDefault();
+                                Adat_Kerék_Mérés Elem = (from a in AdatokMérés
+                                                         where a.Azonosító == rekord.Azonosító
+                                                         && a.Pozíció == "K11"
+                                                         orderby a.Mikor descending
+                                                         select a).FirstOrDefault();
+                                if (Elem != null) Kerék_K11 = Elem.Méret;
 
-                                if (AdatKerékMérés != null) Kerék_K11 = AdatKerékMérés.Méret;
+                                Elem = (from a in AdatokMérés
+                                        where a.Azonosító == rekord.Azonosító
+                                        && a.Pozíció == "K12"
+                                        orderby a.Mikor descending
+                                        select a).FirstOrDefault();
+                                if (Elem != null) Kerék_K12 = Elem.Méret;
 
-                                AdatKerékMérés = (from a in AdatokKerékM
-                                                  where a.Azonosító == rekord.Azonosító.Trim()
-                                                  && a.Pozíció == "K12"
-                                                  orderby a.Mikor descending
-                                                  select a).FirstOrDefault();
-                                if (AdatKerékMérés != null) Kerék_K12 = AdatKerékMérés.Méret;
+                                Elem = (from a in AdatokMérés
+                                        where a.Azonosító == rekord.Azonosító
+                                        && a.Pozíció == "K21"
+                                        orderby a.Mikor descending
+                                        select a).FirstOrDefault();
+                                if (Elem != null) Kerék_K21 = Elem.Méret;
 
-                                AdatKerékMérés = (from a in AdatokKerékM
-                                                  where a.Azonosító == rekord.Azonosító.Trim()
-                                                  && a.Pozíció == "K21"
-                                                  orderby a.Mikor descending
-                                                  select a).FirstOrDefault();
-                                if (AdatKerékMérés != null) Kerék_K21 = AdatKerékMérés.Méret;
-
-                                AdatKerékMérés = (from a in AdatokKerékM
-                                                  where a.Azonosító == rekord.Azonosító.Trim()
-                                                  && a.Pozíció == "K22"
-                                                  orderby a.Mikor descending
-                                                  select a).FirstOrDefault();
-                                if (AdatKerékMérés != null) Kerék_K22 = AdatKerékMérés.Méret;
-
-                                if (kerékminimum > Kerék_K11) kerékminimum = Kerék_K11;
-                                if (kerékminimum > Kerék_K12) kerékminimum = Kerék_K12;
-                                if (kerékminimum > Kerék_K21) kerékminimum = Kerék_K21;
-                                if (kerékminimum > Kerék_K22) kerékminimum = Kerék_K22;
-
-                                szöveg += Kerék_K11.ToString() + ", ";  // Kerék_K11
-                                szöveg += Kerék_K12.ToString() + ", "; // Kerék_K12
-                                szöveg += Kerék_K21.ToString() + ", "; // Kerék_K21
-                                szöveg += Kerék_K22.ToString() + ", "; // Kerék_K22
-                                szöveg += kerékminimum.ToString() + " )";  // Kerék_min
-                                SzövegGy.Add(szöveg);
-                                i += 1;
+                                Elem = (from a in AdatokMérés
+                                        where a.Azonosító == rekord.Azonosító
+                                        && a.Pozíció == "K22"
+                                        orderby a.Mikor descending
+                                        select a).FirstOrDefault();
+                                if (Elem != null) Kerék_K22 = Elem.Méret;
                             }
-                            AlHoltart.Value = j + 1;
+
+                            if (kerékminimum > Kerék_K11) kerékminimum = Kerék_K11;
+                            if (kerékminimum > Kerék_K12) kerékminimum = Kerék_K12;
+                            if (kerékminimum > Kerék_K21) kerékminimum = Kerék_K21;
+                            if (kerékminimum > Kerék_K22) kerékminimum = Kerék_K22;
+                            Adat_T5C5_Előterv ADAT = new Adat_T5C5_Előterv(
+                                              i,
+                                              rekord.Azonosító.ToStrTrim(),
+                                              rekord.Jjavszám,
+                                              rekord.KMUkm,
+                                              rekord.KMUdátum,
+                                              rekord.Vizsgfok.Trim(),
+                                              rekord.Vizsgdátumk,
+                                              rekord.Vizsgdátumv,
+                                              rekord.Vizsgkm,
+                                              rekord.Havikm,
+                                              rekord.Vizsgsorszám,
+                                              rekord.Fudátum,
+                                              rekord.Teljeskm,
+                                              rekord.Ciklusrend.Trim(),
+                                              rekord.V2végezte.Trim(),
+                                              rekord.KövV2_sorszám,
+                                              rekord.KövV2.ToStrTrim(),
+                                              rekord.KövV_sorszám,
+                                              rekord.KövV.Trim(),
+                                              false,
+                                              JárműElem.Üzem,
+                                              0,
+                                              Kerék_K11,
+                                              Kerék_K12,
+                                              Kerék_K21,
+                                              Kerék_K22,
+                                              kerékminimum,
+                                              rekord.V2V3Számláló);
+                            AdatokGy.Add(ADAT);
+                            i += 1;
                         }
+
+                        AlHoltart.Lép();
                     }
-                    MyA.ABMódosítás(hova, jelszó, SzövegGy);
                 }
+                KézElőterv.Rögzítés(hova, AdatokGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1559,256 +1594,189 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-        //
 
         private void Egyhónaprögzítése()
         {
             try
             {
-                if (Text2.Text.Trim() == "") return;
-                if (!int.TryParse(Text2.Text, out int hónap)) return;
 
 
                 string hova = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
-                if (!Exists(hova)) return;
+                if (!File.Exists(hova)) return;
 
-                string jelszó = "pocsaierzsi";
-                var Alsó = default(double);
-                var Felső = default(double);
-                var Névleges = default(double);
-                double Havifutás;
-                var Mennyi = default(double);
-                var sorszám = default(double);
-                double különbözet;
+                FőHoltart.Be();
+                AlHoltart.Be(Hónapok + 3);
+                AlHoltart.BackColor = Color.Green;
 
-                //string Szöveg1;
-                string következőv;
-
-                //Új
-
-                List<Adat_Ciklus> AdatokCiklus = KézCiklus.Lista_Adatok();
-
-                string ideigazonosító;
-                double ideigjjavszám;
-                double ideigKMUkm;
-                DateTime ideigKMUdátum;
-                string ideigvizsgfok;
-                DateTime ideigvizsgdátumk;
-                DateTime ideigvizsgdátumv;
-                double ideigvizsgkm;
-                double ideighavikm;
-                double ideigvizsgsorszám;
-                DateTime ideigfudátum;
-                double ideigTeljeskm;
-                string ideigCiklusrend;
-                string ideigV2végezte;
-                string ideigHonostelephely;
-                double ideigtervsorszám;
-                double ideigkövV2_sorszám;
-                string ideigkövV2;
-                double ideigkövV_sorszám;
-                string ideigKövV;
-                bool ideigtörölt;
-                double ideigkerék_11;
-                double ideigkerék_12;
-                double ideigkerék_21;
-                double ideigkerék_22;
-                double ideigkerék_min;
-                double ideigV2V3számláló;
-                double id_sorszám;
-                DateTime elődátum;
-                double figyelő;
-
-                FőHoltart.Maximum = PszJelölő.Items.Count + 3;
-                AlHoltart.Maximum = int.Parse(Text2.Text) + 3;
                 // beolvassuk a ID sorszámot, majd növeljük minden rögzítésnél
+                List<Adat_T5C5_Előterv> TervAdatok = KézElőterv.Lista_Adatok(hova).OrderByDescending(a => a.ID).ToList();
+                long id_sorszám = 1;
+                if (TervAdatok.Count > 0) id_sorszám = TervAdatok.Max(a => a.ID);
 
-                Kezelő_T5C5_Előterv Kéz = new Kezelő_T5C5_Előterv();
-                Adat_T5C5_Előterv rekordhova;
+                TervAdatok = TervAdatok.OrderByDescending(a => a.Vizsgdátumv).ToList();
 
-                string szöveg = "SELECT * FROM KMtábla ";
-                List<Adat_T5C5_Előterv> Adatok_T5C5 = Kéz.Lista_Adat(hova, jelszó, szöveg);
-                rekordhova = (from a in Adatok_T5C5
-                              orderby a.ID descending
-                              select a).FirstOrDefault();
+                List<Adat_Ciklus> CiklusAdat = KézCiklus.Lista_Adatok();
 
-                id_sorszám = rekordhova.ID;
-
-                for (int j = 0; j < PszJelölő.Items.Count; j++)
+                List<Adat_T5C5_Előterv> AdatokGy = new List<Adat_T5C5_Előterv>();
+                for (int j = 0; j < PszJelölő.CheckedItems.Count; j++)
                 {
-                    if (PszJelölő.GetItemChecked(j))
+                    Adat_T5C5_Előterv rekordhova = (from a in TervAdatok
+                                                    where a.Azonosító == PszJelölő.CheckedItems[j].ToStrTrim()
+                                                    orderby a.Vizsgdátumv descending
+                                                    select a).FirstOrDefault();
+
+                    if (rekordhova != null)
                     {
+                        long ideigvizsgsorszám = rekordhova.Vizsgsorszám;
+                        long ideighavikm = rekordhova.Havikm;
+                        long ideigKMUkm = rekordhova.KMUkm;
+                        long ideigvizsgkm = rekordhova.Vizsgkm;
+                        long figyelő = 0;
+                        long különbözet = 0;
+                        string ideigazonosító = rekordhova.Azonosító.Trim();
+                        long ideigjjavszám = rekordhova.Jjavszám;
+                        DateTime ideigKMUdátum = rekordhova.KMUdátum;
+                        string ideigvizsgfok = rekordhova.Vizsgfok;
+                        DateTime ideigvizsgdátumk = rekordhova.Vizsgdátumk;
+                        DateTime ideigvizsgdátumv = rekordhova.Vizsgdátumv;
+                        DateTime ideigfudátum = rekordhova.Fudátum;
+                        long ideigTeljeskm = rekordhova.Teljeskm;
+                        string ideigCiklusrend = rekordhova.Ciklusrend;
+                        string ideigV2végezte = "Előterv";
+                        long ideigkövV2_sorszám = rekordhova.KövV2_sorszám;
+                        string ideigkövV2 = rekordhova.KövV2;
+                        long ideigkövV_sorszám = rekordhova.KövV_sorszám;
+                        string ideigKövV = rekordhova.KövV;
+                        bool ideigtörölt = rekordhova.Törölt;
+                        string ideigHonostelephely = rekordhova.Honostelephely;
+                        long ideigtervsorszám = rekordhova.Tervsorszám;
+                        double ideigkerék_11 = rekordhova.Kerék_K11;
+                        double ideigkerék_12 = rekordhova.Kerék_K12;
+                        double ideigkerék_21 = rekordhova.Kerék_K21;
+                        double ideigkerék_22 = rekordhova.Kerék_K22;
+                        double ideigkerék_min = rekordhova.Kerék_min;
+                        long ideigV2V3számláló = rekordhova.V2V3Számláló;
 
-                        szöveg = $"SELECT * FROM KMtábla where [azonosító]='{PszJelölő.Items[j].ToStrTrim()}' order by vizsgdátumv desc";
-
-                        rekordhova = Kéz.Egy_Adat(hova, jelszó, szöveg);
-
-                        if (rekordhova != null)
+                        for (int i = 1; i < Hónapok; i++)
                         {
-
-                            // beolvassuk a kocsi alapadatait, hogy tudjuk növelni.
-                            ideigazonosító = rekordhova.Azonosító.Trim();
-                            ideigjjavszám = rekordhova.Jjavszám;
-                            ideigKMUkm = rekordhova.KMUkm;
-                            ideigKMUdátum = rekordhova.KMUdátum;
-                            ideigvizsgfok = rekordhova.Vizsgfok;
-                            ideigvizsgdátumk = rekordhova.Vizsgdátumk;
-                            ideigvizsgdátumv = rekordhova.Vizsgdátumv;
-                            ideigvizsgkm = rekordhova.Vizsgkm;
-                            ideighavikm = rekordhova.Havikm;
-                            ideigvizsgsorszám = rekordhova.Vizsgsorszám;
-                            ideigfudátum = rekordhova.Fudátum;
-                            ideigTeljeskm = rekordhova.Teljeskm;
-                            ideigCiklusrend = rekordhova.Ciklusrend;
-                            ideigV2végezte = "Előterv";
-                            ideigkövV2_sorszám = rekordhova.KövV2_sorszám;
-                            ideigkövV2 = rekordhova.KövV2;
-                            ideigkövV_sorszám = rekordhova.KövV_sorszám;
-                            ideigKövV = rekordhova.KövV;
-                            ideigtörölt = rekordhova.Törölt;
-                            ideigHonostelephely = rekordhova.Honostelephely;
-                            ideigtervsorszám = rekordhova.Tervsorszám;
-                            ideigkerék_11 = rekordhova.Kerék_K11;
-                            ideigkerék_12 = rekordhova.Kerék_K12;
-                            ideigkerék_21 = rekordhova.Kerék_K21;
-                            ideigkerék_22 = rekordhova.Kerék_K22;
-                            ideigkerék_min = rekordhova.Kerék_min;
-                            ideigV2V3számláló = rekordhova.V2V3Számláló;
-
-
-                            for (int i = 1; i < hónap; i++)
+                            DateTime elődátum = DateTime.Today.AddMonths(i);
+                            Adat_Ciklus CiklusElem = (from a in AdatokCiklus
+                                                      where a.Típus == rekordhova.Ciklusrend
+                                                      && a.Sorszám == ideigvizsgsorszám
+                                                      select a).FirstOrDefault();
+                            // megnézzük, hogy mi a ciklus határa
+                            long Alsó = 0;
+                            long Felső = 0;
+                            long Névleges = 0;
+                            long sorszám = 0;
+                            long Mennyi = 0;
+                            if (CiklusElem != null)
                             {
-                                elődátum = DateTime.Today.AddMonths(i);
-
-                                // megnézzük, hogy mi a ciklus határa
-                                Adat_Ciklus AdatCiklus = (from a in AdatokCiklus
-                                                          where a.Típus == ideigCiklusrend.Trim()
-                                                          && a.Sorszám == ideigvizsgsorszám
-                                                          select a).FirstOrDefault();
-
-                                if (AdatCiklus != null)
-                                {
-                                    Alsó = AdatCiklus.Alsóérték;
-                                    Felső = AdatCiklus.Felsőérték;
-                                    Névleges = AdatCiklus.Névleges;
-                                    sorszám = AdatCiklus.Sorszám;
-                                }
-                                if (Option10.Checked) Mennyi = Alsó;
-                                if (Option11.Checked) Mennyi = Névleges;
-                                if (Option12.Checked) Mennyi = Felső;
-
-                                // megnézzük a következő V-t
-                                AdatCiklus = (from a in AdatokCiklus
-                                              where a.Típus == ideigCiklusrend.Trim()
-                                              && a.Sorszám == sorszám + 1
-                                              select a).FirstOrDefault();
-
-                                if (AdatCiklus != null)
-                                    következőv = AdatCiklus.Vizsgálatfok;
-                                else
-                                    következőv = "J";
-
-
-
-                                // az utolsó rögzített adatot megvizsgáljuk, hogy a havi km-et át lépjük -e fokozatot
-                                if (!int.TryParse(Text1.Text, out int havilabel))
-                                    Havifutás = ideighavikm;
-                                else
-                                    Havifutás = havilabel;
-                                figyelő = ideigKMUkm - ideigvizsgkm + Havifutás;
-
-                                if (Mennyi <= figyelő)
-                                {
-
-                                    különbözet = ideigKMUkm - ideigvizsgkm + Havifutás - Mennyi;
-                                    // módosítjuk a határig tartó adatokat
-                                    ideigKMUkm = ideigKMUkm + Havifutás - különbözet;
-                                    ideigTeljeskm = ideigTeljeskm + Havifutás - különbözet;
-                                    id_sorszám += 1d;
-                                    //ideigvizsgkm = ideigKMUkm + Havifutás - különbözet
-                                    ideigvizsgkm += Mennyi;
-                                    ideigTeljeskm += Havifutás;
-                                    ideigKMUdátum = elődátum;
-                                    ideigvizsgfok = következőv;
-                                    ideigvizsgdátumk = elődátum;
-                                    ideigvizsgdátumv = elődátum;
-                                    ideigtervsorszám += 1d;
-                                    double kerékcsökkenés = double.TryParse(Kerékcsökkenés.Text, out kerékcsökkenés) ? kerékcsökkenés : 0;
-                                    ideigkerék_11 -= kerékcsökkenés;
-                                    ideigkerék_12 -= kerékcsökkenés;
-                                    ideigkerék_21 -= kerékcsökkenés;
-                                    ideigkerék_22 -= kerékcsökkenés;
-                                    ideigkerék_min -= kerékcsökkenés;
-                                    // rögzítjük és egy ciklussal feljebb emeljük
-                                    if (következőv == "J")
-                                    {
-                                        ideigvizsgsorszám = 0d;
-                                        ideigKMUkm = 0d;
-                                        ideigfudátum = elődátum;
-                                        ideigjjavszám += 1d;
-                                        ideigvizsgkm = 0d;
-                                    }
-                                    else
-                                    {
-                                        ideigvizsgsorszám += 1;
-                                    }
-                                    szöveg = "INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
-                                    szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
-                                    szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
-                                    szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
-                                    szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt, Honostelephely, tervsorszám, Kerék_K11, Kerék_K12, Kerék_K21, Kerék_K22, Kerék_min)";
-                                    szöveg += " VALUES (";
-                                    szöveg += id_sorszám.ToString() + ", ";                                               // id
-                                    szöveg += "'" + ideigazonosító.Trim() + "', ";                            // azonosító
-                                    szöveg += ideigjjavszám.ToString() + ", ";                                   // jjavszám
-                                    szöveg += ideigKMUkm.ToString() + ", ";                                     // KMUkm
-                                    szöveg += "'" + ideigKMUdátum.ToString("yyyy.MM.dd") + "', ";                 // KMUdátum
-                                    szöveg += "'" + ideigvizsgfok.Trim() + "', ";                            // vizsgfok
-                                    szöveg += "'" + ideigvizsgdátumk.ToString("yyyy.MM.dd") + "', ";             // vizsgdátumk
-                                    szöveg += "'" + ideigvizsgdátumv.ToString("yyyy.MM.dd") + "', ";              // vizsgdátumv
-                                    szöveg += ideigvizsgkm.ToString() + ", ";                                     // vizsgkm
-                                    szöveg += ideighavikm.ToString() + ", ";                                     // havikm
-                                    szöveg += ideigvizsgsorszám.ToString() + ", ";                              // vizsgsorszám
-                                    szöveg += "'" + ideigfudátum.ToString("yyyy.MM.dd") + "', ";    // fudátum
-                                    szöveg += ideigTeljeskm.ToString() + ", ";                               // Teljeskm
-                                    szöveg += "'" + ideigCiklusrend.Trim() + "', ";                          // Ciklusrend
-                                    szöveg += "'" + ideigV2végezte.Trim() + "', ";                                    // V2végezte
-                                    szöveg += ideigkövV2_sorszám.ToString() + ", ";                             // KövV2_Sorszám
-                                    szöveg += "'" + ideigkövV2.Trim() + "', ";                                     // KövV2
-                                    szöveg += ideigkövV_sorszám.ToString() + ", ";                               // KövV_Sorszám
-                                    szöveg += "'" + ideigKövV.Trim() + "', ";                                      // KövV
-                                    szöveg += ideigV2V3számláló.ToString().Trim() + ", ";                                // V2V3Számláló
-                                    szöveg += " false, ";                                                   // törölt
-                                    szöveg += "'" + ideigHonostelephely.Trim() + "', "; // Honostelephely
-                                    szöveg += ideigtervsorszám.ToString() + ", ";    // tervsorszám
-                                    szöveg += ideigkerék_11.ToString().Replace(",", ".") + ", ";
-                                    szöveg += ideigkerék_12.ToString().Replace(",", ".") + ", ";
-                                    szöveg += ideigkerék_21.ToString().Replace(",", ".") + ", ";
-                                    szöveg += ideigkerék_22.ToString().Replace(",", ".") + ", ";
-                                    szöveg += ideigkerék_min.ToString().Replace(",", ".") + ") ";
-
-                                    MyA.ABMódosítás(hova, jelszó, szöveg);
-                                }
-                                else
-                                {
-                                    // módosítjuk az utolsó adatsort
-
-                                    if (ideigKMUkm == 0d) // ha felújítva volt és nem lett lenullázva
-                                    {
-                                        ideigvizsgkm = 0d;
-                                    }
-                                    ideigKMUkm += Havifutás;
-                                    ideigTeljeskm += Havifutás;
-
-                                }
-                                AlHoltart.Value = i + 1;
+                                Alsó = CiklusElem.Alsóérték;
+                                Felső = CiklusElem.Felsőérték;
+                                Névleges = CiklusElem.Névleges;
+                                sorszám = CiklusElem.Sorszám;
                             }
+                            if (Option10.Checked) Mennyi = Alsó;
+                            if (Option11.Checked) Mennyi = Névleges;
+                            if (Option12.Checked) Mennyi = Felső;
+
+                            // megnézzük a következő V-t
+                            CiklusElem = (from a in AdatokCiklus
+                                          where a.Típus == rekordhova.Ciklusrend
+                                          && a.Sorszám == sorszám + 1
+                                          select a).FirstOrDefault();
+
+                            string következőv = "";
+                            if (CiklusElem != null)
+                                következőv = CiklusElem.Vizsgálatfok;       // ha talált akkor
+                            else
+                                következőv = "J";   // ha nem talált
+
+                            // az utolsó rögzített adatot megvizsgáljuk, hogy a havi km-et át lépjük -e fokozatot
+                            figyelő = ideigKMUkm - ideigvizsgkm + Havifutás;
+
+                            if (Mennyi <= figyelő)
+                            {
+                                különbözet = ideigKMUkm - ideigvizsgkm + Havifutás - Mennyi;
+                                // módosítjuk a határig tartó adatokat
+                                ideigKMUkm = ideigKMUkm + Havifutás - különbözet;
+                                ideigTeljeskm = ideigTeljeskm + Havifutás - különbözet;
+                                id_sorszám += 1;
+                                ideigvizsgkm += Mennyi;
+                                ideigTeljeskm += Havifutás;
+                                ideigKMUdátum = elődátum;
+                                ideigvizsgfok = következőv;
+                                ideigvizsgdátumk = elődátum;
+                                ideigvizsgdátumv = elődátum;
+                                ideigtervsorszám += 1;
+                                ideigkerék_11 -= double.Parse(Kerékcsökkenés.Text);
+                                ideigkerék_12 -= double.Parse(Kerékcsökkenés.Text);
+                                ideigkerék_21 -= double.Parse(Kerékcsökkenés.Text);
+                                ideigkerék_22 -= double.Parse(Kerékcsökkenés.Text);
+                                ideigkerék_min -= double.Parse(Kerékcsökkenés.Text);
+                                // rögzítjük és egy ciklussal feljebb emeljük
+                                if (következőv == "J")
+                                {
+                                    ideigvizsgsorszám = 0;
+                                    ideigKMUkm = 0;
+                                    ideigfudátum = elődátum;
+                                    ideigjjavszám += 1;
+                                    ideigvizsgkm = 0;
+                                }
+                                else
+                                {
+                                    ideigvizsgsorszám += 1;
+                                }
+                                Adat_T5C5_Előterv ADAT = new Adat_T5C5_Előterv(
+                                       id_sorszám,
+                                       ideigazonosító,
+                                       ideigjjavszám,
+                                       ideigKMUkm,
+                                       ideigKMUdátum,
+                                       ideigvizsgfok,
+                                       ideigvizsgdátumk,
+                                       ideigvizsgdátumv,
+                                       ideigvizsgkm,
+                                       ideighavikm,
+                                       ideigvizsgsorszám,
+                                       ideigfudátum,
+                                       ideigTeljeskm,
+                                       ideigCiklusrend,
+                                       ideigV2végezte,
+                                       ideigkövV2_sorszám,
+                                       ideigkövV2,
+                                       ideigkövV_sorszám,
+                                       ideigKövV,
+                                       false,
+                                       ideigHonostelephely,
+                                       ideigtervsorszám,
+                                       ideigkerék_11,
+                                       ideigkerék_12,
+                                       ideigkerék_21,
+                                       ideigkerék_22,
+                                       ideigkerék_min,
+                                       ideigV2V3számláló);
+                                AdatokGy.Add(ADAT);
+                            }
+                            else
+                            {
+                                // módosítjuk az utolsó adatsort
+
+                                if (ideigKMUkm == 0) // ha felújítva volt és nem lett lenullázva
+                                {
+                                    ideigvizsgkm = 0;
+                                }
+                                ideigKMUkm += Havifutás;
+                                ideigTeljeskm += Havifutás;
+                            }
+                            AlHoltart.Lép();
                         }
                     }
-                    FőHoltart.Value = j + 1;
+                    FőHoltart.Lép();
                 }
+                KézElőterv.Rögzítés(hova, AdatokGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2205,9 +2173,31 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
+        #region ListákFeltöltése
+        private void KerékadatokListaFeltöltés()
+        {
+            try
+            {
+                AdatokMérés.Clear();
+                AdatokMérés = KézMérés.Lista_Adatok(DateTime.Today.AddYears(-1).Year);
+                List<Adat_Kerék_Mérés> AdatokMérés1 = KézMérés.Lista_Adatok(DateTime.Today.Year);
+                AdatokMérés.AddRange(AdatokMérés1);
+                AdatokMérés = (from a in AdatokMérés
+                               orderby a.Kerékberendezés ascending, a.Mikor descending
+                               select a).ToList();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
     }
 }

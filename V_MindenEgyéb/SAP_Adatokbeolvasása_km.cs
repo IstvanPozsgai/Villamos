@@ -20,26 +20,22 @@ namespace Villamos.V_MindenEgyéb
         /// <param name="fájlexcel"></param>
         /// <param name="hely"></param>
 
-        public static void Km_beolvasó(string fájlexcel, string helye)
+        public static void Km_beolvasóFogas(string fájlexcel)
         {
             try
             {
                 DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
-
-
                 //Ellenőrzés
                 if (!MyF.Betöltéshelyes("KM adatok", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
 
                 MyE.ExcelMegnyitás(fájlexcel);
-                string jelszó = "pocsaierzsi";
-                string szöveg = $"SELECT * FROM kmtábla";
                 string beopályaszám;
 
                 Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok("Fogas");
-                List<Adat_T5C5_Kmadatok> Adatok = Kéz.Lista_Adat(helye, jelszó, szöveg);
+                List<Adat_T5C5_Kmadatok> Adatok = Kéz.Lista_Adatok();
 
                 // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres
-
+                List<Adat_T5C5_Kmadatok> AdatokGy = new List<Adat_T5C5_Kmadatok>();
                 int sor = 2;
                 while (MyE.Beolvas($"a{sor}") != "_")
                 {
@@ -55,27 +51,23 @@ namespace Villamos.V_MindenEgyéb
 
                     if (Elem != null)
                     {
-                        szöveg = "UPDATE kmtábla SET ";
-                        szöveg += $" KMUdátum='{MyE.BeolvasDátum($"c{sor}"):yyyy.MM.dd}', ";
-                        szöveg += $" KMUkm={MyE.Beolvas($"d{sor}")}, ";
-                        if (MyE.Beolvas($"b{sor}") == "_")
-                            szöveg += " havikm=0, ";
-                        else
-                            szöveg += $" havikm={MyE.Beolvas($"b{sor}")}, ";
-
-                        szöveg += $" Jjavszám={MyE.Beolvas($"f{sor}")}, ";
-                        szöveg += $" fudátum='{MyE.BeolvasDátum($"g{sor}")}', ";
-                        szöveg += $" teljeskm={MyE.Beolvas($"e{sor}").Trim()} ";
-                        szöveg += $"WHERE [id]={Elem.ID} ";
-                        MyA.ABMódosítás(helye, jelszó, szöveg);
+                        Adat_T5C5_Kmadatok ADAT = new Adat_T5C5_Kmadatok(
+                            Elem.ID,
+                            MyE.Beolvas($"f{sor}").ToÉrt_Long(),
+                            MyE.Beolvas($"d{sor}").ToÉrt_Long(),
+                            MyE.BeolvasDátum($"c{sor}"),
+                            MyE.Beolvas($"b{sor}") == "_" ? 0 : MyE.Beolvas($"b{sor}").ToÉrt_Long(),
+                            MyE.BeolvasDátum($"g{sor}"),
+                            MyE.Beolvas($"e{sor}").ToÉrt_Long());
+                        AdatokGy.Add(ADAT);
                     }
                     sor++;
                 }
+                Kéz.MódosításKm(AdatokGy);
                 // az excel tábla bezárása
                 MyE.ExcelBezárás();
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexcel);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -173,8 +165,5 @@ namespace Villamos.V_MindenEgyéb
             }
             return Adatok;
         }
-
     }
-
-
 }

@@ -20,7 +20,7 @@ namespace Villamos
     {
         string _fájlexc;
         DataTable _AdatTábla = new DataTable();
-        int utolsósor;
+        long utolsósor;
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Jármű2 KézVizsgálat = new Kezelő_Jármű2();
         readonly Kezelő_T5C5_Kmadatok KézKmAdatok = new Kezelő_T5C5_Kmadatok("T5C5");
@@ -36,6 +36,9 @@ namespace Villamos
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
         List<Adat_Kerék_Mérés> AdatokMérés = new List<Adat_Kerék_Mérés>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
+
+        int Hónapok = 0;
+        long Havikm = 0;
 
         #region Alap
         public Ablak_T5C5_Tulajdonság()
@@ -1561,7 +1564,7 @@ namespace Villamos
         private void Option5_Click(object sender, EventArgs e)
         {
             // Kocsi havi km
-            Havikmlabel.Text = "0";
+            Havikm = 0;
         }
 
         private void Option6_Click(object sender, EventArgs e)
@@ -1603,8 +1606,8 @@ namespace Villamos
             }
             FőHoltart.Ki();
             if (i != 0) típusátlag /= i;
-            Havikmlabel.Text = ((long)Math.Round(típusátlag)).ToString();
-            Text1.Text = ((long)Math.Round(típusátlag)).ToString();
+            Havikm = ((long)Math.Round(típusátlag));
+            Text1.Text = Havikm.ToString();
         }
 
         private void Option7_Click(object sender, EventArgs e)
@@ -1632,8 +1635,8 @@ namespace Villamos
             }
             FőHoltart.Ki();
             if (i != 0) típusátlag /= i;
-            Havikmlabel.Text = ((long)Math.Round(típusátlag)).ToString();
-            Text1.Text = ((long)Math.Round(típusátlag)).ToString();
+            Havikm = (long)Math.Round(típusátlag);
+            Text1.Text = Havikm.ToString();
         }
 
         private void Option9_Click(object sender, EventArgs e)
@@ -1663,8 +1666,8 @@ namespace Villamos
             FőHoltart.Ki();
             if (i != 0)
                 típusátlag /= i;
-            Havikmlabel.Text = ((long)Math.Round(típusátlag)).ToString();
-            Text1.Text = ((long)Math.Round(típusátlag)).ToString();
+            Havikm = (long)Math.Round(típusátlag);
+            Text1.Text = Havikm.ToString();
         }
 
         private void Option8_Click(object sender, EventArgs e)
@@ -1734,11 +1737,15 @@ namespace Villamos
         private void Text2_Leave(object sender, EventArgs e)
         {
             if (int.TryParse(Text2.Text, out int result))
+            {
                 Text2.Text = result.ToString();
+                Hónapok = result;
+            }
             else
+            {
                 Text2.Text = "24";
-
-            Hónapok.Text = Text2.Text;
+                Hónapok = 24;
+            }
         }
 
         private void Text1_Leave(object sender, EventArgs e)
@@ -1755,22 +1762,9 @@ namespace Villamos
         {
             try
             {
-                if (!int.TryParse(Hónapok.Text, out int result)) throw new HibásBevittAdat("Hónapok száma nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(Text2.Text, out int result)) throw new HibásBevittAdat("Hónapok száma nem lehet üres és egész számnak kell lennie.");
+                if (PszJelölő.CheckedItems.Count < 1) return;
 
-
-                int volt = 0;
-                for (int j = 0; j < PszJelölő.Items.Count; j++)
-                {
-                    if (PszJelölő.GetItemChecked(j) == true)
-                    {
-                        volt = 1;
-                        break;
-                    }
-                }
-                if (volt == 0)
-                {
-                    return;
-                }
                 AlHoltart.Be();
                 FőHoltart.Be(10);
 
@@ -1924,14 +1918,11 @@ namespace Villamos
         {
             try
             {
-                if (!int.TryParse(Hónapok.Text, out int Hónapokszáma)) return;
-                if (!long.TryParse(Havikmlabel.Text, out long Havifutás)) return;
-
                 string hova = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
                 if (!File.Exists(hova)) return;
 
                 FőHoltart.Be();
-                AlHoltart.Be(int.Parse(Hónapok.Text) + 3);
+                AlHoltart.Be(Hónapok + 3);
                 AlHoltart.BackColor = Color.Green;
 
                 // beolvassuk a ID sorszámot, majd növeljük minden rögzítésnél
@@ -1983,7 +1974,7 @@ namespace Villamos
                         double ideigkerék_min = rekordhova.Kerék_min;
                         long ideigV2V3számláló = rekordhova.V2V3Számláló;
 
-                        for (int i = 1; i < Hónapokszáma; i++)
+                        for (int i = 1; i < Hónapok; i++)
                         {
                             DateTime elődátum = DateTime.Today.AddMonths(i);
                             Adat_Ciklus CiklusElem = (from a in AdatokCiklus
@@ -2020,17 +2011,17 @@ namespace Villamos
                                 következőv = "J";   // ha nem talált
 
                             // az utolsó rögzített adatot megvizsgáljuk, hogy a havi km-et át lépjük -e fokozatot
-                            figyelő = ideigKMUkm - ideigvizsgkm + Havifutás;
+                            figyelő = ideigKMUkm - ideigvizsgkm + Havikm;
 
                             if (Mennyi <= figyelő)
                             {
-                                különbözet = ideigKMUkm - ideigvizsgkm + Havifutás - Mennyi;
+                                különbözet = ideigKMUkm - ideigvizsgkm + Havikm - Mennyi;
                                 // módosítjuk a határig tartó adatokat
-                                ideigKMUkm = ideigKMUkm + Havifutás - különbözet;
-                                ideigTeljeskm = ideigTeljeskm + Havifutás - különbözet;
+                                ideigKMUkm = ideigKMUkm + Havikm - különbözet;
+                                ideigTeljeskm = ideigTeljeskm + Havikm - különbözet;
                                 id_sorszám += 1;
                                 ideigvizsgkm += Mennyi;
-                                ideigTeljeskm += Havifutás;
+                                ideigTeljeskm += Havikm;
                                 ideigKMUdátum = elődátum;
                                 ideigvizsgfok = következőv;
                                 ideigvizsgdátumk = elődátum;
@@ -2093,8 +2084,8 @@ namespace Villamos
                                 {
                                     ideigvizsgkm = 0;
                                 }
-                                ideigKMUkm += Havifutás;
-                                ideigTeljeskm += Havifutás;
+                                ideigKMUkm += Havikm;
+                                ideigTeljeskm += Havikm;
                             }
                             AlHoltart.Lép();
                         }

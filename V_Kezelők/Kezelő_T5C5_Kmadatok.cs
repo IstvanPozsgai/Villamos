@@ -173,6 +173,36 @@ namespace Villamos.Kezelők
             KézT5C5Napló.Rögzítés(DateTime.Today.Year, Adat);
         }
 
+        public void MódosításKm(List<Adat_T5C5_Kmadatok> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_T5C5_Kmadatok Adat in Adatok)
+                {
+                    string szöveg = " UPDATE kmtábla SET ";
+                    szöveg += $" Jjavszám={Adat.Jjavszám}, ";
+                    szöveg += $" KMUkm={Adat.KMUkm}, ";
+                    szöveg += $" KMUdátum='{Adat.KMUdátum:yyyy.MM.dd}', ";
+                    szöveg += $" HaviKm={Adat.Havikm}, ";
+                    szöveg += $" fudátum='{Adat.Fudátum:yyyy.MM.dd}', ";
+                    szöveg += $" Teljeskm={Adat.Teljeskm}, ";
+                    szöveg += $" WHERE id={Adat.ID}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Törlés(long Sorszám)
         {
             try

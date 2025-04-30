@@ -670,7 +670,7 @@ namespace Villamos
         }
 
 
-        public static int Munkalap(DataTable Tábla, int sor, string munkalap)
+        public static long Munkalap(DataTable Tábla, int sor, string munkalap)
         {
             Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
             Munkalap.Select();
@@ -690,7 +690,7 @@ namespace Villamos
                 }
             }
 
-            int utolsó_sor = Tábla.Rows.Count;
+            long utolsó_sor = Tábla.Rows.Count;
             return utolsó_sor;
         }
 
