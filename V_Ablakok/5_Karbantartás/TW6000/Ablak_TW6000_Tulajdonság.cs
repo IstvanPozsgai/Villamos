@@ -1495,26 +1495,17 @@ namespace Villamos
 
 
         #region Karbantartási előzmények lapfül
-        //
+        /// <summary>
+        /// A karbantartási előzmények táblázatban a kiválasztott pályaszám alapján kiírja az adatokat
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnKarbantartFrissít_Click(object sender, EventArgs e)
         {
             try
             {
-                if (NaplóKezdete.Value > NaplóVége.Value)
-                    throw new HibásBevittAdat("A kezdő dátum nem lehet későbbi, mint a vége dátum. Kérlek ellenőrizd és adj meg érvényes időintervallumot.");
-
-                if (NaplóKezdete.Value.Year != NaplóVége.Value.Year)
-                    throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
-
-                string hely = TW6000_Napló.Trim();
-                string jelszó = "czapmiklós";
-                string szöveg = $"SELECT * FROM alapnapló WHERE rögzítésiidő>=#{NaplóKezdete.Value:MM-dd-yyyy} 00:00:0#";
-                szöveg += $" AND rögzítésiidő<=#{NaplóVége.Value:MM-dd-yyyy} 23:59:0#";
-
-                if (!(NaplóPályaszám.Text.Trim() == ""))
-                    szöveg += $" AND azonosító='{NaplóPályaszám.Text.Trim()}'";
-
-                szöveg += " ORDER BY rögzítésiidő DESC";
+                if (NaplóKezdete.Value > NaplóVége.Value) throw new HibásBevittAdat("A kezdő dátum nem lehet későbbi, mint a vége dátum. Kérlek ellenőrizd és adj meg érvényes időintervallumot.");
+                if (NaplóKezdete.Value.Year != NaplóVége.Value.Year) throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
 
                 Napló_Tábla.Rows.Clear();
                 Napló_Tábla.Columns.Clear();
@@ -1545,8 +1536,13 @@ namespace Villamos
                 Napló_Tábla.Columns[10].HeaderText = "Kötött start";
                 Napló_Tábla.Columns[10].Width = 150;
 
-                Kezelő_TW600_AlapNapló kéz = new Kezelő_TW600_AlapNapló();
-                List<Adat_TW6000_AlapNapló> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_TW6000_AlapNapló> Adatok = KézAlapNapló.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Rögzítésiidő >= NaplóKezdete.Value
+                          && a.Rögzítésiidő <= NaplóVége.Value
+                          orderby a.Rögzítésiidő descending
+                          select a).ToList();
+                if (!(NaplóPályaszám.Text.Trim() == "")) Adatok = Adatok.Where(a => a.Azonosító == NaplóPályaszám.Text.Trim()).ToList();
                 foreach (Adat_TW6000_AlapNapló rekord in Adatok)
                 {
                     Napló_Tábla.RowCount++;
@@ -1560,16 +1556,8 @@ namespace Villamos
                     Napló_Tábla.Rows[i].Cells[6].Value = rekord.Vizsgnév.Trim();
                     Napló_Tábla.Rows[i].Cells[7].Value = rekord.Ciklusrend.Trim();
                     Napló_Tábla.Rows[i].Cells[8].Value = rekord.Start.ToString("yyyy.MM.dd");
-
-                    if (!rekord.Megállítás)
-                        Napló_Tábla.Rows[i].Cells[9].Value = "Nem";
-                    else
-                        Napló_Tábla.Rows[i].Cells[9].Value = "Igen";
-
-                    if (!rekord.Kötöttstart)
-                        Napló_Tábla.Rows[i].Cells[10].Value = "Nem";
-                    else
-                        Napló_Tábla.Rows[i].Cells[10].Value = "Igen";
+                    Napló_Tábla.Rows[i].Cells[9].Value = rekord.Megállítás ? "Igen" : "Nem";
+                    Napló_Tábla.Rows[i].Cells[10].Value = rekord.Kötöttstart ? "Igen" : "Nem";
                 }
                 Napló_Tábla.Visible = true;
                 Napló_Tábla.Refresh();
@@ -1584,47 +1572,65 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
+        /// <summary>
+        /// A pályaszám comboboxban a kiválasztott Típus alapján kiírja az alapadatokat
+        /// </summary>
         private void NaplóPályaszám_feltöltés()
         {
             NaplóPályaszám.Items.Clear();
-            string hely = $@"{Application.StartupPath}\főmérnökség\adatok\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM Állománytábla WHERE [törölt]= false AND valóstípus='TW6000' ORDER BY azonosító ";
-
-
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+            Adatok = (from a in Adatok
+                      where a.Valóstípus.Contains("TW6000")
+                      orderby a.Azonosító
+                      select a).ToList();
             foreach (Adat_Jármű rekord in Adatok)
                 NaplóPályaszám.Items.Add(rekord.Azonosító.ToStrTrim());
         }
 
+        /// <summary>
+        /// A táblázat elemeit kimenti Excel táblába
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnKarbantartExcel_Click(object sender, EventArgs e)
         {
-            if (Napló_Tábla.Rows.Count < 1)
-                throw new HibásBevittAdat("Nincsenek sorok a táblázatban!");
-
-            string fájlexc;
-
-            // kimeneti fájl helye és neve
-            SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+            try
             {
-                InitialDirectory = "MyDocuments",
-                Title = "Listázott tartalom mentése Excel fájlba",
-                FileName = $"TW6000_Karbantartási_előzmények-{Program.PostásTelephely}-{DateTime.Now:yyyyMMddHHmmss}",
-                Filter = "Excel |*.xlsx"
-            };
-            // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (Napló_Tábla.Rows.Count < 1) throw new HibásBevittAdat("Nincsenek sorok a táblázatban!");
 
-            if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                fájlexc = SaveFileDialog1.FileName;
-            else
-                return;
+                string fájlexc;
 
-            fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-            MyE.EXCELtábla(fájlexc, Napló_Tábla, false);
-            MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // kimeneti fájl helye és neve
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"TW6000_Karbantartási_előzmények-{Program.PostásTelephely}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
 
-            MyE.Megnyitás(fájlexc + ".xlsx");
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+
+                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
+                MyE.EXCELtábla(fájlexc, Napló_Tábla, false);
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MyE.Megnyitás(fájlexc + ".xlsx");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
 

@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -19,31 +20,21 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.TW6000táblanapló(hely.KönyvSzerk());
         }
 
-
         public void Rögzítés(int Év, Adat_TW6000_Alap Adat, string oka)
         {
             try
             {
                 FájlBeállítás(Év);
                 string szöveg = "INSERT INTO alapnapló (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum, oka, rögzítő, rögzítésiidő) VALUES (";
-                szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                szöveg += $"'{StartDátum.Value:yyyy.MM.dd}', ";
-                szöveg += $"'{Ciklusrend.Text.Trim()}', ";
-                if (Megállítás.Checked)
-                    szöveg += "true, ";
-
-                else
-                    szöveg += "false, ";
-
-                if (KötöttStart.Checked)
-                    szöveg += "true, ";
-
-                else
-                    szöveg += "false, ";
-                szöveg += $"{Sorszámvizsg}, ";
-                szöveg += $"'{Vizsgsorszám.Text.Trim()}', ";
-                szöveg += $"'{Vizsgdátum.Value:yyyy.MM.dd}', ";
-                szöveg += $"'{Oka.Text.Trim()}', ";
+                szöveg += $"'{Adat.Azonosító}', ";
+                szöveg += $"'{Adat.Start:yyyy.MM.dd}', ";
+                szöveg += $"'{Adat.Ciklusrend}', ";
+                szöveg += $"{Adat.Megállítás}, ";
+                szöveg += $"{Adat.Kötöttstart}, ";
+                szöveg += $"{Adat.Vizsgsorszám}, ";
+                szöveg += $"'{Adat.Vizsgnév}', ";
+                szöveg += $"'{Adat.Vizsgdátum:yyyy.MM.dd}', ";
+                szöveg += $"'{oka}', ";
                 szöveg += $"'{Program.PostásTelephely.Trim()}', ";
                 szöveg += $"'{DateTime.Now}') ";
 
@@ -60,9 +51,9 @@ namespace Villamos.Kezelők
             }
         }
 
-        //elkopó
-        public List<Adat_TW6000_AlapNapló> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public List<Adat_TW6000_AlapNapló> Lista_Adatok()
         {
+            string szöveg = $"SELECT * FROM alapnapló";
             List<Adat_TW6000_AlapNapló> Adatok = new List<Adat_TW6000_AlapNapló>();
             Adat_TW6000_AlapNapló Adat;
 
