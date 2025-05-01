@@ -59,11 +59,11 @@ namespace Villamos
             AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
 
             Ütemkezdete.Value = DateTime.Today;
-            Ütemvége.Value = DateTime.Today;
+            Ütemvége.Value = DateTime.Today.AddDays(30);
             Vizsgdátum.Value = DateTime.Today;
-            ÜtemNaplóKezdet.Value = DateTime.Today;
+            ÜtemNaplóKezdet.Value = DateTime.Today.AddDays(-30);
             ÜtemNaplóVége.Value = DateTime.Today;
-            NaplóKezdete.Value = DateTime.Today;
+            NaplóKezdete.Value = DateTime.Today.AddDays(-30);
             NaplóVége.Value = DateTime.Today;
             Előkezdődátum.Value = DateTime.Today;
             ElőbefejezőDátum.Value = DateTime.Today;
@@ -837,6 +837,7 @@ namespace Villamos
                 List<Adat_TW6000_Ütemezés> AdatokGy = new List<Adat_TW6000_Ütemezés>();
                 foreach (Adat_Jármű rekord in AdatokJármű)
                 {
+                    Holtart.Lép();
                     // megkeressük, hogy az adott napon mi az ütemezett feladat
                     Adat_TW6000_Alap Elem = (from a in AdatokAlap
                                              where a.Azonosító == rekord.Azonosító && a.Megállítás == false
@@ -913,82 +914,53 @@ namespace Villamos
             }
         }
 
-        //
+        /// <summary>
+        /// Ütemezés gomb megnyomásakor a táblázatban lévő adatokat ütemezi.
+        /// Véglegesíti a tervet innetől kezdve fogja lehívni a program amikor esedékes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnÜtemÜtemezés_Click(object sender, EventArgs e)
         {
             try
             {
-                string helyalap = TW6000_Villamos.Trim();
-                string helynapló = TW6000_Napló_Ütem.Trim();
-                string jelszó = "czapmiklós";
-                DateTime dátum;
-                string pszám;
                 Holtart.Be();
+                List<Adat_TW6000_Ütemezés> AdatokGY = new List<Adat_TW6000_Ütemezés>();
+                List<Adat_TW6000_Ütemezés> AdatokTárolt = KézÜtem.Lista_Adatok();
+
                 for (int sor = 0; sor < Táblaütemezés.Rows.Count; sor++)
                 {
-                    dátum = DateTime.Parse(Táblaütemezés.Rows[sor].Cells[0].Value.ToString());
+                    DateTime dátum = Táblaütemezés.Rows[sor].Cells[0].Value.ToÉrt_DaTeTime();
 
                     for (int oszlop = 1; oszlop < Táblaütemezés.ColumnCount; oszlop++)
                     {
                         if (Táblaütemezés.Rows[sor].Cells[oszlop].Value != null && Táblaütemezés.Rows[sor].Cells[oszlop].Value.ToStrTrim() != "")
                         {
                             string[] darabol = Táblaütemezés.Rows[sor].Cells[oszlop].Value.ToString().Split('-');
-                            pszám = darabol[0].Trim();
-                            // beolvassuk az adatokat a naplózáshoz
-                            string szöveg = $"SELECT * FROM ütemezés WHERE azonosító='{pszám.Trim()}' AND vütemezés=#{dátum:yyyy-MM-dd}#";
-
-
-                            Adat_TW6000_Ütemezés Adatok = KézÜtem.Egy_Adat(helyalap, jelszó, szöveg);
-
-                            jelszó = "czapmiklós";
-
-                            if (Adatok != null)
+                            string pszám = darabol[0].Trim();
+                            Adat_TW6000_Ütemezés Elem = (from a in AdatokTárolt
+                                                         where a.Azonosító == pszám && a.Vütemezés == dátum
+                                                         select a).FirstOrDefault();
+                            if (Elem != null)
                             {
                                 // ha tervezési a státusa akkor átállítjuk ütemezettnek
-                                if (Adatok.Státus == 0)
+                                if (Elem.Státus == 0)
                                 {
-                                    szöveg = "UPDATE ütemezés SET ";
-                                    szöveg += " státus=2, megjegyzés='Csoportos ütemezés' ";
-                                    szöveg += $" WHERE azonosító='{pszám.Trim()}'";
-                                    szöveg += $" AND vütemezés=#{dátum:MM-dd-yyyy}#";
-                                    ÜMegjegyzés.Text = "Csoportos ütemezés";
-
-                                    jelszó = "czapmiklós";
-                                    MyA.ABMódosítás(helyalap, jelszó, szöveg);
-
-                                    // naplózás
-                                    szöveg = "INSERT INTO ütemezésnapló (azonosító, ciklusrend, elkészült, megjegyzés, ";
-                                    szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
-                                    szöveg += " vsorszám, vütemezés, vvégezte, rögzítő, rögzítésideje) VALUES (";
-                                    szöveg += $"'{Adatok.Azonosító.Trim()}', "; // azonosító
-                                    szöveg += $"'{Adatok.Ciklusrend.Trim()}', "; // ciklusrend
-                                    if (Adatok.Elkészült)
-                                        szöveg += " true, ";
-                                    else
-                                        szöveg += " false, "; // elkészült
-
-                                    szöveg += $" '{Adatok.Megjegyzés.Trim()}', "; // megjegyzés
-                                    szöveg += " 2, "; // státus 
-                                    szöveg += $" '{Adatok.Velkészülés:yyyy.MM.dd}', "; // velkészülés
-                                    szöveg += $"'{Adatok.Vesedékesség:yyyy.MM.dd}', "; // vesedékesség
-                                    szöveg += $" '{Adatok.Vizsgfoka.Trim()}', "; // vizsgfoka
-                                    szöveg += $"{Adatok.Vsorszám}, "; // vsorszám
-                                    szöveg += $" '{Adatok.Vütemezés:yyyy.MM.dd}', ";  // vütemezés
-                                    szöveg += $" '{Adatok.Vvégezte.Trim()}', "; // vvégezte
-                                    szöveg += $" '{Program.PostásNév.Trim()}', "; // rögzítő
-                                    szöveg += $" '{DateTime.Now}' )";
-
-                                    jelszó = "czapmiklós";
-                                    MyA.ABMódosítás(helynapló, jelszó, szöveg);
+                                    Adat_TW6000_Ütemezés ADAT = new Adat_TW6000_Ütemezés(
+                                                 pszám.Trim(),
+                                                 "Csoportos ütemezés",
+                                                 2,
+                                                 dátum);
+                                    AdatokGY.Add(ADAT);
                                 }
                             }
                         }
+                        Holtart.Lép();
                     }
-                    Holtart.Lép();
                 }
+                KézÜtem.Módosítás(AdatokGY);
                 Holtart.Ki();
                 Újkiíró();
-
             }
             catch (HibásBevittAdat ex)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -83,6 +84,58 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(List<Adat_TW6000_Ütemezés> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                List<Adat_TW6000_Ütemezés> AdatokNaplóhoz = new List<Adat_TW6000_Ütemezés>();
+                List<Adat_TW6000_Ütemezés> AdatokTárolt = Lista_Adatok();
+                foreach (Adat_TW6000_Ütemezés Adat in Adatok)
+                {
+                    string szöveg = "UPDATE ütemezés SET ";
+                    szöveg += $" státus={Adat.Státus},";
+                    szöveg += $" megjegyzés ='{Adat.Megjegyzés}' ";
+                    szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
+                    szöveg += $" AND vütemezés=#{Adat.Vütemezés:MM-dd-yyyy}#";
+                    SzövegGy.Add(szöveg);
+
+                    //Naplófájlhoz megkeressü az adatokat
+                    Adat_TW6000_Ütemezés Elem = (from a in AdatokTárolt
+                                                 where a.Azonosító == Adat.Azonosító && a.Vütemezés == Adat.Vütemezés
+                                                 select a).FirstOrDefault();
+                    if (Elem != null)
+                    {
+                        Adat_TW6000_Ütemezés AdatNapló = new Adat_TW6000_Ütemezés(
+                            Elem.Azonosító,
+                            Elem.Ciklusrend,
+                            Elem.Elkészült,
+                            Adat.Megjegyzés,
+                            Adat.Státus,
+                            Elem.Velkészülés,
+                            Elem.Vesedékesség,
+                            Elem.Vizsgfoka,
+                            Elem.Vsorszám,
+                            Adat.Vütemezés,
+                            Adat.Vvégezte
+                        );
+                        AdatokNaplóhoz.Add(AdatNapló);
+                    }
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                //Naplózunk
+                KézNapló.Rögzítés(DateTime.Now.Year, AdatokNaplóhoz);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         public void Rögzítés(List<Adat_TW6000_Ütemezés> Adatok)
         {
