@@ -867,6 +867,7 @@
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SAP.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Takarítástípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TW6000_Előterv.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000_Ütemezés.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_AlapNapló.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_Színezés.cs" />

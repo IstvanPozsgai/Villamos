@@ -10,7 +10,6 @@ using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.TW6000;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
@@ -37,6 +36,7 @@ namespace Villamos
         readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_TW600_AlapNapló KézAlapNapló = new Kezelő_TW600_AlapNapló();
         readonly Kezelő_TW600_ÜtemNapló KézÜtemNapló = new Kezelő_TW600_ÜtemNapló();
+        readonly Kezelő_TW6000_Előterv KézElőterv = new Kezelő_TW6000_Előterv();
 
         List<Adat_TW6000_Ütemezés> AdatokÜtem = new List<Adat_TW6000_Ütemezés>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
@@ -2074,7 +2074,12 @@ namespace Villamos
             Vizsgálatfeltöltés();
         }
 
-
+        /// <summary>
+        /// Előterv készítéséhez elkészít egy adatbázist, hogy ne okozzon zavart
+        /// Valamint előtervet készít a megfelelő intervallumban és kocsikon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnElőtervezőKeres_Click(object sender, EventArgs e)
         {
             try
@@ -2099,7 +2104,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
+        /// <summary>
+        /// Előterv készítéséhez elkészít egy adatbázist, hogy ne okozzon zavart
+        /// </summary>
         private void Alaptábla()
         {
             try
@@ -2110,13 +2118,10 @@ namespace Villamos
                 if (File.Exists(hova) && !Check1.Checked) File.Delete(hova);
                 if (!File.Exists(hova)) Adatbázis_Létrehozás.TW6000tábla(hova);
 
-                // kilistázzuk az Adatbázis adatait
-                string jelszóhonnanhova = "czapmiklós";
-
                 AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 AdatokAlap = KézAlap.Lista_Adatok();
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_TW6000_Alap> AdatokGy = new List<Adat_TW6000_Alap>();
                 for (int j = 0; j < PszJelölő.CheckedItems.Count; j++)
                 {
                     Adat_Jármű Elem = (from a in AdatokJármű
@@ -2130,24 +2135,11 @@ namespace Villamos
                         Adat_TW6000_Alap rekord = (from a in AdatokAlap
                                                    where a.Azonosító == PszJelölő.CheckedItems[j].ToStrTrim()
                                                    select a).FirstOrDefault();
-                        if (rekord != null)
-                        {
-                            string szöveg = "INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
-                            szöveg += $"'{rekord.Azonosító.ToStrTrim()}', ";
-                            szöveg += $"'{rekord.Start}', ";
-                            szöveg += $"'{rekord.Ciklusrend.ToStrTrim()}', ";
-                            szöveg += $"{rekord.Megállítás}, ";
-                            szöveg += $"{rekord.Kötöttstart}, ";
-                            szöveg += $"'{rekord.Vizsgsorszám.ToStrTrim()}', ";
-                            szöveg += $"'{rekord.Vizsgnév.ToStrTrim()}', ";
-                            szöveg += $"'{rekord.Vizsgdátum}') ";
-
-                            SzövegGy.Add(szöveg);
-                        }
+                        if (rekord != null) AdatokGy.Add(rekord);
                         Holtart.Lép();
                     }
                 }
-                MyA.ABMódosítás(hova, jelszóhonnanhova, SzövegGy);
+                KézElőterv.Rögzítés(hova, AdatokGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2159,72 +2151,55 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
+        /// <summary>
+        /// Elkészíti a tervet
+        /// </summary>
         private void Egyhónaprögzítése()
         {
             try
             {
                 string hova = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\TW6000adatok.mdb";
-                string jelszóhova = "czapmiklós";
-                string helyciklus = $@"{Application.StartupPath}\főmérnökség\adatok\ciklus.mdb";
+                if (!File.Exists(hova)) return;
 
-                if (!File.Exists(hova))
-                    return;
-
-
-                string Ciklusküld;
-                double Ciklussormax;
-                int darab;
-                string cikluseredmény = "";
+                List<Adat_TW6000_Alap> Adatok = KézElőterv.Lista_Adatok(hova);
 
                 DateTime előkezdődátumValue = Előkezdődátum.Value;
                 DateTime előbefejezőDátumValue = ElőbefejezőDátum.Value;
                 TimeSpan időtartam = előbefejezőDátumValue - előkezdődátumValue;
                 double idő = időtartam.TotalDays;
-
-                DateTime futódátum;
-                double Napokküld = default;
-                double Előzőnap;
-                DateTime Start;
-                double napokszáma;
                 DateTime startdátum = default;
-                double előzősor;
-                double sorszám;
-                double sorosnap;
-
-                string szöveg = $"SELECT * FROM alap";
-                List<Adat_TW6000_Alap> Adatok = KézAlap.Lista_Adatok(hova, jelszóhova, szöveg);
-
                 TimeSpan időtartam2 = előbefejezőDátumValue - előkezdődátumValue;
-                napokszáma = (int)időtartam2.TotalDays;
-
+                double napokszáma = (int)időtartam2.TotalDays;
+                List<Adat_TW6000_Ütemezés> AdatokGy = new List<Adat_TW6000_Ütemezés>();
                 for (int j = 0; j < PszJelölő.CheckedItems.Count; j++)
                 {
                     // pörgetjük a pályaszámokat
-                    cikluseredmény = "";
-                    szöveg = $"SELECT * FROM alap WHERE [azonosító]='{PszJelölő.Items[j].ToStrTrim()}'";
+                    string cikluseredmény = "";
+
                     Adat_TW6000_Alap rekord = (from a in Adatok
                                                where a.Azonosító == PszJelölő.Items[j].ToStrTrim()
                                                select a).FirstOrDefault();
 
                     if (rekord != null)
                     {
-                        Ciklusküld = rekord.Ciklusrend; // melyik ciklusrend szerint 
+                        string Ciklusküld = rekord.Ciklusrend; // melyik ciklusrend szerint 
                         long Ciklusmax = Ciklus_Max(Ciklusküld.Trim());// hogy a soron következő vizsgálat hány nap múlva esedékes
 
-                        Ciklussormax = Ciklus_Sorszám(Ciklusmax, Ciklusküld); // a soron következő vizsgálat száma
+                        double Ciklussormax = Ciklus_Sorszám(Ciklusmax, Ciklusküld); // a soron következő vizsgálat száma
 
-                        Start = rekord.Start; // az a dátum ahonnan a kocsi ciklusát kezdjük.
+                        DateTime Start = rekord.Start; // az a dátum ahonnan a kocsi ciklusát kezdjük.
 
                         // megkeressük, hogy mi a két dátum között az első vizsgálat dátuma.
+                        double Napokküld = 0;
                         for (int i = 0; i < (int)Math.Round(napokszáma); i++)
                         {
-                            futódátum = Előkezdődátum.Value.AddDays(i);
+                            DateTime futódátum = Előkezdődátum.Value.AddDays(i);
                             Napokküld = (int)(futódátum - Start).TotalDays;
 
                             if (Ciklusmax <= Napokküld)
                             {
-                                darab = (int)Math.Round(Napokküld / Ciklusmax);
+                                int darab = (int)Math.Round(Napokküld / Ciklusmax);
                                 if (darab == Napokküld / Ciklusmax)
                                     Napokküld = Ciklusmax;
                                 else
@@ -2241,48 +2216,43 @@ namespace Villamos
                         // ha meg van a első elem akkor rögzítjük
                         if (!(cikluseredmény.Trim() == ""))
                         {
-                            szöveg = "INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
-                            szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
-                            szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
-                            szöveg += $"'{PszJelölő.Items[j].ToStrTrim()}', "; // azonosító
-                            szöveg += $"'{Ciklusküld.Trim()}', "; // ciklusrend
-                            szöveg += "false, '_', 0, '1900.01.01', "; // elkészül, Megjegyzés,státus, velkészülés
-                            szöveg += $"'{startdátum:yyyy.MM.dd}', "; // esedékesség
-                            szöveg += $"'{cikluseredmény.Trim()}', "; // vizsgálatfoka
-                            előzősor = Ciklus_Sorszám(Napokküld, Ciklusküld);
-                            szöveg += $"{előzősor}, "; // sorszám
-                            szöveg += $"'{startdátum:yyyy.MM.dd}', "; // ütemezés dátuma
-                            szöveg += $"'{Telephelykereső(PszJelölő.Items[j].ToStrTrim())}' )"; // telephely
-                            MyA.ABMódosítás(hova, jelszóhova, szöveg);
+                            long előzősor = Ciklus_Sorszám(Napokküld, Ciklusküld);
+                            Adat_TW6000_Ütemezés ADAT = new Adat_TW6000_Ütemezés(
+                                    PszJelölő.Items[j].ToStrTrim(),
+                                    Ciklusküld.Trim(),
+                                    false, "_", 0, new DateTime(1900, 1, 1),
+                                    startdátum,
+                                    cikluseredmény.Trim(),
+                                    előzősor,
+                                    startdátum,
+                                    Telephelykereső(PszJelölő.Items[j].ToStrTrim()));
+                            AdatokGy.Add(ADAT);
 
-                            Előzőnap = Napokküld;
+                            double Előzőnap = Napokküld;
 
                             // a következők
+                            long sorszám;
                             if (előzősor == Ciklussormax)
-                                sorszám = 1d;
+                                sorszám = 1;
                             else
-                                sorszám = előzősor + 1d;
+                                sorszám = előzősor + 1;
 
                             while (ElőbefejezőDátum.Value >= startdátum)
                             {
-                                sorosnap = Ciklus_Napok(sorszám, Ciklusküld);
-
+                                double sorosnap = Ciklus_Napok(sorszám, Ciklusküld);
                                 startdátum = startdátum.AddDays(sorosnap - Előzőnap);
-
                                 cikluseredmény = Ciklus_Vizsgálat(sorosnap, Ciklusküld).Trim();
+                                Adat_TW6000_Ütemezés ADATSor = new Adat_TW6000_Ütemezés(
+                                       PszJelölő.Items[j].ToStrTrim(),
+                                       Ciklusküld.Trim(),
+                                       false, "_", 0, new DateTime(1900, 1, 1),
+                                       startdátum,
+                                       cikluseredmény.Trim(),
+                                       sorszám,
+                                       startdátum,
+                                       Telephelykereső(PszJelölő.Items[j].ToStrTrim()));
+                                AdatokGy.Add(ADATSor);
 
-                                szöveg = "INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
-                                szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
-                                szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
-                                szöveg += $"'{PszJelölő.Items[j].ToStrTrim()}', "; // azonosító
-                                szöveg += $"'{Ciklusküld.Trim()}', "; // ciklusrend
-                                szöveg += "false, '_', 0, '1900.01.01', "; // elkészül, Megjegyzés,státus, velkészülés
-                                szöveg += $"'{startdátum:yyyy.MM.dd}', "; // esedékesség
-                                szöveg += $"'{cikluseredmény.Trim()}', "; // vizsgálatfoka
-                                szöveg += $"{sorszám}, "; // sorszám
-                                szöveg += $"'{startdátum:yyyy.MM.dd}', "; // ütemezés dátuma
-                                szöveg += $"'{Telephelykereső(PszJelölő.Items[j].ToStrTrim())}' )"; // telephely
-                                MyA.ABMódosítás(hova, jelszóhova, szöveg);
                                 előzősor = sorszám;
                                 Előzőnap = sorosnap;
 
@@ -2299,6 +2269,7 @@ namespace Villamos
 
                     Holtart.Lép();
                 }
+                KézElőterv.Rögzítés(hova, AdatokGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2311,6 +2282,11 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Megkeresi melyik telephelyen van a kocsi
+        /// </summary>
+        /// <param name="azonosító"></param>
+        /// <returns></returns>
         private string Telephelykereső(string azonosító)
         {
             string TelephelykeresőRet = "_";
@@ -2323,6 +2299,9 @@ namespace Villamos
             return TelephelykeresőRet;
         }
 
+        /// <summary>
+        /// Kimutatás készítése
+        /// </summary>
         private void Exceltábla_Kimutatás()
         {
             try
@@ -2404,7 +2383,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
+        /// <summary>
+        /// Kiírja a vizsgálati adatokat
+        /// </summary>
         private void Adatoklistázása()
         {
             try
@@ -2428,44 +2410,26 @@ namespace Villamos
                 MyE.Kiir("Év", "l3");
                 MyE.Kiir("Hónap", "m3");
 
-                // megnyitjuk az adatbázist
                 string hely = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\TW6000adatok.mdb";
-                string jelszó = "czapmiklós";
-                int darab = 0;
-                int volt;
+                if (VizsgálatLista.CheckedItems.Count < 1) return;
 
-                for (int i = 0; i < VizsgálatLista.Items.Count; i++)
+                AdatokÜtem = KézElőterv.Lista_AdatokÜtem(hely);
+
+                List<Adat_TW6000_Ütemezés> AdatokGy = new List<Adat_TW6000_Ütemezés>();
+                for (int i = 0; i < VizsgálatLista.CheckedItems.Count; i++)
                 {
-                    if (VizsgálatLista.GetItemChecked(i))
-                        darab++;
+                    List<Adat_TW6000_Ütemezés> Ideig = (from a in AdatokÜtem
+                                                        where a.Vizsgfoka == VizsgálatLista.CheckedItems[i].ToStrTrim()
+                                                        select a).ToList();
+                    AdatokGy.AddRange(Ideig);
                 }
-                string szöveg = "SELECT * FROM ütemezés ";
 
-                // ha nincs mind jelölve
-                if (VizsgálatLista.Items.Count != darab)
-                {
-                    volt = 0;
-                    for (int i = 0; i < VizsgálatLista.Items.Count; i++)
-                    {
-                        if (VizsgálatLista.GetItemChecked(i) & volt == 0)
-                        {
-                            // első jelölt
-                            szöveg += $" WHERE ( vizsgfoka='{VizsgálatLista.Items[i].ToStrTrim()}'";
-                            volt = 1;
-                        }
-                        else if (VizsgálatLista.GetItemChecked(i))
-                            // az összes többi
-                            szöveg += $" OR vizsgfoka='{VizsgálatLista.Items[i].ToStrTrim()}'";
-                    }
-                    szöveg += " )";
-                }
-                szöveg += " ORDER BY azonosító,vütemezés ";
-
+                AdatokGy = (from a in AdatokGy
+                            orderby a.Azonosító, a.Vütemezés
+                            select a).ToList();
                 int sor = 4;
 
-
-                AdatokÜtem = KézÜtem.Lista_Adatok(hely, jelszó, szöveg);
-                foreach (Adat_TW6000_Ütemezés rekord in AdatokÜtem)
+                foreach (Adat_TW6000_Ütemezés rekord in AdatokGy)
                 {
                     MyE.Kiir(rekord.Azonosító.Trim(), "a" + sor);
                     MyE.Kiir(rekord.Ciklusrend.Trim(), "b" + sor);
