@@ -36,6 +36,7 @@ namespace Villamos
         readonly Kezelő_Váltós_Naptár KézVNaptár = new Kezelő_Váltós_Naptár();
         readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_TW600_AlapNapló KézAlapNapló = new Kezelő_TW600_AlapNapló();
+        readonly Kezelő_TW600_ÜtemNapló KézÜtemNapló = new Kezelő_TW600_ÜtemNapló();
 
         List<Adat_TW6000_Ütemezés> AdatokÜtem = new List<Adat_TW6000_Ütemezés>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
@@ -1538,8 +1539,8 @@ namespace Villamos
 
                 List<Adat_TW6000_AlapNapló> Adatok = KézAlapNapló.Lista_Adatok();
                 Adatok = (from a in Adatok
-                          where a.Rögzítésiidő >= NaplóKezdete.Value
-                          && a.Rögzítésiidő <= NaplóVége.Value
+                          where a.Rögzítésiidő >= MyF.Nap0000(NaplóKezdete.Value)
+                          && a.Rögzítésiidő <= MyF.Nap2359(NaplóVége.Value)
                           orderby a.Rögzítésiidő descending
                           select a).ToList();
                 if (!(NaplóPályaszám.Text.Trim() == "")) Adatok = Adatok.Where(a => a.Azonosító == NaplóPályaszám.Text.Trim()).ToList();
@@ -1635,41 +1636,34 @@ namespace Villamos
         #endregion
 
 
-
         #region Ütemezés napló lapfül
-        //
+        /// <summary>
+        /// A pályaszám comboboxban a kiválasztott Típus alapján kiírja az alapadatokat
+        /// </summary>
         private void ÜtemPályaszám_feltöltés()
         {
             ÜtemPályaszám.Items.Clear();
-            string hely = $@"{Application.StartupPath}\főmérnökség\adatok\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM Állománytábla WHERE [törölt]= false AND valóstípus='TW6000' ORDER BY azonosító ";
-
-
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+            Adatok = (from a in Adatok
+                      where a.Valóstípus.Contains("TW6000")
+                      orderby a.Azonosító
+                      select a).ToList();
             foreach (Adat_Jármű rekord in Adatok)
                 ÜtemPályaszám.Items.Add(rekord.Azonosító.ToStrTrim());
         }
-        //
+
+        /// <summary>
+        /// Ütemezés naplózásának kiírása
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnÜtemNaplóFrissít_Click(object sender, EventArgs e)
         {
             try
             {
-                if (ÜtemNaplóKezdet.Value > ÜtemNaplóVége.Value)
-                    throw new HibásBevittAdat("A kezdő dátumnnak kisebbnek kell lennie, mint a befejező dátum!");
+                if (ÜtemNaplóKezdet.Value > ÜtemNaplóVége.Value) throw new HibásBevittAdat("A kezdő dátumnnak kisebbnek kell lennie, mint a befejező dátum!");
+                if (ÜtemNaplóKezdet.Value.Year != ÜtemNaplóVége.Value.Year) throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
 
-                if (ÜtemNaplóKezdet.Value.Year != ÜtemNaplóVége.Value.Year)
-                    throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
-
-                string hely = TW6000_Napló_Ütem.Trim();
-                string jelszó = "czapmiklós";
-                string szöveg = $"SELECT * FROM ütemezésnapló WHERE rögzítésideje>=#{ÜtemNaplóKezdet.Value:MM-dd-yyyy} 00:00:0#";
-                szöveg += $" AND rögzítésideje<=#{ÜtemNaplóVége.Value:MM-dd-yyyy} 23:59:0#";
-
-                if (ÜtemPályaszám.Text.Trim() != "")
-                    szöveg += $" AND azonosító='{ÜtemPályaszám.Text.Trim()}'";
-
-                szöveg += " ORDER BY rögzítésideje DESC";
                 ÜtemNapló.Rows.Clear();
                 ÜtemNapló.Columns.Clear();
                 ÜtemNapló.Refresh();
@@ -1702,8 +1696,13 @@ namespace Villamos
                 ÜtemNapló.Columns[11].HeaderText = "rögzítő";
                 ÜtemNapló.Columns[11].Width = 100;
 
-                Kezelő_TW600_ÜtemNapló kéz = new Kezelő_TW600_ÜtemNapló();
-                List<Adat_TW6000_ÜtemNapló> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_TW6000_ÜtemNapló> Adatok = KézÜtemNapló.Lista_Adatok(ÜtemNaplóKezdet.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Rögzítésideje >= MyF.Nap0000(ÜtemNaplóKezdet.Value)
+                          && a.Rögzítésideje <= MyF.Nap2359(ÜtemNaplóVége.Value)
+                          orderby a.Rögzítésideje descending
+                          select a).ToList();
+                if (ÜtemPályaszám.Text.Trim() != "") Adatok = Adatok.Where(a => a.Azonosító == ÜtemPályaszám.Text.Trim()).ToList();
 
                 foreach (Adat_TW6000_ÜtemNapló rekord in Adatok)
                 {
@@ -1736,12 +1735,16 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A táblázat elemeit kimenti Excel táblába
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnÜtemNaplóExcel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (ÜtemNapló.Rows.Count <= 0)
-                    return;
+                if (ÜtemNapló.Rows.Count <= 0) return;
 
                 string fájlexc;
 

@@ -96,7 +96,6 @@ namespace Villamos.Kezelők
             }
         }
 
-
         public void Rögzítés(int Év, List<Adat_TW6000_Ütemezés> Adatok)
         {
             try
@@ -172,46 +171,5 @@ namespace Villamos.Kezelők
             }
         }
 
-        //Elkopó
-        public List<Adat_TW6000_ÜtemNapló> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_TW6000_ÜtemNapló> Adatok = new List<Adat_TW6000_ÜtemNapló>();
-            Adat_TW6000_ÜtemNapló Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_TW6000_ÜtemNapló(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["Ciklusrend"].ToStrTrim(),
-                                        rekord["Elkészült"].ToÉrt_Bool(),
-                                        rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["Rögzítésideje"].ToÉrt_DaTeTime(),
-                                        rekord["Rögzítő"].ToStrTrim(),
-                                        rekord["Státus"].ToÉrt_Long(),
-                                        rekord["Velkészülés"].ToÉrt_DaTeTime(),
-                                        rekord["Vesedékesség"].ToÉrt_DaTeTime(),
-                                        rekord["Vizsgfoka"].ToStrTrim(),
-                                        rekord["Vsorszám"].ToÉrt_Long(),
-                                        rekord["Vütemezés"].ToÉrt_DaTeTime(),
-                                        rekord["Vvégezte"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
     }
 }
