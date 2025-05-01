@@ -124,7 +124,7 @@ namespace Villamos
             this.Megállítás = new System.Windows.Forms.CheckBox();
             this.Ciklusrend = new System.Windows.Forms.ComboBox();
             this.Vizsgdátum = new System.Windows.Forms.DateTimePicker();
-            this.Start = new System.Windows.Forms.DateTimePicker();
+            this.StartDátum = new System.Windows.Forms.DateTimePicker();
             this.Label12 = new System.Windows.Forms.Label();
             this.Label11 = new System.Windows.Forms.Label();
             this.Label10 = new System.Windows.Forms.Label();
@@ -1035,7 +1035,7 @@ namespace Villamos
             this.TabPage1.Controls.Add(this.Megállítás);
             this.TabPage1.Controls.Add(this.Ciklusrend);
             this.TabPage1.Controls.Add(this.Vizsgdátum);
-            this.TabPage1.Controls.Add(this.Start);
+            this.TabPage1.Controls.Add(this.StartDátum);
             this.TabPage1.Controls.Add(this.Label12);
             this.TabPage1.Controls.Add(this.Label11);
             this.TabPage1.Controls.Add(this.Label10);
@@ -1115,11 +1115,11 @@ namespace Villamos
             // 
             // Start
             // 
-            this.Start.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Start.Location = new System.Drawing.Point(204, 79);
-            this.Start.Name = "Start";
-            this.Start.Size = new System.Drawing.Size(107, 26);
-            this.Start.TabIndex = 0;
+            this.StartDátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.StartDátum.Location = new System.Drawing.Point(204, 79);
+            this.StartDátum.Name = "Start";
+            this.StartDátum.Size = new System.Drawing.Size(107, 26);
+            this.StartDátum.TabIndex = 0;
             // 
             // Label12
             // 
@@ -1292,7 +1292,7 @@ namespace Villamos
         internal CheckBox Megállítás;
         internal ComboBox Ciklusrend;
         internal DateTimePicker Vizsgdátum;
-        internal DateTimePicker Start;
+        internal DateTimePicker StartDátum;
         internal Label Label12;
         internal Label Label11;
         internal Label Label10;

@@ -44,15 +44,14 @@ namespace Villamos
         public Ablak_TW6000_Tulajdonság()
         {
             InitializeComponent();
+            Start();
         }
 
-        private void Tulajdonság_TW6000_Load(object sender, EventArgs e)
+        /// <summary>
+        /// Ablak betöltésekor végrehajtandó műveletek
+        /// </summary>
+        private void Start()
         {
-            // ellenőrizzük az alap adatok táblát
-            if (!File.Exists(TW6000_Villamos)) Adatbázis_Létrehozás.TW6000tábla(TW6000_Villamos.Trim());
-            if (!File.Exists(TW6000_Napló)) Adatbázis_Létrehozás.TW6000táblanapló(TW6000_Napló.Trim());
-            if (!File.Exists(TW6000_Napló_Ütem)) Adatbázis_Létrehozás.TW6000ütemnapló(TW6000_Napló_Ütem.Trim());
-
             Telephelyekfeltöltése();
             Jogosultságkiosztás();
             Pályaszám_feltöltés();
@@ -72,6 +71,15 @@ namespace Villamos
             LapFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
+        private void Tulajdonság_TW6000_Load(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Ablak bezárásakor a megnyitott ablakokat is zárja be
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Ablak_TW6000_Tulajdonság_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_TW6000_Telephely?.Close();
@@ -79,6 +87,9 @@ namespace Villamos
             Új_Ablak_Kereső?.Close();
         }
 
+        /// <summary>
+        /// Telephelyek feltöltése a legördülő listába
+        /// </summary>
         private void Telephelyekfeltöltése()
         {
             try
@@ -105,6 +116,9 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Jogosultságok kiosztása a felhasználónak
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             try
@@ -189,6 +203,11 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Megnyitja a súgó fájlt
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Btn_súgó_Click(object sender, EventArgs e)
         {
             try
@@ -207,11 +226,19 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Lapfülek kiválasztásakor a megfelelő lapot tölti be
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LapFülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
 
+        /// <summary>
+        /// A kiválasztott lapfül tartalmának feltöltése
+        /// </summary>
         private void Fülekkitöltése()
         {
             switch (LapFülek.SelectedIndex)
@@ -266,6 +293,11 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Lapfülek megjelenítése az aktív kiemelt szinezést kap
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Lapfülek_DrawItem(object sender, DrawItemEventArgs e)
         {
             // Határozza meg, hogy melyik lap van jelenleg kiválasztva
@@ -1084,7 +1116,7 @@ namespace Villamos
                 Adat_TW6000_Alap rekord = KézAlap.Egy_Adat(hely, jelszó, szöveg);
                 if (rekord != null)
                 {
-                    Start.Value = rekord.Start;
+                    StartDátum.Value = rekord.Start;
                     Ciklusrend.Text = rekord.Ciklusrend.Trim();
                     if (rekord.Megállítás)
                         Megállítás.Checked = true;
@@ -1140,7 +1172,7 @@ namespace Villamos
                     // új adat
                     szöveg = "INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
                     szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                    szöveg += $"'{Start.Value:yyyy.MM.dd}', ";
+                    szöveg += $"'{StartDátum.Value:yyyy.MM.dd}', ";
                     szöveg += $"'{Ciklusrend.Text.Trim()}', ";
                     if (Megállítás.Checked)
                         szöveg += "true, ";
@@ -1158,7 +1190,7 @@ namespace Villamos
                 {
                     // adatmódosítás
                     szöveg = "UPDATE alap SET ";
-                    szöveg += $" Start='{Start.Value:yyyy.MM.dd}', ";
+                    szöveg += $" Start='{StartDátum.Value:yyyy.MM.dd}', ";
                     szöveg += $" ciklusrend='{Ciklusrend.Text.Trim()}', ";
                     szöveg += " megállítás=";
                     if (Megállítás.Checked)
@@ -1183,7 +1215,7 @@ namespace Villamos
 
                 szöveg = "INSERT INTO alapnapló (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum, oka, rögzítő, rögzítésiidő) VALUES (";
                 szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                szöveg += $"'{Start.Value:yyyy.MM.dd}', ";
+                szöveg += $"'{StartDátum.Value:yyyy.MM.dd}', ";
                 szöveg += $"'{Ciklusrend.Text.Trim()}', ";
                 if (Megállítás.Checked)
                     szöveg += "true, ";
