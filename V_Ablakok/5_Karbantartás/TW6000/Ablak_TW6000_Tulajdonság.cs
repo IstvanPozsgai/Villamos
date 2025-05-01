@@ -1782,11 +1782,19 @@ namespace Villamos
 
 
         #region Keresés
+        /// <summary>
+        /// A kereső gomb megnyomásakor megnyitja a kereső ablakot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Keresés_Click(object sender, EventArgs e)
         {
             Keresés_metódus();
         }
 
+        /// <summary>
+        /// A kereső ablakban a keresendő szöveg alapján megkeresi a táblázatban
+        /// </summary>
         private void Keresés_metódus()
         {
             try
@@ -1817,6 +1825,9 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A kereső ablakban a keresendő szöveg alapján megkeresi a táblázatban
+        /// </summary>
         private void Szövegkeresés()
         {
             // megkeressük a szöveget a táblázatban
@@ -1840,6 +1851,11 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A kereső ablak bezárásakor törli a kereső ablakot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Új_Ablak_Kereső_Closed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Kereső = null;
@@ -1849,6 +1865,12 @@ namespace Villamos
 
         #region telephely sorrend
         Ablak_TW6000_Telephely Új_Ablak_TW6000_Telephely;
+
+        /// <summary>
+        /// A telephely lapfül megnyomásakor megnyitja a telephely ablakot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Telephely_lap_Click(object sender, EventArgs e)
         {
             Új_Ablak_TW6000_Telephely?.Close();
@@ -1860,16 +1882,26 @@ namespace Villamos
 
         }
 
+        /// <summary>
+        /// A telephely ablak bezárásakor törli a telephely ablakot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Ablak_TW6000_Telephely_Closed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_TW6000_Telephely = null;
         }
-
         #endregion
 
 
         #region Színezés
         Ablak_TW6000_Színkezelő Új_Ablak_TW6000_Színkezelő;
+
+        /// <summary>
+        /// A színező lapfül megnyomásakor megnyitja a színező ablakot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSzínező_Click(object sender, EventArgs e)
         {
             Új_Ablak_TW6000_Színkezelő?.Close();
@@ -1880,61 +1912,85 @@ namespace Villamos
             Új_Ablak_TW6000_Színkezelő.Show();
         }
 
+        /// <summary>
+        /// A színező ablak bezárásakor törli a színező ablakot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Ablak_TW6000_Színkezelő_Closed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_TW6000_Színkezelő = null;
         }
-
         #endregion
 
 
         #region Előtervező lapfül
+        /// <summary>
+        /// Minden elemet kijelöl
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Mindentkijelöl_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < PszJelölő.Items.Count; i++)
                 PszJelölő.SetItemChecked(i, true);
         }
 
+        /// <summary>
+        /// Minden kijelölést töröl
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Kijelöléstörlése_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < PszJelölő.Items.Count; i++)
                 PszJelölő.SetItemChecked(i, false);
         }
-        //
+
+        /// <summary>
+        /// A telephely comboboxban a kiválasztott Típus alapján kiírja az üzemeket
+        /// </summary>
         private void Telephelylista_feltöltés()
         {
             Telephely.Items.Clear();
-
-            string hely = $@"{Application.StartupPath}\főmérnökség\adatok\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM Állománytábla WHERE [törölt]= false AND valóstípus='TW6000' ORDER BY üzem";
-            string szöveg0 = "";
-
-
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+            Adatok = (from a in Adatok
+                      where a.Valóstípus.Contains("TW6000")
+                      orderby a.Üzem
+                      select a).Distinct().ToList();
             foreach (Adat_Jármű rekord in Adatok)
-            {
-                if (rekord.Üzem != null && szöveg0.Trim() != rekord.Üzem.Trim())
-                {
-                    Telephely.Items.Add(rekord.Üzem.Trim());
-                    szöveg0 = rekord.Üzem.Trim();
-                }
-            }
+                Telephely.Items.Add(rekord.Üzem.Trim());
         }
-        //
+
+        /// <summary>
+        /// A pályaszám comboboxban a kiválasztott Típus alapján kiírja az pályaszámokat
+        /// </summary>
         private void Pszlista_feltöltés()
         {
-            PszJelölő.Items.Clear();
-            string hely = $@"{Application.StartupPath}\főmérnökség\adatok\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM Állománytábla WHERE [törölt]= false AND valóstípus='TW6000' ORDER BY azonosító ";
-
-
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
-            foreach (Adat_Jármű rekord in Adatok)
-                PszJelölő.Items.Add(rekord.Azonosító.ToStrTrim());
+            try
+            {
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+                Adatok = (from a in Adatok
+                          where a.Valóstípus.Contains("TW6000")
+                          orderby a.Azonosító
+                          select a).Distinct().ToList();
+                foreach (Adat_Jármű rekord in Adatok)
+                    PszJelölő.Items.Add(rekord.Azonosító.ToStrTrim());
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        /// <summary>
+        /// A vizsgálat comboboxban a kiválasztott Típus alapján kiírja az alapadatokat
+        /// </summary>
         private void Vizsgálatfeltöltés()
         {
             try
@@ -1971,27 +2027,29 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+
+        /// <summary>
+        /// A telephely comboboxban a kiválasztott Típus alapján kiírja az pályaszámokat
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnElőtervezőFrissít_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Telephely.Text.Trim() == "")
-                    throw new HibásBevittAdat("Jelölj ki egy telephelyet!");
-
-                if (Előkezdődátum.Value > ElőbefejezőDátum.Value)
-                    throw new HibásBevittAdat("A kezdő dátumnnak kisebbnek kell lennie, mint a befejező dátum!");
-
-                if (Előkezdődátum.Value.Year != ElőbefejezőDátum.Value.Year)
-                    throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
+                if (Telephely.Text.Trim() == "") throw new HibásBevittAdat("Jelölj ki egy telephelyet!");
+                if (Előkezdődátum.Value > ElőbefejezőDátum.Value) throw new HibásBevittAdat("A kezdő dátumnnak kisebbnek kell lennie, mint a befejező dátum!");
+                if (Előkezdődátum.Value.Year != ElőbefejezőDátum.Value.Year) throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
 
                 PszJelölő.Items.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = $"SELECT * FROM Állománytábla WHERE [törölt]= false AND  valóstípus='TW6000' AND üzem='{Telephely.Text.Trim()}' ORDER BY azonosító";
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+                Adatok = (from a in Adatok
+                          where a.Valóstípus.Contains("TW6000")
+                          && a.Törölt == false
+                          && a.Üzem == Telephely.Text.Trim()
+                          orderby a.Azonosító
+                          select a).ToList();
 
-
-                List<Adat_Jármű> Adatok = KézJármű.Lista_Jármű_állomány(hely, jelszó, szöveg);
                 foreach (Adat_Jármű rekord in Adatok)
                     PszJelölő.Items.Add(rekord.Azonosító.ToStrTrim());
             }
@@ -2006,10 +2064,16 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ElőCiklusrend_SelectedIndexChanged(object sender, EventArgs e)
         {
             Vizsgálatfeltöltés();
         }
+
 
         private void BtnElőtervezőKeres_Click(object sender, EventArgs e)
         {
@@ -2594,8 +2658,6 @@ namespace Villamos
 
 
         #region ListaFeltöltések
-
-
         private void CiklusListaFeltöltés()
         {
             try
@@ -2616,8 +2678,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
     }
 }
