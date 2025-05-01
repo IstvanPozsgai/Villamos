@@ -35,6 +35,7 @@ namespace Villamos
         readonly Kezelő_TW600_Színezés KézSzín = new Kezelő_TW600_Színezés();
         readonly Kezelő_Váltós_Naptár KézVNaptár = new Kezelő_Váltós_Naptár();
         readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
+        readonly Kezelő_TW600_AlapNapló KézAlapNapló = new Kezelő_TW600_AlapNapló();
 
         List<Adat_TW6000_Ütemezés> AdatokÜtem = new List<Adat_TW6000_Ütemezés>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
@@ -1042,7 +1043,7 @@ namespace Villamos
                 ÜCiklusrend.Items.Clear();
                 ElőCiklusrend.Items.Clear();
 
-                List<string> Adatok = AdatokCiklus.OrderBy(a => a.Típus).Select(a => a.Típus).Distinct().ToList();
+                List<string> Adatok = AdatokCiklus.Select(a => a.Típus).Distinct().ToList();
 
                 foreach (string rekord in Adatok)
                 {
@@ -1261,9 +1262,10 @@ namespace Villamos
         #endregion
 
 
-
-
         #region Járműadatok lapfül
+        /// <summary>
+        /// Feltölti a pályaszámokat a comboboxokba
+        /// </summary>
         private void Pályaszám_feltöltés()
         {
             try
@@ -1299,6 +1301,11 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A pályaszám kereső gomb megnyomásakor a kiválasztott pályaszám alapján kiírja az alapadatokat
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pályaszámkereső_Click(object sender, EventArgs e)
         {
             try
@@ -1307,9 +1314,7 @@ namespace Villamos
                 Adat_Jármű Elem = AdatokJármű.Where(a => a.Azonosító == Pályaszám.Text.Trim() && a.Valóstípus == "TW6000").FirstOrDefault();
 
                 if (Elem == null)
-                {
                     throw new HibásBevittAdat($"Nincs {Pályaszám.Text.Trim()} pályaszámú jármű!");
-                }
                 else
                     Alapadatokkiírása();
 
@@ -1326,41 +1331,30 @@ namespace Villamos
             }
         }
 
-        //
+        /// <summary>
+        /// Kiírja a kiválasztott pályaszámhoz tartozó alapadatokat a mezőkbe
+        /// </summary>
         private void Alapadatokkiírása()
         {
             try
             {
                 if (Pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva a pályaszám.");
 
-                // km adatok feltöltése
-                string hely = TW6000_Villamos.Trim();
-                string jelszó = "czapmiklós";
-                string szöveg = $"SELECT * FROM Alap where azonosító='{Pályaszám.Text.Trim()}'";
-
-
-                Adat_TW6000_Alap rekord = KézAlap.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_TW6000_Alap> Adatok = KézAlap.Lista_Adatok();
+                Adat_TW6000_Alap rekord = Adatok.Where(a => a.Azonosító == Pályaszám.Text.Trim()).FirstOrDefault();
                 if (rekord != null)
                 {
                     StartDátum.Value = rekord.Start;
                     Ciklusrend.Text = rekord.Ciklusrend.Trim();
-                    if (rekord.Megállítás)
-                        Megállítás.Checked = true;
-                    else
-                        Megállítás.Checked = false;
-                    if (rekord.Kötöttstart)
-                        KötöttStart.Checked = true;
-                    else
-                        KötöttStart.Checked = false;
+                    Megállítás.Checked = rekord.Megállítás;
+                    KötöttStart.Checked = rekord.Kötöttstart;
                     Oka.Text = "";
                     Vizsgdátum.Value = rekord.Vizsgdátum;
                     Vizsgsorszám.Text = rekord.Vizsgsorszám.ToString();
                     VizsgNév.Text = rekord.Vizsgnév.Trim();
 
                     Ciklussorszámfeltöltés();
-
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1373,11 +1367,21 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A pályaszám comboboxban a kiválasztott pályaszám alapján kiírja az alapadatokat
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             Alapadatokkiírása();
         }
-        //
+
+        /// <summary>
+        /// A járműadatok rögzítése gomb megnyomásakor a mezők alapján módosítja, vagy rögzíti az adatokat
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Járműadatok_rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -1386,82 +1390,32 @@ namespace Villamos
                 if (!int.TryParse(Vizsgsorszám.Text, out int Sorszámvizsg)) throw new HibásBevittAdat("Az utolsó sorszám mezőt ki kell tölteni és egész számnak kell lennie.");
                 if (VizsgNév.Text.Trim() == "") throw new HibásBevittAdat("A módosítás név mezőt ki kell tölteni !");
 
-                AlapListaFeltöltés();
+                AdatokAlap = KézAlap.Lista_Adatok();
                 Adat_TW6000_Alap Elem = (from a in AdatokAlap
                                          where a.Azonosító == Pályaszám.Text.Trim()
                                          select a).FirstOrDefault();
-                string szöveg;
-                string hely = TW6000_Villamos;
-                string jelszó = "czapmiklós";
+
+                Adat_TW6000_Alap ADAT = new Adat_TW6000_Alap(
+                           Pályaszám.Text.Trim(),
+                           Ciklusrend.Text.Trim(),
+                           KötöttStart.Checked,
+                           Megállítás.Checked,
+                           StartDátum.Value,
+                           Vizsgdátum.Value,
+                           Vizsgsorszám.Text.Trim(),
+                           Sorszámvizsg);
+
                 if (Elem == null)
                 {
-                    // új adat
-                    szöveg = "INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
-                    szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                    szöveg += $"'{StartDátum.Value:yyyy.MM.dd}', ";
-                    szöveg += $"'{Ciklusrend.Text.Trim()}', ";
-                    if (Megállítás.Checked)
-                        szöveg += "true, ";
-                    else
-                        szöveg += "false, ";
-                    if (KötöttStart.Checked)
-                        szöveg += "true, ";
-                    else
-                        szöveg += "false, ";
-                    szöveg += $"{Sorszámvizsg}, ";
-                    szöveg += $"'{Vizsgsorszám.Text.Trim()}', ";
-                    szöveg += $"'{Vizsgdátum.Value:yyyy.MM.dd}') ";
+                    KézAlap.Rögzítés(ADAT);
+                    KézAlapNapló.Rögzítés(DateTime.Today.Year, ADAT, MyF.Szöveg_Tisztítás(Oka.Text));
                 }
                 else
                 {
-                    // adatmódosítás
-                    szöveg = "UPDATE alap SET ";
-                    szöveg += $" Start='{StartDátum.Value:yyyy.MM.dd}', ";
-                    szöveg += $" ciklusrend='{Ciklusrend.Text.Trim()}', ";
-                    szöveg += " megállítás=";
-                    if (Megállítás.Checked)
-                        szöveg += "true, ";
-                    else
-                        szöveg += "false, ";
-                    szöveg += " kötöttstart=";
-                    if (KötöttStart.Checked)
-                        szöveg += "true, ";
-                    else
-                        szöveg += "false, ";
-                    szöveg += $" vizsgsorszám={Sorszámvizsg}, ";
-                    szöveg += $" vizsgnév='{Vizsgsorszám.Text.Trim()}', ";
-                    szöveg += $" vizsgdátum='{Vizsgdátum.Value:yyyy.MM.dd}' ";
-                    szöveg += $" WHERE azonosító='{Pályaszám.Text.Trim()} '";
+                    KézAlap.Módosítás(ADAT);
+                    KézAlapNapló.Rögzítés(DateTime.Today.Year, ADAT, MyF.Szöveg_Tisztítás(Oka.Text));
                 }
 
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                // naplózás
-                hely = TW6000_Napló.Trim();
-
-                szöveg = "INSERT INTO alapnapló (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum, oka, rögzítő, rögzítésiidő) VALUES (";
-                szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                szöveg += $"'{StartDátum.Value:yyyy.MM.dd}', ";
-                szöveg += $"'{Ciklusrend.Text.Trim()}', ";
-                if (Megállítás.Checked)
-                    szöveg += "true, ";
-
-                else
-                    szöveg += "false, ";
-
-                if (KötöttStart.Checked)
-                    szöveg += "true, ";
-
-                else
-                    szöveg += "false, ";
-                szöveg += $"{Sorszámvizsg}, ";
-                szöveg += $"'{Vizsgsorszám.Text.Trim()}', ";
-                szöveg += $"'{Vizsgdátum.Value:yyyy.MM.dd}', ";
-                szöveg += $"'{Oka.Text.Trim()}', ";
-                szöveg += $"'{Program.PostásTelephely.Trim()}', ";
-                szöveg += $"'{DateTime.Now}') ";
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -1475,6 +1429,11 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A vizsgálat sorszám comboboxban a kiválasztott sorszám alapján kiírja a vizsgálatfokát
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Vizsgsorszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1499,11 +1458,19 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A kiválasztott ciklus rend alapján kiírja a vizsgálat sorszámokat a comboboxba
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Ciklusrend_SelectedIndexChanged(object sender, EventArgs e)
         {
             Ciklussorszámfeltöltés_Jármű();
         }
 
+        /// <summary>
+        /// A kiválasztott ciklus rend alapján kiírja a vizsgálat sorszámokat a comboboxba
+        /// </summary>
         private void Ciklussorszámfeltöltés_Jármű()
         {
             try
@@ -2074,7 +2041,7 @@ namespace Villamos
                 string jelszóhonnanhova = "czapmiklós";
 
                 AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
-                AlapListaFeltöltés();
+                AdatokAlap = KézAlap.Lista_Adatok();
 
                 List<string> SzövegGy = new List<string>();
                 for (int j = 0; j < PszJelölő.CheckedItems.Count; j++)
@@ -2641,27 +2608,7 @@ namespace Villamos
             }
         }
 
-        //
-        private void AlapListaFeltöltés()
-        {
-            try
-            {
-                string hely = TW6000_Villamos;
-                string jelszó = "czapmiklós";
-                string szöveg = $"SELECT * FROM alap";
-                AdatokAlap.Clear();
-                AdatokAlap = KézAlap.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+
         #endregion
     }
 }
