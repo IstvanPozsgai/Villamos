@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\főmérnökség\adatok\villamos4TW.mdb";
         readonly string jelszó = "czapmiklós";
+        readonly Kezelő_TW600_ÜtemNapló KézNapló = new Kezelő_TW600_ÜtemNapló();
 
         public Kezelő_TW6000_Ütemezés()
         {
@@ -81,6 +82,46 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        public void Rögzítés(List<Adat_TW6000_Ütemezés> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_TW6000_Ütemezés Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                    szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
+                    szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
+                    szöveg += $"'{Adat.Azonosító}', ";
+                    szöveg += $"'{Adat.Ciklusrend}', ";
+                    szöveg += $"{Adat.Elkészült},";
+                    szöveg += $" '{Adat.Megjegyzés}',";
+                    szöveg += $" {Adat.Státus},";
+                    szöveg += $" '{Adat.Velkészülés:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vesedékesség:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vizsgfoka}', ";
+                    szöveg += $"{Adat.Vsorszám}, ";
+                    szöveg += $"'{Adat.Vütemezés:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vvégezte}' )";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                //Naplózunk
+                KézNapló.Rögzítés(DateTime.Now.Year, Adatok);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         //Elkopó
         public List<Adat_TW6000_Ütemezés> Lista_Adatok(string hely, string jelszó, string szöveg)

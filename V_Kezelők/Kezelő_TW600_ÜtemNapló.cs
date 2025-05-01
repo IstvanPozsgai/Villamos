@@ -97,6 +97,45 @@ namespace Villamos.Kezelők
         }
 
 
+        public void Rögzítés(int Év, List<Adat_TW6000_Ütemezés> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_TW6000_Ütemezés Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                    szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
+                    szöveg += " vsorszám, vütemezés, vvégezte,Rögzítésideje, Rögzítő ) VALUES (";
+                    szöveg += $"'{Adat.Azonosító}', ";
+                    szöveg += $"'{Adat.Ciklusrend}', ";
+                    szöveg += $"{Adat.Elkészült},";
+                    szöveg += $" '{Adat.Megjegyzés}',";
+                    szöveg += $" {Adat.Státus},";
+                    szöveg += $" '{Adat.Velkészülés:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vesedékesség:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vizsgfoka}', ";
+                    szöveg += $"{Adat.Vsorszám}, ";
+                    szöveg += $"'{Adat.Vütemezés:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vvégezte}',";
+                    szöveg += $"'{DateTime.Now}', ";
+                    szöveg += $"'{Program.PostásNév}')";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         //Elkopó
         public List<Adat_TW6000_ÜtemNapló> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

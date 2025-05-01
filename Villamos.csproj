@@ -705,6 +705,7 @@
     <Compile Include="V_Adatszerkezet\Adat_TW6000.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
     <Compile Include="V_Excel\Excel_Nyomtatási.cs" />
+    <Compile Include="V_Excel\Kész_Excelek.cs" />
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
@@ -867,6 +868,7 @@
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Takarítástípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000_Ütemezés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TW600_AlapNapló.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_Színezés.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_Telephely.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_ÜtemNapló.cs" />
