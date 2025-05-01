@@ -973,7 +973,11 @@ namespace Villamos
             }
         }
 
-        //
+        /// <summary>
+        /// Törli a táblázatban lévő adatokat, ha azok tervezési állapotban vannak.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnÜtemTörlésClick(object sender, EventArgs e)
         {
             try
@@ -981,21 +985,19 @@ namespace Villamos
                 if (MessageBox.Show("A táblázat adatainak törlésére készül. A program csak akkor törli az adatokat, ha azok tervezési állapotban vannak. Biztos, hogy törli?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                     return;
                 Holtart.Be();
-                string helyalap = TW6000_Villamos.Trim();
-                string jelszó = "czapmiklós";
-                string szöveg;
-                string dátum = DateTime.Now.ToString("MM-dd-yyyy");
-                string pszám;
+
+                List<Adat_TW6000_Ütemezés> AdatokGY = new List<Adat_TW6000_Ütemezés>();
+                AdatokÜtem = KézÜtem.Lista_Adatok();
 
                 for (int sor = 0; sor < Táblaütemezés.Rows.Count; sor++)
                 {
-                    dátum = Táblaütemezés.Rows[sor].Cells[0].Value.ToString();
+                    DateTime dátum = Táblaütemezés.Rows[sor].Cells[0].Value.ToÉrt_DaTeTime();
                     for (int oszlop = 1; oszlop < Táblaütemezés.ColumnCount; oszlop++)
                     {
                         if (Táblaütemezés.Rows[sor].Cells[oszlop].Value != null && Táblaütemezés.Rows[sor].Cells[oszlop].Value.ToStrTrim() != "")
                         {
-                            pszám = MyF.Szöveg_Tisztítás(Táblaütemezés.Rows[sor].Cells[oszlop].Value.ToStrTrim(), 0, 4);
-                            AdatokÜtem = KézÜtem.Lista_Adatok();
+                            string pszám = MyF.Szöveg_Tisztítás(Táblaütemezés.Rows[sor].Cells[oszlop].Value.ToStrTrim(), 0, 4).Trim();
+
                             Adat_TW6000_Ütemezés ÜtemElem = (from a in AdatokÜtem
                                                              where a.Azonosító == pszám.Trim() &&
                                                              a.Vütemezés.ToShortDateString() == dátum.ToÉrt_DaTeTime().ToShortDateString() &&
@@ -1003,16 +1005,14 @@ namespace Villamos
                                                              select a).FirstOrDefault();
                             if (ÜtemElem != null)
                             {
-                                szöveg = $"DELETE FROM  ütemezés WHERE azonosító='{pszám.Trim()}'";
-                                szöveg += $" AND vütemezés=#{dátum.ToÉrt_DaTeTime():MM-dd-yyyy}#";
-                                szöveg += " AND státus=0";
-                                MyA.ABtörlés(helyalap, jelszó, szöveg);
+                                Adat_TW6000_Ütemezés ADAT = new Adat_TW6000_Ütemezés(pszám, 0, dátum);
+                                AdatokGY.Add(ADAT);
                             }
-
                         }
                     }
                     Holtart.Lép();
                 }
+                KézÜtem.Törlés(AdatokGY);
                 Holtart.Ki();
                 Újkiíró();
             }

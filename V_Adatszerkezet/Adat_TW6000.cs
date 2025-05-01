@@ -85,6 +85,19 @@ namespace Villamos.Villamos_Adatszerkezet
             Státus = státus;
             Vütemezés = vütemezés;
         }
+
+        /// <summary>
+        /// Törléshez
+        /// </summary>
+        /// <param name="azonosító"></param>
+        /// <param name="státus"></param>
+        /// <param name="vütemezés"></param>
+        public Adat_TW6000_Ütemezés(string azonosító, long státus, DateTime vütemezés)
+        {
+            Azonosító = azonosító;
+            Státus = státus;
+            Vütemezés = vütemezés;
+        }
     }
     public class Adat_TW6000_AlapNapló
     {

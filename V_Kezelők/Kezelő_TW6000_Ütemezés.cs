@@ -175,6 +175,31 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Törlés(List<Adat_TW6000_Ütemezés> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_TW6000_Ütemezés Adat in Adatok)
+                {
+                    string szöveg = $"DELETE FROM  ütemezés WHERE azonosító='{Adat.Azonosító}'";
+                    szöveg += $" AND vütemezés=#{Adat.Vütemezés:MM-dd-yyyy}#";
+                    szöveg += $" AND státus={Adat.Státus}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABtörlés(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         //Elkopó
         public List<Adat_TW6000_Ütemezés> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -216,41 +241,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_TW6000_Ütemezés Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_TW6000_Ütemezés Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_TW6000_Ütemezés(
-                                    rekord["azonosító"].ToStrTrim(),
-                                    rekord["Ciklusrend"].ToStrTrim(),
-                                    rekord["Elkészült"].ToÉrt_Bool(),
-                                    rekord["Megjegyzés"].ToStrTrim(),
-                                    rekord["státus"].ToÉrt_Long(),
-                                    rekord["velkészülés"].ToÉrt_DaTeTime(),
-                                    rekord["vesedékesség"].ToÉrt_DaTeTime(),
-                                    rekord["vizsgfoka"].ToStrTrim(),
-                                    rekord["vsorszám"].ToÉrt_Long(),
-                                    rekord["vütemezés"].ToÉrt_DaTeTime(),
-                                    rekord["Vvégezte"].ToStrTrim()
-                                    );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
     }
 
 }
