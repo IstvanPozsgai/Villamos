@@ -35,7 +35,7 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Vizsgnév}', ";
                 szöveg += $"'{Adat.Vizsgdátum:yyyy.MM.dd}', ";
                 szöveg += $"'{oka}', ";
-                szöveg += $"'{Program.PostásTelephely.Trim()}', ";
+                szöveg += $"'{Program.PostásNév.Trim()}', ";
                 szöveg += $"'{DateTime.Now}') ";
 
                 MyA.ABMódosítás(hely, jelszó, szöveg);

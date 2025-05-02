@@ -69,7 +69,7 @@ namespace Villamos
             NaplóKezdete.Value = DateTime.Today.AddDays(-30);
             NaplóVége.Value = DateTime.Today;
             Előkezdődátum.Value = DateTime.Today;
-            ElőbefejezőDátum.Value = DateTime.Today;
+            ElőbefejezőDátum.Value = DateTime.Today.AddDays(30);
 
             LapFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
@@ -1953,13 +1953,14 @@ namespace Villamos
         private void Telephelylista_feltöltés()
         {
             Telephely.Items.Clear();
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
             Adatok = (from a in Adatok
                       where a.Valóstípus.Contains("TW6000")
                       orderby a.Üzem
-                      select a).Distinct().ToList();
-            foreach (Adat_Jármű rekord in Adatok)
-                Telephely.Items.Add(rekord.Üzem.Trim());
+                      select a).ToList();
+            List<string> Üzemek = Adatok.Select(a => a.Üzem).Distinct().ToList();
+            foreach (string rekord in Üzemek)
+                Telephely.Items.Add(rekord);
         }
 
         /// <summary>
@@ -1969,7 +1970,8 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+                PszJelölő.Items.Clear();
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
                 Adatok = (from a in Adatok
                           where a.Valóstípus.Contains("TW6000")
                           orderby a.Azonosító
@@ -2042,7 +2044,7 @@ namespace Villamos
                 if (Előkezdődátum.Value.Year != ElőbefejezőDátum.Value.Year) throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
 
                 PszJelölő.Items.Clear();
-                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
                 Adatok = (from a in Adatok
                           where a.Valóstípus.Contains("TW6000")
                           && a.Törölt == false
@@ -2164,109 +2166,73 @@ namespace Villamos
 
                 List<Adat_TW6000_Alap> Adatok = KézElőterv.Lista_Adatok(hova);
 
-                DateTime előkezdődátumValue = Előkezdődátum.Value;
-                DateTime előbefejezőDátumValue = ElőbefejezőDátum.Value;
-                TimeSpan időtartam = előbefejezőDátumValue - előkezdődátumValue;
-                double idő = időtartam.TotalDays;
-                DateTime startdátum = default;
-                TimeSpan időtartam2 = előbefejezőDátumValue - előkezdődátumValue;
-                double napokszáma = (int)időtartam2.TotalDays;
                 List<Adat_TW6000_Ütemezés> AdatokGy = new List<Adat_TW6000_Ütemezés>();
                 for (int j = 0; j < PszJelölő.CheckedItems.Count; j++)
                 {
                     // pörgetjük a pályaszámokat
-                    string cikluseredmény = "";
-
                     Adat_TW6000_Alap rekord = (from a in Adatok
-                                               where a.Azonosító == PszJelölő.Items[j].ToStrTrim()
+                                               where a.Azonosító == PszJelölő.CheckedItems[j].ToStrTrim()
                                                select a).FirstOrDefault();
 
                     if (rekord != null)
                     {
-                        string Ciklusküld = rekord.Ciklusrend; // melyik ciklusrend szerint 
-                        long Ciklusmax = Ciklus_Max(Ciklusküld.Trim());// hogy a soron következő vizsgálat hány nap múlva esedékes
+                        long Ciklusmax = Ciklus_Max(rekord.Ciklusrend); //a maximális napszám
+                        long Ciklussormax = Ciklus_Sorszám(Ciklusmax, rekord.Ciklusrend); // a max vizsgálat száma
+                        DateTime startdátum = rekord.Start; // az a dátum ahonnan a kocsi ciklusát kezdjük. 
+                        double Nap = (Előkezdődátum.Value - startdátum).TotalDays;   // megkeressük, hogy mi a két dátum között az első vizsgálat dátuma.
+                        double NapE = (Előkezdődátum.Value - startdátum).TotalDays;   //Ezzel később számolunk 
+                        int HányszorFordult = (int)Math.Round(Nap / Ciklusmax, 1);   //Hányszor végezték el rajta a teljes ciklust
 
-                        double Ciklussormax = Ciklus_Sorszám(Ciklusmax, Ciklusküld); // a soron következő vizsgálat száma
-
-                        DateTime Start = rekord.Start; // az a dátum ahonnan a kocsi ciklusát kezdjük.
-
-                        // megkeressük, hogy mi a két dátum között az első vizsgálat dátuma.
-                        double Napokküld = 0;
-                        for (int i = 0; i < (int)Math.Round(napokszáma); i++)
+                        if (Ciklusmax <= Nap)
                         {
-                            DateTime futódátum = Előkezdődátum.Value.AddDays(i);
-                            Napokküld = (int)(futódátum - Start).TotalDays;
-
-                            if (Ciklusmax <= Napokküld)
-                            {
-                                int darab = (int)Math.Round(Napokküld / Ciklusmax);
-                                if (darab == Napokküld / Ciklusmax)
-                                    Napokküld = Ciklusmax;
-                                else
-                                    Napokküld += -Ciklusmax * darab;
-                            }
-                            cikluseredmény = Ciklus_Vizsgálat(Napokküld, Ciklusküld).Trim();
-                            if (!(cikluseredmény.Trim() == ""))
-                            {
-                                // első dátum amitől kezdjük a pörgést
-                                startdátum = Előkezdődátum.Value.AddDays(i);
-                                break;
-                            }
-                        }
-                        // ha meg van a első elem akkor rögzítjük
-                        if (!(cikluseredmény.Trim() == ""))
-                        {
-                            long előzősor = Ciklus_Sorszám(Napokküld, Ciklusküld);
-                            Adat_TW6000_Ütemezés ADAT = new Adat_TW6000_Ütemezés(
-                                    PszJelölő.Items[j].ToStrTrim(),
-                                    Ciklusküld.Trim(),
-                                    false, "_", 0, new DateTime(1900, 1, 1),
-                                    startdátum,
-                                    cikluseredmény.Trim(),
-                                    előzősor,
-                                    startdátum,
-                                    Telephelykereső(PszJelölő.Items[j].ToStrTrim()));
-                            AdatokGy.Add(ADAT);
-
-                            double Előzőnap = Napokküld;
-
-                            // a következők
-                            long sorszám;
-                            if (előzősor == Ciklussormax)
-                                sorszám = 1;
+                            if (HányszorFordult == Nap / Ciklusmax)
+                                Nap = 0;
                             else
-                                sorszám = előzősor + 1;
+                                Nap = (Ciklusmax * HányszorFordult);
+                        }
 
-                            while (ElőbefejezőDátum.Value >= startdátum)
+                        startdátum = rekord.Start.AddDays(Nap);   // Beállítjuk az utolsó ciklus elejére
+                        Adat_Ciklus ElőzőKarb = (from a in AdatokCiklus
+                                                 where a.Névleges < NapE - Nap
+                                                 && a.Típus == rekord.Ciklusrend
+                                                 orderby a.Névleges descending
+                                                 select a).FirstOrDefault();
+                        long sorszám = 0;
+                        DateTime futódátum = startdátum;  //Ezt futatjuk, amíg el nem éri a maximumot
+                        if (ElőzőKarb != null)
+                        {
+                            sorszám = ElőzőKarb.Sorszám; // az utolsó vizsgálat sorszáma
+                            futódátum = rekord.Start.AddDays(ElőzőKarb.Névleges + Nap);     //utolsó vizsgálat dátuma
+                        }
+
+
+                        while (ElőbefejezőDátum.Value >= futódátum)
+                        {
+                            sorszám++;
+                            if (sorszám > Ciklussormax)
                             {
-                                double sorosnap = Ciklus_Napok(sorszám, Ciklusküld);
-                                startdátum = startdátum.AddDays(sorosnap - Előzőnap);
-                                cikluseredmény = Ciklus_Vizsgálat(sorosnap, Ciklusküld).Trim();
-                                Adat_TW6000_Ütemezés ADATSor = new Adat_TW6000_Ütemezés(
-                                       PszJelölő.Items[j].ToStrTrim(),
-                                       Ciklusküld.Trim(),
-                                       false, "_", 0, new DateTime(1900, 1, 1),
-                                       startdátum,
-                                       cikluseredmény.Trim(),
-                                       sorszám,
-                                       startdátum,
-                                       Telephelykereső(PszJelölő.Items[j].ToStrTrim()));
-                                AdatokGy.Add(ADATSor);
-
-                                előzősor = sorszám;
-                                Előzőnap = sorosnap;
-
-                                if (sorszám == Ciklussormax)
-                                {
-                                    sorszám = 1;
-                                    Előzőnap = 0;
-                                }
-                                else
-                                    sorszám += 1;
+                                sorszám = 1;//A nagy Ciklus végén visszaállítjuk a sorszámot
+                                startdátum = futódátum; //beállítjuk az új nagy ciklus elejét
+                                Nap = 0;
                             }
+                            Adat_Ciklus KövetkezőKarb = (from a in AdatokCiklus
+                                                         where a.Sorszám == sorszám
+                                                         && a.Típus == rekord.Ciklusrend
+                                                         select a).FirstOrDefault();
+                            futódátum = startdátum.AddDays(KövetkezőKarb.Névleges); // a következő vizsgálat dátuma
+
+                            Adat_TW6000_Ütemezés ADATSor = new Adat_TW6000_Ütemezés(
+                                   PszJelölő.CheckedItems[j].ToStrTrim(),
+                                   rekord.Ciklusrend,
+                                   false, "_", 0, new DateTime(1900, 1, 1),
+                                   futódátum,
+                                   KövetkezőKarb.Vizsgálatfok,
+                                   sorszám,
+                                   futódátum,
+                                   Telephelykereső(PszJelölő.Items[j].ToStrTrim()));
+                            AdatokGy.Add(ADATSor);
                         }
                     }
-
                     Holtart.Lép();
                 }
                 KézElőterv.Rögzítés(hova, AdatokGy);
@@ -2362,9 +2328,12 @@ namespace Villamos
                 //// Elkészítjük a munkalapokat
                 //// ****************************************************
 
-                Adatoklistázása();
-                Kimutatás();
-                Kimutatás1();
+                long sor = Adatoklistázása();
+                if (sor > 2)        //Azért kell mert nem tud csak 2 soros táblából kimutatást készíteni
+                {
+                    Kimutatás();
+                    Kimutatás1();
+                }
 
                 MyE.Munkalap_aktív("Tartalom");
                 MyE.Aktív_Cella(munkalap, "A1");
@@ -2387,8 +2356,9 @@ namespace Villamos
         /// <summary>
         /// Kiírja a vizsgálati adatokat
         /// </summary>
-        private void Adatoklistázása()
+        private long Adatoklistázása()
         {
+            long válasz = 0;
             try
             {
                 string munkalap = "Adatok";
@@ -2411,7 +2381,7 @@ namespace Villamos
                 MyE.Kiir("Hónap", "m3");
 
                 string hely = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\TW6000adatok.mdb";
-                if (VizsgálatLista.CheckedItems.Count < 1) return;
+                if (VizsgálatLista.CheckedItems.Count < 1) return válasz;
 
                 AdatokÜtem = KézElőterv.Lista_AdatokÜtem(hely);
 
@@ -2428,7 +2398,7 @@ namespace Villamos
                             orderby a.Azonosító, a.Vütemezés
                             select a).ToList();
                 int sor = 4;
-
+                if (AdatokGy.Count > 0) válasz = AdatokGy.Count;
                 foreach (Adat_TW6000_Ütemezés rekord in AdatokGy)
                 {
                     MyE.Kiir(rekord.Azonosító.Trim(), "a" + sor);
@@ -2478,6 +2448,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return válasz;
         }
 
         private void Kimutatás()
@@ -2585,15 +2556,6 @@ namespace Villamos
 
 
         #region Ciklus
-        private string Ciklus_Vizsgálat(double napokszáma, string ciklusrend)
-        {
-            string válasz = "";
-            string valami = (from a in AdatokCiklus
-                             where a.Típus.Trim() == ciklusrend && a.Névleges == napokszáma
-                             select a.Vizsgálatfok.Trim()).FirstOrDefault();
-            if (valami != null) válasz = valami;
-            return válasz;
-        }
 
         private long Ciklus_Sorszám(double napokszáma, string ciklusrend)
         {
@@ -2608,14 +2570,6 @@ namespace Villamos
             long válasz = (from a in AdatokCiklus
                            where a.Típus.Trim() == ciklusrend.Trim()
                            select a).Max(x => x.Névleges);
-            return válasz;
-        }
-
-        private double Ciklus_Napok(double Sorszám, string ciklusrend)
-        {
-            double válasz = (from a in AdatokCiklus
-                             where a.Típus.Trim() == ciklusrend.Trim() && a.Sorszám == Sorszám
-                             select a).Max(x => x.Névleges);
             return válasz;
         }
         #endregion
