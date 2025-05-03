@@ -56,6 +56,9 @@ namespace Villamos
             Start();
         }
 
+        /// <summary>
+        /// Ablak betöltésekor elinduló események
+        /// </summary>
         private void Start()
         {
             Telephelyekfeltöltése();
@@ -71,6 +74,9 @@ namespace Villamos
         {
         }
 
+        /// <summary>
+        /// Telephelyek feltöltése a comboboxba
+        /// </summary>
         private void Telephelyekfeltöltése()
         {
             try
@@ -96,6 +102,9 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Jogosultságok kiosztása
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             try
@@ -152,6 +161,11 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Felhasználói leírást nyitja meg
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
@@ -170,13 +184,20 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Telephely kiválasztásakor a combobaxba a pályaszámok feltöltése
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
             Pályaszám_feltöltés();
         }
 
-        //
+        /// <summary>
+        /// Pályaszámok feltöltése a combobaxba
+        /// </summary>
         private void Pályaszám_feltöltés()
         {
             try
@@ -184,25 +205,33 @@ namespace Villamos
                 Pályaszám.Items.Clear();
                 if (!Program.Postás_Vezér && Cmbtelephely.Text.Trim() == "") return;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
 
                 if (Program.Postás_Vezér)
                 {
-                    szöveg = "Select * FROM Állománytábla WHERE  törölt=0 AND (valóstípus='ICS' OR valóstípus='KCSV-7') ORDER BY azonosító";
+                    // ha főmérnökség vagy vezér akkor minden telephelyről
+                    // feltöltjük az összes pályaszámot a Comboba
+                    Adatok = (from a in Adatok
+                              where a.Törölt == false && (a.Valóstípus == "ICS" || a.Valóstípus == "KCSV-7")
+                              orderby a.Azonosító
+                              select a).ToList();
+
                 }
                 else
                 {
-                    szöveg = $"Select * FROM Állománytábla WHERE Üzem='{Cmbtelephely.Text.Trim()}' AND ";
-                    szöveg += " törölt=0 AND (valóstípus='ICS' OR valóstípus='KCSV-7') ORDER BY azonosító";
+                    // ha nem főmérnökség akkor csak a kiválasztott telephelyről
+                    // feltöltjük az összes pályaszámot a Comboba
+                    Adatok = (from a in Adatok
+                              where a.Törölt == false && a.Üzem == Cmbtelephely.Text.Trim()
+                              && (a.Valóstípus == "ICS" || a.Valóstípus == "KCSV-7")
+                              orderby a.Azonosító
+                              select a).ToList();
                 }
 
                 // feltöltjük az összes pályaszámot a Comboba
+                foreach (Adat_Jármű rekord in Adatok)
+                    Pályaszám.Items.Add(rekord.Azonosító);
 
-                Pályaszám.BeginUpdate();
-                Pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                Pályaszám.EndUpdate();
                 Pályaszám.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -216,17 +245,24 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Pályaszám kereső gomb megnyomásakor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pályaszámkereső_Click(object sender, EventArgs e)
         {
             Frissít();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void Frissít()
         {
             try
             {
-                if (Pályaszám.Text.Trim() == "")
-                    return;
+                if (Pályaszám.Text.Trim() == "") return;
 
                 switch (Fülek.SelectedIndex)
                 {
@@ -271,11 +307,19 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Lapfül kiválasztásakor a megfelelő lapfül betöltése
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
 
+        /// <summary>
+        /// Lapfül tartalmának feltöltése
+        /// </summary>
         private void Fülekkitöltése()
         {
             try
@@ -340,12 +384,22 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Pályaszám kiválasztásakor a combobaxba a pályaszámok feltöltése
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             Frissít();
             Kiüríti_lapfül();
         }
 
+        /// <summary>
+        /// Lapfül fejlécének megrajzolása
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
             // Határozza meg, hogy melyik lap van jelenleg kiválasztva
