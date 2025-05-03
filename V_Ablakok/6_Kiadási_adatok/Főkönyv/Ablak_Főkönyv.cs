@@ -964,7 +964,14 @@ namespace Villamos
                 ZSER_Beolvasás();
                 List<Adat_Főkönyv_Nap> Adatok = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
                 //Ha volt megállítani való jármű akkor a napi adatokat frissítjük
-                if (Főkönyv_Határérték.T5C5_Túllépés(Adatok, Cmbtelephely.Text.Trim()))
+                if (Főkönyv_Határérték.T5C5_Túllépés(Adatok, Cmbtelephely.Text.Trim(), "T5C5"))
+                {
+                    KézFőkönyvNap.Törlés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+                    NapiAdatokRögzítése();
+                    MessageBox.Show("Zser adatok feldolgozása során járművek túlfutottak, ezért megállításra kerül(tek)!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                if (Főkönyv_Határérték.T5C5_Túllépés(Adatok, Cmbtelephely.Text.Trim(), "SGP"))
                 {
                     KézFőkönyvNap.Törlés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
                     NapiAdatokRögzítése();

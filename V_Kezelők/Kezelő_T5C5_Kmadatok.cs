@@ -22,7 +22,7 @@ namespace Villamos.Kezelők
             Típus = típus;
             if (Típus == "T5C5") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
             if (Típus == "ICS") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-            if (Típus == "Fogas") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4Fogas.mdb";
+            if (Típus == "SGP") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4Fogas.mdb";
 
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kmfutástábla(hely.KönyvSzerk());
         }

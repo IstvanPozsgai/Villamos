@@ -23,7 +23,7 @@ namespace Villamos
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-        readonly Kezelő_T5C5_Kmadatok KézKMAdatok = new Kezelő_T5C5_Kmadatok("Fogas");
+        readonly Kezelő_T5C5_Kmadatok KézKMAdatok = new Kezelő_T5C5_Kmadatok("SGP");
         readonly Kezelő_kiegészítő_telephely KézKieg = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_T5C5_Előterv KézElőterv = new Kezelő_T5C5_Előterv();
         readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();

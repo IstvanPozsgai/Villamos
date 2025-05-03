@@ -31,7 +31,7 @@ namespace Villamos.V_MindenEgyéb
                 MyE.ExcelMegnyitás(fájlexcel);
                 string beopályaszám;
 
-                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok("Fogas");
+                Kezelő_T5C5_Kmadatok Kéz = new Kezelő_T5C5_Kmadatok("SGP");
                 List<Adat_T5C5_Kmadatok> Adatok = Kéz.Lista_Adatok();
 
                 // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres

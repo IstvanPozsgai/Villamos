@@ -11,21 +11,30 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv
 {
     public static class Főkönyv_Határérték
     {
-        readonly static Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok("T5C5");
         readonly static Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
         readonly static Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly static Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly static Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
 
-        public static bool T5C5_Túllépés(List<Adat_Főkönyv_Nap> Adatok, string Telephely)
+
+        /// <summary>
+        /// T5C5 és T5C5K2, SGP  járművek túllépésének ellenőrzése
+        /// A napi zser feltöltését követően fut le ellenőrzi, hogy a km a ciklus felső határértékét meghaladja-e
+        /// ha meghaladja akkor a járművet megállítja és e-mailt küld a címzetti körnek
+        /// </summary>
+        /// <param name="Adatok"></param>
+        /// <param name="Telephely"></param>
+        /// <returns></returns>
+        public static bool T5C5_Túllépés(List<Adat_Főkönyv_Nap> Adatok, string Telephely, string Típus)
         {
+            Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok(Típus);
             bool válasz = false;
             try
             {
                 //Csak az üzemképes kocsikkal foglalkozunk
                 Adatok = (from a in Adatok
                           where a.Státus != 4
-                          && (a.Típus == "T5C5" || a.Típus == "T5C5K2")
+                          && (a.Típus.Contains(Típus))
                           select a).ToList();
 
                 List<Adat_T5C5_Kmadatok> AdatokVkm = KézVkm.Lista_Adatok();
@@ -73,10 +82,15 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv
                     long Vkm = KMUkm + KorNapikm;
                     long V23 = rekordszer.KMUkm + KorNapikm - rekordszer.V2V3Számláló;
                     string szöveg = "";
-                    // Ha J javítás volt és nincs visszaállítva még a km
-                    if (!(rekordszer.Vizsgsorszám == 0 && KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám < V23))
+                    string Eredmény = "";
+                    if (rekordszer.Vizsgsorszám == 0 && KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám < V23)
                     {
-                        string Eredmény = "";
+                        // Ha J javítás volt és nincs visszaállítva még a km akkor a teljes kilométer szerint ellenőrizzük
+                        //Nem lehet számolni vele, mert nagyban eltér a KMU km-tól vett különbségektől.
+                    }
+                    else
+                    {
+                        //V2 és V3 vizsgálatnál a km-t a ciklus alapján számoljuk
                         if (KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám < V23)
                         {
 
@@ -156,8 +170,6 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv
                 Kezelő_Kiegészítő_Adatok_Terjesztés kéz = new Kezelő_Kiegészítő_Adatok_Terjesztés();
                 List<Adat_Kiegészítő_Adatok_Terjesztés> Adatok = kéz.Lista_Adatok();
 
-
-
                 string email = (from a in Adatok
                                 where a.Id == 2
                                 select a.Email).FirstOrDefault();
@@ -179,7 +191,7 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv
                     mail.Importance = MyO.OlImportance.olImportanceNormal;
                     ((MyO._MailItem)mail).Send();
 
-                    MessageBox.Show("Üzenet el lett küldve", "Üzenet küldés sikeres", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("E-mail üzenet el lett küldve", "Üzenet küldés sikeres", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
             }
