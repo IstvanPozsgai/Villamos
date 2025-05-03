@@ -125,6 +125,13 @@ namespace Villamos.Kezelők
             }
         }
 
+        /// <summary>
+        /// Törlés 
+        /// </summary>
+        /// <param name="Telephely"></param>
+        /// <param name="Dátum"></param>
+        /// <param name="azonosító"></param>
+        /// <param name="dátum2"></param>
         public void Módosítás(string Telephely, DateTime Dátum, string azonosító, DateTime dátum2)
         {
             try
@@ -189,7 +196,5 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-
     }
 }
