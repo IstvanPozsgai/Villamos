@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_TW6000_Előterv
     {
         readonly string jelszó = "czapmiklós";
-        string hely;
+
         private void FájlBeállítás(string hely)
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.TW6000tábla(hely.KönyvSzerk());

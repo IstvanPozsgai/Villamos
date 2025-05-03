@@ -2,73 +2,9 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők
 {
-    public class Kezelő_Ics
-    {
-        public List<Adat_ICS> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_ICS> Adatok = new List<Adat_ICS>();
-            Adat_ICS Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_ICS(
-                                       rekord["Azonosító"].ToStrTrim(),
-                                       rekord["Takarítás"].ToÉrt_DaTeTime(),
-                                       rekord["E2"].ToÉrt_Int(),
-                                       rekord["E3"].ToÉrt_Int()
-                                       );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-
-        public Adat_ICS Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_ICS Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_ICS(
-                                   rekord["Azonosító"].ToStrTrim(),
-                                   rekord["Takarítás"].ToÉrt_DaTeTime(),
-                                   rekord["E2"].ToÉrt_Int(),
-                                   rekord["E3"].ToÉrt_Int()
-                                   );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-    }
 
 
     public class Kezelő_ICS_Előterv
