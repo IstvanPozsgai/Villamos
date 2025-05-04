@@ -152,49 +152,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
-
-        // Elkopó
-        public List<Adat_Vezénylés> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Vezénylés> Adatok = new List<Adat_Vezénylés>();
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat_Vezénylés Adat = new Adat_Vezénylés(
-                                        rekord["azonosító"].ToStrTrim(),
-                                        DateTime.Parse(rekord["dátum"].ToString()),
-                                        rekord["státus"].ToÉrt_Int(),
-                                        rekord["vizsgálatraütemez"].ToÉrt_Int(),
-                                        rekord["takarításraütemez"].ToÉrt_Int(),
-                                        rekord["vizsgálat"].ToStrTrim(),
-                                        rekord["vizsgálatszám"].ToÉrt_Int(),
-                                        rekord["rendelésiszám"].ToStrTrim(),
-                                        rekord["álljon"].ToÉrt_Int(),
-                                        rekord["fusson"].ToÉrt_Int(),
-                                        rekord["törlés"].ToÉrt_Int(),
-                                        rekord["szerelvényszám"].ToÉrt_Long(),
-                                        rekord["típus"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
     }
 }

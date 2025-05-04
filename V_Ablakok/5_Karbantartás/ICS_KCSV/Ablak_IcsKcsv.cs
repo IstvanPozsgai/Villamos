@@ -2433,7 +2433,7 @@ namespace Villamos
                 List<Adat_Vezénylés> AdatokVezénylés = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_ütem.Value);
                 AdatokVezénylés = (from a in AdatokVezénylés
                                    where a.Törlés == 0
-                                   && a.Dátum == Dátum_ütem.Value
+                                   && a.Dátum.ToShortDateString() == Dátum_ütem.Value.ToShortDateString()
                                    orderby a.Azonosító
                                    select a).ToList();
 
@@ -2529,10 +2529,10 @@ namespace Villamos
                                      hibáksorszáma);
                             KézJárműHiba.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                         }
-                        Holtart.Ki();
-                        MessageBox.Show("Az adatok rögzítése befejeződött!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
+                Holtart.Ki();
+                MessageBox.Show("Az adatok rögzítése befejeződött!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
