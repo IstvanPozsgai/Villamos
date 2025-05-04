@@ -525,6 +525,7 @@
     <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_ICS_KCSV_segéd.Designer.cs">
       <DependentUpon>Ablak_ICS_KCSV_segéd.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Adatszerkezet\Adat_ICS_előterv.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_Ütem.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Beosztás.cs">
       <SubType>Form</SubType>
@@ -740,6 +741,7 @@
     <Compile Include="V_Kezelők\Kezelő_FőSzemélyzet_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_FőTípuscsere_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Beosztás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_ICS_előterv.cs" />
     <Compile Include="V_Kezelők\Kezelő_JogosítványVonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű2ICS.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Hiba_Napló.cs" />
@@ -756,7 +758,6 @@
     <Compile Include="V_Kezelők\Kezelő_Eszköz.cs" />
     <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Előírás.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Ics.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosítvány.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_J1.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_Kötbér.cs" />
