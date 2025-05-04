@@ -144,13 +144,11 @@ namespace Villamos
             this.Típus_text = new System.Windows.Forms.Label();
             this.Státus_text = new System.Windows.Forms.Label();
             this.Miótaáll_text = new System.Windows.Forms.Label();
-            this.Takarítás_text = new System.Windows.Forms.Label();
             this.Főmérnökség_text = new System.Windows.Forms.Label();
             this.Járműtípus_text = new System.Windows.Forms.Label();
             this.Label8 = new System.Windows.Forms.Label();
             this.Label7 = new System.Windows.Forms.Label();
             this.Label6 = new System.Windows.Forms.Label();
-            this.Label3 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
             this.Fülek = new System.Windows.Forms.TabControl();
@@ -1237,13 +1235,11 @@ namespace Villamos
             this.TabPage1.Controls.Add(this.Típus_text);
             this.TabPage1.Controls.Add(this.Státus_text);
             this.TabPage1.Controls.Add(this.Miótaáll_text);
-            this.TabPage1.Controls.Add(this.Takarítás_text);
             this.TabPage1.Controls.Add(this.Főmérnökség_text);
             this.TabPage1.Controls.Add(this.Járműtípus_text);
             this.TabPage1.Controls.Add(this.Label8);
             this.TabPage1.Controls.Add(this.Label7);
             this.TabPage1.Controls.Add(this.Label6);
-            this.TabPage1.Controls.Add(this.Label3);
             this.TabPage1.Controls.Add(this.Label2);
             this.TabPage1.Controls.Add(this.Label1);
             this.TabPage1.Location = new System.Drawing.Point(4, 29);
@@ -1344,21 +1340,11 @@ namespace Villamos
             this.Miótaáll_text.TabIndex = 13;
             this.Miótaáll_text.Text = "Label11";
             // 
-            // Takarítás_text
-            // 
-            this.Takarítás_text.AutoSize = true;
-            this.Takarítás_text.BackColor = System.Drawing.Color.LightGreen;
-            this.Takarítás_text.Location = new System.Drawing.Point(203, 107);
-            this.Takarítás_text.Name = "Takarítás_text";
-            this.Takarítás_text.Size = new System.Drawing.Size(66, 20);
-            this.Takarítás_text.TabIndex = 10;
-            this.Takarítás_text.Text = "Label15";
-            // 
             // Főmérnökség_text
             // 
             this.Főmérnökség_text.AutoSize = true;
             this.Főmérnökség_text.BackColor = System.Drawing.Color.LightGreen;
-            this.Főmérnökség_text.Location = new System.Drawing.Point(203, 139);
+            this.Főmérnökség_text.Location = new System.Drawing.Point(203, 111);
             this.Főmérnökség_text.Name = "Főmérnökség_text";
             this.Főmérnökség_text.Size = new System.Drawing.Size(66, 20);
             this.Főmérnökség_text.TabIndex = 9;
@@ -1368,7 +1354,7 @@ namespace Villamos
             // 
             this.Járműtípus_text.AutoSize = true;
             this.Járműtípus_text.BackColor = System.Drawing.Color.LightGreen;
-            this.Járműtípus_text.Location = new System.Drawing.Point(203, 171);
+            this.Járműtípus_text.Location = new System.Drawing.Point(203, 143);
             this.Járműtípus_text.Name = "Járműtípus_text";
             this.Járműtípus_text.Size = new System.Drawing.Size(66, 20);
             this.Járműtípus_text.TabIndex = 8;
@@ -1404,21 +1390,11 @@ namespace Villamos
             this.Label6.TabIndex = 5;
             this.Label6.Text = "Mióta áll:";
             // 
-            // Label3
-            // 
-            this.Label3.AutoSize = true;
-            this.Label3.BackColor = System.Drawing.Color.LightGreen;
-            this.Label3.Location = new System.Drawing.Point(17, 107);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(124, 20);
-            this.Label3.TabIndex = 2;
-            this.Label3.Text = "Utolsó takarítás:";
-            // 
             // Label2
             // 
             this.Label2.AutoSize = true;
             this.Label2.BackColor = System.Drawing.Color.LightGreen;
-            this.Label2.Location = new System.Drawing.Point(17, 139);
+            this.Label2.Location = new System.Drawing.Point(17, 111);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(152, 20);
             this.Label2.TabIndex = 1;
@@ -1428,7 +1404,7 @@ namespace Villamos
             // 
             this.Label1.AutoSize = true;
             this.Label1.BackColor = System.Drawing.Color.LightGreen;
-            this.Label1.Location = new System.Drawing.Point(17, 171);
+            this.Label1.Location = new System.Drawing.Point(17, 143);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(95, 20);
             this.Label1.TabIndex = 0;
@@ -1549,7 +1525,6 @@ namespace Villamos
             this.Tábla_ütemező.Size = new System.Drawing.Size(795, 434);
             this.Tábla_ütemező.TabIndex = 168;
             this.Tábla_ütemező.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_ütemező_CellClick);
-            this.Tábla_ütemező.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_ütemező_CellContentClick);
             this.Tábla_ütemező.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_ütemező_CellFormatting);
             // 
             // timer1
@@ -1577,6 +1552,7 @@ namespace Villamos
             this.Name = "Ablak_IcsKcsv";
             this.Text = "ICS és KCSV futás km adatok";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_IcsKcsv_FormClosed);
             this.Load += new System.EventHandler(this.IcsKcsv_Load);
             this.Panel2.ResumeLayout(false);
             this.Panel2.PerformLayout();
@@ -1708,13 +1684,11 @@ namespace Villamos
         internal Label Típus_text;
         internal Label Státus_text;
         internal Label Miótaáll_text;
-        internal Label Takarítás_text;
         internal Label Főmérnökség_text;
         internal Label Járműtípus_text;
         internal Label Label8;
         internal Label Label7;
         internal Label Label6;
-        internal Label Label3;
         internal Label Label2;
         internal Label Label1;
         internal TabControl Fülek;

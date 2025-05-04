@@ -1,19 +1,17 @@
-﻿using System; 
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.TW6000
 {
     public partial class Ablak_TW6000_Telephely : Form
     {
+        readonly Kezelő_TW600_Telephely Kéz = new Kezelő_TW600_Telephely();
+        readonly Kezelő_kiegészítő_telephely KézKieg = new Kezelő_kiegészítő_telephely();
 
-        readonly string TW6000_Villamos = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos4TW.mdb";
-        readonly Kezelő_TW600_Telephely kéz = new Kezelő_TW600_Telephely();
         List<Adat_TW6000_Telephely> Adatok = new List<Adat_TW6000_Telephely>();
 
         public Ablak_TW6000_Telephely()
@@ -28,31 +26,17 @@ namespace Villamos.Villamos_Ablakok.TW6000
                 if (Üzem_sorszám.Text.Trim() == "") return;
                 if (!int.TryParse(Üzem_sorszám.Text, out int Sorszám)) return;
                 if (Üzemek.Text.Trim() == "") return;
-                TelephelyListaFeltöltés();
+                Adatok = Kéz.Lista_Adatok();
 
-                string hely = TW6000_Villamos;
-                string jelszó = "czapmiklós";
-
-                string szöveg;
                 Adat_TW6000_Telephely Elem = (from a in Adatok
                                               where a.Telephely == Üzemek.Text.Trim()
-                                              select a).FirstOrDefault ();
-
-                if (Elem==null)
-                {
-                    // új rögzítés
-                    szöveg = "INSERT INTO telephely (telephely, sorrend) VALUES (";
-                    szöveg += $"'{Üzemek.Text.Trim()}', ";
-                    szöveg += $"{Sorszám})";
-                }
+                                              select a).FirstOrDefault();
+                Adat_TW6000_Telephely ADAT = new Adat_TW6000_Telephely(Sorszám, Üzemek.Text.Trim());
+                if (Elem == null)
+                    Kéz.Rögzítés(ADAT);
                 else
-                {
-                    // meglévő módosítás
-                    szöveg = $"UPDATE  telephely SET sorrend={Üzem_sorszám.Text.Trim()}";
-                    szöveg += $" WHERE telephely='{Üzemek.Text.Trim()}'";
+                    Kéz.Módosítás(ADAT);
 
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
                 Telephely_lista();
             }
             catch (HibásBevittAdat ex)
@@ -76,44 +60,13 @@ namespace Villamos.Villamos_Ablakok.TW6000
             try
             {
                 if (Üzemek.Text.Trim() == "") return;
-                TelephelyListaFeltöltés();
-                string hely = TW6000_Villamos;
-                string jelszó = "czapmiklós";
-
-                string szöveg;
+                Adatok = Kéz.Lista_Adatok();
                 Adat_TW6000_Telephely Elem = (from a in Adatok
                                               where a.Telephely == Üzemek.Text.Trim()
                                               select a).FirstOrDefault();
 
-
-                if (Elem!=null)
-                {
-                    szöveg = $"DELETE FROM telephely where telephely='{Üzemek.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                if (Elem != null) Kéz.Törlés(Üzemek.Text.Trim());
                 Telephely_lista();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void TelephelyListaFeltöltés()
-        {
-            try
-            {
-                Adatok.Clear();
-                string hely = TW6000_Villamos.Trim();
-                string jelszó = "czapmiklós";
-                string szöveg = "SELECT * FROM telephely order by sorrend";
-
-                Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -130,7 +83,7 @@ namespace Villamos.Villamos_Ablakok.TW6000
         {
             try
             {
-                TelephelyListaFeltöltés();
+                Adatok = Kéz.Lista_Adatok();
 
                 Telephely_tábla.Rows.Clear();
                 Telephely_tábla.Columns.Clear();
@@ -176,16 +129,23 @@ namespace Villamos.Villamos_Ablakok.TW6000
 
         private void Üzemeklista_feltöltése()
         {
-            Üzemek.Items.Clear();
-
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM telephelytábla ORDER BY sorszám";
-
-            Üzemek.BeginUpdate();
-            Üzemek.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "telephelykönyvtár"));
-            Üzemek.EndUpdate();
-            Üzemek.Refresh();
+            try
+            {
+                Üzemek.Items.Clear();
+                List<Adat_kiegészítő_telephely> Adatok = KézKieg.Lista_Adatok();
+                foreach (Adat_kiegészítő_telephely Elem in Adatok)
+                    Üzemek.Items.Add(Elem.Telephelykönyvtár);
+                Üzemek.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Ablak_TW6000_Telephely_Load(object sender, EventArgs e)

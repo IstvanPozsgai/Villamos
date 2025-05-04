@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
-using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.ICS_KCSV
 {
     public partial class Ablak_ICS_KCSV_segéd : Form
     {
+        readonly Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
+
         public event Event_Kidobó Változás;
         public DateTime Dátum_ütem { get; private set; }
         public string Telephely { get; private set; }
@@ -26,7 +25,6 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
             Adat = adat;
             Jogosultságkiosztás();
         }
-
 
         private void Ablak_ICS_KCSV_segéd_Load(object sender, EventArgs e)
         {
@@ -76,87 +74,33 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
             }
         }
 
-
         private void Rögzít_1_Click(object sender, EventArgs e)
         {
             try
             {
-
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\főkönyv\futás\{Dátum_ütem.Year}\vezénylés{Dátum_ütem.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Vezényléstábla(hely);
-                string jelszó = "tápijános";
-
-                Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
-                string szöveg = $"SELECT * FROM vezényléstábla";
-                List<Adat_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(Telephely.Trim(), Dátum_ütem);
 
                 Adat_Vezénylés Elem = (from a in Adatok
                                        where a.Azonosító == Adat.Azonosító.Trim()
                                        && a.Dátum.ToShortDateString() == Dátum_ütem.ToShortDateString()
                                        && a.Törlés == 0
                                        select a).FirstOrDefault();
-
+                Adat_Vezénylés ADAT = new Adat_Vezénylés(
+                       Adat.Azonosító.Trim(),
+                       Dátum_ütem,
+                       Bennmarad_1.Checked ? 4 : 3,
+                       Vizsgálatrütemez_1.Checked ? 1 : 0,
+                       0,
+                       Vizsgálatrütemez_1.Checked ? Következő_V.Text.Trim() : "_",
+                       Következővizsgálatszám_1.Text.ToÉrt_Int(),
+                       Rendelésiszám_1.Text.Trim() == "" ? "_" : Rendelésiszám_1.Text.Trim(),
+                       0, 0, 0, 0, "ICS");
                 if (Elem == null)
-                {
-                    // ha van akkor rögzíteni kell
-                    szöveg = "INSERT INTO vezényléstábla ";
-                    szöveg += "(azonosító, Dátum, Státus, vizsgálatraütemez, takarításraütemez, vizsgálat, vizsgálatszám, rendelésiszám, törlés, szerelvényszám, fusson, álljon, típus) VALUES (";
-                    szöveg += "'" + Adat.Azonosító.Trim() + "', ";
-                    szöveg += "'" + Dátum_ütem.ToString("yyyy.MM.dd") + "', ";
-                    if (Bennmarad_1.Checked)
-                        szöveg += "4, ";
-                    else
-                        szöveg += "3,";
-                    if (!Vizsgálatrütemez_1.Checked)
-                        szöveg += "0, ";
-                    else
-                        szöveg += "1,";
-                    szöveg += "0, ";
-                    // következő V
-                    if (Vizsgálatrütemez_1.Checked)
-                        szöveg += "'" + Következő_V.Text.Trim() + "', ";
-                    else
-                        szöveg += " '_', ";
-
-                    szöveg += Következővizsgálatszám_1.Text + ", ";
-                    if (Rendelésiszám_1.Text.Trim() == "")
-                        szöveg += "'_', ";
-                    else
-                        szöveg += "'" + Rendelésiszám_1.Text.Trim() + "',";
-                    szöveg += "0, ";
-                    szöveg += "0, ";
-                    szöveg += " 0, 0, 'ICS')";
-                }
-
+                    KézVezénylés.Rögzítés(Telephely.Trim(), Dátum_ütem, ADAT);
                 else
-                {
-                    // módosítás
-                    szöveg = "UPDATE vezényléstábla SET ";
-                    if (Bennmarad_1.Checked)
-                        szöveg += " Státus=4, ";
-                    else
-                        szöveg += " Státus=3, ";
-                    if (!Vizsgálatrütemez_1.Checked)
-                        szöveg += " vizsgálatraütemez=0, ";
-                    else
-                        szöveg += " vizsgálatraütemez=1, ";
-                    szöveg += " takarításraütemez=0, ";
-                    if (Vizsgálatrütemez_1.Checked)
-                        szöveg += "vizsgálat = '" + Következő_V.Text.Trim() + "', ";
-                    else
-                        szöveg += "vizsgálat ='_', ";
+                    KézVezénylés.Módosítás(Telephely.Trim(), Dátum_ütem, ADAT);
 
-                    szöveg += " vizsgálatszám=" + Következővizsgálatszám_1.Text + ", ";
-                    if (Rendelésiszám_1.Text.Trim() == "" || Rendelésiszám_1.Text.Trim() == "_")
-                        szöveg += " rendelésiszám='_' ";
-                    else
-                        szöveg += " rendelésiszám='" + Rendelésiszám_1.Text.Trim() + "' ";
-
-                    szöveg += $" WHERE [azonosító] ='{Adat.Azonosító.Trim()}' AND [dátum]=#" + Dátum_ütem.ToString("M-d-yy") + "#";
-                    szöveg += " AND [törlés]=0";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-                if (Változás != null) Változás();
+                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {
@@ -173,11 +117,7 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\főkönyv\futás\{Dátum_ütem.Year}\vezénylés{Dátum_ütem.Year}.mdb";
-                string jelszó = "tápijános";
-                Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
-                string szöveg = $"SELECT * FROM vezényléstábla";
-                List<Adat_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(Telephely.Trim(), Dátum_ütem);
 
                 Adat_Vezénylés Elem = (from a in Adatok
                                        where a.Azonosító == Adat.Azonosító.Trim()
@@ -187,10 +127,8 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
 
                 if (Elem == null)
                 {
-                    szöveg = "UPDATE vezényléstábla SET törlés=1 ";
-                    szöveg += $" WHERE [azonosító] ='{Adat.Azonosító.Trim()}' AND [dátum]=#{Dátum_ütem:M-d-yy}#  AND [törlés]=0";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                    if (Változás != null) Változás();
+                    KézVezénylés.Módosítás(Telephely.Trim(), Dátum_ütem, Adat.Azonosító.Trim(), Dátum_ütem);
+                    Változás?.Invoke();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -262,6 +200,5 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }

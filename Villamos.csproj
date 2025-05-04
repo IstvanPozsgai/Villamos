@@ -525,7 +525,8 @@
     <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_ICS_KCSV_segéd.Designer.cs">
       <DependentUpon>Ablak_ICS_KCSV_segéd.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Adat_ICS_Ütem.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_ICS_előterv.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_ICS_Ütem.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Beosztás.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -704,7 +705,10 @@
     <Compile Include="V_Adatszerkezet\Adat_Takarítás_Opció.cs" />
     <Compile Include="V_Adatszerkezet\Adat_TW6000.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
+    <Compile Include="V_Excel\Excel_Nyomtatási.cs" />
+    <Compile Include="V_Excel\Kész_Excelek.cs" />
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
+    <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
@@ -737,6 +741,7 @@
     <Compile Include="V_Kezelők\Kezelő_FőSzemélyzet_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_FőTípuscsere_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Beosztás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_ICS_előterv.cs" />
     <Compile Include="V_Kezelők\Kezelő_JogosítványVonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű2ICS.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Hiba_Napló.cs" />
@@ -752,9 +757,7 @@
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Alap.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszköz.cs" />
     <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasó.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Fogas_km.cs" />
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Előírás.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Ics.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosítvány.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_J1.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_Kötbér.cs" />
@@ -842,6 +845,7 @@
     <Compile Include="V_Kezelők\Kezelő_Szerelvény_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerszám_FejLáb.cs" />
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Előterv.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Futás.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Futás1.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Fűtés.cs" />
@@ -849,6 +853,7 @@
     <Compile Include="V_Kezelők\Kezelő_T5C5_Göngyöl_DátumTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Kmadatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Kmadatok_Napló.cs" />
+    <Compile Include="V_Kezelők\Kezelő_T5C5_Tervező.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_BMR.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia_Ciklus.cs" />
@@ -863,7 +868,11 @@
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SAP.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Takarítástípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TW6000_Előterv.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000_Ütemezés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TW600_AlapNapló.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TW600_Színezés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TW600_Telephely.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_ÜtemNapló.cs" />
     <Compile Include="V_Kezelők\Kezelő_utasítás_Olvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós_Kijelöltnapok.cs" />
@@ -1131,7 +1140,6 @@
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Alap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_eszköz.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasó.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Fogas_Km.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hétvége_Előírás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Mérés.cs" />

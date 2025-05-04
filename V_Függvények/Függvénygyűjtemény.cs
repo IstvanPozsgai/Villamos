@@ -400,10 +400,6 @@ public static partial class Függvénygyűjtemény
 
 
     #endregion
-
-
-
-
 }
 
 

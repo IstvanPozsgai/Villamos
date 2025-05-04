@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -11,8 +12,9 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_T5C5_Kmadatok
     {
+        readonly Kezelő_T5C5_Kmadatok_Napló KézT5C5Napló = new Kezelő_T5C5_Kmadatok_Napló();
         public string Típus { get; private set; }
-        string hely;
+        private string hely;
         readonly string jelszó = "pocsaierzsi";
 
         public Kezelő_T5C5_Kmadatok(string típus)
@@ -20,7 +22,7 @@ namespace Villamos.Kezelők
             Típus = típus;
             if (Típus == "T5C5") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
             if (Típus == "ICS") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-            if (Típus == "Fogas") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4Fogas.mdb";
+            if (Típus == "SGP") hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4Fogas.mdb";
 
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kmfutástábla(hely.KönyvSzerk());
         }
@@ -79,7 +81,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzít(Adat_T5C5_Kmadatok Adat)
+        public void Rögzítés(Adat_T5C5_Kmadatok Adat)
         {
             try
             {
@@ -88,7 +90,7 @@ namespace Villamos.Kezelők
                 szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
                 szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
                 szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt) VALUES (";
-                szöveg += $"{Adat.ID}, ";                        //ID
+                szöveg += $"{Sorszám()}, ";                        //ID
                 szöveg += $"'{Adat.Azonosító}', ";               // azonosító
                 szöveg += $"{Adat.Jjavszám}, ";                  // jjavszám
                 szöveg += $"{Adat.KMUkm}, ";                     // KMUkm
@@ -111,6 +113,7 @@ namespace Villamos.Kezelők
                 szöveg += $"{Adat.Törölt} )";                 //törölt
 
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+                KézT5C5Napló.Rögzítés(DateTime.Today.Year, Adat);
             }
             catch (HibásBevittAdat ex)
             {
@@ -143,9 +146,112 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(Adat_T5C5_Kmadatok Adat)
+        {
+            string szöveg = " UPDATE kmtábla SET ";
+            szöveg += $" Jjavszám={Adat.Jjavszám}, ";
+            szöveg += $" KMUkm={Adat.KMUkm}, ";
+            szöveg += $" KMUdátum='{Adat.KMUdátum:yyyy.MM.dd}', ";
+            szöveg += $" Vizsgfok='{Adat.Vizsgfok.Trim()}', ";
+            szöveg += $" Vizsgdátumk='{Adat.Vizsgdátumk:yyyy.MM.dd}', ";
+            szöveg += $" Vizsgdátumv='{Adat.Vizsgdátumv:yyyy.MM.dd}', ";
+            szöveg += $" VizsgKm={Adat.Vizsgkm}, ";
+            szöveg += $" HaviKm={Adat.Havikm}, ";
+            szöveg += $" VizsgSorszám={Adat.Vizsgsorszám}, ";
+            szöveg += $" fudátum='{Adat.Fudátum:yyyy.MM.dd}', ";
+            szöveg += $" Teljeskm={Adat.Teljeskm}, ";
+            szöveg += $" Ciklusrend='{Adat.Ciklusrend.Trim()}', ";
+            szöveg += $" V2végezte='{Adat.V2végezte.Trim()}', ";
+            szöveg += $" KövV2_Sorszám={Adat.KövV2_sorszám},  ";
+            szöveg += $" KövV2='{Adat.KövV2.Trim()}', ";
+            szöveg += $" KövV_Sorszám={Adat.KövV_sorszám}, ";
+            szöveg += $" KövV='{Adat.KövV.Trim()}', ";
+            szöveg += $" törölt={Adat.Törölt}, ";
+            szöveg += $" V2V3Számláló={Adat.V2V3Számláló} ";
+            szöveg += $" WHERE id={Adat.ID}";
+            MyA.ABMódosítás(hely, jelszó, szöveg);
+            KézT5C5Napló.Rögzítés(DateTime.Today.Year, Adat);
+        }
+
+        public void MódosításKm(List<Adat_T5C5_Kmadatok> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_T5C5_Kmadatok Adat in Adatok)
+                {
+                    string szöveg = " UPDATE kmtábla SET ";
+                    szöveg += $" Jjavszám={Adat.Jjavszám}, ";
+                    szöveg += $" KMUkm={Adat.KMUkm}, ";
+                    szöveg += $" KMUdátum='{Adat.KMUdátum:yyyy.MM.dd}', ";
+                    szöveg += $" HaviKm={Adat.Havikm}, ";
+                    szöveg += $" fudátum='{Adat.Fudátum:yyyy.MM.dd}', ";
+                    szöveg += $" Teljeskm={Adat.Teljeskm}, ";
+                    szöveg += $" WHERE id={Adat.ID}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(long Sorszám)
+        {
+            try
+            {
+                List<Adat_T5C5_Kmadatok> Adatok = Lista_Adatok();
+                Adat_T5C5_Kmadatok Adat = Adatok.FirstOrDefault(x => x.ID == Sorszám);
+                if (Adat == null)
+                {
+                    MessageBox.Show("A kiválasztott adat nem található!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                string szöveg = $"UPDATE kmtábla SET törölt=true WHERE id={Sorszám}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                KézT5C5Napló.Rögzítés(DateTime.Today.Year, Adat);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private long Sorszám()
+        {
+            long válasz = 1;
+            try
+            {
+                List<Adat_T5C5_Kmadatok> Adatok = Lista_Adatok();
+                if (Adatok.Count > 0) válasz = Adatok.Max(x => x.ID) + 1;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return válasz;
+        }
+
+
 
         //Elkopó
-
         public List<Adat_T5C5_Kmadatok> Lista_Adat(string hely, string jelszó, string szöveg)
         {
             List<Adat_T5C5_Kmadatok> Adatok = new List<Adat_T5C5_Kmadatok>();
@@ -247,49 +353,6 @@ namespace Villamos.Kezelők
                 }
             }
             return Adat;
-        }
-
-        public void Rögzít(string hely, string jelszó, Adat_T5C5_Kmadatok Rekord)
-        {
-
-            string szöveg = "INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
-            szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
-            szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
-            szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
-            szöveg += " KövV_Sorszám, KövV, V2V3Számláló, törölt) VALUES (";
-            szöveg += Rekord.ID + ", '" + Rekord.Azonosító + "', " + Rekord.Jjavszám + ", " + Rekord.KMUkm + ", '" + Rekord.KMUdátum.ToString("yyyy.MM.dd") + "', ";
-            szöveg += "'" + Rekord.Vizsgfok.Trim() + "', '" + Rekord.Vizsgdátumk.ToString("yyyy.MM.dd") + "', '" + Rekord.Vizsgdátumv.ToString("yyyy.MM.dd") + "', ";
-            szöveg += Rekord.Vizsgkm + ", " + Rekord.Havikm + ", " + Rekord.Vizsgsorszám + ", '" + Rekord.Fudátum.ToString("yyyy.MM.dd") + "', ";
-            szöveg += Rekord.Teljeskm + ", '" + Rekord.Ciklusrend.Trim() + "', '" + Rekord.V2végezte.Trim() + "', " + Rekord.KövV2_sorszám + ", '" + Rekord.KövV2.Trim() + "', ";
-            szöveg += Rekord.KövV_sorszám + ", '" + Rekord.KövV.Trim() + "', " + Rekord.V2V3Számláló + ", " + Rekord.Törölt + " )";
-
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        public void Módosít(string hely, string jelszó, Adat_T5C5_Kmadatok Rekord)
-        {
-            string szöveg = " UPDATE kmtábla SET ";
-            szöveg += " Jjavszám=" + Rekord.Jjavszám + ", ";
-            szöveg += " KMUkm=" + Rekord.KMUkm + ", ";
-            szöveg += " KMUdátum='" + Rekord.KMUdátum.ToString("yyyy.MM.dd") + "', ";
-            szöveg += " Vizsgfok='" + Rekord.Vizsgfok.Trim() + "', ";
-            szöveg += " Vizsgdátumk='" + Rekord.Vizsgdátumk.ToString("yyyy.MM.dd") + "', ";
-            szöveg += " Vizsgdátumv='" + Rekord.Vizsgdátumv.ToString("yyyy.MM.dd") + "', ";
-            szöveg += " VizsgKm=" + Rekord.Vizsgkm + ", ";
-            szöveg += " HaviKm=" + Rekord.Havikm + ", ";
-            szöveg += " VizsgSorszám=" + Rekord.Vizsgsorszám + ", ";
-            szöveg += " fudátum='" + Rekord.Fudátum.ToString("yyyy.MM.dd") + "', ";
-            szöveg += " Teljeskm=" + Rekord.Teljeskm + ", ";
-            szöveg += " Ciklusrend='" + Rekord.Ciklusrend.Trim() + "', ";
-            szöveg += " V2végezte='" + Rekord.V2végezte.Trim() + "', ";
-            szöveg += " KövV2_Sorszám=" + Rekord.KövV2_sorszám + ",  ";
-            szöveg += " KövV2='" + Rekord.KövV2.Trim() + "', ";
-            szöveg += " KövV_Sorszám=" + Rekord.KövV_sorszám + ", ";
-            szöveg += " KövV='" + Rekord.KövV.Trim() + "', ";
-            szöveg += " törölt=false, ";
-            szöveg += " V2V3Számláló=" + Rekord.V2V3Számláló;
-            szöveg += " WHERE id=" + Rekord.ID;
-            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
         public List<Adat_T5C5_Kmadatok> Lista_Szűrt_Adat(string hely, string jelszó, string szöveg)

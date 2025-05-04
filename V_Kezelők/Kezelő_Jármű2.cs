@@ -192,6 +192,7 @@ namespace Villamos.Kezelők
         }
 
 
+
         //Elkopó
         public List<Adat_Jármű_2> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

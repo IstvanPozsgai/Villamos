@@ -47,7 +47,7 @@ namespace Villamos.Villamos_Ablakok
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\" + Dátum_ütem.Value.ToString("yyyy") + @"\vezénylés" + Dátum_ütem.Value.ToString("yyyy") + ".mdb";
             jelszó = "tápijános";
             szöveg = "SELECT * FROM vezényléstábla";
-            AdatokVez = KézVez.Lista_Adatok(hely, jelszó, szöveg);
+            AdatokVez = KézVez.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_ütem.Value);
         }
         #endregion
 

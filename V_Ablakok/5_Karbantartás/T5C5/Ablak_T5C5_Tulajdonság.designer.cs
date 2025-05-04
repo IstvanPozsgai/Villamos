@@ -40,30 +40,28 @@ namespace Villamos
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Fülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label41 = new System.Windows.Forms.Label();
             this.Label8 = new System.Windows.Forms.Label();
-            this.Járműtípus_text = new System.Windows.Forms.Label();
-            this.Főmérnökség_text = new System.Windows.Forms.Label();
-            this.Takarítás_text = new System.Windows.Forms.Label();
             this.Vizsgálati_text = new System.Windows.Forms.Label();
             this.Elő_Szerelvény_text = new System.Windows.Forms.Label();
             this.Típus_text = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.Label7 = new System.Windows.Forms.Label();
-            this.Label1 = new System.Windows.Forms.Label();
-            this.Label2 = new System.Windows.Forms.Label();
-            this.Label3 = new System.Windows.Forms.Label();
             this.Label4 = new System.Windows.Forms.Label();
             this.Szerelvény_text = new System.Windows.Forms.Label();
             this.Miótaáll_text = new System.Windows.Forms.Label();
             this.Státus_text = new System.Windows.Forms.Label();
             this.Label6 = new System.Windows.Forms.Label();
             this.Label5 = new System.Windows.Forms.Label();
+            this.Főmérnökség_text = new System.Windows.Forms.Label();
+            this.Járműtípus_text = new System.Windows.Forms.Label();
             this.ÜzembehelyezésiPDF = new System.Windows.Forms.Button();
+            this.Label2 = new System.Windows.Forms.Label();
+            this.Label1 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
             this.TabPage2 = new System.Windows.Forms.TabPage();
             this.Futásnap = new System.Windows.Forms.TextBox();
             this.Utolsóvizsgálatszáma = new System.Windows.Forms.TextBox();
@@ -134,10 +132,8 @@ namespace Villamos
             this.Panel7 = new System.Windows.Forms.Panel();
             this.Kerékcsökkenés = new System.Windows.Forms.TextBox();
             this.Label39 = new System.Windows.Forms.Label();
-            this.Hónapok = new System.Windows.Forms.TextBox();
-            this.Havikmlabel = new System.Windows.Forms.TextBox();
-            this.FőHoltart = new V_MindenEgyéb.MyProgressbar();
-            this.AlHoltart = new V_MindenEgyéb.MyProgressbar();
+            this.FőHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.AlHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Command1 = new System.Windows.Forms.Button();
             this.Panel5 = new System.Windows.Forms.Panel();
             this.Text2 = new System.Windows.Forms.TextBox();
@@ -264,26 +260,24 @@ namespace Villamos
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.label41, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.Label8, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Járműtípus_text, 1, 8);
-            this.tableLayoutPanel1.Controls.Add(this.Főmérnökség_text, 1, 7);
-            this.tableLayoutPanel1.Controls.Add(this.Takarítás_text, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.Vizsgálati_text, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.Elő_Szerelvény_text, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.Típus_text, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label40, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.Label7, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.Label1, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.Label2, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.Label3, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.Label4, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.Szerelvény_text, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.Miótaáll_text, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.Státus_text, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.Label6, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.Label5, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.ÜzembehelyezésiPDF, 1, 9);
+            this.tableLayoutPanel1.Controls.Add(this.Főmérnökség_text, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.Járműtípus_text, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.ÜzembehelyezésiPDF, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.Label2, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.Label1, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.label41, 0, 8);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(15, 14);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 10;
@@ -295,20 +289,10 @@ namespace Villamos
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(697, 328);
             this.tableLayoutPanel1.TabIndex = 18;
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.BackColor = System.Drawing.Color.LightGreen;
-            this.label41.Location = new System.Drawing.Point(3, 270);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(227, 20);
-            this.label41.TabIndex = 18;
-            this.label41.Text = "Üzembehelyezési jegyzőkönyv:";
             // 
             // Label8
             // 
@@ -319,36 +303,6 @@ namespace Villamos
             this.Label8.Size = new System.Drawing.Size(51, 20);
             this.Label8.TabIndex = 7;
             this.Label8.Text = "Típus:";
-            // 
-            // Járműtípus_text
-            // 
-            this.Járműtípus_text.AutoSize = true;
-            this.Járműtípus_text.BackColor = System.Drawing.Color.LightGreen;
-            this.Járműtípus_text.Location = new System.Drawing.Point(253, 240);
-            this.Járműtípus_text.Name = "Járműtípus_text";
-            this.Járműtípus_text.Size = new System.Drawing.Size(66, 20);
-            this.Járműtípus_text.TabIndex = 8;
-            this.Járműtípus_text.Text = "Label17";
-            // 
-            // Főmérnökség_text
-            // 
-            this.Főmérnökség_text.AutoSize = true;
-            this.Főmérnökség_text.BackColor = System.Drawing.Color.LightGreen;
-            this.Főmérnökség_text.Location = new System.Drawing.Point(253, 210);
-            this.Főmérnökség_text.Name = "Főmérnökség_text";
-            this.Főmérnökség_text.Size = new System.Drawing.Size(66, 20);
-            this.Főmérnökség_text.TabIndex = 9;
-            this.Főmérnökség_text.Text = "Label16";
-            // 
-            // Takarítás_text
-            // 
-            this.Takarítás_text.AutoSize = true;
-            this.Takarítás_text.BackColor = System.Drawing.Color.LightGreen;
-            this.Takarítás_text.Location = new System.Drawing.Point(253, 180);
-            this.Takarítás_text.Name = "Takarítás_text";
-            this.Takarítás_text.Size = new System.Drawing.Size(66, 20);
-            this.Takarítás_text.TabIndex = 10;
-            this.Takarítás_text.Text = "Label15";
             // 
             // Vizsgálati_text
             // 
@@ -399,36 +353,6 @@ namespace Villamos
             this.Label7.Size = new System.Drawing.Size(60, 20);
             this.Label7.TabIndex = 6;
             this.Label7.Text = "Státus:";
-            // 
-            // Label1
-            // 
-            this.Label1.AutoSize = true;
-            this.Label1.BackColor = System.Drawing.Color.LightGreen;
-            this.Label1.Location = new System.Drawing.Point(3, 240);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(95, 20);
-            this.Label1.TabIndex = 0;
-            this.Label1.Text = "Jármű típus:";
-            // 
-            // Label2
-            // 
-            this.Label2.AutoSize = true;
-            this.Label2.BackColor = System.Drawing.Color.LightGreen;
-            this.Label2.Location = new System.Drawing.Point(3, 210);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(152, 20);
-            this.Label2.TabIndex = 1;
-            this.Label2.Text = "Főmérnökségi típus:";
-            // 
-            // Label3
-            // 
-            this.Label3.AutoSize = true;
-            this.Label3.BackColor = System.Drawing.Color.LightGreen;
-            this.Label3.Location = new System.Drawing.Point(3, 180);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(124, 20);
-            this.Label3.TabIndex = 2;
-            this.Label3.Text = "Utolsó takarítás:";
             // 
             // Label4
             // 
@@ -490,17 +414,67 @@ namespace Villamos
             this.Label5.TabIndex = 4;
             this.Label5.Text = "Szerelvény kocsijai:";
             // 
+            // Főmérnökség_text
+            // 
+            this.Főmérnökség_text.AutoSize = true;
+            this.Főmérnökség_text.BackColor = System.Drawing.Color.LightGreen;
+            this.Főmérnökség_text.Location = new System.Drawing.Point(253, 180);
+            this.Főmérnökség_text.Name = "Főmérnökség_text";
+            this.Főmérnökség_text.Size = new System.Drawing.Size(66, 20);
+            this.Főmérnökség_text.TabIndex = 9;
+            this.Főmérnökség_text.Text = "Label16";
+            // 
+            // Járműtípus_text
+            // 
+            this.Járműtípus_text.AutoSize = true;
+            this.Járműtípus_text.BackColor = System.Drawing.Color.LightGreen;
+            this.Járműtípus_text.Location = new System.Drawing.Point(253, 210);
+            this.Járműtípus_text.Name = "Járműtípus_text";
+            this.Járműtípus_text.Size = new System.Drawing.Size(66, 20);
+            this.Járműtípus_text.TabIndex = 8;
+            this.Járműtípus_text.Text = "Label17";
+            // 
             // ÜzembehelyezésiPDF
             // 
             this.ÜzembehelyezésiPDF.BackgroundImage = global::Villamos.Properties.Resources.pdf_32;
             this.ÜzembehelyezésiPDF.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ÜzembehelyezésiPDF.Location = new System.Drawing.Point(253, 273);
+            this.ÜzembehelyezésiPDF.Location = new System.Drawing.Point(253, 243);
             this.ÜzembehelyezésiPDF.Name = "ÜzembehelyezésiPDF";
             this.ÜzembehelyezésiPDF.Size = new System.Drawing.Size(45, 45);
             this.ÜzembehelyezésiPDF.TabIndex = 64;
             this.ToolTip1.SetToolTip(this.ÜzembehelyezésiPDF, "Üzembehelyezési jegyzőkönyv(ek )");
             this.ÜzembehelyezésiPDF.UseVisualStyleBackColor = true;
             this.ÜzembehelyezésiPDF.Click += new System.EventHandler(this.ÜzembehelyezésiPDF_Click);
+            // 
+            // Label2
+            // 
+            this.Label2.AutoSize = true;
+            this.Label2.BackColor = System.Drawing.Color.LightGreen;
+            this.Label2.Location = new System.Drawing.Point(3, 180);
+            this.Label2.Name = "Label2";
+            this.Label2.Size = new System.Drawing.Size(152, 20);
+            this.Label2.TabIndex = 1;
+            this.Label2.Text = "Főmérnökségi típus:";
+            // 
+            // Label1
+            // 
+            this.Label1.AutoSize = true;
+            this.Label1.BackColor = System.Drawing.Color.LightGreen;
+            this.Label1.Location = new System.Drawing.Point(3, 210);
+            this.Label1.Name = "Label1";
+            this.Label1.Size = new System.Drawing.Size(95, 20);
+            this.Label1.TabIndex = 0;
+            this.Label1.Text = "Jármű típus:";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.BackColor = System.Drawing.Color.LightGreen;
+            this.label41.Location = new System.Drawing.Point(3, 240);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(227, 20);
+            this.label41.TabIndex = 18;
+            this.label41.Text = "Üzembehelyezési jegyzőkönyv:";
             // 
             // TabPage2
             // 
@@ -1189,8 +1163,6 @@ namespace Villamos
             // 
             this.TabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.TabPage3.Controls.Add(this.Panel7);
-            this.TabPage3.Controls.Add(this.Hónapok);
-            this.TabPage3.Controls.Add(this.Havikmlabel);
             this.TabPage3.Controls.Add(this.FőHoltart);
             this.TabPage3.Controls.Add(this.AlHoltart);
             this.TabPage3.Controls.Add(this.Command1);
@@ -1236,24 +1208,6 @@ namespace Villamos
             this.Label39.Size = new System.Drawing.Size(159, 20);
             this.Label39.TabIndex = 89;
             this.Label39.Text = "Havi kerékcsökkenés";
-            // 
-            // Hónapok
-            // 
-            this.Hónapok.Location = new System.Drawing.Point(255, 284);
-            this.Hónapok.Name = "Hónapok";
-            this.Hónapok.Size = new System.Drawing.Size(47, 26);
-            this.Hónapok.TabIndex = 180;
-            this.Hónapok.Text = "24";
-            this.Hónapok.Visible = false;
-            // 
-            // Havikmlabel
-            // 
-            this.Havikmlabel.Location = new System.Drawing.Point(255, 252);
-            this.Havikmlabel.Name = "Havikmlabel";
-            this.Havikmlabel.Size = new System.Drawing.Size(47, 26);
-            this.Havikmlabel.TabIndex = 179;
-            this.Havikmlabel.Text = "5000";
-            this.Havikmlabel.Visible = false;
             // 
             // FőHoltart
             // 
@@ -1674,7 +1628,6 @@ namespace Villamos
             this.TabPage6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
             this.TabPage3.ResumeLayout(false);
-            this.TabPage3.PerformLayout();
             this.Panel7.ResumeLayout(false);
             this.Panel7.PerformLayout();
             this.Panel5.ResumeLayout(false);
@@ -1704,7 +1657,6 @@ namespace Villamos
         internal Label Miótaáll_text;
         internal Label Szerelvény_text;
         internal Label Vizsgálati_text;
-        internal Label Takarítás_text;
         internal Label Főmérnökség_text;
         internal Label Járműtípus_text;
         internal Label Label8;
@@ -1712,7 +1664,6 @@ namespace Villamos
         internal Label Label6;
         internal Label Label5;
         internal Label Label4;
-        internal Label Label3;
         internal Label Label2;
         internal Label Label1;
         internal TabPage TabPage2;
@@ -1814,8 +1765,6 @@ namespace Villamos
         internal RadioButton Option6;
         internal RadioButton Option5;
         internal Label Label36;
-        internal TextBox Hónapok;
-        internal TextBox Havikmlabel;
         internal Panel Panel7;
         internal TextBox Kerékcsökkenés;
         internal Label Label39;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -155,5 +156,7 @@ namespace Villamos
             return Válasz;
 
         }
+
+
     }
 }

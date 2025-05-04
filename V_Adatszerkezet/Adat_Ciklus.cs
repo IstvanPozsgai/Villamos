@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Villamos.Villamos_Adatszerkezet
+﻿namespace Villamos.Villamos_Adatszerkezet
 {
     public class Adat_Ciklus
     {
@@ -21,19 +19,6 @@ namespace Villamos.Villamos_Adatszerkezet
             Névleges = névleges;
             Alsóérték = alsóérték;
             Felsőérték = felsőérték;
-        }
-    }
-
-    public class ÖHasonlít_Adat_Ciklus_Típus : IEqualityComparer<Adat_Ciklus>
-    {
-        public bool Equals(Adat_Ciklus X, Adat_Ciklus Y)
-        {
-            return X.Típus.Equals(Y.Típus);
-        }
-
-        public int GetHashCode(Adat_Ciklus obj)
-        {
-            return obj.Típus.GetHashCode();
         }
     }
 }

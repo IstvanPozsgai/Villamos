@@ -651,7 +651,7 @@ namespace Villamos
                 Tábla.Columns[36].HeaderText = "Előző V2/V3-től km ";
                 Tábla.Columns[36].Width = 70;
                 Tábla.Columns[37].HeaderText = "Friss dátum";
-                Tábla.Columns[37].Width = 70;
+                Tábla.Columns[37].Width = 110;
 
                 // kilistázzuk a adatbázis adatait
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());

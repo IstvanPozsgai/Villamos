@@ -39,7 +39,6 @@ namespace Villamos
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Fogaskerekű_Tulajdonságok));
             this.Pályaszám = new System.Windows.Forms.ComboBox();
             this.Label15 = new System.Windows.Forms.Label();
-            this.Holtart = new System.Windows.Forms.ProgressBar();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
@@ -91,8 +90,6 @@ namespace Villamos
             this.Panel7 = new System.Windows.Forms.Panel();
             this.Kerékcsökkenés = new System.Windows.Forms.TextBox();
             this.Label39 = new System.Windows.Forms.Label();
-            this.FőHoltart = new System.Windows.Forms.ProgressBar();
-            this.AlHoltart = new System.Windows.Forms.ProgressBar();
             this.Panel5 = new System.Windows.Forms.Panel();
             this.Text2 = new System.Windows.Forms.TextBox();
             this.Label38 = new System.Windows.Forms.Label();
@@ -120,6 +117,9 @@ namespace Villamos
             this.Pályaszámkereső = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.FőHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.AlHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel2.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage4.SuspendLayout();
@@ -152,16 +152,6 @@ namespace Villamos
             this.Label15.Size = new System.Drawing.Size(89, 20);
             this.Label15.TabIndex = 167;
             this.Label15.Text = "Pályaszám:";
-            // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(671, 5);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(425, 28);
-            this.Holtart.TabIndex = 170;
-            this.Holtart.Visible = false;
             // 
             // Panel2
             // 
@@ -677,9 +667,9 @@ namespace Villamos
             // TabPage3
             // 
             this.TabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.TabPage3.Controls.Add(this.Panel7);
-            this.TabPage3.Controls.Add(this.FőHoltart);
             this.TabPage3.Controls.Add(this.AlHoltart);
+            this.TabPage3.Controls.Add(this.FőHoltart);
+            this.TabPage3.Controls.Add(this.Panel7);
             this.TabPage3.Controls.Add(this.Panel5);
             this.TabPage3.Controls.Add(this.Panel4);
             this.TabPage3.Controls.Add(this.Panel1);
@@ -722,30 +712,6 @@ namespace Villamos
             this.Label39.Size = new System.Drawing.Size(159, 20);
             this.Label39.TabIndex = 89;
             this.Label39.Text = "Havi kerékcsökkenés";
-            // 
-            // FőHoltart
-            // 
-            this.FőHoltart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.FőHoltart.BackColor = System.Drawing.Color.Lime;
-            this.FőHoltart.ForeColor = System.Drawing.Color.MediumBlue;
-            this.FőHoltart.Location = new System.Drawing.Point(6, 133);
-            this.FőHoltart.Name = "FőHoltart";
-            this.FőHoltart.Size = new System.Drawing.Size(1121, 20);
-            this.FőHoltart.TabIndex = 172;
-            this.FőHoltart.Visible = false;
-            // 
-            // AlHoltart
-            // 
-            this.AlHoltart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AlHoltart.BackColor = System.Drawing.Color.Lime;
-            this.AlHoltart.ForeColor = System.Drawing.Color.MediumBlue;
-            this.AlHoltart.Location = new System.Drawing.Point(7, 176);
-            this.AlHoltart.Name = "AlHoltart";
-            this.AlHoltart.Size = new System.Drawing.Size(1121, 20);
-            this.AlHoltart.TabIndex = 173;
-            this.AlHoltart.Visible = false;
             // 
             // Panel5
             // 
@@ -1032,17 +998,56 @@ namespace Villamos
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // Holtart
+            // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Holtart.BackColor = System.Drawing.Color.ForestGreen;
+            this.Holtart.ForeColor = System.Drawing.Color.SpringGreen;
+            this.Holtart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.Holtart.Location = new System.Drawing.Point(671, 15);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(425, 23);
+            this.Holtart.TabIndex = 174;
+            this.Holtart.Visible = false;
+            // 
+            // FőHoltart
+            // 
+            this.FőHoltart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.FőHoltart.BackColor = System.Drawing.Color.ForestGreen;
+            this.FőHoltart.ForeColor = System.Drawing.Color.SpringGreen;
+            this.FőHoltart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.FőHoltart.Location = new System.Drawing.Point(7, 147);
+            this.FőHoltart.Name = "FőHoltart";
+            this.FőHoltart.Size = new System.Drawing.Size(1121, 23);
+            this.FőHoltart.TabIndex = 175;
+            this.FőHoltart.Visible = false;
+            // 
+            // AlHoltart
+            // 
+            this.AlHoltart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.AlHoltart.BackColor = System.Drawing.Color.ForestGreen;
+            this.AlHoltart.ForeColor = System.Drawing.Color.SpringGreen;
+            this.AlHoltart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.AlHoltart.Location = new System.Drawing.Point(7, 176);
+            this.AlHoltart.Name = "AlHoltart";
+            this.AlHoltart.Size = new System.Drawing.Size(1121, 23);
+            this.AlHoltart.TabIndex = 175;
+            this.AlHoltart.Visible = false;
+            // 
             // Ablak_Fogaskerekű_Tulajdonságok
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Coral;
             this.ClientSize = new System.Drawing.Size(1151, 507);
+            this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Pályaszám);
             this.Controls.Add(this.Excel_gomb);
             this.Controls.Add(this.Pályaszámkereső);
             this.Controls.Add(this.Label15);
-            this.Controls.Add(this.Holtart);
             this.Controls.Add(this.BtnSúgó);
             this.Controls.Add(this.Panel2);
             this.Controls.Add(this.Fülek);
@@ -1082,7 +1087,6 @@ namespace Villamos
         internal Button Excel_gomb;
         internal Button Pályaszámkereső;
         internal Label Label15;
-        internal ProgressBar Holtart;
         internal Button BtnSúgó;
         internal Panel Panel2;
         internal ComboBox Cmbtelephely;
@@ -1127,8 +1131,6 @@ namespace Villamos
         internal TabPage TabPage6;
         internal DataGridView Tábla1;
         internal TabPage TabPage3;
-        internal ProgressBar FőHoltart;
-        internal ProgressBar AlHoltart;
         internal Panel Panel5;
         internal TextBox Text2;
         internal Label Label38;
@@ -1161,5 +1163,8 @@ namespace Villamos
         private Timer timer1;
         internal Button VizsA_Excel;
         internal Button VizsA_Frisss;
+        internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal V_MindenEgyéb.MyProgressbar AlHoltart;
+        internal V_MindenEgyéb.MyProgressbar FőHoltart;
     }
 }

@@ -96,47 +96,80 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        //Elkopó
-        public List<Adat_TW6000_ÜtemNapló> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public void Rögzítés(int Év, List<Adat_TW6000_Ütemezés> Adatok)
         {
-            List<Adat_TW6000_ÜtemNapló> Adatok = new List<Adat_TW6000_ÜtemNapló>();
-            Adat_TW6000_ÜtemNapló Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                FájlBeállítás(Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_TW6000_ÜtemNapló(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["Ciklusrend"].ToStrTrim(),
-                                        rekord["Elkészült"].ToÉrt_Bool(),
-                                        rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["Rögzítésideje"].ToÉrt_DaTeTime(),
-                                        rekord["Rögzítő"].ToStrTrim(),
-                                        rekord["Státus"].ToÉrt_Long(),
-                                        rekord["Velkészülés"].ToÉrt_DaTeTime(),
-                                        rekord["Vesedékesség"].ToÉrt_DaTeTime(),
-                                        rekord["Vizsgfoka"].ToStrTrim(),
-                                        rekord["Vsorszám"].ToÉrt_Long(),
-                                        rekord["Vütemezés"].ToÉrt_DaTeTime(),
-                                        rekord["Vvégezte"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
+                    string szöveg = "INSERT INTO ütemezésnapló (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                    szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
+                    szöveg += " vsorszám, vütemezés, vvégezte,Rögzítésideje, Rögzítő ) VALUES (";
+                    szöveg += $"'{Adat.Azonosító}', ";
+                    szöveg += $"'{Adat.Ciklusrend}', ";
+                    szöveg += $"{Adat.Elkészült},";
+                    szöveg += $" '{Adat.Megjegyzés}',";
+                    szöveg += $" {Adat.Státus},";
+                    szöveg += $" '{Adat.Velkészülés:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vesedékesség:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vizsgfoka}', ";
+                    szöveg += $"{Adat.Vsorszám}, ";
+                    szöveg += $"'{Adat.Vütemezés:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Vvégezte}',";
+                    szöveg += $"'{DateTime.Now}', ";
+                    szöveg += $"'{Program.PostásNév}')";
+                    SzövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+        public void Rögzítés(int Év, Adat_TW6000_Ütemezés Adat)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+
+                string szöveg = "INSERT INTO ütemezésnapló (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
+                szöveg += " vsorszám, vütemezés, vvégezte,Rögzítésideje, Rögzítő ) VALUES (";
+                szöveg += $"'{Adat.Azonosító}', ";
+                szöveg += $"'{Adat.Ciklusrend}', ";
+                szöveg += $"{Adat.Elkészült},";
+                szöveg += $" '{Adat.Megjegyzés}',";
+                szöveg += $" {Adat.Státus},";
+                szöveg += $" '{Adat.Velkészülés:yyyy.MM.dd}', ";
+                szöveg += $"'{Adat.Vesedékesség:yyyy.MM.dd}', ";
+                szöveg += $"'{Adat.Vizsgfoka}', ";
+                szöveg += $"{Adat.Vsorszám}, ";
+                szöveg += $"'{Adat.Vütemezés:yyyy.MM.dd}', ";
+                szöveg += $"'{Adat.Vvégezte}',";
+                szöveg += $"'{DateTime.Now}', ";
+                szöveg += $"'{Program.PostásNév}')";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

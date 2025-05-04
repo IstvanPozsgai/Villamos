@@ -354,6 +354,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
         }
 
+        /// <summary>
+        /// Az SAP beolvasott adatokkal az adatbázis frissítése
+        /// Új elemek szereltetése adatbázisban az időközben beépített fődarabok státuszának lezárása.
+        /// </summary>
+        /// <param name="Adatok"></param>
         private void SAP(List<Adat_Nóta_SAP> Adatok)
         {
             try
@@ -397,10 +402,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 foreach (Adat_Nóta rekord in AdatokNóta)
                 {
                     Adat_Nóta_SAP Elem = Adatok.FirstOrDefault(a => a.Berendezés == rekord.Berendezés);
-                    if (Elem == null)
-                        IDK.Add(rekord.Id);       //Ha nincs ilyen elem akkor felvesszük a listára
-                    else
+                    if (Elem != null)
                     {
+
                         bool kell = false;
                         //ha időközben selejtezésre került
                         if (Elem.Rendszerstátus == "RAKT" && Elem.Rendezési.ToUpper().Contains("SEL")) kell = true;
@@ -412,8 +416,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                             Adat_Nóta adat_Nóta = AdatokNóta.FirstOrDefault(x => x.Berendezés == rekord.Berendezés);
                             if (adat_Nóta != null) IDK.Add(adat_Nóta.Id);
                         }
+
+                        Holtart.Lép();
                     }
-                    Holtart.Lép();
                 }
                 if (IDK != null && IDK.Count > 0) KézNóta.Módosítás(IDK);
                 Holtart.Ki();

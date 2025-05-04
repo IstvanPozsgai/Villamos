@@ -186,12 +186,22 @@ namespace Villamos.Villamos_Adatszerkezet
             V2V3Számláló = v2V3Számláló;
         }
 
-
         public Adat_T5C5_Kmadatok(long iD, string azonosító, DateTime vizsgdátumk)
         {
             ID = iD;
             Azonosító = azonosító;
             Vizsgdátumk = vizsgdátumk;
+        }
+
+        public Adat_T5C5_Kmadatok(long iD, long jjavszám, long kMUkm, DateTime kMUdátum, long havikm, DateTime fudátum, long teljeskm)
+        {
+            ID = iD;
+            Jjavszám = jjavszám;
+            KMUkm = kMUkm;
+            KMUdátum = kMUdátum;
+            Havikm = havikm;
+            Fudátum = fudátum;
+            Teljeskm = teljeskm;
         }
     }
 

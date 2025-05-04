@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
+
 
 namespace Villamos.Villamos_Ablakok.TW6000
 {
     public partial class Ablak_TW6000_Színkezelő : Form
     {
-        readonly string TW6000_Villamos = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos4TW.mdb";
         readonly Kezelő_TW600_Színezés kéz = new Kezelő_TW600_Színezés();
         List<Adat_TW6000_Színezés> Adatok = new List<Adat_TW6000_Színezés>();
 
         public Ablak_TW6000_Színkezelő()
         {
             InitializeComponent();
-
         }
 
         private void Szín_tábla_lista_Click(object sender, EventArgs e)
@@ -36,24 +33,13 @@ namespace Villamos.Villamos_Ablakok.TW6000
         private void Karb_töröl_Click(object sender, EventArgs e)
         {
             if (Vonal.Text.Trim() == "") return;
-            if (Színe.Text.Trim() == "") return;
-            if (!int.TryParse(Színe.Text, out int Színszám)) return;
 
-            SzínListaFeltöltés();
-
-            string hely = TW6000_Villamos;
-            string jelszó = "czapmiklós";
-            string szöveg;
-
+            Adatok = kéz.Lista_Adatok();
             Adat_TW6000_Színezés Elem = (from a in Adatok
                                          where a.Vizsgálatnév == Vonal.Text.Trim()
                                          select a).FirstOrDefault();
 
-            if (Elem != null)
-            {
-                szöveg = $"DELETE FROM szinezés where vizsgálatnév ='{Vonal.Text.Trim()}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
-            }
+            if (Elem != null) kéz.Törlés(Vonal.Text.Trim());
             Szín_tábla_kiírás();
         }
 
@@ -83,53 +69,16 @@ namespace Villamos.Villamos_Ablakok.TW6000
                 if (Színe.Text.Trim() == "") return;
                 if (!int.TryParse(Színe.Text, out int Színszám)) return;
 
-                SzínListaFeltöltés();
-                string hely = TW6000_Villamos;
-                string jelszó = "czapmiklós";
-
-                string szöveg ;
+                Adatok = kéz.Lista_Adatok();
                 Adat_TW6000_Színezés Elem = (from a in Adatok
                                              where a.Vizsgálatnév == Vonal.Text.Trim()
                                              select a).FirstOrDefault();
-
-                if (Elem==null)
-                {
-                    // új rögzítés
-                    szöveg = "INSERT INTO szinezés (vizsgálatnév, szín) VALUES (";
-                    szöveg += $"'{Vonal.Text.Trim()}', ";
-                    szöveg += $"{Színszám})";
-                }
+                Adat_TW6000_Színezés ADAT = new Adat_TW6000_Színezés(Színszám, Vonal.Text.Trim());
+                if (Elem == null)
+                    kéz.Rögzítés(ADAT);
                 else
-                {
-                    // meglévő módosítás
-                    szöveg = $"UPDATE  szinezés SET szín={Színe.Text.Trim()}";
-                    szöveg += $" WHERE  vizsgálatnév ='{Vonal.Text.Trim()}'";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                    kéz.Módosítás(ADAT);
                 Szín_tábla_kiírás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void SzínListaFeltöltés()
-        {
-            try
-            {
-                Adatok.Clear();
-                string hely = TW6000_Villamos;
-                if (!File.Exists(hely)) return;
-                string jelszó = "czapmiklós";
-                string szöveg = "SELECT * FROM szinezés ORDER BY vizsgálatnév";
-                Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -151,8 +100,7 @@ namespace Villamos.Villamos_Ablakok.TW6000
                 double kék;
                 double színszám;
 
-                SzínListaFeltöltés();
-
+                Adatok = kéz.Lista_Adatok();
 
                 Szín_Tábla.Rows.Clear();
                 Szín_Tábla.Columns.Clear();
