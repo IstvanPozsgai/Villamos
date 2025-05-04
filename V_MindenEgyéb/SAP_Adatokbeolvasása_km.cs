@@ -143,6 +143,67 @@ namespace Villamos.V_MindenEgyéb
         }
 
 
+        public static void Km_beolvasóICS(string fájlexcel)
+        {
+            try
+            {
+                DateTime Eleje = DateTime.Now;
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("KM adatok", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
+                string jelszó = "pocsaierzsi";
+                // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres
+
+                string szöveg = "SELECT KMtábla.azonosító, KMtábla.vizsgdátumk, KMtábla.ID ";
+                szöveg += " FROM  (SELECT KMtábla.azonosító, Max(KMtábla.vizsgdátumk) AS MaxOfvizsgdátumk FROM KMtábla WHERE törölt=False GROUP BY KMtábla.azonosító ORDER BY azonosító) AS Rész ";
+                szöveg += " INNER JOIN KMtábla ON (Rész.MaxOfvizsgdátumk = KMtábla.vizsgdátumk) AND (Rész.azonosító = KMtábla.azonosító) ";
+                szöveg += " WHERE törölt=False ORDER BY KMtábla.azonosító";
+
+                Kezelő_T5C5_Kmadatok KézT5 = new Kezelő_T5C5_Kmadatok("T5C5");
+                List<Adat_T5C5_Kmadatok> AdatokT5 = KézT5.Lista_Szűrt_Adat(hely, jelszó, szöveg);
+                List<string> SzövegGy = new List<string>();
+
+                foreach (Adat_BEOLVAS_KM rekord in Excel_Km_Beolvas(Tábla))
+                {
+                    long utolsórögzítés = (from a in AdatokT5
+                                           where a.Azonosító.Trim() == rekord.Azonosító
+                                           select a.ID).FirstOrDefault();
+                    if (utolsórögzítés != 0)
+                    {
+                        szöveg = "UPDATE kmtábla SET ";
+                        szöveg += $" KMUdátum='{rekord.KMUdátum:yyyy.MM.dd}', ";
+                        szöveg += $" KMUkm={rekord.KMUkm}, ";
+                        szöveg += $" havikm={rekord.Havikm}, ";
+                        szöveg += $" Jjavszám={rekord.Jjavszám}, ";
+                        szöveg += $" fudátum='{rekord.Fudátum:yyyy.MM.dd}', ";
+                        szöveg += $" teljeskm={rekord.Teljeskm} ";
+                        szöveg += $" WHERE [id]={utolsórögzítés}";
+                        SzövegGy.Add(szöveg);
+                    }
+                }
+                if (SzövegGy.Count > 0) MyA.ABMódosítás(hely, jelszó, SzövegGy);
+
+                DateTime Vége = DateTime.Now;
+                MessageBox.Show($"Az adatok beolvasása {Vége - Eleje} idő alatt megtörtént.", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
 
         public static List<Adat_BEOLVAS_KM> Excel_Km_Beolvas(DataTable EgyTábla)
         {

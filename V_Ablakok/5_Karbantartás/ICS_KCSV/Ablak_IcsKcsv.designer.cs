@@ -1552,6 +1552,7 @@ namespace Villamos
             this.Name = "Ablak_IcsKcsv";
             this.Text = "ICS és KCSV futás km adatok";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_IcsKcsv_FormClosed);
             this.Load += new System.EventHandler(this.IcsKcsv_Load);
             this.Panel2.ResumeLayout(false);
             this.Panel2.PerformLayout();

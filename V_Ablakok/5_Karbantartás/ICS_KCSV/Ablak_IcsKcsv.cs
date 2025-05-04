@@ -1,13 +1,14 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.ICS_KCSV;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -74,6 +75,11 @@ namespace Villamos
 
         private void IcsKcsv_Load(object sender, EventArgs e)
         {
+        }
+
+        private void Ablak_IcsKcsv_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_ICS_KCSV_segéd?.Close();
         }
 
         /// <summary>
@@ -1542,7 +1548,7 @@ namespace Villamos
                                      false,
                                      V2V3Számláló);
 
-                    if (Sorszám.Text.Trim() == "0")
+                    if (Sorszám.Text.Trim() == "")
                         KézICSKmadatok.Rögzítés(ADAT);
                     else
                         KézICSKmadatok.Módosítás(ADAT);
@@ -1595,6 +1601,67 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// SAP adatok gomb megnyomásakor betölti az excel táblát és a benne lévő adatokat beírja a táblába
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SAP_adatok_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // megpróbáljuk megnyitni az excel táblát.
+                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "SAP-s Adatok betöltése",
+                    FileName = "",
+                    Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls"
+                };
+
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    _fájlexc = OpenFileDialog1.FileName;
+                else
+                    return;
+
+
+                timer1.Enabled = true;
+                Holtart.Be();
+                SZál_KM_Beolvasás(() =>
+                { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+                    timer1.Enabled = false;
+                    Holtart.Ki();
+                    MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                });
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Szálon beolvassa a SAP adatok excel táblát és a benne lévő adatokat beírja a táblába
+        /// </summary>
+        /// <param name="callback"></param>
+        private void SZál_KM_Beolvasás(Action callback)
+        {
+            Thread proc = new Thread(() =>
+            {
+                //beolvassuk az adatokat
+                SAP_Adatokbeolvasása_km.Km_beolvasóICS(_fájlexc);
+                this.Invoke(callback, new object[] { });
+            });
+            proc.Start();
         }
         #endregion
 
@@ -1658,7 +1725,7 @@ namespace Villamos
                 Tábla1.Columns[19].Width = 120;
                 Tábla1.Columns[20].HeaderText = "Utolsó V2-V3 számláló";
                 Tábla1.Columns[20].Width = 120;
-
+                AdatokICSKmadatok = KézICSKmadatok.Lista_Adatok().OrderByDescending(a => a.ID).ToList();
                 List<Adat_T5C5_Kmadatok> Adatok = (from a in AdatokICSKmadatok
                                                    where a.Törölt == false
                                                    && a.Azonosító == Pályaszám.Text.Trim()
@@ -1860,6 +1927,676 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        #endregion
+
+
+        #region Vizsgálat_ütemező
+        /// <summary>
+        /// Frissíti a vizsgálati ütemezőt
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Ütem_frissít_Click(object sender, EventArgs e)
+        {
+            Ütemező_lekérdezés();
+            Ütemezettkocsik();
+        }
+
+        /// <summary>
+        /// Lekérdezi járművenként az aktuális állapotokat
+        /// </summary>
+        private void Ütemező_lekérdezés()
+        {
+            try
+            {
+                // kilistázzuk a adatbázis adatait
+                List<Adat_Jármű> AdatokJ = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokJ = (from a in AdatokJ
+                           where a.Törölt == false
+                           && (a.Valóstípus == "ICS" && a.Valóstípus == "KCSV-7")
+                           orderby a.Azonosító
+                           select a).ToList();
+
+                AdatokICSKmadatok = KézICSKmadatok.Lista_Adatok();
+
+                Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
+                AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokVezénylés = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_ütem.Value);
+                KorrekcióListaFeltöltés();
+
+                Holtart.Be();
+
+                Tábla_ütemező.Rows.Clear();
+                Tábla_ütemező.Columns.Clear();
+                Tábla_ütemező.Refresh();
+                Tábla_ütemező.Visible = false;
+                Tábla_ütemező.ColumnCount = 24;
+                // fejléc elkészítése
+                Tábla_ütemező.Columns[0].HeaderText = "Psz";
+                Tábla_ütemező.Columns[0].Width = 80;
+                Tábla_ütemező.Columns[0].Frozen = true;
+                Tábla_ütemező.Columns[1].HeaderText = "KM J-óta";
+                Tábla_ütemező.Columns[1].Width = 80;
+                Tábla_ütemező.Columns[1].Visible = false;
+                Tábla_ütemező.Columns[2].HeaderText = "Frissítés Dátum";
+                Tábla_ütemező.Columns[2].Width = 100;
+                Tábla_ütemező.Columns[3].HeaderText = "Vizsg. Dátum";
+                Tábla_ütemező.Columns[3].Width = 100;
+                Tábla_ütemező.Columns[4].HeaderText = "Vizsg KM állás";
+                Tábla_ütemező.Columns[4].Width = 150;
+                Tábla_ütemező.Columns[5].HeaderText = "Utolsó Vizsg. foka";
+                Tábla_ütemező.Columns[5].Width = 150;
+                Tábla_ütemező.Columns[6].HeaderText = "V óta futott km korrigált";
+                Tábla_ütemező.Columns[6].Width = 80;
+                Tábla_ütemező.Columns[7].HeaderText = "V2 óta futott km korrigált";
+                Tábla_ütemező.Columns[7].Width = 80;
+                Tábla_ütemező.Columns[8].HeaderText = "V3 óta futott km korrigált";
+                Tábla_ütemező.Columns[8].Width = 80;
+                Tábla_ütemező.Columns[9].HeaderText = "Ciklusrend";
+                Tábla_ütemező.Columns[9].Width = 100;
+                Tábla_ütemező.Columns[10].HeaderText = "Követk. vizsg.";
+                Tábla_ütemező.Columns[10].Width = 80;
+                Tábla_ütemező.Columns[11].HeaderText = "Jármű hibák";
+                Tábla_ütemező.Columns[11].Width = 200;
+
+                Tábla_ütemező.Columns[12].Visible = false;
+                Tábla_ütemező.Columns[13].Visible = false;
+                Tábla_ütemező.Columns[14].HeaderText = "Mit kér";
+                Tábla_ütemező.Columns[14].Width = 100;
+                Tábla_ütemező.Columns[14].Visible = false;
+                Tábla_ütemező.Columns[15].HeaderText = "Rendelés szám";
+                Tábla_ütemező.Columns[15].Width = 100;
+                Tábla_ütemező.Columns[15].Visible = false;
+                Tábla_ütemező.Columns[16].HeaderText = "Vizsgálat";
+                Tábla_ütemező.Columns[16].Width = 100;
+                Tábla_ütemező.Columns[16].Visible = false;
+                Tábla_ütemező.Columns[17].HeaderText = "Takarítás";
+                Tábla_ütemező.Columns[17].Width = 100;
+                Tábla_ütemező.Columns[17].Visible = false;
+                Tábla_ütemező.Columns[18].HeaderText = "Járműstátus";
+                Tábla_ütemező.Columns[18].Width = 100;
+                Tábla_ütemező.Columns[18].Visible = false;
+                Tábla_ütemező.Columns[19].HeaderText = "Sorszám";
+                Tábla_ütemező.Columns[19].Width = 80;
+                Tábla_ütemező.Columns[19].Visible = false;
+
+                Tábla_ütemező.Columns[20].HeaderText = "V óta futott km ";
+                Tábla_ütemező.Columns[20].Width = 80;
+                Tábla_ütemező.Columns[21].HeaderText = "V2 óta futott km ";
+                Tábla_ütemező.Columns[21].Width = 80;
+                Tábla_ütemező.Columns[22].HeaderText = "V3 óta futott km ";
+                Tábla_ütemező.Columns[22].Width = 80;
+                Tábla_ütemező.Columns[23].HeaderText = "km korr ";
+                Tábla_ütemező.Columns[23].Width = 100;
+
+                // kiírjuk a pályaszámokat
+
+
+                int i;
+                foreach (Adat_Jármű rekord in AdatokJ)
+                {
+
+                    Tábla_ütemező.RowCount++;
+                    i = Tábla_ütemező.RowCount - 1;
+                    Tábla_ütemező.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
+                    Tábla_ütemező.Rows[i].Cells[18].Value = rekord.Státus;
+
+                    Adat_T5C5_Kmadatok rekordICS = (from a in AdatokICSKmadatok
+                                                    where a.Azonosító == rekord.Azonosító &&
+                                                    a.Törölt == false
+                                                    orderby a.Vizsgdátumk descending
+                                                    select a).FirstOrDefault();
+
+                    if (rekordICS != null)
+                    {
+                        Tábla_ütemező.Rows[i].Cells[14].Value = "0";
+                        Tábla_ütemező.Rows[i].Cells[15].Value = "0";
+                        Tábla_ütemező.Rows[i].Cells[16].Value = "0";
+                        Tábla_ütemező.Rows[i].Cells[19].Value = "0";
+
+                        Tábla_ütemező.Rows[i].Cells[1].Value = rekordICS.KMUkm;
+                        Tábla_ütemező.Rows[i].Cells[2].Value = rekordICS.KMUdátum.ToString("yyyy.MM.dd");
+                        Tábla_ütemező.Rows[i].Cells[3].Value = rekordICS.Vizsgdátumv.ToString("yyyy.MM.dd");
+                        Tábla_ütemező.Rows[i].Cells[4].Value = rekordICS.Vizsgkm;
+                        Tábla_ütemező.Rows[i].Cells[5].Value = rekordICS.Vizsgfok;
+
+                        //km korrekció
+                        int korrekció = 0;
+                        List<Adat_Főkönyv_Zser_Km> AdatokPSZKm = (from a in AdatokZserKm
+                                                                  where a.Azonosító == rekord.Azonosító &&
+                                                                  a.Dátum > rekordICS.KMUdátum
+                                                                  select a).ToList();
+                        if (AdatokPSZKm != null && AdatokPSZKm.Count > 0) korrekció = AdatokPSZKm.Sum(a => a.Napikm);
+                        Tábla_ütemező.Rows[i].Cells[23].Value = korrekció;
+
+                        // ha J akkor nem kell különbséget képezni
+                        if (rekordICS.Vizsgsorszám == 0)
+                        {
+                            Tábla_ütemező.Rows[i].Cells[20].Value = rekordICS.KMUkm;
+                            Tábla_ütemező.Rows[i].Cells[6].Value = rekordICS.KMUkm + korrekció;
+                        }
+                        else
+                        {
+                            Tábla_ütemező.Rows[i].Cells[20].Value = (rekordICS.KMUkm - rekordICS.Vizsgkm);
+                            Tábla_ütemező.Rows[i].Cells[6].Value = (rekordICS.KMUkm - rekordICS.Vizsgkm) + korrekció;
+                        }
+
+                        Tábla_ütemező.Rows[i].Cells[9].Value = rekordICS.Ciklusrend;
+                        Tábla_ütemező.Rows[i].Cells[19].Value = rekordICS.Vizsgsorszám;
+
+                        // utolsó V2 vizsgálat kiírása
+                        Adat_T5C5_Kmadatok rekordICSV2 = (from a in AdatokICSKmadatok
+                                                          where a.Azonosító == rekord.Azonosító &&
+                                                          a.Törölt == false &&
+                                                          a.Vizsgfok.Contains("V2")
+                                                          orderby a.Vizsgdátumk descending
+                                                          select a).FirstOrDefault();
+                        if (rekordICSV2 != null)
+                        {
+                            Tábla_ütemező.Rows[i].Cells[21].Value = rekordICS.KMUkm - rekordICSV2.Vizsgkm;
+                            Tábla_ütemező.Rows[i].Cells[7].Value = rekordICS.KMUkm - rekordICSV2.Vizsgkm + korrekció;
+                        }
+
+                        // utolsó V3 vizsgálat kiírása
+                        Adat_T5C5_Kmadatok rekordICSV3 = (from a in AdatokICSKmadatok
+                                                          where a.Azonosító == rekord.Azonosító &&
+                                                          a.Törölt == false &&
+                                                          a.Vizsgfok.Contains("V3")
+                                                          orderby a.Vizsgdátumk descending
+                                                          select a).FirstOrDefault();
+                        if (rekordICSV3 != null)
+                        {
+                            Tábla_ütemező.Rows[i].Cells[22].Value = rekordICS.KMUkm - rekordICSV3.Vizsgkm;
+                            Tábla_ütemező.Rows[i].Cells[8].Value = rekordICS.KMUkm - rekordICSV3.Vizsgkm + korrekció;
+                        }
+
+
+                        Adat_Ciklus ElemCiklus = (from a in AdatokCiklus
+                                                  where a.Típus == rekordICS.Ciklusrend.Trim() &&
+                                                  a.Sorszám == rekordICS.Vizsgsorszám + 1
+                                                  select a).FirstOrDefault();
+
+                        if (ElemCiklus != null)
+                            Tábla_ütemező.Rows[i].Cells[10].Value = ElemCiklus.Vizsgálatfok;
+                        else
+                            Tábla_ütemező.Rows[i].Cells[10].Value = "";
+                        Adat_Nap_Hiba ElemHiba = (from a in AdatokHiba
+                                                  where a.Azonosító == rekord.Azonosító
+                                                  select a).FirstOrDefault();
+                        if (ElemHiba != null) Tábla_ütemező.Rows[i].Cells[11].Value = $"{ElemHiba.Üzemképtelen.Trim()}-{ElemHiba.Beálló.Trim()}-{ElemHiba.Üzemképeshiba.Trim()}";
+
+                        Adat_Vezénylés ElemVezénylés = (from a in AdatokVezénylés
+                                                        where a.Dátum >= Dátum_ütem.Value &&
+                                                        a.Törlés == 0 &&
+                                                        a.Azonosító == rekord.Azonosító
+                                                        select a).FirstOrDefault();
+                        if (ElemVezénylés != null)
+                        {
+                            if (ElemVezénylés.Vizsgálatraütemez == 1)
+                                Tábla_ütemező.Rows[i].Cells[16].Value = "1";
+                            else
+                                Tábla_ütemező.Rows[i].Cells[16].Value = "0";
+
+                            Tábla_ütemező.Rows[i].Cells[15].Value = ElemVezénylés.Rendelésiszám.Trim();
+                            Tábla_ütemező.Rows[i].Cells[14].Value = ElemVezénylés.Státus;
+                        }
+
+                    }
+
+                    Holtart.Lép();
+                }
+                Tábla_ütemező.Refresh();
+                Tábla_ütemező.Sort(Tábla_ütemező.Columns[6], System.ComponentModel.ListSortDirection.Descending);
+                Tábla_ütemező.Visible = true;
+                Holtart.Ki();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Vezénylés adatokat frissíti a táblázatban
+        /// </summary>
+        private void Vezénylés_listázása()
+        {
+            try
+            {
+                AdatokVezénylés = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_ütem.Value);
+
+                foreach (DataGridViewRow Sor in Tábla_ütemező.Rows)
+                {
+                    Adat_Vezénylés ElemVezénylés = (from a in AdatokVezénylés
+                                                    where a.Dátum >= Dátum_ütem.Value &&
+                                                    a.Törlés == 0 &&
+                                                    a.Azonosító == Sor.Cells[0].Value.ToStrTrim()
+                                                    select a).FirstOrDefault();
+                    if (ElemVezénylés != null)
+                    {
+                        if (ElemVezénylés.Vizsgálatraütemez == 1)
+                            Sor.Cells[16].Value = "1";
+                        else
+                            Sor.Cells[16].Value = "0";
+                        Sor.Cells[15].Value = ElemVezénylés.Rendelésiszám.Trim();
+                        Sor.Cells[14].Value = ElemVezénylés.Státus;
+                    }
+                    Holtart.Lép();
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        /// <summary>
+        /// Kiválasztja a táblázatban lévő adatokat és rögzítési ablakot nyitja meg
+        /// </summary>
+        /// <param name="sor"></param>
+        private void Táblázatba_kattint(int sor)
+        {
+            try
+            {
+                if (Tábla_ütemező.Rows[sor].Cells[0].Value == null) throw new HibásBevittAdat("Nincs kijelölve érvényes sor.");
+                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[14].Value.ToString(), out int állapot)) állapot = 0;
+                bool ütemez = true;
+                if (Tábla_ütemező.Rows[sor].Cells[16].Value.ToStrTrim() == "0") ütemez = false;
+                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[19].Value.ToString(), out int v_sorszám)) v_sorszám = 0;
+                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[6].Value.ToString(), out int v_km)) v_km = 0;
+
+                Adat_ICS_Ütem Küld = new Adat_ICS_Ütem(
+                    Tábla_ütemező.Rows[sor].Cells[0].Value.ToStrTrim(),
+                    állapot,
+                    ütemez,
+                    Tábla_ütemező.Rows[sor].Cells[15].Value.ToStrTrim(),
+                    v_sorszám,
+                    Tábla_ütemező.Rows[sor].Cells[5].Value.ToStrTrim(),
+                    v_km,
+                    Tábla_ütemező.Rows[sor].Cells[10].Value.ToStrTrim(),
+                    v_sorszám + 1
+                    );
+
+                if (Új_Ablak_ICS_KCSV_segéd != null) Új_Ablak_ICS_KCSV_segéd = null;
+
+                Új_Ablak_ICS_KCSV_segéd = new Ablak_ICS_KCSV_segéd(Dátum_ütem.Value, Cmbtelephely.Text.Trim(), Küld);
+                Új_Ablak_ICS_KCSV_segéd.FormClosed += Új_Ablak_ICS_KCSV_segéd_FormClosed;
+                Új_Ablak_ICS_KCSV_segéd.Változás += Vezénylés_listázása;
+                Új_Ablak_ICS_KCSV_segéd.Változás += Ütemezettkocsik;
+                Új_Ablak_ICS_KCSV_segéd.Show();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        Ablak_ICS_KCSV_segéd Új_Ablak_ICS_KCSV_segéd;
+
+        /// <summary>
+        /// Kiválasztja a táblázatban lévő adatokat és rögzítési ablakot nyitja meg
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Tábla_ütemező_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (e.RowIndex < 0) throw new HibásBevittAdat("Nincs kijelölve érvényes sor.");
+                Táblázatba_kattint(e.RowIndex);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        /// <summary>
+        /// Bezáráskor törli a segédablakot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Új_Ablak_ICS_KCSV_segéd_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_ICS_KCSV_segéd = null;
+        }
+
+        /// <summary>
+        /// Ütemezett kocsik táblázatot készít a vizsgálatra ütemezett kocsikról
+        /// </summary>
+        private void Ütemezettkocsik()
+        {
+            try
+            {
+                Tábla_vezénylés.Rows.Clear();
+                Tábla_vezénylés.Columns.Clear();
+                Tábla_vezénylés.Refresh();
+                Tábla_vezénylés.Visible = false;
+                Tábla_vezénylés.ColumnCount = 4;
+
+                // fejléc elkészítése
+                Tábla_vezénylés.Columns[0].HeaderText = "Dátum";
+                Tábla_vezénylés.Columns[0].Width = 100;
+                Tábla_vezénylés.Columns[1].HeaderText = "Psz.";
+                Tábla_vezénylés.Columns[1].Width = 60;
+                Tábla_vezénylés.Columns[2].HeaderText = "Vizsgálat";
+                Tábla_vezénylés.Columns[2].Width = 80;
+                Tábla_vezénylés.Columns[3].HeaderText = "";
+                Tábla_vezénylés.Columns[3].Width = 80;
+
+                DateTime kezdet = MyF.Nap0000(Dátum_ütem.Value.AddDays(-5));
+                DateTime vége = MyF.Nap2359(Dátum_ütem.Value.AddDays(5));
+                List<Adat_Vezénylés> Adatok = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), kezdet);
+                Adatok = (from a in Adatok
+                          where a.Törlés == 0
+                          && a.Dátum >= kezdet
+                          && a.Dátum <= vége
+                          orderby a.Dátum, a.Vizsgálat, a.Azonosító
+                          select a).ToList();
+
+
+                foreach (Adat_Vezénylés rekord in Adatok)
+                {
+                    if (rekord.Vizsgálatraütemez == 1)
+                    {
+                        Tábla_vezénylés.RowCount++;
+                        int i = Tábla_vezénylés.RowCount - 1;
+                        Tábla_vezénylés.Rows[i].Cells[0].Value = rekord.Dátum.ToString("yyyy.MM.dd");
+                        Tábla_vezénylés.Rows[i].Cells[1].Value = rekord.Azonosító.Trim();
+                        Tábla_vezénylés.Rows[i].Cells[2].Value = rekord.Vizsgálat.Trim();
+                        if (rekord.Státus == 3)
+                            Tábla_vezénylés.Rows[i].Cells[3].Value = "Beálló";
+                        else
+                            Tábla_vezénylés.Rows[i].Cells[3].Value = "Benn marad";
+
+                    }
+                }
+                Tábla_vezénylés.Refresh();
+                Tábla_vezénylés.Visible = true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Kiválasztja a táblázatban lévő adatokat és rögzítési ablakot nyitja meg
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Tábla_vezénylés_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (Tábla_vezénylés.Rows.Count < 1)
+                    return;
+
+                Dátum_ütem.Value = DateTime.Parse(Tábla_vezénylés.Rows[e.RowIndex].Cells[0].Value.ToString());
+                Ütemező_lekérdezés();
+                if (Tábla_ütemező.Rows.Count < 1)
+                    return;
+                // megkeressük a nagytáblába, majd kiíratjuk
+
+                for (int i = 0; i < Tábla_ütemező.Rows.Count; i++)
+                {
+                    if (Tábla_vezénylés.Rows[e.RowIndex].Cells[1].Value.ToStrTrim() == Tábla_ütemező.Rows[i].Cells[0].Value.ToStrTrim())
+                    {
+                        Táblázatba_kattint(i);
+                        break;
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Színezés a táblázatban
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Tábla_ütemező_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            try
+            {
+
+                if (Tábla_ütemező.RowCount < 1)
+                    return;
+                foreach (DataGridViewRow row in Tábla_ütemező.Rows)
+                {
+                    if (row.Cells[18].Value.ToString() == "4")
+                    {
+                        row.DefaultCellStyle.ForeColor = Color.White;
+                        row.DefaultCellStyle.BackColor = Color.IndianRed;
+                        row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f);
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Vezénylésbeírás gomb megnyomásakor a kiválasztott járművek státuszát módosítja és a hibák közé beírjuk a vizsgálatot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Btn_Vezénylésbeírás_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<Adat_Vezénylés> AdatokVezénylés = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_ütem.Value);
+                AdatokVezénylés = (from a in AdatokVezénylés
+                                   where a.Törlés == 0
+                                   && a.Dátum == Dátum_ütem.Value
+                                   orderby a.Azonosító
+                                   select a).ToList();
+
+                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());    // Módosítjuk a jármű státuszát
+                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim());     // megnyitjuk a hibákat
+
+                Holtart.Be();
+                // ha van ütemezett kocsi
+                foreach (Adat_Vezénylés rekordütemez in AdatokVezénylés)
+                {
+                    long újstátus = 0;
+                    Holtart.Lép();
+                    if (rekordütemez.Vizsgálatraütemez == 1)
+                    {
+                        // hiba leírása
+                        string szöveg1 = $"{rekordütemez.Vizsgálat.Trim()}-{rekordütemez.Vizsgálatszám}-{rekordütemez.Dátum:yyyy.MM.dd} ";
+                        string szöveg3 = $"{rekordütemez.Vizsgálat.Trim()}-{rekordütemez.Vizsgálatszám}";
+                        if (rekordütemez.Státus == 4)
+                            szöveg1 += $" Maradjon benn ";
+                        else
+                            szöveg1 += $" Beálló ";
+
+                        // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
+                        Adat_Jármű_hiba ElemHiba = (from a in AdatokHiba
+                                                    where a.Azonosító == rekordütemez.Azonosító &&
+                                                    a.Hibaleírása.Contains(szöveg3)
+                                                    select a).FirstOrDefault();
+                        // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
+                        if (ElemHiba == null)
+                        {
+                            // hibák számát emeljük és státus állítjuk ha kell
+                            Adat_Jármű ElemJármű = (from a in AdatokJármű
+                                                    where a.Azonosító == rekordütemez.Azonosító
+                                                    select a).FirstOrDefault();
+                            long hibáksorszáma = 0;
+                            string típusa = "";
+                            long státus = 0;
+                            if (ElemJármű != null)
+                            {
+                                hibáksorszáma = ElemJármű.Hibák;
+                                típusa = ElemJármű.Típus;
+                                státus = ElemJármű.Státus;
+                            }
+                            long hiba = hibáksorszáma + 1;
+
+                            if (státus != 4) // ha 4 státusa akkor nem kell módosítani.
+                            {
+                                // ha a következő napra ütemez
+                                if (DateTime.Today.AddDays(1).ToString("yyyy.MM.dd") == Dátum_ütem.Value.ToString("yyyy.MM.dd"))
+                                {
+                                    if (rekordütemez.Státus == 4)
+                                        státus = 4;
+                                    else
+                                        státus = 3;
+                                }
+                                else if (státus < 4) státus = 3;
+                                // ha ma van  
+                                if (DateTime.Today.ToString("yyyy.MM.dd") == Dátum_ütem.Value.ToString("yyyy.MM.dd")) státus = 4;
+                            }
+                            else
+                            {
+                                újstátus = 1;
+                            }
+
+                            // rögzítjük a villamos.mdb-be
+                            if (státus == 4 & újstátus == 0)
+                            {
+                                Adat_Jármű ADATJármű = new Adat_Jármű(
+                                     rekordütemez.Azonosító.Trim(),
+                                     hiba,
+                                     státus,
+                                     DateTime.Now);
+                                KézJármű.Módosítás_Státus_Hiba_Dátum(Cmbtelephely.Text.Trim(), ADATJármű);
+                            }
+                            else
+                            {
+                                Adat_Jármű ADATJármű = new Adat_Jármű(
+                                     rekordütemez.Azonosító.Trim(),
+                                     hiba,
+                                     státus);
+                                KézJármű.Módosítás_Hiba_Státus(Cmbtelephely.Text.Trim(), ADATJármű);
+                            }
+
+                            // beírjuk a hibákat
+                            Adat_Jármű_hiba ADAT = new Adat_Jármű_hiba(
+                                     Program.PostásNév.Trim(),
+                                     rekordütemez.Státus == 4 ? 4 : 3,
+                                     szöveg1.Trim(),
+                                     DateTime.Now,
+                                     false,
+                                     típusa.Trim(),
+                                     rekordütemez.Azonosító.Trim(),
+                                     hibáksorszáma);
+                            KézJárműHiba.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
+                        }
+                        Holtart.Ki();
+                        MessageBox.Show("Az adatok rögzítése befejeződött!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Mentés Excel fájlba
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Tábla_ütemező.Rows.Count <= 0) return;
+                string fájlexc;
+
+                // kimeneti fájl helye és neve
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"ICS_KCSV_ütemzés_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+
+                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
+                MyE.EXCELtábla(fájlexc, Tábla_ütemező, false);
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MyE.Megnyitás(fájlexc + ".xlsx");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Dátum változásakor frissíti a táblázatot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Dátum_ütem_ValueChanged(object sender, EventArgs e)
+        {
+            Ütemezettkocsik();
         }
         #endregion
 
@@ -3071,812 +3808,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
-
-        //
-        private void SAP_adatok_Click(object sender, EventArgs e)
-        {
-            string fájlexc = "";
-            try
-            {
-                // megpróbáljuk megnyitni az excel táblát.
-                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "SAP-s Adatok betöltése",
-                    FileName = "",
-                    Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls"
-                };
-
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = OpenFileDialog1.FileName;
-                else
-                    return;
-
-                MyE.ExcelMegnyitás(fájlexc);
-
-                // ***********************************
-                // ***** Ellenőrzés eleje ************
-                // ***********************************
-                string fejlécell = "";
-                for (int ii = 0; ii < 7; ii++)
-                    fejlécell += MyE.Beolvas(MyE.Oszlopnév(ii + 1) + "1").Trim();
-
-                if (!MyF.Betöltéshelyes("KM adatok", fejlécell))
-                {
-                    MessageBox.Show("Nem megfelelő a betölteni kívánt adatok formátuma ! ", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    // az excel tábla bezárása
-                    MyE.ExcelBezárás();
-                    return;
-                }
-                // ***********************************
-                // ***** Ellenőrzés vége  ************
-                // ***********************************
-                // megnézzük, hogy hány sorból áll a tábla
-
-                Holtart.Be();
-                AdatokICSKmadatok = KézICSKmadatok.Lista_Adatok().OrderByDescending(a => a.ID).ToList();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-                string jelszó = "pocsaierzsi";
-                string beopályaszám = "";
-                // Első adattól végig pörgetjüka beolvasást
-                int i = 2;
-
-                List<string> SzövegGy = new List<string>();
-                while (MyE.Beolvas($"a{i}") != "_")
-                {
-                    beopályaszám = MyF.Szöveg_Tisztítás(MyE.Beolvas("a" + i.ToString()), 1, 4);
-
-                    if (beopályaszám.Trim() == "_") return;
-
-                    Adat_T5C5_Kmadatok Elem = (from a in AdatokICSKmadatok
-                                               where a.Azonosító == beopályaszám.Trim() &&
-                                               a.Törölt == false
-                                               orderby a.Vizsgdátumk descending
-                                               select a).FirstOrDefault();
-
-                    if (Elem != null)
-                    {
-                        long utolsórögzítés = Elem.ID;
-
-                        string szöveg = "UPDATE kmtábla SET ";
-                        if (!DateTime.TryParse(MyE.Beolvas($"C{i}"), out DateTime KMUdátum)) KMUdátum = new DateTime(1900, 1, 1);
-
-                        szöveg += $" KMUdátum='{KMUdátum:yyyy.MM.dd}', ";
-                        szöveg += $" KMUkm={MyE.Beolvas($"d{i}")}, ";
-                        if (MyE.Beolvas($"b{i}").Trim() == "_")
-                            szöveg += " havikm=0, ";
-                        else
-                            szöveg += $" havikm={MyE.Beolvas($"b{i}")}, ";
-
-                        szöveg += $" Jjavszám={MyE.Beolvas($"f{i}")}, ";
-
-                        if (!DateTime.TryParse(MyE.Beolvas($"G{i}"), out DateTime fudátum)) fudátum = new DateTime(1900, 1, 1);
-
-                        szöveg += $" fudátum='{fudátum:yyyy.MM.dd}', ";
-                        szöveg += $" teljeskm={MyE.Beolvas($"e{i}")} ";
-                        szöveg += $"WHERE [id]={utolsórögzítés}";
-                        SzövegGy.Add(szöveg);
-                    }
-                    Holtart.Lép();
-                    i += 1;
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-                // az excel tábla bezárása
-                MyE.ExcelBezárás();
-                Holtart.Ki();
-                // kitöröljük a betöltött fájlt
-                File.Delete(fájlexc);
-
-                MessageBox.Show("Az adat konvertálás befejeződött!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                if (ex.StackTrace.Contains("System.IO.File.InternalDelete"))
-                    MessageBox.Show($"A programnak a beolvasott adatokat tartalmazó fájlt nem sikerült törölni.\n Valószínüleg a {fájlexc} nyitva van.\n\nAz adat konvertálás befejeződött!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                else
-                {
-                    HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                    MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-
-
-        #region Vizsgálat_ütemező
-
-        private void Ütem_frissít_Click(object sender, EventArgs e)
-        {
-            Ütemező_lekérdezés();
-            Ütemezettkocsik();
-        }
-
-        //
-        private void Ütemező_lekérdezés()
-        {
-            try
-            {
-                // kilistázzuk a adatbázis adatait
-                string honnan = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string szöveg = "Select * FROM Állománytábla WHERE  törölt=0 AND (valóstípus='ICS' OR valóstípus='KCSV-7') ORDER BY azonosító";
-
-                if (!Exists(honnan)) return;
-                string jelszóhonnan = "pozsgaii";
-
-                List<Adat_Jármű> AdatokJ = KézJármű.Lista_Adatok(honnan, jelszóhonnan, szöveg);
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ICSKCSV\villamos4ICS.mdb";
-                string jelszó = "pocsaierzsi";
-                szöveg = "SELECT * FROM KMtábla ";
-
-                List<Adat_T5C5_Kmadatok> AdatokICS = KézICSKmadatok.Lista_Adat(hely, jelszó, szöveg);
-
-                Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
-                AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
-                AdatokVezénylés = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_ütem.Value);
-                KorrekcióListaFeltöltés();
-
-                Holtart.Be();
-
-                Tábla_ütemező.Rows.Clear();
-                Tábla_ütemező.Columns.Clear();
-                Tábla_ütemező.Refresh();
-                Tábla_ütemező.Visible = false;
-                Tábla_ütemező.ColumnCount = 24;
-                // fejléc elkészítése
-                Tábla_ütemező.Columns[0].HeaderText = "Psz";
-                Tábla_ütemező.Columns[0].Width = 80;
-                Tábla_ütemező.Columns[0].Frozen = true;
-                Tábla_ütemező.Columns[1].HeaderText = "KM J-óta";
-                Tábla_ütemező.Columns[1].Width = 80;
-                Tábla_ütemező.Columns[1].Visible = false;
-                Tábla_ütemező.Columns[2].HeaderText = "Frissítés Dátum";
-                Tábla_ütemező.Columns[2].Width = 100;
-                Tábla_ütemező.Columns[3].HeaderText = "Vizsg. Dátum";
-                Tábla_ütemező.Columns[3].Width = 100;
-                Tábla_ütemező.Columns[4].HeaderText = "Vizsg KM állás";
-                Tábla_ütemező.Columns[4].Width = 150;
-                Tábla_ütemező.Columns[5].HeaderText = "Utolsó Vizsg. foka";
-                Tábla_ütemező.Columns[5].Width = 150;
-                Tábla_ütemező.Columns[6].HeaderText = "V óta futott km korrigált";
-                Tábla_ütemező.Columns[6].Width = 80;
-                Tábla_ütemező.Columns[7].HeaderText = "V2 óta futott km korrigált";
-                Tábla_ütemező.Columns[7].Width = 80;
-                Tábla_ütemező.Columns[8].HeaderText = "V3 óta futott km korrigált";
-                Tábla_ütemező.Columns[8].Width = 80;
-                Tábla_ütemező.Columns[9].HeaderText = "Ciklusrend";
-                Tábla_ütemező.Columns[9].Width = 100;
-                Tábla_ütemező.Columns[10].HeaderText = "Követk. vizsg.";
-                Tábla_ütemező.Columns[10].Width = 80;
-                Tábla_ütemező.Columns[11].HeaderText = "Jármű hibák";
-                Tábla_ütemező.Columns[11].Width = 200;
-
-                Tábla_ütemező.Columns[12].Visible = false;
-                Tábla_ütemező.Columns[13].Visible = false;
-                Tábla_ütemező.Columns[14].HeaderText = "Mit kér";
-                Tábla_ütemező.Columns[14].Width = 100;
-                Tábla_ütemező.Columns[14].Visible = false;
-                Tábla_ütemező.Columns[15].HeaderText = "Rendelés szám";
-                Tábla_ütemező.Columns[15].Width = 100;
-                Tábla_ütemező.Columns[15].Visible = false;
-                Tábla_ütemező.Columns[16].HeaderText = "Vizsgálat";
-                Tábla_ütemező.Columns[16].Width = 100;
-                Tábla_ütemező.Columns[16].Visible = false;
-                Tábla_ütemező.Columns[17].HeaderText = "Takarítás";
-                Tábla_ütemező.Columns[17].Width = 100;
-                Tábla_ütemező.Columns[17].Visible = false;
-                Tábla_ütemező.Columns[18].HeaderText = "Járműstátus";
-                Tábla_ütemező.Columns[18].Width = 100;
-                Tábla_ütemező.Columns[18].Visible = false;
-                Tábla_ütemező.Columns[19].HeaderText = "Sorszám";
-                Tábla_ütemező.Columns[19].Width = 80;
-                Tábla_ütemező.Columns[19].Visible = false;
-
-                Tábla_ütemező.Columns[20].HeaderText = "V óta futott km ";
-                Tábla_ütemező.Columns[20].Width = 80;
-                Tábla_ütemező.Columns[21].HeaderText = "V2 óta futott km ";
-                Tábla_ütemező.Columns[21].Width = 80;
-                Tábla_ütemező.Columns[22].HeaderText = "V3 óta futott km ";
-                Tábla_ütemező.Columns[22].Width = 80;
-                Tábla_ütemező.Columns[23].HeaderText = "km korr ";
-                Tábla_ütemező.Columns[23].Width = 100;
-
-                // kiírjuk a pályaszámokat
-
-
-                int i;
-                foreach (Adat_Jármű rekord in AdatokJ)
-                {
-
-                    Tábla_ütemező.RowCount++;
-                    i = Tábla_ütemező.RowCount - 1;
-                    Tábla_ütemező.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
-                    Tábla_ütemező.Rows[i].Cells[18].Value = rekord.Státus;
-
-                    Adat_T5C5_Kmadatok rekordICS = (from a in AdatokICS
-                                                    where a.Azonosító == rekord.Azonosító &&
-                                                    a.Törölt == false
-                                                    orderby a.Vizsgdátumk descending
-                                                    select a).FirstOrDefault();
-
-                    if (rekordICS != null)
-                    {
-                        Tábla_ütemező.Rows[i].Cells[14].Value = "0";
-                        Tábla_ütemező.Rows[i].Cells[15].Value = "0";
-                        Tábla_ütemező.Rows[i].Cells[16].Value = "0";
-                        Tábla_ütemező.Rows[i].Cells[19].Value = "0";
-
-                        Tábla_ütemező.Rows[i].Cells[1].Value = rekordICS.KMUkm;
-                        Tábla_ütemező.Rows[i].Cells[2].Value = rekordICS.KMUdátum.ToString("yyyy.MM.dd");
-                        Tábla_ütemező.Rows[i].Cells[3].Value = rekordICS.Vizsgdátumv.ToString("yyyy.MM.dd");
-                        Tábla_ütemező.Rows[i].Cells[4].Value = rekordICS.Vizsgkm;
-                        Tábla_ütemező.Rows[i].Cells[5].Value = rekordICS.Vizsgfok;
-
-                        //km korrekció
-                        int korrekció = 0;
-                        List<Adat_Főkönyv_Zser_Km> AdatokPSZKm = (from a in AdatokZserKm
-                                                                  where a.Azonosító == rekord.Azonosító &&
-                                                                  a.Dátum > rekordICS.KMUdátum
-                                                                  select a).ToList();
-                        if (AdatokPSZKm != null && AdatokPSZKm.Count > 0) korrekció = AdatokPSZKm.Sum(a => a.Napikm);
-                        Tábla_ütemező.Rows[i].Cells[23].Value = korrekció;
-
-                        // ha J akkor nem kell különbséget képezni
-                        if (rekordICS.Vizsgsorszám == 0)
-                        {
-                            Tábla_ütemező.Rows[i].Cells[20].Value = rekordICS.KMUkm;
-                            Tábla_ütemező.Rows[i].Cells[6].Value = rekordICS.KMUkm + korrekció;
-                        }
-                        else
-                        {
-                            Tábla_ütemező.Rows[i].Cells[20].Value = (rekordICS.KMUkm - rekordICS.Vizsgkm);
-                            Tábla_ütemező.Rows[i].Cells[6].Value = (rekordICS.KMUkm - rekordICS.Vizsgkm) + korrekció;
-                        }
-
-                        Tábla_ütemező.Rows[i].Cells[9].Value = rekordICS.Ciklusrend;
-                        Tábla_ütemező.Rows[i].Cells[19].Value = rekordICS.Vizsgsorszám;
-
-                        // utolsó V2 vizsgálat kiírása
-                        Adat_T5C5_Kmadatok rekordICSV2 = (from a in AdatokICS
-                                                          where a.Azonosító == rekord.Azonosító &&
-                                                          a.Törölt == false &&
-                                                          a.Vizsgfok.Contains("V2")
-                                                          orderby a.Vizsgdátumk descending
-                                                          select a).FirstOrDefault();
-                        if (rekordICSV2 != null)
-                        {
-                            Tábla_ütemező.Rows[i].Cells[21].Value = rekordICS.KMUkm - rekordICSV2.Vizsgkm;
-                            Tábla_ütemező.Rows[i].Cells[7].Value = rekordICS.KMUkm - rekordICSV2.Vizsgkm + korrekció;
-                        }
-
-                        // utolsó V3 vizsgálat kiírása
-                        Adat_T5C5_Kmadatok rekordICSV3 = (from a in AdatokICS
-                                                          where a.Azonosító == rekord.Azonosító &&
-                                                          a.Törölt == false &&
-                                                          a.Vizsgfok.Contains("V3")
-                                                          orderby a.Vizsgdátumk descending
-                                                          select a).FirstOrDefault();
-                        if (rekordICSV3 != null)
-                        {
-                            Tábla_ütemező.Rows[i].Cells[22].Value = rekordICS.KMUkm - rekordICSV3.Vizsgkm;
-                            Tábla_ütemező.Rows[i].Cells[8].Value = rekordICS.KMUkm - rekordICSV3.Vizsgkm + korrekció;
-                        }
-
-
-                        Adat_Ciklus ElemCiklus = (from a in AdatokCiklus
-                                                  where a.Típus == rekordICS.Ciklusrend.Trim() &&
-                                                  a.Sorszám == rekordICS.Vizsgsorszám + 1
-                                                  select a).FirstOrDefault();
-
-                        if (ElemCiklus != null)
-                            Tábla_ütemező.Rows[i].Cells[10].Value = ElemCiklus.Vizsgálatfok;
-                        else
-                            Tábla_ütemező.Rows[i].Cells[10].Value = "";
-                        Adat_Nap_Hiba ElemHiba = (from a in AdatokHiba
-                                                  where a.Azonosító == rekord.Azonosító
-                                                  select a).FirstOrDefault();
-                        if (ElemHiba != null) Tábla_ütemező.Rows[i].Cells[11].Value = $"{ElemHiba.Üzemképtelen.Trim()}-{ElemHiba.Beálló.Trim()}-{ElemHiba.Üzemképeshiba.Trim()}";
-                    }
-
-                    Holtart.Lép();
-                }
-                Vezénylés_listázása();
-
-                Tábla_ütemező.Refresh();
-                Tábla_ütemező.Sort(Tábla_ütemező.Columns[6], System.ComponentModel.ListSortDirection.Descending);
-                Tábla_ütemező.Visible = true;
-                Holtart.Ki();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Vezénylés_listázása()
-        {
-            try
-            {
-                AdatokVezénylés = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_ütem.Value);
-
-                foreach (DataGridViewRow Sor in Tábla_ütemező.Rows)
-                {
-                    Adat_Vezénylés ElemVezénylés = (from a in AdatokVezénylés
-                                                    where a.Dátum >= Dátum_ütem.Value &&
-                                                    a.Törlés == 0 &&
-                                                    a.Azonosító == Sor.Cells[0].Value.ToStrTrim()
-                                                    select a).FirstOrDefault();
-                    if (ElemVezénylés != null)
-                    {
-                        if (ElemVezénylés.Vizsgálatraütemez == 1)
-                            Sor.Cells[16].Value = "1";
-                        else
-                            Sor.Cells[16].Value = "0";
-                        Sor.Cells[15].Value = ElemVezénylés.Rendelésiszám.Trim();
-                        Sor.Cells[14].Value = ElemVezénylés.Státus;
-                    }
-                    Holtart.Lép();
-                }
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        void Táblázatba_kattint(int sor)
-        {
-            try
-            {
-                if (Tábla_ütemező.Rows[sor].Cells[0].Value == null) throw new HibásBevittAdat("Nincs kijelölve érvényes sor.");
-                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[14].Value.ToString(), out int állapot)) állapot = 0;
-                bool ütemez = true;
-                if (Tábla_ütemező.Rows[sor].Cells[16].Value.ToStrTrim() == "0") ütemez = false;
-                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[19].Value.ToString(), out int v_sorszám)) v_sorszám = 0;
-                if (!int.TryParse(Tábla_ütemező.Rows[sor].Cells[6].Value.ToString(), out int v_km)) v_km = 0;
-
-                Adat_ICS_Ütem Küld = new Adat_ICS_Ütem(
-                    Tábla_ütemező.Rows[sor].Cells[0].Value.ToStrTrim(),
-                    állapot,
-                    ütemez,
-                    Tábla_ütemező.Rows[sor].Cells[15].Value.ToStrTrim(),
-                    v_sorszám,
-                    Tábla_ütemező.Rows[sor].Cells[5].Value.ToStrTrim(),
-                    v_km,
-                    Tábla_ütemező.Rows[sor].Cells[10].Value.ToStrTrim(),
-                    v_sorszám + 1
-                    );
-
-                if (Új_Ablak_ICS_KCSV_segéd != null) Új_Ablak_ICS_KCSV_segéd = null;
-
-                Új_Ablak_ICS_KCSV_segéd = new Ablak_ICS_KCSV_segéd(Dátum_ütem.Value, Cmbtelephely.Text.Trim(), Küld);
-                Új_Ablak_ICS_KCSV_segéd.FormClosed += Új_Ablak_ICS_KCSV_segéd_FormClosed;
-                Új_Ablak_ICS_KCSV_segéd.Változás += Vezénylés_listázása;
-                Új_Ablak_ICS_KCSV_segéd.Változás += Ütemezettkocsik;
-                Új_Ablak_ICS_KCSV_segéd.Show();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        Ablak_ICS_KCSV_segéd Új_Ablak_ICS_KCSV_segéd;
-
-        private void Tábla_ütemező_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (e.RowIndex < 0) throw new HibásBevittAdat("Nincs kijelölve érvényes sor.");
-                Táblázatba_kattint(e.RowIndex);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        private void Új_Ablak_ICS_KCSV_segéd_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Új_Ablak_ICS_KCSV_segéd = null;
-        }
-
-
-        //
-        private void Ütemezettkocsik()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\";
-                if (!Exists(hely))
-                    System.IO.Directory.CreateDirectory(hely);
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\" + Dátum_ütem.Value.Year;
-                if (!Exists(hely))
-                    System.IO.Directory.CreateDirectory(hely);
-                hely += @"\vezénylés" + Dátum_ütem.Value.Year + ".mdb";
-                if (!Exists(hely))
-                    Adatbázis_Létrehozás.Vezényléstábla(hely);
-                string jelszó = "tápijános";
-                DateTime kezdet = Dátum_ütem.Value.AddDays(-5);
-                DateTime vége = Dátum_ütem.Value.AddDays(5);
-
-                string szöveg = "SELECT * FROM vezényléstábla where [törlés]=0 and [dátum]>=#" + kezdet.ToString("M-d-yy") + "# AND [dátum]<=#" + vége.ToString("M-d-yy") + "#";
-                szöveg += " ORDER BY dátum, vizsgálat, azonosító";
-
-                Tábla_vezénylés.Rows.Clear();
-                Tábla_vezénylés.Columns.Clear();
-                Tábla_vezénylés.Refresh();
-                Tábla_vezénylés.Visible = false;
-                Tábla_vezénylés.ColumnCount = 4;
-
-                // fejléc elkészítése
-                Tábla_vezénylés.Columns[0].HeaderText = "Dátum";
-                Tábla_vezénylés.Columns[0].Width = 100;
-                Tábla_vezénylés.Columns[1].HeaderText = "Psz.";
-                Tábla_vezénylés.Columns[1].Width = 60;
-                Tábla_vezénylés.Columns[2].HeaderText = "Vizsgálat";
-                Tábla_vezénylés.Columns[2].Width = 80;
-                Tábla_vezénylés.Columns[3].HeaderText = "";
-                Tábla_vezénylés.Columns[3].Width = 80;
-
-                Kezelő_Vezénylés Kéz = new Kezelő_Vezénylés();
-                List<Adat_Vezénylés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                int i;
-                foreach (Adat_Vezénylés rekord in Adatok)
-                {
-                    if (rekord.Vizsgálatraütemez == 1)
-                    {
-                        Tábla_vezénylés.RowCount++;
-                        i = Tábla_vezénylés.RowCount - 1;
-                        Tábla_vezénylés.Rows[i].Cells[0].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                        Tábla_vezénylés.Rows[i].Cells[1].Value = rekord.Azonosító.Trim();
-                        Tábla_vezénylés.Rows[i].Cells[2].Value = rekord.Vizsgálat.Trim();
-                        if (rekord.Státus == 3)
-                            Tábla_vezénylés.Rows[i].Cells[3].Value = "Beálló";
-                        else
-                            Tábla_vezénylés.Rows[i].Cells[3].Value = "Benn marad";
-
-                    }
-                }
-
-                Tábla_vezénylés.Refresh();
-                Tábla_vezénylés.Visible = true;
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-
-        private void Tábla_vezénylés_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (Tábla_vezénylés.Rows.Count < 1)
-                    return;
-
-                Dátum_ütem.Value = DateTime.Parse(Tábla_vezénylés.Rows[e.RowIndex].Cells[0].Value.ToString());
-                Ütemező_lekérdezés();
-                if (Tábla_ütemező.Rows.Count < 1)
-                    return;
-                // megkeressük a nagytáblába, majd kiíratjuk
-
-                for (int i = 0; i < Tábla_ütemező.Rows.Count; i++)
-                {
-                    if (Tábla_vezénylés.Rows[e.RowIndex].Cells[1].Value.ToStrTrim() == Tábla_ütemező.Rows[i].Cells[0].Value.ToStrTrim())
-                    {
-                        Táblázatba_kattint(i);
-                        break;
-                    }
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private void Tábla_ütemező_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            try
-            {
-
-                if (Tábla_ütemező.RowCount < 1)
-                    return;
-                foreach (DataGridViewRow row in Tábla_ütemező.Rows)
-                {
-                    if (row.Cells[18].Value.ToString() == "4")
-                    {
-                        row.DefaultCellStyle.ForeColor = Color.White;
-                        row.DefaultCellStyle.BackColor = Color.IndianRed;
-                        row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f);
-                    }
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        //
-        private void Btn_Vezénylésbeírás_Click(object sender, EventArgs e)
-        {
-            try
-            {
-
-                string helyütemez = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum_ütem.Value.Year}\vezénylés{Dátum_ütem.Value.Year}.mdb";
-                string jelszóütemez = "tápijános";
-                string szöveg = $"SELECT * FROM vezényléstábla where [törlés]=0 and [dátum]=#{Dátum_ütem.Value:M-d-yy}# order by  azonosító";
-                Kezelő_Vezénylés KézVezénylés = new Kezelő_Vezénylés();
-                List<Adat_Vezénylés> AdatokVezénylés = KézVezénylés.Lista_Adatok(helyütemez, jelszóütemez, szöveg);
-
-                // Módosítjuk a jármű státuszát
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
-
-                // megnyitjuk a hibákat
-                List<Adat_Jármű_hiba> AdatokHiba = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
-
-                // naplózás
-                string helynapló = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\hibanapló\{DateTime.Now:yyyyMM}hibanapló.mdb";
-                if (!Exists(helynapló)) Adatbázis_Létrehozás.Hibatáblalap(helynapló);
-
-                Holtart.Be();
-                int talált, szín, újstátus = 0;
-                DateTime mikor;
-                int i = 1;
-                // ha van ütemezett kocsi
-                foreach (Adat_Vezénylés rekordütemez in AdatokVezénylés)
-                {
-                    újstátus = 0;
-                    Holtart.Lép();
-                    if (rekordütemez.Takarításraütemez == 1 | rekordütemez.Vizsgálatraütemez == 1)
-                    {
-                        // hiba leírása
-                        string szöveg1 = rekordütemez.Vizsgálat.Trim() + "-" + rekordütemez.Vizsgálatszám;
-                        string szöveg3 = szöveg1;
-
-                        if (rekordütemez.Státus == 4)
-                        {
-                            szöveg1 += "-" + rekordütemez.Dátum.ToString("yyyy.MM.dd") + " Maradjon benn ";
-                        }
-                        else
-                        {
-                            szöveg1 += "-" + rekordütemez.Dátum.ToString("yyyy.MM.dd") + " Beálló ";
-                        }
-                        if (rekordütemez.Takarításraütemez == 1)
-                        {
-                            szöveg1 += "+Mosó ";
-                        }
-                        // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
-                        talált = 0;
-
-                        Adat_Jármű_hiba ElemHiba = (from a in AdatokHiba
-                                                    where a.Azonosító == rekordütemez.Azonosító &&
-                                                    a.Hibaleírása.Contains(szöveg3)
-                                                    select a).FirstOrDefault();
-                        if (ElemHiba != null) talált = 1;
-
-                        ElemHiba = (from a in AdatokHiba
-                                    where a.Azonosító == rekordütemez.Azonosító &&
-                                    a.Hibaleírása.Contains(szöveg1)
-                                    select a).FirstOrDefault();
-                        if (ElemHiba != null) talált = 1;
-
-
-                        szín = 0;
-                        // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
-                        if (talált == 0)
-                        {
-                            // hibák számát emeljük és státus állítjuk ha kell
-                            Adat_Jármű ElemJármű = (from a in AdatokJármű
-                                                    where a.Azonosító == rekordütemez.Azonosító
-                                                    select a).FirstOrDefault();
-                            long hibáksorszáma = 0;
-                            string típusa = "";
-                            long státus = 0;
-                            if (ElemJármű != null)
-                            {
-                                hibáksorszáma = ElemJármű.Hibák;
-                                típusa = ElemJármű.Típus;
-                                státus = ElemJármű.Státus;
-                            }
-
-
-                            szín = 1;
-                            long hiba = hibáksorszáma + 1;
-
-                            if (státus != 4) // ha 4 státusa akkor nem kell módosítani.
-                            {
-                                // ha a következő napra ütemez
-                                if (DateTime.Today.AddDays(1).ToString("yyyy.MM.dd") == Dátum_ütem.Value.ToString("yyyy.MM.dd"))
-                                {
-                                    if (rekordütemez.Státus == 4)
-                                    {
-                                        státus = 4;
-                                        mikor = DateTime.Now;
-                                    }
-                                    else
-                                    {
-                                        státus = 3;
-                                    }
-                                }
-                                else if (státus < 4)
-                                    státus = 3;
-                                // ha ma van  
-                                if (DateTime.Today.ToString("yyyy.MM.dd") == Dátum_ütem.Value.ToString("yyyy.MM.dd"))
-                                {
-                                    státus = 4;
-                                    mikor = DateTime.Now;
-                                }
-                            }
-                            else
-                            {
-                                újstátus = 1;
-                            }
-
-                            // rögzítjük a villamos.mdb-be
-                            szöveg = "UPDATE állománytábla SET ";
-                            szöveg += " hibák=" + hiba.ToString() + ", ";
-                            // csak akkor módosítkjuk a dátumot, ha nem áll
-                            if (státus == 4 & újstátus == 0)
-                                szöveg += " miótaáll='" + DateTime.Now.ToString() + "', ";
-                            szöveg += " státus=" + státus.ToString();
-                            szöveg += " WHERE  [azonosító]='" + rekordütemez.Azonosító.Trim() + "'";
-                            MyA.ABMódosítás(hely, jelszó, szöveg);
-
-
-                            // beírjuk a hibákat
-
-                            if (szín == 1)
-                            {
-                                szöveg = "INSERT INTO hibatábla (létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
-                                szöveg += "'" + Program.PostásNév.Trim() + "', ";
-                                // ha a következő napra ütemez
-                                if (DateTime.Today.AddDays(1) == Dátum_ütem.Value)
-                                {
-                                    if (rekordütemez.Státus == 4)
-                                        szöveg += " 4, ";
-                                    else
-                                        szöveg += " 3, ";
-                                }
-
-                                else
-                                    szöveg += " 3, ";
-
-                                szöveg += "'" + szöveg1.Trim() + "', ";
-                                szöveg += "'" + DateTime.Now.ToString() + "', false, ";
-                                szöveg += "'" + típusa.Trim() + "', ";
-                                szöveg += "'" + rekordütemez.Azonosító.Trim() + "', " + hibáksorszáma.ToString() + ")";
-                                string helyhiba = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\hiba.mdb";
-                                MyA.ABMódosítás(helyhiba, jelszó, szöveg);
-                                // naplózzuk a hibákat
-                                MyA.ABMódosítás(helynapló, jelszó, szöveg);
-                            }
-                        }
-
-                    }
-                    i += 1;
-                    if (i == 21)
-                        i = 1;
-                }
-
-
-                Holtart.Ki();
-                MessageBox.Show("Az adatok rögzítése befejeződött!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private void Button4_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Tábla_ütemező.Rows.Count <= 0) return;
-                string fájlexc;
-
-                // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-
-                    Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = $"ICS_KCSV_ütemzés_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
-                    Filter = "Excel |*.xlsx"
-                };
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = SaveFileDialog1.FileName;
-                else
-                    return;
-
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla_ütemező, false);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                MyE.Megnyitás(fájlexc + ".xlsx");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private void Dátum_ütem_ValueChanged(object sender, EventArgs e)
-        {
-            Ütemezettkocsik();
-        }
-
-
-
-
         #endregion
 
 
