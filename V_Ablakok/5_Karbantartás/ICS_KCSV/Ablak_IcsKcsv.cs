@@ -1954,7 +1954,7 @@ namespace Villamos
                 List<Adat_Jármű> AdatokJ = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
                 AdatokJ = (from a in AdatokJ
                            where a.Törölt == false
-                           && (a.Valóstípus == "ICS" && a.Valóstípus == "KCSV-7")
+                           && (a.Valóstípus.Trim() == "ICS" || a.Valóstípus == "KCSV-7")
                            orderby a.Azonosító
                            select a).ToList();
 
