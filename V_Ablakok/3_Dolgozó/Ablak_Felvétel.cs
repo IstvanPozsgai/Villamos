@@ -931,9 +931,10 @@ namespace Villamos
                 AdatDolgozó = (from a in AdatokDolgozó
                                where a.Dolgozószám == DolgozószámKi.Text.Trim()
                                select a).FirstOrDefault();
+                string[] darabol = DolgozóKi.Text.Trim().Split('=');
 
                 Adat_Dolgozó_Alap ADAT2 = new Adat_Dolgozó_Alap(DolgozószámKi.Text.Trim(),
-                                                                MyF.Szöveg_Tisztítás(DolgozóKi.Text.Trim(), 0, 50),
+                                                                MyF.Szöveg_Tisztítás(darabol[0], 0, 50),
                                                                 new DateTime(1900, 1, 1),
                                                                 belépés,
                                                                 HonnanKi.Text.Trim());
