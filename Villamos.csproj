@@ -756,7 +756,6 @@
     <Compile Include="V_Kezelők\Kezelő_Ciklus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Alap.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszköz.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Előírás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosítvány.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_J1.cs" />
@@ -1139,7 +1138,6 @@
     <Compile Include="V_Adatszerkezet\Adat_CAF.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Alap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_eszköz.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasó.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hétvége_Előírás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Mérés.cs" />

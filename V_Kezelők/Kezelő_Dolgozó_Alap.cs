@@ -509,7 +509,69 @@ namespace Villamos.Kezelők
             return Válasz;
         }
 
+        /// <summary>
+        /// IDM adatok beolvasása során használatos
+        /// Dolgozószám, Dolgozónév, belépésiidő, kilépésiidő, munkakör 
+        /// </summary>
+        /// <param name="Telephely"></param>
+        /// <param name="Adat"></param>
+        public void Rögzítés_IDM(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
 
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "INSERT INTO dolgozóadatok ( Dolgozószám, Dolgozónév, belépésiidő, kilépésiidő, munkakör )  VALUES ( ";
+                szöveg += $"'{Adat.Dolgozószám}', ";   // Dolgozószám
+                szöveg += $"'{Adat.DolgozóNév}', "; // Dolgozónév
+                szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}', ";  // belépésiidő
+                szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}', ";  // kilépésiidő
+                szöveg += $"'{Adat.Munkakör}') "; // munkakör
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// IDM adatok beolvasása során használatos
+        /// Dolgozószám, Dolgozónév, belépésiidő, kilépésiidő, munkakör 
+        /// </summary>
+        /// <param name="Telephely"></param>
+        /// <param name="Adat"></param>
+        public void Módosítás_IDM(string Telephely, Adat_Dolgozó_Alap Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                string szöveg = "UPDATE dolgozóadatok  SET ";
+                szöveg += $"Dolgozónév='{Adat.DolgozóNév}', "; // Dolgozónév
+                szöveg += $"belépésiidő='{Adat.Belépésiidő:yyyy.MM.dd}', ";  // belépésiidő
+                szöveg += $"kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}' ";  // kilépésiidő
+                szöveg += $" WHERE Dolgozószám='{Adat.Dolgozószám}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        //Elkopó
 
 
         public List<Adat_Dolgozó_Alap> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -662,6 +724,8 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
+
+
     }
 
 

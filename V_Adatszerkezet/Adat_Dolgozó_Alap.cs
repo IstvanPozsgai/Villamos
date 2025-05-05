@@ -202,7 +202,22 @@ namespace Villamos.Villamos_Adatszerkezet
             Lakcím = lakcím;
         }
 
-
+        /// <summary>
+        /// IDM adatok betöltéséhez kell
+        /// </summary>
+        /// <param name="dolgozóNév"></param>
+        /// <param name="dolgozószám"></param>
+        /// <param name="belépésiidő"></param>
+        /// <param name="munkakör"></param>
+        /// <param name="kilépésiidő"></param>
+        public Adat_Dolgozó_Alap(string dolgozóNév, string dolgozószám, DateTime belépésiidő, string munkakör, DateTime kilépésiidő)
+        {
+            Munkakör = munkakör;
+            Kilépésiidő = kilépésiidő;
+            DolgozóNév = dolgozóNév;
+            Dolgozószám = dolgozószám;
+            Belépésiidő = belépésiidő;
+        }
     }
 
     public class Adat_Dolgozó_Telephely
