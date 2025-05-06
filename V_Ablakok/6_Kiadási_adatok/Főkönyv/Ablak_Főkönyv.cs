@@ -971,12 +971,12 @@ namespace Villamos
                     MessageBox.Show("Zser adatok feldolgozása során járművek túlfutottak, ezért megállításra kerül(tek)!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
-                if (Főkönyv_Határérték.T5C5_Túllépés(Adatok, Cmbtelephely.Text.Trim(), "SGP"))
-                {
-                    KézFőkönyvNap.Törlés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
-                    NapiAdatokRögzítése();
-                    MessageBox.Show("Zser adatok feldolgozása során járművek túlfutottak, ezért megállításra kerül(tek)!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                //if (Főkönyv_Határérték.T5C5_Túllépés(Adatok, Cmbtelephely.Text.Trim(), "SGP"))
+                //{
+                //    KézFőkönyvNap.Törlés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
+                //    NapiAdatokRögzítése();
+                //    MessageBox.Show("Zser adatok feldolgozása során járművek túlfutottak, ezért megállításra kerül(tek)!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //}
             }
             catch (HibásBevittAdat ex)
             {
