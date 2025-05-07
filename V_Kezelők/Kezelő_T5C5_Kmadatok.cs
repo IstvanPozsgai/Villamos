@@ -186,7 +186,7 @@ namespace Villamos.Kezelők
                     szöveg += $" KMUdátum='{Adat.KMUdátum:yyyy.MM.dd}', ";
                     szöveg += $" HaviKm={Adat.Havikm}, ";
                     szöveg += $" fudátum='{Adat.Fudátum:yyyy.MM.dd}', ";
-                    szöveg += $" Teljeskm={Adat.Teljeskm}, ";
+                    szöveg += $" Teljeskm={Adat.Teljeskm} ";
                     szöveg += $" WHERE id={Adat.ID}";
                     SzövegGy.Add(szöveg);
                 }

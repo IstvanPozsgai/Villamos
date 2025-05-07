@@ -517,20 +517,15 @@ namespace Villamos
         {
             try
             {
-
-
                 Táblatörlése();
-                if (cmbtelephely1.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kijelölve telephely.");
+                if (cmbtelephely1.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve telephely.");
 
                 string hely = $@"{Application.StartupPath}\" + cmbtelephely1.Text.Trim() + @"\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
                 string jelszó = "lilaakác";
                 Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
 
-
                 DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
-
 
                 string szöveg = $"SELECT * FROM menettábla where [bekövetkezés]>=#{hónapelsőnapja:MM-dd-yyyy} 00:00:0#";
                 szöveg += " and [bekövetkezés]<#" + hónaputolsónapja.ToString("MM-dd-yyyy") + " 23:59:0#";
@@ -641,7 +636,7 @@ namespace Villamos
                                     a++;
                                     am += rekord.Kimaradtmenet;
                                     oszlop = Tábla.ColumnCount - 5;
-                                    sor = rekord.Bekövetkezés.Day + 2;
+                                    sor = rekord.Bekövetkezés.Day + 1;
                                     if (Tábla.Rows[sor].Cells[oszlop].Value == null || Tábla.Rows[sor].Cells[oszlop].Value.ToString().Trim() == "")
                                         Tábla.Rows[sor].Cells[oszlop].Value = 1;
                                     else
@@ -659,7 +654,7 @@ namespace Villamos
                                     b++;
                                     bm += rekord.Kimaradtmenet;
                                     oszlop = Tábla.ColumnCount - 3;
-                                    sor = rekord.Bekövetkezés.Day + 2;
+                                    sor = rekord.Bekövetkezés.Day + 1;
                                     if (Tábla.Rows[sor].Cells[oszlop].Value == null || Tábla.Rows[sor].Cells[oszlop].Value.ToString().Trim() == "")
                                         Tábla.Rows[sor].Cells[oszlop].Value = 1;
                                     else
@@ -676,7 +671,7 @@ namespace Villamos
                                 {
                                     c++;
                                     oszlop = Tábla.ColumnCount - 1;
-                                    sor = rekord.Bekövetkezés.Day + 2;
+                                    sor = rekord.Bekövetkezés.Day + 1;
                                     if (Tábla.Rows[sor].Cells[oszlop].Value == null || Tábla.Rows[sor].Cells[oszlop].Value.ToString().Trim() == "")
                                         Tábla.Rows[sor].Cells[oszlop].Value = 1;
                                     else
