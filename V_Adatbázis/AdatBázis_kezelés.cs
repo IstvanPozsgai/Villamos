@@ -36,7 +36,7 @@ namespace Villamos.Adatszerkezet
         {
             try
             {
-
+                if (File.Exists(hely)) return;       // Ha van ilyen fájl, akkor nem hozza létre ismételten
                 ADOX.Catalog cat = new ADOX.Catalog();
                 string kapcsolatiszöveg = "";
                 if (hely.Contains(".mdb"))
