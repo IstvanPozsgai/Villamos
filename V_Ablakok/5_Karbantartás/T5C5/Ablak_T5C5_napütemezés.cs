@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -1087,8 +1088,8 @@ namespace Villamos
                 }
 
                 // képet beilleszt
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\képek\Villamos.png";
-                MyE.Kép_beillesztés(munkalap, "A1", hely, 40, 30, 200, 450);
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_T5C5.png";
+                if (File.Exists(hely)) MyE.Kép_beillesztés(munkalap, "A1", hely, 40, 30, 200, 450);
                 Holtart.Lép();
                 int sor = 8;
                 MyE.Kiir("Feladatterv", "b" + sor.ToString());
