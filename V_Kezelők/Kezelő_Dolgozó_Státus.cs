@@ -4,6 +4,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -13,19 +14,20 @@ namespace Villamos.Kezelők
     public class Kezelő_Dolgozó_Státus
     {
         readonly string jelszó = "forgalmiutasítás";
+        readonly string táblanév = "státustábla";
         string hely;
 
         private void FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Segéd\Státus.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Státus(hely.KönyvSzerk());
+            if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Dolgozói_Státus(hely);
         }
-
 
         public List<Adat_Dolgozó_Státus> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM státustábla ORDER BY ID desc";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY ID desc";
             List<Adat_Dolgozó_Státus> Adatok = new List<Adat_Dolgozó_Státus>();
             Adat_Dolgozó_Státus Adat;
 
@@ -59,7 +61,8 @@ namespace Villamos.Kezelők
                                           rekord["belépésidátum"].ToÉrt_DaTeTime(),
                                           rekord["Státusváltozások"].ToStrTrim(),
                                           rekord["Státusváltzásoka"].ToStrTrim(),
-                                          rekord["Megjegyzés"].ToStrTrim()
+                                          rekord["Megjegyzés"].ToStrTrim(),
+                                          rekord["Előzetes"].ToÉrt_Bool()
                                           );
 
                                 Adatok.Add(Adat);
@@ -76,7 +79,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  státustábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Névbe='{Adat.Névbe}', ";
                 szöveg += $" Hrazonosítóbe ='{Adat.Hrazonosítóbe}', ";
                 szöveg += $" belépésidátum ='{Adat.Belépésidátum:yyyy.MM.dd}', ";
@@ -100,7 +103,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE státustábla  SET  ";
+                string szöveg = $"UPDATE {táblanév} SET   ";
                 szöveg += $"Honnanjött='{Adat.Honnanjött}' ";
                 szöveg += $" WHERE id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -121,7 +124,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE státustábla  SET  ";
+                string szöveg = $"UPDATE {táblanév} SET   ";
                 szöveg += $" Státusváltozások='{Adat.Státusváltozások}'";
                 szöveg += $" WHERE id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -142,7 +145,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE státustábla  SET  ";
+                string szöveg = $"UPDATE {táblanév} SET   ";
                 szöveg += $"Státusváltzásoka='{Adat.Státusváltozoka}', ";
                 szöveg += $"Megjegyzés='{Adat.Megjegyzés}', ";
                 szöveg += $"Részmunkaidős={Adat.Részmunkaidős} ";
@@ -165,7 +168,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE státustábla  SET  ";
+                string szöveg = $"UPDATE {táblanév} SET   ";
                 szöveg += $"Megjegyzés='{Adat.Megjegyzés}', ";
                 szöveg += $"Részmunkaidős={Adat.Részmunkaidős} ";
                 szöveg += $" WHERE id={Adat.ID}";
@@ -187,7 +190,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE státustábla  SET  ";
+                string szöveg = $"UPDATE {táblanév} SET   ";
                 szöveg += $" Névbe='{Adat.Névbe}', ";
                 szöveg += $" Hrazonosítóbe ='{Adat.Hrazonosítóbe}', ";
                 szöveg += $" bérbe ={Adat.Bérbe}, ";
@@ -213,8 +216,9 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  státustábla SET ";
-                szöveg += $" kilépésdátum='{Adat.Kilépésdátum:yyyy.MM.dd}' ";
+                string szöveg = $"UPDATE {táblanév} SET  ";
+                szöveg += $" kilépésdátum='{Adat.Kilépésdátum:yyyy.MM.dd}', ";
+                szöveg += $" előzetes={Adat.Előzetes} ";
                 szöveg += $" WHERE id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -234,7 +238,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE státustábla  SET  ";
+                string szöveg = $"UPDATE {táblanév} SET   ";
                 szöveg += $"kilépésoka='{Adat.Kilépésoka}' ";
                 szöveg += $" WHERE id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -255,7 +259,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE státustábla  SET  ";
+                string szöveg = $"UPDATE {táblanév} SET   ";
                 szöveg += $"névki='{Adat.Névki}', ";
                 szöveg += $"Hrazonosítóki='{Adat.Hrazonosítóki}', ";
                 szöveg += $"bérki={Adat.Bérki}, ";
@@ -283,7 +287,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 Válasz = Sorszám(Telephely);
-                string szöveg = "INSERT INTO státustábla (id, Státusváltozások, telephelyki, honnanjött, Hrazonosítóbe, névbe) VALUES";
+                string szöveg = $"INSERT INTO {táblanév}  (id, Státusváltozások, telephelyki, honnanjött, Hrazonosítóbe, névbe) VALUES";
                 szöveg += $" ({Válasz},'{Adat.Státusváltozások}', '_', '_', '_', '_')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -305,8 +309,8 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 long Válasz = Sorszám(Telephely);
-                string szöveg = "INSERT INTO státustábla ";
-                szöveg += " (id, Névki, Hrazonosítóki, kilépésdátum, Bérki, telephelyki, Státusváltozások, névbe,  Hrazonosítóbe, honnanjött, belépésidátum )";
+                string szöveg = $"INSERT INTO {táblanév} ";
+                szöveg += " (id, Névki, Hrazonosítóki, kilépésdátum, Bérki, telephelyki, Státusváltozások, névbe,  Hrazonosítóbe, honnanjött, belépésidátum, előzetes )";
                 szöveg += " VALUES (";
                 szöveg += $"{Válasz}, ";
                 szöveg += $" '{Adat.Névki}', ";
@@ -318,7 +322,8 @@ namespace Villamos.Kezelők
                 szöveg += $" '{Adat.Névbe}', ";
                 szöveg += $" '{Adat.Hrazonosítóbe}', ";
                 szöveg += $" '{Adat.Honnanjött}', ";
-                szöveg += $" '{Adat.Belépésidátum:yyyy.MM.dd}')";
+                szöveg += $" '{Adat.Belépésidátum:yyyy.MM.dd}',";
+                szöveg += $" {Adat.Előzetes})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

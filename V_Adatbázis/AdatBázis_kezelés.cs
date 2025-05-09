@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.OleDb;
 using System.IO;
 
@@ -84,6 +85,42 @@ namespace Villamos.Adatszerkezet
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
             }
+        }
+
+        /// <summary>
+        /// Leellenőrzi, hogy létezik-e a tábla az adatbázisban.
+        /// </summary>
+        /// <param name="hely"></param>
+        /// <param name="jelszó"></param>
+        /// <param name="táblanév"></param>
+        /// <returns></returns>
+        public static bool TáblaEllenőrzés(string hely, string jelszó, string táblanév)
+        {
+            bool válasz = false;
+            string kapcsolatiszöveg;
+            if (hely.Contains(".mdb"))
+                kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{hely}'; Jet Oledb:Database Password={jelszó};";
+            else
+                kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{hely}'; Jet OLEDB:Database Password ={jelszó};";
+
+            using (OleDbConnection connection = new OleDbConnection(kapcsolatiszöveg))
+            {
+                connection.Open();
+                DataTable schemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+                foreach (DataRow row in schemaTable.Rows)
+                {
+                    string tábla = row["TABLE_NAME"].ToString();
+                    if (row["TABLE_NAME"].ToString() == táblanév)
+                    {
+                        válasz = true;
+                        break;
+                    }
+
+                }
+
+            }
+            return válasz;
         }
     }
 }

@@ -301,7 +301,7 @@ namespace Villamos
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
                 Tábla.Visible = false;
-                Tábla.ColumnCount = 17;
+                Tábla.ColumnCount = 18;
                 Tábla.RowCount = 0;
                 // ' fejléc elkészítése
                 Tábla.Columns[0].HeaderText = "Sorszám";
@@ -338,6 +338,8 @@ namespace Villamos
                 Tábla.Columns[15].Width = 250;
                 Tábla.Columns[16].HeaderText = "RészMunkaidős";
                 Tábla.Columns[16].Width = 150;
+                Tábla.Columns[17].HeaderText = "Előzetes";
+                Tábla.Columns[17].Width = 100;
 
                 foreach (Adat_Dolgozó_Státus rekord in Adatok)
                 {
@@ -359,10 +361,8 @@ namespace Villamos
                     Tábla.Rows[i].Cells[13].Value = rekord.Státusváltozások;
                     Tábla.Rows[i].Cells[14].Value = rekord.Státusváltozoka.Trim();
                     Tábla.Rows[i].Cells[15].Value = rekord.Megjegyzés.Trim();
-                    if (rekord.Részmunkaidős == -1)
-                        Tábla.Rows[i].Cells[16].Value = "Részmunkaidős";
-                    else
-                        Tábla.Rows[i].Cells[16].Value = "";
+                    Tábla.Rows[i].Cells[16].Value = rekord.Részmunkaidős == -1 ? "Részmunkaidős" : "";
+                    Tábla.Rows[i].Cells[17].Value = rekord.Előzetes ? "Igen" : "";
                 }
                 Tábla.Visible = true;
                 Tábla.Refresh();
@@ -695,7 +695,8 @@ namespace Villamos
                                                                        "",
                                                                        "",
                                                                        new DateTime(1900, 1, 1),
-                                                                       Státusváltozások.Text);
+                                                                       Státusváltozások.Text,
+                                                                       false);
                     Kéz_Státus.Módosít_Státus(Cmbtelephely.Text.Trim(), ADAT);
                 }
                 Kiirjaid(sorszám);
@@ -786,7 +787,8 @@ namespace Villamos
                                                                    "_",
                                                                    "_",
                                                                    new DateTime(1900, 1, 1),
-                                                                   "Státus létrehozása"
+                                                                   "Státus létrehozása",
+                                                                   false
                                                                    );
                 long utolsó = Kéz_Státus.Rögzítés_Új(Cmbtelephely.Text.Trim(), ADAT);
                 Id.Text = utolsó.ToString();
@@ -830,7 +832,7 @@ namespace Villamos
                                                    "",
                                                    "",
                                                    new DateTime(1900, 1, 1),
-                                                   "Státus megszüntetése");
+                                                   "Státus megszüntetése", false);
                         Kéz_Státus.Módosít_Státus(Cmbtelephely.Text.Trim(), ADAT);
                         MessageBox.Show("A státus megszüntetésre került.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }

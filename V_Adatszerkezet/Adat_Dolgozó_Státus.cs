@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Villamos.Villamos_Adatszerkezet
 {
@@ -25,8 +21,11 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Státusváltozások { get; private set; }
         public string Státusváltozoka { get; private set; }
         public string Megjegyzés { get; private set; }
+        public bool Előzetes { get; private set; }
 
-        public Adat_Dolgozó_Státus(long iD, string névki, decimal részmunkaidős, string hrazonosítóki, double bérki, string telephelyki, string kilépésoka, DateTime kilépésdátum, string névbe, string hrazonosítóbe, double bérbe, string honnanjött, string telephelybe, DateTime belépésidátum, string státusváltozások, string státusváltozoka, string megjegyzés)
+        public Adat_Dolgozó_Státus(long iD, string névki, decimal részmunkaidős, string hrazonosítóki, double bérki, string telephelyki, string kilépésoka, DateTime kilépésdátum,
+            string névbe, string hrazonosítóbe, double bérbe, string honnanjött, string telephelybe, DateTime belépésidátum, string státusváltozások, string státusváltozoka,
+            string megjegyzés, bool előzetes)
         {
             ID = iD;
             Névki = névki;
@@ -45,6 +44,7 @@ namespace Villamos.Villamos_Adatszerkezet
             Státusváltozások = státusváltozások;
             Státusváltozoka = státusváltozoka;
             Megjegyzés = megjegyzés;
+            Előzetes = előzetes;
         }
 
         public Adat_Dolgozó_Státus(long iD, string névbe, string hrazonosítóbe, double bérbe, DateTime belépésidátum)
@@ -57,7 +57,7 @@ namespace Villamos.Villamos_Adatszerkezet
         }
 
         public Adat_Dolgozó_Státus(long iD, string névki, string hrazonosítóki, double bérki, string telephelyki, DateTime kilépésdátum, string névbe, string hrazonosítóbe,
-            string honnanjött, DateTime belépésidátum, string státusváltozások)
+            string honnanjött, DateTime belépésidátum, string státusváltozások, bool előzetes)
         {
             ID = iD;
             Névki = névki;
@@ -70,12 +70,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Honnanjött = honnanjött;
             Belépésidátum = belépésidátum;
             Státusváltozások = státusváltozások;
+            Előzetes = előzetes;
         }
 
-        public Adat_Dolgozó_Státus(long iD, DateTime kilépésdátum)
+        public Adat_Dolgozó_Státus(long iD, DateTime kilépésdátum, bool előzetes)
         {
             ID = iD;
             Kilépésdátum = kilépésdátum;
+            Előzetes = előzetes;
         }
 
         public Adat_Dolgozó_Státus(long iD, string kilépésoka)
@@ -84,7 +86,7 @@ namespace Villamos.Villamos_Adatszerkezet
             Kilépésoka = kilépésoka;
         }
 
-        public Adat_Dolgozó_Státus(long iD, string névki, string hrazonosítóki, double bérki, string telephelyki, string kilépésoka, DateTime kilépésdátum) 
+        public Adat_Dolgozó_Státus(long iD, string névki, string hrazonosítóki, double bérki, string telephelyki, string kilépésoka, DateTime kilépésdátum)
         {
             ID = iD;
             Névki = névki;
@@ -95,7 +97,7 @@ namespace Villamos.Villamos_Adatszerkezet
             Kilépésdátum = kilépésdátum;
         }
 
-        public Adat_Dolgozó_Státus(long iD,double bérbe, DateTime belépésidátum, string névbe, string hrazonosítóbe,  string honnanjött, string telephelybe)
+        public Adat_Dolgozó_Státus(long iD, double bérbe, DateTime belépésidátum, string névbe, string hrazonosítóbe, string honnanjött, string telephelybe)
         {
             ID = iD;
             Névbe = névbe;
@@ -114,5 +116,5 @@ namespace Villamos.Villamos_Adatszerkezet
             Megjegyzés = megjegyzés;
         }
 
-     }
- }
+    }
+}

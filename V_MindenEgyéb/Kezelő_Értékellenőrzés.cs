@@ -8,7 +8,7 @@ public partial class Függvénygyűjtemény
     public static DateTime Érték_DATETIME(string rekord) => DateTime.TryParse(rekord, out DateTime válasz) ? válasz : new DateTime(1900, 1, 1);
     public static bool Érték_BOOL(object rekord) => bool.TryParse(rekord?.ToString(), out bool válasz) && válasz;
 
- 
+
 }
 
 public static class FVGyűjtemény
@@ -18,11 +18,13 @@ public static class FVGyűjtemény
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static string   ToStrTrim(this object str)
+    public static string ToStrTrim(this object value)
     {
-        if(str== null) str= "";
-           return  str.ToString().Trim();
+        if (value == DBNull.Value || value == null)
+            return string.Empty; // Visszaad egy üres stringet, ha az érték DBNull vagy null
+        return value.ToString().Trim(); // Egyébként visszaadja a trimmelt stringet
     }
+
 
     /// <summary>
     /// Objectumot alakít át INT abban az esetben, ha nem jó értéket kap 0-val tér vissza
@@ -31,7 +33,7 @@ public static class FVGyűjtemény
     /// <returns></returns>
     public static int ToÉrt_Int(this object str)
     {
-         if (!int.TryParse(str.ToStrTrim (), out int válasz))
+        if (!int.TryParse(str.ToStrTrim(), out int válasz))
             válasz = 0;
         return válasz;
     }
@@ -40,7 +42,7 @@ public static class FVGyűjtemény
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static int ToÉrt_Int(this string  str)
+    public static int ToÉrt_Int(this string str)
     {
         if (!int.TryParse(str, out int válasz))
             válasz = 0;
@@ -53,7 +55,7 @@ public static class FVGyűjtemény
     /// <returns></returns>
     public static long ToÉrt_Long(this object str)
     {
-        if (!long .TryParse(str.ToStrTrim(), out long válasz))
+        if (!long.TryParse(str.ToStrTrim(), out long válasz))
             válasz = 0;
         return válasz;
     }
@@ -62,7 +64,7 @@ public static class FVGyűjtemény
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static long ToÉrt_Long(this string  str)
+    public static long ToÉrt_Long(this string str)
     {
         if (!long.TryParse(str, out long válasz))
             válasz = 0;
@@ -98,7 +100,7 @@ public static class FVGyűjtemény
     public static DateTime ToÉrt_DaTeTime(this object str)
     {
         if (!DateTime.TryParse(str.ToStrTrim(), out DateTime válasz))
-            válasz = new DateTime(1900,1,1);
+            válasz = new DateTime(1900, 1, 1);
         return válasz;
     }
     /// <summary>
@@ -120,7 +122,7 @@ public static class FVGyűjtemény
     public static bool ToÉrt_Bool(this object str)
     {
         if (!bool.TryParse(str.ToStrTrim(), out bool válasz))
-            válasz = false ;
+            válasz = false;
         return válasz;
     }
     /// <summary>
@@ -131,7 +133,7 @@ public static class FVGyűjtemény
     public static bool ToÉrt_Bool(this string str)
     {
         if (!bool.TryParse(str, out bool válasz))
-            válasz = false ;
+            válasz = false;
         return válasz;
     }
 

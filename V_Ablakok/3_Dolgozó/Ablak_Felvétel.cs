@@ -601,6 +601,11 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Rögzítjük a dolgozó kilépését
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Csoportmódosítás_Click(object sender, EventArgs e)
         {
             try
@@ -608,6 +613,8 @@ namespace Villamos
                 if (KilépDolgozószám.Text.Trim() == "") throw new HibásBevittAdat("A dolgozó számát meg kell adni.");
                 if (Kilépésiidő.Value == new DateTime(1900, 1, 1)) throw new HibásBevittAdat("A dátum beállítás hibás!");
                 if (Kilépésiidő.Value <= DateTime.Today && Label6.Text == "Előzetes Tervezett Kiléptetés") throw new HibásBevittAdat("A dátum beállítás hibás! Jövőbeli dátumot lehet csak rögzíteni.");
+                bool előzetes = false;
+                if (Label6.Text == "Előzetes Tervezett Kiléptetés") előzetes = true;
 
                 // leellenőrizzük, hogy van-e bér adat
                 if (!double.TryParse(Bér.Text.Replace(".", ","), out double DolgBér)) DolgBér = 0;
@@ -619,10 +626,10 @@ namespace Villamos
 
                 AdatokStátus = KézStátus.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                // ha jövőbeli a kilépés akkor nem rögzítünk újat
+                // ha előzetesen kilépett akkor nem rögzítünk újat
                 Adat_Dolgozó_Státus AdatStátus = (from a in AdatokStátus
                                                   where a.Hrazonosítóki == KilépDolgozószám.Text.Trim()
-                                                  && a.Kilépésdátum >= Kilépésiidő.Value
+                                                  && a.Előzetes
                                                   select a).FirstOrDefault();
 
                 int melyik = 1;
@@ -642,14 +649,16 @@ namespace Villamos
                                                                          "_",
                                                                          "_",
                                                                          new DateTime(1900, 1, 1),
-                                                                         "Személy csere");
+                                                                         "Személy csere",
+                                                                         előzetes);
                     KézStátus.Rögzítés_Alap(Cmbtelephely.Text.Trim(), ADATBE);
                 }
                 else
                 {
                     // módosíthatjuk a dátumot
                     Adat_Dolgozó_Státus ADATBE = new Adat_Dolgozó_Státus(melyik,
-                                                                         Kilépésiidő.Value);
+                                                                         Kilépésiidő.Value,
+                                                                         false);
                     KézStátus.Módosít_Kilép(Cmbtelephely.Text.Trim(), ADATBE);
                 }
 
