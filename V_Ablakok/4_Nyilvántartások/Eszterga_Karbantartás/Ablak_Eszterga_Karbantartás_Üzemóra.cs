@@ -36,16 +36,29 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Alap
+
+        /// <summary>
+        /// Inicializálja az Eszterga üzemóra nyilvántartó ablak komponenseit.
+        /// </summary>
         public Ablak_Eszterga_Karbantartás_Üzemóra()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Az ablak betöltésekor feltölti az üzemóra adatokat, beállítja a jogosultságokat,
+        /// és regisztrálja az eseményt a cellák formázásához.
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_Üzemóra_Load(object sender, EventArgs e)
         {
             TáblaListázás();
             Jogosultságkiosztás();
             Tábla.CellFormatting += Tábla_CellFormatting;
         }
+
+        /// <summary>
+        /// Jogosultság alapján engedélyezi vagy tiltja a felhasználó számára a műveletek (új, módosít, Excel export) elérhetőségét.
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             try
@@ -77,6 +90,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Lista
+
+        /// <summary>
+        /// Feltölti az üzemóra rekordokat a táblázatba, beállítja az oszlopokat és frissíti a megjelenést.
+        /// Csak formázott, olvasható adatokat jelenít meg.
+        /// </summary>
         private void TáblaListázás()
         {
             try
@@ -118,6 +136,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Beállítja az oszlopok szélességét a táblázatban az átlátható megjelenítés érdekében.
+        /// </summary>
         private void OszlopSzélesség()
         {
             Tábla.Columns["ID"].Width = 50;
@@ -125,6 +147,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             Tábla.Columns["Dátum"].Width = 110;
             Tábla.Columns["Státusz"].Width = 100;
         }
+
+        /// <summary>
+        /// A törölt sorokat piros háttérrel és áthúzott betűstílussal jeleníti meg.
+        /// Minden más sor fehér háttérrel és normál stílussal formázódik.
+        /// </summary>
         private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (Tábla.Columns[e.ColumnIndex].Name == "Státusz" && e.Value is string státusz)
@@ -144,6 +171,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 }
             }
         }
+
+        /// <summary>
+        /// Sor kijelölésekor betölti annak adatait a szerkesztőmezőkbe (üzemóra, dátum, státusz).
+        /// </summary>
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -169,6 +200,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Metodusok, Gombok
+
+        /// <summary>
+        /// Előkészíti az űrlapot egy új üzemóra adat rögzítéséhez: törli a mezők értékeit, beállítja a mai dátumot.
+        /// </summary>
         private void Btn_ÚjFelvétel_Click(object sender, EventArgs e)
         {
             Tábla.ClearSelection();
@@ -177,6 +212,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             DtmPckrDátum.Value = MaiDatum;
             ChckBxStátus.Checked = false;
         }
+
+        /// <summary>
+        /// A kijelölt sor adatait módosítja vagy új rekordot hoz létre, ha nincs kiválasztott sor.
+        /// Előtte érvényesíti az adatokat, majd a változásokat adatbázisba menti, és frissíti a táblát.
+        /// </summary>
         private void Btn_Módosít_Click(object sender, EventArgs e)
         {
             try
@@ -208,6 +248,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Az üzemóra táblázat tartalmát Excel fájlba exportálja és megnyitja.
+        /// A fájl nevét automatikusan generálja, a felhasználó kiválaszthatja a mentési helyet.
+        /// </summary>
         private void Btn_Excel_Click(object sender, EventArgs e)
         {
             if (Tábla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
@@ -230,6 +275,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
             MyE.Megnyitás($"{fájlexc}.xlsx");
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy a megadott dátum nem jövőbeli-e.
+        /// Ha igen, figyelmeztetést jelenít meg és megszakítja a módosítást.
+        /// </summary>
         private bool DátumEllenőrzés(DateTime UjDatum)
         {
             if (UjDatum > MaiDatum)
@@ -239,6 +289,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             return true;
         }
+
+        /// <summary>
+        /// Új üzemóra rekordot hoz létre, ha az adott dátumhoz még nem létezik aktív bejegyzés,
+        /// és az üzemóra értéke megfelelő a környező rekordokhoz képest.
+        /// </summary>
         private bool ÚjRekordHozzáadása(DateTime UjDatum, long UjUzemora, bool UjStatus)
         {
             if (AdatokÜzemóra.Any(a => a.Dátum.Date == UjDatum && !a.Státus))
@@ -274,6 +329,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             MessageBox.Show("Új rekord sikeresen létrehozva.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return true;
         }
+
+        /// <summary>
+        /// Módosítja a kiválasztott üzemóra rekordot.  
+        /// Érvényesítés után elvégzi a törlést és újrarögzítést, ha szükséges.
+        /// Az érintett karbantartási műveleteket is frissíti, ha az üzemóra vagy dátum változott.
+        /// </summary>
         private bool MeglévőRekordMódosítása(DateTime UjDatum, long UjUzemora, bool UjStatus)
         {
             DataGridViewRow KivalasztottSor = Tábla.SelectedRows[0];
@@ -318,6 +379,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             Eszterga_Változás?.Invoke();
             return true;
         }
+
+        /// <summary>
+        /// Frissíti a karbantartási műveletek utolsó üzemóra és dátum mezőit,
+        /// ha az üzemóra vagy dátum változott.  
+        /// Meghívja a módosító metódust minden érintett műveletre.
+        /// </summary>
         private void Frissít_MűveletTáblázat(DateTime EredetiDatum, DateTime UjDatum, long EredetiUzemora, long UjUzemora)
         {
             AdatokMűvelet = Funkció.Eszterga_KarbantartasFeltölt();
@@ -337,6 +404,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             else
                 return;
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy az adott napon létezik-e másik aktív rekord,  
+        /// illetve történt-e valós adatváltozás a módosításhoz képest.
+        /// </summary>
         private bool TáblaEllenőrzés(int AktivID, long UjUzemora, DateTime UjDatum, bool UjStatus)
         {
             try
@@ -375,6 +447,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 return false;
             }
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy az új üzemóra érték pozitív szám-e,  
+        /// és hogy logikusan illeszkedik-e a környező (időben előtte és utána lévő) rekordok közé.
+        /// </summary>
         private bool UzemoraSzamEllenorzes(long UjUzemora, DateTime UjDatum)
         {
             if (UjUzemora <= 0)
@@ -406,6 +483,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
             return true;
         }
+
+        /// <summary>
+        /// Törli a kiválasztott, mai napra vonatkozó üzemóra rekordot,  
+        /// majd új adatot kér be a felhasználótól a segédablakban.
+        /// Ha a felhasználó megszakítja a rögzítést, bezárja az összes kapcsolódó ablakot.
+        /// </summary>
         private void UtolsoUzemoraTorles(int AktivID)
         {
             Adat_Eszterga_Üzemóra ADAT = new Adat_Eszterga_Üzemóra(AktivID);
@@ -419,6 +502,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     EsztergaAblakokBezárása();
             }
         }
+
+        /// <summary>
+        /// Bezárja az összes megnyitott esztergához kapcsolódó ablakot a programból,  
+        /// hogy biztosítsa a következő adatbevitel tiszta környezetét.
+        /// </summary>
         private void EsztergaAblakokBezárása()
         {
             foreach (Form NyitottAblak in Application.OpenForms.Cast<Form>().ToArray())

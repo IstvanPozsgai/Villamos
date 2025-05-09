@@ -40,10 +40,21 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         #endregion
 
         #region Alap
+
+        /// <summary>
+        /// Inicializálja az Eszterga karbantartás ablak komponenseit.
+        /// Konstruktor, amely az ablak felépítését indítja el a komponens inicializálással.
+        /// </summary>
         public Ablak_Eszterga_Karbantartás()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Az ablak betöltésekor előkészíti az adatbázis fájlokat, szükség esetén létrehozza azokat.  
+        /// Betölti az aktuális üzemóra adatokat, és ha nincs rögzítve az adott napra, a felhasználótól kér be értéket.  
+        /// Elvégzi a jogosultságok beállítását, betölti a táblázatokat, és kiszámítja az átlag üzemórát az elmúlt 30 napra.
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_Load(object sender, EventArgs e)
         {
             long Üzemóra = 0;
@@ -96,6 +107,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             AdatokMűvelet = Funkció.Eszterga_KarbantartasFeltölt();
             Tábla.ClearSelection();
         }
+
+        /// <summary>
+        /// Beállítja a felhasználó jogosultságait a gombok (rögzítés, módosítás) elérhetőségéhez.  
+        /// A jogosultságokat azonosító alapján kérdezi le, és engedélyezi vagy tiltja az adott funkciókat.  
+        /// Hiba esetén figyelmeztető üzenetet jelenít meg, vagy naplózza a kivételt.
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             try
@@ -130,6 +147,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         #region Ablakok
         Ablak_Eszterga_Karbantartás_Módosít Új_ablak_EsztergaMódosít;
 
+        /// <summary>
+        /// Megnyitja az Eszterga karbantartás módosító ablakot, ha az még nincs megnyitva.
+        /// Ha már meg van nyitva, akkor előtérbe hozza és maximalizálja.
+        /// Az ablak bezárásakor frissíti a fő ablak tábláját, ha történt változás.
+        /// </summary>
         private void Btn_Módosítás_Click(object sender, EventArgs e)
         {
             if (Új_ablak_EsztergaMódosít == null)
@@ -146,20 +168,31 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             }
         }
 
+        /// <summary>
+        /// A módosító ablak bezárásakor törli a példány hivatkozását,
+        /// így lehetővé teszi az újranyitást.
+        /// </summary>
         private void Új_ablak_EsztergaMódosít_Closed(object sender, FormClosedEventArgs e)
         {
             Új_ablak_EsztergaMódosít = null;
         }
 
+        /// <summary>
+        /// A fő ablak bezárásakor automatikusan bezárja a megnyitott módosító ablakot is,
+        /// ha az még fut.
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_ablak_EsztergaMódosít?.Close();
         }
         #endregion
 
-
-
         #region Egyseg
+
+        /// <summary>
+        /// Az esztergagép karbantartási egységeit leíró felsorolás.
+        /// Meghatározza, hogy a karbantartási művelet milyen típusú ütemezés szerint történik.
+        /// </summary>
         public enum EsztergaEgyseg
         {
             Dátum = 1,
@@ -169,6 +202,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         #endregion
 
         #region Tábla Listázások && Naplózás
+
+        /// <summary>
+        /// Betölti az aktív (nem törölt) karbantartási műveletek listáját a táblázatba.
+        /// Számolja és beállítja az esedékességi dátumokat, üzemóra becsléseket és a megjelenítést színezéssel.
+        /// Az oszlopokat lezárja szerkesztés ellen és alaphelyzetbe állítja a táblázatot.
+        /// </summary>
         private void TáblaListázás()
         {
             AktívTáblaTípus = "Muvelet";
@@ -231,6 +270,13 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             Tábla.Visible = true;
             Tábla.ClearSelection();
         }
+
+        /// <summary>
+        /// Előrejelzést készít a jövőbeli karbantartási műveletekről az üzemóra és a dátum alapján.
+        /// Az algoritmus iterálva számolja ki az esedékességi dátumokat a kiválasztott tervnapig,
+        /// és feltölti a táblát az előre esedékes műveletekkel.
+        /// A táblázat tartalmát rendezve jeleníti meg.
+        /// </summary>
         private void EloreTervezesListazasa()
         {
             AktívTáblaTípus = "EloreTervezes";
@@ -372,6 +418,13 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             Tábla.Visible = true;
             Tábla.ClearSelection();
         }
+
+        /// <summary>
+        /// Betölti a karbantartási műveletek naplózott adatait a táblázatba.
+        /// A naplóból származó adatok (művelet, dátum, üzemóra, rögzítő stb.) megjelennek,
+        /// rendezve dátum és azonosító szerint.
+        /// A táblázat csak olvasható, az oszlopok méreteit előre beállítja.
+        /// </summary>
         private void TáblaNaplóListázás()
         {
             AktívTáblaTípus = "Napló";
@@ -431,6 +484,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             Tábla.Visible = true;
             Tábla.ClearSelection();
         }
+
+        /// <summary>
+        /// Beállítja a fő karbantartási tábla oszlopainak szélességét fix értékekkel.
+        /// A cél a jól áttekinthető, egyenletes elrendezés biztosítása.
+        /// </summary>
         private void OszlopSzélesség()
         {
             Tábla.Columns["Sorszám"].Width = 97;
@@ -445,12 +503,23 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             Tábla.Columns["Becsült Üzemóra"].Width = 140;
             Tábla.Columns["Megjegyzés"].Width = 254;
         }
+
+        /// <summary>
+        /// Beállítja a fő karbantartási tábla oszlopainak szélességét fix értékekkel.
+        /// A cél a jól áttekinthető, egyenletes elrendezés biztosítása.
+        /// </summary>
         private void TáblaÜrítés()
         {
             Tábla.DataSource = null;
             Tábla.Rows.Clear();
             Tábla.Columns.Clear();
         }
+
+        /// <summary>
+        /// Egy adott táblázatsor alapján létrehoz egy naplórekordot a karbantartási művelethez.
+        /// Beállítja a szükséges mezőket, mint a dátum, üzemóra, megjegyzés és a rögzítő neve.
+        /// A létrejött naplóbejegyzést menti adatbázisba. Hiba esetén figyelmeztetést vagy naplózást végez.
+        /// </summary>
         private void Naplózás(DataGridViewRow Sor, DateTime UtolsóDátum, long UtolsóÜzemóra)
         {
             try
@@ -488,6 +557,13 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         #endregion
 
         #region Szinezes
+
+        /// <summary>
+        /// A karbantartási táblázat minden sorához színt rendel a művelet esedékessége alapján.
+        /// Ha a sorhoz tartozó művelet adatai alapján közeledik vagy lejárt az esedékesség,
+        /// a háttérszín piros (lejárt), sárga (közeledik), vagy zöld (rendben) lesz beállítva.
+        /// A napló táblázat esetén nem történik színezés.
+        /// </summary>
         private void SorSzinezes()
         {
             foreach (DataGridViewRow row in Tábla.Rows)
@@ -508,6 +584,13 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                     row.DefaultCellStyle.BackColor = Color.White;
             }
         }
+
+        /// <summary>
+        /// Meghatározza egy karbantartási rekord színét az esedékesség állapota alapján, a megadott tervdátumhoz viszonyítva.
+        /// A szín az idő- vagy üzemóra-alapú határidőkhöz igazodik:
+        /// piros (lejárt), sárga (figyelmeztető küszöb közelében), zöld (még nem esedékes).
+        /// Bekövetkezés típusnál bármely feltétel teljesülése esedékességnek számít.
+        /// </summary>
         private Color Kiszínezés(Adat_Eszterga_Műveletek rekord, DateTime TervDatum)
         {
             int Egyseg = rekord.Egység;
@@ -554,6 +637,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         #endregion
 
         #region Szamolasok
+
+        /// <summary>
+        /// Kiszámítja az átlagos napi üzemóra-növekedést a megadott dátumig bezárólag.
+        /// Legalább két, nem törölt adat szükséges a számításhoz.  
+        /// Az eredményt a napokra eső üzemóra-különbségek átlagaként adja vissza.
+        /// </summary>
         private double AtlagUzemoraNovekedesKiszamitasa(DateTime tervDatum)
         {
             List<Adat_Eszterga_Üzemóra> rekord = AdatokÜzemóra
@@ -573,6 +662,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             }
             return NapiAtlagaosUzemNovekedes / (rekord.Count - 1);
         }
+
+        /// <summary>
+        /// Meghatározza, hogy egy művelet következő esedékessége melyik dátumra várható, 
+        /// figyelembe véve mind a dátum-, mind az üzemóra-alapú ütemezést.  
+        /// A két lehetséges esedékességi dátum közül a korábbit adja vissza.
+        /// </summary>
         private DateTime DatumEsedekesegSzamitasa(DateTime UtolsoDatum, Adat_Eszterga_Műveletek rekord, Adat_Eszterga_Üzemóra uzemoraRekord)
         {
             DateTime? EsedekesDatumNap = null;
@@ -606,6 +701,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
             return UtolsoDatum;
         }
+
+        /// <summary>
+        /// Becsült üzemóra értéket számol a megadott jövőbeli dátumhoz, 
+        /// az eddigi rögzített üzemóra növekedés átlaga alapján.  
+        /// Ha nincs elegendő adat, 0-t ad vissza.
+        /// </summary>
         private long BecsültÜzemóra(DateTime ElőDátum)
         {
             if (AdatokÜzemóra == null || AdatokÜzemóra.Count < 2)
@@ -637,6 +738,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
             return UtolsóRekord.Üzemóra + (long)(NapiNövekedés * NapokElőDátumhoz);
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy a művelet módosítása aktuális napon történik-e.  
+        /// Ha nem, figyelmeztető üzenetet jelenít meg, és false értékkel tér vissza.
+        /// </summary>
         private bool DátumEllenőrzés(DateTime MaiDatum, DateTime TervDatum)
         {
             if (MaiDatum != TervDatum)
@@ -646,6 +752,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             }
             return true;
         }
+
+        /// <summary>
+        /// Kiszámítja az elmúlt X nap üzemóra-növekedésének átlagát, és megjeleníti az eredményt a felhasználó számára.
+        /// Alapértelmezett időtartam 30 nap.  
+        /// Ha nincs elegendő adat, figyelmeztető üzenet jelenik meg.
+        /// </summary>
         private void ÁtlagÜzemóraFrissítés(int Napok = 30)
         {
             try
@@ -692,6 +804,10 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         #endregion
 
         #region Gombok && Muveletek
+
+        /// <summary>
+        /// Megnyitja a programhoz tartozó HTML súgófájlt, ha az elérhető.
+        /// </summary>
         private void Btn_Súgó_Click(object sender, EventArgs e)
         {
             try
@@ -709,6 +825,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Visszaállítja az alapértelmezett értékeket (átlag nap, napi, üzemóra), 
+        /// mai napra állítja a tervdátumot, és újratölti az adatokat a táblázatba.
+        /// </summary>
         private void Btn_Frissít_Click(object sender, EventArgs e)
         {
             TxtBxNapiUzemoraAtlag.Text = "30";
@@ -719,6 +840,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             TáblaListázás();
             ÁtlagÜzemóraFrissítés();
         }
+
+        /// <summary>
+        /// A kiválasztott sor(ok) végrehajtott műveletként történő rögzítése a mai dátummal és aktuális üzemórával.
+        /// Lezárja a műveletet, naplózza az adatokat, és frissíti a táblázatot.  
+        /// Ha a sor nem esedékes vagy nincs kijelölés, figyelmeztetést ad.
+        /// </summary>
         private void Btn_Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -770,6 +897,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// A táblázat tartalmát Excel fájlba exportálja, majd automatikusan megnyitja a fájlt.
+        /// A felhasználó kiválaszthatja a fájl mentési helyét és nevét.
+        /// </summary>
         private void Btn_Excel_Click(object sender, EventArgs e)
         {
             try
@@ -804,6 +936,10 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Betölti a naplózott műveletek listáját a táblázatba, és elrejti a rögzítés gombot.
+        /// </summary>
         private void Bttn_Napló_Listáz_Click(object sender, EventArgs e)
         {
             try
@@ -821,11 +957,20 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Amikor az üzemóra átlag számításához megadott napok száma megváltozik, újra kiszámítja és frissíti az értéket.
+        /// Csak pozitív egész szám esetén hajtódik végre a számítás.
+        /// </summary>
         private void TxtBxNapiUzemoraAtlag_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(TxtBxNapiUzemoraAtlag.Text, out int napok) && napok > 0)
                 ÁtlagÜzemóraFrissítés(napok);
         }
+
+        /// <summary>
+        /// A napi határérték mező módosításakor újratölti a táblázatot – aktuális vagy jövőbeni terv szerint.
+        /// </summary>
         private void TxtBxNapi_TextChanged(object sender, EventArgs e)
         {
             if (MaiDatum == DtmPckrElőTerv.Value)
@@ -833,6 +978,10 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             else
                 EloreTervezesListazasa();
         }
+
+        /// <summary>
+        /// Az üzemóra határérték mező módosításakor újratölti a táblázatot – aktuális vagy jövőbeni terv szerint.
+        /// </summary>
         private void TxtBxÜzem_TextChanged(object sender, EventArgs e)
         {
             if (MaiDatum == DtmPckrElőTerv.Value)
@@ -840,6 +989,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             else
                 EloreTervezesListazasa();
         }
+
+        /// <summary>
+        /// A terv dátum megváltozásakor betölti az aktuális vagy előre tervezett műveleti listát.
+        /// Ha a dátum a mai napnál korábbi, figyelmeztet és visszaállítja a mai dátumra.
+        /// </summary>
         private void DtmPckrElőTerv_ValueChanged(object sender, EventArgs e)
         {
             if (DtmPckrElőTerv.Value >= MaiDatum)
@@ -856,6 +1010,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 DtmPckrElőTerv.Value = MaiDatum;
             }
         }
+
+        /// <summary>
+        /// A megjegyzés cella szerkesztésének lezárásakor ellenőrzi, történt-e változás.
+        /// Ha új megjegyzés került be, elmenti azt, ha törlés történt, törli az értéket.  
+        /// Jogosultság és dátum ellenőrzéssel biztosítja a helyes rögzítést.
+        /// </summary>
         private void Tábla_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -908,11 +1068,19 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// A táblázat szűrési feltételeinek módosításakor újraszínezi a sorokat az aktuális szűrés után.
+        /// </summary>
         private void Tábla_FilterStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.FilterEventArgs e)
         {
             Tábla.DataBindingComplete += (s, ev) => SorSzinezes();
             Tábla.Refresh();
         }
+
+        /// <summary>
+        /// A táblázat rendezésének módosításakor újraszínezi a sorokat az aktuális állapot alapján.
+        /// </summary>
         private void Tábla_SortStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.SortEventArgs e)
         {
             Tábla.DataBindingComplete += (s, ev) => SorSzinezes();

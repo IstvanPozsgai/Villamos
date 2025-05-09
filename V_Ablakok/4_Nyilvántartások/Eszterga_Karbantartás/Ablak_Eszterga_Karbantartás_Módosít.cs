@@ -38,6 +38,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Alap
+        /// <summary>
+        /// Ablak inicializálása és adatok betöltése a vezérlőelemekbe
+        /// </summary>
         public Ablak_Eszterga_Karbantartás_Módosít()
         {
             InitializeComponent();
@@ -47,6 +50,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TxtBxId.Enabled = false;
             CmbxEgység.DataSource = Enum.GetValues(typeof(EsztergaEgyseg));
         }
+        /// <summary>
+        /// Az ablak betöltésekor lefutó inicializálási műveletek
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_Módosít_Load(object sender, EventArgs e)
         {
             Eszterga_Változás?.Invoke();
@@ -60,6 +66,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             EgységBeállítása();
             UzemoraKiolvasasEsBeiras(DtmPckrUtolagos.Value, TxtBxUtolagUzemora);
         }
+        /// <summary>
+        /// Jogosultságok alapján gombok láthatóságát és engedélyezettségét állítja be
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             try
@@ -177,6 +186,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Táblák Listázása
+        /// <summary>
+        /// A karbantartási műveletek adatainak betöltése és megjelenítése a TáblaMűveletbe
+        /// </summary>
         private void TáblaListázásMűvelet()
         {
             try
@@ -232,6 +244,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// A karbantartási művelet tábla oszlopszélességeit állítja be
+        /// </summary>
         private void OszlopSzélességMűvelet()
         {
             TáblaMűvelet.Columns["Sorszám"].Width = 100;
@@ -243,6 +259,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TáblaMűvelet.Columns["Utolsó Dátum"].Width = 120;
             TáblaMűvelet.Columns["Utolsó Üzemóra"].Width = 160;
         }
+
+        /// <summary>
+        /// A karbantartási műveletek naplóbejegyzései betöltése és megjelenítése a TáblaMűveletbe
+        /// </summary>
         private void TáblaNaplóListázás()
         {
             AdatTáblaNapló.Columns.Clear();
@@ -287,6 +307,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TáblaMűvelet.Visible = true;
             TáblaMűvelet.ClearSelection();
         }
+
+        /// <summary>
+        /// A naplótábla oszlopszélességeit állítja be
+        /// </summary>
         private void OszlopSzélességNapló()
         {
             TáblaNapló.Columns["Művelet Sorszáma"].Width = 110;
@@ -297,6 +321,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TáblaNapló.Columns["Rögzítő"].Width = 150;
             TáblaNapló.Columns["Rögzítés Dátuma"].Width = 105;
         }
+
+        /// <summary>
+        /// Betölti és megjeleníti az utólagos karbantartási műveleteket a TáblaMűveletben
+        /// </summary>
         private void TáblaListázásMűveletUtólag()
         {
             try
@@ -334,19 +362,36 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Az utólagos művelet TáblaMűvelet oszlopszélességeit állítja be
+        /// </summary>
         private void OszlopSzélességMűveletUtólag()
         {
             TáblaUtólagMűvelet.Columns["Sorszám"].Width = 100;
             TáblaUtólagMűvelet.Columns["Művelet"].Width = 1160;
             TáblaUtólagMűvelet.Columns["Státusz"].Width = 100;
         }
+
         #endregion
 
         #region Metodusok
+
+        /// <summary>
+        /// Ellenőrzi a törlés gomb láthatóságát a státusz checkbox alapján
+        /// </summary>
         private void TörlésEllenőrzés()
         {
             Btn_Törlés.Visible = !ChckBxStátus.Checked;
         }
+
+        /// <summary>
+        /// Ellenőrzi a megadott adatokat a felhasználói űrlapon. 
+        /// Új rekord hozzáadása esetén ellenőrzi, hogy az azonosító már létezik-e az adatbázisban, 
+        /// illetve biztosítja, hogy minden mező érvényes adatokat tartalmazzon.
+        /// </summary>
+        /// <param name="újRekord">True, ha új rekordról van szó, False, ha meglévő rekordot módosítunk.</param>
+        /// <returns>Visszatérési érték: 0, ha nincs hiba, egyébként a hiba kódja.</returns>
         private int TxtBxEllenőrzés(bool újRekord = false)
         {
             int hiba = 0;
@@ -446,6 +491,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             return hiba;
         }
+
+        /// <summary>
+        /// Az eszterga karbantartási rekordokat rendezi az ID alapján, és szükség esetén módosítja az ID értékeket,
+        /// hogy folyamatosan növekvő sorrendben legyenek.
+        /// </summary>
         private void Rendezés()
         {
             List<Adat_Eszterga_Műveletek> rekordok = Funkció.Eszterga_KarbantartasFeltölt();
@@ -470,6 +520,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 KovetkezoID++;
             }
         }
+
+        /// <summary>
+        /// Kiválasztja a kijelölt sorokat a TáblaMűveletből, és visszaadja az id-jük alapján a megfelelő rekordokat
+        /// az adatbázisból. Ha a rekord nem található, hibát dob.
+        /// </summary>
+        /// <returns>Az adatbázisból lekért, kijelölt rekordok listája.</returns>
         private List<Adat_Eszterga_Műveletek> SorKivalasztas()
         {
             List<Adat_Eszterga_Műveletek> rekordok = new List<Adat_Eszterga_Műveletek>();
@@ -492,6 +548,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             return rekordok;
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy a megadott adat megegyezik-e az adatbázisban lévővel.
+        /// Műveleti mód esetén a művelet adatait, üzemóra mód esetén pedig az üzemórát és dátumot ellenőrzi.
+        /// Ha nincs változás, false-t, ha van, true-t ad vissza.
+        /// </summary>
+        /// <param name="Muvelet">True, ha műveleti mód, false, ha üzemóra mód.</param>
+        /// <returns>True, ha történt változás, false, ha nincs.</returns>
         private bool ModositasEll(bool Muvelet = false)
         {
             if (Muvelet)
@@ -528,6 +592,15 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             return true;
         }
+
+        /// <summary>
+        /// Színezi a táblázat sorait a státusz alapján, ha a státusz "Törölt".
+        /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
+        /// Ha a státusz nem "Törölt", visszaáll a szokásos megjelenítés fehér háttérre.
+        /// </summary>
+        /// <param name="tábla">Az AdvancedDataGridView vezérlő, amely a táblázatot tartalmazza.</param>
+        /// <param name="e">A cella formázási eseménye, amely tartalmazza a cella indexét és értékét.</param>
+        /// <param name="státuszOszlop">Az oszlop neve, amely a státuszt tartalmazza.</param>
         private void TöröltTáblaSzínezés(Zuby.ADGV.AdvancedDataGridView tábla, DataGridViewCellFormattingEventArgs e, string státuszOszlop)
         {
             if (tábla.Columns[e.ColumnIndex].Name == státuszOszlop && e.Value is string státusz)
@@ -548,6 +621,17 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 }
             }
         }
+
+        /// <summary>
+        /// Keres egy üzemórát az adatbázisban a megadott feltételek alapján.
+        /// Az üzemóra keresése az 'Üzemóra', 'Dátum' és 'Bekövetkezés' egységek szerint történik.
+        /// Ha a 'Bekövetkezés' egységet választjuk, akkor a függvény null-t ad vissza.
+        /// A 'Üzemóra' és 'Dátum' esetén az adatokat az AdatokUzemora lista alapján keresük.
+        /// </summary>
+        /// <param name="uzemora">Az üzemóra értéke, amely alapján keresni szeretnénk.</param>
+        /// <param name="datum">A dátum, amely alapján keresni szeretnénk.</param>
+        /// <param name="egyseg">A keresés típusát meghatározó egység (Üzemóra, Dátum, Bekövetkezés).</param>
+        /// <returns>Az első megtalált üzemórát, ha van, különben null-t.</returns>
         private Adat_Eszterga_Üzemóra KeresÜzemóra(long uzemora, DateTime datum, EsztergaEgyseg egyseg)
         {
             if (egyseg == EsztergaEgyseg.Bekövetkezés)
@@ -559,6 +643,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             return null;
         }
+
+        /// <summary>
+        /// Az üzemórát kiolvassa az adatbázisból a megadott dátum alapján, és beírja a TextBox-ba.
+        /// Ha található üzemóra rekord, akkor az üzemóra értékét beírja a TextBox-ba, és letiltja a szerkeszthetőséget.
+        /// Ha nincs találat, akkor 0-t ír be és engedélyezi a TextBox szerkesztését.
+        /// </summary>
+        /// <param name="datum">A dátum, amelyhez az üzemórát keresni szeretnénk.</param>
+        /// <param name="txt">A TextBox, amelybe a megtalált üzemóra értéke kerül beírásra.</param>
         private void UzemoraKiolvasasEsBeiras(DateTime datum, TextBox txt)
         {
             Adat_Eszterga_Üzemóra uzemoraRekord = KeresÜzemóra(0, datum, EsztergaEgyseg.Dátum);
@@ -574,6 +666,16 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 txt.Enabled = true;
             }
         }
+
+        /// <summary>
+        /// Új üzemóra rekordot ad hozzá az adatbázishoz a megadott dátum, üzemóra érték és státusz alapján.
+        /// Az új üzemórát csak akkor rögzíti, ha az érték az előző és következő üzemóra értékek között helyezkedik el.
+        /// Ha a feltételek nem teljesülnek, akkor figyelmeztetést ad, és nem rögzíti az új üzemórát.
+        /// </summary>
+        /// <param name="UjDatum">A dátum, amelyhez az új üzemóra rekordot hozzáadjuk.</param>
+        /// <param name="UjUzemora">Az új üzemóra érték.</param>
+        /// <param name="UjStatus">Az új rekord státusza (aktív vagy törölt).</param>
+        /// <returns>Visszatérési érték: true, ha a rekord sikeresen rögzítve lett, false, ha nem.</returns>
         private bool UjUzemoraHozzaadasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
         {
             long ElozoUzemora = (from a in AdatokUzemora
@@ -600,6 +702,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             return true;
         }
+
+        /// <summary>
+        /// Az adott rekord adatait naplózza egy új adatként az Eszterga műveletek naplója táblában.
+        /// A naplózott adat tartalmazza a műveletet, a dátumot, üzemórát, megjegyzést, a rögzítő nevét és a naplózás dátumát.
+        /// </summary>
+        /// <param name="rekord">Az Eszterga műveletek rekordja, amely alapján a naplózást végezzük.</param>
         private void Naplozas(Adat_Eszterga_Műveletek rekord)
         {
             try
@@ -641,6 +749,15 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Gombok,Muveletek
+
+        /// <summary>
+        /// Ha van kijelölt rekord, akkor módosítja azt az új adatokkal, ha nem, akkor új rekordot ad hozzá.
+        /// Ellenőrzi, hogy a szükséges adatokat megfelelően kitöltötték-e, majd végrehajtja a módosítást vagy a hozzáadást.
+        /// Ha a módosítás nem történt meg, figyelmezteti a felhasználót, hogy nincs változtatás.
+        /// A sikeres művelet után frissíti a táblát, és visszajelzést ad a felhasználónak.
+        /// </summary>
+        /// <param name="sender">A gomb, amely elindítja az eseményt.</param>
+        /// <param name="e">Az esemény adatai.</param>
         private void Btn_Módosít_Click(object sender, EventArgs e)
         {
             try
@@ -704,6 +821,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Ha van kijelölt sor, és az még nincs törölve, akkor a hozzá tartozó rekordot eltávolítja az adatbázisból.
+        /// Először ellenőrzi a kijelölést és a sor állapotát (törölt-e), majd végrehajtja a törlést.
+        /// A törlés után frissíti a táblázatot, és visszajelzést ad a felhasználónak.
+        /// Hibás adatbevitel vagy rendszerhiba esetén figyelmeztetést vagy hibát jelenít meg.
+        /// </summary>
         private void Btn_Törlés_Click(object sender, EventArgs e)
         {
             try
@@ -753,6 +877,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Előkészíti az új rekord felvételéhez szükséges mezőket: új ID-t generál, kiüríti a mezőket, beállítja az alapértékeket,
+        /// és lekéri az utolsó üzemóra állását a listából.
+        /// A cél, hogy egy új bejegyzés felvételekor minden mező megfelelő kezdőértéket kapjon.
+        /// </summary>
         private void Btn_ÚjFelvétel_Click(object sender, EventArgs e)
         {
             try
@@ -783,6 +913,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// Két kijelölt rekord sorrendjének felcserélése az adatbázisban.
+        /// Ellenőrzi, hogy pontosan két sor van-e kijelölve, majd végrehajtja a cserét, frissíti a táblázatot,
+        /// és visszajelzést ad a sikeres műveletről.
+        /// Hibás kijelölés vagy rendszerhiba esetén figyelmeztetést vagy hibát jelenít meg.
+        /// </summary>
         private void Btn_Csere_Click(object sender, EventArgs e)
         {
             try
@@ -810,6 +946,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Két kijelölt sor sorrendjét felcseréli az adatbázisban úgy, hogy az egyik rekord a másik helyére kerül.
+        /// Először ellenőrzi, hogy pontosan két sor van-e kijelölve, majd a cserét végrehajtja, frissíti a listát, és visszajelzést ad a felhasználónak.
+        /// Hibás kijelölés vagy hiba esetén megfelelő figyelmeztetést vagy naplózást biztosít.
+        /// </summary>
         private void Btn_Sorrend_Click(object sender, EventArgs e)
         {
             try
@@ -839,6 +981,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// A táblázat teljes tartalmát Excel fájlba menti, ha van legalább egy sor.
+        /// A felhasználó kiválaszthatja a mentés helyét, majd a fájl automatikusan létrejön és megnyílik.
+        /// Hiba esetén megszakítja a műveletet, ha nincs sor vagy ha a mentést megszakítják.
+        /// </summary>
         private void Btn_Excel_Click(object sender, EventArgs e)
         {
             if (TáblaMűvelet.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
@@ -861,16 +1009,31 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             MyE.Megnyitás($"{fájlexc}.xlsx");
         }
+
+        /// <summary>
+        /// A táblázat formázási eseménye során beállítja a "Státusz" oszlop alapján a sorok megjelenítését (pl. törölt sorok színezése).
+        /// Csak akkor hajtódik végre, ha a forrás egy megfelelő típusú adatgrid.
+        /// </summary>
         private void TáblaMűvelet_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (sender is Zuby.ADGV.AdvancedDataGridView tábla)
                 TöröltTáblaSzínezés(tábla, e, "Státusz");
         }
+
+        /// <summary>
+        /// A táblázat sorainak formázását végzi a "Státusz" oszlop alapján.  
+        /// Ha a sor törölt, a megjelenítése módosul. Csak akkor történik meg, ha a forrás megfelelő típus.
+        /// </summary>
         private void TáblaUtólagMűvelet_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (sender is Zuby.ADGV.AdvancedDataGridView tábla)
                 TöröltTáblaSzínezés(tábla, e, "Státusz");
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy pontosan két sor van-e kijelölve a táblában.
+        /// Ha igen, akkor megjeleníti a csere- és sorrendgombokat, egyébként elrejti őket.
+        /// </summary>
         private void Tábla_SelectionChanged(object sender, EventArgs e)
         {
             int Sorok = TáblaMűvelet.SelectedRows.Count;
@@ -886,6 +1049,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 Btn_Sorrend.Visible = false;
             }
         }
+
+        /// <summary>
+        /// Ha egy sorra kattintanak, a sor adatai betöltődnek a beviteli mezőkbe szerkesztés céljából.
+        /// Dátum és enum érték is feldolgozásra kerül. Hiba esetén figyelmeztet vagy naplóz.
+        /// </summary>
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -918,6 +1086,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Ha a felhasználó módosítja az utolsó dátum értékét, lekérdezi az ahhoz tartozó üzemóra adatot,
+        /// és beírja a megfelelő mezőbe. A jövőbeni dátumokra figyelmeztet. Védekezik a ciklikus frissítés ellen.
+        /// </summary>
         private void DtmPckrUtolsóDátum_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -946,6 +1119,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 frissul = false;
             }
         }
+
+        /// <summary>
+        /// Ha az üzemóra mező értéke megváltozik, annak megfelelő dátumot keres az adatbázisban,
+        /// és automatikusan beállítja a dátummezőt. Védekezik az érvénytelen formátum és a frissítési ciklus ellen.
+        /// </summary>
         private void TxtBxUtolsóÜzemóraÁllás_TextChanged(object sender, EventArgs e)
         {
             try
@@ -977,10 +1155,20 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 frissul = false;
             }
         }
+
+        /// <summary>
+        /// Amikor a felhasználó megváltoztatja az utólagos dátumot, automatikusan kiolvassa és beírja a megfelelő üzemóra értéket.
+        /// </summary>
         private void DtmPckrUtolagos_ValueChanged(object sender, EventArgs e)
         {
             UzemoraKiolvasasEsBeiras(DtmPckrUtolagos.Value, TxtBxUtolagUzemora);
         }
+
+        /// <summary>
+        /// Ellenőrzi és rögzíti az utólagos naplózási adatokat, ha a kiválasztott sor érvényes és nincs már rögzítve ugyanarra a napra.
+        /// Hibás adatbevitel vagy nem megengedett állapot esetén figyelmeztetést ad.  
+        /// Sikeres rögzítés után frissíti a napló táblázatot és visszajelzést ad a felhasználónak.
+        /// </summary>
         private void BttnUtolag_Modosit_Click(object sender, EventArgs e)
         {
             try
@@ -1039,6 +1227,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
         #region Ablakok
         Ablak_Eszterga_Karbantartás_Üzemóra Új_ablak_EsztergaÜzemóra;
+
+        /// <summary>
+        /// Megnyitja az Eszterga üzemóra ablakot, ha még nincs megnyitva.  
+        /// Ha az ablak már létezik, akkor előtérbe hozza és maximalizálja.
+        /// Az ablak bezárásakor visszaállítja a hivatkozást, és frissítést kér a fő táblára, ha adatváltozás történt.
+        /// </summary>
         private void Üzemóra_Oldal_Click(object sender, EventArgs e)
         {
             if (Új_ablak_EsztergaÜzemóra == null)
@@ -1054,10 +1248,19 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 Új_ablak_EsztergaÜzemóra.WindowState = FormWindowState.Maximized;
             }
         }
+
+        /// <summary>
+        /// Az Eszterga módosító ablak bezárásakor automatikusan bezárja az üzemóra ablakot is, ha nyitva van.
+        /// </summary>
         private void Új_ablak_EsztergaMódosít_Closed(object sender, FormClosedEventArgs e)
         {
             Új_ablak_EsztergaÜzemóra?.Close();
         }
+
+        /// <summary>
+        /// Az üzemóra ablak bezárásakor nullára állítja a hozzá tartozó hivatkozást,
+        /// így lehetővé teszi annak újranyitását.
+        /// </summary>
         private void Új_ablak_EsztergaÜzemóra_Closed(object sender, FormClosedEventArgs e)
         {
             Új_ablak_EsztergaÜzemóra = null;

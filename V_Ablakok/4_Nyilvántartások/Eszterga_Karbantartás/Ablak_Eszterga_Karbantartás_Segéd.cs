@@ -19,11 +19,20 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Alap
+
+        /// <summary>
+        /// Inicializálja a segédablak komponenseit, majd meghívja a jogosultságkezelést.
+        /// </summary>
         public Ablak_Eszterga_Karbantartás_Segéd()
         {
             InitializeComponent();
             Jogosultságkiosztás();
         }
+
+        /// <summary>
+        /// Beállítja a jogosultságok alapján az űrlap vezérlőinek láthatóságát és engedélyezettségét.
+        /// Jogosultság alapján engedélyezi vagy tiltja az üzemóra mezőt és a rögzítő gombot.
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             try
@@ -52,6 +61,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Az ablak betöltésekor eldönti, hogy a felhasználó rögzíthet-e új üzemóra adatot.  
+        /// Ha nincs jogosultsága, megjeleníti az utolsó rögzített üzemórát, majd bezárja az ablakot.  
+        /// Ha van jogosultsága, előkészíti a mezőket a rögzítéshez, és ellenőrzi, történt-e már mai napi rögzítés.
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_Segéd_Load(object sender, EventArgs e)
         {
             if (!Baross || !MyF.Vanjoga(160, 1))
@@ -93,6 +108,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             LblElözö.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Üzemóra}\nDátum: {rekord.Dátum.ToShortDateString()}";
         }
+
+        /// <summary>
+        /// Az ablak bezárásakor beállítja a visszatérési értéket a dialógushoz.
+        /// Ha a felhasználó bezárta az ablakot, és nincs rögzítés, a kilépés „Cancel” eredménnyel történik.
+        /// Jogosultság nélküli felhasználó esetén automatikusan „OK” lesz az eredmény.
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_Segéd_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!Baross && e.CloseReason == CloseReason.UserClosing)
@@ -107,6 +128,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Gombok
+
+        /// <summary>
+        /// Ellenőrzi az üzemóra mező értékét, majd ha az érvényes és nem kisebb az utolsó rögzített értéknél,
+        /// elmenti új üzemóra rekordként az aktuális napra.  
+        /// Hibás adat vagy csökkenő üzemóra esetén figyelmeztetést jelenít meg.
+        /// </summary>
         private void BtnRogzit_Click(object sender, EventArgs e)
         {
             if (int.TryParse(TxtBxUzemOra.Text, out int uzemOra) && uzemOra >= 0)
