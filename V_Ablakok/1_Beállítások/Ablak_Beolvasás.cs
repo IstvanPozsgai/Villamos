@@ -238,7 +238,6 @@ namespace Villamos
 
 
                 Listázás();
-                MessageBox.Show("Az adat rögzítése megtörtént. ", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CiklusTípusfeltöltés();
             }
             catch (HibásBevittAdat ex)
