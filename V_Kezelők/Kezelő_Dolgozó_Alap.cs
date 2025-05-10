@@ -521,12 +521,13 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO dolgozóadatok ( Dolgozószám, Dolgozónév, belépésiidő, kilépésiidő, munkakör )  VALUES ( ";
+                string szöveg = "INSERT INTO dolgozóadatok ( Dolgozószám, Dolgozónév, belépésiidő, kilépésiidő, munkakör, lakcím )  VALUES ( ";
                 szöveg += $"'{Adat.Dolgozószám}', ";   // Dolgozószám
                 szöveg += $"'{Adat.DolgozóNév}', "; // Dolgozónév
                 szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}', ";  // belépésiidő
                 szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}', ";  // kilépésiidő
-                szöveg += $"'{Adat.Munkakör}') "; // munkakör
+                szöveg += $"'{Adat.Munkakör}', "; // munkakör
+                szöveg += $"'{Adat.Lakcím}') "; // lakcím csak azért kell hogy eltérjenek a többi változattól
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
             }

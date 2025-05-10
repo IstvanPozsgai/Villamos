@@ -102,6 +102,7 @@ namespace Villamos
                 SAPRögzít.Enabled = false;
                 SAPTöröl.Enabled = false;
                 OsztályRögzít.Enabled = false;
+                BeolvásBeállítás.Enabled = false;
 
                 Tak_Ár_rögzítés.Enabled = false;
                 Button4.Enabled = false;
@@ -113,6 +114,7 @@ namespace Villamos
                     SAPRögzít.Visible = false;
                     SAPTöröl.Visible = false;
                     OsztályRögzít.Visible = false;
+                    BeolvásBeállítás.Visible = false;
 
                     Tak_Ár_rögzítés.Visible = true;
                     Button4.Visible = true;
@@ -124,6 +126,7 @@ namespace Villamos
                     SAPRögzít.Visible = true;
                     SAPTöröl.Visible = true;
                     OsztályRögzít.Visible = true;
+                    BeolvásBeállítás.Visible = true;
 
                     Tak_Ár_rögzítés.Visible = false;
                     Button4.Visible = false;
@@ -139,6 +142,7 @@ namespace Villamos
                 {
                     SAPRögzít.Enabled = true;
                     SAPTöröl.Enabled = true;
+                    BeolvásBeállítás.Enabled = true;
                 }
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))
@@ -1837,6 +1841,31 @@ namespace Villamos
             }
         }
 
+        #endregion
+
+        #region Csempékhez
+
+        Ablak_Beolvasás Új_Ablak_Beolvasás;
+        private void BeolvásBeállítás_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Beolvasás == null)
+            {
+                Új_Ablak_Beolvasás = new Ablak_Beolvasás();
+                Új_Ablak_Beolvasás.FormClosed += Új_Ablak_Beolvasás_FormClosed;
+                Új_Ablak_Beolvasás.Show();
+            }
+            else
+            {
+                Új_Ablak_Beolvasás.Activate();
+                Új_Ablak_Beolvasás.WindowState = FormWindowState.Maximized;
+            }
+
+        }
+
+        private void Új_Ablak_Beolvasás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Beolvasás = null;
+        }
         #endregion
 
 

@@ -192,6 +192,16 @@ namespace Villamos.Villamos_Adatszerkezet
             Lakcím = lakcím;
         }
 
+        public Adat_Dolgozó_Alap(string dolgozószám, string dolgozóNév, DateTime kilépésiidő, DateTime belépésiidő, string lakcím, string munkakör)
+        {
+            DolgozóNév = dolgozóNév;
+            Dolgozószám = dolgozószám;
+            Kilépésiidő = kilépésiidő;
+            Belépésiidő = belépésiidő;
+            Lakcím = lakcím;
+            Munkakör = munkakör;
+        }
+
         public Adat_Dolgozó_Alap(string dolgozószám, string dolgozóNév, DateTime kilépésiidő, bool vezényelt, bool vezényelve, string lakcím)
         {
             Dolgozószám = dolgozószám;

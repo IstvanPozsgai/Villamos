@@ -12,6 +12,7 @@ using Villamos.Villamos_Adatszerkezet;
 public static partial class Függvénygyűjtemény
 {
     readonly static Kezelő_Alap_Beolvasás KézBeolvasás = new Kezelő_Alap_Beolvasás();
+    readonly static Kezelő_Excel_Beolvasás Kéz_Beolvasás = new Kezelő_Excel_Beolvasás();
     /// <summary>
     /// Az Excel tábla fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
     /// </summary>
@@ -48,6 +49,7 @@ public static partial class Függvénygyűjtemény
         return válasz;
     }
 
+    //Elkopó
     /// <summary>
     /// Az Excel táblát kapja és a fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
     /// </summary>
@@ -90,6 +92,41 @@ public static partial class Függvénygyűjtemény
         return válasz;
     }
 
+    public static bool BetöltésHelyes(string Melyik, DataTable Tábla)
+    {
+        bool válasz = false;
+        try
+        {
+            //  beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
+            string fejlécbeolvas = "";
+            for (int i = 0; i < Tábla.Columns.Count; i++)
+                fejlécbeolvas += Tábla.Columns[i].ColumnName.ToStrTrim();
+
+
+            List<Adat_Excel_Beolvasás> Adatok = Kéz_Beolvasás.Lista_Adatok();
+            Adatok = (from a in Adatok
+                      where a.Csoport == Melyik.Trim()
+                      && a.Státusz == false
+                      orderby a.Oszlop
+                      select a).ToList();
+
+            string szöveg = "";
+            foreach (Adat_Excel_Beolvasás rekord in Adatok)
+                szöveg += rekord.Fejléc;
+
+            if (szöveg.Trim() == fejlécbeolvas.Trim()) válasz = true;
+        }
+        catch (HibásBevittAdat ex)
+        {
+            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Függvénygyűjtemény - Betöltéshelyes", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        return válasz;
+    }
 
     #region Jelszó kódolások
 

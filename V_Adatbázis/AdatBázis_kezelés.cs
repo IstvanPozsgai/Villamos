@@ -59,6 +59,34 @@ namespace Villamos.Adatszerkezet
             }
         }
 
+        public void AB_Adat_Tábla_Létrehozás(string hely, string jelszó, string szöveg, string táblanév)
+        {
+            try
+            {
+                if (TáblaEllenőrzés(hely, jelszó, táblanév)) return; //ha létezik a tábla akkor nem csinál semmit
+                string kapcsolatiszöveg = "";
+                if (hely.Contains(".mdb"))
+                    kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{hely}'; Jet Oledb:Database Password={jelszó};";
+                else
+                    kapcsolatiszöveg = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source ='{hely}'; Jet OLEDB:Database Password ={jelszó};";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+                {
+                    using (OleDbCommand cmdCreate = new OleDbCommand())
+                    {
+                        cmdCreate.Connection = Kapcsolat;
+                        cmdCreate.CommandText = szöveg;
+                        Kapcsolat.Open();
+                        cmdCreate.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                HibaNapló.Log(ex.Message, szöveg, ex.StackTrace, ex.Source, ex.HResult);
+            }
+        }
+
+
         public void AB_Új_Oszlop(string hely, string jelszó, string Tábla, string Oszlop, string Típus)
         {
             try
@@ -122,5 +150,7 @@ namespace Villamos.Adatszerkezet
             }
             return válasz;
         }
+
+
     }
 }

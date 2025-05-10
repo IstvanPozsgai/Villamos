@@ -531,6 +531,8 @@
     <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_ICS_KCSV_segéd.Designer.cs">
       <DependentUpon>Ablak_ICS_KCSV_segéd.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Adatbázis\Adatbázis_Excel_Beolvasás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_előterv.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_Ütem.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Beosztás.cs">
@@ -718,6 +720,7 @@
     <Compile Include="V_Függvények\Számkonverter.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási_Napló.cs" />

@@ -152,6 +152,7 @@ namespace Villamos
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.BeolvásBeállítás = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -234,6 +235,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel2.BackColor = System.Drawing.Color.SandyBrown;
+            this.Panel2.Controls.Add(this.BeolvásBeállítás);
             this.Panel2.Controls.Add(this.SAPTábla);
             this.Panel2.Controls.Add(this.SAPFrissít);
             this.Panel2.Controls.Add(this.Label67);
@@ -1413,6 +1415,19 @@ namespace Villamos
             this.Holtart.TabIndex = 1;
             this.Holtart.Visible = false;
             // 
+            // BeolvásBeállítás
+            // 
+            this.BeolvásBeállítás.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.BeolvásBeállítás.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.BeolvásBeállítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BeolvásBeállítás.Location = new System.Drawing.Point(1306, 4);
+            this.BeolvásBeállítás.Name = "BeolvásBeállítás";
+            this.BeolvásBeállítás.Size = new System.Drawing.Size(159, 127);
+            this.BeolvásBeállítás.TabIndex = 112;
+            this.toolTip1.SetToolTip(this.BeolvásBeállítás, "Excel beolvasás beállítás");
+            this.BeolvásBeállítás.UseVisualStyleBackColor = false;
+            this.BeolvásBeállítás.Click += new System.EventHandler(this.BeolvásBeállítás_Click);
+            // 
             // Ablak_alap_program_egyéb
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1560,5 +1575,6 @@ namespace Villamos
         internal Button VégeÁrRögzítés;
         internal V_MindenEgyéb.MyProgressbar Holtart;
         internal Button Osztály_Új;
+        internal Button BeolvásBeállítás;
     }                    
 }
