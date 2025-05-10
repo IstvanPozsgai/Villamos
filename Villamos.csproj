@@ -163,6 +163,12 @@
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.designer.cs">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.Designer.cs">
+      <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_technológia.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -712,6 +718,7 @@
     <Compile Include="V_Függvények\Számkonverter.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Dolgozótábla.cs" />
@@ -749,7 +756,6 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF.cs" />
@@ -1221,6 +1227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.resx">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.resx">
+      <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_technológia.resx">
       <DependentUpon>Ablak_technológia.cs</DependentUpon>

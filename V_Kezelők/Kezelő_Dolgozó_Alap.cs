@@ -572,8 +572,6 @@ namespace Villamos.Kezelők
         }
 
         //Elkopó
-
-
         public List<Adat_Dolgozó_Alap> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Dolgozó_Alap> Adatok = new List<Adat_Dolgozó_Alap>();
@@ -724,8 +722,6 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
-
-
     }
 
 
