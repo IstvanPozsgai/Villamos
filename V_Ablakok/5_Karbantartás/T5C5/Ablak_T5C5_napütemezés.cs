@@ -1527,7 +1527,7 @@ namespace Villamos
             Thread proc = new Thread(() =>
             {
                 //beolvassuk az adatokat
-                SAP_Adatokbeolvasása_km.Km_beolvasó(FájlExcel_);
+                SAP_Adatokbeolvasása_km.Km_beolvasóT5C5(FájlExcel_);
                 this.Invoke(callback, new object[] { });
             });
             proc.Start();

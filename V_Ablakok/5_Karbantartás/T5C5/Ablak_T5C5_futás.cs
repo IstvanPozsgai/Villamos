@@ -1483,7 +1483,7 @@ namespace Villamos
             Thread proc = new Thread(() =>
             {
                 //beolvassuk az adatokat
-                SAP_Adatokbeolvasása_km.Km_beolvasó(FájlExcel_);
+                SAP_Adatokbeolvasása_km.Km_beolvasóT5C5(FájlExcel_);
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Invoke(callback, new object[] { });
             });

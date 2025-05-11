@@ -49,8 +49,9 @@ public static partial class Függvénygyűjtemény
         return válasz;
     }
 
-    //Elkopó
+
     /// <summary>
+    /// Elkopó
     /// Az Excel táblát kapja és a fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
     /// </summary>
     /// <param name="Melyik"></param>
@@ -92,6 +93,13 @@ public static partial class Függvénygyűjtemény
         return válasz;
     }
 
+    /// <summary>
+    /// Ez lesz a véglegez változat
+    ///  Az Excel táblát kapja és a fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
+    /// </summary>
+    /// <param name="Melyik"></param>
+    /// <param name="Tábla"></param>
+    /// <returns></returns>
     public static bool BetöltésHelyes(string Melyik, DataTable Tábla)
     {
         bool válasz = false;
