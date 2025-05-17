@@ -1474,8 +1474,6 @@ namespace Villamos
                 timer1.Enabled = false;
                 Holtart.Ki();
                 MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
             }
             catch (HibásBevittAdat ex)
             {

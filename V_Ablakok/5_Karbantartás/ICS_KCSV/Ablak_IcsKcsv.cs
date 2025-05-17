@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -1608,7 +1609,7 @@ namespace Villamos
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SAP_adatok_Click(object sender, EventArgs e)
+        private async void SAP_adatok_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1630,13 +1631,11 @@ namespace Villamos
 
                 timer1.Enabled = true;
                 Holtart.Be();
-                SZál_KM_Beolvasás(() =>
-                { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                    timer1.Enabled = false;
-                    Holtart.Ki();
-                    MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                });
-
+                await Task.Run(() => SAP_Adatokbeolvasása_km.Km_beolvasó(_fájlexc, "ICS"));
+                timer1.Enabled = false;
+                Holtart.Ki();
+                MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SAP_adatok.Visible = true;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1647,21 +1646,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        /// <summary>
-        /// Szálon beolvassa a SAP adatok excel táblát és a benne lévő adatokat beírja a táblába
-        /// </summary>
-        /// <param name="callback"></param>
-        private void SZál_KM_Beolvasás(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                //beolvassuk az adatokat
-                SAP_Adatokbeolvasása_km.Km_beolvasóICS(_fájlexc);
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
         }
         #endregion
 

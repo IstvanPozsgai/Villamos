@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -1474,7 +1474,7 @@ namespace Villamos
             }
         }
 
-        private void SAP_adatok_Click(object sender, EventArgs e)
+        private async void SAP_adatok_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1487,10 +1487,10 @@ namespace Villamos
                     FileName = "",
                     Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls"
                 };
-                string fájlexc;
+
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = OpenFileDialog1.FileName;
+                    FájlExcel_ = OpenFileDialog1.FileName;
                 else
                 {
                     SAP_adatok.Visible = true;
@@ -1499,16 +1499,10 @@ namespace Villamos
 
                 Holtart.Be();
                 timer1.Enabled = true;
-                FájlExcel_ = fájlexc;
-
-                SZál_KM_Beolvasás(() =>
-                { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                    timer1.Enabled = false;
-                    Holtart.Ki();
-                    MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                });
-
-
+                await Task.Run(() => SAP_Adatokbeolvasása_km.Km_beolvasó(FájlExcel_, "T5C5"));
+                timer1.Enabled = false;
+                Holtart.Ki();
+                MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 SAP_adatok.Visible = true;
             }
             catch (HibásBevittAdat ex)
@@ -1520,17 +1514,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void SZál_KM_Beolvasás(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                //beolvassuk az adatokat
-                SAP_Adatokbeolvasása_km.Km_beolvasóT5C5(FájlExcel_);
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
         }
         #endregion
 
