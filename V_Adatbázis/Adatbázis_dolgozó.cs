@@ -29,7 +29,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[belépésidátum] DATE, ";
             szöveg += "[Státusváltozások] CHAR(150), ";
             szöveg += "[Státusváltozoka] CHAR(150), ";
-            szöveg += "[Megjegyzés] CHAR(150) )";
+            szöveg += "[Megjegyzés] CHAR(150) ,";
+            szöveg += "[Előzetes] yesno )";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
 
