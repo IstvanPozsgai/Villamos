@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -42,7 +43,10 @@ namespace Villamos.Villamos_Ablakok
         List<string> Pályaszám_TáblaAdatok = new List<string>();
         Dictionary<string, string> Személy = new Dictionary<string, string>();
 
-
+        /// <summary>
+        /// Ez a változó jegyzi meg, hogy melyik sorszámtól kell a feladandó Excelt kiírni
+        /// </summary>
+        long NapiSorszám = -1;
         readonly int sormagagasság = 30;
         readonly string munkalap = "Munka1";
 
@@ -86,6 +90,7 @@ namespace Villamos.Villamos_Ablakok
         private void Jogosultságkiosztás()
         {
             Digitális.Visible = false;
+            FelExcel.Visible = false;
             if (Program.PostásTelephely == "Főmérnökség")
                 CHKMinta.Visible = true;
             else
@@ -109,6 +114,7 @@ namespace Villamos.Villamos_Ablakok
             if (MyF.Vanjoga(melyikelem, 3))
             {
                 Digitális.Visible = true;
+                FelExcel.Visible = true;
             }
         }
 
@@ -1887,6 +1893,7 @@ namespace Villamos.Villamos_Ablakok
                 if (Kiadta.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve az ellenőrző személy!");
 
                 long Sorszám = KézDigFej.Sorszám();
+                if (NapiSorszám == -1) NapiSorszám = Sorszám;
                 DigiMentés(Sorszám);
                 MessageBox.Show($"Az adatok mentése elkészült", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1901,5 +1908,114 @@ namespace Villamos.Villamos_Ablakok
             }
         }
         #endregion
+
+        private void FelExcel_Click(object sender, EventArgs e)
+        {
+            if (NapiSorszám == -1) return;
+            DigiFej();
+            DigiKocsi();
+            DigiDolgozó();
+            MessageBox.Show($"Az Exceltáblák elkészültek", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void DigiFej()
+        {
+            Holtart.Be();
+            List<Adat_DigitálisMunkalap_Fej> AdatokFej = KézDigFej.Lista_Adatok().Where(a => a.Id >= NapiSorszám).ToList();
+            string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Clear();
+            dataTable.Columns.Add("Azonosító");
+            dataTable.Columns.Add("ID");
+            dataTable.Columns.Add("Típus");
+            dataTable.Columns.Add("Karbantartási fokozat");
+            dataTable.Columns.Add("Ellenőrző Dolgozó Név");
+            dataTable.Columns.Add("Ellenőrző Dolgozószám");
+            dataTable.Columns.Add("Telephely");
+            dataTable.Columns.Add("Dátum");
+
+            foreach (Adat_DigitálisMunkalap_Fej rekord in AdatokFej)
+            {
+                DataRow Soradat = dataTable.NewRow();
+                Soradat["Azonosító"] = rekord.Id;
+                Soradat["ID"] = rekord.Id;
+                Soradat["Típus"] = rekord.Típus;
+                Soradat["Karbantartási fokozat"] = rekord.Karbantartási_fokozat;
+                Soradat["Ellenőrző Dolgozó Név"] = rekord.EllDolgozóNév;
+                Soradat["Ellenőrző Dolgozószám"] = rekord.EllDolgozószám;
+                Soradat["Telephely"] = rekord.Telephely;
+                Soradat["Dátum"] = rekord.Dátum;
+                dataTable.Rows.Add(Soradat);
+                Holtart.Lép();
+            }
+            string hely = $@"{könyvtár}\Munkautasítás.xlsx";
+            MyE.EXCELtábla(dataTable, hely);
+            Holtart.Ki();
+        }
+
+        private void DigiKocsi()
+        {
+            Holtart.Be();
+            string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            List<Adat_DigitálisMunkalap_Kocsik> AdatokKocsik = KézDigKocsi.Lista_Adatok().Where(a => a.Fej_Id >= NapiSorszám).ToList();
+            DataTable dataTable = new DataTable();
+            dataTable.Clear();
+            dataTable.Columns.Clear();
+            dataTable.Columns.Add("_Azonosító");
+            dataTable.Columns.Add("ID");
+            dataTable.Columns.Add("Azonosító");
+            dataTable.Columns.Add("KMU");
+            dataTable.Columns.Add("Rendelés");
+
+            foreach (Adat_DigitálisMunkalap_Kocsik rekord in AdatokKocsik)
+            {
+                DataRow Soradat = dataTable.NewRow();
+                Soradat["_Azonosító"] = rekord.Fej_Id;
+                Soradat["ID"] = rekord.Fej_Id;
+                Soradat["Azonosító"] = rekord.Azonosító;
+                Soradat["KMU"] = rekord.KMU;
+                Soradat["Rendelés"] = rekord.Rendelés;
+
+                dataTable.Rows.Add(Soradat);
+                Holtart.Lép();
+            }
+            string hely = $@"{könyvtár}\Kocsi.xlsx";
+            MyE.EXCELtábla(dataTable, hely);
+            Holtart.Ki();
+        }
+
+        private void DigiDolgozó()
+        {
+            Holtart.Be();
+            string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+
+            List<Adat_DigitálisMunkalap_Dolgozó> AdatokDolgozó = KézDigDolg.Lista_Adatok().Where(a => a.Fej_Id >= NapiSorszám).ToList();
+            DataTable dataTable = new DataTable();
+            dataTable.Clear();
+            dataTable.Columns.Clear();
+            dataTable.Columns.Add("Azonosító");
+            dataTable.Columns.Add("Dolgozó Név");
+            dataTable.Columns.Add("ID");
+            dataTable.Columns.Add("Dolgozószám");
+            dataTable.Columns.Add("Technológia ID");
+
+            foreach (Adat_DigitálisMunkalap_Dolgozó rekord in AdatokDolgozó)
+            {
+                DataRow Soradat = dataTable.NewRow();
+                Soradat["Azonosító"] = rekord.Fej_Id;
+                Soradat["Dolgozó Név"] = rekord.DolgozóNév;
+                Soradat["ID"] = rekord.Fej_Id;
+                Soradat["Dolgozószám"] = rekord.Dolgozószám;
+                Soradat["Technológia ID"] = rekord.Technológia_Id;
+
+                dataTable.Rows.Add(Soradat);
+                Holtart.Lép();
+            }
+            string hely = $@"{könyvtár}\Dolgozó.xlsx";
+            MyE.EXCELtábla(dataTable, hely);
+            Holtart.Ki();
+            Holtart.Ki();
+        }
     }
 }

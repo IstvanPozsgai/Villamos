@@ -80,6 +80,7 @@
             this.CHKKMU = new System.Windows.Forms.CheckBox();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Beosztás = new System.Windows.Forms.CheckBox();
+            this.FelExcel = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_Beosztás)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_psz)).BeginInit();
@@ -653,12 +654,25 @@
             this.Beosztás.UseVisualStyleBackColor = true;
             this.Beosztás.CheckedChanged += new System.EventHandler(this.Beosztás_CheckedChanged);
             // 
+            // FelExcel
+            // 
+            this.FelExcel.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
+            this.FelExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.FelExcel.Location = new System.Drawing.Point(195, 538);
+            this.FelExcel.Name = "FelExcel";
+            this.FelExcel.Size = new System.Drawing.Size(45, 45);
+            this.FelExcel.TabIndex = 244;
+            this.toolTip1.SetToolTip(this.FelExcel, "Munkalap készítés a beállítottaknak megfelelően.");
+            this.FelExcel.UseVisualStyleBackColor = true;
+            this.FelExcel.Click += new System.EventHandler(this.FelExcel_Click);
+            // 
             // Ablak_Karbantartási_Munkalapok
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGreen;
             this.ClientSize = new System.Drawing.Size(1307, 637);
+            this.Controls.Add(this.FelExcel);
             this.Controls.Add(this.Digitális);
             this.Controls.Add(this.Beosztás);
             this.Controls.Add(this.Holtart);
@@ -775,5 +789,6 @@
         internal V_MindenEgyéb.MyProgressbar Holtart;
         private System.Windows.Forms.CheckBox Beosztás;
         internal System.Windows.Forms.Button Digitális;
+        internal System.Windows.Forms.Button FelExcel;
     }
 }

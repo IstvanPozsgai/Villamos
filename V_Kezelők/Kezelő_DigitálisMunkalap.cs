@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.DigitálisMunkalap(hely.KönyvSzerk());
         }
 
-        private List<Adat_DigitálisMunkalap_Fej> Lista_Adatok()
+        public List<Adat_DigitálisMunkalap_Fej> Lista_Adatok()
         {
             List<Adat_DigitálisMunkalap_Fej> Adatok = new List<Adat_DigitálisMunkalap_Fej>();
             Adat_DigitálisMunkalap_Fej Adat;
