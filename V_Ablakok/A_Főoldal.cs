@@ -49,6 +49,7 @@ namespace Villamos
         public A_Főoldal()
         {
             InitializeComponent();
+            Start();
         }
 
         [DllImport("user32")]
@@ -349,6 +350,12 @@ namespace Villamos
 
 
         #region Főoldal elemek
+
+        private void Start()
+        {
+            Program.PostásMenü = AblakokGombok.MenüListaKészítés(Menü);
+        }
+
         private void AblakFőoldal_Load(object sender, EventArgs e)
         {
             Timer1.Enabled = true;
@@ -2503,8 +2510,57 @@ namespace Villamos
             Verzió_Váltás.Visible = Shift_le;
         }
 
+
         #endregion
 
 
+        #region Ablakok beállítása
+        Ablak_Formok Új_Ablak_Formok;
+        private void Ablakok_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Formok == null)
+            {
+                Új_Ablak_Formok = new Ablak_Formok();
+                Új_Ablak_Formok.FormClosed += Új_Ablak_Formok_FormClosed;
+                Új_Ablak_Formok.Show();
+            }
+            else
+            {
+                Új_Ablak_Formok.Activate();
+                Új_Ablak_Formok.WindowState = FormWindowState.Maximized;
+            }
+
+        }
+
+        private void Új_Ablak_Formok_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Formok = null;
+        }
+        #endregion
+
+
+        #region Gombok beállítása
+        Ablak_Gombok Új_Ablak_Gombok;
+        private void Gombok_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Gombok == null)
+            {
+                Új_Ablak_Gombok = new Ablak_Gombok();
+                Új_Ablak_Gombok.FormClosed += Új_Új_Ablak_Gombok_FormClosed;
+                Új_Ablak_Gombok.Show();
+            }
+            else
+            {
+                Új_Ablak_Gombok.Activate();
+                Új_Ablak_Gombok.WindowState = FormWindowState.Maximized;
+            }
+
+        }
+
+        private void Új_Új_Ablak_Gombok_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Gombok = null;
+        }
+        #endregion
     }
 }

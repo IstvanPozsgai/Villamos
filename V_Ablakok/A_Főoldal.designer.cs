@@ -93,6 +93,8 @@ namespace Villamos
             this.SAPOsztályToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator32 = new System.Windows.Forms.ToolStripSeparator();
             this.TTTPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator35 = new System.Windows.Forms.ToolStripSeparator();
+            this.fődarabNótaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.KarbantartásToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.JárműKarbantartásiAdatokToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -179,8 +181,8 @@ namespace Villamos
             this.Btnüzenetfrissítés = new System.Windows.Forms.Button();
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
-            this.toolStripSeparator35 = new System.Windows.Forms.ToolStripSeparator();
-            this.fődarabNótaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Gombok = new System.Windows.Forms.Button();
+            this.Ablakok = new System.Windows.Forms.Button();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -637,6 +639,18 @@ namespace Villamos
             this.TTTPToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.TTTPToolStripMenuItem.Text = "TTP vizsgálatok";
             this.TTTPToolStripMenuItem.Click += new System.EventHandler(this.TTPToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator35
+            // 
+            this.toolStripSeparator35.Name = "toolStripSeparator35";
+            this.toolStripSeparator35.Size = new System.Drawing.Size(350, 6);
+            // 
+            // fődarabNótaToolStripMenuItem
+            // 
+            this.fődarabNótaToolStripMenuItem.Name = "fődarabNótaToolStripMenuItem";
+            this.fődarabNótaToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
+            this.fődarabNótaToolStripMenuItem.Text = "Fődarab Nóta";
+            this.fődarabNótaToolStripMenuItem.Click += new System.EventHandler(this.FődarabNótaToolStripMenuItem_Click);
             // 
             // KarbantartásToolStripMenuItem
             // 
@@ -1258,6 +1272,8 @@ namespace Villamos
             // Rejtett
             // 
             this.Rejtett.BackColor = System.Drawing.Color.Peru;
+            this.Rejtett.Controls.Add(this.Ablakok);
+            this.Rejtett.Controls.Add(this.Gombok);
             this.Rejtett.Controls.Add(this.Cmbtelephely);
             this.Rejtett.Controls.Add(this.TároltVerzió);
             this.Rejtett.Controls.Add(this.txtutsorszám);
@@ -1392,17 +1408,27 @@ namespace Villamos
             this.Képkeret1.TabIndex = 27;
             this.Képkeret1.TabStop = false;
             // 
-            // toolStripSeparator35
+            // Gombok
             // 
-            this.toolStripSeparator35.Name = "toolStripSeparator35";
-            this.toolStripSeparator35.Size = new System.Drawing.Size(350, 6);
+            this.Gombok.BackgroundImage = global::Villamos.Properties.Resources.Filesystem_blockdevice_cubes;
+            this.Gombok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Gombok.Location = new System.Drawing.Point(568, 238);
+            this.Gombok.Name = "Gombok";
+            this.Gombok.Size = new System.Drawing.Size(40, 40);
+            this.Gombok.TabIndex = 29;
+            this.Gombok.UseVisualStyleBackColor = true;
+            this.Gombok.Click += new System.EventHandler(this.Gombok_Click);
             // 
-            // fődarabNótaToolStripMenuItem
+            // Ablakok
             // 
-            this.fődarabNótaToolStripMenuItem.Name = "fődarabNótaToolStripMenuItem";
-            this.fődarabNótaToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
-            this.fődarabNótaToolStripMenuItem.Text = "Fődarab Nóta";
-            this.fődarabNótaToolStripMenuItem.Click += new System.EventHandler(this.FődarabNótaToolStripMenuItem_Click);
+            this.Ablakok.BackgroundImage = global::Villamos.Properties.Resources.Folder_;
+            this.Ablakok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Ablakok.Location = new System.Drawing.Point(522, 238);
+            this.Ablakok.Name = "Ablakok";
+            this.Ablakok.Size = new System.Drawing.Size(40, 40);
+            this.Ablakok.TabIndex = 30;
+            this.Ablakok.UseVisualStyleBackColor = true;
+            this.Ablakok.Click += new System.EventHandler(this.Ablakok_Click);
             // 
             // A_Főoldal
             // 
@@ -1592,5 +1618,7 @@ namespace Villamos
         internal ToolStripMenuItem EsztergaKarbantartásToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator35;
         private ToolStripMenuItem fődarabNótaToolStripMenuItem;
+        internal Button Ablakok;
+        internal Button Gombok;
     }
 }

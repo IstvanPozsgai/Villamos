@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Zuby.ADGV;
 
@@ -31,8 +32,8 @@ namespace Villamos
         /// 
         /// </summary>
         public static bool Postás_telephely = false;
-
-
+        public static List<ToolStripMenuItem> PostásMenü = new List<ToolStripMenuItem>();
+        public static int PostásNévId = 1;
 
         /// <summary>
         /// The main entry point for the application.
