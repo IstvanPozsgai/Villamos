@@ -18,7 +18,7 @@ using MyF = Függvénygyűjtemény;
 namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 {
     public delegate void Event_Kidobó();
-    //teszt
+    //teszt2
     public partial class Ablak_Eszterga_Karbantartás : Form
     {
         #region Osztalyszintu elemek
