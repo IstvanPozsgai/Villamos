@@ -32,15 +32,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Formok));
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.Ablaknév = new System.Windows.Forms.ComboBox();
-            this.MenüFelirat = new System.Windows.Forms.ComboBox();
-            this.MenüNév = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.TxtId = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.MenüFelirat = new System.Windows.Forms.ComboBox();
+            this.Törölt = new System.Windows.Forms.CheckBox();
             this.Label2 = new System.Windows.Forms.Label();
             this.Label4 = new System.Windows.Forms.Label();
-            this.TxtId = new System.Windows.Forms.TextBox();
-            this.Törölt = new System.Windows.Forms.CheckBox();
+            this.MenüNév = new System.Windows.Forms.ComboBox();
+            this.Ablaknév = new System.Windows.Forms.ComboBox();
             this.Láthatóság = new System.Windows.Forms.CheckBox();
             this.Alap_Rögzít = new System.Windows.Forms.Button();
             this.Új_adat = new System.Windows.Forms.Button();
@@ -57,8 +57,8 @@
             // 
             this.Tábla.AllowUserToAddRows = false;
             this.Tábla.AllowUserToDeleteRows = false;
-            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.FilterAndSortEnabled = true;
@@ -101,30 +101,24 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(726, 214);
             this.tableLayoutPanel1.TabIndex = 221;
             // 
-            // Ablaknév
+            // label5
             // 
-            this.Ablaknév.FormattingEnabled = true;
-            this.Ablaknév.Location = new System.Drawing.Point(105, 108);
-            this.Ablaknév.Name = "Ablaknév";
-            this.Ablaknév.Size = new System.Drawing.Size(607, 28);
-            this.Ablaknév.TabIndex = 228;
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Silver;
+            this.label5.Location = new System.Drawing.Point(3, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(27, 20);
+            this.label5.TabIndex = 220;
+            this.label5.Text = "Id:";
             // 
-            // MenüFelirat
+            // TxtId
             // 
-            this.MenüFelirat.FormattingEnabled = true;
-            this.MenüFelirat.Location = new System.Drawing.Point(105, 38);
-            this.MenüFelirat.Name = "MenüFelirat";
-            this.MenüFelirat.Size = new System.Drawing.Size(607, 28);
-            this.MenüFelirat.TabIndex = 227;
-            this.MenüFelirat.SelectionChangeCommitted += new System.EventHandler(this.MenüFelirat_SelectionChangeCommitted);
-            // 
-            // MenüNév
-            // 
-            this.MenüNév.FormattingEnabled = true;
-            this.MenüNév.Location = new System.Drawing.Point(105, 73);
-            this.MenüNév.Name = "MenüNév";
-            this.MenüNév.Size = new System.Drawing.Size(607, 28);
-            this.MenüNév.TabIndex = 226;
+            this.TxtId.Enabled = false;
+            this.TxtId.Location = new System.Drawing.Point(105, 3);
+            this.TxtId.MaxLength = 10;
+            this.TxtId.Name = "TxtId";
+            this.TxtId.Size = new System.Drawing.Size(202, 26);
+            this.TxtId.TabIndex = 219;
             // 
             // label1
             // 
@@ -136,15 +130,26 @@
             this.label1.TabIndex = 225;
             this.label1.Text = "Menü felirat:";
             // 
-            // label5
+            // MenüFelirat
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Silver;
-            this.label5.Location = new System.Drawing.Point(3, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(27, 20);
-            this.label5.TabIndex = 220;
-            this.label5.Text = "Id:";
+            this.MenüFelirat.FormattingEnabled = true;
+            this.MenüFelirat.Location = new System.Drawing.Point(105, 38);
+            this.MenüFelirat.Name = "MenüFelirat";
+            this.MenüFelirat.Size = new System.Drawing.Size(607, 28);
+            this.MenüFelirat.Sorted = true;
+            this.MenüFelirat.TabIndex = 227;
+            this.MenüFelirat.SelectionChangeCommitted += new System.EventHandler(this.MenüFelirat_SelectionChangeCommitted);
+            // 
+            // Törölt
+            // 
+            this.Törölt.AutoSize = true;
+            this.Törölt.BackColor = System.Drawing.Color.Lime;
+            this.Törölt.Location = new System.Drawing.Point(105, 178);
+            this.Törölt.Name = "Törölt";
+            this.Törölt.Size = new System.Drawing.Size(68, 24);
+            this.Törölt.TabIndex = 221;
+            this.Törölt.Text = "Törölt";
+            this.Törölt.UseVisualStyleBackColor = false;
             // 
             // Label2
             // 
@@ -166,25 +171,23 @@
             this.Label4.TabIndex = 214;
             this.Label4.Text = "Menü név:";
             // 
-            // TxtId
+            // MenüNév
             // 
-            this.TxtId.Enabled = false;
-            this.TxtId.Location = new System.Drawing.Point(105, 3);
-            this.TxtId.MaxLength = 10;
-            this.TxtId.Name = "TxtId";
-            this.TxtId.Size = new System.Drawing.Size(202, 26);
-            this.TxtId.TabIndex = 219;
+            this.MenüNév.FormattingEnabled = true;
+            this.MenüNév.Location = new System.Drawing.Point(105, 73);
+            this.MenüNév.Name = "MenüNév";
+            this.MenüNév.Size = new System.Drawing.Size(607, 28);
+            this.MenüNév.Sorted = true;
+            this.MenüNév.TabIndex = 226;
             // 
-            // Törölt
+            // Ablaknév
             // 
-            this.Törölt.AutoSize = true;
-            this.Törölt.BackColor = System.Drawing.Color.Lime;
-            this.Törölt.Location = new System.Drawing.Point(105, 178);
-            this.Törölt.Name = "Törölt";
-            this.Törölt.Size = new System.Drawing.Size(68, 24);
-            this.Törölt.TabIndex = 221;
-            this.Törölt.Text = "Törölt";
-            this.Törölt.UseVisualStyleBackColor = false;
+            this.Ablaknév.FormattingEnabled = true;
+            this.Ablaknév.Location = new System.Drawing.Point(105, 108);
+            this.Ablaknév.Name = "Ablaknév";
+            this.Ablaknév.Size = new System.Drawing.Size(607, 28);
+            this.Ablaknév.Sorted = true;
+            this.Ablaknév.TabIndex = 228;
             // 
             // Láthatóság
             // 
