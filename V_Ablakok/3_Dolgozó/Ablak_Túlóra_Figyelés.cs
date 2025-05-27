@@ -423,6 +423,10 @@ namespace Villamos
             Tábla3_harmadik();
         }
 
+        /// <summary>
+        /// Üres táblát készíti el a nevekkel és hónapokkal minden második embert más színnel színezi, hogy ne legyen összefolyós
+        /// 
+        /// </summary>
         private void Tábla3_első_új()
         {
             try
@@ -536,6 +540,9 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Kiírja az előírás értékeket
+        /// </summary>
         private void Tábla3_második()
         {
             try
@@ -573,13 +580,16 @@ namespace Villamos
                         string beolvasott = Tábla3.Rows[i].Cells[2].Value.ToStrTrim();
                         if (beolvasott == "") beolvasott = "N";
                         if (beolvasott.Contains('.')) beolvasott = beolvasott.Replace('.', '_');
+                        if (beolvasott == "É.1") beolvasott = "É_5";
+                        if (beolvasott == "É.2") beolvasott = "É_6";
 
                         if (beolvasott.Substring(0, 1) != "R")
                         {
                             for (int j = 1; j <= 12; j++)
                             {
+                                string[] darabol = beolvasott.Split('_');
                                 Adat_Váltós_Összesítő kötelező = (from a in Adatok
-                                                                  where a.Dátum.Month == j && a.Csoport.Trim() == beolvasott.Trim()
+                                                                  where a.Dátum.Month == j && a.Csoport.Trim() == darabol[1].Trim()
                                                                   select a).FirstOrDefault();
                                 if (kötelező != null)
                                 {
@@ -632,6 +642,9 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Kiírja a táblázatba a tényadatokat és mind a beosztási és mind a túlóra adatokat.
+        /// </summary>
         private void Tábla3_harmadik()
         {
             try
@@ -641,8 +654,8 @@ namespace Villamos
                 Tábla3.Visible = false;
                 for (int j = 4; j < 16; j++)
                 {
-                    string hónap = j - 3 > 9 ? (j - 3).ToString() : "0" + (j - 3);
-                    List<Adat_Dolgozó_Beosztás_Új> Adatok = KézBeosztás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                    DateTime MelyikHónap = new DateTime(Dátum.Value.Year, j - 3, 1);
+                    List<Adat_Dolgozó_Beosztás_Új> Adatok = KézBeosztás.Lista_Adatok(Cmbtelephely.Text.Trim(), MelyikHónap);
                     if (Adatok != null)
                     {
                         for (int i = 0; i < Tábla3.Rows.Count; i += 3)
