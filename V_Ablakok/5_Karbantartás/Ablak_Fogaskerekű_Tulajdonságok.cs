@@ -1010,21 +1010,44 @@ namespace Villamos
         {
             try
             {
-                Vizsgfok_új.Text = "";
-                if (Vizsg_sorszám_combo.Text.Trim() == "") return;
+                int i = Vizsg_sorszám_combo.SelectedIndex;
                 if (CiklusrendCombo.Text.Trim() == "") return;
-                List<Adat_Ciklus> AdatokCiklus = KézCiklus.Lista_Adatok();
 
-                long.TryParse(Vizsg_sorszám_combo.Text.Trim(), out long vSorsz);
+                List<Adat_Ciklus> CiklusAdat = KézCiklus.Lista_Adatok();
+                CiklusAdat = CiklusAdat.Where(a => a.Típus.Trim() == CiklusrendCombo.Text.Trim()).OrderBy(a => a.Sorszám).ToList();
+                string Vizsgálatfok = (from a in CiklusAdat
+                                       where a.Sorszám == i
+                                       select a.Vizsgálatfok).FirstOrDefault();
 
-                Adat_Ciklus AdatCiklus = (from a in AdatokCiklus
-                                          where a.Típus == CiklusrendCombo.Text.Trim()
-                                          && a.Sorszám == vSorsz
-                                          && a.Törölt == "0"
-                                          select a).FirstOrDefault();
+                if (Vizsgálatfok != null)
+                    Vizsgfok_új.Text = Vizsgálatfok;
 
-                if (AdatCiklus != null)
-                    Vizsgfok_új.Text = AdatCiklus.Vizsgálatfok.Trim();
+                // következő vizsgálat sorszáma
+                Vizsgálatfok = (from a in CiklusAdat
+                                where a.Sorszám == i + 1
+                                select a.Vizsgálatfok).FirstOrDefault();
+                if (Vizsgálatfok != null)
+                    KövV.Text = Vizsgálatfok;
+
+                KövV_Sorszám.Text = (i + 1).ToString();
+                // követekező V2-V3
+                KövV2.Text = "J";
+                KövV2_Sorszám.Text = "0";
+                for (int j = i + 1; j < CiklusAdat.Count; j++)
+                {
+                    if (CiklusAdat[j].Vizsgálatfok.Contains("V2"))
+                    {
+                        KövV2.Text = CiklusAdat[j].Vizsgálatfok;
+                        KövV2_Sorszám.Text = j.ToString();
+                        break;
+                    }
+                    if (CiklusAdat[j].Vizsgálatfok.Contains("V3"))
+                    {
+                        KövV2.Text = CiklusAdat[j].Vizsgálatfok;
+                        KövV2_Sorszám.Text = j.ToString();
+                        break;
+                    }
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -1064,6 +1087,11 @@ namespace Villamos
                 if (!long.TryParse(TEljesKmText.Text, out long tEljesKmText)) throw new HibásBevittAdat("Üzembehelyezés óta futott mezőnek egész számnak kell lennie.");
                 if (CiklusrendCombo.Text.Trim() == "") throw new HibásBevittAdat("Ütemezés típusa mező nem lehet üres.");
                 if (!long.TryParse(Sorszám.Text.Trim(), out long sorszámId)) sorszámId = 0;
+                if (!int.TryParse(KövV2_Sorszám.Text, out int kövV2_Sorszám)) throw new HibásBevittAdat("Következő V2-V3 sorszám mező nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(KövV_Sorszám.Text, out int kövV_Sorszám)) throw new HibásBevittAdat("Következő V mező nem lehet üres és egész számnak kell lennie.");
+                if (!int.TryParse(KövV2km.Text, out int kövV2km)) throw new HibásBevittAdat("V2-V3-tól futott km mező nem lehet üres és egész számnak kell lennie.");
+                if (!long.TryParse(KövV2_számláló.Text, out long kövV2_számláló)) throw new HibásBevittAdat("V2-V3 számláló állás mező nem lehet üres és egész számnak kell lennie.");
+
 
                 Adat_T5C5_Kmadatok ADAT = new Adat_T5C5_Kmadatok(
                                 sorszámId,
@@ -1079,14 +1107,14 @@ namespace Villamos
                                 sorszám,
                                 Utolsófelújításdátuma.Value,
                                 tEljesKmText,
-                                CiklusrendCombo.Text.Trim(),
-                                Üzemek.Text.Trim(),
-                                0,
-                                "_",
-                                0,
-                                "_",
+                                MyF.Szöveg_Tisztítás(CiklusrendCombo.Text.Trim()),
+                                MyF.Szöveg_Tisztítás(Üzemek.Text.Trim()),
+                                kövV2_Sorszám,
+                                MyF.Szöveg_Tisztítás(KövV2.Text.Trim()),
+                                kövV_Sorszám,
+                                MyF.Szöveg_Tisztítás(KövV.Text.Trim()),
                                 false,
-                                0);
+                                kövV2_számláló);
 
                 if (Sorszám.Text.Trim() == "")
                     KézKMAdatok.Rögzítés(ADAT);
