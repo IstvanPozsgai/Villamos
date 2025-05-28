@@ -453,7 +453,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //itt tartok
+        //aaa tartok
         private void Túlóratörlés_Click(object sender, EventArgs e)
         {
             try

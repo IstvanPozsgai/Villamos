@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 

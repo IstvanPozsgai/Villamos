@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 

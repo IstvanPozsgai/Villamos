@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Villamos;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+
 using Villamos.Villamos_Adatszerkezet;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;

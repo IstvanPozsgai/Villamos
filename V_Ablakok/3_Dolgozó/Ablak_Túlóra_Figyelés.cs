@@ -50,16 +50,10 @@ namespace Villamos
             // Munkaidő keret feltöltés
             Kötelezőidők();
             Jogosultságkiosztás();
-            Fülekkitöltése();
             Csoportfeltöltés();
             Névfeltöltés();
 
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-        }
-
-        private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Fülekkitöltése();
         }
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
@@ -120,27 +114,6 @@ namespace Villamos
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Fülekkitöltése()
-        {
-            switch (Fülek.SelectedIndex)
-            {
-                case 0:
-                    {
-                        break;
-                    }
-
-                case 1:
-                    {
-                        break;
-                    }
-
-                case 2:
-                    {
-                        break;
-                    }
             }
         }
 
@@ -206,7 +179,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Túlórakeret_Ellenőrzés_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Túlórakeret_Ellenőrzés_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -391,7 +364,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Munkaidőkeret_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Munkaidőkeret_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -966,7 +939,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Elvont_pihenőnapok_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Elvont_pihenőnapok_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1033,7 +1006,7 @@ namespace Villamos
                 Csoport.Items.Add(Elem.Csoport);
         }
 
-        //Ezt még egyesíteni kell a rögzítés során
+        // aaa  Ezt még egyesíteni kell a rögzítés során
         private void Rögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -1166,6 +1139,9 @@ namespace Villamos
 
 
         #region Dolgozónév választás
+        /// <summary>
+        /// Dolgozókat tölti fel a dolgozók listáját a telephelyhez tartozóan.
+        /// </summary>
         private void Névfeltöltés()
         {
             Dolgozónév.Items.Clear();
@@ -1181,6 +1157,11 @@ namespace Villamos
             Dolgozónév.EndUpdate();
         }
 
+        /// <summary>
+        ///  A dolgozónév checklistbox nyitása, hogy a dolgozók listája látható legyen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Nyitdolgozó_Click(object sender, EventArgs e)
         {
             Dolgozónév.Height = 500;
@@ -1188,11 +1169,19 @@ namespace Villamos
             NyitDolgozó.Visible = false;
         }
 
+        /// <summary>
+        /// A dolgozónév checklistbox bezárása, hogy a dolgozók listája ne legyen látható.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Csukdolgozó_Click(object sender, EventArgs e)
         {
             Visszacsukjadolgozó();
         }
 
+        /// <summary>
+        /// A dolgozónév checklistbox bezárása, hogy a dolgozók listája ne legyen látható.
+        /// </summary>
         private void Visszacsukjadolgozó()
         {
             Dolgozónév.Height = 25;
@@ -1200,6 +1189,11 @@ namespace Villamos
             NyitDolgozó.Visible = true;
         }
 
+        /// <summary>
+        /// Minden dolgozó checkbox kijelölése a dolgozók listájában.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Dolgozókijelölmind_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Dolgozónév.Items.Count; i++)
@@ -1207,6 +1201,11 @@ namespace Villamos
             Visszacsukjadolgozó();
         }
 
+        /// <summary>
+        /// Minden dolgozó checkbox kijelölésének törlése a dolgozók listájában.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Dolgozóvissza_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Dolgozónév.Items.Count; i++)
