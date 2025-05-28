@@ -110,7 +110,7 @@
             // 
             this.CmbStátus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.CmbStátus.FormattingEnabled = true;
-            this.CmbStátus.Location = new System.Drawing.Point(209, 244);
+            this.CmbStátus.Location = new System.Drawing.Point(209, 237);
             this.CmbStátus.Name = "CmbStátus";
             this.CmbStátus.Size = new System.Drawing.Size(187, 28);
             this.CmbStátus.TabIndex = 4;
@@ -271,7 +271,7 @@
             // 
             this.CmbAzonosító.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.CmbAzonosító.FormattingEnabled = true;
-            this.CmbAzonosító.Location = new System.Drawing.Point(209, 26);
+            this.CmbAzonosító.Location = new System.Drawing.Point(209, 19);
             this.CmbAzonosító.Name = "CmbAzonosító";
             this.CmbAzonosító.Size = new System.Drawing.Size(187, 28);
             this.CmbAzonosító.TabIndex = 14;

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
 using MyA = Adatbázis;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 {
@@ -37,7 +37,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 {
                     szöveg = $"INSERT INTO TTP_Év (Életkor, Év) ";
                     szöveg += "VALUES (";
-                    szöveg += $" {TxtBxÉletkor.Text}, " ;
+                    szöveg += $" {TxtBxÉletkor.Text}, ";
                     szöveg += $" {TxtBxÉv.Text} )";
                 }
                 else
@@ -55,7 +55,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                     {
                         szöveg = $"INSERT INTO TTP_Év (Életkor, Év) ";
                         szöveg += "VALUES (";
-                        szöveg += $" {TxtBxÉletkor.Text}, " ;
+                        szöveg += $" {TxtBxÉletkor.Text}, ";
                         szöveg += $" {TxtBxÉv.Text} )";
                     }
                 }
@@ -72,7 +72,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-   
+
         private void ÉvListáz()
         {
             try
