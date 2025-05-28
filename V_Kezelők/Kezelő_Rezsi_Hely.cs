@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Rezsi_Hely
     {
         readonly string jelszó = "csavarhúzó";
+        readonly string Táblanév = "tábla";
         string hely;
 
         private void FájlBeállítás(string Telephely)
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Rezsi_Hely> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM tábla Order by azonosító";
+            string szöveg = $"SELECT * FROM {Táblanév} Order by azonosító";
             List<Adat_Rezsi_Hely> Adatok = new List<Adat_Rezsi_Hely>();
             Adat_Rezsi_Hely Adat;
 
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO tábla (azonosító, helyiség, állvány, polc, megjegyzés) VALUES (";
+                string szöveg = $"INSERT INTO {Táblanév} (azonosító, helyiség, állvány, polc, megjegyzés) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Helyiség}', ";
                 szöveg += $"'{Adat.Állvány}', ";
@@ -85,7 +86,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
 
-                string szöveg = "UPDATE tábla  SET ";
+                string szöveg = $"UPDATE {Táblanév}  SET ";
                 szöveg += $"Helyiség='{Adat.Helyiség}', ";
                 szöveg += $"Állvány='{Adat.Állvány}', ";
                 szöveg += $"polc='{Adat.Polc}', ";

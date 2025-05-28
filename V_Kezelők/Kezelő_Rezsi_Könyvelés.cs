@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Rezsi_Könyvelés
     {
         readonly string jelszó = "csavarhúzó";
+        readonly string Táblanév = "könyv";
         string hely;
 
         private void FájlBeállítás(string Telephely)
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Rezsi_Lista> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM könyv ORDER BY Azonosító";
+            string szöveg = $"SELECT * FROM {Táblanév} ORDER BY Azonosító";
             List<Adat_Rezsi_Lista> Adatok = new List<Adat_Rezsi_Lista>();
             Adat_Rezsi_Lista Adat;
 
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
             foreach (string telep in Telephely)
             {
                 FájlBeállítás(telep);
-                string szöveg = "SELECT * FROM könyv ORDER BY Azonosító";
+                string szöveg = $"SELECT * FROM {Táblanév} ORDER BY Azonosító";
                 Adat_Rezsi_Lista Adat;
 
                 string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -96,7 +97,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO könyv (azonosító, Mennyiség, dátum, státus ) VALUES (";
+                string szöveg = $"INSERT INTO {Táblanév} (azonosító, Mennyiség, dátum, státus ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"{Adat.Mennyiség.ToString().Replace(',', '.')}, ";
                 szöveg += $"'{Adat.Dátum}', ";
@@ -120,7 +121,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
 
-                string szöveg = "UPDATE könyv  SET ";
+                string szöveg = $"UPDATE {Táblanév}  SET ";
                 szöveg += $"Mennyiség={Adat.Mennyiség.ToString().Replace(',', '.')}, ";
                 szöveg += $"státus={Adat.Státus}, ";
                 szöveg += $"dátum ='{Adat.Dátum}' ";
@@ -154,7 +155,7 @@ namespace Villamos.Kezelők
                                                 rekord.Dátum,
                                                 rekord.Státus);
                         Rögzítés(Telephely, Adat);
-                        string szöveg = $"DELETE FROM könyv WHERE Azonosító='{rekord.Azonosító}'";
+                        string szöveg = $"DELETE FROM {Táblanév} WHERE Azonosító='{rekord.Azonosító}'";
                         Adatbázis.ABtörlés(hely, jelszó, szöveg);
                     }
                 }

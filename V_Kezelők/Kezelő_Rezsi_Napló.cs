@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Rezsi_Napló
     {
         readonly string jelszó = "csavarhúzó";
+        readonly string Táblanév = "napló";
         string hely;
 
         private void FájlBeállítás(string Telephely, int Év)
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Rezsi_Listanapló> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM napló ORDER BY Azonosító";
+            string szöveg = $"SELECT * FROM {Táblanév} ORDER BY Azonosító";
             List<Adat_Rezsi_Listanapló> Adatok = new List<Adat_Rezsi_Listanapló>();
             Adat_Rezsi_Listanapló Adat;
 
@@ -63,7 +64,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO napló (Azonosító, honnan, hova, mennyiség, státus, módosította, mirehasznál, módosításidátum) VALUES (";
+                string szöveg = $"INSERT INTO {Táblanév} (Azonosító, honnan, hova, mennyiség, státus, módosította, mirehasznál, módosításidátum) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Honnan}', ";
                 szöveg += $"'{Adat.Hova}', ";
@@ -113,7 +114,7 @@ namespace Villamos.Kezelők
                 {
                     if (rekord != rekord.ToUpper())
                     {
-                        string szöveg = $"DELETE FROM napló WHERE Azonosító='{rekord}'";
+                        string szöveg = $"DELETE FROM {Táblanév} WHERE Azonosító='{rekord}'";
                         Adatbázis.ABtörlés(hely, jelszó, szöveg);
                     }
                 }
