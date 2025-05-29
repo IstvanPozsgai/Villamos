@@ -1894,8 +1894,143 @@ namespace Villamos.Villamos_Ablakok
 
                 long Sorszám = KézDigFej.Sorszám();
                 if (NapiSorszám == -1) NapiSorszám = Sorszám;
-                DigiMentés(Sorszám);
+                if (Combo_KarbCiklus.Text.Trim() == "E1" || Combo_KarbCiklus.Text.Trim() == "E2")
+                    DigiMentés(Sorszám);
+                else
+                    DigiMentéstöbbi(Sorszám);
+
                 MessageBox.Show($"Az adatok mentése elkészült", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DigiMentéstöbbi(long Sorszám)
+        {
+            try
+            {
+                Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok("T5C5");
+                List<Adat_T5C5_Kmadatok> AdatokKmAdatok = KézKM.Lista_Adatok();
+                List<Adat_DigitálisMunkalap_Kocsik> AdatokDigiKocsik = new List<Adat_DigitálisMunkalap_Kocsik>();
+                List<Adat_DigitálisMunkalap_Dolgozó> AdatokDigiDolgozó = new List<Adat_DigitálisMunkalap_Dolgozó>();
+
+                foreach (string azonosító in Pályaszám_TáblaAdatok)
+                {
+                    //Fejadatok
+                    string[] darabol = Kiadta.Text.Split('-');
+                    string[] darabol2 = darabol[0].Split('_');
+                    Adat_DigitálisMunkalap_Fej ADATDigiFej = new Adat_DigitálisMunkalap_Fej(
+                                            Sorszám,
+                                            Járműtípus.Text.Trim(),
+                                            Combo_KarbCiklus.Text.Trim(),
+                                            darabol2[0],
+                                            darabol2[1],
+                                            Cmbtelephely.Text.Trim(),
+                                            Dátum.Value
+                                            );
+                    KézDigFej.Rögzítés(ADATDigiFej);
+
+                    //Kocsik
+                    AdatokDigiKocsik.Clear();
+                    Adat_T5C5_Kmadatok Adatkm = AdatokKmAdatok.Where(a => a.Azonosító == azonosító).FirstOrDefault();
+                    long KMU = 0;
+                    if (Adatkm != null) KMU = Adatkm.KMUkm;
+
+                    string rendelés = Rendelés_Keresés(0);
+
+                    Adat_DigitálisMunkalap_Kocsik AdatKocsik = new Adat_DigitálisMunkalap_Kocsik(
+                                            Sorszám,
+                                            azonosító,
+                                            KMU,
+                                            rendelés);
+                    AdatokDigiKocsik.Add(AdatKocsik);
+
+                    KézDigKocsi.Rögzítés(AdatokDigiKocsik);
+
+
+                    //Változatok
+                    AdatokVáltozat = MyLista.VáltozatLista(Járműtípus.Text.Trim(), Cmbtelephely.Text.Trim());
+                    List<Adat_Technológia_Változat> VÁLTAdatok = (from a in AdatokVáltozat
+                                                                  where a.Változatnév == Munkalap_Változatnév.Text.Trim()
+                                                                  select a).ToList();
+
+                    //pályaszám kivételei
+                    AdatokKivétel = MyLista.KivételekLista(Járműtípus.Text.Trim());
+                    AdatokKivételCsop = CsoportosKivételek();
+
+                    AdatokCiklus = MyLista.KarbCiklusLista(Járműtípus.Text.Trim());
+                    Adat_technológia_Ciklus AdatCikk = (from a in AdatokCiklus
+                                                        where a.Fokozat == Combo_KarbCiklus.Text.Trim()
+                                                        select a).FirstOrDefault();
+
+                    AdatokTechnológia = MyLista.TechnológiaLista(Járműtípus.Text.Trim());
+                    List<Adat_Technológia_Új> Adatok = (from a in AdatokTechnológia
+                                                        where a.Karb_ciklus_eleje <= AdatCikk.Sorszám && a.Karb_ciklus_vége >= AdatCikk.Sorszám
+                                                        && a.Érv_kezdete <= Dátum.Value && a.Érv_vége >= Dátum.Value
+                                                        orderby a.Részegység, a.Munka_utasítás_szám, a.ID
+                                                        select a).ToList();
+
+                    //munkalap érdemi része
+                    foreach (Adat_Technológia_Új Rekorda in Adatok)
+                    {
+                        //Ha speciális, akkor kiírja különben kihagy
+                        if (Ki_kell_írni(Rekorda.Altípus, csoportos, AdatokKivétel))
+                        {
+                            string dolgozónév = "";
+                            string dolgozószám = "";
+
+                            if (VÁLTAdatok.Count > 0)
+                            {
+                                string Ideignév = (from b in VÁLTAdatok
+                                                   where b.Technológia_Id == Rekorda.ID
+                                                   select b.Végzi).FirstOrDefault();
+                                if (Ideignév != null)
+                                {
+                                    List<string> Elem = (from a in Személy
+                                                         where a.Key.Contains(Ideignév.Trim())
+                                                         select a.Value).ToList();
+                                    foreach (string item in Elem)
+                                    {
+                                        string[] Darabol = item.Split('_');
+                                        Adat_DigitálisMunkalap_Dolgozó ADATDOLGOZÓ = new Adat_DigitálisMunkalap_Dolgozó(
+                                                                         Darabol[0].Trim(),
+                                                                         Darabol[1].Trim(),
+                                                                         Sorszám,
+                                                                         Rekorda.ID);
+                                        AdatokDigiDolgozó.Add(ADATDOLGOZÓ);
+                                    }
+                                    if (Elem.Count == 0)
+                                    {
+                                        Adat_DigitálisMunkalap_Dolgozó ADATDOLGOZÓ = new Adat_DigitálisMunkalap_Dolgozó(
+                                                                          dolgozónév,
+                                                                          dolgozószám,
+                                                                          Sorszám,
+                                                                          Rekorda.ID);
+                                        AdatokDigiDolgozó.Add(ADATDOLGOZÓ);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Adat_DigitálisMunkalap_Dolgozó ADATDOLGOZÓ = new Adat_DigitálisMunkalap_Dolgozó(
+                                      dolgozónév,
+                                      dolgozószám,
+                                      Sorszám,
+                                      Rekorda.ID);
+                                AdatokDigiDolgozó.Add(ADATDOLGOZÓ);
+                            }
+                        }
+                    }
+                    KézDigDolg.Rögzítés(AdatokDigiDolgozó);
+                    Sorszám++;
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -1916,6 +2051,7 @@ namespace Villamos.Villamos_Ablakok
             DigiKocsi();
             DigiDolgozó();
             MessageBox.Show($"Az Exceltáblák elkészültek", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            NapiSorszám = -1;
         }
 
         private void DigiFej()
