@@ -12,9 +12,10 @@ namespace Villamos.Villamos_Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
         readonly string jelszó = "bozaim";
+        readonly string Tabla_Muvelet = "Műveletek";
         public List<Adat_Eszterga_Műveletek> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Műveletek ORDER BY ID  ";
+            string szöveg = $"SELECT * FROM {Tabla_Muvelet} ORDER BY ID  ";
             List<Adat_Eszterga_Műveletek> Adatok = new List<Adat_Eszterga_Műveletek>();
             Adat_Eszterga_Műveletek Adat;
 
@@ -52,7 +53,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Műveletek (ID, Művelet, Egység, Mennyi_Dátum, Mennyi_Óra, Státus, Utolsó_Dátum, Utolsó_Üzemóra_Állás) VALUES(";
+                string szöveg = $"INSERT INTO {Tabla_Muvelet} (ID, Művelet, Egység, Mennyi_Dátum, Mennyi_Óra, Státus, Utolsó_Dátum, Utolsó_Üzemóra_Állás) VALUES(";
                 szöveg += $"'{Sorszám()}', ";
                 szöveg += $"'{Adat.Művelet}', ";
                 szöveg += $"{Adat.Egység}, ";
@@ -78,7 +79,7 @@ namespace Villamos.Villamos_Kezelők
             try
             {
                 string oszlop = törlés ? "Státus=True" : "Megjegyzés=NULL";
-                string szöveg = $"UPDATE Műveletek SET {oszlop} WHERE ID={Adat.ID}";
+                string szöveg = $"UPDATE {Tabla_Muvelet} SET {oszlop} WHERE ID={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -114,7 +115,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Műveletek SET ";
+                string szöveg = $"UPDATE {Tabla_Muvelet} SET ";
                 szöveg += $"Utolsó_Dátum=#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, ";
                 szöveg += $"Utolsó_Üzemóra_Állás={Adat.Utolsó_Üzemóra_Állás} ";
                 szöveg += $"WHERE ID = {Adat.ID}";
@@ -134,7 +135,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Műveletek SET Megjegyzés='{Adat.Megjegyzés}' WHERE ID={Adat.ID}";
+                string szöveg = $"UPDATE {Tabla_Muvelet} SET Megjegyzés='{Adat.Megjegyzés}' WHERE ID={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -151,7 +152,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Műveletek SET ID = {KovetkezoID} WHERE ID = {Adat.ID}";
+                string szöveg = $"UPDATE {Tabla_Muvelet} SET ID = {KovetkezoID} WHERE ID = {Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -168,7 +169,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Műveletek SET ";
+                string szöveg = $"UPDATE {Tabla_Muvelet} SET ";
                 szöveg += $"Művelet='{Adat.Művelet}', ";
                 szöveg += $"Egység={Adat.Egység}, ";
                 szöveg += $"Mennyi_Dátum={Adat.Mennyi_Dátum}, ";
@@ -193,7 +194,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg1 = $"UPDATE Műveletek SET Művelet='{rekord2.Művelet}', ";
+                string szöveg1 = $"UPDATE {Tabla_Muvelet} SET Művelet='{rekord2.Művelet}', ";
                 szöveg1 += $"Egység={rekord2.Egység}, ";
                 szöveg1 += $"Mennyi_Dátum={rekord2.Mennyi_Dátum}, ";
                 szöveg1 += $"Mennyi_Óra={rekord2.Mennyi_Óra}, ";
@@ -202,7 +203,7 @@ namespace Villamos.Villamos_Kezelők
                 szöveg1 += $"Utolsó_Üzemóra_állás={rekord2.Utolsó_Üzemóra_Állás} ";
                 szöveg1 += $"WHERE ID={rekord1.ID}";
 
-                string szöveg2 = $"UPDATE Műveletek SET Művelet='{rekord1.Művelet}', ";
+                string szöveg2 = $"UPDATE {Tabla_Muvelet} SET Művelet='{rekord1.Művelet}', ";
                 szöveg2 += $"Egység={rekord1.Egység}, ";
                 szöveg2 += $"Mennyi_Dátum={rekord1.Mennyi_Dátum}, ";
                 szöveg2 += $"Mennyi_Óra={rekord1.Mennyi_Óra}, ";
@@ -233,18 +234,18 @@ namespace Villamos.Villamos_Kezelők
 
                 if (ElsoID < MasodikID)
                 {
-                    szöveg = $"UPDATE Műveletek SET ID = ID + 1 WHERE ID >= {MasodikID}";
+                    szöveg = $"UPDATE {Tabla_Muvelet} SET ID = ID + 1 WHERE ID >= {MasodikID}";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
 
-                    szövegMozog = $"UPDATE Műveletek SET ID = {MasodikID} WHERE ID = {ElsoID}";
+                    szövegMozog = $"UPDATE {Tabla_Muvelet} SET ID = {MasodikID} WHERE ID = {ElsoID}";
                     MyA.ABMódosítás(hely, jelszó, szövegMozog);
                 }
                 else
                 {
-                    szöveg = $"UPDATE Műveletek SET ID = ID + 1 WHERE ID >= {MasodikID}";
+                    szöveg = $"UPDATE {Tabla_Muvelet} SET ID = ID + 1 WHERE ID >= {MasodikID}";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
 
-                    szövegMozog = $"UPDATE Műveletek SET ID = {MasodikID} WHERE ID = {ElsoID + 1}";
+                    szövegMozog = $"UPDATE {Tabla_Muvelet} SET ID = {MasodikID} WHERE ID = {ElsoID + 1}";
                     MyA.ABMódosítás(hely, jelszó, szövegMozog);
                 }
             }
@@ -263,9 +264,10 @@ namespace Villamos.Villamos_Kezelők
     {
         readonly string jelszó = "bozaim";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
+        readonly string Tabla_Uzem = "Üzemóra";
         public List<Adat_Eszterga_Üzemóra> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Üzemóra ORDER BY Dátum, ID  ";
+            string szöveg = $"SELECT * FROM {Tabla_Uzem} ORDER BY Dátum, ID  ";
             List<Adat_Eszterga_Üzemóra> Adatok = new List<Adat_Eszterga_Üzemóra>();
             Adat_Eszterga_Üzemóra Adat;
 
@@ -298,7 +300,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Üzemóra (ID, Üzemóra, Dátum, Státus) VALUES(";
+                string szöveg = $"INSERT INTO {Tabla_Uzem} (ID, Üzemóra, Dátum, Státus) VALUES(";
                 szöveg += $"'{Sorszám()}', ";
                 szöveg += $"{Adat.Üzemóra}, ";
                 szöveg += $"'{Adat.Dátum:yyyy-MM-dd}', ";
@@ -319,7 +321,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Üzemóra SET Státus=True WHERE ID={Adat.ID}";
+                string szöveg = $"UPDATE {Tabla_Uzem} SET Státus=True WHERE ID={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -356,6 +358,7 @@ namespace Villamos.Villamos_Kezelők
     {
         readonly string jelszó = "bozaim";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{DateTime.Now.Year}_Napló.mdb";
+        readonly string Tabla_Napló = "Műveletek_Napló";
         public List<Adat_Eszterga_Műveletek_Napló> Lista_Adatok()
         {
            string szöveg = "SELECT * FROM Műveletek_Napló ORDER BY ID ";
@@ -396,7 +399,7 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Műveletek_Napló (ID, Művelet, Mennyi_Dátum, Mennyi_Óra, Utolsó_Dátum, Utolsó_Üzemóra_Állás, [Megjegyzés], Rögzítő, Rögzítés_Dátuma) VALUES (";
+                string szöveg = $"INSERT INTO {Tabla_Napló} (ID, Művelet, Mennyi_Dátum, Mennyi_Óra, Utolsó_Dátum, Utolsó_Üzemóra_Állás, [Megjegyzés], Rögzítő, Rögzítés_Dátuma) VALUES (";
                 szöveg += $"{Adat.ID}, ";
                 szöveg += $"'{Adat.Művelet}', ";
                 szöveg += $"{Adat.Mennyi_Dátum}, ";
