@@ -1976,7 +1976,7 @@ namespace Villamos.Villamos_Ablakok
                                                         && a.Érv_kezdete <= Dátum.Value && a.Érv_vége >= Dátum.Value
                                                         orderby a.Részegység, a.Munka_utasítás_szám, a.ID
                                                         select a).ToList();
-
+                    AdatokDigiDolgozó.Clear();
                     //munkalap érdemi része
                     foreach (Adat_Technológia_Új Rekorda in Adatok)
                     {
