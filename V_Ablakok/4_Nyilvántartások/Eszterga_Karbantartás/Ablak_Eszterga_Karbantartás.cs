@@ -955,8 +955,14 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void TxtBxNapiUzemoraAtlag_TextChanged(object sender, EventArgs e)
         {
-            if (int.TryParse(TxtBxNapiUzemoraAtlag.Text, out int napok) && napok > 0)
-                ÁtlagÜzemóraFrissítés(napok);
+            if (int.TryParse(TxtBxNapiUzemoraAtlag.Text, out int napok))
+            {
+                if (napok > 100000)
+                    TxtBxNapiUzemoraAtlag.Text = "100000";
+
+                if (napok > 0)
+                    ÁtlagÜzemóraFrissítés(Math.Min(napok, 100000));
+            }
         }
 
         /// <summary>
