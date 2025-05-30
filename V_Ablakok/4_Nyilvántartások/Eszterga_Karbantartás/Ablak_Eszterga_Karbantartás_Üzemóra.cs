@@ -93,7 +93,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
         /// <summary>
         /// Feltölti az üzemóra rekordokat a táblázatba, beállítja az oszlopokat és frissíti a megjelenést.
-        /// Csak formázott, olvasható adatokat jelenít meg.
         /// </summary>
         private void TáblaListázás()
         {
@@ -278,7 +277,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
         /// <summary>
         /// Ellenőrzi, hogy a megadott dátum nem jövőbeli-e.
-        /// Ha igen, figyelmeztetést jelenít meg és megszakítja a módosítást.
         /// </summary>
         private bool DátumEllenőrzés(DateTime UjDatum)
         {
@@ -382,8 +380,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
         /// <summary>
         /// Frissíti a karbantartási műveletek utolsó üzemóra és dátum mezőit,
-        /// ha az üzemóra vagy dátum változott.  
-        /// Meghívja a módosító metódust minden érintett műveletre.
+        /// ha az üzemóra vagy dátum változott.
         /// </summary>
         private void Frissít_MűveletTáblázat(DateTime EredetiDatum, DateTime UjDatum, long EredetiUzemora, long UjUzemora)
         {

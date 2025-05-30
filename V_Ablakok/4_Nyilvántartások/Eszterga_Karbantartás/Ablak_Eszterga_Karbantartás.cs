@@ -273,9 +273,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         /// <summary>
         /// Előrejelzést készít a jövőbeli karbantartási műveletekről az üzemóra és a dátum alapján.
-        /// Az algoritmus iterálva számolja ki az esedékességi dátumokat a kiválasztott tervnapig,
-        /// és feltölti a táblát az előre esedékes műveletekkel.
-        /// A táblázat tartalmát rendezve jeleníti meg.
         /// </summary>
         private void EloreTervezesListazasa()
         {
@@ -423,7 +420,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// Betölti a karbantartási műveletek naplózott adatait a táblázatba.
         /// A naplóból származó adatok (művelet, dátum, üzemóra, rögzítő stb.) megjelennek,
         /// rendezve dátum és azonosító szerint.
-        /// A táblázat csak olvasható, az oszlopok méreteit előre beállítja.
         /// </summary>
         private void TáblaNaplóListázás()
         {
@@ -487,7 +483,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         /// <summary>
         /// Beállítja a fő karbantartási tábla oszlopainak szélességét fix értékekkel.
-        /// A cél a jól áttekinthető, egyenletes elrendezés biztosítása.
         /// </summary>
         private void OszlopSzélesség()
         {
@@ -506,7 +501,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         /// <summary>
         /// Beállítja a fő karbantartási tábla oszlopainak szélességét fix értékekkel.
-        /// A cél a jól áttekinthető, egyenletes elrendezés biztosítása.
         /// </summary>
         private void TáblaÜrítés()
         {
@@ -518,7 +512,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// <summary>
         /// Egy adott táblázatsor alapján létrehoz egy naplórekordot a karbantartási művelethez.
         /// Beállítja a szükséges mezőket, mint a dátum, üzemóra, megjegyzés és a rögzítő neve.
-        /// A létrejött naplóbejegyzést menti adatbázisba. Hiba esetén figyelmeztetést vagy naplózást végez.
+        /// A létrejött naplóbejegyzést menti adatbázisba.
         /// </summary>
         private void Naplózás(DataGridViewRow Sor, DateTime UtolsóDátum, long UtolsóÜzemóra)
         {
@@ -704,8 +698,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         /// <summary>
         /// Becsült üzemóra értéket számol a megadott jövőbeli dátumhoz, 
-        /// az eddigi rögzített üzemóra növekedés átlaga alapján.  
-        /// Ha nincs elegendő adat, 0-t ad vissza.
+        /// az eddigi rögzített üzemóra növekedés átlaga alapján.
         /// </summary>
         private long BecsültÜzemóra(DateTime ElőDátum)
         {
@@ -843,8 +836,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         /// <summary>
         /// A kiválasztott sor(ok) végrehajtott műveletként történő rögzítése a mai dátummal és aktuális üzemórával.
-        /// Lezárja a műveletet, naplózza az adatokat, és frissíti a táblázatot.  
-        /// Ha a sor nem esedékes vagy nincs kijelölés, figyelmeztetést ad.
+        /// Lezárja a műveletet, naplózza az adatokat, és frissíti a táblázatot.
         /// </summary>
         private void Btn_Rögzít_Click(object sender, EventArgs e)
         {
@@ -960,7 +952,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         /// <summary>
         /// Amikor az üzemóra átlag számításához megadott napok száma megváltozik, újra kiszámítja és frissíti az értéket.
-        /// Csak pozitív egész szám esetén hajtódik végre a számítás.
         /// </summary>
         private void TxtBxNapiUzemoraAtlag_TextChanged(object sender, EventArgs e)
         {
@@ -1013,8 +1004,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         /// <summary>
         /// A megjegyzés cella szerkesztésének lezárásakor ellenőrzi, történt-e változás.
-        /// Ha új megjegyzés került be, elmenti azt, ha törlés történt, törli az értéket.  
-        /// Jogosultság és dátum ellenőrzéssel biztosítja a helyes rögzítést.
+        /// Ha új megjegyzés került be, elmenti azt, ha törlés történt, törli az értéket.
         /// </summary>
         private void Tábla_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {

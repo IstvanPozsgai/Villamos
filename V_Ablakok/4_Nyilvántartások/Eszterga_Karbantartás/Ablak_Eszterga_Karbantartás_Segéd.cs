@@ -131,8 +131,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
         /// <summary>
         /// Ellenőrzi az üzemóra mező értékét, majd ha az érvényes és nem kisebb az utolsó rögzített értéknél,
-        /// elmenti új üzemóra rekordként az aktuális napra.  
-        /// Hibás adat vagy csökkenő üzemóra esetén figyelmeztetést jelenít meg.
+        /// elmenti új üzemóra rekordként az aktuális napra. 
         /// </summary>
         private void BtnRogzit_Click(object sender, EventArgs e)
         {
