@@ -499,6 +499,7 @@
             this.TáblaUtólagMűvelet.Size = new System.Drawing.Size(656, 204);
             this.TáblaUtólagMűvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TáblaUtólagMűvelet.TabIndex = 47;
+            this.TáblaUtólagMűvelet.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaUtólagMűvelet_CellClick);
             this.TáblaUtólagMűvelet.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TáblaUtólagMűvelet_CellFormatting);
             // 
             // LblDatumUtolag
@@ -535,6 +536,7 @@
             this.TáblaNapló.Size = new System.Drawing.Size(656, 212);
             this.TáblaNapló.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TáblaNapló.TabIndex = 29;
+            this.TáblaNapló.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaNapló_CellClick);
             // 
             // DtmPckrUtolagos
             // 

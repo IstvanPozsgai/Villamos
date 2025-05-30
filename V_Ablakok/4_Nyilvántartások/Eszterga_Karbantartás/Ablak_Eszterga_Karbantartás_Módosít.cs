@@ -32,9 +32,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Kezelők
-       readonly private Kezelő_Eszterga_Műveletek KézMűveletek = new Kezelő_Eszterga_Műveletek();
-       readonly private Kezelő_Eszterga_Műveletek_Napló KézNapló = new Kezelő_Eszterga_Műveletek_Napló();
-       readonly private Kezelő_Eszterga_Üzemóra KézÜzemóra = new Kezelő_Eszterga_Üzemóra();
+        readonly private Kezelő_Eszterga_Műveletek KézMűveletek = new Kezelő_Eszterga_Műveletek();
+        readonly private Kezelő_Eszterga_Műveletek_Napló KézNapló = new Kezelő_Eszterga_Műveletek_Napló();
+        readonly private Kezelő_Eszterga_Üzemóra KézÜzemóra = new Kezelő_Eszterga_Üzemóra();
         #endregion
 
         #region Alap
@@ -998,6 +998,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             if (sender is Zuby.ADGV.AdvancedDataGridView tábla)
                 TöröltTáblaSzínezés(tábla, e, "Státusz");
         }
+        private void TáblaUtólagMűvelet_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            TáblaNapló.ClearSelection();
+            DtmPckrUtolagos.Value = DateTime.Today;
+        }
 
         /// <summary>
         /// Ellenőrzi, hogy pontosan két sor van-e kijelölve a táblában.
@@ -1189,11 +1194,23 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void TáblaNapló_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow sor = TáblaNapló.Rows[e.RowIndex];
 
-        #endregion
+                DtmPckrUtolagos.Value = sor.Cells["Utolsó Dátum"].Value.ToÉrt_DaTeTime();
+                TxtBxUtolagUzemora.Text = sor.Cells["Utolsó Üzemóra"].Value.ToStrTrim();
+                TxtBxUtolagMegjegyzes.Text = sor.Cells["Megjegyzés"].Value.ToStrTrim();
 
-        #region Ablakok
-        Ablak_Eszterga_Karbantartás_Üzemóra Új_ablak_EsztergaÜzemóra;
+                TáblaUtólagMűvelet.ClearSelection();
+            }
+        }
+            #endregion
+
+            #region Ablakok
+            Ablak_Eszterga_Karbantartás_Üzemóra Új_ablak_EsztergaÜzemóra;
 
         /// <summary>
         /// Megnyitja az Eszterga üzemóra ablakot, ha még nincs megnyitva.  
@@ -1233,5 +1250,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             Új_ablak_EsztergaÜzemóra = null;
         }
         #endregion
+
+        
     }
 }
