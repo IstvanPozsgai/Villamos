@@ -630,12 +630,6 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_Kerék_Konverter.Designer.cs">
       <DependentUpon>Ablak_Kerék_Konverter.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.Designer.cs">
-      <DependentUpon>Ablak_PDF_Tallózó.cs</DependentUpon>
-    </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Színkezelő.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1600,9 +1594,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Eszköz_Szerszám\Ablak_Szerszám.resx">
       <DependentUpon>Ablak_Szerszám.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.resx">
-      <DependentUpon>Ablak_PDF_Tallózó.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_segéd.resx">
       <DependentUpon>Ablak_T5C5_segéd.cs</DependentUpon>
