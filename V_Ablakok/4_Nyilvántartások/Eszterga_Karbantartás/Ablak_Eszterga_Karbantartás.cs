@@ -1,11 +1,13 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -893,29 +895,97 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// A táblázat tartalmát Excel fájlba exportálja, majd automatikusan megnyitja a fájlt.
         /// A felhasználó kiválaszthatja a fájl mentési helyét és nevét.
         /// </summary>
+        //private void Btn_Excel_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (Tábla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
+        //        string fájlexc;
+        //        SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+        //        {
+        //            InitialDirectory = "MyDocuments",
+        //            Title = "Teljes tartalom mentése Excel fájlba",
+        //            FileName = $"Eszterga_Karbantartás_Műveletek_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+        //            Filter = "Excel |*.xlsx"
+        //        };
+        //        if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+        //            fájlexc = SaveFileDialog1.FileName;
+        //        else
+        //            return;
+        //        fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
+
+        //        MyE.EXCELtábla(fájlexc, Tábla, false, true);
+        //        MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        //        MyE.Megnyitás($"{fájlexc}.xlsx");
+        //    }
+        //    catch (HibásBevittAdat ex)
+        //    {
+        //        MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+        //        MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
         private void Btn_Excel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
-                string fájlexc;
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "Teljes tartalom mentése Excel fájlba",
-                    FileName = $"Eszterga_Karbantartás_Műveletek_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
-                    Filter = "Excel |*.xlsx"
-                };
-                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = SaveFileDialog1.FileName;
-                else
+                if (Tábla.Rows.Count <= 0)
+                    throw new HibásBevittAdat("Nincs sora a táblázatnak!");
+
+                DialogResult választás = MessageBox.Show(
+                    "Hogyan szeretné menteni a táblázatot?\n\nIgen = Excel\nNem = PDF\nMégse = Kilépés",
+                    "Mentés típusa",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button1);
+
+                if (választás == DialogResult.Cancel)
                     return;
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
 
-                MyE.EXCELtábla(fájlexc, Tábla, false, true);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                bool pdf = választás == DialogResult.No;
 
-                MyE.Megnyitás($"{fájlexc}.xlsx");
+                SaveFileDialog mentésAblak = new SaveFileDialog
+                {
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    Title = pdf ? "Mentés PDF fájlba" : "Mentés Excel fájlba",
+                    FileName = $"Eszterga_Karbantartás_{Program.PostásNév.Trim()}_{DateTime.Now:yyyyMMdd_HHmmss}",
+                    Filter = pdf ? "PDF fájl (*.pdf)|*.pdf" : "Excel fájl (*.xlsx)|*.xlsx"
+                };
+
+                if (mentésAblak.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string fájlNév = mentésAblak.FileName;
+                Stopwatch stopper = new Stopwatch();
+                stopper.Start();
+
+                if (pdf)
+                {
+                    if (!fájlNév.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                        fájlNév += ".pdf";
+
+                    PDFtábla(fájlNév, Tábla);
+                    MessageBox.Show("Elkészült a PDF fájl:\n" + fájlNév, "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    if (!fájlNév.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
+                        fájlNév += ".xlsx";
+
+                    MyE.EXCELtábla(fájlNév, Tábla, false, true);
+                    MessageBox.Show("Elkészült az Excel fájl:\n" + fájlNév, "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                stopper.Stop();
+
+                string típus = pdf ? "PDF" : "Excel";
+                string idő = (stopper.Elapsed.TotalSeconds).ToString("0.00");
+
+                MessageBox.Show($"Elkészült a {típus} fájl:\n{fájlNév}\n\nIdő: {idő} másodperc", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyE.Megnyitás(fájlNév);
             }
             catch (HibásBevittAdat ex)
             {
@@ -924,7 +994,73 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void PDFtábla(string fájlNév, DataGridView tábla)
+        {
+            using (FileStream stream = new FileStream(fájlNév, FileMode.Create))
+            {
+                Document pdfDoc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
+                PdfWriter.GetInstance(pdfDoc, stream);
+                pdfDoc.Open();
+
+                // Betűtípus betöltése (Arial, Unicode támogatás)
+                string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+                // Fejléc betűtípus - fekete, vastag
+                iTextSharp.text.Font fejlecBetu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+
+                PdfPTable pdfTable = new PdfPTable(tábla.Columns.Count)
+                {
+                    WidthPercentage = 100
+                };
+
+                // Fejléc hozzáadása, egységes fekete háttérrel (vagy tetszőleges színnel)
+                foreach (DataGridViewColumn column in tábla.Columns)
+                {
+                    PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fejlecBetu))
+                    {
+                        BackgroundColor = new BaseColor(240, 240, 240)
+                    };
+                    pdfTable.AddCell(cell);
+                }
+
+                // Sorok bejárása
+                foreach (DataGridViewRow row in tábla.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        string szoveg = cell.Value?.ToString() ?? "";
+
+                        // Színek lekérése az InheritedStyle-ból (ez tartalmazza a tényleges megjelenő színt)
+                        BaseColor háttérSzín = cell.InheritedStyle.BackColor.IsEmpty
+                            ? BaseColor.WHITE
+                            : new BaseColor(cell.InheritedStyle.BackColor.R, cell.InheritedStyle.BackColor.G, cell.InheritedStyle.BackColor.B);
+
+                        BaseColor szovegSzín = cell.InheritedStyle.ForeColor.IsEmpty
+                            ? BaseColor.BLACK
+                            : new BaseColor(cell.InheritedStyle.ForeColor.R, cell.InheritedStyle.ForeColor.G, cell.InheritedStyle.ForeColor.B);
+
+                        // Betűtípus az adott cella szövegszínével
+                        iTextSharp.text.Font betu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.NORMAL, szovegSzín);
+
+                        PdfPCell pdfCell = new PdfPCell(new Phrase(szoveg, betu))
+                        {
+                            BackgroundColor = háttérSzín
+                        };
+
+                        pdfTable.AddCell(pdfCell);
+                    }
+                }
+
+                pdfDoc.Add(pdfTable);
+                pdfDoc.Close();
+                stream.Close();
             }
         }
 
