@@ -905,6 +905,7 @@ namespace Villamos
                           && a.Törölt == "0"
                           orderby a.Sorszám
                           select a).ToList();
+                Vizsg_sorszám_combo.Items.Clear();
                 foreach (Adat_Ciklus Elem in Adatok)
                     Vizsg_sorszám_combo.Items.Add(Elem.Sorszám);
                 Vizsg_sorszám_combo.Refresh();
