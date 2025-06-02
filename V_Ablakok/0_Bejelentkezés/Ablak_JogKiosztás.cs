@@ -17,14 +17,14 @@ namespace Villamos
         readonly Kezelők_Gombok KézGombok = new Kezelők_Gombok();
         readonly Kezelő_Kiegészítő_Könyvtár KézSzervezet = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelők_Users KézUsers = new Kezelők_Users();
-        readonly Kezelő_Dolgozó KézDolgozó = new Kezelő_Dolgozó();
+        readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
         readonly Kezelők_Jogosultságok KézJogosultságok = new Kezelők_Jogosultságok();
 
         List<Adat_Users> AdatokUsers = new List<Adat_Users>();
         List<Adat_Oldalak> AdatokOldal = new List<Adat_Oldalak>();
         List<Adat_Gombok> AdatokGombok = new List<Adat_Gombok>();
         List<Adat_Kiegészítő_Könyvtár> AdatokSzervezet = new List<Adat_Kiegészítő_Könyvtár>();
-        List<Adat_Dolgozó> AdatokDolgozó = new List<Adat_Dolgozó>();
+        List<Adat_Behajtás_Dolgozótábla> AdatokDolgozó = new List<Adat_Behajtás_Dolgozótábla>();
         List<Adat_Jogosultságok> AdatokJogosultságok = new List<Adat_Jogosultságok>();
 
 #pragma warning disable IDE0044
@@ -216,7 +216,7 @@ namespace Villamos
                 else
                 {
                     FelhasználóId = Felhasználó.UserId;
-                    Adat_Dolgozó dolgozó = AdatokDolgozó.FirstOrDefault(a => a.Dolgozószám == Felhasználó.Dolgozószám);
+                    Adat_Behajtás_Dolgozótábla dolgozó = AdatokDolgozó.FirstOrDefault(a => a.Dolgozószám == Felhasználó.Dolgozószám);
                     if (dolgozó != null)
                         DolgozóNév.Text = $"<<{dolgozó.Dolgozószám} - {dolgozó.Dolgozónév}>>";
                     else

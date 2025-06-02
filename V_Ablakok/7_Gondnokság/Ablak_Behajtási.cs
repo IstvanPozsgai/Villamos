@@ -506,13 +506,13 @@ namespace Villamos
 
                 List<Adat_Behajtás_Dolgozótábla> Adatok = KézDolgozó.Lista_Adatok();
                 Adat_Behajtás_Dolgozótábla rekord = (from a in Adatok
-                                                     where a.SZTSZ == TxtkérelemHR.Text.Trim()
+                                                     where a.Dolgozószám == TxtkérelemHR.Text.Trim()
                                                      select a).FirstOrDefault();
 
                 if (rekord != null)
                 {
                     // név és szervezet
-                    Txtkérelemnév.Text = rekord.Családnévutónév.Trim();
+                    Txtkérelemnév.Text = rekord.Dolgozónév.Trim();
                     CmbKérelemSzolgálati.Text = rekord.Szervezetiegység.Trim();
                 }
 
@@ -3091,11 +3091,11 @@ namespace Villamos
                         string munkakör = sor[oszlopMunka].ToString();
                         string szervezetiegység = sor[oszlopSzerv].ToString();
                         string státussz = sor[oszlopStátus].ToString();
-                        int státus = 0;
-                        if (státussz.Trim() == "ACTIVE") státus = 1;
+                        bool státus = false;
+                        if (státussz.Trim() == "ACTIVE") státus = true;
 
                         // meg nézzük, hogy van-e már ilyen adat
-                        bool vane = Adatok_behajt.Any(a => a.SZTSZ.Trim() == sztsz.Trim());
+                        bool vane = Adatok_behajt.Any(a => a.Dolgozószám.Trim() == sztsz.Trim());
                         Adat_Behajtás_Dolgozótábla ADAT = new Adat_Behajtás_Dolgozótábla(
                                                         sztsz.Trim(),
                                                         családnévutónév.Trim(),

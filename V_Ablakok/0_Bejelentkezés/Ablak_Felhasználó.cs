@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 
 
@@ -13,9 +14,9 @@ namespace Villamos
     public partial class Ablak_Felhasználó : Form
     {
         readonly Kezelők_Users Kéz = new Kezelők_Users();
-        readonly Kezelő_Dolgozó KézDolgozó = new Kezelő_Dolgozó();
+        readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
         List<Adat_Users> Adatok = new List<Adat_Users>();
-        List<Adat_Dolgozó> AdatokDolg = new List<Adat_Dolgozó>();
+        List<Adat_Behajtás_Dolgozótábla> AdatokDolg = new List<Adat_Behajtás_Dolgozótábla>();
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
@@ -122,9 +123,9 @@ namespace Villamos
             foreach (Adat_Users rekord in Adatok)
             {
                 DataRow Soradat = AdatTáblaALap.NewRow();
-                Adat_Dolgozó Elem = (from a in AdatokDolg
-                                     where a.Dolgozószám == rekord.Dolgozószám
-                                     select a).FirstOrDefault();
+                Adat_Behajtás_Dolgozótábla Elem = (from a in AdatokDolg
+                                                   where a.Dolgozószám == rekord.Dolgozószám
+                                                   select a).FirstOrDefault();
                 string DolgozóNév = Elem == null ? "" : Elem.Dolgozónév;
                 Soradat["Id"] = rekord.UserId;
                 Soradat["Felhasználó név"] = rekord.UserName;
@@ -271,11 +272,11 @@ namespace Villamos
             CmbDolgozószám.Items.Add("");
             CmbDolgozónév.Items.Add("");
             AdatokDolg.OrderBy(a => a.Dolgozószám).ToList();
-            foreach (Adat_Dolgozó elem in AdatokDolg)
+            foreach (Adat_Behajtás_Dolgozótábla elem in AdatokDolg)
                 CmbDolgozószám.Items.Add(elem.Dolgozószám);
 
             AdatokDolg.OrderBy(a => a.Dolgozónév).ToList();
-            foreach (Adat_Dolgozó elem in AdatokDolg)
+            foreach (Adat_Behajtás_Dolgozótábla elem in AdatokDolg)
                 CmbDolgozónév.Items.Add(elem.Dolgozónév);
 
         }
@@ -302,9 +303,9 @@ namespace Villamos
             {
                 if (dolgozószám.Trim() != "")
                 {
-                    Adat_Dolgozó elem = (from a in AdatokDolg
-                                         where a.Dolgozószám == dolgozószám
-                                         select a).FirstOrDefault();
+                    Adat_Behajtás_Dolgozótábla elem = (from a in AdatokDolg
+                                                       where a.Dolgozószám == dolgozószám
+                                                       select a).FirstOrDefault();
                     if (elem != null) válasz = elem.Dolgozónév; else CmbDolgozónév.Text = "";
                 }
             }
@@ -326,9 +327,9 @@ namespace Villamos
             CmbDolgozónév.Text = CmbDolgozónév.Items[CmbDolgozónév.SelectedIndex].ToString();
             if (CmbDolgozónév.Text.Trim() != "")
             {
-                Adat_Dolgozó elem = (from a in AdatokDolg
-                                     where a.Dolgozónév == CmbDolgozónév.Text.Trim()
-                                     select a).FirstOrDefault();
+                Adat_Behajtás_Dolgozótábla elem = (from a in AdatokDolg
+                                                   where a.Dolgozónév == CmbDolgozónév.Text.Trim()
+                                                   select a).FirstOrDefault();
                 if (elem != null) CmbDolgozószám.Text = elem.Dolgozószám; else CmbDolgozószám.Text = "";
             }
             else CmbDolgozószám.Text = "";

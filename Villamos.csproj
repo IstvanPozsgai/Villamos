@@ -753,7 +753,6 @@
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_Verzió Új.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Dolgozó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási.cs" />
