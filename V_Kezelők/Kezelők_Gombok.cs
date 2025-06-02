@@ -66,10 +66,21 @@ namespace Villamos.Kezelők
                                     && a.FromName == Adat.FromName
                                     && a.Törölt == false
                                     select a).FirstOrDefault();
-                if (gomb == null)
+                if (gomb == null && Adat.GombokId == 0)
                     Rögzítés(Adat);
                 else
-                    Módosítás(Adat);
+                {
+                    // csak törölni és láthatóságot és szöveget engedjük módosítani
+                    Adat_Gombok gomb1 = (from a in Adatok
+                                         where a.GombName == Adat.GombName
+                                         && a.FromName == Adat.FromName
+                                          && a.GombokId == Adat.GombokId
+                                         select a).FirstOrDefault();
+                    if (gomb1 != null)
+                        Módosítás(Adat);
+                    else
+                        throw new HibásBevittAdat($"Ez a {gomb.GombokId} szám alatt már szerepel!");
+                }
 
             }
             catch (HibásBevittAdat ex)
