@@ -40,6 +40,10 @@ namespace Villamos
             this.Menü = new System.Windows.Forms.MenuStrip();
             this.ProgramAdatokMenü = new System.Windows.Forms.ToolStripMenuItem();
             this.FelhasználókBeállításaMenü = new System.Windows.Forms.ToolStripMenuItem();
+            this.ablakokBeállításaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gombokBeállításaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.felhasználókLétrehozásaTörléseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jogosultságKiosztásToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ProgramAdatokKiadásiAdatokToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ProgramAdatokSzemélyMenü = new System.Windows.Forms.ToolStripMenuItem();
@@ -168,6 +172,7 @@ namespace Villamos
             this.Command9 = new System.Windows.Forms.Button();
             this.Label6 = new System.Windows.Forms.Label();
             this.Rejtett = new System.Windows.Forms.GroupBox();
+            this.Gombok = new System.Windows.Forms.Button();
             this.TároltVerzió = new System.Windows.Forms.TextBox();
             this.Label5 = new System.Windows.Forms.Label();
             this.Verzió_Váltás = new System.Windows.Forms.Button();
@@ -181,8 +186,6 @@ namespace Villamos
             this.Btnüzenetfrissítés = new System.Windows.Forms.Button();
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
-            this.Gombok = new System.Windows.Forms.Button();
-            this.Ablakok = new System.Windows.Forms.Button();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -230,11 +233,44 @@ namespace Villamos
             // 
             // FelhasználókBeállításaMenü
             // 
+            this.FelhasználókBeállításaMenü.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ablakokBeállításaToolStripMenuItem,
+            this.gombokBeállításaToolStripMenuItem,
+            this.felhasználókLétrehozásaTörléseToolStripMenuItem,
+            this.jogosultságKiosztásToolStripMenuItem});
             this.FelhasználókBeállításaMenü.Image = global::Villamos.Properties.Resources.felhasználók;
             this.FelhasználókBeállításaMenü.Name = "FelhasználókBeállításaMenü";
             this.FelhasználókBeállításaMenü.Size = new System.Drawing.Size(242, 22);
             this.FelhasználókBeállításaMenü.Text = "Felhasználók &jogosultág ";
             this.FelhasználókBeállításaMenü.Click += new System.EventHandler(this.FelhasználókBeállításaMenü_Click);
+            // 
+            // ablakokBeállításaToolStripMenuItem
+            // 
+            this.ablakokBeállításaToolStripMenuItem.Name = "ablakokBeállításaToolStripMenuItem";
+            this.ablakokBeállításaToolStripMenuItem.Size = new System.Drawing.Size(271, 22);
+            this.ablakokBeállításaToolStripMenuItem.Text = "Ablakok beállítása";
+            this.ablakokBeállításaToolStripMenuItem.Click += new System.EventHandler(this.AblakokBeállításaToolStripMenuItem_Click);
+            // 
+            // gombokBeállításaToolStripMenuItem
+            // 
+            this.gombokBeállításaToolStripMenuItem.Name = "gombokBeállításaToolStripMenuItem";
+            this.gombokBeállításaToolStripMenuItem.Size = new System.Drawing.Size(271, 22);
+            this.gombokBeállításaToolStripMenuItem.Text = "Gombok beállítása";
+            this.gombokBeállításaToolStripMenuItem.Click += new System.EventHandler(this.GombokBeállításaToolStripMenuItem_Click);
+            // 
+            // felhasználókLétrehozásaTörléseToolStripMenuItem
+            // 
+            this.felhasználókLétrehozásaTörléseToolStripMenuItem.Name = "felhasználókLétrehozásaTörléseToolStripMenuItem";
+            this.felhasználókLétrehozásaTörléseToolStripMenuItem.Size = new System.Drawing.Size(271, 22);
+            this.felhasználókLétrehozásaTörléseToolStripMenuItem.Text = "Felhasználók létrehozása törlése";
+            this.felhasználókLétrehozásaTörléseToolStripMenuItem.Click += new System.EventHandler(this.FelhasználókLétrehozásaTörléseToolStripMenuItem_Click);
+            // 
+            // jogosultságKiosztásToolStripMenuItem
+            // 
+            this.jogosultságKiosztásToolStripMenuItem.Name = "jogosultságKiosztásToolStripMenuItem";
+            this.jogosultságKiosztásToolStripMenuItem.Size = new System.Drawing.Size(271, 22);
+            this.jogosultságKiosztásToolStripMenuItem.Text = "Jogosultság kiosztás";
+            this.jogosultságKiosztásToolStripMenuItem.Click += new System.EventHandler(this.JogosultságKiosztásToolStripMenuItem_Click);
             // 
             // ToolStripSeparator1
             // 
@@ -1272,7 +1308,6 @@ namespace Villamos
             // Rejtett
             // 
             this.Rejtett.BackColor = System.Drawing.Color.Peru;
-            this.Rejtett.Controls.Add(this.Ablakok);
             this.Rejtett.Controls.Add(this.Gombok);
             this.Rejtett.Controls.Add(this.Cmbtelephely);
             this.Rejtett.Controls.Add(this.TároltVerzió);
@@ -1292,6 +1327,17 @@ namespace Villamos
             this.Rejtett.TabIndex = 29;
             this.Rejtett.TabStop = false;
             this.Rejtett.Visible = false;
+            // 
+            // Gombok
+            // 
+            this.Gombok.BackgroundImage = global::Villamos.Properties.Resources.Filesystem_blockdevice_cubes;
+            this.Gombok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Gombok.Location = new System.Drawing.Point(567, 238);
+            this.Gombok.Name = "Gombok";
+            this.Gombok.Size = new System.Drawing.Size(40, 40);
+            this.Gombok.TabIndex = 29;
+            this.Gombok.UseVisualStyleBackColor = true;
+            this.Gombok.Click += new System.EventHandler(this.Gombok_Click);
             // 
             // TároltVerzió
             // 
@@ -1407,28 +1453,6 @@ namespace Villamos
             this.Képkeret1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Képkeret1.TabIndex = 27;
             this.Képkeret1.TabStop = false;
-            // 
-            // Gombok
-            // 
-            this.Gombok.BackgroundImage = global::Villamos.Properties.Resources.Filesystem_blockdevice_cubes;
-            this.Gombok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Gombok.Location = new System.Drawing.Point(568, 238);
-            this.Gombok.Name = "Gombok";
-            this.Gombok.Size = new System.Drawing.Size(40, 40);
-            this.Gombok.TabIndex = 29;
-            this.Gombok.UseVisualStyleBackColor = true;
-            this.Gombok.Click += new System.EventHandler(this.Gombok_Click);
-            // 
-            // Ablakok
-            // 
-            this.Ablakok.BackgroundImage = global::Villamos.Properties.Resources.Folder_;
-            this.Ablakok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Ablakok.Location = new System.Drawing.Point(522, 238);
-            this.Ablakok.Name = "Ablakok";
-            this.Ablakok.Size = new System.Drawing.Size(40, 40);
-            this.Ablakok.TabIndex = 30;
-            this.Ablakok.UseVisualStyleBackColor = true;
-            this.Ablakok.Click += new System.EventHandler(this.Ablakok_Click);
             // 
             // A_Főoldal
             // 
@@ -1618,7 +1642,10 @@ namespace Villamos
         internal ToolStripMenuItem EsztergaKarbantartásToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator35;
         private ToolStripMenuItem fődarabNótaToolStripMenuItem;
-        internal Button Ablakok;
         internal Button Gombok;
+        private ToolStripMenuItem ablakokBeállításaToolStripMenuItem;
+        private ToolStripMenuItem gombokBeállításaToolStripMenuItem;
+        private ToolStripMenuItem felhasználókLétrehozásaTörléseToolStripMenuItem;
+        private ToolStripMenuItem jogosultságKiosztásToolStripMenuItem;
     }
 }

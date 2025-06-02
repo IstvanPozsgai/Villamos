@@ -115,7 +115,7 @@ namespace Villamos.Kezelők
                     if (rekord != rekord.ToUpper())
                     {
                         string szöveg = $"DELETE FROM {Táblanév} WHERE Azonosító='{rekord}'";
-                        Adatbázis.ABtörlés(hely, jelszó, szöveg);
+                        MyA.ABtörlés(hely, jelszó, szöveg);
                     }
                 }
 

@@ -80,7 +80,7 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Oka.Trim()}', ";
                 szöveg += $"{Adat.SAP} )";
 
-                Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -182,7 +182,7 @@ namespace Villamos.Kezelők
             szöveg += $"'{Program.PostásNév.Trim()}', ";
             szöveg += $"'{Adat.Oka.Trim()}', 0 )";
 
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
     }
 

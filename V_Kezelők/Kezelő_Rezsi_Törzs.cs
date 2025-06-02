@@ -117,7 +117,7 @@ namespace Villamos.Kezelők
                         Rögzítés(Adat);
 
                         string szöveg = $"DELETE FROM {Táblanév} WHERE Azonosító='{rekord.Azonosító}'";
-                        Adatbázis.ABtörlés(hely, jelszó, szöveg);
+                        MyA.ABtörlés(hely, jelszó, szöveg);
                     }
                 }
 

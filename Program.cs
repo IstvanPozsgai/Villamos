@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Zuby.ADGV;
 
 namespace Villamos
@@ -34,6 +35,8 @@ namespace Villamos
         public static bool Postás_telephely = false;
         public static List<ToolStripMenuItem> PostásMenü = new List<ToolStripMenuItem>();
         public static int PostásNévId = 1;
+        public static List<Adat_Jogosultságok> PostásJogosultságok = new List<Adat_Jogosultságok>();
+        public static List<Adat_Oldalak> PostásOldalak = new List<Adat_Oldalak>();
 
         /// <summary>
         /// The main entry point for the application.

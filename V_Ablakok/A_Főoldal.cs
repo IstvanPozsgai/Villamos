@@ -22,6 +22,7 @@ namespace Villamos
 {
     public partial class A_Főoldal
     {
+        readonly Kezelők_Oldalok KézOldal = new Kezelők_Oldalok();
         private static PerformanceCounter myCounter;
         public delegate void VoidDelegate(string data);
         public event VoidDelegate MyEvent;
@@ -60,6 +61,11 @@ namespace Villamos
         /// </summary>
         private void Menükbeállítása()
         {
+            ablakokBeállításaToolStripMenuItem.Visible = false;
+            gombokBeállításaToolStripMenuItem.Visible = false;
+            felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = false;
+            jogosultságKiosztásToolStripMenuItem.Visible = false;
+
             if (panels2.Text.Substring(0, 1) == "0")
                 FelhasználókBeállításaMenü.Enabled = false;
             else
@@ -348,6 +354,42 @@ namespace Villamos
                 KülsősDolgozókBelépésiÉsBehajtásaToolStripMenuItem.Enabled = true;
         }
 
+        private void Menü_Beállítása_Új()
+        {
+            try
+            {
+                //Kikapcsoljuk a jogosultságtól függő ablakokat
+                Program.PostásOldalak = KézOldal.Lista_Adatok();
+                foreach (ToolStripMenuItem item in Program.PostásMenü)
+                {
+                    Adat_Oldalak Adat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
+                    if (Adat != null) item.Enabled = Adat.Látható;
+                }
+
+                //Beállítjuk a jogosultságot amit felhasználóknak adtunk
+                List<Adat_Jogosultságok> JogAdatok = Program.PostásJogosultságok;
+                if (JogAdatok == null) return;
+
+                List<int> JogIDék = JogAdatok.Select(a => a.OldalId).Distinct().ToList();
+                foreach (ToolStripMenuItem item in Program.PostásMenü)
+                {
+                    Adat_Oldalak OldalAdat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
+                    if (OldalAdat != null)
+                    {
+                        if (JogIDék.Contains(OldalAdat.OldalId)) item.Enabled = true;
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         #region Főoldal elemek
 
@@ -2515,9 +2557,35 @@ namespace Villamos
 
 
         #region Ablakok beállítása
-        Ablak_Formok Új_Ablak_Formok;
+
         private void Ablakok_Click(object sender, EventArgs e)
         {
+
+
+        }
+
+
+        #endregion
+
+
+        #region Gombok beállítása
+
+        private void Gombok_Click(object sender, EventArgs e)
+        {
+            ablakokBeállításaToolStripMenuItem.Visible = true;
+            gombokBeállításaToolStripMenuItem.Visible = true;
+            felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = true;
+            jogosultságKiosztásToolStripMenuItem.Visible = true;
+            Menü_Beállítása_Új();
+        }
+
+
+        #endregion
+
+        Ablak_Formok Új_Ablak_Formok;
+        private void AblakokBeállításaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
             if (Új_Ablak_Formok == null)
             {
                 Új_Ablak_Formok = new Ablak_Formok();
@@ -2529,20 +2597,17 @@ namespace Villamos
                 Új_Ablak_Formok.Activate();
                 Új_Ablak_Formok.WindowState = FormWindowState.Maximized;
             }
-
         }
 
         private void Új_Ablak_Formok_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Formok = null;
         }
-        #endregion
 
-
-        #region Gombok beállítása
         Ablak_Gombok Új_Ablak_Gombok;
-        private void Gombok_Click(object sender, EventArgs e)
+        private void GombokBeállításaToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             if (Új_Ablak_Gombok == null)
             {
                 Új_Ablak_Gombok = new Ablak_Gombok();
@@ -2561,6 +2626,47 @@ namespace Villamos
         {
             Új_Ablak_Gombok = null;
         }
-        #endregion
+
+        Ablak_Felhasználó Új_Ablak_Felhasználó;
+        private void FelhasználókLétrehozásaTörléseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Felhasználó == null)
+            {
+                Új_Ablak_Felhasználó = new Ablak_Felhasználó();
+                Új_Ablak_Felhasználó.FormClosed += Új_Ablak_Felhasználó_FormClosed;
+                Új_Ablak_Felhasználó.Show();
+            }
+            else
+            {
+                Új_Ablak_Felhasználó.Activate();
+                Új_Ablak_Felhasználó.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Új_Ablak_Felhasználó_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Felhasználó = null;
+        }
+
+        Ablak_JogKiosztás Új_Ablak_JogKiosztás;
+        private void JogosultságKiosztásToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_JogKiosztás == null)
+            {
+                Új_Ablak_JogKiosztás = new Ablak_JogKiosztás();
+                Új_Ablak_JogKiosztás.FormClosed += Új_Ablak_JogKiosztás_FormClosed;
+                Új_Ablak_JogKiosztás.Show();
+            }
+            else
+            {
+                Új_Ablak_JogKiosztás.Activate();
+                Új_Ablak_JogKiosztás.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Új_Ablak_JogKiosztás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Felhasználó = null;
+        }
     }
 }

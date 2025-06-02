@@ -156,7 +156,7 @@ namespace Villamos.Kezelők
                                                 rekord.Státus);
                         Rögzítés(Telephely, Adat);
                         string szöveg = $"DELETE FROM {Táblanév} WHERE Azonosító='{rekord.Azonosító}'";
-                        Adatbázis.ABtörlés(hely, jelszó, szöveg);
+                        MyA.ABtörlés(hely, jelszó, szöveg);
                     }
                 }
             }

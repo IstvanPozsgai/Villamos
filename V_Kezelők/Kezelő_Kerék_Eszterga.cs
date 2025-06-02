@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using Villamos.Villamos_Adatszerkezet;
-using MyF = Függvénygyűjtemény;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -254,7 +254,7 @@ namespace Villamos.Kezelők
             string szöveg = $"UPDATE naptár SET pályaszám='_', foglalt=false, Megjegyzés='', ";
             szöveg += $" betűszín=0, háttérszín=12632256, marad=false ";
             szöveg += $"WHERE idő=#{Adat.Idő.ToString("MM-dd-yyyy H:m:s")}#";
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
         public void Adat_Rögzítés(string hely, string jelszó, Adat_Kerék_Eszterga_Naptár Adat)
@@ -262,7 +262,7 @@ namespace Villamos.Kezelők
             string szöveg = $"UPDATE naptár SET pályaszám='{Adat.Pályaszám.Trim()}', foglalt=true, Megjegyzés='{Adat.Megjegyzés.Trim()}', ";
             szöveg += $" betűszín={Adat.BetűSzín}, háttérszín={Adat.HáttérSzín}, marad={Adat.Marad} ";
             szöveg += $"WHERE idő=#{Adat.Idő.ToString("MM-dd-yyyy HH:mm")}#";
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
         public List<string> Lista_MindenbőlEgy(string hely, string jelszó, string szöveg)
@@ -397,7 +397,7 @@ namespace Villamos.Kezelők
         public void Egy_Rögzítés(string hely, string jelszó, Adat_Kerék_Eszterga_Tengely Adat)
         {
             string szöveg = $"INSERT INTO tengely ( Típus, munkaidő, állapot) VALUES ('{Adat.Típus.Trim()}', {Adat.Munkaidő}, {Adat.Állapot})";
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
         public void Egy_Módosítás(string hely, string jelszó, Adat_Kerék_Eszterga_Tengely Adat)
@@ -405,7 +405,7 @@ namespace Villamos.Kezelők
             string szöveg = "UPDATE tengely SET ";
             szöveg += $" munkaidő={Adat.Munkaidő} ";
             szöveg += $" WHERE típus='{Adat.Típus.Trim()}' AND Állapot={Adat.Állapot}";
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
     }
 

@@ -145,6 +145,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Felhasználó.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Felhasználó.designer.cs">
+      <DependentUpon>Ablak_Felhasználó.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Formok.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +162,12 @@
     </Compile>
     <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Gombok.Designer.cs">
       <DependentUpon>Ablak_Gombok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_JogKiosztás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_JogKiosztás.designer.cs">
+      <DependentUpon>Ablak_JogKiosztás.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_egyéb.cs">
       <SubType>Form</SubType>
@@ -544,6 +556,7 @@
     <Compile Include="V_Adatbázis\Adatbázis_Bejelentkezés.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Excel_Beolvasás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Belépés_Verzió.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Dolgozó.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Gombok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_előterv.cs" />
@@ -746,6 +759,7 @@
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_Verzió Új.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Dolgozó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási.cs" />
@@ -1236,6 +1250,7 @@
     <Compile Include="V_MindenEgyéb\GombLathatosagKezelo.cs" />
     <Compile Include="V_MindenEgyéb\Hely_Ellenőr.cs" />
     <Compile Include="V_MindenEgyéb\Hibakezelés.cs" />
+    <Compile Include="V_MindenEgyéb\Jelszó.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Kép.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Pdf.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Szín.cs" />
@@ -1253,11 +1268,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Felhasználó.resx">
+      <DependentUpon>Ablak_Felhasználó.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Formok.resx">
       <DependentUpon>Ablak_Formok.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Gombok.resx">
       <DependentUpon>Ablak_Gombok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_JogKiosztás.resx">
+      <DependentUpon>Ablak_JogKiosztás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_egyéb.resx">
       <DependentUpon>Ablak_alap_program_egyéb.cs</DependentUpon>
