@@ -1243,6 +1243,7 @@
     <Compile Include="V_MindenEgyéb\GombLathatosagKezelo.cs" />
     <Compile Include="V_MindenEgyéb\Hely_Ellenőr.cs" />
     <Compile Include="V_MindenEgyéb\Hibakezelés.cs" />
+    <Compile Include="V_MindenEgyéb\IDM_beolvasás.cs" />
     <Compile Include="V_MindenEgyéb\Jelszó.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Kép.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Pdf.cs" />

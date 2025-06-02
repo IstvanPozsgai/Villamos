@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 
@@ -32,7 +33,7 @@ namespace Villamos
         private void Start()
         {
             Adatok = Kéz.Lista_Adatok();
-            AdatokDolg = KézDolgozó.Lista_Adatok().Where(a => a.Státus == false).ToList();
+            AdatokDolg = KézDolgozó.Lista_Adatok().Where(a => a.Státus == true).ToList();
             CombokFeltöltése();
             Üres();
             TáblázatListázás();
@@ -249,6 +250,42 @@ namespace Villamos
         {
             TáblázatListázás();
         }
+
+        private void BtnDolgozóilsta_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // megpróbáljuk megnyitni az excel táblát.
+                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "IDM-s Adatok betöltése",
+                    FileName = "",
+                    Filter = "Excel |*.xlsx"
+                };
+                string fájlexc;
+
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = OpenFileDialog1.FileName;
+                else
+                    return;
+
+                IDM_beolvasás.Behajtási_beolvasás(fájlexc);
+
+                MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         #endregion
 
 
@@ -335,6 +372,7 @@ namespace Villamos
             else CmbDolgozószám.Text = "";
 
         }
+
 
         #endregion
 
