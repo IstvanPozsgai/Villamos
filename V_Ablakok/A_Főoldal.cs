@@ -23,6 +23,7 @@ namespace Villamos
     public partial class A_Főoldal
     {
         readonly Kezelők_Oldalok KézOldal = new Kezelők_Oldalok();
+        readonly Kezelők_Jogosultságok KézJog = new Kezelők_Jogosultságok();
         private static PerformanceCounter myCounter;
         public delegate void VoidDelegate(string data);
         public event VoidDelegate MyEvent;
@@ -2576,6 +2577,8 @@ namespace Villamos
             gombokBeállításaToolStripMenuItem.Visible = true;
             felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = true;
             jogosultságKiosztásToolStripMenuItem.Visible = true;
+
+            Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
             Menü_Beállítása_Új();
         }
 
