@@ -21,7 +21,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #region Osztályszintű elemek
         readonly private DataTable AdatTábla = new DataTable();
         public event Event_Kidobó Eszterga_Változás;
-        readonly DateTime MaiDatum = DateTime.Today;
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         #endregion
 
@@ -208,7 +207,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             Tábla.ClearSelection();
             TxtBxÜzem.Text = string.Empty;
             TxtBxÜzem.Focus();
-            DtmPckrDátum.Value = MaiDatum;
+            DtmPckrDátum.Value = DateTime.Today;
             ChckBxStátus.Checked = false;
         }
 
@@ -280,7 +279,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private bool DátumEllenőrzés(DateTime UjDatum)
         {
-            if (UjDatum > MaiDatum)
+            if (UjDatum > DateTime.Today)
             {
                 MessageBox.Show("Nem lehet jövőbeli dátumot beállítani", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
@@ -353,7 +352,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             long EredetiUzemora = VanID.Üzemóra;
             bool EredetiStatusz = VanID.Státus;
 
-            if (EredetiDatum != MaiDatum && EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
+            if (EredetiDatum != DateTime.Today && EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
             {
                 if (UjStatus)
                     KézÜzemóra.Törlés(new Adat_Eszterga_Üzemóra(AktivID));
@@ -362,7 +361,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             else
             {
-                if (UjStatus && EredetiDatum == MaiDatum)
+                if (UjStatus && EredetiDatum == DateTime.Today)
                     UtolsoUzemoraTorles(AktivID);
 
                 else

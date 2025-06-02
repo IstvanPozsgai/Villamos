@@ -11,7 +11,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
     public partial class Ablak_Eszterga_Karbantartás_Segéd : Form
     {
         #region osztalyszintű elemek
-        readonly DateTime MaiDátum = DateTime.Now;
         private List<Adat_Eszterga_Üzemóra> AdatokÜzemóra;
         readonly private Kezelő_Eszterga_Üzemóra Kéz_Üzemóra = new Kezelő_Eszterga_Üzemóra();
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
@@ -99,7 +98,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 LblElözö.Text = "Még nem volt üzemóra rögzítés\n az adatbázisban.";
                 return;
             }
-            else if (rekord != null && rekord.Dátum == MaiDátum)
+            else if (rekord != null && rekord.Dátum == DateTime.Today)
             {
                 MessageBox.Show("A mai napon már rögzítettek üzemóra adatot.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.Cancel;
@@ -154,7 +153,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 Adat_Eszterga_Üzemóra ADAT = new Adat_Eszterga_Üzemóra(0,
                                                               uzemOra,
-                                                              MaiDátum, 
+                                                              DateTime.Today, 
                                                               false);
                 Kéz_Üzemóra.Rögzítés (ADAT);
 

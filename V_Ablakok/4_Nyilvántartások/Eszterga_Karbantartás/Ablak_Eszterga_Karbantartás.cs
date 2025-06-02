@@ -21,7 +21,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
     public partial class Ablak_Eszterga_Karbantartás : Form
     {
         #region Osztalyszintu elemek
-        readonly DateTime MaiDatum = DateTime.Today;
         DateTime TervDatum;
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         private string AktívTáblaTípus;
@@ -78,7 +77,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             AdatokÜzemóra = Funkció.Eszterga_ÜzemóraFeltölt();
 
             Adat_Eszterga_Üzemóra rekord = (from a in AdatokÜzemóra
-                                            where a.Dátum.Date == MaiDatum && a.Státus != true
+                                            where a.Dátum.Date == DateTime.Today && a.Státus != true
                                             select a).FirstOrDefault();
 
             if (rekord != null)
@@ -758,7 +757,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 if (string.IsNullOrEmpty(TxtBxNapiUzemoraAtlag.Text))
                     TxtBxNapiUzemoraAtlag.Text = "30";
 
-                DateTime KezdetiDatum = MaiDatum.AddDays(-Napok);
+                DateTime KezdetiDatum = DateTime.Today.AddDays(-Napok);
 
                 List<Adat_Eszterga_Üzemóra> rekord = (from a in AdatokÜzemóra
                                                       where !a.Státus && a.Dátum >= KezdetiDatum
@@ -828,7 +827,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             TxtBxNapiUzemoraAtlag.Text = "30";
             TxtBxNapi.Text = "5";
             TxtBxÜzem.Text = "8";
-            DtmPckrElőTerv.Value = MaiDatum;
+            DtmPckrElőTerv.Value = DateTime.Today;
             Btn_Rögzít.Visible = true;
             TáblaListázás();
             ÁtlagÜzemóraFrissítés();
@@ -849,7 +848,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         Color HatterSzin = Sor.DefaultCellStyle.BackColor;
                         TervDatum = DtmPckrElőTerv.Value.Date;
 
-                        if (!DátumEllenőrzés(MaiDatum, TervDatum))
+                        if (!DátumEllenőrzés(DateTime.Today, TervDatum))
                             return;
                         if (HatterSzin == Color.LawnGreen)
                         {
@@ -861,16 +860,16 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         long AktivUzemora = 0;
                         if (AdatokÜzemóra.Count > 0) AktivUzemora = AdatokÜzemóra.Max(a => a.Üzemóra);
 
-                        Adat_Eszterga_Műveletek ADAT = new Adat_Eszterga_Műveletek(MaiDatum,
+                        Adat_Eszterga_Műveletek ADAT = new Adat_Eszterga_Műveletek(DateTime.Today,
                                                               AktivUzemora,
                                                               Id);
 
                         Kéz_Művelet.Módosítás(ADAT);
                         Kéz_Művelet.Törlés(ADAT, false);
-                        Sor.Cells[4].Value = MaiDatum;
+                        Sor.Cells[4].Value = DateTime.Today;
                         Sor.Cells[5].Value = AktivUzemora;
 
-                        Naplózás(Sor, MaiDatum, AktivUzemora);
+                        Naplózás(Sor, DateTime.Today, AktivUzemora);
                     }
                     TáblaListázás();
 
@@ -970,7 +969,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void TxtBxNapi_TextChanged(object sender, EventArgs e)
         {
-            if (MaiDatum == DtmPckrElőTerv.Value)
+            if (DateTime.Today == DtmPckrElőTerv.Value)
                 TáblaListázás();
             else
                 EloreTervezesListazasa();
@@ -981,7 +980,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void TxtBxÜzem_TextChanged(object sender, EventArgs e)
         {
-            if (MaiDatum == DtmPckrElőTerv.Value)
+            if (DateTime.Today == DtmPckrElőTerv.Value)
                 TáblaListázás();
             else
                 EloreTervezesListazasa();
@@ -993,9 +992,9 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void DtmPckrElőTerv_ValueChanged(object sender, EventArgs e)
         {
-            if (DtmPckrElőTerv.Value >= MaiDatum)
+            if (DtmPckrElőTerv.Value >= DateTime.Today)
             {
-                if (DtmPckrElőTerv.Value > MaiDatum)
+                if (DtmPckrElőTerv.Value > DateTime.Today)
                     EloreTervezesListazasa();
                 else
                     TáblaListázás();
@@ -1004,7 +1003,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             else
             {
                 MessageBox.Show("A dátum nem lehet kisebb, mint a mai dátum.", "Érvénytelen dátum", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                DtmPckrElőTerv.Value = MaiDatum;
+                DtmPckrElőTerv.Value = DateTime.Today;
             }
         }
 
@@ -1018,7 +1017,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             {
                 DataGridViewRow sor = Tábla.Rows[e.RowIndex];
 
-                if (!Baross || !DátumEllenőrzés(MaiDatum, TervDatum))
+                if (!Baross || !DátumEllenőrzés(DateTime.Today, TervDatum))
                 {
                     sor.Cells[10].Value = null;
                     Tábla.InvalidateRow(e.RowIndex);
