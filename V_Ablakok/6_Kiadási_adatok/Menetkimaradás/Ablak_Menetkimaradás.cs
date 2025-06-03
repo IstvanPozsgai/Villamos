@@ -19,6 +19,8 @@ namespace Villamos
 {
     public partial class AblakMenetkimaradás
     {
+        Kezelő_Menetkimaradás KézMenet = new Kezelő_Menetkimaradás();
+
         string Html_szöveg = "";
         string hely_;
         string jelszó_;
@@ -1303,18 +1305,18 @@ namespace Villamos
         {
             try
             {
+                List<Adat_Menetkimaradás> Adatok = new List<Adat_Menetkimaradás>();
                 if (cmbtelephely.Enabled)
-                    hely_ = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\{Dátum.Value:yyyy}_menet_adatok.mdb";
+                    Adatok = KézMenet.Lista_Adatok("Főmérnökség", Dátum.Value.Year);
                 else
-                    hely_ = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value:yyyy}.mdb";
+                    Adatok = KézMenet.Lista_Adatok(cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
-                string jelszó = "lilaakác";
+                Adat_Menetkimaradás ADAT = Adatok.Where(a => a.Id == idszám_).FirstOrDefault();
 
-                if (idszám_ != 0)
+                if (ADAT != null)
                 {
-                    string szöveg = "SELECT * FROM menettábla WHERE id=" + idszám_.ToString();
                     Új_Ablak_Menetrögítés?.Close();
-                    Új_Ablak_Menetrögítés = new Ablak_Menetrögítés(hely_, jelszó, szöveg);
+                    Új_Ablak_Menetrögítés = new Ablak_Menetrögítés(ADAT);
                     Új_Ablak_Menetrögítés.FormClosed += Ablak_Menetrögítés_FormClosed;
                     Új_Ablak_Menetrögítés.Show();
                 }
