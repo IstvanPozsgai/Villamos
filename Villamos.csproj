@@ -1232,7 +1232,7 @@
     <Compile Include="V_Excel\Excel.cs" />
     <Compile Include="V_Kezelők\Kezelő_Üzenet.cs" />
     <Compile Include="V_Kezelők\Kezelő_Üzenet_Olvas.cs" />
-    <Compile Include="V_Kezelők\public class Kezelő_CAF_Szinezés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_CAF_Szinezés.cs" />
     <Compile Include="V_MindenEgyéb\AblakokGombok.cs" />
     <Compile Include="V_MindenEgyéb\AccessDatabaseHelper.cs" />
     <Compile Include="V_MindenEgyéb\Enumok.cs" />
