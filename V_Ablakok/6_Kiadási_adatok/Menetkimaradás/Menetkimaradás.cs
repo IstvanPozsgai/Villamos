@@ -26,7 +26,7 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Menetkimaradás
 
             for (int i = 0; i < Tábla.Rows.Count; i++)
             {
-                if (felelősmunkahely.Trim ().ToUpper () ==Tábla.Rows[i]["Felel.munkahely"].ToStrTrim().ToUpper ())
+                if (felelősmunkahely.Trim().ToUpper() == Tábla.Rows[i]["Felel.munkahely"].ToStrTrim().ToUpper())
                 {
                     string viszonylat = MyF.Szöveg_Tisztítás(Tábla.Rows[i]["Vonalszer."].ToStrTrim(), 0, 6);
                     string azonosító = MyF.Szöveg_Tisztítás(Tábla.Rows[i]["Berendezés"].ToStrTrim(), 1, 4);
@@ -67,7 +67,7 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Menetkimaradás
         public static bool Adategyezzés(DataTable Tábla)
         {
             bool válasz;
- 
+
             válasz = MyF.Betöltéshelyes("Menet", Tábla);
             return válasz;
         }
@@ -121,7 +121,7 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Menetkimaradás
             return szöveg;
         }
 
-        public  static string Rögzít(Adat_Menetkimaradás Elem, long Id)
+        public static string Rögzít(Adat_Menetkimaradás Elem, long Id)
         {
             string szöveg = "INSERT INTO menettábla ";
             szöveg += " ([viszonylat], [azonosító], [típus], [Eseményjele], [Bekövetkezés],";

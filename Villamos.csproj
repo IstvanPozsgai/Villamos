@@ -859,6 +859,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
     <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />
+    <Compile Include="V_Kezelők\Kezelő_MenetKimaradás_Főmérnökség.cs" />
     <Compile Include="V_Kezelők\Kezelő_MEO.cs" />
     <Compile Include="V_Kezelők\Kezelő_MEO_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munkakör.cs" />

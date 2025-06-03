@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 {
     public partial class Ablak_TTP_Év : Form
     {
-
-        readonly string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/TTP_Adatbázis.mdb";
-        readonly string jelszó = "rudolfg";
+        readonly Kezelő_TTP_Év Kéz = new Kezelő_TTP_Év();
 
         List<Adat_TTP_Év> AdatokÉv = new List<Adat_TTP_Év>();
 
@@ -26,20 +23,21 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             ÉvListáz();
         }
 
+
+        /// <summary>
+        /// Rögzíti vagy módosítja az adatokat
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Btn_TTP_Rögz_Click(object sender, EventArgs e)
         {
             try
             {
                 if (!int.TryParse(TxtBxÉletkor.Text, out int életkor)) throw new HibásBevittAdat("Nem egész szám az életkor.");
                 if (!int.TryParse(TxtBxÉv.Text, out int év)) throw new HibásBevittAdat("Nem egész szám az év.");
-                string szöveg;
+                Adat_TTP_Év ADAT = new Adat_TTP_Év(életkor, év);
                 if (AdatokÉv.Count == 0)
-                {
-                    szöveg = $"INSERT INTO TTP_Év (Életkor, Év) ";
-                    szöveg += "VALUES (";
-                    szöveg += $" {TxtBxÉletkor.Text}, ";
-                    szöveg += $" {TxtBxÉv.Text} )";
-                }
+                    Kéz.Rögzítés(ADAT);
                 else
                 {
                     Adat_TTP_Év Életkorr = (from a in AdatokÉv
@@ -47,19 +45,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                                             select a).FirstOrDefault();
 
                     if (Életkorr != null)
-                    {
-                        szöveg = $"UPDATE TTP_Év SET Év={TxtBxÉv.Text}";
-                        szöveg += $" WHERE Életkor={TxtBxÉletkor.Text}";
-                    }
+                        Kéz.Módosítás(ADAT);
                     else
-                    {
-                        szöveg = $"INSERT INTO TTP_Év (Életkor, Év) ";
-                        szöveg += "VALUES (";
-                        szöveg += $" {TxtBxÉletkor.Text}, ";
-                        szöveg += $" {TxtBxÉv.Text} )";
-                    }
+                        Kéz.Rögzítés(ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
                 ÉvListáz();
             }
             catch (HibásBevittAdat ex)
@@ -73,11 +62,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             }
         }
 
+        /// <summary>
+        /// Kiírja a TTP_Év táblában lévő adatokat a DataGridView-be
+        /// </summary>
         private void ÉvListáz()
         {
             try
             {
-                AdatokÉv = MyF.TTP_ÉvFeltölt();
+                AdatokÉv = Kéz.Lista_Adatok();
                 Tábla_Év.Rows.Clear();
                 Tábla_Év.Columns.Clear();
                 Tábla_Év.Refresh();
@@ -111,6 +103,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             }
         }
 
+        /// <summary>
+        /// Kiválaszt egy sort a DataGridView-ből, és beírja az értékeket a megfelelő TextBox-okba
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Tábla_Év_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -118,14 +115,18 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             TxtBxÉv.Text = Tábla_Év.Rows[e.RowIndex].Cells[1].Value.ToString();
         }
 
+        /// <summary>
+        /// Törls gomb eseménykezelője, amely törli a kiválasztott életkort az adatbázisból
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnTöröl_Click(object sender, EventArgs e)
         {
             try
             {
                 if (!int.TryParse(TxtBxÉletkor.Text, out int életkoreredmény)) return;
+                Kéz.Törlés(életkoreredmény);
 
-                string szöveg = $"DELETE FROM TTP_Év WHERE Életkor={életkoreredmény}";
-                MyA.ABtörlés(hely, jelszó, szöveg);
                 ÉvListáz();
             }
             catch (HibásBevittAdat ex)
