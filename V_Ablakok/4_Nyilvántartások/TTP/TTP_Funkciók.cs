@@ -39,30 +39,6 @@ public static partial class Függvénygyűjtemény
         return AdatokTábla;
     }
 
-    public static List<Adat_TTP_Naptár> TTP_NaptárFeltölt(DateTime Dátum)
-    {
-        Kezelő_TTP_Naptár KézNaptár = new Kezelő_TTP_Naptár();
-        List<Adat_TTP_Naptár> AdatokNaptár = new List<Adat_TTP_Naptár>();
-        try
-        {
-            string szöveg = "SELECT * FROM TTP_Naptár";
-            szöveg += $" WHERE dátum>=#{MyF.Év_elsőnapja(Dátum):M-d-yy}# ";
-            szöveg += $" AND dátum<=#{MyF.Év_utolsónapja(Dátum):M-d-yy}# ORDER BY dátum";
-
-            AdatokNaptár = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
-        }
-        catch (HibásBevittAdat ex)
-        {
-            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, " TTP_NaptárFeltölt", ex.StackTrace, ex.Source, ex.HResult);
-            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        return AdatokNaptár;
-    }
-
     public static DataTable TTP_VezénylésFeltölt(List<Adat_Kiegészítő_Sérülés> AdatokTelep, List<Adat_Jármű_hiba> AdatokHiba, DateTime Dátum, bool Kötelező)
     {
         DataTable AdatTábla = new DataTable();
@@ -121,7 +97,12 @@ public static partial class Függvénygyűjtemény
         List<Adat_TTP_Tábla> TáblaAdat = TTP_TáblaFeltölt();
         Kezelő_TTP_Év KézÉv = new Kezelő_TTP_Év();
         List<Adat_TTP_Év> TáblaÉv = KézÉv.Lista_Adatok();
-        List<Adat_TTP_Naptár> TáblaNaptár = TTP_NaptárFeltölt(Dátum);
+        Kezelő_TTP_Naptár KézNaptár = new Kezelő_TTP_Naptár();
+        List<Adat_TTP_Naptár> TáblaNaptár = KézNaptár.Lista_Adatok();
+        TáblaNaptár = (from a in TáblaNaptár
+                       where a.Dátum >= MyF.Év_elsőnapja(Dátum) && a.Dátum <= MyF.Év_utolsónapja(Dátum)
+                       orderby a.Dátum
+                       select a).ToList();
         List<Adat_TTP_Tábla> AdatokTeljes = TTP_Tábla_Lista_Feltöltés();
         List<Adat_Jármű> AdatokJármű = TeljesJárműadatok(AdatokTelep);
 

@@ -49,45 +49,5 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public Adat_Menetkimaradás_Főmérnökség Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Menetkimaradás_Főmérnökség Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Menetkimaradás_Főmérnökség(
-                                    rekord["viszonylat"].ToStrTrim(),
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["típus"].ToStrTrim(),
-                                    rekord["eseményjele"].ToStrTrim(),
-                                    rekord["bekövetkezés"].ToÉrt_DaTeTime(),
-                                    rekord["kimaradtmenet"].ToÉrt_Long(),
-                                    rekord["jvbeírás"].ToStrTrim(),
-                                    rekord["vmbeírás"].ToStrTrim(),
-                                    rekord["javítás"].ToStrTrim(),
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["törölt"].ToÉrt_Bool(),
-                                    rekord["jelentés"].ToStrTrim(),
-                                    rekord["tétel"].ToÉrt_Long(),
-                                    rekord["telephely"].ToStrTrim(),
-                                    rekord["szolgálat"].ToStrTrim()
-                                    );
-                            }
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
     }
 }
