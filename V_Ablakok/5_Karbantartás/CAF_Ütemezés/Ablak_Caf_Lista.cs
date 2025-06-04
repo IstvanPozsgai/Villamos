@@ -462,14 +462,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                if (Kijelölt_Sor == -1) throw new HibásBevittAdat("Nincs kijelölve érvényes adat.");
-
-                string azonosító;
-                if (KiÍrás == "Alap")
-                    azonosító = Tábla_lista.Rows[Kijelölt_Sor].Cells[0].Value.ToString().Trim();
-                else
-                    azonosító = Tábla_lista.Rows[Kijelölt_Sor].Cells[1].Value.ToString().Trim();
-
+                string azonosító = "";
+                if (Kijelölt_Sor != -1)
+                {
+                    if (KiÍrás == "Alap")
+                        azonosító = Tábla_lista.Rows[Kijelölt_Sor].Cells[0].Value.ToString().Trim();
+                    else
+                        azonosító = Tábla_lista.Rows[Kijelölt_Sor].Cells[1].Value.ToString().Trim();
+                }
                 Új_Ablak_CAF_Alapadat?.Close();
 
                 Új_Ablak_CAF_Alapadat = new Ablak_CAF_Alapadat(azonosító);
