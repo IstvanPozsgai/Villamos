@@ -797,7 +797,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
 
                 sor += 2;
                 MyE.Egyesít(munkalap, $"A{sor}:H{sor}");
-                string BMRszám = KeresBMR();
+                string BMRszám = KeresBMR(munka);
                 string irateleje = "Felek rögzítik, hogy 2022.04.29. napján T-50/20. számon „BKV Zrt. járműveinek, telephelyeinek és létesítményeinek takarítása” " +
                     "tárgyban vállalkozási megbízási szerződést (a továbbiakban: Szerződés) kötöttek. \r\nFelek rögzítik, hogy Szerződéshez kapcsolódó,  BMR ";
                 string iratvége = " számú megrendelésben(a továbbiakban: Megrendelés) foglaltakat a Vállalkozó a következők szerint végezte el:";
@@ -946,13 +946,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             }
         }
 
-        private string KeresBMR()
+        private string KeresBMR(string munka)
         {
             string válasz = "-Nincs megadva BMR szám-";
             try
             {
+                if (munka.Trim() == "opcionális") munka = "Épület takarítási";
+                string[] darabol = munka.Split(' ');
+
                 Adat_Takarítás_BMR Elem = (from a in AdatokBMR
-                                           where a.JárműÉpület == "Épület" &&
+                                           where a.JárműÉpület == darabol[0].Trim() &&
                                            a.Dátum == new DateTime(Dátum.Year, Dátum.Month, 1) &&
                                            a.Telephely == Telephely
                                            select a).FirstOrDefault();
