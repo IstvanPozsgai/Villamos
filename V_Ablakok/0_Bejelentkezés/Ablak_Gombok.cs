@@ -31,7 +31,7 @@ namespace Villamos.Ablakok
             FormFeltöltése();
             Adatok = Kéz.Lista_Adatok();
             Alap_tábla_író();
-       //     GombLathatosagKezelo.Beallit(this);
+            //     GombLathatosagKezelo.Beallit(this);
         }
 
         private void Ablak_Anyagok_Load(object sender, System.EventArgs e)
@@ -188,6 +188,7 @@ namespace Villamos.Ablakok
             Adatok = (from a in Adatok
                       orderby a.FromName, a.GombName
                       select a).ToList();
+            if (Ablaknév.Text.Trim() != "") Adatok = Adatok.Where(a => a.FromName == Ablaknév.Text.Trim()).ToList();
             foreach (Adat_Gombok rekord in Adatok)
             {
                 DataRow Soradat = AdatTáblaALap.NewRow();
@@ -330,6 +331,7 @@ namespace Villamos.Ablakok
         {
             TxtId.Text = "";
             Ablaknév.Text = Ablaknév.Items[Ablaknév.SelectedIndex].ToString();
+            Alap_tábla_író();
             GombokFeltöltése();
         }
     }
