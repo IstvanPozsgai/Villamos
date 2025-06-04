@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
-using MyF = Függvénygyűjtemény;
+using Villamos.Kezelők;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 {
@@ -14,23 +12,40 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         public List<Adat_Jármű> AdatokJármű { get; set; }
         public event Event_Kidobó TTP_Változás;
 
+        readonly Kezelő_TTP_Alapadat KézAlap = new Kezelő_TTP_Alapadat();
+
+        #region Alap
         public Ablak_TTP_Alapadat(List<Adat_Jármű> adatokJármű)
         {
             AdatokJármű = adatokJármű;
             InitializeComponent();
+            Start();
         }
 
+        private void Ablak_TTP_Alapadat_Load(object sender, EventArgs e)
+        { }
+
+        private void Start()
+        {
+            CmbPályaszámFeltölt();
+        }
+        #endregion
+
+
+        /// <summary>
+        /// Combo feltöltése a pályaszámokkal.
+        /// </summary>
         public void CmbPályaszámFeltölt()
         {
             foreach (Adat_Jármű rekord in AdatokJármű)
                 CmbPályaszám.Items.Add(rekord.Azonosító);
         }
 
-        private void Ablak_TTP_Alapadat_Load(object sender, EventArgs e)
-        {
-            CmbPályaszámFeltölt();
-        }
-
+        /// <summary>
+        /// Rögzíti a TTP alapadatokat a pályaszámhoz tartozóan.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnRögzít_Click(object sender, EventArgs e)
         {
             try
@@ -38,31 +53,20 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 if (CmbPályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve a Pályaszám mező.");
                 if (!CmbPályaszám.Items.Contains(CmbPályaszám.Text.Trim())) throw new HibásBevittAdat("Nem létezik a pályaszám.");
 
-                Adat_TTP_Alapadat Adat = (from a in MyF.TTP_AlapadatFeltölt()
+                Adat_TTP_Alapadat Adat = (from a in KézAlap.Lista_Adatok()
                                           where a.Azonosító == CmbPályaszám.Text.Trim()
                                           select a).FirstOrDefault();
-                string szöveg;
-                if (Adat != null)
-                {
-                    szöveg = $"UPDATE TTP_Alapadat SET Gyártási_Év='{DátumGyártás.Value}', ";
-                    szöveg += $"TTP={ChbTTP.Checked}, ";
-                    szöveg += $"Megjegyzés='{TxtbxMegjegyz.Text.Trim()}' ";
-                    szöveg += $"WHERE Azonosító='{CmbPályaszám.Text.Trim()}'";
-                }
+
+                Adat_TTP_Alapadat ADAT = new Adat_TTP_Alapadat(
+                                 CmbPályaszám.Text.Trim(),
+                                 DátumGyártás.Value,
+                                 ChbTTP.Checked,
+                                 TxtbxMegjegyz.Text.Trim());
+
+                if (Adat == null)
+                    KézAlap.Rögzítés(ADAT);
                 else
-                {
-                    szöveg = $"INSERT INTO TTP_Alapadat (Azonosító, Gyártási_Év, TTP, Megjegyzés)";
-                    szöveg += $"VALUES (";
-                    szöveg += $"'{CmbPályaszám.Text.Trim()}',";
-                    szöveg += $"'{DátumGyártás.Value}',";
-                    szöveg += $"{ChbTTP.Checked},";
-                    szöveg += $"'{TxtbxMegjegyz.Text.Trim()}')";
-                }
-
-                string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/TTP_Adatbázis.mdb";
-                string jelszó = "rudolfg";
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézAlap.Módosítás(ADAT);
                 TTP_Változás?.Invoke();
 
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Rögzítve.", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -78,15 +82,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             }
         }
 
-        private void CmbPályaszám_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PályaszámKereső();
-        }
-
-
+        /// <summary>
+        /// Pályaszámhoz tartozó adatok keresése és kitöltése a mezőkbe.
+        /// </summary>
         private void PályaszámKereső()
         {
-            Adat_TTP_Alapadat Adat = (from a in MyF.TTP_AlapadatFeltölt()
+            Adat_TTP_Alapadat Adat = (from a in KézAlap.Lista_Adatok()
                                       where a.Azonosító == CmbPályaszám.Text.Trim()
                                       select a).FirstOrDefault();
 
@@ -107,6 +108,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 
         private void CmbPályaszám_TextUpdate(object sender, EventArgs e)
         {
+            PályaszámKereső();
+        }
+
+        private void CmbPályaszám_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            CmbPályaszám.Text = CmbPályaszám.Items[CmbPályaszám.SelectedIndex].ToString();
             PályaszámKereső();
         }
     }

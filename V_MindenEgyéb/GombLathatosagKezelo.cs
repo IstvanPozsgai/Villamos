@@ -69,6 +69,7 @@ public static class GombLathatosagKezelo
             Kezelõk_Oldalok KézOldal = new Kezelõk_Oldalok();
             Adat_Oldalak AdatOldal = KézOldal.Lista_Adatok()
                 .Where(o => o.FromName == form.Name).FirstOrDefault();
+            if (AdatOldal == null) return;
 
             // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
             List<Adat_Jogosultságok> jogosultságok = Kéz.Lista_Adatok()

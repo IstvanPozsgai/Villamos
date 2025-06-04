@@ -15,53 +15,8 @@ using MyF = Függvénygyűjtemény;
 
 public static partial class Függvénygyűjtemény
 {
-
-
     readonly static string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/TTP_Adatbázis.mdb";
     readonly static string jelszó = "rudolfg";
-
-    public static List<Adat_TTP_Alapadat> TTP_AlapadatFeltölt()
-    {
-        List<Adat_TTP_Alapadat> AdatokAlap = new List<Adat_TTP_Alapadat>();
-        try
-        {
-            Kezelő_TTP_Alapadat KézAlap = new Kezelő_TTP_Alapadat();
-
-            string szöveg = "SELECT * FROM TTP_Alapadat";
-            AdatokAlap = KézAlap.Lista_Adatok(hely, jelszó, szöveg);
-        }
-        catch (HibásBevittAdat ex)
-        {
-            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "TTP_AlapadatFeltölt", ex.StackTrace, ex.Source, ex.HResult);
-            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        return AdatokAlap;
-    }
-
-    public static List<Adat_TTP_Év> TTP_ÉvFeltölt()
-    {
-        Kezelő_TTP_Év KézÉv = new Kezelő_TTP_Év();
-        List<Adat_TTP_Év> AdatokÉv = new List<Adat_TTP_Év>();
-        try
-        {
-            string szöveg = "SELECT * FROM TTP_Év  ORDER BY Életkor";
-            AdatokÉv = KézÉv.Lista_Adatok(hely, jelszó, szöveg);
-        }
-        catch (HibásBevittAdat ex)
-        {
-            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "TTP_ÉvFeltölt", ex.StackTrace, ex.Source, ex.HResult);
-            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        return AdatokÉv;
-    }
 
     public static List<Adat_TTP_Tábla> TTP_TáblaFeltölt()
     {
@@ -82,30 +37,6 @@ public static partial class Függvénygyűjtemény
             MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         return AdatokTábla;
-    }
-
-    public static List<Adat_TTP_Naptár> TTP_NaptárFeltölt(DateTime Dátum)
-    {
-        Kezelő_TTP_Naptár KézNaptár = new Kezelő_TTP_Naptár();
-        List<Adat_TTP_Naptár> AdatokNaptár = new List<Adat_TTP_Naptár>();
-        try
-        {
-            string szöveg = "SELECT * FROM TTP_Naptár";
-            szöveg += $" WHERE dátum>=#{MyF.Év_elsőnapja(Dátum):M-d-yy}# ";
-            szöveg += $" AND dátum<=#{MyF.Év_utolsónapja(Dátum):M-d-yy}# ORDER BY dátum";
-
-            AdatokNaptár = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
-        }
-        catch (HibásBevittAdat ex)
-        {
-            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, " TTP_NaptárFeltölt", ex.StackTrace, ex.Source, ex.HResult);
-            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        return AdatokNaptár;
     }
 
     public static DataTable TTP_VezénylésFeltölt(List<Adat_Kiegészítő_Sérülés> AdatokTelep, List<Adat_Jármű_hiba> AdatokHiba, DateTime Dátum, bool Kötelező)
@@ -161,11 +92,17 @@ public static partial class Függvénygyűjtemény
     public static List<Adat_Tábla_Vezénylés> TTP_VezénylésLista(List<Adat_Kiegészítő_Sérülés> AdatokTelep, List<Adat_Jármű_hiba> AdatokHiba, DateTime Dátum, bool Kötelező)
     {
         List<Adat_Tábla_Vezénylés> Adatok = new List<Adat_Tábla_Vezénylés>();
-
-        List<Adat_TTP_Alapadat> AlapAdat = TTP_AlapadatFeltölt();
+        Kezelő_TTP_Alapadat KézAlap = new Kezelő_TTP_Alapadat();
+        List<Adat_TTP_Alapadat> AlapAdat = KézAlap.Lista_Adatok();
         List<Adat_TTP_Tábla> TáblaAdat = TTP_TáblaFeltölt();
-        List<Adat_TTP_Év> TáblaÉv = TTP_ÉvFeltölt();
-        List<Adat_TTP_Naptár> TáblaNaptár = TTP_NaptárFeltölt(Dátum);
+        Kezelő_TTP_Év KézÉv = new Kezelő_TTP_Év();
+        List<Adat_TTP_Év> TáblaÉv = KézÉv.Lista_Adatok();
+        Kezelő_TTP_Naptár KézNaptár = new Kezelő_TTP_Naptár();
+        List<Adat_TTP_Naptár> TáblaNaptár = KézNaptár.Lista_Adatok();
+        TáblaNaptár = (from a in TáblaNaptár
+                       where a.Dátum >= MyF.Év_elsőnapja(Dátum) && a.Dátum <= MyF.Év_utolsónapja(Dátum)
+                       orderby a.Dátum
+                       select a).ToList();
         List<Adat_TTP_Tábla> AdatokTeljes = TTP_Tábla_Lista_Feltöltés();
         List<Adat_Jármű> AdatokJármű = TeljesJárműadatok(AdatokTelep);
 

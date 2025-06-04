@@ -36,7 +36,7 @@ namespace Villamos
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AblakFelhasználó));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Felhasználó));
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnRögzít = new System.Windows.Forms.Button();
             this.BtnSugó = new System.Windows.Forms.Button();
@@ -58,6 +58,7 @@ namespace Villamos
             this.TxtPassword = new System.Windows.Forms.TextBox();
             this.Frissít = new System.Windows.Forms.CheckBox();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
+            this.BtnDolgozóilsta = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.SuspendLayout();
@@ -198,6 +199,7 @@ namespace Villamos
             this.CmbDolgozószám.MaxLength = 8;
             this.CmbDolgozószám.Name = "CmbDolgozószám";
             this.CmbDolgozószám.Size = new System.Drawing.Size(165, 28);
+            this.CmbDolgozószám.Sorted = true;
             this.CmbDolgozószám.TabIndex = 99;
             this.CmbDolgozószám.SelectionChangeCommitted += new System.EventHandler(this.CmbDolgozószám_SelectionChangeCommitted);
             // 
@@ -244,6 +246,7 @@ namespace Villamos
             this.CmbDolgozónév.Location = new System.Drawing.Point(201, 143);
             this.CmbDolgozónév.Name = "CmbDolgozónév";
             this.CmbDolgozónév.Size = new System.Drawing.Size(455, 28);
+            this.CmbDolgozónév.Sorted = true;
             this.CmbDolgozónév.TabIndex = 104;
             this.CmbDolgozónév.SelectionChangeCommitted += new System.EventHandler(this.CmbDolgozónév_SelectionChangeCommitted);
             // 
@@ -296,12 +299,25 @@ namespace Villamos
             this.Tábla.TabIndex = 221;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
-            // AblakFelhasználó
+            // BtnDolgozóilsta
+            // 
+            this.BtnDolgozóilsta.BackgroundImage = global::Villamos.Properties.Resources.felhasználók32;
+            this.BtnDolgozóilsta.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnDolgozóilsta.Location = new System.Drawing.Point(827, 120);
+            this.BtnDolgozóilsta.Name = "BtnDolgozóilsta";
+            this.BtnDolgozóilsta.Size = new System.Drawing.Size(45, 45);
+            this.BtnDolgozóilsta.TabIndex = 224;
+            this.ToolTip1.SetToolTip(this.BtnDolgozóilsta, "Frissíti a dolgozói listát IDM adataival");
+            this.BtnDolgozóilsta.UseVisualStyleBackColor = true;
+            this.BtnDolgozóilsta.Click += new System.EventHandler(this.BtnDolgozóilsta_Click);
+            // 
+            // Ablak_Felhasználó
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(884, 495);
+            this.Controls.Add(this.BtnDolgozóilsta);
             this.Controls.Add(this.BtnFrissít);
             this.Controls.Add(this.BtnÚj);
             this.Controls.Add(this.Tábla);
@@ -312,7 +328,7 @@ namespace Villamos
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "AblakFelhasználó";
+            this.Name = "Ablak_Felhasználó";
             this.Text = "Felhasználók karbantartása";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.AblakFelhasználó_Load);
@@ -343,5 +359,6 @@ namespace Villamos
         internal Button BtnFrissít;
         internal Label label6;
         internal TextBox TxtPassword;
+        internal Button BtnDolgozóilsta;
     }
 }

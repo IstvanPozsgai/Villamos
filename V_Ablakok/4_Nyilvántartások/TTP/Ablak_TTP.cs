@@ -23,6 +23,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         readonly Kezelő_Kiegészítő_Sérülés KézTelep = new Kezelő_Kiegészítő_Sérülés();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_TTP_Naptár KézNaptár = new Kezelő_TTP_Naptár();
 
         readonly List<Adat_Jármű_hiba> AdatokHiba = new List<Adat_Jármű_hiba>();
         List<Adat_Kiegészítő_Sérülés> AdatokTelep = new List<Adat_Kiegészítő_Sérülés>();
@@ -481,7 +482,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             DtGvw_Naptár.RowCount = 1;
 
             DateTime HétElsőNapja = MyF.Hét_elsőnapja(Dátum.Value);
-            NaptárLista = MyF.TTP_NaptárFeltölt(Dátum.Value);
+            NaptárLista = KézNaptár.Lista_Adatok();
+            NaptárLista = (from a in NaptárLista
+                           where a.Dátum >= MyF.Év_elsőnapja(Dátum.Value) && a.Dátum <= MyF.Év_utolsónapja(Dátum.Value)
+                           orderby a.Dátum
+                           select a).ToList();
+
 
             for (int i = 0; i < DtGvw_Naptár.ColumnCount; i++)
             {

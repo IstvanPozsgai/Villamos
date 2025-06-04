@@ -26,16 +26,16 @@ namespace Villamos.Villamos_Adatszerkezet
 
     public class Adat_Behajtás_Dolgozótábla
     {
-        public string SZTSZ { get; set; }
-        public string Családnévutónév { get; set; }
+        public string Dolgozószám { get; set; }
+        public string Dolgozónév { get; set; }
         public string Szervezetiegység { get; set; }
         public string Munkakör { get; set; }
-        public int Státus { get; set; }
+        public bool Státus { get; set; }
 
-        public Adat_Behajtás_Dolgozótábla(string sZTSZ, string családnévutónév, string szervezetiegység, string munkakör, int státus)
+        public Adat_Behajtás_Dolgozótábla(string dolgozószám, string dolgozónév, string szervezetiegység, string munkakör, bool státus)
         {
-            SZTSZ = sZTSZ;
-            Családnévutónév = családnévutónév;
+            Dolgozószám = dolgozószám;
+            Dolgozónév = dolgozónév;
             Szervezetiegység = szervezetiegység;
             Munkakör = munkakör;
             Státus = státus;
@@ -350,7 +350,7 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-    public class Adat_Behajtási_Engedélyek 
+    public class Adat_Behajtási_Engedélyek
     {
         public string Telephely { get; set; }
         public int Engedély { get; set; }

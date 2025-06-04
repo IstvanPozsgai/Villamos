@@ -192,7 +192,7 @@ namespace Villamos.Ablakok
             {
                 DataRow Soradat = AdatTáblaALap.NewRow();
 
-                Soradat["Oldal Id"] = rekord.GombokId;
+                Soradat["Gomb Id"] = rekord.GombokId;
                 Soradat["Form Név"] = rekord.FromName;
                 Soradat["Gomb Leírás"] = rekord.GombFelirat;
                 Soradat["Gomb Név"] = rekord.GombName;
@@ -210,7 +210,7 @@ namespace Villamos.Ablakok
             try
             {
                 AdatTáblaALap.Columns.Clear();
-                AdatTáblaALap.Columns.Add("Oldal Id");
+                AdatTáblaALap.Columns.Add("Gomb Id");
                 AdatTáblaALap.Columns.Add("Gomb Leírás");
                 AdatTáblaALap.Columns.Add("Gomb Név");
                 AdatTáblaALap.Columns.Add("Form Név");
@@ -233,7 +233,7 @@ namespace Villamos.Ablakok
         /// </summary>
         private void AlapTáblaOszlopSzélesség()
         {
-            Tábla.Columns["Oldal Id"].Width = 130;
+            Tábla.Columns["Gomb Id"].Width = 130;
             Tábla.Columns["Form Név"].Width = 400;
             Tábla.Columns["Gomb Leírás"].Width = 400;
             Tábla.Columns["Gomb Név"].Width = 450;
@@ -328,6 +328,7 @@ namespace Villamos.Ablakok
 
         private void Ablaknév_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            TxtId.Text = "";
             Ablaknév.Text = Ablaknév.Items[Ablaknév.SelectedIndex].ToString();
             GombokFeltöltése();
         }
