@@ -23,31 +23,41 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 double Id = 0;
                 string Azonosító = Kocsi.Azonosító.Trim();
 
-                long Számláló = Előző.Számláló;
+                long Számláló = 0;
+                int Idő_sorszám = 0;
                 int Státus = 0;
-                int Idő_sorszám = Előző.IDŐ_Sorszám;
-                int KM_Sorszám = Előző.KM_Sorszám;
+                int KM_Sorszám = 0;
+                int IDŐvKM = 1;
+                DateTime Dátum = Kocsi.Vizsgdátum_nap;
+                if (Előző != null)
+                {
+                    Számláló = Előző.Számláló;
+                    Idő_sorszám = Előző.IDŐ_Sorszám;
+                    KM_Sorszám = Előző.KM_Sorszám;
+                    IDŐvKM = Előző.IDŐvKM;
+                    Dátum = Előző.Dátum;
+                }
 
                 // ha az utolsó ütem akkor lenullázuk az értéket
                 int következő;
-                if (Előző.IDŐvKM == 2)
+                if (IDŐvKM == 2)
                 {
                     következő = 1;
                 }
                 else
                 {
-                    if (Ciklus[Ciklus.Count - 1].Sorszám == Előző.IDŐ_Sorszám)
+                    if (Ciklus[Ciklus.Count - 1].Sorszám == Idő_sorszám)
                         következő = 1;
                     else
-                        következő = Előző.IDŐ_Sorszám + 1;
+                        következő = Idő_sorszám + 1;
                 }
                 int IDŐ_Sorszám = következő;
                 string Vizsgálat = Ciklus[következő - 1].Vizsgálatfok.Trim();
 
                 int névleges_nap = (int)Ciklus[következő - 1].Névleges;
-                DateTime Dátum = Előző.Dátum.AddDays(névleges_nap);
-                DateTime Dátum_program = Előző.Dátum.AddDays(névleges_nap);
-                int IDŐvKM = 1;
+                Dátum = Dátum.AddDays(névleges_nap);
+                DateTime Dátum_program = Dátum.AddDays(névleges_nap);
+                IDŐvKM = 1;
                 string Megjegyzés = "_";
 
                 válasz = new Adat_CAF_Adatok(Id, Azonosító, Vizsgálat, Dátum, Dátum_program, Számláló, Státus, KM_Sorszám, IDŐ_Sorszám, IDŐvKM, Megjegyzés);
