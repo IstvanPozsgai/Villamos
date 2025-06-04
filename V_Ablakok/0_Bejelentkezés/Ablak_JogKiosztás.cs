@@ -57,7 +57,7 @@ namespace Villamos
             AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
             OldalFeltöltés();
             FelhasználóFeltöltés();
-            GombLathatosagKezelo.Beallit(this);
+         //   GombLathatosagKezelo.Beallit(this);
         }
 
 

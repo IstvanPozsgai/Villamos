@@ -35,7 +35,7 @@ namespace Villamos
             CombokFeltöltése();
             Üres();
             TáblázatListázás();
-            GombLathatosagKezelo.Beallit(this);
+        //    GombLathatosagKezelo.Beallit(this);
         }
 
         private void AblakFelhasználó_Load(object sender, EventArgs e)

@@ -44,6 +44,7 @@ namespace Villamos
             {
                 // betöltjük a telephelyeket
                 Telephelyekfeltöltése();
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
 
 

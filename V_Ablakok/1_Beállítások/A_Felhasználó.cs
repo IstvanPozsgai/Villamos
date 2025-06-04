@@ -38,7 +38,7 @@ namespace Villamos
                 Neveklistája();
                 Fülek.TabIndex = 0;
                 TextNév.Focus();
-                GombLathatosagKezelo.Beallit(this);
+            //    GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 Táblaíró();
 
