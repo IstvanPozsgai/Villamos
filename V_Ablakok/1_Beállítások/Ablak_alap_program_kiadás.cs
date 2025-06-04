@@ -64,6 +64,7 @@ namespace Villamos
                 Telephelyekfeltöltése();
                 if (Cmbtelephely.Items.Count > 0)
                 {// Ha telephelyek feltöltése sikeres csak akkor fejezi be az ablak kitöltését
+                    //GombLathatosagKezelo.Beallit(this);
                     Jogosultságkiosztás();
                     Típusfeltöltés();
                     Főkönyvialáírások();
