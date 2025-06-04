@@ -79,19 +79,29 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 double Id = 0;
                 string Azonosító = Kocsi.Azonosító.Trim();
+                long Számláló = 0;
+                int KM_Sorszám = 0;
+                DateTime Dátum = Kocsi.Vizsgdátum_km;
+                if (Előző != null)
+                {
+                    Számláló = Előző.Számláló;
+                    KM_Sorszám = Előző.KM_Sorszám;
+                    Dátum = Előző.Dátum;
+                }
 
-                long Számláló = Előző.Számláló;
+
+
                 int Státus = 0;
                 int IDŐ_Sorszám = 1;
 
                 // ha az utolsó ütem akkor lenullázuk az értéket
                 int következő;
-                if (Ciklus[Ciklus.Count - 1].Sorszám == Előző.KM_Sorszám)
+                if (Ciklus[Ciklus.Count - 1].Sorszám == KM_Sorszám)
                     következő = 1;
                 else
-                    következő = Előző.KM_Sorszám + 1;
+                    következő = KM_Sorszám + 1;
 
-                int KM_Sorszám = következő;
+                KM_Sorszám = következő;
                 string Vizsgálat = Ciklus[következő - 1].Vizsgálatfok.Trim();
 
                 int NapiKm = (int)(Kocsi.Havikm / 30);
@@ -107,8 +117,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 double futhatmég_Nap = (Ciklus[következő - 1].Felsőérték - Vizsgálat_Óta_km) / NapiKm;
 
 
-                DateTime Dátum = Előző.Dátum.AddDays(futhatmég_Nap);
-                DateTime Dátum_program = Előző.Dátum.AddDays(futhatmég_Nap);
+                Dátum = Dátum.AddDays(futhatmég_Nap);
+                DateTime Dátum_program = Dátum;
                 int IDŐvKM = 2;
                 string Megjegyzés = "";
 
@@ -137,28 +147,35 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Adat_CAF_Adatok Előző = Kéz_Adatok.Egy_Adat(pályaszám.Trim());    // utolsó ütemezett
 
                 int Státus = 0;
-                int IDŐvKM = 1;
+                int IDŐvKM = 0;
                 string Megjegyzés = "_";
-                long Számláló = Előző.Számláló;
-                int Idő_sorszám = Előző.IDŐ_Sorszám;
-                int KM_Sorszám = Előző.KM_Sorszám;
-                DateTime Dátum;
-                if (ELŐDátumtól == new DateTime(1900, 1, 1))
+                long Számláló = 0;
+                int Idő_sorszám = 0;
+                int KM_Sorszám = 0;
+                DateTime Dátum = EgyCAF.Vizsgdátum_nap;
+                if (Előző != null)
+                {
+                    Számláló = Előző.Számláló;
+                    Idő_sorszám = Előző.IDŐ_Sorszám;
+                    KM_Sorszám = Előző.KM_Sorszám;
                     Dátum = Előző.Dátum;
-                else
-                    Dátum = ELŐDátumtól;
+                    IDŐvKM = Előző.IDŐvKM;
+                }
+
+
+                if (ELŐDátumtól != new DateTime(1900, 1, 1)) Dátum = ELŐDátumtól;
                 // ha az utolsó ütem akkor lenullázuk az értéket
                 int következő;
-                if (Előző.IDŐvKM == 2)
+                if (IDŐvKM == 2)
                 {
                     következő = 1;
                 }
                 else
                 {
-                    if (Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám == Előző.IDŐ_Sorszám)
+                    if (Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám == Idő_sorszám)
                         következő = 1;
                     else
-                        következő = Előző.IDŐ_Sorszám + 1;
+                        következő = Idő_sorszám + 1;
                 }
 
                 while (vége == true)
@@ -197,10 +214,20 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 bool vége = true;
                 Adat_CAF_alap EgyCAF = KézAlap.Egy_Adat(pályaszám.Trim(), true);//Jármű tulajdonsága
                 List<Adat_Ciklus> Ciklus_Km = Ciklus.Where(a => a.Típus == EgyCAF.Cikluskm).OrderBy(a => a.Sorszám).ToList();
-                Adat_CAF_Adatok Előző = Kéz_Adatok.Egy_Adat(pályaszám.Trim(), 2);     // utolsó ütemezett
+                Adat_CAF_Adatok Előző = Kéz_Adatok.Egy_Adat(pályaszám.Trim(), 2);
 
                 double Vizsgálat_Óta_km;
-                long Számláló = Előző.Számláló;
+                long Számláló = 0;
+                int Km_sorszám = 0;
+                DateTime Dátum = EgyCAF.Vizsgdátum_km;
+                if (Előző != null)
+                {
+                    Számláló = Előző.Számláló;
+                    Km_sorszám = Előző.KM_Sorszám;
+                    Dátum = Előző.Dátum;
+                }
+
+
                 //Ha nincs számláló állás akkor a teljes ciklust kell tervezni.
                 if (Számláló == 0)
                     Vizsgálat_Óta_km = 0;
@@ -214,11 +241,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 int IDŐvKM = 2;
                 string Megjegyzés = "_";
                 // ha az utolsó ütem akkor lenullázuk az értéket
-                if (Ciklus_Km[Ciklus_Km.Count - 1].Sorszám == Előző.KM_Sorszám)
+                if (Ciklus_Km[Ciklus_Km.Count - 1].Sorszám == Km_sorszám)
                     következő = 1;
                 else
-                    következő = Előző.KM_Sorszám + 1;
-                DateTime Dátum = Előző.Dátum;
+                    következő = Km_sorszám + 1;
+
                 while (vége == true)
                 {
                     int KM_Sorszám = következő;
