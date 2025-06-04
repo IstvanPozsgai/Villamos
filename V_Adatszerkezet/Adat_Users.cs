@@ -12,8 +12,18 @@ namespace Villamos.Adatszerkezet
         public DateTime Dátum { get; private set; }
         public bool Frissít { get; private set; }
         public bool Törölt { get; private set; }
+        public string Szervezetek { get; private set; }
 
-        public Adat_Users(int userId, string userName, string winUserName, string dolgozószám, string password, DateTime dátum, bool frissít, bool törölt)
+        public Adat_Users(
+            int userId,
+            string userName,
+            string winUserName,
+            string dolgozószám,
+            string password,
+            DateTime dátum,
+            bool frissít,
+            bool törölt,
+            string szervezetek)
         {
             UserId = userId;
             UserName = userName;
@@ -23,6 +33,7 @@ namespace Villamos.Adatszerkezet
             Dátum = dátum;
             Frissít = frissít;
             Törölt = törölt;
+            Szervezetek = szervezetek;
         }
     }
 }

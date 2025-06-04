@@ -62,7 +62,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[Password] CHAR(255),";
             szöveg += "[Dátum] Date,";
             szöveg += "[Frissít] yesno,";
-            szöveg += "[Törölt] yesno)";
+            szöveg += "[Törölt] yesno,";
+            szöveg += "[Szervezetek] CHAR(255))";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg, táblanév);
         }
 

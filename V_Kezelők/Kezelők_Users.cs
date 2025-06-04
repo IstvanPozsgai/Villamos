@@ -47,7 +47,9 @@ namespace Villamos.Kezelők
                                         rekord["Password"].ToStrTrim(),
                                         rekord["Dátum"].ToÉrt_DaTeTime(),
                                         rekord["Frissít"].ToÉrt_Bool(),
-                                        rekord["Törölt"].ToÉrt_Bool());
+                                        rekord["Törölt"].ToÉrt_Bool(),
+                                        rekord["Szervezetek"].ToStrTrim()
+                                );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -86,8 +88,8 @@ namespace Villamos.Kezelők
                 string pword = Adat.Password;
                 if (Adat.Password.Trim() == "") pword = "123456";
                 bool frissít = true;
-                string szöveg = $"INSERT INTO {táblanév} (UserName, WinUserName, Dolgozószám, [Password], Dátum, frissít, Törölt) VALUES (";
-                szöveg += $"'{Adat.UserName}', '{Adat.WinUserName}', '{Adat.Dolgozószám}', '{pword}', '{Adat.Dátum:yyyy.MM.dd}', {frissít}, {Adat.Törölt})";
+                string szöveg = $"INSERT INTO {táblanév} (UserName, WinUserName, Dolgozószám, [Password], Dátum, frissít, Törölt, Szervezetek) VALUES (";
+                szöveg += $"'{Adat.UserName}', '{Adat.WinUserName}', '{Adat.Dolgozószám}', '{pword}', '{Adat.Dátum:yyyy.MM.dd}', {frissít}, {Adat.Törölt}, '{Adat.Szervezetek}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -110,7 +112,8 @@ namespace Villamos.Kezelők
                 szöveg += $"[Password] ='{Adat.Password}', ";
                 szöveg += $"Dátum ='{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"Frissít ={Adat.Frissít}, ";
-                szöveg += $"Törölt ={Adat.Törölt} ";
+                szöveg += $"Törölt ={Adat.Törölt}, ";
+                szöveg += $"Szervezetek ='{Adat.Szervezetek}' ";
                 szöveg += $"WHERE UserId = {Adat.UserId}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

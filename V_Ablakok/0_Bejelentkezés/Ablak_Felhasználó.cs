@@ -21,7 +21,7 @@ namespace Villamos
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
-
+        // megjegyzés dolgozókhoz kell majd feltölteni a szervezeteket
 
         #region Alap
         public Ablak_Felhasználó()
@@ -37,7 +37,8 @@ namespace Villamos
             CombokFeltöltése();
             Üres();
             TáblázatListázás();
-        //    GombLathatosagKezelo.Beallit(this);
+            SzervezetFeltöltésChk();
+            //    GombLathatosagKezelo.Beallit(this);
         }
 
         private void AblakFelhasználó_Load(object sender, EventArgs e)
@@ -100,6 +101,7 @@ namespace Villamos
                 AdatTáblaALap.Columns.Add("WinFelhasználó név");
                 AdatTáblaALap.Columns.Add("Dolgozószám");
                 AdatTáblaALap.Columns.Add("Dolgozó Név");
+                AdatTáblaALap.Columns.Add("Szervezetek");
                 AdatTáblaALap.Columns.Add("Jelszó");
                 AdatTáblaALap.Columns.Add("Dátum");
                 AdatTáblaALap.Columns.Add("Frissít");
@@ -118,26 +120,39 @@ namespace Villamos
 
         private void AlapTáblaTartalom()
         {
-            AdatTáblaALap.Clear();
-
-
-            foreach (Adat_Users rekord in Adatok)
+            try
             {
-                DataRow Soradat = AdatTáblaALap.NewRow();
-                Adat_Behajtás_Dolgozótábla Elem = (from a in AdatokDolg
-                                                   where a.Dolgozószám == rekord.Dolgozószám
-                                                   select a).FirstOrDefault();
-                string DolgozóNév = Elem == null ? "" : Elem.Dolgozónév;
-                Soradat["Id"] = rekord.UserId;
-                Soradat["Felhasználó név"] = rekord.UserName;
-                Soradat["WinFelhasználó név"] = rekord.WinUserName;
-                Soradat["Dolgozószám"] = rekord.Dolgozószám;
-                Soradat["Dolgozó Név"] = DolgozóNév;
-                Soradat["Jelszó"] = rekord.Password;
-                Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
-                Soradat["Frissít"] = rekord.Frissít ? "Igen" : "Nem";
-                Soradat["Törölt"] = rekord.Törölt == true ? "Törölt" : "Aktív";
-                AdatTáblaALap.Rows.Add(Soradat);
+                AdatTáblaALap.Clear();
+
+                foreach (Adat_Users rekord in Adatok)
+                {
+                    DataRow Soradat = AdatTáblaALap.NewRow();
+                    Adat_Behajtás_Dolgozótábla Elem = (from a in AdatokDolg
+                                                       where a.Dolgozószám == rekord.Dolgozószám
+                                                       select a).FirstOrDefault();
+                    string DolgozóNév = Elem == null ? "" : Elem.Dolgozónév;
+                    Soradat["Id"] = rekord.UserId;
+                    Soradat["Felhasználó név"] = rekord.UserName;
+                    Soradat["WinFelhasználó név"] = rekord.WinUserName;
+                    Soradat["Dolgozószám"] = rekord.Dolgozószám;
+                    Soradat["Dolgozó Név"] = DolgozóNév;
+                    Soradat["Szervezetek"] = rekord.Szervezetek; // ÚJ: közvetlenül a Dolgozó Név után
+                    Soradat["Jelszó"] = rekord.Password;
+                    Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
+                    Soradat["Frissít"] = rekord.Frissít ? "Igen" : "Nem";
+                    Soradat["Törölt"] = rekord.Törölt == true ? "Törölt" : "Aktív";
+                    AdatTáblaALap.Rows.Add(Soradat);
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -148,7 +163,7 @@ namespace Villamos
             Tábla.Columns["WinFelhasználó név"].Width = 180;
             Tábla.Columns["Dolgozószám"].Width = 110;
             Tábla.Columns["Dolgozó Név"].Width = 250;
-            Tábla.Columns["Jelszó"].Width = 250;
+            Tábla.Columns["Szervezetek"].Width = 250;
             Tábla.Columns["Dátum"].Width = 130;
             Tábla.Columns["Frissít"].Width = 110;
             Tábla.Columns["Törölt"].Width = 110;
@@ -180,6 +195,22 @@ namespace Villamos
                 TxtPassword.Text = "";
                 Frissít.Checked = adat.Frissít;
                 Törölt.Checked = adat.Törölt;
+
+                for (int i = 0; i < ChkSzervezet.Items.Count; i++)
+                    ChkSzervezet.SetItemChecked(i, false);
+
+                if (!string.IsNullOrWhiteSpace(adat.Szervezetek))
+                {
+                    string[] szervezetek = adat.Szervezetek.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < ChkSzervezet.Items.Count; i++)
+                    {
+                        string itemText = ChkSzervezet.Items[i].ToString();
+                        if (szervezetek.Contains(itemText))
+                        {
+                            ChkSzervezet.SetItemChecked(i, true);
+                        }
+                    }
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -223,6 +254,19 @@ namespace Villamos
                 if (Adatok.Any(a => a.Dolgozószám == CmbDolgozószám.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Dolgozószámhoz már létezik egy másik felhasználó!");
                 string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
 
+                // --- ÚJ: Szervezetek szöveg összeállítása a ChkSzervezet kijelölt elemeiből ---
+                string szervezetek = "";
+                if (ChkSzervezet.CheckedItems.Count > 0)
+                {
+                    List<string> szervezetLista = new List<string>();
+                    foreach (object item in ChkSzervezet.CheckedItems)
+                    {
+                        szervezetLista.Add(item.ToString());
+                    }
+                    szervezetek = string.Join(";", szervezetLista);
+                }
+                // ------------------------------------------------------------------------------
+
                 Adat_Users ADAT = new Adat_Users(
                     Id,
                     TextUserNév.Text.Trim(),
@@ -231,7 +275,9 @@ namespace Villamos
                     jelszó,
                     DateTime.Now,
                     Frissít.Checked,
-                    Törölt.Checked);
+                    Törölt.Checked,
+                    szervezetek // új paraméter
+                );
                 Kéz.Döntés(ADAT);
                 TáblázatListázás();
             }
@@ -300,6 +346,8 @@ namespace Villamos
             TxtPassword.Text = "123456";
             Frissít.Checked = true;
             Törölt.Checked = false;
+            for (int i = 0; i < ChkSzervezet.Items.Count; i++)
+                ChkSzervezet.SetItemChecked(i, false);
         }
 
         private void CombokFeltöltése()
@@ -321,6 +369,31 @@ namespace Villamos
         private void TxtPassword_TextChanged(object sender, EventArgs e)
         {
             Frissít.Checked = true;
+        }
+
+        private void SzervezetFeltöltésChk()
+        {
+            try
+            {
+                Kezelő_Kiegészítő_Könyvtár kezSzervezet = new Kezelő_Kiegészítő_Könyvtár();
+                List<Adat_Kiegészítő_Könyvtár> adatokSzervezet = kezSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
+
+                ChkSzervezet.Items.Clear();
+                for (int i = 0; i < adatokSzervezet.Count; i++)
+                {
+                    ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
+                    ChkSzervezet.SetItemChecked(i, false);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
 
