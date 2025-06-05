@@ -635,40 +635,22 @@ namespace Villamos
 
 
         /// <summary>
-        /// Oszlop sorszámát átalakítja az oszlop jelölő betűvé 3 db Betűhosszt tud számolni ZZZ
+        /// Oszlop sorszámát átalakítja az oszlop jelölő betűvé 
         /// </summary>
         /// <param name="sorszám">Int adunnk át</param>
         /// <returns></returns>
         public static string Oszlopnév(int sorszám)
         {
-            string ideig;
-            if (sorszám < 27)
+            if (sorszám < 1) throw new ArgumentOutOfRangeException(nameof(sorszám), "Az oszlopszámnak 1 vagy nagyobbnak kell lennie.");
+
+            string oszlopNev = string.Empty;
+            while (sorszám > 0)
             {
-                ideig = Convert.ToString(Convert.ToChar(sorszám + 64));
+                sorszám--;
+                oszlopNev = (char)('A' + (sorszám % 26)) + oszlopNev;
+                sorszám /= 26;
             }
-            //Ha maradék nélkül lehet osztani
-            else if (sorszám < 703)
-            {
-                int elsőbetűszáma = ((sorszám - 1) / 26) + 64;
-                int maradék = (sorszám - 1) % 26;
-                int másodikbetűszáma = maradék + 65;
-                Char betű1 = Convert.ToChar(elsőbetűszáma);
-                Char betű2 = Convert.ToChar(másodikbetűszáma);
-                ideig = Convert.ToString(betű1) + Convert.ToString(betű2);
-            }
-            else
-            {
-                int betűszáma1 = ((sorszám) / 676) + 64;
-                int maradék1 = sorszám % 676;
-                int betűszáma2 = ((maradék1) / 26) + 64;
-                int maradék2 = maradék1 % 26;
-                int betűszáma3 = maradék2 + 64;
-                Char betű1 = Convert.ToChar(betűszáma1);
-                Char betű2 = Convert.ToChar(betűszáma2);
-                Char betű3 = Convert.ToChar(betűszáma3);
-                ideig = Convert.ToString(betű1) + Convert.ToString(betű2) + Convert.ToString(betű3);
-            }
-            return ideig.Replace('@', 'A');
+            return oszlopNev;
         }
 
 
