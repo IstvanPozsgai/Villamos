@@ -2669,7 +2669,7 @@ namespace Villamos
 
         private void Új_Ablak_JogKiosztás_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Új_Ablak_Felhasználó = null;
+            Új_Ablak_JogKiosztás = null;
         }
     }
 }

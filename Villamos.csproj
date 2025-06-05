@@ -1854,6 +1854,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ADGV">
+      <Version>0.1.0.10</Version>
+    </PackageReference>
     <PackageReference Include="DG.AdvancedDataGridView">
       <Version>1.2.30115.18</Version>
     </PackageReference>
