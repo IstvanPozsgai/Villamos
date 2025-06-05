@@ -380,3 +380,5 @@ FodyWeavers.xsd
 /Fogaskerekű
 /Súgó
 /Villamos_C#.exe
+*.dll
+/Villamos.csproj
