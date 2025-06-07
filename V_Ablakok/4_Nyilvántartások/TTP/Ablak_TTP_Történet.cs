@@ -40,7 +40,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             Pályaszámok_feltöltése();
             StátusokFeltöltése();
             Jogosultságkiosztás();
-            ListaTábla();
+            AdatokTeljes = MyF.TTP_Tábla_Lista_Feltöltés();
             CmbAzonosító.Text = Azonosító;
             TáblaListázás();
             MindenInAktív();
@@ -323,27 +323,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         #endregion
 
 
-        #region Listák
-        private void ListaTábla()
-        {
-            try
-            {
-                AdatokTeljes = MyF.TTP_Tábla_Lista_Feltöltés();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        #endregion
-
-
         #region Adatok módosítása rögzítése
         private void Btn_TTP_Rögz_Click(object sender, EventArgs e)
         {
@@ -364,7 +343,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                                 );
                 MyF.TTP_AdatTábla_Vizsgál(Elem, AdatokTeljes);
                 if (Művelet == "KészJav") SzabadHiba();
-                ListaTábla();
+                AdatokTeljes = MyF.TTP_Tábla_Lista_Feltöltés();
                 TáblaListázás();
                 Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
