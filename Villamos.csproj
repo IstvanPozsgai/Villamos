@@ -381,8 +381,7 @@
       <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatbázis\TTP_Adatbázis.cs" />
-    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\TTP_Adattábla.cs" />
-    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\TTP_Funkciók.cs" />
+    <Compile Include="V_Függvények\TTP_PDF.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.cs">
       <SubType>Form</SubType>
     </Compile>
