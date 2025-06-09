@@ -748,6 +748,7 @@
     <Compile Include="V_Kezelők\Kezelő_Gombok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosultságok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />

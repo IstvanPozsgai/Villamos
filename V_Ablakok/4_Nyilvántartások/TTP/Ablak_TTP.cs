@@ -809,7 +809,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                                      Tábla.Rows[sor].Cells[9].Value.ToÉrt_DaTeTime(),     //Utolsó ttp dátuma
                                      Tábla.Rows[sor].Cells[10].Value.ToÉrt_Int()
                                      );
-                    MyF.TörténetbeRögzítés(ÜtemezésDátuma, Tábla.Rows[sor].Cells[0].Value.ToStrTrim(), AdatokTábla, Adat, szöveg.Substring(0, szöveg.Length - 3));
+                    KézTábla.TörténetbeRögzítés(ÜtemezésDátuma, Tábla.Rows[sor].Cells[0].Value.ToStrTrim(), AdatokTábla, Adat, szöveg.Substring(0, szöveg.Length - 3));
                 }
 
                 AdatokTábla = KézTábla.Lista_Adatok();
@@ -849,7 +849,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                         //vizsgálni kell hogy az ütemezésen túl van-e, ha igen nem lehet törölni.
                         //Csak azokat lehet törölni amik ütemezve vannak csak.
                         if (Elem.Státus == 1)
-                            MyF.TTP_AdatTábla_Törlés(Elem);
+                            KézTábla.Törlés(Elem);
                     }
                 }
                 AdatokTábla = KézTábla.Lista_Adatok();

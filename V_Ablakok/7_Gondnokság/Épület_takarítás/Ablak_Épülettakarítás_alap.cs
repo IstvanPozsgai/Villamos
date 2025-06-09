@@ -41,10 +41,6 @@ namespace Villamos
             hely += @"\épülettörzs.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
 
-            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Opcionális.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.ÉpülettakarításOpcionálislétrehozás(hely);
-
-
             Jogosultságkiosztás();
             Combofeltöltése();
 
@@ -1078,10 +1074,7 @@ namespace Villamos
             try
             {
                 AdatokTakOpció.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Opcionális.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM TakarításOpcionális ORDER BY ID";
-                AdatokTakOpció = KézOpció.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTakOpció = KézOpció.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1217,12 +1210,10 @@ namespace Villamos
                 if (Opció_Mennyisége.Text.Trim() == "") throw new HibásBevittAdat("Mennyiség egység mezőt ki kell tölteni.");
 
                 OpcióListaFeltöltés();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Opcionális.mdb";
-                string jelszó = "seprűéslapát";
 
                 if (int.TryParse(Opció_Id.Text, out int ID))
                 {
-                    KézOpció.Módosít(hely, jelszó, new Adat_Takarítás_Opció(ID,
+                    KézOpció.Módosít(new Adat_Takarítás_Opció(ID,
                                                                              Opció_Megnevezés.Text.Trim(),
                                                                              Opció_Mennyisége.Text.Trim(),
                                                                              Ár,
@@ -1235,7 +1226,7 @@ namespace Villamos
                         ID = 1;
                     else
                         ID = AdatokTakOpció.Max(a => a.Id) + 1;
-                    KézOpció.Rögzít(hely, jelszó, new Adat_Takarítás_Opció(ID,
+                    KézOpció.Rögzít(new Adat_Takarítás_Opció(ID,
                                                          MyF.Szöveg_Tisztítás(Opció_Megnevezés.Text.Trim()),
                                                          Opció_Mennyisége.Text.Trim(),
                                                          Ár,

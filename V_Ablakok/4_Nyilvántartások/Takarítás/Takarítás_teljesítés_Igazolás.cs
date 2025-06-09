@@ -72,14 +72,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             AdatokKijelöltek = KézTakarításrakijelölt.Lista_Adatok(helyép, jelszó, szöveg);
             AdatokTIG.Clear();
 
-            string helyop = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Opcionális.mdb";
-            szöveg = "SELECT * FROM TakarításOpcionális ORDER BY ID";
-            AdatokTakOpció = KézOpció.Lista_Adatok(helyop, jelszó, szöveg);
+            AdatokTakOpció = KézOpció.Lista_Adatok();
 
             AdatokTakTelepOpció.Clear();
-            string helytelop = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\Opcionális{Dátum.Year}.mdb";
-            szöveg = "SELECT * FROM TakarításOpcTelepAdatok";
-            AdatokTakTelepOpció = KézTelep.Lista_Adatok(helytelop, jelszó, szöveg);
+            AdatokTakTelepOpció = KézTelep.Lista_Adatok(Telephely, Dátum.Year);
 
             GondnokListaFeltöltés();
             BMRListaFeltöltés();
@@ -421,10 +417,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             try
             {
                 AdatokTakOpció.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Opcionális.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM TakarításOpcionális ORDER BY ID";
-                AdatokTakOpció = KézOpció.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTakOpció = KézOpció.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {
@@ -442,10 +435,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             try
             {
                 AdatokTakTelepOpció.Clear();
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\Opcionális{Dátum.Year}.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM TakarításOpcTelepAdatok";
-                AdatokTakTelepOpció = KézTelep.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTakTelepOpció = KézTelep.Lista_Adatok(Telephely, Dátum.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -491,10 +481,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         private void AláíróListaFeltöltés()
         {
             Kezelő_Kiegészítő_főkönyvtábla KézFőkönyv = new Kezelő_Kiegészítő_főkönyvtábla();
-            string hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM főkönyvtábla ";
-            List<Adat_Kiegészítő_főkönyvtábla> AdatokFőkönyv = KézFőkönyv.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Kiegészítő_főkönyvtábla> AdatokFőkönyv = KézFőkönyv.Lista_Adatok(Telephely);
             Adat_Kiegészítő_főkönyvtábla Elem = (from a in AdatokFőkönyv
                                                  where a.Id == 2
                                                  select a).FirstOrDefault();
