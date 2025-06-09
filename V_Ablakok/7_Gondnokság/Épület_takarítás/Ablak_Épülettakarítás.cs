@@ -2294,8 +2294,8 @@ namespace Villamos
 
 
                 Adat_Épület_Takarításrakijelölt rekord;
-                Kezelő_Épület_Takarítás_Adattábla KézA = new Kezelő_Épület_Takarítás_Adattábla();
-                List<Adat_Épület_Takarítás_Adattábla> AdatÉ;
+                Kezelő_Épület_Adattábla KézA = new Kezelő_Épület_Adattábla();
+                List<Adat_Épület_Adattábla> AdatÉ;
 
                 Adat_Épület_Naptár Naptár;
 
@@ -2395,7 +2395,7 @@ namespace Villamos
 
                             if (AdatÉ != null)
                             {
-                                foreach (Adat_Épület_Takarítás_Adattábla rekordép in AdatÉ)
+                                foreach (Adat_Épület_Adattábla rekordép in AdatÉ)
                                     szöveg1 += "; " + rekordép.Helységkód.Trim() + " - " + rekordép.Megnevezés.Trim();
                             }
 

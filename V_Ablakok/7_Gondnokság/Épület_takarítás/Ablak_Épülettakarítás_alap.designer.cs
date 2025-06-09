@@ -33,7 +33,6 @@ namespace Villamos
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_épülettakarítás_alap));
             this.Panel4 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
@@ -52,7 +51,6 @@ namespace Villamos
             this.E2ár = new System.Windows.Forms.TextBox();
             this.Label3 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
-            this.Tábla1 = new System.Windows.Forms.DataGridView();
             this.Oszály_Excel = new System.Windows.Forms.Button();
             this.Osztály_feljebb = new System.Windows.Forms.Button();
             this.Adatok_beolvasása = new System.Windows.Forms.Button();
@@ -118,16 +116,17 @@ namespace Villamos
             this.Opció_Megnevezés = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
             this.Btn_súgó = new System.Windows.Forms.Button();
+            this.Tábla1 = new Zuby.ADGV.AdvancedDataGridView();
             this.Panel4.SuspendLayout();
             this.LapFülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
             this.TabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla2)).BeginInit();
             this.TabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Opció_Tábla)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel4
@@ -186,8 +185,8 @@ namespace Villamos
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.BurlyWood;
-            this.TabPage1.Controls.Add(this.tableLayoutPanel1);
             this.TabPage1.Controls.Add(this.Tábla1);
+            this.TabPage1.Controls.Add(this.tableLayoutPanel1);
             this.TabPage1.Controls.Add(this.Oszály_Excel);
             this.TabPage1.Controls.Add(this.Osztály_feljebb);
             this.TabPage1.Controls.Add(this.Adatok_beolvasása);
@@ -321,21 +320,6 @@ namespace Villamos
             this.Label1.Size = new System.Drawing.Size(116, 20);
             this.Label1.TabIndex = 192;
             this.Label1.Text = "E1 takarítás ár:";
-            // 
-            // Tábla1
-            // 
-            this.Tábla1.AllowUserToAddRows = false;
-            this.Tábla1.AllowUserToDeleteRows = false;
-            this.Tábla1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Tábla1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla1.Location = new System.Drawing.Point(6, 180);
-            this.Tábla1.Name = "Tábla1";
-            this.Tábla1.RowHeadersVisible = false;
-            this.Tábla1.Size = new System.Drawing.Size(1171, 346);
-            this.Tábla1.TabIndex = 186;
-            this.Tábla1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla1_CellClick);
             // 
             // Oszály_Excel
             // 
@@ -1033,6 +1017,26 @@ namespace Villamos
             this.Btn_súgó.UseVisualStyleBackColor = true;
             this.Btn_súgó.Click += new System.EventHandler(this.Btn_súgó_Click);
             // 
+            // Tábla1
+            // 
+            this.Tábla1.AllowUserToAddRows = false;
+            this.Tábla1.AllowUserToDeleteRows = false;
+            this.Tábla1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Tábla1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla1.FilterAndSortEnabled = true;
+            this.Tábla1.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tábla1.Location = new System.Drawing.Point(8, 180);
+            this.Tábla1.MaxFilterButtonImageHeight = 23;
+            this.Tábla1.Name = "Tábla1";
+            this.Tábla1.ReadOnly = true;
+            this.Tábla1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Tábla1.Size = new System.Drawing.Size(1169, 346);
+            this.Tábla1.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tábla1.TabIndex = 221;
+            this.Tábla1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla1_CellClick);
+            // 
             // Ablak_épülettakarítás_alap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1056,7 +1060,6 @@ namespace Villamos
             this.TabPage1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
             this.TabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla2)).EndInit();
             this.TabPage3.ResumeLayout(false);
@@ -1064,6 +1067,7 @@ namespace Villamos
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Opció_Tábla)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1087,7 +1091,6 @@ namespace Villamos
         internal Label Label9;
         internal TextBox Osztálynév;
         internal Button Osztály_rögzít;
-        internal DataGridView Tábla1;
         internal Button Helység_feljebb;
         internal Button Helység_frissít;
         internal DataGridView Tábla2;
@@ -1151,5 +1154,6 @@ namespace Villamos
         internal Button Opció_Frissít;
         private TextBox Opció_Id;
         private Label label26;
+        private Zuby.ADGV.AdvancedDataGridView Tábla1;
     }
 }

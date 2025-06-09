@@ -15,48 +15,59 @@ namespace Villamos
 {
     public partial class Ablak_épülettakarítás_alap
     {
-        readonly Kezelő_Épület_Takarítás_Osztály KézTakOsztály = new Kezelő_Épület_Takarítás_Osztály();
-        readonly Kezelő_Épület_Takarítás_Adattábla KézÉptakarításAdat = new Kezelő_Épület_Takarítás_Adattábla();
+        readonly Kezelő_Épület_Takarítás_Osztály KézOsztály = new Kezelő_Épület_Takarítás_Osztály();
+        readonly Kezelő_Épület_Adattábla KézÉpület = new Kezelő_Épület_Adattábla();
         readonly Kezelő_Takarítás_Opció KézOpció = new Kezelő_Takarítás_Opció();
 
+
         List<Adat_Épület_Takarítás_Osztály> AdatokTakOsztály = new List<Adat_Épület_Takarítás_Osztály>();
-        List<Adat_Épület_Takarítás_Adattábla> AdatokÉptakarításAdat = new List<Adat_Épület_Takarítás_Adattábla>();
+        List<Adat_Épület_Adattábla> AdatokÉptakarításAdat = new List<Adat_Épület_Adattábla>();
         List<Adat_Takarítás_Opció> AdatokTakOpció = new List<Adat_Takarítás_Opció>();
 
+#pragma warning disable IDE0044 // Add readonly modifier
         DataTable AdatTábla = new DataTable();
+        DataTable AdatTábla1 = new DataTable();
+
+#pragma warning restore IDE0044 // Add readonly modifier
+
+
+        #region Alap
         public Ablak_épülettakarítás_alap()
         {
             InitializeComponent();
             Start();
         }
 
-        #region Alap
+        /// <summary>
+        /// Ablak betöltésekor hívódik meg, itt történik a kezdeti beállítások elvégzése.
+        /// </summary>
         private void Start()
         {
             Telephelyekfeltöltése();
-            // leellenőrizzük, hogy van-e adatbázis
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület";
-            if (!System.IO.Directory.Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-
-            hely += @"\épülettörzs.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-
             Jogosultságkiosztás();
             Combofeltöltése();
-
-        }
-
-        private void Ablak_épülettakarítás_alap_Load(object sender, EventArgs e)
-        {
             LapFülek.SelectedIndex = 0;
             Fülekkitöltése();
         }
 
+        private void Ablak_épülettakarítás_alap_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Ablakfül változásakor betölti a szükséges lapok alap adatait.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
 
+        /// <summary>
+        /// Ablak lapfül választott lap betöltésének eseménye
+        /// </summary>
         private void Fülekkitöltése()
         {
             switch (LapFülek.SelectedIndex)
@@ -86,6 +97,9 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Jogosultságok kiosztása a gombokhoz, hogy ki mit tud csinálni az ablakon.
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             int melyikelem;
@@ -125,6 +139,9 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Telephelyek feltöltése a comboboxba, hogy mely telephelyek vannak a rendszerben.
+        /// </summary>
         private void Telephelyekfeltöltése()
         {
             try
@@ -153,15 +170,35 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Súgó gomb megnyomásakor megnyitja a súgó fájlt, ha létezik.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Btn_súgó_Click(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Épület_törzsadatok.html";
-            Module_Excel.Megnyitás(hely);
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Épület_törzsadatok.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
         #endregion
 
+
         #region Takarítási osztály
+        /// <summary>
+        /// A beviteli mezőket alaphelyzetbe állítjuk, hogy új osztályt lehessen rögzíteni.
+        /// </summary>
         private void Osztályürítés()
         {
             Sorszám.Text = "";
@@ -171,51 +208,93 @@ namespace Villamos
             E3ár.Text = "0";
         }
 
-        private void Osztálykiirás()
+        private void Tábla1_író()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-            if (!File.Exists(hely))
-                Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-            string jelszó = "seprűéslapát";
-            // mentési helyek kiirása
-            string szöveg = "SELECT * FROM takarításosztály where státus=0  order by  id";
-
-            Tábla1.Rows.Clear();
-            Tábla1.Columns.Clear();
-            Tábla1.Refresh();
-            Tábla1.Visible = false;
-            Tábla1.ColumnCount = 5;
-
-            // fejléc elkészítése
-            Tábla1.Columns[0].HeaderText = "Sorszám";
-            Tábla1.Columns[0].Width = 150;
-            Tábla1.Columns[1].HeaderText = "Osztály";
-            Tábla1.Columns[1].Width = 400;
-            Tábla1.Columns[2].HeaderText = "E1 takarítási ár";
-            Tábla1.Columns[2].Width = 200;
-            Tábla1.Columns[3].HeaderText = "E2 takarítási ár";
-            Tábla1.Columns[3].Width = 200;
-            Tábla1.Columns[4].HeaderText = "E3 takarítási ár";
-            Tábla1.Columns[4].Width = 200;
-
-            Kezelő_Épület_Takarítás_Osztály Kéz = new Kezelő_Épület_Takarítás_Osztály();
-            List<Adat_Épület_Takarítás_Osztály> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-            int i;
-
-            foreach (Adat_Épület_Takarítás_Osztály rekord in Adatok)
+            try
             {
-                Tábla1.RowCount++;
-                i = Tábla1.RowCount - 1;
-                Tábla1.Rows[i].Cells[0].Value = rekord.Id;
-                Tábla1.Rows[i].Cells[1].Value = rekord.Osztály.ToString();
-                Tábla1.Rows[i].Cells[2].Value = rekord.E1Ft.ToString();
-                Tábla1.Rows[i].Cells[3].Value = rekord.E2Ft.ToString();
-                Tábla1.Rows[i].Cells[4].Value = rekord.E3Ft.ToString();
+                Tábla1.Visible = false;
+                Tábla1.CleanFilterAndSort();
+                Tábla1Fejléc();
+                Tábla1Tartalom();
+                Tábla1.DataSource = AdatTábla1;
+                Tábla1OszlopSzélesség();
+                Tábla1.Visible = true;
+                Tábla1.Refresh();
             }
-            Tábla1.Visible = true;
-            Tábla1.Refresh();
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        private void Tábla1OszlopSzélesség()
+        {
+            Tábla1.Columns["Sorszám"].Width = 150;
+            Tábla1.Columns["Osztály"].Width = 400;
+            Tábla1.Columns["E1 takarítási ár"].Width = 200;
+            Tábla1.Columns["E2 takarítási ár"].Width = 200;
+            Tábla1.Columns["E3 takarítási ár"].Width = 200;
+        }
+
+        private void Tábla1Tartalom()
+        {
+            List<Adat_Épület_Takarítás_Osztály> Adatok = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
+            Adatok = Adatok.Where(a => a.Státus == false).ToList();
+            AdatTábla1.Clear();
+            foreach (Adat_Épület_Takarítás_Osztály rekord in Adatok)
+            {
+                DataRow Soradat = AdatTábla1.NewRow();
+
+                Soradat["Sorszám"] = rekord.Id;
+                Soradat["Osztály"] = rekord.Osztály;
+                Soradat["E1 takarítási ár"] = rekord.E1Ft;
+                Soradat["E2 takarítási ár"] = rekord.E2Ft;
+                Soradat["E3 takarítási ár"] = rekord.E3Ft;
+                AdatTábla1.Rows.Add(Soradat);
+            }
+        }
+
+        private void Tábla1Fejléc()
+        {
+            AdatTábla1.Columns.Clear();
+            AdatTábla1.Columns.Add("Sorszám", typeof(int));
+            AdatTábla1.Columns.Add("Osztály", typeof(string));
+            AdatTábla1.Columns.Add("E1 takarítási ár", typeof(double));
+            AdatTábla1.Columns.Add("E2 takarítási ár", typeof(double));
+            AdatTábla1.Columns.Add("E3 takarítási ár", typeof(double));
+        }
+
+
+        /// <summary>
+        /// Táblát felöltjük az osztály adatokkal
+        /// </summary>
+        private void Osztálykiirás()
+        {
+            try
+            {
+                Tábla1_író();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// A táblázat cellájának kattintásakor beállítja a beviteli mezőkbe az adott osztály adatait.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Tábla1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -226,11 +305,21 @@ namespace Villamos
             E3ár.Text = Tábla1.Rows[e.RowIndex].Cells[4].Value.ToString();
         }
 
+        /// <summary>
+        /// Osztály új gomb megnyomásakor az osztály beviteli mezőket üríti, hogy új osztályt lehessen rögzíteni.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Osztály_Új_Click(object sender, EventArgs e)
         {
             Osztályürítés();
         }
 
+        /// <summary>
+        /// Rögzíti és/vagy módosítja az osztály adatait a beviteli mezőkben megadott értékek alapján.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Osztály_rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -240,12 +329,7 @@ namespace Villamos
                 if (!double.TryParse(E2ár.Text, out double E2Ár) && E2Ár < 0) throw new HibásBevittAdat("Az E2 takarítási árnak számnak kell lennie és nem lehet negatív szám.");
                 if (!double.TryParse(E3ár.Text, out double E3Ár) && E3Ár < 0) throw new HibásBevittAdat("Az E3 takarítási árnak számnak kell lennie és nem lehet negatív szám.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-                string jelszó = "seprűéslapát";
-                string szöveg;
-
-                AdatokTakListázás();
+                AdatokTakOsztály = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 if (!int.TryParse(Sorszám.Text, out int sorszám))
                 {
@@ -257,26 +341,17 @@ namespace Villamos
                 Adat_Épület_Takarítás_Osztály AdatTakOsztály = (from a in AdatokTakOsztály
                                                                 where a.Id == sorszám
                                                                 select a).FirstOrDefault();
+                Adat_Épület_Takarítás_Osztály ADAT = new Adat_Épület_Takarítás_Osztály(
+                                    sorszám,
+                                    Osztálynév.Text.Trim(),
+                                    E1Ár,
+                                    E2Ár,
+                                    E3Ár,
+                                    false);
                 if (AdatTakOsztály != null)
-                {
-                    szöveg = "UPDATE takarításosztály  SET ";
-                    szöveg += "osztály='" + Osztálynév.Text.Trim() + "', ";
-                    szöveg += "E1Ft=" + E1ár.Text.Replace(",", ".") + ", ";
-                    szöveg += "E2Ft=" + E2ár.Text.Replace(",", ".") + ", ";
-                    szöveg += "E3Ft=" + E3ár.Text.Replace(",", ".");
-                    szöveg += $" WHERE id={sorszám}";
-                }
+                    KézOsztály.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                {
-
-                    szöveg = "INSERT INTO takarításosztály  (id, osztály, E1Ft, E2Ft, E3Ft, státus  ) VALUES (";
-                    szöveg += $"{sorszám}, ";
-                    szöveg += "'" + Osztálynév.Text.Trim() + "', ";
-                    szöveg += E1ár.Text.Replace(",", ".") + ", ";
-                    szöveg += E2ár.Text.Replace(",", ".") + ", ";
-                    szöveg += E3ár.Text.Replace(",", ".") + ", false )";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    KézOsztály.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
 
                 Osztályürítés();
                 Osztálykiirás();
@@ -292,27 +367,25 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Az oszály törlés gomb megnyomásakor törli a kijelölt osztályt a táblázatból és az adatbázisból.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Osztálytörlés_Click(object sender, EventArgs e)
         {
             try
             {
                 if (!int.TryParse(Sorszám.Text, out int sorszám)) return;
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-                string jelszó = "seprűéslapát";
-                string szöveg;
 
+                AdatokTakOsztály = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Épület_Takarítás_Osztály AdatTakOsztály = (from a in AdatokTakOsztály
                                                                 where a.Id == sorszám
                                                                 select a).FirstOrDefault();
 
-                if (AdatTakOsztály != null)
-                {
-                    szöveg = "UPDATE takarításosztály  SET ";
-                    szöveg += "státus=true ";
-                    szöveg += $" WHERE id={sorszám}";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                }
+                if (AdatTakOsztály != null) KézOsztály.Törlés(Cmbtelephely.Text.Trim(), sorszám);
+
                 Osztályürítés();
                 Osztálykiirás();
             }
@@ -327,56 +400,19 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Eggyel előrébb rakja a választott elemet.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Felljebb_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Sorszám.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kijelölve egy elem sem.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "seprűéslapát";
+                if (Sorszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy elem sem.");
+                if (!int.TryParse(Sorszám.Text.Trim(), out int sorszám)) throw new HibásBevittAdat("A sorszám mezőben számot kell megadni.");
 
-                int előző = 0;
-                int választott = int.Parse(Sorszám.Text.Trim());
-                Tábla1.Sort(Tábla1.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-
-                for (int i = 0; i < Tábla1.Rows.Count; i++)
-                {
-                    if (Tábla1.Rows[i].Cells[0].Value.ToString().Trim() == Sorszám.Text.Trim())
-                    {
-                        if (i == 0)
-                        {
-                            // legelső
-                            előző = 0;
-                            return;
-                        }
-                        előző = int.Parse(Tábla1.Rows[i - 1].Cells[0].Value.ToString());
-                        break;
-                    }
-                }
-                if (előző == 0)
-                    throw new HibásBevittAdat("A legelső elemet nem lehet előrébb helyezni a sorban.");
-
-                Kezelő_Épület_Takarítás_Osztály Kéz = new Kezelő_Épület_Takarítás_Osztály();
-
-                string szöveg = $"SELECT * FROM takarításosztály WHERE id={előző}";
-                Adat_Épület_Takarítás_Osztály A_elem = Kéz.Egy_Adat(hely, jelszó, szöveg);
-
-                szöveg = $"SELECT * FROM takarításosztály WHERE id={választott}";
-                Adat_Épület_Takarítás_Osztály B_elem = Kéz.Egy_Adat(hely, jelszó, szöveg);
-
-                // rögzítjük eggyel előrébb a kiválasztott elemet
-                szöveg = "UPDATE takarításosztály  SET id=" + előző.ToString();
-                szöveg += " WHERE ";
-                szöveg += " osztály='" + B_elem.Osztály.Trim() + "'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                szöveg = "UPDATE takarításosztály  SET id=" + választott.ToString();
-                szöveg += " WHERE ";
-                szöveg += " osztály='" + A_elem.Osztály.Trim() + "'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                KézOsztály.Csere(Cmbtelephely.Text.Trim(), sorszám);
                 Osztályürítés();
                 Osztálykiirás();
             }
@@ -391,12 +427,16 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Táblázat elemeit Excel fájlba exportálja, ha van adat a táblázatban.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Oszály_Excel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla1.Rows.Count <= 0)
-                    return;
+                if (Tábla1.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -405,7 +445,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Épület_osztály_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Épület_osztály_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -415,9 +455,9 @@ namespace Villamos
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla1, false);
+                MyE.EXCELtábla(fájlexc, Tábla1, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
@@ -431,7 +471,7 @@ namespace Villamos
         }
 
 
-        void Adatok_beolvasása_Click(object sender, EventArgs e)
+        private void Adatok_beolvasása_Click(object sender, EventArgs e)
         {
             try
             {
@@ -516,7 +556,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Excel tábla készítés adatok beolvasásához",
-                    FileName = "Beolvasó_Takarítás_" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Beolvasó_Takarítás_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -568,7 +608,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
         #region Helység lista
@@ -580,10 +619,12 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
                 if (!File.Exists(hely))
                     Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM Adattábla where státus=0 order by  id";
 
-
+                List<Adat_Épület_Adattábla> Adatok = KézÉpület.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = (from a in Adatok
+                          where a.Státus == false
+                          orderby a.ID
+                          select a).ToList();
                 Tábla2.Rows.Clear();
                 Tábla2.Columns.Clear();
                 Tábla2.Refresh();
@@ -623,15 +664,15 @@ namespace Villamos
                 Tábla2.Columns[14].Width = 100;
 
                 // kiirjuk a tartalmat
-                Kezelő_Épület_Takarítás_Adattábla kéz = new Kezelő_Épület_Takarítás_Adattábla();
-                List<Adat_Épület_Takarítás_Adattábla> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+
                 int i;
-                foreach (Adat_Épület_Takarítás_Adattábla rekord in Adatok)
+                foreach (Adat_Épület_Adattábla rekord in Adatok)
                 {
 
                     Tábla2.RowCount++;
                     i = Tábla2.RowCount - 1;
-                    Tábla2.Rows[i].Cells[0].Value = rekord.Id;
+                    Tábla2.Rows[i].Cells[0].Value = rekord.ID;
                     Tábla2.Rows[i].Cells[1].Value = rekord.Megnevezés.Trim();
                     Tábla2.Rows[i].Cells[2].Value = rekord.Osztály.Trim();
                     Tábla2.Rows[i].Cells[3].Value = rekord.Méret;
@@ -864,14 +905,14 @@ namespace Villamos
 
                 string szöveg = "SELECT * FROM adattábla";
 
-                Kezelő_Épület_Takarítás_Adattábla KézÉptakarításAdat = new Kezelő_Épület_Takarítás_Adattábla();
-                List<Adat_Épület_Takarítás_Adattábla> AdatokÉptakarításAdat = KézÉptakarításAdat.Lista_Adatok(hely, jelszó, szöveg);
 
-                AdatokÉptakarításAdatListázás();
+                List<Adat_Épület_Adattábla> AdatokÉptakarításAdat = KézÉpület.Lista_Adatok(hely, jelszó, szöveg);
 
-                Adat_Épület_Takarítás_Adattábla AdatÉptakarításAdat = (from a in AdatokÉptakarításAdat
-                                                                       where a.Id == Hsorszám.Text.Trim().ToÉrt_Int()
-                                                                       select a).FirstOrDefault();
+                AdatokÉptakarításAdat = KézÉpület.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+                Adat_Épület_Adattábla AdatÉptakarításAdat = (from a in AdatokÉptakarításAdat
+                                                             where a.ID == Hsorszám.Text.Trim().ToÉrt_Int()
+                                                             select a).FirstOrDefault();
 
 
 
@@ -934,19 +975,19 @@ namespace Villamos
                 string jelszó = "seprűéslapát";
                 string szöveg;
 
-                AdatokÉptakarításAdatListázás();
+                AdatokÉptakarításAdat = KézÉpület.Lista_Adatok(Cmbtelephely.Text.Trim());
 
 
 
                 if (!int.TryParse(Hsorszám.Text, out int hsorszám))
                 {
                     hsorszám = 1;
-                    if (AdatokÉptakarításAdat.Count > 0) hsorszám = AdatokÉptakarításAdat.Max(a => a.Id) + 1;
+                    if (AdatokÉptakarításAdat.Count > 0) hsorszám = AdatokÉptakarításAdat.Max(a => a.ID) + 1;
                 }
 
-                Adat_Épület_Takarítás_Adattábla AdatÉptakarításAdat = (from a in AdatokÉptakarításAdat
-                                                                       where a.Id == hsorszám
-                                                                       select a).FirstOrDefault();
+                Adat_Épület_Adattábla AdatÉptakarításAdat = (from a in AdatokÉptakarításAdat
+                                                             where a.ID == hsorszám
+                                                             select a).FirstOrDefault();
 
                 if (AdatÉptakarításAdat != null)
                 {
@@ -1013,59 +1054,6 @@ namespace Villamos
 
         #endregion
 
-        #region Listák
-        private void AdatokÉptakarításAdatListázás()
-        {
-            try
-            {
-                AdatokÉptakarításAdat.Clear();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-
-                string jelszó = "seprűéslapát";
-
-                string szöveg = "SELECT * FROM adattábla";// where id=" + Hsorszám.Text.Trim();
-
-                AdatokÉptakarításAdat = KézÉptakarításAdat.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void AdatokTakListázás()
-        {
-            try
-            {
-                AdatokTakOsztály.Clear();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM takarításosztály";
-
-                AdatokTakOsztály = KézTakOsztály.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
 
         #region Opcionális
 
@@ -1260,7 +1248,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = $"Opcionális_{Program.PostásNév}-{DateTime.Now.ToString("yyyyMMddHHmmss")}",
+                    FileName = $"Opcionális_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
