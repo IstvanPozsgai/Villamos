@@ -22,8 +22,8 @@ namespace Villamos
 {
     public partial class A_Főoldal
     {
-        readonly Kezelők_Oldalok KézOldal = new Kezelők_Oldalok();
-        readonly Kezelők_Jogosultságok KézJog = new Kezelők_Jogosultságok();
+        readonly Kezelő_Oldalok KézOldal = new Kezelő_Oldalok();
+        readonly Kezelő_Jogosultságok KézJog = new Kezelő_Jogosultságok();
         private static PerformanceCounter myCounter;
         public delegate void VoidDelegate(string data);
         public event VoidDelegate MyEvent;

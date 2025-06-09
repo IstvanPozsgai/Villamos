@@ -40,6 +40,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[FromName] CHAR(255),";
             szöveg += "[GombName] CHAR(255),";
             szöveg += "[GombFelirat] CHAR(255),";
+            szöveg += "[Szervezet] CHAR(255),";
             szöveg += "[Látható] yesno,";
             szöveg += "[Törölt] yesno)";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg, táblanév);

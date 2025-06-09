@@ -24,7 +24,7 @@ public static class GombLathatosagKezelo
     {
         try
         {
-            Kezelõk_Gombok kezeloGombok = new Kezelõk_Gombok();
+            Kezelõ_Gombok kezeloGombok = new Kezelõ_Gombok();
 
             // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
             List<Adat_Gombok> gombok = kezeloGombok.Lista_Adatok()
@@ -57,16 +57,16 @@ public static class GombLathatosagKezelo
     {
         try
         {
-            Kezelõk_Jogosultságok Kéz = new Kezelõk_Jogosultságok();
+            Kezelõ_Jogosultságok Kéz = new Kezelõ_Jogosultságok();
 
-            Kezelõk_Gombok kezeloGombok = new Kezelõk_Gombok();
+            Kezelõ_Gombok kezeloGombok = new Kezelõ_Gombok();
             // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
             List<Adat_Gombok> AdatokGombok = kezeloGombok.Lista_Adatok()
                 .Where(g => g.FromName == form.Name && !g.Törölt)
                 .ToList();
 
             // Lekérjük az aktuális oldal ID-ját
-            Kezelõk_Oldalok KézOldal = new Kezelõk_Oldalok();
+            Kezelõ_Oldalok KézOldal = new Kezelõ_Oldalok();
             Adat_Oldalak AdatOldal = KézOldal.Lista_Adatok()
                 .Where(o => o.FromName == form.Name).FirstOrDefault();
             if (AdatOldal == null) return;

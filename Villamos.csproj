@@ -746,10 +746,10 @@
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
-    <Compile Include="V_Kezelők\Kezelők_Gombok.cs" />
-    <Compile Include="V_Kezelők\Kezelők_Jogosultságok.cs" />
-    <Compile Include="V_Kezelők\Kezelők_Oldalok.cs" />
-    <Compile Include="V_Kezelők\Kezelők_Users.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Gombok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jogosultságok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_Verzió Új.cs" />

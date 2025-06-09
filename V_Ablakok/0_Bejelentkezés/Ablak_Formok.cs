@@ -12,7 +12,7 @@ namespace Villamos.Ablakok
 {
     public partial class Ablak_Formok : Form
     {
-        readonly Kezelők_Oldalok Kéz = new Kezelők_Oldalok();
+        readonly Kezelő_Oldalok Kéz = new Kezelő_Oldalok();
         DataTable AdatTáblaALap = new DataTable();
         List<Adat_Oldalak> Adatok = new List<Adat_Oldalak>();
 

@@ -6,13 +6,14 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
+using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 
 namespace Villamos.Ablakok
 {
     public partial class Ablak_Gombok : Form
     {
-        readonly Kezelők_Gombok Kéz = new Kezelők_Gombok();
+        readonly Kezelő_Gombok Kéz = new Kezelő_Gombok();
         DataTable AdatTáblaALap = new DataTable();
         List<Adat_Gombok> Adatok = new List<Adat_Gombok>();
 
@@ -31,6 +32,7 @@ namespace Villamos.Ablakok
             FormFeltöltése();
             Adatok = Kéz.Lista_Adatok();
             Alap_tábla_író();
+            SzervezetFeltöltésChk();
             //     GombLathatosagKezelo.Beallit(this);
         }
 
@@ -118,12 +120,14 @@ namespace Villamos.Ablakok
             try
             {
                 if (string.IsNullOrEmpty(GombNév.Text.Trim())) throw new HibásBevittAdat("Kérem adja meg a Menü nevét!");
-
+                // megjegyzés ide be kell olvasni listából a szervezeteket pontosvesszővel tagolva
+                string szervezet = string.Join(";", ChkSzervezet.CheckedItems.Cast<string>());
                 Adat_Gombok adat = new Adat_Gombok(
                         TxtId.Text.ToÉrt_Int(),
                         Ablaknév.Text.ToStrTrim(),
                         GombNév.Text.ToStrTrim(),
                         GombFelirat.Text.ToStrTrim(),
+                        szervezet,
                         Láthatóság.Checked,
                         Törölt.Checked);
 
@@ -185,10 +189,11 @@ namespace Villamos.Ablakok
         private void AlapTáblaTartalom()
         {
             AdatTáblaALap.Clear();
+            Adatok = Kéz.Lista_Adatok();
             Adatok = (from a in Adatok
                       orderby a.FromName, a.GombName
                       select a).ToList();
-            if (Ablaknév.Text.Trim() != "") Adatok = Adatok.Where(a => a.FromName == Ablaknév.Text.Trim()).ToList();
+            if (Ablaknév.Text.Trim() != "") Adatok = Adatok.Where(a => a.FromName.Trim() == Ablaknév.Text.Trim()).ToList();
             foreach (Adat_Gombok rekord in Adatok)
             {
                 DataRow Soradat = AdatTáblaALap.NewRow();
@@ -197,6 +202,7 @@ namespace Villamos.Ablakok
                 Soradat["Form Név"] = rekord.FromName;
                 Soradat["Gomb Leírás"] = rekord.GombFelirat;
                 Soradat["Gomb Név"] = rekord.GombName;
+                Soradat["Szervezet korlátozás"] = rekord.Szervezet;
                 Soradat["Látható"] = rekord.Látható ? "Igen" : "Nem";
                 Soradat["Törölt"] = rekord.Törölt ? "Igen" : "Nem";
                 AdatTáblaALap.Rows.Add(Soradat);
@@ -215,6 +221,7 @@ namespace Villamos.Ablakok
                 AdatTáblaALap.Columns.Add("Gomb Leírás");
                 AdatTáblaALap.Columns.Add("Gomb Név");
                 AdatTáblaALap.Columns.Add("Form Név");
+                AdatTáblaALap.Columns.Add("Szervezet korlátozás");
                 AdatTáblaALap.Columns.Add("Látható");
                 AdatTáblaALap.Columns.Add("Törölt");
             }
@@ -235,9 +242,10 @@ namespace Villamos.Ablakok
         private void AlapTáblaOszlopSzélesség()
         {
             Tábla.Columns["Gomb Id"].Width = 130;
-            Tábla.Columns["Form Név"].Width = 400;
+            Tábla.Columns["Form Név"].Width = 300;
             Tábla.Columns["Gomb Leírás"].Width = 400;
-            Tábla.Columns["Gomb Név"].Width = 450;
+            Tábla.Columns["Gomb Név"].Width = 350;
+            Tábla.Columns["Szervezet korlátozás"].Width = 350;
             Tábla.Columns["Látható"].Width = 100;
             Tábla.Columns["Törölt"].Width = 100;
 
@@ -315,6 +323,21 @@ namespace Villamos.Ablakok
                 Ablaknév.Text = adat.FromName;
                 Láthatóság.Checked = adat.Látható;
                 Törölt.Checked = adat.Törölt;
+                // --- Szervezetek kipipálása ---
+                // Először minden pipát törlünk
+                SzervezetJelöl(false);
+
+                if (!string.IsNullOrWhiteSpace(adat.Szervezet))
+                {
+                    List<string> szervezetek = adat.Szervezet.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                                          .Select(s => s.Trim()).ToList();
+                    for (int i = 0; i < ChkSzervezet.Items.Count; i++)
+                    {
+                        if (szervezetek.Contains(ChkSzervezet.Items[i].ToString()))
+                            ChkSzervezet.SetItemChecked(i, true);
+                    }
+                }
+                // --- vége ---
             }
             catch (HibásBevittAdat ex)
             {
@@ -333,6 +356,52 @@ namespace Villamos.Ablakok
             Ablaknév.Text = Ablaknév.Items[Ablaknév.SelectedIndex].ToString();
             Alap_tábla_író();
             GombokFeltöltése();
+            SzervezetJelöl(false);
+        }
+
+        /// <summary>
+        /// Feltölti a szervezeteket a listcheckboxba
+        /// </summary>
+        private void SzervezetFeltöltésChk()
+        {
+            try
+            {
+                Kezelő_Kiegészítő_Könyvtár kezSzervezet = new Kezelő_Kiegészítő_Könyvtár();
+                List<Adat_Kiegészítő_Könyvtár> adatokSzervezet = kezSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
+
+                ChkSzervezet.Items.Clear();
+                for (int i = 0; i < adatokSzervezet.Count; i++)
+                {
+                    ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
+                    ChkSzervezet.SetItemChecked(i, false);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SzervezetMinden_Click(object sender, EventArgs e)
+        {
+            SzervezetJelöl(true);
+        }
+
+        private void SzervezetSemmi_Click(object sender, EventArgs e)
+        {
+            SzervezetJelöl(false);
+        }
+
+        private void SzervezetJelöl(bool kell)
+        {
+            for (int i = 0; i < ChkSzervezet.Items.Count; i++)
+                ChkSzervezet.SetItemChecked(i, kell);
         }
     }
+
 }

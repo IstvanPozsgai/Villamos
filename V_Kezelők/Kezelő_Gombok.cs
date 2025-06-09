@@ -10,13 +10,13 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-    public class Kezelők_Gombok
+    public class Kezelő_Gombok
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ÚJ_Belépés.mdb";
         readonly string jelszó = "ForgalmiUtasítás";
         readonly string táblanév = "Tábla_Gombok";
 
-        public Kezelők_Gombok()
+        public Kezelő_Gombok()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Adatbázis_Gombok(hely.KönyvSzerk());
             if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Gombok(hely);
@@ -44,6 +44,7 @@ namespace Villamos.Kezelők
                                         rekord["FromName"].ToStrTrim(),
                                         rekord["GombName"].ToStrTrim(),
                                         rekord["GombFelirat"].ToStrTrim(),
+                                        rekord["Szervezet"].ToStrTrim(),
                                         rekord["Látható"].ToÉrt_Bool(),
                                         rekord["Törölt"].ToÉrt_Bool());
                                 Adatok.Add(Adat);
@@ -98,8 +99,8 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO {táblanév} (  FromName, GombName, GombFelirat, Látható, Törölt) VALUES (";
-                szöveg += $"'{Adat.FromName}', '{Adat.GombName}', '{Adat.GombFelirat}', {Adat.Látható}, {Adat.Törölt})";
+                string szöveg = $"INSERT INTO {táblanév} (  FromName, GombName, GombFelirat, Szervezet, Látható, Törölt) VALUES (";
+                szöveg += $"'{Adat.FromName}', '{Adat.GombName}', '{Adat.GombFelirat}', '{Adat.Szervezet}', {Adat.Látható}, {Adat.Törölt})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -121,6 +122,7 @@ namespace Villamos.Kezelők
                 szöveg += $"FromName ='{Adat.FromName}', ";
                 szöveg += $"GombName ='{Adat.GombName}', ";
                 szöveg += $"GombFelirat ='{Adat.GombFelirat}', ";
+                szöveg += $"Szervezet ='{Adat.Szervezet}', ";
                 szöveg += $"Látható ={Adat.Látható}, ";
                 szöveg += $"Törölt ={Adat.Törölt} ";
                 szöveg += $"WHERE GombokId = {Adat.GombokId}";

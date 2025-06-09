@@ -10,21 +10,21 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-    public class Kezelők_Oldalok
+    public class Kezelő_Users
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ÚJ_Belépés.mdb";
         readonly string jelszó = "ForgalmiUtasítás";
-        readonly string táblanév = "Tábla_Oldalak";
+        readonly string táblanév = "Tábla_Users";
 
-        public Kezelők_Oldalok()
+        public Kezelő_Users()
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Adatbázis_Oldalak(hely.KönyvSzerk());
-            if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Oldalak(hely);
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Adatbázis_Users(hely.KönyvSzerk());
+            if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Users(hely);
         }
 
-        public List<Adat_Oldalak> Lista_Adatok()
+        public List<Adat_Users> Lista_Adatok()
         {
-            List<Adat_Oldalak> Adatok = new List<Adat_Oldalak>();
+            List<Adat_Users> Adatok = new List<Adat_Users>();
             string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
 
@@ -39,13 +39,17 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat_Oldalak Adat = new Adat_Oldalak(
-                                        rekord["OldalId"].ToÉrt_Int(),
-                                        rekord["FromName"].ToStrTrim(),
-                                        rekord["MenuName"].ToStrTrim(),
-                                        rekord["MenuFelirat"].ToStrTrim(),
-                                        rekord["Látható"].ToÉrt_Bool(),
-                                        rekord["Törölt"].ToÉrt_Bool());
+                                Adat_Users Adat = new Adat_Users(
+                                        rekord["UserId"].ToÉrt_Int(),
+                                        rekord["UserName"].ToStrTrim(),
+                                        rekord["WinUserName"].ToStrTrim(),
+                                        rekord["Dolgozószám"].ToStrTrim(),
+                                        rekord["Password"].ToStrTrim(),
+                                        rekord["Dátum"].ToÉrt_DaTeTime(),
+                                        rekord["Frissít"].ToÉrt_Bool(),
+                                        rekord["Törölt"].ToÉrt_Bool(),
+                                        rekord["Szervezetek"].ToStrTrim()
+                                );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -55,12 +59,12 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Döntés(Adat_Oldalak Adat)
+        public void Döntés(Adat_Users Adat)
         {
             try
             {
-                List<Adat_Oldalak> Adatok = Lista_Adatok();
-                if (!Adatok.Any(a => a.OldalId == Adat.OldalId))
+                List<Adat_Users> Adatok = Lista_Adatok();
+                if (!Adatok.Any(a => a.UserId == Adat.UserId))
                     Rögzítés(Adat);
                 else
                     Módosítás(Adat);
@@ -77,12 +81,15 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(Adat_Oldalak Adat)
+        public void Rögzítés(Adat_Users Adat)
         {
             try
             {
-                string szöveg = $"INSERT INTO {táblanév} (FromName, MenuName, MenuFelirat, Látható, Törölt) VALUES (";
-                szöveg += $"'{Adat.FromName}', '{Adat.MenuName}', '{Adat.MenuFelirat}', {Adat.Látható}, {Adat.Törölt})";
+                string pword = Adat.Password;
+                if (Adat.Password.Trim() == "") pword = "123456";
+                bool frissít = true;
+                string szöveg = $"INSERT INTO {táblanév} (UserName, WinUserName, Dolgozószám, [Password], Dátum, frissít, Törölt, Szervezetek) VALUES (";
+                szöveg += $"'{Adat.UserName}', '{Adat.WinUserName}', '{Adat.Dolgozószám}', '{pword}', '{Adat.Dátum:yyyy.MM.dd}', {frissít}, {Adat.Törölt}, '{Adat.Szervezetek}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -96,17 +103,18 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(Adat_Oldalak Adat)
+        public void Módosítás(Adat_Users Adat)
         {
             try
             {
                 string szöveg = $"UPDATE {táblanév} SET ";
-                szöveg += $"FromName ='{Adat.FromName}', ";
-                szöveg += $"MenuName ='{Adat.MenuName}', ";
-                szöveg += $"MenuFelirat ='{Adat.MenuFelirat}', ";
-                szöveg += $"Látható ={Adat.Látható}, ";
-                szöveg += $"Törölt ={Adat.Törölt} ";
-                szöveg += $"WHERE OldalId = {Adat.OldalId}";
+                szöveg += $"WinUserName ='{Adat.WinUserName}', ";
+                szöveg += $"[Password] ='{Adat.Password}', ";
+                szöveg += $"Dátum ='{Adat.Dátum:yyyy.MM.dd}', ";
+                szöveg += $"Frissít ={Adat.Frissít}, ";
+                szöveg += $"Törölt ={Adat.Törölt}, ";
+                szöveg += $"Szervezetek ='{Adat.Szervezetek}' ";
+                szöveg += $"WHERE UserId = {Adat.UserId}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

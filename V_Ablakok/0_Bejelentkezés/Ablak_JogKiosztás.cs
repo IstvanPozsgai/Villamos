@@ -13,12 +13,12 @@ namespace Villamos
 
     public partial class Ablak_JogKiosztás : Form
     {
-        readonly Kezelők_Oldalok KézOldal = new Kezelők_Oldalok();
-        readonly Kezelők_Gombok KézGombok = new Kezelők_Gombok();
+        readonly Kezelő_Oldalok KézOldal = new Kezelő_Oldalok();
+        readonly Kezelő_Gombok KézGombok = new Kezelő_Gombok();
         readonly Kezelő_Kiegészítő_Könyvtár KézSzervezet = new Kezelő_Kiegészítő_Könyvtár();
-        readonly Kezelők_Users KézUsers = new Kezelők_Users();
+        readonly Kezelő_Users KézUsers = new Kezelő_Users();
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
-        readonly Kezelők_Jogosultságok KézJogosultságok = new Kezelők_Jogosultságok();
+        readonly Kezelő_Jogosultságok KézJogosultságok = new Kezelő_Jogosultságok();
 
         List<Adat_Users> AdatokUsers = new List<Adat_Users>();
         List<Adat_Oldalak> AdatokOldal = new List<Adat_Oldalak>();

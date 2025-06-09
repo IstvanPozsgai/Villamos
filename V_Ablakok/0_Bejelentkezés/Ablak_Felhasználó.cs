@@ -14,7 +14,7 @@ namespace Villamos
 {
     public partial class Ablak_Felhasználó : Form
     {
-        readonly Kezelők_Users Kéz = new Kezelők_Users();
+        readonly Kezelő_Users Kéz = new Kezelő_Users();
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
         List<Adat_Users> Adatok = new List<Adat_Users>();
         List<Adat_Behajtás_Dolgozótábla> AdatokDolg = new List<Adat_Behajtás_Dolgozótábla>();
