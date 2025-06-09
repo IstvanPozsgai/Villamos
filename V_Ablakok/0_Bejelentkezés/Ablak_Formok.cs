@@ -13,7 +13,10 @@ namespace Villamos.Ablakok
     public partial class Ablak_Formok : Form
     {
         readonly Kezelő_Oldalok Kéz = new Kezelő_Oldalok();
+#pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
+#pragma warning restore IDE0044
+
         List<Adat_Oldalak> Adatok = new List<Adat_Oldalak>();
 
 
@@ -32,7 +35,7 @@ namespace Villamos.Ablakok
             FormFeltöltése();
             Adatok = Kéz.Lista_Adatok();
             Alap_tábla_író();
-         //   GombLathatosagKezelo.Beallit(this);
+            //   GombLathatosagKezelo.Beallit(this);
         }
 
         private void Ablak_Anyagok_Load(object sender, System.EventArgs e)

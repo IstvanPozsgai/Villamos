@@ -14,7 +14,9 @@ namespace Villamos.Ablakok
     public partial class Ablak_Gombok : Form
     {
         readonly Kezelő_Gombok Kéz = new Kezelő_Gombok();
+#pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
+#pragma warning restore IDE0044
         List<Adat_Gombok> Adatok = new List<Adat_Gombok>();
 
         public Ablak_Gombok()
@@ -120,7 +122,7 @@ namespace Villamos.Ablakok
             try
             {
                 if (string.IsNullOrEmpty(GombNév.Text.Trim())) throw new HibásBevittAdat("Kérem adja meg a Menü nevét!");
-                // megjegyzés ide be kell olvasni listából a szervezeteket pontosvesszővel tagolva
+                // megjegyzés: ide be kell olvasni listából a szervezeteket pontosvesszővel tagolva
                 string szervezet = string.Join(";", ChkSzervezet.CheckedItems.Cast<string>());
                 Adat_Gombok adat = new Adat_Gombok(
                         TxtId.Text.ToÉrt_Int(),
