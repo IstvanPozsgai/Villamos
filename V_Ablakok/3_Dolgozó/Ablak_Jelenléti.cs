@@ -911,7 +911,7 @@ namespace Villamos
                 // igazoló rész
                 MyE.Sormagasság((hanyadikember + 6).ToString() + ":" + (hanyadikember + 6).ToString(), 36);
                 MyE.Vastagkeret(MyE.Oszlopnév(1) + (hanyadikember + 6).ToString() + ":" + MyE.Oszlopnév(2 + 7 * 3).ToString() + (hanyadikember + 6).ToString());
-                for (int k = 0; k < 19; k += 3)
+                for (int k = 1; k < 19; k += 3)
                 {
                     MyE.Vastagkeret(MyE.Oszlopnév(k) + (hanyadikember + 6).ToString() + ":" + MyE.Oszlopnév(k + 2).ToString() + (hanyadikember + 6).ToString());
                     oszlop += 3;
