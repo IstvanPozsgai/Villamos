@@ -723,13 +723,13 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                     NapiNövekedés += (rekord[i].Üzemóra - rekord[i - 1].Üzemóra) / Napok;
             }
             NapiNövekedés /= rekord.Count - 1;
+            NapiNövekedés = Math.Floor(NapiNövekedés);
 
             Adat_Eszterga_Üzemóra UtolsóRekord = rekord
                 .Where(a => !a.Státus)
                 .LastOrDefault();
 
             double NapokElőDátumhoz = (ElőDátum - UtolsóRekord.Dátum).TotalDays;
-
             return UtolsóRekord.Üzemóra + (long)(NapiNövekedés * NapokElőDátumhoz);
         }
 
