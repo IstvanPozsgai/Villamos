@@ -235,6 +235,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 else
                 { if (MeglévőRekordMódosítása(UjDatum, UjUzemora, UjStatus)) return; }
+                TáblaListázás();
             }
             catch (HibásBevittAdat ex)
             {
