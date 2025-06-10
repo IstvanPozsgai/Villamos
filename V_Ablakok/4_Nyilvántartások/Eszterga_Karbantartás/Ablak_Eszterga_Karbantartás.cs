@@ -783,7 +783,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 double Átlag = NovekedesiAranyok.Count > 0 ? NovekedesiAranyok.Average() : 0;
 
-                LblÁtlagÜzemóraSzám.Text = $"Üzemóra növekedése {Napok} napig átlagolva: {Átlag:F2} üzemóra";
+                LblÁtlagÜzemóraSzám.Text = $"Üzemóra növekedése {Napok} napig átlagolva: {Math.Floor(Átlag)} üzemóra";
+
             }
             catch (HibásBevittAdat ex)
             {
