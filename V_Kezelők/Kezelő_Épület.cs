@@ -4,48 +4,6 @@ using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
 {
-
-
-    public class Kezelő_Épület_Takarításosztály
-    {
-        public List<Adat_Épület_Takarításosztály> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Épület_Takarításosztály> Adatok = new List<Adat_Épület_Takarításosztály>();
-            Adat_Épület_Takarításosztály Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Épület_Takarításosztály(
-                                          rekord["ID"].ToÉrt_Int(),
-                                          rekord["Osztály"].ToStrTrim(),
-                                          rekord["E1Ft"].ToÉrt_Double(),
-                                          rekord["E2Ft"].ToÉrt_Double(),
-                                          rekord["E3Ft"].ToÉrt_Double(),
-                                          rekord["Státus"].ToÉrt_Bool()
-                                          );
-
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
-
-
-
     public class Kezelő_Épület_Naptár
     {
         public List<Adat_Épület_Naptár> Lista_Adatok(string hely, string jelszó, string szöveg)

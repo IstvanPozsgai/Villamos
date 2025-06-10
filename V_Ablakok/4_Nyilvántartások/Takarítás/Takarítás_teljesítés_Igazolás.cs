@@ -19,7 +19,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         private string AláíróBeosztás = "";
         private string AláíróNév = "";
 
-        readonly Kezelő_Épület_Takarításosztály KézTakarításOsztály = new Kezelő_Épület_Takarításosztály();
+        readonly Kezelő_Épület_Takarítás_Osztály KézTakarításOsztály = new Kezelő_Épület_Takarítás_Osztály();
         readonly Kezelő_Épület_Adattábla KézAdatTábla = new Kezelő_Épület_Adattábla();
         readonly Kezelő_Épület_Takarításrakijelölt KézTakarításrakijelölt = new Kezelő_Épület_Takarításrakijelölt();
         readonly Kezelő_Takarítás_Opció KézOpció = new Kezelő_Takarítás_Opció();
@@ -34,7 +34,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         List<Adat_Jármű_Takarítás_Teljesítés> AdatokTelj = new List<Adat_Jármű_Takarítás_Teljesítés>();
         List<Adat_Jármű_Takarítás_J1> AdatokJ1 = new List<Adat_Jármű_Takarítás_J1>();
         List<Adat_Jármű_Takarítás_Árak> AdatokÁr = new List<Adat_Jármű_Takarítás_Árak>();
-        List<Adat_Épület_Takarításosztály> AdatokOsztály = new List<Adat_Épület_Takarításosztály>();
+        List<Adat_Épület_Takarítás_Osztály> AdatokOsztály = new List<Adat_Épület_Takarítás_Osztály>();
         List<Adat_Épület_Adattábla> AdatokRészletes = new List<Adat_Épület_Adattábla>();
         List<Adat_Épület_Takarításrakijelölt> AdatokKijelöltek = new List<Adat_Épület_Takarításrakijelölt>();
         List<Adat_Takarítás_Opció> AdatokTakOpció = new List<Adat_Takarítás_Opció>();
@@ -62,7 +62,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\épülettörzs.mdb";
             string jelszó = "seprűéslapát";
             string szöveg = "SELECT * FROM takarításosztály where státus=0 ORDER BY id";
-            AdatokOsztály = KézTakarításOsztály.Lista_Adatok(hely, jelszó, szöveg);
+            AdatokOsztály = KézTakarításOsztály.Lista_Adatok(Telephely);
+
             string helyép = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\{Dátum.Year}épülettakarítás.mdb";
 
             szöveg = "SELECT * FROM Adattábla where státus=0  ORDER BY id";
@@ -138,7 +139,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
 
                 if (AdatokOsztály != null)
                 {
-                    foreach (Adat_Épület_Takarításosztály rekord in AdatokOsztály)
+                    foreach (Adat_Épület_Takarítás_Osztály rekord in AdatokOsztály)
                     {
                         MyE.Kiir(rekord.Osztály.Trim(), $"a{sor}");
                         MyE.Kiir(rekord.E1Ft.ToString().Replace(",", "."), $"c{sor}");
@@ -235,7 +236,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 double NagySum = 0;
                 if (AdatokOsztály != null)
                 {
-                    foreach (Adat_Épület_Takarításosztály rekord in AdatokOsztály)
+                    foreach (Adat_Épület_Takarítás_Osztály rekord in AdatokOsztály)
                     {
 
                         sor += 1;

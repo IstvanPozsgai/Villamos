@@ -877,19 +877,27 @@ namespace Villamos
 
         private void Combofeltöltése()
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-            if (!File.Exists(hely))
-                Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-            string jelszó = "seprűéslapát";
+            try
+            {
+                AdatokTakOsztály = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokTakOsztály = (from a in AdatokTakOsztály
+                                    where a.Státus == false
+                                    orderby a.Id
+                                    select a).ToList();
+                foreach (Adat_Épület_Takarítás_Osztály Elem in AdatokTakOsztály)
+                    Combo1.Items.Add(Elem.Osztály);
 
-            string szöveg = "SELECT * FROM takarításosztály where státus=0  order by  id";
-
-
-            Combo1.Items.Clear();
-            Combo1.BeginUpdate();
-            Combo1.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "osztály"));
-            Combo1.EndUpdate();
-            Combo1.Refresh();
+                Combo1.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 

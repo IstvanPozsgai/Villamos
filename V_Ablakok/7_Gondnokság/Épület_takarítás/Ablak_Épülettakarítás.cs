@@ -25,7 +25,7 @@ namespace Villamos
         readonly Kezelő_Épület_Naptár KézÉpületNaptár = new Kezelő_Épület_Naptár();
         readonly Kezelő_Épület_Takarításrakijelölt KézTakarításrakijelölt = new Kezelő_Épület_Takarításrakijelölt();
         readonly Kezelő_Épület_Adattábla KézAdatTábla = new Kezelő_Épület_Adattábla();
-        readonly Kezelő_Épület_Takarításosztály KézTakarításOsztály = new Kezelő_Épület_Takarításosztály();
+        readonly Kezelő_Épület_Takarítás_Osztály KézOsztály = new Kezelő_Épület_Takarítás_Osztály();
         #endregion
 
 
@@ -33,7 +33,7 @@ namespace Villamos
         List<Adat_Épület_Takarításrakijelölt> AdatokKijelöltek = new List<Adat_Épület_Takarításrakijelölt>();
         List<Adat_Épület_Naptár> AdatokÉNaptár = new List<Adat_Épület_Naptár>();
         List<Adat_Épület_Adattábla> AdatokAdatTábla = new List<Adat_Épület_Adattábla>();
-
+        List<Adat_Épület_Takarítás_Osztály> AdatokTakOsztály = new List<Adat_Épület_Takarítás_Osztály>();
 
         #endregion
         public string Telephely_ = "";
@@ -590,19 +590,17 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-                string jelszó = "seprűéslapát";
-
-                string szöveg = "SELECT * FROM takarításosztály where státus=0  order by  id";
-
-
+                AdatokTakOsztály = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokTakOsztály = (from a in AdatokTakOsztály
+                                    where a.Státus == false
+                                    orderby a.Id
+                                    select a).ToList();
                 List1.Items.Clear();
-                List1.BeginUpdate();
                 List1.Items.Add("<Összes>");
-                List1.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "osztály"));
-                List1.EndUpdate();
+
+                foreach (Adat_Épület_Takarítás_Osztály Elem in AdatokTakOsztály)
+                    List1.Items.Add(Elem.Osztály);
+
                 List1.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -1153,7 +1151,11 @@ namespace Villamos
                 int idE3dbv;
 
 
-                List<Adat_Épület_Takarításosztály> Adatok = KézTakarításOsztály.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Épület_Takarítás_Osztály> Adatok = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = (from a in Adatok
+                          where a.Státus == false
+                          orderby a.Id
+                          select a).ToList();
 
                 string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\" + Dátum1.Value.ToString("yyyy") + @"épülettakarítás.mdb";
 
@@ -1161,7 +1163,7 @@ namespace Villamos
 
                 if (Adatok != null)
                 {
-                    foreach (Adat_Épület_Takarításosztály rekord in Adatok)
+                    foreach (Adat_Épület_Takarítás_Osztály rekord in Adatok)
                     {
                         MyE.Kiir(rekord.Osztály.Trim(), "a" + sor.ToString());
                         MyE.Kiir(rekord.E1Ft.ToString().Replace(",", "."), "c" + sor.ToString());
@@ -1298,7 +1300,7 @@ namespace Villamos
 
                 if (Adatok != null)
                 {
-                    foreach (Adat_Épület_Takarításosztály rekord in Adatok)
+                    foreach (Adat_Épület_Takarítás_Osztály rekord in Adatok)
                     {
                         sor += 1;
                         MyE.Egyesít(munkalap, "b" + sor.ToString() + ":af" + sor.ToString());
@@ -1815,6 +1817,16 @@ namespace Villamos
                 Osztálylista.BeginUpdate();
                 Osztálylista.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "osztály"));
                 Osztálylista.EndUpdate();
+                Osztálylista.Refresh();
+
+                AdatokTakOsztály = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokTakOsztály = (from a in AdatokTakOsztály
+                                    where a.Státus == false
+                                    orderby a.Id
+                                    select a).ToList();
+                foreach (Adat_Épület_Takarítás_Osztály Elem in AdatokTakOsztály)
+                    Osztálylista.Items.Add(Elem.Osztály);
+
                 Osztálylista.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -2557,12 +2569,12 @@ namespace Villamos
                 string szövegép;
 
 
-                List<Adat_Épület_Takarításosztály> AdatokO = KézTakarításOsztály.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Épület_Takarítás_Osztály> AdatokO = KézOsztály.Lista_Adatok(hely, jelszó, szöveg);
 
                 Holtart.Be(20);
 
                 int sor = 2;
-                foreach (Adat_Épület_Takarításosztály rekord in AdatokO)
+                foreach (Adat_Épület_Takarítás_Osztály rekord in AdatokO)
                 {
                     MyE.Kiir(rekord.Osztály.Trim(), "a" + sor.ToString());
                     MyE.Kiir(rekord.E1Ft.ToString().Replace(",", "."), "c" + sor.ToString());
@@ -2646,7 +2658,7 @@ namespace Villamos
 
                 Adat_Épület_Takarításrakijelölt rekordép;
 
-                foreach (Adat_Épület_Takarításosztály rekord in AdatokO)
+                foreach (Adat_Épület_Takarítás_Osztály rekord in AdatokO)
                 {
                     sor += 1;
                     MyE.Egyesít(munkalap, "b" + sor.ToString() + ":W" + sor.ToString());

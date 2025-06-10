@@ -75,7 +75,7 @@ namespace Villamos
 
         #region Alap
 
-        void Telephelyek_Feltöltése_lista()
+        private void Telephelyek_Feltöltése_lista()
         {
             string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő.mdb";
             string jelszó = "Mocó";
@@ -1343,15 +1343,26 @@ namespace Villamos
         #region Oldal Panelen Lévő   
         private void Szolgálatoklista()
         {
-            // szolgálatok listázása
-            Lstszolgálatok.Items.Clear();
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM szolgálattábla order by sorszám";
+            try
+            {
+                // szolgálatok listázása
+                Lstszolgálatok.Items.Clear();
 
-            Lstszolgálatok.BeginUpdate();
-            Lstszolgálatok.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "szolgálatnév"));
-            Lstszolgálatok.EndUpdate();
+                Kezelő_Kiegészítő_Szolgálat Kéz = new Kezelő_Kiegészítő_Szolgálat();
+                List<Adat_Kiegészítő_Szolgálat> Adatok = Kéz.Lista_Adatok();
+                foreach (Adat_Kiegészítő_Szolgálat Elem in Adatok)
+                    Lstszolgálatok.Items.Add(Elem.Szolgálatnév);
+                Lstszolgálatok.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Lstszolgálatok_SelectedIndexChanged(object sender, EventArgs e)
