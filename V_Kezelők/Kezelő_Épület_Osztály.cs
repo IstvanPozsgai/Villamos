@@ -7,13 +7,13 @@ using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Épület_Takarítás_Osztály
     {
         readonly string jelszó = "seprűéslapát";
+        string tábla = "takarításosztály";
         string hely;
 
         private void FájlBeállítás(string Telephely)
@@ -26,7 +26,7 @@ namespace Villamos.Kezelők
         {
             FájlBeállítás(Telephely);
             List<Adat_Épület_Takarítás_Osztály> Adatok = new List<Adat_Épület_Takarítás_Osztály>();
-            string szöveg = "SELECT * FROM takarításosztály order by id";
+            string szöveg = $"SELECT * FROM {tábla} order by id";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE takarításosztály  SET ";
+                string szöveg = $"UPDATE {tábla}  SET ";
                 szöveg += $"osztály='{Adat.Osztály}', ";
                 szöveg += $"E1Ft={Adat.E1Ft.ToString().Replace(",", ".")}, ";
                 szöveg += $"E2Ft={Adat.E2Ft.ToString().Replace(",", ".")}, ";
@@ -84,8 +84,8 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO takarításosztály  (id, osztály, E1Ft, E2Ft, E3Ft, státus) VALUES (";
-                szöveg += $"{Adat.Id}, ";
+                string szöveg = $"INSERT INTO {tábla}  (id, osztály, E1Ft, E2Ft, E3Ft, státus) VALUES (";
+                szöveg += $"{Sorszám(Telephely)}, ";
                 szöveg += $"'{Adat.Osztály}', ";
                 szöveg += $"{Adat.E1Ft.ToString().Replace(",", ".")}, ";
                 szöveg += $"{Adat.E2Ft.ToString().Replace(",", ".")}, ";
@@ -103,12 +103,71 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(string Telephely, List<Adat_Épület_Takarítás_Osztály> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarítás_Osztály Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {tábla}  SET ";
+                    szöveg += $"E1Ft={Adat.E1Ft.ToString().Replace(',', '.')}, ";
+                    szöveg += $"E2Ft={Adat.E2Ft.ToString().Replace(',', '.')}, ";
+                    szöveg += $"E3Ft={Adat.E3Ft.ToString().Replace(',', '.')} ";
+                    szöveg += $" WHERE osztály='{Adat.Osztály}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(string Telephely, List<Adat_Épület_Takarítás_Osztály> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely);
+                List<string> SzövegGy = new List<string>();
+                int i = Sorszám(Telephely);
+                foreach (Adat_Épület_Takarítás_Osztály Adat in Adatok)
+                {
+                    string szöveg = $"INSERT INTO {tábla} (id, osztály, E1Ft, E2Ft, E3Ft, státus) VALUES (";
+                    szöveg += $"{i}, ";
+                    szöveg += $"'{Adat.Osztály}', ";
+                    szöveg += $"{Adat.E1Ft.ToString().Replace(",", ".")}, ";
+                    szöveg += $"{Adat.E2Ft.ToString().Replace(",", ".")}, ";
+                    szöveg += $"{Adat.E3Ft.ToString().Replace(",", ".")}, false )";
+                    SzövegGy.Add(szöveg);
+                    i++;
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Törlés(string Telephely, int Id)
         {
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE takarításosztály  SET státus=true ";
+                string szöveg = $"UPDATE {tábla}  SET státus=true ";
                 szöveg += $" WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -160,41 +219,24 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        //Elkopó
-        public List<Adat_Épület_Takarítás_Osztály> Lista_Adatok(string hely, string jelszó, string szöveg)
+        private int Sorszám(string Telephely)
         {
-            List<Adat_Épület_Takarítás_Osztály> Adatok = new List<Adat_Épület_Takarítás_Osztály>();
-            Adat_Épület_Takarítás_Osztály Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            int válasz = 1;
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Épület_Takarítás_Osztály(
-                                        MyF.Érték_INT(rekord["id"].ToString()),
-                                        rekord["Osztály"].ToStrTrim(),
-                                        MyF.Érték_DOUBLE(rekord["E1Ft"].ToString()),
-                                        MyF.Érték_DOUBLE(rekord["E2Ft"].ToString()),
-                                        MyF.Érték_DOUBLE(rekord["E3Ft"].ToString()),
-                                        MyF.Érték_BOOL(rekord["státus"].ToString())
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
+                List<Adat_Épület_Takarítás_Osztály> Adatok = Lista_Adatok(Telephely);
+                if (Adatok.Count > 0) válasz = Adatok.Max(a => a.Id) + 1;
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return válasz;
         }
-
     }
 }

@@ -2569,8 +2569,11 @@ namespace Villamos
                 string szövegép;
 
 
-                List<Adat_Épület_Takarítás_Osztály> AdatokO = KézOsztály.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Épület_Takarítás_Osztály> AdatokO = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokO = (from a in AdatokO
+                           where a.Státus == false
+                           orderby a.Id
+                           select a).ToList();
                 Holtart.Be(20);
 
                 int sor = 2;
