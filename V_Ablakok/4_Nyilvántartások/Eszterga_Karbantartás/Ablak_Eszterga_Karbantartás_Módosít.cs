@@ -21,7 +21,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         private bool frissul = false;
         readonly DataTable AdatTábla = new DataTable();
         readonly DataTable AdatTáblaUtólag = new DataTable();
-        readonly DataTable AdatTáblaNapló = new DataTable();
+         DataTable AdatTáblaNapló = new DataTable();
         #endregion
 
         #region Listák
@@ -264,48 +264,54 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void TáblaNaplóListázás()
         {
-            AdatTáblaNapló.Columns.Clear();
-            AdatTáblaNapló.Columns.Add("Művelet Sorszáma");
-            AdatTáblaNapló.Columns.Add("Művelet");
-            AdatTáblaNapló.Columns.Add("Utolsó Dátum");
-            AdatTáblaNapló.Columns.Add("Utolsó Üzemóra");
-            AdatTáblaNapló.Columns.Add("Megjegyzés");
-            AdatTáblaNapló.Columns.Add("Rögzítő");
-            AdatTáblaNapló.Columns.Add("Rögzítés Dátuma");
+            // Az eredeti táblát megtartjuk, de ideiglenes klónban építjük fel a tartalmat
+            DataTable ideiglenesTábla = new DataTable();
+            ideiglenesTábla.Columns.Add("Művelet Sorszáma");
+            ideiglenesTábla.Columns.Add("Művelet");
+            ideiglenesTábla.Columns.Add("Utolsó Dátum");
+            ideiglenesTábla.Columns.Add("Utolsó Üzemóra");
+            ideiglenesTábla.Columns.Add("Megjegyzés");
+            ideiglenesTábla.Columns.Add("Rögzítő");
+            ideiglenesTábla.Columns.Add("Rögzítés Dátuma");
 
             AdatokNapló = Funkció.Eszterga_KarbantartasNaplóFeltölt();
-            AdatTáblaNapló.Clear();
-            List<DataRow> RendezettSorok = new List<DataRow>();
+
             foreach (Adat_Eszterga_Műveletek_Napló rekord in AdatokNapló)
             {
-                DataRow Soradat = AdatTáblaNapló.NewRow();
+                DataRow sor = ideiglenesTábla.NewRow();
 
-                Soradat["Művelet Sorszáma"] = rekord.ID;
-                Soradat["Művelet"] = rekord.Művelet;
-                Soradat["Utolsó Dátum"] = rekord.Utolsó_Dátum.ToShortDateString();
-                Soradat["Utolsó Üzemóra"] = rekord.Utolsó_Üzemóra_Állás;
-                Soradat["Megjegyzés"] = rekord.Megjegyzés;
-                Soradat["Rögzítő"] = rekord.Rögzítő;
-                Soradat["Rögzítés Dátuma"] = rekord.Rögzítés_Dátuma.ToShortDateString();
+                sor["Művelet Sorszáma"] = rekord.ID;
+                sor["Művelet"] = rekord.Művelet;
+                sor["Utolsó Dátum"] = rekord.Utolsó_Dátum.ToShortDateString();
+                sor["Utolsó Üzemóra"] = rekord.Utolsó_Üzemóra_Állás;
+                sor["Megjegyzés"] = rekord.Megjegyzés;
+                sor["Rögzítő"] = rekord.Rögzítő;
+                sor["Rögzítés Dátuma"] = rekord.Rögzítés_Dátuma.ToShortDateString();
 
-                RendezettSorok.Add(Soradat);
+                ideiglenesTábla.Rows.Add(sor);
             }
-            IEnumerable<DataRow> RendezettAdatok = RendezettSorok
+
+            IEnumerable<DataRow> rendezettAdatok = ideiglenesTábla.AsEnumerable()
                 .OrderBy(sor => DateTime.Parse(sor["Utolsó Dátum"].ToStrTrim()))
                 .ThenBy(sor => int.Parse(sor["Művelet Sorszáma"].ToStrTrim()));
 
-            foreach (DataRow sor in RendezettAdatok)
-                AdatTáblaNapló.Rows.Add(sor);
+            // Eredeti táblát újratöltjük friss, tiszta sorokkal
+            AdatTáblaNapló = ideiglenesTábla.Clone(); // struktúra másolása
+            foreach (DataRow sor in rendezettAdatok)
+                AdatTáblaNapló.ImportRow(sor);
 
             TáblaNapló.DataSource = AdatTáblaNapló;
+
             OszlopSzélességNapló();
 
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < TáblaNapló.Columns.Count; i++)
                 TáblaNapló.Columns[i].ReadOnly = true;
+
             TáblaNapló.Visible = true;
             TáblaMűvelet.Visible = true;
             TáblaMűvelet.ClearSelection();
         }
+
 
         /// <summary>
         /// A naplótábla oszlopszélességeit állítja be
