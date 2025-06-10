@@ -730,7 +730,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
             double NapokElőDátumhoz = (ElőDátum - UtolsóRekord.Dátum).TotalDays;
 
-            return (long)Math.Round(UtolsóRekord.Üzemóra + (NapiNövekedés * NapokElőDátumhoz));
+            return UtolsóRekord.Üzemóra + (long)(NapiNövekedés * NapokElőDátumhoz);
         }
 
         /// <summary>
