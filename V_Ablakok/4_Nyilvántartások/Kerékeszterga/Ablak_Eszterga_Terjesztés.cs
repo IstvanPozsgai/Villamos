@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
 {
@@ -47,15 +46,13 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM könyvtár order by név ";
-
-
+                Kezelő_Kiegészítő_Könyvtár KézKönyv = new Kezelő_Kiegészítő_Könyvtár();
+                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKönyv.Lista_Adatok();
+                Adatok = Adatok.OrderBy(a => a.Név).ToList();
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.BeginUpdate();
-                Cmbtelephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "Név"));
-                Cmbtelephely.EndUpdate();
+                foreach (Adat_Kiegészítő_Könyvtár Elem in Adatok)
+                    Cmbtelephely.Items.Add(Elem.Név);
+
                 Cmbtelephely.Refresh();
             }
             catch (HibásBevittAdat ex)
