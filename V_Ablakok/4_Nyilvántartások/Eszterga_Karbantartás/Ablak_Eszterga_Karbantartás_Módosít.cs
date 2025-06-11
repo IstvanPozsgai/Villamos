@@ -1037,18 +1037,49 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// Ha a felhasználó módosítja az utolsó dátum értékét, lekérdezi az ahhoz tartozó üzemóra adatot,
         /// és beírja a megfelelő mezőbe. A jövőbeni dátumokra figyelmeztet.
         /// </summary>
+        //private void DtmPckrUtolsóDátum_ValueChanged(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (frissul) return;
+
+        //        frissul = true;
+
+        //        DateTime ValasztottDatum = DtmPckrUtolsóDátum.Value.Date;
+
+        //        if (ValasztottDatum > DateTime.Today)
+        //            throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
+
+        //        UzemoraKiolvasasEsBeiras(ValasztottDatum, TxtBxUtolsóÜzemóraÁllás);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+        //        MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    finally
+        //    {
+        //        frissul = false;
+        //    }
+        //}
         private void DtmPckrUtolsóDátum_ValueChanged(object sender, EventArgs e)
         {
+            if (frissul) return;
+
             try
             {
-                if (frissul) return;
-
                 frissul = true;
 
-                DateTime ValasztottDatum = DtmPckrUtolsóDátum.Value;
+                DateTime ValasztottDatum;
+
+                try{ValasztottDatum = DtmPckrUtolsóDátum.Value.Date;}
+                catch{return;}
 
                 if (ValasztottDatum > DateTime.Today)
-                    throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
+                {
+                    MessageBox.Show($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
                 UzemoraKiolvasasEsBeiras(ValasztottDatum, TxtBxUtolsóÜzemóraÁllás);
             }
@@ -1062,6 +1093,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 frissul = false;
             }
         }
+
 
         /// <summary>
         /// Ha az üzemóra mező értéke megváltozik, annak megfelelő dátumot keres az adatbázisban,
