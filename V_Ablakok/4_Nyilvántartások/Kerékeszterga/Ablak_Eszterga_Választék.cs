@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.V_MindenEgyéb;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok
 {
@@ -362,19 +362,28 @@ namespace Villamos.Villamos_Ablakok
 
         #region Normaidők
 
-        void Norm_Típus_feltöltés()
+        private void Norm_Típus_feltöltés()
         {
+            try
+            {
+                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség").OrderBy(a => a.Valóstípus2).ToList();
+                List<string> Típusok = Adatok.Select(a => a.Valóstípus2).Distinct().ToList();
 
-
-            string helytípus = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
-            string jelszótípus = "pozsgaii";
-            string szöveg = "SELECT DISTINCT valóstípus2  FROM állománytábla order by valóstípus2";
-
-            Norm_Típus.Items.Clear();
-            Norm_Típus.BeginUpdate();
-            Norm_Típus.Items.AddRange(MyF.ComboFeltöltés(helytípus, jelszótípus, szöveg, "valóstípus2"));
-            Norm_Típus.EndUpdate();
-            Norm_Típus.Refresh();
+                Norm_Típus.Items.Clear();
+                foreach (string Elem in Típusok)
+                    Norm_Típus.Items.Add(Elem);
+                Norm_Típus.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -455,7 +464,7 @@ namespace Villamos.Villamos_Ablakok
 
                 Adat_Kerék_Eszterga_Tengely Ideig = new Adat_Kerék_Eszterga_Tengely(Norm_Típus.Text.Trim(), Munkaidő, Állapota);
 
-                if (Elem!=null)
+                if (Elem != null)
                 {
                     KézEsztergaTengely.Egy_Módosítás(hely, jelszó, Ideig);
                 }
@@ -495,15 +504,26 @@ namespace Villamos.Villamos_Ablakok
 
         private void Felhasználók_Feltöltése()
         {
-            string hely = Application.StartupPath + @"\Baross\Adatok\belépés.mdb";
-            string jelszó = "forgalmiutasítás";
-            string szöveg = "SELECT * FROM bejelentkezés order by név ";
+            try
+            {
+                Kezelő_Belépés_Bejelentkezés KézBejelen = new Kezelő_Belépés_Bejelentkezés();
+                List<Adat_Belépés_Bejelentkezés> Adatok = KézBejelen.Lista_Adatok("Baross").OrderBy(a => a.Név).ToList();
 
-            Felhasználók.Items.Clear();
-            Felhasználók.BeginUpdate();
-            Felhasználók.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "név"));
-            Felhasználók.EndUpdate();
-            Felhasználók.Refresh();
+                Felhasználók.Items.Clear();
+                foreach (Adat_Belépés_Bejelentkezés Elem in Adatok)
+                    Felhasználók.Items.Add(Elem.Név);
+
+                Felhasználók.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -511,16 +531,16 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                if (Felhasználók.Text.Trim() == "")                         throw new HibásBevittAdat("A felhasználóinév nem lehet üres");
+                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("A felhasználóinév nem lehet üres");
 
                 string szöveg = $"SELECT * FROM Automata ";
-                  List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok(hely,jelszó,szöveg );
+                List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok(hely, jelszó, szöveg);
 
                 Adat_Kerék_Eszterga_Automata Elem = (from a in Adatok
                                                      where a.FelhasználóiNév == Felhasználók.Text.Trim()
-                                                     select a).FirstOrDefault ();
+                                                     select a).FirstOrDefault();
 
-                if (Elem==null)
+                if (Elem == null)
                     szöveg = $"INSERT INTO Automata (FelhasználóiNév, UtolsóÜzenet) VALUES ( '{Felhasználók.Text.Trim()}', '{UtolsóÜzenet.Value.ToString("yyyy.MM.dd")}')";
                 else
                     szöveg = $"UPDATE Automata SET UtolsóÜzenet='{UtolsóÜzenet.Value.ToString("yyyy.MM.dd")}' WHERE FelhasználóiNév='{Felhasználók.Text.Trim()}'";
@@ -545,7 +565,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                if (Felhasználók.Text.Trim() == "")                       throw new HibásBevittAdat("A felhasználóinév nem lehet üres");
+                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("A felhasználóinév nem lehet üres");
 
                 string szöveg = $"SELECT * FROM Automata ";
                 List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok(hely, jelszó, szöveg);
@@ -600,7 +620,7 @@ namespace Villamos.Villamos_Ablakok
                 TáblaAutomata.Columns[1].Width = 180;
 
 
-            
+
                 List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok(hely, jelszó, szöveg);
                 int i;
 
