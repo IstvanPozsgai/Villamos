@@ -286,41 +286,6 @@ public static partial class Függvénygyűjtemény
     #endregion
 
 
-    #region Üres rekord Vizsgálatok
-    public static string Vizsgálat(OleDbDataReader ReKORD, string cím)
-    {
-        string iszöveg = "_";
-        if (!(ReKORD[cím] is DBNull))
-            iszöveg = Convert.ToString(ReKORD[cím]);
-        return iszöveg;
-    }
-
-    public static DateTime Vizsgálatdátum(OleDbDataReader ReKORD, string cím)
-    {
-        var idátum = Convert.ToDateTime("1900.01.01");
-        if (!(ReKORD[cím] is DBNull))
-            idátum = Convert.ToDateTime(ReKORD[cím]);
-        return idátum;
-    }
-
-    public static bool Vizsgálatigaz(OleDbDataReader ReKORD, string cím)
-    {
-        bool iigaz = false;
-        if (!(ReKORD[cím] is DBNull))
-            iigaz = Convert.ToBoolean(ReKORD[cím]);
-        return iigaz;
-    }
-
-    public static double Vizsgálatszám(OleDbDataReader ReKORD, string cím)
-    {
-        double iszám = 0d;
-        if (!(ReKORD[cím] is DBNull))
-            iszám = Convert.ToDouble(ReKORD[cím]);
-        return iszám;
-    }
-
-    #endregion
-
     public static AdatCombohoz[] ComboFeltöltés(string sqlhely, string sqljelszó, string sqlszöveg, string rekordoszlop)
     {
 
