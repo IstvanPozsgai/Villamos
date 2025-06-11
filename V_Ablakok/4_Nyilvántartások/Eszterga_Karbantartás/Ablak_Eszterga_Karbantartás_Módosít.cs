@@ -1260,7 +1260,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 Uj_ablak_EsztergaUzemora = new Ablak_Eszterga_Karbantartás_Üzemóra();
                 Uj_ablak_EsztergaUzemora.FormClosed += Új_ablak_EsztergaÜzemóra_Closed;
                 Uj_ablak_EsztergaUzemora.Show();
-                Uj_ablak_EsztergaUzemora.Eszterga_Változás += TablaListazasMuvelet;
+                Uj_ablak_EsztergaUzemora.Eszterga_Valtozas += TablaListazasMuvelet;
             }
             else
             {

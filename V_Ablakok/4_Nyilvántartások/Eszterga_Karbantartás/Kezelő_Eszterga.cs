@@ -317,7 +317,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Törlés(Adat_Eszterga_Uzemora Adat)
+        public void Torles(Adat_Eszterga_Uzemora Adat)
         {
             try
             {
