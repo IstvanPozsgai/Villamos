@@ -747,6 +747,7 @@
     <Compile Include="V_Függvények\Számkonverter.cs" />
     <Compile Include="V_Kezelők\Kezelő_Gombok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosultságok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tevékenység.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szabadságok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />

@@ -4,8 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.V_MindenEgyéb;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
@@ -31,6 +31,7 @@ namespace Villamos.Villamos_Ablakok
         string helyTörzs = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
 
         readonly Kezelő_Kerék_Eszterga_Naptár Naptár_Kéz = new Kezelő_Kerék_Eszterga_Naptár();
+        readonly Kezelő_Kerék_Eszterga_Tevékenység KézTevékenység = new Kezelő_Kerék_Eszterga_Tevékenység();
         List<Adat_Kerék_Eszterga_Naptár> Naptár_Adatok;
         List<Adat_Kerék_Eszterga_Naptár> Naptár_Adatok_ideig;
 
@@ -143,14 +144,25 @@ namespace Villamos.Villamos_Ablakok
         }
 
 
-        void Tevékenység_feltöltés()
+        private void Tevékenység_feltöltés()
         {
-            string szöveg = "SELECT * FROM Tevékenység ORDER BY id";
-            Tevékenység.Items.Clear();
-            Tevékenység.BeginUpdate();
-            Tevékenység.Items.AddRange(MyF.ComboFeltöltés(helyTörzs, jelszó, szöveg, "Tevékenység"));
-            Tevékenység.EndUpdate();
-            Tevékenység.Refresh();
+            try
+            {
+                List<Adat_Kerék_Eszterga_Tevékenység> Adatok = KézTevékenység.Lista_Adatok();
+                Tevékenység.Items.Clear();
+                foreach (Adat_Kerék_Eszterga_Tevékenység Elem in Adatok)
+                    Tevékenység.Items.Add(Elem.Tevékenység);
+                Tevékenység.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
