@@ -362,7 +362,6 @@ public static partial class Függvénygyűjtemény
 
 
     #region Jogosultság
-
     public static bool Vanjoga(int melyikelem, int csoport)
     {
         bool válasz;
@@ -406,9 +405,6 @@ public static partial class Függvénygyűjtemény
         return válasz;
 
     }
-
-
-
     #endregion
 }
 

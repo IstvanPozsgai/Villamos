@@ -592,33 +592,20 @@ namespace Villamos
             {
                 Pályaszám.Items.Clear();
                 if (Cmbtelephely.Text.ToStrTrim() == "") return;
-                string hely, jelszó, szöveg;
-                hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                jelszó = "pozsgaii";
-                // ha nem telephelyről kérdezzük le akkor minden kocsit kiír
-                int volt = 0;
 
-                for (int i = 0; i < Cmbtelephely.Items.Count; i++)
-                {
-                    if (Cmbtelephely.Items[i].ToStrTrim() == Program.PostásTelephely.Trim())
-                        volt = 1;
-                }
-                if (volt == 1)
-                {
-                    szöveg = "Select * FROM Állománytábla WHERE Üzem='" + Cmbtelephely.Text.ToStrTrim() + "' AND ";
-                    szöveg += " törölt=0 AND valóstípus Like  '%T5C5%' ORDER BY azonosító";
-                }
-                else
-                {
-                    szöveg = "Select * FROM Állománytábla WHERE  törölt=0 AND valóstípus Like  '%T5C5%' ORDER BY azonosító";
-                }
+                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
+                Adatok = (from a in Adatok
+                          where a.Törölt == false
+                          && a.Valóstípus.Contains("T5C5")
+                          orderby a.Azonosító
+                          select a).ToList();
+                if (Program.Postás_Vezér) Adatok = Adatok.Where(a => a.Üzem == Cmbtelephely.Text.ToStrTrim()).ToList();
+
                 // feltöltjük az összes pályaszámot a Comboba
-
-                Pályaszám.BeginUpdate();
-                Pályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                Pályaszám.EndUpdate();
+                foreach (Adat_Jármű Elem in Adatok)
+                    Pályaszám.Items.Add(Elem.Azonosító);
                 Pályaszám.Refresh();
-
             }
             catch (HibásBevittAdat ex)
             {
