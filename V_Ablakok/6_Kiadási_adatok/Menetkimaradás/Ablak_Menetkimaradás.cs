@@ -77,14 +77,25 @@ namespace Villamos
 
         private void Telephelyek_Feltöltése_lista()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM telephelytábla ORDER BY telephelynév";
+            try
+            {
+                Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
+                List<Adat_kiegészítő_telephely> Adatok = KézTelephely.Lista_Adatok().OrderBy(a => a.Telephelynév).ToList();
 
-            Lstüzemek.BeginUpdate();
-            Lstüzemek.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "telephelynév"));
-            Lstüzemek.EndUpdate();
-            Lstüzemek.Refresh();
+                Lstüzemek.Items.Clear();
+                foreach (Adat_kiegészítő_telephely Elem in Adatok)
+                    Lstüzemek.Items.Add(Elem.Telephelynév);
+                Lstüzemek.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Telephelyekfeltöltése()

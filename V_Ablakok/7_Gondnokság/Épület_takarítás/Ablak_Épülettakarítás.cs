@@ -1805,20 +1805,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-                string jelszó = "seprűéslapát";
-
-                string szöveg = "SELECT * FROM takarításosztály where státus=0  order by  id";
-
-
                 Osztálylista.Items.Clear();
-                Osztálylista.BeginUpdate();
-                Osztálylista.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "osztály"));
-                Osztálylista.EndUpdate();
-                Osztálylista.Refresh();
-
                 AdatokTakOsztály = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
                 AdatokTakOsztály = (from a in AdatokTakOsztály
                                     where a.Státus == false
