@@ -801,13 +801,11 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 SzabadságOka.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM szabadságok WHERE megnevezés like '%kivétel%' ";
-
-                SzabadságOka.BeginUpdate();
-                SzabadságOka.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "megnevezés"));
-                SzabadságOka.EndUpdate();
+                Kezelő_Kiegészítő_Szabadságok KézSzab = new Kezelő_Kiegészítő_Szabadságok();
+                List<Adat_Kiegészítő_Szabadságok> Adatok = KézSzab.Lista_Adatok(Cmbtelephely.Trim());
+                foreach (Adat_Kiegészítő_Szabadságok Elem in Adatok)
+                    SzabadságOka.Items.Add(Elem.Megnevezés);
+                SzabadságOka.Refresh();
             }
             catch (HibásBevittAdat ex)
             {
