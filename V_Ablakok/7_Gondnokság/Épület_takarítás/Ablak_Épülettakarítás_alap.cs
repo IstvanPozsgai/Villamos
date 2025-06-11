@@ -796,6 +796,7 @@ namespace Villamos
             {
                 if (Hsorszám.Text.Trim() == "") throw new HibásBevittAdat("A sorszámot ki kell választani.");
                 if (!int.TryParse(Hsorszám.Text.Trim(), out int sorszám)) throw new HibásBevittAdat("A sorszámnak számnak kell lennie.");
+                if (sorszám == 1) throw new HibásBevittAdat("Az első elemet nem lehet előrébb tenni.");
                 KézÉpület.Csere(Cmbtelephely.Text.Trim(), sorszám);
                 Helységlistáz();
                 LapFülek.SelectedIndex = 1;

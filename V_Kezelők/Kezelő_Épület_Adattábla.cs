@@ -209,9 +209,9 @@ namespace Villamos.Kezelők
                 List<Adat_Épület_Adattábla> Adatok = Lista_Adatok(Telephely).OrderBy(a => a.ID).ToList();
                 Adat_Épület_Adattábla Adat = Adatok.FirstOrDefault(a => a.ID == Id);
                 Adat_Épület_Adattábla Előző = Adatok.LastOrDefault(a => a.ID < Id);
-                Módosítás(Telephely, Előző.ID, 0);
-                Módosítás(Telephely, Adat.ID, Előző.ID);
-                Módosítás(Telephely, 0, Adat.ID);
+                Módosítás(Telephely, 0, Előző.ID);
+                Módosítás(Telephely, Előző.ID, Adat.ID);
+                Módosítás(Telephely, Adat.ID, 0);
             }
             catch (HibásBevittAdat ex)
             {
