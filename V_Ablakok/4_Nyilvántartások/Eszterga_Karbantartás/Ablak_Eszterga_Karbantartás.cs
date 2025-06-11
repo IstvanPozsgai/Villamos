@@ -536,7 +536,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                                               Megjegyzes,
                                                               Rogzito,
                                                               MaiDatum);
-                Kez_Muvelet_Naplo.EsztergaNaplózás(ADAT);
+                Kez_Muvelet_Naplo.EsztergaNaplozas(ADAT);
 
             }
             catch (HibásBevittAdat ex)

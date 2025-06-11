@@ -520,7 +520,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (rekord.ID != KovetkezoID)
                 {
                     Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(rekord.ID);
-                    KézMűveletek.Rendezés(ADAT, KovetkezoID);
+                    KézMűveletek.Rendezes(ADAT, KovetkezoID);
                     rekord.ID = KovetkezoID;
                 }
 
@@ -1226,7 +1226,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     maiDatum
                 );
 
-                KézNapló.EsztergaNaplózás(adat);
+                KézNapló.EsztergaNaplozas(adat);
             }
         }
 
