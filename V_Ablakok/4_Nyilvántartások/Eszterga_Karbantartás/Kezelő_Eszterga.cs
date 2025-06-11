@@ -13,11 +13,11 @@ namespace Villamos.Villamos_Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
         readonly string jelszó = "bozaim";
         readonly string Tabla_Muvelet = "Műveletek";
-        public List<Adat_Eszterga_Műveletek> Lista_Adatok()
+        public List<Adat_Eszterga_Muveletek> Lista_Adatok()
         {
             string szöveg = $"SELECT * FROM {Tabla_Muvelet} ORDER BY ID  ";
-            List<Adat_Eszterga_Műveletek> Adatok = new List<Adat_Eszterga_Műveletek>();
-            Adat_Eszterga_Műveletek Adat;
+            List<Adat_Eszterga_Muveletek> Adatok = new List<Adat_Eszterga_Muveletek>();
+            Adat_Eszterga_Muveletek Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -31,7 +31,7 @@ namespace Villamos.Villamos_Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Eszterga_Műveletek(
+                                Adat = new Adat_Eszterga_Muveletek(
                                         rekord["ID"].ToÉrt_Int(),
                                         rekord["Művelet"].ToStrTrim(),
                                         rekord["Egység"].ToÉrt_Int(),
@@ -49,7 +49,7 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
-        public void Rögzítés(Adat_Eszterga_Műveletek Adat)
+        public void Rogzites(Adat_Eszterga_Muveletek Adat)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Törlés(Adat_Eszterga_Műveletek Adat, bool törlés)
+        public void Törlés(Adat_Eszterga_Muveletek Adat, bool törlés)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Villamos.Villamos_Kezelők
             int válasz = 1;
             try
             {
-                List<Adat_Eszterga_Műveletek> Adatok = Lista_Adatok();
+                List<Adat_Eszterga_Muveletek> Adatok = Lista_Adatok();
                 if (Adatok.Count > 0) válasz = Adatok.Max(a => a.ID) + 1;
             }
             catch (HibásBevittAdat ex)
@@ -111,7 +111,7 @@ namespace Villamos.Villamos_Kezelők
             }
             return válasz;
         }
-        public void Módosítás(Adat_Eszterga_Műveletek Adat)
+        public void Módosítás(Adat_Eszterga_Muveletek Adat)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Megjegyzés_Módosítás(Adat_Eszterga_Műveletek Adat)
+        public void Megjegyzés_Módosítás(Adat_Eszterga_Muveletek Adat)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Rendezés(Adat_Eszterga_Műveletek Adat, int KovetkezoID)
+        public void Rendezés(Adat_Eszterga_Muveletek Adat, int KovetkezoID)
         {
             try
             {
@@ -165,7 +165,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void MeglévőMűvelet_Módosítás(Adat_Eszterga_Műveletek Adat)
+        public void MeglevoMuvelet_Modositas(Adat_Eszterga_Muveletek Adat)
         {
             try
             {
@@ -190,7 +190,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void MűveletCsere(Adat_Eszterga_Műveletek rekord1, Adat_Eszterga_Műveletek rekord2)
+        public void MuveletCsere(Adat_Eszterga_Muveletek rekord1, Adat_Eszterga_Muveletek rekord2)
         {
             try
             {
@@ -226,7 +226,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void MűveletSorrend(int ElsoID, int MasodikID)
+        public void MuveletSorrend(int ElsoID, int MasodikID)
         {
             try
             {
@@ -265,11 +265,11 @@ namespace Villamos.Villamos_Kezelők
         readonly string jelszó = "bozaim";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
         readonly string Tabla_Uzem = "Üzemóra";
-        public List<Adat_Eszterga_Üzemóra> Lista_Adatok()
+        public List<Adat_Eszterga_Uzemora> Lista_Adatok()
         {
             string szöveg = $"SELECT * FROM {Tabla_Uzem} ORDER BY Dátum, ID  ";
-            List<Adat_Eszterga_Üzemóra> Adatok = new List<Adat_Eszterga_Üzemóra>();
-            Adat_Eszterga_Üzemóra Adat;
+            List<Adat_Eszterga_Uzemora> Adatok = new List<Adat_Eszterga_Uzemora>();
+            Adat_Eszterga_Uzemora Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -283,7 +283,7 @@ namespace Villamos.Villamos_Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Eszterga_Üzemóra(
+                                Adat = new Adat_Eszterga_Uzemora(
                                         rekord["ID"].ToÉrt_Int(),
                                         rekord["Üzemóra"].ToÉrt_Long(),
                                         rekord["Dátum"].ToÉrt_DaTeTime(),
@@ -296,13 +296,13 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
-        public void Rögzítés(Adat_Eszterga_Üzemóra Adat)
+        public void Rogzites(Adat_Eszterga_Uzemora Adat)
         {
             try
             {
                 string szöveg = $"INSERT INTO {Tabla_Uzem} (ID, Üzemóra, Dátum, Státus) VALUES(";
                 szöveg += $"'{Sorszám()}', ";
-                szöveg += $"{Adat.Üzemóra}, ";
+                szöveg += $"{Adat.Uzemora}, ";
                 szöveg += $"'{Adat.Dátum:yyyy-MM-dd}', ";
                 szöveg += $"{(Adat.Státus ? "TRUE" : "FALSE")})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -317,7 +317,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Törlés(Adat_Eszterga_Üzemóra Adat)
+        public void Törlés(Adat_Eszterga_Uzemora Adat)
         {
             try
             {
@@ -339,7 +339,7 @@ namespace Villamos.Villamos_Kezelők
             int válasz = 1;
             try
             {
-                List<Adat_Eszterga_Üzemóra> Adatok = Lista_Adatok();
+                List<Adat_Eszterga_Uzemora> Adatok = Lista_Adatok();
                 if (Adatok.Count > 0) válasz = Adatok.Max(a => a.ID) + 1;
             }
             catch (HibásBevittAdat ex)
@@ -359,11 +359,11 @@ namespace Villamos.Villamos_Kezelők
         readonly string jelszó = "bozaim";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{DateTime.Now.Year}_Napló.mdb";
         readonly string Tabla_Napló = "Műveletek_Napló";
-        public List<Adat_Eszterga_Műveletek_Napló> Lista_Adatok()
+        public List<Adat_Eszterga_Muveletek_Naplo> Lista_Adatok()
         {
            string szöveg = "SELECT * FROM Műveletek_Napló ORDER BY ID ";
-            List<Adat_Eszterga_Műveletek_Napló> Adatok = new List<Adat_Eszterga_Műveletek_Napló>();
-            Adat_Eszterga_Műveletek_Napló Adat;
+            List<Adat_Eszterga_Muveletek_Naplo> Adatok = new List<Adat_Eszterga_Muveletek_Naplo>();
+            Adat_Eszterga_Muveletek_Naplo Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -377,7 +377,7 @@ namespace Villamos.Villamos_Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Eszterga_Műveletek_Napló(
+                                Adat = new Adat_Eszterga_Muveletek_Naplo(
                                         rekord["ID"].ToÉrt_Int(),
                                         rekord["Művelet"].ToStrTrim(),
                                         rekord["Mennyi_Dátum"].ToÉrt_Int(),
@@ -395,7 +395,7 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
-        public void EsztergaNaplózás(Adat_Eszterga_Műveletek_Napló Adat)
+        public void EsztergaNaplózás(Adat_Eszterga_Muveletek_Naplo Adat)
         {
             try
             {
@@ -421,7 +421,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Update(Adat_Eszterga_Műveletek_Napló újAdat, DateTime eredetiDatum)
+        public void Update(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
         {
             try
             {

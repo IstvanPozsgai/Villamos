@@ -25,8 +25,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Listák
-        private List<Adat_Eszterga_Műveletek> AdatokMűvelet;
-        private List<Adat_Eszterga_Üzemóra> AdatokÜzemóra;
+        private List<Adat_Eszterga_Muveletek> AdatokMűvelet;
+        private List<Adat_Eszterga_Uzemora> AdatokÜzemóra;
         #endregion
 
         #region Kezelők
@@ -104,15 +104,15 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 AdatTábla.Columns.Add("Dátum");
                 AdatTábla.Columns.Add("Státusz");
 
-                AdatokÜzemóra = Funkció.Eszterga_ÜzemóraFeltölt();
+                AdatokÜzemóra = Funkció.Eszterga_UzemoraFeltolt();
 
                 AdatTábla.Rows.Clear();
 
-                foreach (Adat_Eszterga_Üzemóra rekord in AdatokÜzemóra)
+                foreach (Adat_Eszterga_Uzemora rekord in AdatokÜzemóra)
                 {
                     DataRow Soradat = AdatTábla.NewRow();
                     Soradat["ID"] = rekord.ID;
-                    Soradat["Üzemóra"] = rekord.Üzemóra;
+                    Soradat["Üzemóra"] = rekord.Uzemora;
                     Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
                     Soradat["Státusz"] = rekord.Státus ? "Törölt" : "Aktív";
 
@@ -226,7 +226,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 DateTime UjDatum = DtmPckrDátum.Value.Date;
                 bool UjStatus = ChckBxStátus.Checked;
 
-                AdatokÜzemóra = Funkció.Eszterga_ÜzemóraFeltölt();
+                AdatokÜzemóra = Funkció.Eszterga_UzemoraFeltolt();
 
                 if (!DátumEllenőrzés(UjDatum)) return;
 
@@ -303,12 +303,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             long ElozoUzemora = (from a in AdatokÜzemóra
                                  where a.Dátum < UjDatum && a.Státus == false
                                  orderby a.Dátum descending
-                                 select a.Üzemóra).FirstOrDefault();
+                                 select a.Uzemora).FirstOrDefault();
 
             long UtanaUzemora = (from a in AdatokÜzemóra
                                  where a.Dátum > UjDatum && a.Státus == false
                                  orderby a.Dátum
-                                 select a.Üzemóra).FirstOrDefault();
+                                 select a.Uzemora).FirstOrDefault();
 
             if (UjUzemora <= ElozoUzemora || (UtanaUzemora != 0 && UjUzemora >= UtanaUzemora))
             {
@@ -318,11 +318,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
 
 
-            Adat_Eszterga_Üzemóra ADAT = new Adat_Eszterga_Üzemóra(0,
+            Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
                                               UjUzemora,
                                               UjDatum,
                                               UjStatus);
-            KézÜzemóra.Rögzítés(ADAT);
+            KézÜzemóra.Rogzites(ADAT);
 
             MessageBox.Show("Új rekord sikeresen létrehozva.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return true;
@@ -344,21 +344,21 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             if (!TáblaEllenőrzés(AktivID, UjUzemora, UjDatum, UjStatus))
                 return false;
 
-            Adat_Eszterga_Üzemóra VanID = AdatokÜzemóra.FirstOrDefault(a => a.ID == AktivID);
+            Adat_Eszterga_Uzemora VanID = AdatokÜzemóra.FirstOrDefault(a => a.ID == AktivID);
 
             if (VanID == null)
                 return false;
 
             DateTime EredetiDatum = VanID.Dátum;
-            long EredetiUzemora = VanID.Üzemóra;
+            long EredetiUzemora = VanID.Uzemora;
             bool EredetiStatusz = VanID.Státus;
 
             if (EredetiDatum != DateTime.Today && EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
             {
                 if (UjStatus)
-                    KézÜzemóra.Törlés(new Adat_Eszterga_Üzemóra(AktivID));
+                    KézÜzemóra.Törlés(new Adat_Eszterga_Uzemora(AktivID));
                 else
-                    KézÜzemóra.Rögzítés(new Adat_Eszterga_Üzemóra(0, EredetiUzemora, EredetiDatum, false));
+                    KézÜzemóra.Rogzites(new Adat_Eszterga_Uzemora(0, EredetiUzemora, EredetiDatum, false));
             }
             else
             {
@@ -367,8 +367,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 else
                 {
-                    KézÜzemóra.Törlés(new Adat_Eszterga_Üzemóra(AktivID));
-                    KézÜzemóra.Rögzítés(new Adat_Eszterga_Üzemóra(0, UjUzemora, UjDatum, false));
+                    KézÜzemóra.Törlés(new Adat_Eszterga_Uzemora(AktivID));
+                    KézÜzemóra.Rogzites(new Adat_Eszterga_Uzemora(0, UjUzemora, UjDatum, false));
                     MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -384,17 +384,17 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void Frissít_MűveletTáblázat(DateTime EredetiDatum, DateTime UjDatum, long EredetiUzemora, long UjUzemora)
         {
-            AdatokMűvelet = Funkció.Eszterga_KarbantartasFeltölt();
+            AdatokMűvelet = Funkció.Eszterga_KarbantartasFeltolt();
             if (UjDatum != EredetiDatum || UjUzemora != EredetiUzemora)
             {
-                List<Adat_Eszterga_Műveletek> rekord = (from a in AdatokMűvelet
+                List<Adat_Eszterga_Muveletek> rekord = (from a in AdatokMűvelet
                                                         where (a.Utolsó_Dátum == EredetiDatum || a.Utolsó_Üzemóra_Állás == EredetiUzemora)
                                                         && a.Státus != true
                                                         select a).ToList();
 
-                foreach (Adat_Eszterga_Műveletek Muvelet in rekord)
+                foreach (Adat_Eszterga_Muveletek Muvelet in rekord)
                 {
-                    Adat_Eszterga_Műveletek ADAT = new Adat_Eszterga_Műveletek(UjDatum, UjUzemora, Muvelet.ID);
+                    Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(UjDatum, UjUzemora, Muvelet.ID);
                     KézMűveletek.Módosítás(ADAT);
                 }
             }
@@ -410,7 +410,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
-                Adat_Eszterga_Üzemóra AktivRekord = AdatokÜzemóra.FirstOrDefault(a => a.Dátum == UjDatum && !a.Státus);
+                Adat_Eszterga_Uzemora AktivRekord = AdatokÜzemóra.FirstOrDefault(a => a.Dátum == UjDatum && !a.Státus);
 
                 if (UjStatus == false && AktivRekord != null && AktivRekord.ID != AktivID)
                 {
@@ -419,9 +419,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     return false;
                 }
 
-                Adat_Eszterga_Üzemóra KivalasztottRekord = AdatokÜzemóra.FirstOrDefault(a => a.ID == AktivID);
+                Adat_Eszterga_Uzemora KivalasztottRekord = AdatokÜzemóra.FirstOrDefault(a => a.ID == AktivID);
                 if (KivalasztottRekord != null &&
-                    KivalasztottRekord.Üzemóra == UjUzemora &&
+                    KivalasztottRekord.Uzemora == UjUzemora &&
                     KivalasztottRekord.Dátum == UjDatum &&
                     KivalasztottRekord.Státus == UjStatus)
                 {
@@ -457,19 +457,19 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 return false;
             }
 
-            Adat_Eszterga_Üzemóra ElozoRekord = AdatokÜzemóra
+            Adat_Eszterga_Uzemora ElozoRekord = AdatokÜzemóra
                 .Where(a => a.Dátum < UjDatum && !a.Státus)
                 .OrderByDescending(a => a.Dátum)
                 .FirstOrDefault();
 
-            long ElozoUzemora = ElozoRekord?.Üzemóra ?? int.MinValue;
+            long ElozoUzemora = ElozoRekord?.Uzemora ?? int.MinValue;
 
-            Adat_Eszterga_Üzemóra UtanaRekord = AdatokÜzemóra
+            Adat_Eszterga_Uzemora UtanaRekord = AdatokÜzemóra
                 .Where(a => a.Dátum > UjDatum && !a.Státus)
                 .OrderBy(a => a.Dátum)
                 .FirstOrDefault();
 
-            long UtanaUzemora = UtanaRekord?.Üzemóra ?? int.MaxValue;
+            long UtanaUzemora = UtanaRekord?.Uzemora ?? int.MaxValue;
 
             if (UjUzemora <= ElozoUzemora || UjUzemora >= UtanaUzemora)
             {
@@ -488,7 +488,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void UtolsoUzemoraTorles(int AktivID)
         {
-            Adat_Eszterga_Üzemóra ADAT = new Adat_Eszterga_Üzemóra(AktivID);
+            Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(AktivID);
             KézÜzemóra.Törlés(ADAT);
 
             using (Ablak_Eszterga_Karbantartás_Segéd SegedAblak = new Ablak_Eszterga_Karbantartás_Segéd())

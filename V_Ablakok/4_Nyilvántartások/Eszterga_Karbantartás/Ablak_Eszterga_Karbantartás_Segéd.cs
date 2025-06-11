@@ -11,7 +11,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
     public partial class Ablak_Eszterga_Karbantartás_Segéd : Form
     {
         #region osztalyszintű elemek
-        private List<Adat_Eszterga_Üzemóra> AdatokÜzemóra;
+        private List<Adat_Eszterga_Uzemora> AdatokÜzemóra;
         readonly private Kezelő_Eszterga_Üzemóra Kéz_Üzemóra = new Kezelő_Eszterga_Üzemóra();
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         public int Üzemóra { get; private set; }
@@ -70,14 +70,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             if (!Baross || !MyF.Vanjoga(160, 1))
             {
-                AdatokÜzemóra = Eszterga_Funkció.Eszterga_ÜzemóraFeltölt();
-                Adat_Eszterga_Üzemóra Uzemora = (from a in AdatokÜzemóra
+                AdatokÜzemóra = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+                Adat_Eszterga_Uzemora Uzemora = (from a in AdatokÜzemóra
                                                 where a.Státus != true
                                                 orderby a.Dátum descending 
                                                 select a).FirstOrDefault();
 
                 if (Uzemora != null)
-                    LblElözö.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Üzemóra}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
+                    LblElözö.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Uzemora}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
                 else
                     LblElözö.Text = "Nincs előző napi üzemóra rögzítve.";
 
@@ -88,8 +88,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             LblSzöveg.Text = $"Írja be mai napi Üzemóra állását.";
 
-            AdatokÜzemóra = Eszterga_Funkció.Eszterga_ÜzemóraFeltölt();
-            Adat_Eszterga_Üzemóra rekord = (from a in AdatokÜzemóra
+            AdatokÜzemóra = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+            Adat_Eszterga_Uzemora rekord = (from a in AdatokÜzemóra
                                             where a.Státus != true
                                             orderby a.Dátum descending
                                             select a).FirstOrDefault();
@@ -105,7 +105,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 this.Close();
             }
 
-            LblElözö.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Üzemóra}\nDátum: {rekord.Dátum.ToShortDateString()}";
+            LblElözö.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Uzemora}\nDátum: {rekord.Dátum.ToShortDateString()}";
         }
 
         /// <summary>
@@ -136,26 +136,26 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             if (int.TryParse(TxtBxUzemOra.Text, out int uzemOra) && uzemOra >= 0)
             {
-                AdatokÜzemóra = Eszterga_Funkció.Eszterga_ÜzemóraFeltölt();
+                AdatokÜzemóra = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
 
-                Adat_Eszterga_Üzemóra rekord = (from a in AdatokÜzemóra
+                Adat_Eszterga_Uzemora rekord = (from a in AdatokÜzemóra
                                                 where !a.Státus
-                                                orderby a.Üzemóra descending
+                                                orderby a.Uzemora descending
                                                 select a).FirstOrDefault();
 
-                if (rekord != null && uzemOra < rekord.Üzemóra)
+                if (rekord != null && uzemOra < rekord.Uzemora)
                 {
-                    MessageBox.Show($"Az új üzemóra érték nem lehet kisebb, mint az előző: {rekord.Üzemóra}.", "Hiba.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Az új üzemóra érték nem lehet kisebb, mint az előző: {rekord.Uzemora}.", "Hiba.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     TxtBxUzemOra.Focus();
                     return;
                 }
                 Üzemóra = uzemOra;
 
-                Adat_Eszterga_Üzemóra ADAT = new Adat_Eszterga_Üzemóra(0,
+                Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
                                                               uzemOra,
                                                               DateTime.Today, 
                                                               false);
-                Kéz_Üzemóra.Rögzítés (ADAT);
+                Kéz_Üzemóra.Rogzites (ADAT);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();

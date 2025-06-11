@@ -46,7 +46,7 @@
             this.CmbxEgység = new System.Windows.Forms.ComboBox();
             this.DtmPckrUtolsóDátum = new System.Windows.Forms.DateTimePicker();
             this.ChckBxStátus = new System.Windows.Forms.CheckBox();
-            this.TáblaMűvelet = new Zuby.ADGV.AdvancedDataGridView();
+            this.TablaMuvelet = new Zuby.ADGV.AdvancedDataGridView();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Btn_Módosít = new System.Windows.Forms.Button();
             this.Btn_Excel = new System.Windows.Forms.Button();
@@ -64,15 +64,15 @@
             this.LblUtolagNaplozasTabla = new System.Windows.Forms.Label();
             this.LblAznapiUzemora = new System.Windows.Forms.Label();
             this.TxtBxUtolagUzemora = new System.Windows.Forms.TextBox();
-            this.TáblaUtólagMűvelet = new Zuby.ADGV.AdvancedDataGridView();
+            this.TablaUtolagMuvelet = new Zuby.ADGV.AdvancedDataGridView();
             this.LblDatumUtolag = new System.Windows.Forms.Label();
-            this.TáblaNapló = new Zuby.ADGV.AdvancedDataGridView();
+            this.TablaNaplo = new Zuby.ADGV.AdvancedDataGridView();
             this.DtmPckrUtolagos = new System.Windows.Forms.DateTimePicker();
-            ((System.ComponentModel.ISupportInitialize)(this.TáblaMűvelet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TablaMuvelet)).BeginInit();
             this.GrpBxMűveletek.SuspendLayout();
             this.GrpBxUtolagos.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TáblaUtólagMűvelet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TáblaNapló)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TablaUtolagMuvelet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TablaNaplo)).BeginInit();
             this.SuspendLayout();
             // 
             // TxtBxId
@@ -216,30 +216,30 @@
             // 
             // TáblaMűvelet
             // 
-            this.TáblaMűvelet.AllowUserToAddRows = false;
-            this.TáblaMűvelet.AllowUserToDeleteRows = false;
-            this.TáblaMűvelet.AllowUserToResizeRows = false;
-            this.TáblaMűvelet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TablaMuvelet.AllowUserToAddRows = false;
+            this.TablaMuvelet.AllowUserToDeleteRows = false;
+            this.TablaMuvelet.AllowUserToResizeRows = false;
+            this.TablaMuvelet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TáblaMűvelet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.TáblaMűvelet.FilterAndSortEnabled = true;
-            this.TáblaMűvelet.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.TáblaMűvelet.Location = new System.Drawing.Point(10, 9);
-            this.TáblaMűvelet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.TáblaMűvelet.MaxFilterButtonImageHeight = 23;
-            this.TáblaMűvelet.Name = "TáblaMűvelet";
-            this.TáblaMűvelet.ReadOnly = true;
-            this.TáblaMűvelet.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.TáblaMűvelet.RowHeadersVisible = false;
-            this.TáblaMűvelet.RowHeadersWidth = 62;
-            this.TáblaMűvelet.RowTemplate.Height = 28;
-            this.TáblaMűvelet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.TáblaMűvelet.Size = new System.Drawing.Size(1146, 249);
-            this.TáblaMűvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.TáblaMűvelet.TabIndex = 28;
-            this.TáblaMűvelet.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            this.TáblaMűvelet.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TáblaMűvelet_CellFormatting);
-            this.TáblaMűvelet.SelectionChanged += new System.EventHandler(this.Tábla_SelectionChanged);
+            this.TablaMuvelet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TablaMuvelet.FilterAndSortEnabled = true;
+            this.TablaMuvelet.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TablaMuvelet.Location = new System.Drawing.Point(10, 9);
+            this.TablaMuvelet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.TablaMuvelet.MaxFilterButtonImageHeight = 23;
+            this.TablaMuvelet.Name = "TáblaMűvelet";
+            this.TablaMuvelet.ReadOnly = true;
+            this.TablaMuvelet.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.TablaMuvelet.RowHeadersVisible = false;
+            this.TablaMuvelet.RowHeadersWidth = 62;
+            this.TablaMuvelet.RowTemplate.Height = 28;
+            this.TablaMuvelet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.TablaMuvelet.Size = new System.Drawing.Size(1146, 249);
+            this.TablaMuvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TablaMuvelet.TabIndex = 28;
+            this.TablaMuvelet.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
+            this.TablaMuvelet.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TáblaMűvelet_CellFormatting);
+            this.TablaMuvelet.SelectionChanged += new System.EventHandler(this.Tábla_SelectionChanged);
             // 
             // toolTip1
             // 
@@ -372,7 +372,7 @@
             this.GrpBxMűveletek.Controls.Add(this.Üzemóra_Oldal);
             this.GrpBxMűveletek.Controls.Add(this.Btn_Módosít);
             this.GrpBxMűveletek.Controls.Add(this.Btn_Excel);
-            this.GrpBxMűveletek.Controls.Add(this.TáblaMűvelet);
+            this.GrpBxMűveletek.Controls.Add(this.TablaMuvelet);
             this.GrpBxMűveletek.Controls.Add(this.Btn_ÚjFelvétel);
             this.GrpBxMűveletek.Controls.Add(this.ChckBxStátus);
             this.GrpBxMűveletek.Controls.Add(this.Btn_Csere);
@@ -411,9 +411,9 @@
             this.GrpBxUtolagos.Controls.Add(this.LblUtolagNaplozasTabla);
             this.GrpBxUtolagos.Controls.Add(this.LblAznapiUzemora);
             this.GrpBxUtolagos.Controls.Add(this.TxtBxUtolagUzemora);
-            this.GrpBxUtolagos.Controls.Add(this.TáblaUtólagMűvelet);
+            this.GrpBxUtolagos.Controls.Add(this.TablaUtolagMuvelet);
             this.GrpBxUtolagos.Controls.Add(this.LblDatumUtolag);
-            this.GrpBxUtolagos.Controls.Add(this.TáblaNapló);
+            this.GrpBxUtolagos.Controls.Add(this.TablaNaplo);
             this.GrpBxUtolagos.Controls.Add(this.DtmPckrUtolagos);
             this.GrpBxUtolagos.Location = new System.Drawing.Point(12, 469);
             this.GrpBxUtolagos.Name = "GrpBxUtolagos";
@@ -478,29 +478,29 @@
             // 
             // TáblaUtólagMűvelet
             // 
-            this.TáblaUtólagMűvelet.AllowUserToAddRows = false;
-            this.TáblaUtólagMűvelet.AllowUserToDeleteRows = false;
-            this.TáblaUtólagMűvelet.AllowUserToResizeRows = false;
-            this.TáblaUtólagMűvelet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TablaUtolagMuvelet.AllowUserToAddRows = false;
+            this.TablaUtolagMuvelet.AllowUserToDeleteRows = false;
+            this.TablaUtolagMuvelet.AllowUserToResizeRows = false;
+            this.TablaUtolagMuvelet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TáblaUtólagMűvelet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.TáblaUtólagMűvelet.FilterAndSortEnabled = true;
-            this.TáblaUtólagMűvelet.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.TáblaUtólagMűvelet.Location = new System.Drawing.Point(125, 20);
-            this.TáblaUtólagMűvelet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.TáblaUtólagMűvelet.MaxFilterButtonImageHeight = 23;
-            this.TáblaUtólagMűvelet.Name = "TáblaUtólagMűvelet";
-            this.TáblaUtólagMűvelet.ReadOnly = true;
-            this.TáblaUtólagMűvelet.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.TáblaUtólagMűvelet.RowHeadersVisible = false;
-            this.TáblaUtólagMűvelet.RowHeadersWidth = 62;
-            this.TáblaUtólagMűvelet.RowTemplate.Height = 28;
-            this.TáblaUtólagMűvelet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.TáblaUtólagMűvelet.Size = new System.Drawing.Size(656, 204);
-            this.TáblaUtólagMűvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.TáblaUtólagMűvelet.TabIndex = 47;
-            this.TáblaUtólagMűvelet.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TáblaUtólagMűvelet_CellFormatting);
-            this.TáblaUtólagMűvelet.SelectionChanged += new System.EventHandler(this.TáblaUtólagMűvelet_SelectionChanged);
+            this.TablaUtolagMuvelet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TablaUtolagMuvelet.FilterAndSortEnabled = true;
+            this.TablaUtolagMuvelet.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TablaUtolagMuvelet.Location = new System.Drawing.Point(125, 20);
+            this.TablaUtolagMuvelet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.TablaUtolagMuvelet.MaxFilterButtonImageHeight = 23;
+            this.TablaUtolagMuvelet.Name = "TáblaUtólagMűvelet";
+            this.TablaUtolagMuvelet.ReadOnly = true;
+            this.TablaUtolagMuvelet.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.TablaUtolagMuvelet.RowHeadersVisible = false;
+            this.TablaUtolagMuvelet.RowHeadersWidth = 62;
+            this.TablaUtolagMuvelet.RowTemplate.Height = 28;
+            this.TablaUtolagMuvelet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.TablaUtolagMuvelet.Size = new System.Drawing.Size(656, 204);
+            this.TablaUtolagMuvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TablaUtolagMuvelet.TabIndex = 47;
+            this.TablaUtolagMuvelet.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TáblaUtólagMűvelet_CellFormatting);
+            this.TablaUtolagMuvelet.SelectionChanged += new System.EventHandler(this.TáblaUtólagMűvelet_SelectionChanged);
             // 
             // LblDatumUtolag
             // 
@@ -515,28 +515,28 @@
             // 
             // TáblaNapló
             // 
-            this.TáblaNapló.AllowUserToAddRows = false;
-            this.TáblaNapló.AllowUserToDeleteRows = false;
-            this.TáblaNapló.AllowUserToResizeRows = false;
-            this.TáblaNapló.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.TablaNaplo.AllowUserToAddRows = false;
+            this.TablaNaplo.AllowUserToDeleteRows = false;
+            this.TablaNaplo.AllowUserToResizeRows = false;
+            this.TablaNaplo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TáblaNapló.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.TáblaNapló.FilterAndSortEnabled = true;
-            this.TáblaNapló.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.TáblaNapló.Location = new System.Drawing.Point(125, 232);
-            this.TáblaNapló.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.TáblaNapló.MaxFilterButtonImageHeight = 23;
-            this.TáblaNapló.Name = "TáblaNapló";
-            this.TáblaNapló.ReadOnly = true;
-            this.TáblaNapló.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.TáblaNapló.RowHeadersVisible = false;
-            this.TáblaNapló.RowHeadersWidth = 62;
-            this.TáblaNapló.RowTemplate.Height = 28;
-            this.TáblaNapló.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.TáblaNapló.Size = new System.Drawing.Size(656, 212);
-            this.TáblaNapló.SortStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.TáblaNapló.TabIndex = 29;
-            this.TáblaNapló.SelectionChanged += new System.EventHandler(this.TáblaNapló_SelectionChanged);
+            this.TablaNaplo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TablaNaplo.FilterAndSortEnabled = true;
+            this.TablaNaplo.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TablaNaplo.Location = new System.Drawing.Point(125, 232);
+            this.TablaNaplo.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.TablaNaplo.MaxFilterButtonImageHeight = 23;
+            this.TablaNaplo.Name = "TáblaNapló";
+            this.TablaNaplo.ReadOnly = true;
+            this.TablaNaplo.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.TablaNaplo.RowHeadersVisible = false;
+            this.TablaNaplo.RowHeadersWidth = 62;
+            this.TablaNaplo.RowTemplate.Height = 28;
+            this.TablaNaplo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.TablaNaplo.Size = new System.Drawing.Size(656, 212);
+            this.TablaNaplo.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TablaNaplo.TabIndex = 29;
+            this.TablaNaplo.SelectionChanged += new System.EventHandler(this.TáblaNapló_SelectionChanged);
             // 
             // DtmPckrUtolagos
             // 
@@ -565,13 +565,13 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Új_ablak_EsztergaMódosít_Closed);
             this.Load += new System.EventHandler(this.Ablak_Eszterga_Karbantartás_Módosít_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.TáblaMűvelet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TablaMuvelet)).EndInit();
             this.GrpBxMűveletek.ResumeLayout(false);
             this.GrpBxMűveletek.PerformLayout();
             this.GrpBxUtolagos.ResumeLayout(false);
             this.GrpBxUtolagos.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TáblaUtólagMűvelet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TáblaNapló)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TablaUtolagMuvelet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TablaNaplo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -594,7 +594,7 @@
         internal System.Windows.Forms.DateTimePicker DtmPckrUtolsóDátum;
         internal System.Windows.Forms.CheckBox ChckBxStátus;
         internal System.Windows.Forms.Button Btn_ÚjFelvétel;
-        internal Zuby.ADGV.AdvancedDataGridView TáblaMűvelet;
+        internal Zuby.ADGV.AdvancedDataGridView TablaMuvelet;
         internal System.Windows.Forms.Button Btn_Csere;
         internal System.Windows.Forms.Button Btn_Sorrend;
         internal System.Windows.Forms.Button Btn_Törlés;
@@ -604,9 +604,9 @@
         internal System.Windows.Forms.GroupBox GrpBxMűveletek;
         internal System.Windows.Forms.Button Üzemóra_Oldal;
         private System.Windows.Forms.GroupBox GrpBxUtolagos;
-        internal Zuby.ADGV.AdvancedDataGridView TáblaNapló;
+        internal Zuby.ADGV.AdvancedDataGridView TablaNaplo;
         internal System.Windows.Forms.DateTimePicker DtmPckrUtolagos;
-        internal Zuby.ADGV.AdvancedDataGridView TáblaUtólagMűvelet;
+        internal Zuby.ADGV.AdvancedDataGridView TablaUtolagMuvelet;
         internal System.Windows.Forms.Button BttnUtolag_Modosit;
         internal System.Windows.Forms.Label LblDatumUtolag;
         internal System.Windows.Forms.Label LblAznapiUzemora;
