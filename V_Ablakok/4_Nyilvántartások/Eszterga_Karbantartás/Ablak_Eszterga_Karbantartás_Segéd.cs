@@ -11,10 +11,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
     public partial class Ablak_Eszterga_Karbantartás_Segéd : Form
     {
         #region osztalyszintű elemek
-        private List<Adat_Eszterga_Uzemora> AdatokÜzemóra;
-        readonly private Kezelő_Eszterga_Üzemóra Kéz_Üzemóra = new Kezelő_Eszterga_Üzemóra();
+        private List<Adat_Eszterga_Uzemora> AdatokUzemora;
+        readonly private Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
-        public int Üzemóra { get; private set; }
+        public int Uzemora { get; private set; }
         #endregion
 
         #region Alap
@@ -25,14 +25,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         public Ablak_Eszterga_Karbantartás_Segéd()
         {
             InitializeComponent();
-            Jogosultságkiosztás();
+            Jogosultsagkiosztas();
         }
 
         /// <summary>
         /// Beállítja a jogosultságok alapján az űrlap vezérlőinek láthatóságát és engedélyezettségét.
         /// Jogosultság alapján engedélyezi vagy tiltja az üzemóra mezőt és a rögzítő gombot.
         /// </summary>
-        private void Jogosultságkiosztás()
+        private void Jogosultsagkiosztas()
         {
             try
             {
@@ -70,8 +70,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             if (!Baross || !MyF.Vanjoga(160, 1))
             {
-                AdatokÜzemóra = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
-                Adat_Eszterga_Uzemora Uzemora = (from a in AdatokÜzemóra
+                AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+                Adat_Eszterga_Uzemora Uzemora = (from a in AdatokUzemora
                                                 where a.Státus != true
                                                 orderby a.Dátum descending 
                                                 select a).FirstOrDefault();
@@ -88,8 +88,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             LblSzöveg.Text = $"Írja be mai napi Üzemóra állását.";
 
-            AdatokÜzemóra = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
-            Adat_Eszterga_Uzemora rekord = (from a in AdatokÜzemóra
+            AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+            Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
                                             where a.Státus != true
                                             orderby a.Dátum descending
                                             select a).FirstOrDefault();
@@ -136,9 +136,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             if (int.TryParse(TxtBxUzemOra.Text, out int uzemOra) && uzemOra >= 0)
             {
-                AdatokÜzemóra = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+                AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
 
-                Adat_Eszterga_Uzemora rekord = (from a in AdatokÜzemóra
+                Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
                                                 where !a.Státus
                                                 orderby a.Uzemora descending
                                                 select a).FirstOrDefault();
@@ -149,13 +149,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     TxtBxUzemOra.Focus();
                     return;
                 }
-                Üzemóra = uzemOra;
+                Uzemora = uzemOra;
 
                 Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
                                                               uzemOra,
                                                               DateTime.Today, 
                                                               false);
-                Kéz_Üzemóra.Rogzites (ADAT);
+                Kez_Uzemora.Rogzites (ADAT);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();

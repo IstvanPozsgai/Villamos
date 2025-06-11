@@ -94,7 +94,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 using (Ablak_Eszterga_Karbantartás_Segéd SegedAblak = new Ablak_Eszterga_Karbantartás_Segéd())
                 {
                     if (SegedAblak.ShowDialog() == DialogResult.OK)
-                        Uzemora = SegedAblak.Üzemóra;
+                        Uzemora = SegedAblak.Uzemora;
                     else
                     {
                         this.Close();
