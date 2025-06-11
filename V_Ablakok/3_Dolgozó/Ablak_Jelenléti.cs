@@ -874,6 +874,7 @@ namespace Villamos
                 do
                 {
                     MyE.Egyesít(munkalap, MyE.Oszlopnév(oszlop) + (hanyadikember + 6).ToString() + ":" + MyE.Oszlopnév(oszlop + 2) + (hanyadikember + 6).ToString());
+                    MyE.Vastagkeret(MyE.Oszlopnév(oszlop) + (hanyadikember + 6).ToString() + ":" + MyE.Oszlopnév(oszlop + 2).ToString() + (hanyadikember + 6).ToString());
                     i += 1;
                     oszlop += 3;
                 }
@@ -911,11 +912,6 @@ namespace Villamos
                 // igazoló rész
                 MyE.Sormagasság((hanyadikember + 6).ToString() + ":" + (hanyadikember + 6).ToString(), 36);
                 MyE.Vastagkeret(MyE.Oszlopnév(1) + (hanyadikember + 6).ToString() + ":" + MyE.Oszlopnév(2 + 7 * 3).ToString() + (hanyadikember + 6).ToString());
-                for (int k = 1; k < 19; k += 3)
-                {
-                    MyE.Vastagkeret(MyE.Oszlopnév(k) + (hanyadikember + 6).ToString() + ":" + MyE.Oszlopnév(k + 2).ToString() + (hanyadikember + 6).ToString());
-                    oszlop += 3;
-                }
                 MyE.sor = 9 + hanyadikember;
                 MyE.Kiir(" Az igazoló aláírása", "a" + MyE.sor.ToString());
                 // színezés

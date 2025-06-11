@@ -803,6 +803,9 @@ namespace Villamos.Villamos_Ablakok
                 SzabadságOka.Items.Clear();
                 Kezelő_Kiegészítő_Szabadságok KézSzab = new Kezelő_Kiegészítő_Szabadságok();
                 List<Adat_Kiegészítő_Szabadságok> Adatok = KézSzab.Lista_Adatok(Cmbtelephely.Trim());
+                Adatok = (from a in Adatok
+                          where a.Megnevezés.Contains("kivétel")
+                          select a).ToList();
                 foreach (Adat_Kiegészítő_Szabadságok Elem in Adatok)
                     SzabadságOka.Items.Add(Elem.Megnevezés);
                 SzabadságOka.Refresh();
