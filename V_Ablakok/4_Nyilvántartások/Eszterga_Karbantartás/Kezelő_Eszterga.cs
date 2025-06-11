@@ -8,7 +8,7 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Kezelők
 {
-    public class Kezelő_Eszterga_Műveletek
+    public class Kezelo_Eszterga_Muveletek
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
         readonly string jelszó = "bozaim";
@@ -74,7 +74,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Törlés(Adat_Eszterga_Muveletek Adat, bool törlés)
+        public void Torles(Adat_Eszterga_Muveletek Adat, bool törlés)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace Villamos.Villamos_Kezelők
             }
             return válasz;
         }
-        public void Módosítás(Adat_Eszterga_Muveletek Adat)
+        public void Modositas(Adat_Eszterga_Muveletek Adat)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Megjegyzés_Módosítás(Adat_Eszterga_Muveletek Adat)
+        public void Megjegyzes_Modositas(Adat_Eszterga_Muveletek Adat)
         {
             try
             {
@@ -354,7 +354,7 @@ namespace Villamos.Villamos_Kezelők
             return válasz;
         }
     }
-    public class Kezelő_Eszterga_Műveletek_Napló
+    public class Kezelo_Eszterga_Muveletek_Naplo
     {
         readonly string jelszó = "bozaim";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{DateTime.Now.Year}_Napló.mdb";

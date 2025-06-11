@@ -30,7 +30,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Kezelők
-        readonly private Kezelő_Eszterga_Műveletek KézMűveletek = new Kezelő_Eszterga_Műveletek();
+        readonly private Kezelo_Eszterga_Muveletek KézMűveletek = new Kezelo_Eszterga_Muveletek();
         readonly private Kezelő_Eszterga_Üzemóra KézÜzemóra = new Kezelő_Eszterga_Üzemóra();
         #endregion
 
@@ -395,7 +395,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 foreach (Adat_Eszterga_Muveletek Muvelet in rekord)
                 {
                     Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(UjDatum, UjUzemora, Muvelet.ID);
-                    KézMűveletek.Módosítás(ADAT);
+                    KézMűveletek.Modositas(ADAT);
                 }
             }
             else

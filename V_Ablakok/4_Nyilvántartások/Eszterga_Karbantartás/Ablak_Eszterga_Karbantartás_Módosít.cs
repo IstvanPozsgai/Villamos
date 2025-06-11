@@ -31,8 +31,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Kezelők
-        readonly private Kezelő_Eszterga_Műveletek KézMűveletek = new Kezelő_Eszterga_Műveletek();
-        readonly private Kezelő_Eszterga_Műveletek_Napló KézNapló = new Kezelő_Eszterga_Műveletek_Napló();
+        readonly private Kezelo_Eszterga_Muveletek KézMűveletek = new Kezelo_Eszterga_Muveletek();
+        readonly private Kezelo_Eszterga_Muveletek_Naplo KézNapló = new Kezelo_Eszterga_Muveletek_Naplo();
         readonly private Kezelő_Eszterga_Üzemóra KezUzemora = new Kezelő_Eszterga_Üzemóra();
         #endregion
 
@@ -793,7 +793,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     if (rekord != null)
                     {
                         Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(Id);
-                        KézMűveletek.Törlés(ADAT, true);
+                        KézMűveletek.Torles(ADAT, true);
                     }
                 }
                 Eszterga_Valtozas?.Invoke();

@@ -29,7 +29,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[Státus] yesno)";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
-        public static void Eszterga_Karbantartás_Napló(string hely)
+        public static void Eszterga_Karbantartas_Naplo(string hely)
         {
             string szöveg;
             string jelszó = "bozaim";

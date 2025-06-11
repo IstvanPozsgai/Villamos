@@ -8,7 +8,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
     {
         public static List<Adat_Eszterga_Muveletek> Eszterga_KarbantartasFeltolt()
         {
-            Kezelő_Eszterga_Műveletek Kéz = new Kezelő_Eszterga_Műveletek();
+            Kezelo_Eszterga_Muveletek Kéz = new Kezelo_Eszterga_Muveletek();
             List<Adat_Eszterga_Muveletek> Adatok = Kéz.Lista_Adatok();
             return Adatok;
         }
@@ -21,7 +21,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
         public static List<Adat_Eszterga_Muveletek_Naplo> Eszterga_KarbantartasNaplóFeltölt()
         {
-            Kezelő_Eszterga_Műveletek_Napló Kéz = new Kezelő_Eszterga_Műveletek_Napló();
+            Kezelo_Eszterga_Muveletek_Naplo Kéz = new Kezelo_Eszterga_Muveletek_Naplo();
             List<Adat_Eszterga_Muveletek_Naplo> Adatok = Kéz.Lista_Adatok();
 
             return Adatok;
