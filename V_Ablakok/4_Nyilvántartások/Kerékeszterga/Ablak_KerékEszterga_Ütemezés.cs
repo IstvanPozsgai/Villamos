@@ -122,15 +122,14 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM telephelytábla ORDER BY telephelynév";
+                Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
+                List<Adat_kiegészítő_telephely> Adatok = KézTelep.Lista_Adatok().OrderBy(a => a.Telephelynév).ToList();
 
-                Telephely.BeginUpdate();
                 Telephely.Items.Clear();
                 Telephely.Items.Add("");
-                Telephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "telephelynév"));
-                Telephely.EndUpdate();
+                foreach (Adat_kiegészítő_telephely Elem in Adatok)
+                    Telephely.Items.Add(Elem.Telephelynév);
+
                 Telephely.Refresh();
             }
             catch (HibásBevittAdat ex)
