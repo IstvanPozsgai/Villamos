@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
         Kezelő_Osztály_Név KézNév = new Kezelő_Osztály_Név();
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
         readonly string jelszó = "kéménybe";
+        readonly string táblanév = "osztályadatok";
 
         public Kezelő_Osztály_Adat()
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
             List<Adat_Osztály_Adat> Adatok = new List<Adat_Osztály_Adat>();
             try
             {
-                string szöveg = "select * from osztályadatok ORDER BY azonosító";
+                string szöveg = $"select * from {táblanév} ORDER BY azonosító";
                 string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
                 using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
@@ -108,18 +109,18 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Osztály_Adat rekord in Adatok)
                 {
-                    string szöveg = "UPDATE osztályadatok SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    string szöveg1 = "   ";
                     for (int i = 0; i < rekord.Mezőnév.Count; i++)
                     {
                         if (rekord.Mezőnév[i].ToStrTrim() != "")
-                            szöveg += $"{rekord.Mezőnév[i].ToStrTrim()}='{rekord.Adatok[i].ToStrTrim()}', ";
+                            szöveg1 += $"{rekord.Mezőnév[i].ToStrTrim()}='{rekord.Adatok[i].ToStrTrim()}', ";
                     }
-                    szöveg = szöveg.Substring(0, szöveg.Length - 2); //az utolsó vesszőt eldobjuk
-                    szöveg += $" WHERE azonosító='{rekord.Azonosító}'";
-
-                    SzövegGy.Add(szöveg);
+                    szöveg1 = szöveg1.Substring(0, szöveg1.Length - 2); //az utolsó vesszőt eldobjuk
+                    szöveg += $"{szöveg1} WHERE azonosító='{rekord.Azonosító}'";
+                    if (szöveg1.Trim() != "") SzövegGy.Add(szöveg);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (SzövegGy.Count > 0) MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -140,7 +141,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Osztály_Adat rekord in Adatok)
                 {
-                    string szöveg = "INSERT INTO osztályadatok ( azonosító";
+                    string szöveg = $"INSERT INTO {táblanév} ( azonosító";
                     foreach (string név in rekord.Mezőnév)
                         szöveg += $", {név}";
 
