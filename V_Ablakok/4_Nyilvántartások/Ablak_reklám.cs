@@ -1131,20 +1131,11 @@ namespace Villamos
             try
             {
                 Méret.Items.Clear();
-                //string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                //string jelszó = "Mocó";
-                //string szöveg = "SELECT * FROM reklámtábla ORDER BY méret";
-                //Méret.BeginUpdate();
-                //Méret.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "méret"));
-                //Méret.EndUpdate();
-                //Méret.Refresh();
-                //Kezelő_Kiegészítő_Reklám KézReklám = new Kezelő_Kiegészítő_Reklám()
-                //Kezelő_Kiegészítő_Csoportbeosztás KézCsop = new Kezelő_Kiegészítő_Csoportbeosztás();
-                //List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsop.Lista_Adatok(Cmbtelephely.Text.Trim());
-                //foreach (Adat_Kiegészítő_Csoportbeosztás Elem in Adatok)
-                //    Csoport.Items.Add(Elem.Csoportbeosztás);
-                //Csoport.Refresh();
-
+                Kezelő_Kiegészítő_Reklám KézReklám = new Kezelő_Kiegészítő_Reklám();
+                List<Adat_Kiegészítő_Reklám> Adatok = KézReklám.Lista_Adatok();
+                foreach (Adat_Kiegészítő_Reklám Elem in Adatok)
+                    Méret.Items.Add(Elem.Méret);
+                Méret.Refresh();
             }
             catch (HibásBevittAdat ex)
             {

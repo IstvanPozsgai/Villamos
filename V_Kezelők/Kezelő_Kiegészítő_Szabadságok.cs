@@ -9,6 +9,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        string táblanév = "szabadságok";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
             FájlBeállítás(Telephely);
             List<Adat_Kiegészítő_Szabadságok> Adatok = new List<Adat_Kiegészítő_Szabadságok>();
             Adat_Kiegészítő_Szabadságok Adat;
-            string szöveg = "SELECT * FROM szabadságok";
+            string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
