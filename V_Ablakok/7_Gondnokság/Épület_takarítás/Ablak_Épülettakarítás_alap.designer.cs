@@ -40,6 +40,7 @@ namespace Villamos
             this.Holtart = new System.Windows.Forms.ProgressBar();
             this.LapFülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.Tábla1 = new Zuby.ADGV.AdvancedDataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Sorszám = new System.Windows.Forms.TextBox();
             this.Label14 = new System.Windows.Forms.Label();
@@ -116,17 +117,16 @@ namespace Villamos
             this.Opció_Megnevezés = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
             this.Btn_súgó = new System.Windows.Forms.Button();
-            this.Tábla1 = new Zuby.ADGV.AdvancedDataGridView();
             this.Panel4.SuspendLayout();
             this.LapFülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.TabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla2)).BeginInit();
             this.TabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Opció_Tábla)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel4
@@ -200,6 +200,26 @@ namespace Villamos
             this.TabPage1.Size = new System.Drawing.Size(1183, 532);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Takarítási osztályok";
+            // 
+            // Tábla1
+            // 
+            this.Tábla1.AllowUserToAddRows = false;
+            this.Tábla1.AllowUserToDeleteRows = false;
+            this.Tábla1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Tábla1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla1.FilterAndSortEnabled = true;
+            this.Tábla1.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tábla1.Location = new System.Drawing.Point(8, 180);
+            this.Tábla1.MaxFilterButtonImageHeight = 23;
+            this.Tábla1.Name = "Tábla1";
+            this.Tábla1.ReadOnly = true;
+            this.Tábla1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Tábla1.Size = new System.Drawing.Size(1169, 346);
+            this.Tábla1.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tábla1.TabIndex = 221;
+            this.Tábla1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla1_CellClick);
             // 
             // tableLayoutPanel1
             // 
@@ -772,6 +792,7 @@ namespace Villamos
             // 
             // Hsorszám
             // 
+            this.Hsorszám.Enabled = false;
             this.Hsorszám.Location = new System.Drawing.Point(171, 15);
             this.Hsorszám.MaxLength = 50;
             this.Hsorszám.Name = "Hsorszám";
@@ -1017,26 +1038,6 @@ namespace Villamos
             this.Btn_súgó.UseVisualStyleBackColor = true;
             this.Btn_súgó.Click += new System.EventHandler(this.Btn_súgó_Click);
             // 
-            // Tábla1
-            // 
-            this.Tábla1.AllowUserToAddRows = false;
-            this.Tábla1.AllowUserToDeleteRows = false;
-            this.Tábla1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Tábla1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla1.FilterAndSortEnabled = true;
-            this.Tábla1.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla1.Location = new System.Drawing.Point(8, 180);
-            this.Tábla1.MaxFilterButtonImageHeight = 23;
-            this.Tábla1.Name = "Tábla1";
-            this.Tábla1.ReadOnly = true;
-            this.Tábla1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Tábla1.Size = new System.Drawing.Size(1169, 346);
-            this.Tábla1.SortStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla1.TabIndex = 221;
-            this.Tábla1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla1_CellClick);
-            // 
             // Ablak_épülettakarítás_alap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1058,6 +1059,7 @@ namespace Villamos
             this.Panel4.PerformLayout();
             this.LapFülek.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.TabPage2.ResumeLayout(false);
@@ -1067,7 +1069,6 @@ namespace Villamos
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Opció_Tábla)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
             this.ResumeLayout(false);
 
         }

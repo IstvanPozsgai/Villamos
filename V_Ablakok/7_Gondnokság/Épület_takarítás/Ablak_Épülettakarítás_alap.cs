@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -798,50 +795,9 @@ namespace Villamos
             try
             {
                 if (Hsorszám.Text.Trim() == "") throw new HibásBevittAdat("A sorszámot ki kell választani.");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-                string jelszó = "seprűéslapát";
-                Tábla2.Sort(Tábla2.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-
-                int sor_előző = 0;
-                int sor = 0;
-                string megnevezés_előző = "";
-                string osztály_előző = "";
-                string megnevezés = "";
-                string osztály = "";
-
-                for (int i = 0; i < Tábla2.Rows.Count; i++)
-                {
-                    if (Tábla2.Rows[i].Cells[0].Value.ToStrTrim() == Hsorszám.Text.Trim())
-                    {
-                        if (i == 0)
-                            return;
-
-                        sor = int.Parse(Tábla2.Rows[i].Cells[0].Value.ToString());
-                        megnevezés = Tábla2.Rows[i].Cells[1].Value.ToString();
-                        osztály = Tábla2.Rows[i].Cells[2].Value.ToString();
-                        sor_előző = int.Parse(Tábla2.Rows[i - 1].Cells[0].Value.ToString());
-                        megnevezés_előző = Tábla2.Rows[i - 1].Cells[1].Value.ToString();
-                        osztály_előző = Tábla2.Rows[i - 1].Cells[2].Value.ToString();
-                        break;
-                    }
-                }
-                // rögzítjük eggyel előrébb a kiválasztott elemet
-
-                string szöveg = "UPDATE Adattábla  SET id=" + sor_előző.ToString();
-                szöveg += " WHERE ";
-                szöveg += " osztály='" + osztály.Trim() + "' AND ";
-                szöveg += " megnevezés='" + megnevezés.Trim() + "'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                szöveg = "UPDATE Adattábla  SET id=" + sor.ToString();
-                szöveg += " WHERE ";
-                szöveg += " osztály='" + osztály_előző.Trim() + "' AND ";
-                szöveg += " megnevezés='" + megnevezés_előző.Trim() + "'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                if (!int.TryParse(Hsorszám.Text.Trim(), out int sorszám)) throw new HibásBevittAdat("A sorszámnak számnak kell lennie.");
+                KézÉpület.Csere(Cmbtelephely.Text.Trim(), sorszám);
                 Helységlistáz();
-
                 LapFülek.SelectedIndex = 1;
             }
             catch (HibásBevittAdat ex)
@@ -894,32 +850,13 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-                string jelszó = "seprűéslapát";
+                if (!int.TryParse(Hsorszám.Text.Trim(), out int Sorszám)) return;
 
-                if (Hsorszám.Text.Trim() == "") return;
-
-                string szöveg = "SELECT * FROM adattábla";
-
-
-                List<Adat_Épület_Adattábla> AdatokÉptakarításAdat = KézÉpület.Lista_Adatok(hely, jelszó, szöveg);
-
-                AdatokÉptakarításAdat = KézÉpület.Lista_Adatok(Cmbtelephely.Text.Trim());
-
+                List<Adat_Épület_Adattábla> AdatokÉptakarításAdat = KézÉpület.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Épület_Adattábla AdatÉptakarításAdat = (from a in AdatokÉptakarításAdat
-                                                             where a.ID == Hsorszám.Text.Trim().ToÉrt_Int()
+                                                             where a.ID == Sorszám
                                                              select a).FirstOrDefault();
-
-
-
-                if (AdatÉptakarításAdat != null)
-                {
-                    szöveg = "UPDATE adattábla  SET ";
-                    szöveg += "státus=true ";
-                    szöveg += " WHERE id=" + Hsorszám.Text.Trim();
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                }
+                if (AdatÉptakarításAdat != null) KézÉpület.Módosítás(Cmbtelephely.Text.Trim(), Sorszám);
 
                 Helységlistáz();
                 Helységürítés();
@@ -943,7 +880,6 @@ namespace Villamos
             Helységürítés();
         }
 
-
         private void Részletes_rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -961,81 +897,40 @@ namespace Villamos
                 if (Hellenőremail.Text.Trim() == "") throw new HibásBevittAdat("Az Ellenőr e-mail mezőt ki kell tölteni.");
                 if (Hellenőrtelefon.Text.Trim() == "") throw new HibásBevittAdat("Az Ellenőr telefonszáma mezőt ki kell tölteni.");
 
-                if (!double.TryParse(He1évdb.Text.Trim(), out double E1)) throw new HibásBevittAdat("Az E1 éves mennyiségnek egész számnak kell lennie.");
-                if (!double.TryParse(He2évdb.Text.Trim(), out double E2)) throw new HibásBevittAdat("Az E2 éves mennyiségnek egész számnak kell lennie.");
-                if (!double.TryParse(He3évdb.Text.Trim(), out double E3)) throw new HibásBevittAdat("Az E3 éves mennyiségnek egész számnak kell lennie.");
-                if (!double.TryParse(Hméret.Text.Trim(), out double HM)) throw new HibásBevittAdat("A Méret mezőnek számnak kell lennie.");
-
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarításlétrehozás(hely);
-                string jelszó = "seprűéslapát";
-                string szöveg;
+                if (!int.TryParse(He1évdb.Text.Trim(), out int E1)) throw new HibásBevittAdat("Az E1 éves mennyiségnek egész számnak kell lennie.");
+                if (!int.TryParse(He2évdb.Text.Trim(), out int E2)) throw new HibásBevittAdat("Az E2 éves mennyiségnek egész számnak kell lennie.");
+                if (!int.TryParse(He3évdb.Text.Trim(), out int E3)) throw new HibásBevittAdat("Az E3 éves mennyiségnek egész számnak kell lennie.");
+                if (!double.TryParse(Hméret.Text.Trim(), out double HelyMéret)) throw new HibásBevittAdat("A Méret mezőnek számnak kell lennie.");
 
                 AdatokÉptakarításAdat = KézÉpület.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-
-
-                if (!int.TryParse(Hsorszám.Text, out int hsorszám))
-                {
-                    hsorszám = 1;
-                    if (AdatokÉptakarításAdat.Count > 0) hsorszám = AdatokÉptakarításAdat.Max(a => a.ID) + 1;
-                }
-
+                if (!int.TryParse(Hsorszám.Text, out int hsorszám)) hsorszám = 0;
                 Adat_Épület_Adattábla AdatÉptakarításAdat = (from a in AdatokÉptakarításAdat
                                                              where a.ID == hsorszám
                                                              select a).FirstOrDefault();
+                Adat_Épület_Adattábla ADAT = new Adat_Épület_Adattábla(
+                            hsorszám,
+                            Hmegnevezés.Text.Trim(),
+                            Combo1.Text.Trim(),
+                            HelyMéret,
+                            Hsorszám.Text.Trim(),
+                            false, // státusz
+                            E1,
+                            E2,
+                            E3,
+                            Hkezd.Text.Trim(),
+                            Hvégez.Text.Trim(),
+                            Hellenőremail.Text.Trim(),
+                            Hellenőrneve.Text.Trim(),
+                            Hellenőrtelefon.Text.Trim(),
+                            Check1.Checked, // szemetes
+                            Kapcsolthelység.Text.Trim());
 
-                if (AdatÉptakarításAdat != null)
-                {
-                    szöveg = "UPDATE adattábla  SET ";
-                    szöveg += "megnevezés='" + Hmegnevezés.Text.Trim() + "', ";
-                    szöveg += "Osztály='" + Combo1.Text.Trim() + "', ";
-                    szöveg += "Méret=" + Hméret.Text.Replace(',', '.') + ", ";
-                    szöveg += "helységkód='E" + Hsorszám.Text + "', ";
-                    szöveg += "E1évdb='" + He1évdb.Text + "', ";
-                    szöveg += "E2évdb='" + He2évdb.Text + "', ";
-                    szöveg += "E3évdb='" + He3évdb.Text + "', ";
-                    szöveg += "kezd='" + Hkezd.Text.Trim() + "', ";
-                    szöveg += "végez='" + Hvégez.Text.Trim() + "', ";
-                    szöveg += "ellenőremail='" + Hellenőremail.Text.Trim() + "', ";
-                    szöveg += "ellenőrneve='" + Hellenőrneve.Text.Trim() + "', ";
-                    szöveg += "ellenőrtelefonszám='" + Hellenőrtelefon.Text.Trim() + "', ";
-                    if (Check1.Checked == false)
-                        szöveg += " szemetes=false, ";
-                    else
-                        szöveg += " szemetes=true, ";
-                    szöveg += "kapcsolthelység='" + Kapcsolthelység.Text.Trim() + "' ";
-                    szöveg += $" WHERE id ={hsorszám}";
-                }
+                if (AdatÉptakarításAdat == null)
+                    KézÉpület.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                 else
-                {
-                    szöveg = "INSERT INTO adattábla  (id, Megnevezés, Osztály, Méret, helységkód, státus, E1évdb, E2évdb, E3évdb," +
-                        " kezd, végez, ellenőremail, ellenőrneve, ellenőrtelefonszám, szemetes, kapcsolthelység ) VALUES (";
-                    szöveg += $"{hsorszám}, ";
-                    szöveg += "'" + Hmegnevezés.Text.Trim() + "', ";
-                    szöveg += "'" + Combo1.Text.Trim() + "', ";
-                    szöveg += Hméret.Text.Replace(',', '.') + ", ";
-                    szöveg += "'E" + Hsorszám.Text + "', ";
-                    szöveg += "false, ";
-                    szöveg += He1évdb.Text + ", ";
-                    szöveg += He2évdb.Text + ", ";
-                    szöveg += He3évdb.Text + ", ";
-                    szöveg += "'" + Hkezd.Text.Trim() + "', ";
-                    szöveg += "'" + Hvégez.Text.Trim() + "', ";
-                    szöveg += "'" + Hellenőremail.Text.Trim() + "', ";
-                    szöveg += "'" + Hellenőrneve.Text.Trim() + "', ";
-                    szöveg += "'" + Hellenőrtelefon.Text.Trim() + "', ";
-                    if (Check1.Checked == false)
-                        szöveg += " false, ";
-                    else
-                        szöveg += " true, ";
-                    szöveg += "'" + Kapcsolthelység.Text.Trim() + "')";
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                    KézÉpület.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 Helységlistáz();
-
                 LapFülek.SelectedIndex = 1;
             }
             catch (HibásBevittAdat ex)
@@ -1048,12 +943,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
         #region Opcionális
-
         private void OpcióListaFeltöltés()
         {
             try
@@ -1255,9 +1148,9 @@ namespace Villamos
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Opció_Tábla, false);
+                MyE.EXCELtábla(fájlexc, Opció_Tábla, false);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
@@ -1270,7 +1163,5 @@ namespace Villamos
             }
         }
         #endregion
-
-
     }
 }
