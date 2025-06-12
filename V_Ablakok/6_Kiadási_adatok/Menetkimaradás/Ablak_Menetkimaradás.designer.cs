@@ -41,8 +41,6 @@ namespace Villamos
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AblakMenetkimaradás));
             this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
             this.RögzítésekToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmbtelephely = new System.Windows.Forms.ToolStripComboBox();
             this.ToolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.SAPAdatokBetöltéseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -61,15 +59,15 @@ namespace Villamos
             this.PályaszámraTörténőLekérdezésToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Pályaszámok = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.FőmérnökségiLekérdezésToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SúgóToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Button4 = new System.Windows.Forms.Button();
             this.Button3 = new System.Windows.Forms.Button();
             this.Button2 = new System.Windows.Forms.Button();
             this.Button1 = new System.Windows.Forms.Button();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Btnexcel = new System.Windows.Forms.Button();
+            this.BtnFőmérnükség = new System.Windows.Forms.Button();
             this.Dátum = new System.Windows.Forms.DateTimePicker();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.CheckBox1 = new System.Windows.Forms.CheckBox();
@@ -79,7 +77,7 @@ namespace Villamos
             this.Tábla = new System.Windows.Forms.DataGridView();
             this.txtSorszám = new System.Windows.Forms.TextBox();
             this.txthely = new System.Windows.Forms.TextBox();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.alsópanels1 = new System.Windows.Forms.TextBox();
             this.alsópanels2 = new System.Windows.Forms.TextBox();
             this.alsópanels3 = new System.Windows.Forms.TextBox();
@@ -87,10 +85,16 @@ namespace Villamos
             this.alsópanels6 = new System.Windows.Forms.TextBox();
             this.alsópanels4 = new System.Windows.Forms.TextBox();
             this.CheckBox2 = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             this.MenuStrip1.SuspendLayout();
             this.Panel2.SuspendLayout();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuStrip1
@@ -98,42 +102,22 @@ namespace Villamos
             this.MenuStrip1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.MenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RögzítésekToolStripMenuItem,
-            this.LekérdezésekToolStripMenuItem,
-            this.FőmérnökségiLekérdezésToolStripMenuItem,
-            this.ExcelToolStripMenuItem,
-            this.SúgóToolStripMenuItem});
+            this.LekérdezésekToolStripMenuItem});
             this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip1.Name = "MenuStrip1";
-            this.MenuStrip1.Size = new System.Drawing.Size(822, 26);
+            this.MenuStrip1.Size = new System.Drawing.Size(1047, 26);
             this.MenuStrip1.TabIndex = 0;
             this.MenuStrip1.Text = "menuStrip1";
             // 
             // RögzítésekToolStripMenuItem
             // 
             this.RögzítésekToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItem1,
-            this.cmbtelephely,
             this.ToolStripSeparator4,
             this.SAPAdatokBetöltéseToolStripMenuItem,
             this.ToolStripSeparator2});
             this.RögzítésekToolStripMenuItem.Name = "RögzítésekToolStripMenuItem";
             this.RögzítésekToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
             this.RögzítésekToolStripMenuItem.Text = "&Rögzítések";
-            // 
-            // ToolStripMenuItem1
-            // 
-            this.ToolStripMenuItem1.Enabled = false;
-            this.ToolStripMenuItem1.Name = "ToolStripMenuItem1";
-            this.ToolStripMenuItem1.Size = new System.Drawing.Size(218, 22);
-            this.ToolStripMenuItem1.Text = "Telephely választás:";
-            // 
-            // cmbtelephely
-            // 
-            this.cmbtelephely.DropDownHeight = 200;
-            this.cmbtelephely.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.cmbtelephely.IntegralHeight = false;
-            this.cmbtelephely.Name = "cmbtelephely";
-            this.cmbtelephely.Size = new System.Drawing.Size(150, 29);
             // 
             // ToolStripSeparator4
             // 
@@ -262,34 +246,13 @@ namespace Villamos
             this.toolStripSeparator7.Name = "toolStripSeparator7";
             this.toolStripSeparator7.Size = new System.Drawing.Size(260, 6);
             // 
-            // FőmérnökségiLekérdezésToolStripMenuItem
-            // 
-            this.FőmérnökségiLekérdezésToolStripMenuItem.Name = "FőmérnökségiLekérdezésToolStripMenuItem";
-            this.FőmérnökségiLekérdezésToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.FőmérnökségiLekérdezésToolStripMenuItem.Text = "&Főmérnökségi lekérdezés";
-            this.FőmérnökségiLekérdezésToolStripMenuItem.Click += new System.EventHandler(this.FőmérnökségiLekérdezésToolStripMenuItem_Click);
-            // 
-            // ExcelToolStripMenuItem
-            // 
-            this.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem";
-            this.ExcelToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
-            this.ExcelToolStripMenuItem.Text = "&Excel exportálás";
-            this.ExcelToolStripMenuItem.Click += new System.EventHandler(this.ExcelToolStripMenuItem_Click);
-            // 
-            // SúgóToolStripMenuItem
-            // 
-            this.SúgóToolStripMenuItem.Name = "SúgóToolStripMenuItem";
-            this.SúgóToolStripMenuItem.Size = new System.Drawing.Size(55, 22);
-            this.SúgóToolStripMenuItem.Text = "Súgó";
-            this.SúgóToolStripMenuItem.Click += new System.EventHandler(this.SúgóToolStripMenuItem_Click);
-            // 
             // Panel2
             // 
             this.Panel2.Controls.Add(this.Button4);
             this.Panel2.Controls.Add(this.Button3);
             this.Panel2.Controls.Add(this.Button2);
             this.Panel2.Controls.Add(this.Button1);
-            this.Panel2.Location = new System.Drawing.Point(6, 66);
+            this.Panel2.Location = new System.Drawing.Point(6, 227);
             this.Panel2.Name = "Panel2";
             this.Panel2.Size = new System.Drawing.Size(214, 62);
             this.Panel2.TabIndex = 16;
@@ -347,12 +310,51 @@ namespace Villamos
             this.Button1.UseVisualStyleBackColor = true;
             this.Button1.Click += new System.EventHandler(this.Button1_Click);
             // 
+            // BtnSúgó
+            // 
+            this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSúgó.Location = new System.Drawing.Point(981, 3);
+            this.BtnSúgó.Name = "BtnSúgó";
+            this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
+            this.BtnSúgó.TabIndex = 175;
+            this.ToolTip1.SetToolTip(this.BtnSúgó, "Súgó");
+            this.BtnSúgó.UseVisualStyleBackColor = true;
+            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
+            // 
+            // Btnexcel
+            // 
+            this.Btnexcel.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.Btnexcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btnexcel.Location = new System.Drawing.Point(644, 2);
+            this.Btnexcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Btnexcel.Name = "Btnexcel";
+            this.Btnexcel.Size = new System.Drawing.Size(44, 45);
+            this.Btnexcel.TabIndex = 211;
+            this.ToolTip1.SetToolTip(this.Btnexcel, "Táblázat adatait excelbe menti");
+            this.Btnexcel.UseVisualStyleBackColor = true;
+            this.Btnexcel.Click += new System.EventHandler(this.Btnexcel_Click);
+            // 
+            // BtnFőmérnükség
+            // 
+            this.BtnFőmérnükség.BackgroundImage = global::Villamos.Properties.Resources.Google_Noto_Emoji_Travel_Places_42498_factory;
+            this.BtnFőmérnükség.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnFőmérnükség.Location = new System.Drawing.Point(594, 2);
+            this.BtnFőmérnükség.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BtnFőmérnükség.Name = "BtnFőmérnükség";
+            this.BtnFőmérnükség.Size = new System.Drawing.Size(44, 45);
+            this.BtnFőmérnükség.TabIndex = 212;
+            this.ToolTip1.SetToolTip(this.BtnFőmérnükség, "Főmérnökségi lekérdezés");
+            this.BtnFőmérnükség.UseVisualStyleBackColor = true;
+            this.BtnFőmérnükség.Click += new System.EventHandler(this.BtnFőmérnükség_Click);
+            // 
             // Dátum
             // 
             this.Dátum.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Dátum.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Dátum.Location = new System.Drawing.Point(6, 30);
+            this.Dátum.Location = new System.Drawing.Point(6, 196);
             this.Dátum.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Dátum.Name = "Dátum";
             this.Dátum.Size = new System.Drawing.Size(178, 26);
@@ -365,7 +367,7 @@ namespace Villamos
             this.Panel1.Controls.Add(this.Lstszolgálatok);
             this.Panel1.Controls.Add(this.Lstüzemek);
             this.Panel1.Controls.Add(this.BtnNapilista);
-            this.Panel1.Location = new System.Drawing.Point(3, 136);
+            this.Panel1.Location = new System.Drawing.Point(6, 295);
             this.Panel1.Name = "Panel1";
             this.Panel1.Size = new System.Drawing.Size(217, 445);
             this.Panel1.TabIndex = 17;
@@ -438,7 +440,7 @@ namespace Villamos
             this.Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.EnableHeadersVisualStyles = false;
-            this.Tábla.Location = new System.Drawing.Point(226, 30);
+            this.Tábla.Location = new System.Drawing.Point(226, 99);
             this.Tábla.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Tábla.Name = "Tábla";
             this.Tábla.ReadOnly = true;
@@ -450,13 +452,13 @@ namespace Villamos
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.Tábla.Size = new System.Drawing.Size(589, 586);
+            this.Tábla.Size = new System.Drawing.Size(814, 642);
             this.Tábla.TabIndex = 18;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
             // txtSorszám
             // 
-            this.txtSorszám.Location = new System.Drawing.Point(240, 65);
+            this.txtSorszám.Location = new System.Drawing.Point(250, 136);
             this.txtSorszám.Name = "txtSorszám";
             this.txtSorszám.Size = new System.Drawing.Size(100, 26);
             this.txtSorszám.TabIndex = 19;
@@ -464,7 +466,7 @@ namespace Villamos
             // 
             // txthely
             // 
-            this.txthely.Location = new System.Drawing.Point(240, 104);
+            this.txthely.Location = new System.Drawing.Point(250, 168);
             this.txthely.Name = "txthely";
             this.txthely.Size = new System.Drawing.Size(100, 26);
             this.txthely.TabIndex = 20;
@@ -477,10 +479,10 @@ namespace Villamos
             this.Holtart.BackColor = System.Drawing.Color.ForestGreen;
             this.Holtart.ForeColor = System.Drawing.Color.SpringGreen;
             this.Holtart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Holtart.Location = new System.Drawing.Point(240, 190);
+            this.Holtart.Location = new System.Drawing.Point(241, 218);
             this.Holtart.Maximum = 10;
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(546, 23);
+            this.Holtart.Size = new System.Drawing.Size(771, 23);
             this.Holtart.TabIndex = 21;
             this.Holtart.Visible = false;
             // 
@@ -551,10 +553,60 @@ namespace Villamos
             this.CheckBox2.UseVisualStyleBackColor = true;
             this.CheckBox2.Visible = false;
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 9;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.BtnSúgó, 8, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Btnexcel, 7, 0);
+            this.tableLayoutPanel1.Controls.Add(this.BtnFőmérnükség, 6, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 38);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1029, 51);
+            this.tableLayoutPanel1.TabIndex = 176;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.Cmbtelephely);
+            this.panel3.Controls.Add(this.Label13);
+            this.panel3.Location = new System.Drawing.Point(3, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(335, 33);
+            this.panel3.TabIndex = 176;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(143, 0);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(5, 5);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
+            // 
             // AblakMenetkimaradás
             // 
             this.BackColor = System.Drawing.Color.MediumSlateBlue;
-            this.ClientSize = new System.Drawing.Size(822, 619);
+            this.ClientSize = new System.Drawing.Size(1047, 752);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.CheckBox2);
             this.Controls.Add(this.alsópanels4);
             this.Controls.Add(this.alsópanels6);
@@ -584,6 +636,9 @@ namespace Villamos
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -597,8 +652,6 @@ namespace Villamos
         internal Button Button2;
         internal Button Button1;
         internal ToolTip ToolTip1;
-        internal ToolStripMenuItem ToolStripMenuItem1;
-        internal ToolStripComboBox cmbtelephely;
         internal ToolStripSeparator ToolStripSeparator4;
         internal ToolStripMenuItem SAPAdatokBetöltéseToolStripMenuItem;
         internal ToolStripMenuItem LekérdezésekToolStripMenuItem;
@@ -612,9 +665,6 @@ namespace Villamos
         internal ToolStripSeparator ToolStripSeparator3;
         internal ToolStripMenuItem PályaszámraTörténőLekérdezésToolStripMenuItem;
         internal ToolStripComboBox Pályaszámok;
-        internal ToolStripMenuItem FőmérnökségiLekérdezésToolStripMenuItem;
-        internal ToolStripMenuItem ExcelToolStripMenuItem;
-        internal ToolStripMenuItem SúgóToolStripMenuItem;
         internal DateTimePicker Dátum;
         internal Panel Panel1;
         internal CheckBox CheckBox1;
@@ -637,5 +687,12 @@ namespace Villamos
         internal ToolStripSeparator toolStripSeparator6;
         internal ToolStripMenuItem AdatRészletesMegjelenítéseToolStripMenuItem;
         internal ToolStripSeparator toolStripSeparator7;
+        internal Button BtnSúgó;
+        private TableLayoutPanel tableLayoutPanel1;
+        internal Panel panel3;
+        internal ComboBox Cmbtelephely;
+        internal Label Label13;
+        internal Button Btnexcel;
+        internal Button BtnFőmérnükség;
     }
 }

@@ -27,7 +27,7 @@ namespace Villamos
         int idszám_;
 
         Ablak_Menetrögítés Új_Ablak_Menetrögítés = null;
-        Ablak_Menetkimaradás_Kiegészítő Új_Ablak_Menetkimaradás_Kiegészítő = null;
+
 
         public AblakMenetkimaradás()
         {
@@ -48,12 +48,12 @@ namespace Villamos
         {
             string hely;
             // ha járműkiadó telephely, akkor csak a saját telephelyet kezeli.
-            if (cmbtelephely.Enabled == false)
+            if (Cmbtelephely.Enabled == false)
             {
                 Panel1.Visible = false;
                 Panel2.Visible = false;
                 // leellenőrizzük, hogy létezik-e a feltölteni kívánt adat helye
-                hely = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
                 if (!Exists(hely))
                     Adatbázis_Létrehozás.Menekimaradás_telephely(hely);
             }
@@ -102,27 +102,27 @@ namespace Villamos
         {
             try
             {
-                cmbtelephely.Items.Clear();
+                Cmbtelephely.Items.Clear();
                 foreach (string Elem in Listák.TelephelyLista_Jármű())
-                    cmbtelephely.Items.Add(Elem);
+                    Cmbtelephely.Items.Add(Elem);
 
                 cmbtelephely1.Items.Clear();
                 foreach (string Elem in Listák.TelephelyLista_Jármű())
                     cmbtelephely1.Items.Add(Elem);
-                cmbtelephely.Enabled = false;
+                Cmbtelephely.Enabled = false;
 
                 if (Program.PostásTelephely == "Főmérnökség" || Program.PostásTelephely.Contains("törzs"))
                 {
-                    cmbtelephely.Text = cmbtelephely.Items[0].ToString().Trim();
+                    Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim();
                     cmbtelephely1.Text = cmbtelephely1.Items[0].ToString().Trim();
                 }
                 else
                 {
-                    cmbtelephely.Text = Program.PostásTelephely;
+                    Cmbtelephely.Text = Program.PostásTelephely;
                     cmbtelephely1.Text = Program.PostásTelephely;
                 }
 
-                cmbtelephely.Enabled = Program.Postás_Vezér;
+                Cmbtelephely.Enabled = Program.Postás_Vezér;
             }
             catch (HibásBevittAdat ex)
             {
@@ -137,8 +137,7 @@ namespace Villamos
 
         private void SúgóToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\menetkimaradás.html";
-            Module_Excel.Megnyitás(hely);
+
         }
 
         private void Pályaszámokfeltöltése()
@@ -147,10 +146,10 @@ namespace Villamos
             {
                 Pályaszámok.Items.Clear();
                 string hely;
-                if (cmbtelephely.Enabled == false)
+                if (Cmbtelephely.Enabled == false)
                 {
                     // telephelyi adatok
-                    hely = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
+                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
                 }
                 else
                 {
@@ -183,7 +182,7 @@ namespace Villamos
 
             SAPAdatokBetöltéseToolStripMenuItem.Enabled = false;
             CheckBox2.Checked = false;
-            FőmérnökségiLekérdezésToolStripMenuItem.Visible = false;
+            BtnFőmérnükség.Visible = false;
             Button1.Visible = false;
             Button2.Visible = false;
             Button3.Visible = false;
@@ -208,7 +207,7 @@ namespace Villamos
 
                 Panel1.Visible = true;
                 Panel2.Visible = true;
-                FőmérnökségiLekérdezésToolStripMenuItem.Visible = true;
+                BtnFőmérnükség.Visible = true;
             }
 
             melyikelem = 21;
@@ -268,9 +267,9 @@ namespace Villamos
             {
 
                 // ha nincs kiválasztva telephely, akkor nem tudunk feltölteni adatot.
-                if (cmbtelephely.Text.Trim() == "") return;
+                if (Cmbtelephely.Text.Trim() == "") return;
                 // leellenőrizzük, hogy létezik-e a feltölteni kívánt adat helye
-                string hely = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value:yyyy}.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value:yyyy}.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Menekimaradás_telephely(hely);
 
                 // megpróbáljuk megnyitni az excel táblát.
@@ -299,7 +298,7 @@ namespace Villamos
                 if (!MyMen.Adategyezzés(Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
 
                 //Készítünk egy listát az adatszerkezetnek megfelelően   az Excel táblából
-                hely = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value.Year}.mdb";
+                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value.Year}.mdb";
 
                 List<Adat_Menetkimaradás> Excel_Listában = MyMen.Excel_Lista(Tábla, felelősmunkahely);
 
@@ -356,7 +355,7 @@ namespace Villamos
             try
             {
                 Kezelő_Telep_Kiegészítő_SAP KézSap = new Kezelő_Telep_Kiegészítő_SAP();
-                List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(cmbtelephely.Text.Trim());
+                List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Telep_Kiegészítő_SAP RekordSAP = (from a in AdatokSAP
                                                        where a.Id == 1
                                                        select a).FirstOrDefault();
@@ -382,39 +381,7 @@ namespace Villamos
 
         private void ExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (Tábla.Rows.Count <= 0) return;
-                string fájlexc;
 
-                // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Menetkimaradás_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
-                    Filter = "Excel |*.xlsx"
-                };
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = SaveFileDialog1.FileName;
-                else
-                    return;
-
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla, true);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc + ".xlsx");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         #endregion
@@ -1269,10 +1236,10 @@ namespace Villamos
         #region MindenEgyéb
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
-            if (cmbtelephely.Text.Trim() == "")
+            if (Cmbtelephely.Text.Trim() == "")
                 return;
             // leellenőrizzük, hogy létezik-e a feltölteni kívánt adat helye
-            string hely = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
             if (!Exists(hely))
                 Adatbázis_Létrehozás.Menekimaradás_telephely(hely);
 
@@ -1290,10 +1257,10 @@ namespace Villamos
                     idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[0].Value.ToString());
                 if (Tábla.Columns.Count > 9 && Tábla.Columns[9].HeaderCell.Value.ToString() == "ID")
                     idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[9].Value.ToString());
-                if (!cmbtelephely.Enabled)
+                if (!Cmbtelephely.Enabled)
                 {
                     // telephelyi adatok
-                    txthely.Text = $@"{Application.StartupPath}\{cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value.Year}.mdb";
+                    txthely.Text = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value.Year}.mdb";
                 }
                 else
                 {
@@ -1317,10 +1284,10 @@ namespace Villamos
             try
             {
                 List<Adat_Menetkimaradás> Adatok = new List<Adat_Menetkimaradás>();
-                if (cmbtelephely.Enabled)
+                if (Cmbtelephely.Enabled)
                     Adatok = KézMenet.Lista_Adatok("Főmérnökség", Dátum.Value.Year);
                 else
-                    Adatok = KézMenet.Lista_Adatok(cmbtelephely.Text.Trim(), Dátum.Value.Year);
+                    Adatok = KézMenet.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 Adat_Menetkimaradás ADAT = Adatok.Where(a => a.Id == idszám_).FirstOrDefault();
 
@@ -1535,7 +1502,8 @@ namespace Villamos
 
 
         #region Főmérnökségi panel
-        private void FőmérnökségiLekérdezésToolStripMenuItem_Click(object sender, EventArgs e)
+        Ablak_Menetkimaradás_Kiegészítő Új_Ablak_Menetkimaradás_Kiegészítő = null;
+        private void BtnFőmérnükség_Click(object sender, EventArgs e)
         {
             if (Új_Ablak_Menetkimaradás_Kiegészítő == null)
             {
@@ -1555,7 +1523,67 @@ namespace Villamos
         {
             Új_Ablak_Menetkimaradás_Kiegészítő = null;
         }
-
         #endregion
+
+
+        #region Gombok
+        private void BtnSúgó_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\menetkimaradás.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Btnexcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Tábla.Rows.Count <= 0) return;
+                string fájlexc;
+
+                // kimeneti fájl helye és neve
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"Menetkimaradás_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+
+                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
+                MyE.EXCELtábla(fájlexc, Tábla, true);
+                MyE.Megnyitás(fájlexc + ".xlsx");
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+
     }
 }
