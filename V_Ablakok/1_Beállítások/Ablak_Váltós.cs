@@ -77,7 +77,8 @@ namespace Villamos
 
         private void Ablak_Váltós_Load(object sender, EventArgs e)
         {
-            Jogosultságkiosztás();
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
             Fülek.SelectedIndex = 0;
             Fülekkitöltése();
             Munkarend8és12kiirás();
