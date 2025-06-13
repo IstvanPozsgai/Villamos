@@ -167,7 +167,7 @@ namespace Villamos.V_MindenEgyéb
                         Adat_Menetkimaradás Adat = new Adat_Menetkimaradás(
                                             viszonylat,
                                             azonosító,
-                                            viszonylat,
+                                            Típus,
                                             Eseményjele,
                                             bekövetkezés,
                                             kimaradtmenet,
