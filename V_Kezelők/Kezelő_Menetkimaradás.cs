@@ -112,6 +112,7 @@ namespace Villamos.Kezelők
                     szöveg += $", javítás='{Elem.Javítás}'";
                     szöveg += $", törölt={Elem.Törölt} ";
                     szöveg += $" WHERE tétel={Elem.Tétel} and jelentés='{Elem.Jelentés}'";
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
@@ -141,6 +142,7 @@ namespace Villamos.Kezelők
                     szöveg += " VALUES (";
                     szöveg += $"'{Adat.Viszonylat}','{Adat.Azonosító}','{Adat.Típus}','{Adat.Eseményjele}','{Adat.Bekövetkezés}',";
                     szöveg += $"{Adat.Kimaradtmenet},'{Adat.Jvbeírás}','{Adat.Vmbeírás}','{Adat.Javítás}', {i}, {Adat.Törölt}, {Adat.Tétel},'{Adat.Jelentés}')";
+                    SzövegGy.Add(szöveg);
                     i++;
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
@@ -202,6 +204,7 @@ namespace Villamos.Kezelők
                 {
                     Adat_Menetkimaradás ADAT = (from a in AdatokBázis
                                                 where a.Tétel == Elem.Tétel
+                                                && a.Jelentés == Elem.Jelentés
                                                 select a).FirstOrDefault();
                     if (ADAT == null)
                         AdatokRögzítés.Add(Elem);

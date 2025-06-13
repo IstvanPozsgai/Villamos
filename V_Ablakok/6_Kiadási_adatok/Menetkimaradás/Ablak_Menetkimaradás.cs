@@ -27,6 +27,13 @@ namespace Villamos
 
         List<Adat_Menetkimaradás> AdatokMenet = new List<Adat_Menetkimaradás>();
 
+        //Különszálas beolvasás
+        string Felelősmunkahely = "";
+        string Telephely = "";
+        DateTime DátumKüld = DateTime.Now;
+        string Fájlexc = "";
+
+
         string Html_szöveg = "";
         string hely_;
         string jelszó_;
@@ -276,6 +283,8 @@ namespace Villamos
             {
                 // ha nincs kiválasztva telephely, akkor nem tudunk feltölteni adatot.
                 if (Cmbtelephely.Text.Trim() == "") return;
+                Telephely = Cmbtelephely.Text.Trim();
+                DátumKüld = Dátum.Value;  // a dátumot elküldjük a külön szálra, hogy tudja melyik évben kell keresni az adatokat.
 
                 // megpróbáljuk megnyitni az excel táblát.
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
@@ -285,21 +294,21 @@ namespace Villamos
                     FileName = "",
                     Filter = "Excel |*.xlsx"
                 };
-                string fájlexc;
+
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = OpenFileDialog1.FileName;
+                    Fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
                 timer1.Enabled = true;
                 Holtart.Be();
-                string felelősmunkahely = Felelős_Munkahely();   // beolvassuk a felelős munkahelyet
-                await Task.Run(() => SAP_Adatokbeolvasása.Menet_beolvasó(Cmbtelephely.Text.Trim(), Dátum.Value.Year, fájlexc, felelősmunkahely));
+                Felelősmunkahely = Felelős_Munkahely();   // beolvassuk a felelős munkahelyet
+                await Task.Run(() => SAP_Adatokbeolvasása.Menet_beolvasó(Telephely, DátumKüld.Year, Fájlexc, Felelősmunkahely));
                 timer1.Enabled = false;
                 Holtart.Ki();
 
                 // kitöröljük a betöltött fájlt
-                File.Delete(fájlexc);
+                File.Delete(Fájlexc);
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

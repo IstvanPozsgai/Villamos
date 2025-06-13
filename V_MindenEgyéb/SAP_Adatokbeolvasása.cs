@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
@@ -104,6 +105,8 @@ namespace Villamos.V_MindenEgyéb
         {
             try
             {
+                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
                 //Ellenőrzés
                 if (!MyF.BetöltésHelyes("Menet", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
@@ -116,7 +119,6 @@ namespace Villamos.V_MindenEgyéb
                 //Oszlopnevek beállítása
                 string oszlopAzon = (from a in oszlopnév where a.Csoport == "Menet" && a.Státusz == false && a.Változónév == "azonosító" select a.Fejléc).FirstOrDefault();
                 string oszlopVisz = (from a in oszlopnév where a.Csoport == "Menet" && a.Státusz == false && a.Változónév == "viszonylat" select a.Fejléc).FirstOrDefault();
-                string oszlopTípus = (from a in oszlopnév where a.Csoport == "Menet" && a.Státusz == false && a.Változónév == "Típus" select a.Fejléc).FirstOrDefault();
                 string oszlopJel = (from a in oszlopnév where a.Csoport == "Menet" && a.Státusz == false && a.Változónév == "Eseményjele" select a.Fejléc).FirstOrDefault();
                 string oszlopIdő = (from a in oszlopnév where a.Csoport == "Menet" && a.Státusz == false && a.Változónév == "didő" select a.Fejléc).FirstOrDefault();
                 string oszlopDátum = (from a in oszlopnév where a.Csoport == "Menet" && a.Státusz == false && a.Változónév == "ddátum" select a.Fejléc).FirstOrDefault();
@@ -128,16 +130,25 @@ namespace Villamos.V_MindenEgyéb
                 string oszlopMunkahely = (from a in oszlopnév where a.Csoport == "Menet" && a.Státusz == false && a.Változónév == "munkahely" select a.Fejléc).FirstOrDefault();
 
 
-                if (oszlopAzon == null || oszlopVisz == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+                if (oszlopAzon == null) throw new HibásBevittAdat("Nincs helyesen beállítva az azonosító beolvasótábla! ");
+                if (oszlopVisz == null) throw new HibásBevittAdat("Nincs helyesen beállítva a viszonylat beolvasótábla! ");
+                if (oszlopJel == null) throw new HibásBevittAdat("Nincs helyesen beállítva az Eseményjele beolvasótábla! ");
+                if (oszlopIdő == null) throw new HibásBevittAdat("Nincs helyesen beállítva a didő beolvasótábla! ");
+                if (oszlopDátum == null) throw new HibásBevittAdat("Nincs helyesen beállítva a ddátum beolvasótábla! ");
+                if (oszlopMenet == null) throw new HibásBevittAdat("Nincs helyesen beállítva a  kimaradtmenet beolvasótábla! ");
+                if (oszlopBeír == null) throw new HibásBevittAdat("Nincs helyesen beállítva a jvbeírás beolvasótábla! ");
+                if (oszlopjav == null) throw new HibásBevittAdat("Nincs helyesen beállítva a javítás beolvasótábla! ");
+                if (oszlopjelentés == null) throw new HibásBevittAdat("Nincs helyesen beállítva a Jelentés beolvasótábla! ");
+                if (oszloptétel == null) throw new HibásBevittAdat("Nincs helyesen beállítva a tétel beolvasótábla! ");
+                if (oszlopMunkahely == null) throw new HibásBevittAdat("Nincs helyesen beállítva a munkahely beolvasótábla! ");
 
                 Kezelő_Menetkimaradás Kéz = new Kezelő_Menetkimaradás();
                 List<Adat_Menetkimaradás> AdatokGy = new List<Adat_Menetkimaradás>();
-                int sor = 2;
                 foreach (DataRow Sor in Tábla.Rows)
                 {
                     string azonosító = MyF.Szöveg_Tisztítás(Sor[oszlopAzon].ToStrTrim(), 1, 4);
                     string viszonylat = MyF.Szöveg_Tisztítás(Sor[oszlopVisz].ToStrTrim(), 0, 6);
-                    string Típus = Sor[oszlopTípus].ToStrTrim();
+                    string Típus = Milyen_típus(AdatokJármű, azonosító);
                     string Eseményjele = MyF.Szöveg_Tisztítás(Sor[oszlopJel].ToStrTrim(), 0, 1);
                     DateTime didő = Sor[oszlopIdő].ToÉrt_DaTeTime();
                     DateTime ddátum = Sor[oszlopDátum].ToÉrt_DaTeTime();
@@ -151,14 +162,12 @@ namespace Villamos.V_MindenEgyéb
                     string Jelentés = MyF.Szöveg_Tisztítás(Sor[oszlopjelentés].ToStrTrim(), 0, 20);
                     int tétel = Sor[oszloptétel].ToÉrt_Int();
                     string munkahely = MyF.Szöveg_Tisztítás(Sor[oszlopMunkahely].ToStrTrim(), 0, 20);
-
-
                     if (felelősmunkahely.Trim().ToUpper() == munkahely.ToStrTrim().ToUpper())
                     {
                         Adat_Menetkimaradás Adat = new Adat_Menetkimaradás(
                                             viszonylat,
                                             azonosító,
-                                            Típus,
+                                            viszonylat,
                                             Eseményjele,
                                             bekövetkezés,
                                             kimaradtmenet,
@@ -170,12 +179,12 @@ namespace Villamos.V_MindenEgyéb
                                             Jelentés,
                                             tétel);
                         AdatokGy.Add(Adat);
-                        sor++;
                     }
-                    Kéz.Döntés(Telephely, Év, AdatokGy);
-                    // kitöröljük a betöltött fájlt
-                    File.Delete(fájlexcel);
                 }
+                if (AdatokGy.Count > 0) Kéz.Döntés(Telephely, Év, AdatokGy);
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+            }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -187,6 +196,14 @@ namespace Villamos.V_MindenEgyéb
             }
         }
 
-
+        private static string Milyen_típus(List<Adat_Jármű> AdatokJármű, string azonosító)
+        {
+            string típus = "?";
+            Adat_Jármű Elem = (from a in AdatokJármű
+                               where a.Azonosító == azonosító.Trim()
+                               select a).FirstOrDefault();
+            if (Elem != null) típus = Elem.Valóstípus;
+            return típus;
+        }
     }
 }

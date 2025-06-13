@@ -532,7 +532,6 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetkimaradás_Kiegészítő.Designer.cs">
       <DependentUpon>Ablak_Menetkimaradás_Kiegészítő.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Menetkimaradás.cs" />
     <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Behajtási.cs">
       <SubType>Form</SubType>
     </Compile>
