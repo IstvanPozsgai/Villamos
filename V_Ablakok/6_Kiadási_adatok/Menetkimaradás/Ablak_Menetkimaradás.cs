@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
-using MyMen = Villamos.Villamos_Ablakok._6_Kiadási_adatok.Menetkimaradás.Menetkimaradás;
 using MyO = Microsoft.Office.Interop.Outlook;
 
 namespace Villamos
 {
     public partial class AblakMenetkimaradás
     {
-        Kezelő_Menetkimaradás KézMenet = new Kezelő_Menetkimaradás();
+        readonly Kezelő_Menetkimaradás KézMenet = new Kezelő_Menetkimaradás();
+        readonly Kezelő_Kiegészítő_Szolgálat KézSzolg = new Kezelő_Kiegészítő_Szolgálat();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Telep_Kiegészítő_SAP KézSap = new Kezelő_Telep_Kiegészítő_SAP();
+
+        List<Adat_Menetkimaradás> AdatokMenet = new List<Adat_Menetkimaradás>();
 
         string Html_szöveg = "";
         string hely_;
@@ -28,13 +34,19 @@ namespace Villamos
 
         Ablak_Menetrögítés Új_Ablak_Menetrögítés = null;
 
-
+        #region Alap
+        /// <summary>
+        /// konstruktor
+        /// </summary>
         public AblakMenetkimaradás()
         {
             InitializeComponent();
             Start();
         }
 
+        /// <summary>
+        /// Ablak betöltésekor elvégzendő műveletek
+        /// </summary>
         private void Start()
         {
             // beállítjuk a dátumot az előző napra mert mai adat még nincs
@@ -42,62 +54,23 @@ namespace Villamos
             Telephelyekfeltöltése();
             Szolgálatoklista();
             Telephelyek_Feltöltése_lista();
+
+            // ha járműkiadó telephely, akkor csak a saját telephelyet kezeli.
+            Panel1.Visible = Cmbtelephely.Enabled;
+            Panel2.Visible = Cmbtelephely.Enabled;
+
+            Pályaszámokfeltöltése();
+            Jogosultságkiosztás();  // Jogosultságok beállítása
         }
 
         private void Menetkimaradás_Load(object sender, EventArgs e)
         {
-            string hely;
-            // ha járműkiadó telephely, akkor csak a saját telephelyet kezeli.
-            if (Cmbtelephely.Enabled == false)
-            {
-                Panel1.Visible = false;
-                Panel2.Visible = false;
-                // leellenőrizzük, hogy létezik-e a feltölteni kívánt adat helye
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
-                if (!Exists(hely))
-                    Adatbázis_Létrehozás.Menekimaradás_telephely(hely);
-            }
-            else
-            {
-                Panel1.Visible = true;
-                Panel2.Visible = true;
-            }
 
-            // leellenőrizzük a főmérnökségi tábla létezik-e ha nem akkor másoljuk
-            hely = Application.StartupPath + @"\Főmérnökség\Adatok\" + Dátum.Value.ToString("yyyy") + @"\" + Dátum.Value.ToString("yyyy") + "_menet_adatok.mdb";
-            if (!Exists(hely))
-                Adatbázis_Létrehozás.Menekimaradás_Főmérnökség(hely);
-            Pályaszámokfeltöltése();
-
-            // Jogosultságok beállítása
-            Jogosultságkiosztás();
         }
 
-        #region Alap
-
-        private void Telephelyek_Feltöltése_lista()
-        {
-            try
-            {
-                Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> Adatok = KézTelephely.Lista_Adatok().OrderBy(a => a.Telephelynév).ToList();
-
-                Lstüzemek.Items.Clear();
-                foreach (Adat_kiegészítő_telephely Elem in Adatok)
-                    Lstüzemek.Items.Add(Elem.Telephelynév);
-                Lstüzemek.Refresh();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        /// <summary>
+        /// Telephelyek feltöltése a comboboxba
+        /// </summary>
         private void Telephelyekfeltöltése()
         {
             try
@@ -135,33 +108,19 @@ namespace Villamos
             }
         }
 
-        private void SúgóToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Pályaszámokfeltöltése()
+        /// <summary>
+        /// Listába feltölti a szolgálatokat
+        /// </summary>
+        private void Szolgálatoklista()
         {
             try
             {
-                Pályaszámok.Items.Clear();
-                string hely;
-                if (Cmbtelephely.Enabled == false)
-                {
-                    // telephelyi adatok
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
-                }
-                else
-                {
-                    // főmérnökségi adatok 
-                    hely = Application.StartupPath + @"\Főmérnökség\adatok\" + Dátum.Value.ToString("yyyy") + @"\" + Dátum.Value.ToString("yyyy") + "_menet_adatok.mdb";
-                }
-                if (!File.Exists(hely)) throw new HibásBevittAdat($"A {Dátum.Value:yyyy.MM.dd} dátumra a program nem rendelkezik adatokkal.");
-                string jelszó = "lilaakác";
-                string szöveg = "SELECT DISTINCT azonosító FROM menettábla order by azonosító";
-                Pályaszámok.BeginUpdate();
-                Pályaszámok.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                Pályaszámok.EndUpdate();
+                // szolgálatok listázása
+                Lstszolgálatok.Items.Clear();
+                List<Adat_Kiegészítő_Szolgálat> Adatok = KézSzolg.Lista_Adatok();
+                foreach (Adat_Kiegészítő_Szolgálat Elem in Adatok)
+                    Lstszolgálatok.Items.Add(Elem.Szolgálatnév);
+                Lstszolgálatok.Refresh();
             }
             catch (HibásBevittAdat ex)
             {
@@ -174,13 +133,67 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// Telephelyek feltöltése a listboxba
+        /// </summary>
+        private void Telephelyek_Feltöltése_lista()
+        {
+            try
+            {
+                Lstüzemek.Items.Clear();
+                foreach (string Elem in Listák.TelephelyLista_Jármű())
+                    Lstüzemek.Items.Add(Elem);
+                Lstüzemek.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Üzemelő kocsik pályaszámok feltöltése a comboboxba
+        /// </summary>
+        private void Pályaszámokfeltöltése()
+        {
+            try
+            {
+                Pályaszámok.Items.Clear();
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
+                Adatok = (from a in Adatok
+                          where a.Státus == 0
+                          orderby a.Azonosító
+                          select a).ToList();
+                foreach (Adat_Jármű Elem in Adatok)
+                    Pályaszámok.Items.Add(Elem.Azonosító.Trim());
+                Pályaszámok.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Jogosultságok kiosztása a gombokhoz és egyéb elemekhez
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             int melyikelem;
 
             // ide kell az összes gombot tenni amit szabályozni akarunk false
 
-            SAPAdatokBetöltéseToolStripMenuItem.Enabled = false;
+            BtnSap.Enabled = false;
             CheckBox2.Checked = false;
             BtnFőmérnükség.Visible = false;
             Button1.Visible = false;
@@ -193,7 +206,7 @@ namespace Villamos
             // módosítás 1 
             if (MyF.Vanjoga(melyikelem, 1))
             {
-                SAPAdatokBetöltéseToolStripMenuItem.Enabled = true;
+                BtnSap.Enabled = true;
             }
             // módosítás 2 
             if (MyF.Vanjoga(melyikelem, 2))
@@ -243,34 +256,26 @@ namespace Villamos
             }
         }
 
-        private void Táblatörlése()
-        {
-            Tábla.Rows.Clear();
-            Tábla.Columns.Clear();
-            Tábla.Refresh();
-            Tábla.ClearSelection();
-        }
-
+        /// <summary>
+        /// Ha a segédablakok nyitva vannak akkor bezárja őket
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AblakMenetkimaradás_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Menetrögítés?.Close();
             Új_Ablak_Menetkimaradás_Kiegészítő?.Close();
         }
-
         #endregion
 
 
         #region Beolvasás
-        private void SAPAdatokBetöltéseToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void BtnSap_Click(object sender, EventArgs e)
         {
             try
             {
-
                 // ha nincs kiválasztva telephely, akkor nem tudunk feltölteni adatot.
                 if (Cmbtelephely.Text.Trim() == "") return;
-                // leellenőrizzük, hogy létezik-e a feltölteni kívánt adat helye
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value:yyyy}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Menekimaradás_telephely(hely);
 
                 // megpróbáljuk megnyitni az excel táblát.
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
@@ -286,54 +291,13 @@ namespace Villamos
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
-
-                // beolvassuk a felelős munkahelyet
-                string felelősmunkahely = Felelős_Munkahely();
-
-                DateTime Eleje = DateTime.Now;
-                //Adattáblába tesszük
-                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexc);
-
-                //  beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
-                if (!MyMen.Adategyezzés(Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
-
-                //Készítünk egy listát az adatszerkezetnek megfelelően   az Excel táblából
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\menet{Dátum.Value.Year}.mdb";
-
-                List<Adat_Menetkimaradás> Excel_Listában = MyMen.Excel_Lista(Tábla, felelősmunkahely);
-
-                //Feltöltjük az eddig rögzített adatokat
-                string jelszó = "lilaakác";
-                string szöveg = "SELECT * FROM Menettábla order by id desc";
-                Kezelő_Menetkimaradás KézMen = new Kezelő_Menetkimaradás();
-                List<Adat_Menetkimaradás> Adatok = KézMen.Lista_Adatok(hely, jelszó, szöveg);
-                long Id = 1;
-                if (Adatok.Count > 0) Id = Adatok.Max(a => a.Id);
-
-                Holtart.Be(Adatok.Count + 1);
-                List<string> szövegGy = new List<string>();
-                // Excel elemeket rögzítéshez előkészítjük
-                foreach (Adat_Menetkimaradás rekord in Excel_Listában)
-                {
-                    Adat_Menetkimaradás Elem = (from a in Adatok
-                                                where a.Tétel == rekord.Tétel && a.Jelentés == rekord.Jelentés
-                                                select a).FirstOrDefault();
-
-                    if (Elem != null)
-                        szöveg = MyMen.Módosít(rekord);
-                    else
-                    {
-                        // ha még nem volt akkor újként rögzítjük
-                        Id++;
-                        szöveg = MyMen.Rögzít(rekord, Id);
-                    }
-                    szövegGy.Add(szöveg);
-                    Holtart.Lép();
-
-                }
-                if (szövegGy.Count > 0) MyA.ABMódosítás(hely, jelszó, szövegGy);
-
+                timer1.Enabled = true;
+                Holtart.Be();
+                string felelősmunkahely = Felelős_Munkahely();   // beolvassuk a felelős munkahelyet
+                await Task.Run(() => SAP_Adatokbeolvasása.Menet_beolvasó(Cmbtelephely.Text.Trim(), Dátum.Value.Year, fájlexc, felelősmunkahely));
+                timer1.Enabled = false;
                 Holtart.Ki();
+
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexc);
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -348,13 +312,25 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        /// <summary>
+        /// Beolvasott adatok feldolgozása közben lépteti a Holtartot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            Holtart.Lép();
+        }
 
+        /// <summary>
+        /// A telephelyhez tartozó felelős munkahely lekérdezése
+        /// </summary>
+        /// <returns></returns>
         private string Felelős_Munkahely()
         {
             string válasz = "";
             try
             {
-                Kezelő_Telep_Kiegészítő_SAP KézSap = new Kezelő_Telep_Kiegészítő_SAP();
                 List<Adat_Telep_Kiegészítő_SAP> AdatokSAP = KézSap.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Telep_Kiegészítő_SAP RekordSAP = (from a in AdatokSAP
                                                        where a.Id == 1
@@ -373,8 +349,20 @@ namespace Villamos
             }
             return válasz;
         }
-
         #endregion
+
+
+
+
+        private void Táblatörlése()
+        {
+            Tábla.Rows.Clear();
+            Tábla.Columns.Clear();
+            Tábla.Refresh();
+            Tábla.ClearSelection();
+        }
+
+
 
 
         #region Excel
@@ -400,7 +388,7 @@ namespace Villamos
             string jelszó = "lilaakác";
             hely_ = hely;
             jelszó_ = jelszó;
-            Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
+
 
 
             string szöveg = "SELECT * ";
@@ -423,7 +411,7 @@ namespace Villamos
                     }
             }
 
-            List<Adat_Menetkimaradás> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(hely, jelszó, szöveg);
 
             Tábla.ColumnCount = 12;
             Tábla.RowCount = 0;
@@ -502,7 +490,7 @@ namespace Villamos
 
                 string hely = $@"{Application.StartupPath}\" + cmbtelephely1.Text.Trim() + @"\Adatok\főkönyv\menet" + Dátum.Value.ToString("yyyy") + ".mdb";
                 string jelszó = "lilaakác";
-                Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
+
 
                 DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
@@ -511,7 +499,7 @@ namespace Villamos
                 szöveg += " and [bekövetkezés]<#" + hónaputolsónapja.ToString("MM-dd-yyyy") + " 23:59:0#";
                 szöveg += " and [viszonylat]<> '_' and [Eseményjele]<> '_'";
                 szöveg += " and [törölt]<>-1 ORDER BY viszonylat, típus, Eseményjele, Bekövetkezés";
-                List<Adat_Menetkimaradás> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(hely, jelszó, szöveg);
 
                 // kiírjuk az adatokat a táblába
                 Tábla.Visible = false;
@@ -732,8 +720,8 @@ namespace Villamos
                 szöveg += " and [viszonylat]<> '_'";
                 szöveg += " and [törölt]<>-1 ORDER BY típus, Eseményjele, Bekövetkezés";
 
-                Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
-                List<Adat_Menetkimaradás> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(hely, jelszó, szöveg);
 
                 foreach (Adat_Menetkimaradás rekord in Adatok)
                 {
@@ -931,8 +919,8 @@ namespace Villamos
 
                 string szöveg = $"SELECT * FROM menettábla where  azonosító='{Pályaszámok.Text.Trim()}' order by bekövetkezés desc";
 
-                Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
-                List<Adat_Menetkimaradás> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(hely, jelszó, szöveg);
 
                 Tábla.ColumnCount = 12;
                 Tábla.RowCount = 0;
@@ -1136,7 +1124,7 @@ namespace Villamos
                 DateTime utolsónap = DateTime.Parse(MyE.Beolvas("b" + szám.ToString()));
                 i = 1;
                 Holtart.Lép();
-                Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
+
                 List<Adat_Menetkimaradás> Adatok;
 
                 while (utolsónap.ToString("MM/dd/yyyy") != DateTime.Today.AddDays(-1).ToString("MM/dd/yyyy"))
@@ -1161,7 +1149,7 @@ namespace Villamos
                             szöveg += " and eseményjele<>'_' order by eseményjele, típus";
                             string jelszó = "lilaakác";
 
-                            Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                            Adatok = KézMenet.Lista_Adatok(hely, jelszó, szöveg);
 
                             szöveg_html = "<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 12pt'>";
                             szöveg_html += $"<tr><td style='background-color: #B8DBFD;border: 1px solid #ccc'>{telep}</td></tr>";
@@ -1319,29 +1307,6 @@ namespace Villamos
 
 
         #region Oldal Panelen Lévő   
-        private void Szolgálatoklista()
-        {
-            try
-            {
-                // szolgálatok listázása
-                Lstszolgálatok.Items.Clear();
-
-                Kezelő_Kiegészítő_Szolgálat Kéz = new Kezelő_Kiegészítő_Szolgálat();
-                List<Adat_Kiegészítő_Szolgálat> Adatok = Kéz.Lista_Adatok();
-                foreach (Adat_Kiegészítő_Szolgálat Elem in Adatok)
-                    Lstszolgálatok.Items.Add(Elem.Szolgálatnév);
-                Lstszolgálatok.Refresh();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Lstszolgálatok_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1420,7 +1385,7 @@ namespace Villamos
                 Tábla.Columns[9].HeaderText = "ID";
                 Tábla.Columns[9].Width = 80;
                 int i;
-                Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
+
                 List<Adat_Menetkimaradás> Adatok;
 
                 for (int j = 0; j < Lstüzemek.Items.Count; j++)
@@ -1438,7 +1403,7 @@ namespace Villamos
 
                             szöveg += " order by eseményjele, típus";
 
-                            Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                            Adatok = KézMenet.Lista_Adatok(hely, jelszó, szöveg);
 
                             foreach (Adat_Menetkimaradás rekord in Adatok)
                             {
@@ -1582,6 +1547,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
 
 

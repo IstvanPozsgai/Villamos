@@ -104,33 +104,7 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Menetkimaradás
             }
         }
 
-        public static string Módosít(Adat_Menetkimaradás Elem)
-        {
-            string szöveg = $"UPDATE menettábla SET viszonylat='{Elem.Viszonylat}'";
-            szöveg += $", azonosító='{Elem.Azonosító}'";
-            szöveg += $", típus='{Elem.Típus}'";
-            szöveg += $", Eseményjele='{Elem.Eseményjele}'";
-            szöveg += $", Bekövetkezés='{Elem.Bekövetkezés}'";
-            szöveg += $", kimaradtmenet={Elem.Kimaradtmenet}";
-            szöveg += $", jvbeírás='{Elem.Jvbeírás}'";
-            szöveg += $", vmbeírás='{Elem.Vmbeírás}'";
-            szöveg += $", javítás='{Elem.Javítás}'";
-            szöveg += $", törölt={Elem.Törölt} ";
-            szöveg += $" WHERE tétel={Elem.Tétel} and jelentés='{Elem.Jelentés}'";
 
-            return szöveg;
-        }
-
-        public static string Rögzít(Adat_Menetkimaradás Elem, long Id)
-        {
-            string szöveg = "INSERT INTO menettábla ";
-            szöveg += " ([viszonylat], [azonosító], [típus], [Eseményjele], [Bekövetkezés],";
-            szöveg += " [kimaradtmenet], [jvbeírás], [vmbeírás], [javítás], [id], [törölt], [tétel], [jelentés]) ";
-            szöveg += " VALUES (";
-            szöveg += $"'{Elem.Viszonylat}','{Elem.Azonosító}','{Elem.Típus}','{Elem.Eseményjele}','{Elem.Bekövetkezés}',";
-            szöveg += $"{Elem.Kimaradtmenet},'{Elem.Jvbeírás}','{Elem.Vmbeírás}','{Elem.Javítás}', {Id}, {Elem.Törölt}, {Elem.Tétel},'{Elem.Jelentés}')";
-            return szöveg;
-        }
 
     }
 }

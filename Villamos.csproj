@@ -1257,7 +1257,7 @@
     <Compile Include="V_MindenEgyéb\Listák.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="V_MindenEgyéb\Mentés_Ablak.cs" />
-    <Compile Include="V_MindenEgyéb\SAP_Adatokbeolvasása_km.cs" />
+    <Compile Include="V_MindenEgyéb\SAP_Adatokbeolvasása.cs" />
     <Compile Include="V_MindenEgyéb\ScreenshotHelper.cs" />
     <Compile Include="V_MindenEgyéb\Vezénylés.cs" />
     <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />

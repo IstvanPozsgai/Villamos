@@ -1165,7 +1165,7 @@ namespace Villamos
                 Holtart.Visible = true;
 
                 // Wrap the void method in a Task.Run to make it awaitable
-                await Task.Run(() => SAP_Adatokbeolvasása_km.Km_beolvasó(_fájlexc, "SGP"));
+                await Task.Run(() => SAP_Adatokbeolvasása.Km_beolvasó(_fájlexc, "SGP"));
 
                 //leállítjuk a számlálót és kikapcsoljuk a holtartot.
                 timer1.Enabled = false;

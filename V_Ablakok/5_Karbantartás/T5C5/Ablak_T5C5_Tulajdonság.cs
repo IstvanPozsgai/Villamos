@@ -1443,7 +1443,7 @@ namespace Villamos
 
                 timer1.Enabled = true;
                 Holtart.Be();
-                await Task.Run(() => SAP_Adatokbeolvasása_km.Km_beolvasó(_fájlexc, "T5C5"));
+                await Task.Run(() => SAP_Adatokbeolvasása.Km_beolvasó(_fájlexc, "T5C5"));
                 timer1.Enabled = false;
                 Holtart.Ki();
                 MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);

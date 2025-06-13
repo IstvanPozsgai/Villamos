@@ -1499,7 +1499,7 @@ namespace Villamos
 
                 Holtart.Be();
                 timer1.Enabled = true;
-                await Task.Run(() => SAP_Adatokbeolvasása_km.Km_beolvasó(FájlExcel_, "T5C5"));
+                await Task.Run(() => SAP_Adatokbeolvasása.Km_beolvasó(FájlExcel_, "T5C5"));
                 timer1.Enabled = false;
                 Holtart.Ki();
                 MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);

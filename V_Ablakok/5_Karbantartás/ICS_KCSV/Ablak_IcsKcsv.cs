@@ -1631,7 +1631,7 @@ namespace Villamos
 
                 timer1.Enabled = true;
                 Holtart.Be();
-                await Task.Run(() => SAP_Adatokbeolvasása_km.Km_beolvasó(_fájlexc, "ICS"));
+                await Task.Run(() => SAP_Adatokbeolvasása.Km_beolvasó(_fájlexc, "ICS"));
                 timer1.Enabled = false;
                 Holtart.Ki();
                 MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
