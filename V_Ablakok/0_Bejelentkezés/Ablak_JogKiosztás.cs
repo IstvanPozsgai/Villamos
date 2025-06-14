@@ -105,7 +105,7 @@ namespace Villamos
             for (int i = 0; i < gombok.Count; i++)
             {
                 Adat_Gombok item = gombok[i];
-                string felirat = $"{item.GombFelirat} - {item.GombName}";
+                string felirat = $"{item.GombFelirat} = {item.GombName}";
                 CmbGombok.Items.Add(felirat);
             }
         }
@@ -233,26 +233,29 @@ namespace Villamos
             {
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem adja meg a Felhasználót!");
                 if (CmbAblak.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon egy Ablakot!");
+                if (CmbGombok.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon legalább egy Gombot gombot!");
+                //Ha van kiválasztott gomb akkor azt rögzítjük
+                string[] gomb = CmbGombok.Text.Trim().Split('=');
+                int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[1].Trim() && a.FromName == AblakForm)?.GombokId ?? -1;
+
                 if (LstChkSzervezet.CheckedItems.Count == 0)
                 {
                     Adat_Jogosultságok adat = new Adat_Jogosultságok
                           (
                               FelhasználóId,
                               AblakID,
+                              GombokID,
                               -1,
-                              -1,
-                              false
+                              true
                           );
                     KézJogosultságok.Törlés(adat);
                 }
                 else
                 {
-                    if (CmbGombok.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon legalább egy Gombot gombot!");
+
                     if (LstChkSzervezet.CheckedItems.Count == 0) throw new HibásBevittAdat("Kérem válasszon legalább egy Szervezetet!");
                     List<Adat_Jogosultságok> Adatok = new List<Adat_Jogosultságok>();
-                    //Ha van kiválasztott gomb akkor azt rögzítjük
-                    string[] gomb = CmbGombok.Text.Trim().Split('-');
-                    int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[1].Trim() && a.FromName == AblakForm)?.GombokId ?? -1;
+
                     foreach (string Szervezet in LstChkSzervezet.CheckedItems)
                     {
                         int SzervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == Szervezet)?.ID ?? -1;
@@ -280,10 +283,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
-
         #endregion
 
 
@@ -364,7 +363,7 @@ namespace Villamos
                     string gombnév = "<<Nincs Gomb>>";
                     Adat_Gombok EgyGomb = AdatokGombok.FirstOrDefault(a => a.GombokId == rekord.GombokId);
                     if (EgyGomb != null)
-                        gombnév = $"{EgyGomb.GombFelirat} - {EgyGomb.GombName}";
+                        gombnév = $"{EgyGomb.GombFelirat} = {EgyGomb.GombName}";
                     Soradat["Gomb név"] = gombnév;
                     string szervezet = "<<Nincs Szervezet>>";
                     szervezet = AdatokSzervezet.FirstOrDefault(a => a.ID == rekord.SzervezetId)?.Név ?? "<<Nincs Szervezet>>";
@@ -393,6 +392,19 @@ namespace Villamos
             Tábla.Columns["Törölt"].Width = 110;
         }
 
+
+        private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            Felhasználók.Text = Tábla.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
+            CmbGombok.Text = Tábla.Rows[e.RowIndex].Cells[2].Value.ToStrTrim();
+
+            CmbAblak.Text = Tábla.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
+            Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
+            AblakForm = Ablak.FromName;
+            AblakID = Ablak.OldalId;
+            SzervezetFeltöltés();
+        }
         #endregion
 
         private void CmbGombok_SelectionChangeCommitted(object sender, EventArgs e)
@@ -429,7 +441,7 @@ namespace Villamos
                 foreach (Adat_Kiegészítő_Könyvtár szervezet in AdatokSzervezet)
                 {
                     //Ha van ehhez a szervezethez joga akkor engedélyezzük a kiírást
-                    string[] gomb = CmbGombok.Text.Split('-');
+                    string[] gomb = CmbGombok.Text.Split('=');
                     Adat_Gombok EgyGomb = (from a in AdatokGombok
                                            where a.Szervezet.Contains(szervezet.Név)
                                            && a.GombName == gomb[1].Trim()
@@ -446,6 +458,7 @@ namespace Villamos
                                 a.UserId == FelhasználóId &&
                                 a.OldalId == AblakID &&
                                 a.SzervezetId == szervezet.ID
+                                && a.GombokId == EgyGomb.GombokId
                             );
                             if (EgyJog != null) LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.Count - 1, true);
                         }
@@ -480,5 +493,7 @@ namespace Villamos
                 LstChkSzervezet.SetItemChecked(i, kell);
         }
         #endregion
+
+
     }
 }

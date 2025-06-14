@@ -112,7 +112,8 @@ namespace Villamos.Kezelők
                 string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"Törölt ={true} ";
                 szöveg += $"WHERE UserId ={Adat.UserId} AND ";
-                szöveg += $"OldalId ={Adat.OldalId}";
+                szöveg += $"OldalId ={Adat.OldalId} AND ";
+                szöveg += $"GombokId ={Adat.GombokId}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -134,7 +135,8 @@ namespace Villamos.Kezelők
                 string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"Törölt ={true} ";
                 szöveg += $"WHERE UserId ={Adatok[0].UserId} AND ";
-                szöveg += $"OldalId ={Adatok[0].OldalId}";
+                szöveg += $"OldalId ={Adatok[0].OldalId} AND ";
+                szöveg += $"GombokId ={Adatok[0].GombokId}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
