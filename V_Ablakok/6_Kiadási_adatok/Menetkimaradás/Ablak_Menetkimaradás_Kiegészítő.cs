@@ -16,6 +16,10 @@ namespace Villamos.Villamos_Ablakok
 {
     public partial class Ablak_Menetkimaradás_Kiegészítő : Form
     {
+        readonly Kezelő_MenetKimaradás_Főmérnökség KézFőmérnök = new Kezelő_MenetKimaradás_Főmérnökség();
+        readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgTelep = new Kezelő_Kiegészítő_Szolgálattelepei();
+        readonly Kezelő_Menetkimaradás KézMenet = new Kezelő_Menetkimaradás();
+
         List<Adat_Kiegészítő_Szolgálattelepei> Lstüzemek;
 
         string alsópanels6;
@@ -30,7 +34,7 @@ namespace Villamos.Villamos_Ablakok
         {
             dátumig.Value = DateTime.Now.AddDays(-1);
             dátumtól.Value = DateTime.Now.AddDays(-1);
-            Telephelyek_Feltöltése_lista();
+            Lstüzemek = KézSzolgTelep.Lista_Adatok().OrderBy(a => a.Telephelynév).ToList();
         }
 
         private void Ablak_Menetkimaradás_Kiegészítő_Load(object sender, EventArgs e)
@@ -38,28 +42,12 @@ namespace Villamos.Villamos_Ablakok
 
         }
 
-        void Telephelyek_Feltöltése_lista()
-        {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő.mdb";
-            string jelszó = "Mocó";
-            string szöveg = "SELECT * FROM Szolgálattelepeitábla ORDER BY telephelynév";
-
-            Kezelő_Kiegészítő_Szolgálattelepei kéz = new Kezelő_Kiegészítő_Szolgálattelepei();
-            Lstüzemek = kéz.Lista_Adatok(hely, jelszó, szöveg);
-        }
-
-
         private void Adat_Törlés_Click(object sender, EventArgs e)
         {
             try
             {
                 // törli az időszak főmérnökségi adatait
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\" + dátumtól.Value.ToString("yyyy") + @"\" + dátumtól.Value.ToString("yyyy") + "_menet_adatok.mdb";
-                string jelszó = "lilaakác";
-                string szöveg = "DELETE * FROM menettábla WHERE bekövetkezés>=#" + dátumtól.Value.ToString("MM-dd-yyyy") + " 00:00:0#";
-                szöveg = szöveg + " and bekövetkezés<=#" + dátumig.Value.ToString("MM-dd-yyyy") + " 23:59:59#";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                KézFőmérnök.Törlés(dátumtól.Value.Year, dátumtól.Value, dátumig.Value);
                 MessageBox.Show("Az adatok törlése befejeződött!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -77,14 +65,13 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-
                 // ellenőrizzük, hogy létezik-e  a főmérnökségi tábla a választott évben
                 // leellenőrizzük a főmérnökségi tábla létezik-e ha nem akkor másoljuk
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{dátumtól.Value.Year}\{dátumtól.Value.Year}_menet_adatok.mdb";
                 string jelszó = "lilaakác";
                 string szöveg = "SELECT * FROM menettábla";
 
-                Kezelő_Menetkimaradás KézMenet = new Kezelő_Menetkimaradás();
+
                 List<Adat_Menetkimaradás> AdatokMenet = KézMenet.Lista_Adatok(hely, jelszó, szöveg);
 
                 // ha nem létezik akkor létrehozzuk
@@ -109,8 +96,8 @@ namespace Villamos.Villamos_Ablakok
                 string helykieg = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
                 string jelszókieg = "Mocó";
                 string szövegkieg = "SELECT * FROM szolgálattelepeitábla";
-                Kezelő_Kiegészítő_Szolgálattelepei KézSzolg = new Kezelő_Kiegészítő_Szolgálattelepei();
-                List<Adat_Kiegészítő_Szolgálattelepei> AdatokSzolg = KézSzolg.Lista_Adatok(helykieg, jelszókieg, szövegkieg);
+
+                List<Adat_Kiegészítő_Szolgálattelepei> AdatokSzolg = KézSzolgTelep.Lista_Adatok(helykieg, jelszókieg, szövegkieg);
 
                 string helytip = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
                 string jelszótip = "pozsgaii";
@@ -237,72 +224,60 @@ namespace Villamos.Villamos_Ablakok
 
         private void Telephely_gomb_Click(object sender, EventArgs e)
         {
-            // telephelyek adatait összemásoljuk
-            // leellenőrizzük, hogy létezik-e a fájl
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{dátumtól.Value.Year}\{dátumtól.Value.Year}_menet_adatok.mdb";
+            try
+            {  // telephelyek adatait összemásoljuk
 
-            if (!Exists(hely)) Adatbázis_Létrehozás.Menekimaradás_Főmérnökség(hely);
-
-            string jelszó = "lilaakác";
-            string helytelep;
-
-            // a telepek adataival frisíti a főmérnökségi adatbázis adatait.
-            főholtart.Be(Lstüzemek.Count + 1);
-            alholtart.Be(100);
-            List<string> szövegGy = new List<string>();
-            foreach (Adat_Kiegészítő_Szolgálattelepei Elem in Lstüzemek)
-            {
-                főholtart.Lép();
-                // telephelyenként végigmegyünk az adatokon
-                helytelep = $@"{Application.StartupPath}\{Elem.Telephelynév.Trim()}\Adatok\főkönyv\menet{dátumtól.Value.Year}.mdb";
-                if (Exists(helytelep))
+                // a telepek adataival frisíti a főmérnökségi adatbázis adatait.
+                főholtart.Be(Lstüzemek.Count + 1);
+                alholtart.Be(100);
+                List<Adat_Menetkimaradás_Főmérnökség> AdatokGy = new List<Adat_Menetkimaradás_Főmérnökség>();
+                foreach (Adat_Kiegészítő_Szolgálattelepei Elem in Lstüzemek)
                 {
-
-                    string szöveg = $"SELECT * FROM menettábla WHERE Bekövetkezés>=#{dátumtól.Value:yyyy-MM-dd}# AND Bekövetkezés<=#{dátumig.Value:yyyy-MM-dd}# ORDER BY id";
-                    Kezelő_Menetkimaradás kéz = new Kezelő_Menetkimaradás();
-                    List<Adat_Menetkimaradás> Adatok = kéz.Lista_Adatok(helytelep, jelszó, szöveg);
+                    főholtart.Lép();
+                    // telephelyenként végigmegyünk az adatokon
+                    List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(Elem.Telephelynév.Trim(), dátumtól.Value.Year);
+                    Adatok = (from a in Adatok
+                              where a.Bekövetkezés >= MyF.Nap0000(dátumtól.Value)
+                              && a.Bekövetkezés >= MyF.Nap2359(dátumig.Value)
+                              orderby a.Id
+                              select a).ToList();
                     // Végig nézzük az adatokat
 
                     foreach (Adat_Menetkimaradás rekord in Adatok)
                     {
-
-                        string jvbeírás = (from a in Adatok
-                                           where a.Tétel == rekord.Tétel && a.Jelentés == rekord.Jelentés
-                                           select a.Jvbeírás).FirstOrDefault();
-                        if (jvbeírás != null && jvbeírás == "_")
-                        {
-                            // ha nincs a főmérnökségi táblába akkor rögzítjük
-                            szöveg = "INSERT INTO menettábla ";
-                            // rekord nevek
-                            szöveg += "(viszonylat, azonosító, típus, Eseményjele, Bekövetkezés, kimaradtmenet, jvbeírás, javítás, jelentés, tétel, ";
-                            szöveg += " vmbeírás, id, telephely, szolgálat, törölt )";
-                            szöveg += " VALUES  ( ";
-                            // értékek
-                            szöveg += "'" + rekord.Viszonylat + "', ";
-                            szöveg += "'" + rekord.Azonosító + "', ";
-                            szöveg += "'" + rekord.Típus + "', ";
-                            szöveg += "'" + rekord.Eseményjele + "', ";
-                            szöveg += "'" + rekord.Bekövetkezés.ToString() + "', ";
-                            szöveg += rekord.Kimaradtmenet + ", ";
-                            szöveg += "'" + rekord.Jvbeírás.Replace('"', '°').Replace('\'', '°') + "', ";
-                            szöveg += "'" + rekord.Javítás.Replace('"', '°').Replace('\'', '°') + "', ";
-                            szöveg += "'" + rekord.Jelentés + "', ";
-                            szöveg += rekord.Tétel + ", ";
-                            szöveg += "'" + rekord.Vmbeírás + "' , ";
-                            szöveg += "0, ";
-                            szöveg += "'" + Elem.Telephelynév.Trim() + "', ";
-                            szöveg += "'" + Elem.Szolgálatnév.Trim() + "', ";
-                            szöveg += rekord.Törölt;
-                            szöveg += " )";
-                            szövegGy.Add(szöveg);
-                        }
+                        Adat_Menetkimaradás_Főmérnökség ADAT = new Adat_Menetkimaradás_Főmérnökség(
+                                         rekord.Viszonylat,
+                                         rekord.Azonosító,
+                                         rekord.Típus,
+                                         rekord.Eseményjele,
+                                         rekord.Bekövetkezés,
+                                         rekord.Kimaradtmenet,
+                                         rekord.Jvbeírás.Replace('"', '°').Replace('\'', '°'),
+                                         rekord.Vmbeírás,
+                                         rekord.Javítás.Replace('"', '°').Replace('\'', '°'),
+                                         0,// ID-t nem használjuk itt
+                                         rekord.Törölt,
+                                         rekord.Jelentés,
+                                         rekord.Tétel,
+                                         Elem.Telephelynév.Trim(),
+                                         Elem.Szolgálatnév.Trim());
+                        AdatokGy.Add(ADAT);
                         alholtart.Lép();
                     }
                 }
+                KézFőmérnök.Rögzítés(dátumtól.Value.Year, AdatokGy);
+                főholtart.Ki();
+                alholtart.Ki();
             }
-            MyA.ABMódosítás(hely, jelszó, szövegGy);
-            főholtart.Ki();
-            alholtart.Ki();
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Kimutatás_Gomb_Click(object sender, EventArgs e)
@@ -332,11 +307,13 @@ namespace Villamos.Villamos_Ablakok
                 string fájlexc;
                 // létrehozzuk az excel táblát
                 // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
-                SaveFileDialog1.InitialDirectory = "MyDocuments";
-                SaveFileDialog1.Title = "Listázott tartalom mentése Excel fájlba";
-                SaveFileDialog1.FileName = "Menetkimaradás_" + Program.PostásNév.Trim() + "_" + dátumtól.Value.ToString("yyyy-MMMM") + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                SaveFileDialog1.Filter = "Excel |*.xlsx";
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"Menetkimaradás_{Program.PostásNév.Trim()}_{dátumtól.Value:yyyy-MMMM}_{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -431,13 +408,12 @@ namespace Villamos.Villamos_Ablakok
                 MyE.Kiir("telephely", "m5");
                 MyE.Kiir("szolgálat", "n5");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{dátumtól.Value.Year}\{dátumtól.Value.Year}_menet_adatok.mdb";
-                string jelszó = "lilaakác";
-                string szöveg = "SELECT * FROM menettábla where [bekövetkezés]>=#" + dátumtól.Value.ToString("M-d-yy") + " 00:00:0#";
-                szöveg += " and [bekövetkezés]<#" + dátumig.Value.ToString("M-d-yy") + " 23:59:0#";
-                szöveg += " order by bekövetkezés";
-                Kezelő_MenetKimaradás_Főmérnökség kéz = new Kezelő_MenetKimaradás_Főmérnökség();
-                List<Adat_Menetkimaradás_Főmérnökség> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Menetkimaradás_Főmérnökség> Adatok = KézFőmérnök.Lista_Adatok(dátumtól.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Bekövetkezés >= MyF.Nap0000(dátumtól.Value)
+                          && a.Bekövetkezés >= MyF.Nap2359(dátumig.Value)
+                          orderby a.Bekövetkezés
+                          select a).ToList();
 
                 alholtart.Be(100);
                 int i = 6;
@@ -688,11 +664,14 @@ namespace Villamos.Villamos_Ablakok
                 }
                 oszlop -= 5;
                 MyE.Háttérszín("A5:" + MyE.Oszlopnév(oszlop + 4) + "6", Color.Yellow);
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\" + dátumtól.Value.ToString("yyyy") + @"\" + dátumtól.Value.ToString("yyyy") + "_menet_adatok.mdb";
-                string jelszó = "lilaakác";
-                string szöveg = "SELECT * FROM menettábla where [bekövetkezés]>=#" + dátumtól.Value.ToString("M-d-yy") + " 00:00:0#";
-                szöveg += " and [bekövetkezés]<#" + dátumig.Value.ToString("M-d-yy") + " 23:59:0#";
-                szöveg += " order by telephely, típus, viszonylat,bekövetkezés";
+
+                List<Adat_Menetkimaradás_Főmérnökség> Adatok = KézFőmérnök.Lista_Adatok(dátumtól.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Bekövetkezés >= MyF.Nap0000(dátumtól.Value)
+                          && a.Bekövetkezés >= MyF.Nap2359(dátumig.Value)
+                          orderby a.Telephely, a.Típus, a.Viszonylat, a.Bekövetkezés
+                          select a).ToList();
+
                 int aö = 0;
                 int bö = 0;
                 int cö = 0;
@@ -704,9 +683,6 @@ namespace Villamos.Villamos_Ablakok
                 int nap = 1;
                 string képlet;
                 int napja;
-                Kezelő_MenetKimaradás_Főmérnökség kéz = new Kezelő_MenetKimaradás_Főmérnökség();
-                List<Adat_Menetkimaradás_Főmérnökség> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
 
                 alholtart.Be(100);
                 int i = 6;

@@ -53,7 +53,7 @@ namespace Villamos.Villamos_Ablakok
         }
 
 
-        void Al()
+        private void Al()
         {
             List<Adat_Épület_Adattábla> Adatok = Kéz.Lista_Adatok(Cmbtelephely.Trim());
 
