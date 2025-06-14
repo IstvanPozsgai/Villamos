@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_Kerék_Eszterga_Terjesztés> Adatok = new List<Adat_Kerék_Eszterga_Terjesztés>();
 
-            string szöveg = $"SELECT * FROM terjesztés ORDER BY  név";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY  név";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -58,7 +58,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE terjesztés SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"név='{Adat.Név}', ";  //Név
                 szöveg += $"Telephely='{Adat.Telephely}', ";    //Telephely
                 szöveg += $"Változat={Adat.Változat} ";    //Változat
@@ -80,7 +80,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO terjesztés (Név, Email, Telephely, Változat ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (Név, Email, Telephely, Változat ) VALUES (";
                 szöveg += $"'{Adat.Név}', ";  //Név
                 szöveg += $"'{Adat.Email}', ";  // Email
                 szöveg += $"'{Adat.Telephely}', ";    //Telephely
@@ -126,7 +126,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM terjesztés WHERE email='{Email}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE email='{Email}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

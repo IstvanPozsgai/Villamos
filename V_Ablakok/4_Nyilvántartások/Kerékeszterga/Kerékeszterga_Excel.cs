@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -17,6 +17,13 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         public DateTime Dátum { get; private set; }
 
         int NormaIdő = 0;
+
+        readonly Kezelő_Kerék_Eszterga_Igény KézIgény = new Kezelő_Kerék_Eszterga_Igény();
+        readonly Kezelő_Váltós_Naptár KéZNaptár = new Kezelő_Váltós_Naptár();
+        readonly Kezelő_Kerék_Eszterga_Esztergályos KézEszter = new Kezelő_Kerék_Eszterga_Esztergályos();
+        readonly Kezelő_Dolgozó_Beosztás_Új KézBeo = new Kezelő_Dolgozó_Beosztás_Új();
+        readonly Kezelő_Kerék_Eszterga_Naptár KézEsztNaptár = new Kezelő_Kerék_Eszterga_Naptár();
+
         public Kerékeszterga_Excel(string fájl, string gyökér, DateTime dátum)
         {
             Fájl = fájl;
@@ -36,7 +43,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             MyE.ExcelBezárás();
         }
 
-        void Várakozók()
+        private void Várakozók()
         {
             try
             {
@@ -45,11 +52,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 int sor = 1;
                 for (int ii = -1; ii < 1; ii++)
                 {
-                    string hely = Gyökér + $@"\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(ii).Year}_Igény.mdb";
-                    string jelszó = "RónaiSándor";
-                    string szöveg;
-
-
                     //fejléc elkészítése
                     MyE.Kiir("Prioritás", "A" + sor);
                     MyE.Kiir("Igénylés ideje", "B" + sor);
@@ -59,39 +61,37 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     MyE.Kiir("Státus", "F" + sor);
                     MyE.Kiir("Megjegyzés", "G" + sor);
 
-
-                    if (File.Exists(hely))
+                    List<Adat_Kerék_Eszterga_Igény> Adatok = KézIgény.Lista_Adatok(DateTime.Today.AddYears(ii).Year);
+                    Adatok = (from a in Adatok
+                              where a.Státus < 7
+                              orderby a.Prioritás descending, a.Rögzítés_dátum
+                              select a).ToList();
+                    foreach (Adat_Kerék_Eszterga_Igény rekord in Adatok)
                     {
-                        szöveg = "SELECT * FROM Igény WHERE státus<7  ORDER BY Prioritás desc, Rögzítés_dátum  ";
-                        Kezelő_Kerék_Eszterga_Igény kéz = new Kezelő_Kerék_Eszterga_Igény();
-                        List<Adat_Kerék_Eszterga_Igény> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                        foreach (Adat_Kerék_Eszterga_Igény rekord in Adatok)
+                        sor++;
+                        MyE.Kiir(rekord.Prioritás.ToString(), "A" + sor);
+                        MyE.Kiir(rekord.Rögzítés_dátum.ToString(), "B" + sor);
+                        MyE.Kiir(rekord.Pályaszám.Trim(), "C" + sor);
+                        MyE.Kiir(rekord.Telephely.Trim(), "D" + sor);
+                        MyE.Kiir(rekord.Típus.Trim(), "E" + sor);
+                        switch (rekord.Státus)
                         {
-                            sor++;
-                            MyE.Kiir(rekord.Prioritás.ToString(), "A" + sor);
-                            MyE.Kiir(rekord.Rögzítés_dátum.ToString(), "B" + sor);
-                            MyE.Kiir(rekord.Pályaszám.Trim(), "C" + sor);
-                            MyE.Kiir(rekord.Telephely.Trim(), "D" + sor);
-                            MyE.Kiir(rekord.Típus.Trim(), "E" + sor);
-                            switch (rekord.Státus)
-                            {
-                                case 0:
-                                    MyE.Kiir("Igény", "F" + sor);
-                                    break;
-                                case 2:
-                                    MyE.Kiir("Ütemezett", "F" + sor);
-                                    break;
-                                case 7:
-                                    MyE.Kiir("Elkészült", "F" + sor);
-                                    break;
-                                case 9:
-                                    MyE.Kiir("Törölt", "F" + sor);
-                                    break;
-                            }
-                            MyE.Kiir(rekord.Megjegyzés.Trim(), "G" + sor);
+                            case 0:
+                                MyE.Kiir("Igény", "F" + sor);
+                                break;
+                            case 2:
+                                MyE.Kiir("Ütemezett", "F" + sor);
+                                break;
+                            case 7:
+                                MyE.Kiir("Elkészült", "F" + sor);
+                                break;
+                            case 9:
+                                MyE.Kiir("Törölt", "F" + sor);
+                                break;
                         }
+                        MyE.Kiir(rekord.Megjegyzés.Trim(), "G" + sor);
                     }
+
                 }
                 MyE.Rácsoz("A1:G" + sor);
                 MyE.Vastagkeret("A1:G" + sor);
@@ -109,7 +109,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
         }
 
-        void Beosztás()
+        private void Beosztás()
         {
             try
             {
@@ -149,11 +149,12 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 }
 
                 // hétvége és ünnepnap színezés
-                string hely = Gyökér + @"\Főmérnökség\adatok\" + Dátum.Year.ToString() + @"\munkaidőnaptár.mdb";
-                string jelszó = "katalin";
-                string szöveg = $"SELECT * FROM naptár WHERE dátum>=#{Hételső:MM-dd-yyyy}# AND dátum<=#{Hétutolsó:MM-dd-yyyy}# ORDER BY Dátum";
-                Kezelő_Váltós_Naptár KéZNaptár = new Kezelő_Váltós_Naptár();
-                List<Adat_Váltós_Naptár> AdatNaptár = KéZNaptár.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Váltós_Naptár> AdatNaptár = KéZNaptár.Lista_Adatok(Dátum.Year, "");
+                AdatNaptár = (from a in AdatNaptár
+                              where a.Dátum >= Hételső
+                              && a.Dátum <= Hétutolsó
+                              orderby a.Dátum
+                              select a).ToList();
 
                 foreach (Adat_Váltós_Naptár Elem in AdatNaptár)
                 {
@@ -189,13 +190,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         public List<Adat_Dolgozó_Beosztás_Új> Adat_BEO_Csoport(DateTime KüldDátum)
         {
             List<Adat_Dolgozó_Beosztás_Új> CsoportAdatok = new List<Adat_Dolgozó_Beosztás_Új>();
-
-            string hely = Gyökér + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-            string jelszó = "RónaiSándor";
-            string szöveg = $"SELECT * FROM Esztergályos ORDER BY dolgozószám";
-
-            Kezelő_Kerék_Eszterga_Esztergályos Kéz = new Kezelő_Kerék_Eszterga_Esztergályos();
-            List<Adat_Kerék_Eszterga_Esztergályos> Csoport = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Kerék_Eszterga_Esztergályos> Csoport = KézEszter.Lista_Adatok().OrderBy(a => a.Dolgozószám).ToList();
 
             foreach (Adat_Kerék_Eszterga_Esztergályos Elem in Csoport)
             {
@@ -210,53 +205,51 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             DateTime Hételső = MyF.Hét_elsőnapja(KüldDátum);
             DateTime Hétutolsó = MyF.Hét_Utolsónapja(KüldDátum);
 
-            string hely = Gyökér + $@"\Baross\Adatok\Beosztás\{Hételső.Year}\EsztBeosztás{Hételső:yyyyMM}.mdb";
-            string jelszó = "kiskakas";
-            string szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{dolgozószám.Trim()}' AND Nap>=#{Hételső:MM-dd-yyyy}# AND Nap<=#{Hétutolsó:MM-dd-yyyy}#";
-            szöveg += " ORDER BY Nap";
-
-            Kezelő_Dolgozó_Beosztás_Új kéz = new Kezelő_Dolgozó_Beosztás_Új();
-            List<Adat_Dolgozó_Beosztás_Új> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-
+            List<Adat_Dolgozó_Beosztás_Új> Adatok = KézBeo.Lista_Adatok("Baross", Hételső);
             //következő hónap adatait hozzáadjuk
             if (Hételső.Month != Hétutolsó.Month)
             {
                 //Másik Hónap
-                hely = Gyökér + $@"\Baross\Adatok\Beosztás\{Hétutolsó.Year}\EsztBeosztás{Hétutolsó:yyyyMM}.mdb";
-                List<Adat_Dolgozó_Beosztás_Új> Ideig = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Ideig = KézBeo.Lista_Adatok("Baross", Hétutolsó);
                 Adatok.AddRange(Ideig);
-
             }
+            Adatok = (from a in Adatok
+                      where a.Dolgozószám == dolgozószám.Trim()
+                      && a.Nap >= Hételső
+                      && a.Nap <= Hétutolsó
+                      orderby a.Nap
+                      select a).ToList();
+
             return Adatok;
         }
 
         public string Dolgozó_név(string dolgozószám)
         {
-            string hely = Gyökér + $@"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-            string jelszó = "RónaiSándor";
-            string szöveg = $"SELECT * FROM Esztergályos WHERE dolgozószám='{dolgozószám}'";
-            Kezelő_Kerék_Eszterga_Esztergályos Kéz = new Kezelő_Kerék_Eszterga_Esztergályos();
-            Adat_Kerék_Eszterga_Esztergályos Elem = Kéz.Egy_Adat(hely, jelszó, szöveg);
+            string válasz = "";
+            List<Adat_Kerék_Eszterga_Esztergályos> Adatok = KézEszter.Lista_Adatok();
 
-            return Elem.Dolgozónév.Trim();
+            Adat_Kerék_Eszterga_Esztergályos Elem = (from a in Adatok
+                                                     where a.Dolgozószám == dolgozószám
+                                                     select a).FirstOrDefault();
+            if (Elem != null) válasz = Elem.Dolgozónév.Trim();
+
+            return válasz;
         }
 
-        void Elvégzett()
+        public void Elvégzett()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Esztergálás.mdb";
-                string jelszó = "RónaiSándor";
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum);
                 DateTime IdeigDát = Hételső;
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum);
 
-                string szöveg = $"SELECT * FROM Naptár WHERE Naptár.Idő>=#{Hételső:MM-dd-yyyy}# ";
-                szöveg += $" And Naptár.Idő<=#{Hétutolsó:MM-dd-yyyy}# ORDER BY pályaszám";
-
-                Kezelő_Kerék_Eszterga_Naptár kéz = new Kezelő_Kerék_Eszterga_Naptár();
-                List<Adat_Kerék_Eszterga_Naptár> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézEsztNaptár.Lista_Adatok(Dátum.Year);
+                Adatok = (from a in Adatok
+                          where a.Idő >= Hételső
+                          && a.Idő <= Hétutolsó
+                          orderby a.Pályaszám
+                          select a).ToList();
 
                 string munkalap = "Elvégzett";
                 MyE.Új_munkalap(munkalap);
@@ -289,24 +282,21 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     }
                 }
 
-
                 //Megkeressük a telephelyet és a Norma időt
-                Kezelő_Kerék_Eszterga_Igény kézIgény = new Kezelő_Kerék_Eszterga_Igény();
-                hely = Gyökér + $@"\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Igény.mdb";
-                Adat_Kerék_Eszterga_Igény AdatokIgény;
+                List<Adat_Kerék_Eszterga_Igény> AdatokIgény = KézIgény.Lista_Adatok(Dátum.Year);
 
                 for (int i = 2; i <= sor; i++)
                 {
                     string Beolvasott = MyE.Beolvas("B" + i);
                     string[] darabol = Beolvasott.Split('=');
-                    szöveg = $"SELECT * FROM Igény WHERE pályaszám='{darabol[0].Trim()}' ";
-                    AdatokIgény = kézIgény.Egy_Adat(hely, jelszó, szöveg);
-                    if (AdatokIgény != null)
+
+                    Adat_Kerék_Eszterga_Igény EgyIgény = AdatokIgény.Where(a => a.Pályaszám == darabol[0].Trim()).FirstOrDefault();
+                    if (EgyIgény != null)
                     {
-                        NormaIdő += AdatokIgény.Norma;
-                        MyE.Kiir(AdatokIgény.Norma.ToString(), "D" + i);
-                        MyE.Kiir(AdatokIgény.Telephely, "C" + i);
-                        switch (AdatokIgény.Státus)
+                        NormaIdő += EgyIgény.Norma;
+                        MyE.Kiir(EgyIgény.Norma.ToString(), "D" + i);
+                        MyE.Kiir(EgyIgény.Telephely, "C" + i);
+                        switch (EgyIgény.Státus)
                         {
                             case 0:
                                 MyE.Kiir("Igényelt", "G" + i);
@@ -324,9 +314,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                                 MyE.Kiir("Nem értékelhető", "G" + i);
                                 break;
                         }
-
-
-
                     }
                 }
 
@@ -354,21 +341,20 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-        void Gépidő()
+        public void Gépidő()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Esztergálás.mdb";
-                string jelszó = "RónaiSándor";
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum);
                 DateTime IdeigDát = Hételső;
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum);
 
-                string szöveg = $"SELECT * FROM Naptár WHERE Naptár.Idő>=#{Hételső:MM-dd-yyyy}# ";
-                szöveg += $" And Naptár.Idő<=#{Hétutolsó:MM-dd-yyyy}# ORDER BY pályaszám";
-
-                Kezelő_Kerék_Eszterga_Naptár kéz = new Kezelő_Kerék_Eszterga_Naptár();
-                List<Adat_Kerék_Eszterga_Naptár> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézEsztNaptár.Lista_Adatok(Dátum.Year);
+                Adatok = (from a in Adatok
+                          where a.Idő >= Hételső
+                          && a.Idő <= Hétutolsó
+                          orderby a.Pályaszám
+                          select a).ToList();
 
                 string munkalap = "GépIdő";
                 MyE.Új_munkalap(munkalap);

@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Kerék_Eszterga_Igény> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = "SELECT * FROM Igény";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Kerék_Eszterga_Igény> Adatok = new List<Adat_Kerék_Eszterga_Igény>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -68,7 +68,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "INSERT INTO igény (Pályaszám, Rögzítés_dátum,  Igényelte, Tengelyszám, Szerelvény,  prioritás, Ütemezés_dátum,  státus, telephely, megjegyzés, típus, norma) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (Pályaszám, Rögzítés_dátum,  Igényelte, Tengelyszám, Szerelvény,  prioritás, Ütemezés_dátum,  státus, telephely, megjegyzés, típus, norma) VALUES (";
                 szöveg += $"'{Adat.Pályaszám}', '{Adat.Rögzítés_dátum}', '{Adat.Igényelte}', {Adat.Tengelyszám}, {Adat.Szerelvény},";
                 szöveg += $" {Adat.Prioritás}, '{Adat.Ütemezés_dátum}', {Adat.Státus}, '{Adat.Telephely}','{Adat.Megjegyzés}', '{Adat.Típus}', {Adat.Norma})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -126,43 +126,6 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
-        }
-
-        public Adat_Kerék_Eszterga_Igény Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Kerék_Eszterga_Igény Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-                            Adat = new Adat_Kerék_Eszterga_Igény(
-                                    rekord["Pályaszám"].ToStrTrim(),
-                                    rekord["Megjegyzés"].ToStrTrim(),
-                                    rekord["Rögzítés_dátum"].ToÉrt_DaTeTime(),
-                                    rekord["Igényelte"].ToStrTrim(),
-                                    rekord["Tengelyszám"].ToÉrt_Int(),
-                                    rekord["Szerelvény"].ToÉrt_Int(),
-                                    rekord["prioritás"].ToÉrt_Int(),
-                                    rekord["Ütemezés_dátum"].ToÉrt_DaTeTime(),
-                                    rekord["státus"].ToÉrt_Int(),
-                                    rekord["telephely"].ToStrTrim(),
-                                    rekord["típus"].ToStrTrim(),
-                                    rekord["Norma"].ToÉrt_Int()
-                                    );
-                        }
-                    }
-                }
-            }
-            return Adat;
         }
     }
 

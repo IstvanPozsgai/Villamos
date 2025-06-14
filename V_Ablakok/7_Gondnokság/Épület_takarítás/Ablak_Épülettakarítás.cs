@@ -1140,7 +1140,7 @@ namespace Villamos
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
                 string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM takarításosztály where státus=0 ORDER BY id";
+
 
                 int sor = 2;
                 int idE1db;
@@ -2550,7 +2550,7 @@ namespace Villamos
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
                 string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM takarításosztály where státus=0  order by  id";
+
 
                 string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
                 string szövegép;
