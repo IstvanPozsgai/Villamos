@@ -101,7 +101,8 @@ namespace Villamos.V_MindenEgyéb
         /// <param name="Év"></param>
         /// <param name="fájlexcel"></param>
         /// <param name="felelősmunkahely"></param>
-        public static void Menet_beolvasó(string Telephely, int Év, string fájlexcel, string felelősmunkahely)
+        /// <param name="üzem">alapértelmezés szerint üzemek és false esetén főmérnökség</param>
+        public static void Menet_beolvasó(string Telephely, int Év, string fájlexcel, string felelősmunkahely, bool üzem = true)
         {
             try
             {
@@ -114,6 +115,10 @@ namespace Villamos.V_MindenEgyéb
                 // Beolvasni kívánt oszlopok
                 Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
                 List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+                //Szolgálat adatok
+                Kezelő_Kiegészítő_Szolgálattelepei KézSzolgTelep = new Kezelő_Kiegészítő_Szolgálattelepei();
+                List<Adat_Kiegészítő_Szolgálattelepei> AdatokSzolg = KézSzolgTelep.Lista_Adatok();
 
                 //Meghatározzuk a beolvasó tábla elnevezéseit 
                 //Oszlopnevek beállítása
@@ -143,7 +148,9 @@ namespace Villamos.V_MindenEgyéb
                 if (oszlopMunkahely == null) throw new HibásBevittAdat("Nincs helyesen beállítva a munkahely beolvasótábla! ");
 
                 Kezelő_Menetkimaradás Kéz = new Kezelő_Menetkimaradás();
+                Kezelő_MenetKimaradás_Főmérnökség KézFőmérnök = new Kezelő_MenetKimaradás_Főmérnökség();
                 List<Adat_Menetkimaradás> AdatokGy = new List<Adat_Menetkimaradás>();
+                List<Adat_Menetkimaradás_Főmérnökség> AdatokFőGy = new List<Adat_Menetkimaradás_Főmérnökség>();
                 foreach (DataRow Sor in Tábla.Rows)
                 {
                     string azonosító = MyF.Szöveg_Tisztítás(Sor[oszlopAzon].ToStrTrim(), 1, 4);
@@ -162,26 +169,63 @@ namespace Villamos.V_MindenEgyéb
                     string Jelentés = MyF.Szöveg_Tisztítás(Sor[oszlopjelentés].ToStrTrim(), 0, 20);
                     int tétel = Sor[oszloptétel].ToÉrt_Int();
                     string munkahely = MyF.Szöveg_Tisztítás(Sor[oszlopMunkahely].ToStrTrim(), 0, 20);
-                    if (felelősmunkahely.Trim().ToUpper() == munkahely.ToStrTrim().ToUpper())
+                    if (üzem)
                     {
-                        Adat_Menetkimaradás Adat = new Adat_Menetkimaradás(
-                                            viszonylat,
-                                            azonosító,
-                                            Típus,
-                                            Eseményjele,
-                                            bekövetkezés,
-                                            kimaradtmenet,
-                                            jvbeírás,
-                                            vmbeírás,
-                                            javítás,
-                                            Id,
-                                            törölt,
-                                            Jelentés,
-                                            tétel);
-                        AdatokGy.Add(Adat);
+                        if (felelősmunkahely.Trim().ToUpper() == munkahely.ToStrTrim().ToUpper())
+                        {
+
+                            Adat_Menetkimaradás Adat = new Adat_Menetkimaradás(
+                                              viszonylat,
+                                              azonosító,
+                                              Típus,
+                                              Eseményjele,
+                                              bekövetkezés,
+                                              kimaradtmenet,
+                                              jvbeírás,
+                                              vmbeírás,
+                                              javítás,
+                                              Id,
+                                              törölt,
+                                              Jelentés,
+                                              tétel);
+                            AdatokGy.Add(Adat);
+
+                        }
+                    }
+                    else
+                    {
+                        string telephely = "_";
+                        string szolgálat = "_";
+                        Adat_Kiegészítő_Szolgálattelepei Lekérdezés = (from a in AdatokSzolg
+                                                                       where a.Felelősmunkahely.Trim() == munkahely.Trim()
+                                                                       select a).FirstOrDefault();
+                        if (Lekérdezés != null)
+                        {
+                            telephely = Lekérdezés.Telephelynév;
+                            szolgálat = Lekérdezés.Szolgálatnév;
+                        }
+                        Adat_Menetkimaradás_Főmérnökség AdatFő = new Adat_Menetkimaradás_Főmérnökség(
+                                        viszonylat,
+                                        azonosító,
+                                        Típus,
+                                        Eseményjele,
+                                        bekövetkezés,
+                                        kimaradtmenet,
+                                        jvbeírás,
+                                        vmbeírás,
+                                        javítás,
+                                        Id,
+                                        törölt,
+                                        Jelentés,
+                                        tétel,
+                                        telephely,
+                                        szolgálat);
+                        AdatokFőGy.Add(AdatFő);
                     }
                 }
+
                 if (AdatokGy.Count > 0) Kéz.Döntés(Telephely, Év, AdatokGy);
+                if (AdatokFőGy.Count > 0) KézFőmérnök.Döntés(Év, AdatokFőGy);
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexcel);
             }

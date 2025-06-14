@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -19,6 +17,12 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_MenetKimaradás_Főmérnökség KézFőmérnök = new Kezelő_MenetKimaradás_Főmérnökség();
         readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgTelep = new Kezelő_Kiegészítő_Szolgálattelepei();
         readonly Kezelő_Menetkimaradás KézMenet = new Kezelő_Menetkimaradás();
+
+        //Különszálas beolvasás
+        string Felelősmunkahely = "";
+        string Telephely = "";
+        DateTime DátumKüld = DateTime.Now;
+        string Fájlexc = "";
 
         List<Adat_Kiegészítő_Szolgálattelepei> Lstüzemek;
 
@@ -61,22 +65,10 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        private void SAP_Click(object sender, EventArgs e)
+        private async void SAP_Click(object sender, EventArgs e)
         {
             try
             {
-                // ellenőrizzük, hogy létezik-e  a főmérnökségi tábla a választott évben
-                // leellenőrizzük a főmérnökségi tábla létezik-e ha nem akkor másoljuk
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{dátumtól.Value.Year}\{dátumtól.Value.Year}_menet_adatok.mdb";
-                string jelszó = "lilaakác";
-                string szöveg = "SELECT * FROM menettábla";
-
-
-                List<Adat_Menetkimaradás> AdatokMenet = KézMenet.Lista_Adatok(hely, jelszó, szöveg);
-
-                // ha nem létezik akkor létrehozzuk
-                if (!Exists(hely)) Adatbázis_Létrehozás.Menekimaradás_Főmérnökség(hely);
-
                 // megpróbáljuk megnyitni az excel táblát.
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
                 {
@@ -85,130 +77,22 @@ namespace Villamos.Villamos_Ablakok
                     FileName = "",
                     Filter = "Excel |*.xlsx"
                 };
-                string fájlexc;
+
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = OpenFileDialog1.FileName;
+                    Fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
 
-
-                string helykieg = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszókieg = "Mocó";
-                string szövegkieg = "SELECT * FROM szolgálattelepeitábla";
-
-                List<Adat_Kiegészítő_Szolgálattelepei> AdatokSzolg = KézSzolgTelep.Lista_Adatok(helykieg, jelszókieg, szövegkieg);
-
-                string helytip = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
-                string jelszótip = "pozsgaii";
-                string szövegtip = "SELECT * FROM állománytábla ";
-                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(helytip, jelszótip, szövegtip);
-
-
-                // megnyitjuk a beolvasandó táblát
-                MyE.ExcelMegnyitás(fájlexc);
-                string munkalap = "Munka1";
-                // megnézzük, hogy hány sorból áll a tábla
-                int utolsó = MyE.Utolsósor(munkalap);
-
-                főholtart.Be(utolsó + 1);
-                if (utolsó > 1)
-                {
-                    // megnyitjuk a táblát
-                    bool törölt = false;
-
-                    List<string> SzövegGy = new List<string>();
-                    for (int i = 2; i <= utolsó; i++)
-                    {
-                        // beolvassuk az adatokat
-                        DateTime didő = MyE.Beolvasidő("c" + i.ToString());
-                        DateTime ddátum = MyE.BeolvasDátum("b" + i.ToString());
-                        DateTime bekövetkezés = new DateTime(ddátum.Year, ddátum.Month, ddátum.Day, didő.Hour, didő.Minute, didő.Second);
-                        string jelentés = MyE.Beolvas("a" + i.ToString());
-                        string viszonylat = MyF.Szöveg_Tisztítás(MyE.Beolvas("j" + i.ToString()), 0, 6);
-                        string azonosító = MyF.Szöveg_Tisztítás(MyE.Beolvas("d" + i.ToString()), 1, 4);
-                        string Eseményjele = MyF.Szöveg_Tisztítás(MyE.Beolvas("g" + i.ToString()), 0, 1);
-                        int kimaradtmenet = int.Parse(MyE.Beolvas("h" + i.ToString()));
-                        int tétel = int.Parse(MyE.Beolvas("m" + i.ToString()));
-                        string jvbeírás = MyF.Szöveg_Tisztítás(MyE.Beolvas("e" + i.ToString()), 0, 150);
-                        string vmbeírás = "*";
-                        string javítás = MyF.Szöveg_Tisztítás(MyE.Beolvas("F" + i.ToString()), 0, 150);
-
-
-                        string típus = (from a in AdatokJármű
-                                        where a.Azonosító.Trim() == azonosító.Trim()
-                                        select a.Valóstípus).FirstOrDefault() ?? "?";
-
-                        string felelősmunkahely = MyE.Beolvas("l" + i.ToString()).Trim();
-
-                        string telephely = "_";
-                        string szolgálat = "_";
-                        Adat_Kiegészítő_Szolgálattelepei Lekérdezés = (from a in AdatokSzolg
-                                                                       where a.Felelősmunkahely.Trim() == felelősmunkahely.Trim()
-                                                                       select a).FirstOrDefault();
-                        if (Lekérdezés != null)
-                        {
-                            telephely = Lekérdezés.Telephelynév;
-                            szolgálat = Lekérdezés.Szolgálatnév;
-                        }
-
-                        List<Adat_Menetkimaradás> Ellenorzes = (from a in AdatokMenet
-                                                                where a.Tétel == tétel && a.Jelentés == jelentés
-                                                                select a).ToList();
-
-                        if (Ellenorzes.Any())
-                        {
-                            // ha van ilyen akkor módosítjuk
-                            szöveg = "UPDATE menettábla SET viszonylat= '" + viszonylat.Trim() + "'";
-                            szöveg += ", azonosító= '" + azonosító.Trim() + "'";
-                            szöveg += ", típus= '" + típus.Trim() + "'";
-                            szöveg += ", Eseményjele= '" + Eseményjele.Trim() + "'";
-                            szöveg += ", Bekövetkezés= '" + bekövetkezés.ToString() + "'";
-                            szöveg += ", kimaradtmenet= " + kimaradtmenet;
-                            szöveg += ", jvbeírás= '" + jvbeírás.Trim() + "'";
-                            szöveg += ", vmbeírás= '" + vmbeírás.Trim() + "'";
-                            szöveg += ", javítás= '" + javítás.Trim() + "'";
-                            szöveg += ", törölt= " + törölt;
-                            szöveg += ", telephely= '" + telephely.Trim() + "'";
-                            szöveg += ", szolgálat= '" + szolgálat.Trim() + "'";
-                            szöveg += " WHERE tétel=" + tétel + " and jelentés='" + jelentés.Trim() + "'";
-                        }
-                        else
-                        {
-                            // ha nincs a főmérnökségi táblába akkor rögzítjük
-                            szöveg = "INSERT INTO menettábla ";
-                            // rekord nevek
-                            szöveg += "(viszonylat, azonosító, típus, Eseményjele, Bekövetkezés, kimaradtmenet, jvbeírás, javítás, jelentés, tétel, ";
-                            szöveg += " vmbeírás, id, telephely, szolgálat, törölt )";
-                            szöveg += " VALUES  ( ";
-                            // értékek
-                            szöveg += $"'{viszonylat}', ";
-                            szöveg += $"'{azonosító}', ";
-                            szöveg += $"'{típus}', ";
-                            szöveg += $"'{Eseményjele}', ";
-                            szöveg += $"'{bekövetkezés}', ";
-                            szöveg += $"{kimaradtmenet}, ";
-                            szöveg += $"'{jvbeírás}', ";
-                            szöveg += $"'{javítás}', ";
-                            szöveg += $"'{jelentés}', ";
-                            szöveg += $"{tétel}, ";
-                            szöveg += $"'{vmbeírás}' , ";
-                            szöveg += $"{0}, ";
-                            szöveg += $"'{telephely}', ";
-                            szöveg += $"'{szolgálat}', ";
-                            szöveg += $"{törölt} )";
-                        }
-                        SzövegGy.Add(szöveg);
-                        főholtart.Lép();
-                    }
-                    MyA.ABMódosítás(hely, jelszó, SzövegGy);
-                }
-                MyE.ExcelBezárás();
-
+                timer1.Enabled = true;
+                főholtart.Be();
+                Felelősmunkahely = "";   // beolvassuk a felelős munkahelyet
+                DátumKüld = dátumtól.Value; // beolvassuk a dátumot
+                await Task.Run(() => SAP_Adatokbeolvasása.Menet_beolvasó(Telephely, DátumKüld.Year, Fájlexc, Felelősmunkahely, false));
+                timer1.Enabled = false;
                 főholtart.Ki();
+
                 // kitöröljük a betöltött fájlt
-                Delete(fájlexc);
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -220,6 +104,16 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Beolvasott adatok feldolgozása közben lépteti a Holtartot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            főholtart.Lép();
         }
 
         private void Telephely_gomb_Click(object sender, EventArgs e)
@@ -238,7 +132,7 @@ namespace Villamos.Villamos_Ablakok
                     List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(Elem.Telephelynév.Trim(), dátumtól.Value.Year);
                     Adatok = (from a in Adatok
                               where a.Bekövetkezés >= MyF.Nap0000(dátumtól.Value)
-                              && a.Bekövetkezés >= MyF.Nap2359(dátumig.Value)
+                              && a.Bekövetkezés <= MyF.Nap2359(dátumig.Value)
                               orderby a.Id
                               select a).ToList();
                     // Végig nézzük az adatokat
@@ -265,7 +159,7 @@ namespace Villamos.Villamos_Ablakok
                         alholtart.Lép();
                     }
                 }
-                KézFőmérnök.Rögzítés(dátumtól.Value.Year, AdatokGy);
+                KézFőmérnök.Döntés(dátumtól.Value.Year, AdatokGy);
                 főholtart.Ki();
                 alholtart.Ki();
             }
@@ -411,7 +305,7 @@ namespace Villamos.Villamos_Ablakok
                 List<Adat_Menetkimaradás_Főmérnökség> Adatok = KézFőmérnök.Lista_Adatok(dátumtól.Value.Year);
                 Adatok = (from a in Adatok
                           where a.Bekövetkezés >= MyF.Nap0000(dátumtól.Value)
-                          && a.Bekövetkezés >= MyF.Nap2359(dátumig.Value)
+                          && a.Bekövetkezés <= MyF.Nap2359(dátumig.Value)
                           orderby a.Bekövetkezés
                           select a).ToList();
 
@@ -668,7 +562,7 @@ namespace Villamos.Villamos_Ablakok
                 List<Adat_Menetkimaradás_Főmérnökség> Adatok = KézFőmérnök.Lista_Adatok(dátumtól.Value.Year);
                 Adatok = (from a in Adatok
                           where a.Bekövetkezés >= MyF.Nap0000(dátumtól.Value)
-                          && a.Bekövetkezés >= MyF.Nap2359(dátumig.Value)
+                          && a.Bekövetkezés <= MyF.Nap2359(dátumig.Value)
                           orderby a.Telephely, a.Típus, a.Viszonylat, a.Bekövetkezés
                           select a).ToList();
 

@@ -72,41 +72,73 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                List<Adat_Menetkimaradás_Főmérnökség> AdatokB = Lista_Adatok(Év);
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Menetkimaradás_Főmérnökség rekord in Adatok)
                 {
-                    Adat_Menetkimaradás_Főmérnökség jvbeírás = (from a in AdatokB
-                                                                where a.Tétel == rekord.Tétel && a.Jelentés == rekord.Jelentés
-                                                                select a).FirstOrDefault();
-                    if (jvbeírás == null)
-                    {
-                        // ha nincs a főmérnökségi táblába akkor rögzítjük
-                        string szöveg = $"INSERT INTO {táblanév} ";
-                        // rekord nevek
-                        szöveg += "(viszonylat, azonosító, típus, Eseményjele, Bekövetkezés, kimaradtmenet, jvbeírás, javítás, jelentés, tétel, ";
-                        szöveg += " vmbeírás, id, telephely, szolgálat, törölt )";
-                        szöveg += " VALUES  ( ";
-                        // értékek
-                        szöveg += $"'{rekord.Viszonylat}', ";
-                        szöveg += $"'{rekord.Azonosító}', ";
-                        szöveg += $"'{rekord.Típus}', ";
-                        szöveg += $"'{rekord.Eseményjele}', ";
-                        szöveg += $"'{rekord.Bekövetkezés}', ";
-                        szöveg += $"{rekord.Kimaradtmenet}, ";
-                        szöveg += $"'{rekord.Jvbeírás.Replace('"', '°').Replace('\'', '°')}', ";
-                        szöveg += $"'{rekord.Javítás.Replace('"', '°').Replace('\'', '°')}', ";
-                        szöveg += $"'{rekord.Jelentés}', ";
-                        szöveg += $"{rekord.Tétel}, ";
-                        szöveg += $"'{rekord.Vmbeírás}' , ";
-                        szöveg += "0, ";
-                        szöveg += $"'{rekord.Telephely}', ";
-                        szöveg += $"'{rekord.Szolgálat}', ";
-                        szöveg += $"{rekord.Törölt})";
-                        szövegGy.Add(szöveg);
-                    }
-                    MyA.ABMódosítás(hely, jelszó, szövegGy);
+                    // ha nincs a főmérnökségi táblába akkor rögzítjük
+                    string szöveg = $"INSERT INTO {táblanév} ";
+                    // rekord nevek
+                    szöveg += "(viszonylat, azonosító, típus, Eseményjele, Bekövetkezés, kimaradtmenet, jvbeírás, javítás, jelentés, tétel, ";
+                    szöveg += " vmbeírás, id, telephely, szolgálat, törölt )";
+                    szöveg += " VALUES  ( ";
+                    // értékek
+                    szöveg += $"'{rekord.Viszonylat}', ";
+                    szöveg += $"'{rekord.Azonosító}', ";
+                    szöveg += $"'{rekord.Típus}', ";
+                    szöveg += $"'{rekord.Eseményjele}', ";
+                    szöveg += $"'{rekord.Bekövetkezés}', ";
+                    szöveg += $"{rekord.Kimaradtmenet}, ";
+                    szöveg += $"'{rekord.Jvbeírás.Replace('"', '°').Replace('\'', '°')}', ";
+                    szöveg += $"'{rekord.Javítás.Replace('"', '°').Replace('\'', '°')}', ";
+                    szöveg += $"'{rekord.Jelentés}', ";
+                    szöveg += $"{rekord.Tétel}, ";
+                    szöveg += $"'{rekord.Vmbeírás}' , ";
+                    szöveg += "0, ";
+                    szöveg += $"'{rekord.Telephely}', ";
+                    szöveg += $"'{rekord.Szolgálat}', ";
+                    szöveg += $"{rekord.Törölt})";
+                    szövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, szövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(int Év, List<Adat_Menetkimaradás_Főmérnökség> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> szövegGy = new List<string>();
+                foreach (Adat_Menetkimaradás_Főmérnökség rekord in Adatok)
+                {
+                    // ha nincs a főmérnökségi táblába akkor rögzítjük
+                    string szöveg = $"UPDATE {táblanév}  SET ";
+                    szöveg += $"viszonylat='{rekord.Viszonylat}', ";
+                    szöveg += $"azonosító='{rekord.Azonosító}', ";
+                    szöveg += $"típus='{rekord.Típus}', ";
+                    szöveg += $"Eseményjele='{rekord.Eseményjele}', ";
+                    szöveg += $"Bekövetkezés='{rekord.Bekövetkezés}', ";
+                    szöveg += $"kimaradtmenet={rekord.Kimaradtmenet}, ";
+                    szöveg += $"jvbeírás='{rekord.Jvbeírás.Replace('"', '°').Replace('\'', '°')}', ";
+                    szöveg += $"javítás='{rekord.Javítás.Replace('"', '°').Replace('\'', '°')}', ";
+                    szöveg += $"vmbeírás='{rekord.Vmbeírás}' , ";
+                    szöveg += $"telephely='{rekord.Telephely}', ";
+                    szöveg += $"szolgálat='{rekord.Szolgálat}', ";
+                    szöveg += $"törölt={rekord.Törölt} ";
+                    szöveg += $" WHERE [jelentés]='{rekord.Jelentés}'";
+                    szöveg += $" AND [tétel]={rekord.Tétel}";
+                    szövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, szövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -127,6 +159,38 @@ namespace Villamos.Kezelők
                 string szöveg = $"DELETE * FROM {táblanév} WHERE bekövetkezés>=#{Dátumtól:MM-dd-yyyy} 00:00:0#";
                 szöveg += $" and bekövetkezés<=#{Dátumig:MM-dd-yyyy} 23:59:59#";
                 MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Döntés(int Év, List<Adat_Menetkimaradás_Főmérnökség> Adatok)
+        {
+            try
+            {
+                List<Adat_Menetkimaradás_Főmérnökség> AdatokRögzítés = new List<Adat_Menetkimaradás_Főmérnökség>();
+                List<Adat_Menetkimaradás_Főmérnökség> AdatokMódosítás = new List<Adat_Menetkimaradás_Főmérnökség>();
+                List<Adat_Menetkimaradás_Főmérnökség> AdatokBázis = Lista_Adatok(Év);
+                foreach (Adat_Menetkimaradás_Főmérnökség Elem in Adatok)
+                {
+                    Adat_Menetkimaradás_Főmérnökség ADAT = (from a in AdatokBázis
+                                                            where a.Tétel == Elem.Tétel
+                                                            && a.Jelentés == Elem.Jelentés
+                                                            select a).FirstOrDefault();
+                    if (ADAT == null)
+                        AdatokRögzítés.Add(Elem);
+                    else
+                        AdatokMódosítás.Add(Elem);
+                }
+                if (AdatokRögzítés.Count > 0) Rögzítés(Év, AdatokRögzítés);
+                if (AdatokMódosítás.Count > 0) Módosítás(Év, AdatokMódosítás);
             }
             catch (HibásBevittAdat ex)
             {
