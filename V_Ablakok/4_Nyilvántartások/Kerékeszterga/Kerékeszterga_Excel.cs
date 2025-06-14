@@ -13,7 +13,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
     public class Kerékeszterga_Excel
     {
         public string Fájl { get; private set; }
-        public string Gyökér { get; private set; }
         public DateTime Dátum { get; private set; }
 
         int NormaIdő = 0;
@@ -24,12 +23,10 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         readonly Kezelő_Dolgozó_Beosztás_Új KézBeo = new Kezelő_Dolgozó_Beosztás_Új();
         readonly Kezelő_Kerék_Eszterga_Naptár KézEsztNaptár = new Kezelő_Kerék_Eszterga_Naptár();
 
-        public Kerékeszterga_Excel(string fájl, string gyökér, DateTime dátum)
+        public Kerékeszterga_Excel(string fájl, DateTime dátum)
         {
             Fájl = fájl;
             Dátum = dátum;
-            Gyökér = gyökér;
-
         }
 
         public void Excel_alaptábla()

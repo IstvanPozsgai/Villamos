@@ -20,35 +20,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely.KönyvSzerk());
         }
 
-        public List<Adat_Váltós_Naptár> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Váltós_Naptár> Adatok = new List<Adat_Váltós_Naptár>();
-            Adat_Váltós_Naptár Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Váltós_Naptár(
-                                          rekord["Nap"].ToStrTrim(),
-                                          rekord["Dátum"].ToÉrt_DaTeTime()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Váltós_Naptár> Lista_Adatok(int Év, string Tábla)
         {
@@ -175,5 +146,38 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        //elkopó
+        public List<Adat_Váltós_Naptár> Lista_Adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Váltós_Naptár> Adatok = new List<Adat_Váltós_Naptár>();
+            Adat_Váltós_Naptár Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Váltós_Naptár(
+                                          rekord["Nap"].ToStrTrim(),
+                                          rekord["Dátum"].ToÉrt_DaTeTime()
+                                          );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
+
     }
 }

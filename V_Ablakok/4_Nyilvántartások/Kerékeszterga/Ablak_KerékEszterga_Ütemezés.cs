@@ -1401,7 +1401,7 @@ namespace Villamos.Villamos_Ablakok
                 fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\Eszterga_Lejelentés_{MyF.Hét_Sorszáma(Dátum.Value)}_heti_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}.xlsx";
 
                 Holtart.Be();
-                Kerékeszterga_Excel KerExc = new Kerékeszterga_Excel(fájlexc, Application.StartupPath, Dátum.Value);
+                Kerékeszterga_Excel KerExc = new Kerékeszterga_Excel(fájlexc, Dátum.Value);
                 Holtart.Lép();
                 KerExc.Excel_alaptábla();
                 Holtart.Lép();
