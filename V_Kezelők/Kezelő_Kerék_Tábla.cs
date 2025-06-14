@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "szabólászló";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerék.mdb";
+        readonly string táblanév = "tábla";
 
         public Kezelő_Kerék_Tábla()
         {
@@ -20,9 +21,8 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kerék_Tábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM tábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Kerék_Tábla> Adatok = new List<Adat_Kerék_Tábla>();
-            Adat_Kerék_Tábla Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -36,7 +36,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Kerék_Tábla(
+                                Adat_Kerék_Tábla Adat = new Adat_Kerék_Tábla(
                                         rekord["Kerékberendezés"].ToStrTrim(),
                                         rekord["kerékmegnevezés"].ToStrTrim(),
                                         rekord["kerékgyártásiszám"].ToStrTrim(),
