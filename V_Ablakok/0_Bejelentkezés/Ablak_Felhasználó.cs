@@ -21,7 +21,7 @@ namespace Villamos
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
-        // megjegyzés: dolgozókhoz kell majd feltölteni a szervezeteket
+        // JAVÍTANDÓ: dolgozókhoz kell majd feltölteni a szervezeteket
 
         #region Alap
         public Ablak_Felhasználó()

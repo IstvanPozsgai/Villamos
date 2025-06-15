@@ -1198,7 +1198,7 @@ namespace Villamos
 
 
         #region MindenEgyéb
-        // megjegyzés: Ezt még javítani kell
+        // JAVÍTANDÓ: Ezt még javítani kell
 
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {

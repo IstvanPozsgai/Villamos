@@ -44,7 +44,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 
 
         #region alap
-        // megjegyzés:
+        // JAVÍTANDÓ:   Ezt el kell koptatni
         private void Ablak_TTP_Load(object sender, EventArgs e)
         {
             string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP";

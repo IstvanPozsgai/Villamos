@@ -122,7 +122,7 @@ namespace Villamos.Ablakok
             try
             {
                 if (string.IsNullOrEmpty(GombNév.Text.Trim())) throw new HibásBevittAdat("Kérem adja meg a Menü nevét!");
-                // megjegyzés: ide be kell olvasni listából a szervezeteket pontosvesszővel tagolva
+                // JAVÍTANDÓ: ide be kell olvasni listából a szervezeteket pontosvesszővel tagolva
                 string szervezet = string.Join(";", ChkSzervezet.CheckedItems.Cast<string>());
                 Adat_Gombok adat = new Adat_Gombok(
                         TxtId.Text.ToÉrt_Int(),

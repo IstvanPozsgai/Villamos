@@ -21,21 +21,24 @@ namespace Villamos.Villamos_Ablakok
         long háttérSzín = 12632256;
         public event Event_Kidobó Változás;
         Szín_kódolás Szín;
+        DateTime Hételső;
 
         int Év = 1900;
         string telephely = "";
         string Választott = "";
 
+        // JAVÍTANDÓ:
         string hely;
         string jelszó = "RónaiSándor";
         string helyTörzs = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
 
-        readonly Kezelő_Kerék_Eszterga_Naptár Naptár_Kéz = new Kezelő_Kerék_Eszterga_Naptár();
+        readonly Kezelő_Kerék_Eszterga_Naptár KézNaptár = new Kezelő_Kerék_Eszterga_Naptár();
         readonly Kezelő_Kerék_Eszterga_Tevékenység KézTevékenység = new Kezelő_Kerék_Eszterga_Tevékenység();
+        readonly Kezelő_Kerék_Eszterga_Tengely kézTengely = new Kezelő_Kerék_Eszterga_Tengely();
+        readonly Kezelő_Kerék_Eszterga_Igény KézIgény = new Kezelő_Kerék_Eszterga_Igény();
+
         List<Adat_Kerék_Eszterga_Naptár> Naptár_Adatok;
         List<Adat_Kerék_Eszterga_Naptár> Naptár_Adatok_ideig;
-
-        readonly Kezelő_Kerék_Eszterga_Igény KézIgény = new Kezelő_Kerék_Eszterga_Igény();
         List<Adat_Kerék_Eszterga_Igény> AdatokIgény = new List<Adat_Kerék_Eszterga_Igény>();
 
         int elem;
@@ -49,12 +52,12 @@ namespace Villamos.Villamos_Ablakok
             Start();
         }
 
-        void Start()
+        private void Start()
         {
-
             Tevékenység_feltöltés();
             Marad.Checked = false;
-            DateTime Hételső = MyF.Hét_elsőnapja(DátumésIdő);
+            Hételső = MyF.Hét_elsőnapja(DátumésIdő);
+            // JAVÍTANDÓ:
             hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
             switch (Mód)
             {
@@ -73,6 +76,13 @@ namespace Villamos.Villamos_Ablakok
             }
 
             IgénylistaFeltötlés();
+            Jogosultságkiosztás();
+            Text_Dátum.Text = DátumésIdő.ToString("yyyy.MM.dd");
+            Text_Idő.Text = DátumésIdő.ToString("HH:mm");
+            Kiírás();
+            Igény_Típus_Feltöltés();
+            Tábla_Író();
+            Automata();
         }
 
 
@@ -87,13 +97,6 @@ namespace Villamos.Villamos_Ablakok
 
         private void Ablak_Eszterga_Segéd_Load(object sender, EventArgs e)
         {
-            Jogosultságkiosztás();
-            Text_Dátum.Text = DátumésIdő.ToString("yyyy.MM.dd");
-            Text_Idő.Text = DátumésIdő.ToString("HH:mm");
-            Kiírás();
-            Igény_Típus_Feltöltés();
-            Tábla_Író();
-            Automata();
         }
 
 
@@ -188,7 +191,7 @@ namespace Villamos.Villamos_Ablakok
         }
 
 
-        void Rögzít()
+        private void Rögzít()
         {
             try
             {
@@ -199,17 +202,17 @@ namespace Villamos.Villamos_Ablakok
                 if (NormaIdő < 1)
                     throw new HibásBevittAdat("Az időszükséglet mezőnek pozítív egész számnak kell lennie.");
 
-                string szöveg = $"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy H:m:s")}# ORDER BY idő ";
-
-                Kezelő_Kerék_Eszterga_Naptár kéz = new Kezelő_Kerék_Eszterga_Naptár();
-                List<Adat_Kerék_Eszterga_Naptár> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(Hételső.Year);
+                Adatok = (from a in Adatok
+                          where a.Idő >= DátumésIdő
+                          orderby a.Idő
+                          select a).ToList();
                 Holtart.Be();
 
                 Adatok_Rögzítése(NormaIdő);
                 Igény_Módosítás();
 
-                if (Változás != null) Változás();
+                Változás?.Invoke();
                 this.Close();
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -228,10 +231,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string helyigény = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Év}_Igény.mdb";
-                if (!File.Exists(helyigény)) return;
-                string szöveg = $"SELECT * FROM Igény";
-                AdatokIgény = KézIgény.Lista_Adatok(helyigény, jelszó, szöveg);
+                AdatokIgény = KézIgény.Lista_Adatok(Év);
                 Adat_Kerék_Eszterga_Igény Elem = (from a in AdatokIgény
                                                   where a.Telephely == telephely.Trim()
                                                   && a.Pályaszám == Választott.Trim()
@@ -240,8 +240,12 @@ namespace Villamos.Villamos_Ablakok
 
                 if (Elem != null)
                 {
-                    szöveg = $"UPDATE  Igény SET státus=2, ütemezés_dátum='{Text_Dátum.Text}' WHERE státus<=2   AND telephely='{telephely.Trim()}' AND pályaszám='{Választott.Trim()}'";
-                    MyA.ABMódosítás(helyigény, jelszó, szöveg);
+                    Adat_Kerék_Eszterga_Igény ADAT = new Adat_Kerék_Eszterga_Igény(
+                          Választott.Trim(),
+                          DátumésIdő,
+                          2, // Státusz módosítva 2-re
+                          telephely.Trim());
+                    KézIgény.Módosítás(Év, ADAT);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -254,7 +258,6 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Igény_Törlés()
         {
@@ -263,14 +266,21 @@ namespace Villamos.Villamos_Ablakok
                 string[] elem = Tevékenység_Vál.Text.Trim().Split('=');
                 if (elem.Length < 2) return;
 
-                Adat_Kerék_Eszterga_Igény EgyIgény = (from a in AdatokIgény
-                                                      where a.Státus == 2 && a.Telephely == elem[1].Trim() && a.Pályaszám == elem[0].Trim()
-                                                      select a).FirstOrDefault();
-                if (EgyIgény != null)
+                AdatokIgény = KézIgény.Lista_Adatok(Év);
+                Adat_Kerék_Eszterga_Igény Elem = (from a in AdatokIgény
+                                                  where a.Telephely == elem[1].Trim()
+                                                  && a.Pályaszám == elem[0].Trim()
+                                                  && a.Státus == 2
+                                                  select a).FirstOrDefault();
+
+                if (Elem != null)
                 {
-                    string helyigény = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{(EgyIgény.Rögzítés_dátum.Year)}_Igény.mdb";
-                    string szöveg = $"UPDATE  Igény SET státus=0, ütemezés_dátum='1900.01.01' WHERE státus=2 AND telephely='{elem[1].Trim()}' AND pályaszám='{elem[0].Trim()}'";
-                    MyA.ABMódosítás(helyigény, jelszó, szöveg);
+                    Adat_Kerék_Eszterga_Igény ADAT = new Adat_Kerék_Eszterga_Igény(
+                             elem[0].Trim(),
+                             new DateTime(1900, 1, 1),
+                             0, // Státusz módosítva 0-re
+                             elem[1].Trim());
+                    KézIgény.Módosítás(Elem.Rögzítés_dátum.Year, ADAT, true);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -284,7 +294,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        void Beszúrásos_Csúsztatás()
+        private void Beszúrásos_Csúsztatás()
         {
             try
             {
@@ -310,7 +320,7 @@ namespace Villamos.Villamos_Ablakok
                 Igény_Módosítás();
 
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (Változás != null) Változás();
+                Változás?.Invoke();
                 this.Close();
             }
             catch (HibásBevittAdat ex)
@@ -329,7 +339,7 @@ namespace Villamos.Villamos_Ablakok
         {
             Holtart.Be();
             string szöveg = $@"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy H:m:s")}#  AND  pályaszám<>'_'  ORDER BY idő ";
-            Naptár_Adatok = Naptár_Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            Naptár_Adatok = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
             //Ami nem mozog csak az marad benne a többit visszaállítjuk alapra
 
             Naptár_Adatok[0].Marad = false;
@@ -340,7 +350,7 @@ namespace Villamos.Villamos_Ablakok
                 if (!rekord.Marad)
                 {
                     Adat_Kerék_Eszterga_Naptár Ideig_Naptár = new Adat_Kerék_Eszterga_Naptár(rekord.Idő);
-                    Naptár_Kéz.Adat_RögzítésIdő(hely, jelszó, Ideig_Naptár);
+                    KézNaptár.Adat_RögzítésIdő(hely, jelszó, Ideig_Naptár);
                 }
 
                 Holtart.Lép();
@@ -352,7 +362,7 @@ namespace Villamos.Villamos_Ablakok
         {
             Holtart.Be();
             string szöveg = $"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy H:m:s")}#  AND  Munkaidő=true   ORDER BY idő";
-            Naptár_Adatok_ideig = Naptár_Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            Naptár_Adatok_ideig = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
 
             int Futóidő = 0;
             //Amit be akarunk szúrni azt beszúrjuk
@@ -370,7 +380,7 @@ namespace Villamos.Villamos_Ablakok
                                     háttérSzín,
                                     Marad.Checked);
 
-                    Naptár_Kéz.Adat_Rögzítés(hely, jelszó, Ideig_Naptár);
+                    KézNaptár.Adat_Rögzítés(hely, jelszó, Ideig_Naptár);
 
                     Státus_állítás(0, 2);
 
@@ -451,7 +461,7 @@ namespace Villamos.Villamos_Ablakok
                 //Az eredeti adatokat a folytatólagosan tesszük a javított lista alapján
                 string szöveg = $"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy H:m:s")}#  AND Munkaidő=true  ORDER BY idő";
                 if (Naptár_Adatok_ideig != null) Naptár_Adatok_ideig.Clear();
-                Naptár_Adatok_ideig = Naptár_Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                Naptár_Adatok_ideig = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
                 elemszám = Naptár_Adatok.Count - 1;
                 elem = kimarad;
                 List<string> SzövegGy = new List<string>();
@@ -558,8 +568,8 @@ namespace Villamos.Villamos_Ablakok
                 string szöveg = $"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy H:m:s")}# AND ";
                 szöveg += $" idő<=#{DátumésIdő.AddDays(3).ToString("MM-dd-yyyy H:m:s")}# Order BY idő";
 
-                Kezelő_Kerék_Eszterga_Naptár kéz = new Kezelő_Kerék_Eszterga_Naptár();
-                List<Adat_Kerék_Eszterga_Naptár> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
                 int Futóidő = 0;
 
                 List<string> SzövegGy = new List<string>();
@@ -643,8 +653,8 @@ namespace Villamos.Villamos_Ablakok
             {
                 string szöveg = $"SELECT * FROM Tevékenység WHERE Tevékenység='{Tevékenység_Vál.Text.Trim()}'";
 
-                Kezelő_Kerék_Eszterga_Tevékenység kéz = new Kezelő_Kerék_Eszterga_Tevékenység();
-                Adat_Kerék_Eszterga_Tevékenység Adat = kéz.Egy_Adat(helyTörzs, jelszó, szöveg);
+
+                Adat_Kerék_Eszterga_Tevékenység Adat = KézTevékenység.Egy_Adat(helyTörzs, jelszó, szöveg);
 
                 //      if (Adat.Betűszín != 0)
                 betűSzín = Adat.Betűszín;
@@ -687,7 +697,7 @@ namespace Villamos.Villamos_Ablakok
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(DátumésIdő);
                 Naptár_Adatok?.Clear();
                 string szöveg = $"SELECT * FROM naptár ";
-                Naptár_Adatok = Naptár_Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                Naptár_Adatok = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
                 Adat_Kerék_Eszterga_Naptár Elem;
 
                 if (!Egy_adat.Checked)
@@ -756,8 +766,8 @@ namespace Villamos.Villamos_Ablakok
             {
                 string szöveg = $"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy HH:m:s")}# ORDER BY idő";
 
-                Kezelő_Kerék_Eszterga_Naptár kéz = new Kezelő_Kerék_Eszterga_Naptár();
-                Adat_Kerék_Eszterga_Naptár Adat = kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_Kerék_Eszterga_Naptár Adat = KézNaptár.Egy_Adat(hely, jelszó, szöveg);
 
                 if (Adat != null)
                 {
@@ -858,7 +868,7 @@ namespace Villamos.Villamos_Ablakok
                 string szövegT = $"SELECT * FROM tengely ORDER BY  típus";
                 string jelszó = "RónaiSándor";
 
-                Kezelő_Kerék_Eszterga_Tengely kézTengely = new Kezelő_Kerék_Eszterga_Tengely();
+
                 List<Adat_Kerék_Eszterga_Tengely> AdatokT = kézTengely.Lista_Adatok(helyTörzs, jelszó, szövegT);
 
                 IgénylistaFeltötlés();
@@ -948,6 +958,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                // JAVÍTANDÓ:  Át kell állítani a kezelőt Igényre
                 Igény_Típus.Items.Clear();
 
                 for (int ii = -1; ii < 1; ii++)

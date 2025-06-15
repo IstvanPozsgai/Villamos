@@ -156,7 +156,7 @@ namespace Villamos.Kezelők
 
                 szöveg += $"'{Adat.Korlátlan}', ";    //Korlátlan,
                 szöveg += $"{Adat.Autók_száma}, ";    //Autók_száma,
-                szöveg += $"'{Adat.Megjegyzés}', ";    //Megjegyzés,
+                szöveg += $"'{Adat.Megjegyzés}', ";    //MegjegyzésVáltozó,
                 szöveg += $"{Adat.I_engedély}, ";     //I_engedély
                 szöveg += $"{Adat.II_engedély}, ";     //II_engedély
                 szöveg += $"{Adat.III_engedély}, ";     //III_engedély
