@@ -41,7 +41,7 @@
             this.Tev_Rögzít = new System.Windows.Forms.Button();
             this.Színválasztás_Betű = new System.Windows.Forms.Button();
             this.Tev_Tábla_frissítés = new System.Windows.Forms.Button();
-            this.Lista_Tábla = new System.Windows.Forms.Button();
+            this.Feljebb = new System.Windows.Forms.Button();
             this.Tev_Tevékenység = new System.Windows.Forms.TextBox();
             this.Tev_Betű = new System.Windows.Forms.TextBox();
             this.Tev_Háttér = new System.Windows.Forms.TextBox();
@@ -102,7 +102,7 @@
             this.tabPage1.Controls.Add(this.Tev_Rögzít);
             this.tabPage1.Controls.Add(this.Színválasztás_Betű);
             this.tabPage1.Controls.Add(this.Tev_Tábla_frissítés);
-            this.tabPage1.Controls.Add(this.Lista_Tábla);
+            this.tabPage1.Controls.Add(this.Feljebb);
             this.tabPage1.Controls.Add(this.Tev_Tevékenység);
             this.tabPage1.Controls.Add(this.Tev_Betű);
             this.tabPage1.Controls.Add(this.Tev_Háttér);
@@ -223,16 +223,16 @@
             this.Tev_Tábla_frissítés.UseVisualStyleBackColor = true;
             this.Tev_Tábla_frissítés.Click += new System.EventHandler(this.Tev_Tábla_frissítés_Click);
             // 
-            // Lista_Tábla
+            // Feljebb
             // 
-            this.Lista_Tábla.BackgroundImage = global::Villamos.Properties.Resources.Up_gyűjtemény;
-            this.Lista_Tábla.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Lista_Tábla.Location = new System.Drawing.Point(655, 97);
-            this.Lista_Tábla.Name = "Lista_Tábla";
-            this.Lista_Tábla.Size = new System.Drawing.Size(45, 45);
-            this.Lista_Tábla.TabIndex = 185;
-            this.Lista_Tábla.UseVisualStyleBackColor = true;
-            this.Lista_Tábla.Click += new System.EventHandler(this.Lista_Tábla_Click);
+            this.Feljebb.BackgroundImage = global::Villamos.Properties.Resources.Up_gyűjtemény;
+            this.Feljebb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Feljebb.Location = new System.Drawing.Point(655, 97);
+            this.Feljebb.Name = "Feljebb";
+            this.Feljebb.Size = new System.Drawing.Size(45, 45);
+            this.Feljebb.TabIndex = 185;
+            this.Feljebb.UseVisualStyleBackColor = true;
+            this.Feljebb.Click += new System.EventHandler(this.Feljebb_Click);
             // 
             // Tev_Tevékenység
             // 
@@ -549,7 +549,7 @@
         internal System.Windows.Forms.Button Tev_Rögzít;
         internal System.Windows.Forms.Button Színválasztás_Betű;
         internal System.Windows.Forms.Button Tev_Tábla_frissítés;
-        internal System.Windows.Forms.Button Lista_Tábla;
+        internal System.Windows.Forms.Button Feljebb;
         internal System.Windows.Forms.Button Töröl;
         internal System.Windows.Forms.Button Tev_Új;
         internal System.Windows.Forms.Button Színválasztás_Háttér;
