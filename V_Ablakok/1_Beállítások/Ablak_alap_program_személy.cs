@@ -77,7 +77,8 @@ namespace Villamos
         {
             try
             {
-                Jogosultságkiosztás();
+                GombLathatosagKezelo.Beallit(this);
+                //Jogosultságkiosztás();
                 Fülek.SelectedIndex = 0;
                 Fülekkitöltése();
             }
