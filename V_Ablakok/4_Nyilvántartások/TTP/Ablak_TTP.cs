@@ -8,7 +8,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
@@ -44,17 +43,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 
 
         #region alap
-        // JAVÍTANDÓ:   Ezt el kell koptatni
         private void Ablak_TTP_Load(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely += "/TTP_Adatbázis.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.TTP_Adatbázis(hely);
-
-            hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/PDF";
-            if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
+            string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/PDF";
+            if (!Directory.Exists(hely)) hely.KönyvSzerk();
 
             Telephelyekfeltöltése();
             TelephelyLista();
@@ -63,8 +55,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             PályaszámListaFeltölt();
             Jogosultságkiosztás();
             Gombok_Ki();
-
-
         }
 
         private void Ablak_TTP_FormClosed(object sender, FormClosedEventArgs e)

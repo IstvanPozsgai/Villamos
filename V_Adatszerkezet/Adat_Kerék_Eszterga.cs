@@ -336,5 +336,15 @@ namespace Villamos.Villamos_Adatszerkezet
             Megjegyzés = megjegyzés;
             Státus = státus;
         }
+
+        public Adat_Baross_Mérési_Adatok(string azonosító, string kerékpár_szám, string típus_Eszt, int pozíció_Eszt, long eszterga_Id, string megjegyzés)
+        {
+            Azonosító = azonosító;
+            Kerékpár_szám = kerékpár_szám;
+            Típus_Eszt = típus_Eszt;
+            Pozíció_Eszt = pozíció_Eszt;
+            Eszterga_Id = eszterga_Id;
+            Megjegyzés = megjegyzés;
+        }
     }
 }

@@ -647,7 +647,7 @@ namespace Villamos.Villamos_Ablakok
         }
 
 
-        void Tevékenységválasztás()
+        private void Tevékenységválasztás()
         {
             try
             {
