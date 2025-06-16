@@ -72,9 +72,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
                 Adat_Eszterga_Uzemora Uzemora = (from a in AdatokUzemora
-                                                where a.Státus != true
-                                                orderby a.Dátum descending 
-                                                select a).FirstOrDefault();
+                                                 where a.Státus != true
+                                                 orderby a.Dátum descending
+                                                 select a).FirstOrDefault();
 
                 if (Uzemora != null)
                     LblElözö.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Uzemora}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
@@ -134,34 +134,46 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void BtnRogzit_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(TxtBxUzemOra.Text, out int uzemOra) && uzemOra >= 0)
+            try
             {
-                AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
-
-                Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
-                                                where !a.Státus
-                                                orderby a.Uzemora descending
-                                                select a).FirstOrDefault();
-
-                if (rekord != null && uzemOra < rekord.Uzemora)
+                if (int.TryParse(TxtBxUzemOra.Text, out int uzemOra) && uzemOra >= 0)
                 {
-                    MessageBox.Show($"Az új üzemóra érték nem lehet kisebb, mint az előző: {rekord.Uzemora}.", "Hiba.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    TxtBxUzemOra.Focus();
-                    return;
+                    AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+
+                    Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
+                                                    where !a.Státus
+                                                    orderby a.Uzemora descending
+                                                    select a).FirstOrDefault();
+
+                    if (rekord != null && uzemOra < rekord.Uzemora)
+                    {
+                        MessageBox.Show($"Az új üzemóra érték nem lehet kisebb, mint az előző: {rekord.Uzemora}.", "Hiba.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        TxtBxUzemOra.Focus();
+                        return;
+                    }
+                    Uzemora = uzemOra;
+
+                    Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
+                                                                  uzemOra,
+                                                                  DateTime.Today,
+                                                                  false);
+                    Kez_Uzemora.Rogzites(ADAT);
+
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
-                Uzemora = uzemOra;
-
-                Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
-                                                              uzemOra,
-                                                              DateTime.Today, 
-                                                              false);
-                Kez_Uzemora.Rogzites (ADAT);
-
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                else
+                    MessageBox.Show("Kérem adjon meg egy érvényes számot!", "Hiba.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
-                MessageBox.Show("Kérem adjon meg egy érvényes számot!", "Hiba.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
     }
