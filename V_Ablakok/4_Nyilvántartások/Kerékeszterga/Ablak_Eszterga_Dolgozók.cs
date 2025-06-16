@@ -1,46 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
+
 
 namespace Villamos.Villamos_Ablakok
 {
     public partial class Ablak_Eszterga_Dolgozók : Form
     {
         public string Cmbtelephely { get; private set; }
-        readonly Kezelő_Kerék_Eszterga_Esztergályos kéz = new Kezelő_Kerék_Eszterga_Esztergályos();
+        readonly Kezelő_Kerék_Eszterga_Esztergályos KézEszterga = new Kezelő_Kerék_Eszterga_Esztergályos();
+        readonly Kezelő_Kiegészítő_Könyvtár KézKiegKönyv = new Kezelő_Kiegészítő_Könyvtár();
+        readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
+
+
         List<Adat_Kerék_Eszterga_Esztergályos> Adatok = new List<Adat_Kerék_Eszterga_Esztergályos>();
 
         public Ablak_Eszterga_Dolgozók(string cmbtelephely)
         {
             InitializeComponent();
             Cmbtelephely = cmbtelephely;
+            Start();
         }
 
-
-        private void Ablak_Eszterga_Dolgozók_Load(object sender, EventArgs e)
+        private void Start()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Kerékeszterga";
-            if (!Directory.Exists(hely))
-                Directory.CreateDirectory(hely);
-
-            hely = Application.StartupPath + @"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-            if (!File.Exists(hely))
-                Adatbázis_Létrehozás.Kerék_Törzs(hely);
-
-
             Telephelyfeltöltés();
             Telephely.Text = Cmbtelephely.Trim();
             Dolg_Nevek_Fel();
             Munka_Jelleg_feltöltés();
-
             Tábla_Lista();
+        }
 
+        private void Ablak_Eszterga_Dolgozók_Load(object sender, EventArgs e)
+        {
         }
 
         private void Munka_Jelleg_feltöltés()
@@ -55,13 +50,10 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Telephely.Items.Clear();
-
-                Kezelő_Kiegészítő_Könyvtár kéz = new Kezelő_Kiegészítő_Könyvtár();
-                List<Adat_Kiegészítő_Könyvtár> Adatok = kéz.Lista_Adatok().OrderBy(a => a.Név).ToList();
+                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKiegKönyv.Lista_Adatok().OrderBy(a => a.Név).ToList();
 
                 foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
                     Telephely.Items.Add(rekord.Név.Trim());
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -79,19 +71,10 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Dolgozó_nevek.Items.Clear();
-
-                string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Trim() + @"\Adatok\Dolgozók.mdb";
-                if (!File.Exists(hely))
-                    return;
-                string jelszó = "forgalmiutasítás";
-                string szöveg = "SELECT * FROM Dolgozóadatok WHERE kilépésiidő=#1/1/1900# ORDER BY DolgozóNév asc";
-
-                Kezelő_Dolgozó_Alap kéz = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Trim());
 
                 foreach (Adat_Dolgozó_Alap rekord in Adatok)
                     Dolgozó_nevek.Items.Add(rekord.DolgozóNév + " = " + rekord.Dolgozószám);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -109,11 +92,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Adatok.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"SELECT * FROM Esztergályos ORDER BY Dolgozónév ";
-
-                Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok = KézEszterga.Lista_Adatok().OrderBy(a => a.Dolgozónév).ToList();
             }
             catch (HibásBevittAdat ex)
             {
@@ -192,7 +171,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Frissít_Click(object sender, EventArgs e)
         {
             Tábla_Lista();
@@ -207,30 +185,16 @@ namespace Villamos.Villamos_Ablakok
                 if (Munkajelleg.Text.Trim() == "") throw new HibásBevittAdat("A munka jellegét ki kell választani, nem lehet üres.");
 
                 TörzsListaFeltöltés();
-
                 string[] darabol = Dolgozó_nevek.Text.Trim().Split('=');
                 string[] darabos = Munkajelleg.Text.Trim().Split('-');
-                string szöveg;
-                Adat_Kerék_Eszterga_Esztergályos Elem = (from a in Adatok
-                                                         where a.Dolgozószám == darabol[1].Trim()
-                                                         select a).FirstOrDefault();
 
-                if (Elem != null)
-                {
-                    szöveg = "UPDATE Esztergályos SET ";
-                    szöveg += $"telephely='{Telephely.Text.Trim()}', ";
-                    szöveg += $"státus={int.Parse(darabos[1])} ";
-                    szöveg += $" WHERE dolgozószám='{darabol[1].Trim()}'";
-                }
-                else
-                {
-                    szöveg = "INSERT INTO Esztergályos (Dolgozószám, dolgozónév, telephely, státus) VALUES (";
-                    szöveg += $"'{darabol[1].Trim()}','{darabol[0].Trim()}','{Telephely.Text.Trim()}', {int.Parse(darabos[0])} )";
-                }
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-                string jelszó = "RónaiSándor";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                Adat_Kerék_Eszterga_Esztergályos ADAT = new Adat_Kerék_Eszterga_Esztergályos(
+                    darabol[1].Trim(), // Dolgozószám
+                    darabol[0].Trim(), // Dolgozónév
+                    Telephely.Text.Trim(), // Telephely
+                    int.Parse(darabos[0]) // Státus
+                );
+                KézEszterga.Döntés(ADAT);
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Tábla_Lista();
             }
@@ -259,11 +223,7 @@ namespace Villamos.Villamos_Ablakok
 
                 if (Elem != null)
                 {
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-                    string jelszó = "RónaiSándor";
-                    string szöveg = $"DELETE FROM Esztergályos  WHERE dolgozószám='{darabol[1].Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-
+                    KézEszterga.Törlés(darabol[1].Trim());
                     MessageBox.Show("Az adatok törlésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Tábla_Lista();
                 }

@@ -571,7 +571,7 @@ namespace Villamos.Villamos_Ablakok
                 string szöveg = $"SELECT * FROM Esztergályos  ORDER BY dolgozószám ";
 
                 Kezelő_Kerék_Eszterga_Esztergályos kézE = new Kezelő_Kerék_Eszterga_Esztergályos();
-                List<Adat_Kerék_Eszterga_Esztergályos> AdatokE = kézE.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga_Esztergályos> AdatokE = kézE.Lista_Adatok();
 
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum.Value);
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum.Value);
