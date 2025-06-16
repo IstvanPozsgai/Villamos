@@ -33,7 +33,8 @@ namespace Villamos.Villamos_Ablakok
 
         private void Ablak_technológia_Load(object sender, EventArgs e)
         {
-            Jogosultságkiosztás();
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
             Típus_feltöltés();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             DátumBef.Value = DateTime.Today;
