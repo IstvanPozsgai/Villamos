@@ -107,9 +107,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #region Egyseg
         public enum EsztergaEgyseg
         {
-            Datum = 1,
-            Uzemora = 2,
-            Bekovetkezes = 3
+            Dátum = 1,
+            Üzemóra = 2,
+            Bekövetkezés = 3
         }
         private void EgysegEllenorzes(string Egyseg)
         {
@@ -127,7 +127,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         TxtBxMennyiÓra.Text = "0";
                         TxtBxUtolsóÜzemóraÁllás.Enabled = false;
 
-                        Adat_Eszterga_Uzemora uzemoraRekordDatum = KeresÜzemóra(0, DtmPckrUtolsóDátum.Value, EsztergaEgyseg.Datum);
+                        Adat_Eszterga_Uzemora uzemoraRekordDatum = KeresÜzemóra(0, DtmPckrUtolsóDátum.Value, EsztergaEgyseg.Dátum);
                         TxtBxUtolsóÜzemóraÁllás.Text = uzemoraRekordDatum != null ? uzemoraRekordDatum.Uzemora.ToStrTrim() : "0";
                         break;
 
@@ -138,7 +138,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                         if (long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out long uzemora))
                         {
-                            Adat_Eszterga_Uzemora uzemoraRekordUzemora = KeresÜzemóra(uzemora, DateTime.MinValue, EsztergaEgyseg.Uzemora);
+                            Adat_Eszterga_Uzemora uzemoraRekordUzemora = KeresÜzemóra(uzemora, DateTime.MinValue, EsztergaEgyseg.Üzemóra);
                             DtmPckrUtolsóDátum.Value = uzemoraRekordUzemora?.Dátum ?? new DateTime(1900, 1, 1);
                         }
                         else
@@ -166,11 +166,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                CmbxEgység.SelectedItem = EsztergaEgyseg.Bekovetkezes;
+                CmbxEgység.SelectedItem = EsztergaEgyseg.Bekövetkezés;
                 List<Adat_Eszterga_Muveletek> AdatokMűvelet = Funkcio.Eszterga_KarbantartasFeltolt();
                 int KovetkezoID = AdatokMűvelet.Any() ? AdatokMűvelet.Max(a => a.ID) + 1 : 1;
                 TxtBxId.Text = KovetkezoID.ToStrTrim();
-                EgysegEllenorzes(EsztergaEgyseg.Bekovetkezes.ToStrTrim());
+                EgysegEllenorzes(EsztergaEgyseg.Bekövetkezés.ToStrTrim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -626,11 +626,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private Adat_Eszterga_Uzemora KeresÜzemóra(long uzemora, DateTime datum, EsztergaEgyseg egyseg)
         {
-            if (egyseg == EsztergaEgyseg.Bekovetkezes)
+            if (egyseg == EsztergaEgyseg.Bekövetkezés)
                 return null;
-            if (egyseg == EsztergaEgyseg.Uzemora)
+            if (egyseg == EsztergaEgyseg.Üzemóra)
                 return AdatokUzemora.FirstOrDefault(u => u.Uzemora == uzemora && !u.Státus);
-            if (egyseg == EsztergaEgyseg.Datum)
+            if (egyseg == EsztergaEgyseg.Dátum)
                 return AdatokUzemora.FirstOrDefault(u => u.Dátum.Date == datum.Date && !u.Státus);
 
             return null;
@@ -643,7 +643,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void UzemoraKiolvasasEsBeiras(DateTime datum, TextBox txt)
         {
-            Adat_Eszterga_Uzemora uzemoraRekord = KeresÜzemóra(0, datum, EsztergaEgyseg.Datum);
+            Adat_Eszterga_Uzemora uzemoraRekord = KeresÜzemóra(0, datum, EsztergaEgyseg.Dátum);
 
             if (uzemoraRekord != null)
             {
@@ -827,7 +827,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
                 TxtBxId.Text = (AdatokMuvelet.Any() ? AdatokMuvelet.Max(a => a.ID) + 1 : 1).ToStrTrim();
                 TxtBxMűvelet.Text = "";
-                CmbxEgység.SelectedItem = EsztergaEgyseg.Bekovetkezes;
+                CmbxEgység.SelectedItem = EsztergaEgyseg.Bekövetkezés;
                 TxtBxMennyiNap.Text = "0";
                 TxtBxMennyiÓra.Text = "0";
                 ChckBxStátus.Checked = false;
@@ -1110,7 +1110,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (!long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out long ValasztottUzemora))
                     throw new HibásBevittAdat("Csak pozitív egész szám lehet az üzemóra állásánál.");
 
-                Adat_Eszterga_Uzemora uzemoraRekord = KeresÜzemóra(ValasztottUzemora, DateTime.MinValue, EsztergaEgyseg.Uzemora);
+                Adat_Eszterga_Uzemora uzemoraRekord = KeresÜzemóra(ValasztottUzemora, DateTime.MinValue, EsztergaEgyseg.Üzemóra);
 
                 if (uzemoraRekord != null)
                     DtmPckrUtolsóDátum.Value = uzemoraRekord.Dátum;
