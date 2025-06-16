@@ -403,7 +403,9 @@ namespace Villamos
             Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
             AblakForm = Ablak.FromName;
             AblakID = Ablak.OldalId;
+            GombokFeltöltése();
             SzervezetFeltöltés();
+            TáblázatListázás();
         }
         #endregion
 
@@ -448,19 +450,24 @@ namespace Villamos
                                            select a).FirstOrDefault();
                     if (EgyGomb != null)
                     {
-                        // ha van joga ahhoz a szervezethez a felhasználónak akkor kiírjuk a lehetőséget
-                        if (EgyFelhasználó.Szervezetek.Contains(szervezet.Név))
+                        string[] szervezetek = EgyGomb.Szervezet.Split(';');
+                        string szervezetNév = szervezetek.FirstOrDefault(a => a.Trim() == szervezet.Név);
+                        if (szervezetNév != null)
                         {
-                            LstChkSzervezet.Items.Add(szervezet.Név);
+                            // ha van joga ahhoz a szervezethez a felhasználónak akkor kiírjuk a lehetőséget
+                            if (EgyFelhasználó.Szervezetek.Contains(szervezet.Név))
+                            {
+                                LstChkSzervezet.Items.Add(szervezet.Név);
 
-                            // Jogosultság beállítása, ha már van ilyen
-                            Adat_Jogosultságok EgyJog = AdatokJogosultságok.FirstOrDefault(a =>
-                                a.UserId == FelhasználóId &&
-                                a.OldalId == AblakID &&
-                                a.SzervezetId == szervezet.ID
-                                && a.GombokId == EgyGomb.GombokId
-                            );
-                            if (EgyJog != null) LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.Count - 1, true);
+                                // Jogosultság beállítása, ha már van ilyen
+                                Adat_Jogosultságok EgyJog = AdatokJogosultságok.FirstOrDefault(a =>
+                                    a.UserId == FelhasználóId &&
+                                    a.OldalId == AblakID &&
+                                    a.SzervezetId == szervezet.ID
+                                    && a.GombokId == EgyGomb.GombokId
+                                );
+                                if (EgyJog != null) LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.Count - 1, true);
+                            }
                         }
                     }
 
