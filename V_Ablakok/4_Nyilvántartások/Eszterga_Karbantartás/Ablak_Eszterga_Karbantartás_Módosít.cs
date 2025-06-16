@@ -64,6 +64,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TablaMuvelet.CellFormatting += TáblaMűvelet_CellFormatting;
             EgysegBeallitasa();
             UzemoraKiolvasasEsBeiras(DtmPckrUtolagos.Value, TxtBxUtolagUzemora);
+            TxtBxMennyiNap.Text = "0";
         }
         /// <summary>
         /// Jogosultságok alapján gombok láthatóságát és engedélyezettségét állítja be
