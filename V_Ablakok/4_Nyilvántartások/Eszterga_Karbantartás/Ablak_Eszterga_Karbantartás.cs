@@ -567,37 +567,24 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
-                try
-                {
-                    int Id = Sor.Cells[0].Value.ToÉrt_Int();
-                    string Muvelet = Sor.Cells[1].Value?.ToStrTrim() ?? "";
-                    int MennyiNap = Sor.Cells[3].Value.ToÉrt_Int();
-                    int MennyiOra = Sor.Cells[2].Value.ToÉrt_Int();
-                    string Megjegyzes = Sor.Cells[10].Value.ToStrTrim();
-                    string Rogzito = Program.PostásNév.ToStrTrim();
-                    DateTime MaiDatum = DateTime.Today;
+                int Id = Sor.Cells[0].Value.ToÉrt_Int();
+                string Muvelet = Sor.Cells[1].Value?.ToStrTrim() ?? "";
+                int MennyiNap = Sor.Cells[3].Value.ToÉrt_Int();
+                int MennyiOra = Sor.Cells[2].Value.ToÉrt_Int();
+                string Megjegyzes = Sor.Cells[10].Value.ToStrTrim();
+                string Rogzito = Program.PostásNév.ToStrTrim();
+                DateTime MaiDatum = DateTime.Today;
 
-                    Adat_Eszterga_Muveletek_Naplo ADAT = new Adat_Eszterga_Muveletek_Naplo(Id,
-                                                                  Muvelet,
-                                                                  MennyiNap,
-                                                                  MennyiOra,
-                                                                  UtolsóDátum,
-                                                                  UtolsóÜzemóra,
-                                                                  Megjegyzes,
-                                                                  Rogzito,
-                                                                  MaiDatum);
-                    Kez_Muvelet_Naplo.EsztergaNaplozas(ADAT);
-                }
-                catch (HibásBevittAdat ex)
-                {
-                    MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                    MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
+                Adat_Eszterga_Muveletek_Naplo ADAT = new Adat_Eszterga_Muveletek_Naplo(Id,
+                                                              Muvelet,
+                                                              MennyiNap,
+                                                              MennyiOra,
+                                                              UtolsóDátum,
+                                                              UtolsóÜzemóra,
+                                                              Megjegyzes,
+                                                              Rogzito,
+                                                              MaiDatum);
+                Kez_Muvelet_Naplo.EsztergaNaplozas(ADAT);
             }
             catch (HibásBevittAdat ex)
             {
@@ -660,46 +647,60 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private Color Kiszinezes(Adat_Eszterga_Muveletek rekord, DateTime TervDatum)
         {
-            int Egyseg = rekord.Egység;
-            DateTime UtolsoDatum = rekord.Utolsó_Dátum;
-            long UtolsoUzemora = rekord.Utolsó_Üzemóra_Állás;
-            long AktualisUzemora = BecsultUzemora(TervDatum);
-            int ElteltNapok = (int)(TervDatum - UtolsoDatum).TotalDays;
-            long ElteltOrak = AktualisUzemora - UtolsoUzemora;
-            int ElorejelezDatum = rekord.Mennyi_Dátum - TxtBxNapi.Text.ToÉrt_Int();
-            int ElorejelezUzem = rekord.Mennyi_Óra - TxtBxÜzem.Text.ToÉrt_Int();
+            try
+            {
+                int Egyseg = rekord.Egység;
+                DateTime UtolsoDatum = rekord.Utolsó_Dátum;
+                long UtolsoUzemora = rekord.Utolsó_Üzemóra_Állás;
+                long AktualisUzemora = BecsultUzemora(TervDatum);
+                int ElteltNapok = (int)(TervDatum - UtolsoDatum).TotalDays;
+                long ElteltOrak = AktualisUzemora - UtolsoUzemora;
+                int ElorejelezDatum = rekord.Mennyi_Dátum - TxtBxNapi.Text.ToÉrt_Int();
+                int ElorejelezUzem = rekord.Mennyi_Óra - TxtBxÜzem.Text.ToÉrt_Int();
 
-            if (Egyseg == (int)EsztergaEgyseg.Dátum)
-            {
-                if (ElteltNapok >= rekord.Mennyi_Dátum)
-                    return Color.IndianRed;
-                else if (ElteltNapok >= ElorejelezDatum && rekord.Mennyi_Dátum > 1)
-                    return Color.Yellow;
-                else
-                    return Color.LawnGreen;
-            }
-            else if (Egyseg == (int)EsztergaEgyseg.Üzemóra)
-            {
-                if (ElteltOrak >= rekord.Mennyi_Óra)
-                    return Color.IndianRed;
-                else if (ElteltOrak >= ElorejelezUzem)
-                    return Color.Yellow;
-                else
-                    return Color.LawnGreen;
-            }
-            else if (Egyseg == (int)EsztergaEgyseg.Bekövetkezés)
-            {
-                bool Datum = (TervDatum - UtolsoDatum).TotalDays >= rekord.Mennyi_Dátum;
-                bool Uzemora = (AktualisUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra;
+                if (Egyseg == (int)EsztergaEgyseg.Dátum)
+                {
+                    if (ElteltNapok >= rekord.Mennyi_Dátum)
+                        return Color.IndianRed;
+                    else if (ElteltNapok >= ElorejelezDatum && rekord.Mennyi_Dátum > 1)
+                        return Color.Yellow;
+                    else
+                        return Color.LawnGreen;
+                }
+                else if (Egyseg == (int)EsztergaEgyseg.Üzemóra)
+                {
+                    if (ElteltOrak >= rekord.Mennyi_Óra)
+                        return Color.IndianRed;
+                    else if (ElteltOrak >= ElorejelezUzem)
+                        return Color.Yellow;
+                    else
+                        return Color.LawnGreen;
+                }
+                else if (Egyseg == (int)EsztergaEgyseg.Bekövetkezés)
+                {
+                    bool Datum = (TervDatum - UtolsoDatum).TotalDays >= rekord.Mennyi_Dátum;
+                    bool Uzemora = (AktualisUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra;
 
-                if (Datum && Uzemora || Datum || Uzemora)
-                    return Color.IndianRed;
-                else if (ElteltNapok >= ElorejelezDatum || ElteltOrak >= ElorejelezUzem)
-                    return Color.Yellow;
-                else
-                    return Color.LawnGreen;
+                    if (Datum && Uzemora || Datum || Uzemora)
+                        return Color.IndianRed;
+                    else if (ElteltNapok >= ElorejelezDatum || ElteltOrak >= ElorejelezUzem)
+                        return Color.Yellow;
+                    else
+                        return Color.LawnGreen;
+                }
+                return Color.LawnGreen;
             }
-            return Color.LawnGreen;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
         #endregion
 
@@ -712,22 +713,36 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private double AtlagUzemoraNovekedesKiszamitasa(DateTime tervDatum)
         {
-            List<Adat_Eszterga_Uzemora> rekord = AdatokUzemora
-                .Where(a => a.Dátum <= tervDatum && !a.Státus)
-                .OrderBy(a => a.Dátum)
-                .ToList();
-
-            if (rekord.Count < 1)
-                throw new Exception("Nincs elegendő adat az üzemóra átlagának számításához.");
-
-            double NapiAtlagaosUzemNovekedes = 0;
-            for (int i = 1; i < rekord.Count; i++)
+            try
             {
-                double napok = (rekord[i].Dátum - rekord[i - 1].Dátum).TotalDays;
-                if (napok > 0)
-                    NapiAtlagaosUzemNovekedes += (rekord[i].Uzemora - rekord[i - 1].Uzemora) / napok;
+                List<Adat_Eszterga_Uzemora> rekord = AdatokUzemora
+                    .Where(a => a.Dátum <= tervDatum && !a.Státus)
+                    .OrderBy(a => a.Dátum)
+                    .ToList();
+
+                if (rekord.Count < 1)
+                    throw new Exception("Nincs elegendő adat az üzemóra átlagának számításához.");
+
+                double NapiAtlagaosUzemNovekedes = 0;
+                for (int i = 1; i < rekord.Count; i++)
+                {
+                    double napok = (rekord[i].Dátum - rekord[i - 1].Dátum).TotalDays;
+                    if (napok > 0)
+                        NapiAtlagaosUzemNovekedes += (rekord[i].Uzemora - rekord[i - 1].Uzemora) / napok;
+                }
+                return NapiAtlagaosUzemNovekedes / (rekord.Count - 1);
             }
-            return NapiAtlagaosUzemNovekedes / (rekord.Count - 1);
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
 
         /// <summary>
@@ -737,36 +752,50 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private DateTime DatumEsedekesegSzamitasa(DateTime UtolsoDatum, Adat_Eszterga_Muveletek rekord, Adat_Eszterga_Uzemora uzemoraRekord)
         {
-            DateTime? EsedekesDatumNap = null;
-            if (rekord.Mennyi_Dátum > 0)
-                EsedekesDatumNap = UtolsoDatum.AddDays(rekord.Mennyi_Dátum);
-
-            DateTime? EsedekesDatumUzemora = null;
-            if (rekord.Mennyi_Óra > 0 && uzemoraRekord != null)
+            try
             {
-                double NapiUzemoraNovekedes = AtlagUzemoraNovekedesKiszamitasa(UtolsoDatum);
+                DateTime? EsedekesDatumNap = null;
+                if (rekord.Mennyi_Dátum > 0)
+                    EsedekesDatumNap = UtolsoDatum.AddDays(rekord.Mennyi_Dátum);
 
-                if (NapiUzemoraNovekedes > 0)
+                DateTime? EsedekesDatumUzemora = null;
+                if (rekord.Mennyi_Óra > 0 && uzemoraRekord != null)
                 {
-                    double NapokEsedekessegig = rekord.Mennyi_Óra / NapiUzemoraNovekedes;
-                    EsedekesDatumUzemora = UtolsoDatum.AddDays(Math.Ceiling(NapokEsedekessegig));
+                    double NapiUzemoraNovekedes = AtlagUzemoraNovekedesKiszamitasa(UtolsoDatum);
+
+                    if (NapiUzemoraNovekedes > 0)
+                    {
+                        double NapokEsedekessegig = rekord.Mennyi_Óra / NapiUzemoraNovekedes;
+                        EsedekesDatumUzemora = UtolsoDatum.AddDays(Math.Ceiling(NapokEsedekessegig));
+                    }
                 }
-            }
 
-            if (EsedekesDatumNap.HasValue && EsedekesDatumUzemora.HasValue)
+                if (EsedekesDatumNap.HasValue && EsedekesDatumUzemora.HasValue)
+                {
+                    return EsedekesDatumNap.Value <= EsedekesDatumUzemora.Value
+                        ? EsedekesDatumNap.Value
+                        : EsedekesDatumUzemora.Value;
+                }
+
+                if (EsedekesDatumNap.HasValue)
+                    return EsedekesDatumNap.Value;
+
+                if (EsedekesDatumUzemora.HasValue)
+                    return EsedekesDatumUzemora.Value;
+
+                return UtolsoDatum;
+            }
+            catch (HibásBevittAdat ex)
             {
-                return EsedekesDatumNap.Value <= EsedekesDatumUzemora.Value
-                    ? EsedekesDatumNap.Value
-                    : EsedekesDatumUzemora.Value;
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
             }
-
-            if (EsedekesDatumNap.HasValue)
-                return EsedekesDatumNap.Value;
-
-            if (EsedekesDatumUzemora.HasValue)
-                return EsedekesDatumUzemora.Value;
-
-            return UtolsoDatum;
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
 
         /// <summary>
@@ -775,34 +804,48 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private long BecsultUzemora(DateTime EloDatum)
         {
-            if (AdatokUzemora == null || AdatokUzemora.Count < 2)
-                return 0;
-
-            List<Adat_Eszterga_Uzemora> rekord = (from a in AdatokUzemora
-                                                  where !a.Státus
-                                                  orderby a.Dátum
-                                                  select a).ToList();
-
-            if (rekord.Count < 2)
-                return 0;
-
-            double NapiNovekedes = 0;
-
-            for (int i = 1; i < rekord.Count; i++)
+            try
             {
-                double Napok = (rekord[i].Dátum - rekord[i - 1].Dátum).TotalDays;
-                if (Napok > 0)
-                    NapiNovekedes += (rekord[i].Uzemora - rekord[i - 1].Uzemora) / Napok;
+                if (AdatokUzemora == null || AdatokUzemora.Count < 2)
+                    return 0;
+
+                List<Adat_Eszterga_Uzemora> rekord = (from a in AdatokUzemora
+                                                      where !a.Státus
+                                                      orderby a.Dátum
+                                                      select a).ToList();
+
+                if (rekord.Count < 2)
+                    return 0;
+
+                double NapiNovekedes = 0;
+
+                for (int i = 1; i < rekord.Count; i++)
+                {
+                    double Napok = (rekord[i].Dátum - rekord[i - 1].Dátum).TotalDays;
+                    if (Napok > 0)
+                        NapiNovekedes += (rekord[i].Uzemora - rekord[i - 1].Uzemora) / Napok;
+                }
+                NapiNovekedes /= rekord.Count - 1;
+                NapiNovekedes = Math.Floor(NapiNovekedes);
+
+                Adat_Eszterga_Uzemora UtolsoRekord = rekord
+                    .Where(a => !a.Státus)
+                    .LastOrDefault();
+
+                double NapokEloDatumhoz = (EloDatum - UtolsoRekord.Dátum).TotalDays;
+                return UtolsoRekord.Uzemora + (long)(NapiNovekedes * NapokEloDatumhoz);
             }
-            NapiNovekedes /= rekord.Count - 1;
-            NapiNovekedes = Math.Floor(NapiNovekedes);
-
-            Adat_Eszterga_Uzemora UtolsoRekord = rekord
-                .Where(a => !a.Státus)
-                .LastOrDefault();
-
-            double NapokEloDatumhoz = (EloDatum - UtolsoRekord.Dátum).TotalDays;
-            return UtolsoRekord.Uzemora + (long)(NapiNovekedes * NapokEloDatumhoz);
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
 
         /// <summary>
@@ -899,13 +942,25 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void Btn_Frissít_Click(object sender, EventArgs e)
         {
-            TxtBxNapiUzemoraAtlag.Text = "30";
-            TxtBxNapi.Text = "5";
-            TxtBxÜzem.Text = "8";
-            DtmPckrElőTerv.Value = DateTime.Today;
-            Btn_Rögzít.Visible = true;
-            TablaListazas();
-            AtlagUzemoraFrissites();
+            try
+            {
+                TxtBxNapiUzemoraAtlag.Text = "30";
+                TxtBxNapi.Text = "5";
+                TxtBxÜzem.Text = "8";
+                DtmPckrElőTerv.Value = DateTime.Today;
+                Btn_Rögzít.Visible = true;
+                TablaListazas();
+                AtlagUzemoraFrissites();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -1073,67 +1128,79 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         private void PDFtábla(string fájlNév, DataGridView tábla)
         {
-            using (FileStream stream = new FileStream(fájlNév, FileMode.Create))
+            try
             {
-                Document pdfDoc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
-                PdfWriter.GetInstance(pdfDoc, stream);
-                pdfDoc.Open();
-
-                // Betűtípus betöltése (Arial, Unicode támogatás)
-                string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
-                BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
-                // Fejléc betűtípus - fekete, vastag
-                iTextSharp.text.Font fejlecBetu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-
-                PdfPTable pdfTable = new PdfPTable(tábla.Columns.Count)
+                using (FileStream stream = new FileStream(fájlNév, FileMode.Create))
                 {
-                    WidthPercentage = 100
-                };
+                    Document pdfDoc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
+                    PdfWriter.GetInstance(pdfDoc, stream);
+                    pdfDoc.Open();
 
-                // Fejléc hozzáadása, egységes fekete háttérrel (vagy tetszőleges színnel)
-                foreach (DataGridViewColumn column in tábla.Columns)
-                {
-                    PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fejlecBetu))
+                    // Betűtípus betöltése (Arial, Unicode támogatás)
+                    string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                    BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+                    // Fejléc betűtípus - fekete, vastag
+                    iTextSharp.text.Font fejlecBetu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+
+                    PdfPTable pdfTable = new PdfPTable(tábla.Columns.Count)
                     {
-                        BackgroundColor = new BaseColor(240, 240, 240)
+                        WidthPercentage = 100
                     };
-                    pdfTable.AddCell(cell);
-                }
 
-                // Sorok bejárása
-                foreach (DataGridViewRow row in tábla.Rows)
-                {
-                    if (row.IsNewRow) continue;
-
-                    foreach (DataGridViewCell cell in row.Cells)
+                    // Fejléc hozzáadása, egységes fekete háttérrel (vagy tetszőleges színnel)
+                    foreach (DataGridViewColumn column in tábla.Columns)
                     {
-                        string szoveg = cell.Value?.ToString() ?? "";
-
-                        // Színek lekérése az InheritedStyle-ból (ez tartalmazza a tényleges megjelenő színt)
-                        BaseColor háttérSzín = cell.InheritedStyle.BackColor.IsEmpty
-                            ? BaseColor.WHITE
-                            : new BaseColor(cell.InheritedStyle.BackColor.R, cell.InheritedStyle.BackColor.G, cell.InheritedStyle.BackColor.B);
-
-                        BaseColor szovegSzín = cell.InheritedStyle.ForeColor.IsEmpty
-                            ? BaseColor.BLACK
-                            : new BaseColor(cell.InheritedStyle.ForeColor.R, cell.InheritedStyle.ForeColor.G, cell.InheritedStyle.ForeColor.B);
-
-                        // Betűtípus az adott cella szövegszínével
-                        iTextSharp.text.Font betu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.NORMAL, szovegSzín);
-
-                        PdfPCell pdfCell = new PdfPCell(new Phrase(szoveg, betu))
+                        PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fejlecBetu))
                         {
-                            BackgroundColor = háttérSzín
+                            BackgroundColor = new BaseColor(240, 240, 240)
                         };
-
-                        pdfTable.AddCell(pdfCell);
+                        pdfTable.AddCell(cell);
                     }
-                }
 
-                pdfDoc.Add(pdfTable);
-                pdfDoc.Close();
-                stream.Close();
+                    // Sorok bejárása
+                    foreach (DataGridViewRow row in tábla.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            string szoveg = cell.Value?.ToString() ?? "";
+
+                            // Színek lekérése az InheritedStyle-ból (ez tartalmazza a tényleges megjelenő színt)
+                            BaseColor háttérSzín = cell.InheritedStyle.BackColor.IsEmpty
+                                ? BaseColor.WHITE
+                                : new BaseColor(cell.InheritedStyle.BackColor.R, cell.InheritedStyle.BackColor.G, cell.InheritedStyle.BackColor.B);
+
+                            BaseColor szovegSzín = cell.InheritedStyle.ForeColor.IsEmpty
+                                ? BaseColor.BLACK
+                                : new BaseColor(cell.InheritedStyle.ForeColor.R, cell.InheritedStyle.ForeColor.G, cell.InheritedStyle.ForeColor.B);
+
+                            // Betűtípus az adott cella szövegszínével
+                            iTextSharp.text.Font betu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.NORMAL, szovegSzín);
+
+                            PdfPCell pdfCell = new PdfPCell(new Phrase(szoveg, betu))
+                            {
+                                BackgroundColor = háttérSzín
+                            };
+
+                            pdfTable.AddCell(pdfCell);
+                        }
+                    }
+
+                    pdfDoc.Add(pdfTable);
+                    pdfDoc.Close();
+                    stream.Close();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1163,13 +1230,25 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void TxtBxNapiUzemoraAtlag_TextChanged(object sender, EventArgs e)
         {
-            if (int.TryParse(TxtBxNapiUzemoraAtlag.Text, out int napok))
+            try
             {
-                if (napok > 100000)
-                    TxtBxNapiUzemoraAtlag.Text = "100000";
+                if (int.TryParse(TxtBxNapiUzemoraAtlag.Text, out int napok))
+                {
+                    if (napok > 100000)
+                        TxtBxNapiUzemoraAtlag.Text = "100000";
 
-                if (napok > 0)
-                    AtlagUzemoraFrissites(Math.Min(napok, 100000));
+                    if (napok > 0)
+                        AtlagUzemoraFrissites(Math.Min(napok, 100000));
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1178,10 +1257,22 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void TxtBxNapi_TextChanged(object sender, EventArgs e)
         {
-            if (DateTime.Today == DtmPckrElőTerv.Value)
-                TablaListazas();
-            else
-                EloreTervezesListazasa();
+            try
+            {
+                if (DateTime.Today == DtmPckrElőTerv.Value)
+                    TablaListazas();
+                else
+                    EloreTervezesListazasa();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -1189,10 +1280,22 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void TxtBxÜzem_TextChanged(object sender, EventArgs e)
         {
-            if (DateTime.Today == DtmPckrElőTerv.Value)
-                TablaListazas();
-            else
-                EloreTervezesListazasa();
+            try
+            {
+                if (DateTime.Today == DtmPckrElőTerv.Value)
+                    TablaListazas();
+                else
+                    EloreTervezesListazasa();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -1201,18 +1304,30 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void DtmPckrElőTerv_ValueChanged(object sender, EventArgs e)
         {
-            if (DtmPckrElőTerv.Value >= DateTime.Today)
+            try
             {
-                if (DtmPckrElőTerv.Value > DateTime.Today)
-                    EloreTervezesListazasa();
+                if (DtmPckrElőTerv.Value >= DateTime.Today)
+                {
+                    if (DtmPckrElőTerv.Value > DateTime.Today)
+                        EloreTervezesListazasa();
+                    else
+                        TablaListazas();
+                    Btn_Rögzít.Visible = true;
+                }
                 else
-                    TablaListazas();
-                Btn_Rögzít.Visible = true;
+                {
+                    MessageBox.Show("A dátum nem lehet kisebb, mint a mai dátum.", "Érvénytelen dátum", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    DtmPckrElőTerv.Value = DateTime.Today;
+                }
             }
-            else
+            catch (HibásBevittAdat ex)
             {
-                MessageBox.Show("A dátum nem lehet kisebb, mint a mai dátum.", "Érvénytelen dátum", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                DtmPckrElőTerv.Value = DateTime.Today;
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
