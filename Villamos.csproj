@@ -750,6 +750,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Esztergályos.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Igény.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Naptár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tengely.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Terjesztés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tevékenység.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szabadságok.cs" />
@@ -819,7 +820,7 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Állomány_Típus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék.cs" />
     <Compile Include="V_Kezelők\Kezelő_KerékMérő.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Automata.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiadás_Összesítő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kidobó.cs" />

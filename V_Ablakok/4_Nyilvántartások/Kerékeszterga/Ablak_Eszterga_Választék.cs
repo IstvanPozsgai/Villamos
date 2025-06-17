@@ -7,7 +7,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 
 namespace Villamos.Villamos_Ablakok
@@ -21,6 +20,8 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Kerék_Eszterga_Tengely KézEsztergaTengely = new Kezelő_Kerék_Eszterga_Tengely();
         readonly Kezelő_Kerék_Eszterga_Tevékenység KézEsztergaTevékenység = new Kezelő_Kerék_Eszterga_Tevékenység();
         readonly Kezelő_Kerék_Eszterga_Automata KézAutomata = new Kezelő_Kerék_Eszterga_Automata();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Belépés_Bejelentkezés KézBejelen = new Kezelő_Belépés_Bejelentkezés();
 
         public Ablak_Eszterga_Választék()
         {
@@ -294,13 +295,13 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
-        //Itt tartok
+
         #region Normaidők
         private void Norm_Típus_feltöltés()
         {
             try
             {
-                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség").OrderBy(a => a.Valóstípus2).ToList();
                 List<string> Típusok = Adatok.Select(a => a.Valóstípus2).Distinct().ToList();
 
@@ -325,12 +326,10 @@ namespace Villamos.Villamos_Ablakok
             Norma_Tábla_kiír();
         }
 
-        void Norma_Tábla_kiír()
+        private void Norma_Tábla_kiír()
         {
             try
             {
-                string szöveg = "SELECT * FROM tengely ORDER BY típus, állapot";
-
                 Norma_Tábla.Rows.Clear();
                 Norma_Tábla.Columns.Clear();
                 Norma_Tábla.Refresh();
@@ -345,15 +344,15 @@ namespace Villamos.Villamos_Ablakok
                 Norma_Tábla.Columns[1].HeaderText = "Állapot";
                 Norma_Tábla.Columns[1].Width = 180;
 
-
-                List<Adat_Kerék_Eszterga_Tengely> Adatok = KézEsztergaTengely.Lista_Adatok(hely, jelszó, szöveg);
-                int i;
-
+                List<Adat_Kerék_Eszterga_Tengely> Adatok = KézEsztergaTengely.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          orderby a.Típus, a.Állapot
+                          select a).ToList();
 
                 foreach (Adat_Kerék_Eszterga_Tengely rekord in Adatok)
                 {
                     Norma_Tábla.RowCount++;
-                    i = Norma_Tábla.RowCount - 1;
+                    int i = Norma_Tábla.RowCount - 1;
                     Norma_Tábla.Rows[i].Cells[0].Value = rekord.Típus;
                     Norma_Tábla.Rows[i].Cells[2].Value = rekord.Munkaidő;
                     Norma_Tábla.Rows[i].Cells[1].Value = rekord.Állapot;
@@ -382,25 +381,11 @@ namespace Villamos.Villamos_Ablakok
                 if (Állapot.Text.Trim() == "" || !int.TryParse(Állapot.Text, out int Állapota)) throw new HibásBevittAdat("Az állapotnak pozítív egész számnak kell lennie.");
                 if (Állapota < 0) throw new HibásBevittAdat("Az állapotnak nagyobbnak kell lennie nullánál.");
 
-                string szöveg = $"SELECT * FROM tengely";
-                List<Adat_Kerék_Eszterga_Tengely> Adatok = KézEsztergaTengely.Lista_Adatok(hely, jelszó, szöveg);
-
-                Adat_Kerék_Eszterga_Tengely Elem = (from a in Adatok
-                                                    where a.Típus == Norm_Típus.Text.Trim()
-                                                    && a.Állapot == Állapota
-                                                    select a).FirstOrDefault();
-
-                Adat_Kerék_Eszterga_Tengely Ideig = new Adat_Kerék_Eszterga_Tengely(Norm_Típus.Text.Trim(), Munkaidő, Állapota);
-
-                if (Elem != null)
-                {
-                    KézEsztergaTengely.Egy_Módosítás(hely, jelszó, Ideig);
-                }
-                else
-                {
-                    //Új
-                    KézEsztergaTengely.Egy_Rögzítés(hely, jelszó, Ideig);
-                }
+                Adat_Kerék_Eszterga_Tengely ADAT = new Adat_Kerék_Eszterga_Tengely(
+                    Norm_Típus.Text.Trim(),
+                    Munkaidő,
+                    Állapota);
+                KézEsztergaTengely.Döntés(ADAT);
 
                 Norma_Tábla_kiír();
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -432,7 +417,6 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                Kezelő_Belépés_Bejelentkezés KézBejelen = new Kezelő_Belépés_Bejelentkezés();
                 List<Adat_Belépés_Bejelentkezés> Adatok = KézBejelen.Lista_Adatok("Baross").OrderBy(a => a.Név).ToList();
 
                 Felhasználók.Items.Clear();
@@ -452,26 +436,17 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void OKAutomata_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("A felhasználóinév nem lehet üres");
 
-                string szöveg = $"SELECT * FROM Automata ";
-                List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok(hely, jelszó, szöveg);
+                Adat_Kerék_Eszterga_Automata ADAT = new Adat_Kerék_Eszterga_Automata(
+                         Felhasználók.Text.Trim(),
+                         UtolsóÜzenet.Value);
+                KézAutomata.Döntés(ADAT);
 
-                Adat_Kerék_Eszterga_Automata Elem = (from a in Adatok
-                                                     where a.FelhasználóiNév == Felhasználók.Text.Trim()
-                                                     select a).FirstOrDefault();
-
-                if (Elem == null)
-                    szöveg = $"INSERT INTO Automata (FelhasználóiNév, UtolsóÜzenet) VALUES ( '{Felhasználók.Text.Trim()}', '{UtolsóÜzenet.Value.ToString("yyyy.MM.dd")}')";
-                else
-                    szöveg = $"UPDATE Automata SET UtolsóÜzenet='{UtolsóÜzenet.Value.ToString("yyyy.MM.dd")}' WHERE FelhasználóiNév='{Felhasználók.Text.Trim()}'";
-
-                MyA.ABMódosítás(hely, jelszó, szöveg);
                 AutomataTáblaÍró();
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -492,21 +467,17 @@ namespace Villamos.Villamos_Ablakok
             {
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("A felhasználóinév nem lehet üres");
 
-                string szöveg = $"SELECT * FROM Automata ";
-                List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok();
                 Adat_Kerék_Eszterga_Automata Elem = (from a in Adatok
                                                      where a.FelhasználóiNév == Felhasználók.Text.Trim()
                                                      select a).FirstOrDefault();
 
                 if (Elem != null)
                 {
-                    szöveg = $"DELETE FROM Automata  WHERE FelhasználóiNév='{Felhasználók.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    KézAutomata.Törlés(Felhasználók.Text.Trim());
                     AutomataTáblaÍró();
                     MessageBox.Show("Az adatok törlésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -524,13 +495,10 @@ namespace Villamos.Villamos_Ablakok
             AutomataTáblaÍró();
         }
 
-
-        void AutomataTáblaÍró()
+        private void AutomataTáblaÍró()
         {
             try
             {
-                string szöveg = "SELECT * FROM automata ORDER BY FelhasználóiNév";
-
                 TáblaAutomata.Rows.Clear();
                 TáblaAutomata.Columns.Clear();
                 TáblaAutomata.Refresh();
@@ -543,16 +511,11 @@ namespace Villamos.Villamos_Ablakok
                 TáblaAutomata.Columns[1].HeaderText = "Utolsó küldés";
                 TáblaAutomata.Columns[1].Width = 180;
 
-
-
-                List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok(hely, jelszó, szöveg);
-                int i;
-
-
+                List<Adat_Kerék_Eszterga_Automata> Adatok = KézAutomata.Lista_Adatok().OrderBy(a => a.FelhasználóiNév).ToList();
                 foreach (Adat_Kerék_Eszterga_Automata rekord in Adatok)
                 {
                     TáblaAutomata.RowCount++;
-                    i = TáblaAutomata.RowCount - 1;
+                    int i = TáblaAutomata.RowCount - 1;
                     TáblaAutomata.Rows[i].Cells[0].Value = rekord.FelhasználóiNév;
                     TáblaAutomata.Rows[i].Cells[1].Value = rekord.UtolsóÜzenet.ToString("yyyy.MM.dd");
 
