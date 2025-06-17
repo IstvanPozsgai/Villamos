@@ -52,6 +52,7 @@ namespace Villamos
             this.BtnFrissít = new System.Windows.Forms.Button();
             this.BtnRészletes = new System.Windows.Forms.Button();
             this.BtnVonal = new System.Windows.Forms.Button();
+            this.BtnHavi = new System.Windows.Forms.Button();
             this.Dátum = new System.Windows.Forms.DateTimePicker();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.CheckBox1 = new System.Windows.Forms.CheckBox();
@@ -66,15 +67,14 @@ namespace Villamos
             this.Label13 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.DátumTól = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.DátumIg = new System.Windows.Forms.DateTimePicker();
-            this.DátumTól = new System.Windows.Forms.DateTimePicker();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cmbtelephely1 = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.Pályaszámok = new System.Windows.Forms.ComboBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbtelephely1 = new System.Windows.Forms.ComboBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.BtnHavi = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -82,8 +82,8 @@ namespace Villamos
             this.panel3.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Panel2
@@ -234,7 +234,7 @@ namespace Villamos
             this.BtnRészletes.Name = "BtnRészletes";
             this.BtnRészletes.Size = new System.Drawing.Size(44, 45);
             this.BtnRészletes.TabIndex = 216;
-            this.ToolTip1.SetToolTip(this.BtnRészletes, "Táblázat adatait excelbe menti");
+            this.ToolTip1.SetToolTip(this.BtnRészletes, "Részletes adatok megjelenítése");
             this.BtnRészletes.UseVisualStyleBackColor = true;
             this.BtnRészletes.Click += new System.EventHandler(this.BtnRészletes_Click);
             // 
@@ -252,6 +252,21 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.BtnVonal, "Havi vonalas listát készít");
             this.BtnVonal.UseVisualStyleBackColor = true;
             this.BtnVonal.Click += new System.EventHandler(this.BtnVonal_Click);
+            // 
+            // BtnHavi
+            // 
+            this.BtnHavi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnHavi.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Large_Seo_SEO;
+            this.BtnHavi.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnHavi.Location = new System.Drawing.Point(972, 2);
+            this.BtnHavi.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BtnHavi.Name = "BtnHavi";
+            this.BtnHavi.Size = new System.Drawing.Size(44, 45);
+            this.BtnHavi.TabIndex = 218;
+            this.ToolTip1.SetToolTip(this.BtnHavi, "Havi ABC Listát készít");
+            this.BtnHavi.UseVisualStyleBackColor = true;
+            this.BtnHavi.Click += new System.EventHandler(this.BtnHavi_Click);
             // 
             // Dátum
             // 
@@ -468,6 +483,15 @@ namespace Villamos
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Dátum szűrő";
             // 
+            // DátumTól
+            // 
+            this.DátumTól.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DátumTól.Location = new System.Drawing.Point(6, 22);
+            this.DátumTól.Name = "DátumTól";
+            this.DátumTól.Size = new System.Drawing.Size(106, 26);
+            this.DátumTól.TabIndex = 1;
+            this.DátumTól.ValueChanged += new System.EventHandler(this.DátumTól_ValueChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -485,36 +509,6 @@ namespace Villamos
             this.DátumIg.Size = new System.Drawing.Size(106, 26);
             this.DátumIg.TabIndex = 2;
             this.DátumIg.ValueChanged += new System.EventHandler(this.DátumIg_ValueChanged);
-            // 
-            // DátumTól
-            // 
-            this.DátumTól.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DátumTól.Location = new System.Drawing.Point(6, 22);
-            this.DátumTól.Name = "DátumTól";
-            this.DátumTól.Size = new System.Drawing.Size(106, 26);
-            this.DátumTól.TabIndex = 1;
-            this.DátumTól.ValueChanged += new System.EventHandler(this.DátumTól_ValueChanged);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.cmbtelephely1);
-            this.groupBox1.Location = new System.Drawing.Point(223, 0);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(199, 54);
-            this.groupBox1.TabIndex = 214;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Telephely";
-            // 
-            // cmbtelephely1
-            // 
-            this.cmbtelephely1.FormattingEnabled = true;
-            this.cmbtelephely1.Location = new System.Drawing.Point(6, 20);
-            this.cmbtelephely1.Name = "cmbtelephely1";
-            this.cmbtelephely1.Size = new System.Drawing.Size(186, 28);
-            this.cmbtelephely1.TabIndex = 19;
             // 
             // groupBox2
             // 
@@ -537,24 +531,30 @@ namespace Villamos
             this.Pályaszámok.Size = new System.Drawing.Size(117, 28);
             this.Pályaszámok.TabIndex = 1;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.cmbtelephely1);
+            this.groupBox1.Location = new System.Drawing.Point(223, 0);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(199, 54);
+            this.groupBox1.TabIndex = 214;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Telephely";
+            // 
+            // cmbtelephely1
+            // 
+            this.cmbtelephely1.FormattingEnabled = true;
+            this.cmbtelephely1.Location = new System.Drawing.Point(6, 20);
+            this.cmbtelephely1.Name = "cmbtelephely1";
+            this.cmbtelephely1.Size = new System.Drawing.Size(186, 28);
+            this.cmbtelephely1.TabIndex = 19;
+            // 
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
-            // 
-            // BtnHavi
-            // 
-            this.BtnHavi.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnHavi.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Large_Seo_SEO;
-            this.BtnHavi.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnHavi.Location = new System.Drawing.Point(972, 2);
-            this.BtnHavi.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.BtnHavi.Name = "BtnHavi";
-            this.BtnHavi.Size = new System.Drawing.Size(44, 45);
-            this.BtnHavi.TabIndex = 218;
-            this.ToolTip1.SetToolTip(this.BtnHavi, "Havi ABC Listát készít");
-            this.BtnHavi.UseVisualStyleBackColor = true;
-            this.BtnHavi.Click += new System.EventHandler(this.BtnHavi_Click);
             // 
             // AblakMenetkimaradás
             // 
@@ -583,8 +583,8 @@ namespace Villamos
             this.tableLayoutPanel2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
