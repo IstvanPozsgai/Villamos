@@ -1019,7 +1019,10 @@ namespace Villamos.Villamos_Ablakok
 
                 string munkalap = "Munka1";
                 string hatályos_str = $"Hatálybalépés dátuma:{hatályos:yyyy.MM.dd}";
+
                 string Verzió = $"{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{AdatCikk.Verzió}";
+                if (Járműtípus.Text.Trim().Length > 15) Verzió = $"{Járműtípus.Text.Trim()}\n_{Combo_KarbCiklus.Text.Trim()}_{AdatCikk.Verzió}";
+
 
                 MyE.ExcelLétrehozás();
                 ExcelMunkalap();
@@ -1690,8 +1693,11 @@ namespace Villamos.Villamos_Ablakok
                 MyE.Kiir($"Pályaszám:{Pályaszám.Text.Trim()}", $"A{sor}");
                 MyE.Betű($"A{sor}", false, false, true);
             }
+            string szöveg = Járműtípus.Text.Trim();
+            if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
+            szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
 
-            MyE.Kiir(Járműtípus.Text.Trim() + " - " + Combo_KarbCiklus.Text.Trim() + " Karbantartási munkalap", $"F{sor}");
+            MyE.Kiir(szöveg, $"F{sor}");
             MyE.Betű($"F{sor}", false, false, true);
 
             MyE.Kiir($"Készítve: {DateTime.Now}", $"M{sor}");

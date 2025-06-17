@@ -44,7 +44,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
 
             szöveg = "CREATE TABLE típus_tábla (";
             szöveg += " [id] Long , ";
-            szöveg += " [típus] char(20))";
+            szöveg += " [típus] char(50))";
             //Létrehozzuk az adattáblát
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
