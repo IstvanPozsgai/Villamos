@@ -129,8 +129,8 @@ namespace Villamos.Kezelők
             }
         }
 
-        //Elkopó
 
+        //Elkopó
         public List<Adat_Kerék_Eszterga_Automata> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kerék_Eszterga_Automata> Adatok = new List<Adat_Kerék_Eszterga_Automata>();
@@ -187,6 +187,4 @@ namespace Villamos.Kezelők
             return Adat;
         }
     }
-
-
 }

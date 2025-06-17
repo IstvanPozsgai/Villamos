@@ -567,7 +567,7 @@ namespace Villamos.Villamos_Ablakok
                 //Betöltjük a dolgozókat akik beosztását nézzük
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
                 if (!File.Exists(hely)) return;
-                string jelszó = "RónaiSándor";
+
                 string szöveg = $"SELECT * FROM Esztergályos  ORDER BY dolgozószám ";
 
                 Kezelő_Kerék_Eszterga_Esztergályos kézE = new Kezelő_Kerék_Eszterga_Esztergályos();
