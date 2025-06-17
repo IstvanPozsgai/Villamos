@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
@@ -12,23 +12,29 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
     {
         public event Event_Kidobó Változás;
         readonly Kezelő_Baross_Mérési_Adatok Kéz = new Kezelő_Baross_Mérési_Adatok();
+        readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
+        List<Adat_Baross_Mérési_Adatok> Adatok = new List<Adat_Baross_Mérési_Adatok>();
         Adat_Baross_Mérési_Adatok Adat = null;
-
-
 
         public long ID { get; private set; }
         public Ablak_Eszterga_Adatok_Javítás(long id)
         {
             InitializeComponent();
             ID = id;
+            Start();
         }
 
-        private void Ablak_Eszterga_Adatok_Javítás_Load(object sender, EventArgs e)
+        private void Start()
         {
+            Adatok = Kéz.Lista_Adatok();
             Beolvasás();
             Kiírja();
             Berendezés_adatok();
             AcceptButton = Rögzítés;
+        }
+
+        private void Ablak_Eszterga_Adatok_Javítás_Load(object sender, EventArgs e)
+        {
         }
 
 
@@ -36,10 +42,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"SELECT * FROM mérés WHERE Eszterga_Id=" + ID;
-                Adat = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat = Adatok.Where(a => a.Eszterga_Id == ID).FirstOrDefault();
             }
             catch (HibásBevittAdat ex)
             {
@@ -82,7 +85,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-        void Ürít()
+        private void Ürít()
         {
             Dátum_1.Text = "";
             Azonosító.Text = "";
@@ -105,10 +108,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-                string jelszó = "szabólászló";
-                string szöveg = "";
-
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
@@ -125,11 +124,12 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 Tábla.Columns[3].HeaderText = "Pozíció";
                 Tábla.Columns[3].Width = 100;
 
-                szöveg = $"SELECT * FROM tábla where [azonosító]='{Azonosító.Text.Trim()}' AND objektumfajta='V.KERÉKPÁR' order by pozíció ";
-
-                Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
-                List<Adat_Kerék_Tábla> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Azonosító == Azonosító.Text.Trim()
+                          && a.Objektumfajta == "V.KERÉKPÁR"
+                          orderby a.Pozíció
+                          select a).ToList();
                 foreach (Adat_Kerék_Tábla rekord in Adatok)
                 {
 
@@ -175,47 +175,20 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 Megjegyzés.Text == Adat.Megjegyzés.Trim()) throw new HibásBevittAdat("Az adatokban nem történt változás.");
 
                 string szövegmegjegyzés = "";
-                bool volt = false;
+                if (Azonosító.Text != Adat.Azonosító.Trim()) szövegmegjegyzés += $"Pályaszám:{Adat.Azonosító.Trim()},";
+                if (Kerékpárszám.Text != Adat.Kerékpár_szám.Trim()) szövegmegjegyzés += $"Kerékpárszám:{Adat.Kerékpár_szám.Trim()},";
+                if (Típus_Eszt.Text != Adat.Típus_Eszt.Trim()) szövegmegjegyzés += $"Típus:{Adat.Típus_Eszt.Trim()},";
+                if (Pozíció.Text != Adat.Pozíció_Eszt.ToString()) szövegmegjegyzés += $"Pozíció:{Adat.Pozíció_Eszt},";
+                if (Megjegyzés.Text.Trim() != Adat.Megjegyzés.Trim()) szövegmegjegyzés += $"Megjegyzés:{Megjegyzés.Text.Trim()}\n";
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"UPDATE mérés SET ";
-                if (Azonosító.Text != Adat.Azonosító.Trim())
-                {
-                    szöveg += $" Azonosító='{Azonosító.Text.Trim()}'";
-                    szövegmegjegyzés += $"Pályaszám:{Adat.Azonosító.Trim()},";
-                    volt = true;
-                }
-                if (Kerékpárszám.Text != Adat.Kerékpár_szám.Trim())
-                {
-                    if (volt) szöveg += ",";
-                    szöveg += $" Kerékpár_szám='{Kerékpárszám.Text.Trim()}'";
-                    szövegmegjegyzés += $"Kerékpárszám:{Adat.Kerékpár_szám.Trim()},";
-                    volt = true;
-                }
-                if (Típus_Eszt.Text != Adat.Típus_Eszt.Trim())
-                {
-                    if (volt) szöveg += ",";
-                    szöveg += $" Típus_Eszt='{Típus_Eszt.Text.Trim()}'";
-                    szövegmegjegyzés += $"Típus:{Adat.Típus_Eszt.Trim()},";
-                    volt = true;
-                }
-                if (Pozíció.Text != Adat.Pozíció_Eszt.ToString())
-                {
-                    if (volt) szöveg += ",";
-                    szöveg += $" Pozíció_Eszt={pozi}";
-                    szövegmegjegyzés += $"Pozíció:{Adat.Pozíció_Eszt},";
-                    volt = true;
-                }
-                if (Megjegyzés.Text.Trim() != Adat.Megjegyzés.Trim())
-                {
-                    if (volt) szöveg += ",";
-                    szövegmegjegyzés += $"Megjegyzés:{Megjegyzés.Text.Trim()}\n";
-                    szöveg += $" Megjegyzés='{Adat.Megjegyzés.Trim() + "\n" + szövegmegjegyzés}'";
-                }
-
-                szöveg += " WHERE Eszterga_Id=" + ID;
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Baross_Mérési_Adatok ADAT = new Adat_Baross_Mérési_Adatok(
+                        Azonosító.Text != Adat.Azonosító.Trim() ? Azonosító.Text.Trim() : Adat.Azonosító.Trim(),
+                        Kerékpárszám.Text != Adat.Kerékpár_szám.Trim() ? Kerékpárszám.Text.Trim() : Adat.Kerékpár_szám.Trim(),
+                        Típus_Eszt.Text != Adat.Típus_Eszt.Trim() ? Típus_Eszt.Text.Trim() : Adat.Típus_Eszt.Trim(),
+                        Pozíció.Text != Adat.Pozíció_Eszt.ToString() ? pozi : Adat.Pozíció_Eszt,
+                        ID,
+                        Megjegyzés.Text.Trim() != szövegmegjegyzés ? $"{Adat.Megjegyzés.Trim()}\n{szövegmegjegyzés}" : Adat.Megjegyzés.Trim());
+                Kéz.Módosítás(ADAT);
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Változás?.Invoke();
                 this.Close();
