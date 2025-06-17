@@ -48,8 +48,6 @@ namespace Villamos.Villamos_Ablakok.MEO
             }
         }
 
-
-
         private void Végrehajt_Click(object sender, EventArgs e)
         {
             try
@@ -238,7 +236,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                 MyE.Kiir("NYKMJ ", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("KIFUTJ", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("NYKVJ ", MyE.Oszlopnév(i++) + sor);
-                MyE.Kiir("QR_J  ", MyE.Oszlopnév(i++) + sor);  
+                MyE.Kiir("QR_J  ", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("BETAJ ", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("BKOPB ", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("KKOPB ", MyE.Oszlopnév(i++) + sor);
@@ -246,7 +244,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                 MyE.Kiir("NYKMB ", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("KIFUTB", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("NYKVB ", MyE.Oszlopnév(i++) + sor);
-                MyE.Kiir("QR_B  ", MyE.Oszlopnév(i++) + sor);  
+                MyE.Kiir("QR_B  ", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("BETAB ", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("ATM_J-ATM_B", MyE.Oszlopnév(i++) + sor);
                 MyE.Kiir("HATL_T", MyE.Oszlopnév(i++) + sor);
@@ -290,7 +288,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                     MyE.Kiir(rekord.A_NYKMJ.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_KIFUTJ.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_NYKVJ.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
-                    MyE.Kiir(rekord.A_QR_J.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor); 
+                    MyE.Kiir(rekord.A_QR_J.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_BETAJ.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_BKOPB.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_KKOPB.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
@@ -298,7 +296,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                     MyE.Kiir(rekord.A_NYKMB.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_KIFUTB.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_NYKVB.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
-                    MyE.Kiir(rekord.A_QR_B.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor); 
+                    MyE.Kiir(rekord.A_QR_B.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_BETAB.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir((rekord.A_ATM_J - rekord.A_ATM_B).ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
                     MyE.Kiir(rekord.A_HATL_T.ToString().Replace(',', '.'), MyE.Oszlopnév(i++) + sor);
@@ -342,7 +340,6 @@ namespace Villamos.Villamos_Ablakok.MEO
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Excel_Kimenet()
         {
@@ -816,7 +813,6 @@ namespace Villamos.Villamos_Ablakok.MEO
 
         private DateTime DatumKonvert(string előzőDátum, string előzőIdő)
         {
-
             int év = int.TryParse(előzőDátum.Substring(0, 4), out év) ? év : 1900;
             int hó = int.TryParse(előzőDátum.Substring(4, 2), out hó) ? hó : 1;
             int nap = int.TryParse(előzőDátum.Substring(6, 2), out nap) ? nap : 1;
@@ -910,8 +906,5 @@ namespace Villamos.Villamos_Ablakok.MEO
             }
             return válasz;
         }
-
-
-
     }
 }

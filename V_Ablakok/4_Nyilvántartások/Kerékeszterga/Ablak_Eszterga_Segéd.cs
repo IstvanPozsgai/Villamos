@@ -94,18 +94,15 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Ablak_Eszterga_Segéd_Load(object sender, EventArgs e)
         {
         }
-
 
         private void Automata()
         {
             if (Mód == 3) Munkaközi_Szünet();
 
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -143,9 +140,7 @@ namespace Villamos.Villamos_Ablakok
             {
 
             }
-
         }
-
 
         private void Tevékenység_feltöltés()
         {
@@ -168,7 +163,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Terv_Rögzít_Click(object sender, EventArgs e)
         {
             switch (Mód)
@@ -190,17 +184,13 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Rögzít()
         {
             try
             {
-                if (Tevékenység_Vál.Text.Trim() == "")
-                    throw new HibásBevittAdat("Tevékenység mezőt ki kell tölteni.");
-                if (Norma_Idő.Text.Trim() == "" || !int.TryParse(Norma_Idő.Text, out int NormaIdő))
-                    throw new HibásBevittAdat("Az időszükséglet mező nem lehet üres és pozítív egész számnak kell lennie.");
-                if (NormaIdő < 1)
-                    throw new HibásBevittAdat("Az időszükséglet mezőnek pozítív egész számnak kell lennie.");
+                if (Tevékenység_Vál.Text.Trim() == "") throw new HibásBevittAdat("Tevékenység mezőt ki kell tölteni.");
+                if (Norma_Idő.Text.Trim() == "" || !int.TryParse(Norma_Idő.Text, out int NormaIdő)) throw new HibásBevittAdat("Az időszükséglet mező nem lehet üres és pozítív egész számnak kell lennie.");
+                if (NormaIdő < 1) throw new HibásBevittAdat("Az időszükséglet mezőnek pozítív egész számnak kell lennie.");
 
                 List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(Hételső.Year);
                 Adatok = (from a in Adatok
@@ -334,7 +324,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Alapra_állítás()
         {
             Holtart.Be();
@@ -356,7 +345,6 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Lép();
             }
         }
-
 
         private void Adatok_Rögzítése(int NormaIdő)
         {
@@ -396,7 +384,6 @@ namespace Villamos.Villamos_Ablakok
                 Maradék_beírása_Rögzítés(Futóidő, NormaIdő);
         }
 
-
         private void Maradék_beírása_Rögzítés(int Futóidő, int NormaIdő)
         {
             Holtart.Be();
@@ -420,7 +407,6 @@ namespace Villamos.Villamos_Ablakok
             }
             MyA.ABMódosítás(hely, jelszó, SzövegGy);
         }
-
 
         private void Maradék_beírása()
         {
@@ -450,7 +436,6 @@ namespace Villamos.Villamos_Ablakok
             }
             MyA.ABMódosítás(hely, jelszó, SzövegGy);
         }
-
 
         private void Adatok_VisszaÍrása(int kimarad)
         {
