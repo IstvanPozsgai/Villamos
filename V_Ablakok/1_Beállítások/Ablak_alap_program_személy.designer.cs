@@ -1340,7 +1340,6 @@ namespace Villamos
             // 
             // BtnOktatásOK
             // 
-            this.BtnOktatásOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnOktatásOK.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.BtnOktatásOK.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.BtnOktatásOK.Location = new System.Drawing.Point(1132, 16);
