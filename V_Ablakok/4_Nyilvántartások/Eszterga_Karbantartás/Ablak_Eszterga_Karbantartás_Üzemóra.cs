@@ -502,13 +502,13 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
+                throw;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                throw;
             }
         }
 
@@ -518,34 +518,48 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private bool UzemoraSzamEllenorzes(long UjUzemora, DateTime UjDatum)
         {
-            if (UjUzemora <= 0)
+            try
             {
-                MessageBox.Show("Az üzemóra értékének pozitív egész számnak kell lennie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
+                if (UjUzemora <= 0)
+                {
+                    MessageBox.Show("Az üzemóra értékének pozitív egész számnak kell lennie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+                Adat_Eszterga_Uzemora ElozoRekord = AdatokUzemora
+                    .Where(a => a.Dátum < UjDatum && !a.Státus)
+                    .OrderByDescending(a => a.Dátum)
+                    .FirstOrDefault();
+
+                long ElozoUzemora = ElozoRekord?.Uzemora ?? int.MinValue;
+
+                Adat_Eszterga_Uzemora UtanaRekord = AdatokUzemora
+                    .Where(a => a.Dátum > UjDatum && !a.Státus)
+                    .OrderBy(a => a.Dátum)
+                    .FirstOrDefault();
+
+                long UtanaUzemora = UtanaRekord?.Uzemora ?? int.MaxValue;
+
+                if (UjUzemora <= ElozoUzemora || UjUzemora >= UtanaUzemora)
+                {
+                    MessageBox.Show($"Az üzemóra értéknek az előző: {(ElozoRekord != null ? ElozoUzemora.ToStrTrim() : "nincs")}" +
+                        $" és következő: {(UtanaRekord != null ? UtanaUzemora.ToStrTrim() : "nincs")} közé kell esnie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+                return true;
             }
-
-            Adat_Eszterga_Uzemora ElozoRekord = AdatokUzemora
-                .Where(a => a.Dátum < UjDatum && !a.Státus)
-                .OrderByDescending(a => a.Dátum)
-                .FirstOrDefault();
-
-            long ElozoUzemora = ElozoRekord?.Uzemora ?? int.MinValue;
-
-            Adat_Eszterga_Uzemora UtanaRekord = AdatokUzemora
-                .Where(a => a.Dátum > UjDatum && !a.Státus)
-                .OrderBy(a => a.Dátum)
-                .FirstOrDefault();
-
-            long UtanaUzemora = UtanaRekord?.Uzemora ?? int.MaxValue;
-
-            if (UjUzemora <= ElozoUzemora || UjUzemora >= UtanaUzemora)
+            catch (HibásBevittAdat ex)
             {
-                MessageBox.Show($"Az üzemóra értéknek az előző: {(ElozoRekord != null ? ElozoUzemora.ToStrTrim() : "nincs")}" +
-                    $" és következő: {(UtanaRekord != null ? UtanaUzemora.ToStrTrim() : "nincs")} közé kell esnie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
             }
-
-            return true;
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
 
         /// <summary>
