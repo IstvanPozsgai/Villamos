@@ -61,9 +61,9 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 long Uzemora = 0;
-                string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/Kerékeszterga";
+                string hely = $@"{Application.StartupPath}/Főmérnökség/Adatok/Kerékeszterga";
 
-                if (Directory.Exists(hely))
+                if (!Directory.Exists(hely))
                     Directory.CreateDirectory(hely);
 
                 //hely += "/Eszterga_Karbantartás.accdb";
