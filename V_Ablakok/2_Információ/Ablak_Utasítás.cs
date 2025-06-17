@@ -38,6 +38,7 @@ namespace Villamos
 
             Táblalistázás();
             btnrögzítés.Visible = false;
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
 
