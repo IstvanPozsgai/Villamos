@@ -1399,19 +1399,20 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void Üzemóra_Oldal_Click(object sender, EventArgs e)
         {
-            try { 
-            if (Uj_ablak_EsztergaUzemora == null)
+            try
             {
-                Uj_ablak_EsztergaUzemora = new Ablak_Eszterga_Karbantartás_Üzemóra();
-                Uj_ablak_EsztergaUzemora.FormClosed += Új_ablak_EsztergaÜzemóra_Closed;
-                Uj_ablak_EsztergaUzemora.Show();
-                Uj_ablak_EsztergaUzemora.Eszterga_Valtozas += TablaListazasMuvelet;
-            }
-            else
-            {
-                Uj_ablak_EsztergaUzemora.Activate();
-                Uj_ablak_EsztergaUzemora.WindowState = FormWindowState.Maximized;
-            }
+                if (Uj_ablak_EsztergaUzemora == null)
+                {
+                    Uj_ablak_EsztergaUzemora = new Ablak_Eszterga_Karbantartás_Üzemóra();
+                    Uj_ablak_EsztergaUzemora.FormClosed += Új_ablak_EsztergaÜzemóra_Closed;
+                    Uj_ablak_EsztergaUzemora.Show();
+                    Uj_ablak_EsztergaUzemora.Eszterga_Valtozas += TablaListazasMuvelet;
+                }
+                else
+                {
+                    Uj_ablak_EsztergaUzemora.Activate();
+                    Uj_ablak_EsztergaUzemora.WindowState = FormWindowState.Maximized;
+                }
             }
             catch (HibásBevittAdat ex)
             {
