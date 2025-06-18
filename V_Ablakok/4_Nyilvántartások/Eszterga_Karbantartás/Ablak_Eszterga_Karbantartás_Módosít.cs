@@ -149,6 +149,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     case "Bekövetkezés":
                         TxtBxMennyiÓra.Enabled = true;
                         TxtBxMennyiNap.Enabled = true;
+                        TxtBxUtolsóÜzemóraÁllás.Enabled = true;
+                        DtmPckrUtolsóDátum.Enabled = true;
                         break;
                 }
             }
@@ -544,8 +546,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         /// <summary>
         /// Kiválasztja a kijelölt sorokat a TáblaMűveletből, és visszaadja az id-jük alapján a megfelelő rekordokat
@@ -1147,31 +1147,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// Ha a felhasználó módosítja az utolsó dátum értékét, lekérdezi az ahhoz tartozó üzemóra adatot,
         /// és beírja a megfelelő mezőbe. A jövőbeni dátumokra figyelmeztet.
         /// </summary>
-        //private void DtmPckrUtolsóDátum_ValueChanged(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (frissul) return;
-
-        //        frissul = true;
-
-        //        DateTime ValasztottDatum = DtmPckrUtolsóDátum.Value.Date;
-
-        //        if (ValasztottDatum > DateTime.Today)
-        //            throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
-
-        //        UzemoraKiolvasasEsBeiras(ValasztottDatum, TxtBxUtolsóÜzemóraÁllás);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-        //        MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //    finally
-        //    {
-        //        frissul = false;
-        //    }
-        //}
         private void DtmPckrUtolsóDátum_ValueChanged(object sender, EventArgs e)
         {
 
@@ -1208,7 +1183,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 frissul = false;
             }
         }
-
 
         /// <summary>
         /// Ha az üzemóra mező értéke megváltozik, annak megfelelő dátumot keres az adatbázisban,
@@ -1339,7 +1313,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void UjUtolagosNaplozas()
         {
             try
@@ -1401,8 +1374,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         private void TáblaNapló_SelectionChanged(object sender, EventArgs e)
         {
             if (TablaNaplo.Focused && TablaNaplo.SelectedRows.Count == 1)
@@ -1469,8 +1440,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             Uj_ablak_EsztergaUzemora = null;
         }
-
-
         #endregion
     }
 }
