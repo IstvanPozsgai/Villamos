@@ -506,14 +506,14 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 Tabla.DataSource = AdatTabla;
 
                 Tabla.Columns["Művelet Sorszáma"].Width = 110;
-                Tabla.Columns["Művelet"].Width = 950;
+                Tabla.Columns["Művelet"].Width = 943;
                 Tabla.Columns["Nap"].Width = 60;
                 Tabla.Columns["Óra"].Width = 60;
                 Tabla.Columns["Utolsó Dátum"].Width = 105;
                 Tabla.Columns["Utolsó Üzemóra"].Width = 120;
                 Tabla.Columns["Megjegyzés"].Width = 221;
                 Tabla.Columns["Rögzítő"].Width = 150;
-                Tabla.Columns["Rögzítés Dátuma"].Width = 115;
+                Tabla.Columns["Rögzítés Dátuma"].Width = 105;
                 for (int i = 0; i < 9; i++)
                     Tabla.Columns[i].ReadOnly = true;
                 Tabla.Visible = true;

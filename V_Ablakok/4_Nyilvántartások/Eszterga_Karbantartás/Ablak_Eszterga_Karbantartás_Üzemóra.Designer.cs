@@ -60,7 +60,7 @@
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.RowHeadersWidth = 30;
             this.Tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.Tábla.Size = new System.Drawing.Size(558, 430);
+            this.Tábla.Size = new System.Drawing.Size(472, 430);
             this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 261;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
@@ -74,7 +74,7 @@
             this.Btn_Excel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Excel.ForeColor = System.Drawing.Color.Transparent;
             this.Btn_Excel.Image = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.Btn_Excel.Location = new System.Drawing.Point(798, 382);
+            this.Btn_Excel.Location = new System.Drawing.Point(712, 382);
             this.Btn_Excel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Btn_Excel.Name = "Btn_Excel";
             this.Btn_Excel.Size = new System.Drawing.Size(60, 62);
@@ -90,7 +90,7 @@
             this.Btn_ÚjFelvétel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_ÚjFelvétel.ForeColor = System.Drawing.Color.Transparent;
             this.Btn_ÚjFelvétel.Image = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.Btn_ÚjFelvétel.Location = new System.Drawing.Point(660, 382);
+            this.Btn_ÚjFelvétel.Location = new System.Drawing.Point(574, 382);
             this.Btn_ÚjFelvétel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Btn_ÚjFelvétel.Name = "Btn_ÚjFelvétel";
             this.Btn_ÚjFelvétel.Size = new System.Drawing.Size(60, 62);
@@ -101,7 +101,7 @@
             // TxtBxÜzem
             // 
             this.TxtBxÜzem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TxtBxÜzem.Location = new System.Drawing.Point(686, 212);
+            this.TxtBxÜzem.Location = new System.Drawing.Point(600, 212);
             this.TxtBxÜzem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.TxtBxÜzem.Name = "TxtBxÜzem";
             this.TxtBxÜzem.Size = new System.Drawing.Size(170, 26);
@@ -115,7 +115,7 @@
             this.Btn_Módosít.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Módosít.ForeColor = System.Drawing.Color.Transparent;
             this.Btn_Módosít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Btn_Módosít.Location = new System.Drawing.Point(728, 382);
+            this.Btn_Módosít.Location = new System.Drawing.Point(642, 382);
             this.Btn_Módosít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Btn_Módosít.Name = "Btn_Módosít";
             this.Btn_Módosít.Size = new System.Drawing.Size(60, 62);
@@ -127,7 +127,7 @@
             // 
             this.LblStátuszÜzem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LblStátuszÜzem.AutoSize = true;
-            this.LblStátuszÜzem.Location = new System.Drawing.Point(590, 328);
+            this.LblStátuszÜzem.Location = new System.Drawing.Point(504, 328);
             this.LblStátuszÜzem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LblStátuszÜzem.Name = "LblStátuszÜzem";
             this.LblStátuszÜzem.Size = new System.Drawing.Size(68, 20);
@@ -138,7 +138,7 @@
             // 
             this.ChckBxStátus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ChckBxStátus.AutoSize = true;
-            this.ChckBxStátus.Location = new System.Drawing.Point(686, 328);
+            this.ChckBxStátus.Location = new System.Drawing.Point(600, 328);
             this.ChckBxStátus.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ChckBxStátus.Name = "ChckBxStátus";
             this.ChckBxStátus.Size = new System.Drawing.Size(79, 24);
@@ -150,7 +150,7 @@
             // 
             this.LblÜzem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LblÜzem.AutoSize = true;
-            this.LblÜzem.Location = new System.Drawing.Point(590, 212);
+            this.LblÜzem.Location = new System.Drawing.Point(504, 212);
             this.LblÜzem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LblÜzem.Name = "LblÜzem";
             this.LblÜzem.Size = new System.Drawing.Size(78, 20);
@@ -161,7 +161,7 @@
             // 
             this.LblDátum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LblDátum.AutoSize = true;
-            this.LblDátum.Location = new System.Drawing.Point(590, 275);
+            this.LblDátum.Location = new System.Drawing.Point(504, 275);
             this.LblDátum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LblDátum.Name = "LblDátum";
             this.LblDátum.Size = new System.Drawing.Size(61, 20);
@@ -172,7 +172,7 @@
             // 
             this.DtmPckrDátum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DtmPckrDátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtmPckrDátum.Location = new System.Drawing.Point(686, 269);
+            this.DtmPckrDátum.Location = new System.Drawing.Point(600, 269);
             this.DtmPckrDátum.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.DtmPckrDátum.Name = "DtmPckrDátum";
             this.DtmPckrDátum.Size = new System.Drawing.Size(170, 26);
@@ -183,7 +183,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
-            this.ClientSize = new System.Drawing.Size(868, 458);
+            this.ClientSize = new System.Drawing.Size(797, 458);
             this.Controls.Add(this.Tábla);
             this.Controls.Add(this.Btn_Excel);
             this.Controls.Add(this.Btn_ÚjFelvétel);

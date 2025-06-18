@@ -140,9 +140,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void OszlopSzelesseg()
         {
-            Tábla.Columns["ID"].Width = 50;
-            Tábla.Columns["Üzemóra"].Width = 159;
-            Tábla.Columns["Dátum"].Width = 110;
+            Tábla.Columns["ID"].Width = 60;
+            Tábla.Columns["Üzemóra"].Width = 172;
+            Tábla.Columns["Dátum"].Width = 120;
             Tábla.Columns["Státusz"].Width = 100;
         }
 
