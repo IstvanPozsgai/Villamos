@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Menetkimaradás
     {
         readonly string jelszó = "lilaakác";
+        readonly string táblanév = "menettábla";
         string hely;
 
         private void FájlBeállítás(string Telephely, int Év)
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Menetkimaradás> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM menettábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Menetkimaradás> Adatok = new List<Adat_Menetkimaradás>();
             Adat_Menetkimaradás Adat;
 
@@ -69,7 +70,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"UPDATE menettábla SET viszonylat='{Adat.Viszonylat}'";
+                string szöveg = $"UPDATE {táblanév} SET viszonylat='{Adat.Viszonylat}'";
                 szöveg += $", azonosító='{Adat.Azonosító}'";
                 szöveg += $", típus='{Adat.Típus}'";
                 szöveg += $", Eseményjele='{Adat.Eseményjele}'";
@@ -101,7 +102,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Menetkimaradás Elem in Adatok)
                 {
-                    string szöveg = $"UPDATE menettábla SET viszonylat='{Elem.Viszonylat}'";
+                    string szöveg = $"UPDATE {táblanév} SET viszonylat='{Elem.Viszonylat}'";
                     szöveg += $", azonosító='{Elem.Azonosító}'";
                     szöveg += $", típus='{Elem.Típus}'";
                     szöveg += $", Eseményjele='{Elem.Eseményjele}'";
@@ -136,7 +137,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Menetkimaradás Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO menettábla ";
+                    string szöveg = $"INSERT INTO {táblanév} ";
                     szöveg += " ([viszonylat], [azonosító], [típus], [Eseményjele], [Bekövetkezés],";
                     szöveg += " [kimaradtmenet], [jvbeírás], [vmbeírás], [javítás], [id], [törölt], [tétel], [jelentés]) ";
                     szöveg += " VALUES (";
@@ -163,7 +164,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO menettábla ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += " ([viszonylat], [azonosító], [típus], [Eseményjele], [Bekövetkezés],";
                 szöveg += " [kimaradtmenet], [jvbeírás], [vmbeírás], [javítás], [id], [törölt], [tétel], [jelentés]) ";
                 szöveg += " VALUES (";

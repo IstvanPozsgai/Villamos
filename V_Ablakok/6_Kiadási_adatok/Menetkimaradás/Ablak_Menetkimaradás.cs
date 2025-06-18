@@ -37,6 +37,7 @@ namespace Villamos
         int szakszolgálat = 0;
         string Html_szöveg = "";
         int idszám_;
+        string TelepHely = "";
 
         #region Alap
         /// <summary>
@@ -146,9 +147,10 @@ namespace Villamos
         {
             try
             {
+                List<Adat_Kiegészítő_Szolgálattelepei> Adatok = KézSzolgTelep.Lista_Adatok().OrderBy(a => a.Telephelynév).ToList();
                 Lstüzemek.Items.Clear();
-                foreach (string Elem in Listák.TelephelyLista_Jármű())
-                    Lstüzemek.Items.Add(Elem);
+                foreach (Adat_Kiegészítő_Szolgálattelepei Elem in Adatok)
+                    Lstüzemek.Items.Add(Elem.Telephelynév);
                 Lstüzemek.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -704,7 +706,7 @@ namespace Villamos
                                                              where a.Azonosító.Trim() == Pályaszámok.Text.Trim()
                                                              select a).ToList();
 
-                Tábla.ColumnCount = 12;
+                Tábla.ColumnCount = 13;
                 Tábla.RowCount = 0;
                 Tábla.Visible = false;
                 // Táblázat fejléce
@@ -720,6 +722,7 @@ namespace Villamos
                 Tábla.Columns[9].HeaderText = "Törölt";
                 Tábla.Columns[10].HeaderText = "Jelentés";
                 Tábla.Columns[11].HeaderText = "Tétel";
+                Tábla.Columns[12].HeaderText = "Telephely";
                 Tábla.Columns[0].Width = 55;
                 Tábla.Columns[1].Width = 45;
                 Tábla.Columns[2].Width = 45;
@@ -732,6 +735,7 @@ namespace Villamos
                 Tábla.Columns[9].Width = 45;
                 Tábla.Columns[10].Width = 90;
                 Tábla.Columns[11].Width = 45;
+                Tábla.Columns[12].Width = 90;
 
                 foreach (Adat_Menetkimaradás rekord in Adatok)
                 {
@@ -749,6 +753,7 @@ namespace Villamos
                     Tábla.Rows[i].Cells[9].Value = rekord.Törölt ? "Törölt" : "Aktív";
                     Tábla.Rows[i].Cells[10].Value = rekord.Jelentés;
                     Tábla.Rows[i].Cells[11].Value = rekord.Tétel;
+                    Tábla.Rows[i].Cells[12].Value = cmbtelephely1.Text.Trim();
                 }
                 Tábla.Visible = true;
             }
@@ -1204,8 +1209,19 @@ namespace Villamos
             {
                 // melyik sorra kattintottunk
                 if (e.RowIndex < 0) return;
-                if (Tábla.Columns[0].HeaderCell.Value.ToString() == "Srsz") idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[0].Value.ToString());
-                if (Tábla.Columns.Count > 9 && Tábla.Columns[9].HeaderCell.Value.ToString() == "ID") idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[9].Value.ToString());
+                idszám_ = 0;
+                TelepHely = "";
+                if (Tábla.Columns[0].HeaderCell.Value.ToString() == "Srsz")
+                {
+                    idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[0].Value.ToString());
+                    TelepHely = Tábla.Rows[e.RowIndex].Cells[12].Value.ToString();
+
+                }
+                if (Tábla.Columns[0].HeaderCell.Value.ToString() == "Telephely")
+                {
+                    idszám_ = int.Parse(Tábla.Rows[e.RowIndex].Cells[9].Value.ToString());
+                    TelepHely = Tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -1213,6 +1229,7 @@ namespace Villamos
             }
             catch (Exception ex)
             {
+
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -1304,7 +1321,7 @@ namespace Villamos
 
                 for (int j = 0; j < Lstüzemek.CheckedItems.Count; j++)
                 {
-                    List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(Lstüzemek.Items[j].ToStrTrim(), Dátum.Value.Year);
+                    List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(Lstüzemek.CheckedItems[j].ToStrTrim(), Dátum.Value.Year);
                     Adatok = (from a in Adatok
                               where a.Bekövetkezés >= MyF.Nap0000(Dátum.Value)
                               && a.Bekövetkezés <= MyF.Nap2359(Dátum.Value)
@@ -1316,7 +1333,7 @@ namespace Villamos
                     {
                         Tábla.RowCount++;
                         int i = Tábla.RowCount - 1;
-                        Tábla.Rows[i].Cells[0].Value = Lstüzemek.Items[j];
+                        Tábla.Rows[i].Cells[0].Value = Lstüzemek.CheckedItems[j];
                         Tábla.Rows[i].Cells[1].Value = rekord.Eseményjele;
                         Tábla.Rows[i].Cells[2].Value = rekord.Viszonylat;
                         Tábla.Rows[i].Cells[3].Value = rekord.Típus;
@@ -1382,6 +1399,7 @@ namespace Villamos
         Ablak_Menetrögítés Új_Ablak_Menetrögítés = null;
         private void BtnRészletes_Click(object sender, EventArgs e)
         {
+            if (TelepHely.Trim() == "") return;
             AdatRészletes();
         }
 
@@ -1390,10 +1408,7 @@ namespace Villamos
             try
             {
                 List<Adat_Menetkimaradás> Adatok = new List<Adat_Menetkimaradás>();
-                if (Cmbtelephely.Enabled)
-                    Adatok = KézMenet.Lista_Adatok("Főmérnökség", Dátum.Value.Year);
-                else
-                    Adatok = KézMenet.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
+                Adatok = KézMenet.Lista_Adatok(TelepHely, Dátum.Value.Year);
 
                 Adat_Menetkimaradás ADAT = Adatok.Where(a => a.Id == idszám_).FirstOrDefault();
 

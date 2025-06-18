@@ -92,7 +92,7 @@ namespace Villamos
             this.Panel2.Controls.Add(this.Button3);
             this.Panel2.Controls.Add(this.Button2);
             this.Panel2.Controls.Add(this.Button1);
-            this.Panel2.Location = new System.Drawing.Point(6, 126);
+            this.Panel2.Location = new System.Drawing.Point(6, 91);
             this.Panel2.Name = "Panel2";
             this.Panel2.Size = new System.Drawing.Size(214, 62);
             this.Panel2.TabIndex = 16;
@@ -155,7 +155,7 @@ namespace Villamos
             this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
             this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(1130, 3);
+            this.BtnSúgó.Location = new System.Drawing.Point(1111, 3);
             this.BtnSúgó.Name = "BtnSúgó";
             this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
             this.BtnSúgó.TabIndex = 175;
@@ -273,7 +273,7 @@ namespace Villamos
             this.Dátum.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Dátum.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Dátum.Location = new System.Drawing.Point(56, 95);
+            this.Dátum.Location = new System.Drawing.Point(45, 50);
             this.Dátum.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Dátum.Name = "Dátum";
             this.Dátum.Size = new System.Drawing.Size(122, 26);
@@ -286,9 +286,9 @@ namespace Villamos
             this.Panel1.Controls.Add(this.Lstszolgálatok);
             this.Panel1.Controls.Add(this.Lstüzemek);
             this.Panel1.Controls.Add(this.BtnNapilista);
-            this.Panel1.Location = new System.Drawing.Point(6, 194);
+            this.Panel1.Location = new System.Drawing.Point(6, 159);
             this.Panel1.Name = "Panel1";
-            this.Panel1.Size = new System.Drawing.Size(217, 445);
+            this.Panel1.Size = new System.Drawing.Size(217, 439);
             this.Panel1.TabIndex = 17;
             // 
             // CheckBox1
@@ -298,7 +298,7 @@ namespace Villamos
             this.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.CheckBox1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.CheckBox1.Location = new System.Drawing.Point(39, 373);
+            this.CheckBox1.Location = new System.Drawing.Point(39, 362);
             this.CheckBox1.Name = "CheckBox1";
             this.CheckBox1.Size = new System.Drawing.Size(142, 22);
             this.CheckBox1.TabIndex = 10;
@@ -321,7 +321,7 @@ namespace Villamos
             this.Lstüzemek.CheckOnClick = true;
             this.Lstüzemek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Lstüzemek.FormattingEnabled = true;
-            this.Lstüzemek.Location = new System.Drawing.Point(3, 111);
+            this.Lstüzemek.Location = new System.Drawing.Point(3, 100);
             this.Lstüzemek.Name = "Lstüzemek";
             this.Lstüzemek.Size = new System.Drawing.Size(204, 256);
             this.Lstüzemek.TabIndex = 8;
@@ -331,7 +331,7 @@ namespace Villamos
             this.BtnNapilista.BackColor = System.Drawing.Color.Silver;
             this.BtnNapilista.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.BtnNapilista.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnNapilista.Location = new System.Drawing.Point(22, 402);
+            this.BtnNapilista.Location = new System.Drawing.Point(19, 391);
             this.BtnNapilista.Margin = new System.Windows.Forms.Padding(4);
             this.BtnNapilista.Name = "BtnNapilista";
             this.BtnNapilista.Size = new System.Drawing.Size(178, 32);
@@ -359,7 +359,7 @@ namespace Villamos
             this.Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.EnableHeadersVisualStyles = false;
-            this.Tábla.Location = new System.Drawing.Point(229, 91);
+            this.Tábla.Location = new System.Drawing.Point(229, 99);
             this.Tábla.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Tábla.Name = "Tábla";
             this.Tábla.ReadOnly = true;
@@ -371,7 +371,7 @@ namespace Villamos
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.Tábla.Size = new System.Drawing.Size(961, 548);
+            this.Tábla.Size = new System.Drawing.Size(1164, 504);
             this.Tábla.TabIndex = 18;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -385,7 +385,7 @@ namespace Villamos
             this.Holtart.Location = new System.Drawing.Point(353, 3);
             this.Holtart.Maximum = 10;
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(770, 23);
+            this.Holtart.Size = new System.Drawing.Size(973, 23);
             this.Holtart.TabIndex = 21;
             this.Holtart.Visible = false;
             // 
@@ -402,7 +402,7 @@ namespace Villamos
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1126, 40);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1329, 40);
             this.tableLayoutPanel1.TabIndex = 176;
             // 
             // panel3
@@ -461,11 +461,11 @@ namespace Villamos
             this.tableLayoutPanel2.Controls.Add(this.BtnFőmérnükség, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnRészletes, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.groupBox1, 5, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 40);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(234, 40);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1178, 50);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1159, 50);
             this.tableLayoutPanel2.TabIndex = 177;
             // 
             // groupBox3
@@ -559,7 +559,7 @@ namespace Villamos
             // AblakMenetkimaradás
             // 
             this.BackColor = System.Drawing.Color.MediumSlateBlue;
-            this.ClientSize = new System.Drawing.Size(1194, 646);
+            this.ClientSize = new System.Drawing.Size(1397, 610);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Panel1);
