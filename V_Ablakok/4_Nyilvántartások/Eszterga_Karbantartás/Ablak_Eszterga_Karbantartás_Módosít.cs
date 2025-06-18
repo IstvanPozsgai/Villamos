@@ -1271,7 +1271,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (TablaUtolagMuvelet.SelectedRows.Count != 0)
                     UjUtolagosNaplozas();
                 else if (TablaNaplo.SelectedRows.Count != 0)
-                    NaploModositas();
+                    UtolagNaploModositas();
 
                 TablaNaploListazas();
                 MessageBox.Show("Sikeres rögzítés a naplóba.", "Rögzítve", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1286,7 +1286,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void NaploModositas()
+        private void UtolagNaploModositas()
         {
             try
             {
@@ -1326,7 +1326,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         DateTime.Today
                     );
 
-                    KézNapló.Update(modositott, eredetiDatum);
+                    KézNapló.UtolagUpdate(modositott, eredetiDatum);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1379,7 +1379,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     string rogzito = Program.PostásNév.ToStrTrim();
                     DateTime maiDatum = DateTime.Today;
 
-                    Adat_Eszterga_Muveletek_Naplo adat = new Adat_Eszterga_Muveletek_Naplo(
+                    Adat_Eszterga_Muveletek_Naplo Adat = new Adat_Eszterga_Muveletek_Naplo(
                         id,
                         muvelet,
                         mennyiNap,
@@ -1391,7 +1391,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         maiDatum
                     );
 
-                    KézNapló.EsztergaNaplozas(adat);
+                    KézNapló.UtolagEsztergaNaplozas(Adat);
                 }
             }
             catch (HibásBevittAdat ex)

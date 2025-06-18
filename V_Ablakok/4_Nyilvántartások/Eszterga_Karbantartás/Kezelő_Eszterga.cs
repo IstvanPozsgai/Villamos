@@ -410,20 +410,20 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
-        public void EsztergaNaplozas(Adat_Eszterga_Muveletek_Naplo Adat)
+        public void UtolagEsztergaNaplozas(Adat_Eszterga_Muveletek_Naplo Adat)
         {
             try
             {
-                string szoveg = $"INSERT INTO {Tabla_Naplo} (ID, Művelet, Mennyi_Dátum, Mennyi_Óra, Utolsó_Dátum, Utolsó_Üzemóra_Állás, [Megjegyzés], Rögzítő, Rögzítés_Dátuma) VALUES (";
-                szoveg += $"{Adat.ID}, ";
-                szoveg += $"'{Adat.Művelet}', ";
-                szoveg += $"{Adat.Mennyi_Dátum}, ";
-                szoveg += $"{Adat.Mennyi_Óra}, ";
-                szoveg += $"#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, ";
-                szoveg += $"{Adat.Utolsó_Üzemóra_Állás}, ";
-                szoveg += $"'{Adat.Megjegyzés}', ";
-                szoveg += $"'{Adat.Rögzítő}', ";
-                szoveg += $"#{Adat.Rögzítés_Dátuma:yyyy-MM-dd}#)";
+                    string szoveg = $"INSERT INTO {Tabla_Naplo} (ID, Művelet, Mennyi_Dátum, Mennyi_Óra, Utolsó_Dátum, Utolsó_Üzemóra_Állás, [Megjegyzés], Rögzítő, Rögzítés_Dátuma) VALUES (";
+                    szoveg += $"{Adat.ID}, ";
+                    szoveg += $"'{Adat.Művelet}', ";
+                    szoveg += $"{Adat.Mennyi_Dátum}, ";
+                    szoveg += $"{Adat.Mennyi_Óra}, ";
+                    szoveg += $"#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, ";
+                    szoveg += $"{Adat.Utolsó_Üzemóra_Állás}, ";
+                    szoveg += $"'{Adat.Megjegyzés}', ";
+                    szoveg += $"'{Adat.Rögzítő}', ";
+                    szoveg += $"#{Adat.Rögzítés_Dátuma:yyyy-MM-dd}#)";
                 MyA.ABMódosítás(hely, jelszo, szoveg);
             }
             catch (HibásBevittAdat ex)
@@ -436,7 +436,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Update(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
+        public void UtolagUpdate(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
         {
             try
             {
