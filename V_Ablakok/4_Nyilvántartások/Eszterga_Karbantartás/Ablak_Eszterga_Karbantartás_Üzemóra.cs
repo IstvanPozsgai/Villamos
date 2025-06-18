@@ -409,7 +409,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     {
                         KezUzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
                         KezUzemora.Rogzites(new Adat_Eszterga_Uzemora(0, UjUzemora, UjDatum, false));
-                        //MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 TablaListazas();
@@ -447,11 +446,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                                                             && a.Státus != true
                                                             select a).ToList();
 
+                    List<Adat_Eszterga_Muveletek> ModLista = new List<Adat_Eszterga_Muveletek>();
+
                     foreach (Adat_Eszterga_Muveletek Muvelet in rekord)
-                    {
-                        Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(UjDatum, UjUzemora, Muvelet.ID);
-                        KezMuveletek.Modositas(ADAT);
-                    }
+                        ModLista.Add(new Adat_Eszterga_Muveletek(UjDatum, UjUzemora, Muvelet.ID));
                 }
                 else
                     return;

@@ -973,13 +973,18 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             {
                 if (Tabla.SelectedRows.Count > 0)
                 {
+                    List<Adat_Eszterga_Muveletek> AdatLista = new List<Adat_Eszterga_Muveletek>();
+                    List<DataGridViewRow> NaplozandoSorok = new List<DataGridViewRow>();
+
+                    TervDatum = DtmPckrElőTerv.Value.Date;
+
+                    if (!DatumEllenorzes(DateTime.Today, TervDatum))
+                        return;
+
                     foreach (DataGridViewRow Sor in Tabla.SelectedRows)
                     {
                         Color HatterSzin = Sor.DefaultCellStyle.BackColor;
-                        TervDatum = DtmPckrElőTerv.Value.Date;
 
-                        if (!DatumEllenorzes(DateTime.Today, TervDatum))
-                            return;
                         if (HatterSzin == Color.LawnGreen || HatterSzin == Color.Yellow)
                         {
                             MessageBox.Show("Ez a sor nem módosítható, mert már a művelet elkészült vagy nem kell még végrehajtani.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -987,26 +992,31 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         }
 
                         int Id = Sor.Cells[0].Value.ToÉrt_Int();
-                        long AktivUzemora = 0;
-                        if (AdatokUzemora.Count > 0) AktivUzemora = AdatokUzemora.Max(a => a.Uzemora);
+                        long AktivUzemora = AdatokUzemora.Count > 0 ? AdatokUzemora.Max(a => a.Uzemora) : 0;
 
-                        Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(DateTime.Today,
-                                                              AktivUzemora,
-                                                              Id);
-
-                        Kez_Muvelet.Modositas(ADAT);
-                        Kez_Muvelet.Torles(ADAT, false);
-                        Sor.Cells[4].Value = DateTime.Today;
-                        Sor.Cells[5].Value = AktivUzemora;
-
-                        Naplozas(Sor, DateTime.Today, AktivUzemora);
+                        Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(DateTime.Today, AktivUzemora, Id);
+                        AdatLista.Add(ADAT);
+                        NaplozandoSorok.Add(Sor);
                     }
+                    Kez_Muvelet.Modositas(AdatLista);
+                    Kez_Muvelet.Torles(AdatLista, false);
+
+                    for (int i = 0; i < AdatLista.Count; i++)
+                    {
+                        NaplozandoSorok[i].Cells[4].Value = DateTime.Today;
+                        NaplozandoSorok[i].Cells[5].Value = AdatLista[i].Utolsó_Üzemóra_Állás;
+
+                        Naplozas(NaplozandoSorok[i], DateTime.Today, AdatLista[i].Utolsó_Üzemóra_Állás);
+                    }
+
                     TablaListazas();
 
                     MessageBox.Show("Az adatok rögzítése megtörtént.", "Rögzítve.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
+                {
                     MessageBox.Show("Válasszon ki egy vagy több sort a táblázatból.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -1018,6 +1028,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         /// <summary>
         /// A táblázat tartalmát Excel fájlba exportálja, majd automatikusan megnyitja a fájlt.
@@ -1371,8 +1382,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 }
                 else
                 {
-                    Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(ID);
-                    Kez_Muvelet.Torles(ADAT, false);
+                    List<Adat_Eszterga_Muveletek> lista = new List<Adat_Eszterga_Muveletek>
+                    {
+                        new Adat_Eszterga_Muveletek(ID)
+                    };
+                    Kez_Muvelet.Torles(lista, false);
                     MessageBox.Show("A megjegyzés törlésre került.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Tabla.InvalidateRow(e.RowIndex);

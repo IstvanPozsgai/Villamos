@@ -886,14 +886,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
                     rekordok.Add(row.Cells[0].Value.ToÉrt_Int());
 
+                List<Adat_Eszterga_Muveletek> TorlesRekord = new List<Adat_Eszterga_Muveletek>();
+
                 foreach (int Id in rekordok)
                 {
                     Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == Id);
                     if (rekord != null)
-                    {
-                        Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(Id);
-                        KézMűveletek.Torles(ADAT, true);
-                    }
+                        TorlesRekord.Add(new Adat_Eszterga_Muveletek(Id));
                 }
                 Eszterga_Valtozas?.Invoke();
                 TablaListazasMuvelet();
