@@ -410,21 +410,29 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
-        public void UtolagEsztergaNaplozas(Adat_Eszterga_Muveletek_Naplo Adat)
+        public void EsztergaNaplozas(List<Adat_Eszterga_Muveletek_Naplo> Adatok)
         {
             try
             {
+                List<string> sqlLista = new List<string>();
+
+                foreach (Adat_Eszterga_Muveletek_Naplo rekord in Adatok)
+                {
                     string szoveg = $"INSERT INTO {Tabla_Naplo} (ID, Művelet, Mennyi_Dátum, Mennyi_Óra, Utolsó_Dátum, Utolsó_Üzemóra_Állás, [Megjegyzés], Rögzítő, Rögzítés_Dátuma) VALUES (";
-                    szoveg += $"{Adat.ID}, ";
-                    szoveg += $"'{Adat.Művelet}', ";
-                    szoveg += $"{Adat.Mennyi_Dátum}, ";
-                    szoveg += $"{Adat.Mennyi_Óra}, ";
-                    szoveg += $"#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, ";
-                    szoveg += $"{Adat.Utolsó_Üzemóra_Állás}, ";
-                    szoveg += $"'{Adat.Megjegyzés}', ";
-                    szoveg += $"'{Adat.Rögzítő}', ";
-                    szoveg += $"#{Adat.Rögzítés_Dátuma:yyyy-MM-dd}#)";
-                MyA.ABMódosítás(hely, jelszo, szoveg);
+                    szoveg += $"{rekord.ID}, ";
+                    szoveg += $"'{rekord.Művelet}', ";
+                    szoveg += $"{rekord.Mennyi_Dátum}, ";
+                    szoveg += $"{rekord.Mennyi_Óra}, ";
+                    szoveg += $"#{rekord.Utolsó_Dátum:yyyy-MM-dd}#, ";
+                    szoveg += $"{rekord.Utolsó_Üzemóra_Állás}, ";
+                    szoveg += $"'{rekord.Megjegyzés}', ";
+                    szoveg += $"'{rekord.Rögzítő}', ";
+                    szoveg += $"#{rekord.Rögzítés_Dátuma:yyyy-MM-dd}#)";
+
+                    sqlLista.Add(szoveg);
+                }
+
+                MyA.ABMódosítás(hely, jelszo, sqlLista);
             }
             catch (HibásBevittAdat ex)
             {
