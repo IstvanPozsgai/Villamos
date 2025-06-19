@@ -8,7 +8,7 @@ namespace Villamos.Kezelők
     {
         public List<Adat_Nosztalgia_Állomány> Lista_Adat(string hely, string jelszó, string szöveg)
         {
-            Adat_Nosztalgia_Állomány Adat = null;
+            Adat_Nosztalgia_Állomány Adat;
             List<Adat_Nosztalgia_Állomány> Adatok = new List<Adat_Nosztalgia_Állomány>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -32,11 +32,11 @@ namespace Villamos.Kezelők
                                                         rekord["ciklus_idő"].ToStrTrim(),
                                                         rekord["ciklus_km1"].ToStrTrim(),
                                                         rekord["ciklus_km2"].ToStrTrim(),
-                                                        rekord["gyártó"].ToStrTrim(),
-                                                        rekord["év"].ToÉrt_Int(),
-                                                        rekord["Ntípus"].ToStrTrim(),
-                                                        rekord["eszközszám"].ToStrTrim(),
-                                                        rekord["leltári_szám"].ToStrTrim(),
+                                                        //rekord["gyártó"].ToStrTrim(),
+                                                        //rekord["év"].ToÉrt_Int(),
+                                                        //rekord["Ntípus"].ToStrTrim(),
+                                                        //rekord["eszközszám"].ToStrTrim(),
+                                                        //rekord["leltári_szám"].ToStrTrim(),
                                                         rekord["vizsgálatdátuma_idő"].ToÉrt_DaTeTime(),
                                                         rekord["vizsgálatdátuma_km"].ToÉrt_DaTeTime(),
                                                         rekord["vizsgálatfokozata"].ToStrTrim(),
