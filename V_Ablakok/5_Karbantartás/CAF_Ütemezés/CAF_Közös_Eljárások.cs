@@ -136,7 +136,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
-        public static List<Adat_CAF_Adatok> IDŐ_EgyKocsi(string pályaszám, DateTime Elő_Dátumig, DateTime ELŐDátumtól)
+        /// <summary>
+        /// Az adott kocsi idő alapú ciklusrendjét beütemezi a két dátum között
+        /// akkor áll le, ha végdátumot meghaladtuk, de az utolsó értéket még rögzíti
+        /// </summary>
+        /// <param name="pályaszám"></param>
+        /// <param name="Elő_Dátumig"></param>
+        /// <param name="Elő_Dátumtól"></param>
+        /// <returns></returns>
+        public static List<Adat_CAF_Adatok> IDŐ_EgyKocsi(string pályaszám, DateTime Elő_Dátumig, DateTime Elő_Dátumtól)
         {
             List<Adat_CAF_Adatok> Válasz = new List<Adat_CAF_Adatok>();
             try
@@ -147,7 +155,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Adat_CAF_Adatok Előző = Kéz_Adatok.Egy_Adat(pályaszám.Trim());    // utolsó ütemezett
 
                 int Státus = 0;
-                int IDŐvKM = 0;
+                int IDŐvKM = 1;
                 string Megjegyzés = "_";
                 long Számláló = 0;
                 int Idő_sorszám = 0;
@@ -163,20 +171,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 }
 
 
-                if (ELŐDátumtól != new DateTime(1900, 1, 1)) Dátum = ELŐDátumtól;
-                // ha az utolsó ütem akkor lenullázuk az értéket
-                int következő;
-                if (IDŐvKM == 2)
-                {
-                    következő = 1;
-                }
-                else
-                {
-                    if (Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám == Idő_sorszám)
-                        következő = 1;
-                    else
-                        következő = Idő_sorszám + 1;
-                }
+                if (Elő_Dátumtól != new DateTime(1900, 1, 1)) Dátum = Elő_Dátumtól;
+                // ha km alapú az utolsó, vagy ha a maximálist elérte akkor 1
+                // különben a ciklus következő elemét veszi
+                int következő = 1;
+                if (!(IDŐvKM == 1 && Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám == Idő_sorszám))
+                    következő = Idő_sorszám + 1;
+
 
                 while (vége == true)
                 {
@@ -185,7 +186,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     long névleges_nap = Ciklus_Idő[következő - 1].Névleges;
                     Dátum = Dátum.AddDays(névleges_nap);
 
-                    Adat_CAF_Adatok ADAT = new Adat_CAF_Adatok(0, pályaszám, Vizsgálat, Dátum, Dátum, Számláló, Státus, KM_Sorszám, IDŐ_Sorszám, IDŐvKM, Megjegyzés);
+                    Adat_CAF_Adatok ADAT = new Adat_CAF_Adatok(0, pályaszám, Vizsgálat, Dátum, Dátum, Számláló, Státus, KM_Sorszám, IDŐ_Sorszám, 1, Megjegyzés);
                     Válasz.Add(ADAT);
                     // ha belefér az időbe akkor rögzítjük
                     if (Elő_Dátumig < ADAT.Dátum) vége = false;
