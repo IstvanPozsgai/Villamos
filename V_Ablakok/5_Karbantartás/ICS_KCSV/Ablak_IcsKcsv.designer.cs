@@ -1454,7 +1454,7 @@ namespace Villamos
             this.Button4.Location = new System.Drawing.Point(806, 57);
             this.Button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Button4.Name = "Button4";
-            this.Button4.Size = new System.Drawing.Size(40, 40);
+            this.Button4.Size = new System.Drawing.Size(45, 45);
             this.Button4.TabIndex = 176;
             this.ToolTip1.SetToolTip(this.Button4, "Excel táblázatot készít");
             this.Button4.UseVisualStyleBackColor = true;
@@ -1467,7 +1467,7 @@ namespace Villamos
             this.Btn_Vezénylésbeírás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn_Vezénylésbeírás.Location = new System.Drawing.Point(852, 57);
             this.Btn_Vezénylésbeírás.Name = "Btn_Vezénylésbeírás";
-            this.Btn_Vezénylésbeírás.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Vezénylésbeírás.Size = new System.Drawing.Size(45, 45);
             this.Btn_Vezénylésbeírás.TabIndex = 175;
             this.ToolTip1.SetToolTip(this.Btn_Vezénylésbeírás, "A napi vezénylési adatokat rögzíti a hiba táblába");
             this.Btn_Vezénylésbeírás.UseVisualStyleBackColor = true;
@@ -1480,11 +1480,11 @@ namespace Villamos
             this.Tábla_vezénylés.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla_vezénylés.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla_vezénylés.Location = new System.Drawing.Point(806, 103);
+            this.Tábla_vezénylés.Location = new System.Drawing.Point(806, 108);
             this.Tábla_vezénylés.Name = "Tábla_vezénylés";
             this.Tábla_vezénylés.RowHeadersVisible = false;
             this.Tábla_vezénylés.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.Tábla_vezénylés.Size = new System.Drawing.Size(324, 337);
+            this.Tábla_vezénylés.Size = new System.Drawing.Size(324, 332);
             this.Tábla_vezénylés.TabIndex = 171;
             this.Tábla_vezénylés.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_vezénylés_CellClick);
             // 

@@ -336,9 +336,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(829, 304);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(829, 310);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // label10
@@ -372,7 +371,7 @@
             this.KerékRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.KerékRögzít.Location = new System.Drawing.Point(470, 263);
             this.KerékRögzít.Name = "KerékRögzít";
-            this.KerékRögzít.Size = new System.Drawing.Size(45, 45);
+            this.KerékRögzít.Size = new System.Drawing.Size(45, 44);
             this.KerékRögzít.TabIndex = 121;
             this.KerékRögzít.UseVisualStyleBackColor = true;
             this.KerékRögzít.Click += new System.EventHandler(this.KerékRögzít_Click);
@@ -411,7 +410,7 @@
             this.tableLayoutPanel2.Controls.Add(this.Műszaki, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label12, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.Osztási, 1, 1);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 319);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 325);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -430,7 +429,7 @@
             this.tableLayoutPanel3.Controls.Add(this.Dátum, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.label14, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.Státus, 3, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(12, 540);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(12, 545);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -453,7 +452,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
-            this.ClientSize = new System.Drawing.Size(899, 588);
+            this.ClientSize = new System.Drawing.Size(899, 602);
             this.Controls.Add(this.Rögzít);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);

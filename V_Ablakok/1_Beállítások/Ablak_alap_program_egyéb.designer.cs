@@ -58,6 +58,7 @@ namespace Villamos
             this.Fülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.Panel2 = new System.Windows.Forms.Panel();
+            this.BeolvásBeállítás = new System.Windows.Forms.Button();
             this.SAPTábla = new System.Windows.Forms.DataGridView();
             this.SAPFrissít = new System.Windows.Forms.Button();
             this.Label67 = new System.Windows.Forms.Label();
@@ -234,6 +235,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel2.BackColor = System.Drawing.Color.SandyBrown;
+            this.Panel2.Controls.Add(this.BeolvásBeállítás);
             this.Panel2.Controls.Add(this.SAPTábla);
             this.Panel2.Controls.Add(this.SAPFrissít);
             this.Panel2.Controls.Add(this.Label67);
@@ -251,6 +253,19 @@ namespace Villamos
             this.Panel2.Name = "Panel2";
             this.Panel2.Size = new System.Drawing.Size(1478, 342);
             this.Panel2.TabIndex = 0;
+            // 
+            // BeolvásBeállítás
+            // 
+            this.BeolvásBeállítás.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.BeolvásBeállítás.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.BeolvásBeállítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BeolvásBeállítás.Location = new System.Drawing.Point(1306, 4);
+            this.BeolvásBeállítás.Name = "BeolvásBeállítás";
+            this.BeolvásBeállítás.Size = new System.Drawing.Size(159, 127);
+            this.BeolvásBeállítás.TabIndex = 112;
+            this.toolTip1.SetToolTip(this.BeolvásBeállítás, "Excel beolvasás beállítás");
+            this.BeolvásBeállítás.UseVisualStyleBackColor = false;
+            this.BeolvásBeállítás.Click += new System.EventHandler(this.BeolvásBeállítás_Click);
             // 
             // SAPTábla
             // 
@@ -1132,6 +1147,7 @@ namespace Villamos
             this.Adatok_beolvasása.Name = "Adatok_beolvasása";
             this.Adatok_beolvasása.Size = new System.Drawing.Size(44, 45);
             this.Adatok_beolvasása.TabIndex = 204;
+            this.toolTip1.SetToolTip(this.Adatok_beolvasása, "Beilleszti az elkészült Excel fájlt");
             this.Adatok_beolvasása.UseVisualStyleBackColor = true;
             this.Adatok_beolvasása.Click += new System.EventHandler(this.Adatok_beolvasása_Click);
             // 
@@ -1143,6 +1159,7 @@ namespace Villamos
             this.Beviteli_táblakészítés.Name = "Beviteli_táblakészítés";
             this.Beviteli_táblakészítés.Size = new System.Drawing.Size(45, 45);
             this.Beviteli_táblakészítés.TabIndex = 205;
+            this.toolTip1.SetToolTip(this.Beviteli_táblakészítés, "Beolvasás Excel táblába");
             this.Beviteli_táblakészítés.UseVisualStyleBackColor = true;
             this.Beviteli_táblakészítés.Click += new System.EventHandler(this.Beviteli_táblakészítés_Click);
             // 
@@ -1560,5 +1577,6 @@ namespace Villamos
         internal Button VégeÁrRögzítés;
         internal V_MindenEgyéb.MyProgressbar Holtart;
         internal Button Osztály_Új;
+        internal Button BeolvásBeállítás;
     }                    
 }

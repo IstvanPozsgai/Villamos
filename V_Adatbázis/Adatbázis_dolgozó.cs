@@ -29,7 +29,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[belépésidátum] DATE, ";
             szöveg += "[Státusváltozások] CHAR(150), ";
             szöveg += "[Státusváltozoka] CHAR(150), ";
-            szöveg += "[Megjegyzés] CHAR(150) )";
+            szöveg += "[Megjegyzés] CHAR(150) ,";
+            szöveg += "[Előzetes] yesno )";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
 
@@ -410,5 +411,22 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[név] CHAR(50))";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
+
+
+        public static void Dolgozó(string hely)
+        {
+            string jelszó = "csavarhúzó";
+            string táblanév = "Tábla_Dolgozó";
+            AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
+            ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
+            string szöveg = $"CREATE TABLE {táblanév} (";
+            szöveg += "[Dolgozószám]  char (8),";
+            szöveg += "[Dolgozónév]  char (250),";
+            szöveg += "[Munkakör]  char (250),";
+            szöveg += "[Szervezet]  char (200),";
+            szöveg += "[státus]  yesno)";
+            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg, táblanév);
+        }
+
     }
 }

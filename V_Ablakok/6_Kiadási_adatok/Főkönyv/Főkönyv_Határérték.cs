@@ -54,63 +54,65 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv
                     Adat_T5C5_Kmadatok rekordszer = (from a in AdatokVkm
                                                      where a.Azonosító == Adat.Azonosító
                                                      select a).FirstOrDefault();
-
-                    List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER
-                                                                 where a.Azonosító == Adat.Azonosító && a.Dátum > rekordszer.KMUdátum
-                                                                 select a).ToList();
-                    Adat_Ciklus KisV = (from a in AdatokCiklus
-                                        where a.Típus == rekordszer.Ciklusrend
-                                        && a.Sorszám == rekordszer.KövV_sorszám
-                                        select a).FirstOrDefault();
-
-                    List<Adat_Ciklus> AdatokCiklusNagy = (from a in AdatokCiklus
-                                                          where !a.Vizsgálatfok.Contains("V1")
-                                                          && a.Típus == rekordszer.Ciklusrend
-                                                          select a).ToList();
-
-                    //km korrekció
-                    long KorNapikm = 0;
-                    if (KorNapikmLista != null)
-                        KorNapikm = KorNapikmLista.Sum(a => a.Napikm);
-                    //J javítás után át kell számolni a km-t
-                    long KMUkm = 0;
-                    if (rekordszer.Vizsgsorszám == 0)
-                        KMUkm = rekordszer.KMUkm;
-                    else
-                        KMUkm = rekordszer.KMUkm - rekordszer.Vizsgkm;
-                    // hol tartunk kmben?
-                    long Vkm = KMUkm + KorNapikm;
-                    long V23 = rekordszer.KMUkm + KorNapikm - rekordszer.V2V3Számláló;
-                    string szöveg = "";
-                    string Eredmény = "";
-                    if (rekordszer.Vizsgsorszám == 0 && KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám < V23)
+                    if (rekordszer != null)
                     {
-                        // Ha J javítás volt és nincs visszaállítva még a km akkor a teljes kilométer szerint ellenőrizzük
-                        //Nem lehet számolni vele, mert nagyban eltér a KMU km-tól vett különbségektől.
-                    }
-                    else
-                    {
-                        //V2 és V3 vizsgálatnál a km-t a ciklus alapján számoljuk
-                        if (KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám < V23)
-                        {
+                        List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER
+                                                                     where a.Azonosító == Adat.Azonosító && a.Dátum > rekordszer.KMUdátum
+                                                                     select a).ToList();
+                        Adat_Ciklus KisV = (from a in AdatokCiklus
+                                            where a.Típus == rekordszer.Ciklusrend
+                                            && a.Sorszám == rekordszer.KövV_sorszám
+                                            select a).FirstOrDefault();
 
-                            Eredmény = $"A(z) {rekordszer.Azonosító} azonosítójú jármű V2/3 vizsgálat tűrésmezejét a {KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám}" +
-                                $" km-t túllépte, az utolsó vizsgálat óta {V23} km futott, túllépés mértéke:{V23 - (KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám)} km\n";
-                            válasz = true;
-                            szöveg = $"{rekordszer.KövV2}-{rekordszer.KövV2_sorszám}-{DateTime.Today:yyyy.MM.dd}";
-                        }
-                        //ebben az esetben V1-re vizsgálunk
-                        else if (KisV.Felsőérték < Vkm)
-                        {
-                            Eredmény = $"A(z) {rekordszer.Azonosító} azonosítójú jármű V1 vizsgálat tűrésmezejét a {KisV.Felsőérték}" +
-                                $" km-t túllépte, az utolsó vizsgálat óta {Vkm} km futott, túllépés mértéke:{Vkm - KisV.Felsőérték} km\n";
-                            válasz = true;
-                            szöveg = $"{rekordszer.KövV}-{rekordszer.KövV_sorszám}-{DateTime.Today:yyyy.MM.dd}";
-                        }
+                        List<Adat_Ciklus> AdatokCiklusNagy = (from a in AdatokCiklus
+                                                              where !a.Vizsgálatfok.Contains("V1")
+                                                              && a.Típus == rekordszer.Ciklusrend
+                                                              select a).ToList();
 
-                        if (Eredmény.Trim() != "") Eredmények.Add(Eredmény);
+                        //km korrekció
+                        long KorNapikm = 0;
+                        if (KorNapikmLista != null)
+                            KorNapikm = KorNapikmLista.Sum(a => a.Napikm);
+                        //J javítás után át kell számolni a km-t
+                        long KMUkm = 0;
+                        if (rekordszer.Vizsgsorszám == 0)
+                            KMUkm = rekordszer.KMUkm;
+                        else
+                            KMUkm = rekordszer.KMUkm - rekordszer.Vizsgkm;
+                        // hol tartunk kmben?
+                        long Vkm = KMUkm + KorNapikm;
+                        long V23 = rekordszer.KMUkm + KorNapikm - rekordszer.V2V3Számláló;
+                        string szöveg = "";
+                        string Eredmény = "";
+                        if (rekordszer.Vizsgsorszám == 0 && KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám < V23)
+                        {
+                            // Ha J javítás volt és nincs visszaállítva még a km akkor a teljes kilométer szerint ellenőrizzük
+                            //Nem lehet számolni vele, mert nagyban eltér a KMU km-tól vett különbségektől.
+                        }
+                        else
+                        {
+                            //V2 és V3 vizsgálatnál a km-t a ciklus alapján számoljuk
+                            if (KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám < V23)
+                            {
+
+                                Eredmény = $"A(z) {rekordszer.Azonosító} azonosítójú jármű V2/3 vizsgálat tűrésmezejét a {KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám}" +
+                                    $" km-t túllépte, az utolsó vizsgálat óta {V23} km futott, túllépés mértéke:{V23 - (KisV.Felsőérték * AdatokCiklusNagy[1].Sorszám)} km\n";
+                                válasz = true;
+                                szöveg = $"{rekordszer.KövV2}-{rekordszer.KövV2_sorszám}-{DateTime.Today:yyyy.MM.dd}";
+                            }
+                            //ebben az esetben V1-re vizsgálunk
+                            else if (KisV.Felsőérték < Vkm)
+                            {
+                                Eredmény = $"A(z) {rekordszer.Azonosító} azonosítójú jármű V1 vizsgálat tűrésmezejét a {KisV.Felsőérték}" +
+                                    $" km-t túllépte, az utolsó vizsgálat óta {Vkm} km futott, túllépés mértéke:{Vkm - KisV.Felsőérték} km\n";
+                                válasz = true;
+                                szöveg = $"{rekordszer.KövV}-{rekordszer.KövV_sorszám}-{DateTime.Today:yyyy.MM.dd}";
+                            }
+
+                            if (Eredmény.Trim() != "") Eredmények.Add(Eredmény);
+                        }
+                        if (szöveg.Trim() != "") Megállítjuk(rekordszer, szöveg, EgyKocsi, Telephely);
                     }
-                    if (szöveg.Trim() != "") Megállítjuk(rekordszer, szöveg, EgyKocsi, Telephely);
                 }
                 if (Eredmények.Count > 0) EmailKüldés(Eredmények, Telephely);
 

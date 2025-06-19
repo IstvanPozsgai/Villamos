@@ -110,7 +110,7 @@
             // 
             this.CmbStátus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.CmbStátus.FormattingEnabled = true;
-            this.CmbStátus.Location = new System.Drawing.Point(209, 244);
+            this.CmbStátus.Location = new System.Drawing.Point(209, 236);
             this.CmbStátus.Name = "CmbStátus";
             this.CmbStátus.Size = new System.Drawing.Size(187, 28);
             this.CmbStátus.TabIndex = 4;
@@ -187,7 +187,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.label8.Location = new System.Drawing.Point(3, 248);
+            this.label8.Location = new System.Drawing.Point(3, 240);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(200, 20);
             this.label8.TabIndex = 12;
@@ -313,7 +313,7 @@
             // 
             // TxtMegjegyzés
             // 
-            this.TxtMegjegyzés.Location = new System.Drawing.Point(221, 286);
+            this.TxtMegjegyzés.Location = new System.Drawing.Point(221, 288);
             this.TxtMegjegyzés.MaxLength = 255;
             this.TxtMegjegyzés.Multiline = true;
             this.TxtMegjegyzés.Name = "TxtMegjegyzés";
@@ -350,7 +350,7 @@
             this.tableLayoutPanel1.Controls.Add(this.BtnExcel, 4, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -358,7 +358,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1011, 268);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1011, 271);
             this.tableLayoutPanel1.TabIndex = 75;
             // 
             // Ablak_TTP_Történet

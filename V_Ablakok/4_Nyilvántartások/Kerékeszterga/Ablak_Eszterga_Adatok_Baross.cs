@@ -20,6 +20,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         readonly Kezelő_Baross_Mérési_Adatok KézMérés = new Kezelő_Baross_Mérési_Adatok();
 
         List<Adat_Baross_Mérési_Adatok> AdatokMérés = new List<Adat_Baross_Mérési_Adatok>();
+
         public Ablak_Eszterga_Adatok_Baross()
         {
             InitializeComponent();
@@ -64,7 +65,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-
         private void Jogosultságkiosztás()
         {
             try
@@ -101,8 +101,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     //
 
                 }
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -116,8 +114,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
         }
 
-
-        void Státuscombo_Feltöltés()
+        private void Státuscombo_Feltöltés()
         {
             Státuscombo.Items.Clear();
             Státuscombo.Items.Add("");
@@ -129,9 +126,8 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         }
         #endregion
 
+
         #region Beolvasás
-
-
         private void Beolvassa_Click(object sender, EventArgs e)
         {
             try
@@ -323,8 +319,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-
-        string VálaszInt(string Részelem)
+        private string VálaszInt(string Részelem)
         {
             string válasz;
             if (int.TryParse(Részelem, out int Érték))
@@ -335,7 +330,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             return válasz;
         }
 
-        string VálaszLong(string Részelem)
+        private string VálaszLong(string Részelem)
         {
             string válasz;
             if (long.TryParse(Részelem, out long Érték))
@@ -346,7 +341,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             return válasz;
         }
 
-        string VálaszDátum(string Részelem)
+        private string VálaszDátum(string Részelem)
         {
             string válasz;
             string[] darabol = Részelem.Split('/');
@@ -365,7 +360,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             return válasz;
         }
 
-        string VálaszIdő(string Részelem)
+        private string VálaszIdő(string Részelem)
         {
             string válasz;
             if (DateTime.TryParse(Részelem, out DateTime Érték))
@@ -376,7 +371,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             return válasz;
         }
 
-        string VálaszDouble(string Részelem)
+        private string VálaszDouble(string Részelem)
         {
             string válasz = Részelem.Replace('.', ',');
             if (double.TryParse(válasz, out double Érték))
@@ -387,7 +382,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             return válasz;
         }
 
-        string VálaszString(string Részelem)
+        private string VálaszString(string Részelem)
         {
             string válasz;
             if (Részelem.Trim() != "")
@@ -397,15 +392,12 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
             return válasz;
         }
-
-
         #endregion
 
         private void Tábla_Listázás_Click(object sender, EventArgs e)
         {
             Listázás_Tábla();
         }
-
 
         private void Listázás_Tábla()
         {
@@ -663,7 +655,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Kerékeszterga_mérési_listája_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Kerékeszterga_mérési_listája_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -690,7 +682,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
 
         }
-
 
         private void Ellenőrzések_Click(object sender, EventArgs e)
         {
@@ -785,15 +776,12 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-
         private void Töröl_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve elem törlésre.");
+                if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve elem törlésre.");
                 Holtart.Be();
-
 
                 foreach (DataGridViewRow Elem in Tábla.SelectedRows)
                 {
@@ -815,8 +803,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-
-        void Státus_Állítás(int státus, long EsztergaID)
+        private void Státus_Állítás(int státus, long EsztergaID)
         {
             string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
             string jelszó = "RónaiSándor";
@@ -832,8 +819,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
         }
-
-
 
         private void Villamos_programba_Click(object sender, EventArgs e)
         {
@@ -932,7 +917,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-        public void Státus_állítás_Baross(string Pályaszám, int Státus_Lesz, DateTime Dátum)
+        private void Státus_állítás_Baross(string Pályaszám, int Státus_Lesz, DateTime Dátum)
         {
             try
             {
@@ -958,22 +943,16 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                if (Tábla.Rows.Count < 1)
-                    throw new HibásBevittAdat("A táblázat nem tartalmaz adatot.");
-                if (Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy sor sem.");
-
-                if (!long.TryParse(Tábla.SelectedRows[0].Cells[57].Value.ToString(), out long ID))
-                    throw new HibásBevittAdat("A táblázat nem tartalmaz adatot.");
+                if (Tábla.Rows.Count < 1) throw new HibásBevittAdat("A táblázat nem tartalmaz adatot.");
+                if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy sor sem.");
+                if (!long.TryParse(Tábla.SelectedRows[0].Cells[57].Value.ToString(), out long ID)) throw new HibásBevittAdat("A táblázat nem tartalmaz adatot.");
 
                 Új_Ablak_Eszterga_Adatok_Javítás?.Close();
-
 
                 Új_Ablak_Eszterga_Adatok_Javítás = new Ablak_Eszterga_Adatok_Javítás(ID);
                 Új_Ablak_Eszterga_Adatok_Javítás.FormClosed += Ablak_Eszterga_Adatok_Javítás_Closed;
                 Új_Ablak_Eszterga_Adatok_Javítás.Változás += Listázás_Tábla;
                 Új_Ablak_Eszterga_Adatok_Javítás.Show();
-
             }
             catch (HibásBevittAdat ex)
             {

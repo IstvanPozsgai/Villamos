@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés;
-using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
@@ -15,6 +14,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 {
     public partial class Ablak_TTP_Történet : Form
     {
+        readonly Kezelő_TTP_Tábla KézTábla = new Kezelő_TTP_Tábla();
+
         public event Event_Kidobó Változás;
 
         public string Azonosító { get; set; }
@@ -41,7 +42,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             Pályaszámok_feltöltése();
             StátusokFeltöltése();
             Jogosultságkiosztás();
-            ListaTábla();
+            AdatokTeljes = KézTábla.Lista_Adatok();
             CmbAzonosító.Text = Azonosító;
             TáblaListázás();
             MindenInAktív();
@@ -232,7 +233,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                                               orderby a.TTP_Dátum
                                               select a).ToList();
                 if (Ideig != null)
-                    Tábla.DataSource = MyF.AdatTábla_TTP_TáblaFeltölt(Ideig);
+                    Tábla.DataSource = AdatTábla_TTP_TáblaFeltölt(Ideig);
                 else
                     Tábla.DataSource = null;
 
@@ -324,27 +325,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         #endregion
 
 
-        #region Listák
-        private void ListaTábla()
-        {
-            try
-            {
-                AdatokTeljes = MyF.TTP_Tábla_Lista_Feltöltés();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        #endregion
-
-
         #region Adatok módosítása rögzítése
         private void Btn_TTP_Rögz_Click(object sender, EventArgs e)
         {
@@ -363,9 +343,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                                 ((MyEn.TTP_Státus)Enum.Parse(typeof(MyEn.TTP_Státus), CmbStátus.Text.Trim())).GetHashCode(),
                                 TxtMegjegyzés.Text.Trim()
                                 );
-                MyF.TTP_AdatTábla_Vizsgál(Elem, AdatokTeljes);
+                KézTábla.TTP_AdatTábla_Vizsgál(Elem, AdatokTeljes);
                 if (Művelet == "KészJav") SzabadHiba();
-                ListaTábla();
+                AdatokTeljes = KézTábla.Lista_Adatok();
                 TáblaListázás();
                 Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -505,7 +485,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
 
                 DataTable ValamiTábla;
-                ValamiTábla = MyF.AdatTábla_TTP_TáblaFeltölt(AdatokTeljes);
+                ValamiTábla = AdatTábla_TTP_TáblaFeltölt(AdatokTeljes);
                 MyE.EXCELtábla(ValamiTábla, fájlexc);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -523,5 +503,54 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 BtnExcel.Visible = true;
             }
         }
+
+        DataTable AdatTábla_TTP_TáblaFeltölt(List<Adat_TTP_Tábla> Adatok)
+        {
+            DataTable AdatTábla = new DataTable();
+            try
+            {
+                //Tábla mezőnevek
+                AdatTábla.Columns.Clear();
+                AdatTábla.Columns.Add("Pályaszám");
+                AdatTábla.Columns.Add("Lejárat dátum", typeof(DateTime));
+                AdatTábla.Columns.Add("Ütemezés dátum", typeof(DateTime));
+                AdatTábla.Columns.Add("TTP dátum", typeof(DateTime));
+                AdatTábla.Columns.Add("TTP Javítás");
+                AdatTábla.Columns.Add("Rendelés");
+                AdatTábla.Columns.Add("Javítás befejező dátum", typeof(DateTime));
+                AdatTábla.Columns.Add("Szerelvény");
+                AdatTábla.Columns.Add("Státus");
+                AdatTábla.Columns.Add("Megjegyzés");
+
+
+                foreach (Adat_TTP_Tábla rekord in Adatok)
+                {
+                    DataRow Soradat = AdatTábla.NewRow();
+                    Soradat["Pályaszám"] = rekord.Azonosító;
+                    Soradat["Lejárat dátum"] = rekord.Lejárat_Dátum;
+                    Soradat["Ütemezés dátum"] = rekord.Ütemezés_Dátum;
+                    Soradat["TTP dátum"] = rekord.TTP_Dátum;
+                    Soradat["TTP Javítás"] = rekord.TTP_Javítás == true ? "Igen" : "Nem";
+                    Soradat["Rendelés"] = rekord.Rendelés;
+                    if (rekord.TTP_Javítás) Soradat["Javítás befejező dátum"] = rekord.JavBefDát;
+
+                    Soradat["Szerelvény"] = rekord.Együtt;
+                    Soradat["Státus"] = Enum.GetName(typeof(MyEn.TTP_Státus), rekord.Státus);
+                    Soradat["Megjegyzés"] = rekord.Megjegyzés;
+                    AdatTábla.Rows.Add(Soradat);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "TTP_VezénylésFeltölt", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return AdatTábla;
+        }
+
     }
 }

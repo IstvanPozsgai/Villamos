@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
 {
     public partial class Ablak_Eszterga_Beosztás : Form
     {
+        readonly Kezelő_Váltós_Naptár KéZNaptár = new Kezelő_Váltós_Naptár();
+
         public DateTime Dátum { get; private set; }
         public string Gyökér { get; private set; }
 
@@ -24,13 +27,11 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             Beosztás();
         }
 
-        void Beosztás()
+        private void Beosztás()
         {
             try
             {
-
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum);
-
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum);
 
                 Terv_Tábla.Rows.Clear();
@@ -71,7 +72,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
 
                 string előzőDolg = "";
-                Kerékeszterga_Excel KerExc = new Kerékeszterga_Excel("", Application.StartupPath, Dátum);
+                Kerékeszterga_Excel KerExc = new Kerékeszterga_Excel("", Dátum);
                 List<Adat_Dolgozó_Beosztás_Új> Adatok = KerExc.Adat_BEO_Csoport(Dátum);
                 foreach (Adat_Dolgozó_Beosztás_Új rekord in Adatok)
                 {
@@ -89,11 +90,12 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 }
 
                 // hétvége és ünnepnap színezés
-                string hely = Gyökér + @"\Főmérnökség\adatok\" + Dátum.Year.ToString() + @"\munkaidőnaptár.mdb";
-                string jelszó = "katalin";
-                string szöveg = $"SELECT * FROM naptár WHERE dátum>=#{Hételső:MM-dd-yyyy}# AND dátum<=#{Hétutolsó:MM-dd-yyyy}# ORDER BY Dátum";
-                Kezelő_Váltós_Naptár KéZNaptár = new Kezelő_Váltós_Naptár();
-                List<Adat_Váltós_Naptár> AdatNaptár = KéZNaptár.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Váltós_Naptár> AdatNaptár = KéZNaptár.Lista_Adatok(Dátum.Year, "");
+                AdatNaptár = (from a in AdatNaptár
+                              where a.Dátum >= Hételső
+                              && a.Dátum <= Hétutolsó
+                              orderby a.Dátum
+                              select a).ToList();
 
                 foreach (Adat_Váltós_Naptár Elem in AdatNaptár)
                 {
@@ -145,9 +147,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
             //Ctrl gomb nyomása
             if ((int)e.KeyCode == 17)
-
-
-
                 //Ctrl+F
                 if (e.Control && e.KeyCode == Keys.F)
                 {

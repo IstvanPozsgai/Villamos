@@ -642,7 +642,7 @@
         FbNTZ6M+YNM2T8MmygarSCuejX0W5wRnXBNcH1v0X66h05/yPe3mAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="button1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="V_Idő_CiklusRögzít_gom.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAACXFJREFUWEetlntQVnUaxx9IQDAlxuxi5jACDV5SAlYFAQVRQQIxQVQQDOWmIIgi
@@ -688,7 +688,7 @@
         FbNTZ6M+YNM2T8MmygarSCuejX0W5wRnXBNcH1v0X66h05/yPe3mAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="Km_Rögzít.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="V_Km_CiklusRögzít_gomb.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAACXFJREFUWEetlntQVnUaxx9IQDAlxuxi5jACDV5SAlYFAQVRQQIxQVQQDOWmIIgi
@@ -734,7 +734,7 @@
         FbNTZ6M+YNM2T8MmygarSCuejX0W5wRnXBNcH1v0X66h05/yPe3mAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="Futás_Rögzít.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="E_CiklusRögzít_gomb.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAACXFJREFUWEetlntQVnUaxx9IQDAlxuxi5jACDV5SAlYFAQVRQQIxQVQQDOWmIIgi

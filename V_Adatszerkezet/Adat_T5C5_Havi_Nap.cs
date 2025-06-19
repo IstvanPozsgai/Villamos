@@ -324,7 +324,6 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-
     public class Adat_T5C5_Posta
     {
         public string Azonosító { get; private set; }
@@ -380,28 +379,6 @@ namespace Villamos.Villamos_Adatszerkezet
             Vissza = vissza;
             Vonal = vonal;
 
-        }
-    }
-
-    public class Adat_BEOLVAS_KM
-    {
-        public string Azonosító { get; set; }
-        public long Havikm { get; set; }
-        public DateTime KMUdátum { get; set; }
-        public long KMUkm { get; set; }
-        public long Teljeskm { get; set; }
-        public long Jjavszám { get; set; }
-        public DateTime Fudátum { get; set; }
-
-        public Adat_BEOLVAS_KM(string azonosító, long havikm, DateTime kMUdátum, long kMUkm, long teljeskm, long jjavszám, DateTime fudátum)
-        {
-            Azonosító = azonosító;
-            Havikm = havikm;
-            KMUdátum = kMUdátum;
-            KMUkm = kMUkm;
-            Teljeskm = teljeskm;
-            Jjavszám = jjavszám;
-            Fudátum = fudátum;
         }
     }
 

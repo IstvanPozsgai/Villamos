@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Villamos.Villamos_Adatszerkezet
+﻿namespace Villamos.Villamos_Adatszerkezet
 {
-    public  class Adat_Belépés_Bejelentkezés
+    public class Adat_Belépés_Bejelentkezés
     {
         public long Sorszám { get; private set; }
-        public string  Név { get; private set; }
-        public string  Jelszó { get; private set; }
-        public string  Jogkör { get; private set; }
+        public string Név { get; private set; }
+        public string Jelszó { get; private set; }
+        public string Jogkör { get; private set; }
 
         public Adat_Belépés_Bejelentkezés(long sorszám, string név, string jelszó, string jogkör)
         {
@@ -36,7 +30,7 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-    public class Adat_Belépés_WinTábla 
+    public class Adat_Belépés_WinTábla
     {
         public string Név { get; private set; }
         public string Telephely { get; private set; }
@@ -50,16 +44,6 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-    public class Adat_Belépés_Verzió
-    {
-        public long Id { get; private set; }
-        public double Verzió { get; private set; }
 
-        public Adat_Belépés_Verzió(long id, double verzió)
-        {
-            Id = id;
-            Verzió = verzió;
-        }
-    }
 
 }

@@ -109,7 +109,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
             }
         }
 
-
         private void Btn_PDFVálasztó_Click(object sender, EventArgs e)
         {
             switch (MelyikAblak)

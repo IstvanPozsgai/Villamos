@@ -58,10 +58,8 @@ namespace Villamos
             this.Label5 = new System.Windows.Forms.Label();
             this.Főmérnökség_text = new System.Windows.Forms.Label();
             this.Járműtípus_text = new System.Windows.Forms.Label();
-            this.ÜzembehelyezésiPDF = new System.Windows.Forms.Button();
             this.Label2 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
             this.TabPage2 = new System.Windows.Forms.TabPage();
             this.Futásnap = new System.Windows.Forms.TextBox();
             this.Utolsóvizsgálatszáma = new System.Windows.Forms.TextBox();
@@ -274,10 +272,8 @@ namespace Villamos
             this.tableLayoutPanel1.Controls.Add(this.Label5, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.Főmérnökség_text, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.Járműtípus_text, 1, 7);
-            this.tableLayoutPanel1.Controls.Add(this.ÜzembehelyezésiPDF, 1, 8);
             this.tableLayoutPanel1.Controls.Add(this.Label2, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.Label1, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.label41, 0, 8);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(15, 14);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 10;
@@ -434,18 +430,6 @@ namespace Villamos
             this.Járműtípus_text.TabIndex = 8;
             this.Járműtípus_text.Text = "Label17";
             // 
-            // ÜzembehelyezésiPDF
-            // 
-            this.ÜzembehelyezésiPDF.BackgroundImage = global::Villamos.Properties.Resources.pdf_32;
-            this.ÜzembehelyezésiPDF.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ÜzembehelyezésiPDF.Location = new System.Drawing.Point(253, 243);
-            this.ÜzembehelyezésiPDF.Name = "ÜzembehelyezésiPDF";
-            this.ÜzembehelyezésiPDF.Size = new System.Drawing.Size(45, 45);
-            this.ÜzembehelyezésiPDF.TabIndex = 64;
-            this.ToolTip1.SetToolTip(this.ÜzembehelyezésiPDF, "Üzembehelyezési jegyzőkönyv(ek )");
-            this.ÜzembehelyezésiPDF.UseVisualStyleBackColor = true;
-            this.ÜzembehelyezésiPDF.Click += new System.EventHandler(this.ÜzembehelyezésiPDF_Click);
-            // 
             // Label2
             // 
             this.Label2.AutoSize = true;
@@ -465,16 +449,6 @@ namespace Villamos
             this.Label1.Size = new System.Drawing.Size(95, 20);
             this.Label1.TabIndex = 0;
             this.Label1.Text = "Jármű típus:";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.BackColor = System.Drawing.Color.LightGreen;
-            this.label41.Location = new System.Drawing.Point(3, 240);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(227, 20);
-            this.label41.TabIndex = 18;
-            this.label41.Text = "Üzembehelyezési jegyzőkönyv:";
             // 
             // TabPage2
             // 
@@ -1611,7 +1585,6 @@ namespace Villamos
             this.Name = "Ablak_T5C5_Tulajdonság";
             this.Text = "T5C5 járművek adatai";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_T5C5_Tulajdonság_FormClosed);
             this.Load += new System.EventHandler(this.Tulajdonság_T5C5_Load);
             this.Panel2.ResumeLayout(false);
             this.Panel2.PerformLayout();
@@ -1771,8 +1744,6 @@ namespace Villamos
         internal Label Elő_Szerelvény_text;
         internal Label label40;
         internal TableLayoutPanel tableLayoutPanel1;
-        internal Label label41;
-        internal Button ÜzembehelyezésiPDF;
         internal Timer timer1;
         internal Button VizsgAdat_Excel;
         internal Button VizsgAdat_Frissít;

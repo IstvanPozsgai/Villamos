@@ -41,6 +41,7 @@ namespace Villamos
 
             Dátumig.MaxDate = DateTime.Today;
             Dátumtól.MaxDate = DateTime.Today;
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Többrögzít.Visible = false;
 

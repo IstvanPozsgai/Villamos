@@ -33,7 +33,6 @@ namespace Villamos.Villamos_Ablakok
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Nosztalgia));
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
@@ -91,7 +90,7 @@ namespace Villamos.Villamos_Ablakok
             this.label10 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
             this.label44 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.V_Idő_CiklusRögzít_gom = new System.Windows.Forms.Button();
             this.label45 = new System.Windows.Forms.Label();
             this.Km_group = new System.Windows.Forms.GroupBox();
             this.KM_Alap = new System.Windows.Forms.Panel();
@@ -106,7 +105,7 @@ namespace Villamos.Villamos_Ablakok
             this.label61 = new System.Windows.Forms.Label();
             this.label62 = new System.Windows.Forms.Label();
             this.label63 = new System.Windows.Forms.Label();
-            this.Km_Rögzít = new System.Windows.Forms.Button();
+            this.V_Km_CiklusRögzít_gomb = new System.Windows.Forms.Button();
             this.label64 = new System.Windows.Forms.Label();
             this.Idő_group = new System.Windows.Forms.GroupBox();
             this.Idő_Alap = new System.Windows.Forms.Panel();
@@ -117,7 +116,7 @@ namespace Villamos.Villamos_Ablakok
             this.label48 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
             this.label50 = new System.Windows.Forms.Label();
-            this.Futás_Rögzít = new System.Windows.Forms.Button();
+            this.E_CiklusRögzít_gomb = new System.Windows.Forms.Button();
             this.label51 = new System.Windows.Forms.Label();
             this.Alap_group = new System.Windows.Forms.GroupBox();
             this.Alap = new System.Windows.Forms.Panel();
@@ -203,7 +202,7 @@ namespace Villamos.Villamos_Ablakok
             this.Cmbtelephely.FormattingEnabled = true;
             this.Cmbtelephely.Location = new System.Drawing.Point(143, 0);
             this.Cmbtelephely.Name = "Cmbtelephely";
-            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 30);
             this.Cmbtelephely.TabIndex = 18;
             // 
             // Label13
@@ -211,7 +210,7 @@ namespace Villamos.Villamos_Ablakok
             this.Label13.AutoSize = true;
             this.Label13.Location = new System.Drawing.Point(3, 4);
             this.Label13.Name = "Label13";
-            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.Size = new System.Drawing.Size(169, 22);
             this.Label13.TabIndex = 17;
             this.Label13.Text = "Telephelyi beállítás:";
             // 
@@ -221,7 +220,7 @@ namespace Villamos.Villamos_Ablakok
             this.Pályaszám.Location = new System.Drawing.Point(442, 15);
             this.Pályaszám.MaxDropDownItems = 5;
             this.Pályaszám.Name = "Pályaszám";
-            this.Pályaszám.Size = new System.Drawing.Size(124, 28);
+            this.Pályaszám.Size = new System.Drawing.Size(124, 30);
             this.Pályaszám.TabIndex = 166;
             this.Pályaszám.SelectedIndexChanged += new System.EventHandler(this.Pályaszám_SelectedIndexChanged);
             // 
@@ -240,7 +239,7 @@ namespace Villamos.Villamos_Ablakok
             this.Label15.AutoSize = true;
             this.Label15.Location = new System.Drawing.Point(347, 23);
             this.Label15.Name = "Label15";
-            this.Label15.Size = new System.Drawing.Size(89, 20);
+            this.Label15.Size = new System.Drawing.Size(101, 22);
             this.Label15.TabIndex = 167;
             this.Label15.Text = "Pályaszám:";
             // 
@@ -282,9 +281,9 @@ namespace Villamos.Villamos_Ablakok
             this.tabPage8.Controls.Add(this.Kép_listbox);
             this.tabPage8.Controls.Add(this.Kép_Listázás);
             this.tabPage8.Controls.Add(this.Kép_rögzít);
-            this.tabPage8.Location = new System.Drawing.Point(4, 29);
+            this.tabPage8.Location = new System.Drawing.Point(4, 31);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(1320, 538);
+            this.tabPage8.Size = new System.Drawing.Size(1320, 536);
             this.tabPage8.TabIndex = 9;
             this.tabPage8.Text = "Képek";
             // 
@@ -304,10 +303,10 @@ namespace Villamos.Villamos_Ablakok
             this.Kép_szűrés.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.Kép_szűrés.FormattingEnabled = true;
-            this.Kép_szűrés.ItemHeight = 20;
+            this.Kép_szűrés.ItemHeight = 22;
             this.Kép_szűrés.Location = new System.Drawing.Point(445, 74);
             this.Kép_szűrés.Name = "Kép_szűrés";
-            this.Kép_szűrés.Size = new System.Drawing.Size(163, 284);
+            this.Kép_szűrés.Size = new System.Drawing.Size(163, 268);
             this.Kép_szűrés.TabIndex = 9;
             this.Kép_szűrés.Visible = false;
             // 
@@ -329,7 +328,7 @@ namespace Villamos.Villamos_Ablakok
             this.Kép_megnevezés.Location = new System.Drawing.Point(449, 6);
             this.Kép_megnevezés.MaxLength = 50;
             this.Kép_megnevezés.Name = "Kép_megnevezés";
-            this.Kép_megnevezés.Size = new System.Drawing.Size(554, 26);
+            this.Kép_megnevezés.Size = new System.Drawing.Size(554, 27);
             this.Kép_megnevezés.TabIndex = 7;
             // 
             // Kép_Feltöltendő
@@ -338,7 +337,7 @@ namespace Villamos.Villamos_Ablakok
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Kép_Feltöltendő.Location = new System.Drawing.Point(449, 38);
             this.Kép_Feltöltendő.Name = "Kép_Feltöltendő";
-            this.Kép_Feltöltendő.Size = new System.Drawing.Size(554, 26);
+            this.Kép_Feltöltendő.Size = new System.Drawing.Size(554, 27);
             this.Kép_Feltöltendő.TabIndex = 8;
             // 
             // label4
@@ -347,7 +346,7 @@ namespace Villamos.Villamos_Ablakok
             this.label4.BackColor = System.Drawing.Color.Silver;
             this.label4.Location = new System.Drawing.Point(322, 12);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(103, 20);
+            this.label4.Size = new System.Drawing.Size(115, 22);
             this.label4.TabIndex = 190;
             this.label4.Text = "Megnevezés:";
             // 
@@ -357,7 +356,7 @@ namespace Villamos.Villamos_Ablakok
             this.label12.BackColor = System.Drawing.Color.Silver;
             this.label12.Location = new System.Drawing.Point(322, 42);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(121, 20);
+            this.label12.Size = new System.Drawing.Size(137, 22);
             this.label12.TabIndex = 186;
             this.label12.Text = "Feltöltendő fájl :";
             // 
@@ -376,7 +375,7 @@ namespace Villamos.Villamos_Ablakok
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(2, 51);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(123, 20);
+            this.label14.Size = new System.Drawing.Size(137, 22);
             this.label14.TabIndex = 183;
             this.label14.Text = "Feltöltött képek:";
             // 
@@ -397,10 +396,10 @@ namespace Villamos.Villamos_Ablakok
             this.Kép_listbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.Kép_listbox.FormattingEnabled = true;
-            this.Kép_listbox.ItemHeight = 20;
+            this.Kép_listbox.ItemHeight = 22;
             this.Kép_listbox.Location = new System.Drawing.Point(3, 74);
             this.Kép_listbox.Name = "Kép_listbox";
-            this.Kép_listbox.Size = new System.Drawing.Size(259, 304);
+            this.Kép_listbox.Size = new System.Drawing.Size(259, 290);
             this.Kép_listbox.TabIndex = 6;
             this.Kép_listbox.SelectedIndexChanged += new System.EventHandler(this.Kép_listbox_SelectedIndexChanged);
             // 
@@ -436,9 +435,9 @@ namespace Villamos.Villamos_Ablakok
             this.TabPage4.Controls.Add(this.groupBox1);
             this.TabPage4.Controls.Add(this.SAP_Beolv);
             this.TabPage4.Controls.Add(this.Lekérdezés_lekérdezés);
-            this.TabPage4.Location = new System.Drawing.Point(4, 29);
+            this.TabPage4.Location = new System.Drawing.Point(4, 31);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1320, 538);
+            this.TabPage4.Size = new System.Drawing.Size(1320, 536);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Lekérdezések";
             // 
@@ -447,7 +446,7 @@ namespace Villamos.Villamos_Ablakok
             this.Dátum_ütem.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Dátum_ütem.Location = new System.Drawing.Point(286, 27);
             this.Dátum_ütem.Name = "Dátum_ütem";
-            this.Dátum_ütem.Size = new System.Drawing.Size(109, 26);
+            this.Dátum_ütem.Size = new System.Drawing.Size(109, 27);
             this.Dátum_ütem.TabIndex = 223;
             // 
             // button2
@@ -465,7 +464,7 @@ namespace Villamos.Villamos_Ablakok
             this.Dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Dátum.Location = new System.Drawing.Point(123, 63);
             this.Dátum.Name = "Dátum";
-            this.Dátum.Size = new System.Drawing.Size(109, 26);
+            this.Dátum.Size = new System.Drawing.Size(109, 27);
             this.Dátum.TabIndex = 221;
             // 
             // Tábla_lekérdezés
@@ -480,6 +479,7 @@ namespace Villamos.Villamos_Ablakok
             this.Tábla_lekérdezés.MaxFilterButtonImageHeight = 23;
             this.Tábla_lekérdezés.Name = "Tábla_lekérdezés";
             this.Tábla_lekérdezés.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Tábla_lekérdezés.RowHeadersWidth = 45;
             this.Tábla_lekérdezés.Size = new System.Drawing.Size(1128, 416);
             this.Tábla_lekérdezés.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla_lekérdezés.TabIndex = 213;
@@ -534,9 +534,9 @@ namespace Villamos.Villamos_Ablakok
             // 
             // Nap_azonosító
             // 
-            this.Nap_azonosító.Location = new System.Drawing.Point(3, 23);
+            this.Nap_azonosító.Location = new System.Drawing.Point(3, 25);
             this.Nap_azonosító.Name = "Nap_azonosító";
-            this.Nap_azonosító.Size = new System.Drawing.Size(128, 26);
+            this.Nap_azonosító.Size = new System.Drawing.Size(128, 27);
             this.Nap_azonosító.TabIndex = 219;
             // 
             // label7
@@ -544,7 +544,7 @@ namespace Villamos.Villamos_Ablakok
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(3, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(80, 20);
+            this.label7.Size = new System.Drawing.Size(88, 22);
             this.label7.TabIndex = 214;
             this.label7.Text = "Azonosító";
             // 
@@ -553,24 +553,24 @@ namespace Villamos.Villamos_Ablakok
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(137, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(61, 20);
+            this.label9.Size = new System.Drawing.Size(67, 22);
             this.label9.TabIndex = 216;
             this.label9.Text = "Indulás";
             // 
             // Nap_Dátum
             // 
             this.Nap_Dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Nap_Dátum.Location = new System.Drawing.Point(137, 23);
+            this.Nap_Dátum.Location = new System.Drawing.Point(137, 25);
             this.Nap_Dátum.Name = "Nap_Dátum";
-            this.Nap_Dátum.Size = new System.Drawing.Size(109, 26);
+            this.Nap_Dátum.Size = new System.Drawing.Size(109, 27);
             this.Nap_Dátum.TabIndex = 220;
             // 
             // Nap_törlés
             // 
             this.Nap_törlés.AutoSize = true;
-            this.Nap_törlés.Location = new System.Drawing.Point(252, 23);
+            this.Nap_törlés.Location = new System.Drawing.Point(252, 25);
             this.Nap_törlés.Name = "Nap_törlés";
-            this.Nap_törlés.Size = new System.Drawing.Size(68, 24);
+            this.Nap_törlés.Size = new System.Drawing.Size(76, 26);
             this.Nap_törlés.TabIndex = 213;
             this.Nap_törlés.Text = "Törölt";
             this.Nap_törlés.UseVisualStyleBackColor = true;
@@ -580,23 +580,23 @@ namespace Villamos.Villamos_Ablakok
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(252, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(49, 20);
+            this.label8.Size = new System.Drawing.Size(57, 22);
             this.label8.TabIndex = 194;
             this.label8.Text = "Törölt";
             // 
             // Nap_Telephely
             // 
-            this.Nap_Telephely.Location = new System.Drawing.Point(326, 23);
+            this.Nap_Telephely.Location = new System.Drawing.Point(334, 25);
             this.Nap_Telephely.Name = "Nap_Telephely";
-            this.Nap_Telephely.Size = new System.Drawing.Size(100, 26);
+            this.Nap_Telephely.Size = new System.Drawing.Size(100, 27);
             this.Nap_Telephely.TabIndex = 223;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(326, 0);
+            this.label11.Location = new System.Drawing.Point(334, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(76, 20);
+            this.label11.Size = new System.Drawing.Size(89, 22);
             this.label11.TabIndex = 224;
             this.label11.Text = "Telephely";
             // 
@@ -639,10 +639,10 @@ namespace Villamos.Villamos_Ablakok
             this.TabPage1.Controls.Add(this.Km_group);
             this.TabPage1.Controls.Add(this.Idő_group);
             this.TabPage1.Controls.Add(this.Alap_group);
-            this.TabPage1.Location = new System.Drawing.Point(4, 29);
+            this.TabPage1.Location = new System.Drawing.Point(4, 31);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(1320, 538);
+            this.TabPage1.Size = new System.Drawing.Size(1320, 536);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Alapadatok";
             // 
@@ -679,7 +679,7 @@ namespace Villamos.Villamos_Ablakok
             this.panel8.Controls.Add(this.label10);
             this.panel8.Controls.Add(this.label41);
             this.panel8.Controls.Add(this.label44);
-            this.panel8.Controls.Add(this.button1);
+            this.panel8.Controls.Add(this.V_Idő_CiklusRögzít_gom);
             this.panel8.Controls.Add(this.label45);
             this.panel8.Location = new System.Drawing.Point(11, 29);
             this.panel8.Name = "panel8";
@@ -691,7 +691,7 @@ namespace Villamos.Villamos_Ablakok
             this.Cmb_KmCiklus_V2_Cnév.FormattingEnabled = true;
             this.Cmb_KmCiklus_V2_Cnév.Location = new System.Drawing.Point(165, 2);
             this.Cmb_KmCiklus_V2_Cnév.Name = "Cmb_KmCiklus_V2_Cnév";
-            this.Cmb_KmCiklus_V2_Cnév.Size = new System.Drawing.Size(185, 28);
+            this.Cmb_KmCiklus_V2_Cnév.Size = new System.Drawing.Size(185, 30);
             this.Cmb_KmCiklus_V2_Cnév.TabIndex = 264;
             // 
             // Txt_V2_dátum
@@ -699,7 +699,7 @@ namespace Villamos.Villamos_Ablakok
             this.Txt_V2_dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Txt_V2_dátum.Location = new System.Drawing.Point(165, 33);
             this.Txt_V2_dátum.Name = "Txt_V2_dátum";
-            this.Txt_V2_dátum.Size = new System.Drawing.Size(185, 26);
+            this.Txt_V2_dátum.Size = new System.Drawing.Size(185, 27);
             this.Txt_V2_dátum.TabIndex = 263;
             // 
             // Cmb_KmCiklus_V2
@@ -707,7 +707,7 @@ namespace Villamos.Villamos_Ablakok
             this.Cmb_KmCiklus_V2.FormattingEnabled = true;
             this.Cmb_KmCiklus_V2.Location = new System.Drawing.Point(165, 62);
             this.Cmb_KmCiklus_V2.Name = "Cmb_KmCiklus_V2";
-            this.Cmb_KmCiklus_V2.Size = new System.Drawing.Size(185, 28);
+            this.Cmb_KmCiklus_V2.Size = new System.Drawing.Size(185, 30);
             this.Cmb_KmCiklus_V2.TabIndex = 260;
             // 
             // Txt_V2_Kmu
@@ -716,7 +716,7 @@ namespace Villamos.Villamos_Ablakok
             this.Txt_V2_Kmu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Txt_V2_Kmu.Location = new System.Drawing.Point(165, 153);
             this.Txt_V2_Kmu.Name = "Txt_V2_Kmu";
-            this.Txt_V2_Kmu.Size = new System.Drawing.Size(185, 26);
+            this.Txt_V2_Kmu.Size = new System.Drawing.Size(185, 27);
             this.Txt_V2_Kmu.TabIndex = 221;
             // 
             // label1
@@ -725,7 +725,7 @@ namespace Villamos.Villamos_Ablakok
             this.label1.BackColor = System.Drawing.Color.LightGreen;
             this.label1.Location = new System.Drawing.Point(4, 155);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 20);
+            this.label1.Size = new System.Drawing.Size(51, 22);
             this.label1.TabIndex = 220;
             this.label1.Text = "Kmu:";
             // 
@@ -735,7 +735,7 @@ namespace Villamos.Villamos_Ablakok
             this.Txt_V2_Kmv.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Txt_V2_Kmv.Location = new System.Drawing.Point(165, 123);
             this.Txt_V2_Kmv.Name = "Txt_V2_Kmv";
-            this.Txt_V2_Kmv.Size = new System.Drawing.Size(185, 26);
+            this.Txt_V2_Kmv.Size = new System.Drawing.Size(185, 27);
             this.Txt_V2_Kmv.TabIndex = 219;
             // 
             // label2
@@ -744,7 +744,7 @@ namespace Villamos.Villamos_Ablakok
             this.label2.BackColor = System.Drawing.Color.LightGreen;
             this.label2.Location = new System.Drawing.Point(4, 125);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(122, 20);
+            this.label2.Size = new System.Drawing.Size(139, 22);
             this.label2.TabIndex = 218;
             this.label2.Text = "Km vizsgálatnál:";
             // 
@@ -754,7 +754,7 @@ namespace Villamos.Villamos_Ablakok
             this.Txt_V2_sorszám.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Txt_V2_sorszám.Location = new System.Drawing.Point(165, 93);
             this.Txt_V2_sorszám.Name = "Txt_V2_sorszám";
-            this.Txt_V2_sorszám.Size = new System.Drawing.Size(185, 26);
+            this.Txt_V2_sorszám.Size = new System.Drawing.Size(185, 27);
             this.Txt_V2_sorszám.TabIndex = 217;
             // 
             // label10
@@ -763,7 +763,7 @@ namespace Villamos.Villamos_Ablakok
             this.label10.BackColor = System.Drawing.Color.LightGreen;
             this.label10.Location = new System.Drawing.Point(4, 95);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(151, 20);
+            this.label10.Size = new System.Drawing.Size(168, 22);
             this.label10.TabIndex = 216;
             this.label10.Text = "Vizsgálat sorszáma:";
             // 
@@ -773,7 +773,7 @@ namespace Villamos.Villamos_Ablakok
             this.label41.BackColor = System.Drawing.Color.LightGreen;
             this.label41.Location = new System.Drawing.Point(4, 65);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(144, 20);
+            this.label41.Size = new System.Drawing.Size(159, 22);
             this.label41.TabIndex = 214;
             this.label41.Text = "Viszgálat fokozata:";
             // 
@@ -783,18 +783,18 @@ namespace Villamos.Villamos_Ablakok
             this.label44.BackColor = System.Drawing.Color.LightGreen;
             this.label44.Location = new System.Drawing.Point(4, 35);
             this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(136, 20);
+            this.label44.Size = new System.Drawing.Size(151, 22);
             this.label44.TabIndex = 212;
             this.label44.Text = "Vizsgálat dátuma:";
             // 
-            // button1
+            // V_Idő_CiklusRögzít_gom
             // 
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(358, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 50);
-            this.button1.TabIndex = 205;
-            this.button1.UseVisualStyleBackColor = true;
+            this.V_Idő_CiklusRögzít_gom.Image = ((System.Drawing.Image)(resources.GetObject("V_Idő_CiklusRögzít_gom.Image")));
+            this.V_Idő_CiklusRögzít_gom.Location = new System.Drawing.Point(358, 5);
+            this.V_Idő_CiklusRögzít_gom.Name = "V_Idő_CiklusRögzít_gom";
+            this.V_Idő_CiklusRögzít_gom.Size = new System.Drawing.Size(50, 50);
+            this.V_Idő_CiklusRögzít_gom.TabIndex = 205;
+            this.V_Idő_CiklusRögzít_gom.UseVisualStyleBackColor = true;
             // 
             // label45
             // 
@@ -802,7 +802,7 @@ namespace Villamos.Villamos_Ablakok
             this.label45.BackColor = System.Drawing.Color.LightGreen;
             this.label45.Location = new System.Drawing.Point(4, 5);
             this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(55, 20);
+            this.label45.Size = new System.Drawing.Size(64, 22);
             this.label45.TabIndex = 204;
             this.label45.Text = "Ciklus:";
             // 
@@ -829,7 +829,7 @@ namespace Villamos.Villamos_Ablakok
             this.KM_Alap.Controls.Add(this.label61);
             this.KM_Alap.Controls.Add(this.label62);
             this.KM_Alap.Controls.Add(this.label63);
-            this.KM_Alap.Controls.Add(this.Km_Rögzít);
+            this.KM_Alap.Controls.Add(this.V_Km_CiklusRögzít_gomb);
             this.KM_Alap.Controls.Add(this.label64);
             this.KM_Alap.Location = new System.Drawing.Point(6, 30);
             this.KM_Alap.Name = "KM_Alap";
@@ -841,7 +841,7 @@ namespace Villamos.Villamos_Ablakok
             this.Cmb_KmCiklus_V1_Cnév.FormattingEnabled = true;
             this.Cmb_KmCiklus_V1_Cnév.Location = new System.Drawing.Point(164, 2);
             this.Cmb_KmCiklus_V1_Cnév.Name = "Cmb_KmCiklus_V1_Cnév";
-            this.Cmb_KmCiklus_V1_Cnév.Size = new System.Drawing.Size(185, 28);
+            this.Cmb_KmCiklus_V1_Cnév.Size = new System.Drawing.Size(185, 30);
             this.Cmb_KmCiklus_V1_Cnév.TabIndex = 262;
             // 
             // Cmb_KmCiklus_V1
@@ -849,7 +849,7 @@ namespace Villamos.Villamos_Ablakok
             this.Cmb_KmCiklus_V1.FormattingEnabled = true;
             this.Cmb_KmCiklus_V1.Location = new System.Drawing.Point(165, 61);
             this.Cmb_KmCiklus_V1.Name = "Cmb_KmCiklus_V1";
-            this.Cmb_KmCiklus_V1.Size = new System.Drawing.Size(185, 28);
+            this.Cmb_KmCiklus_V1.Size = new System.Drawing.Size(185, 30);
             this.Cmb_KmCiklus_V1.TabIndex = 259;
             // 
             // Txt_V1_Kmu
@@ -858,7 +858,7 @@ namespace Villamos.Villamos_Ablakok
             this.Txt_V1_Kmu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Txt_V1_Kmu.Location = new System.Drawing.Point(165, 153);
             this.Txt_V1_Kmu.Name = "Txt_V1_Kmu";
-            this.Txt_V1_Kmu.Size = new System.Drawing.Size(185, 26);
+            this.Txt_V1_Kmu.Size = new System.Drawing.Size(185, 27);
             this.Txt_V1_Kmu.TabIndex = 221;
             // 
             // Txt_V1_dátum
@@ -866,7 +866,7 @@ namespace Villamos.Villamos_Ablakok
             this.Txt_V1_dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Txt_V1_dátum.Location = new System.Drawing.Point(165, 33);
             this.Txt_V1_dátum.Name = "Txt_V1_dátum";
-            this.Txt_V1_dátum.Size = new System.Drawing.Size(185, 26);
+            this.Txt_V1_dátum.Size = new System.Drawing.Size(185, 27);
             this.Txt_V1_dátum.TabIndex = 261;
             // 
             // label59
@@ -875,7 +875,7 @@ namespace Villamos.Villamos_Ablakok
             this.label59.BackColor = System.Drawing.Color.LightGreen;
             this.label59.Location = new System.Drawing.Point(4, 155);
             this.label59.Name = "label59";
-            this.label59.Size = new System.Drawing.Size(45, 20);
+            this.label59.Size = new System.Drawing.Size(51, 22);
             this.label59.TabIndex = 220;
             this.label59.Text = "Kmu:";
             // 
@@ -885,7 +885,7 @@ namespace Villamos.Villamos_Ablakok
             this.Txt_V1_Kmv.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Txt_V1_Kmv.Location = new System.Drawing.Point(165, 123);
             this.Txt_V1_Kmv.Name = "Txt_V1_Kmv";
-            this.Txt_V1_Kmv.Size = new System.Drawing.Size(185, 26);
+            this.Txt_V1_Kmv.Size = new System.Drawing.Size(185, 27);
             this.Txt_V1_Kmv.TabIndex = 219;
             // 
             // label60
@@ -894,7 +894,7 @@ namespace Villamos.Villamos_Ablakok
             this.label60.BackColor = System.Drawing.Color.LightGreen;
             this.label60.Location = new System.Drawing.Point(4, 125);
             this.label60.Name = "label60";
-            this.label60.Size = new System.Drawing.Size(122, 20);
+            this.label60.Size = new System.Drawing.Size(139, 22);
             this.label60.TabIndex = 218;
             this.label60.Text = "Km vizsgálatnál:";
             // 
@@ -904,7 +904,7 @@ namespace Villamos.Villamos_Ablakok
             this.Txt_V1_sorszám.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Txt_V1_sorszám.Location = new System.Drawing.Point(165, 93);
             this.Txt_V1_sorszám.Name = "Txt_V1_sorszám";
-            this.Txt_V1_sorszám.Size = new System.Drawing.Size(185, 26);
+            this.Txt_V1_sorszám.Size = new System.Drawing.Size(185, 27);
             this.Txt_V1_sorszám.TabIndex = 217;
             // 
             // label61
@@ -913,7 +913,7 @@ namespace Villamos.Villamos_Ablakok
             this.label61.BackColor = System.Drawing.Color.LightGreen;
             this.label61.Location = new System.Drawing.Point(4, 95);
             this.label61.Name = "label61";
-            this.label61.Size = new System.Drawing.Size(151, 20);
+            this.label61.Size = new System.Drawing.Size(168, 22);
             this.label61.TabIndex = 216;
             this.label61.Text = "Vizsgálat sorszáma:";
             // 
@@ -923,7 +923,7 @@ namespace Villamos.Villamos_Ablakok
             this.label62.BackColor = System.Drawing.Color.LightGreen;
             this.label62.Location = new System.Drawing.Point(4, 65);
             this.label62.Name = "label62";
-            this.label62.Size = new System.Drawing.Size(144, 20);
+            this.label62.Size = new System.Drawing.Size(159, 22);
             this.label62.TabIndex = 214;
             this.label62.Text = "Viszgálat fokozata:";
             // 
@@ -933,19 +933,19 @@ namespace Villamos.Villamos_Ablakok
             this.label63.BackColor = System.Drawing.Color.LightGreen;
             this.label63.Location = new System.Drawing.Point(4, 35);
             this.label63.Name = "label63";
-            this.label63.Size = new System.Drawing.Size(136, 20);
+            this.label63.Size = new System.Drawing.Size(151, 22);
             this.label63.TabIndex = 212;
             this.label63.Text = "Vizsgálat dátuma:";
             // 
-            // Km_Rögzít
+            // V_Km_CiklusRögzít_gomb
             // 
-            this.Km_Rögzít.Image = ((System.Drawing.Image)(resources.GetObject("Km_Rögzít.Image")));
-            this.Km_Rögzít.Location = new System.Drawing.Point(358, 5);
-            this.Km_Rögzít.Name = "Km_Rögzít";
-            this.Km_Rögzít.Size = new System.Drawing.Size(50, 50);
-            this.Km_Rögzít.TabIndex = 205;
-            this.Km_Rögzít.UseVisualStyleBackColor = true;
-            this.Km_Rögzít.Click += new System.EventHandler(this.Km_Rögzít_Click);
+            this.V_Km_CiklusRögzít_gomb.Image = ((System.Drawing.Image)(resources.GetObject("V_Km_CiklusRögzít_gomb.Image")));
+            this.V_Km_CiklusRögzít_gomb.Location = new System.Drawing.Point(358, 5);
+            this.V_Km_CiklusRögzít_gomb.Name = "V_Km_CiklusRögzít_gomb";
+            this.V_Km_CiklusRögzít_gomb.Size = new System.Drawing.Size(50, 50);
+            this.V_Km_CiklusRögzít_gomb.TabIndex = 205;
+            this.V_Km_CiklusRögzít_gomb.UseVisualStyleBackColor = true;
+            this.V_Km_CiklusRögzít_gomb.Click += new System.EventHandler(this.Km_Rögzít_Click);
             // 
             // label64
             // 
@@ -953,7 +953,7 @@ namespace Villamos.Villamos_Ablakok
             this.label64.BackColor = System.Drawing.Color.LightGreen;
             this.label64.Location = new System.Drawing.Point(4, 5);
             this.label64.Name = "label64";
-            this.label64.Size = new System.Drawing.Size(55, 20);
+            this.label64.Size = new System.Drawing.Size(64, 22);
             this.label64.TabIndex = 204;
             this.label64.Text = "Ciklus:";
             // 
@@ -976,7 +976,7 @@ namespace Villamos.Villamos_Ablakok
             this.Idő_Alap.Controls.Add(this.label48);
             this.Idő_Alap.Controls.Add(this.label49);
             this.Idő_Alap.Controls.Add(this.label50);
-            this.Idő_Alap.Controls.Add(this.Futás_Rögzít);
+            this.Idő_Alap.Controls.Add(this.E_CiklusRögzít_gomb);
             this.Idő_Alap.Controls.Add(this.label51);
             this.Idő_Alap.Location = new System.Drawing.Point(6, 29);
             this.Idő_Alap.Name = "Idő_Alap";
@@ -988,7 +988,7 @@ namespace Villamos.Villamos_Ablakok
             this.Cmb_FutCiklusE_Cnév.FormattingEnabled = true;
             this.Cmb_FutCiklusE_Cnév.Location = new System.Drawing.Point(165, 2);
             this.Cmb_FutCiklusE_Cnév.Name = "Cmb_FutCiklusE_Cnév";
-            this.Cmb_FutCiklusE_Cnév.Size = new System.Drawing.Size(185, 28);
+            this.Cmb_FutCiklusE_Cnév.Size = new System.Drawing.Size(185, 30);
             this.Cmb_FutCiklusE_Cnév.TabIndex = 263;
             // 
             // Fut_dátum
@@ -996,7 +996,7 @@ namespace Villamos.Villamos_Ablakok
             this.Fut_dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Fut_dátum.Location = new System.Drawing.Point(165, 33);
             this.Fut_dátum.Name = "Fut_dátum";
-            this.Fut_dátum.Size = new System.Drawing.Size(185, 26);
+            this.Fut_dátum.Size = new System.Drawing.Size(185, 27);
             this.Fut_dátum.TabIndex = 262;
             // 
             // Cmb_FutCiklusE
@@ -1004,7 +1004,7 @@ namespace Villamos.Villamos_Ablakok
             this.Cmb_FutCiklusE.FormattingEnabled = true;
             this.Cmb_FutCiklusE.Location = new System.Drawing.Point(165, 62);
             this.Cmb_FutCiklusE.Name = "Cmb_FutCiklusE";
-            this.Cmb_FutCiklusE.Size = new System.Drawing.Size(185, 28);
+            this.Cmb_FutCiklusE.Size = new System.Drawing.Size(185, 30);
             this.Cmb_FutCiklusE.TabIndex = 258;
             // 
             // Fut_sorszám
@@ -1013,7 +1013,7 @@ namespace Villamos.Villamos_Ablakok
             this.Fut_sorszám.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Fut_sorszám.Location = new System.Drawing.Point(165, 93);
             this.Fut_sorszám.Name = "Fut_sorszám";
-            this.Fut_sorszám.Size = new System.Drawing.Size(185, 26);
+            this.Fut_sorszám.Size = new System.Drawing.Size(185, 27);
             this.Fut_sorszám.TabIndex = 217;
             // 
             // label48
@@ -1022,7 +1022,7 @@ namespace Villamos.Villamos_Ablakok
             this.label48.BackColor = System.Drawing.Color.LightGreen;
             this.label48.Location = new System.Drawing.Point(4, 95);
             this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(151, 20);
+            this.label48.Size = new System.Drawing.Size(168, 22);
             this.label48.TabIndex = 216;
             this.label48.Text = "Vizsgálat sorszáma:";
             // 
@@ -1032,7 +1032,7 @@ namespace Villamos.Villamos_Ablakok
             this.label49.BackColor = System.Drawing.Color.LightGreen;
             this.label49.Location = new System.Drawing.Point(4, 65);
             this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(144, 20);
+            this.label49.Size = new System.Drawing.Size(159, 22);
             this.label49.TabIndex = 214;
             this.label49.Text = "Vizsgálat fokozata:";
             // 
@@ -1042,19 +1042,19 @@ namespace Villamos.Villamos_Ablakok
             this.label50.BackColor = System.Drawing.Color.LightGreen;
             this.label50.Location = new System.Drawing.Point(4, 35);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(136, 20);
+            this.label50.Size = new System.Drawing.Size(151, 22);
             this.label50.TabIndex = 212;
             this.label50.Text = "Vizsgálat dátuma:";
             // 
-            // Futás_Rögzít
+            // E_CiklusRögzít_gomb
             // 
-            this.Futás_Rögzít.Image = ((System.Drawing.Image)(resources.GetObject("Futás_Rögzít.Image")));
-            this.Futás_Rögzít.Location = new System.Drawing.Point(358, 5);
-            this.Futás_Rögzít.Name = "Futás_Rögzít";
-            this.Futás_Rögzít.Size = new System.Drawing.Size(50, 50);
-            this.Futás_Rögzít.TabIndex = 205;
-            this.Futás_Rögzít.UseVisualStyleBackColor = true;
-            this.Futás_Rögzít.Click += new System.EventHandler(this.Futás_Rögzít_Click);
+            this.E_CiklusRögzít_gomb.Image = ((System.Drawing.Image)(resources.GetObject("E_CiklusRögzít_gomb.Image")));
+            this.E_CiklusRögzít_gomb.Location = new System.Drawing.Point(358, 5);
+            this.E_CiklusRögzít_gomb.Name = "E_CiklusRögzít_gomb";
+            this.E_CiklusRögzít_gomb.Size = new System.Drawing.Size(50, 50);
+            this.E_CiklusRögzít_gomb.TabIndex = 205;
+            this.E_CiklusRögzít_gomb.UseVisualStyleBackColor = true;
+            this.E_CiklusRögzít_gomb.Click += new System.EventHandler(this.Futás_Rögzít_Click);
             // 
             // label51
             // 
@@ -1062,7 +1062,7 @@ namespace Villamos.Villamos_Ablakok
             this.label51.BackColor = System.Drawing.Color.LightGreen;
             this.label51.Location = new System.Drawing.Point(4, 5);
             this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(55, 20);
+            this.label51.Size = new System.Drawing.Size(64, 22);
             this.label51.TabIndex = 204;
             this.label51.Text = "Ciklus:";
             // 
@@ -1116,7 +1116,7 @@ namespace Villamos.Villamos_Ablakok
             this.Fut_nap_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Fut_nap_text.Location = new System.Drawing.Point(165, 363);
             this.Fut_nap_text.Name = "Fut_nap_text";
-            this.Fut_nap_text.Size = new System.Drawing.Size(187, 26);
+            this.Fut_nap_text.Size = new System.Drawing.Size(187, 27);
             this.Fut_nap_text.TabIndex = 225;
             // 
             // ut_forg_text
@@ -1125,7 +1125,7 @@ namespace Villamos.Villamos_Ablakok
             this.ut_forg_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ut_forg_text.Location = new System.Drawing.Point(165, 333);
             this.ut_forg_text.Name = "ut_forg_text";
-            this.ut_forg_text.Size = new System.Drawing.Size(187, 26);
+            this.ut_forg_text.Size = new System.Drawing.Size(187, 27);
             this.ut_forg_text.TabIndex = 224;
             // 
             // label3
@@ -1134,7 +1134,7 @@ namespace Villamos.Villamos_Ablakok
             this.label3.BackColor = System.Drawing.Color.LightGreen;
             this.label3.Location = new System.Drawing.Point(4, 335);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(150, 20);
+            this.label3.Size = new System.Drawing.Size(169, 22);
             this.label3.TabIndex = 223;
             this.label3.Text = "Utolsó forgalmi nap:";
             // 
@@ -1144,7 +1144,7 @@ namespace Villamos.Villamos_Ablakok
             this.label6.BackColor = System.Drawing.Color.LightGreen;
             this.label6.Location = new System.Drawing.Point(4, 365);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(149, 20);
+            this.label6.Size = new System.Drawing.Size(165, 22);
             this.label6.TabIndex = 222;
             this.label6.Text = "Futásnapok száma:";
             // 
@@ -1154,7 +1154,7 @@ namespace Villamos.Villamos_Ablakok
             this.TárH_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TárH_text.Location = new System.Drawing.Point(165, 153);
             this.TárH_text.Name = "TárH_text";
-            this.TárH_text.Size = new System.Drawing.Size(187, 26);
+            this.TárH_text.Size = new System.Drawing.Size(187, 27);
             this.TárH_text.TabIndex = 221;
             // 
             // TárH_label
@@ -1163,7 +1163,7 @@ namespace Villamos.Villamos_Ablakok
             this.TárH_label.BackColor = System.Drawing.Color.LightGreen;
             this.TárH_label.Location = new System.Drawing.Point(4, 155);
             this.TárH_label.Name = "TárH_label";
-            this.TárH_label.Size = new System.Drawing.Size(100, 20);
+            this.TárH_label.Size = new System.Drawing.Size(118, 22);
             this.TárH_label.TabIndex = 220;
             this.TárH_label.Text = "Tárolási hely:";
             // 
@@ -1173,7 +1173,7 @@ namespace Villamos.Villamos_Ablakok
             this.LeltSz_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.LeltSz_text.Location = new System.Drawing.Point(165, 123);
             this.LeltSz_text.Name = "LeltSz_text";
-            this.LeltSz_text.Size = new System.Drawing.Size(187, 26);
+            this.LeltSz_text.Size = new System.Drawing.Size(187, 27);
             this.LeltSz_text.TabIndex = 219;
             // 
             // LeltSz_label
@@ -1182,7 +1182,7 @@ namespace Villamos.Villamos_Ablakok
             this.LeltSz_label.BackColor = System.Drawing.Color.LightGreen;
             this.LeltSz_label.Location = new System.Drawing.Point(4, 125);
             this.LeltSz_label.Name = "LeltSz_label";
-            this.LeltSz_label.Size = new System.Drawing.Size(98, 20);
+            this.LeltSz_label.Size = new System.Drawing.Size(110, 22);
             this.LeltSz_label.TabIndex = 218;
             this.LeltSz_label.Text = "Leltári szám:";
             // 
@@ -1192,7 +1192,7 @@ namespace Villamos.Villamos_Ablakok
             this.EszkSz_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.EszkSz_text.Location = new System.Drawing.Point(165, 93);
             this.EszkSz_text.Name = "EszkSz_text";
-            this.EszkSz_text.Size = new System.Drawing.Size(187, 26);
+            this.EszkSz_text.Size = new System.Drawing.Size(187, 27);
             this.EszkSz_text.TabIndex = 217;
             // 
             // EszkSz_label
@@ -1201,7 +1201,7 @@ namespace Villamos.Villamos_Ablakok
             this.EszkSz_label.BackColor = System.Drawing.Color.LightGreen;
             this.EszkSz_label.Location = new System.Drawing.Point(4, 95);
             this.EszkSz_label.Name = "EszkSz_label";
-            this.EszkSz_label.Size = new System.Drawing.Size(103, 20);
+            this.EszkSz_label.Size = new System.Drawing.Size(112, 22);
             this.EszkSz_label.TabIndex = 216;
             this.EszkSz_label.Text = "Eszközszám:";
             // 
@@ -1211,7 +1211,7 @@ namespace Villamos.Villamos_Ablakok
             this.Év_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Év_text.Location = new System.Drawing.Point(165, 63);
             this.Év_text.Name = "Év_text";
-            this.Év_text.Size = new System.Drawing.Size(187, 26);
+            this.Év_text.Size = new System.Drawing.Size(187, 27);
             this.Év_text.TabIndex = 215;
             // 
             // Év_label
@@ -1220,7 +1220,7 @@ namespace Villamos.Villamos_Ablakok
             this.Év_label.BackColor = System.Drawing.Color.LightGreen;
             this.Év_label.Location = new System.Drawing.Point(4, 65);
             this.Év_label.Name = "Év_label";
-            this.Év_label.Size = new System.Drawing.Size(31, 20);
+            this.Év_label.Size = new System.Drawing.Size(36, 22);
             this.Év_label.TabIndex = 214;
             this.Év_label.Text = "Év:";
             // 
@@ -1230,7 +1230,7 @@ namespace Villamos.Villamos_Ablakok
             this.Gyártó_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Gyártó_text.Location = new System.Drawing.Point(165, 33);
             this.Gyártó_text.Name = "Gyártó_text";
-            this.Gyártó_text.Size = new System.Drawing.Size(187, 26);
+            this.Gyártó_text.Size = new System.Drawing.Size(187, 27);
             this.Gyártó_text.TabIndex = 213;
             // 
             // Gyártó_label
@@ -1239,7 +1239,7 @@ namespace Villamos.Villamos_Ablakok
             this.Gyártó_label.BackColor = System.Drawing.Color.LightGreen;
             this.Gyártó_label.Location = new System.Drawing.Point(4, 35);
             this.Gyártó_label.Name = "Gyártó_label";
-            this.Gyártó_label.Size = new System.Drawing.Size(61, 20);
+            this.Gyártó_label.Size = new System.Drawing.Size(69, 22);
             this.Gyártó_label.TabIndex = 212;
             this.Gyártó_label.Text = "Gyártó:";
             // 
@@ -1249,7 +1249,7 @@ namespace Villamos.Villamos_Ablakok
             this.Járműtípus_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Járműtípus_text.Location = new System.Drawing.Point(165, 303);
             this.Járműtípus_text.Name = "Járműtípus_text";
-            this.Járműtípus_text.Size = new System.Drawing.Size(187, 26);
+            this.Járműtípus_text.Size = new System.Drawing.Size(187, 27);
             this.Járműtípus_text.TabIndex = 211;
             // 
             // Főmérnökség_text
@@ -1258,7 +1258,7 @@ namespace Villamos.Villamos_Ablakok
             this.Főmérnökség_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Főmérnökség_text.Location = new System.Drawing.Point(165, 273);
             this.Főmérnökség_text.Name = "Főmérnökség_text";
-            this.Főmérnökség_text.Size = new System.Drawing.Size(187, 26);
+            this.Főmérnökség_text.Size = new System.Drawing.Size(187, 27);
             this.Főmérnökség_text.TabIndex = 210;
             // 
             // Takarítás_text
@@ -1267,7 +1267,7 @@ namespace Villamos.Villamos_Ablakok
             this.Takarítás_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Takarítás_text.Location = new System.Drawing.Point(165, 243);
             this.Takarítás_text.Name = "Takarítás_text";
-            this.Takarítás_text.Size = new System.Drawing.Size(187, 26);
+            this.Takarítás_text.Size = new System.Drawing.Size(187, 27);
             this.Takarítás_text.TabIndex = 209;
             // 
             // Miótaáll_text
@@ -1276,7 +1276,7 @@ namespace Villamos.Villamos_Ablakok
             this.Miótaáll_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Miótaáll_text.Location = new System.Drawing.Point(165, 213);
             this.Miótaáll_text.Name = "Miótaáll_text";
-            this.Miótaáll_text.Size = new System.Drawing.Size(187, 26);
+            this.Miótaáll_text.Size = new System.Drawing.Size(187, 27);
             this.Miótaáll_text.TabIndex = 208;
             // 
             // Státus_text
@@ -1285,7 +1285,7 @@ namespace Villamos.Villamos_Ablakok
             this.Státus_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Státus_text.Location = new System.Drawing.Point(165, 183);
             this.Státus_text.Name = "Státus_text";
-            this.Státus_text.Size = new System.Drawing.Size(187, 26);
+            this.Státus_text.Size = new System.Drawing.Size(187, 27);
             this.Státus_text.TabIndex = 207;
             // 
             // Típus_text
@@ -1294,7 +1294,7 @@ namespace Villamos.Villamos_Ablakok
             this.Típus_text.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Típus_text.Location = new System.Drawing.Point(165, 3);
             this.Típus_text.Name = "Típus_text";
-            this.Típus_text.Size = new System.Drawing.Size(187, 26);
+            this.Típus_text.Size = new System.Drawing.Size(187, 27);
             this.Típus_text.TabIndex = 206;
             // 
             // alapadatRögzít
@@ -1313,7 +1313,7 @@ namespace Villamos.Villamos_Ablakok
             this.Típus_label.BackColor = System.Drawing.Color.LightGreen;
             this.Típus_label.Location = new System.Drawing.Point(4, 5);
             this.Típus_label.Name = "Típus_label";
-            this.Típus_label.Size = new System.Drawing.Size(51, 20);
+            this.Típus_label.Size = new System.Drawing.Size(60, 22);
             this.Típus_label.TabIndex = 204;
             this.Típus_label.Text = "Típus:";
             // 
@@ -1323,7 +1323,7 @@ namespace Villamos.Villamos_Ablakok
             this.Státus_label.BackColor = System.Drawing.Color.LightGreen;
             this.Státus_label.Location = new System.Drawing.Point(4, 185);
             this.Státus_label.Name = "Státus_label";
-            this.Státus_label.Size = new System.Drawing.Size(60, 20);
+            this.Státus_label.Size = new System.Drawing.Size(66, 22);
             this.Státus_label.TabIndex = 203;
             this.Státus_label.Text = "Státus:";
             // 
@@ -1333,7 +1333,7 @@ namespace Villamos.Villamos_Ablakok
             this.Miótaáll_label.BackColor = System.Drawing.Color.LightGreen;
             this.Miótaáll_label.Location = new System.Drawing.Point(4, 215);
             this.Miótaáll_label.Name = "Miótaáll_label";
-            this.Miótaáll_label.Size = new System.Drawing.Size(71, 20);
+            this.Miótaáll_label.Size = new System.Drawing.Size(81, 22);
             this.Miótaáll_label.TabIndex = 202;
             this.Miótaáll_label.Text = "Mióta áll:";
             // 
@@ -1343,7 +1343,7 @@ namespace Villamos.Villamos_Ablakok
             this.Takarítás_label.BackColor = System.Drawing.Color.LightGreen;
             this.Takarítás_label.Location = new System.Drawing.Point(4, 245);
             this.Takarítás_label.Name = "Takarítás_label";
-            this.Takarítás_label.Size = new System.Drawing.Size(124, 20);
+            this.Takarítás_label.Size = new System.Drawing.Size(139, 22);
             this.Takarítás_label.TabIndex = 201;
             this.Takarítás_label.Text = "Utolsó takarítás:";
             // 
@@ -1353,7 +1353,7 @@ namespace Villamos.Villamos_Ablakok
             this.Főmérnökség_label.BackColor = System.Drawing.Color.LightGreen;
             this.Főmérnökség_label.Location = new System.Drawing.Point(4, 275);
             this.Főmérnökség_label.Name = "Főmérnökség_label";
-            this.Főmérnökség_label.Size = new System.Drawing.Size(152, 20);
+            this.Főmérnökség_label.Size = new System.Drawing.Size(171, 22);
             this.Főmérnökség_label.TabIndex = 200;
             this.Főmérnökség_label.Text = "Főmérnökségi típus:";
             // 
@@ -1363,7 +1363,7 @@ namespace Villamos.Villamos_Ablakok
             this.Járműtípus_label.BackColor = System.Drawing.Color.LightGreen;
             this.Járműtípus_label.Location = new System.Drawing.Point(4, 305);
             this.Járműtípus_label.Name = "Járműtípus_label";
-            this.Járműtípus_label.Size = new System.Drawing.Size(95, 20);
+            this.Járműtípus_label.Size = new System.Drawing.Size(107, 22);
             this.Járműtípus_label.TabIndex = 199;
             this.Járműtípus_label.Text = "Jármű típus:";
             // 
@@ -1400,9 +1400,9 @@ namespace Villamos.Villamos_Ablakok
             this.TabPage7.Controls.Add(this.Pdf_listbox);
             this.TabPage7.Controls.Add(this.PDF_Frissít);
             this.TabPage7.Controls.Add(this.PDF_rögzít);
-            this.TabPage7.Location = new System.Drawing.Point(4, 29);
+            this.TabPage7.Location = new System.Drawing.Point(4, 31);
             this.TabPage7.Name = "TabPage7";
-            this.TabPage7.Size = new System.Drawing.Size(1320, 538);
+            this.TabPage7.Size = new System.Drawing.Size(1320, 536);
             this.TabPage7.TabIndex = 10;
             this.TabPage7.Text = "PDF";
             // 
@@ -1411,10 +1411,10 @@ namespace Villamos.Villamos_Ablakok
             this.Szűrés.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.Szűrés.FormattingEnabled = true;
-            this.Szűrés.ItemHeight = 20;
+            this.Szűrés.ItemHeight = 22;
             this.Szűrés.Location = new System.Drawing.Point(380, 100);
             this.Szűrés.Name = "Szűrés";
-            this.Szűrés.Size = new System.Drawing.Size(163, 284);
+            this.Szűrés.Size = new System.Drawing.Size(163, 268);
             this.Szűrés.TabIndex = 8;
             this.Szűrés.Visible = false;
             // 
@@ -1449,7 +1449,7 @@ namespace Villamos.Villamos_Ablakok
             this.PDF_megnevezés.Location = new System.Drawing.Point(430, 6);
             this.PDF_megnevezés.MaxLength = 50;
             this.PDF_megnevezés.Name = "PDF_megnevezés";
-            this.PDF_megnevezés.Size = new System.Drawing.Size(536, 26);
+            this.PDF_megnevezés.Size = new System.Drawing.Size(536, 27);
             this.PDF_megnevezés.TabIndex = 6;
             // 
             // label40
@@ -1458,7 +1458,7 @@ namespace Villamos.Villamos_Ablakok
             this.label40.BackColor = System.Drawing.Color.Silver;
             this.label40.Location = new System.Drawing.Point(303, 12);
             this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(103, 20);
+            this.label40.Size = new System.Drawing.Size(115, 22);
             this.label40.TabIndex = 192;
             this.label40.Text = "Megnevezés:";
             // 
@@ -1467,7 +1467,7 @@ namespace Villamos.Villamos_Ablakok
             this.label42.AutoSize = true;
             this.label42.Location = new System.Drawing.Point(303, 55);
             this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(121, 20);
+            this.label42.Size = new System.Drawing.Size(137, 22);
             this.label42.TabIndex = 174;
             this.label42.Text = "Feltöltendő fájl :";
             // 
@@ -1477,7 +1477,7 @@ namespace Villamos.Villamos_Ablakok
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Feltöltendő.Location = new System.Drawing.Point(430, 49);
             this.Feltöltendő.Name = "Feltöltendő";
-            this.Feltöltendő.Size = new System.Drawing.Size(536, 26);
+            this.Feltöltendő.Size = new System.Drawing.Size(536, 27);
             this.Feltöltendő.TabIndex = 7;
             // 
             // BtnPDF
@@ -1495,7 +1495,7 @@ namespace Villamos.Villamos_Ablakok
             this.label43.AutoSize = true;
             this.label43.Location = new System.Drawing.Point(2, 57);
             this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(190, 20);
+            this.label43.Size = new System.Drawing.Size(210, 22);
             this.label43.TabIndex = 171;
             this.label43.Text = "Feltöltött dokumentumok:";
             // 
@@ -1504,10 +1504,10 @@ namespace Villamos.Villamos_Ablakok
             this.Pdf_listbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.Pdf_listbox.FormattingEnabled = true;
-            this.Pdf_listbox.ItemHeight = 20;
+            this.Pdf_listbox.ItemHeight = 22;
             this.Pdf_listbox.Location = new System.Drawing.Point(3, 80);
             this.Pdf_listbox.Name = "Pdf_listbox";
-            this.Pdf_listbox.Size = new System.Drawing.Size(242, 304);
+            this.Pdf_listbox.Size = new System.Drawing.Size(242, 290);
             this.Pdf_listbox.TabIndex = 4;
             this.Pdf_listbox.SelectedIndexChanged += new System.EventHandler(this.Pdf_listbox_SelectedIndexChanged);
             // 
@@ -1538,7 +1538,7 @@ namespace Villamos.Villamos_Ablakok
             // 
             // Ablak_Nosztalgia
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Teal;
             this.ClientSize = new System.Drawing.Size(1350, 633);
@@ -1656,14 +1656,14 @@ namespace Villamos.Villamos_Ablakok
         internal Label label61;
         internal Label label62;
         internal Label label63;
-        internal Button Km_Rögzít;
+        internal Button V_Km_CiklusRögzít_gomb;
         internal Label label64;
         internal Panel Idő_Alap;
         internal TextBox Fut_sorszám;
         internal Label label48;
         internal Label label49;
         internal Label label50;
-        internal Button Futás_Rögzít;
+        internal Button E_CiklusRögzít_gomb;
         internal Label label51;
         internal Panel Alap;
         internal TextBox Fut_nap_text;
@@ -1708,7 +1708,7 @@ namespace Villamos.Villamos_Ablakok
         internal Label label10;
         internal Label label41;
         internal Label label44;
-        internal Button button1;
+        internal Button V_Idő_CiklusRögzít_gom;
         internal Label label45;
         internal ComboBox Cmb_KmCiklus_V2;
         internal ComboBox Cmb_KmCiklus_V1;

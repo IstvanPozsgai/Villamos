@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using MyA = Adatbázis;
+using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 
@@ -13,36 +13,40 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 {
     public partial class Ablak_TTP_Naptár : Form
     {
+        readonly Kezelő_TTP_Naptár KézNaptár = new Kezelő_TTP_Naptár();
+        readonly Kezelő_Váltós_Naptár KézVálNaptár = new Kezelő_Váltós_Naptár();
+
         List<Adat_TTP_Naptár> NaptárLista = new List<Adat_TTP_Naptár>();
-        readonly string Hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/TTP_Adatbázis.mdb";
-        readonly string Jelszó = "rudolfg";
 
         public Ablak_TTP_Naptár()
         {
             InitializeComponent();
+            Start();
         }
 
-        private void Ablak_TTP_Naptár_Load(object sender, EventArgs e)
+        private void Start()
         {
             Dátum.Value = DateTime.Today;
             TáblaListázás();
         }
 
+        private void Ablak_TTP_Naptár_Load(object sender, EventArgs e)
+        { }
+
         private void Adatok_Áttöltése()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
-                string jelszó = "katalin";
-                string szöveg = "SELECT * FROM naptár ";
-
-                Kezelő_Váltós_Naptár Kéz = new Kezelő_Váltós_Naptár();
-                List<Adat_Váltós_Naptár> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Váltós_Naptár> Adatok = KézVálNaptár.Lista_Adatok(Dátum.Value.Year, "");
 
                 NaptárLista.Clear();
-                NaptárLista = MyF.TTP_NaptárFeltölt(Dátum.Value);
+                NaptárLista = KézNaptár.Lista_Adatok();
+                NaptárLista = (from a in NaptárLista
+                               where a.Dátum >= MyF.Év_elsőnapja(Dátum.Value) && a.Dátum <= MyF.Év_utolsónapja(Dátum.Value)
+                               orderby a.Dátum
+                               select a).ToList();
 
-                List<string> szövegGy = new List<string>();
+                List<Adat_TTP_Naptár> AdatokGy = new List<Adat_TTP_Naptár>();
                 foreach (Adat_Váltós_Naptár rekord in Adatok)
                 {
                     Adat_TTP_Naptár Elem = (from a in NaptárLista
@@ -50,13 +54,16 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                                             select a).FirstOrDefault();
                     if (Elem == null)
                     {
-                        szöveg = "INSERT INTO TTP_Naptár (Dátum, Munkanap) VALUES (";
-                        szöveg += $"'{rekord.Dátum.ToShortDateString()}', {rekord.Nap == "1"})";
-                        szövegGy.Add(szöveg);
+                        Adat_TTP_Naptár ADAT = new Adat_TTP_Naptár(rekord.Dátum, rekord.Nap == "1");
+                        AdatokGy.Add(ADAT);
                     }
                 }
-                MyA.ABMódosítás(Hely, Jelszó, szövegGy);
-                NaptárLista = MyF.TTP_NaptárFeltölt(Dátum.Value);
+                KézNaptár.Rögzítés(AdatokGy);
+                NaptárLista = KézNaptár.Lista_Adatok();
+                NaptárLista = (from a in NaptárLista
+                               where a.Dátum >= MyF.Év_elsőnapja(Dátum.Value) && a.Dátum <= MyF.Év_utolsónapja(Dátum.Value)
+                               orderby a.Dátum
+                               select a).ToList();
             }
 
             catch (HibásBevittAdat ex)
@@ -75,7 +82,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             try
             {
                 NaptárLista.Clear();
-                NaptárLista = MyF.TTP_NaptárFeltölt(Dátum.Value);
+                NaptárLista = KézNaptár.Lista_Adatok();
+                NaptárLista = (from a in NaptárLista
+                               where a.Dátum >= MyF.Év_elsőnapja(Dátum.Value) && a.Dátum <= MyF.Év_utolsónapja(Dátum.Value)
+                               orderby a.Dátum
+                               select a).ToList();
                 TáblaNaptár.Rows.Clear();
                 TáblaNaptár.Columns.Clear();
                 TáblaNaptár.Refresh();
@@ -155,8 +166,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 
                 if (Dátum.Value == TáblaNaptár.Rows[TáblaNaptár.SelectedRows[0].Index].Cells[0].Value.ToÉrt_DaTeTime())
                 {
-                    string szöveg = $"UPDATE TTP_Naptár SET Munkanap={ChkMunkanap.Checked} WHERE Dátum=#{Dátum.Value:MM-dd-yyyy}# ";
-                    MyA.ABMódosítás(Hely, Jelszó, szöveg);
+                    Adat_TTP_Naptár ADAT = new Adat_TTP_Naptár(Dátum.Value, ChkMunkanap.Checked);
+                    KézNaptár.Módosítás(ADAT);
                     TáblaListázás();
                 }
             }

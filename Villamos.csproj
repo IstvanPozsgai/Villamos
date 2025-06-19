@@ -145,6 +145,30 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Felhasználó.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Felhasználó.designer.cs">
+      <DependentUpon>Ablak_Felhasználó.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Formok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Formok.Designer.cs">
+      <DependentUpon>Ablak_Formok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Gombok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Gombok.Designer.cs">
+      <DependentUpon>Ablak_Gombok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_JogKiosztás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_JogKiosztás.designer.cs">
+      <DependentUpon>Ablak_JogKiosztás.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_egyéb.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +186,12 @@
     </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.designer.cs">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.Designer.cs">
+      <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_technológia.cs">
       <SubType>Form</SubType>
@@ -236,8 +266,8 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Adatbázis_Eszterga.cs" />
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Adat_Eszterga.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Eszterga.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Eszterga.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Eszterga_Funkció.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelő_Eszterga.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Baross.cs">
@@ -350,11 +380,8 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Év.Designer.cs">
       <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Adat_TTP.cs" />
-    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\Kezelő_TTP.cs" />
-    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\TTP_Adatbázis.cs" />
-    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\TTP_Adattábla.cs" />
-    <Compile Include="V_Ablakok\4_Nyilvántartások\TTP\TTP_Funkciók.cs" />
+    <Compile Include="V_Adatbázis\TTP_Adatbázis.cs" />
+    <Compile Include="V_Függvények\TTP_PDF.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -505,7 +532,6 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Ablak_Menetkimaradás_Kiegészítő.Designer.cs">
       <DependentUpon>Ablak_Menetkimaradás_Kiegészítő.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\6_Kiadási_adatok\Menetkimaradás\Menetkimaradás.cs" />
     <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Behajtási.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -525,6 +551,12 @@
     <Compile Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_ICS_KCSV_segéd.Designer.cs">
       <DependentUpon>Ablak_ICS_KCSV_segéd.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Adatbázis\Adatbázis_Bejelentkezés.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Excel_Beolvasás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Belépés_Verzió.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Dolgozó.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Gombok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_előterv.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_Ütem.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Beosztás.cs">
@@ -595,12 +627,6 @@
     </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\MEO\Ablak_Kerék_Konverter.Designer.cs">
       <DependentUpon>Ablak_Kerék_Konverter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.Designer.cs">
-      <DependentUpon>Ablak_PDF_Tallózó.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Színkezelő.cs">
       <SubType>Form</SubType>
@@ -683,6 +709,7 @@
     <Compile Include="V_Adatszerkezet\Adat_DigitálisMunkalap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Státus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jogosultságok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jogosítvány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Karbantartási.cs" />
@@ -696,6 +723,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Munkakör.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nóta.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Oktatás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Oldalak.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Reklám.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Rezsi.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szerszám_FejLáb.cs" />
@@ -703,15 +731,37 @@
     <Compile Include="V_Adatszerkezet\Adat_T5C5_Fűtés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Takarítás_BMR.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Takarítás_Opció.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_TTP_Alapadat.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_TTP_Naptár.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_TTP_Tábla.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_TTP_Év.cs" />
     <Compile Include="V_Adatszerkezet\Adat_TW6000.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Tábla_Vezénylés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Users.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
     <Compile Include="V_Excel\Excel_Nyomtatási.cs" />
     <Compile Include="V_Excel\Kész_Excelek.cs" />
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Baross_Mérési_Adatok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Gombok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Jogosultságok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Esztergályos.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Igény.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Naptár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tengely.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Terjesztés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tevékenység.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szabadságok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Belépés_Verzió Új.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás_Dolgozótábla.cs" />
@@ -749,14 +799,12 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Alap_Beolvasás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF.cs" />
     <Compile Include="V_Kezelők\Kezelő_Ciklus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Alap.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszköz.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Előírás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosítvány.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_J1.cs" />
@@ -772,7 +820,7 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Állomány_Típus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék.cs" />
     <Compile Include="V_Kezelők\Kezelő_KerékMérő.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Automata.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiadás_Összesítő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kidobó.cs" />
@@ -818,6 +866,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső.cs" />
     <Compile Include="V_Kezelők\Kezelő_Létszám.cs" />
+    <Compile Include="V_Kezelők\Kezelő_MenetKimaradás_Főmérnökség.cs" />
     <Compile Include="V_Kezelők\Kezelő_MEO.cs" />
     <Compile Include="V_Kezelők\Kezelő_MEO_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munkakör.cs" />
@@ -867,6 +916,10 @@
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Kidobó.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SAP.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_Takarítástípus.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TTP_Alapadat.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TTP_Naptár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TTP_Tábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_TTP_Év.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000_Előterv.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW6000_Ütemezés.cs" />
@@ -949,7 +1002,8 @@
     <Compile Include="V_Kezelők\Kezelő_Védő_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Általános.cs" />
     <Compile Include="V_Kezelők\Kezelő_Épület.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Épület_Takarítás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Épület_Adattábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Épület_Osztály.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_Akkumulátor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1139,7 +1193,6 @@
     <Compile Include="V_Adatszerkezet\Adat_CAF.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Alap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_eszköz.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasó.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hétvége_Előírás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Mérés.cs" />
@@ -1188,15 +1241,19 @@
     <Compile Include="V_Excel\Excel.cs" />
     <Compile Include="V_Kezelők\Kezelő_Üzenet.cs" />
     <Compile Include="V_Kezelők\Kezelő_Üzenet_Olvas.cs" />
-    <Compile Include="V_Kezelők\public class Kezelő_CAF_Szinezés.cs" />
+    <Compile Include="V_Kezelők\Kezelő_CAF_Szinezés.cs" />
+    <Compile Include="V_MindenEgyéb\AblakokGombok.cs" />
+    <Compile Include="V_MindenEgyéb\AccessDatabaseHelper.cs" />
     <Compile Include="V_MindenEgyéb\Enumok.cs" />
     <Compile Include="V_MindenEgyéb\Excel_Kezelés.cs" />
     <Compile Include="V_Függvények\Fv_Dátum.cs" />
     <Compile Include="V_Függvények\Függvénygyűjtemény.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Funkciók.cs" />
+    <Compile Include="V_MindenEgyéb\GombLathatosagKezelo.cs" />
     <Compile Include="V_MindenEgyéb\Hely_Ellenőr.cs" />
     <Compile Include="V_MindenEgyéb\Hibakezelés.cs" />
-    <Compile Include="V_MindenEgyéb\IDM_Dolgozó.cs" />
+    <Compile Include="V_MindenEgyéb\IDM_beolvasás.cs" />
+    <Compile Include="V_MindenEgyéb\Jelszó.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Kép.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Pdf.cs" />
     <Compile Include="V_MindenEgyéb\Kezelő_Szín.cs" />
@@ -1205,7 +1262,7 @@
     <Compile Include="V_MindenEgyéb\Listák.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="V_MindenEgyéb\Mentés_Ablak.cs" />
-    <Compile Include="V_MindenEgyéb\SAP_Adatokbeolvasása_km.cs" />
+    <Compile Include="V_MindenEgyéb\SAP_Adatokbeolvasása.cs" />
     <Compile Include="V_MindenEgyéb\ScreenshotHelper.cs" />
     <Compile Include="V_MindenEgyéb\Vezénylés.cs" />
     <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />
@@ -1213,6 +1270,18 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Felhasználó.resx">
+      <DependentUpon>Ablak_Felhasználó.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Formok.resx">
+      <DependentUpon>Ablak_Formok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Gombok.resx">
+      <DependentUpon>Ablak_Gombok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_JogKiosztás.resx">
+      <DependentUpon>Ablak_JogKiosztás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_egyéb.resx">
       <DependentUpon>Ablak_alap_program_egyéb.cs</DependentUpon>
@@ -1222,6 +1291,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.resx">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.resx">
+      <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_technológia.resx">
       <DependentUpon>Ablak_technológia.cs</DependentUpon>
@@ -1532,9 +1604,6 @@
     <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Eszköz_Szerszám\Ablak_Szerszám.resx">
       <DependentUpon>Ablak_Szerszám.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_PDF_Tallózó.resx">
-      <DependentUpon>Ablak_PDF_Tallózó.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_segéd.resx">
       <DependentUpon>Ablak_T5C5_segéd.cs</DependentUpon>
     </EmbeddedResource>
@@ -1793,6 +1862,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ADGV">
+      <Version>0.1.0.10</Version>
+    </PackageReference>
     <PackageReference Include="DG.AdvancedDataGridView">
       <Version>1.2.30115.18</Version>
     </PackageReference>
@@ -1801,6 +1873,9 @@
     </PackageReference>
     <PackageReference Include="ExcelDataReader.DataSet">
       <Version>3.7.0</Version>
+    </PackageReference>
+    <PackageReference Include="iTextSharp">
+      <Version>5.5.13.4</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1001</Version>

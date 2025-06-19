@@ -9,44 +9,56 @@ using Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using Application = System.Windows.Forms.Application;
-using Funkció = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
+using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 {
-    public delegate void Event_Kidobó();
+    public delegate void Event_Kidobo();
     public partial class Ablak_Eszterga_Karbantartás_Üzemóra : Form
     {
         #region Osztályszintű elemek
-        readonly private DataTable AdatTábla = new DataTable();
-        public event Event_Kidobó Eszterga_Változás;
-        readonly DateTime MaiDatum = DateTime.Today;
+        readonly private DataTable AdatTabla = new DataTable();
+        public event Event_Kidobo Eszterga_Valtozas;
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         #endregion
 
         #region Listák
-        private List<Adat_Eszterga_Műveletek> AdatokMűvelet;
-        private List<Adat_Eszterga_Üzemóra> AdatokÜzemóra;
+        private List<Adat_Eszterga_Muveletek> AdatokMuvelet;
+        private List<Adat_Eszterga_Uzemora> AdatokUzemora;
         #endregion
 
         #region Kezelők
-        readonly private Kezelő_Eszterga_Műveletek KézMűveletek = new Kezelő_Eszterga_Műveletek();
-        readonly private Kezelő_Eszterga_Üzemóra KézÜzemóra = new Kezelő_Eszterga_Üzemóra();
+        readonly private Kezelo_Eszterga_Muveletek KezMuveletek = new Kezelo_Eszterga_Muveletek();
+        readonly private Kezelő_Eszterga_Üzemóra KezUzemora = new Kezelő_Eszterga_Üzemóra();
         #endregion
 
         #region Alap
+
+        /// <summary>
+        /// Inicializálja az Eszterga üzemóra nyilvántartó ablak komponenseit.
+        /// </summary>
         public Ablak_Eszterga_Karbantartás_Üzemóra()
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Az ablak betöltésekor feltölti az üzemóra adatokat, beállítja a jogosultságokat,
+        /// és regisztrálja az eseményt a cellák formázásához.
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_Üzemóra_Load(object sender, EventArgs e)
         {
-            TáblaListázás();
-            Jogosultságkiosztás();
+            TablaListazas();
+            Jogosultsagkiosztas();
             Tábla.CellFormatting += Tábla_CellFormatting;
         }
-        private void Jogosultságkiosztás()
+
+        /// <summary>
+        /// Jogosultság alapján engedélyezi vagy tiltja a felhasználó számára a műveletek (új, módosít, Excel export) elérhetőségét.
+        /// </summary>
+        private void Jogosultsagkiosztas()
         {
             try
             {
@@ -77,34 +89,38 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Lista
-        private void TáblaListázás()
+
+        /// <summary>
+        /// Feltölti az üzemóra rekordokat a táblázatba, beállítja az oszlopokat és frissíti a megjelenést.
+        /// </summary>
+        private void TablaListazas()
         {
             try
             {
-                AdatTábla.Columns.Clear();
-                AdatTábla.Rows.Clear();
-                AdatTábla.Columns.Add("ID");
-                AdatTábla.Columns.Add("Üzemóra");
-                AdatTábla.Columns.Add("Dátum");
-                AdatTábla.Columns.Add("Státusz");
+                AdatTabla.Columns.Clear();
+                AdatTabla.Rows.Clear();
+                AdatTabla.Columns.Add("ID");
+                AdatTabla.Columns.Add("Üzemóra");
+                AdatTabla.Columns.Add("Dátum");
+                AdatTabla.Columns.Add("Státusz");
 
-                AdatokÜzemóra = Funkció.Eszterga_ÜzemóraFeltölt();
+                AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
 
-                AdatTábla.Rows.Clear();
+                AdatTabla.Rows.Clear();
 
-                foreach (Adat_Eszterga_Üzemóra rekord in AdatokÜzemóra)
+                foreach (Adat_Eszterga_Uzemora rekord in AdatokUzemora)
                 {
-                    DataRow Soradat = AdatTábla.NewRow();
+                    DataRow Soradat = AdatTabla.NewRow();
                     Soradat["ID"] = rekord.ID;
-                    Soradat["Üzemóra"] = rekord.Üzemóra;
+                    Soradat["Üzemóra"] = rekord.Uzemora;
                     Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
                     Soradat["Státusz"] = rekord.Státus ? "Törölt" : "Aktív";
 
-                    AdatTábla.Rows.Add(Soradat);
+                    AdatTabla.Rows.Add(Soradat);
                 }
 
-                Tábla.DataSource = AdatTábla;
-                OszlopSzélesség();
+                Tábla.DataSource = AdatTabla;
+                OszlopSzelesseg();
                 Tábla.Visible = true;
                 Tábla.ClearSelection();
             }
@@ -118,32 +134,57 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void OszlopSzélesség()
+
+        /// <summary>
+        /// Beállítja az oszlopok szélességét a táblázatban az átlátható megjelenítés érdekében.
+        /// </summary>
+        private void OszlopSzelesseg()
         {
-            Tábla.Columns["ID"].Width = 50;
-            Tábla.Columns["Üzemóra"].Width = 159;
-            Tábla.Columns["Dátum"].Width = 110;
+            Tábla.Columns["ID"].Width = 60;
+            Tábla.Columns["Üzemóra"].Width = 172;
+            Tábla.Columns["Dátum"].Width = 120;
             Tábla.Columns["Státusz"].Width = 100;
         }
+
+        /// <summary>
+        /// A törölt sorokat piros háttérrel és áthúzott betűstílussal jeleníti meg.
+        /// Minden más sor fehér háttérrel és normál stílussal formázódik.
+        /// </summary>
         private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (Tábla.Columns[e.ColumnIndex].Name == "Státusz" && e.Value is string státusz)
+            try
             {
-                DataGridViewRow sor = Tábla.Rows[e.RowIndex];
-                if (státusz == "Törölt")
+                if (Tábla.Columns[e.ColumnIndex].Name == "Státusz" && e.Value is string státusz)
                 {
-                    sor.DefaultCellStyle.BackColor = Color.IndianRed;
-                    sor.DefaultCellStyle.ForeColor = Color.Black;
-                    sor.DefaultCellStyle.Font = new Font(Tábla.DefaultCellStyle.Font, FontStyle.Strikeout);
-                }
-                else
-                {
-                    sor.DefaultCellStyle.BackColor = Color.White;
-                    sor.DefaultCellStyle.ForeColor = Color.Black;
-                    sor.DefaultCellStyle.Font = new Font(Tábla.DefaultCellStyle.Font, FontStyle.Regular);
+                    DataGridViewRow sor = Tábla.Rows[e.RowIndex];
+                    if (státusz == "Törölt")
+                    {
+                        sor.DefaultCellStyle.BackColor = Color.IndianRed;
+                        sor.DefaultCellStyle.ForeColor = Color.Black;
+                        sor.DefaultCellStyle.Font = new Font(Tábla.DefaultCellStyle.Font, FontStyle.Strikeout);
+                    }
+                    else
+                    {
+                        sor.DefaultCellStyle.BackColor = Color.White;
+                        sor.DefaultCellStyle.ForeColor = Color.Black;
+                        sor.DefaultCellStyle.Font = new Font(Tábla.DefaultCellStyle.Font, FontStyle.Regular);
+                    }
                 }
             }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+        /// <summary>
+        /// Sor kijelölésekor betölti annak adatait a szerkesztőmezőkbe (üzemóra, dátum, státusz).
+        /// </summary>
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -169,14 +210,23 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Metodusok, Gombok
+
+        /// <summary>
+        /// Előkészíti az űrlapot egy új üzemóra adat rögzítéséhez: törli a mezők értékeit, beállítja a mai dátumot.
+        /// </summary>
         private void Btn_ÚjFelvétel_Click(object sender, EventArgs e)
         {
             Tábla.ClearSelection();
             TxtBxÜzem.Text = string.Empty;
             TxtBxÜzem.Focus();
-            DtmPckrDátum.Value = MaiDatum;
+            DtmPckrDátum.Value = DateTime.Today;
             ChckBxStátus.Checked = false;
         }
+
+        /// <summary>
+        /// A kijelölt sor adatait módosítja vagy új rekordot hoz létre, ha nincs kiválasztott sor.
+        /// Előtte érvényesíti az adatokat, majd a változásokat adatbázisba menti, és frissíti a táblát.
+        /// </summary>
         private void Btn_Módosít_Click(object sender, EventArgs e)
         {
             try
@@ -188,15 +238,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 DateTime UjDatum = DtmPckrDátum.Value.Date;
                 bool UjStatus = ChckBxStátus.Checked;
 
-                AdatokÜzemóra = Funkció.Eszterga_ÜzemóraFeltölt();
+                AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
 
-                if (!DátumEllenőrzés(UjDatum)) return;
+                if (!DatumEllenorzes(UjDatum)) return;
 
                 if (Tábla.SelectedRows.Count == 0)
-                { if (!ÚjRekordHozzáadása(UjDatum, UjUzemora, UjStatus)) return; }
+                { if (!UjRekordHozzaadasa(UjDatum, UjUzemora, UjStatus)) return; }
 
                 else
-                { if (MeglévőRekordMódosítása(UjDatum, UjUzemora, UjStatus)) return; }
+                { if (MeglevoRekordModositasa(UjDatum, UjUzemora, UjStatus)) return; }
+                TablaListazas();
             }
             catch (HibásBevittAdat ex)
             {
@@ -208,140 +259,223 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Az üzemóra táblázat tartalmát Excel fájlba exportálja és megnyitja.
+        /// A fájl nevét automatikusan generálja, a felhasználó kiválaszthatja a mentési helyet.
+        /// </summary>
         private void Btn_Excel_Click(object sender, EventArgs e)
         {
-            if (Tábla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
-            string fájlexc;
-            SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+            try
             {
-                InitialDirectory = "MyDocuments",
-                Title = "Teljes tartalom mentése Excel fájlba",
-                FileName = $"Eszterga_Karbantartás_Üzemórák_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
-                Filter = "Excel |*.xlsx"
-            };
-            if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                fájlexc = SaveFileDialog1.FileName;
-            else
-                return;
-            fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
+                if (Tábla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
+                string fájlexc;
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Teljes tartalom mentése Excel fájlba",
+                    FileName = $"Eszterga_Karbantartás_Üzemórák_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
 
-            MyE.EXCELtábla(fájlexc, Tábla, false);
-            MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyE.EXCELtábla(fájlexc, Tábla, false);
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            MyE.Megnyitás($"{fájlexc}.xlsx");
+                MyE.Megnyitás($"{fájlexc}.xlsx");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-        private bool DátumEllenőrzés(DateTime UjDatum)
+
+        /// <summary>
+        /// Ellenőrzi, hogy a megadott dátum nem jövőbeli-e.
+        /// </summary>
+        private bool DatumEllenorzes(DateTime UjDatum)
         {
-            if (UjDatum > MaiDatum)
+            if (UjDatum > DateTime.Today)
             {
                 MessageBox.Show("Nem lehet jövőbeli dátumot beállítani", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
             return true;
         }
-        private bool ÚjRekordHozzáadása(DateTime UjDatum, long UjUzemora, bool UjStatus)
-        {
-            if (AdatokÜzemóra.Any(a => a.Dátum.Date == UjDatum && !a.Státus))
-            {
-                MessageBox.Show("Az adott dátumhoz már létezik rekord. Nem hozható létre új.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
 
-            long ElozoUzemora = (from a in AdatokÜzemóra
-                                 where a.Dátum < UjDatum && a.Státus == false
-                                 orderby a.Dátum descending
-                                 select a.Üzemóra).FirstOrDefault();
-
-            long UtanaUzemora = (from a in AdatokÜzemóra
-                                 where a.Dátum > UjDatum && a.Státus == false
-                                 orderby a.Dátum
-                                 select a.Üzemóra).FirstOrDefault();
-
-            if (UjUzemora <= ElozoUzemora || (UtanaUzemora != 0 && UjUzemora >= UtanaUzemora))
-            {
-                MessageBox.Show($"Az üzemóra értéknek az előző: {ElozoUzemora} és következő: {UtanaUzemora} közé kell esnie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
-
-
-
-            Adat_Eszterga_Üzemóra ADAT = new Adat_Eszterga_Üzemóra(0,
-                                              UjUzemora,
-                                              UjDatum,
-                                              UjStatus);
-            KézÜzemóra.Rögzítés(ADAT);
-
-            MessageBox.Show("Új rekord sikeresen létrehozva.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return true;
-        }
-        private bool MeglévőRekordMódosítása(DateTime UjDatum, long UjUzemora, bool UjStatus)
-        {
-            DataGridViewRow KivalasztottSor = Tábla.SelectedRows[0];
-            int AktivID = KivalasztottSor.Cells[0].Value.ToÉrt_Int();
-
-            if (!UzemoraSzamEllenorzes(UjUzemora, UjDatum))
-                return false;
-
-            if (!TáblaEllenőrzés(AktivID, UjUzemora, UjDatum, UjStatus))
-                return false;
-
-            Adat_Eszterga_Üzemóra VanID = AdatokÜzemóra.FirstOrDefault(a => a.ID == AktivID);
-
-            if (VanID == null)
-                return false;
-
-            DateTime EredetiDatum = VanID.Dátum;
-            long EredetiUzemora = VanID.Üzemóra;
-            bool EredetiStatusz = VanID.Státus;
-
-            if (EredetiDatum != MaiDatum && EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
-            {
-                if (UjStatus)
-                    KézÜzemóra.Törlés(new Adat_Eszterga_Üzemóra(AktivID));
-                else
-                    KézÜzemóra.Rögzítés(new Adat_Eszterga_Üzemóra(0, EredetiUzemora, EredetiDatum, false));
-            }
-            else
-            {
-                if (UjStatus && EredetiDatum == MaiDatum)
-                    UtolsoUzemoraTorles(AktivID);
-
-                else
-                {
-                    KézÜzemóra.Törlés(new Adat_Eszterga_Üzemóra(AktivID));
-                    KézÜzemóra.Rögzítés(new Adat_Eszterga_Üzemóra(0, UjUzemora, UjDatum, false));
-                    MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            TáblaListázás();
-            Frissít_MűveletTáblázat(EredetiDatum, UjDatum, EredetiUzemora, UjUzemora);
-            Eszterga_Változás?.Invoke();
-            return true;
-        }
-        private void Frissít_MűveletTáblázat(DateTime EredetiDatum, DateTime UjDatum, long EredetiUzemora, long UjUzemora)
-        {
-            AdatokMűvelet = Funkció.Eszterga_KarbantartasFeltölt();
-            if (UjDatum != EredetiDatum || UjUzemora != EredetiUzemora)
-            {
-                List<Adat_Eszterga_Műveletek> rekord = (from a in AdatokMűvelet
-                                                        where (a.Utolsó_Dátum == EredetiDatum || a.Utolsó_Üzemóra_Állás == EredetiUzemora)
-                                                        && a.Státus != true
-                                                        select a).ToList();
-
-                foreach (Adat_Eszterga_Műveletek Muvelet in rekord)
-                {
-                    Adat_Eszterga_Műveletek ADAT = new Adat_Eszterga_Műveletek(UjDatum, UjUzemora, Muvelet.ID);
-                    KézMűveletek.Módosítás(ADAT);
-                }
-            }
-            else
-                return;
-        }
-        private bool TáblaEllenőrzés(int AktivID, long UjUzemora, DateTime UjDatum, bool UjStatus)
+        /// <summary>
+        /// Új üzemóra rekordot hoz létre, ha az adott dátumhoz még nem létezik aktív bejegyzés,
+        /// és az üzemóra értéke megfelelő a környező rekordokhoz képest.
+        /// </summary>
+        private bool UjRekordHozzaadasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
         {
             try
             {
-                Adat_Eszterga_Üzemóra AktivRekord = AdatokÜzemóra.FirstOrDefault(a => a.Dátum == UjDatum && !a.Státus);
+                if (AdatokUzemora.Any(a => a.Dátum.Date == UjDatum && !a.Státus))
+                {
+                    MessageBox.Show("Az adott dátumhoz már létezik rekord. Nem hozható létre új.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+                long ElozoUzemora = (from a in AdatokUzemora
+                                     where a.Dátum < UjDatum && a.Státus == false
+                                     orderby a.Dátum descending
+                                     select a.Uzemora).FirstOrDefault();
+
+                long UtanaUzemora = (from a in AdatokUzemora
+                                     where a.Dátum > UjDatum && a.Státus == false
+                                     orderby a.Dátum
+                                     select a.Uzemora).FirstOrDefault();
+
+                if (UjUzemora <= ElozoUzemora || (UtanaUzemora != 0 && UjUzemora >= UtanaUzemora))
+                {
+                    MessageBox.Show($"Az üzemóra értéknek az előző: {ElozoUzemora} és következő: {UtanaUzemora} közé kell esnie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+
+
+                Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
+                                                  UjUzemora,
+                                                  UjDatum,
+                                                  UjStatus);
+                KezUzemora.Rogzites(ADAT);
+
+                MessageBox.Show("Új rekord sikeresen létrehozva.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Módosítja a kiválasztott üzemóra rekordot.  
+        /// Érvényesítés után elvégzi a törlést és újrarögzítést, ha szükséges.
+        /// Az érintett karbantartási műveleteket is frissíti, ha az üzemóra vagy dátum változott.
+        /// </summary>
+        private bool MeglevoRekordModositasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
+        {
+            try
+            {
+                DataGridViewRow KivalasztottSor = Tábla.SelectedRows[0];
+                int AktivID = KivalasztottSor.Cells[0].Value.ToÉrt_Int();
+
+                if (!UzemoraSzamEllenorzes(UjUzemora, UjDatum))
+                    return false;
+
+                if (!TablaEllenorzes(AktivID, UjUzemora, UjDatum, UjStatus))
+                    return false;
+
+                Adat_Eszterga_Uzemora VanID = AdatokUzemora.FirstOrDefault(a => a.ID == AktivID);
+
+                if (VanID == null)
+                    return false;
+
+                DateTime EredetiDatum = VanID.Dátum;
+                long EredetiUzemora = VanID.Uzemora;
+                bool EredetiStatusz = VanID.Státus;
+
+                if (EredetiDatum != DateTime.Today && EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
+                {
+                    if (UjStatus)
+                        KezUzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
+                    else
+                        KezUzemora.Rogzites(new Adat_Eszterga_Uzemora(0, EredetiUzemora, EredetiDatum, false));
+                }
+                else
+                {
+                    if (UjStatus && EredetiDatum == DateTime.Today)
+                        UtolsoUzemoraTorles(AktivID);
+
+                    else
+                    {
+                        KezUzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
+                        KezUzemora.Rogzites(new Adat_Eszterga_Uzemora(0, UjUzemora, UjDatum, false));
+                    }
+                }
+                TablaListazas();
+                Frissit_MuveletTablazat(EredetiDatum, UjDatum, EredetiUzemora, UjUzemora);
+                Eszterga_Valtozas?.Invoke();
+                MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Frissíti a karbantartási műveletek utolsó üzemóra és dátum mezőit,
+        /// ha az üzemóra vagy dátum változott.
+        /// </summary>
+        private void Frissit_MuveletTablazat(DateTime EredetiDatum, DateTime UjDatum, long EredetiUzemora, long UjUzemora)
+        {
+            try
+            {
+                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
+                if (UjDatum != EredetiDatum || UjUzemora != EredetiUzemora)
+                {
+                    List<Adat_Eszterga_Muveletek> rekord = (from a in AdatokMuvelet
+                                                            where (a.Utolsó_Dátum == EredetiDatum || a.Utolsó_Üzemóra_Állás == EredetiUzemora)
+                                                            && a.Státus != true
+                                                            select a).ToList();
+
+                    List<Adat_Eszterga_Muveletek> ModLista = new List<Adat_Eszterga_Muveletek>();
+
+                    foreach (Adat_Eszterga_Muveletek Muvelet in rekord)
+                        ModLista.Add(new Adat_Eszterga_Muveletek(UjDatum, UjUzemora, Muvelet.ID));
+                }
+                else
+                    return;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Ellenőrzi, hogy az adott napon létezik-e másik aktív rekord,  
+        /// illetve történt-e valós adatváltozás a módosításhoz képest.
+        /// </summary>
+        private bool TablaEllenorzes(int AktivID, long UjUzemora, DateTime UjDatum, bool UjStatus)
+        {
+            try
+            {
+                Adat_Eszterga_Uzemora AktivRekord = AdatokUzemora.FirstOrDefault(a => a.Dátum == UjDatum && !a.Státus);
 
                 if (UjStatus == false && AktivRekord != null && AktivRekord.ID != AktivID)
                 {
@@ -350,9 +484,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     return false;
                 }
 
-                Adat_Eszterga_Üzemóra KivalasztottRekord = AdatokÜzemóra.FirstOrDefault(a => a.ID == AktivID);
+                Adat_Eszterga_Uzemora KivalasztottRekord = AdatokUzemora.FirstOrDefault(a => a.ID == AktivID);
                 if (KivalasztottRekord != null &&
-                    KivalasztottRekord.Üzemóra == UjUzemora &&
+                    KivalasztottRekord.Uzemora == UjUzemora &&
                     KivalasztottRekord.Dátum == UjDatum &&
                     KivalasztottRekord.Státus == UjStatus)
                 {
@@ -366,69 +500,123 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
+                throw;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                throw;
             }
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy az új üzemóra érték pozitív szám-e,  
+        /// és hogy logikusan illeszkedik-e a környező (időben előtte és utána lévő) rekordok közé.
+        /// </summary>
         private bool UzemoraSzamEllenorzes(long UjUzemora, DateTime UjDatum)
         {
-            if (UjUzemora <= 0)
+            try
             {
-                MessageBox.Show("Az üzemóra értékének pozitív egész számnak kell lennie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
+                if (UjUzemora <= 0)
+                {
+                    MessageBox.Show("Az üzemóra értékének pozitív egész számnak kell lennie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+                Adat_Eszterga_Uzemora ElozoRekord = AdatokUzemora
+                    .Where(a => a.Dátum < UjDatum && !a.Státus)
+                    .OrderByDescending(a => a.Dátum)
+                    .FirstOrDefault();
+
+                long ElozoUzemora = ElozoRekord?.Uzemora ?? int.MinValue;
+
+                Adat_Eszterga_Uzemora UtanaRekord = AdatokUzemora
+                    .Where(a => a.Dátum > UjDatum && !a.Státus)
+                    .OrderBy(a => a.Dátum)
+                    .FirstOrDefault();
+
+                long UtanaUzemora = UtanaRekord?.Uzemora ?? int.MaxValue;
+
+                if (UjUzemora <= ElozoUzemora || UjUzemora >= UtanaUzemora)
+                {
+                    MessageBox.Show($"Az üzemóra értéknek az előző: {(ElozoRekord != null ? ElozoUzemora.ToStrTrim() : "nincs")}" +
+                        $" és következő: {(UtanaRekord != null ? UtanaUzemora.ToStrTrim() : "nincs")} közé kell esnie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
+                return true;
             }
-
-            Adat_Eszterga_Üzemóra ElozoRekord = AdatokÜzemóra
-                .Where(a => a.Dátum < UjDatum && !a.Státus)
-                .OrderByDescending(a => a.Dátum)
-                .FirstOrDefault();
-
-            long ElozoUzemora = ElozoRekord?.Üzemóra ?? int.MinValue;
-
-            Adat_Eszterga_Üzemóra UtanaRekord = AdatokÜzemóra
-                .Where(a => a.Dátum > UjDatum && !a.Státus)
-                .OrderBy(a => a.Dátum)
-                .FirstOrDefault();
-
-            long UtanaUzemora = UtanaRekord?.Üzemóra ?? int.MaxValue;
-
-            if (UjUzemora <= ElozoUzemora || UjUzemora >= UtanaUzemora)
+            catch (HibásBevittAdat ex)
             {
-                MessageBox.Show($"Az üzemóra értéknek az előző: {(ElozoRekord != null ? ElozoUzemora.ToStrTrim() : "nincs")}" +
-                    $" és következő: {(UtanaRekord != null ? UtanaUzemora.ToStrTrim() : "nincs")} közé kell esnie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                throw;
             }
-
-            return true;
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
+
+        /// <summary>
+        /// Törli a kiválasztott, mai napra vonatkozó üzemóra rekordot,  
+        /// majd új adatot kér be a felhasználótól a segédablakban.
+        /// Ha a felhasználó megszakítja a rögzítést, bezárja az összes kapcsolódó ablakot.
+        /// </summary>
         private void UtolsoUzemoraTorles(int AktivID)
         {
-            Adat_Eszterga_Üzemóra ADAT = new Adat_Eszterga_Üzemóra(AktivID);
-            KézÜzemóra.Törlés(ADAT);
-
-            using (Ablak_Eszterga_Karbantartás_Segéd SegedAblak = new Ablak_Eszterga_Karbantartás_Segéd())
+            try
             {
-                if (SegedAblak.ShowDialog() == DialogResult.OK)
-                    MessageBox.Show("Mai napra vonatkozó új üzemóra sikeresen mentve.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                else
-                    EsztergaAblakokBezárása();
+                Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(AktivID);
+                KezUzemora.Torles(ADAT);
+
+                using (Ablak_Eszterga_Karbantartás_Segéd SegedAblak = new Ablak_Eszterga_Karbantartás_Segéd())
+                {
+                    if (SegedAblak.ShowDialog() == DialogResult.OK)
+                        MessageBox.Show("Mai napra vonatkozó új üzemóra sikeresen mentve.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    else
+                        EsztergaAblakokBezarasa();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void EsztergaAblakokBezárása()
+
+        /// <summary>
+        /// Bezárja az összes megnyitott esztergához kapcsolódó ablakot a programból,  
+        /// hogy biztosítsa a következő adatbevitel tiszta környezetét.
+        /// </summary>
+        private void EsztergaAblakokBezarasa()
         {
-            foreach (Form NyitottAblak in Application.OpenForms.Cast<Form>().ToArray())
+            try
             {
-                if (NyitottAblak is Ablak_Eszterga_Karbantartás ||
-                    NyitottAblak is Ablak_Eszterga_Karbantartás_Módosít ||
-                    NyitottAblak is Ablak_Eszterga_Karbantartás_Üzemóra ||
-                    NyitottAblak is Ablak_Eszterga_Karbantartás_Segéd
-                    )
-                    NyitottAblak.Close();
+                foreach (Form NyitottAblak in Application.OpenForms.Cast<Form>().ToArray())
+                {
+                    if (NyitottAblak is Ablak_Eszterga_Karbantartás ||
+                        NyitottAblak is Ablak_Eszterga_Karbantartás_Módosít ||
+                        NyitottAblak is Ablak_Eszterga_Karbantartás_Üzemóra ||
+                        NyitottAblak is Ablak_Eszterga_Karbantartás_Segéd
+                        )
+                        NyitottAblak.Close();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion

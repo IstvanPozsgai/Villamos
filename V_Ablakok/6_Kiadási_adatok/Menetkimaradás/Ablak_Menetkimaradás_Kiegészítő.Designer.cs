@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Menetkimaradás_Kiegészítő));
-            this.főholtart = new V_MindenEgyéb.MyProgressbar();
-            this.alholtart = new V_MindenEgyéb.MyProgressbar();
+            this.főholtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.alholtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Label5 = new System.Windows.Forms.Label();
             this.Label4 = new System.Windows.Forms.Label();
             this.Label3 = new System.Windows.Forms.Label();
@@ -42,6 +43,7 @@
             this.Telephely_gomb = new System.Windows.Forms.Button();
             this.dátumig = new System.Windows.Forms.DateTimePicker();
             this.dátumtól = new System.Windows.Forms.DateTimePicker();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // főholtart
@@ -184,6 +186,10 @@
             this.dátumtól.Size = new System.Drawing.Size(103, 26);
             this.dátumtól.TabIndex = 23;
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
+            // 
             // Ablak_Menetkimaradás_Kiegészítő
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -232,5 +238,6 @@
         internal System.Windows.Forms.Button Telephely_gomb;
         internal System.Windows.Forms.DateTimePicker dátumig;
         internal System.Windows.Forms.DateTimePicker dátumtól;
+        private System.Windows.Forms.Timer timer1;
     }
 }

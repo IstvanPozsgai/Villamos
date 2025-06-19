@@ -208,7 +208,7 @@ namespace Villamos
             try
             {
                 Cmbtelephely.Items.Clear();
-                foreach (string Elem in Listák.TelephelyLista_Jármű())
+                foreach (string Elem in Listák.TelephelyLista_Rezsi())
                     Cmbtelephely.Items.Add(Elem);
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
                 { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
@@ -1090,10 +1090,8 @@ namespace Villamos
                 AdatokTörzs = KézTörzs.Lista_Adatok();
                 List<Adat_Rezsi_Törzs> Adatok = AdatokTörzs.Where(a => a.Státusz == 0).ToList();
 
-                if (ListaCsoportCombo.Text.Trim() != "")
-                    Adatok = Adatok.Where(a => a.Csoport == ListaCsoportCombo.Text.Trim()).ToList();
-                if (Lista_megnevezés_szűrő.Text.Trim() != "")
-                    Adatok = Adatok.Where(a => a.Megnevezés.ToUpper().Contains(Lista_megnevezés_szűrő.Text.Trim().ToUpper())).ToList();
+                if (ListaCsoportCombo.Text.Trim() != "") Adatok = Adatok.Where(a => a.Csoport == ListaCsoportCombo.Text.Trim()).ToList();
+                if (Lista_megnevezés_szűrő.Text.Trim() != "") Adatok = Adatok.Where(a => a.Megnevezés.ToUpper().Contains(Lista_megnevezés_szűrő.Text.Trim().ToUpper())).ToList();
 
                 List<string> telephelyek = new List<string>();
                 for (int e = 0; e < Cmbtelephely.Items.Count; e++)

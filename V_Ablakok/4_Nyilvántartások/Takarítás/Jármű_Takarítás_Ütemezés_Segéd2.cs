@@ -107,8 +107,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
                             Segéd_tábla.Rows[3].Cells[i + 2].Value = AblakTakFő.Tábla.Rows[j].Cells[13].Value;
                             Segéd_tábla.Rows[4].Cells[i + 2].Value = AblakTakFő.Tábla.Rows[j].Cells[16].Value;
 
-                            T5C5Előterv = AblakTakFő.Tábla.Rows[j].Cells[29].Value.ToString();
-
+                            if (AblakTakFő.Tábla.Rows[j].Cells[29].Value != null) T5C5Előterv = AblakTakFő.Tábla.Rows[j].Cells[29].Value.ToString();
                             switch (i)
                             {
                                 case 0: T5C5_1.Text = T5C5Előterv ?? ""; break;

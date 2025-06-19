@@ -19,7 +19,7 @@ namespace Villamos.Kezelők
             hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Típus}.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Telep(hely, Telephely);
             string szöveg = $"SELECT * FROM {Telephely}";
-            if (!Adatbázis.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Technológia_Telep(hely, Telephely);
+            if (!MyA.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Technológia_Telep(hely, Telephely);
         }
 
         public List<Adat_Technológia_Változat> Lista_Adatok(string Típus, string Telephely)

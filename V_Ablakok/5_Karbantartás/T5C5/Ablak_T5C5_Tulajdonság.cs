@@ -5,11 +5,11 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Ablakok.T5C5;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -60,11 +60,6 @@ namespace Villamos
 
         private void Tulajdonság_T5C5_Load(object sender, EventArgs e)
         {
-        }
-
-        private void Ablak_T5C5_Tulajdonság_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Új_Ablak_PDF_Tallózó?.Close();
         }
 
         private void Telephelyekfeltöltése()
@@ -375,7 +370,6 @@ namespace Villamos
                 Alap_Adatok();
                 E2_Vizsgálat();
                 Előírt_Szerelvény_kiir();
-                ÜzembehelyezésiPDF.Visible = Üzembehelyzés(Pályaszám.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -398,7 +392,6 @@ namespace Villamos
             Vizsgálati_text.Text = "";
             Főmérnökség_text.Text = "";
             Járműtípus_text.Text = "";
-            ÜzembehelyezésiPDF.Visible = false;
         }
 
         private void E2_Vizsgálat()
@@ -560,25 +553,6 @@ namespace Villamos
                 Elő_Szerelvény_text.Text += Szerel.Kocsi5.Trim() != "_" ? "-" + Szerel.Kocsi5.Trim() : "";
                 Elő_Szerelvény_text.Text += Szerel.Kocsi6.Trim() != "_" ? "-" + Szerel.Kocsi6.Trim() : "";
             }
-        }
-
-        Ablak_PDF_Tallózó Új_Ablak_PDF_Tallózó;
-        private void ÜzembehelyezésiPDF_Click(object sender, EventArgs e)
-        {
-            Új_Ablak_PDF_Tallózó?.Close();
-
-            string hely = Application.StartupPath + @"\Főmérnökség\Jegyzőkönyvek\";
-
-
-            Új_Ablak_PDF_Tallózó = new Ablak_PDF_Tallózó(hely, Pályaszám.Text.Trim());
-            Új_Ablak_PDF_Tallózó.FormClosed += Ablak_PDF_Tallózó_Closed;
-            Új_Ablak_PDF_Tallózó.StartPosition = FormStartPosition.CenterScreen;
-            Új_Ablak_PDF_Tallózó.Show();
-        }
-
-        private void Ablak_PDF_Tallózó_Closed(object sender, FormClosedEventArgs e)
-        {
-            Új_Ablak_PDF_Tallózó = null;
         }
         #endregion
 
@@ -1447,7 +1421,7 @@ namespace Villamos
 
 
         #region SAP betöltés
-        private void SAP_adatok_Click(object sender, EventArgs e)
+        private async void SAP_adatok_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1469,13 +1443,10 @@ namespace Villamos
 
                 timer1.Enabled = true;
                 Holtart.Be();
-                SZál_KM_Beolvasás(() =>
-                { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                    timer1.Enabled = false;
-                    Holtart.Ki();
-                    MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                });
-
+                await Task.Run(() => SAP_Adatokbeolvasása.Km_beolvasó(_fájlexc, "T5C5"));
+                timer1.Enabled = false;
+                Holtart.Ki();
+                MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1486,17 +1457,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void SZál_KM_Beolvasás(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                //beolvassuk az adatokat
-                SAP_Adatokbeolvasása_km.Km_beolvasó(_fájlexc);
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
         }
 
         private void Timer1_Tick(object sender, EventArgs e)

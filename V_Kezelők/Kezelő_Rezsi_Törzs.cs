@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "csavarhúzó";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsi\rezsitörzs.mdb";
+        readonly string Táblanév = "törzs";
 
         public Kezelő_Rezsi_Törzs()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Rezsi_Törzs> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM törzs ORDER BY Azonosító";
+            string szöveg = $"SELECT * FROM {Táblanév} ORDER BY Azonosító";
             List<Adat_Rezsi_Törzs> Adatok = new List<Adat_Rezsi_Törzs>();
             Adat_Rezsi_Törzs Adat;
 
@@ -56,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO törzs (azonosító, megnevezés, Méret, státus, csoport ) VALUES (";
+                string szöveg = $"INSERT INTO {Táblanév} (azonosító, megnevezés, Méret, státus, csoport ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Megnevezés}', ";
                 szöveg += $"'{Adat.Méret}', ";
@@ -79,7 +80,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE törzs SET ";
+                string szöveg = $"UPDATE {Táblanév} SET ";
                 szöveg += $"megnevezés='{Adat.Megnevezés}', ";
                 szöveg += $"Méret='{Adat.Méret}', ";
                 szöveg += $"csoport='{Adat.Csoport}', ";
@@ -115,8 +116,8 @@ namespace Villamos.Kezelők
                                                 rekord.Csoport);
                         Rögzítés(Adat);
 
-                        string szöveg = $"DELETE FROM törzs WHERE Azonosító='{rekord.Azonosító}'";
-                        Adatbázis.ABtörlés(hely, jelszó, szöveg);
+                        string szöveg = $"DELETE FROM {Táblanév} WHERE Azonosító='{rekord.Azonosító}'";
+                        MyA.ABtörlés(hely, jelszó, szöveg);
                     }
                 }
 

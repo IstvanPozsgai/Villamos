@@ -1121,30 +1121,31 @@ namespace Villamos
                         MyE.Háttérszín(MyE.Oszlopnév(i + 2) + "2:" + MyE.Oszlopnév(i + 2) + Tábla_elő.ColumnCount.ToString(), vasárnap);
 
                     Holtart.Lép();
-
-                    előzőHónap = DateTime.Parse(Tábla_elő.Rows[0].Cells[0].Value.ToString());
-                    int blokkeleje = 2;
-                    // hónap nevek kiírása
-
-                    for (int iii = 0; iii < Tábla_elő.Rows.Count - 6; iii++)
-                    {
-                        if (előzőHónap.ToString("yyyy MMM") != DateTime.Parse(Tábla_elő.Rows[iii].Cells[0].Value.ToString()).ToString("yyyy MMM"))
-                        {
-                            MyE.Egyesít(munkalap, MyE.Oszlopnév(blokkeleje) + "1:" + MyE.Oszlopnév(iii + 1) + "1");
-                            MyE.Kiir(előzőHónap.ToString("yyyy MMM"), MyE.Oszlopnév(blokkeleje) + "1");
-                            előzőHónap = DateTime.Parse(Tábla_elő.Rows[iii].Cells[0].Value.ToString());
-                            blokkeleje = iii + 2;
-                        }
-                    }
-                    // utolsó hónap
-                    DateTime iidát = DateTime.Parse(Tábla_elő.Rows[Tábla_elő.Rows.Count - 6].Cells[0].Value.ToString());
-                    if (előzőHónap.ToString("yyyy MMM") == DateTime.Parse(Tábla_elő.Rows[Tábla_elő.Rows.Count - 6].Cells[0].Value.ToString()).ToString("yyyy MMM"))
-                    {
-                        MyE.Egyesít(munkalap, MyE.Oszlopnév(blokkeleje) + "1:" + MyE.Oszlopnév(Tábla_elő.Rows.Count - 4) + "1");
-                        MyE.Kiir(előzőHónap.ToString("yyyy MMM"), MyE.Oszlopnév(blokkeleje) + "1");
-                    }
-                    Holtart.Lép();
                 }
+
+                előzőHónap = DateTime.Parse(Tábla_elő.Rows[0].Cells[0].Value.ToString());
+                int blokkeleje = 2;
+                // hónap nevek kiírása
+
+                for (int iii = 0; iii < Tábla_elő.Rows.Count - 6; iii++)
+                {
+                    if (előzőHónap.ToString("yyyy MMM") != DateTime.Parse(Tábla_elő.Rows[iii].Cells[0].Value.ToString()).ToString("yyyy MMM"))
+                    {
+                        MyE.Egyesít(munkalap, MyE.Oszlopnév(blokkeleje) + "1:" + MyE.Oszlopnév(iii + 1) + "1");
+                        MyE.Kiir(előzőHónap.ToString("yyyy MMM"), MyE.Oszlopnév(blokkeleje) + "1");
+                        előzőHónap = DateTime.Parse(Tábla_elő.Rows[iii].Cells[0].Value.ToString());
+                        blokkeleje = iii + 2;
+                    }
+                }
+                // utolsó hónap
+                DateTime iidát = DateTime.Parse(Tábla_elő.Rows[Tábla_elő.Rows.Count - 6].Cells[0].Value.ToString());
+                if (előzőHónap.ToString("yyyy MMM") == DateTime.Parse(Tábla_elő.Rows[Tábla_elő.Rows.Count - 6].Cells[0].Value.ToString()).ToString("yyyy MMM"))
+                {
+                    MyE.Egyesít(munkalap, MyE.Oszlopnév(blokkeleje) + "1:" + MyE.Oszlopnév(Tábla_elő.Rows.Count - 4) + "1");
+                    MyE.Kiir(előzőHónap.ToString("yyyy MMM"), MyE.Oszlopnév(blokkeleje) + "1");
+                }
+                Holtart.Lép();
+
 
                 // kiírjuk  a pályaszámokat
                 int sor = 3;
