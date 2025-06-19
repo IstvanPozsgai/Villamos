@@ -74,13 +74,20 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Torles(Adat_Eszterga_Muveletek Adat, bool torles)
+        public void Torles(List<Adat_Eszterga_Muveletek> Adatok, bool torles)
         {
             try
             {
-                string oszlop = torles ? "Státus=True" : "Megjegyzés=NULL";
-                string szoveg = $"UPDATE {Tabla_Muvelet} SET {oszlop} WHERE ID={Adat.ID}";
-                MyA.ABMódosítás(hely, jelszo, szoveg);
+                List<string> sqlLista = new List<string>();
+
+                foreach (Adat_Eszterga_Muveletek rekord in Adatok)
+                {
+                    string oszlop = torles ? "Státus=True" : "Megjegyzés=NULL";
+                    string szoveg = $"UPDATE {Tabla_Muvelet} SET {oszlop} WHERE ID={rekord.ID}";
+                    sqlLista.Add(szoveg);
+                }
+
+                MyA.ABMódosítás(hely, jelszo, sqlLista);
             }
             catch (HibásBevittAdat ex)
             {
@@ -111,15 +118,23 @@ namespace Villamos.Villamos_Kezelők
             }
             return valasz;
         }
-        public void Modositas(Adat_Eszterga_Muveletek Adat)
+        public void Modositas(List<Adat_Eszterga_Muveletek> Adatok)
         {
             try
             {
-                string szoveg = $"UPDATE {Tabla_Muvelet} SET ";
-                szoveg += $"Utolsó_Dátum=#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, ";
-                szoveg += $"Utolsó_Üzemóra_Állás={Adat.Utolsó_Üzemóra_Állás} ";
-                szoveg += $"WHERE ID = {Adat.ID}";
-                MyA.ABMódosítás(hely, jelszo, szoveg);
+                List<string> sqlLista = new List<string>();
+
+                foreach (Adat_Eszterga_Muveletek rekord in Adatok)
+                {
+                    string szoveg = $"UPDATE {Tabla_Muvelet} SET ";
+                    szoveg += $"Utolsó_Dátum=#{rekord.Utolsó_Dátum:yyyy-MM-dd}#, ";
+                    szoveg += $"Utolsó_Üzemóra_Állás={rekord.Utolsó_Üzemóra_Állás} ";
+                    szoveg += $"WHERE ID = {rekord.ID}";
+
+                    sqlLista.Add(szoveg);
+                }
+
+                MyA.ABMódosítás(hely, jelszo, sqlLista);
             }
             catch (HibásBevittAdat ex)
             {
@@ -361,7 +376,7 @@ namespace Villamos.Villamos_Kezelők
         readonly string Tabla_Naplo = "Műveletek_Napló";
         public List<Adat_Eszterga_Muveletek_Naplo> Lista_Adatok()
         {
-           string szoveg = "SELECT * FROM Műveletek_Napló ORDER BY ID ";
+            string szoveg = "SELECT * FROM Műveletek_Napló ORDER BY ID ";
             List<Adat_Eszterga_Muveletek_Naplo> Adatok = new List<Adat_Eszterga_Muveletek_Naplo>();
             Adat_Eszterga_Muveletek_Naplo Adat;
 
@@ -395,21 +410,29 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
-        public void EsztergaNaplozas(Adat_Eszterga_Muveletek_Naplo Adat)
+        public void EsztergaNaplozas(List<Adat_Eszterga_Muveletek_Naplo> Adatok)
         {
             try
             {
-                string szoveg = $"INSERT INTO {Tabla_Naplo} (ID, Művelet, Mennyi_Dátum, Mennyi_Óra, Utolsó_Dátum, Utolsó_Üzemóra_Állás, [Megjegyzés], Rögzítő, Rögzítés_Dátuma) VALUES (";
-                szoveg += $"{Adat.ID}, ";
-                szoveg += $"'{Adat.Művelet}', ";
-                szoveg += $"{Adat.Mennyi_Dátum}, ";
-                szoveg += $"{Adat.Mennyi_Óra}, ";
-                szoveg += $"#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, ";
-                szoveg += $"{Adat.Utolsó_Üzemóra_Állás}, ";
-                szoveg += $"'{Adat.Megjegyzés}', ";
-                szoveg += $"'{Adat.Rögzítő}', ";
-                szoveg += $"#{Adat.Rögzítés_Dátuma:yyyy-MM-dd}#)";
-                MyA.ABMódosítás(hely, jelszo, szoveg);
+                List<string> sqlLista = new List<string>();
+
+                foreach (Adat_Eszterga_Muveletek_Naplo rekord in Adatok)
+                {
+                    string szoveg = $"INSERT INTO {Tabla_Naplo} (ID, Művelet, Mennyi_Dátum, Mennyi_Óra, Utolsó_Dátum, Utolsó_Üzemóra_Állás, [Megjegyzés], Rögzítő, Rögzítés_Dátuma) VALUES (";
+                    szoveg += $"{rekord.ID}, ";
+                    szoveg += $"'{rekord.Művelet}', ";
+                    szoveg += $"{rekord.Mennyi_Dátum}, ";
+                    szoveg += $"{rekord.Mennyi_Óra}, ";
+                    szoveg += $"#{rekord.Utolsó_Dátum:yyyy-MM-dd}#, ";
+                    szoveg += $"{rekord.Utolsó_Üzemóra_Állás}, ";
+                    szoveg += $"'{rekord.Megjegyzés}', ";
+                    szoveg += $"'{rekord.Rögzítő}', ";
+                    szoveg += $"#{rekord.Rögzítés_Dátuma:yyyy-MM-dd}#)";
+
+                    sqlLista.Add(szoveg);
+                }
+
+                MyA.ABMódosítás(hely, jelszo, sqlLista);
             }
             catch (HibásBevittAdat ex)
             {
@@ -421,7 +444,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Update(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
+        public void UtolagUpdate(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
         {
             try
             {

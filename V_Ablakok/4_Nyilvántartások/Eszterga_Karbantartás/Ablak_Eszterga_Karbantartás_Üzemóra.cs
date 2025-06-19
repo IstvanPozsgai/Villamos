@@ -140,9 +140,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void OszlopSzelesseg()
         {
-            Tábla.Columns["ID"].Width = 50;
-            Tábla.Columns["Üzemóra"].Width = 159;
-            Tábla.Columns["Dátum"].Width = 110;
+            Tábla.Columns["ID"].Width = 60;
+            Tábla.Columns["Üzemóra"].Width = 172;
+            Tábla.Columns["Dátum"].Width = 120;
             Tábla.Columns["Státusz"].Width = 100;
         }
 
@@ -409,7 +409,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     {
                         KezUzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
                         KezUzemora.Rogzites(new Adat_Eszterga_Uzemora(0, UjUzemora, UjDatum, false));
-                        //MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 TablaListazas();
@@ -447,11 +446,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                                                             && a.Státus != true
                                                             select a).ToList();
 
+                    List<Adat_Eszterga_Muveletek> ModLista = new List<Adat_Eszterga_Muveletek>();
+
                     foreach (Adat_Eszterga_Muveletek Muvelet in rekord)
-                    {
-                        Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(UjDatum, UjUzemora, Muvelet.ID);
-                        KezMuveletek.Modositas(ADAT);
-                    }
+                        ModLista.Add(new Adat_Eszterga_Muveletek(UjDatum, UjUzemora, Muvelet.ID));
                 }
                 else
                     return;
