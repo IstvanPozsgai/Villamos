@@ -8,11 +8,11 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Ciklus_idő { get; private set; }
         public string Ciklus_km1 { get; private set; }
         public string Ciklus_km2 { get; private set; }
-        public string Gyártó { get; private set; }
-        public int Év { get; private set; }
-        public string Ntípus { get; private set; }
-        public string Eszközszám { get; private set; }
-        public string Leltári_szám { get; private set; }
+        //public string Gyártó { get; private set; }
+        //public int Év { get; private set; }
+        //public string Ntípus { get; private set; }
+        //public string Eszközszám { get; private set; }
+        //public string Leltári_szám { get; private set; }
         public DateTime Vizsgálatdátuma_idő { get; private set; }
         public DateTime Vizsgálatdátuma_km { get; private set; }
         public string Vizsgálatfokozata { get; private set; }
@@ -24,17 +24,17 @@ namespace Villamos.Villamos_Adatszerkezet
         public DateTime Utolsórögzítés { get; private set; }
         public string Telephely { get; private set; }
 
-        public Adat_Nosztalgia_Állomány(string azonosító, string ciklus_idő, string ciklus_km1, string ciklus_km2, string gyártó, int év, string ntípus, string eszközszám, string leltári_szám, DateTime vizsgálatdátuma_idő, DateTime vizsgálatdátuma_km, string vizsgálatfokozata, string vizsgálatszáma_idő, string vizsgálatszáma_km, DateTime utolsóforgalminap, int km_v, int km_u, DateTime utolsórögzítés, string telephely)
+        public Adat_Nosztalgia_Állomány(string azonosító, string ciklus_idő, string ciklus_km1, string ciklus_km2,/* string gyártó, int év, string ntípus, string eszközszám, string leltári_szám, */DateTime vizsgálatdátuma_idő, DateTime vizsgálatdátuma_km, string vizsgálatfokozata, string vizsgálatszáma_idő, string vizsgálatszáma_km, DateTime utolsóforgalminap, int km_v, int km_u, DateTime utolsórögzítés, string telephely)
         {
             Azonosító = azonosító;
             Ciklus_idő = ciklus_idő;
             Ciklus_km1 = ciklus_km1;
             Ciklus_km2 = ciklus_km2;
-            Gyártó = gyártó;
-            Év = év;
-            Ntípus = ntípus;
-            Eszközszám = eszközszám;
-            Leltári_szám = leltári_szám;
+            //Gyártó = gyártó;
+            //Év = év;
+            //Ntípus = ntípus;
+            //Eszközszám = eszközszám;
+            //Leltári_szám = leltári_szám;
             Vizsgálatdátuma_idő = vizsgálatdátuma_idő;
             Vizsgálatdátuma_km = vizsgálatdátuma_km;
             Vizsgálatfokozata = vizsgálatfokozata;
