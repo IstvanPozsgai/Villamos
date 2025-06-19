@@ -1253,6 +1253,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                    sikeres = UjUtolagosNaplozas();
                 else if (TablaNaplo.SelectedRows.Count != 0)
                     sikeres = UtolagNaploModositas();
+
                 if (sikeres)
                 {
                     TablaNaploListazas();
