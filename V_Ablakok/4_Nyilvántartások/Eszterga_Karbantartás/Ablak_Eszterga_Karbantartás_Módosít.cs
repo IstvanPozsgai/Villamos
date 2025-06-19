@@ -345,6 +345,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 AdatTablaUtolag.Columns.Add("Sorszám");
                 AdatTablaUtolag.Columns.Add("Művelet");
                 AdatTablaUtolag.Columns.Add("Státusz");
+                AdatTablaUtolag.Columns.Add("Nap");
+                AdatTablaUtolag.Columns.Add("Óra");
 
                 AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
                 AdatTablaUtolag.Clear();
@@ -356,6 +358,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     Soradat["Sorszám"] = rekord.ID;
                     Soradat["Művelet"] = rekord.Művelet;
                     Soradat["Státusz"] = rekord.Státus ? "Törölt" : "Aktív";
+                    Soradat["Nap"] = rekord.Mennyi_Dátum;
+                    Soradat["Óra"] = rekord.Mennyi_Óra;
                     AdatTablaUtolag.Rows.Add(Soradat);
                 }
 
@@ -382,7 +386,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             TablaUtolagMuvelet.Columns["Sorszám"].Width = 100;
             TablaUtolagMuvelet.Columns["Művelet"].Width = 1160;
-            TablaUtolagMuvelet.Columns["Státusz"].Width = 100;
+            TablaUtolagMuvelet.Columns["Státusz"].Width = 100; 
+
+            TablaUtolagMuvelet.Columns["Nap"].Visible = false;
+            TablaUtolagMuvelet.Columns["Óra"].Visible = false;
         }
 
         #endregion
@@ -1241,14 +1248,16 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 if (DtmPckrUtolagos.Value.Date > DateTime.Today)
                     throw new HibásBevittAdat("A kiválasztott dátum nem lehet későbbi, mint a mai dátum.");
-
+                bool sikeres = false;
                 if (TablaUtolagMuvelet.SelectedRows.Count != 0)
-                    UjUtolagosNaplozas();
+                   sikeres = UjUtolagosNaplozas();
                 else if (TablaNaplo.SelectedRows.Count != 0)
-                    UtolagNaploModositas();
-
-                TablaNaploListazas();
-                MessageBox.Show("Sikeres rögzítés a naplóba.", "Rögzítve", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    sikeres = UtolagNaploModositas();
+                if (sikeres)
+                {
+                    TablaNaploListazas();
+                    MessageBox.Show("Sikeres rögzítés a naplóba.", "Rögzítve", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -1260,7 +1269,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void UtolagNaploModositas()
+        private bool UtolagNaploModositas()
         {
             try
             {
@@ -1302,18 +1311,21 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     KézNapló.UtolagUpdate(modositott, eredetiDatum);
                 }
+                return true;
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
-        private void UjUtolagosNaplozas()
+        private bool UjUtolagosNaplozas()
         {
             try
             {
@@ -1331,7 +1343,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 }
 
                 List<Adat_Eszterga_Muveletek_Naplo> naploLista = new List<Adat_Eszterga_Muveletek_Naplo>();
-
                 foreach (DataGridViewRow sor in TablaUtolagMuvelet.SelectedRows)
                 {
                     int id = sor.Cells[0].Value.ToÉrt_Int();
@@ -1345,14 +1356,16 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     bool VanE = AdatokNaplo.Any(a => a.ID == id && a.Utolsó_Dátum.Date == datum);
                     if (VanE)
                         throw new HibásBevittAdat("Erre a dátumra már rögzítve lett ez a feladat egyszer.");
+                    int MennyiNap = sor.Cells["Nap"].Value.ToÉrt_Int();
+                    int MennyiÓra = sor.Cells["Óra"].Value.ToÉrt_Int();
 
                     long utolsoUzemora = TxtBxUtolagUzemora.Text.ToÉrt_Long();
 
                     Adat_Eszterga_Muveletek_Naplo adat = new Adat_Eszterga_Muveletek_Naplo(
                         id,
                         rekord.Művelet,
-                        rekord.Mennyi_Dátum,
-                        rekord.Mennyi_Óra,
+                        MennyiNap,
+                        MennyiÓra,
                         datum,
                         utolsoUzemora,
                         megjegyzes,
@@ -1361,17 +1374,20 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     naploLista.Add(adat);
                 }
-
                 KézNapló.EsztergaNaplozas(naploLista);
+                return true;
             }
+
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
         private void TáblaNapló_SelectionChanged(object sender, EventArgs e)
