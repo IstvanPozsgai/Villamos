@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -14,7 +14,8 @@ namespace Villamos.Villamos_Ablakok
 
         public bool FőAl { get; private set; }
 
-        Kezelő_Épület_Adattábla kéz = new Kezelő_Épület_Adattábla();
+        readonly Kezelő_Épület_Adattábla Kéz = new Kezelő_Épület_Adattábla();
+
         List<Adat_Épület_Adattábla> Adatok;
 
         public Ablak_Épülettakarítás_kieg(string cmbtelephely, string helységKód, bool főal)
@@ -42,12 +43,8 @@ namespace Villamos.Villamos_Ablakok
             List2.Items.Clear();
             List2.Visible = true;
             string[] darabol = HelységKód.Split(' ');
-
-            string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Trim() + @"\Adatok\Épület\épülettörzs.mdb";
-            string jelszó = "seprűéslapát";
-            string szöveg = "SELECT * FROM Adattábla where státus=0 and kapcsolthelység='" + darabol[0].Trim() + "'";
-
-            Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+            Adatok = Kéz.Lista_Adatok(Cmbtelephely.Trim());
+            Adatok = Adatok.Where(a => a.Státus == false && a.Kapcsolthelység.Trim() == darabol[0].Trim()).ToList();
 
             foreach (Adat_Épület_Adattábla Elem in Adatok)
             {
@@ -56,20 +53,14 @@ namespace Villamos.Villamos_Ablakok
         }
 
 
-        void Al()
+        private void Al()
         {
+            List<Adat_Épület_Adattábla> Adatok = Kéz.Lista_Adatok(Cmbtelephely.Trim());
 
-            string hely = $@"{Application.StartupPath}\" + Cmbtelephely.Trim() + @"\Adatok\Épület\épülettörzs.mdb";
-            string jelszó = "seprűéslapát";
-            string szöveg = $"SELECT * FROM Adattábla";
-
-            Kezelő_Épület_Takarítás_Adattábla Kéz = new Kezelő_Épület_Takarítás_Adattábla();
-            List<Adat_Épület_Takarítás_Adattábla> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-            Adat_Épület_Takarítás_Adattábla Elem = (from a in Adatok
-                                                    where a.Státus == false
-                                                    && a.Helységkód == HelységKód.Trim()
-                                                    select a).FirstOrDefault ();
+            Adat_Épület_Adattábla Elem = (from a in Adatok
+                                          where a.Státus == false
+                                          && a.Helységkód == HelységKód.Trim()
+                                          select a).FirstOrDefault();
             string Eredmény = "";
             if (Elem != null) Eredmény = Elem.Kapcsolthelység;
             label1.Text = $"A {HelységKód.Trim()} helység {Eredmény}-hez van kapcsolva.";

@@ -87,6 +87,8 @@ namespace Villamos
             this.Tábla1 = new System.Windows.Forms.DataGridView();
             this.VizsA_Frisss = new System.Windows.Forms.Button();
             this.TabPage3 = new System.Windows.Forms.TabPage();
+            this.AlHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.FőHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel7 = new System.Windows.Forms.Panel();
             this.Kerékcsökkenés = new System.Windows.Forms.TextBox();
             this.Label39 = new System.Windows.Forms.Label();
@@ -118,8 +120,18 @@ namespace Villamos
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.FőHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.AlHoltart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.KövV2km = new System.Windows.Forms.TextBox();
+            this.Label35 = new System.Windows.Forms.Label();
+            this.KövV2_Sorszám = new System.Windows.Forms.TextBox();
+            this.KövV_Sorszám = new System.Windows.Forms.TextBox();
+            this.KövV2_számláló = new System.Windows.Forms.TextBox();
+            this.KövV2 = new System.Windows.Forms.TextBox();
+            this.KövV1km = new System.Windows.Forms.TextBox();
+            this.KövV = new System.Windows.Forms.TextBox();
+            this.Label33 = new System.Windows.Forms.Label();
+            this.Label32 = new System.Windows.Forms.Label();
+            this.Label31 = new System.Windows.Forms.Label();
+            this.Label30 = new System.Windows.Forms.Label();
             this.Panel2.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage4.SuspendLayout();
@@ -265,6 +277,18 @@ namespace Villamos
             // TabPage5
             // 
             this.TabPage5.BackColor = System.Drawing.Color.DarkOrange;
+            this.TabPage5.Controls.Add(this.KövV2km);
+            this.TabPage5.Controls.Add(this.Label35);
+            this.TabPage5.Controls.Add(this.KövV2_Sorszám);
+            this.TabPage5.Controls.Add(this.KövV_Sorszám);
+            this.TabPage5.Controls.Add(this.KövV2_számláló);
+            this.TabPage5.Controls.Add(this.KövV2);
+            this.TabPage5.Controls.Add(this.KövV1km);
+            this.TabPage5.Controls.Add(this.KövV);
+            this.TabPage5.Controls.Add(this.Label33);
+            this.TabPage5.Controls.Add(this.Label32);
+            this.TabPage5.Controls.Add(this.Label31);
+            this.TabPage5.Controls.Add(this.Label30);
             this.TabPage5.Controls.Add(this.Következő_V);
             this.TabPage5.Controls.Add(this.Vizsgfok_új);
             this.TabPage5.Controls.Add(this.Vizsg_sorszám_combo);
@@ -685,6 +709,32 @@ namespace Villamos
             this.TabPage3.TabIndex = 6;
             this.TabPage3.Text = "Előtervező";
             // 
+            // AlHoltart
+            // 
+            this.AlHoltart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.AlHoltart.BackColor = System.Drawing.Color.ForestGreen;
+            this.AlHoltart.ForeColor = System.Drawing.Color.SpringGreen;
+            this.AlHoltart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.AlHoltart.Location = new System.Drawing.Point(7, 176);
+            this.AlHoltart.Name = "AlHoltart";
+            this.AlHoltart.Size = new System.Drawing.Size(1121, 23);
+            this.AlHoltart.TabIndex = 175;
+            this.AlHoltart.Visible = false;
+            // 
+            // FőHoltart
+            // 
+            this.FőHoltart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.FőHoltart.BackColor = System.Drawing.Color.ForestGreen;
+            this.FőHoltart.ForeColor = System.Drawing.Color.SpringGreen;
+            this.FőHoltart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.FőHoltart.Location = new System.Drawing.Point(7, 147);
+            this.FőHoltart.Name = "FőHoltart";
+            this.FőHoltart.Size = new System.Drawing.Size(1121, 23);
+            this.FőHoltart.TabIndex = 175;
+            this.FőHoltart.Visible = false;
+            // 
             // Panel7
             // 
             this.Panel7.BackColor = System.Drawing.Color.Tomato;
@@ -1011,31 +1061,104 @@ namespace Villamos
             this.Holtart.TabIndex = 174;
             this.Holtart.Visible = false;
             // 
-            // FőHoltart
+            // KövV2km
             // 
-            this.FőHoltart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.FőHoltart.BackColor = System.Drawing.Color.ForestGreen;
-            this.FőHoltart.ForeColor = System.Drawing.Color.SpringGreen;
-            this.FőHoltart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.FőHoltart.Location = new System.Drawing.Point(7, 147);
-            this.FőHoltart.Name = "FőHoltart";
-            this.FőHoltart.Size = new System.Drawing.Size(1121, 23);
-            this.FőHoltart.TabIndex = 175;
-            this.FőHoltart.Visible = false;
+            this.KövV2km.Location = new System.Drawing.Point(670, 343);
+            this.KövV2km.Name = "KövV2km";
+            this.KövV2km.Size = new System.Drawing.Size(136, 26);
+            this.KövV2km.TabIndex = 106;
             // 
-            // AlHoltart
+            // Label35
             // 
-            this.AlHoltart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AlHoltart.BackColor = System.Drawing.Color.ForestGreen;
-            this.AlHoltart.ForeColor = System.Drawing.Color.SpringGreen;
-            this.AlHoltart.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.AlHoltart.Location = new System.Drawing.Point(7, 176);
-            this.AlHoltart.Name = "AlHoltart";
-            this.AlHoltart.Size = new System.Drawing.Size(1121, 23);
-            this.AlHoltart.TabIndex = 175;
-            this.AlHoltart.Visible = false;
+            this.Label35.AutoSize = true;
+            this.Label35.BackColor = System.Drawing.Color.OrangeRed;
+            this.Label35.Location = new System.Drawing.Point(420, 343);
+            this.Label35.Name = "Label35";
+            this.Label35.Size = new System.Drawing.Size(147, 20);
+            this.Label35.TabIndex = 105;
+            this.Label35.Text = "V2-V3-tól futott km:";
+            // 
+            // KövV2_Sorszám
+            // 
+            this.KövV2_Sorszám.Location = new System.Drawing.Point(812, 273);
+            this.KövV2_Sorszám.Name = "KövV2_Sorszám";
+            this.KövV2_Sorszám.Size = new System.Drawing.Size(136, 26);
+            this.KövV2_Sorszám.TabIndex = 104;
+            // 
+            // KövV_Sorszám
+            // 
+            this.KövV_Sorszám.Location = new System.Drawing.Point(811, 203);
+            this.KövV_Sorszám.Name = "KövV_Sorszám";
+            this.KövV_Sorszám.Size = new System.Drawing.Size(136, 26);
+            this.KövV_Sorszám.TabIndex = 103;
+            // 
+            // KövV2_számláló
+            // 
+            this.KövV2_számláló.Location = new System.Drawing.Point(670, 308);
+            this.KövV2_számláló.Name = "KövV2_számláló";
+            this.KövV2_számláló.Size = new System.Drawing.Size(136, 26);
+            this.KövV2_számláló.TabIndex = 95;
+            // 
+            // KövV2
+            // 
+            this.KövV2.Location = new System.Drawing.Point(670, 273);
+            this.KövV2.Name = "KövV2";
+            this.KövV2.Size = new System.Drawing.Size(136, 26);
+            this.KövV2.TabIndex = 102;
+            // 
+            // KövV1km
+            // 
+            this.KövV1km.Location = new System.Drawing.Point(670, 238);
+            this.KövV1km.Name = "KövV1km";
+            this.KövV1km.Size = new System.Drawing.Size(136, 26);
+            this.KövV1km.TabIndex = 101;
+            // 
+            // KövV
+            // 
+            this.KövV.Location = new System.Drawing.Point(670, 203);
+            this.KövV.Name = "KövV";
+            this.KövV.Size = new System.Drawing.Size(136, 26);
+            this.KövV.TabIndex = 100;
+            // 
+            // Label33
+            // 
+            this.Label33.AutoSize = true;
+            this.Label33.BackColor = System.Drawing.Color.OrangeRed;
+            this.Label33.Location = new System.Drawing.Point(420, 203);
+            this.Label33.Name = "Label33";
+            this.Label33.Size = new System.Drawing.Size(102, 20);
+            this.Label33.TabIndex = 99;
+            this.Label33.Text = "Következő V:";
+            // 
+            // Label32
+            // 
+            this.Label32.AutoSize = true;
+            this.Label32.BackColor = System.Drawing.Color.OrangeRed;
+            this.Label32.Location = new System.Drawing.Point(420, 273);
+            this.Label32.Name = "Label32";
+            this.Label32.Size = new System.Drawing.Size(132, 20);
+            this.Label32.TabIndex = 98;
+            this.Label32.Text = "Következő V2-V3";
+            // 
+            // Label31
+            // 
+            this.Label31.AutoSize = true;
+            this.Label31.BackColor = System.Drawing.Color.OrangeRed;
+            this.Label31.Location = new System.Drawing.Point(420, 238);
+            this.Label31.Name = "Label31";
+            this.Label31.Size = new System.Drawing.Size(163, 20);
+            this.Label31.TabIndex = 97;
+            this.Label31.Text = "Utolsó V-től futott km:";
+            // 
+            // Label30
+            // 
+            this.Label30.AutoSize = true;
+            this.Label30.BackColor = System.Drawing.Color.OrangeRed;
+            this.Label30.Location = new System.Drawing.Point(420, 308);
+            this.Label30.Name = "Label30";
+            this.Label30.Size = new System.Drawing.Size(160, 20);
+            this.Label30.TabIndex = 96;
+            this.Label30.Text = "V2-V3 számláló állás:";
             // 
             // Ablak_Fogaskerekű_Tulajdonságok
             // 
@@ -1166,5 +1289,17 @@ namespace Villamos
         internal V_MindenEgyéb.MyProgressbar Holtart;
         internal V_MindenEgyéb.MyProgressbar AlHoltart;
         internal V_MindenEgyéb.MyProgressbar FőHoltart;
+        internal TextBox KövV2km;
+        internal Label Label35;
+        internal TextBox KövV2_Sorszám;
+        internal TextBox KövV_Sorszám;
+        internal TextBox KövV2_számláló;
+        internal TextBox KövV2;
+        internal TextBox KövV1km;
+        internal TextBox KövV;
+        internal Label Label33;
+        internal Label Label32;
+        internal Label Label31;
+        internal Label Label30;
     }
 }

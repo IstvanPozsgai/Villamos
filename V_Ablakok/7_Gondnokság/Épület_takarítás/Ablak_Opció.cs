@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
@@ -22,7 +20,9 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
         List<Adat_Takarítás_Opció> AdatokTakOpció = new List<Adat_Takarítás_Opció>();
         List<Adat_Takarítás_Telep_Opció> AdatokTakTelepOpció = new List<Adat_Takarítás_Telep_Opció>();
 
+#pragma warning disable IDE0044 // Add readonly modifier
         DataTable AdatTábla = new DataTable();
+#pragma warning restore IDE0044 // Add readonly modifier
 
         public Ablak_Opció(DateTime dátum, bool irány, string telephely)
         {
@@ -35,9 +35,6 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
 
         private void Ablak_Opció_Load(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\Opcionális{Dátum.Year}.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.ÉpülettakarításTelepOpcionálisLétrehozás(hely);
-
             if (Irány)
             {
                 this.Text = "Opciós tételek tény adatainak rögzítése";
@@ -139,7 +136,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
                     Soradat["Sorszám"] = rekord.Id;
                     Soradat["Megnevezés"] = rekord.Megnevezés;
                     Soradat["Mennyisége"] = rekord.Mennyisége;
-                    Adat_Takarítás_Telep_Opció Elem = AdatokTakTelepOpció.Where(a => a.Id == rekord.Id && a.Dátum ==new DateTime  (Dátum.Year , Dátum.Month,1)  ).FirstOrDefault();
+                    Adat_Takarítás_Telep_Opció Elem = AdatokTakTelepOpció.Where(a => a.Id == rekord.Id && a.Dátum == new DateTime(Dátum.Year, Dátum.Month, 1)).FirstOrDefault();
                     if (Elem == null)
                     {
                         Soradat["Megrendelt"] = 0;
@@ -180,10 +177,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
             try
             {
                 AdatokTakOpció.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Opcionális.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM TakarításOpcionális ORDER BY ID";
-                AdatokTakOpció = KézOpció.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTakOpció = KézOpció.Lista_Adatok();
             }
             catch (HibásBevittAdat ex)
             {
@@ -201,10 +195,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
             try
             {
                 AdatokTakTelepOpció.Clear();
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\Opcionális{Dátum.Year}.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM TakarításOpcTelepAdatok";
-                AdatokTakTelepOpció = KézTelep.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokTakTelepOpció = KézTelep.Lista_Adatok(Telephely, Dátum.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -223,8 +214,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
             try
             {
                 if (Opció_Tábla.Rows.Count <= 0) return;
-                string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\Opcionális{Dátum.Year}.mdb";
-                string jelszó = "seprűéslapát";
+
                 List<Adat_Takarítás_Telep_Opció> AdatokMód = new List<Adat_Takarítás_Telep_Opció>();
                 List<Adat_Takarítás_Telep_Opció> AdatokRögz = new List<Adat_Takarítás_Telep_Opció>();
 
@@ -235,7 +225,7 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
                         new DateTime(Dátum.Year, Dátum.Month, 1),
                         Sor.Cells["Megrendelt"].Value.ToÉrt_Double(),
                         Sor.Cells["Teljesített"].Value.ToÉrt_Double());
-                    Adat_Takarítás_Telep_Opció ElemVolt = AdatokTakTelepOpció.Where(a => a.Id == Sor.Cells["Sorszám"].Value .ToÉrt_Int() && a.Dátum ==new DateTime (Dátum.Year,Dátum.Month ,1)).FirstOrDefault();
+                    Adat_Takarítás_Telep_Opció ElemVolt = AdatokTakTelepOpció.Where(a => a.Id == Sor.Cells["Sorszám"].Value.ToÉrt_Int() && a.Dátum == new DateTime(Dátum.Year, Dátum.Month, 1)).FirstOrDefault();
                     if (ElemVolt != null)
                         AdatokMód.Add(Elem);
                     else
@@ -243,12 +233,12 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
                 }
                 if (AdatokMód.Count > 0)
                 {
-                    KézTelep.Módosít(hely, jelszó, AdatokMód);
+                    KézTelep.Módosít(Telephely, Dátum.Year, AdatokMód);
                     MessageBox.Show("Az Módosítás megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (AdatokRögz.Count > 0)
                 {
-                    KézTelep.Rögzít(hely, jelszó, AdatokRögz);
+                    KézTelep.Rögzít(Telephely, Dátum.Year, AdatokRögz);
                     MessageBox.Show("Az Rögzítés megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Táblaírás();

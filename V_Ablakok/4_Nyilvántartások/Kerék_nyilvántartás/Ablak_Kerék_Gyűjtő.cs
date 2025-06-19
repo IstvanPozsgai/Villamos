@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -9,7 +9,8 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
 {
     public partial class Ablak_Kerék_Gyűjtő : Form
     {
-
+        readonly Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
+        readonly Kezelő_Kerék_Mérés KézMérés = new Kezelő_Kerék_Mérés();
         public string Pályaszám { get; private set; }
         public Ablak_Kerék_Gyűjtő(string pályaszám)
         {
@@ -27,17 +28,9 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
         {
             try
             {
-                string hely, jelszó, szöveg;
-
-
-
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-                jelszó = "szabólászló";
-                szöveg = "";
-
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
-                Tábla.Refresh(); 
+                Tábla.Refresh();
                 Tábla.Visible = false;
                 Tábla.ColumnCount = 8;
 
@@ -52,7 +45,7 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
                 Tábla.Columns[2].Width = 80;
                 Tábla.Columns[2].ReadOnly = true;
                 Tábla.Columns[3].HeaderText = "Pozíció";
-                Tábla.Columns[3].Width =80;
+                Tábla.Columns[3].Width = 80;
                 Tábla.Columns[3].ReadOnly = true;
                 Tábla.Columns[4].HeaderText = "Előző Állapot";
                 Tábla.Columns[4].Width = 375;
@@ -65,111 +58,41 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
                 Tábla.Columns[7].HeaderText = "Új Méret";
                 Tábla.Columns[7].Width = 100;
 
-                int i;
-
-
-                szöveg = $"SELECT * FROM tábla where [azonosító]='{Pályaszám.Trim()}' AND objektumfajta='V.KERÉKPÁR' order by pozíció ";
-
-                Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
-                List<Adat_Kerék_Tábla> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Tábla> Adatok = kéz.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Azonosító.Trim() == Pályaszám.Trim()
+                          && a.Objektumfajta.Trim() == "V.KERÉKPÁR"
+                          orderby a.Pozíció.Trim()
+                          select a).ToList();
+                List<Adat_Kerék_Mérés> AdatokMérés = KézMérés.Lista_Adatok(DateTime.Today.Year);
+                List<Adat_Kerék_Mérés> AdatokMérésE = KézMérés.Lista_Adatok(DateTime.Today.Year - 1);
+                AdatokMérés.AddRange(AdatokMérésE);
+                AdatokMérés = AdatokMérés.OrderByDescending(a => a.Mikor).ToList();
 
                 foreach (Adat_Kerék_Tábla rekord in Adatok)
                 {
-
                     Tábla.RowCount++;
-                    i = Tábla.RowCount - 1;
+                    int i = Tábla.RowCount - 1;
                     Tábla.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
                     Tábla.Rows[i].Cells[1].Value = rekord.Kerékberendezés.Trim();
                     Tábla.Rows[i].Cells[2].Value = rekord.Kerékgyártásiszám.Trim();
                     Tábla.Rows[i].Cells[3].Value = rekord.Pozíció.Trim();
+                    Adat_Kerék_Mérés EgyMérés = (from a in AdatokMérés
+                                                 where a.Kerékberendezés == rekord.Kerékberendezés
+                                                 select a).FirstOrDefault();
                     Tábla.Rows[i].Cells[4].Value = "_";
                     Tábla.Rows[i].Cells[5].Value = "_";
+                    if (EgyMérés != null)
+                    {
+                        // ha van mérési adat akkor kiírjuk
+                        Tábla.Rows[i].Cells[4].Value = MilyenÁllapot(EgyMérés.Állapot);
+                        Tábla.Rows[i].Cells[5].Value = EgyMérés.Méret;
+                    }
                     Tábla.Rows[i].Cells[6].Value = "";
                     Tábla.Rows[i].Cells[7].Value = "";
                 }
-
                 Tábla.Visible = true;
-                Tábla.Refresh(); 
-                if (Tábla.Rows.Count > 0)
-                {
-                    hely = Application.StartupPath + @"\Főmérnökség\adatok\" + DateTime.Today.ToString("yyyy") + @"\telepikerék.mdb";
-                    Mérésieredmények(hely, jelszó);
-                    hely = Application.StartupPath + @"\Főmérnökség\adatok\" + (DateTime.Today.ToString("yyyy").ToÉrt_Int() - 1).ToString() + @"\telepikerék.mdb";
-                    Mérésieredmények(hely, jelszó);
-                    Tábla.Sort(Tábla.Columns[3], System.ComponentModel.ListSortDirection.Ascending);
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void Mérésieredmények(String helykerék, String jelszó)
-        {
-            try
-            {
-
-                int hiba = 0;
-                if (File.Exists(helykerék) == true)
-                {
-                    string szöveg;
-                    Tábla.Sort(Tábla.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
-
-                    szöveg = "SELECT * FROM keréktábla where azonosító='" + Pályaszám.Trim() + "'";
-                    szöveg += " order by kerékberendezés asc, mikor desc";
-
-                    Kezelő_Kerék_Mérés kéz = new Kezelő_Kerék_Mérés();
-                    List<Adat_Kerék_Mérés> Adatok = kéz.Lista_Adatok(helykerék, jelszó, szöveg);
-
-                    int i = 0;
-                    foreach (Adat_Kerék_Mérés rekord in Adatok)
-                    {
-
-
-                        // ha kisebb a táblázatban lévő szám akkor addig növeljük amíg egyenlő nem lesz
-                        while (String.Compare(Tábla.Rows[i].Cells[1].Value.ToString().Trim(), rekord.Kerékberendezés.Trim()) < 0)
-                        {
-                            i += 1;
-                            if (i == Tábla.Rows.Count)
-                            {
-                                hiba = 1;
-                                break;
-                            }
-                        }
-                        if (hiba == 1)
-                            break;
-                        while (string.Compare(Tábla.Rows[i].Cells[1].Value.ToString().Trim(), rekord.Kerékberendezés.Trim()) <= 0)
-                        {
-
-                            if (Tábla.Rows[i].Cells[1].Value.ToString().Trim() == rekord.Kerékberendezés.Trim())
-                            {
-                                // ha egyforma akkor kiírjuk
-                                if (Tábla.Rows[i].Cells[5].Value.ToString().Trim() == "_")
-                                {
-                                    Tábla.Rows[i].Cells[4].Value = MilyenÁllapot(rekord.Állapot);
-                                    Tábla.Rows[i].Cells[5].Value = rekord.Méret;
-                                }
-                            }
-                            i += 1;
-                            if (i == Tábla.Rows.Count)
-                            {
-                                hiba = 1;
-                                break;
-                            }
-                        }
-                        if (hiba == 1)
-                            break;
-                    }
-
-                    Tábla.Visible = true;
-                    Tábla.Refresh(); 
-                    Tábla.ClearSelection();
-                }
+                Tábla.Refresh();
             }
             catch (HibásBevittAdat ex)
             {
@@ -201,7 +124,6 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
                     break;
             }
             return MilyenÁllapot;
-
         }
 
         private void Frissít_Click(object sender, EventArgs e)
@@ -211,16 +133,13 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
 
         private void ValidateKeyPress(object sender, KeyPressEventArgs e)
         {
-            int Állapot = 0;
             //Kerék állapot
-            if ((char)(e.KeyChar) != 13 && (char)(e.KeyChar) != 8 && !int.TryParse(e.KeyChar.ToString(), out Állapot))
+            if ((char)(e.KeyChar) != 13 && (char)(e.KeyChar) != 8 && !int.TryParse(e.KeyChar.ToString(), out int Állapot))
             {
                 MessageBox.Show("Csak egész számot lehet beírni!");
                 e.Handled = true;
             }
         }
-
-
 
         private void Tábla_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
@@ -243,14 +162,9 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
         {
             try
             {
-                if (RögzítOka.Text.Trim() == "")
-                    throw new HibásBevittAdat("A rögzítés okát meg kell adni.");
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\" + DateTime.Today.ToString("yyyy") + @"\telepikerék.mdb";
+                if (RögzítOka.Text.Trim() == "") throw new HibásBevittAdat("A rögzítés okát meg kell adni.");
 
-                string jelszó = "szabólászló";
-                Kezelő_Kerék_Mérés kéz = new Kezelő_Kerék_Mérés();
-
-
+                List<Adat_Kerék_Mérés> AdatokGy = new List<Adat_Kerék_Mérés>();
                 for (int i = 0; i < Tábla.Rows.Count; i++)
                 {
                     if (Tábla.Rows[i].Cells[6].Value.ToString() != "" && Tábla.Rows[i].Cells[7].Value.ToString() != "")
@@ -266,16 +180,15 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
                             Program.PostásNév.Trim(),
                             DateTime.Now,
                             RögzítOka.Text.Trim(),
-                            0
-                            );
-
-                        kéz.Rögzít(hely, jelszó, Adat);
-                        MessageBox.Show("Az adat rögzítésre került!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            0);
+                        AdatokGy.Add(Adat);
                     }
                 }
-
-
-
+                if (AdatokGy.Count > 0)
+                {
+                    KézMérés.Rögzítés(DateTime.Now.Year, AdatokGy);
+                    MessageBox.Show("Az adat rögzítésre került!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (HibásBevittAdat ex)
             {

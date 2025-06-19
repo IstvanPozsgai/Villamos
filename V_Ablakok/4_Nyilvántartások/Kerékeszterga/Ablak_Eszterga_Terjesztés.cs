@@ -5,26 +5,21 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
 {
     public partial class Ablak_Eszterga_Terjesztés : Form
     {
-        readonly string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-        readonly string jelszó = "RónaiSándor";
-
-
+        readonly Kezelő_Kiegészítő_Könyvtár KézKönyv = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelő_Kerék_Eszterga_Terjesztés kéz = new Kezelő_Kerék_Eszterga_Terjesztés();
 
         List<Adat_Kerék_Eszterga_Terjesztés> Adatok = new List<Adat_Kerék_Eszterga_Terjesztés>();
+
         public Ablak_Eszterga_Terjesztés()
         {
             InitializeComponent();
             Start();
         }
-
 
         private void Start()
         {
@@ -47,15 +42,12 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM könyvtár order by név ";
-
-
+                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKönyv.Lista_Adatok();
+                Adatok = Adatok.OrderBy(a => a.Név).ToList();
                 Cmbtelephely.Items.Clear();
-                Cmbtelephely.BeginUpdate();
-                Cmbtelephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "Név"));
-                Cmbtelephely.EndUpdate();
+                foreach (Adat_Kiegészítő_Könyvtár Elem in Adatok)
+                    Cmbtelephely.Items.Add(Elem.Név);
+
                 Cmbtelephely.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -74,7 +66,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
         }
 
-        void MezőÜrítés()
+        private void MezőÜrítés()
         {
             Név.Text = "";
             Email.Text = "";
@@ -82,31 +74,12 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             CmbVáltozat.Text = "";
         }
 
-        private void ListaFeltöltés()
-        {
-            try
-            {
-                Adatok.Clear();
-                string szöveg = $"SELECT * FROM terjesztés ORDER BY  név";
-                Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Tábla_Író()
         {
             try
             {
                 MezőÜrítés();
-                ListaFeltöltés();
+                Adatok = kéz.Lista_Adatok();
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
@@ -159,7 +132,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-
         private void Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -172,32 +144,16 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 if (Cmbtelephely.Text.Trim() == "") throw new HibásBevittAdat("A telephely mező nem lehet üres.");
                 if (CmbVáltozat.Text.Trim() == "") throw new HibásBevittAdat("A terjesztési változat mező nem lehet üres.");
 
-
                 string[] darabol = CmbVáltozat.Text.Split('-');
-                ListaFeltöltés();
-                string szöveg;
+                Adatok = kéz.Lista_Adatok();
 
-                Adat_Kerék_Eszterga_Terjesztés Elem = (from a in Adatok
-                                                       where a.Email == Email.Text.Trim()
-                                                       select a).FirstOrDefault();
+                Adat_Kerék_Eszterga_Terjesztés ADAT = new Adat_Kerék_Eszterga_Terjesztés(
+                     Név.Text.Trim(),
+                     Email.Text.Trim(),
+                     Cmbtelephely.Text.Trim(),
+                     int.Parse(darabol[0]));
 
-                if (Elem != null)
-                {
-                    szöveg = "UPDATE terjesztés SET ";
-                    szöveg += $"név='{Név.Text.Trim()}', ";  //Név
-                    szöveg += $"Telephely='{Cmbtelephely.Text.Trim()}', ";    //Telephely
-                    szöveg += $"Változat={int.Parse(darabol[0])} ";    //Változat
-                    szöveg += $" WHERE email='{Email.Text.Trim()}'";
-                }
-                else
-                {
-                    szöveg = "INSERT INTO terjesztés (Név, Email, Telephely, Változat ) VALUES (";
-                    szöveg += $"'{Név.Text.Trim()}', ";  //Név
-                    szöveg += $"'{Email.Text.Trim()}', ";  // Email
-                    szöveg += $"'{Cmbtelephely.Text.Trim()}', ";    //Telephely
-                    szöveg += $"{int.Parse(darabol[0])} )";    //Változat
-                }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                kéz.Döntés(ADAT);
                 Tábla_Író();
             }
             catch (HibásBevittAdat ex)
@@ -211,22 +167,20 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-
         private void Töröl_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Email.Text.Trim() == "") throw new HibásBevittAdat("Az e-mail címet meg kell adni.");
 
-                ListaFeltöltés();
+                Adatok = kéz.Lista_Adatok();
                 Adat_Kerék_Eszterga_Terjesztés Elem = (from a in Adatok
                                                        where a.Email == Email.Text.Trim()
                                                        select a).FirstOrDefault();
 
                 if (Elem != null)
                 {
-                    string szöveg = $"DELETE FROM terjesztés WHERE email='{Email.Text.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    kéz.Törlés(Email.Text.Trim());
                     Tábla_Író();
                 }
             }
@@ -240,7 +194,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {

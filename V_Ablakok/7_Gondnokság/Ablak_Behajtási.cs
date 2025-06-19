@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
+using Villamos.MindenEgyéb;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
@@ -15,6 +17,8 @@ namespace Villamos
     public partial class Ablak_Behajtási
     {
         #region Listák def
+
+
 #pragma warning disable IDE0044
         List<string> TáblaTelephely = new List<string>();
         List<string> Szereplők = new List<string>();
@@ -502,13 +506,13 @@ namespace Villamos
 
                 List<Adat_Behajtás_Dolgozótábla> Adatok = KézDolgozó.Lista_Adatok();
                 Adat_Behajtás_Dolgozótábla rekord = (from a in Adatok
-                                                     where a.SZTSZ == TxtkérelemHR.Text.Trim()
+                                                     where a.Dolgozószám == TxtkérelemHR.Text.Trim()
                                                      select a).FirstOrDefault();
 
                 if (rekord != null)
                 {
                     // név és szervezet
-                    Txtkérelemnév.Text = rekord.Családnévutónév.Trim();
+                    Txtkérelemnév.Text = rekord.Dolgozónév.Trim();
                     CmbKérelemSzolgálati.Text = rekord.Szervezetiegység.Trim();
                 }
 
@@ -3039,7 +3043,7 @@ namespace Villamos
                 else
                     return;
 
-                IDM_Dolgozó.Behajtási_beolvasás(fájlexc);
+                IDM_beolvasás.Behajtási_beolvasás(fájlexc);
 
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -3053,6 +3057,8 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
         #endregion
 
 

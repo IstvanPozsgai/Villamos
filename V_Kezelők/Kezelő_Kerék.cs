@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "szabólászló";
         string hely;
+        readonly string táblanév = "keréktábla";
 
         private void FájlBeállítás(int Év)
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Kerék_Mérés> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = "SELECT * FROM keréktábla order by azonosító,pozíció ";
+            string szöveg = $"SELECT * FROM {táblanév} order by azonosító,pozíció ";
 
             List<Adat_Kerék_Mérés> Adatok = new List<Adat_Kerék_Mérés>();
             Adat_Kerék_Mérés Adat;
@@ -67,7 +68,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "INSERT INTO keréktábla  (Azonosító, pozíció, kerékberendezés, kerékgyártásiszám, állapot, méret, mikor, Módosító, Oka, SAP) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (Azonosító, pozíció, kerékberendezés, kerékgyártásiszám, állapot, méret, mikor, Módosító, Oka, SAP) VALUES (";
 
                 szöveg += $"'{Adat.Azonosító.Trim()}', ";
                 szöveg += $"'{Adat.Pozíció.Trim()}', ";
@@ -80,7 +81,41 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Oka.Trim()}', ";
                 szöveg += $"{Adat.SAP} )";
 
-                Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(int Év, List<Adat_Kerék_Mérés> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Kerék_Mérés Adat in Adatok)
+                {
+                    string szöveg = $"INSERT INTO {táblanév}  (Azonosító, pozíció, kerékberendezés, kerékgyártásiszám, állapot, méret, mikor, Módosító, Oka, SAP) VALUES (";
+                    szöveg += $"'{Adat.Azonosító.Trim()}', ";
+                    szöveg += $"'{Adat.Pozíció.Trim()}', ";
+                    szöveg += $"'{Adat.Kerékberendezés.Trim()}', ";
+                    szöveg += $"'{Adat.Kerékgyártásiszám.Trim()}', ";
+                    szöveg += $"'{Adat.Állapot}', ";
+                    szöveg += $"{Adat.Méret}, ";
+                    szöveg += $"'{DateTime.Now}', ";
+                    szöveg += $"'{Program.PostásNév.Trim()}', ";
+                    szöveg += $"'{Adat.Oka.Trim()}', ";
+                    szöveg += $"{Adat.SAP} )";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -167,23 +202,6 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
-        public void Rögzít(string hely, string jelszó, Adat_Kerék_Mérés Adat)
-        {
-
-            string szöveg = "INSERT INTO keréktábla  (Azonosító, pozíció, kerékberendezés, kerékgyártásiszám, állapot, méret, mikor, Módosító, Oka, SAP) VALUES (";
-
-            szöveg += $"'{Adat.Azonosító.Trim()}', ";
-            szöveg += $"'{Adat.Pozíció.Trim()}', ";
-            szöveg += $"'{Adat.Kerékberendezés.Trim()}', ";
-            szöveg += $"'{Adat.Kerékgyártásiszám.Trim()}', ";
-            szöveg += $"'{Adat.Állapot}', ";
-            szöveg += $"{Adat.Méret}, ";
-            szöveg += $"'{DateTime.Now}', ";
-            szöveg += $"'{Program.PostásNév.Trim()}', ";
-            szöveg += $"'{Adat.Oka.Trim()}', 0 )";
-
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
-        }
     }
 
 

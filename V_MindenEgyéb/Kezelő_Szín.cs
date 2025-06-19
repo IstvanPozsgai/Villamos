@@ -1,10 +1,9 @@
 ﻿using System.Drawing;
-
 namespace Villamos.V_MindenEgyéb
 {
-    public static  class Kezelő_Szín
+    public static class Kezelő_Szín
     {
-        public static  Szín_kódolás Szín_váltó(long színes)
+        public static Szín_kódolás Szín_váltó(long színes)
         {
             Szín_kódolás ideig;
             int Piros, Kék, Zöld;

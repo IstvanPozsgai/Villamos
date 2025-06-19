@@ -24,11 +24,11 @@ namespace Villamos.Villamos_Adatbázis_Funkció
 
 
             szöveg = "CREATE TABLE Dolgozóktábla (";
-            szöveg += "[SZTSZ]  char (250),";
-            szöveg += "[Családnévutónév]  char (250),";
+            szöveg += "[Dolgozószám]  char (250),";
+            szöveg += "[Dolgozónév]  char (250),";
             szöveg += "[Szervezetiegység]  char (250),";
             szöveg += "[Munkakör]  char (250),";
-            szöveg += "[Státus long)";
+            szöveg += "[Státus yesno)";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
 

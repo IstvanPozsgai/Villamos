@@ -122,15 +122,14 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM telephelytábla ORDER BY telephelynév";
+                Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
+                List<Adat_kiegészítő_telephely> Adatok = KézTelep.Lista_Adatok().OrderBy(a => a.Telephelynév).ToList();
 
-                Telephely.BeginUpdate();
                 Telephely.Items.Clear();
                 Telephely.Items.Add("");
-                Telephely.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "telephelynév"));
-                Telephely.EndUpdate();
+                foreach (Adat_kiegészítő_telephely Elem in Adatok)
+                    Telephely.Items.Add(Elem.Telephelynév);
+
                 Telephely.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -568,11 +567,11 @@ namespace Villamos.Villamos_Ablakok
                 //Betöltjük a dolgozókat akik beosztását nézzük
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
                 if (!File.Exists(hely)) return;
-                string jelszó = "RónaiSándor";
+
                 string szöveg = $"SELECT * FROM Esztergályos  ORDER BY dolgozószám ";
 
                 Kezelő_Kerék_Eszterga_Esztergályos kézE = new Kezelő_Kerék_Eszterga_Esztergályos();
-                List<Adat_Kerék_Eszterga_Esztergályos> AdatokE = kézE.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga_Esztergályos> AdatokE = kézE.Lista_Adatok();
 
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum.Value);
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum.Value);
@@ -910,7 +909,7 @@ namespace Villamos.Villamos_Ablakok
                             szöveg += $"{rekord.Csúszóra}, ";   //    Csúszóra,
                             szöveg += $"'{rekord.CSúszórakezd}', ";   //    CSúszórakezd,
                             szöveg += $"'{rekord.Csúszóravég}', ";   //    Csúszóravég,
-                            szöveg += $"'{rekord.Megjegyzés}', ";   //    Megjegyzés,
+                            szöveg += $"'{rekord.Megjegyzés}', ";   //    Megjegyzésváltozó,
                             szöveg += $"'{rekord.Túlóraok}', ";   //    Túlóraok,
                             szöveg += $"'{rekord.Szabiok}', ";   //    Szabiok,
                             szöveg += $"{rekord.Kért} , ";   //    kért,
@@ -993,7 +992,7 @@ namespace Villamos.Villamos_Ablakok
                         szöveg += $"{rekord.Csúszóra}, ";   //    Csúszóra,
                         szöveg += $"'{rekord.CSúszórakezd}', ";   //    CSúszórakezd,
                         szöveg += $"'{rekord.Csúszóravég}', ";   //    Csúszóravég,
-                        szöveg += $"'{rekord.Megjegyzés}', ";   //    Megjegyzés,
+                        szöveg += $"'{rekord.Megjegyzés}', ";   //    MegjegyzésVáltozó,
                         szöveg += $"'{rekord.Túlóraok}', ";   //    Túlóraok,
                         szöveg += $"'{rekord.Szabiok}', ";   //    Szabiok,
                         szöveg += $"{rekord.Kért} , ";   //    kért,
@@ -1402,7 +1401,7 @@ namespace Villamos.Villamos_Ablakok
                 fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\Eszterga_Lejelentés_{MyF.Hét_Sorszáma(Dátum.Value)}_heti_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}.xlsx";
 
                 Holtart.Be();
-                Kerékeszterga_Excel KerExc = new Kerékeszterga_Excel(fájlexc, Application.StartupPath, Dátum.Value);
+                Kerékeszterga_Excel KerExc = new Kerékeszterga_Excel(fájlexc, Dátum.Value);
                 Holtart.Lép();
                 KerExc.Excel_alaptábla();
                 Holtart.Lép();

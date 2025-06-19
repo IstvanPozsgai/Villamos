@@ -432,13 +432,11 @@ namespace Villamos
             try
             {
                 Csoport.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM csoportbeosztás order by Sorszám";
-
-                Csoport.BeginUpdate();
-                Csoport.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "csoportbeosztás"));
-                Csoport.EndUpdate();
+                Kezelő_Kiegészítő_Csoportbeosztás KézCsop = new Kezelő_Kiegészítő_Csoportbeosztás();
+                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsop.Lista_Adatok(Cmbtelephely.Text.Trim());
+                foreach (Adat_Kiegészítő_Csoportbeosztás Elem in Adatok)
+                    Csoport.Items.Add(Elem.Csoportbeosztás);
+                Csoport.Refresh();
             }
             catch (HibásBevittAdat ex)
             {

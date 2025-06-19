@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő2.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "könyvtár";
 
         public Kezelő_Kiegészítő_Könyvtár()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Könyvtár> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM könyvtár ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             Adat_Kiegészítő_Könyvtár Adat;
             List<Adat_Kiegészítő_Könyvtár> Adatok = new List<Adat_Kiegészítő_Könyvtár>();
 
@@ -60,7 +61,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO könyvtár ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += " ( név, csoport1, csoport2, sorrend1, sorrend2, vezér1, vezér2 ) VALUES ";
                 szöveg += $"('{Adat.Név}', ";
                 szöveg += $"{Adat.Csoport1}, ";
@@ -86,7 +87,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE könyvtár SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" név='{Adat.Név}', ";
                 szöveg += $" csoport1={Adat.Csoport1}, ";
                 szöveg += $" csoport2={Adat.Csoport2}, ";
@@ -112,7 +113,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"Delete FROM könyvtár where id={Sorszám}";
+                string szöveg = $"Delete FROM {táblanév} where id={Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

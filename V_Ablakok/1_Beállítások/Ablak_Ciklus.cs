@@ -24,6 +24,7 @@ namespace Villamos
         {
             Adatok = Kéz.Lista_Adatok();
             CiklusTípusfeltöltés();
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
 

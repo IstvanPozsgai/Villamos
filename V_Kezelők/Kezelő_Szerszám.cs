@@ -156,7 +156,7 @@ namespace Villamos.Kezelők
             szöveg += $"gyáriszám='{Adat.Gyáriszám}', ";
             szöveg += $" Beszerzésidátum='{Adat.Beszerzésidátum:yyyy.MM.dd}' ";
             szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
         public void Rögzítés(string hely, string jelszó, Adat_Szerszám_Cikktörzs Adat)
@@ -171,7 +171,7 @@ namespace Villamos.Kezelők
             szöveg += $"'{Adat.Hely}', ";
             szöveg += $"'{Adat.Költséghely}', ";
             szöveg += $"'{Adat.Gyáriszám}') ";
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
     }
 
@@ -218,7 +218,7 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Felelős1}', ";
                 szöveg += $"'{Adat.Felelős2}', ";
                 szöveg += $"{Adat.Státus}) ";
-                Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -241,7 +241,7 @@ namespace Villamos.Kezelők
                 szöveg += $"felelős2='{Adat.Felelős2.Trim()}', ";
                 szöveg += $"státus={Adat.Státus} ";
                 szöveg += $" WHERE Szerszámkönyvszám='{Adat.Szerszámkönyvszám.Trim()}'";
-                Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

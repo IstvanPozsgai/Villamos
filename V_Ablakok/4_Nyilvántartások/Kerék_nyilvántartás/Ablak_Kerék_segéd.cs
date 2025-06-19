@@ -1,13 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
-using MyF = Függvénygyűjtemény;
-using MyA = Adatbázis;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok
 {
@@ -21,7 +18,9 @@ namespace Villamos.Villamos_Ablakok
         public int Proritás_db { get; private set; }
         public string Típus { get; private set; }
 
-        public int Norma{get; private set; }
+        public int Norma { get; private set; }
+
+        readonly Kezelő_Kerék_Eszterga_Igény Kéz = new Kezelő_Kerék_Eszterga_Igény();
 
         public Ablak_Kerék_segéd(string cmbTelephely, string pályaszám, int tengely_darab, int proritás_db, string típus, int norma)
         {
@@ -38,10 +37,6 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga";
-                if (!Directory.Exists(hely))                     Directory.CreateDirectory(hely);
-                hely += $@"\{DateTime.Today.Year}_Igény.mdb";
-                if (!File.Exists(hely))                        Adatbázis_Létrehozás.Kerék_Igény(hely);
 
                 Pályaszámok.Text = Pályaszám.Trim();
                 Telephely.Text = CmbTelephely.Trim();
@@ -49,19 +44,13 @@ namespace Villamos.Villamos_Ablakok
                 Szerelvény_db.Text = darabol.Length.ToString();
                 Prioritás.Text = Proritás_db.ToString();
                 Tengely_db.Text = Tengely_darab.ToString();
-                NormaIdő.Text = Norma.ToString ();
+                NormaIdő.Text = Norma.ToString();
 
+                List<Adat_Kerék_Eszterga_Igény> Adatok = Kéz.Lista_Adatok(DateTime.Today.Year);
 
-                string jelszó = "RónaiSándor";
-                string ellenőr = "";
-                string szöveg = "SELECT * FROM Igény";
-
-                Kezelő_Kerék_Eszterga_Igény Kéz = new Kezelő_Kerék_Eszterga_Igény();
-                List<Adat_Kerék_Eszterga_Igény> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                ellenőr = string.Join("-", (from elem in darabol
-                                            where Adatok.Any(a => a.Státus < 7 && a.Pályaszám.Contains(elem))
-                                            select elem).ToList());
+                string ellenőr = string.Join("-", (from elem in darabol
+                                                   where Adatok.Any(a => a.Státus < 7 && a.Pályaszám.Contains(elem))
+                                                   select elem).ToList());
 
                 if (ellenőr != "")
                 {
@@ -84,12 +73,8 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.Year}_Igény.mdb";
-                string jelszó = "RónaiSándor";
                 // ellenőrzés, hogy már szerepel-e valamelyik kocsi az igénylésben
                 string[] darabol = Pályaszám.Split('-');
-
-
 
                 if (Szerelvény_db.Text.Trim() == "" || !int.TryParse(Szerelvény_db.Text.Trim(), out int szerelvény))
                     throw new HibásBevittAdat("A szerelvényszám mezőnek egész számnak kell lennie");
@@ -100,13 +85,23 @@ namespace Villamos.Villamos_Ablakok
                 if (Prioritás.Text.Trim() == "" || !int.TryParse(Prioritás.Text.Trim(), out int prioritás))
                     throw new HibásBevittAdat("A prioritás mezőnek egész számnak kell lennie");
 
-                string szöveg = "INSERT INTO igény (Pályaszám, Rögzítés_dátum,  Igényelte, Tengelyszám, Szerelvény,  prioritás, Ütemezés_dátum,  státus, telephely, megjegyzés, típus, norma) VALUES (";
-                szöveg += $"'{Pályaszám}', '{DateTime.Now.ToString()}', '{Program.PostásNév.Trim()}', {tengely}, {szerelvény}," +
-                          $" {prioritás}, '{new DateTime(1900, 1, 1)}',0, '{CmbTelephely.Trim()}','{MyF.Szöveg_Tisztítás (Megjegyzés.Text.Trim(),0,-1,true )}', '{Típus.Trim()}', {Norma} )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Kerék_Eszterga_Igény adat = new Adat_Kerék_Eszterga_Igény(
+                    Pályaszám,
+                    MyF.Szöveg_Tisztítás(Megjegyzés.Text.Trim(), 0, -1, true),
+                    DateTime.Now,
+                    Program.PostásNév.Trim(),
+                    tengely,
+                    szerelvény,
+                    prioritás,
+                    new DateTime(1900, 1, 1),
+                    0, // státusz
+                    CmbTelephely.Trim(),
+                    Típus.Trim(),
+                    Norma);
+                Kéz.Rögzítés(DateTime.Today.Year, adat);
 
                 MessageBox.Show("Az adatok rögzítésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (Változás != null) Változás();
+                Változás?.Invoke();
                 this.Close();
 
             }

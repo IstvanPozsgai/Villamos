@@ -65,7 +65,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = $"UPDATE Típuszínektábla SET ";
-                szöveg += $"színszám= '{Adat.Színszám}',";
+                szöveg += $"színszám={Adat.Színszám} ";
                 szöveg += $"WHERE típus='{Adat.Típus}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

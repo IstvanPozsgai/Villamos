@@ -165,7 +165,6 @@ namespace Villamos
             this.Fülek.Size = new System.Drawing.Size(1284, 423);
             this.Fülek.TabIndex = 58;
             this.Fülek.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.Fülek_DrawItem);
-            this.Fülek.SelectedIndexChanged += new System.EventHandler(this.Fülek_SelectedIndexChanged);
             // 
             // TabPage1
             // 

@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
         public Kezelő_Szerszám_FejLáb()
         {
             string szöveg = $"SELECT * FROM Szerszám_FejLáb";
-            if (!Adatbázis.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Szerszám_FejLáb(hely);
+            if (!MyA.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Szerszám_FejLáb(hely);
         }
 
         public List<Adat_Szerszám_FejLáb> Lista_Adatok()

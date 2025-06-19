@@ -53,6 +53,35 @@ namespace Villamos
             return Válasz;
         }
 
+        public static List<string> TelephelyLista_Rezsi()
+        {
+            Kezelő_Kiegészítő_Sérülés Kéz = new Kezelő_Kiegészítő_Sérülés();
+            List<Adat_Kiegészítő_Sérülés> Adatok = Kéz.Lista_Adatok().OrderBy(a => a.Név).ToList();
+
+            Adat_Kiegészítő_Sérülés Elem = (from a in Adatok
+                                            where a.Név.Trim() == Program.PostásTelephely.Trim()
+                                            select a).FirstOrDefault();
+
+            List<Adat_Kiegészítő_Sérülés> Eredmény = new List<Adat_Kiegészítő_Sérülés>();
+
+            if (Elem != null)
+            {
+                // Szakszolgálat
+                Eredmény = (from a in Adatok
+                            where a.Vezér1 == false && a.Csoport1 == Elem.Csoport1
+                            select a).ToList();
+                Program.Postás_Vezér = Elem.Vezér1;
+
+            }
+
+            List<string> Válasz = new List<string>();
+            foreach (Adat_Kiegészítő_Sérülés rekord in Eredmény)
+            {
+                Válasz.Add(rekord.Név);
+            }
+            return Válasz;
+        }
+
         public static List<Adat_Kiegészítő_Sérülés> TelephelyJármű()
         {
             Kezelő_Kiegészítő_Sérülés Kéz = new Kezelő_Kiegészítő_Sérülés();

@@ -80,7 +80,7 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Garancia:yyyy.MM.dd}', "; //garancia,
                 szöveg += $"'{Adat.Gyártásiidő:yyyy.MM.dd}', "; //gyártásiidő,
                 szöveg += $"{Adat.Státus}, "; //státus,
-                szöveg += $"'{Adat.Megjegyzés}', "; //Megjegyzés,
+                szöveg += $"'{Adat.Megjegyzés}', "; //MegjegyzésVáltozó,
                 szöveg += $"'{Adat.Módosításdátuma}', "; //Módosításdátuma,
                 szöveg += $"{Adat.Kapacitás}, "; //kapacitás,
                 szöveg += $"'{Adat.Telephely}', "; //Telephely

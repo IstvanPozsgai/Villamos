@@ -700,7 +700,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 EgyCAF = AlapKéz.Egy_Adat(Ütem_pályaszám.Text.Trim());
                 // utolsó ütemezett
                 Adat_CAF_Adatok Előző = KézAdatok.Egy_Adat(Ütem_pályaszám.Text.Trim());
-                KiírElőzőAdatot(Előző);
+                if (Előző != null) KiírElőzőAdatot(Előző);
 
                 // következő idő szerinti
                 Adat_CAF_Adatok Adat = MyCaf.Következő_Idő(Ciklus_Idő, Előző, EgyCAF);

@@ -37,7 +37,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         private void Start()
         {
             AdatokCiklus = KézCiklus.Lista_Adatok(true);
-            AdatokCAFAlap = KézCAFAlap.Lista_Adatok();
             Jogosultságkiosztás();
             Pályaszámokfeltöltése();
             Vizsgsorszámcombofeltölés();
@@ -343,6 +342,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     KézCAFAlap.Módosítás(ADAT);
                 else
                     KézCAFAlap.Rögzítés(ADAT);
+                Pályaszámokfeltöltése();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -519,6 +519,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
+                AdatokCAFAlap = KézCAFAlap.Lista_Adatok();
                 Alap_pályaszám.Items.Clear();
 
                 foreach (Adat_CAF_alap Elem in AdatokCAFAlap)

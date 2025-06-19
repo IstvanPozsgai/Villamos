@@ -38,11 +38,11 @@ namespace Villamos.Kezelők
                             while (rekord.Read())
                             {
                                 Adat = new Adat_Behajtás_Dolgozótábla(
-                                    rekord["SZTSZ"].ToStrTrim(),
-                                    rekord["Családnévutónév"].ToStrTrim(),
+                                    rekord["Dolgozószám"].ToStrTrim(),
+                                    rekord["Dolgozónév"].ToStrTrim(),
                                     rekord["Szervezetiegység"].ToStrTrim(),
                                     rekord["Munkakör"].ToStrTrim(),
-                                    rekord["Státus"].ToÉrt_Int());
+                                    rekord["Státus"].ToÉrt_Bool());
                                 Adatok.Add(Adat);
                             }
                         }
@@ -57,11 +57,11 @@ namespace Villamos.Kezelők
             try
             {
                 string szöveg = "UPDATE dolgozóktábla SET ";
-                szöveg += $" családnévutónév='{Adat.Családnévutónév}', ";
+                szöveg += $" Dolgozónév='{Adat.Dolgozónév}', ";
                 szöveg += $" munkakör='{Adat.Munkakör}', ";
                 szöveg += $" szervezetiegység='{Adat.Szervezetiegység}', ";
                 szöveg += $" státus={Adat.Státus}";
-                szöveg += $"  WHERE SZTSZ='{Adat.SZTSZ}'";
+                szöveg += $"  WHERE Dolgozószám='{Adat.Dolgozószám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
             }
@@ -80,9 +80,9 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO dolgozóktábla ( sztsz, családnévutónév, munkakör, szervezetiegység, státus )  VALUES ( ";
-                szöveg += $"'{Adat.SZTSZ}', ";
-                szöveg += $"'{Adat.Családnévutónév}', ";
+                string szöveg = "INSERT INTO dolgozóktábla ( Dolgozószám, Dolgozónév, munkakör, szervezetiegység, státus )  VALUES ( ";
+                szöveg += $"'{Adat.Dolgozószám}', ";
+                szöveg += $"'{Adat.Dolgozónév}', ";
                 szöveg += $"'{Adat.Munkakör}', ";
                 szöveg += $"'{Adat.Szervezetiegység}', ";
                 szöveg += $"{Adat.Státus}) ";

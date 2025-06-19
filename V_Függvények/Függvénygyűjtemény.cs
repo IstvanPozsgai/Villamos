@@ -12,6 +12,7 @@ using Villamos.Villamos_Adatszerkezet;
 public static partial class Függvénygyűjtemény
 {
     readonly static Kezelő_Alap_Beolvasás KézBeolvasás = new Kezelő_Alap_Beolvasás();
+    readonly static Kezelő_Excel_Beolvasás Kéz_Beolvasás = new Kezelő_Excel_Beolvasás();
     /// <summary>
     /// Az Excel tábla fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
     /// </summary>
@@ -48,7 +49,9 @@ public static partial class Függvénygyűjtemény
         return válasz;
     }
 
+
     /// <summary>
+    /// Elkopó
     /// Az Excel táblát kapja és a fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
     /// </summary>
     /// <param name="Melyik"></param>
@@ -90,6 +93,48 @@ public static partial class Függvénygyűjtemény
         return válasz;
     }
 
+    /// <summary>
+    /// Ez lesz a véglegez változat
+    ///  Az Excel táblát kapja és a fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
+    /// </summary>
+    /// <param name="Melyik"></param>
+    /// <param name="Tábla"></param>
+    /// <returns></returns>
+    public static bool BetöltésHelyes(string Melyik, DataTable Tábla)
+    {
+        bool válasz = false;
+        try
+        {
+            //  beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
+            string fejlécbeolvas = "";
+            for (int i = 0; i < Tábla.Columns.Count; i++)
+                fejlécbeolvas += Tábla.Columns[i].ColumnName.ToStrTrim();
+
+
+            List<Adat_Excel_Beolvasás> Adatok = Kéz_Beolvasás.Lista_Adatok();
+            Adatok = (from a in Adatok
+                      where a.Csoport == Melyik.Trim()
+                      && a.Státusz == false
+                      orderby a.Oszlop
+                      select a).ToList();
+
+            string szöveg = "";
+            foreach (Adat_Excel_Beolvasás rekord in Adatok)
+                szöveg += rekord.Fejléc;
+
+            if (szöveg.Trim() == fejlécbeolvas.Trim()) válasz = true;
+        }
+        catch (HibásBevittAdat ex)
+        {
+            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Függvénygyűjtemény - Betöltéshelyes", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        return válasz;
+    }
 
     #region Jelszó kódolások
 
@@ -241,41 +286,6 @@ public static partial class Függvénygyűjtemény
     #endregion
 
 
-    #region Üres rekord Vizsgálatok
-    public static string Vizsgálat(OleDbDataReader ReKORD, string cím)
-    {
-        string iszöveg = "_";
-        if (!(ReKORD[cím] is DBNull))
-            iszöveg = Convert.ToString(ReKORD[cím]);
-        return iszöveg;
-    }
-
-    public static DateTime Vizsgálatdátum(OleDbDataReader ReKORD, string cím)
-    {
-        var idátum = Convert.ToDateTime("1900.01.01");
-        if (!(ReKORD[cím] is DBNull))
-            idátum = Convert.ToDateTime(ReKORD[cím]);
-        return idátum;
-    }
-
-    public static bool Vizsgálatigaz(OleDbDataReader ReKORD, string cím)
-    {
-        bool iigaz = false;
-        if (!(ReKORD[cím] is DBNull))
-            iigaz = Convert.ToBoolean(ReKORD[cím]);
-        return iigaz;
-    }
-
-    public static double Vizsgálatszám(OleDbDataReader ReKORD, string cím)
-    {
-        double iszám = 0d;
-        if (!(ReKORD[cím] is DBNull))
-            iszám = Convert.ToDouble(ReKORD[cím]);
-        return iszám;
-    }
-
-    #endregion
-
     public static AdatCombohoz[] ComboFeltöltés(string sqlhely, string sqljelszó, string sqlszöveg, string rekordoszlop)
     {
 
@@ -352,7 +362,6 @@ public static partial class Függvénygyűjtemény
 
 
     #region Jogosultság
-
     public static bool Vanjoga(int melyikelem, int csoport)
     {
         bool válasz;
@@ -396,9 +405,6 @@ public static partial class Függvénygyűjtemény
         return válasz;
 
     }
-
-
-
     #endregion
 }
 

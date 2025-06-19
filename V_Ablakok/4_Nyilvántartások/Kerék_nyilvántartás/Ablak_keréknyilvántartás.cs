@@ -259,37 +259,30 @@ namespace Villamos
         {
             try
             {
-                string hely, jelszó, szöveg;
+                List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                {
-                    hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                    jelszó = "pozsgaii";
-                    szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-                }
-
+                    Adatok = KézJármű.Lista_Adatok("Főmérnökség");
                 else
-                {
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\villamos.mdb";
-                    jelszó = "pozsgaii";
-                    szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-                }
+                    Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+                Adatok = (from a in Adatok
+                          where a.Törölt == false
+                          orderby a.Azonosító
+                          select a).ToList();
+
 
                 SAPPályaszám.Items.Clear();
-                SAPPályaszám.BeginUpdate();
-                SAPPályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                SAPPályaszám.EndUpdate();
-                SAPPályaszám.Refresh();
-
                 PályaszámCombo2.Items.Clear();
-                PályaszámCombo2.BeginUpdate();
-                PályaszámCombo2.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                PályaszámCombo2.EndUpdate();
-                PályaszámCombo2.Refresh();
-
                 RögzítPályaszám.Items.Clear();
-                RögzítPályaszám.BeginUpdate();
-                RögzítPályaszám.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "azonosító"));
-                RögzítPályaszám.EndUpdate();
+                foreach (Adat_Jármű Elem in Adatok)
+                {
+                    SAPPályaszám.Items.Add(Elem.Azonosító);
+                    PályaszámCombo2.Items.Add(Elem.Azonosító);
+                    RögzítPályaszám.Items.Add(Elem.Azonosító);
+                }
+
+                SAPPályaszám.Refresh();
+                PályaszámCombo2.Refresh();
                 RögzítPályaszám.Refresh();
 
             }
@@ -318,20 +311,19 @@ namespace Villamos
         {
             try
             {
+                Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = (from a in Adatok
+                          where a.Kilépésiidő.ToShortDateString() == new DateTime(1900, 1, 1).ToShortDateString()
+                          && a.Főkönyvtitulus.Trim() != "" && a.Főkönyvtitulus.Trim() != "_"
+                          orderby a.DolgozóNév
+                          select a).ToList();
+
                 Kiadta.Items.Clear();
-                string hely, jelszó, szöveg;
-                hely = $@"{Application.StartupPath}\" + Cmbtelephely.Text + @"\Adatok\Dolgozók.mdb";
-                if (!Exists(hely))
-                    return;
-                jelszó = "forgalmiutasítás";
-
-
-                szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900# and főkönyvtitulus<>'' and főkönyvtitulus<>'_'  order by DolgozóNév asc";
-                Kiadta.BeginUpdate();
                 Kiadta.Items.Add("");
-
-                Kiadta.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "dolgozónév"));
-                Kiadta.EndUpdate();
+                foreach (Adat_Dolgozó_Alap Elem in Adatok)
+                    Kiadta.Items.Add(Elem.DolgozóNév);
+                Kiadta.Refresh();
             }
             catch (HibásBevittAdat ex)
             {
@@ -342,8 +334,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
 
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
@@ -1773,25 +1763,25 @@ namespace Villamos
         {
             try
             {
-                string hely, jelszó, szöveg;
+                List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                {
-                    hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                    jelszó = "pozsgaii";
-                    szöveg = "SELECT DISTINCT típus FROM állománytábla where törölt=0 ";
-                }
+                    Adatok = KézJármű.Lista_Adatok("Főmérnökség");
                 else
-                {
-                    hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\villamos.mdb";
-                    jelszó = "pozsgaii";
-                    szöveg = "SELECT DISTINCT típus FROM állománytábla where törölt=0 ";
-                }
+                    Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+                Adatok = (from a in Adatok
+                          where a.Törölt == false
+                          orderby a.Típus
+                          select a).ToList();
+                List<string> Típusok = Adatok.Select(a => a.Típus).Distinct().ToList();
+
+
 
                 Típus_Szűrő.Items.Clear();
-                Típus_Szűrő.BeginUpdate();
                 Típus_Szűrő.Items.Add("");
-                Típus_Szűrő.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "típus"));
-                Típus_Szűrő.EndUpdate();
+                foreach (string Elem in Típusok)
+                    Típus_Szűrő.Items.Add(Elem);
+
                 Típus_Szűrő.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -2285,16 +2275,15 @@ namespace Villamos
                 if (RögzítPályaszám.Text.Trim() == "") return;
                 Rögzítürít();
 
-                // betöltjük, ha van a pozíciókat
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\kerék.mdb";
-                string jelszó = "szabólászló";
-                string szöveg = $"SELECT * FROM tábla where [azonosító]='{RögzítPályaszám.Text.Trim()}' ORDER BY pozíció";
-
-
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
+                List<Adat_Kerék_Tábla> EgyKocsi = (from a in Adatok
+                                                   where a.Azonosító == RögzítPályaszám.Text.Trim()
+                                                   orderby a.Pozíció
+                                                   select a).ToList();
                 Rögzítpozíció.Items.Clear();
-                Rögzítpozíció.BeginUpdate();
-                Rögzítpozíció.Items.AddRange(MyF.ComboFeltöltés(hely, jelszó, szöveg, "pozíció"));
-                Rögzítpozíció.EndUpdate();
+                foreach (Adat_Kerék_Tábla Elem in EgyKocsi)
+                    Rögzítpozíció.Items.Add(Elem.Pozíció);
+
                 Rögzítpozíció.Refresh();
 
                 ChkErőtám.Checked = MyKerék.Erőtámkiolvasás(SAPPályaszám.Text.Trim());

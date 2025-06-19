@@ -2,10 +2,6 @@
 {
     partial class Ablak_TTP_Alapadat
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        internal System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -62,7 +58,7 @@
             this.CmbPályaszám.Size = new System.Drawing.Size(180, 28);
             this.CmbPályaszám.Sorted = true;
             this.CmbPályaszám.TabIndex = 1;
-            this.CmbPályaszám.SelectedIndexChanged += new System.EventHandler(this.CmbPályaszám_SelectedIndexChanged);
+            this.CmbPályaszám.SelectionChangeCommitted += new System.EventHandler(this.CmbPályaszám_SelectionChangeCommitted);
             this.CmbPályaszám.TextUpdate += new System.EventHandler(this.CmbPályaszám_TextUpdate);
             // 
             // DátumGyártás
@@ -161,5 +157,6 @@
         internal System.Windows.Forms.Label label2;
         internal System.Windows.Forms.Label label4;
         internal System.Windows.Forms.ToolTip toolTip1;
+        private System.ComponentModel.IContainer components;
     }
 }

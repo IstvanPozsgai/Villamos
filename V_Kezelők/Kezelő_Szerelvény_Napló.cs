@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -73,7 +74,7 @@ namespace Villamos.Kezelők
             szöveg += $"{Adat.Szerelvényhossz}, ";
             szöveg += $"'{Program.PostásNév.Trim()}', ";
             szöveg += $"'{DateTime.Now}') ";
-            Adatbázis.ABMódosítás(hely, jelszó, szöveg);
+            MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
         //elkopó

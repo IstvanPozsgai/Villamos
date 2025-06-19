@@ -331,6 +331,7 @@ namespace Villamos
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboListáz();
+            PDF_Listáz_psz_();
         }
         #endregion
 

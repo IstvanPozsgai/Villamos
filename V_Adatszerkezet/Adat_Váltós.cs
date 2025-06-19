@@ -26,10 +26,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Dátum = dátum;
         }
 
-        public Adat_Váltós_Összesítő(long perc, DateTime dátum, string csoport) : this(perc, dátum)
+        public Adat_Váltós_Összesítő(string csoport, long perc, DateTime dátum)
         {
             Csoport = csoport;
+            Perc = perc;
+            Dátum = dátum;
         }
+
     }
 
 
@@ -46,8 +49,8 @@ namespace Villamos.Villamos_Adatszerkezet
             Dátum = dátum;
         }
     }
-  
-    
+
+
     public class Adat_Váltós_Váltóstábla
     {
         public string Telephely { get; private set; }
@@ -69,7 +72,7 @@ namespace Villamos.Villamos_Adatszerkezet
             Tperc = tperc;
         }
     }
-   
+
     public class Adat_Váltós_Váltóscsopitábla
     {
         public string Csoport { get; private set; }

@@ -379,4 +379,7 @@ FodyWeavers.xsd
 /Főmérnökség
 /Fogaskerekű
 /Súgó
-Villamos_C\#.exe
+/Villamos_C#.exe
+*.dll
+/Villamos.csproj
+/Adatok/főkönyv

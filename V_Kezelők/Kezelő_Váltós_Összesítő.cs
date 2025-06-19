@@ -40,6 +40,7 @@ namespace Villamos.Kezelők
                             while (rekord.Read())
                             {
                                 Adat = new Adat_Váltós_Összesítő(
+                                          Tábla,
                                           rekord["Perc"].ToÉrt_Long(),
                                           rekord["Dátum"].ToÉrt_DaTeTime()
                                           );

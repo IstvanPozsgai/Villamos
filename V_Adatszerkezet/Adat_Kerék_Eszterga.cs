@@ -34,6 +34,21 @@ namespace Villamos.Villamos_Adatszerkezet
             Típus = típus;
             Norma = norma;
         }
+
+        /// <summary>
+        ///   Módosításhoz konstruktor, csak a pályaszám, ütemezés dátum és telephely szükséges.
+        /// </summary>
+        /// <param name="pályaszám"></param>
+        /// <param name="ütemezés_dátum"></param>
+        /// <param name="státus"></param>
+        /// <param name="telephely"></param>
+        public Adat_Kerék_Eszterga_Igény(string pályaszám, DateTime ütemezés_dátum, int státus, string telephely)
+        {
+            Pályaszám = pályaszám;
+            Ütemezés_dátum = ütemezés_dátum;
+            Státus = státus;
+            Telephely = telephely;
+        }
     }
 
     public class Adat_Kerék_Eszterga_Esztergályos
@@ -251,9 +266,9 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Megjegyzés { get; private set; }
         public int Státus { get; private set; }
 
-        public Adat_Baross_Mérési_Adatok(DateTime dátum_1, string azonosító, string tulajdonos, string kezelő, string profil, long profil_szám, string kerékpár_szám, 
-            string adat_1, string adat_2, string adat_3, string típus_Eszt, long kMU, int pozíció_Eszt, string tengely_Aznosító, string adat_4, DateTime dátum_2, 
-            double táv_Belső_Futó_K, double táv_Nyom_K, double delta_K, double b_Átmérő_K, double j_Átmérő_K, double b_Axiális_K, double j_Axiális_K, double b_Radiális_K, 
+        public Adat_Baross_Mérési_Adatok(DateTime dátum_1, string azonosító, string tulajdonos, string kezelő, string profil, long profil_szám, string kerékpár_szám,
+            string adat_1, string adat_2, string adat_3, string típus_Eszt, long kMU, int pozíció_Eszt, string tengely_Aznosító, string adat_4, DateTime dátum_2,
+            double táv_Belső_Futó_K, double táv_Nyom_K, double delta_K, double b_Átmérő_K, double j_Átmérő_K, double b_Axiális_K, double j_Axiális_K, double b_Radiális_K,
             double j_Radiális_K, double b_Nyom_Mag_K, double j_Nyom_Mag_K, double b_Nyom_Vast_K, double j_nyom_Vast_K, double b_Nyom_Vast_B_K, double j_nyom_Vast_B_K, double b_QR_K,
             double j_QR_K, double b_Profilhossz_K, double j_Profilhossz_K, DateTime dátum_3, double táv_Belső_Futó_Ú, double táv_Nyom_Ú, double delta_Ú, double b_Átmérő_Ú,
             double j_Átmérő_Ú, double b_Axiális_Ú, double j_Axiális_Ú, double b_Radiális_Ú, double j_Radiális_Ú, double b_Nyom_Mag_Ú, double j_Nyom_Mag_Ú, double b_Nyom_Vast_Ú,
@@ -320,6 +335,16 @@ namespace Villamos.Villamos_Adatszerkezet
             Eszterga_Id = eszterga_Id;
             Megjegyzés = megjegyzés;
             Státus = státus;
+        }
+
+        public Adat_Baross_Mérési_Adatok(string azonosító, string kerékpár_szám, string típus_Eszt, int pozíció_Eszt, long eszterga_Id, string megjegyzés)
+        {
+            Azonosító = azonosító;
+            Kerékpár_szám = kerékpár_szám;
+            Típus_Eszt = típus_Eszt;
+            Pozíció_Eszt = pozíció_Eszt;
+            Eszterga_Id = eszterga_Id;
+            Megjegyzés = megjegyzés;
         }
     }
 }
