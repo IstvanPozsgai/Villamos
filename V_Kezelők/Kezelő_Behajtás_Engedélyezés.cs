@@ -84,6 +84,36 @@ namespace Villamos.Kezelők
             }
         }
 
+
+        public void Döntés(Adat_Behajtás_Engedélyezés Adat)
+        {
+            try
+            {
+                if (Adat.Id == 0)
+                    Rögzítés(Adat);
+                else
+                {
+                    List<Adat_Behajtás_Engedélyezés> Adatok = Lista_Adatok();
+                    Adat_Behajtás_Engedélyezés Elem = (from a in Adatok
+                                                       where a.Id == Adat.Id // feltételezve, hogy az Id az egyedi azonosító
+                                                       select a).FirstOrDefault();
+                    if (Elem != null)
+                        Módosítás(Adat);
+                    else
+                        Rögzítés(Adat);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Módosítás(Adat_Behajtás_Engedélyezés Adat)
         {
             try
