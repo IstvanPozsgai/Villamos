@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Takarítás_Telep_Opció
     {
-        readonly string jelszó = "forgalmiutasítás";
+        readonly string jelszó = "seprűéslapát";
         string hely;
 
         private void FájlBeállítás(string Telephely, int Év)
