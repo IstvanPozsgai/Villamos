@@ -1857,9 +1857,8 @@ namespace Villamos
                             AdatokGy.Add(ADAT);
                             i += 1;
                         }
-
-                        AlHoltart.Lép();
                     }
+                    AlHoltart.Lép();
                 }
                 KézElőterv.Rögzítés(hova, AdatokGy);
             }
@@ -1881,7 +1880,7 @@ namespace Villamos
                 string hova = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
                 if (!File.Exists(hova)) return;
 
-                FőHoltart.Be();
+                FőHoltart.Be(PszJelölő.CheckedItems.Count + 2);
                 AlHoltart.Be(Hónapok + 3);
                 AlHoltart.BackColor = Color.Green;
 
