@@ -37,8 +37,8 @@ namespace Villamos
         List<Adat_Kerék_Mérés> AdatokMérés = new List<Adat_Kerék_Mérés>();
         List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
 
-        int Hónapok = 0;
-        long Havikm = 0;
+        int Hónapok = 24;
+        long Havikm = 5000;
 
         #region Alap
         public Ablak_T5C5_Tulajdonság()
