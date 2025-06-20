@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyA = Adatbázis;
@@ -18,35 +17,30 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
     public partial class Ablak_Eszterga_Adatok_Baross : Form
     {
         readonly Kezelő_Baross_Mérési_Adatok KézMérés = new Kezelő_Baross_Mérési_Adatok();
+        readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
+        readonly Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
 
         List<Adat_Baross_Mérési_Adatok> AdatokMérés = new List<Adat_Baross_Mérési_Adatok>();
 
+        #region Alap
         public Ablak_Eszterga_Adatok_Baross()
         {
             InitializeComponent();
+            Start();
+        }
+
+        private void Start()
+        {
+            Jogosultságkiosztás();
+            Státuscombo_Feltöltés();
+            Dátumtól.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            dátumig.Value = new DateTime(DateTime.Today.Year, 12, 31);
         }
 
         private void Ablak_Eszterga_Adatok_Baross_Load(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
-            if (!Exists(hely))
-                Adatbázis_Létrehozás.Kerék_Baross_Mérési_Adatok(hely);
-            Jogosultságkiosztás();
-            Státuscombo_Feltöltés();
-
-            Dátumtól.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            dátumig.Value = new DateTime(DateTime.Today.Year, 12, 31);
-
-            hely = Application.StartupPath + @"\Főmérnökség\adatok\" + DateTime.Today.Year;
-            if (Directory.Exists(hely) == false)
-                Directory.CreateDirectory(hely);
-
-            hely += @"\telepikerék.mdb";
-            if (!Exists(hely))
-                Adatbázis_Létrehozás.Méréstáblakerék(hely);
         }
 
-        #region Alap
         private void Súgó_Click(object sender, EventArgs e)
         {
             try
@@ -143,15 +137,11 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 };
 
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() == DialogResult.Cancel)
-                    return;
+                if (OpenFileDialog1.ShowDialog() == DialogResult.Cancel) return;
 
                 Holtart.Be();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"SELECT * FROM mérés ";
-                AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokMérés = KézMérés.Lista_Adatok();
 
                 string Választás = "TtsssslssssslissTtdddddddddddddddddddTtdddddddddddddddddddddl";
 
@@ -171,7 +161,9 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 }
 
                 int hibák = 0;
-                List<string> szövegGy = new List<string>();
+                List<string> SzövegVáltok = new List<string>();
+                List<string> Megjegyzések = new List<string>();
+                List<long> IdGy = new List<long>();
                 foreach (string Elem in CSVAdatok)
                 {
                     string[] Darabol = Elem.Split(';');
@@ -277,26 +269,15 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                                                                    where a.Eszterga_Id == ID
                                                                    select a).FirstOrDefault();
 
-                            if (ElemMérés != null)
-                            {
-                                //Ha van kitöröljük
-                                szöveg = $"DELETE FROM mérés WHERE Eszterga_Id={ID}";
-                                MyA.ABtörlés(hely, jelszó, szöveg);
-                            }
-                            szöveg = "INSERT INTO mérés (Dátum_1, Azonosító, Tulajdonos, kezelő, Profil, Profil_szám, Kerékpár_szám, Adat_1, Adat_2,";
-                            szöveg += " Adat_3, Típus_Eszt, KMU, Pozíció_Eszt, Tengely_Aznosító, Adat_4, Dátum_2, Táv_Belső_Futó_K, Táv_Nyom_K, Delta_K,";
-                            szöveg += " B_Átmérő_K, J_Átmérő_K, B_Axiális_K, J_Axiális_K, B_Radiális_K, J_Radiális_K, B_Nyom_Mag_K, J_Nyom_Mag_K, B_Nyom_Vast_K,";
-                            szöveg += " J_nyom_Vast_K, B_Nyom_Vast_B_K, J_nyom_Vast_B_K, B_QR_K, J_QR_K, B_Profilhossz_K, J_Profilhossz_K, Dátum_3, Táv_Belső_Futó_Ú,";
-                            szöveg += " Táv_Nyom_Ú, Delta_Ú, B_Átmérő_Ú, J_Átmérő_Ú, B_Axiális_Ú, J_Axiális_Ú, B_Radiális_Ú, J_Radiális_Ú, B_Nyom_Mag_Ú, J_Nyom_Mag_Ú,";
-                            szöveg += " B_Nyom_Vast_Ú, J_nyom_Vast_Ú, B_Nyom_Vast_B_Ú, J_nyom_Vast_B_Ú, B_QR_Ú, J_QR_Ú, B_Szög_Ú, J_Szög_Ú, B_Profilhossz_Ú,";
-                            szöveg += $" J_Profilhossz_Ú, Eszterga_Id, Megjegyzés, Státus) Values ({szövegvált} '{Megjegyzés}', 1)";
-
-                            szövegGy.Add(szöveg);
+                            if (ElemMérés != null) IdGy.Add(ID);
+                            SzövegVáltok.Add(szövegvált);
+                            Megjegyzések.Add(Megjegyzés);
                         }
                         Holtart.Lép();
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                KézMérés.Törlés(IdGy);
+                KézMérés.Rögzítés(SzövegVáltok, Megjegyzések);
 
                 Holtart.Ki();
                 MessageBox.Show("Az adatok konvertálása megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -403,8 +384,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
-                string jelszó = "RónaiSándor";
                 Holtart.Be();
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -479,24 +458,20 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 Tábla.Columns[58].HeaderText = "Megjegyzés"; Tábla.Columns[58].Width = 120;
                 Tábla.Columns[59].HeaderText = "Státus"; Tábla.Columns[59].Width = 120;
 
-                string szöveg = $"SELECT * FROM mérés WHERE ";
-                szöveg += $" [Dátum_1]>=#{Dátumtól.Value:M-d-yy} 00:00:0#";
-                szöveg += $" and [Dátum_1]<#{dátumig.Value:M-d-yy} 23:59:0#";
+                AdatokMérés = KézMérés.Lista_Adatok();
+                AdatokMérés = (from a in AdatokMérés
+                               where a.Dátum_1 >= MyF.Nap0000(Dátumtól.Value)
+                               && a.Dátum_1 < MyF.Nap2359(dátumig.Value)
+                               orderby a.Eszterga_Id
+                               select a).ToList();
 
                 if (Státuscombo.Text.Trim() != "")
                 {
                     MyEn.Eszterga_Állapot_Státus KiválasztottStátusz = (MyEn.Eszterga_Állapot_Státus)Enum.Parse(typeof(MyEn.Eszterga_Állapot_Státus), Státuscombo.Text.ToString());
-                    szöveg += " AND  Státus=" + ((int)KiválasztottStátusz).ToString();
+                    AdatokMérés = AdatokMérés.Where(a => a.Státus == (int)KiválasztottStátusz).ToList();
                 }
 
-                if (Pályaszám.Text.Trim() != "")
-                {
-                    szöveg += $" AND  azonosító='{Pályaszám.Text.Trim()}'";
-                }
-                szöveg += " ORDER BY Eszterga_Id";
-
-
-                AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
+                if (Pályaszám.Text.Trim() != "") AdatokMérés = AdatokMérés.Where(a => a.Azonosító.Trim() == Pályaszám.Text.Trim()).ToList();
 
                 foreach (Adat_Baross_Mérési_Adatok rekord in AdatokMérés)
                 {
@@ -647,8 +622,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             try
             {
 
-                if (Tábla.Rows.Count <= 0)
-                    return;
+                if (Tábla.Rows.Count <= 0) return;
                 string fájlexc;
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -680,7 +654,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void Ellenőrzések_Click(object sender, EventArgs e)
@@ -696,26 +669,17 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 if (Tábla.Rows.Count < 1) throw new HibásBevittAdat("Nincs a táblázatban ellenőrzendő elem.");
 
                 Holtart.Be();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-                string jelszó = "szabólászló";
-                string szöveg = $"SELECT * FROM tábla where objektumfajta='V.KERÉKPÁR' order by pozíció ";
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Objektumfajta == "V.KERÉKPÁR"
+                          orderby a.Pozíció
+                          select a).ToList();
 
-                Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
-                List<Adat_Kerék_Tábla> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Jármű> AdatokJármű = Kéz_Jármű.Lista_Adatok("Főmérnökség");
+                AdatokJármű = AdatokJármű.Where(a => a.Törölt == false).OrderBy(a => a.Azonosító).ToList();
 
-
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\villamos.mdb";
-                jelszó = "pozsgaii";
-                szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-
-                Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
-                List<Adat_Jármű> AdatokJármű = Kéz_Jármű.Lista_Adatok(hely, jelszó, szöveg);
-
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
-                jelszó = "RónaiSándor";
-
-                List<string> szövegGy = new List<string>();
+                List<Adat_Baross_Mérési_Adatok> AdatokSGy = new List<Adat_Baross_Mérési_Adatok>();
+                List<Adat_Baross_Mérési_Adatok> AdatokMGy = new List<Adat_Baross_Mérési_Adatok>();
                 foreach (DataGridViewRow Elem in Tábla.Rows)
                 {
                     //Csak azokat ellenőrizzük ami még nincs áttöltve, és nincs törölve
@@ -737,8 +701,10 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
                         if (Létezik_Psz != null && Létezik_kerék != null && Létezik_beépítés != null)
                         {
-                            szöveg = "UPDATE mérés SET Státus=4 WHERE Eszterga_Id=" + Elem.Cells[57].Value.ToString();
-                            szövegGy.Add(szöveg);
+                            Adat_Baross_Mérési_Adatok ADATS = new Adat_Baross_Mérési_Adatok(
+                                Elem.Cells[57].Value.ToÉrt_Long(),
+                                4);
+                            AdatokSGy.Add(ADATS);
                         }
                         else
                         {
@@ -751,14 +717,16 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                             //Ha volt már ilyen szöveg akkor nem rögzítjük újra
                             if (!előző.Contains(válasz.Trim()))
                             {
-                                szöveg = "UPDATE mérés SET Státus=2, ";
-                                szöveg += $" Megjegyzés='{előző + "\n" + válasz.Trim()}'";
-                                szöveg += " WHERE Eszterga_Id=" + Elem.Cells[57].Value.ToString();
-                                szövegGy.Add(szöveg);
+                                Adat_Baross_Mérési_Adatok ADATS = new Adat_Baross_Mérési_Adatok(
+                                        Elem.Cells[57].Value.ToÉrt_Long(),
+                                        előző + "\n" + válasz.Trim(),
+                                        2);
+                                AdatokMGy.Add(ADATS);
                             }
                         }
                     }
-                    MyA.ABMódosítás(hely, jelszó, szövegGy);
+                    if (AdatokSGy.Count > 0) KézMérés.Módosítás(AdatokSGy);
+                    if (AdatokMGy.Count > 0) KézMérés.MódosításMeg(AdatokMGy);
                     Holtart.Lép();
                 }
                 Holtart.Ki();
@@ -782,12 +750,16 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             {
                 if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve elem törlésre.");
                 Holtart.Be();
-
+                List<Adat_Baross_Mérési_Adatok> AdatokSGy = new List<Adat_Baross_Mérési_Adatok>();
                 foreach (DataGridViewRow Elem in Tábla.SelectedRows)
                 {
-                    Státus_Állítás(9, long.Parse(Elem.Cells[57].Value.ToString()));
+                    Adat_Baross_Mérési_Adatok ADATS = new Adat_Baross_Mérési_Adatok(
+                       Elem.Cells[57].Value.ToÉrt_Long(),
+                       9);
+                    AdatokSGy.Add(ADATS);
                     Holtart.Lép();
                 }
+                if (AdatokSGy.Count > 0) KézMérés.Módosítás(AdatokSGy);
                 Holtart.Ki();
                 MessageBox.Show("Az adatok törlése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -803,23 +775,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-        private void Státus_Állítás(int státus, long EsztergaID)
-        {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Baross_Mérés.mdb";
-            string jelszó = "RónaiSándor";
-            string szöveg = "SELECT * FROM mérés ";
-            AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
-            Adat_Baross_Mérési_Adatok ElemMérés = (from a in AdatokMérés
-                                                   where a.Eszterga_Id == EsztergaID
-                                                   select a).FirstOrDefault();
-
-            if (ElemMérés != null)
-            {
-                szöveg = $"UPDATE mérés SET Státus={státus} WHERE Eszterga_Id={EsztergaID}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-        }
-
+        //itt tartok
         private void Villamos_programba_Click(object sender, EventArgs e)
         {
             try
@@ -827,15 +783,15 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 if (Tábla.Rows.Count < 1) throw new HibásBevittAdat("Nincs a táblázatban rögzítendő elem.");
 
                 Holtart.Be();
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Objektumfajta == "V.KERÉKPÁR"
+                          orderby a.Pozíció
+                          select a).ToList();
 
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
                 string jelszó = "szabólászló";
-                string szöveg = $"SELECT * FROM tábla where objektumfajta='V.KERÉKPÁR' order by pozíció ";
-                Kezelő_Kerék_Tábla kéz = new Kezelő_Kerék_Tábla();
-                List<Adat_Kerék_Tábla> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{dátumig.Value.Year}\telepikerék.mdb";
-                szöveg = $"SELECT * FROM esztergatábla order by mikor desc";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{dátumig.Value.Year}\telepikerék.mdb";
+                string szöveg = $"SELECT * FROM esztergatábla order by mikor desc";
                 Kezelő_Kerék_Eszterga KézEszt = new Kezelő_Kerék_Eszterga();
                 List<Adat_Kerék_Eszterga> AdatokEszt = KézEszt.Lista_Adatok(hely, jelszó, szöveg);
                 if (Dátumtól.Value.Year != dátumig.Value.Year)
@@ -846,6 +802,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 }
 
                 List<string> szövegGy = new List<string>();
+                List<Adat_Baross_Mérési_Adatok> AdatokSGy = new List<Adat_Baross_Mérési_Adatok>();
                 foreach (DataGridViewRow Elem in Tábla.Rows)
                 {
                     // rögzítjük az adatokat, ha későbbi az esztergálás csak akkor rögzítjük
@@ -898,10 +855,16 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     }
 
                     Státus_állítás_Baross(Elem.Cells[1].Value.ToStrTrim(), 7, DateTime.Now);
-                    Státus_Állítás(7, long.Parse(Elem.Cells[57].Value.ToString()));
+
+                    Adat_Baross_Mérési_Adatok ADATS = new Adat_Baross_Mérési_Adatok(
+                             Elem.Cells[57].Value.ToÉrt_Long(),
+                             7);
+                    AdatokSGy.Add(ADATS);
+
                     Holtart.Lép();
                 }
                 MyA.ABMódosítás(hely, jelszó, szövegGy);
+                if (AdatokSGy.Count > 0) KézMérés.Módosítás(AdatokSGy);
 
                 Holtart.Ki();
                 Listázás_Tábla();
