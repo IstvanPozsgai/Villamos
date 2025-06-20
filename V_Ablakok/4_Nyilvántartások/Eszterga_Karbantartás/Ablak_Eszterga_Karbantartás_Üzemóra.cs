@@ -373,6 +373,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private bool MeglevoRekordModositasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
         {
+            bool UtolsoTorles = false;
             try
             {
                 DataGridViewRow KivalasztottSor = Tábla.SelectedRows[0];
@@ -410,10 +411,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                         KezUzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
                         KezUzemora.Rogzites(new Adat_Eszterga_Uzemora(0, UjUzemora, UjDatum, false));
                     }
+                    UtolsoTorles = true;
                 }
                 TablaListazas();
                 Frissit_MuveletTablazat(EredetiDatum, UjDatum, EredetiUzemora, UjUzemora);
                 Eszterga_Valtozas?.Invoke();
+                if(!UtolsoTorles)
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return true;
             }
