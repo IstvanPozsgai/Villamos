@@ -266,6 +266,13 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\Homokozó\ExcelUtlity.cs" />
+    <Compile Include="V_Ablakok\Homokozó\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\Homokozó\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Adatbázis\Adatbázis_Eszterga.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Eszterga_Funkció.cs" />
@@ -1537,6 +1544,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás.resx">
       <DependentUpon>Ablak_Épülettakarítás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\Homokozó\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\Közös\Ablak_Fénykép_Betöltés.resx">
       <DependentUpon>Ablak_Fénykép_Betöltés.cs</DependentUpon>
