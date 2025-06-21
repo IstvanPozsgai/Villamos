@@ -180,20 +180,25 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private string UpdateSzoveg(Adat_Eszterga_Muveletek Adat)
+        {
+            return $"UPDATE {Tabla_Muvelet} SET " +
+                   $"Művelet='{Adat.Művelet}', " +
+                   $"Egység={Adat.Egység}, " +
+                   $"Mennyi_Dátum={Adat.Mennyi_Dátum}, " +
+                   $"Mennyi_Óra={Adat.Mennyi_Óra}, " +
+                   $"Státus={(Adat.Státus ? "True" : "False")}, " +
+                   $"Utolsó_Dátum=#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, " +
+                   $"Utolsó_Üzemóra_állás={Adat.Utolsó_Üzemóra_Állás} " +
+                   $"WHERE ID={Adat.ID}";
+        }
+
         public void MeglevoMuvelet_Modositas(Adat_Eszterga_Muveletek Adat)
         {
             try
             {
-                string szoveg = $"UPDATE {Tabla_Muvelet} SET ";
-                szoveg += $"Művelet='{Adat.Művelet}', ";
-                szoveg += $"Egység={Adat.Egység}, ";
-                szoveg += $"Mennyi_Dátum={Adat.Mennyi_Dátum}, ";
-                szoveg += $"Mennyi_Óra={Adat.Mennyi_Óra}, ";
-                szoveg += $"Státus={(Adat.Státus ? "True" : "False")}, ";
-                szoveg += $"Utolsó_Dátum=#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, ";
-                szoveg += $"Utolsó_Üzemóra_állás={Adat.Utolsó_Üzemóra_Állás} ";
-                szoveg += $"WHERE ID = {Adat.ID} ";
-                MyA.ABMódosítás(hely, jelszo, szoveg);
+                string sql = UpdateSzoveg(Adat);
+                MyA.ABMódosítás(hely, jelszo, sql);
             }
             catch (HibásBevittAdat ex)
             {
@@ -209,27 +214,39 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szoveg1 = $"UPDATE {Tabla_Muvelet} SET Művelet='{rekord2.Művelet}', ";
-                szoveg1 += $"Egység={rekord2.Egység}, ";
-                szoveg1 += $"Mennyi_Dátum={rekord2.Mennyi_Dátum}, ";
-                szoveg1 += $"Mennyi_Óra={rekord2.Mennyi_Óra}, ";
-                szoveg1 += $"Státus={(rekord2.Státus ? "True" : "False")},";
-                szoveg1 += $"Utolsó_Dátum=#{rekord2.Utolsó_Dátum:yyyy-MM-dd}#,";
-                szoveg1 += $"Utolsó_Üzemóra_állás={rekord2.Utolsó_Üzemóra_Állás} ";
-                szoveg1 += $"WHERE ID={rekord1.ID}";
+                Adat_Eszterga_Muveletek masolat1 = new Adat_Eszterga_Muveletek
+                    (
+                        rekord1.ID,
+                        rekord2.Művelet,
+                        rekord2.Egység,
+                        rekord2.Mennyi_Dátum,
+                        rekord2.Mennyi_Óra,
+                        rekord2.Státus,
+                        rekord2.Utolsó_Dátum,
+                        rekord2.Utolsó_Üzemóra_Állás,
+                        rekord2.Megjegyzés
+                    );
 
-                string szoveg2 = $"UPDATE {Tabla_Muvelet} SET Művelet='{rekord1.Művelet}', ";
-                szoveg2 += $"Egység={rekord1.Egység}, ";
-                szoveg2 += $"Mennyi_Dátum={rekord1.Mennyi_Dátum}, ";
-                szoveg2 += $"Mennyi_Óra={rekord1.Mennyi_Óra}, ";
-                szoveg2 += $"Státus={(rekord1.Státus ? "True" : "False")},";
-                szoveg2 += $"Utolsó_Dátum=#{rekord1.Utolsó_Dátum:yyyy-MM-dd}#,";
-                szoveg2 += $"Utolsó_Üzemóra_állás={rekord1.Utolsó_Üzemóra_Állás} ";
-                szoveg2 += $"WHERE ID={rekord2.ID}";
+                Adat_Eszterga_Muveletek masolat2 = new Adat_Eszterga_Muveletek
+                    (
+                        rekord2.ID,
+                        rekord1.Művelet,
+                        rekord1.Egység,
+                        rekord1.Mennyi_Dátum,
+                        rekord1.Mennyi_Óra,
+                        rekord1.Státus,
+                        rekord1.Utolsó_Dátum,
+                        rekord1.Utolsó_Üzemóra_Állás,
+                        rekord1.Megjegyzés
+                    );
 
-                List<string> SQL = new List<string> { szoveg1, szoveg2 };
+                List<string> sqlLista = new List<string>
+                {
+                    UpdateSzoveg(masolat1),
+                    UpdateSzoveg(masolat2)
+                };
 
-                MyA.ABMódosítás(hely, jelszo, SQL);
+                MyA.ABMódosítás(hely, jelszo, sqlLista);
             }
             catch (HibásBevittAdat ex)
             {
@@ -245,24 +262,15 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string szoveg, szovegMozog;
+                List<string> sqlLista = new List<string>();
 
+                sqlLista.Add($"UPDATE {Tabla_Muvelet} SET ID = ID + 1 WHERE ID >= {MasodikID}");
                 if (ElsoID < MasodikID)
-                {
-                    szoveg = $"UPDATE {Tabla_Muvelet} SET ID = ID + 1 WHERE ID >= {MasodikID}";
-                    MyA.ABMódosítás(hely, jelszo, szoveg);
-
-                    szovegMozog = $"UPDATE {Tabla_Muvelet} SET ID = {MasodikID} WHERE ID = {ElsoID}";
-                    MyA.ABMódosítás(hely, jelszo, szovegMozog);
-                }
+                    sqlLista.Add($"UPDATE {Tabla_Muvelet} SET ID = {MasodikID} WHERE ID = {ElsoID}");
                 else
-                {
-                    szoveg = $"UPDATE {Tabla_Muvelet} SET ID = ID + 1 WHERE ID >= {MasodikID}";
-                    MyA.ABMódosítás(hely, jelszo, szoveg);
+                    sqlLista.Add($"UPDATE {Tabla_Muvelet} SET ID = {MasodikID} WHERE ID = {ElsoID + 1}");
 
-                    szovegMozog = $"UPDATE {Tabla_Muvelet} SET ID = {MasodikID} WHERE ID = {ElsoID + 1}";
-                    MyA.ABMódosítás(hely, jelszo, szovegMozog);
-                }
+                MyA.ABMódosítás(hely, jelszo, sqlLista);
             }
             catch (HibásBevittAdat ex)
             {

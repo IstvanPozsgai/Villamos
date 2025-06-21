@@ -380,3 +380,17 @@ FodyWeavers.xsd
 /Fogaskerekű
 /Súgó
 /Adatok/főkönyv/menet2025.mdb
+/AdvancedDataGridView.dll
+/ExcelDataReader.DataSet.dll
+/ExcelDataReader.dll
+/Microsoft.Office.Interop.Excel.dll
+/Microsoft.Office.Interop.Outlook.dll
+/Office.dll
+/PdfiumViewer.dll
+/pdfium_x64.dll
+/pdfium_x86.dll
+/System.Data.OleDb.dll
+/Villamos_C#.exe
+/fr/AdvancedDataGridView.resources.dll
+/nl/PdfiumViewer.resources.dll
+/ru/AdvancedDataGridView.resources.dll

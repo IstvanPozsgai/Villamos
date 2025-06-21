@@ -176,5 +176,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
         #endregion
+
+        private void TxtBxUzemOra_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                BtnRogzit.PerformClick();
+            }
+        }
     }
 }
