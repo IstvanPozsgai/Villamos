@@ -1900,7 +1900,7 @@
       <Version>2018.4.8.256</Version>
     </PackageReference>
     <PackageReference Include="System.Data.OleDb">
-      <Version>9.0.1</Version>
+      <Version>9.0.6</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
