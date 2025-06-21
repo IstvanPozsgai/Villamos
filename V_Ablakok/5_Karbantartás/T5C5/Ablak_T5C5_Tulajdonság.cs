@@ -834,9 +834,10 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
+                DateTime Kezdet = DateTime.Now;
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
                 MyE.EXCELtábla(fájlexc, Tábla_lekérdezés, false);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}\n idő alatt:{DateTime.Now - Kezdet}", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
@@ -850,7 +851,7 @@ namespace Villamos
             }
         }
 
-        private void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
+        private async void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
         {
             SaveFileDialog SaveFileDialog1 = new SaveFileDialog
             {
@@ -867,31 +868,21 @@ namespace Villamos
             else
                 return;
             _AdatTábla.Clear();
-            //    _AdatTábla = AdattáblaFeltöltés();
+            // JAVÍTANDÓ: Itt lehet próbálkozni Excel kimenet gyorsításával
             List<Adat_T5C5_Kmadatok> Adatok = KézKmAdatok.Lista_Adatok();
             _AdatTábla = MyF.ToDataTable(Adatok);
             Holtart.Be();
             timer1.Enabled = true;
-            SZál_ABadatbázis(() =>
-             { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                 timer1.Enabled = false;
-                 Holtart.Ki();
-                 MessageBox.Show("Az Excel tábla elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                 MyE.Megnyitás(_fájlexc);
-             });
+            DateTime Kezdet = DateTime.Now;
+            await Task.Run(() => MyE.EXCELtábla(_AdatTábla, _fájlexc));
+
+            timer1.Enabled = false;
+            Holtart.Ki();
+            MessageBox.Show($"Az Excel tábla elkészült !\n Futási idő{DateTime.Now - Kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MyE.Megnyitás(_fájlexc);
+
         }
 
-        private void SZál_ABadatbázis(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót
-                MyE.EXCELtábla(_AdatTábla, _fájlexc);
-
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
-        }
 
         private void Tábla_lekérdezés_CellClick(object sender, DataGridViewCellEventArgs e)
         {

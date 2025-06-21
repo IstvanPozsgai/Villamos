@@ -635,6 +635,5 @@ namespace Villamos
 
             Module_Excel.ExcelBezárás();
         }
-
     }
 }
