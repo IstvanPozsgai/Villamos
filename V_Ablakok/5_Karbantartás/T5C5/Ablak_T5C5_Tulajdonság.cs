@@ -874,7 +874,7 @@ namespace Villamos
             Holtart.Be();
             timer1.Enabled = true;
             DateTime Kezdet = DateTime.Now;
-            await Task.Run(() => MyE.EXCELtábla(_AdatTábla, _fájlexc));
+            await Task.Run(() => MyE.ExcelTábla(_AdatTábla, _fájlexc));
 
             timer1.Enabled = false;
             Holtart.Ki();
