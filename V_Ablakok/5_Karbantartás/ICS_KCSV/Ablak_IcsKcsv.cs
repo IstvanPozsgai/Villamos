@@ -1044,7 +1044,7 @@ namespace Villamos
             Thread proc = new Thread(() =>
             {
                 // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót
-                MyE.EXCELtábla(_Tábla, _fájlexc);
+                MyE.DataTableToExcel(_fájlexc, _Tábla);
                 this.Invoke(callback, new object[] { });
             });
             proc.Start();

@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using static System.IO.File;
-using DataTable = System.Data.DataTable;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
 
@@ -45,29 +44,7 @@ namespace Villamos
 
 
 
-        public static long Munkalap(DataTable Tábla, int sor, string munkalap)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munkalap.Select();
 
-            //Fejléc
-            for (int j = 0; j < Tábla.Columns.Count; j++)
-            {
-                Munkalap.Cells[sor, j + 1] = Tábla.Columns[j].ColumnName.ToString();
-            }
-
-
-            for (int i = 0; i < Tábla.Rows.Count; i++)
-            {
-                for (int j = 0; j < Tábla.Columns.Count; j++)
-                {
-                    Munkalap.Cells[i + sor + 1, j + 1] = Tábla.Rows[i].ItemArray[j];
-                }
-            }
-
-            long utolsó_sor = Tábla.Rows.Count;
-            return utolsó_sor;
-        }
 
 
 
@@ -587,25 +564,7 @@ namespace Villamos
         }
 
 
-        /// <summary>
-        /// Sormagasságot lehet beállítani
-        /// </summary>
-        /// <param name="mit">szöveg</param>
-        /// <param name="mekkora">egész</param>
-        public static void Sormagasság(string mit, int mekkora)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.RowHeight = mekkora;
-        }
-        /// <summary>
-        /// Automata sormagasság beállítása
-        /// </summary>
-        /// <param name="mit"></param>
-        public static void Sormagasság(string mit)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.EntireRow.AutoFit();
-        }
+
 
         /// <summary>
         /// A cellába beírt szöveg olvasási irányát lehet beállítani
@@ -719,7 +678,8 @@ namespace Villamos
 
             Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
             MyExcel.Range myRange = Munkalap.Range[mit];
-            object result = myRange.AutoFilter(sor);
+            myRange.AutoFilter(sor);
+
         }
 
 
@@ -745,10 +705,10 @@ namespace Villamos
         }
 
 
-        public static void ExcelMegnyitás(string hely)
+        public static void ExcelMegnyitás(string hely, bool látszik = false)
         {
             xlApp = new MyExcel.Application();
-            //  xlApp.Visible = true;
+            xlApp.Visible = látszik;
             xlWorkBook = xlApp.Workbooks.Open(hely);
         }
 
@@ -1241,6 +1201,7 @@ namespace Villamos
             cp.ApplyLayout(1);
 
         }
+
 
     }
 }

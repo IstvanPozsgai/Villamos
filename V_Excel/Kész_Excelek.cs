@@ -2,6 +2,7 @@
 using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Windows.Forms;
 using Color = System.Drawing.Color;
@@ -414,7 +415,7 @@ namespace Villamos
         /// <param name="Tábla"></param>
         /// <param name="fájl"></param>
         /// <param name="Elemek"></param>
-        public static void DataTableToExcel(DataTable Tábla, string fájl)
+        public static void DataTableToExcel(string fájl, DataTable Tábla)
         {
             try
             {
@@ -459,5 +460,41 @@ namespace Villamos
         }
 
 
+        public static void DataGridViewToExcel(string fájl, DataGridView Tábla, bool Elsőoszlop = false)
+        {
+            try
+            {
+                DataTable ÚjTábla = new DataTable();
+                foreach (DataGridViewColumn oszlop in Tábla.Columns)
+                {
+                    if (oszlop.Visible)
+                    {
+                        ÚjTábla.Columns.Add(oszlop.HeaderText);
+                    }
+                }
+                foreach (DataGridViewRow sor in Tábla.Rows)
+                {
+                    DataRow ÚjSor = ÚjTábla.NewRow();
+                    for (int i = 0; i < Tábla.Columns.Count; i++)
+                    {
+                        if (Tábla.Columns[i].Visible)
+                        {
+                            ÚjSor[i] = sor.Cells[i].Value;
+                        }
+                    }
+                    ÚjTábla.Rows.Add(ÚjSor);
+                }
+                DataTableToExcel(fájl, ÚjTábla);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "DataGridViewToExcel", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

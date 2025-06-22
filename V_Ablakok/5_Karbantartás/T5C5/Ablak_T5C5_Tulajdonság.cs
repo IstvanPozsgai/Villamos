@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArrayToExcel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -874,7 +875,7 @@ namespace Villamos
             Holtart.Be();
             timer1.Enabled = true;
             DateTime Kezdet = DateTime.Now;
-            await Task.Run(() => MyE.DataTableToExcel(_AdatTábla, _fájlexc));
+            await Task.Run(() => MyE.DataTableToExcel(_fájlexc, _AdatTábla));
 
             timer1.Enabled = false;
             Holtart.Ki();
@@ -2063,14 +2064,17 @@ namespace Villamos
                 string[] Leírás = new string[5];
 
                 // paraméter tábla feltöltése
-                cím[1] = "Adatok";
-                Leírás[1] = "Előtervezett adatok";
-                cím[2] = "Vizsgálatok";
-                Leírás[2] = "Vizsgálati adatok havonta";
-                cím[3] = "Éves_terv";
-                Leírás[3] = "Vizsgálati adatok éves";
-                cím[4] = "Éves_havi_terv";
-                Leírás[4] = "Vizsgálati adatok éves/havi";
+
+                cím[0] = "Tartalom";
+                Leírás[0] = "Tartalom jegyzék";
+                cím[1] = "Vizsgálatok";
+                Leírás[1] = "Vizsgálati adatok havonta";
+                cím[2] = "Éves_terv";
+                Leírás[2] = "Vizsgálati adatok éves";
+                cím[3] = "Éves_havi_terv";
+                Leírás[3] = "Vizsgálati adatok éves/havi";
+                cím[4] = "Adatok";
+                Leírás[4] = "Előtervezett adatok";
 
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -2088,21 +2092,18 @@ namespace Villamos
                 else
                     return;
 
+                FőHoltart.Be(5);
+                utolsósor = Adatoklistázása(fájlexc); //Részletes adatokat a Adatok lapon készítjük el 
 
-                // megnyitjuk
-                MyE.ExcelLétrehozás();
+                MyE.ExcelMegnyitás(fájlexc);       // Megnyitjuk az Excel fájlt
 
                 // ****************************************************
                 // elkészítjük a lapokat
                 // ****************************************************
-                string munkalap = "Munka1";
-                MyE.Munkalap_átnevezés(munkalap, "Tartalom");
-                munkalap = "Tartalom";
-
-                for (int i = 1; i <= 4; i++)
+                for (int i = 0; i < 4; i++)
                     MyE.Új_munkalap(cím[i].Trim());
 
-
+                string munkalap = "Tartalom";
                 // ****************************************************
                 // Elkészítjük a tartalom jegyzéket
                 // ****************************************************
@@ -2112,17 +2113,17 @@ namespace Villamos
                 MyE.Kiir("Leírás", "b1");
                 for (int i = 1; i <= 4; i++)
                 {
-                    MyE.Kiir(cím[i], "A" + (i + 1).ToString());
-                    MyE.Link_beillesztés(munkalap, "B" + (i + 1).ToString(), cím[i].Trim());
-                    MyE.Kiir(Leírás[i], "B" + (i + 1).ToString());
+                    MyE.Kiir(cím[i], $"A{i + 1}");
+                    MyE.Link_beillesztés(munkalap, $"B{i + 1}", cím[i].Trim());
+                    MyE.Kiir(Leírás[i], $"B{i + 1}");
                 }
                 MyE.Oszlopszélesség(munkalap, "A:B");
 
                 // ****************************************************
                 // Elkészítjük a munkalapokat
                 // ****************************************************
-                FőHoltart.Be(4);
-                Adatoklistázása();
+                FőHoltart.Lép();
+                AdatokFormázása(utolsósor);
                 FőHoltart.Lép();
                 Kimutatás();
                 FőHoltart.Lép();
@@ -2130,8 +2131,11 @@ namespace Villamos
                 FőHoltart.Lép();
                 Kimutatás2();
 
+
+
                 MyE.Munkalap_aktív(munkalap);
                 MyE.Aktív_Cella(munkalap, "A1");
+
 
                 MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();
@@ -2149,20 +2153,54 @@ namespace Villamos
             }
         }
 
-        private void Adatoklistázása()
+
+        /// <summary>
+        /// Kilistázzuk az adatokat egy Excel táblába amit ebben az eljárásban hozunk létre.
+        /// Visszaadjuk, hogy hány sorból áll a táblázat
+        /// </summary>
+        /// <param name="fájlnév"></param>
+        /// <returns>Visszaadjuk, hogy hány sorból áll a táblázat</returns>
+        private int Adatoklistázása(string fájlnév)
+        {
+            int utolsósor = 0;
+            try
+            {
+                // megnyitjuk az adatbázist
+                string hely = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
+                DataTable dataTable = MyF.ToDataTable(KézElőterv.Lista_Adatok(hely));
+                utolsósor = dataTable.Rows.Count;
+
+                //Kiírjuk egy Excel táblába
+                byte[] excel = dataTable.ToExcel(a => a.SheetName("Adatok"));
+                File.WriteAllBytes(fájlnév, excel);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return utolsósor;
+        }
+
+        private void AdatokFormázása(long utolsósor)
         {
             try
             {
                 string munkalap = "Adatok";
                 MyE.Munkalap_aktív(munkalap);
+                MyE.SzűrésKi(munkalap); // szűrő kikapcsolása
+                MyE.Háttérszín($"1:1", Color.White); //Visszaállítjuk a háttér színt
+                MyE.Betű($"1:1", Color.Black);
+
+                MyE.SorBeszúrás(munkalap, 1, 2);  //beszúrunk két sort előre
+
                 MyE.Link_beillesztés(munkalap, "A1", "Tartalom");
                 MyE.Munkalap_aktív(munkalap);
-
-                // megnyitjuk az adatbázist
-                string hely = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
-                DataTable dataTable = MyF.ToDataTable(KézElőterv.Lista_Adatok(hely));
-                utolsósor = MyE.Munkalap(dataTable, 3, munkalap);
-
                 //// fejlécet kiírjuk
                 MyE.Kiir("ID", "a3");
                 MyE.Kiir("Pályaszám", "b3");
@@ -2213,7 +2251,7 @@ namespace Villamos
                 MyE.Vastagkeret("a3:AG" + (utolsósor + 3));
                 MyE.Vastagkeret("a3:AG3");
                 // szűrő
-                MyE.Szűrés(munkalap, "A3:AG" + (utolsósor + 3), 3);
+                MyE.Szűrés(munkalap, $"A3:AG{(utolsósor + 3)}", 3);
 
                 // ablaktábla rögzítése
 
@@ -2227,6 +2265,8 @@ namespace Villamos
                 MyE.Kiir((utolsósor + 2).ToString(), "aa1");
                 MyE.Munkalap_aktív("Éves_havi_terv");
                 MyE.Kiir((utolsósor + 2).ToString(), "aa1");
+                MyE.Aktív_Cella(munkalap, "A1");
+
             }
             catch (HibásBevittAdat ex)
             {

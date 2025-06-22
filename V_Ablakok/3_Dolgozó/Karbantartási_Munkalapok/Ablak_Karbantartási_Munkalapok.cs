@@ -2091,7 +2091,7 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Lép();
             }
             string hely = $@"{könyvtár}\Munkautasítás.xlsx";
-            MyE.EXCELtábla(dataTable, hely);
+            MyE.DataTableToExcel(hely, dataTable);
             Holtart.Ki();
         }
 
@@ -2122,7 +2122,7 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Lép();
             }
             string hely = $@"{könyvtár}\Kocsi.xlsx";
-            MyE.EXCELtábla(dataTable, hely);
+            MyE.DataTableToExcel(hely, dataTable);
             Holtart.Ki();
         }
 
@@ -2155,7 +2155,7 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Lép();
             }
             string hely = $@"{könyvtár}\Dolgozó.xlsx";
-            MyE.EXCELtábla(dataTable, hely);
+            MyE.DataTableToExcel(hely, dataTable);
             Holtart.Ki();
             Holtart.Ki();
         }
