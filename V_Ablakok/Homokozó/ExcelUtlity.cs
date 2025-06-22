@@ -58,19 +58,19 @@ namespace Excel
 
                         excelSheet.Cells[rowcount, i] = datarow[i - 1].ToString();
 
-                        ////for alternate rows
-                        //if (rowcount > 3)
-                        //{
-                        //    if (i == dataTable.Columns.Count)
-                        //    {
-                        //        if (rowcount % 2 == 0)
-                        //        {
-                        //            excelCellrange = excelSheet.Range[excelSheet.Cells[rowcount, 1], excelSheet.Cells[rowcount, dataTable.Columns.Count]];
-                        //            FormattingExcelCells(excelCellrange, "#CCCCFF", System.Drawing.Color.Black, false);
-                        //        }
+                        //for alternate rows
+                        if (rowcount > 3)
+                        {
+                            if (i == dataTable.Columns.Count)
+                            {
+                                if (rowcount % 2 == 0)
+                                {
+                                    excelCellrange = excelSheet.Range[excelSheet.Cells[rowcount, 1], excelSheet.Cells[rowcount, dataTable.Columns.Count]];
+                                    FormattingExcelCells(excelCellrange, "#CCCCFF", System.Drawing.Color.Black, false);
+                                }
 
-                        //    }
-                        //}
+                            }
+                        }
 
                     }
 
