@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using static System.IO.File;
-using DataTable = System.Data.DataTable;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
 
@@ -45,43 +44,9 @@ namespace Villamos
 
 
 
-        public static long Munkalap(DataTable Tábla, int sor, string munkalap)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munkalap.Select();
-
-            //Fejléc
-            for (int j = 0; j < Tábla.Columns.Count; j++)
-            {
-                Munkalap.Cells[sor, j + 1] = Tábla.Columns[j].ColumnName.ToString();
-            }
 
 
-            for (int i = 0; i < Tábla.Rows.Count; i++)
-            {
-                for (int j = 0; j < Tábla.Columns.Count; j++)
-                {
-                    Munkalap.Cells[i + sor + 1, j + 1] = Tábla.Rows[i].ItemArray[j];
-                }
-            }
 
-            long utolsó_sor = Tábla.Rows.Count;
-            return utolsó_sor;
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="mit">terület</param>
-        /// <param name="sor">sor</param>
-        public static void Tábla_Rögzítés(string mit, int sor)
-        {
-            MyExcel.Range Táblaterület = xlWorkSheet.Range[mit];
-            xlApp.ActiveWindow.SplitColumn = 0;
-            xlApp.ActiveWindow.SplitRow = sor;
-            xlApp.ActiveWindow.FreezePanes = true;
-        }
 
 
         public static int Tábla_Író(string hely, string jelszó, string szöveg, int sor, string munkalap)
@@ -599,25 +564,7 @@ namespace Villamos
         }
 
 
-        /// <summary>
-        /// Sormagasságot lehet beállítani
-        /// </summary>
-        /// <param name="mit">szöveg</param>
-        /// <param name="mekkora">egész</param>
-        public static void Sormagasság(string mit, int mekkora)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.RowHeight = mekkora;
-        }
-        /// <summary>
-        /// Automata sormagasság beállítása
-        /// </summary>
-        /// <param name="mit"></param>
-        public static void Sormagasság(string mit)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.EntireRow.AutoFit();
-        }
+
 
         /// <summary>
         /// A cellába beírt szöveg olvasási irányát lehet beállítani
@@ -731,7 +678,8 @@ namespace Villamos
 
             Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
             MyExcel.Range myRange = Munkalap.Range[mit];
-            object result = myRange.AutoFilter(sor);
+            myRange.AutoFilter(sor);
+
         }
 
 
@@ -757,10 +705,10 @@ namespace Villamos
         }
 
 
-        public static void ExcelMegnyitás(string hely)
+        public static void ExcelMegnyitás(string hely, bool látszik = false)
         {
             xlApp = new MyExcel.Application();
-            //  xlApp.Visible = true;
+            xlApp.Visible = látszik;
             xlWorkBook = xlApp.Workbooks.Open(hely);
         }
 
@@ -1254,190 +1202,6 @@ namespace Villamos
 
         }
 
-
-
-        // Beosztás Excel tábla
-        /*
-        public static void BeoTábla(string fájlexc, object tábla, DateTime Dátum)
-        {
-
-            // ha üres a tábla akkor kilép
-            if (Conversions.ToBoolean(Operators.ConditionalCompareObjectLessEqual(tábla.Rows.Count, 1, false)))
-                return;
-
-
-            Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
-            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheet;
-            object misValue = System.Reflection.Missing.Value;
-            // formázáshoz
-            xlWorkBook = MyExcel.Workbooks.Add(misValue);
-            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)MyExcel.Worksheets.Item(1);
-            // xlWorkSheet = CType(xlWorkBook.Worksheets.Item(1), Excel.Worksheet)
-            // *********************** Táblázat munkalap ********************************
-
-            MyExcel.Sheets("Munka1").Select();
-            MyExcel.Sheets("Munka1").Name = "Beosztás";
-            MyExcel.Sheets.Add(After: MyExcel.Sheets(MyExcel.Sheets.Count));
-            MyExcel.Sheets("Munka2").Name = "Részletes";
-            MyExcel.Sheets("Beosztás").Select();
-
-            int sorelőző = 1;
-            xlWorkSheet.Cells(sorelőző, 1).Value = Strings.Format(Dátum, "yyyy.MM.") + " havi beosztás";
-
-            sorelőző = 3;
-            // fejléc kiírása
-            var loopTo = Convert.ToInt32(Operators.SubtractObject(tábla.ColumnCount, 1));
-            for (oszlop = 0; oszlop <= loopTo; oszlop++)
-                xlWorkSheet.Cells(sorelőző, oszlop + 1).Value = tábla.Columns(oszlop).HeaderText;
-            sorelőző += 1;
-            // tartalom kiírása
-            var loopTo1 = Convert.ToInt32(Operators.SubtractObject(tábla.RowCount, 1));
-            for (sor = 0; sor <= loopTo1; sor++)
-            {
-                var loopTo2 = Convert.ToInt32(Operators.SubtractObject(tábla.ColumnCount, 1));
-                for (oszlop = 0; oszlop <= loopTo2; oszlop++)
-                {
-                    xlWorkSheet.Cells(sorelőző + sor, oszlop + 1).Value = tábla.Rows(sor).Cells(oszlop).Value;
-                    xlWorkSheet.Cells(2, 53).Value = oszlop + 1;
-                }
-                xlWorkSheet.Cells(1, 53).Value = sorelőző + sor;
-            }
-
-
-            // megformázzuk
-            MyExcel.Range("A3:" + Oszlopnév(Convert.ToInt32(Beolvas("BA2"))) + "3").Select();
-            {
-                var withBlock = MyExcel.Selection.Interior;
-                withBlock.ColorIndex = 6;
-            }
-
-            // rácsozás
-            Rácsoz("A3:" + Oszlopnév(Convert.ToInt32(Beolvas("BA2"))) + Beolvas("ba1"));
-
-            // Oszlopok beállítása
-            MyExcel.Columns("A:A").Select();
-            MyExcel.Selection.ColumnWidth = 30;
-            MyExcel.Columns("B:B").Select();
-            MyExcel.Selection.ColumnWidth = 7;
-            MyExcel.Columns("C:C").Select();
-            MyExcel.Selection.ColumnWidth = 7;
-            MyExcel.Columns("D:" + Oszlopnév(Convert.ToInt32(Beolvas("BA2")) - 1)).Select();
-            MyExcel.Selection.ColumnWidth = 5;
-            MyExcel.Columns(Oszlopnév(Convert.ToInt32(Beolvas("BA2"))) + ":" + Oszlopnév(Convert.ToInt32(Beolvas("BA2")))).Select();
-            MyExcel.Selection.ColumnWidth = 10;
-
-
-
-
-            MyExcel.Selection.Font.Bold = true;
-            MyExcel.Cells.Select();
-
-            {
-                var withBlock1 = MyExcel.Selection.Font;
-                withBlock1.Name = "Arial";
-                withBlock1.Size = 12;
-                withBlock1.Strikethrough = false;
-                withBlock1.Superscript = false;
-                withBlock1.Subscript = false;
-                withBlock1.OutlineFont = false;
-                withBlock1.Shadow = false;
-                withBlock1.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
-                withBlock1.ColorIndex = Microsoft.Office.Interop.Excel.Constants.xlAutomatic;
-            }
-
-
-            // fejléc
-            MyExcel.Range("A3:" + Oszlopnév(Convert.ToInt32(Beolvas("BA2"))) + "3").Select();
-            {
-                var withBlock2 = MyExcel.Selection.Interior;
-                withBlock2.ColorIndex = 15;
-                withBlock2.Pattern = Microsoft.Office.Interop.Excel.Constants.xlSolid;
-            }
-            MyExcel.Selection.Font.Bold = true;
-
-            // szo v más színnel
-            var loopTo3 = Convert.ToInt32(Beolvas("BA2"));
-            for (i = 4; i <= loopTo3; i++)
-            {
-                switch (tábla.Rows((object)0).Cells((object)(i - 1)).Style.BackColor)
-                {
-                    case var @case when Operators.ConditionalCompareObjectEqual(@case, Color.FromArgb(186, 176, 165), false):
-                        {
-                            MyExcel.Range(Oszlopnév(i) + "3:" + Oszlopnév(i) + Beolvas("BA1")).Select();
-                            MyExcel.Selection.Interior.Color = 8372031;
-                            break;
-                        }
-
-                    case var case1 when Operators.ConditionalCompareObjectEqual(case1, Color.FromArgb(228, 189, 141), false):
-                        {
-                            MyExcel.Range(Oszlopnév(i) + "3:" + Oszlopnév(i) + Beolvas("BA1")).Select();
-                            MyExcel.Selection.Interior.Color = 7171583;
-                            break;
-                        }
-                    case var case2 when Operators.ConditionalCompareObjectEqual(case2, Color.FromArgb(244, 95, 95), false):
-                        {
-                            MyExcel.Range(Oszlopnév(i) + "3:" + Oszlopnév(i) + Beolvas("BA1")).Select();
-                            MyExcel.Selection.Interior.Color = 7171583;
-                            break;
-                        }
-                }
-
-
-            }
-
-
-            // nyomtatási terület
-            MyExcel.ActiveSheet.PageSetup.PrintArea = "$A$1:$" + Oszlopnév(Convert.ToInt32(Beolvas("BA2"))) + "$" + (Conversions.ToDouble(Beolvas("ba1")) + 1d).ToString();
-            {
-                var withBlock3 = MyExcel.ActiveSheet.PageSetup;
-                withBlock3.LeftHeader = "";
-                withBlock3.CenterHeader = Strings.Trim(Konvertáló.My.MyProject.Forms.AblakFőoldal.Panels1.Text);
-                withBlock3.RightHeader = Strings.Format(DateTime.Now, "yyyy.MM.dd hh:mm");
-                withBlock3.LeftFooter = "";
-                withBlock3.CenterFooter = "";
-                withBlock3.RightFooter = "";
-                withBlock3.LeftMargin = MyExcel.InchesToPoints(0.590551181102362d);
-                withBlock3.RightMargin = MyExcel.InchesToPoints(0.590551181102362d);
-                withBlock3.TopMargin = MyExcel.InchesToPoints(0.78740157480315d);
-                withBlock3.BottomMargin = MyExcel.InchesToPoints(0.590551181102362d);
-                withBlock3.HeaderMargin = MyExcel.InchesToPoints(0.511811023622047d);
-                withBlock3.FooterMargin = MyExcel.InchesToPoints(0.511811023622047d);
-                withBlock3.PrintHeadings = false;
-                withBlock3.PrintGridlines = false;
-                withBlock3.PrintComments = Microsoft.Office.Interop.Excel.XlPrintLocation.xlPrintNoComments;
-                withBlock3.CenterHorizontally = false;
-                withBlock3.CenterVertically = false;
-                withBlock3.Orientation = Microsoft.Office.Interop.Excel.XlPageOrientation.xlPortrait;
-                withBlock3.Draft = false;
-                withBlock3.PaperSize = Microsoft.Office.Interop.Excel.XlPaperSize.xlPaperA4;
-                withBlock3.FirstPageNumber = Microsoft.Office.Interop.Excel.Constants.xlAutomatic;
-                withBlock3.Order = Microsoft.Office.Interop.Excel.XlOrder.xlDownThenOver;
-                withBlock3.BlackAndWhite = false;
-                withBlock3.Zoom = false;
-                withBlock3.FitToPagesWide = 1;
-                withBlock3.FitToPagesTall = false;
-                withBlock3.PrintErrors = Microsoft.Office.Interop.Excel.XlPrintErrors.xlPrintErrorsDisplayed;
-            }
-            // MyExcel.ActiveWindow.WindowState = Microsoft.Office.Interop.Excel.XlWindowState.xlMaximized
-            MyExcel.Range("A1").Select();
-
-            xlWorkBook.SaveAs(fájlexc, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, misValue, misValue, misValue, misValue, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            xlWorkBook.Close(true, misValue, misValue);
-            ReleaseObject(xlWorkSheet);
-            ReleaseObject(xlWorkBook);
-
-            // az excel tábla bezárása
-            MyExcel.Workbooks.Close();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(MyExcel.Workbooks);
-            // alkalmazás leállítása
-            // MyExcel.Quit()
-            // System.Runtime.InteropServices.Marshal.ReleaseComObject(MyExcel)
-            // '    MyExcel = Nothing
-            GC.Collect();
-
-
-        }
-        */
 
     }
 }

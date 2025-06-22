@@ -1297,9 +1297,8 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
 
-                MyE.EXCELtábla(fájlexc, Tábla, true);
+                MyE.DataGridViewToExcel(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc + ".xlsx");
             }
@@ -2604,8 +2603,8 @@ namespace Villamos
             {
                 return;
             }
-            fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-            MyE.EXCELtábla(fájlexc, Tábla_utolsó, false);
+
+            MyE.DataGridViewToExcel(fájlexc, Tábla_utolsó);
             MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             MyE.Megnyitás(fájlexc + ".xlsx");
@@ -2941,8 +2940,8 @@ namespace Villamos
                 {
                     return;
                 }
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Ütem_Tábla, false);
+
+                MyE.DataGridViewToExcel(fájlexc, Ütem_Tábla);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -4776,8 +4775,8 @@ namespace Villamos
                 {
                     return;
                 }
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, ListaTábla, false);
+
+                MyE.DataGridViewToExcel(fájlexc, ListaTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
@@ -5455,8 +5454,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Gépi_Tábla, false);
+                MyE.DataGridViewToExcel(fájlexc, Gépi_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");

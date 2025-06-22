@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using static System.IO.File;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,6 +15,10 @@ namespace Villamos.Kezelők
         readonly string jelszó = "RónaiSándor";
         readonly string táblanév = "mérés";
 
+        public Kezelő_Baross_Mérési_Adatok()
+        {
+            if (!Exists(hely)) Adatbázis_Létrehozás.Kerék_Baross_Mérési_Adatok(hely.KönyvSzerk());
+        }
 
         public List<Adat_Baross_Mérési_Adatok> Lista_Adatok()
         {
@@ -102,7 +108,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public void Módosítás(Adat_Baross_Mérési_Adatok Adat)
         {
             try
@@ -127,7 +132,115 @@ namespace Villamos.Kezelők
             }
         }
 
+        /// <summary>
+        /// Státus módosítása azonosító alapján
+        /// </summary>
+        /// <param name="Adat"></param>
+        public void Módosítás(List<Adat_Baross_Mérési_Adatok> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGY = new List<string>();
+                foreach (Adat_Baross_Mérési_Adatok Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE mérés SET ";
+                    szöveg += $" Státus={Adat.Státus} ";
+                    szöveg += $" WHERE Eszterga_Id={Adat.Eszterga_Id}";
+                    SzövegGY.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGY);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        /// <summary>
+        /// Státus és megjegyzés módosítása azonosító alapján
+        /// </summary>
+        /// <param name="Adatok"></param>
+        public void MódosításMeg(List<Adat_Baross_Mérési_Adatok> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGY = new List<string>();
+                foreach (Adat_Baross_Mérési_Adatok Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE mérés SET Státus={Adat.Státus}, ";
+                    szöveg += $" Megjegyzés='{Adat.Megjegyzés}'";
+                    szöveg += $" WHERE Eszterga_Id={Adat.Eszterga_Id}";
+                    SzövegGY.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGY);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(List<long> Idk)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (long ID in Idk)
+                {
+                    string szöveg = $"DELETE FROM mérés WHERE Eszterga_Id={ID}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABtörlés(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(List<string> SzövegVáltok, List<string> Megjegyzések)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                for (int i = 0; i < SzövegVáltok.Count; i++)
+                {
+                    string szöveg = "INSERT INTO mérés (Dátum_1, Azonosító, Tulajdonos, kezelő, Profil, Profil_szám, Kerékpár_szám, Adat_1, Adat_2,";
+                    szöveg += " Adat_3, Típus_Eszt, KMU, Pozíció_Eszt, Tengely_Aznosító, Adat_4, Dátum_2, Táv_Belső_Futó_K, Táv_Nyom_K, Delta_K,";
+                    szöveg += " B_Átmérő_K, J_Átmérő_K, B_Axiális_K, J_Axiális_K, B_Radiális_K, J_Radiális_K, B_Nyom_Mag_K, J_Nyom_Mag_K, B_Nyom_Vast_K,";
+                    szöveg += " J_nyom_Vast_K, B_Nyom_Vast_B_K, J_nyom_Vast_B_K, B_QR_K, J_QR_K, B_Profilhossz_K, J_Profilhossz_K, Dátum_3, Táv_Belső_Futó_Ú,";
+                    szöveg += " Táv_Nyom_Ú, Delta_Ú, B_Átmérő_Ú, J_Átmérő_Ú, B_Axiális_Ú, J_Axiális_Ú, B_Radiális_Ú, J_Radiális_Ú, B_Nyom_Mag_Ú, J_Nyom_Mag_Ú,";
+                    szöveg += " B_Nyom_Vast_Ú, J_nyom_Vast_Ú, B_Nyom_Vast_B_Ú, J_nyom_Vast_B_Ú, B_QR_Ú, J_QR_Ú, B_Szög_Ú, J_Szög_Ú, B_Profilhossz_Ú,";
+                    szöveg += $" J_Profilhossz_Ú, Eszterga_Id, Megjegyzés, Státus) Values ({SzövegVáltok[i]} '{Megjegyzések[i]}', 1)";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         //Elkopó
         public List<Adat_Baross_Mérési_Adatok> Lista_Adatok(string hely, string jelszó, string szöveg)
         {

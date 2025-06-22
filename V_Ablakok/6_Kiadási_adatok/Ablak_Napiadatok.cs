@@ -159,12 +159,9 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-
-
-                if (Tábla.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla, false);
-                else if (Tábla1.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla1, false);
-                else if (Tábla2.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla2, false);
+                if (Tábla.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
+                else if (Tábla1.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla1);
+                else if (Tábla2.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla2);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Module_Excel.Megnyitás(fájlexc + ".xlsx");

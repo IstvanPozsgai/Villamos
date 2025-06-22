@@ -1085,7 +1085,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyE.Kiir(Elem.ME, $"C{sor}");
                 MyE.Kiir(Elem.Egységár.ToString().Replace(",", "."), $"D{sor}");
                 MyE.Betű($"D{sor}", "", "#,###.##");
-                MyE.Kiir(Elem.Összesen.ToString().Replace(",", "."), $"E{sor}");
+                MyE.Kiir(Math.Round(Elem.Összesen).ToString(), $"E{sor}");
                 MyE.Betű($"E{sor}", "", "#,###.##");
                 Összesen += Elem.Összesen;
 

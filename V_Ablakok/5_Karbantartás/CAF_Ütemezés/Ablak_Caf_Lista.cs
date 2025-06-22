@@ -242,8 +242,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 else
                     return;
 
-                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla_lista, false);
+                MyE.DataGridViewToExcel(fájlexc, Tábla_lista);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

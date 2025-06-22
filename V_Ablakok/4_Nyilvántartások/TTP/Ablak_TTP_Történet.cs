@@ -486,7 +486,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 
                 DataTable ValamiTábla;
                 ValamiTábla = AdatTábla_TTP_TáblaFeltölt(AdatokTeljes);
-                MyE.EXCELtábla(ValamiTábla, fájlexc);
+                MyE.DataTableToExcel(fájlexc, ValamiTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");

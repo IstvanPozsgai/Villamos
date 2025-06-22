@@ -274,6 +274,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatbázis\Adatbázis_Eszterga.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Baross_Mérési_Adatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Eszterga_Funkció.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelő_Eszterga.cs" />
@@ -388,6 +389,8 @@
       <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatbázis\TTP_Adatbázis.cs" />
+    <Compile Include="V_Excel\Excel_Munkalap.cs" />
+    <Compile Include="V_Excel\Excel_Sor.cs" />
     <Compile Include="V_Függvények\TTP_PDF.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.cs">
       <SubType>Form</SubType>
@@ -747,7 +750,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Users.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
     <Compile Include="V_Excel\Excel_Nyomtatási.cs" />
-    <Compile Include="V_Excel\Kész_Excelek.cs" />
+    <Compile Include="V_Excel\Excel_Táblák.cs" />
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
@@ -1872,14 +1875,23 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ADGV">
-      <Version>0.1.0.10</Version>
+    <PackageReference Include="ArrayToExcel">
+      <Version>2.5.0</Version>
+    </PackageReference>
+    <PackageReference Include="BouncyCastle.Cryptography">
+      <Version>2.6.1</Version>
     </PackageReference>
     <PackageReference Include="ArrayToExcel">
       <Version>2.5.0</Version>
     </PackageReference>
     <PackageReference Include="DG.AdvancedDataGridView">
       <Version>1.2.30115.18</Version>
+    </PackageReference>
+    <PackageReference Include="DocumentFormat.OpenXml">
+      <Version>3.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="DocumentFormat.OpenXml.Framework">
+      <Version>3.3.0</Version>
     </PackageReference>
     <PackageReference Include="ExcelDataReader">
       <Version>3.7.0</Version>

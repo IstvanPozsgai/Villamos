@@ -983,8 +983,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla_lekérdezés, false);
+                MyE.DataGridViewToExcel(fájlexc, Tábla_lekérdezés);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
@@ -1044,7 +1043,7 @@ namespace Villamos
             Thread proc = new Thread(() =>
             {
                 // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót
-                MyE.EXCELtábla(_Tábla, _fájlexc);
+                MyE.DataTableToExcel(_fájlexc, _Tábla);
                 this.Invoke(callback, new object[] { });
             });
             proc.Start();
@@ -1847,8 +1846,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla1, false);
+                MyE.DataGridViewToExcel(fájlexc, Tábla1);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
@@ -2556,8 +2554,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla_ütemező, false);
+                MyE.DataGridViewToExcel(fájlexc, Tábla_ütemező);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
@@ -3462,7 +3459,7 @@ namespace Villamos
 
                 // ablaktábla rögzítése
 
-                MyE.Tábla_Rögzítés("3:3", 3);
+                MyE.Tábla_Rögzítés(3);
 
                 // kiírjuk a tábla méretét
                 MyE.Munkalap_aktív("Vizsgálatok");

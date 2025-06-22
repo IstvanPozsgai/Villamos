@@ -1057,9 +1057,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-
-                MyE.EXCELtábla(fájlexc, TáblaOktatás, true);
+                MyE.DataGridViewToExcel(fájlexc, TáblaOktatás);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
@@ -2661,8 +2659,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, BeosztásTábla, true);
+                MyE.DataGridViewToExcel(fájlexc, BeosztásTábla);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -2920,24 +2917,6 @@ namespace Villamos
 
 
         #region Gondnok
-        private void GondnokListaFeltöltés()
-        {
-            try
-            {
-                AdatokBehEng.Clear();
-                AdatokBehEng = KézBehEng.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Gondnok_frissít_Click(object sender, EventArgs e)
         {
             try
@@ -2959,7 +2938,7 @@ namespace Villamos
         {
             try
             {
-                GondnokListaFeltöltés();
+                AdatokBehEng = KézBehEng.Lista_Adatok();
 
                 Gondnok_tábla.Rows.Clear();
                 Gondnok_tábla.Columns.Clear();
@@ -3116,9 +3095,7 @@ namespace Villamos
                 if (Gond_szakszolg_szöv.Text.Trim() == "") Gond_szakszolg_szöv.Text = "_";
                 if (Gond_beosztás.Text.Trim() == "") Gond_beosztás.Text = "_";
                 if (Gond_Név.Text.Trim() == "") Gond_Név.Text = "_";
-                if (int.TryParse(Gond_sorszám.Text, out int sorszám)) sorszám = 0;
-
-                GondnokListaFeltöltés();
+                if (!int.TryParse(Gond_sorszám.Text, out int sorszám)) sorszám = 0;
 
                 Adat_Behajtás_Engedélyezés ADAT = new Adat_Behajtás_Engedélyezés(
                                                 sorszám,
@@ -3130,12 +3107,7 @@ namespace Villamos
                                                 Gond_szakszolg_szöv.Text.Trim(),
                                                 Gond_beosztás.Text.Trim(),
                                                 Gond_Név.Text.Trim());
-
-                if (Gond_sorszám.Text.Trim() == "")
-                    KézBehEng.Rögzítés(ADAT);
-                else
-                    KézBehEng.Módosítás(ADAT);
-
+                KézBehEng.Döntés(ADAT);
                 MessageBox.Show("Az adat rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Gondnok_tábla_listázás();
             }
