@@ -259,7 +259,7 @@ namespace Villamos.Ablakok
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Menük_és_Ablakok_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
+                    FileName = $"Menük_és_Ablakok_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -268,8 +268,7 @@ namespace Villamos.Ablakok
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla, true);
+                MyE.DataGridViewToExcel(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc + ".xlsx");
             }

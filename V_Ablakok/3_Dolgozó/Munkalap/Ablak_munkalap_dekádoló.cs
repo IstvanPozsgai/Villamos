@@ -687,8 +687,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla3, true);
+                Module_Excel.DataGridViewToExcel(fájlexc, Tábla3);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Module_Excel.Megnyitás(fájlexc + ".xlsx");

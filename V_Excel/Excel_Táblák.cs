@@ -13,100 +13,102 @@ namespace Villamos
 {
     public static partial class Module_Excel
     {
+        /// <summary>
+        /// Ez a változat közvetlenül Adattáblából írja ki az adatokat
+        /// és az ArrayToExcel könyvtárat használja
+        /// </summary>
+        /// <param name="Tábla"></param>
+        /// <param name="fájl"></param>
+        /// <param name="Elemek"></param>
+        public static void DataTableToExcel(string fájl, DataTable Tábla)
+        {
+            try
+            {
+                byte[] excel = Tábla.ToExcel(a => a.SheetName("Munka1"));
+                File.WriteAllBytes(fájl, excel);
+
+                ///Megnyitjuk az Excel Formázásra
+                ExcelMegnyitás(fájl);
+
+                ////Utolsó oszlop és sor adatok
+                oszlop = Tábla.Columns.Count;
+                sor = Tábla.Rows.Count;
+
+                Háttérszín($"A1:{Oszlopnév(oszlop)}1", System.Drawing.Color.Yellow); //Sárga háttér
+                Betű($"A1:{Oszlopnév(oszlop)}1", System.Drawing.Color.Black);  //Fekete betű
+                Betű($"A1:{Oszlopnév(oszlop)}1", false, false, true); //vastag betű
+
+                Rácsoz($"A1:{Oszlopnév(oszlop)}{sor + 1}"); // rácsozás
+                Oszlopszélesség("Munka1", $"A:{Oszlopnév(oszlop)}");     //Automata Oszlop szélesség beállítás
+
+                Tábla_Rögzítés(1);  //Rögzítjük a fejlécet
+                Szűrés("Munka1", 1, oszlop, 1);    //szűrést felteszük
+
+                //Nyomtatási terület kijelülése
+                NyomtatásiTerület_részletes("Munka1", $"A1:{Oszlopnév(oszlop)}{sor + 1}", "$1:$1", "", true);
+
+                //Beállunk az A1 cellába
+                xlApp.Range["A1"].Select();
+
+                ExcelMentés();
+                ExcelBezárás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "ExcelTábla", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         /// <summary>
-        /// Datagridviewból készít Excel táblát
+        /// DataGridView adatai alapján Excel táblát készít
         /// </summary>
-        /// <param name="fájlexc">Excel tábla mentési helye</param>
-        /// <param name="tábla">Átadott táblázat</param>
-        /// <param name="Elsőoszlop">Az első oszlopot kell-e törölni, mert van sor fejléc</param>>
-        public static void EXCELtábla(string fájlexc, DataGridView tábla, bool Elsőoszlop)
+        /// <param name="fájl">Mentési név</param>
+        /// <param name="Tábla">DataGridView tábla</param>
+        public static void DataGridViewToExcel(string fájl, DataGridView Tábla)
         {
-
-            MyExcel.Range MyRange;
-            Module_Excel.ExcelLétrehozás();
-
-
-            // fejléc kiírása
-            int oszlopíró = 1;
-
-            for (oszlop = 0; oszlop < tábla.ColumnCount; oszlop++)
+            try
             {
-                if (tábla.Columns[oszlop].Visible)
+                DataTable ÚjTábla = new DataTable();
+                foreach (DataGridViewColumn oszlop in Tábla.Columns)
                 {
-                    oszlopíró += 1;
-                    xlWorkSheet.Cells[1, oszlopíró] = tábla.Columns[oszlop].HeaderText;
+                    if (oszlop.Visible)
+                    {
+                        ÚjTábla.Columns.Add(oszlop.HeaderText);
+                    }
                 }
+                foreach (DataGridViewRow sor in Tábla.Rows)
+                {
+                    DataRow ÚjSor = ÚjTábla.NewRow();
+                    for (int i = 0; i < Tábla.Columns.Count; i++)
+                    {
+                        if (Tábla.Columns[i].Visible)
+                        {
+                            ÚjSor[i] = sor.Cells[i].Value;
+                        }
+                    }
+                    ÚjTábla.Rows.Add(ÚjSor);
+                }
+                DataTableToExcel(fájl, ÚjTábla);
             }
-
-            // mindet kijelöl datagrindviewben a fejléc nem másolódik
-            tábla.SelectAll();
-            // kitörötljük a vágólapot
-            Clipboard.Clear();
-            // másoljuk a kijelölt elemeket
-            Clipboard.SetDataObject(tábla.GetClipboardContent());
-
-            //Beillesztjük az értékeket
-            if (Elsőoszlop)
-            {// ha van jelölő akkor ideírjuk
-
-                MyRange = xlWorkSheet.get_Range("a2");
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else
-            {// ha nincs sorjelölő akkor ide
-                MyRange = xlWorkSheet.get_Range("b2");
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "DataGridViewToExcel", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            MyRange.PasteSpecial(XlPasteType.xlPasteAll, XlPasteSpecialOperation.xlPasteSpecialOperationNone);
-
-            // tábla kijelölését töröljük
-            tábla.ClearSelection();
-
-            // az első oszlop akkor kitöröljük
-
-            oszlopíró -= 1;
-            OszlopTörlés("A:A");
-
-
-            //Utolsó oszlop és sor adatok
-            oszlop = oszlopíró;
-            sor = tábla.RowCount;
-
-            // Kiszínezzük
-            MyRange = xlWorkSheet.get_Range("A1", Oszlopnév(oszlop) + "1");
-            MyRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow);
-
-            // rácsozás
-            Rácsoz("A1:" + Oszlopnév(oszlop) + (sor + 1).ToString());
-
-            //Automata Oszlop szélesség beállítás
-            Oszlopszélesség("Munka1", "A:" + Oszlopnév(oszlop));
-
-            //Vastag betű
-            MyExcel.Range Táblaterület = xlWorkSheet.Range["A1:" + Oszlopnév(oszlop) + "1"];
-            Táblaterület.Font.Bold = true;
-            Táblaterület.Interior.Color = Color.Yellow;
-
-            //Rögzítjük a fejlécet
-            xlApp.Range["A2"].Select();
-            xlApp.ActiveWindow.SplitColumn = 0;
-            xlApp.ActiveWindow.SplitRow = 1;
-            xlApp.ActiveWindow.FreezePanes = true;
-
-            //szűrést felteszük
-            Szűrés("Munka1", 1, oszlop, 1);
-
-
-            //Nyomtatási terület kijelülése
-            NyomtatásiTerület_részletes("Munka1", "A1:" + Oszlopnév(oszlop) + (sor + 1).ToString(), "$1:$1", "", true);
-
-            //Beállunk az A1 cellába
-            xlApp.Range["A1"].Select();
-
-            ExcelMentés(fájlexc);
-
-            Module_Excel.ExcelBezárás();
         }
+
+
+        //Elkoptatni
 
         /// <summary>
         /// Sor jelölő nincs akkor ==> false
@@ -231,6 +233,7 @@ namespace Villamos
 
             Module_Excel.ExcelBezárás();
         }
+
         /// <summary>
         /// A megadott munkalapra elkészítit az átküldött adatoknak megfelelő munkalapot
         /// </summary>
@@ -404,97 +407,6 @@ namespace Villamos
             ExcelMentés(fájlexc);
 
             Module_Excel.ExcelBezárás();
-        }
-
-
-
-        /// <summary>
-        /// Ez a változat közvetlenül Adattáblából írja ki az adatokat
-        /// és az ArrayToExcel könyvtárat használja
-        /// </summary>
-        /// <param name="Tábla"></param>
-        /// <param name="fájl"></param>
-        /// <param name="Elemek"></param>
-        public static void DataTableToExcel(string fájl, DataTable Tábla)
-        {
-            try
-            {
-                byte[] excel = Tábla.ToExcel(a => a.SheetName("Munka1"));
-                File.WriteAllBytes(fájl, excel);
-
-                ///Megnyitjuk az Excel Formázásra
-                ExcelMegnyitás(fájl);
-
-                ////Utolsó oszlop és sor adatok
-                oszlop = Tábla.Columns.Count;
-                sor = Tábla.Rows.Count;
-
-                Háttérszín($"A1:{Oszlopnév(oszlop)}1", System.Drawing.Color.Yellow); //Sárga háttér
-                Betű($"A1:{Oszlopnév(oszlop)}1", System.Drawing.Color.Black);  //Fekete betű
-                Betű($"A1:{Oszlopnév(oszlop)}1", false, false, true); //vastag betű
-
-                Rácsoz($"A1:{Oszlopnév(oszlop)}{sor + 1}"); // rácsozás
-                Oszlopszélesség("Munka1", $"A:{Oszlopnév(oszlop)}");     //Automata Oszlop szélesség beállítás
-
-                Tábla_Rögzítés(1);  //Rögzítjük a fejlécet
-                Szűrés("Munka1", 1, oszlop, 1);    //szűrést felteszük
-
-                //Nyomtatási terület kijelülése
-                NyomtatásiTerület_részletes("Munka1", $"A1:{Oszlopnév(oszlop)}{sor + 1}", "$1:$1", "", true);
-
-                //Beállunk az A1 cellába
-                xlApp.Range["A1"].Select();
-
-                ExcelMentés();
-                ExcelBezárás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "ExcelTábla", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        public static void DataGridViewToExcel(string fájl, DataGridView Tábla, bool Elsőoszlop = false)
-        {
-            try
-            {
-                DataTable ÚjTábla = new DataTable();
-                foreach (DataGridViewColumn oszlop in Tábla.Columns)
-                {
-                    if (oszlop.Visible)
-                    {
-                        ÚjTábla.Columns.Add(oszlop.HeaderText);
-                    }
-                }
-                foreach (DataGridViewRow sor in Tábla.Rows)
-                {
-                    DataRow ÚjSor = ÚjTábla.NewRow();
-                    for (int i = 0; i < Tábla.Columns.Count; i++)
-                    {
-                        if (Tábla.Columns[i].Visible)
-                        {
-                            ÚjSor[i] = sor.Cells[i].Value;
-                        }
-                    }
-                    ÚjTábla.Rows.Add(ÚjSor);
-                }
-                DataTableToExcel(fájl, ÚjTábla);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "DataGridViewToExcel", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
     }
 }

@@ -484,8 +484,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Csoport_tábla, false);
+                MyE.DataGridViewToExcel(fájlexc, Csoport_tábla);
                 MessageBox.Show("Elkészült az Excel tábla: \n" + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");

@@ -743,7 +743,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Users.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
     <Compile Include="V_Excel\Excel_Nyomtatási.cs" />
-    <Compile Include="V_Excel\Kész_Excelek.cs" />
+    <Compile Include="V_Excel\Excel_Táblák.cs" />
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />

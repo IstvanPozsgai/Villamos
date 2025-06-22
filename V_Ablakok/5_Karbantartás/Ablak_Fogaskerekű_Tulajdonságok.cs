@@ -547,8 +547,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla_lekérdezés, false);
+                MyE.DataGridViewToExcel(fájlexc, Tábla_lekérdezés);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
@@ -842,8 +841,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Tábla1, false);
+                MyE.DataGridViewToExcel(fájlexc, Tábla1);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

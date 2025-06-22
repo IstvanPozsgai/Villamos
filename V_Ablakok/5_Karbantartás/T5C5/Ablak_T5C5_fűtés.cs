@@ -928,8 +928,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(fájlexc, Lekérdezés_Tábla, false);
+                MyE.DataGridViewToExcel(fájlexc, Lekérdezés_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc + ".xlsx");
 

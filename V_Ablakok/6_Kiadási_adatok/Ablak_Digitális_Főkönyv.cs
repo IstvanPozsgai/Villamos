@@ -1742,12 +1742,10 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-
-                if (Tábla.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla, false);
-                if (Tábla1.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla1, false);
-                if (Tábla2.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla2, false);
-                if (Tábla3.Visible) Module_Excel.EXCELtábla(fájlexc, Tábla3, false);
+                if (Tábla.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
+                if (Tábla1.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla1);
+                if (Tábla2.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla2);
+                if (Tábla3.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla3);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

@@ -1742,8 +1742,8 @@ namespace Villamos
                 {
                     return;
                 }
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla2, true);
+
+                Module_Excel.DataGridViewToExcel(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Module_Excel.Megnyitás(fájlexc + ".xlsx");
@@ -1932,8 +1932,8 @@ namespace Villamos
                 {
                     return;
                 }
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla1, false);
+
+                Module_Excel.DataGridViewToExcel(fájlexc, Tábla1);
                 MessageBox.Show("Elkészült az Excel tábla: \n" + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Module_Excel.Megnyitás(fájlexc + ".xlsx");
