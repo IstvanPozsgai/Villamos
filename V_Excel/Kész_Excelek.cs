@@ -13,101 +13,6 @@ namespace Villamos
 {
     public static partial class Module_Excel
     {
-
-        /// <summary>
-        /// Datagridviewból készít Excel táblát
-        /// </summary>
-        /// <param name="fájlexc">Excel tábla mentési helye</param>
-        /// <param name="tábla">Átadott táblázat</param>
-        /// <param name="Elsőoszlop">Az első oszlopot kell-e törölni, mert van sor fejléc</param>>
-        public static void EXCELtábla(string fájlexc, DataGridView tábla, bool Elsőoszlop)
-        {
-
-            MyExcel.Range MyRange;
-            Module_Excel.ExcelLétrehozás();
-
-
-            // fejléc kiírása
-            int oszlopíró = 1;
-
-            for (oszlop = 0; oszlop < tábla.ColumnCount; oszlop++)
-            {
-                if (tábla.Columns[oszlop].Visible)
-                {
-                    oszlopíró += 1;
-                    xlWorkSheet.Cells[1, oszlopíró] = tábla.Columns[oszlop].HeaderText;
-                }
-            }
-
-            // mindet kijelöl datagrindviewben a fejléc nem másolódik
-            tábla.SelectAll();
-            // kitörötljük a vágólapot
-            Clipboard.Clear();
-            // másoljuk a kijelölt elemeket
-            Clipboard.SetDataObject(tábla.GetClipboardContent());
-
-            //Beillesztjük az értékeket
-            if (Elsőoszlop)
-            {// ha van jelölő akkor ideírjuk
-
-                MyRange = xlWorkSheet.get_Range("a2");
-            }
-            else
-            {// ha nincs sorjelölő akkor ide
-                MyRange = xlWorkSheet.get_Range("b2");
-            }
-
-            MyRange.PasteSpecial(XlPasteType.xlPasteAll, XlPasteSpecialOperation.xlPasteSpecialOperationNone);
-
-            // tábla kijelölését töröljük
-            tábla.ClearSelection();
-
-            // az első oszlop akkor kitöröljük
-
-            oszlopíró -= 1;
-            OszlopTörlés("A:A");
-
-
-            //Utolsó oszlop és sor adatok
-            oszlop = oszlopíró;
-            sor = tábla.RowCount;
-
-            // Kiszínezzük
-            MyRange = xlWorkSheet.get_Range("A1", Oszlopnév(oszlop) + "1");
-            MyRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow);
-
-            // rácsozás
-            Rácsoz("A1:" + Oszlopnév(oszlop) + (sor + 1).ToString());
-
-            //Automata Oszlop szélesség beállítás
-            Oszlopszélesség("Munka1", "A:" + Oszlopnév(oszlop));
-
-            //Vastag betű
-            MyExcel.Range Táblaterület = xlWorkSheet.Range["A1:" + Oszlopnév(oszlop) + "1"];
-            Táblaterület.Font.Bold = true;
-            Táblaterület.Interior.Color = Color.Yellow;
-
-            //Rögzítjük a fejlécet
-            xlApp.Range["A2"].Select();
-            xlApp.ActiveWindow.SplitColumn = 0;
-            xlApp.ActiveWindow.SplitRow = 1;
-            xlApp.ActiveWindow.FreezePanes = true;
-
-            //szűrést felteszük
-            Szűrés("Munka1", 1, oszlop, 1);
-
-
-            //Nyomtatási terület kijelülése
-            NyomtatásiTerület_részletes("Munka1", "A1:" + Oszlopnév(oszlop) + (sor + 1).ToString(), "$1:$1", "", true);
-
-            //Beállunk az A1 cellába
-            xlApp.Range["A1"].Select();
-
-            ExcelMentés(fájlexc);
-
-            Module_Excel.ExcelBezárás();
-        }
-
         /// <summary>
         /// Sor jelölő nincs akkor ==> false
         /// Színez true átmásolja a színezést is
@@ -460,7 +365,12 @@ namespace Villamos
         }
 
 
-        public static void DataGridViewToExcel(string fájl, DataGridView Tábla, bool Elsőoszlop = false)
+        /// <summary>
+        /// DataGridView adatai alapján Excel táblát készít
+        /// </summary>
+        /// <param name="fájl">Mentési név</param>
+        /// <param name="Tábla">DataGridView tábla</param>
+        public static void DataGridViewToExcel(string fájl, DataGridView Tábla)
         {
             try
             {

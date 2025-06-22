@@ -1491,8 +1491,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, JogTábla, true);
+                Module_Excel.DataGridViewToExcel(fájlexc, JogTábla);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -1587,8 +1586,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Munkakörtábla, true);
+                Module_Excel.DataGridViewToExcel(fájlexc, Munkakörtábla);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

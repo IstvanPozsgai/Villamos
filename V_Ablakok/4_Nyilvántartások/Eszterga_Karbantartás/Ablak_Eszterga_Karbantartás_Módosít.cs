@@ -386,7 +386,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             TablaUtolagMuvelet.Columns["Sorszám"].Width = 100;
             TablaUtolagMuvelet.Columns["Művelet"].Width = 1160;
-            TablaUtolagMuvelet.Columns["Státusz"].Width = 100; 
+            TablaUtolagMuvelet.Columns["Státusz"].Width = 100;
 
             TablaUtolagMuvelet.Columns["Nap"].Visible = false;
             TablaUtolagMuvelet.Columns["Óra"].Visible = false;
@@ -1045,9 +1045,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     fajlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                fajlexc = fajlexc.Substring(0, fajlexc.Length - 5);
 
-                MyE.EXCELtábla(fajlexc, TablaMuvelet, false);
+                MyE.DataGridViewToExcel(fajlexc, TablaMuvelet);
                 MessageBox.Show("Elkészült az Excel tábla: " + fajlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás($"{fajlexc}.xlsx");
@@ -1250,7 +1249,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     throw new HibásBevittAdat("A kiválasztott dátum nem lehet későbbi, mint a mai dátum.");
                 bool sikeres = false;
                 if (TablaUtolagMuvelet.SelectedRows.Count != 0)
-                   sikeres = UjUtolagosNaplozas();
+                    sikeres = UjUtolagosNaplozas();
                 else if (TablaNaplo.SelectedRows.Count != 0)
                     sikeres = UtolagNaploModositas();
 

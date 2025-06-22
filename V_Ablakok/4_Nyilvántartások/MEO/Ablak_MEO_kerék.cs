@@ -928,8 +928,8 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, ListaTábla, false);
+
+                Module_Excel.DataGridViewToExcel(fájlexc, ListaTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Module_Excel.Megnyitás($"{fájlexc}.xlsx");
             }
@@ -1078,8 +1078,8 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, LekérdTábla, false);
+
+                Module_Excel.DataGridViewToExcel(fájlexc, LekérdTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Module_Excel.Megnyitás(fájlexc + ".xlsx");

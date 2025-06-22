@@ -1745,8 +1745,7 @@ namespace Villamos.Villamos_Ablakok
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla, true);
+                Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Module_Excel.Megnyitás(fájlexc + ".xlsx");
             }

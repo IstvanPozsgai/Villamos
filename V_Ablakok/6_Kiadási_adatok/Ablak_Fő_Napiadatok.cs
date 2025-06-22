@@ -937,10 +937,10 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                if (Tábla.Visible) MyE.EXCELtábla(fájlexc, Tábla, false);
-                if (Tábla1.Visible) MyE.EXCELtábla(fájlexc, Tábla1, false);
-                if (Tábla2.Visible) MyE.EXCELtábla(fájlexc, Tábla2, false);
+
+                if (Tábla.Visible) MyE.DataGridViewToExcel(fájlexc, Tábla);
+                if (Tábla1.Visible) MyE.DataGridViewToExcel(fájlexc, Tábla1);
+                if (Tábla2.Visible) MyE.DataGridViewToExcel(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
