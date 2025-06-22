@@ -874,7 +874,7 @@ namespace Villamos
             Holtart.Be();
             timer1.Enabled = true;
             DateTime Kezdet = DateTime.Now;
-            await Task.Run(() => MyE.ExcelTábla(_AdatTábla, _fájlexc));
+            await Task.Run(() => MyE.DataTableToExcel(_AdatTábla, _fájlexc));
 
             timer1.Enabled = false;
             Holtart.Ki();
@@ -2217,7 +2217,7 @@ namespace Villamos
 
                 // ablaktábla rögzítése
 
-                MyE.Tábla_Rögzítés("3:3", 3);
+                MyE.Tábla_Rögzítés(3);
 
 
                 // kiírjuk a tábla méretét

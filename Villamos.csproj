@@ -382,6 +382,7 @@
       <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatbázis\TTP_Adatbázis.cs" />
+    <Compile Include="V_Excel\Excel_Tábla.cs" />
     <Compile Include="V_Függvények\TTP_PDF.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.cs">
       <SubType>Form</SubType>
@@ -1863,9 +1864,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ADGV">
-      <Version>0.1.0.10</Version>
-    </PackageReference>
     <PackageReference Include="ArrayToExcel">
       <Version>2.5.0</Version>
     </PackageReference>

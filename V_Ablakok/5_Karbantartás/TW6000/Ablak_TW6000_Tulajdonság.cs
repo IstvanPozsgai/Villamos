@@ -2431,7 +2431,7 @@ namespace Villamos
                 MyE.Szűrés(munkalap, $"a3:m{sor}", 3);
 
                 // ablaktábla rögzítése
-                MyE.Tábla_Rögzítés($"a3:m{sor}", 3);
+                MyE.Tábla_Rögzítés(3);
 
                 // kiírjuk a tábla méretét
                 MyE.Munkalap_aktív("Vizsgálatok");

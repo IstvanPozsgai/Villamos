@@ -2021,7 +2021,7 @@ namespace Villamos
 
                 // ablaktábla rögzítése
 
-                MyE.Tábla_Rögzítés("3:3", 3);
+                MyE.Tábla_Rögzítés(3);
 
 
                 // kiírjuk a tábla méretét

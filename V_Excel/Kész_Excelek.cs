@@ -1,8 +1,7 @@
 ﻿using ArrayToExcel;
 using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Color = System.Drawing.Color;
@@ -318,238 +317,6 @@ namespace Villamos
             xlApp.Range["A1"].Select();
         }
 
-
-
-        /// <summary>
-        /// Ez a változat közvetlenül adatbázisból írja ki az adatokat
-        /// Gondoskodni kell külön szálon a holtart működéséről
-        /// </summary>
-        /// <param name="hely"> Adatbázis elérhetősége</param>
-        /// <param name="jelszó">Adatbázis jelszó</param>
-        /// <param name="szöveg">Adatbázis sql</param>
-        /// <param name="fájlexc">Excel mentési helye és fájlneve</param>
-        public static void EXCELtábla(string hely, string jelszó, string szöveg, string fájlexc)
-        {
-
-            MyExcel.Range MyRange;
-            Module_Excel.ExcelLétrehozás();
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                OleDbDataAdapter Adapter = new OleDbDataAdapter(szöveg, Kapcsolat);
-
-                DataSet Tábla = new DataSet();
-
-                Adapter.Fill(Tábla);
-                //Fejléc
-                for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
-                {
-                    xlWorkSheet.Cells[1, j + 1] = Tábla.Tables[0].Columns[j].ColumnName.ToString();
-                }
-
-
-                for (int i = 0; i < Tábla.Tables[0].Rows.Count; i++)
-                {
-                    for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
-                    {
-                        xlWorkSheet.Cells[i + 2, j + 1] = Tábla.Tables[0].Rows[i].ItemArray[j];
-                    }
-                }
-
-                //Utolsó oszlop és sor adatok
-                oszlop = Tábla.Tables[0].Columns.Count;
-                sor = Tábla.Tables[0].Rows.Count;
-            }
-            // Kiszínezzük
-            MyRange = xlWorkSheet.get_Range("A1", Oszlopnév(oszlop) + "1");
-            MyRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow);
-
-            // rácsozás
-            Rácsoz("A1:" + Oszlopnév(oszlop) + (sor + 1).ToString());
-
-            //Automata Oszlop szélesség beállítás
-            Oszlopszélesség("Munka1", "A:" + Oszlopnév(oszlop));
-
-            //Vastag betű
-            MyExcel.Range Táblaterület = xlWorkSheet.Range["A1:" + Oszlopnév(oszlop) + "1"];
-            Táblaterület.Font.Bold = true;
-            Táblaterület.Interior.Color = Color.Yellow;
-
-            //Rögzítjük a fejlécet
-            xlApp.Range["A2"].Select();
-            xlApp.ActiveWindow.SplitColumn = 0;
-            xlApp.ActiveWindow.SplitRow = 1;
-            xlApp.ActiveWindow.FreezePanes = true;
-
-            //szűrést felteszük
-            Szűrés("Munka1", 1, oszlop, 1);
-
-
-            //Nyomtatási terület kijelülése
-            NyomtatásiTerület_részletes("Munka1", "A1:" + Oszlopnév(oszlop) + (sor + 1).ToString(), "$1:$1", "", true);
-
-            //Beállunk az A1 cellába
-            xlApp.Range["A1"].Select();
-
-            ExcelMentés(fájlexc);
-
-            Module_Excel.ExcelBezárás();
-        }
-
-
-        /// <summary>
-        /// Ez a változat közvetlenül adatbázisból írja ki az adatokat
-        /// Gondoskodni kell külön szálon a holtart működéséről
-        /// </summary>
-        /// <param name="hely"> Adatbázis elérhetősége</param>
-        /// <param name="jelszó">Adatbázis jelszó</param>
-        /// <param name="szöveg">Adatbázis sql</param>
-        public static int EXCELtábla(string hely, string jelszó, string szöveg)
-        {
-
-            MyExcel.Range MyRange;
-            Module_Excel.ExcelLétrehozás();
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                OleDbDataAdapter Adapter = new OleDbDataAdapter(szöveg, Kapcsolat);
-
-                DataSet Tábla = new DataSet();
-
-                Adapter.Fill(Tábla);
-                //Fejléc
-                for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
-                {
-                    xlWorkSheet.Cells[1, j + 1] = Tábla.Tables[0].Columns[j].ColumnName.ToString();
-                }
-
-
-                for (int i = 0; i < Tábla.Tables[0].Rows.Count; i++)
-                {
-                    for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
-                    {
-                        xlWorkSheet.Cells[i + 2, j + 1] = Tábla.Tables[0].Rows[i].ItemArray[j];
-                    }
-                }
-
-                //Utolsó oszlop és sor adatok
-                oszlop = Tábla.Tables[0].Columns.Count;
-                sor = Tábla.Tables[0].Rows.Count;
-            }
-            // Kiszínezzük
-            MyRange = xlWorkSheet.get_Range("A1", Oszlopnév(oszlop) + "1");
-            MyRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow);
-
-            // rácsozás
-            Rácsoz("A1:" + Oszlopnév(oszlop) + (sor + 1).ToString());
-
-            //Automata Oszlop szélesség beállítás
-            Oszlopszélesség("Munka1", "A:" + Oszlopnév(oszlop));
-
-            //Vastag betű
-            MyExcel.Range Táblaterület = xlWorkSheet.Range["A1:" + Oszlopnév(oszlop) + "1"];
-            Táblaterület.Font.Bold = true;
-            Táblaterület.Interior.Color = Color.Yellow;
-
-            //Rögzítjük a fejlécet
-            xlApp.Range["A2"].Select();
-            xlApp.ActiveWindow.SplitColumn = 0;
-            xlApp.ActiveWindow.SplitRow = 1;
-            xlApp.ActiveWindow.FreezePanes = true;
-
-            //szűrést felteszük
-            Szűrés("Munka1", 1, oszlop, 1);
-
-
-            //Nyomtatási terület kijelülése
-            NyomtatásiTerület_részletes("Munka1", "A1:" + Oszlopnév(oszlop) + (sor + 1).ToString(), "$1:$1", "", true);
-
-            //Beállunk az A1 cellába
-            xlApp.Range["A1"].Select();
-
-            return sor;
-        }
-
-
-        /// <summary>
-        /// Adatbázist kiírja Excelbe, de nem menti el, hogy lehessen tovább folytatni.
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <param name="jelszó"></param>
-        /// <param name="szöveg"></param>
-        public static void EXCEL_tábla(string hely, string jelszó, string szöveg)
-        {
-
-            MyExcel.Range MyRange;
-            Module_Excel.ExcelLétrehozás();
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                OleDbDataAdapter Adapter = new OleDbDataAdapter(szöveg, Kapcsolat);
-
-                DataSet Tábla = new DataSet();
-
-                Adapter.Fill(Tábla);
-                //Fejléc
-                for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
-                {
-                    xlWorkSheet.Cells[1, j + 1] = Tábla.Tables[0].Columns[j].ColumnName.ToString();
-                }
-
-
-                for (int i = 0; i < Tábla.Tables[0].Rows.Count; i++)
-                {
-                    for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
-                    {
-                        xlWorkSheet.Cells[i + 2, j + 1] = Tábla.Tables[0].Rows[i].ItemArray[j];
-                    }
-                }
-
-                //Utolsó oszlop és sor adatok
-                oszlop = Tábla.Tables[0].Columns.Count;
-                sor = Tábla.Tables[0].Rows.Count;
-            }
-            // Kiszínezzük
-            MyRange = xlWorkSheet.get_Range("A1", Oszlopnév(oszlop) + "1");
-            MyRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow);
-
-            // rácsozás
-            Rácsoz("A1:" + Oszlopnév(oszlop) + (sor + 1).ToString());
-
-            //Automata Oszlop szélesség beállítás
-            Oszlopszélesség("Munka1", "A:" + Oszlopnév(oszlop));
-
-            //Vastag betű
-            MyExcel.Range Táblaterület = xlWorkSheet.Range["A1:" + Oszlopnév(oszlop) + "1"];
-            Táblaterület.Font.Bold = true;
-            Táblaterület.Interior.Color = Color.Yellow;
-
-            //Rögzítjük a fejlécet
-            xlApp.Range["A2"].Select();
-            xlApp.ActiveWindow.SplitColumn = 0;
-            xlApp.ActiveWindow.SplitRow = 1;
-            xlApp.ActiveWindow.FreezePanes = true;
-
-            //szűrést felteszük
-            Szűrés("Munka1", 1, oszlop, 1);
-
-
-            //Nyomtatási terület kijelülése
-            NyomtatásiTerület_részletes("Munka1", "A1:" + Oszlopnév(oszlop) + (sor + 1).ToString(), "$1:$1", "", true);
-
-            //Beállunk az A1 cellába
-            xlApp.Range["A1"].Select();
-        }
-
         /// <summary>
         /// Ez a változat közvetlenül Adattáblából írja ki az adatokat
         /// </summary>
@@ -638,6 +405,8 @@ namespace Villamos
             Module_Excel.ExcelBezárás();
         }
 
+
+
         /// <summary>
         /// Ez a változat közvetlenül Adattáblából írja ki az adatokat
         /// és az ArrayToExcel könyvtárat használja
@@ -645,90 +414,48 @@ namespace Villamos
         /// <param name="Tábla"></param>
         /// <param name="fájl"></param>
         /// <param name="Elemek"></param>
-        public static void ExcelTábla(DataTable Tábla, string fájl)
+        public static void DataTableToExcel(DataTable Tábla, string fájl)
         {
+            try
+            {
+                byte[] excel = Tábla.ToExcel(a => a.SheetName("Munka1"));
+                File.WriteAllBytes(fájl, excel);
 
-            byte[] excel = Tábla.ToExcel();
-            File.WriteAllBytes(fájl, excel);
+                ///Megnyitjuk az Excel Formázásra
+                ExcelMegnyitás(fájl);
 
-            //MyExcel.Range MyRange;
-            //Module_Excel.ExcelLétrehozás();
+                ////Utolsó oszlop és sor adatok
+                oszlop = Tábla.Columns.Count;
+                sor = Tábla.Rows.Count;
 
-            ////Fejléc
-            //int oszlop = 1;
-            //for (int j = 0; j < Tábla.Columns.Count; j++)
-            //{
-            //    if (Elemek != null && Elemek.Count > 0 && Elemek.Contains(Tábla.Columns[j].ColumnName))
-            //    {
-            //        xlWorkSheet.Cells[1, oszlop] = Tábla.Columns[j].ColumnName.ToString();
-            //        oszlop++;
-            //    }
+                Háttérszín($"A1:{Oszlopnév(oszlop)}1", System.Drawing.Color.Yellow); //Sárga háttér
+                Betű($"A1:{Oszlopnév(oszlop)}1", System.Drawing.Color.Black);  //Fekete betű
+                Betű($"A1:{Oszlopnév(oszlop)}1", false, false, true); //vastag betű
 
-            //    if (Elemek == null)
-            //    {
-            //        xlWorkSheet.Cells[1, oszlop] = Tábla.Columns[j].ColumnName.ToString();
-            //        oszlop++;
-            //    }
+                Rácsoz($"A1:{Oszlopnév(oszlop)}{sor + 1}"); // rácsozás
+                Oszlopszélesség("Munka1", $"A:{Oszlopnév(oszlop)}");     //Automata Oszlop szélesség beállítás
 
-            //}
+                Tábla_Rögzítés(1);  //Rögzítjük a fejlécet
+                Szűrés("Munka1", 1, oszlop, 1);    //szűrést felteszük
 
+                //Nyomtatási terület kijelülése
+                NyomtatásiTerület_részletes("Munka1", $"A1:{Oszlopnév(oszlop)}{sor + 1}", "$1:$1", "", true);
 
-            //for (int i = 0; i < Tábla.Rows.Count; i++)
-            //{
-            //    oszlop = 1;
-            //    for (int j = 0; j < Tábla.Columns.Count; j++)
-            //    {
-            //        if (Elemek != null && Elemek.Count > 0 && Elemek.Contains(Tábla.Columns[j].ColumnName))
-            //        {
-            //            xlWorkSheet.Cells[i + 2, oszlop] = Tábla.Rows[i].ItemArray[j];
-            //            oszlop++;
-            //        }
-            //        if (Elemek == null)
-            //        {
-            //            xlWorkSheet.Cells[i + 2, oszlop] = Tábla.Rows[i].ItemArray[j];
-            //            oszlop++;
-            //        }
-            //    }
-            //}
+                //Beállunk az A1 cellába
+                xlApp.Range["A1"].Select();
 
-            ////Utolsó oszlop és sor adatok
-            //oszlop--;
-            //sor = Tábla.Rows.Count;
-
-            //// Kiszínezzük
-            //MyRange = xlWorkSheet.get_Range("A1", Oszlopnév(oszlop) + "1");
-            //MyRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Yellow);
-
-            //// rácsozás
-            //Rácsoz("A1:" + Oszlopnév(oszlop) + (sor + 1).ToString());
-
-            ////Automata Oszlop szélesség beállítás
-            //Oszlopszélesség("Munka1", "A:" + Oszlopnév(oszlop));
-
-            ////Vastag betű
-            //MyExcel.Range Táblaterület = xlWorkSheet.Range["A1:" + Oszlopnév(oszlop) + "1"];
-            //Táblaterület.Font.Bold = true;
-            //Táblaterület.Interior.Color = Color.Yellow;
-
-            ////Rögzítjük a fejlécet
-            //xlApp.Range["A2"].Select();
-            //xlApp.ActiveWindow.SplitColumn = 0;
-            //xlApp.ActiveWindow.SplitRow = 1;
-            //xlApp.ActiveWindow.FreezePanes = true;
-
-            ////szűrést felteszük
-            //Szűrés("Munka1", 1, oszlop, 1);
-
-
-            ////Nyomtatási terület kijelülése
-            //NyomtatásiTerület_részletes("Munka1", $"A1:{Oszlopnév(oszlop)}{sor + 1}", "$1:$1", "", true);
-
-            ////Beállunk az A1 cellába
-            //xlApp.Range["A1"].Select();
-
-            //ExcelMentés(fájl);
-
-            //Module_Excel.ExcelBezárás();
+                ExcelMentés();
+                ExcelBezárás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "ExcelTábla", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 

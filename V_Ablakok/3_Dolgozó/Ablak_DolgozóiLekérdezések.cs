@@ -504,7 +504,7 @@ namespace Villamos
 
                     MyE.Rácsoz($"b{i}:c{i + 6}");
                     MyE.Vastagkeret($"b{i}:c{i + 6}");
-                    MyE.Tábla_Rögzítés($"b1:c{i + 6}", 1);
+                    MyE.Tábla_Rögzítés(1);
 
 
                     // összesítő lapra kiírjuk telephelyenként
