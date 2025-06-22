@@ -26,7 +26,7 @@ namespace Excel
                 excel = new Microsoft.Office.Interop.Excel.Application();
 
                 // for making Excel visible
-                excel.Visible = true;
+                excel.Visible = false;
                 excel.DisplayAlerts = false;
 
                 // Creation a new Workbook
