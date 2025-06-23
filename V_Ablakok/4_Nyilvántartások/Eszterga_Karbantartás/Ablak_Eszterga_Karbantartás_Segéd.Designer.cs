@@ -44,6 +44,7 @@
             this.TxtBxUzemOra.Name = "TxtBxUzemOra";
             this.TxtBxUzemOra.Size = new System.Drawing.Size(120, 26);
             this.TxtBxUzemOra.TabIndex = 1;
+            this.TxtBxUzemOra.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtBxUzemOra_KeyDown);
             // 
             // Lbl_Üzemóra
             // 

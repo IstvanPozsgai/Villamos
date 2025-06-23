@@ -1109,8 +1109,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                     return;
 
                 string FajlNev = MentesAblak.FileName;
-                Stopwatch stopper = new Stopwatch();
-                stopper.Start();
 
                 if (pdf)
                 {
@@ -1118,7 +1116,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         FajlNev += ".pdf";
 
                     PDFtábla(FajlNev, Tabla);
-                    MessageBox.Show("Elkészült a PDF fájl:\n" + FajlNev, "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -1126,14 +1123,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         FajlNev += ".xlsx";
 
                     MyE.EXCELtábla(FajlNev, Tabla, false, true);
-                    MessageBox.Show("Elkészült az Excel fájl:\n" + FajlNev, "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                stopper.Stop();
 
                 string Tipus = pdf ? "PDF" : "Excel";
-                string Ido = (stopper.Elapsed.TotalSeconds).ToString("0.00");
 
-                MessageBox.Show($"Elkészült a {Tipus} fájl:\n{FajlNev}\n\nIdő: {Ido} másodperc", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Elkészült a {Tipus} fájl:\n{FajlNev}", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(FajlNev);
             }
             catch (HibásBevittAdat ex)
