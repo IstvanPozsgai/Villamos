@@ -22,7 +22,7 @@ namespace Villamos
             InitializeComponent();
             dataGridView1.DataSource = GetTable();
 
-            //fájl += "\próba.xlsx";
+            fájl += @"\próba.xlsx";
             if (File.Exists(fájl)) File.Delete(fájl);
         }
 
