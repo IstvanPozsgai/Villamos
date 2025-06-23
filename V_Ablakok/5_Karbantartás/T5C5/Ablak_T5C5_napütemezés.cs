@@ -226,11 +226,11 @@ namespace Villamos
                 Tábla.Columns[17].Width = 80;
                 Tábla.Columns[18].HeaderText = "Előző V2-től futott";
                 Tábla.Columns[18].Width = 80;
-                Tábla.Columns[19].HeaderText = "";
+                Tábla.Columns[19].HeaderText = "A_";
                 Tábla.Columns[19].Width = 80;
-                Tábla.Columns[20].HeaderText = "";
+                Tábla.Columns[20].HeaderText = "B_";
                 Tábla.Columns[20].Width = 80;
-                Tábla.Columns[21].HeaderText = "";
+                Tábla.Columns[21].HeaderText = "C_";
                 Tábla.Columns[21].Width = 80;
                 Tábla.Columns[22].HeaderText = "V napi";
                 Tábla.Columns[22].Width = 80;
@@ -240,9 +240,9 @@ namespace Villamos
                 Tábla.Columns[24].Width = 80;
                 Tábla.Columns[25].HeaderText = "V";
                 Tábla.Columns[25].Width = 80;
-                Tábla.Columns[26].HeaderText = "státus";
+                Tábla.Columns[26].HeaderText = "státus_";
                 Tábla.Columns[26].Width = 80;
-                Tábla.Columns[26].Visible = false;
+                Tábla.Columns[26].Visible = true;
                 Tábla.Columns[27].HeaderText = "Rendelés";
                 Tábla.Columns[27].Width = 80;
                 Tábla.Columns[28].HeaderText = "Következő V Ssz";
@@ -581,9 +581,9 @@ namespace Villamos
                 Tábla.Columns[0].Width = 85;
                 for (int ii = 1; ii <= 6; ii++)
                 {
-                    Tábla.Columns[(ii - 1) * 2 + 1].HeaderText = "Psz";
+                    Tábla.Columns[(ii - 1) * 2 + 1].HeaderText = $"Psz{ii}";
                     Tábla.Columns[(ii - 1) * 2 + 1].Width = 85;
-                    Tábla.Columns[1 + (ii - 1) * 2 + 1].HeaderText = "Futásnap";
+                    Tábla.Columns[1 + (ii - 1) * 2 + 1].HeaderText = $"Futásnap{ii}";
                     Tábla.Columns[1 + (ii - 1) * 2 + 1].Width = 85;
                 }
 
@@ -1006,12 +1006,11 @@ namespace Villamos
 
 
         #region excel kimenetek
-        private void BtnExcelkimenet_Click(object sender, EventArgs e)
+        private async void BtnExcelkimenet_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Tábla.Rows.Count <= 0) return;
-                string fájlexc;
 
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -1024,13 +1023,18 @@ namespace Villamos
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = SaveFileDialog1.FileName;
+                    FájlExcel_ = SaveFileDialog1.FileName;
                 else
                     return;
 
-                Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                Holtart.Be();
+                timer1.Enabled = true;
+                await Task.Run(() => MyE.DataGridViewToExcel(FájlExcel_, Tábla));
+                timer1.Enabled = false;
+                Holtart.Ki();
+
+                MessageBox.Show("Elkészült az Excel tábla: " + FájlExcel_, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyE.Megnyitás(FájlExcel_);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1546,6 +1550,11 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            Holtart.Lép();
         }
     }
 }

@@ -283,6 +283,10 @@ namespace Villamos
             this.BtnExcelkimenet.UseVisualStyleBackColor = false;
             this.BtnExcelkimenet.Click += new System.EventHandler(this.BtnExcelkimenet_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
+            // 
             // Ablak_T5C5_napütemezés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
