@@ -1,7 +1,10 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga;
@@ -52,7 +55,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             TablaListazas();
             Jogosultsagkiosztas();
-            Tábla.CellFormatting += Tábla_CellFormatting;
+            Tabla.CellFormatting += Tábla_CellFormatting;
         }
 
         /// <summary>
@@ -119,10 +122,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     AdatTabla.Rows.Add(Soradat);
                 }
 
-                Tábla.DataSource = AdatTabla;
+                Tabla.DataSource = AdatTabla;
                 OszlopSzelesseg();
-                Tábla.Visible = true;
-                Tábla.ClearSelection();
+                Tabla.Visible = true;
+                Tabla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {
@@ -140,10 +143,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void OszlopSzelesseg()
         {
-            Tábla.Columns["ID"].Width = 60;
-            Tábla.Columns["Üzemóra"].Width = 172;
-            Tábla.Columns["Dátum"].Width = 120;
-            Tábla.Columns["Státusz"].Width = 100;
+            Tabla.Columns["ID"].Width = 60;
+            Tabla.Columns["Üzemóra"].Width = 172;
+            Tabla.Columns["Dátum"].Width = 120;
+            Tabla.Columns["Státusz"].Width = 100;
         }
 
         /// <summary>
@@ -154,20 +157,20 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
-                if (Tábla.Columns[e.ColumnIndex].Name == "Státusz" && e.Value is string státusz)
+                if (Tabla.Columns[e.ColumnIndex].Name == "Státusz" && e.Value is string státusz)
                 {
-                    DataGridViewRow sor = Tábla.Rows[e.RowIndex];
+                    DataGridViewRow sor = Tabla.Rows[e.RowIndex];
                     if (státusz == "Törölt")
                     {
                         sor.DefaultCellStyle.BackColor = Color.IndianRed;
                         sor.DefaultCellStyle.ForeColor = Color.Black;
-                        sor.DefaultCellStyle.Font = new Font(Tábla.DefaultCellStyle.Font, FontStyle.Strikeout);
+                        sor.DefaultCellStyle.Font = new System.Drawing.Font(Tabla.DefaultCellStyle.Font, FontStyle.Strikeout);
                     }
                     else
                     {
                         sor.DefaultCellStyle.BackColor = Color.White;
                         sor.DefaultCellStyle.ForeColor = Color.Black;
-                        sor.DefaultCellStyle.Font = new Font(Tábla.DefaultCellStyle.Font, FontStyle.Regular);
+                        sor.DefaultCellStyle.Font = new System.Drawing.Font(Tabla.DefaultCellStyle.Font, FontStyle.Regular);
                     }
                 }
             }
@@ -191,7 +194,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             {
                 if (e.RowIndex >= 0)
                 {
-                    DataGridViewRow row = Tábla.Rows[e.RowIndex];
+                    DataGridViewRow row = Tabla.Rows[e.RowIndex];
                     TxtBxÜzem.Text = row.Cells[1].Value.ToStrTrim();
                     DtmPckrDátum.Value = row.Cells[2].Value.ToÉrt_DaTeTime();
                     ChckBxStátus.Checked = row.Cells[3].Value.ToStrTrim() == "Törölt";
@@ -216,7 +219,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void Btn_ÚjFelvétel_Click(object sender, EventArgs e)
         {
-            Tábla.ClearSelection();
+            Tabla.ClearSelection();
             TxtBxÜzem.Text = string.Empty;
             TxtBxÜzem.Focus();
             DtmPckrDátum.Value = DateTime.Today;
@@ -231,7 +234,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
-                if (Tábla.SelectedRows.Count > 1)
+                if (Tabla.SelectedRows.Count > 1)
                     throw new HibásBevittAdat("Egyszerre csak 1 sort lehet módosítani");
 
                 long UjUzemora = TxtBxÜzem.Text.ToÉrt_Long();
@@ -242,7 +245,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 if (!DatumEllenorzes(UjDatum)) return;
 
-                if (Tábla.SelectedRows.Count == 0)
+                if (Tabla.SelectedRows.Count == 0)
                 { if (!UjRekordHozzaadasa(UjDatum, UjUzemora, UjStatus)) return; }
 
                 else
@@ -268,24 +271,51 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
-                if (Tábla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
-                string fájlexc;
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "Teljes tartalom mentése Excel fájlba",
-                    FileName = $"Eszterga_Karbantartás_Üzemórák_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
-                    Filter = "Excel |*.xlsx"
-                };
-                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = SaveFileDialog1.FileName;
-                else
+                if (Tabla.Rows.Count <= 0)
+                    throw new HibásBevittAdat("Nincs sora a táblázatnak!");
+
+                DialogResult Valasztas = MessageBox.Show(
+                    "Hogyan szeretné menteni a táblázatot?\n\nIgen = Excel\nNem = PDF\nMégse = Kilépés",
+                    "Mentés típusa",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button1);
+
+                if (Valasztas == DialogResult.Cancel)
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                bool pdf = Valasztas == DialogResult.No;
+                SaveFileDialog MentesAblak = new SaveFileDialog
+                {
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    Title = pdf ? "Mentés PDF fájlba" : "Mentés Excel fájlba",
+                    FileName = $"Eszterga_Karbantartás_Üzemórák_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = pdf ? "PDF fájl (*.pdf)|*.pdf" : "Excel fájl (*.xlsx)|*.xlsx"
+                };
+                if (MentesAblak.ShowDialog() != DialogResult.OK)
+                    return;
 
-                MyE.Megnyitás($"{fájlexc}.xlsx");
+                string FajlNev = MentesAblak.FileName;
+
+                if (pdf)
+                {
+                    if (!FajlNev.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                        FajlNev += ".pdf";
+
+                    PDFtábla(FajlNev, Tabla);
+                }
+                else
+                {
+                    if (!FajlNev.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
+                        FajlNev += ".xlsx";
+
+                    MyE.EXCELtábla(FajlNev, Tabla, false, true);
+                }
+
+                string Tipus = pdf ? "PDF" : "Excel";
+
+                MessageBox.Show($"Elkészült a {Tipus} fájl:\n{FajlNev}", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyE.Megnyitás(FajlNev);
             }
             catch (HibásBevittAdat ex)
             {
@@ -297,7 +327,83 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void PDFtábla(string fájlNév, DataGridView tábla)
+        {
+            try
+            {
+                using (FileStream stream = new FileStream(fájlNév, FileMode.Create))
+                {
+                    Document pdfDoc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
+                    PdfWriter.GetInstance(pdfDoc, stream);
+                    pdfDoc.Open();
 
+                    // Betűtípus betöltése (Arial, Unicode támogatás)
+                    string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                    BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+                    // Fejléc betűtípus - fekete, vastag
+                    iTextSharp.text.Font fejlecBetu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+
+                    PdfPTable pdfTable = new PdfPTable(tábla.Columns.Count)
+                    {
+                        WidthPercentage = 100
+                    };
+
+                    // Fejléc hozzáadása, egységes fekete háttérrel (vagy tetszőleges színnel)
+                    foreach (DataGridViewColumn column in tábla.Columns)
+                    {
+                        PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fejlecBetu))
+                        {
+                            BackgroundColor = new BaseColor(240, 240, 240)
+                        };
+                        pdfTable.AddCell(cell);
+                    }
+
+                    // Sorok bejárása
+                    foreach (DataGridViewRow row in tábla.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            string szoveg = cell.Value?.ToString() ?? "";
+
+                            // Színek lekérése az InheritedStyle-ból (ez tartalmazza a tényleges megjelenő színt)
+                            BaseColor háttérSzín = cell.InheritedStyle.BackColor.IsEmpty
+                                ? BaseColor.WHITE
+                                : new BaseColor(cell.InheritedStyle.BackColor.R, cell.InheritedStyle.BackColor.G, cell.InheritedStyle.BackColor.B);
+
+                            BaseColor szovegSzín = cell.InheritedStyle.ForeColor.IsEmpty
+                                ? BaseColor.BLACK
+                                : new BaseColor(cell.InheritedStyle.ForeColor.R, cell.InheritedStyle.ForeColor.G, cell.InheritedStyle.ForeColor.B);
+
+                            // Betűtípus az adott cella szövegszínével
+                            iTextSharp.text.Font betu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.NORMAL, szovegSzín);
+
+                            PdfPCell pdfCell = new PdfPCell(new Phrase(szoveg, betu))
+                            {
+                                BackgroundColor = háttérSzín
+                            };
+
+                            pdfTable.AddCell(pdfCell);
+                        }
+                    }
+
+                    pdfDoc.Add(pdfTable);
+                    pdfDoc.Close();
+                    stream.Close();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         /// <summary>
         /// Ellenőrzi, hogy a megadott dátum nem jövőbeli-e.
         /// </summary>
@@ -375,7 +481,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             bool UtolsoTorles = false;
             try
             {
-                DataGridViewRow KivalasztottSor = Tábla.SelectedRows[0];
+                DataGridViewRow KivalasztottSor = Tabla.SelectedRows[0];
                 int AktivID = KivalasztottSor.Cells[0].Value.ToÉrt_Int();
 
                 if (!UzemoraSzamEllenorzes(UjUzemora, UjDatum))

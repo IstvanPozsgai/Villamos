@@ -1,7 +1,10 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás;
@@ -661,13 +664,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     {
                         sor.DefaultCellStyle.BackColor = Color.IndianRed;
                         sor.DefaultCellStyle.ForeColor = Color.Black;
-                        sor.DefaultCellStyle.Font = new Font(tabla.DefaultCellStyle.Font, FontStyle.Strikeout);
+                        sor.DefaultCellStyle.Font = new System.Drawing.Font(tabla.DefaultCellStyle.Font, FontStyle.Strikeout);
                     }
                     else
                     {
                         sor.DefaultCellStyle.BackColor = Color.White;
                         sor.DefaultCellStyle.ForeColor = Color.Black;
-                        sor.DefaultCellStyle.Font = new Font(tabla.DefaultCellStyle.Font, FontStyle.Regular);
+                        sor.DefaultCellStyle.Font = new System.Drawing.Font(tabla.DefaultCellStyle.Font, FontStyle.Regular);
                     }
                 }
             }
@@ -1032,24 +1035,128 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                if (TablaMuvelet.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
-                string fajlexc;
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "Teljes tartalom mentése Excel fájlba",
-                    FileName = $"Eszterga_Karbantartás_Műveletek_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
-                    Filter = "Excel |*.xlsx"
-                };
-                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fajlexc = SaveFileDialog1.FileName;
-                else
+                if (TablaMuvelet.Rows.Count <= 0)
+                    throw new HibásBevittAdat("Nincs sora a táblázatnak!");
+
+                DialogResult Valasztas = MessageBox.Show(
+                    "Hogyan szeretné menteni a táblázatot?\n\nIgen = Excel\nNem = PDF\nMégse = Kilépés",
+                    "Mentés típusa",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button1);
+
+                if (Valasztas == DialogResult.Cancel)
                     return;
 
-                MyE.DataGridViewToExcel(fajlexc, TablaMuvelet);
-                MessageBox.Show("Elkészült az Excel tábla: " + fajlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                bool pdf = Valasztas == DialogResult.No;
+                SaveFileDialog MentesAblak = new SaveFileDialog
+                {
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    Title = pdf ? "Mentés PDF fájlba" : "Mentés Excel fájlba",
+                    FileName = $"Eszterga_Karbantartás_Műveletek_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = pdf ? "PDF fájl (*.pdf)|*.pdf" : "Excel fájl (*.xlsx)|*.xlsx"
+                };
+                if (MentesAblak.ShowDialog() != DialogResult.OK)
+                    return;
 
-                MyE.Megnyitás($"{fajlexc}.xlsx");
+                string FajlNev = MentesAblak.FileName;
+
+                if (pdf)
+                {
+                    if (!FajlNev.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                        FajlNev += ".pdf";
+
+                    PDFtábla(FajlNev, TablaMuvelet);
+                }
+                else
+                {
+                    if (!FajlNev.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
+                        FajlNev += ".xlsx";
+
+                    MyE.EXCELtábla(FajlNev, TablaMuvelet, false, true);
+                }
+
+                string Tipus = pdf ? "PDF" : "Excel";
+
+                MessageBox.Show($"Elkészült a {Tipus} fájl:\n{FajlNev}", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyE.Megnyitás(FajlNev);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void PDFtábla(string fájlNév, DataGridView tábla)
+        {
+            try
+            {
+                using (FileStream stream = new FileStream(fájlNév, FileMode.Create))
+                {
+                    Document pdfDoc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
+                    PdfWriter.GetInstance(pdfDoc, stream);
+                    pdfDoc.Open();
+
+                    // Betűtípus betöltése (Arial, Unicode támogatás)
+                    string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                    BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+                    // Fejléc betűtípus - fekete, vastag
+                    iTextSharp.text.Font fejlecBetu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+
+                    PdfPTable pdfTable = new PdfPTable(tábla.Columns.Count)
+                    {
+                        WidthPercentage = 100
+                    };
+
+                    // Fejléc hozzáadása, egységes fekete háttérrel (vagy tetszőleges színnel)
+                    foreach (DataGridViewColumn column in tábla.Columns)
+                    {
+                        PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fejlecBetu))
+                        {
+                            BackgroundColor = new BaseColor(240, 240, 240)
+                        };
+                        pdfTable.AddCell(cell);
+                    }
+
+                    // Sorok bejárása
+                    foreach (DataGridViewRow row in tábla.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            string szoveg = cell.Value?.ToString() ?? "";
+
+                            // Színek lekérése az InheritedStyle-ból (ez tartalmazza a tényleges megjelenő színt)
+                            BaseColor háttérSzín = cell.InheritedStyle.BackColor.IsEmpty
+                                ? BaseColor.WHITE
+                                : new BaseColor(cell.InheritedStyle.BackColor.R, cell.InheritedStyle.BackColor.G, cell.InheritedStyle.BackColor.B);
+
+                            BaseColor szovegSzín = cell.InheritedStyle.ForeColor.IsEmpty
+                                ? BaseColor.BLACK
+                                : new BaseColor(cell.InheritedStyle.ForeColor.R, cell.InheritedStyle.ForeColor.G, cell.InheritedStyle.ForeColor.B);
+
+                            // Betűtípus az adott cella szövegszínével
+                            iTextSharp.text.Font betu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.NORMAL, szovegSzín);
+
+                            PdfPCell pdfCell = new PdfPCell(new Phrase(szoveg, betu))
+                            {
+                                BackgroundColor = háttérSzín
+                            };
+
+                            pdfTable.AddCell(pdfCell);
+                        }
+                    }
+
+                    pdfDoc.Add(pdfTable);
+                    pdfDoc.Close();
+                    stream.Close();
+                }
             }
             catch (HibásBevittAdat ex)
             {

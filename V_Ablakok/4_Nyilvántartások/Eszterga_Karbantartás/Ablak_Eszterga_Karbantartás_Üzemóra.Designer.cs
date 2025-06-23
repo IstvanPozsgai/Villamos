@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
+            this.Tabla = new Zuby.ADGV.AdvancedDataGridView();
             this.Btn_Excel = new System.Windows.Forms.Button();
             this.Btn_ÚjFelvétel = new System.Windows.Forms.Button();
             this.TxtBxÜzem = new System.Windows.Forms.TextBox();
@@ -38,33 +38,33 @@
             this.LblÜzem = new System.Windows.Forms.Label();
             this.LblDátum = new System.Windows.Forms.Label();
             this.DtmPckrDátum = new System.Windows.Forms.DateTimePicker();
-            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tabla)).BeginInit();
             this.SuspendLayout();
             // 
             // Tábla
             // 
-            this.Tábla.AllowUserToAddRows = false;
-            this.Tábla.AllowUserToDeleteRows = false;
-            this.Tábla.AllowUserToResizeRows = false;
-            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Tabla.AllowUserToAddRows = false;
+            this.Tabla.AllowUserToDeleteRows = false;
+            this.Tabla.AllowUserToResizeRows = false;
+            this.Tabla.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla.FilterAndSortEnabled = true;
-            this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla.Location = new System.Drawing.Point(24, 14);
-            this.Tábla.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Tábla.MaxFilterButtonImageHeight = 23;
-            this.Tábla.Name = "Tábla";
-            this.Tábla.ReadOnly = true;
-            this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Tábla.RowHeadersVisible = false;
-            this.Tábla.RowHeadersWidth = 30;
-            this.Tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.Tábla.Size = new System.Drawing.Size(472, 430);
-            this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla.TabIndex = 261;
-            this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            this.Tábla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_CellFormatting);
+            this.Tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tabla.FilterAndSortEnabled = true;
+            this.Tabla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tabla.Location = new System.Drawing.Point(24, 14);
+            this.Tabla.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Tabla.MaxFilterButtonImageHeight = 23;
+            this.Tabla.Name = "Tábla";
+            this.Tabla.ReadOnly = true;
+            this.Tabla.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Tabla.RowHeadersVisible = false;
+            this.Tabla.RowHeadersWidth = 30;
+            this.Tabla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.Tabla.Size = new System.Drawing.Size(472, 430);
+            this.Tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tabla.TabIndex = 261;
+            this.Tabla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
+            this.Tabla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_CellFormatting);
             // 
             // Btn_Excel
             // 
@@ -184,7 +184,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
             this.ClientSize = new System.Drawing.Size(797, 458);
-            this.Controls.Add(this.Tábla);
+            this.Controls.Add(this.Tabla);
             this.Controls.Add(this.Btn_Excel);
             this.Controls.Add(this.Btn_ÚjFelvétel);
             this.Controls.Add(this.TxtBxÜzem);
@@ -201,7 +201,7 @@
             this.Text = "Ablak_Eszterga_Karbantartás_Üzemóra";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_Eszterga_Karbantartás_Üzemóra_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tabla)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,7 +209,7 @@
 
         #endregion
 
-        internal Zuby.ADGV.AdvancedDataGridView Tábla;
+        internal Zuby.ADGV.AdvancedDataGridView Tabla;
         internal System.Windows.Forms.Button Btn_Excel;
         internal System.Windows.Forms.Button Btn_ÚjFelvétel;
         internal System.Windows.Forms.TextBox TxtBxÜzem;
