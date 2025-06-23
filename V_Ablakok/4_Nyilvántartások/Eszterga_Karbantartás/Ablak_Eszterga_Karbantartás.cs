@@ -3,7 +3,6 @@ using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -61,6 +60,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 long Uzemora = 0;
+
+                // JAVÍTANDÓ: Miért kell ez ide? Kezelő dolga.
                 string hely = $@"{Application.StartupPath}/Főmérnökség/Adatok/Kerékeszterga";
 
                 if (!Directory.Exists(hely))
@@ -80,6 +81,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
 
+                // JAVÍTANDÓ: Miért kell bonyolítani?
                 Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
                                                 where a.Dátum.Date == DateTime.Today && a.Státus != true
                                                 select a).FirstOrDefault();
@@ -251,6 +253,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
                 {
+                    // JAVÍTANDÓ: miért nem linqban van?
                     if (rekord.Státus != true)
                     {
                         DataRow Soradat = AdatTabla.NewRow();
@@ -329,6 +332,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
                 {
+                    // JAVÍTANDÓ: Ez miért kell?
                     if (rekord.Státus == true) continue;
 
                     int ID = rekord.ID;
@@ -336,6 +340,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                     long UtolsoUzemora = rekord.Utolsó_Üzemóra_Állás;
                     long BecsultUzemora = this.BecsultUzemora(TervDatum);
 
+                    // JAVÍTANDÓ:Mit csinálunk itt?
                     while (UtolsoDatum.AddDays(rekord.Mennyi_Dátum) <= TervDatum || (UtolsoUzemora + rekord.Mennyi_Óra) >= BecsultUzemora)
                     {
                         bool Esedekes = false;
@@ -567,6 +572,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
+                // JAVÍTANDÓ: nincs var
+                //Miért kell bevezetni új változót?
                 var naploLista = new List<Adat_Eszterga_Muveletek_Naplo>();
                 string rogzito = Program.PostásNév.ToStrTrim();
                 DateTime maiDatum = DateTime.Today;
@@ -624,6 +631,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             {
                 foreach (DataGridViewRow row in Tabla.Rows)
                 {
+                    // JAVÍTANDÓ:a tábla típus miért cikluson belül van?
                     if (AktivTablaTipus == "Napló") return;
                     if (row.IsNewRow) continue;
                     if (row.Cells["Sorszám"].Value != null && int.TryParse(row.Cells["Sorszám"].Value.ToStrTrim(), out int Sorszam))
@@ -669,7 +677,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 long ElteltOrak = AktualisUzemora - UtolsoUzemora;
                 int ElorejelezDatum = rekord.Mennyi_Dátum - TxtBxNapi.Text.ToÉrt_Int();
                 int ElorejelezUzem = rekord.Mennyi_Óra - TxtBxÜzem.Text.ToÉrt_Int();
-
+                // JAVÍTANDÓ:magyarázat
                 if (Egyseg == (int)EsztergaEgyseg.Dátum)
                 {
                     if (ElteltNapok >= rekord.Mennyi_Dátum)
@@ -747,12 +755,14 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // JAVÍTANDÓ:Ez mit csinál itt?
                 throw;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // JAVÍTANDÓ:Ez mit csinál itt?
                 throw;
             }
         }
@@ -892,7 +902,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                                       where !a.Státus && a.Dátum >= KezdetiDatum
                                                       orderby a.Dátum
                                                       select a).ToList();
-
+                // JAVÍTANDÓ:1
                 if (rekord.Count < 2)
                 {
                     LblÁtlagÜzemóraSzám.Text = $"Nincs elegendő adat az átlag számításhoz.";
@@ -956,6 +966,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
+
+                // JAVÍTANDÓ:ezek konstansok?
                 TxtBxNapiUzemoraAtlag.Text = "30";
                 TxtBxNapi.Text = "5";
                 TxtBxÜzem.Text = "8";
@@ -983,6 +995,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
+                // JAVÍTANDÓ:Miért nem használod a try
                 if (Tabla.SelectedRows.Count == 0)
                 {
                     MessageBox.Show("Válasszon ki egy vagy több sort a táblázatból.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1000,7 +1013,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 foreach (DataGridViewRow sor in Tabla.SelectedRows)
                 {
                     Color hatterSzin = sor.DefaultCellStyle.BackColor;
-
+                    // JAVÍTANDÓ:Miért nem használod a try
                     if (hatterSzin == Color.LawnGreen || hatterSzin == Color.Yellow)
                     {
                         MessageBox.Show("Ez a sor nem módosítható, mert már a művelet elkészült vagy nem kell még végrehajtani.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1040,6 +1053,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             }
         }
 
+        // JAVÍTANDÓ:miért van megjegyzéssé alakítva
         /// <summary>
         /// A táblázat tartalmát Excel fájlba exportálja, majd automatikusan megnyitja a fájlt.
         /// A felhasználó kiválaszthatja a fájl mentési helyét és nevét.
@@ -1078,6 +1092,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         //        MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         //    }
         //}
+
+        // JAVÍTANDÓ:Ez nem excelt készít
         private void Btn_Excel_Click(object sender, EventArgs e)
         {
             try
@@ -1240,6 +1256,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             }
         }
 
+        // JAVÍTANDÓ:Ezt bővebben magyarázd el és miért 100000 ez nem konstans?
         /// <summary>
         /// Amikor az üzemóra átlag számításához megadott napok száma megváltozik, újra kiszámítja és frissíti az értéket.
         /// </summary>
@@ -1321,6 +1338,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
+                // JAVÍTANDÓ:mit csinál a külső és belső if
                 if (DtmPckrElőTerv.Value >= DateTime.Today)
                 {
                     if (DtmPckrElőTerv.Value > DateTime.Today)
@@ -1371,7 +1389,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 string ElozoMegjegyzes = (from rekord in Funkcio.Eszterga_KarbantartasFeltolt()
                                           where rekord.ID == ID
                                           select rekord.Megjegyzés)?.FirstOrDefault()?.ToStrTrim();
-
+                // JAVÍTANDÓ:try
                 if (ElozoMegjegyzes == Megjegyzes)
                 {
                     MessageBox.Show("Nem történt változás a megjegyzés változtatásakor.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);

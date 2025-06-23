@@ -4,6 +4,7 @@ using Villamos.Villamos_Kezelők;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 {
+    // JAVÍTANDÓ:Ez miért kell, hogy pihenjen itt a kezelőből az adat, majd tovább tudjon repülni?
     static class Eszterga_Funkció
     {
         public static List<Adat_Eszterga_Muveletek> Eszterga_KarbantartasFeltolt()

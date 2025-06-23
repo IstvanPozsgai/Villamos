@@ -13,6 +13,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #region osztalyszintű elemek
         private List<Adat_Eszterga_Uzemora> AdatokUzemora;
         readonly private Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
+        // JAVÍTANDÓ:Biztos?
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         public int Uzemora { get; private set; }
         #endregion
@@ -61,6 +62,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
+        // JAVÍTANDÓ:try
         /// <summary>
         /// Az ablak betöltésekor eldönti, hogy a felhasználó rögzíthet-e új üzemóra adatot.  
         /// Ha nincs jogosultsága, megjeleníti az utolsó rögzített üzemórát, majd bezárja az ablakot.  

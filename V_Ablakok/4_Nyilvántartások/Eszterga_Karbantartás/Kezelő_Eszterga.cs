@@ -8,10 +8,16 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Kezelők
 {
+    // JAVÍTANDÓ:Egy kezelő egy fájl.
+    // táblanév legyen    Tabla_Muvelet helyett egységesen
+    // a fájl létrehozását a kezelő végzi
+    //sok módosítás
+
     public class Kezelo_Eszterga_Muveletek
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
         readonly string jelszo = "bozaim";
+
         readonly string Tabla_Muvelet = "Műveletek";
         public List<Adat_Eszterga_Muveletek> Lista_Adatok()
         {
@@ -283,6 +289,7 @@ namespace Villamos.Villamos_Kezelők
             }
         }
     }
+
     public class Kezelő_Eszterga_Üzemóra
     {
         readonly string jelszo = "bozaim";
@@ -418,6 +425,8 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
+
+        // JAVÍTANDÓ:Ez rögzítés
         public void EsztergaNaplozas(List<Adat_Eszterga_Muveletek_Naplo> Adatok)
         {
             try
@@ -452,6 +461,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        // JAVÍTANDÓ:az módosítás
         public void UtolagUpdate(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
         {
             try

@@ -24,6 +24,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #region Osztályszintű elemek
         readonly private DataTable AdatTabla = new DataTable();
         public event Event_Kidobo Eszterga_Valtozas;
+        // JAVÍTANDÓ:?
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         #endregion
 
@@ -33,6 +34,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Kezelők
+        // JAVÍTANDÓ:ha nem kell akkor minek?
         readonly private Kezelo_Eszterga_Muveletek KezMuveletek = new Kezelo_Eszterga_Muveletek();
         readonly private Kezelő_Eszterga_Üzemóra KezUzemora = new Kezelő_Eszterga_Üzemóra();
         #endregion
@@ -521,8 +523,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 TablaListazas();
                 Frissit_MuveletTablazat(EredetiDatum, UjDatum, EredetiUzemora, UjUzemora);
                 Eszterga_Valtozas?.Invoke();
-                if(!UtolsoTorles)
-                MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (!UtolsoTorles)
+                    MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return true;
             }
             catch (HibásBevittAdat ex)
@@ -561,6 +563,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 }
                 else
                     return;
+                // JAVÍTANDÓ:Ez minek?
             }
             catch (HibásBevittAdat ex)
             {

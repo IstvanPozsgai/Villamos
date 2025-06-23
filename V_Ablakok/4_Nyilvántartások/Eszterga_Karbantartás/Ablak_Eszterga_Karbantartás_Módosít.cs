@@ -115,6 +115,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             Üzemóra = 2,
             Bekövetkezés = 3
         }
+
+        // JAVÍTANDÓ:mit csinálunk itt?
         private void EgysegEllenorzes(string Egyseg)
         {
             try
@@ -179,6 +181,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 CmbxEgység.SelectedItem = EsztergaEgyseg.Bekövetkezés;
                 List<Adat_Eszterga_Muveletek> AdatokMűvelet = Funkcio.Eszterga_KarbantartasFeltolt();
                 int KovetkezoID = AdatokMűvelet.Any() ? AdatokMűvelet.Max(a => a.ID) + 1 : 1;
+                // JAVÍTANDÓ:miért kell tudnunk itt , hogy mi az ID? kezelőben a helye
                 TxtBxId.Text = KovetkezoID.ToStrTrim();
                 EgysegEllenorzes(EsztergaEgyseg.Bekövetkezés.ToStrTrim());
             }
@@ -269,6 +272,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TablaMuvelet.Columns["Utolsó Üzemóra"].Width = 160;
         }
 
+        // JAVÍTANDÓ:try?
         /// <summary>
         /// A karbantartási műveletek naplóbejegyzései betöltése és megjelenítése a TáblaMűveletbe
         /// </summary>
@@ -445,7 +449,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     Hibak.Add("Az azonosító nem található az adatbázisban.");
                     hiba++;
                 }
-
+                // JAVÍTANDÓ:a true mikor lesz false?
                 if (true)
                 {
                     string Egyseg = CmbxEgység.SelectedItem?.ToStrTrim();
@@ -520,6 +524,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
+        // JAVÍTANDÓ:miért nem a kezelőben oldod meg?
         /// <summary>
         /// Az eszterga karbantartási rekordokat rendezi az ID alapján, és szükség esetén módosítja az ID értékeket,
         /// hogy folyamatosan növekvő sorrendben legyenek.
@@ -581,6 +586,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         rekordok.Add(rekord);
                     else
                         throw new HibásBevittAdat("A kijelölt sorok nem találhatóak az adatbázisban.");
+                    // JAVÍTANDÓ:erről szerintem beszéltünk, ha a felhasználó kijelölte és nincs adatbátisban a következő listázáskor úgyis fog értesülni róla
                 }
 
                 return rekordok;
@@ -624,6 +630,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 else
                 {
                     AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                    // JAVÍTANDÓ:ha ez bekövetkezik mit ad vissza?
                     Adat_Eszterga_Uzemora rekord = AdatokUzemora
                         .FirstOrDefault(a => a.Dátum == Uj_ablak_EsztergaUzemora.DtmPckrDátum.Value.Date) ?? throw new HibásBevittAdat("Nem található rekord a megadott dátummal.");
 
@@ -631,7 +638,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         rekord.Státus == Uj_ablak_EsztergaUzemora.ChckBxStátus.Checked)
                         return false;
                 }
-
+                // JAVÍTANDÓ:Mikor lesz igaz?
                 return true;
             }
             catch (HibásBevittAdat ex)
@@ -824,7 +831,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 Adat_Eszterga_Muveletek rekord = AdatokMuvelet
                     .FirstOrDefault(a => a.ID == TxtBxId.Text.ToÉrt_Int());
-
+                // JAVÍTANDÓ:mi a különbség a két adat között?
                 if (rekord != null)
                 {
                     Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(TxtBxId.Text.ToÉrt_Int(),
@@ -835,6 +842,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                                                 ChckBxStátus.Checked.ToÉrt_Bool(),
                                                                                 UjDatum,
                                                                                 UjUzemora);
+                    // JAVÍTANDÓ:szóval ez a módosítás
                     KézMűveletek.MeglevoMuvelet_Modositas(ADAT);
                 }
                 else
@@ -885,6 +893,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
                 {
+                    // JAVÍTANDÓ:erre miért van szükség 
                     bool Torolt = (row.Cells[5].Value.ToStrTrim() == "Törölt").ToÉrt_Bool();
                     if (Torolt)
                         throw new HibásBevittAdat("Csak olyan sorokat lehet törölni, amik nincsenek törölve.");
@@ -958,6 +967,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
+        // JAVÍTANDÓ:Kezelőben
         /// Két kijelölt rekord sorrendjének felcserélése az adatbázisban.
         /// Ellenőrzi, hogy pontosan két sor van-e kijelölve, majd végrehajtja a cserét, frissíti a táblázatot.
         /// </summary>
@@ -991,6 +1001,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
+        // JAVÍTANDÓ:ez miben tér el az előzőtől?
         /// <summary>
         /// Két kijelölt sor sorrendjét felcseréli az adatbázisban úgy, hogy az egyik rekord a másik helyére kerül.
         /// Először ellenőrzi, hogy pontosan két sor van-e kijelölve, majd a cserét végrehajtja, frissíti a listát.
@@ -1169,6 +1180,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
+        // JAVÍTANDÓ:Ez annyiszor fut le ahány sor változott?
         /// <summary>
         /// A táblázat formázási eseménye során beállítja a "Státusz" oszlop alapján a sorok megjelenítését (pl. törölt sorok színezése).
         /// Csak akkor hajtódik végre, ha a forrás egy megfelelő típusú adatgrid.
@@ -1273,7 +1285,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 try { ValasztottDatum = DtmPckrUtolsóDátum.Value.Date; }
                 catch { return; }
-
+                // JAVÍTANDÓ:try
                 if (ValasztottDatum > DateTime.Today)
                 {
                     MessageBox.Show($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1308,7 +1320,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (frissul) return;
 
                 frissul = true;
-
+                // JAVÍTANDÓ:try
                 if (!long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out long ValasztottUzemora))
                     throw new HibásBevittAdat("Csak pozitív egész szám lehet az üzemóra állásánál.");
 
@@ -1415,7 +1427,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         Program.PostásNév.ToStrTrim(),
                         DateTime.Today
                     );
-
+                    // JAVÍTANDÓ:tehát módosítás
                     KézNapló.UtolagUpdate(modositott, eredetiDatum);
                 }
                 return true;
@@ -1436,6 +1448,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
+                // JAVÍTANDÓ:a dátum az nem dátum?
                 DateTime datum = DtmPckrUtolagos.Value.Date;
                 string megjegyzes = TxtBxUtolagMegjegyzes.Text.Trim();
 
@@ -1453,7 +1466,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 foreach (DataGridViewRow sor in TablaUtolagMuvelet.SelectedRows)
                 {
                     int id = sor.Cells[0].Value.ToÉrt_Int();
-
+                    // JAVÍTANDÓ:ha ki tudta választani akkor ott van és több elem esetén nem futunk végig?
                     Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == id)
                         ?? throw new HibásBevittAdat($"A(z) {id} azonosítójú művelet nem található.");
 
