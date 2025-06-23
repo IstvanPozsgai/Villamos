@@ -976,7 +976,7 @@ namespace Villamos.Ablakok
                 MyE.DataGridViewToExcel(fájlexc, Szerelvénylista);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (Exception ex)
             {
@@ -1669,7 +1669,7 @@ namespace Villamos.Ablakok
 
                 MyE.DataGridViewToExcel(fájlexc, Előírt_Szerelvénylista);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2208,7 +2208,7 @@ namespace Villamos.Ablakok
                 MyE.DataGridViewToExcel(fájlexc, Tábla_napló);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (Exception ex)
             {

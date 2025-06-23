@@ -489,7 +489,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 MyE.DataTableToExcel(fájlexc, ValamiTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
                 BtnExcel.Visible = true;
             }
             catch (HibásBevittAdat ex)

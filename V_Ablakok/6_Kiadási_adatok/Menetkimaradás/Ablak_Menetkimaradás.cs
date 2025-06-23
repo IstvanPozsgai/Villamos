@@ -412,7 +412,7 @@ namespace Villamos
                     return;
 
                 MyE.DataGridViewToExcel(fájlexc, Tábla);
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }

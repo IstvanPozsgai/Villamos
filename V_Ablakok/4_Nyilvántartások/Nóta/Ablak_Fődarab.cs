@@ -285,7 +285,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
                 MyE.DataGridViewToExcel(fájlexc, Táblalista);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

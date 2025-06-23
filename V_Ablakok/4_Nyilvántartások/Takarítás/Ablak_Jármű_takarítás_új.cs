@@ -1300,7 +1300,7 @@ namespace Villamos
 
                 MyE.DataGridViewToExcel(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2607,7 +2607,7 @@ namespace Villamos
             MyE.DataGridViewToExcel(fájlexc, Tábla_utolsó);
             MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            MyE.Megnyitás(fájlexc + ".xlsx");
+            MyE.Megnyitás(fájlexc);
         }
 
         private void PályaszámTakarításai_Click(object sender, EventArgs e)
@@ -2945,7 +2945,7 @@ namespace Villamos
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -4779,7 +4779,7 @@ namespace Villamos
                 MyE.DataGridViewToExcel(fájlexc, ListaTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -5457,7 +5457,7 @@ namespace Villamos
                 MyE.DataGridViewToExcel(fájlexc, Gépi_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
 
             }
             catch (HibásBevittAdat ex)
