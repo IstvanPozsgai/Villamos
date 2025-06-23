@@ -53,40 +53,24 @@ namespace Villamos.Ablakok
             Új_Ablak_Kereső?.Close();
         }
 
-        private void Ablak_szerelvény_Shown(object sender, EventArgs e)
-        {
-            try
-            {
-                Ellenőrzés();
-                List<Adat_Szerelvény> Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
-                if (Adatok != null && Adatok.Count > 0)
-                {
-                    HibásTábla.Visible = true;
-                    Label3.Visible = true;
-                }
-                else
-                {
-                    HibásTábla.Visible = false;
-                    Label3.Visible = false;
-                }
-                Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-                Képernyő_frissítés_Tényleges();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Start()
         {
             Telephelyekfeltöltése();
             Jogosultságkiosztás();
+            Ellenőrzés();
+            List<Adat_Szerelvény> Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
+            if (Adatok != null && Adatok.Count > 0)
+            {
+                HibásTábla.Visible = true;
+                Label3.Visible = true;
+            }
+            else
+            {
+                HibásTábla.Visible = false;
+                Label3.Visible = false;
+            }
+            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+            Képernyő_frissítés_Tényleges();
         }
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
@@ -972,17 +956,22 @@ namespace Villamos.Ablakok
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-
-                MyE.DataGridViewToExcel(fájlexc, Szerelvénylista);
+                this.Cursor = Cursors.WaitCursor; // homok óra kezdete
+                MyE.DataGridViewToExcel(fájlexc, Szerelvénylista, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            this.Cursor = Cursors.Default; // homokóra vége
         }
         #endregion
 
@@ -1494,14 +1483,15 @@ namespace Villamos.Ablakok
                 Előírt_Szerelvénylista.Columns[4].Width = 80;
                 Előírt_Szerelvénylista.Columns[5].HeaderText = "Kocsi 6";
                 Előírt_Szerelvénylista.Columns[5].Width = 80;
-                Előírt_Szerelvénylista.Columns[6].HeaderText = "Sorzám";
-                Előírt_Szerelvénylista.Columns[6].Width = 70;
-                Előírt_Szerelvénylista.Columns[6].Visible = false;
-                Előírt_Szerelvénylista.Columns[7].HeaderText = "Szerelvény";
-                Előírt_Szerelvénylista.Columns[7].Width = 100;
-                Előírt_Szerelvénylista.Columns[7].Visible = false;
-                Előírt_Szerelvénylista.Columns[8].HeaderText = "E2 vizsgálati napja";
-                Előírt_Szerelvénylista.Columns[8].Width = 150;
+                Előírt_Szerelvénylista.Columns[6].HeaderText = "E2 vizsgálati napja";
+                Előírt_Szerelvénylista.Columns[6].Width = 150;
+                Előírt_Szerelvénylista.Columns[7].HeaderText = "Sorzám";
+                Előírt_Szerelvénylista.Columns[7].Width = 70;
+                Előírt_Szerelvénylista.Columns[7].Visible = true;
+                Előírt_Szerelvénylista.Columns[8].HeaderText = "Szerelvény";
+                Előírt_Szerelvénylista.Columns[8].Width = 100;
+                Előírt_Szerelvénylista.Columns[8].Visible = true;
+
 
 
                 foreach (Adat_Szerelvény adat in Elő_Szer_Adatok)
@@ -1520,9 +1510,10 @@ namespace Villamos.Ablakok
                     Előírt_Szerelvénylista.Rows[i].Cells[4].Style.BackColor = Milyenszínű(adat.Kocsi5);
                     Előírt_Szerelvénylista.Rows[i].Cells[5].Value = adat.Kocsi6 == "_" ? "" : adat.Kocsi6;
                     Előírt_Szerelvénylista.Rows[i].Cells[5].Style.BackColor = Milyenszínű(adat.Kocsi6);
-                    Előírt_Szerelvénylista.Rows[i].Cells[6].Value = adat.Szerelvény_ID.ToString();
-                    Előírt_Szerelvénylista.Rows[i].Cells[7].Value = adat.Szerelvényhossz.ToString();
-                    Előírt_Szerelvénylista.Rows[i].Cells[8].Value = "Nincs beállítva";
+                    Előírt_Szerelvénylista.Rows[i].Cells[6].Value = "Nincs beállítva";
+                    Előírt_Szerelvénylista.Rows[i].Cells[7].Value = adat.Szerelvény_ID.ToString();
+                    Előírt_Szerelvénylista.Rows[i].Cells[8].Value = adat.Szerelvényhossz.ToString();
+
                     int napos = (from a in AdatokJ2
                                  where a.Azonosító == adat.Kocsi1
                                  select a.Haromnapos).FirstOrDefault();
@@ -1530,27 +1521,27 @@ namespace Villamos.Ablakok
                     {
                         case 0:
                             {
-                                Előírt_Szerelvénylista.Rows[i].Cells[8].Value = "Nincs beállítva";
+                                Előírt_Szerelvénylista.Rows[i].Cells[6].Value = "Nincs beállítva";
                                 break;
                             }
                         case 1:
                             {
-                                Előírt_Szerelvénylista.Rows[i].Cells[8].Value = "Hétfő- Csütörtök";
+                                Előírt_Szerelvénylista.Rows[i].Cells[6].Value = "Hétfő- Csütörtök";
                                 break;
                             }
                         case 2:
                             {
-                                Előírt_Szerelvénylista.Rows[i].Cells[8].Value = "Kedd- Péntek";
+                                Előírt_Szerelvénylista.Rows[i].Cells[6].Value = "Kedd- Péntek";
                                 break;
                             }
                         case 3:
                             {
-                                Előírt_Szerelvénylista.Rows[i].Cells[8].Value = "Szerda- Szombat";
+                                Előírt_Szerelvénylista.Rows[i].Cells[6].Value = "Szerda- Szombat";
                                 break;
                             }
                         default:
                             {
-                                Előírt_Szerelvénylista.Rows[i].Cells[8].Value = "Nincs beállítva";
+                                Előírt_Szerelvénylista.Rows[i].Cells[6].Value = "Nincs beállítva";
                                 break;
                             }
                     }
@@ -1666,8 +1657,8 @@ namespace Villamos.Ablakok
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-
-                MyE.DataGridViewToExcel(fájlexc, Előírt_Szerelvénylista);
+                this.Cursor = Cursors.WaitCursor; // homokóra kezdete
+                MyE.DataGridViewToExcel(fájlexc, Előírt_Szerelvénylista, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc);
             }
@@ -1680,6 +1671,7 @@ namespace Villamos.Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            this.Cursor = Cursors.Default; // homokóra vége
         }
 
         private void Előírt_hozzáad_Click(object sender, EventArgs e)
@@ -1913,12 +1905,12 @@ namespace Villamos.Ablakok
                 if (e.RowIndex >= 0)
                 {
                     long szerelvényID;
-                    if (Előírt_Szerelvénylista.Rows[e.RowIndex].Cells[6].Value == null || Előírt_Szerelvénylista.Rows[e.RowIndex].Cells[6].Value.ToStrTrim() == "")
+                    if (Előírt_Szerelvénylista.Rows[e.RowIndex].Cells[7].Value == null || Előírt_Szerelvénylista.Rows[e.RowIndex].Cells[7].Value.ToStrTrim() == "")
                         szerelvényID = 0;
                     else
-                        szerelvényID = long.Parse(Előírt_Szerelvénylista.Rows[e.RowIndex].Cells[6].Value.ToStrTrim());
+                        szerelvényID = long.Parse(Előírt_Szerelvénylista.Rows[e.RowIndex].Cells[7].Value.ToStrTrim());
 
-                    switch (Előírt_Szerelvénylista.Rows[e.RowIndex].Cells[8].Value.ToStrTrim())
+                    switch (Előírt_Szerelvénylista.Rows[e.RowIndex].Cells[6].Value.ToStrTrim())
                     {
                         case "Nincs beállítva":
                             {

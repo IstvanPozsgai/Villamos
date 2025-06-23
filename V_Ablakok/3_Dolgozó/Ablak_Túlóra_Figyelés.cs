@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.Beosztás;
 using Villamos.Villamos_Adatszerkezet;
+using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos
@@ -188,9 +189,9 @@ namespace Villamos
                 else
                     return;
 
-                Module_Excel.DataGridViewToExcel(fájlexc, Tábla2);
+                MyE.DataGridViewToExcel(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
@@ -371,11 +372,10 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                Module_Excel.EXCELtábla(fájlexc, Tábla3, false, true);
+                this.Cursor = Cursors.WaitCursor;
+                MyE.DataGridViewToExcel(fájlexc, Tábla3, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -386,6 +386,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            this.Cursor = Cursors.Default;
         }
 
         private void Ellenőrzés_Click(object sender, EventArgs e)

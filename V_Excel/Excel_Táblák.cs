@@ -20,7 +20,7 @@ namespace Villamos
         /// <param name="Tábla"></param>
         /// <param name="fájl"></param>
         /// <param name="Elemek"></param>
-        public static void DataTableToExcel(string fájl, DataTable Tábla)
+        public static void DataTableToExcel(string fájl, DataTable Tábla, DataGridView TáblaGrid = null)
         {
             try
             {
@@ -40,6 +40,8 @@ namespace Villamos
 
                 Rácsoz($"A1:{Oszlopnév(oszlop)}{sor + 1}"); // rácsozás
                 Oszlopszélesség("Munka1", $"A:{Oszlopnév(oszlop)}");     //Automata Oszlop szélesség beállítás
+
+                if (TáblaGrid != null) Színezés(TáblaGrid);
 
                 Tábla_Rögzítés(1);  //Rögzítjük a fejlécet
                 Szűrés("Munka1", 1, oszlop, 1);    //szűrést felteszük
@@ -66,11 +68,47 @@ namespace Villamos
 
 
         /// <summary>
+        /// Kiszinézi a DataGridView adatai szerint az Excel tábla adat sorait
+        /// csak azokat a cellákat színezi ami nem fehér
+        /// Nagy táblázatoknál sokáig tart
+        /// </summary>
+        /// <param name="TáblaDat"></param>
+        private static void Színezés(DataGridView TáblaDat)
+        {
+            try
+            {
+                int sor = 2;
+                int oszlop = 1;
+                Color Háttér;
+                for (int i = 0; i < TáblaDat.Rows.Count; i++)
+                {
+                    for (int j = 0; j < TáblaDat.Columns.Count; j++)
+                    {
+                        Háttér = TáblaDat.Rows[i].Cells[j].Style.BackColor;
+                        if (Háttér.Name == "0") Háttér = Color.White;
+                        if (Háttér != Color.White) Háttérszín(Oszlopnév(oszlop + j) + (sor + i).ToString(), Háttér);
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Színezés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        /// <summary>
         /// DataGridView adatai alapján Excel táblát készít
         /// </summary>
         /// <param name="fájl">Mentési név</param>
         /// <param name="Tábla">DataGridView tábla</param>
-        public static void DataGridViewToExcel(string fájl, DataGridView Tábla)
+        /// <param name="színes">DataGridView tábla színezését át akarjuk vinni az Excel táblába</param>
+        public static void DataGridViewToExcel(string fájl, DataGridView Tábla, bool színes = false)
         {
             try
             {
@@ -94,7 +132,10 @@ namespace Villamos
                     }
                     ÚjTábla.Rows.Add(ÚjSor);
                 }
-                DataTableToExcel(fájl, ÚjTábla);
+                if (színes)
+                    DataTableToExcel(fájl, ÚjTábla, Tábla);
+                else
+                    DataTableToExcel(fájl, ÚjTábla);
             }
             catch (HibásBevittAdat ex)
             {

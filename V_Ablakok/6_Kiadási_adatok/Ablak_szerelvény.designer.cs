@@ -830,7 +830,6 @@ namespace Villamos.Ablakok
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_szerelvény_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_szerelvény_Load);
-            this.Shown += new System.EventHandler(this.Ablak_szerelvény_Shown);
             this.Fülek.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();
