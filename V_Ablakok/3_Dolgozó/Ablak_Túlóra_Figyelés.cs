@@ -478,9 +478,13 @@ namespace Villamos
                 {
                     if (!páros)
                     {
-                        Tábla3.Rows[i].DefaultCellStyle.BackColor = Color.Aqua;
-                        Tábla3.Rows[i + 1].DefaultCellStyle.BackColor = Color.Aqua;
-                        Tábla3.Rows[i + 2].DefaultCellStyle.BackColor = Color.Aqua;
+                        for (int j = 0; j < Tábla3.Columns.Count; j++)
+                        {
+                            Tábla3.Rows[i].Cells[j].Style.BackColor = Color.Aqua;
+                            Tábla3.Rows[i + 1].Cells[j].Style.BackColor = Color.Aqua;
+                            Tábla3.Rows[i + 2].Cells[j].Style.BackColor = Color.Aqua;
+                        }
+
                         páros = true;
                     }
                     else
@@ -561,16 +565,19 @@ namespace Villamos
                             for (int j = 1; j <= 12; j++)
                             {
                                 string[] darabol = beolvasott.Split('_');
-                                Adat_Váltós_Összesítő kötelező = (from a in Adatok
-                                                                  where a.Dátum.Month == j && a.Csoport.Trim() == darabol[1].Trim()
-                                                                  select a).FirstOrDefault();
-                                if (kötelező != null)
+                                if (darabol.Length > 1)
                                 {
-                                    Tábla3.Rows[i].Cells[j + 3].Value = kötelező.Perc.ToString();
-                                    if (j < 7)
-                                        első += kötelező.Perc;
-                                    else
-                                        második += kötelező.Perc;
+                                    Adat_Váltós_Összesítő kötelező = (from a in Adatok
+                                                                      where a.Dátum.Month == j && a.Csoport.Trim() == darabol[1].Trim()
+                                                                      select a).FirstOrDefault();
+                                    if (kötelező != null)
+                                    {
+                                        Tábla3.Rows[i].Cells[j + 3].Value = kötelező.Perc.ToString();
+                                        if (j < 7)
+                                            első += kötelező.Perc;
+                                        else
+                                            második += kötelező.Perc;
+                                    }
                                 }
                             }
                         }
