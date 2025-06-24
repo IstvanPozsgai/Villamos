@@ -56,6 +56,7 @@
             this.Btn_Törlés = new System.Windows.Forms.Button();
             this.Üzemóra_Oldal = new System.Windows.Forms.Button();
             this.BttnUtolag_Modosit = new System.Windows.Forms.Button();
+            this.Btn_Pdf = new System.Windows.Forms.Button();
             this.GrpBxMűveletek = new System.Windows.Forms.GroupBox();
             this.GrpBxUtolagos = new System.Windows.Forms.GroupBox();
             this.TxtBxUtolagMegjegyzes = new System.Windows.Forms.TextBox();
@@ -214,7 +215,7 @@
             this.ChckBxStátus.Text = "Törölve";
             this.ChckBxStátus.UseVisualStyleBackColor = true;
             // 
-            // TáblaMűvelet
+            // TablaMuvelet
             // 
             this.TablaMuvelet.AllowUserToAddRows = false;
             this.TablaMuvelet.AllowUserToDeleteRows = false;
@@ -227,7 +228,7 @@
             this.TablaMuvelet.Location = new System.Drawing.Point(10, 9);
             this.TablaMuvelet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.TablaMuvelet.MaxFilterButtonImageHeight = 23;
-            this.TablaMuvelet.Name = "TáblaMűvelet";
+            this.TablaMuvelet.Name = "TablaMuvelet";
             this.TablaMuvelet.ReadOnly = true;
             this.TablaMuvelet.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.TablaMuvelet.RowHeadersVisible = false;
@@ -252,7 +253,7 @@
             this.Btn_Módosít.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
             this.Btn_Módosít.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Módosít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Btn_Módosít.Location = new System.Drawing.Point(885, 405);
+            this.Btn_Módosít.Location = new System.Drawing.Point(836, 405);
             this.Btn_Módosít.Name = "Btn_Módosít";
             this.Btn_Módosít.Size = new System.Drawing.Size(40, 40);
             this.Btn_Módosít.TabIndex = 45;
@@ -282,7 +283,7 @@
             this.Btn_ÚjFelvétel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
             this.Btn_ÚjFelvétel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_ÚjFelvétel.Image = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.Btn_ÚjFelvétel.Location = new System.Drawing.Point(974, 405);
+            this.Btn_ÚjFelvétel.Location = new System.Drawing.Point(928, 405);
             this.Btn_ÚjFelvétel.Name = "Btn_ÚjFelvétel";
             this.Btn_ÚjFelvétel.Size = new System.Drawing.Size(40, 40);
             this.Btn_ÚjFelvétel.TabIndex = 27;
@@ -327,7 +328,7 @@
             this.Btn_Törlés.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
             this.Btn_Törlés.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Törlés.Image = global::Villamos.Properties.Resources.Kuka;
-            this.Btn_Törlés.Location = new System.Drawing.Point(928, 405);
+            this.Btn_Törlés.Location = new System.Drawing.Point(882, 405);
             this.Btn_Törlés.Name = "Btn_Törlés";
             this.Btn_Törlés.Size = new System.Drawing.Size(40, 40);
             this.Btn_Törlés.TabIndex = 35;
@@ -364,11 +365,27 @@
             this.BttnUtolag_Modosit.UseVisualStyleBackColor = true;
             this.BttnUtolag_Modosit.Click += new System.EventHandler(this.BttnUtolag_Modosit_Click);
             // 
+            // Btn_Pdf
+            // 
+            this.Btn_Pdf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_Pdf.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Pdf.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
+            this.Btn_Pdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Pdf.Image = global::Villamos.Properties.Resources.pdf_32;
+            this.Btn_Pdf.Location = new System.Drawing.Point(974, 405);
+            this.Btn_Pdf.Name = "Btn_Pdf";
+            this.Btn_Pdf.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Pdf.TabIndex = 250;
+            this.toolTip1.SetToolTip(this.Btn_Pdf, "Excel táblázatot készít a táblázat adataiból");
+            this.Btn_Pdf.UseVisualStyleBackColor = true;
+            this.Btn_Pdf.Click += new System.EventHandler(this.Btn_Pdf_Click);
+            // 
             // GrpBxMűveletek
             // 
             this.GrpBxMűveletek.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GrpBxMűveletek.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
+            this.GrpBxMűveletek.Controls.Add(this.Btn_Pdf);
             this.GrpBxMűveletek.Controls.Add(this.Üzemóra_Oldal);
             this.GrpBxMűveletek.Controls.Add(this.Btn_Módosít);
             this.GrpBxMűveletek.Controls.Add(this.Btn_Excel);
@@ -476,7 +493,7 @@
             this.TxtBxUtolagUzemora.Size = new System.Drawing.Size(179, 26);
             this.TxtBxUtolagUzemora.TabIndex = 48;
             // 
-            // TáblaUtólagMűvelet
+            // TablaUtolagMuvelet
             // 
             this.TablaUtolagMuvelet.AllowUserToAddRows = false;
             this.TablaUtolagMuvelet.AllowUserToDeleteRows = false;
@@ -489,7 +506,7 @@
             this.TablaUtolagMuvelet.Location = new System.Drawing.Point(125, 20);
             this.TablaUtolagMuvelet.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.TablaUtolagMuvelet.MaxFilterButtonImageHeight = 23;
-            this.TablaUtolagMuvelet.Name = "TáblaUtólagMűvelet";
+            this.TablaUtolagMuvelet.Name = "TablaUtolagMuvelet";
             this.TablaUtolagMuvelet.ReadOnly = true;
             this.TablaUtolagMuvelet.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.TablaUtolagMuvelet.RowHeadersVisible = false;
@@ -513,7 +530,7 @@
             this.LblDatumUtolag.TabIndex = 30;
             this.LblDatumUtolag.Text = "Dátum:";
             // 
-            // TáblaNapló
+            // TablaNaplo
             // 
             this.TablaNaplo.AllowUserToAddRows = false;
             this.TablaNaplo.AllowUserToDeleteRows = false;
@@ -526,7 +543,7 @@
             this.TablaNaplo.Location = new System.Drawing.Point(125, 232);
             this.TablaNaplo.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.TablaNaplo.MaxFilterButtonImageHeight = 23;
-            this.TablaNaplo.Name = "TáblaNapló";
+            this.TablaNaplo.Name = "TablaNaplo";
             this.TablaNaplo.ReadOnly = true;
             this.TablaNaplo.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.TablaNaplo.RowHeadersVisible = false;
@@ -615,5 +632,6 @@
         internal System.Windows.Forms.Label LblUtolagNaplozasTabla;
         internal System.Windows.Forms.Label LblMegjegyzes;
         internal System.Windows.Forms.TextBox TxtBxUtolagMegjegyzes;
+        internal System.Windows.Forms.Button Btn_Pdf;
     }
 }

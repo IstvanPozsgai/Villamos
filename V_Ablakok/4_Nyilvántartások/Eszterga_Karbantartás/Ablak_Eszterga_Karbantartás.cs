@@ -1105,7 +1105,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 {
                     InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     Title = "Mentés PDF fájlba",
-                    FileName = $"Eszterga_Karbantartás_{Program.PostásNév.Trim()}_{DateTime.Now:yyyyMMdd_HHmmss}",
+                    FileName = $"Eszterga_Karbantartás_Műveletek_{Program.PostásNév.Trim()}_{DateTime.Now:yyyyMMdd_HHmmss}",
                     Filter = "PDF fájl (*.pdf)|*.pdf"
                 };
 
