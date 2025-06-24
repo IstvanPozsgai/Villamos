@@ -238,7 +238,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 TervDatum = DtmPckrElőTerv.Value.Date;
 
                 AdatokMuvelet = AdatokMuvelet
-                    .Where(rekord => rekord.Státus != true)
+                    .Where(rekord => !rekord.Státus)
                     .OrderBy(rekord =>
                         Kiszinezes(rekord, TervDatum) == Color.IndianRed ? 0 :
                         Kiszinezes(rekord, TervDatum) == Color.Yellow ? 1 : 2)
