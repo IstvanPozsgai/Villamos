@@ -1058,93 +1058,68 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// A táblázat tartalmát Excel fájlba exportálja, majd automatikusan megnyitja a fájlt.
         /// A felhasználó kiválaszthatja a fájl mentési helyét és nevét.
         /// </summary>
-        //private void Btn_Excel_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (Tábla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
-        //        string fájlexc;
-        //        SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-        //        {
-        //            InitialDirectory = "MyDocuments",
-        //            Title = "Teljes tartalom mentése Excel fájlba",
-        //            FileName = $"Eszterga_Karbantartás_Műveletek_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
-        //            Filter = "Excel |*.xlsx"
-        //        };
-        //        if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-        //            fájlexc = SaveFileDialog1.FileName;
-        //        else
-        //            return;
-        //        fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-
-        //        MyE.EXCELtábla(fájlexc, Tábla, false, true);
-        //        MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        //        MyE.Megnyitás($"{fájlexc}.xlsx");
-        //    }
-        //    catch (HibásBevittAdat ex)
-        //    {
-        //        MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-        //        MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //}
-
-        // JAVÍTANDÓ:Ez nem excelt készít
         private void Btn_Excel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Tabla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
+                string fájlexc;
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Teljes tartalom mentése Excel fájlba",
+                    FileName = $"Eszterga_Karbantartás_Műveletek_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
+
+                MyE.EXCELtábla(fájlexc, Tabla, false, true);
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MyE.Megnyitás($"{fájlexc}.xlsx");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        //JAVÍTANDÓ:Ez nem excelt készít
+        private void Btn_Pdf_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Tabla.Rows.Count <= 0)
                     throw new HibásBevittAdat("Nincs sora a táblázatnak!");
 
-                DialogResult Valasztas = MessageBox.Show(
-                    "Hogyan szeretné menteni a táblázatot?\n\nIgen = Excel\nNem = PDF\nMégse = Kilépés",
-                    "Mentés típusa",
-                    MessageBoxButtons.YesNoCancel,
-                    MessageBoxIcon.Question,
-                    MessageBoxDefaultButton.Button1);
-
-                if (Valasztas == DialogResult.Cancel)
-                    return;
-
-                bool pdf = Valasztas == DialogResult.No;
-
-                SaveFileDialog MentesAblak = new SaveFileDialog
+                SaveFileDialog saveDlg = new SaveFileDialog
                 {
                     InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    Title = pdf ? "Mentés PDF fájlba" : "Mentés Excel fájlba",
+                    Title = "Mentés PDF fájlba",
                     FileName = $"Eszterga_Karbantartás_{Program.PostásNév.Trim()}_{DateTime.Now:yyyyMMdd_HHmmss}",
-                    Filter = pdf ? "PDF fájl (*.pdf)|*.pdf" : "Excel fájl (*.xlsx)|*.xlsx"
+                    Filter = "PDF fájl (*.pdf)|*.pdf"
                 };
 
-                if (MentesAblak.ShowDialog() != DialogResult.OK)
+                if (saveDlg.ShowDialog() != DialogResult.OK)
                     return;
 
-                string FajlNev = MentesAblak.FileName;
+                string fajlNev = saveDlg.FileName;
+                if (!fajlNev.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                    fajlNev += ".pdf";
 
-                if (pdf)
-                {
-                    if (!FajlNev.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
-                        FajlNev += ".pdf";
+                PDFtábla(fajlNev, Tabla);
 
-                    PDFtábla(FajlNev, Tabla);
-                }
-                else
-                {
-                    if (!FajlNev.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
-                        FajlNev += ".xlsx";
-
-                    MyE.EXCELtábla(FajlNev, Tabla, false, true);
-                }
-
-                string Tipus = pdf ? "PDF" : "Excel";
-
-                MessageBox.Show($"Elkészült a {Tipus} fájl:\n{FajlNev}", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(FajlNev);
+                MessageBox.Show($"Elkészült a PDF fájl:\n{fajlNev}", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyE.Megnyitás(fajlNev);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1156,7 +1131,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void PDFtábla(string fájlNév, DataGridView tábla)
         {
             try
@@ -1238,7 +1212,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// <summary>
         /// Betölti a naplózott műveletek listáját a táblázatba, és elrejti a rögzítés gombot.
         /// </summary>
-        private void Bttn_Napló_Listáz_Click(object sender, EventArgs e)
+        private void Btn_Napló_Listáz_Click(object sender, EventArgs e)
         {
             try
             {

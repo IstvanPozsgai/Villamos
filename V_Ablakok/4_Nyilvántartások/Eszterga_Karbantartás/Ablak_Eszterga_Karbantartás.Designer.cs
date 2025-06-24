@@ -48,6 +48,7 @@
             this.DtmPckrElőTerv = new System.Windows.Forms.DateTimePicker();
             this.LblElőterv = new System.Windows.Forms.Label();
             this.Tabla = new Zuby.ADGV.AdvancedDataGridView();
+            this.Btn_Pdf = new System.Windows.Forms.Button();
             this.GrpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tabla)).BeginInit();
             this.SuspendLayout();
@@ -62,7 +63,7 @@
             this.Btn_Módosítás.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
             this.Btn_Módosítás.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Módosítás.Image = global::Villamos.Properties.Resources.Gear_01;
-            this.Btn_Módosítás.Location = new System.Drawing.Point(190, 22);
+            this.Btn_Módosítás.Location = new System.Drawing.Point(236, 22);
             this.Btn_Módosítás.Name = "Btn_Módosítás";
             this.Btn_Módosítás.Size = new System.Drawing.Size(40, 40);
             this.Btn_Módosítás.TabIndex = 2;
@@ -134,7 +135,7 @@
             this.Bttn_Napló_Listáz.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
             this.Bttn_Napló_Listáz.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Bttn_Napló_Listáz.Image = global::Villamos.Properties.Resources.Treetog_Junior_Document_scroll;
-            this.Bttn_Napló_Listáz.Location = new System.Drawing.Point(144, 22);
+            this.Bttn_Napló_Listáz.Location = new System.Drawing.Point(190, 22);
             this.Bttn_Napló_Listáz.Name = "Bttn_Napló_Listáz";
             this.Bttn_Napló_Listáz.Size = new System.Drawing.Size(40, 40);
             this.Bttn_Napló_Listáz.TabIndex = 254;
@@ -147,6 +148,7 @@
             this.GrpBx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GrpBx.BackColor = System.Drawing.Color.Tan;
+            this.GrpBx.Controls.Add(this.Btn_Pdf);
             this.GrpBx.Controls.Add(this.LblÜzemÁtlag);
             this.GrpBx.Controls.Add(this.TxtBxNapiUzemoraAtlag);
             this.GrpBx.Controls.Add(this.Bttn_Napló_Listáz);
@@ -174,7 +176,7 @@
             this.LblÜzemÁtlag.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.LblÜzemÁtlag.AutoSize = true;
-            this.LblÜzemÁtlag.Location = new System.Drawing.Point(253, 49);
+            this.LblÜzemÁtlag.Location = new System.Drawing.Point(299, 49);
             this.LblÜzemÁtlag.Name = "LblÜzemÁtlag";
             this.LblÜzemÁtlag.Size = new System.Drawing.Size(163, 20);
             this.LblÜzemÁtlag.TabIndex = 256;
@@ -184,7 +186,7 @@
             // 
             this.TxtBxNapiUzemoraAtlag.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.TxtBxNapiUzemoraAtlag.Location = new System.Drawing.Point(422, 49);
+            this.TxtBxNapiUzemoraAtlag.Location = new System.Drawing.Point(468, 49);
             this.TxtBxNapiUzemoraAtlag.Name = "TxtBxNapiUzemoraAtlag";
             this.TxtBxNapiUzemoraAtlag.Size = new System.Drawing.Size(43, 26);
             this.TxtBxNapiUzemoraAtlag.TabIndex = 255;
@@ -196,7 +198,7 @@
             this.LblÁtlagÜzemóraSzám.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.LblÁtlagÜzemóraSzám.AutoSize = true;
-            this.LblÁtlagÜzemóraSzám.Location = new System.Drawing.Point(485, 52);
+            this.LblÁtlagÜzemóraSzám.Location = new System.Drawing.Point(531, 52);
             this.LblÁtlagÜzemóraSzám.Name = "LblÁtlagÜzemóraSzám";
             this.LblÁtlagÜzemóraSzám.Size = new System.Drawing.Size(0, 20);
             this.LblÁtlagÜzemóraSzám.TabIndex = 253;
@@ -246,7 +248,7 @@
             this.DtmPckrElőTerv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.DtmPckrElőTerv.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtmPckrElőTerv.Location = new System.Drawing.Point(369, 20);
+            this.DtmPckrElőTerv.Location = new System.Drawing.Point(415, 20);
             this.DtmPckrElőTerv.Name = "DtmPckrElőTerv";
             this.DtmPckrElőTerv.Size = new System.Drawing.Size(139, 26);
             this.DtmPckrElőTerv.TabIndex = 198;
@@ -257,13 +259,13 @@
             this.LblElőterv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.LblElőterv.AutoSize = true;
-            this.LblElőterv.Location = new System.Drawing.Point(253, 22);
+            this.LblElőterv.Location = new System.Drawing.Point(299, 22);
             this.LblElőterv.Name = "LblElőterv";
             this.LblElőterv.Size = new System.Drawing.Size(110, 20);
             this.LblElőterv.TabIndex = 197;
             this.LblElőterv.Text = "Előre tervezés";
             // 
-            // Tábla
+            // Tabla
             // 
             this.Tabla.AllowUserToAddRows = false;
             this.Tabla.AllowUserToDeleteRows = false;
@@ -277,7 +279,7 @@
             this.Tabla.Location = new System.Drawing.Point(14, 97);
             this.Tabla.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.Tabla.MaxFilterButtonImageHeight = 23;
-            this.Tabla.Name = "Tábla";
+            this.Tabla.Name = "Tabla";
             this.Tabla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Tabla.RowHeadersVisible = false;
             this.Tabla.RowHeadersWidth = 62;
@@ -289,6 +291,20 @@
             this.Tabla.SortStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.SortEventArgs>(this.Tábla_SortStringChanged);
             this.Tabla.FilterStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.FilterEventArgs>(this.Tábla_FilterStringChanged);
             this.Tabla.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellEndEdit);
+            // 
+            // Btn_Pdf
+            // 
+            this.Btn_Pdf.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Btn_Pdf.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
+            this.Btn_Pdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Pdf.Image = global::Villamos.Properties.Resources.pdf_32;
+            this.Btn_Pdf.Location = new System.Drawing.Point(144, 22);
+            this.Btn_Pdf.Name = "Btn_Pdf";
+            this.Btn_Pdf.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Pdf.TabIndex = 257;
+            this.toolTip1.SetToolTip(this.Btn_Pdf, "Excel táblázatot készít a táblázat adataiból");
+            this.Btn_Pdf.UseVisualStyleBackColor = true;
+            this.Btn_Pdf.Click += new System.EventHandler(this.Btn_Pdf_Click);
             // 
             // Ablak_Eszterga_Karbantartás
             // 
@@ -332,5 +348,6 @@
         internal Zuby.ADGV.AdvancedDataGridView Tabla;
         private System.Windows.Forms.TextBox TxtBxNapiUzemoraAtlag;
         private System.Windows.Forms.Label LblÜzemÁtlag;
+        internal System.Windows.Forms.Button Btn_Pdf;
     }
 }
