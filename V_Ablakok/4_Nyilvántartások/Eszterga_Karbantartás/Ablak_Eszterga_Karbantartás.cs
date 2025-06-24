@@ -1094,6 +1094,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         }
 
         //JAVÍTANDÓ:Ez nem excelt készít
+        /// <summary>
+        /// Eseménykezelő, amely PDF fájlba exportálja a megjelenített műveleti táblázatot.
+        /// Ellenőrzi, hogy van-e adat, majd mentési helyet kér a felhasználótól, 
+        /// és meghívja a PDF létrehozó metódust. Sikeres mentés után megnyitja a PDF-et.
+        /// </summary>
         private void Btn_Pdf_Click(object sender, EventArgs e)
         {
             try
@@ -1131,6 +1136,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Egy adott DataGridView tartalmát exportálja PDF formátumba, megtartva a cellák háttér- és szövegszínét.
+        /// Unicode-kompatibilis betűtípussal dolgozik, és Arial-t használ a PDF generálásához.
+        /// </summary>
         private void PDFtábla(string fájlNév, DataGridView tábla)
         {
             try
