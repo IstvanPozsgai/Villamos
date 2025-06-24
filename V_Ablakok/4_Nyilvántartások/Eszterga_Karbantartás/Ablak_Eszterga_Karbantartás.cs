@@ -32,6 +32,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         private const string Alap_Napi_Atlag = "30";
         private const string Alap_Napi_Szam = "5";
         private const string Alap_Uzemora_Szam = "8";
+
+        private const int Max_Napok = 100000;
         #endregion
 
         #region Listák
@@ -342,6 +344,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                     long BecsultUzemora = this.BecsultUzemora(TervDatum);
 
                     // JAVÍTANDÓ:Mit csinálunk itt?
+                    // Addig generáljuk az új esedékességeket, amíg a dátum vagy az üzemóra nem lépi túl a tervezett határt.
                     while (UtolsoDatum.AddDays(rekord.Mennyi_Dátum) <= TervDatum || (UtolsoUzemora + rekord.Mennyi_Óra) >= BecsultUzemora)
                     {
                         bool Esedekes = false;
@@ -1232,7 +1235,10 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
         // JAVÍTANDÓ:Ezt bővebben magyarázd el és miért 100000 ez nem konstans?
         /// <summary>
-        /// Amikor az üzemóra átlag számításához megadott napok száma megváltozik, újra kiszámítja és frissíti az értéket.
+        /// Kezeli a napi üzemóra átlag számításához megadott napok számának változását.
+        /// Ellenőrzi, hogy a bevitt érték egész szám és nem haladja meg a 100000-es(Max_Napok konstans) felső korlátot, 
+        /// Ha az érték nagyobb ennél, visszaállítja 100000-re, majd frissíti az átlag üzemórát.
+        /// Hibakezeléssel biztosítja a megbízható működést és a felhasználó tájékoztatását.
         /// </summary>
         private void TxtBxNapiUzemoraAtlag_TextChanged(object sender, EventArgs e)
         {
@@ -1240,11 +1246,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             {
                 if (int.TryParse(TxtBxNapiUzemoraAtlag.Text, out int napok))
                 {
-                    if (napok > 100000)
-                        TxtBxNapiUzemoraAtlag.Text = "100000";
+                    if (napok > Max_Napok)
+                        TxtBxNapiUzemoraAtlag.Text = Max_Napok.ToStrTrim();
 
                     if (napok > 0)
-                        AtlagUzemoraFrissites(Math.Min(napok, 100000));
+                        AtlagUzemoraFrissites(Math.Min(napok, Max_Napok));
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1313,19 +1319,18 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 // JAVÍTANDÓ:mit csinál a külső és belső if
-                if (DtmPckrElőTerv.Value >= DateTime.Today)
+                if (DtmPckrElőTerv.Value < DateTime.Today)
                 {
-                    if (DtmPckrElőTerv.Value > DateTime.Today)
-                        EloreTervezesListazasa();
-                    else
-                        TablaListazas();
-                    Btn_Rögzít.Visible = true;
-                }
-                else
-                {
-                    MessageBox.Show("A dátum nem lehet kisebb, mint a mai dátum.", "Érvénytelen dátum", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     DtmPckrElőTerv.Value = DateTime.Today;
+                    throw new HibásBevittAdat("A dátum nem lehet kisebb, mint a mai dátum.");
                 }
+
+                if (DtmPckrElőTerv.Value == DateTime.Today)
+                    TablaListazas();
+                else
+                    EloreTervezesListazasa();
+
+                Btn_Rögzít.Visible = true;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1365,10 +1370,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                           select rekord.Megjegyzés)?.FirstOrDefault()?.ToStrTrim();
                 // JAVÍTANDÓ:try
                 if (ElozoMegjegyzes == Megjegyzes)
-                {
-                    MessageBox.Show("Nem történt változás a megjegyzés változtatásakor.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+                    throw new HibásBevittAdat("Nem történt változás a megjegyzés változtatásakor.");
+                  
 
                 if (!string.IsNullOrEmpty(Megjegyzes))
                 {

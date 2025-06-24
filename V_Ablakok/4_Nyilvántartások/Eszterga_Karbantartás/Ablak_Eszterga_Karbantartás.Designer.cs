@@ -141,7 +141,7 @@
             this.Bttn_Napló_Listáz.TabIndex = 254;
             this.toolTip1.SetToolTip(this.Bttn_Napló_Listáz, "Napló listázása");
             this.Bttn_Napló_Listáz.UseVisualStyleBackColor = true;
-            this.Bttn_Napló_Listáz.Click += new System.EventHandler(this.Bttn_Napló_Listáz_Click);
+            this.Bttn_Napló_Listáz.Click += new System.EventHandler(this.Btn_Napló_Listáz_Click);
             // 
             // GrpBx
             // 
