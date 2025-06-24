@@ -1,5 +1,4 @@
-﻿using ADODB;
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
@@ -10,11 +9,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using Application = System.Windows.Forms.Application;
-//using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
