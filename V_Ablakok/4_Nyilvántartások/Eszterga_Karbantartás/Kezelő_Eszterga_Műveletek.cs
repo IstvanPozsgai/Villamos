@@ -11,10 +11,14 @@ using MyA = Adatbázis;
 namespace Villamos.Villamos_Kezelők
 {
     // JAVÍTANDÓ:Egy kezelő egy fájl.
+    //kesz
     // táblanév legyen    Tabla_Muvelet helyett egységesen
+    //kesz
     // a fájl létrehozását a kezelő végzi
+    //kesz
+
     //sok módosítás
-    
+    //meg nincs kesz
     public class Kezelo_Eszterga_Muveletek
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb".KönyvSzerk();

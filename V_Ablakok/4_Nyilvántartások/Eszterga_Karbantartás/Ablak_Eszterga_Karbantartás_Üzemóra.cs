@@ -34,6 +34,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
         #region Kezelők
         // JAVÍTANDÓ:ha nem kell akkor minek?
+        //kesz
         readonly Kezelo_Eszterga_Muveletek Kez_Muvelet = new Kezelo_Eszterga_Muveletek();
         readonly Kezelo_Eszterga_Uzemora Kez_Uzemora = new Kezelo_Eszterga_Uzemora();
         #endregion
@@ -580,8 +581,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 else
                     //csak akkor frissítjük a műveleteket, ha az üzemóra vagy dátum változott
                     return;
-                
+
                 // JAVÍTANDÓ:Ez minek?
+                //kesz
             }
             catch (HibásBevittAdat ex)
             {

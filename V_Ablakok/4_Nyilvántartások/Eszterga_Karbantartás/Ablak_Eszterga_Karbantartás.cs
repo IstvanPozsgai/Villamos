@@ -66,11 +66,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 long Uzemora = 0;
-
+                //kesz
                 // JAVÍTANDÓ: Miért kell ez ide? Kezelő dolga.
 
                 AdatokUzemora = Kez_Uzemora.Lista_Adatok();
-
+                //kesz
                 // JAVÍTANDÓ: Miért kell bonyolítani?
                 Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
                                                 where a.Dátum.Date == DateTime.Today && !a.Státus
@@ -247,6 +247,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
                 {
                     // JAVÍTANDÓ: miért nem linqban van?
+                    //kesz
+
                         DataRow Soradat = AdatTabla.NewRow();
 
                         Soradat["Sorszám"] = rekord.ID;
@@ -333,6 +335,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
                 {
                     // JAVÍTANDÓ: Ez miért kell?
+                    //kesz
                     if (rekord.Státus) continue;
 
                     int ID = rekord.ID;
@@ -341,6 +344,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                     long BecsultUzemora = this.BecsultUzemora(TervDatum);
 
                     // JAVÍTANDÓ:Mit csinálunk itt?
+                    //kesz felig
                     // Addig generáljuk az új esedékességeket, amíg a dátum vagy az üzemóra nem lépi túl a tervezett határt.
                     while (UtolsoDatum.AddDays(rekord.Mennyi_Dátum) <= TervDatum || (UtolsoUzemora + rekord.Mennyi_Óra) >= BecsultUzemora)
                     {
@@ -579,6 +583,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 // JAVÍTANDÓ: nincs var
+                //kesz
                 //Miért kell bevezetni új változót?
                 List<Adat_Eszterga_Muveletek_Naplo> naploLista = new List<Adat_Eszterga_Muveletek_Naplo>();
                 
@@ -637,6 +642,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 foreach (DataGridViewRow row in Tabla.Rows)
                 {
                     // JAVÍTANDÓ:a tábla típus miért cikluson belül van?
+                    //kesz / szinezes rossz meg
                     if (row.IsNewRow) continue;
                     if (row.Cells["Sorszám"].Value != null && int.TryParse(row.Cells["Sorszám"].Value.ToStrTrim(), out int Sorszam))
                     {
@@ -752,12 +758,14 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 // JAVÍTANDÓ:Ez mit csinál itt?
+                //kesz
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 // JAVÍTANDÓ:Ez mit csinál itt?
+                //kesz
             }
             return NapiAtlagaosUzemNovekedes / (rekord.Count - 1);
         }
@@ -898,6 +906,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                                       orderby a.Dátum
                                                       select a).ToList();
                 // JAVÍTANDÓ:1
+                //kesz
                 if (rekord.Count == 0)
                 {
                     LblÁtlagÜzemóraSzám.Text = $"Nincs adat az átlag számításhoz.";
@@ -973,6 +982,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 // JAVÍTANDÓ:ezek konstansok?
+                //kesz
                 TxtBxNapiUzemoraAtlag.Text = Alap_Napi_Atlag;
                 TxtBxNapi.Text = Alap_Napi_Szam;
                 TxtBxÜzem.Text = Alap_Uzemora_Szam;
@@ -1001,6 +1011,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 // JAVÍTANDÓ:Miért nem használod a try
+                //kesz
                 if (Tabla.SelectedRows.Count == 0)
                     throw new HibásBevittAdat("Válasszon ki egy vagy több sort a táblázatból.");
                  
@@ -1017,6 +1028,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 {
                     Color hatterSzin = sor.DefaultCellStyle.BackColor;
                     // JAVÍTANDÓ:Miért nem használod a try
+                    //kesz
                     if (hatterSzin == Color.LawnGreen || hatterSzin == Color.Yellow)
                        throw new HibásBevittAdat("Ez a sor nem módosítható, mert már a művelet elkészült vagy nem kell még végrehajtani.");
                         
@@ -1054,6 +1066,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         }
 
         // JAVÍTANDÓ:miért van megjegyzéssé alakítva
+        //kesz
         /// <summary>
         /// A táblázat tartalmát Excel fájlba exportálja, majd automatikusan megnyitja a fájlt.
         /// A felhasználó kiválaszthatja a fájl mentési helyét és nevét.
@@ -1094,6 +1107,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         }
 
         //JAVÍTANDÓ:Ez nem excelt készít
+        //kesz
         /// <summary>
         /// Eseménykezelő, amely PDF fájlba exportálja a megjelenített műveleti táblázatot.
         /// Ellenőrzi, hogy van-e adat, majd mentési helyet kér a felhasználótól, 
@@ -1241,6 +1255,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         }
 
         // JAVÍTANDÓ:Ezt bővebben magyarázd el és miért 100000 ez nem konstans?
+        //kesz
         /// <summary>
         /// Kezeli a napi üzemóra átlag számításához megadott napok számának változását.
         /// Ellenőrzi, hogy a bevitt érték egész szám és nem haladja meg a 100000-es(Max_Napok konstans) felső korlátot, 
@@ -1326,6 +1341,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 // JAVÍTANDÓ:mit csinál a külső és belső if
+                //kesz
                 if (DtmPckrElőTerv.Value < DateTime.Today)
                 {
                     DtmPckrElőTerv.Value = DateTime.Today;
@@ -1376,6 +1392,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                           where rekord.ID == ID
                                           select rekord.Megjegyzés)?.FirstOrDefault()?.ToStrTrim();
                 // JAVÍTANDÓ:try
+                //kesz
                 if (ElozoMegjegyzes == Megjegyzes)
                     throw new HibásBevittAdat("Nem történt változás a megjegyzés változtatásakor.");
                   

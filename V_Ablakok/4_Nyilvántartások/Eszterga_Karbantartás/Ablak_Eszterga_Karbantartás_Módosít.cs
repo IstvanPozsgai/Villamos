@@ -116,6 +116,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:mit csinálunk itt?
+        //kesz felig
         /// <summary>
         /// A kiválasztott egység típusától függően engedélyezi vagy tiltja az űrlap mezőit, 
         /// valamint előtölti az utolsó ismert dátumot vagy üzemóra értéket.
@@ -276,6 +277,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:try?
+        //kesz
         /// <summary>
         /// A karbantartási műveletek naplóbejegyzései betöltése és megjelenítése a TáblaMűveletbe
         /// </summary>
@@ -909,6 +911,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
                     // JAVÍTANDÓ:erre miért van szükség 
+                    //kesz
                     if (row.Cells[5].Value.ToStrTrim() == "Törölt")
                         throw new HibásBevittAdat("Csak olyan sorokat lehet törölni, amik nincsenek törölve.");
 
@@ -1323,6 +1326,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 try { ValasztottDatum = DtmPckrUtolsóDátum.Value.Date; }
                 catch { return; }
                 // JAVÍTANDÓ:try
+                //kesz
                 if (ValasztottDatum > DateTime.Today)
                     throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
                  
@@ -1355,6 +1359,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 frissul = true;
                 // JAVÍTANDÓ:try
+                //kesz
                 if (!long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out long ValasztottUzemora))
                     throw new HibásBevittAdat("Csak pozitív egész szám lehet az üzemóra állásánál.");
 
@@ -1462,6 +1467,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         DateTime.Today
                     );
                     // JAVÍTANDÓ:tehát módosítás
+                    //kesz
                     Kez_Muvelet_Naplo.UtolagModositas(modositott, eredetiDatum);
                 }
                 return true;
