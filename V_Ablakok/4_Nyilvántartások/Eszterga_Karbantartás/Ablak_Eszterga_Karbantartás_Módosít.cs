@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
-//using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -117,6 +116,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:mit csinálunk itt?
+        /// <summary>
+        /// A kiválasztott egység típusától függően engedélyezi vagy tiltja az űrlap mezőit, 
+        /// valamint előtölti az utolsó ismert dátumot vagy üzemóra értéket.
+        /// </summary>
         private void EgysegEllenorzes(string Egyseg)
         {
             try
@@ -278,52 +281,64 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void TablaNaploListazas()
         {
-            // Az eredeti táblát megtartjuk, de ideiglenes klónban építjük fel a tartalmat
-            DataTable IdeiglenesTabla = new DataTable();
-            IdeiglenesTabla.Columns.Add("Művelet Sorszáma");
-            IdeiglenesTabla.Columns.Add("Művelet");
-            IdeiglenesTabla.Columns.Add("Utolsó Dátum");
-            IdeiglenesTabla.Columns.Add("Utolsó Üzemóra");
-            IdeiglenesTabla.Columns.Add("Megjegyzés");
-            IdeiglenesTabla.Columns.Add("Rögzítő");
-            IdeiglenesTabla.Columns.Add("Rögzítés Dátuma");
-
-            AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok();
-
-            foreach (Adat_Eszterga_Muveletek_Naplo rekord in AdatokMuveletNaplo)
+            try
             {
-                DataRow sor = IdeiglenesTabla.NewRow();
+                // Az eredeti táblát megtartjuk, de ideiglenes klónban építjük fel a tartalmat
+                DataTable IdeiglenesTabla = new DataTable();
+                IdeiglenesTabla.Columns.Add("Művelet Sorszáma");
+                IdeiglenesTabla.Columns.Add("Művelet");
+                IdeiglenesTabla.Columns.Add("Utolsó Dátum");
+                IdeiglenesTabla.Columns.Add("Utolsó Üzemóra");
+                IdeiglenesTabla.Columns.Add("Megjegyzés");
+                IdeiglenesTabla.Columns.Add("Rögzítő");
+                IdeiglenesTabla.Columns.Add("Rögzítés Dátuma");
 
-                sor["Művelet Sorszáma"] = rekord.ID;
-                sor["Művelet"] = rekord.Művelet;
-                sor["Utolsó Dátum"] = rekord.Utolsó_Dátum.ToShortDateString();
-                sor["Utolsó Üzemóra"] = rekord.Utolsó_Üzemóra_Állás;
-                sor["Megjegyzés"] = rekord.Megjegyzés;
-                sor["Rögzítő"] = rekord.Rögzítő;
-                sor["Rögzítés Dátuma"] = rekord.Rögzítés_Dátuma.ToShortDateString();
+                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok();
 
-                IdeiglenesTabla.Rows.Add(sor);
+                foreach (Adat_Eszterga_Muveletek_Naplo rekord in AdatokMuveletNaplo)
+                {
+                    DataRow sor = IdeiglenesTabla.NewRow();
+
+                    sor["Művelet Sorszáma"] = rekord.ID;
+                    sor["Művelet"] = rekord.Művelet;
+                    sor["Utolsó Dátum"] = rekord.Utolsó_Dátum.ToShortDateString();
+                    sor["Utolsó Üzemóra"] = rekord.Utolsó_Üzemóra_Állás;
+                    sor["Megjegyzés"] = rekord.Megjegyzés;
+                    sor["Rögzítő"] = rekord.Rögzítő;
+                    sor["Rögzítés Dátuma"] = rekord.Rögzítés_Dátuma.ToShortDateString();
+
+                    IdeiglenesTabla.Rows.Add(sor);
+                }
+
+                IEnumerable<DataRow> rendezettAdatok = IdeiglenesTabla.AsEnumerable()
+                    .OrderBy(sor => DateTime.Parse(sor["Utolsó Dátum"].ToStrTrim()))
+                    .ThenBy(sor => int.Parse(sor["Művelet Sorszáma"].ToStrTrim()));
+
+                // Eredeti táblát újratöltjük friss, tiszta sorokkal
+                AdatTablaNaplo = IdeiglenesTabla.Clone(); // struktúra másolása
+                foreach (DataRow sor in rendezettAdatok)
+                    AdatTablaNaplo.ImportRow(sor);
+
+                TablaNaplo.DataSource = AdatTablaNaplo;
+
+                OszlopSzelessegNaplo();
+
+                for (int i = 0; i < TablaNaplo.Columns.Count; i++)
+                    TablaNaplo.Columns[i].ReadOnly = true;
+
+                TablaNaplo.Visible = true;
+                TablaMuvelet.Visible = true;
+                TablaMuvelet.ClearSelection();
             }
-
-            IEnumerable<DataRow> rendezettAdatok = IdeiglenesTabla.AsEnumerable()
-                .OrderBy(sor => DateTime.Parse(sor["Utolsó Dátum"].ToStrTrim()))
-                .ThenBy(sor => int.Parse(sor["Művelet Sorszáma"].ToStrTrim()));
-
-            // Eredeti táblát újratöltjük friss, tiszta sorokkal
-            AdatTablaNaplo = IdeiglenesTabla.Clone(); // struktúra másolása
-            foreach (DataRow sor in rendezettAdatok)
-                AdatTablaNaplo.ImportRow(sor);
-
-            TablaNaplo.DataSource = AdatTablaNaplo;
-
-            OszlopSzelessegNaplo();
-
-            for (int i = 0; i < TablaNaplo.Columns.Count; i++)
-                TablaNaplo.Columns[i].ReadOnly = true;
-
-            TablaNaplo.Visible = true;
-            TablaMuvelet.Visible = true;
-            TablaMuvelet.ClearSelection();
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -832,6 +847,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 Adat_Eszterga_Muveletek rekord = AdatokMuvelet
                     .FirstOrDefault(a => a.ID == TxtBxId.Text.ToÉrt_Int());
                 // JAVÍTANDÓ:mi a különbség a két adat között?
+                //sorszamot kell csinalni ide
                 if (rekord != null)
                 {
                     Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(TxtBxId.Text.ToÉrt_Int(),
@@ -892,12 +908,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     return;
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
-                {
                     // JAVÍTANDÓ:erre miért van szükség 
-                    bool Torolt = (row.Cells[5].Value.ToStrTrim() == "Törölt").ToÉrt_Bool();
-                    if (Torolt)
+                    if (row.Cells[5].Value.ToStrTrim() == "Törölt")
                         throw new HibásBevittAdat("Csak olyan sorokat lehet törölni, amik nincsenek törölve.");
-                }
 
                 AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
 
@@ -1185,6 +1198,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// A táblázat formázási eseménye során beállítja a "Státusz" oszlop alapján a sorok megjelenítését (pl. törölt sorok színezése).
         /// Csak akkor hajtódik végre, ha a forrás egy megfelelő típusú adatgrid.
         /// </summary>
+        /// 
+        //ne a cellformattingot hanem az elso oldalon levot sima style a szinezes
         private void TáblaMűvelet_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (sender is Zuby.ADGV.AdvancedDataGridView tabla)
@@ -1287,11 +1302,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 catch { return; }
                 // JAVÍTANDÓ:try
                 if (ValasztottDatum > DateTime.Today)
-                {
-                    MessageBox.Show($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
+                    throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
+                 
                 UzemoraKiolvasasEsBeiras(ValasztottDatum, TxtBxUtolsóÜzemóraÁllás);
             }
             catch (HibásBevittAdat ex)
@@ -1428,7 +1440,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         DateTime.Today
                     );
                     // JAVÍTANDÓ:tehát módosítás
-                    Kez_Muvelet_Naplo.UtolagUpdate(modositott, eredetiDatum);
+                    Kez_Muvelet_Naplo.UtolagModositas(modositott, eredetiDatum);
                 }
                 return true;
             }
