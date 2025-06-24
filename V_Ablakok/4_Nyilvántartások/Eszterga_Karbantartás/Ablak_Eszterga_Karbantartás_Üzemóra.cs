@@ -12,7 +12,7 @@ using Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using Application = System.Windows.Forms.Application;
-using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
+//using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -29,14 +29,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Listák
-        private List<Adat_Eszterga_Muveletek> AdatokMuvelet;
-        private List<Adat_Eszterga_Uzemora> AdatokUzemora;
+        List<Adat_Eszterga_Muveletek> AdatokMuvelet = new List<Adat_Eszterga_Muveletek>();
+        List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
         #endregion
 
         #region Kezelők
         // JAVÍTANDÓ:ha nem kell akkor minek?
-        readonly private Kezelo_Eszterga_Muveletek KezMuveletek = new Kezelo_Eszterga_Muveletek();
-        readonly private Kezelo_Eszterga_Uzemora KezUzemora = new Kezelo_Eszterga_Uzemora();
+        readonly Kezelo_Eszterga_Muveletek Kez_Muvelet = new Kezelo_Eszterga_Muveletek();
+        readonly Kezelo_Eszterga_Uzemora Kez_Uzemora = new Kezelo_Eszterga_Uzemora();
         #endregion
 
         #region Alap
@@ -109,7 +109,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 AdatTabla.Columns.Add("Dátum");
                 AdatTabla.Columns.Add("Státusz");
 
-                AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
 
                 AdatTabla.Rows.Clear();
 
@@ -243,7 +243,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 DateTime UjDatum = DtmPckrDátum.Value.Date;
                 bool UjStatus = ChckBxStátus.Checked;
 
-                AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
 
                 if (!DatumEllenorzes(UjDatum)) return;
 
@@ -455,7 +455,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                                                   UjUzemora,
                                                   UjDatum,
                                                   UjStatus);
-                KezUzemora.Rogzites(ADAT);
+                Kez_Uzemora.Rogzites(ADAT);
 
                 MessageBox.Show("Új rekord sikeresen létrehozva.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return true;
@@ -504,9 +504,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 if (EredetiDatum != DateTime.Today && EredetiDatum == UjDatum && EredetiUzemora == UjUzemora && EredetiStatusz != UjStatus)
                 {
                     if (UjStatus)
-                        KezUzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
+                        Kez_Uzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
                     else
-                        KezUzemora.Rogzites(new Adat_Eszterga_Uzemora(0, EredetiUzemora, EredetiDatum, false));
+                        Kez_Uzemora.Rogzites(new Adat_Eszterga_Uzemora(0, EredetiUzemora, EredetiDatum, false));
                 }
                 else
                 {
@@ -515,8 +515,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                     else
                     {
-                        KezUzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
-                        KezUzemora.Rogzites(new Adat_Eszterga_Uzemora(0, UjUzemora, UjDatum, false));
+                        Kez_Uzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
+                        Kez_Uzemora.Rogzites(new Adat_Eszterga_Uzemora(0, UjUzemora, UjDatum, false));
                     }
                     UtolsoTorles = true;
                 }
@@ -548,7 +548,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
-                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
                 if (UjDatum != EredetiDatum || UjUzemora != EredetiUzemora)
                 {
                     List<Adat_Eszterga_Muveletek> rekord = (from a in AdatokMuvelet
@@ -681,7 +681,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(AktivID);
-                KezUzemora.Torles(ADAT);
+                Kez_Uzemora.Torles(ADAT);
 
                 using (Ablak_Eszterga_Karbantartás_Segéd SegedAblak = new Ablak_Eszterga_Karbantartás_Segéd())
                 {

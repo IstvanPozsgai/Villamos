@@ -13,7 +13,7 @@ using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using Application = System.Windows.Forms.Application;
-using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
+//using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -30,13 +30,14 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         #endregion
 
         #region Listák
-        private List<Adat_Eszterga_Muveletek> AdatokMuvelet;
-        private List<Adat_Eszterga_Uzemora> AdatokUzemora;
-        private List<Adat_Eszterga_Muveletek_Naplo> AdatokMuveletNaplo;
+        List<Adat_Eszterga_Muveletek> AdatokMuvelet = new List<Adat_Eszterga_Muveletek>();
+        List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
+        List<Adat_Eszterga_Muveletek_Naplo> AdatokMuveletNaplo = new List<Adat_Eszterga_Muveletek_Naplo>();
         #endregion
 
         #region Kezelők
         readonly Kezelo_Eszterga_Muveletek Kez_Muvelet = new Kezelo_Eszterga_Muveletek();
+        readonly Kezelo_Eszterga_Uzemora Kez_Uzemora = new Kezelo_Eszterga_Uzemora();
         readonly Kezelo_Eszterga_Muveletek_Naplo Kez_Muvelet_Naplo = new Kezelo_Eszterga_Muveletek_Naplo();
         #endregion
 
@@ -63,24 +64,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 long Uzemora = 0;
 
                 // JAVÍTANDÓ: Miért kell ez ide? Kezelő dolga.
-                string hely = $@"{Application.StartupPath}/Főmérnökség/Adatok/Kerékeszterga";
 
-                if (!Directory.Exists(hely))
-                    Directory.CreateDirectory(hely);
-
-                //hely += "/Eszterga_Karbantartás.accdb";
-                hely += "/Eszterga_Karbantartás.mdb";
-
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Eszterga_Karbantartás(hely);
-
-                //string helyNapló = $@"{Application.StartupPath}/Főmérnökség/adatok/Kerékeszterga/Eszterga_Karbantartás_{DateTime.Now.Year}_napló.accdb";
-                string helyNaplo = $@"{Application.StartupPath}/Főmérnökség/adatok/Kerékeszterga/Eszterga_Karbantartás_{DateTime.Now.Year}_napló.mdb";
-
-                if (!File.Exists(helyNaplo))
-                    Adatbázis_Létrehozás.Eszterga_Karbantartas_Naplo(helyNaplo);
-
-                AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
 
                 // JAVÍTANDÓ: Miért kell bonyolítani?
                 Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
@@ -110,7 +95,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 Jogosultsagkiosztas();
                 TablaListazas();
                 AtlagUzemoraFrissites(30);
-                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
                 Tabla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
@@ -244,8 +229,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 AdatTabla.Columns.Add("Becsült Üzemóra");
                 AdatTabla.Columns.Add("Megjegyzés");
 
-                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
-                AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
+                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                 TervDatum = DtmPckrElőTerv.Value.Date;
 
                 AdatokMuvelet = AdatokMuvelet.OrderBy(rekord =>
@@ -324,8 +309,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 AdatTabla.Columns.Add("Becsült Üzemóra");
                 AdatTabla.Columns.Add("Megjegyzés");
 
-                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
-                AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
+                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                 TervDatum = DtmPckrElőTerv.Value.Date;
                 double SzuksegesNapok;
 
@@ -484,7 +469,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 AdatTabla.Columns.Add("Rögzítő");
                 AdatTabla.Columns.Add("Rögzítés Dátuma");
 
-                AdatokMuveletNaplo = Funkcio.Eszterga_KarbantartasNaplóFeltölt();
+                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok();
                 List<DataRow> RendezettSorok = new List<DataRow>();
                 foreach (Adat_Eszterga_Muveletek_Naplo rekord in AdatokMuveletNaplo)
                 {
@@ -1387,7 +1372,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 string Megjegyzes = sor.Cells[10].Value?.ToStrTrim();
                 int ID = sor.Cells[0].Value.ToÉrt_Int();
 
-                string ElozoMegjegyzes = (from rekord in Funkcio.Eszterga_KarbantartasFeltolt()
+                string ElozoMegjegyzes = (from rekord in Kez_Muvelet.Lista_Adatok()
                                           where rekord.ID == ID
                                           select rekord.Megjegyzés)?.FirstOrDefault()?.ToStrTrim();
                 // JAVÍTANDÓ:try

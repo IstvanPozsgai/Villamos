@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
-using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
+//using Funkcio = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga.Eszterga_Funkció;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -28,15 +28,15 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Listák
-        private List<Adat_Eszterga_Muveletek> AdatokMuvelet;
-        private List<Adat_Eszterga_Uzemora> AdatokUzemora;
-        private List<Adat_Eszterga_Muveletek_Naplo> AdatokNaplo;
+        List<Adat_Eszterga_Muveletek> AdatokMuvelet = new List<Adat_Eszterga_Muveletek>();
+        List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
+        List<Adat_Eszterga_Muveletek_Naplo> AdatokMuveletNaplo = new List<Adat_Eszterga_Muveletek_Naplo>();
         #endregion
 
         #region Kezelők
-        readonly private Kezelo_Eszterga_Muveletek KézMűveletek = new Kezelo_Eszterga_Muveletek();
-        readonly private Kezelo_Eszterga_Muveletek_Naplo KézNapló = new Kezelo_Eszterga_Muveletek_Naplo();
-        readonly private Kezelo_Eszterga_Uzemora KezUzemora = new Kezelo_Eszterga_Uzemora();
+        readonly Kezelo_Eszterga_Muveletek Kez_Muvelet = new Kezelo_Eszterga_Muveletek();
+        readonly Kezelo_Eszterga_Muveletek_Naplo Kez_Muvelet_Naplo = new Kezelo_Eszterga_Muveletek_Naplo();
+        readonly Kezelo_Eszterga_Uzemora Kez_Uzemora = new Kezelo_Eszterga_Uzemora();
         #endregion
 
         #region Alap
@@ -179,8 +179,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             try
             {
                 CmbxEgység.SelectedItem = EsztergaEgyseg.Bekövetkezés;
-                List<Adat_Eszterga_Muveletek> AdatokMűvelet = Funkcio.Eszterga_KarbantartasFeltolt();
-                int KovetkezoID = AdatokMűvelet.Any() ? AdatokMűvelet.Max(a => a.ID) + 1 : 1;
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
+                int KovetkezoID = AdatokMuvelet.Any() ? AdatokMuvelet.Max(a => a.ID) + 1 : 1;
                 // JAVÍTANDÓ:miért kell tudnunk itt , hogy mi az ID? kezelőben a helye
                 TxtBxId.Text = KovetkezoID.ToStrTrim();
                 EgysegEllenorzes(EsztergaEgyseg.Bekövetkezés.ToStrTrim());
@@ -215,8 +215,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 AdatTabla.Columns.Add("Utolsó Dátum");
                 AdatTabla.Columns.Add("Utolsó Üzemóra");
 
-                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
-                AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
+                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                 AdatTabla.Clear();
 
                 foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
@@ -288,9 +288,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             IdeiglenesTabla.Columns.Add("Rögzítő");
             IdeiglenesTabla.Columns.Add("Rögzítés Dátuma");
 
-            AdatokNaplo = Funkcio.Eszterga_KarbantartasNaplóFeltölt();
+            AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok();
 
-            foreach (Adat_Eszterga_Muveletek_Naplo rekord in AdatokNaplo)
+            foreach (Adat_Eszterga_Muveletek_Naplo rekord in AdatokMuveletNaplo)
             {
                 DataRow sor = IdeiglenesTabla.NewRow();
 
@@ -355,7 +355,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 AdatTablaUtolag.Columns.Add("Nap");
                 AdatTablaUtolag.Columns.Add("Óra");
 
-                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
                 AdatTablaUtolag.Clear();
 
                 foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
@@ -480,7 +480,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     if (Egyseg == "Üzemóra" || Egyseg == "Bekövetkezés")
                     {
-                        AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                        AdatokUzemora = Kez_Uzemora.Lista_Adatok();
 
                         if (string.IsNullOrEmpty(TxtBxUtolsóÜzemóraÁllás.Text) || TxtBxUtolsóÜzemóraÁllás.Text == "0" ||
                             !long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out _))
@@ -533,7 +533,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                List<Adat_Eszterga_Muveletek> rekordok = Funkcio.Eszterga_KarbantartasFeltolt()
+                List<Adat_Eszterga_Muveletek> rekordok = Kez_Muvelet.Lista_Adatok()
                     .OrderBy(r => r.ID)
                     .ToList();
 
@@ -544,7 +544,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     if (rekord.ID != KovetkezoID)
                     {
                         Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(rekord.ID);
-                        KézMűveletek.Rendezes(ADAT, KovetkezoID);
+                        Kez_Muvelet.Rendezes(ADAT, KovetkezoID);
                         rekord.ID = KovetkezoID;
                     }
 
@@ -576,7 +576,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 {
                     int id = sor.Cells[0].Value.ToÉrt_Int();
 
-                    AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
+                    AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
 
                     Adat_Eszterga_Muveletek rekord = (from a in AdatokMuvelet
                                                       where a.ID == id
@@ -614,7 +614,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 if (Muvelet)
                 {
-                    AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
+                    AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
                     Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == int.Parse(TxtBxId.Text));
                     Enum.TryParse(CmbxEgység.SelectedItem.ToStrTrim(), out EsztergaEgyseg Egyseg);
                     if (rekord != null &&
@@ -629,7 +629,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 }
                 else
                 {
-                    AdatokUzemora = Funkcio.Eszterga_UzemoraFeltolt();
+                    AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                     // JAVÍTANDÓ:ha ez bekövetkezik mit ad vissza?
                     Adat_Eszterga_Uzemora rekord = AdatokUzemora
                         .FirstOrDefault(a => a.Dátum == Uj_ablak_EsztergaUzemora.DtmPckrDátum.Value.Date) ?? throw new HibásBevittAdat("Nem található rekord a megadott dátummal.");
@@ -785,7 +785,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                   UjUzemora,
                                                   UjDatum,
                                                   UjStatus);
-                KezUzemora.Rogzites(ADAT);
+                Kez_Uzemora.Rogzites(ADAT);
 
                 return true;
             }
@@ -843,7 +843,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                                                 UjDatum,
                                                                                 UjUzemora);
                     // JAVÍTANDÓ:szóval ez a módosítás
-                    KézMűveletek.MeglevoMuvelet_Modositas(ADAT);
+                    Kez_Muvelet.MeglevoMuvelet_Modositas(ADAT);
                 }
                 else
                 {
@@ -856,7 +856,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                                                (ChckBxStátus.Checked ? "True" : "False").ToÉrt_Bool(),
                                                                                UjDatum,
                                                                                UjUzemora);
-                    KézMűveletek.Rogzites(ADAT);
+                    Kez_Muvelet.Rogzites(ADAT);
                 }
 
                 Eszterga_Valtozas?.Invoke();
@@ -899,7 +899,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         throw new HibásBevittAdat("Csak olyan sorokat lehet törölni, amik nincsenek törölve.");
                 }
 
-                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
 
                 List<int> rekordok = new List<int>();
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
@@ -941,7 +941,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             try
             {
                 Btn_Törlés.Visible = false;
-                AdatokMuvelet = Funkcio.Eszterga_KarbantartasFeltolt();
+                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
                 TxtBxId.Text = (AdatokMuvelet.Any() ? AdatokMuvelet.Max(a => a.ID) + 1 : 1).ToStrTrim();
                 TxtBxMűvelet.Text = "";
                 CmbxEgység.SelectedItem = EsztergaEgyseg.Bekövetkezés;
@@ -983,7 +983,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 Adat_Eszterga_Muveletek rekord1 = rekordok[0];
                 Adat_Eszterga_Muveletek rekord2 = rekordok[1];
 
-                KézMűveletek.MuveletCsere(rekord1, rekord2);
+                Kez_Muvelet.MuveletCsere(rekord1, rekord2);
                 Rendezes();
                 TablaListazasMuvelet();
                 TablaListazasMuveletUtolag();
@@ -1020,7 +1020,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 int ElsoID = elso.ID;
                 int MasodikID = masodik.ID;
 
-                KézMűveletek.MuveletSorrend(ElsoID, MasodikID);
+                Kez_Muvelet.MuveletSorrend(ElsoID, MasodikID);
                 Rendezes();
                 TablaListazasMuvelet();
                 TablaListazasMuveletUtolag();
@@ -1400,7 +1400,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     int id = sor.Cells["Művelet Sorszáma"].Value.ToÉrt_Int();
                     DateTime eredetiDatum = sor.Cells["Utolsó Dátum"].Value.ToÉrt_DaTeTime();
 
-                    Adat_Eszterga_Muveletek_Naplo eredeti = AdatokNaplo.FirstOrDefault(
+                    Adat_Eszterga_Muveletek_Naplo eredeti = AdatokMuveletNaplo.FirstOrDefault(
                         a => a.ID == id && a.Utolsó_Dátum.Date == eredetiDatum.Date)
                         ?? throw new HibásBevittAdat($"A(z) {id} azonosítójú naplózott sor nem található a memóriában.");
 
@@ -1428,7 +1428,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         DateTime.Today
                     );
                     // JAVÍTANDÓ:tehát módosítás
-                    KézNapló.UtolagUpdate(modositott, eredetiDatum);
+                    Kez_Muvelet_Naplo.UtolagUpdate(modositott, eredetiDatum);
                 }
                 return true;
             }
@@ -1473,7 +1473,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     if (rekord.Státus)
                         throw new HibásBevittAdat("Törölt műveletet nem lehet naplózni.");
 
-                    bool VanE = AdatokNaplo.Any(a => a.ID == id && a.Utolsó_Dátum.Date == datum);
+                    bool VanE = AdatokMuveletNaplo.Any(a => a.ID == id && a.Utolsó_Dátum.Date == datum);
                     if (VanE)
                         throw new HibásBevittAdat("Erre a dátumra már rögzítve lett ez a feladat egyszer.");
                     int MennyiNap = sor.Cells["Nap"].Value.ToÉrt_Int();
@@ -1494,7 +1494,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     naploLista.Add(adat);
                 }
-                KézNapló.EsztergaNaplozas(naploLista);
+                Kez_Muvelet_Naplo.EsztergaNaplozas(naploLista);
                 return true;
             }
 

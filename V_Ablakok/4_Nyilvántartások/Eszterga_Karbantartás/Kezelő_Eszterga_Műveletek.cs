@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -12,12 +14,16 @@ namespace Villamos.Villamos_Kezelők
     // táblanév legyen    Tabla_Muvelet helyett egységesen
     // a fájl létrehozását a kezelő végzi
     //sok módosítás
-
+    
     public class Kezelo_Eszterga_Muveletek
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb".KönyvSzerk();
         readonly string jelszo = "bozaim";
         readonly string tablaNev = "Műveletek";
+        public Kezelo_Eszterga_Muveletek()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartás(hely);
+        }
         public List<Adat_Eszterga_Muveletek> Lista_Adatok()
         {
             string szoveg = $"SELECT * FROM {tablaNev} ORDER BY ID  ";

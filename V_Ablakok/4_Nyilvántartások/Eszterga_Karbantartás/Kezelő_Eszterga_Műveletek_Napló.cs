@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -13,8 +15,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
     public class Kezelo_Eszterga_Muveletek_Naplo
     {
         readonly string jelszo = "bozaim";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{DateTime.Now.Year}_Napló.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{DateTime.Now.Year}_Napló.mdb".KönyvSzerk();
         readonly string tablaNev = "Műveletek_Napló";
+        public Kezelo_Eszterga_Muveletek_Naplo()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartas_Naplo(hely);
+        }
         public List<Adat_Eszterga_Muveletek_Naplo> Lista_Adatok()
         {
             string szoveg = "SELECT * FROM Műveletek_Napló ORDER BY ID ";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using MyF = Függvénygyűjtemény;
@@ -11,8 +12,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
     public partial class Ablak_Eszterga_Karbantartás_Segéd : Form
     {
         #region osztalyszintű elemek
-        private List<Adat_Eszterga_Uzemora> AdatokUzemora;
-        readonly private Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
+        List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
+        readonly Kezelo_Eszterga_Uzemora Kez_Uzemora = new Kezelo_Eszterga_Uzemora();
         // JAVÍTANDÓ:Biztos?
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         public int Uzemora { get; private set; }
@@ -74,7 +75,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 if (!Baross || !MyF.Vanjoga(160, 1))
                 {
-                    AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+                    AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                     Adat_Eszterga_Uzemora Uzemora = (from a in AdatokUzemora
                                                      where a.Státus != true
                                                      orderby a.Dátum descending
@@ -92,7 +93,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 LblSzöveg.Text = $"Írja be mai napi Üzemóra állását.";
 
-                AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                 Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
                                                 where a.Státus != true
                                                 orderby a.Dátum descending
@@ -152,7 +153,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 if (int.TryParse(TxtBxUzemOra.Text, out int uzemOra) && uzemOra >= 0)
                 {
-                    AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+                    AdatokUzemora = Kez_Uzemora.Lista_Adatok();
 
                     Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
                                                     where !a.Státus
