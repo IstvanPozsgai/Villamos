@@ -555,7 +555,7 @@ namespace Villamos
                         double első = 0;
                         double második = 0;
                         string beolvasott = Tábla3.Rows[i].Cells[2].Value.ToStrTrim();
-                        if (beolvasott == "") beolvasott = "N";
+                        if (beolvasott == "") beolvasott = "N_";
                         if (beolvasott.Contains('.')) beolvasott = beolvasott.Replace('.', '_');
                         if (beolvasott == "É.1") beolvasott = "É_5";
                         if (beolvasott == "É.2") beolvasott = "É_6";
