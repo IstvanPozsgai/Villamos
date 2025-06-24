@@ -570,7 +570,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 {
                     List<Adat_Eszterga_Muveletek> rekord = (from a in AdatokMuvelet
                                                             where (a.Utolsó_Dátum == EredetiDatum || a.Utolsó_Üzemóra_Állás == EredetiUzemora)
-                                                            && a.Státus != true
+                                                            && !a.Státus
                                                             select a).ToList();
 
                     List<Adat_Eszterga_Muveletek> ModLista = new List<Adat_Eszterga_Muveletek>();
