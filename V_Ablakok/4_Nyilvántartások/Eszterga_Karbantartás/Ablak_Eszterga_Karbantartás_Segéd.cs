@@ -70,44 +70,56 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void Ablak_Eszterga_Karbantartás_Segéd_Load(object sender, EventArgs e)
         {
-            if (!Baross || !MyF.Vanjoga(160, 1))
+            try
             {
+                if (!Baross || !MyF.Vanjoga(160, 1))
+                {
+                    AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
+                    Adat_Eszterga_Uzemora Uzemora = (from a in AdatokUzemora
+                                                     where a.Státus != true
+                                                     orderby a.Dátum descending
+                                                     select a).FirstOrDefault();
+
+                    if (Uzemora != null)
+                        LblElözö.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Uzemora}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
+                    else
+                        LblElözö.Text = "Nincs előző napi üzemóra rögzítve.";
+
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                    return;
+                }
+
+                LblSzöveg.Text = $"Írja be mai napi Üzemóra állását.";
+
                 AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
-                Adat_Eszterga_Uzemora Uzemora = (from a in AdatokUzemora
-                                                 where a.Státus != true
-                                                 orderby a.Dátum descending
-                                                 select a).FirstOrDefault();
+                Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
+                                                where a.Státus != true
+                                                orderby a.Dátum descending
+                                                select a).FirstOrDefault();
+                if (rekord == null)
+                {
+                    LblElözö.Text = "Még nem volt üzemóra rögzítés\n az adatbázisban.";
+                    return;
+                }
+                else if (rekord != null && rekord.Dátum == DateTime.Today)
+                {
+                    MessageBox.Show("A mai napon már rögzítettek üzemóra adatot.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DialogResult = DialogResult.Cancel;
+                    this.Close();
+                }
 
-                if (Uzemora != null)
-                    LblElözö.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Uzemora}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
-                else
-                    LblElözö.Text = "Nincs előző napi üzemóra rögzítve.";
-
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-                return;
+                LblElözö.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Uzemora}\nDátum: {rekord.Dátum.ToShortDateString()}";
             }
-
-            LblSzöveg.Text = $"Írja be mai napi Üzemóra állását.";
-
-            AdatokUzemora = Eszterga_Funkció.Eszterga_UzemoraFeltolt();
-            Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
-                                            where a.Státus != true
-                                            orderby a.Dátum descending
-                                            select a).FirstOrDefault();
-            if (rekord == null)
+            catch (HibásBevittAdat ex)
             {
-                LblElözö.Text = "Még nem volt üzemóra rögzítés\n az adatbázisban.";
-                return;
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else if (rekord != null && rekord.Dátum == DateTime.Today)
+            catch (Exception ex)
             {
-                MessageBox.Show("A mai napon már rögzítettek üzemóra adatot.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.Cancel;
-                this.Close();
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            LblElözö.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Uzemora}\nDátum: {rekord.Dátum.ToShortDateString()}";
         }
 
         /// <summary>

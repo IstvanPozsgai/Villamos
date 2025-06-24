@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -83,7 +84,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 // JAVÍTANDÓ: Miért kell bonyolítani?
                 Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
-                                                where a.Dátum.Date == DateTime.Today && a.Státus != true
+                                                where a.Dátum.Date == DateTime.Today && !a.Státus
                                                 select a).FirstOrDefault();
 
                 if (rekord != null)

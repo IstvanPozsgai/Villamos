@@ -36,7 +36,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #region Kezelők
         // JAVÍTANDÓ:ha nem kell akkor minek?
         readonly private Kezelo_Eszterga_Muveletek KezMuveletek = new Kezelo_Eszterga_Muveletek();
-        readonly private Kezelő_Eszterga_Üzemóra KezUzemora = new Kezelő_Eszterga_Üzemóra();
+        readonly private Kezelo_Eszterga_Uzemora KezUzemora = new Kezelo_Eszterga_Uzemora();
         #endregion
 
         #region Alap
