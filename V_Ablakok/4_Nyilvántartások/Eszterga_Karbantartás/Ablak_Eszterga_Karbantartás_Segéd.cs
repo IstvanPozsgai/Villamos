@@ -78,7 +78,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 {
                     AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                     Adat_Eszterga_Uzemora Uzemora = (from a in AdatokUzemora
-                                                     where a.Státus != true
+                                                     where !a.Státus
                                                      orderby a.Dátum descending
                                                      select a).FirstOrDefault();
 
@@ -96,7 +96,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                 Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
-                                                where a.Státus != true
+                                                where !a.Státus
                                                 orderby a.Dátum descending
                                                 select a).FirstOrDefault();
                 if (rekord == null)
