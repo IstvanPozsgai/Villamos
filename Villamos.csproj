@@ -266,12 +266,12 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelő_Eszterga_Műveletek_Napló.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelo_Eszterga_Muveletek_Naplo.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelo_Eszterga_Uzemora.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Eszterga.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Baross_Mérési_Adatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga.cs" />
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelő_Eszterga_Műveletek.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelo_Eszterga_Muveletek.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Baross.cs">
       <SubType>Form</SubType>
     </Compile>
