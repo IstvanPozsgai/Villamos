@@ -49,7 +49,8 @@ namespace Villamos.Kezelők
                                         rekord["KM_Sorszám"].ToÉrt_Int(),
                                         rekord["IDŐ_Sorszám"].ToÉrt_Int(),
                                         rekord["IDŐvKM"].ToÉrt_Int(),
-                                        rekord["Megjegyzés"].ToStrTrim()
+                                        rekord["Megjegyzés"].ToStrTrim(),
+                                        rekord["KmRogzitett_e"].ToÉrt_Bool()
                                         );
                                 Adatok.Add(Adat);
                             }
@@ -386,6 +387,7 @@ namespace Villamos.Kezelők
                 szöveg += $"idő_sorszám={Adat.IDŐ_Sorszám}, "; // idő_sorszám
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";// megjegyzés
                 szöveg += $"idővKM={Adat.IDŐvKM} ";
+                szöveg += $"KmRogzitett_e={Adat.KmRogzitett_e} ";
                 szöveg += $" WHERE id={Adat.Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -423,6 +425,24 @@ namespace Villamos.Kezelők
             try
             {
                 string szöveg = $"UPDATE adatok  SET Státus={státus}  WHERE azonosító='{Azonosító}' AND id={Sorszám}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_KmRogzitett_E(double Sorszám)
+        {
+            try
+            {
+                string szöveg = $"UPDATE adatok  SET KmRogzitett_e=TRUE WHERE id={Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -579,7 +599,8 @@ namespace Villamos.Kezelők
                                         rekord["KM_Sorszám"].ToÉrt_Int(),
                                         rekord["IDŐ_Sorszám"].ToÉrt_Int(),
                                         rekord["IDŐvKM"].ToÉrt_Int(),
-                                        rekord["Megjegyzés"].ToStrTrim()
+                                        rekord["Megjegyzés"].ToStrTrim(),
+                                        rekord["KmRogzitett_e"].ToÉrt_Bool()
                                         );
                                 Adatok.Add(Adat);
                             }
