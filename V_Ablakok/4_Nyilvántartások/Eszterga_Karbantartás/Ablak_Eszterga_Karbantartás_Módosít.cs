@@ -183,11 +183,22 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Kezeli az egység kiválasztásának változását a legördülő listában.
+        /// Az újonnan kiválasztott egység alapján ellenőrzi annak érvényességét vagy egyéb logikát hajt végre.
+        /// </summary>
         private void CmbxEgység_SelectedIndexChanged(object sender, EventArgs e)
         {
             string kivalasztottEgyseg = CmbxEgység.SelectedItem.ToStrTrim();
             EgysegEllenorzes(kivalasztottEgyseg);
         }
+
+        /// <summary>
+        /// Beállítja az egységet az alapértelmezett (Bekövetkezés) értékre,
+        /// lekéri az aktuális sorszámot és megjeleníti azt a megfelelő mezőben,
+        /// majd ellenőrzi az egység helyességét.
+        /// </summary>
         private void EgysegBeallitasa()
         {
             try
@@ -1166,6 +1177,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             ToroltTablaSzinezes(TablaUtolagMuvelet);
         }
+
+        /// <summary>
+        /// Kezeli a TablaUtolagMuvelet DataGridView kijelölésének változását.
+        /// Amennyiben a felhasználó egyetlen sort választ ki és a kontroll fókuszban van,
+        /// törli a TablaNaplo kijelölését, beállítja az utólagos dátumválasztót a mai napra,
+        /// és törli az utólagos megjegyzés szövegmező tartalmát.
+        /// </summary>
         private void TáblaUtólagMűvelet_SelectionChanged(object sender, EventArgs e)
         {
             if (TablaUtolagMuvelet.Focused && TablaUtolagMuvelet.SelectedRows.Count == 1)
@@ -1352,6 +1370,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Az utólagos naplóbejegyzések módosítását végzi.
+        /// Ellenőrzi, hogy legalább egy sor ki legyen választva a napló táblában,
+        /// majd az új értékek alapján frissíti a memóriában lévő naplóadatokat és adatbázisban is módosítja őket.
+        /// Hibák esetén megfelelő üzenetet jelenít meg.
+        /// </summary>
         private bool UtolagNaploModositas()
         {
             try
@@ -1409,6 +1434,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 return false;
             }
         }
+
+        /// <summary>
+        /// Új utólagos naplóbejegyzést hoz létre a kiválasztott műveletek alapján.
+        /// Ellenőrzi az üzemóra és dátum helyességét, és ha minden rendben van,
+        /// hozzáadja az új bejegyzéseket az adatbázishoz.
+        /// Hibák esetén megfelelő üzenetet jelenít meg.
+        /// </summary>
         private bool UjUtolagosNaplozas()
         {
             try
@@ -1475,6 +1507,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 return false;
             }
         }
+
+        /// <summary>
+        /// Kezeli a napló táblázat kijelölésének változását.
+        /// Ha a felhasználó egy sort választ ki, akkor a másik táblázat kijelölése törlődik,
+        /// és a részletes adatok (dátum, üzemóra, megjegyzés) megjelennek a megfelelő vezérlőkben.
+        /// </summary>
         private void TáblaNapló_SelectionChanged(object sender, EventArgs e)
         {
             if (TablaNaplo.Focused && TablaNaplo.SelectedRows.Count == 1)

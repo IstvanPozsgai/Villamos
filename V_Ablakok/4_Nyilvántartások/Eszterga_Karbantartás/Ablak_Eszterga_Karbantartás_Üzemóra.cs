@@ -743,5 +743,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
         }
         #endregion
+
+        private void Tabla_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+
+        }
     }
 }
