@@ -65,7 +65,6 @@
             this.Tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tabla.TabIndex = 261;
             this.Tabla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            this.Tabla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_CellFormatting);
             this.Tabla.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.Tabla_DataBindingComplete);
             // 
             // Btn_Excel

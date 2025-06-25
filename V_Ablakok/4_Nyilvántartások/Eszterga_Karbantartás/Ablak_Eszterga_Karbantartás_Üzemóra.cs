@@ -57,7 +57,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             TablaListazas();
             Jogosultsagkiosztas();
-            Tabla.CellFormatting += Tábla_CellFormatting;
+            // A DataGridView adatforrásának kötése után automatikusan meghívja a ToroltTablaSzinezes metódust,
+            // hogy a törölt státuszú sorokat színezve jelenítse meg.
+            Tabla.DataBindingComplete += (s, ev) => ToroltTablaSzinezes(Tabla);
         }
 
         /// <summary>
@@ -126,6 +128,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 Tabla.DataSource = AdatTabla;
                 OszlopSzelesseg();
+                ToroltTablaSzinezes(Tabla);
                 Tabla.Visible = true;
                 Tabla.ClearSelection();
             }
@@ -152,39 +155,46 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         }
 
         /// <summary>
-        /// A törölt sorokat piros háttérrel és áthúzott betűstílussal jeleníti meg.
-        /// Minden más sor fehér háttérrel és normál stílussal formázódik.
+        /// Színezi a táblázat sorait a státusz alapján, ha a státusz "Törölt".
+        /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
+        /// Ha a státusz nem "Törölt", visszaáll a szokásos megjelenítés fehér háttérre.
         /// </summary>
-        private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void ToroltTablaSzinezes(DataGridView tabla)
         {
-            try
+            foreach (DataGridViewRow sor in tabla.Rows)
             {
-                if (Tabla.Columns[e.ColumnIndex].Name == "Státusz" && e.Value is string státusz)
+                if (sor.IsNewRow) continue;
+
+                string statusz = sor.Cells["Státusz"].Value?.ToStrTrim();
+
+                if (statusz == "Törölt")
                 {
-                    DataGridViewRow sor = Tabla.Rows[e.RowIndex];
-                    if (státusz == "Törölt")
+                    foreach (DataGridViewCell cell in sor.Cells)
                     {
-                        sor.DefaultCellStyle.BackColor = Color.IndianRed;
-                        sor.DefaultCellStyle.ForeColor = Color.Black;
-                        sor.DefaultCellStyle.Font = new System.Drawing.Font(Tabla.DefaultCellStyle.Font, FontStyle.Strikeout);
+                        cell.Style.BackColor = Color.IndianRed;
+                        cell.Style.ForeColor = Color.Black;
+                        cell.Style.Font = new System.Drawing.Font(tabla.DefaultCellStyle.Font, FontStyle.Strikeout);
                     }
-                    else
+                }
+                else
+                {
+                    foreach (DataGridViewCell cell in sor.Cells)
                     {
-                        sor.DefaultCellStyle.BackColor = Color.White;
-                        sor.DefaultCellStyle.ForeColor = Color.Black;
-                        sor.DefaultCellStyle.Font = new System.Drawing.Font(Tabla.DefaultCellStyle.Font, FontStyle.Regular);
+                        cell.Style.BackColor = Color.White;
+                        cell.Style.ForeColor = Color.Black;
+                        cell.Style.Font = new System.Drawing.Font(tabla.DefaultCellStyle.Font, FontStyle.Regular);
                     }
                 }
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        }
+
+        /// <summary>
+        /// Eseménykezelő, amely a DataGridView adatforrásának kötése után hívódik meg.
+        /// Meghívja a ToroltTablaSzinezes metódust, hogy a törölt státuszú sorokat megjelenítési színezéssel lássa el.
+        /// </summary>
+        private void Tabla_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            ToroltTablaSzinezes(Tabla);
         }
 
         /// <summary>
@@ -278,17 +288,18 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     InitialDirectory = "MyDocuments",
-                    Title = "Teljes tartalom mentése Excel fájlba",
+                    Title = "Listázott tartalom mentése Excel fájlba",
                     FileName = $"Eszterga_Karbantartás_Üzemórák_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
+
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
 
-                MyE.EXCELtábla(fájlexc, Tabla, false, true);
+                MyE.DataGridViewToExcel(fájlexc, Tabla, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás($"{fájlexc}.xlsx");
@@ -743,10 +754,5 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
         }
         #endregion
-
-        private void Tabla_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-
-        }
     }
 }
