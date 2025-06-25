@@ -1169,6 +1169,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             ToroltTablaSzinezes(TablaMuvelet);
         }
+
         /// <summary>
         /// Eseménykezelő, amely a TablaUtolagMuvelet DataGridView adatforrásának kötése után hívódik meg.
         /// Meghívja a ToroltTablaSzinezes metódust, hogy a törölt státuszú sorokat megjelenési színezéssel lássa el.
