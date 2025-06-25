@@ -457,12 +457,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 }
 
                 long ElozoUzemora = (from a in AdatokUzemora
-                                     where a.Dátum < UjDatum && a.Státus == false
+                                     where a.Dátum < UjDatum && !a.Státus
                                      orderby a.Dátum descending
                                      select a.Uzemora).FirstOrDefault();
 
                 long UtanaUzemora = (from a in AdatokUzemora
-                                     where a.Dátum > UjDatum && a.Státus == false
+                                     where a.Dátum > UjDatum && !a.Státus
                                      orderby a.Dátum
                                      select a.Uzemora).FirstOrDefault();
 
