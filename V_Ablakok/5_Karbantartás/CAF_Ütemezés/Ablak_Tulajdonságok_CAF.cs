@@ -897,6 +897,15 @@ namespace Villamos
 
                 Holtart.Be();
                 AdatokCaf = KézAdatok.Lista_Adatok();
+
+                foreach (var item in AdatokCaf)
+                {
+                    if (item.Státus == 2)
+                    {
+                        KézAdatok.Módosítás_KmRogzitett_E(item.Id);
+                    }
+                }
+
                 List<Adat_CAF_Adatok_Pót> ADATOK = new List<Adat_CAF_Adatok_Pót>();
                 foreach (string elem in Elő_pályaszám.CheckedItems)
                 {

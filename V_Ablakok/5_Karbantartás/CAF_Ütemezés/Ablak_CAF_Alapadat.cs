@@ -18,6 +18,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_Főkönyv_Zser_Km KézZser = new Kezelő_Főkönyv_Zser_Km();
         readonly Kezelő_CAF_alap KézCAFAlap = new Kezelő_CAF_alap();
+        readonly Kezelő_CAF_Adatok KezCafAdatok = new Kezelő_CAF_Adatok();
         readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_Főkönyv_Zser_Km KézZSerKm = new Kezelő_Főkönyv_Zser_Km();
 
@@ -228,6 +229,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 if (Alap_pályaszám.Text.Trim() == "") return;
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok();
                 Adat_CAF_alap Adat = Adatok.FirstOrDefault(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
+
+                List<Adat_CAF_Adatok> Caf_Adatok_Tabla = KezCafAdatok.Lista_Adatok();
+                Adat_CAF_Adatok Caf_Adatok_Tabla_Adat = Caf_Adatok_Tabla.FirstOrDefault(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
+
                 if (Adat != null)
                 {
                     Alap_ciklus_idő.Text = Adat.Ciklusnap;
@@ -255,6 +260,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Utolsó_vizsgóta.Text = (Adat.KMUkm - Adat.Számláló).ToString();
                     Alap_Státus.Checked = Adat.Törölt;
                     Alap_Garancia.Checked = Adat.Garancia;
+
+                    utolso_vizsgalat_km.Text = Caf_Adatok_Tabla_Adat.Számláló.ToString();
+
                 }
             }
             catch (HibásBevittAdat ex)
@@ -541,5 +549,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Alapadatokat_kiír();
         }
         #endregion
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Alap_KM_számláló_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

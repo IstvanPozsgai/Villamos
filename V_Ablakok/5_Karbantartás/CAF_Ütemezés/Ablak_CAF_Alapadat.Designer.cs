@@ -52,29 +52,31 @@
             this.Label8 = new System.Windows.Forms.Label();
             this.Label7 = new System.Windows.Forms.Label();
             this.Alap_ciklus_km = new System.Windows.Forms.ComboBox();
-            this.Alap_ciklus_idő = new System.Windows.Forms.ComboBox();
             this.Alap_vizsg_km = new System.Windows.Forms.TextBox();
-            this.Alap_vizsg_idő = new System.Windows.Forms.TextBox();
             this.Alap_vizsg_sorszám_km = new System.Windows.Forms.ComboBox();
-            this.Alap_vizsg_sorszám_idő = new System.Windows.Forms.ComboBox();
             this.ALAP_Üzemek_km = new System.Windows.Forms.ComboBox();
-            this.ALAP_Üzemek_nap = new System.Windows.Forms.ComboBox();
-            this.Alap_dátum_idő = new System.Windows.Forms.DateTimePicker();
             this.Label12 = new System.Windows.Forms.Label();
             this.Label14 = new System.Windows.Forms.Label();
             this.Label15 = new System.Windows.Forms.Label();
             this.Label16 = new System.Windows.Forms.Label();
             this.Label17 = new System.Windows.Forms.Label();
-            this.Label6 = new System.Windows.Forms.Label();
-            this.Label5 = new System.Windows.Forms.Label();
-            this.Label4 = new System.Windows.Forms.Label();
-            this.Label3 = new System.Windows.Forms.Label();
-            this.Label2 = new System.Windows.Forms.Label();
             this.Alap_dátum_km = new System.Windows.Forms.DateTimePicker();
-            this.Alap_pályaszám = new System.Windows.Forms.ComboBox();
-            this.Label1 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Label1 = new System.Windows.Forms.Label();
+            this.Alap_pályaszám = new System.Windows.Forms.ComboBox();
+            this.Label2 = new System.Windows.Forms.Label();
+            this.Label3 = new System.Windows.Forms.Label();
+            this.Label4 = new System.Windows.Forms.Label();
+            this.Label5 = new System.Windows.Forms.Label();
+            this.Label6 = new System.Windows.Forms.Label();
+            this.Alap_dátum_idő = new System.Windows.Forms.DateTimePicker();
+            this.ALAP_Üzemek_nap = new System.Windows.Forms.ComboBox();
+            this.Alap_vizsg_sorszám_idő = new System.Windows.Forms.ComboBox();
+            this.Alap_vizsg_idő = new System.Windows.Forms.TextBox();
+            this.Alap_ciklus_idő = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.utolso_vizsgalat_km = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Kalkulál
@@ -111,6 +113,7 @@
             this.Alap_KM_számláló.Name = "Alap_KM_számláló";
             this.Alap_KM_számláló.Size = new System.Drawing.Size(146, 26);
             this.Alap_KM_számláló.TabIndex = 111;
+            this.Alap_KM_számláló.TextChanged += new System.EventHandler(this.Alap_KM_számláló_TextChanged);
             // 
             // Label20
             // 
@@ -274,30 +277,12 @@
             this.Alap_ciklus_km.TabIndex = 93;
             this.Alap_ciklus_km.SelectedIndexChanged += new System.EventHandler(this.Alap_ciklus_km_SelectedIndexChanged);
             // 
-            // Alap_ciklus_idő
-            // 
-            this.Alap_ciklus_idő.DropDownHeight = 300;
-            this.Alap_ciklus_idő.FormattingEnabled = true;
-            this.Alap_ciklus_idő.IntegralHeight = false;
-            this.Alap_ciklus_idő.Location = new System.Drawing.Point(176, 55);
-            this.Alap_ciklus_idő.Name = "Alap_ciklus_idő";
-            this.Alap_ciklus_idő.Size = new System.Drawing.Size(146, 28);
-            this.Alap_ciklus_idő.TabIndex = 92;
-            this.Alap_ciklus_idő.SelectedIndexChanged += new System.EventHandler(this.Alap_ciklus_idő_SelectedIndexChanged);
-            // 
             // Alap_vizsg_km
             // 
             this.Alap_vizsg_km.Location = new System.Drawing.Point(624, 89);
             this.Alap_vizsg_km.Name = "Alap_vizsg_km";
             this.Alap_vizsg_km.Size = new System.Drawing.Size(146, 26);
             this.Alap_vizsg_km.TabIndex = 91;
-            // 
-            // Alap_vizsg_idő
-            // 
-            this.Alap_vizsg_idő.Location = new System.Drawing.Point(176, 89);
-            this.Alap_vizsg_idő.Name = "Alap_vizsg_idő";
-            this.Alap_vizsg_idő.Size = new System.Drawing.Size(146, 26);
-            this.Alap_vizsg_idő.TabIndex = 90;
             // 
             // Alap_vizsg_sorszám_km
             // 
@@ -310,17 +295,6 @@
             this.Alap_vizsg_sorszám_km.TabIndex = 89;
             this.Alap_vizsg_sorszám_km.SelectedIndexChanged += new System.EventHandler(this.Alap_vizsg_sorszám_km_SelectedIndexChanged);
             // 
-            // Alap_vizsg_sorszám_idő
-            // 
-            this.Alap_vizsg_sorszám_idő.DropDownHeight = 300;
-            this.Alap_vizsg_sorszám_idő.FormattingEnabled = true;
-            this.Alap_vizsg_sorszám_idő.IntegralHeight = false;
-            this.Alap_vizsg_sorszám_idő.Location = new System.Drawing.Point(176, 121);
-            this.Alap_vizsg_sorszám_idő.Name = "Alap_vizsg_sorszám_idő";
-            this.Alap_vizsg_sorszám_idő.Size = new System.Drawing.Size(121, 28);
-            this.Alap_vizsg_sorszám_idő.TabIndex = 88;
-            this.Alap_vizsg_sorszám_idő.SelectedIndexChanged += new System.EventHandler(this.Alap_vizsg_sorszám_idő_SelectedIndexChanged);
-            // 
             // ALAP_Üzemek_km
             // 
             this.ALAP_Üzemek_km.DropDownHeight = 300;
@@ -330,24 +304,6 @@
             this.ALAP_Üzemek_km.Name = "ALAP_Üzemek_km";
             this.ALAP_Üzemek_km.Size = new System.Drawing.Size(198, 28);
             this.ALAP_Üzemek_km.TabIndex = 87;
-            // 
-            // ALAP_Üzemek_nap
-            // 
-            this.ALAP_Üzemek_nap.DropDownHeight = 300;
-            this.ALAP_Üzemek_nap.FormattingEnabled = true;
-            this.ALAP_Üzemek_nap.IntegralHeight = false;
-            this.ALAP_Üzemek_nap.Location = new System.Drawing.Point(176, 155);
-            this.ALAP_Üzemek_nap.Name = "ALAP_Üzemek_nap";
-            this.ALAP_Üzemek_nap.Size = new System.Drawing.Size(198, 28);
-            this.ALAP_Üzemek_nap.TabIndex = 86;
-            // 
-            // Alap_dátum_idő
-            // 
-            this.Alap_dátum_idő.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Alap_dátum_idő.Location = new System.Drawing.Point(176, 189);
-            this.Alap_dátum_idő.Name = "Alap_dátum_idő";
-            this.Alap_dátum_idő.Size = new System.Drawing.Size(119, 26);
-            this.Alap_dátum_idő.TabIndex = 85;
             // 
             // Label12
             // 
@@ -394,51 +350,6 @@
             this.Label17.TabIndex = 80;
             this.Label17.Text = "Kmalapú Ciklus";
             // 
-            // Label6
-            // 
-            this.Label6.AutoSize = true;
-            this.Label6.Location = new System.Drawing.Point(15, 190);
-            this.Label6.Name = "Label6";
-            this.Label6.Size = new System.Drawing.Size(70, 20);
-            this.Label6.TabIndex = 79;
-            this.Label6.Text = "Dátuma:";
-            // 
-            // Label5
-            // 
-            this.Label5.AutoSize = true;
-            this.Label5.Location = new System.Drawing.Point(15, 158);
-            this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(73, 20);
-            this.Label5.TabIndex = 78;
-            this.Label5.Text = "Végezte:";
-            // 
-            // Label4
-            // 
-            this.Label4.AutoSize = true;
-            this.Label4.Location = new System.Drawing.Point(15, 124);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(151, 20);
-            this.Label4.TabIndex = 77;
-            this.Label4.Text = "Vizsgálat sorszáma:";
-            // 
-            // Label3
-            // 
-            this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(15, 90);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(128, 20);
-            this.Label3.TabIndex = 76;
-            this.Label3.Text = "Utolsó Vizsgálat:";
-            // 
-            // Label2
-            // 
-            this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(15, 58);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(117, 20);
-            this.Label2.TabIndex = 75;
-            this.Label2.Text = "Időalapú Ciklus";
-            // 
             // Alap_dátum_km
             // 
             this.Alap_dátum_km.Format = System.Windows.Forms.DateTimePickerFormat.Short;
@@ -446,27 +357,6 @@
             this.Alap_dátum_km.Name = "Alap_dátum_km";
             this.Alap_dátum_km.Size = new System.Drawing.Size(119, 26);
             this.Alap_dátum_km.TabIndex = 74;
-            // 
-            // Alap_pályaszám
-            // 
-            this.Alap_pályaszám.DropDownHeight = 300;
-            this.Alap_pályaszám.FormattingEnabled = true;
-            this.Alap_pályaszám.IntegralHeight = false;
-            this.Alap_pályaszám.Location = new System.Drawing.Point(176, 7);
-            this.Alap_pályaszám.Name = "Alap_pályaszám";
-            this.Alap_pályaszám.Size = new System.Drawing.Size(121, 28);
-            this.Alap_pályaszám.TabIndex = 73;
-            this.Alap_pályaszám.SelectedIndexChanged += new System.EventHandler(this.Alap_pályaszám_SelectedIndexChanged);
-            this.Alap_pályaszám.TextUpdate += new System.EventHandler(this.Alap_pályaszám_TextUpdate);
-            // 
-            // Label1
-            // 
-            this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(15, 15);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(89, 20);
-            this.Label1.TabIndex = 72;
-            this.Label1.Text = "Pályaszám:";
             // 
             // toolTip1
             // 
@@ -482,12 +372,144 @@
             this.Holtart.TabIndex = 115;
             this.Holtart.Visible = false;
             // 
+            // Label1
+            // 
+            this.Label1.AutoSize = true;
+            this.Label1.Location = new System.Drawing.Point(15, 15);
+            this.Label1.Name = "Label1";
+            this.Label1.Size = new System.Drawing.Size(89, 20);
+            this.Label1.TabIndex = 72;
+            this.Label1.Text = "Pályaszám:";
+            // 
+            // Alap_pályaszám
+            // 
+            this.Alap_pályaszám.DropDownHeight = 300;
+            this.Alap_pályaszám.FormattingEnabled = true;
+            this.Alap_pályaszám.IntegralHeight = false;
+            this.Alap_pályaszám.Location = new System.Drawing.Point(176, 7);
+            this.Alap_pályaszám.Name = "Alap_pályaszám";
+            this.Alap_pályaszám.Size = new System.Drawing.Size(121, 28);
+            this.Alap_pályaszám.TabIndex = 73;
+            this.Alap_pályaszám.SelectedIndexChanged += new System.EventHandler(this.Alap_pályaszám_SelectedIndexChanged);
+            this.Alap_pályaszám.TextUpdate += new System.EventHandler(this.Alap_pályaszám_TextUpdate);
+            // 
+            // Label2
+            // 
+            this.Label2.AutoSize = true;
+            this.Label2.Location = new System.Drawing.Point(15, 58);
+            this.Label2.Name = "Label2";
+            this.Label2.Size = new System.Drawing.Size(117, 20);
+            this.Label2.TabIndex = 75;
+            this.Label2.Text = "Időalapú Ciklus";
+            // 
+            // Label3
+            // 
+            this.Label3.AutoSize = true;
+            this.Label3.Location = new System.Drawing.Point(15, 90);
+            this.Label3.Name = "Label3";
+            this.Label3.Size = new System.Drawing.Size(128, 20);
+            this.Label3.TabIndex = 76;
+            this.Label3.Text = "Utolsó Vizsgálat:";
+            // 
+            // Label4
+            // 
+            this.Label4.AutoSize = true;
+            this.Label4.Location = new System.Drawing.Point(15, 124);
+            this.Label4.Name = "Label4";
+            this.Label4.Size = new System.Drawing.Size(151, 20);
+            this.Label4.TabIndex = 77;
+            this.Label4.Text = "Vizsgálat sorszáma:";
+            // 
+            // Label5
+            // 
+            this.Label5.AutoSize = true;
+            this.Label5.Location = new System.Drawing.Point(15, 158);
+            this.Label5.Name = "Label5";
+            this.Label5.Size = new System.Drawing.Size(73, 20);
+            this.Label5.TabIndex = 78;
+            this.Label5.Text = "Végezte:";
+            // 
+            // Label6
+            // 
+            this.Label6.AutoSize = true;
+            this.Label6.Location = new System.Drawing.Point(15, 190);
+            this.Label6.Name = "Label6";
+            this.Label6.Size = new System.Drawing.Size(70, 20);
+            this.Label6.TabIndex = 79;
+            this.Label6.Text = "Dátuma:";
+            // 
+            // Alap_dátum_idő
+            // 
+            this.Alap_dátum_idő.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.Alap_dátum_idő.Location = new System.Drawing.Point(176, 189);
+            this.Alap_dátum_idő.Name = "Alap_dátum_idő";
+            this.Alap_dátum_idő.Size = new System.Drawing.Size(119, 26);
+            this.Alap_dátum_idő.TabIndex = 85;
+            // 
+            // ALAP_Üzemek_nap
+            // 
+            this.ALAP_Üzemek_nap.DropDownHeight = 300;
+            this.ALAP_Üzemek_nap.FormattingEnabled = true;
+            this.ALAP_Üzemek_nap.IntegralHeight = false;
+            this.ALAP_Üzemek_nap.Location = new System.Drawing.Point(176, 155);
+            this.ALAP_Üzemek_nap.Name = "ALAP_Üzemek_nap";
+            this.ALAP_Üzemek_nap.Size = new System.Drawing.Size(198, 28);
+            this.ALAP_Üzemek_nap.TabIndex = 86;
+            // 
+            // Alap_vizsg_sorszám_idő
+            // 
+            this.Alap_vizsg_sorszám_idő.DropDownHeight = 300;
+            this.Alap_vizsg_sorszám_idő.FormattingEnabled = true;
+            this.Alap_vizsg_sorszám_idő.IntegralHeight = false;
+            this.Alap_vizsg_sorszám_idő.Location = new System.Drawing.Point(176, 121);
+            this.Alap_vizsg_sorszám_idő.Name = "Alap_vizsg_sorszám_idő";
+            this.Alap_vizsg_sorszám_idő.Size = new System.Drawing.Size(121, 28);
+            this.Alap_vizsg_sorszám_idő.TabIndex = 88;
+            this.Alap_vizsg_sorszám_idő.SelectedIndexChanged += new System.EventHandler(this.Alap_vizsg_sorszám_idő_SelectedIndexChanged);
+            // 
+            // Alap_vizsg_idő
+            // 
+            this.Alap_vizsg_idő.Location = new System.Drawing.Point(176, 89);
+            this.Alap_vizsg_idő.Name = "Alap_vizsg_idő";
+            this.Alap_vizsg_idő.Size = new System.Drawing.Size(146, 26);
+            this.Alap_vizsg_idő.TabIndex = 90;
+            // 
+            // Alap_ciklus_idő
+            // 
+            this.Alap_ciklus_idő.DropDownHeight = 300;
+            this.Alap_ciklus_idő.FormattingEnabled = true;
+            this.Alap_ciklus_idő.IntegralHeight = false;
+            this.Alap_ciklus_idő.Location = new System.Drawing.Point(176, 55);
+            this.Alap_ciklus_idő.Name = "Alap_ciklus_idő";
+            this.Alap_ciklus_idő.Size = new System.Drawing.Size(146, 28);
+            this.Alap_ciklus_idő.TabIndex = 92;
+            this.Alap_ciklus_idő.SelectedIndexChanged += new System.EventHandler(this.Alap_ciklus_idő_SelectedIndexChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(12, 227);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(166, 20);
+            this.label13.TabIndex = 116;
+            this.label13.Text = "Vizsgálatkori KM állás:";
+            this.label13.Click += new System.EventHandler(this.label13_Click);
+            // 
+            // utolso_vizsgalat_km
+            // 
+            this.utolso_vizsgalat_km.Location = new System.Drawing.Point(176, 222);
+            this.utolso_vizsgalat_km.Name = "utolso_vizsgalat_km";
+            this.utolso_vizsgalat_km.Size = new System.Drawing.Size(146, 26);
+            this.utolso_vizsgalat_km.TabIndex = 117;
+            // 
             // Ablak_CAF_Alapadat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Peru;
             this.ClientSize = new System.Drawing.Size(903, 452);
+            this.Controls.Add(this.utolso_vizsgalat_km);
+            this.Controls.Add(this.label13);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Kalkulál);
             this.Controls.Add(this.Utolsó_vizsgóta);
@@ -571,28 +593,30 @@
         internal System.Windows.Forms.Label Label8;
         internal System.Windows.Forms.Label Label7;
         internal System.Windows.Forms.ComboBox Alap_ciklus_km;
-        internal System.Windows.Forms.ComboBox Alap_ciklus_idő;
         internal System.Windows.Forms.TextBox Alap_vizsg_km;
-        internal System.Windows.Forms.TextBox Alap_vizsg_idő;
         internal System.Windows.Forms.ComboBox Alap_vizsg_sorszám_km;
-        internal System.Windows.Forms.ComboBox Alap_vizsg_sorszám_idő;
         internal System.Windows.Forms.ComboBox ALAP_Üzemek_km;
-        internal System.Windows.Forms.ComboBox ALAP_Üzemek_nap;
-        internal System.Windows.Forms.DateTimePicker Alap_dátum_idő;
         internal System.Windows.Forms.Label Label12;
         internal System.Windows.Forms.Label Label14;
         internal System.Windows.Forms.Label Label15;
         internal System.Windows.Forms.Label Label16;
         internal System.Windows.Forms.Label Label17;
-        internal System.Windows.Forms.Label Label6;
-        internal System.Windows.Forms.Label Label5;
-        internal System.Windows.Forms.Label Label4;
-        internal System.Windows.Forms.Label Label3;
-        internal System.Windows.Forms.Label Label2;
         internal System.Windows.Forms.DateTimePicker Alap_dátum_km;
-        internal System.Windows.Forms.ComboBox Alap_pályaszám;
-        internal System.Windows.Forms.Label Label1;
         private System.Windows.Forms.ToolTip toolTip1;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal System.Windows.Forms.Label Label1;
+        internal System.Windows.Forms.ComboBox Alap_pályaszám;
+        internal System.Windows.Forms.Label Label2;
+        internal System.Windows.Forms.Label Label3;
+        internal System.Windows.Forms.Label Label4;
+        internal System.Windows.Forms.Label Label5;
+        internal System.Windows.Forms.Label Label6;
+        internal System.Windows.Forms.DateTimePicker Alap_dátum_idő;
+        internal System.Windows.Forms.ComboBox ALAP_Üzemek_nap;
+        internal System.Windows.Forms.ComboBox Alap_vizsg_sorszám_idő;
+        internal System.Windows.Forms.TextBox Alap_vizsg_idő;
+        internal System.Windows.Forms.ComboBox Alap_ciklus_idő;
+        internal System.Windows.Forms.Label label13;
+        internal System.Windows.Forms.TextBox utolso_vizsgalat_km;
     }
 }
