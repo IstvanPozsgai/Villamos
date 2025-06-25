@@ -114,7 +114,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private int Sorszam()
+        public int Sorszam()
         {
             int valasz = 1;
             try
