@@ -634,28 +634,64 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// a háttérszín piros (lejárt), sárga (közeledik), vagy zöld (rendben) lesz beállítva.
         /// A napló táblázat esetén nem történik színezés.
         /// </summary>
+        //private void SorSzinezes()
+        //{
+        //    try
+        //    {
+        //        if (AktivTablaTipus == "Napló") return;
+        //        foreach (DataGridViewRow row in Tabla.Rows)
+        //        {
+        //            // JAVÍTANDÓ:a tábla típus miért cikluson belül van?
+        //            //kesz / szinezes rossz meg
+        //            if (row.IsNewRow) continue;
+        //            if (row.Cells["Sorszám"].Value != null && int.TryParse(row.Cells["Sorszám"].Value.ToStrTrim(), out int Sorszam))
+        //            {
+        //                Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(r => r.ID == Sorszam);
+
+        //                if (rekord != null)
+        //                {
+        //                    Color hatterszin = Kiszinezes(rekord, TervDatum);
+        //                    row.DefaultCellStyle.BackColor = hatterszin;
+        //                }
+        //            }
+        //            else
+        //                row.DefaultCellStyle.BackColor = Color.White;
+        //        }
+        //    }
+        //    catch (HibásBevittAdat ex)
+        //    {
+        //        MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+        //        MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
         private void SorSzinezes()
         {
             try
             {
                 if (AktivTablaTipus == "Napló") return;
+
                 foreach (DataGridViewRow row in Tabla.Rows)
                 {
-                    // JAVÍTANDÓ:a tábla típus miért cikluson belül van?
-                    //kesz / szinezes rossz meg
                     if (row.IsNewRow) continue;
+
                     if (row.Cells["Sorszám"].Value != null && int.TryParse(row.Cells["Sorszám"].Value.ToStrTrim(), out int Sorszam))
                     {
                         Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(r => r.ID == Sorszam);
-
                         if (rekord != null)
                         {
                             Color hatterszin = Kiszinezes(rekord, TervDatum);
-                            row.DefaultCellStyle.BackColor = hatterszin;
+
+                            foreach (DataGridViewCell cell in row.Cells)
+                                cell.Style.BackColor = hatterszin;
                         }
                     }
                     else
-                        row.DefaultCellStyle.BackColor = Color.White;
+                        foreach (DataGridViewCell cell in row.Cells)
+                            cell.Style.BackColor = Color.White;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1077,20 +1113,21 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             {
                 if (Tabla.Rows.Count <= 0) throw new HibásBevittAdat("Nincs sora a táblázatnak!");
                 string fájlexc;
+
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     InitialDirectory = "MyDocuments",
-                    Title = "Teljes tartalom mentése Excel fájlba",
+                    Title = "Listázott tartalom mentése Excel fájlba",
                     FileName = $"Eszterga_Karbantartás_Műveletek_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
+
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-
-                MyE.EXCELtábla(fájlexc, Tabla, false, true);
+                MyE.DataGridViewToExcel(fájlexc, Tabla, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás($"{fájlexc}.xlsx");
