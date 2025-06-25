@@ -63,7 +63,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             JogosultsagKiosztas();
             Btn_Csere.Visible = false;
             Btn_Sorrend.Visible = false;
-            TablaMuvelet.CellFormatting += TáblaMűvelet_CellFormatting;
+            // A DataGridView adatforrásának kötése után automatikusan meghívja a ToroltTablaSzinezes metódust,
+            // hogy a törölt státuszú sorokat színezve jelenítse meg.
+            TablaMuvelet.DataBindingComplete += (s, ev) => ToroltTablaSzinezes(TablaMuvelet);
+            TablaUtolagMuvelet.DataBindingComplete += (s, ev) => ToroltTablaSzinezes(TablaUtolagMuvelet);
             EgysegBeallitasa();
             UzemoraKiolvasasEsBeiras(DtmPckrUtolagos.Value, TxtBxUtolagUzemora);
             TxtBxMennyiNap.Text = "0";
@@ -253,6 +256,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 TablaMuvelet.DataSource = AdatTabla;
                 OszlopSzelessegMuvelet();
+                ToroltTablaSzinezes(TablaMuvelet);
                 TablaMuvelet.Visible = true;
                 TablaMuvelet.ClearSelection();
             }
@@ -364,6 +368,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TablaNaplo.Columns["Rögzítés Dátuma"].Width = 105;
         }
 
+
         /// <summary>
         /// Betölti és megjeleníti az utólagos karbantartási műveleteket a TáblaMűveletben
         /// </summary>
@@ -396,6 +401,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 TablaUtolagMuvelet.DataSource = AdatTablaUtolag;
                 OszlopSzelessegMuveletUtolag();
                 TablaUtolagMuvelet.Visible = true;
+                ToroltTablaSzinezes(TablaUtolagMuvelet);
                 TablaUtolagMuvelet.ClearSelection();
             }
             catch (HibásBevittAdat ex)
@@ -408,6 +414,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         /// <summary>
         /// Az utólagos művelet TáblaMűvelet oszlopszélességeit állítja be
@@ -630,45 +637,37 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
         /// Ha a státusz nem "Törölt", visszaáll a szokásos megjelenítés fehér háttérre.
         /// </summary>
-        private void ToroltTablaSzinezes(Zuby.ADGV.AdvancedDataGridView tabla, DataGridViewCellFormattingEventArgs e, string statuszOszlop)
+        private void ToroltTablaSzinezes(DataGridView tabla)
         {
-            try
-            {
-                if (tabla.Columns[e.ColumnIndex].Name == statuszOszlop && e.Value is string statusz)
-                {
-                    DataGridViewRow sor = tabla.Rows[e.RowIndex];
+            if (!tabla.Columns.Contains("Státusz"))
+                return;
 
-                    if (statusz == "Törölt")
+            foreach (DataGridViewRow sor in tabla.Rows)
+            {
+                if (sor.IsNewRow) continue;
+
+                string statusz = sor.Cells["Státusz"].Value?.ToString().Trim();
+
+                if (statusz == "Törölt")
+                {
+                    foreach (DataGridViewCell cell in sor.Cells)
                     {
-                        foreach (DataGridViewCell cell in sor.Cells)
-                        {
-                            cell.Style.BackColor = Color.IndianRed;
-                            cell.Style.ForeColor = Color.Black;
-                            cell.Style.Font = new System.Drawing.Font(tabla.DefaultCellStyle.Font, FontStyle.Strikeout);
-                        }
+                        cell.Style.BackColor = Color.IndianRed;
+                        cell.Style.ForeColor = Color.Black;
+                        cell.Style.Font = new System.Drawing.Font(tabla.DefaultCellStyle.Font, FontStyle.Strikeout);
                     }
-                    else
+                }
+                else
+                {
+                    foreach (DataGridViewCell cell in sor.Cells)
                     {
-                        foreach (DataGridViewCell cell in sor.Cells)
-                        {
-                            cell.Style.BackColor = Color.White;
-                            cell.Style.ForeColor = Color.Black;
-                            cell.Style.Font = new System.Drawing.Font(tabla.DefaultCellStyle.Font, FontStyle.Regular);
-                        }
+                        cell.Style.BackColor = Color.White;
+                        cell.Style.ForeColor = Color.Black;
+                        cell.Style.Font = new System.Drawing.Font(tabla.DefaultCellStyle.Font, FontStyle.Regular);
                     }
                 }
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
-
 
         /// <summary>
         /// Keres egy üzemórát az adatbázisban a megadott feltételek alapján.
@@ -851,14 +850,15 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
                     rekordok.Add(row.Cells[0].Value.ToÉrt_Int());
 
-                List<Adat_Eszterga_Muveletek> TorlesRekord = new List<Adat_Eszterga_Muveletek>();
+                List<Adat_Eszterga_Muveletek> TorlesAdatok = new List<Adat_Eszterga_Muveletek>();
 
                 foreach (int Id in rekordok)
                 {
                     Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == Id);
                     if (rekord != null)
-                        TorlesRekord.Add(new Adat_Eszterga_Muveletek(Id));
+                        TorlesAdatok.Add(new Adat_Eszterga_Muveletek(Id));
                 }
+                Kez_Muvelet.Torles(TorlesAdatok, true);
                 Eszterga_Valtozas?.Invoke();
                 TablaListazasMuvelet();
                 TablaListazasMuveletUtolag();
@@ -1149,28 +1149,23 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:Ez annyiszor fut le ahány sor változott?
+        //kesz
         /// <summary>
-        /// A táblázat formázási eseménye során beállítja a "Státusz" oszlop alapján a sorok megjelenítését (pl. törölt sorok színezése).
-        /// Csak akkor hajtódik végre, ha a forrás egy megfelelő típusú adatgrid.
+        /// Eseménykezelő, amely a TablaMuvelet DataGridView adatforrásának kötése után hívódik meg.
+        /// Meghívja a ToroltTablaSzinezes metódust, hogy a törölt státuszú sorokat megjelenítési színezéssel lássa el.
         /// </summary>
-        /// 
-        //ne a cellformattingot hanem az elso oldalon levot sima style a szinezes
-        private void TáblaMűvelet_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void TablaMuvelet_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            if (sender is Zuby.ADGV.AdvancedDataGridView tabla)
-                ToroltTablaSzinezes(tabla, e, "Státusz");
+            ToroltTablaSzinezes(TablaMuvelet);
         }
-
         /// <summary>
-        /// A táblázat sorainak formázását végzi a "Státusz" oszlop alapján.  
-        /// Ha a sor törölt, a megjelenítése módosul. Csak akkor történik meg, ha a forrás megfelelő típus.
+        /// Eseménykezelő, amely a TablaUtolagMuvelet DataGridView adatforrásának kötése után hívódik meg.
+        /// Meghívja a ToroltTablaSzinezes metódust, hogy a törölt státuszú sorokat megjelenési színezéssel lássa el.
         /// </summary>
-        private void TáblaUtólagMűvelet_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void TablaUtolagMuvelet_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            if (sender is Zuby.ADGV.AdvancedDataGridView tabla)
-                ToroltTablaSzinezes(tabla, e, "Státusz");
+            ToroltTablaSzinezes(TablaUtolagMuvelet);
         }
-
         private void TáblaUtólagMűvelet_SelectionChanged(object sender, EventArgs e)
         {
             if (TablaUtolagMuvelet.Focused && TablaUtolagMuvelet.SelectedRows.Count == 1)

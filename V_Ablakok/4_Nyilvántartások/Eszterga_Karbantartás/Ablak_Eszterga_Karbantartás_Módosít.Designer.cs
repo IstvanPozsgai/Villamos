@@ -239,7 +239,7 @@
             this.TablaMuvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TablaMuvelet.TabIndex = 28;
             this.TablaMuvelet.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            this.TablaMuvelet.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TáblaMűvelet_CellFormatting);
+            this.TablaMuvelet.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.TablaMuvelet_DataBindingComplete);
             this.TablaMuvelet.SelectionChanged += new System.EventHandler(this.Tábla_SelectionChanged);
             // 
             // toolTip1
@@ -516,7 +516,7 @@
             this.TablaUtolagMuvelet.Size = new System.Drawing.Size(656, 204);
             this.TablaUtolagMuvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TablaUtolagMuvelet.TabIndex = 47;
-            this.TablaUtolagMuvelet.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.TáblaUtólagMűvelet_CellFormatting);
+            this.TablaUtolagMuvelet.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.TablaUtolagMuvelet_DataBindingComplete);
             this.TablaUtolagMuvelet.SelectionChanged += new System.EventHandler(this.TáblaUtólagMűvelet_SelectionChanged);
             // 
             // LblDatumUtolag
