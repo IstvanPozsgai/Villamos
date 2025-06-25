@@ -116,10 +116,17 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:mit csinálunk itt?
-        //kesz felig
+        //kesz
         /// <summary>
-        /// A kiválasztott egység típusától függően engedélyezi vagy tiltja az űrlap mezőit, 
-        /// valamint előtölti az utolsó ismert dátumot vagy üzemóra értéket.
+        /// Beállítja az űrlap különböző mezőinek engedélyezettségét és értékeit az adott egység típusának megfelelően.
+        /// A metódus az egység típusától függően engedélyezi vagy letiltja a napi és üzemóra mezőket, valamint az utolsó üzemóra állás és utolsó dátum mezőket.
+        /// Három egységtípus kezelése történik:
+        /// Dátum
+        /// Csak a dátum alapú beállítás engedélyezett, az üzemóra mezők tiltva és értékük 0-ra állítva. Az utolsó üzemóra állás értéke a hozzá tartozó rekord alapján töltődik
+        /// Üzemóra
+        /// Csak az üzemóra mezők engedélyezettek, a dátum mező letiltva és az érték 1900.01.01-re állítva vagy az üzemóra alapján lekért rekord dátumára.
+        /// Bekövetkezés
+        /// Mind a dátum, mind az üzemóra mezők engedélyezettek, nincs tiltás.
         /// </summary>
         private void EgysegEllenorzes(string Egyseg)
         {
@@ -183,10 +190,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             try
             {
                 CmbxEgység.SelectedItem = EsztergaEgyseg.Bekövetkezés;
-                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
-                int KovetkezoID = AdatokMuvelet.Any() ? AdatokMuvelet.Max(a => a.ID) + 1 : 1;
                 // JAVÍTANDÓ:miért kell tudnunk itt , hogy mi az ID? kezelőben a helye
-                TxtBxId.Text = KovetkezoID.ToStrTrim();
+                //kesz
+                TxtBxId.Text = Kez_Muvelet.Sorszam().ToStrTrim();
                 EgysegEllenorzes(EsztergaEgyseg.Bekövetkezés.ToStrTrim());
             }
             catch (HibásBevittAdat ex)
@@ -680,20 +686,17 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     return AdatokUzemora.FirstOrDefault(u => u.Uzemora == uzemora && !u.Státus);
                 if (egyseg == EsztergaEgyseg.Dátum)
                     return AdatokUzemora.FirstOrDefault(u => u.Dátum.Date == datum.Date && !u.Státus);
-
-                return null;
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                throw;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw;
             }
+            return null;
         }
 
         /// <summary>
@@ -739,12 +742,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             try
             {
                 long ElozoUzemora = (from a in AdatokUzemora
-                                     where a.Dátum < UjDatum && a.Státus == false
+                                     where a.Dátum < UjDatum && !a.Státus
                                      orderby a.Dátum descending
                                      select a.Uzemora).FirstOrDefault();
 
                 long UtanaUzemora = (from a in AdatokUzemora
-                                     where a.Dátum > UjDatum && a.Státus == false
+                                     where a.Dátum > UjDatum && !a.Státus
                                      orderby a.Dátum
                                      select a.Uzemora).FirstOrDefault();
 
@@ -756,20 +759,17 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                   UjDatum,
                                                   UjStatus);
                 Kez_Uzemora.Rogzites(ADAT);
-
-                return true;
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                throw;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw;
             }
+            return true;
         }
 
         #endregion
@@ -837,7 +837,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                
                 TxtBxEllenorzes();
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
@@ -866,7 +865,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 TorlesEllenorzes();
                 Btn_Törlés.Visible = false;
                 MessageBox.Show("Az adatok törlése megtörtént.", "Törölve.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
             catch (HibásBevittAdat ex)
             {
