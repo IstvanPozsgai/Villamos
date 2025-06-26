@@ -288,8 +288,6 @@
             this.Tabla.Size = new System.Drawing.Size(1174, 596);
             this.Tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tabla.TabIndex = 196;
-            this.Tabla.SortStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.SortEventArgs>(this.Tábla_SortStringChanged);
-            this.Tabla.FilterStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.FilterEventArgs>(this.Tábla_FilterStringChanged);
             this.Tabla.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellEndEdit);
             // 
             // Btn_Pdf

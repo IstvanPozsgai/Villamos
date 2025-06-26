@@ -21,8 +21,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         public event Event_Kidobó Eszterga_Valtozas;
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         private bool frissul = false;
-        readonly DataTable AdatTabla = new DataTable();
-        readonly DataTable AdatTablaUtolag = new DataTable();
+        DataTable AdatTabla = new DataTable();
+        DataTable AdatTablaUtolag = new DataTable();
         DataTable AdatTablaNaplo = new DataTable();
         #endregion
 
@@ -229,6 +229,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
+                TablaMuvelet.DataSource = null;
+                AdatTabla = new DataTable();
                 AdatTabla.Columns.Clear();
                 AdatTabla.Columns.Add("Sorszám");
                 AdatTabla.Columns.Add("Művelet");
@@ -306,21 +308,24 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                // Az eredeti táblát megtartjuk, de ideiglenes klónban építjük fel a tartalmat
-                DataTable IdeiglenesTabla = new DataTable();
-                IdeiglenesTabla.Columns.Add("Művelet Sorszáma");
-                IdeiglenesTabla.Columns.Add("Művelet");
-                IdeiglenesTabla.Columns.Add("Utolsó Dátum");
-                IdeiglenesTabla.Columns.Add("Utolsó Üzemóra");
-                IdeiglenesTabla.Columns.Add("Megjegyzés");
-                IdeiglenesTabla.Columns.Add("Rögzítő");
-                IdeiglenesTabla.Columns.Add("Rögzítés Dátuma");
+                TablaNaplo.DataSource = null;
+                AdatTablaNaplo = new DataTable();
+                AdatTablaNaplo.Columns.Add("Művelet Sorszáma");
+                AdatTablaNaplo.Columns.Add("Művelet");
+                AdatTablaNaplo.Columns.Add("Utolsó Dátum");
+                AdatTablaNaplo.Columns.Add("Utolsó Üzemóra");
+                AdatTablaNaplo.Columns.Add("Megjegyzés");
+                AdatTablaNaplo.Columns.Add("Rögzítő");
+                AdatTablaNaplo.Columns.Add("Rögzítés Dátuma");
 
-                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok();
+                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok()
+                    .OrderBy(a => a.Utolsó_Dátum)
+                    .ThenBy(a => a.ID)
+                    .ToList();
 
                 foreach (Adat_Eszterga_Muveletek_Naplo rekord in AdatokMuveletNaplo)
                 {
-                    DataRow sor = IdeiglenesTabla.NewRow();
+                    DataRow sor = AdatTablaNaplo.NewRow();
 
                     sor["Művelet Sorszáma"] = rekord.ID;
                     sor["Művelet"] = rekord.Művelet;
@@ -330,17 +335,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     sor["Rögzítő"] = rekord.Rögzítő;
                     sor["Rögzítés Dátuma"] = rekord.Rögzítés_Dátuma.ToShortDateString();
 
-                    IdeiglenesTabla.Rows.Add(sor);
+                    AdatTablaNaplo.Rows.Add(sor);
                 }
-
-                IEnumerable<DataRow> rendezettAdatok = IdeiglenesTabla.AsEnumerable()
-                    .OrderBy(sor => DateTime.Parse(sor["Utolsó Dátum"].ToStrTrim()))
-                    .ThenBy(sor => int.Parse(sor["Művelet Sorszáma"].ToStrTrim()));
-
-                // Eredeti táblát újratöltjük friss, tiszta sorokkal
-                AdatTablaNaplo = IdeiglenesTabla.Clone(); // struktúra másolása
-                foreach (DataRow sor in rendezettAdatok)
-                    AdatTablaNaplo.ImportRow(sor);
 
                 TablaNaplo.DataSource = AdatTablaNaplo;
 
@@ -387,6 +383,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
+                TablaUtolagMuvelet.DataSource = null;
+                AdatTablaUtolag = new DataTable();
                 AdatTablaUtolag.Columns.Clear();
                 AdatTablaUtolag.Columns.Add("Sorszám");
                 AdatTablaUtolag.Columns.Add("Művelet");

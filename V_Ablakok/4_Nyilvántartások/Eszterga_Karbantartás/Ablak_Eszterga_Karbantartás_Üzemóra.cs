@@ -21,7 +21,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
     public partial class Ablak_Eszterga_Karbantartás_Üzemóra : Form
     {
         #region Osztályszintű elemek
-        readonly private DataTable AdatTabla = new DataTable();
+        DataTable AdatTabla = new DataTable();
         public event Event_Kidobo Eszterga_Valtozas;
         // JAVÍTANDÓ:?
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
@@ -104,6 +104,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
+                Tabla.DataSource = null;
+                AdatTabla = new DataTable();
                 AdatTabla.Columns.Clear();
                 AdatTabla.Rows.Clear();
                 AdatTabla.Columns.Add("ID");
