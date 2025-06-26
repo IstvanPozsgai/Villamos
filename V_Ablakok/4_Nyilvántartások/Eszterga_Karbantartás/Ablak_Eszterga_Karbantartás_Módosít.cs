@@ -19,6 +19,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
     {
         #region Osztalyszintű elemek
         public event Event_Kidobó Eszterga_Valtozas;
+        // JAVÍTANDÓ:
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         private bool frissul = false;
         DataTable AdatTabla = new DataTable();
@@ -118,8 +119,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             Bekövetkezés = 3
         }
 
-        // JAVÍTANDÓ:mit csinálunk itt?
-        //kesz
         /// <summary>
         /// Beállítja az űrlap különböző mezőinek engedélyezettségét és értékeit az adott egység típusának megfelelően.
         /// A metódus az egység típusától függően engedélyezi vagy letiltja a napi és üzemóra mezőket, valamint az utolsó üzemóra állás és utolsó dátum mezőket.
@@ -205,7 +204,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 CmbxEgység.SelectedItem = EsztergaEgyseg.Bekövetkezés;
                 // JAVÍTANDÓ:miért kell tudnunk itt , hogy mi az ID? kezelőben a helye
-                //kesz
+                //Nem ezt beszéltük meg.
                 TxtBxId.Text = Kez_Muvelet.Sorszam().ToStrTrim();
                 EgysegEllenorzes(EsztergaEgyseg.Bekövetkezés.ToStrTrim());
             }
@@ -299,8 +298,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TablaMuvelet.Columns["Utolsó Üzemóra"].Width = 160;
         }
 
-        // JAVÍTANDÓ:try?
-        //kesz
         /// <summary>
         /// A karbantartási műveletek naplóbejegyzései betöltése és megjelenítése a TáblaMűveletbe
         /// </summary>
@@ -477,6 +474,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 // JAVÍTANDÓ:a true mikor lesz false?
                 //kesz
                 //A törlésnél megvan hivva és ott nem lehet uj adatot torolni szoval ezert ezeket kihagyja, és alapértelmezetten false
+                //olvasd el mégegyszer!!!!!!!!!!!!
                 if (true)
                 {
                     string Egyseg = CmbxEgység.SelectedItem?.ToStrTrim();
@@ -523,9 +521,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
-        // JAVÍTANDÓ:miért nem a kezelőben oldod meg?
-        //kesz
-
         /// <summary>
         /// Kiválasztja a kijelölt sorokat a TáblaMűveletből, és visszaadja az id-jük alapján a megfelelő rekordokat
         /// az adatbázisból.
@@ -546,17 +541,17 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                       where a.ID == id
                                                       select a).FirstOrDefault();
 
-                        rekordok.Add(rekord);
-                    //Kesz
-                    // JAVÍTANDÓ:erről szerintem beszéltünk, ha a felhasználó kijelölte és nincs adatbátisban a következő listázáskor úgyis fog értesülni róla
+                    rekordok.Add(rekord);
                 }
 
                 return rekordok;
+
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 throw;
+                // JAVÍTANDÓ:
             }
             catch (Exception ex)
             {
@@ -592,7 +587,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (NincsValtozas)
                     return false;
                 // JAVÍTANDÓ:Mikor lesz igaz?
-                //kesz
+                //Ezt még gondold át mégegyszer van egyszerűbb megoldás is
             }
             catch (HibásBevittAdat ex)
             {
@@ -606,6 +601,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             return Muvelet;
         }
 
+        // JAVÍTANDÓ:Akkor tulajdonképpen táblát színez
         /// <summary>
         /// Színezi a táblázat sorait a státusz alapján, ha a státusz "Törölt".
         /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
@@ -669,6 +665,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            // JAVÍTANDÓ:Ez miért kell?
             return null;
         }
 
@@ -742,6 +739,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            // JAVÍTANDÓ:Ez miért kell?
             return true;
         }
 
@@ -764,8 +762,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (!UjRekord && !ModositasEll(true))
                     throw new HibásBevittAdat("Nem történt változás.");
 
-                // JAVÍTANDÓ:mi a különbség a két adat között?
-                //kesz
+                // JAVÍTANDÓ: Nem azt mondtam, hogy nem vezethetsz be új változót
                 if (!AdatokMuvelet.Any(a => a.ID == TxtBxId.Text.ToÉrt_Int()))
                     TxtBxId.Text = Kez_Muvelet.Sorszam().ToStrTrim();
 
@@ -813,8 +810,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 TxtBxEllenorzes();
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
-                    // JAVÍTANDÓ:erre miért van szükség 
-                    //kesz
                     if (row.Cells[5].Value.ToStrTrim() == "Törölt")
                         throw new HibásBevittAdat("Csak olyan sorokat lehet törölni, amik nincsenek törölve.");
 
@@ -1230,14 +1225,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 frissul = true;
 
                 DateTime ValasztottDatum;
-
+                // JAVÍTANDÓ:ez miért van itt try-catch? Megint bonyolítasz
                 try { ValasztottDatum = DtmPckrUtolsóDátum.Value.Date; }
                 catch { return; }
-                // JAVÍTANDÓ:try
-                //kesz
                 if (ValasztottDatum > DateTime.Today)
                     throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
-                 
+
                 UzemoraKiolvasasEsBeiras(ValasztottDatum, TxtBxUtolsóÜzemóraÁllás);
             }
             catch (HibásBevittAdat ex)
@@ -1266,8 +1259,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (frissul) return;
 
                 frissul = true;
-                // JAVÍTANDÓ:try
-                //kesz
                 if (!long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out long ValasztottUzemora))
                     throw new HibásBevittAdat("Csak pozitív egész szám lehet az üzemóra állásánál.");
 
@@ -1344,6 +1335,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private bool UtolagNaploModositas()
         {
+            // JAVÍTANDÓ:
             try
             {
                 if (TablaNaplo.SelectedRows.Count == 0)
@@ -1381,8 +1373,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         Program.PostásNév.ToStrTrim(),
                         DateTime.Today
                     );
-                    // JAVÍTANDÓ:tehát módosítás
-                    //kesz
                     Kez_Muvelet_Naplo.UtolagModositas(modositott, eredetiDatum);
                 }
                 return true;

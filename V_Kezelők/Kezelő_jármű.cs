@@ -361,11 +361,22 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE állománytábla SET ";
-                szöveg += $"valóstípus='{Adat.Valóstípus}', ";
-                szöveg += $"valóstípus2='{Adat.Valóstípus2}', ";
-                szöveg += $"üzembehelyezés='{Adat.Üzembehelyezés:yyyy.MM.dd}' ";
-                szöveg += $"where [azonosító] ='{Adat.Azonosító}'";
+                string szöveg;
+                if (Telephely == "Főmérnökség")
+                {
+                    szöveg = "UPDATE állománytábla SET ";
+                    szöveg += $"valóstípus='{Adat.Valóstípus}', ";
+                    szöveg += $"valóstípus2='{Adat.Valóstípus2}', ";
+                    szöveg += $"üzembehelyezés='{Adat.Üzembehelyezés:yyyy.MM.dd}' ";
+                    szöveg += $"where [azonosító] ='{Adat.Azonosító}'";
+                }
+                else
+                {
+                    szöveg = "UPDATE állománytábla SET ";
+                    szöveg += $"valóstípus='{Adat.Valóstípus}', ";
+                    szöveg += $"valóstípus2='{Adat.Valóstípus2}' ";
+                    szöveg += $"where [azonosító] ='{Adat.Azonosító}'";
+                }
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

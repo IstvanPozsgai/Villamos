@@ -10,13 +10,7 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Kezelők
 {
-    // JAVÍTANDÓ:Egy kezelő egy fájl.
-    //kesz
-    // táblanév legyen    Tabla_Muvelet helyett egységesen
-    //kesz
-    // a fájl létrehozását a kezelő végzi
-    //kesz
-
+    // JAVÍTANDÓ:
     //sok módosítás
     //meg nincs kesz
     public class Kezelo_Eszterga_Muveletek
@@ -24,10 +18,12 @@ namespace Villamos.Villamos_Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb".KönyvSzerk();
         readonly string jelszo = "bozaim";
         readonly string tablaNev = "Műveletek";
+
         public Kezelo_Eszterga_Muveletek()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartás(hely);
         }
+
         public List<Adat_Eszterga_Muveletek> Lista_Adatok()
         {
             string szoveg = $"SELECT * FROM {tablaNev} ORDER BY ID  ";
@@ -133,6 +129,7 @@ namespace Villamos.Villamos_Kezelők
             }
             return valasz;
         }
+
         public void Modositas(List<Adat_Eszterga_Muveletek> Adatok)
         {
             try

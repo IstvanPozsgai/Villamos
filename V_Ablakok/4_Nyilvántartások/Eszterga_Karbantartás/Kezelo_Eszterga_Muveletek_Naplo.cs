@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -17,6 +14,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         readonly string jelszo = "bozaim";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{DateTime.Now.Year}_Napló.mdb".KönyvSzerk();
         readonly string tablaNev = "Műveletek_Napló";
+
+        // JAVÍTANDÓ:Nem jó, hogyan fogjuk a tavalyi adatokat olvasni, itt csak az aktuális év adatai vannak
+
         public Kezelo_Eszterga_Muveletek_Naplo()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartas_Naplo(hely);

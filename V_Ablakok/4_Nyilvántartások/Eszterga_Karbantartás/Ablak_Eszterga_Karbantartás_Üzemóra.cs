@@ -33,8 +33,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Kezelők
-        // JAVÍTANDÓ:ha nem kell akkor minek?
-        //kesz
         readonly Kezelo_Eszterga_Muveletek Kez_Muvelet = new Kezelo_Eszterga_Muveletek();
         readonly Kezelo_Eszterga_Uzemora Kez_Uzemora = new Kezelo_Eszterga_Uzemora();
         #endregion
@@ -463,6 +461,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
+                // JAVÍTANDÓ:
                 if (AdatokUzemora.Any(a => a.Dátum.Date == UjDatum && !a.Státus))
                 {
                     MessageBox.Show("Az adott dátumhoz már létezik rekord. Nem hozható létre új.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -478,7 +477,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                                      where a.Dátum > UjDatum && !a.Státus
                                      orderby a.Dátum
                                      select a.Uzemora).FirstOrDefault();
-
+                // JAVÍTANDÓ:
                 if (UjUzemora <= ElozoUzemora || (UtanaUzemora != 0 && UjUzemora >= UtanaUzemora))
                 {
                     MessageBox.Show($"Az üzemóra értéknek az előző: {ElozoUzemora} és következő: {UtanaUzemora} közé kell esnie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -502,6 +501,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            // JAVÍTANDÓ:
             return true;
         }
 
@@ -567,6 +567,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            // JAVÍTANDÓ:
             return true;
         }
 
@@ -596,7 +597,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     return;
 
                 // JAVÍTANDÓ:Ez minek?
-                //kesz
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -615,6 +616,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private bool TablaEllenorzes(int AktivID, long UjUzemora, DateTime UjDatum, bool UjStatus)
         {
+            // JAVÍTANDÓ:
             try
             {
                 Adat_Eszterga_Uzemora AktivRekord = AdatokUzemora.FirstOrDefault(a => a.Dátum == UjDatum && !a.Státus);
@@ -655,6 +657,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private bool UzemoraSzamEllenorzes(long UjUzemora, DateTime UjDatum)
         {
+            // JAVÍTANDÓ:
             try
             {
                 if (UjUzemora <= 0)

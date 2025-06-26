@@ -13,6 +13,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         readonly string jelszo = "bozaim";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
         readonly string Tabla_Uzem = "Üzemóra";
+        // JAVÍTANDÓ:Hogy jön létre a fájl?
+
         public List<Adat_Eszterga_Uzemora> Lista_Adatok()
         {
             string szoveg = $"SELECT * FROM {Tabla_Uzem} ORDER BY Dátum, ID  ";
