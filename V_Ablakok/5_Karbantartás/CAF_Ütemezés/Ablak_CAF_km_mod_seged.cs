@@ -13,6 +13,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
     {
         public event Event_Kidobó Változás;
         public Adat_CAF_Adatok Adat { get; private set; }
+        public double id { get; private set; }
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         
@@ -21,6 +22,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             InitializeComponent();
             Adat = KézAdatok.Lista_Adatok().FirstOrDefault(a=> a.Id == ID);
+            id = ID;
             Start();
         }
 
@@ -49,13 +51,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-
                 if (Adat != null)
                 {
                     Segéd_pályaszám.Text = Adat.Azonosító;
                     Segéd_KM_allas.Text = Adat.Számláló.ToString();
                     Segéd_dátum.Value = Adat.Dátum;
-                    seged_kov_stat.Text = "6- Elvégzett";         
+                    seged_kov_stat.Text = "6 - Elvégzett";         
                 }
             }
             catch (HibásBevittAdat ex)
@@ -72,30 +73,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                ////if (Segéd_Vizsg.Text.Trim() == "") throw new HibásBevittAdat("Vizsgálat neve nem lehet üres.");
-                //if (Segéd_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("A pályaszám mező nem lehet üres.");
-
-                ////if (!int.TryParse(Segéd_darab.Text, out int Darab)) throw new HibásBevittAdat("A darab mező nem lehet üres és pozitív egész számnak kell lennie.");
-                //if (Darab <= 0) throw new HibásBevittAdat("A darab mező nem lehet nullánál kisebb.");
-
-                //for (int i = 0; i < Darab; i++)
-                //{
-                //    DateTime újnap = Segéd_dátum.Value.AddDays(i);
-
-                //    // következő sorszám
-                //    double Segéd_Sorszám = KézAdatok.Sorszám();
-                //    Segéd_KM_allas.Text = Segéd_Sorszám.ToString();
-
-                //    Adat_CAF_Adatok rekord = new Adat_CAF_Adatok(
-                //        0,
-                //        Segéd_pályaszám.Text.Trim(),
-                //        Segéd_Vizsg.Text.Trim(),
-                //        újnap,
-                //        new DateTime(1900, 1, 1), 0, 8, 0, 0, 0,
-                //        "Ütemezési Segéd");
-                //    KézAdatok.Döntés(rekord);
-                //}
-
+                //A rögzítés nem működik még.
+                KézAdatok.Módosítás_StátusEsKm(id, Segéd_KM_allas.Text.ToString());
                 //Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
