@@ -1431,6 +1431,15 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Eseménykezelő, amely a DataGridView adatforrásának kötése után hívódik meg.
+        /// Meghívja a Sorszinezes metódust, hogy a sorokat megjelenítési színezéssel lássa el.
+        /// </summary>
+        private void Tabla_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            SorSzinezes();
+        }
         #endregion
     }
 }

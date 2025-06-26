@@ -37,6 +37,7 @@
             this.Btn_Súgó = new System.Windows.Forms.Button();
             this.Btn_Rögzít = new System.Windows.Forms.Button();
             this.Bttn_Napló_Listáz = new System.Windows.Forms.Button();
+            this.Btn_Pdf = new System.Windows.Forms.Button();
             this.GrpBx = new System.Windows.Forms.GroupBox();
             this.LblÜzemÁtlag = new System.Windows.Forms.Label();
             this.TxtBxNapiUzemoraAtlag = new System.Windows.Forms.TextBox();
@@ -48,7 +49,6 @@
             this.DtmPckrElőTerv = new System.Windows.Forms.DateTimePicker();
             this.LblElőterv = new System.Windows.Forms.Label();
             this.Tabla = new Zuby.ADGV.AdvancedDataGridView();
-            this.Btn_Pdf = new System.Windows.Forms.Button();
             this.GrpBx.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tabla)).BeginInit();
             this.SuspendLayout();
@@ -142,6 +142,20 @@
             this.toolTip1.SetToolTip(this.Bttn_Napló_Listáz, "Napló listázása");
             this.Bttn_Napló_Listáz.UseVisualStyleBackColor = true;
             this.Bttn_Napló_Listáz.Click += new System.EventHandler(this.Btn_Napló_Listáz_Click);
+            // 
+            // Btn_Pdf
+            // 
+            this.Btn_Pdf.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Btn_Pdf.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
+            this.Btn_Pdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Pdf.Image = global::Villamos.Properties.Resources.pdf_32;
+            this.Btn_Pdf.Location = new System.Drawing.Point(144, 22);
+            this.Btn_Pdf.Name = "Btn_Pdf";
+            this.Btn_Pdf.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Pdf.TabIndex = 257;
+            this.toolTip1.SetToolTip(this.Btn_Pdf, "Excel táblázatot készít a táblázat adataiból");
+            this.Btn_Pdf.UseVisualStyleBackColor = true;
+            this.Btn_Pdf.Click += new System.EventHandler(this.Btn_Pdf_Click);
             // 
             // GrpBx
             // 
@@ -289,20 +303,7 @@
             this.Tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tabla.TabIndex = 196;
             this.Tabla.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellEndEdit);
-            // 
-            // Btn_Pdf
-            // 
-            this.Btn_Pdf.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Btn_Pdf.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
-            this.Btn_Pdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn_Pdf.Image = global::Villamos.Properties.Resources.pdf_32;
-            this.Btn_Pdf.Location = new System.Drawing.Point(144, 22);
-            this.Btn_Pdf.Name = "Btn_Pdf";
-            this.Btn_Pdf.Size = new System.Drawing.Size(40, 40);
-            this.Btn_Pdf.TabIndex = 257;
-            this.toolTip1.SetToolTip(this.Btn_Pdf, "Excel táblázatot készít a táblázat adataiból");
-            this.Btn_Pdf.UseVisualStyleBackColor = true;
-            this.Btn_Pdf.Click += new System.EventHandler(this.Btn_Pdf_Click);
+            this.Tabla.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.Tabla_DataBindingComplete);
             // 
             // Ablak_Eszterga_Karbantartás
             // 
