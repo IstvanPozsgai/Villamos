@@ -266,8 +266,30 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelo_Eszterga_Muveletek_Naplo.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelo_Eszterga_Uzemora.cs" />
+=======
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_km_mod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_km_mod.Designer.cs">
+      <DependentUpon>Ablak_Caf_km_mod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_km_mod_seged.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_km_mod_seged.Designer.cs">
+      <DependentUpon>Ablak_CAF_km_mod_seged.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\Homokozó\ExcelUtlity.cs" />
+    <Compile Include="V_Ablakok\Homokozó\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\Homokozó\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+>>>>>>> ed12317 (KM módosítási ablakok implementálása)
     <Compile Include="V_Adatbázis\Adatbázis_Eszterga.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Baross_Mérési_Adatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga.cs" />
@@ -1388,6 +1410,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Év.resx">
       <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_km_mod.resx">
+      <DependentUpon>Ablak_Caf_km_mod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_km_mod_seged.resx">
+      <DependentUpon>Ablak_CAF_km_mod_seged.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.resx">
       <DependentUpon>Ablak_Tulajdonságok_CAF.cs</DependentUpon>

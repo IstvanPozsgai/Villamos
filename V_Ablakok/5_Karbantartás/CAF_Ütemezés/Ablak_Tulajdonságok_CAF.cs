@@ -607,6 +607,7 @@ namespace Villamos
             //  Új_Ablak_CAF_Szín.Változás += Terv_lista_elj;
             Új_Ablak_CAF_Szín.StartPosition = FormStartPosition.CenterScreen;
             Új_Ablak_CAF_Szín.Show();
+
         }
 
         private void Ablak_CAF_Szín_Closed(object sender, FormClosedEventArgs e)
@@ -898,9 +899,9 @@ namespace Villamos
                 Holtart.Be();
                 AdatokCaf = KézAdatok.Lista_Adatok();
 
-                foreach (var item in AdatokCaf)
+                foreach (var item in KézAdatok.Lista_Adatok())
                 {
-                    if (item.Státus == 2)
+                    if (item.Státus <= 2)
                     {
                         KézAdatok.Módosítás_KmRogzitett_E(item.Id);
                     }
@@ -1800,5 +1801,15 @@ namespace Villamos
             Előterv_listázás_excelhez_negát();
         }
         #endregion
+
+        Ablak_Caf_km_mod uj_ablak_Caf_Km_Mod;
+        private void km_modosit_btn_Click(object sender, EventArgs e)
+        {
+            uj_ablak_Caf_Km_Mod?.Close();
+
+            uj_ablak_Caf_Km_Mod = new Ablak_Caf_km_mod();
+            uj_ablak_Caf_Km_Mod.StartPosition = FormStartPosition.CenterScreen;
+            uj_ablak_Caf_Km_Mod.Show();
+        }
     }
 }

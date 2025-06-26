@@ -72,6 +72,7 @@ namespace Villamos
             this.Tábla_elő = new System.Windows.Forms.DataGridView();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.km_modosit_btn = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_elő)).BeginInit();
             this.SuspendLayout();
@@ -137,7 +138,7 @@ namespace Villamos
             // 
             this.Színbeállítás.BackgroundImage = global::Villamos.Properties.Resources.Dtafalonso_Modern_Xp_ModernXP_12_Workstation_Desktop_Colors;
             this.Színbeállítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Színbeállítás.Location = new System.Drawing.Point(1118, 79);
+            this.Színbeállítás.Location = new System.Drawing.Point(1164, 79);
             this.Színbeállítás.Name = "Színbeállítás";
             this.Színbeállítás.Size = new System.Drawing.Size(40, 40);
             this.Színbeállítás.TabIndex = 239;
@@ -468,12 +469,25 @@ namespace Villamos
             // 
             this.timer1.Interval = 500;
             // 
+            // km_modosit_btn
+            // 
+            this.km_modosit_btn.BackgroundImage = global::Villamos.Properties.Resources.Button_Forward_01;
+            this.km_modosit_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.km_modosit_btn.Location = new System.Drawing.Point(1118, 79);
+            this.km_modosit_btn.Name = "km_modosit_btn";
+            this.km_modosit_btn.Size = new System.Drawing.Size(40, 40);
+            this.km_modosit_btn.TabIndex = 241;
+            this.ToolTip1.SetToolTip(this.km_modosit_btn, "Excel tábla színkezelés");
+            this.km_modosit_btn.UseVisualStyleBackColor = true;
+            this.km_modosit_btn.Click += new System.EventHandler(this.km_modosit_btn_Click);
+            // 
             // Ablak_Tulajdonságok_CAF
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.BurlyWood;
             this.ClientSize = new System.Drawing.Size(1268, 333);
+            this.Controls.Add(this.km_modosit_btn);
             this.Controls.Add(this.Caf_Listák);
             this.Controls.Add(this.Színbeállítás);
             this.Controls.Add(this.Alap_adatok);
@@ -554,5 +568,6 @@ namespace Villamos
         internal Button Tábla_frissítés;
         internal Button Előtervet_készít;
         private Timer timer1;
+        internal Button km_modosit_btn;
     }
 }
