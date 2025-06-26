@@ -298,7 +298,6 @@ namespace Villamos.Villamos_Kezelők
             }
         }
 
-
         public void Rendezes()
         {
             List<Adat_Eszterga_Muveletek> rekordok = Lista_Adatok().OrderBy(a => a.ID).ToList();

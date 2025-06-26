@@ -887,6 +887,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:Kezelőben
+        //felig kesz
         /// Két kijelölt rekord sorrendjének felcserélése az adatbázisban.
         /// Ellenőrzi, hogy pontosan két sor van-e kijelölve, majd végrehajtja a cserét, frissíti a táblázatot.
         /// </summary>
