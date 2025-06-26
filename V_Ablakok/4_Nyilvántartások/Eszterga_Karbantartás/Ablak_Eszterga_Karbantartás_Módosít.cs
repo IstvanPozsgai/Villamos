@@ -524,42 +524,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:miért nem a kezelőben oldod meg?
-        /// <summary>
-        /// Az eszterga karbantartási rekordokat rendezi az ID alapján, és szükség esetén módosítja az ID értékeket,
-        /// hogy folyamatosan növekvő sorrendben legyenek.
-        /// </summary>
-        private void Rendezes()
-        {
-            try
-            {
-                List<Adat_Eszterga_Muveletek> rekordok = Kez_Muvelet.Lista_Adatok()
-                    .OrderBy(r => r.ID)
-                    .ToList();
-
-                int KovetkezoID = 1;
-
-                foreach (Adat_Eszterga_Muveletek rekord in rekordok)
-                {
-                    if (rekord.ID != KovetkezoID)
-                    {
-                        Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(rekord.ID);
-                        Kez_Muvelet.Rendezes(ADAT, KovetkezoID);
-                        rekord.ID = KovetkezoID;
-                    }
-
-                    KovetkezoID++;
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        //kesz
 
         /// <summary>
         /// Kiválasztja a kijelölt sorokat a TáblaMűveletből, és visszaadja az id-jük alapján a megfelelő rekordokat
@@ -938,7 +903,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 Adat_Eszterga_Muveletek rekord2 = rekordok[1];
 
                 Kez_Muvelet.MuveletCsere(rekord1, rekord2);
-                Rendezes();
+                Kez_Muvelet.Rendezes();
                 TablaListazasMuvelet();
                 TablaListazasMuveletUtolag();
                 TorlesEllenorzes();
@@ -975,7 +940,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 int MasodikID = masodik.ID;
 
                 Kez_Muvelet.MuveletSorrend(ElsoID, MasodikID);
-                Rendezes();
+                Kez_Muvelet.Rendezes();
                 TablaListazasMuvelet();
                 TablaListazasMuveletUtolag();
                 TorlesEllenorzes();

@@ -297,5 +297,23 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        public void Rendezes()
+        {
+            List<Adat_Eszterga_Muveletek> rekordok = Lista_Adatok().OrderBy(a => a.ID).ToList();
+
+            int ujID = 1;
+            foreach (Adat_Eszterga_Muveletek rekord in rekordok)
+            {
+                if (rekord.ID != ujID)
+                {
+                    Adat_Eszterga_Muveletek adat = new Adat_Eszterga_Muveletek(rekord.ID);
+                    Rendezes(adat, ujID);
+                    rekord.ID = ujID;
+                }
+                ujID++;
+            }
+        }
     }
 }
