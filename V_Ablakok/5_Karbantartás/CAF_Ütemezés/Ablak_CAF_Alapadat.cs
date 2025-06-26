@@ -230,8 +230,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok();
                 Adat_CAF_alap Adat = Adatok.FirstOrDefault(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
 
+                //Lekérem az adatok táblából a tervezési(0)/ütemezési(2) státuszu járműveket, hogy megkapjam az időbeli vizsgálathoz az utolsó rögzített km állást.
                 List<Adat_CAF_Adatok> Caf_Adatok_Tabla = KezCafAdatok.Lista_Adatok();
-                Adat_CAF_Adatok Caf_Adatok_Tabla_Adat = Caf_Adatok_Tabla.FirstOrDefault(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
+                Adat_CAF_Adatok Caf_Adatok_Tabla_Adat = Caf_Adatok_Tabla.Where(a => a.Státus <= 2 )
+                    .FirstOrDefault(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
 
                 if (Adat != null)
                 {
@@ -261,8 +263,17 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Alap_Státus.Checked = Adat.Törölt;
                     Alap_Garancia.Checked = Adat.Garancia;
 
-                    utolso_vizsgalat_km.Text = Caf_Adatok_Tabla_Adat.Számláló.ToString();
-
+                    //Időalapú vizsgálat alatt jeleníti meg az utolsó rögzített km állást.
+                    //Ha nem kap vissza km állást '-' ír, különben kiírja.
+                    if (utolso_vizsgalat_km.Text != "" || utolso_vizsgalat_km != null)
+                    {
+                        utolso_vizsgalat_km.Text = Caf_Adatok_Tabla_Adat.Számláló.ToString();
+                    }
+                    else
+                    {
+                        utolso_vizsgalat_km.Text = "-";
+                    }
+                   
                 }
             }
             catch (HibásBevittAdat ex)
