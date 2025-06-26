@@ -456,6 +456,24 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás_StátusEsKm(double Sorszám, string uj_km)
+        {
+            try
+            {
+                string szöveg = $"UPDATE adatok SET Státus=6 KmRogzitett_e=FALSE Számláló={uj_km} WHERE id={Sorszám}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Törlés(DateTime Dátum, string Azonosító, int státus = 0)
         {
             try
