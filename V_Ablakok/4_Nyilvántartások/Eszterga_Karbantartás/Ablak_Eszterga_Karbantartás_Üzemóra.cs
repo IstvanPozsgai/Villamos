@@ -257,11 +257,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 if (!DatumEllenorzes(UjDatum)) return;
 
-                if (Tabla.SelectedRows.Count == 0)
-                { if (!UjRekordHozzaadasa(UjDatum, UjUzemora, UjStatus)) return; }
+                    if (AdatokUzemora.Any(a => a.Dátum.Date == UjDatum && !a.Státus))
+                        MeglevoRekordModositasa(UjDatum, UjUzemora, UjStatus);
+                    else
+                        UjRekordHozzaadasa(UjDatum, UjUzemora, UjStatus);
 
-                else
-                { if (MeglevoRekordModositasa(UjDatum, UjUzemora, UjStatus)) return; }
                 TablaListazas();
             }
             catch (HibásBevittAdat ex)
@@ -457,16 +457,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// Új üzemóra rekordot hoz létre, ha az adott dátumhoz még nem létezik aktív bejegyzés,
         /// és az üzemóra értéke megfelelő a környező rekordokhoz képest.
         /// </summary>
-        private bool UjRekordHozzaadasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
+        private void UjRekordHozzaadasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
         {
             try
             {
                 // JAVÍTANDÓ:
-                if (AdatokUzemora.Any(a => a.Dátum.Date == UjDatum && !a.Státus))
-                {
-                    MessageBox.Show("Az adott dátumhoz már létezik rekord. Nem hozható létre új.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return false;
-                }
 
                 long ElozoUzemora = (from a in AdatokUzemora
                                      where a.Dátum < UjDatum && !a.Státus
@@ -479,10 +474,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                                      select a.Uzemora).FirstOrDefault();
                 // JAVÍTANDÓ:
                 if (UjUzemora <= ElozoUzemora || (UtanaUzemora != 0 && UjUzemora >= UtanaUzemora))
-                {
-                    MessageBox.Show($"Az üzemóra értéknek az előző: {ElozoUzemora} és következő: {UtanaUzemora} közé kell esnie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return false;
-                }
+                    throw new HibásBevittAdat($"Az üzemóra értéknek az előző: {ElozoUzemora} és következő: {UtanaUzemora} közé kell esnie.");
 
                 Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
                                                   UjUzemora,
@@ -502,7 +494,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             // JAVÍTANDÓ:
-            return true;
         }
 
         /// <summary>
@@ -510,24 +501,27 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// Érvényesítés után elvégzi a törlést és újrarögzítést, ha szükséges.
         /// Az érintett karbantartási műveleteket is frissíti, ha az üzemóra vagy dátum változott.
         /// </summary>
-        private bool MeglevoRekordModositasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
+        private void MeglevoRekordModositasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
         {
             bool UtolsoTorles = false;
             try
             {
+                if (Tabla.SelectedRows.Count == 0)
+                    throw new HibásBevittAdat("Nincs kiválasztott sor a módosításhoz.");
+
                 DataGridViewRow KivalasztottSor = Tabla.SelectedRows[0];
                 int AktivID = KivalasztottSor.Cells[0].Value.ToÉrt_Int();
 
                 if (!UzemoraSzamEllenorzes(UjUzemora, UjDatum))
-                    return false;
+                    return;
 
                 if (!TablaEllenorzes(AktivID, UjUzemora, UjDatum, UjStatus))
-                    return false;
+                    return;
 
                 Adat_Eszterga_Uzemora VanID = AdatokUzemora.FirstOrDefault(a => a.ID == AktivID);
 
                 if (VanID == null)
-                    return false;
+                    return;
 
                 DateTime EredetiDatum = VanID.Dátum;
                 long EredetiUzemora = VanID.Uzemora;
@@ -568,7 +562,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             // JAVÍTANDÓ:
-            return true;
         }
 
         /// <summary>
@@ -660,12 +653,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             // JAVÍTANDÓ:
             try
             {
-                if (UjUzemora <= 0)
-                {
-                    MessageBox.Show("Az üzemóra értékének pozitív egész számnak kell lennie.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return false;
-                }
-
                 Adat_Eszterga_Uzemora ElozoRekord = AdatokUzemora
                     .Where(a => a.Dátum < UjDatum && !a.Státus)
                     .OrderByDescending(a => a.Dátum)
