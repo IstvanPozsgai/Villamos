@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
@@ -36,6 +34,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
         //Van szükség erre a metódusra?
+        // JAVÍTANDÓ: most igen itt kellene szabályozni, hogy ki módosíthatja az adatokat és ki nem.
         private void Jogosultságkiosztás()
         {
             try
@@ -60,9 +59,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Ablak_Caf_km_mod_Load(object sender, EventArgs e)
         {
-           
+
         }
 
+        // JAVÍTANDÓ:nem kell azt szeretnénk látni a táblázatban, hogy melyikek azok a km adatok amiket módosítani kellene:
         private void Lista_Pályaszámokfeltöltése()
         {
             List<Adat_CAF_alap> Adatok = KézAlap.Lista_Adatok(true);
@@ -124,7 +124,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         Tábla_lista.Rows[i].Cells[6].Value = rekord.KM_Sorszám;
                         Tábla_lista.Rows[i].Cells[7].Value = rekord.IDŐ_Sorszám;
                         Tábla_lista.Rows[i].Cells[8].Value = rekord.IDŐvKM;
-                    }          
+                    }
                 }
 
                 Tábla_lista.Visible = true;
@@ -162,8 +162,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
- 
-                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok().Where(a => a.Azonosító == Lista_Pályaszám.SelectedItem.ToString()).ToList();
+
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok().Where(a => a.KmRogzitett_e == true).ToList();
 
                 KiÍrás = "Pályaszám";
                 Holtart.Be(20);
@@ -172,7 +172,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Tábla_lista.Columns.Clear();
                 Tábla_lista.Refresh();
                 Tábla_lista.Visible = false;
-                Tábla_lista.ColumnCount = 12;
+                Tábla_lista.ColumnCount = 10;
 
                 // fejléc elkészítése
                 Tábla_lista.Columns[0].HeaderText = "Pályaszám";
@@ -191,9 +191,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Tábla_lista.Columns[6].Width = 100;
                 Tábla_lista.Columns[7].HeaderText = "Vizsgálat fajta";
                 Tábla_lista.Columns[7].Width = 100;
-                Tábla_lista.Columns[8].HeaderText = "Rögzíthet KM állást";
+                Tábla_lista.Columns[8].HeaderText = "Tervezési KM állás";
                 Tábla_lista.Columns[8].Width = 200;
-
+                // JAVÍTANDÓ:
+                Tábla_lista.Columns[9].HeaderText = "Valós KM állás";
+                Tábla_lista.Columns[9].Width = 200;
 
                 foreach (Adat_CAF_Adatok rekord in Adatok)
                 {
@@ -258,23 +260,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                     break;
                                 }
                         }
-
-                        switch (rekord.KmRogzitett_e)
-                        {
-                            case true:
-                                {
-                                    Tábla_lista.Rows[i].Cells[8].Value = "Igen";
-                                    break;
-                                }
-                            case false:
-                                {
-                                    Tábla_lista.Rows[i].Cells[8].Value = "Nem";
-                                    break;
-                                }
-                        }
+                        Tábla_lista.Rows[i].Cells[8].Value = rekord.Számláló;
+                        Tábla_lista.Rows[i].Cells[9].Value = "0";
 
                         Holtart.Lép();
-                    }      
+                    }
                 }
 
                 Tábla_lista.Visible = true;
@@ -308,12 +298,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
         Ablak_CAF_km_mod_seged uj_ablak_CAF_Km_Mod_Seged;
-
+        // JAVÍTANDÓ:Nem bonyolítanám tovább a rögzítést
         private void button_km_modosit_Click(object sender, EventArgs e)
         {
-            
+
             uj_ablak_CAF_Km_Mod_Seged?.Close();
-            
+
             if (Tábla_lista.SelectedRows.Count > 0)
             {
                 var kivalasztott_villamos = Tábla_lista.SelectedRows[0];

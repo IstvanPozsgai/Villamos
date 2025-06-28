@@ -438,6 +438,7 @@ namespace Villamos.Kezelők
             }
         }
 
+        // JAVÍTANDÓ:Nem kell külön eljárás erre  ezt kell kiegészíteni:Ütemez
         public void Módosítás_KmRogzitett_E(double Sorszám)
         {
             try
@@ -456,6 +457,7 @@ namespace Villamos.Kezelők
             }
         }
 
+        // JAVÍTANDÓ:Ez is felesleges, mert a Módosítás_Státus-t kellene használni kicsit átalakítva
         public void Módosítás_StátusEsKm(double Sorszám, string uj_km)
         {
             try
@@ -538,6 +540,7 @@ namespace Villamos.Kezelők
             }
         }
 
+        // JAVÍTANDÓ:ide
         public void Ütemez(List<Adat_CAF_Adatok_Pót> Adatok)
         {
             try
