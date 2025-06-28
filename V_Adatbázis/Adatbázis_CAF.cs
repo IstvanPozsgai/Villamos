@@ -39,6 +39,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
+            // JAVÍTANDÓ:Nem jó szintaktika, a char (255) után kellene egy vessző
             // Adatok létrehozása
             szöveg = "CREATE TABLE Adatok (";
             szöveg += "[Id] Double,";

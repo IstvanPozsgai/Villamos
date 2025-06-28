@@ -479,7 +479,7 @@ namespace Villamos
             this.km_modosit_btn.TabIndex = 241;
             this.ToolTip1.SetToolTip(this.km_modosit_btn, "Excel tábla színkezelés");
             this.km_modosit_btn.UseVisualStyleBackColor = true;
-            this.km_modosit_btn.Click += new System.EventHandler(this.km_modosit_btn_Click);
+            this.km_modosit_btn.Click += new System.EventHandler(this.Km_modosit_btn_Click);
             // 
             // Ablak_Tulajdonságok_CAF
             // 

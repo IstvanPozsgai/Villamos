@@ -898,7 +898,7 @@ namespace Villamos
 
                 Holtart.Be();
                 AdatokCaf = KézAdatok.Lista_Adatok();
-
+                // JAVÍTANDÓ:Kezelőben
                 foreach (var item in KézAdatok.Lista_Adatok())
                 {
                     if (item.Státus <= 2)
@@ -1802,8 +1802,11 @@ namespace Villamos
         }
         #endregion
 
+        // JAVÍTANDÓ:Be kellene csukni amikor a tulajdonságokat becsukjuk
+        // időközben becsukjuk akkor erre is fel kellene is készíteni
+
         Ablak_Caf_km_mod uj_ablak_Caf_Km_Mod;
-        private void km_modosit_btn_Click(object sender, EventArgs e)
+        private void Km_modosit_btn_Click(object sender, EventArgs e)
         {
             uj_ablak_Caf_Km_Mod?.Close();
 

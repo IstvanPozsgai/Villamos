@@ -232,7 +232,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 //Lekérem az adatok táblából a tervezési(0)/ütemezési(2) státuszu járműveket, hogy megkapjam az időbeli vizsgálathoz az utolsó rögzített km állást.
                 List<Adat_CAF_Adatok> Caf_Adatok_Tabla = KezCafAdatok.Lista_Adatok();
-                Adat_CAF_Adatok Caf_Adatok_Tabla_Adat = Caf_Adatok_Tabla.Where(a => a.Státus <= 2 )
+                Adat_CAF_Adatok Caf_Adatok_Tabla_Adat = Caf_Adatok_Tabla.Where(a => a.Státus <= 2)
                     .FirstOrDefault(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
 
                 if (Adat != null)
@@ -250,6 +250,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Alap_vizsg_sorszám_km.Text = Adat.Utolsó_Km_sorszám.ToString();
                     ALAP_Üzemek_km.Text = Adat.Végezte_km;
                     Alap_dátum_km.Value = Adat.Vizsgdátum_km;
+                    // JAVÍTANDÓ:ezt is úgy kell mint a 266-ban
                     Alap_KM_számláló.Text = Adat.Számláló.ToString();
 
                     Alap_Havi_km.Text = Adat.Havikm.ToString();
@@ -262,7 +263,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Utolsó_vizsgóta.Text = (Adat.KMUkm - Adat.Számláló).ToString();
                     Alap_Státus.Checked = Adat.Törölt;
                     Alap_Garancia.Checked = Adat.Garancia;
-
+                    // JAVÍTANDÓ:mindig kap vissza km állást. Itt azt kellene vizsgálni, hogy azaz óra állás valós vagy tervezett-e.
+                    // Ha valós akkor pl színezze a hátteret zöldre különben pl sárga 
                     //Időalapú vizsgálat alatt jeleníti meg az utolsó rögzített km állást.
                     //Ha nem kap vissza km állást '-' ír, különben kiírja.
                     if (utolso_vizsgalat_km.Text != "" || utolso_vizsgalat_km != null)
@@ -273,7 +275,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     {
                         utolso_vizsgalat_km.Text = "-";
                     }
-                   
+
                 }
             }
             catch (HibásBevittAdat ex)
@@ -561,6 +563,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
         #endregion
 
+        // JAVÍTANDÓ:Erre van szükség?
         private void label13_Click(object sender, EventArgs e)
         {
 
