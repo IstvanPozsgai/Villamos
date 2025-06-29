@@ -326,6 +326,7 @@ namespace Villamos.Villamos_Ablakok
 
         private void Alapra_állítás()
         {
+            // JAVÍTANDÓ:
             Holtart.Be();
             string szöveg = $@"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy H:m:s")}#  AND  pályaszám<>'_'  ORDER BY idő ";
             Naptár_Adatok = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
@@ -348,6 +349,7 @@ namespace Villamos.Villamos_Ablakok
 
         private void Adatok_Rögzítése(int NormaIdő)
         {
+            // JAVÍTANDÓ:
             Holtart.Be();
             string szöveg = $"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy H:m:s")}#  AND  Munkaidő=true   ORDER BY idő";
             Naptár_Adatok_ideig = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
@@ -390,7 +392,7 @@ namespace Villamos.Villamos_Ablakok
             Futóidő -= 30;
 
             //   Ha még van rögzített, de már nincs munkaidővel lefedett akkor azt is rögzítjük
-
+            // JAVÍTANDÓ:
             List<string> SzövegGy = new List<string>();
             while (Futóidő < NormaIdő)
             {
@@ -411,7 +413,7 @@ namespace Villamos.Villamos_Ablakok
         private void Maradék_beírása()
         {
             Holtart.Be();
-
+            // JAVÍTANDÓ:
             //   Ha még van rögzített, de már nincs munkaidővel lefedett akkor azt is rögzítjük
             elem--;
             List<string> SzövegGy = new List<string>();
@@ -439,6 +441,7 @@ namespace Villamos.Villamos_Ablakok
 
         private void Adatok_VisszaÍrása(int kimarad)
         {
+            // JAVÍTANDÓ:
             try
             {
                 Holtart.Be();
@@ -525,7 +528,7 @@ namespace Villamos.Villamos_Ablakok
                 Adatok_VisszaÍrása(i);
 
                 MessageBox.Show("Az adatok törlésre kerültek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (Változás != null) Változás();
+                Változás?.Invoke();
                 this.Close();
             }
             catch (HibásBevittAdat ex)
@@ -543,6 +546,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                // JAVÍTANDÓ:
                 Tevékenység_Vál.Text = "Munkaközi szünet";
                 Tevékenységválasztás();
                 if (Norma_Idő.Text.Trim() == "" || !int.TryParse(Norma_Idő.Text, out int NormaIdő))
@@ -595,6 +599,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                // JAVÍTANDÓ:
                 string helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DátumésIdő.Year}_Igény.mdb";
 
                 string[] darabol = Tevékenység_Vál.Text.Split('=');
@@ -636,6 +641,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                // JAVÍTANDÓ:
                 string szöveg = $"SELECT * FROM Tevékenység WHERE Tevékenység='{Tevékenység_Vál.Text.Trim()}'";
 
 
@@ -674,10 +680,11 @@ namespace Villamos.Villamos_Ablakok
         }
 
 
-        void Töröl_esemény()
+        private void Töröl_esemény()
         {
             try
             {
+                // JAVÍTANDÓ:
                 DateTime Hételső = MyF.Hét_elsőnapja(DátumésIdő);
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(DátumésIdő);
                 Naptár_Adatok?.Clear();
@@ -749,6 +756,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                // JAVÍTANDÓ:
                 string szöveg = $"SELECT * FROM naptár WHERE idő>=#{DátumésIdő.ToString("MM-dd-yyyy HH:m:s")}# ORDER BY idő";
 
 
@@ -822,6 +830,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                // JAVÍTANDÓ:
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
@@ -939,7 +948,7 @@ namespace Villamos.Villamos_Ablakok
 
 
 
-        void Igény_Típus_Feltöltés()
+        private void Igény_Típus_Feltöltés()
         {
             try
             {
@@ -987,6 +996,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                // JAVÍTANDÓ:
                 AdatokIgény.Clear();
                 for (int ii = -1; ii < 1; ii++)
                 {
