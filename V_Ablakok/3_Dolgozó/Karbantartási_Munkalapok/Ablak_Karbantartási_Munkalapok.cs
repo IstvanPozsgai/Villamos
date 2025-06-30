@@ -656,53 +656,7 @@ namespace Villamos.Villamos_Ablakok
         private void Munkalap_Változatnév_SelectedIndexChanged(object sender, EventArgs e)
         {
             Személy.Clear();
-            if (Munkalap_Változatnév.Text.Trim() == "Egyszerűsített")
-                Tábla_Beosztás_feltöltés_Egyszerű();
-            else
-                Tábla_Beosztás_feltöltés();
-        }
-
-        private void Tábla_Beosztás_feltöltés_Egyszerű()
-        {
-            try
-            {
-                Tábla_Beosztás.Rows.Clear();
-                Tábla_Beosztás.Columns.Clear();
-                Tábla_Beosztás.ColumnCount = 2;
-
-                // fejléc elkészítése
-                Tábla_Beosztás.Columns[0].HeaderText = "Csoportosítási elnevezés";
-                Tábla_Beosztás.Columns[0].Width = 250;
-                Tábla_Beosztás.Columns[1].HeaderText = "Dolgozónév";
-                Tábla_Beosztás.Columns[1].Width = 300;
-
-                //Megkeressük, hogy melyik sorszám
-                Adat_technológia_Ciklus AdatCikk = (from a in AdatokCiklus
-                                                    where a.Fokozat == Combo_KarbCiklus.Text.Trim()
-                                                    select a).FirstOrDefault();
-
-                Munka_végzi.Clear();
-                Munka_végzi = (from a in AdatokTechnológia
-                               where a.Karb_ciklus_eleje <= AdatCikk.Sorszám && a.Karb_ciklus_vége >= AdatCikk.Sorszám
-                               orderby a.Szakmai_bontás
-                               select a.Szakmai_bontás
-                               ).Distinct().ToList();
-
-                Tábla_Beosztás.RowCount = Munka_végzi.Count;
-                for (int i = 0; i < Munka_végzi.Count; i++)
-                    Tábla_Beosztás.Rows[i].Cells[0].Value = Munka_végzi[i].Trim();
-
-                kijelölt_sor = -1;
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Tábla_Beosztás_feltöltés();
         }
 
         private void Tábla_Beosztás_feltöltés()
@@ -826,7 +780,6 @@ namespace Villamos.Villamos_Ablakok
 
         private void Munkalap_Változatnév_Feltöltlés()
         {
-
             try
             {
                 if (Járműtípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva járműtípus.");
@@ -836,13 +789,7 @@ namespace Villamos.Villamos_Ablakok
                                        where a.Karbantartási_fokozat == Combo_KarbCiklus.Text.Trim()
                                        orderby a.Végzi
                                        select a.Változatnév).Distinct().ToList();
-
-                //  AdatokVáltozat.OrderBy(a => a.Változatnév).Select(a => a.Változatnév).Distinct().ToList();
-
                 Munkalap_Változatnév.Items.Clear();
-                if (Combo_KarbCiklus.Text.Trim() == "E1" || Combo_KarbCiklus.Text.Trim() == "E2")
-                    Munkalap_Változatnév.Items.Add("Egyszerűsített");
-
                 foreach (string elem in ELemek)
                     Munkalap_Változatnév.Items.Add(elem);
 
@@ -857,8 +804,6 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
         #endregion
 
@@ -981,6 +926,7 @@ namespace Villamos.Villamos_Ablakok
                                                     orderby a.Részegység, a.Munka_utasítás_szám, a.ID
                                                     select a).ToList();
                 KM_korr = 0;
+                //Egyedi munkalapokon kiírja a km adatokat
                 if (CHKKMU.Checked && !csoportos)
                 {
                     //KMU érték
@@ -1031,9 +977,9 @@ namespace Villamos.Villamos_Ablakok
                 sor = Díszesblokk(sor, Verzió);
                 sor = FejlécÁltalános(sor);
                 sor = MunkaFejléc(sor);
+                sor = Fejlécspec(sor);
 
-
-                if (csoportos && Munkalap_Változatnév.Text.Trim() != "Egyszerűsített")
+                if (csoportos)
                 {
                     foreach (string dolgnév in Személy.OrderBy(a => a.Value).Select(a => a.Value).Distinct())
                     {
@@ -1041,15 +987,9 @@ namespace Villamos.Villamos_Ablakok
                     }
                 }
 
-                sor = Fejlécspec(sor);
+                //Tartalom
+                sor = Részletes(munkalap, Adatok, AdatokKivétel, sormagagasság, VÁLTAdatok, sor);
 
-                //----------------
-                //tartalmi változat
-                //----------------
-                if (Munkalap_Változatnév.Text.Trim() != "Egyszerűsített")
-                    sor = Részletes(munkalap, Adatok, AdatokKivétel, sormagagasság, VÁLTAdatok, sor);
-                else
-                    sor = Egyszerűsített(munkalap, sor);
 
                 Holtart.Be(7, MyColor.ColorToHex(Color.Green));
                 //Karbantartó tevékenység
@@ -1061,7 +1001,7 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Lép();
 
                 //Pályaszámok
-                if (csoportos && Munkalap_Változatnév.Text.Trim() == "Egyszerűsített") sor = CsoportosPályaszámok(sor);
+                //   if (csoportos && Munkalap_Változatnév.Text.Trim() == "Egyszerűsített") sor = CsoportosPályaszámok(sor);
                 Holtart.Lép();
 
                 //Megjegyzések
@@ -1272,116 +1212,6 @@ namespace Villamos.Villamos_Ablakok
             return sor;
         }
 
-        private int Egyszerűsített(string munkalap, int sor)
-        {
-            //Munkalap fejléc
-            sor++;
-            MyE.Egyesít(munkalap, "B" + sor + ":I" + sor);
-            MyE.Egyesít(munkalap, "M" + sor + ":O" + sor);
-            MyE.Egyesít(munkalap, "P" + sor + ":Q" + sor);
-            MyE.Kiir("Nr.", $"A{sor}");
-            MyE.Kiir("Munkaköri feladatok elosztása", "B" + sor);
-            MyE.Kiir("Karb. Cikl.", "J" + sor);
-            MyE.Sortörésseltöbbsorba("J" + sor);
-            MyE.Kiir("OK*", "K" + sor);
-            MyE.Kiir("Jav.**", "L" + sor);
-            MyE.Kiir("Utasítást Végrehajtotta***", "M" + sor);
-            MyE.Sortörésseltöbbsorba_egyesített("M" + sor + ":O" + sor);
-            MyE.Kiir("Aláírás", "P" + sor);
-
-            MyE.Rácsoz($"A{sor}:Q{sor}");
-            MyE.Betű($"{sor}:{sor}", false, false, true);
-            MyE.Háttérszín($"A{sor}:Q{sor}", System.Drawing.Color.Gainsboro);
-            MyE.Sormagasság($"{sor}:{sor}", 32);
-
-            Holtart.Be(25, MyColor.ColorToHex(Color.DeepSkyBlue));
-            string előzö = "";
-            string tartalom;
-            sor++;
-            int elsősor = sor;
-
-            for (int i = 0; i < Tábla_Beosztás.Rows.Count; i++)
-            {
-                Holtart.Lép();
-                tartalom = Tábla_Beosztás.Rows[i].Cells[0].Value.ToStrTrim();
-                string[] darabol = tartalom.Split('_');
-
-                if (előzö.Trim() != "" && előzö.Trim() != darabol[0].Trim())
-                {
-                    MyE.Egyesít(munkalap, "B" + elsősor + ":I" + (sor - 1));
-                    MyE.Egyesít(munkalap, "J" + elsősor + ":J" + (sor - 1));
-                    MyE.Kiir(előzö, "B" + elsősor);
-                    MyE.Betű("B" + elsősor, false, false, true);
-                    MyE.Igazít_vízszintes("B" + elsősor, "bal");
-                    MyE.Kiir(Combo_KarbCiklus.Text.Trim(), "J" + elsősor);
-                    MyE.Igazít_vízszintes("J" + elsősor, "közép");
-                    MyE.Rácsoz($"A{elsősor}:Q{(sor - 1)}");
-                    MyE.Sormagasság($"{elsősor}:{sor - 1}", 30);
-
-                    előzö = "";
-                }
-
-                if (darabol.Length == 1)
-                {
-                    MyE.Egyesít(munkalap, "B" + sor + ":I" + sor);
-                    MyE.Egyesít(munkalap, "M" + sor + ":O" + sor);
-                    MyE.Egyesít(munkalap, "P" + sor + ":Q" + sor);
-                    MyE.Kiir((i + 1).ToString(), $"A{sor}");
-                    MyE.Kiir(tartalom, "B" + sor);
-                    MyE.Betű("B" + sor, false, false, true);
-                    MyE.Igazít_vízszintes("B" + sor, "bal");
-                    MyE.Kiir(Combo_KarbCiklus.Text.Trim(), "J" + sor);
-                    MyE.Igazít_vízszintes("J" + sor, "közép");
-
-                    tartalom = Tábla_Beosztás.Rows[i].Cells[1].Value == null ? "" : Tábla_Beosztás.Rows[i].Cells[1].Value.ToStrTrim();
-                    MyE.Kiir(tartalom, "M" + sor);
-                    MyE.Sortörésseltöbbsorba("M" + sor, true);
-
-                    MyE.Rácsoz($"A{sor}:Q{sor}");
-                    MyE.Sormagasság($"{sor}:{sor}", 30);
-
-                    előzö = "";
-                }
-                else
-                {
-                    if (előzö == "")
-                    {
-                        elsősor = sor;
-                        előzö = darabol[0];
-                    }
-                    tartalom = Tábla_Beosztás.Rows[i].Cells[1].Value == null ? "" : Tábla_Beosztás.Rows[i].Cells[1].Value.ToStrTrim();
-                    MyE.Kiir((i + 1).ToString(), $"A{sor}");
-                    MyE.Egyesít(munkalap, "M" + sor + ":O" + sor);
-                    MyE.Egyesít(munkalap, "P" + sor + ":Q" + sor);
-                    MyE.Kiir(tartalom, "M" + sor);
-                    MyE.Sortörésseltöbbsorba("M" + sor, true);
-                }
-                sor++;
-            }
-            //Befejezzük ha nem lett befejezve
-            if (előzö.Trim() != "")
-            {
-                MyE.Egyesít(munkalap, "B" + elsősor + ":I" + (sor - 1));
-                MyE.Egyesít(munkalap, "J" + elsősor + ":J" + (sor - 1));
-                MyE.Kiir(előzö, "B" + elsősor);
-                MyE.Betű("B" + elsősor, false, false, true);
-                MyE.Igazít_vízszintes("B" + elsősor, "bal");
-                MyE.Kiir(Combo_KarbCiklus.Text.Trim(), "J" + elsősor);
-                MyE.Igazít_vízszintes("J" + elsősor, "közép");
-                MyE.Rácsoz("A" + elsősor + ":Q" + (sor - 1));
-                MyE.Sormagasság($"{elsősor}:{sor - 1}", 30);
-            }
-            MyE.Egyesít(munkalap, $"A{sor}:Q{sor + 1}");
-            MyE.Kiir("(***) Aláírásommal igazolom, hogy a felsorolt járműveken, a típusra aktuálisan" +
-                " érvényes Főtechnológia jelölt karbantartási ciklusban előírt feladatait elvégeztem.", $"A{sor}".ToString());
-            MyE.Sormagasság($"{sor}:{sor + 1}", 25);
-            MyE.Betű($"A{sor}", false, true, false);
-            MyE.Sortörésseltöbbsorba_egyesített($"A{sor}".ToString());
-            MyE.Vastagkeret($"A{sor}:Q{sor + 1}");
-
-            sor++;
-            return sor;
-        }
 
         private int Részletes(string munkalap, List<Adat_Technológia_Új> Adatok, List<Adat_Technológia_Kivételek> KivételAdatok, int sormagagasság,
                   List<Adat_Technológia_Változat> VÁLTAdatok, int sor)
