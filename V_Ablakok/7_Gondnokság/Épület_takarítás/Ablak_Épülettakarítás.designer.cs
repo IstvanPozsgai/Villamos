@@ -36,7 +36,7 @@ namespace Villamos
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
@@ -490,10 +490,10 @@ namespace Villamos
             // 
             this.Szemetes.BackgroundImage = global::Villamos.Properties.Resources.szemetes64;
             this.Szemetes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Szemetes.Location = new System.Drawing.Point(425, 304);
+            this.Szemetes.Location = new System.Drawing.Point(425, 307);
             this.Szemetes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Szemetes.Name = "Szemetes";
-            this.Szemetes.Size = new System.Drawing.Size(54, 84);
+            this.Szemetes.Size = new System.Drawing.Size(40, 37);
             this.Szemetes.TabIndex = 203;
             this.ToolTip1.SetToolTip(this.Szemetes, "Van szemetes a helységben");
             this.Szemetes.UseVisualStyleBackColor = true;

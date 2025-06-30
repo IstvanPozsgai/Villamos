@@ -1862,6 +1862,7 @@ namespace Villamos
         {
             try
             {
+                if (Helyiséglista.SelectedIndex < 0) return;
                 Szemetes.Visible = false;
                 KapcsoltHelységFő.Visible = false;
                 KapcsoltHelységAl.Visible = false;
