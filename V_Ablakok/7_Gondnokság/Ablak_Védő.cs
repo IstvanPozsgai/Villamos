@@ -1745,6 +1745,7 @@ namespace Villamos
         private void Mindtöröl_Click(object sender, EventArgs e)
         {
             Lekérd_mindtöröl_esemény();
+            Lekérd_Tábla.DataSource = null;
             Lekérd_Tábla.Rows.Clear();
             Lekérd_Tábla.Columns.Clear();
         }
