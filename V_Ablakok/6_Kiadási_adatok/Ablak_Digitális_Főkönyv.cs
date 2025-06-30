@@ -1197,7 +1197,7 @@ namespace Villamos
                     sor += 1;
                     Tábla1.RowCount = sor + 1;
                     Tábla1.Rows[sor - 1].Cells[0].Value = rekord.Azonosító.Trim();
-                    Tábla1.Rows[sor - 1].Cells[1].Value = rekord.Valóstípus2.Trim();
+                    Tábla1.Rows[sor - 1].Cells[1].Value = rekord.Valóstípus.Trim();
 
                     Adat_Főkönyv_Nap FadatokAzon = Fadatok.FirstOrDefault(a => a.Azonosító.Trim() == rekord.Azonosító.Trim());
                     if (FadatokAzon != null)

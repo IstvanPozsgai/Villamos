@@ -337,7 +337,7 @@ namespace Villamos
                 AdatokJármű = KézJármű.Lista_Adatok(Járműhely, Járműjelszó, Járműszöveg);
 
                 List<string> RészAdat = (from a in AdatokJármű
-                                         select a.Valóstípus2).Distinct().ToList();
+                                         select a.Valóstípus).Distinct().ToList();
 
                 Típus.Items.Clear();
                 Típus.Items.Add("");
@@ -600,7 +600,7 @@ namespace Villamos
                     for (int i = 0; i < FelhasználóTábla.Rows.Count; i++)
                     {
                         string FelhasználóTípusa = FelhasználóTábla.Rows[i].Cells[1].Value.ToStrTrim();
-                        string Szöveg = $"{SzövegAlap} AND valóstípus2 = '{FelhasználóTípusa}' ORDER BY azonosító";
+                        string Szöveg = $"{SzövegAlap} AND valóstípus='{FelhasználóTípusa}' ORDER BY azonosító";
                         AdatokJármű = KézJármű.Lista_Adatok(Járműhely, Járműjelszó, Szöveg);
                         if (AdatokJármű != null)
                             foreach (Adat_Jármű rekord in AdatokJármű)
@@ -736,7 +736,7 @@ namespace Villamos
                 if (AdatJármű != null)
                 {
                     Telephely.Text = AdatJármű.Üzem.Trim();
-                    Típus2.Text = AdatJármű.Valóstípus2.Trim();
+                    Típus2.Text = AdatJármű.Valóstípus.Trim();
                     Listáz();
                 }
                 else
@@ -855,7 +855,7 @@ namespace Villamos
                 AdatokJármű = KézJármű.Lista_Adatok(Járműhely, Járműjelszó, Járműszöveg);
 
                 List<string> RészAdat = (from a in AdatokJármű
-                                         select a.Valóstípus2).Distinct().ToList();
+                                         select a.Valóstípus).Distinct().ToList();
 
                 Típuslista.Items.Clear();
                 Típuslista.BeginUpdate();
@@ -1108,7 +1108,7 @@ namespace Villamos
             {
                 AdatokJármű = KézJármű.Lista_Adatok(Járműhely, Járműjelszó, Járműszöveg);
                 List<string> RészAdat = (from a in AdatokJármű
-                                         select a.Valóstípus2).Distinct().ToList();
+                                         select a.Valóstípus).Distinct().ToList();
                 Típuslista1.Items.Clear();
                 Típuslista1.BeginUpdate();
                 foreach (string rekord in RészAdat)
@@ -1195,7 +1195,7 @@ namespace Villamos
                     k = 0;
                     foreach (string adat in Típuslista1.CheckedItems)
                     {
-                        szöveg += $" valóstípus2='{adat.ToStrTrim()}'";
+                        szöveg += $" valóstípus='{adat.ToStrTrim()}'";
                         k++;
                         if (Típuslista1.CheckedItems.Count > 1 && k != Típuslista1.CheckedItems.Count)
                             szöveg += " OR ";
@@ -1229,7 +1229,7 @@ namespace Villamos
                     LekérdTábla.RowCount++;
                     i = LekérdTábla.RowCount - 1;
                     LekérdTábla.Rows[i].Cells[0].Value = rekord.Azonosító;
-                    LekérdTábla.Rows[i].Cells[1].Value = rekord.Valóstípus2;
+                    LekérdTábla.Rows[i].Cells[1].Value = rekord.Valóstípus;
                     LekérdTábla.Rows[i].Cells[2].Value = rekord.Üzem;
 
                     Lista_Mérés1(rekord, LekérdTábla, i, AdatokKerékMérés, HatárNap);

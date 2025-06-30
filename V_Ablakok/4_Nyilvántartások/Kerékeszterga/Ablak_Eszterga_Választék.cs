@@ -298,8 +298,8 @@ namespace Villamos.Villamos_Ablakok
             try
             {
 
-                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség").OrderBy(a => a.Valóstípus2).ToList();
-                List<string> Típusok = Adatok.Select(a => a.Valóstípus2).Distinct().ToList();
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség").OrderBy(a => a.Valóstípus).ToList();
+                List<string> Típusok = Adatok.Select(a => a.Valóstípus).Distinct().ToList();
 
                 Norm_Típus.Items.Clear();
                 foreach (string Elem in Típusok)
