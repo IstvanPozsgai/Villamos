@@ -288,7 +288,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         utolso_vizsgalat_km.BackColor = Color.Green;
                     }
                     utolso_vizsgalat_km.Text = Caf_Adatok_Tabla_Adat.Számláló.ToString();
-        
+
+                    if (Caf_Adatok_Tabla_Adat.Számláló > Adat.Számláló)
+                    {
+                        vegso_km_tbox.Text = (Caf_Adatok_Tabla_Adat.Számláló+Adat.Havikm).ToString();
+                    }
+                    else
+                    {
+                        vegso_km_tbox.Text = (Adat.Számláló+Adat.Havikm).ToString();
+                    }
 
                 }
             }
@@ -584,5 +592,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
 
         }
+
+     
     }
 }
