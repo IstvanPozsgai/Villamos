@@ -899,13 +899,7 @@ namespace Villamos
                 Holtart.Be();
                 AdatokCaf = KézAdatok.Lista_Adatok();
                 // JAVÍTANDÓ:Kezelőben
-                foreach (var item in KézAdatok.Lista_Adatok())
-                {
-                    if (item.Státus <= 2)
-                    {
-                        KézAdatok.Módosítás_KmRogzitett_E(item.Id);
-                    }
-                }
+                KézAdatok.StatustVizsgal(AdatokCaf);
 
                 List<Adat_CAF_Adatok_Pót> ADATOK = new List<Adat_CAF_Adatok_Pót>();
                 foreach (string elem in Elő_pályaszám.CheckedItems)
@@ -923,7 +917,8 @@ namespace Villamos
                                                     elem,
                                                     Elő_Dátumtól.Value,
                                                     Elő_Dátumig.Value,
-                                                    0);
+                                                    0
+                                                    );
                     }
                     Holtart.Lép();
                 }

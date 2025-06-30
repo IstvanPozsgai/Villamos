@@ -40,6 +40,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
             // JAVÍTANDÓ:Nem jó szintaktika, a char (255) után kellene egy vessző
+            // KÉSZ✔
             // Adatok létrehozása
             szöveg = "CREATE TABLE Adatok (";
             szöveg += "[Id] Double,";
@@ -52,7 +53,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[KM_Sorszám] SHORT,";
             szöveg += "[IDŐ_Sorszám] SHORT,";
             szöveg += "[IDŐvKM] SHORT,";
-            szöveg += "[Megjegyzés]  char (255)";
+            szöveg += "[Megjegyzés]  char (255),";
             szöveg += "[KmRogzitett_e] YESNO))";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
