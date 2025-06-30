@@ -26,9 +26,10 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         private string AktivTablaTipus;
         DataTable AdatTabla = new DataTable();
         // JAVÍTANDÓ:Ez most komoly? Miért szöveg?
-        private const string Alap_Napi_Atlag = "30";
-        private const string Alap_Napi_Szam = "5";
-        private const string Alap_Uzemora_Szam = "8";
+        //kesz
+        private const int Alap_Napi_Atlag = 30;
+        private const int Alap_Napi_Szam = 5;
+        private const int Alap_Uzemora_Szam = 8;
 
         private const int Max_Napok = 100000;
         #endregion
@@ -74,10 +75,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 if (rekord != null)
                 {
                     // JAVÍTANDÓ:     throw 
-                    MessageBox.Show($"A mai napon már rögzítettek üzemóra adatot.\nAz utolsó rögzített üzemóra: {rekord.Uzemora}.",
-                                    "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                     Uzemora = rekord.Uzemora;
+                    throw new HibásBevittAdat($"A mai napon már rögzítettek üzemóra adatot.\nAz utolsó rögzített üzemóra: {rekord.Uzemora}.");
                 }
                 else
                 {
@@ -92,12 +91,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         }
                     }
                 }
-                Jogosultsagkiosztas();
-                TablaListazas();
-                AtlagUzemoraFrissites(30);
-                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
-                Tabla.DataBindingComplete += (s, ev) => SorSzinezes();
-                Tabla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {
@@ -108,6 +101,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            Jogosultsagkiosztas();
+            TablaListazas();
+            AtlagUzemoraFrissites(Alap_Napi_Atlag);
+            Tabla.DataBindingComplete += (s, ev) => SorSzinezes();
+            Tabla.ClearSelection();
         }
 
         /// <summary>
@@ -800,21 +798,19 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 if (EsedekesDatumUzemora.HasValue)
                     return EsedekesDatumUzemora.Value;
-
-                return UtolsoDatum;
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                throw;
                 // JAVÍTANDÓ:
+                //kesz
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw;
             }
+            return UtolsoDatum;
         }
 
         /// <summary>
@@ -823,6 +819,9 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private long BecsultUzemora(DateTime EloDatum)
         {
+            double NapiNovekedes = 0;
+            double NapokEloDatumhoz = 0;
+            Adat_Eszterga_Uzemora UtolsoRekord = null;
             try
             {
                 if (AdatokUzemora == null || AdatokUzemora.Count < 2)
@@ -836,7 +835,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 if (rekord.Count < 2)
                     return 0;
 
-                double NapiNovekedes = 0;
+                NapiNovekedes = 0;
 
                 for (int i = 1; i < rekord.Count; i++)
                 {
@@ -847,25 +846,25 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 NapiNovekedes /= rekord.Count - 1;
                 NapiNovekedes = Math.Floor(NapiNovekedes);
 
-                Adat_Eszterga_Uzemora UtolsoRekord = rekord
-                    .Where(a => !a.Státus)
-                    .LastOrDefault();
+                UtolsoRekord = rekord
+                  .Where(a => !a.Státus)
+                  .LastOrDefault();
 
-                double NapokEloDatumhoz = (EloDatum - UtolsoRekord.Dátum).TotalDays;
-                return UtolsoRekord.Uzemora + (long)(NapiNovekedes * NapokEloDatumhoz);
+                NapokEloDatumhoz = (EloDatum - UtolsoRekord.Dátum).TotalDays;
+
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                throw;
                 // JAVÍTANDÓ:
+                //kesz
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw;
             }
+            return UtolsoRekord.Uzemora + (long)(NapiNovekedes * NapokEloDatumhoz);
         }
 
         /// <summary>
@@ -893,7 +892,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             {
                 //   JAVÍTANDÓ: ez konstans?
                 if (string.IsNullOrEmpty(TxtBxNapiUzemoraAtlag.Text))
-                    TxtBxNapiUzemoraAtlag.Text = "30";
+                    TxtBxNapiUzemoraAtlag.Text = Alap_Napi_Atlag.ToStrTrim();
 
                 DateTime KezdetiDatum = DateTime.Today.AddDays(-Napok);
 
@@ -975,9 +974,9 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
-                TxtBxNapiUzemoraAtlag.Text = Alap_Napi_Atlag;
-                TxtBxNapi.Text = Alap_Napi_Szam;
-                TxtBxÜzem.Text = Alap_Uzemora_Szam;
+                TxtBxNapiUzemoraAtlag.Text = Alap_Napi_Atlag.ToStrTrim();
+                TxtBxNapi.Text = Alap_Napi_Szam.ToStrTrim();
+                TxtBxÜzem.Text = Alap_Uzemora_Szam.ToStrTrim();
                 DtmPckrElőTerv.Value = DateTime.Today;
                 Btn_Rögzít.Visible = true;
                 TablaListazas();
