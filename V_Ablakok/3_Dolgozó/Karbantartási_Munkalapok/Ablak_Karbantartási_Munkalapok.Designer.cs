@@ -76,11 +76,11 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Digitális = new System.Windows.Forms.Button();
+            this.FelExcel = new System.Windows.Forms.Button();
             this.CHKMinta = new System.Windows.Forms.CheckBox();
             this.CHKKMU = new System.Windows.Forms.CheckBox();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Beosztás = new System.Windows.Forms.CheckBox();
-            this.FelExcel = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_Beosztás)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_psz)).BeginInit();
@@ -499,6 +499,7 @@
             this.Chk_utasítás.BackColor = System.Drawing.Color.Silver;
             this.Chk_utasítás.Checked = true;
             this.Chk_utasítás.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.Chk_utasítás.Enabled = false;
             this.Chk_utasítás.Location = new System.Drawing.Point(16, 204);
             this.Chk_utasítás.Name = "Chk_utasítás";
             this.Chk_utasítás.Size = new System.Drawing.Size(162, 24);
@@ -512,6 +513,7 @@
             this.Chk_paraméter.BackColor = System.Drawing.Color.Silver;
             this.Chk_paraméter.Checked = true;
             this.Chk_paraméter.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.Chk_paraméter.Enabled = false;
             this.Chk_paraméter.Location = new System.Drawing.Point(16, 234);
             this.Chk_paraméter.Name = "Chk_paraméter";
             this.Chk_paraméter.Size = new System.Drawing.Size(139, 24);
@@ -543,6 +545,7 @@
             this.Chk_hibássorok.BackColor = System.Drawing.Color.Silver;
             this.Chk_hibássorok.Checked = true;
             this.Chk_hibássorok.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.Chk_hibássorok.Enabled = false;
             this.Chk_hibássorok.Location = new System.Drawing.Point(16, 264);
             this.Chk_hibássorok.Name = "Chk_hibássorok";
             this.Chk_hibássorok.Size = new System.Drawing.Size(220, 24);
@@ -608,6 +611,18 @@
             this.Digitális.UseVisualStyleBackColor = true;
             this.Digitális.Click += new System.EventHandler(this.Digitális_Click);
             // 
+            // FelExcel
+            // 
+            this.FelExcel.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
+            this.FelExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.FelExcel.Location = new System.Drawing.Point(195, 538);
+            this.FelExcel.Name = "FelExcel";
+            this.FelExcel.Size = new System.Drawing.Size(45, 45);
+            this.FelExcel.TabIndex = 244;
+            this.toolTip1.SetToolTip(this.FelExcel, "Munkalap készítés a beállítottaknak megfelelően.");
+            this.FelExcel.UseVisualStyleBackColor = true;
+            this.FelExcel.Click += new System.EventHandler(this.FelExcel_Click);
+            // 
             // CHKMinta
             // 
             this.CHKMinta.AutoSize = true;
@@ -626,6 +641,7 @@
             this.CHKKMU.BackColor = System.Drawing.Color.Silver;
             this.CHKKMU.Checked = true;
             this.CHKKMU.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CHKKMU.Enabled = false;
             this.CHKKMU.Location = new System.Drawing.Point(16, 172);
             this.CHKKMU.Name = "CHKKMU";
             this.CHKKMU.Size = new System.Drawing.Size(219, 24);
@@ -653,18 +669,6 @@
             this.Beosztás.Text = "Beosztás szerint dolgoznak";
             this.Beosztás.UseVisualStyleBackColor = true;
             this.Beosztás.CheckedChanged += new System.EventHandler(this.Beosztás_CheckedChanged);
-            // 
-            // FelExcel
-            // 
-            this.FelExcel.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
-            this.FelExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.FelExcel.Location = new System.Drawing.Point(195, 538);
-            this.FelExcel.Name = "FelExcel";
-            this.FelExcel.Size = new System.Drawing.Size(45, 45);
-            this.FelExcel.TabIndex = 244;
-            this.toolTip1.SetToolTip(this.FelExcel, "Munkalap készítés a beállítottaknak megfelelően.");
-            this.FelExcel.UseVisualStyleBackColor = true;
-            this.FelExcel.Click += new System.EventHandler(this.FelExcel_Click);
             // 
             // Ablak_Karbantartási_Munkalapok
             // 

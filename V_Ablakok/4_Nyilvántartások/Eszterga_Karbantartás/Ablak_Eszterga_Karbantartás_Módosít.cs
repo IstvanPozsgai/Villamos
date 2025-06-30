@@ -452,7 +452,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// Új rekord hozzáadása esetén ellenőrzi, hogy az azonosító már létezik-e az adatbázisban, 
         /// illetve biztosítja, hogy minden mező érvényes adatokat tartalmazzon.
         /// </summary>
-        private void TxtBxEllenorzes(bool ujRekord = false)
+        private void TxtBxEllenorzes(bool ujRekord)
         {
             try
             {
@@ -475,7 +475,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 //kesz
                 //A törlésnél megvan hivva és ott nem lehet uj adatot torolni szoval ezert ezeket kihagyja, és alapértelmezetten false
                 //olvasd el mégegyszer!!!!!!!!!!!!
-                if (true)
+                if (ujRekord)
                 {
                     string Egyseg = CmbxEgység.SelectedItem?.ToStrTrim();
                     bool Nap = int.TryParse(TxtBxMennyiNap.Text, out int MennyiNap);
@@ -807,7 +807,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                TxtBxEllenorzes();
+                TxtBxEllenorzes(false);
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
                     if (row.Cells[5].Value.ToStrTrim() == "Törölt")
