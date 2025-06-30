@@ -30,7 +30,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         void Start()
         {
-            Lista_Pályaszámokfeltöltése();
+            
         }
 
         //Van szükség erre a metódusra?
@@ -63,14 +63,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
         // JAVÍTANDÓ:nem kell azt szeretnénk látni a táblázatban, hogy melyikek azok a km adatok amiket módosítani kellene:
-        private void Lista_Pályaszámokfeltöltése()
-        {
-            List<Adat_CAF_alap> Adatok = KézAlap.Lista_Adatok(true);
-            Lista_Pályaszám.Items.Clear();
-
-            foreach (Adat_CAF_alap item in Adatok)
-                Lista_Pályaszám.Items.Add(item.Azonosító);
-        }
+        // KÉSZ✔       
 
         private void Alapadatok_listázása()
         {
@@ -282,39 +275,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        private void Tábla_lista_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (Tábla_lista.Rows.Count < 1) return;
-            // egész sor színezése ha törölt
-            foreach (DataGridViewRow row in Tábla_lista.Rows)
-            {
-                if (MyF.Szöveg_Tisztítás(row.Cells[5].Value.ToString(), 0, 1) == "9")
-                {
-                    row.DefaultCellStyle.ForeColor = Color.White;
-                    row.DefaultCellStyle.BackColor = Color.IndianRed;
-                    row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
-                }
-            }
-        }
-
         Ablak_CAF_km_mod_seged uj_ablak_CAF_Km_Mod_Seged;
         // JAVÍTANDÓ:Nem bonyolítanám tovább a rögzítést
-        private void button_km_modosit_Click(object sender, EventArgs e)
-        {
-
-            uj_ablak_CAF_Km_Mod_Seged?.Close();
-
-            if (Tábla_lista.SelectedRows.Count > 0)
-            {
-                var kivalasztott_villamos = Tábla_lista.SelectedRows[0];
-                var villamos = kivalasztott_villamos.DataBoundItem as Adat_CAF_Adatok;
-                if (villamos != null)
-                {
-                    uj_ablak_CAF_Km_Mod_Seged = new Ablak_CAF_km_mod_seged(villamos.Id.ToÉrt_Int());
-                    uj_ablak_CAF_Km_Mod_Seged.StartPosition = FormStartPosition.CenterScreen;
-                    uj_ablak_CAF_Km_Mod_Seged.Show();
-                }
-            }
-        }
+        // KÉSZ✔
     }
 }

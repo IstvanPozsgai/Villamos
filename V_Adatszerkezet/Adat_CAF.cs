@@ -232,6 +232,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public DateTime Dátumtól { get; private set; }
         public DateTime Dátumig { get; private set; }
         public int Státus { get; private set; }
+        public bool KmRogzitett_e { get; private set; }
 
         public Adat_CAF_Adatok_Pót(string azonosító, DateTime dátum, int státus)
         {
@@ -246,6 +247,15 @@ namespace Villamos.Villamos_Adatszerkezet
             Dátumtól = dátumtól;
             Dátumig = dátumig;
             Státus = státus;
+        }
+
+        public Adat_CAF_Adatok_Pót(string azonosító, DateTime dátumtól, DateTime dátumig, int státus, bool kmrogzitett_e)
+        {
+            Azonosító = azonosító;
+            Dátumtól = dátumtól;
+            Dátumig = dátumig;
+            Státus = státus;
+            KmRogzitett_e = kmrogzitett_e;
         }
     }
 

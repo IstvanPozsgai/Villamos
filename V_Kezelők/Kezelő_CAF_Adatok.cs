@@ -404,9 +404,14 @@ namespace Villamos.Kezelők
 
         public void Módosítás_Státus(double Sorszám, int státus)
         {
+            string szöveg;
             try
             {
-                string szöveg = $"UPDATE adatok  SET státus={státus} WHERE id={Sorszám}";
+                if (státus == 2)
+                {
+                    szöveg = $"UPDATE adatok  SET státus={státus} WHERE id={Sorszám} AND KmRogzitett_e=TRUE";
+                }
+                szöveg = $"UPDATE adatok  SET státus={státus} WHERE id={Sorszám} AND KmRogzitett_e=FALSE";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -422,9 +427,14 @@ namespace Villamos.Kezelők
 
         public void Módosítás_Státus(double Sorszám, string Azonosító, int státus)
         {
+            string szöveg;
             try
             {
-                string szöveg = $"UPDATE adatok  SET Státus={státus}  WHERE azonosító='{Azonosító}' AND id={Sorszám}";
+                if (státus == 2)
+                {
+                    szöveg = $"UPDATE adatok  SET Státus={státus}  WHERE azonosító='{Azonosító}' AND id={Sorszám} AND KmRogzitett_e=TRUE";
+                }
+                szöveg = $"UPDATE adatok  SET Státus={státus}  WHERE azonosító='{Azonosító}' AND id={Sorszám} AND KmRogzitett_e=FALSE";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -439,42 +449,10 @@ namespace Villamos.Kezelők
         }
 
         // JAVÍTANDÓ:Nem kell külön eljárás erre  ezt kell kiegészíteni:Ütemez
-        public void Módosítás_KmRogzitett_E(double Sorszám)
-        {
-            try
-            {
-                string szöveg = $"UPDATE adatok  SET KmRogzitett_e=TRUE WHERE id={Sorszám}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        // KÉSZ✔
 
         // JAVÍTANDÓ:Ez is felesleges, mert a Módosítás_Státus-t kellene használni kicsit átalakítva
-        public void Módosítás_StátusEsKm(double Sorszám, string uj_km)
-        {
-            try
-            {
-                string szöveg = $"UPDATE adatok SET Státus=6 KmRogzitett_e=FALSE Számláló={uj_km} WHERE id={Sorszám}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        // KÉSZ✔
 
         public void Törlés(DateTime Dátum, string Azonosító, int státus = 0)
         {
@@ -541,6 +519,7 @@ namespace Villamos.Kezelők
         }
 
         // JAVÍTANDÓ:ide
+        // KÉSZ✔
         public void Ütemez(List<Adat_CAF_Adatok_Pót> Adatok)
         {
             try
@@ -550,7 +529,7 @@ namespace Villamos.Kezelők
                 {
                     string szöveg = "UPDATE adatok  SET Státus=2 ";
                     szöveg += $" WHERE azonosító='{Adat.Azonosító}' AND dátum>=#{Adat.Dátumtól:MM-dd-yyyy}# ";
-                    szöveg += $" AND dátum<=#{Adat.Dátumig:MM-dd-yyyy}# AND Státus={Adat.Státus}";
+                    szöveg += $" AND dátum<=#{Adat.Dátumig:MM-dd-yyyy}# AND Státus={Adat.Státus} AND KmRogzitett_e=TRUE";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
@@ -632,5 +611,32 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        //Ez állítja át a jelenleg is adb-ben lévő elemeket True státuszura, a későbbiekben már figyeli az előütemező/módosító metódus.
+        public void StatustVizsgal(List<Adat_CAF_Adatok> Adatok)
+        {
+            try
+            {
+                foreach (Adat_CAF_Adatok item in Adatok)
+                {
+                
+                    if (item.Státus == 2)
+                    {
+                        string szöveg = "UPDATE adatok  SET ";
+                        szöveg += $"KmRogzitett_e=True ";
+                        szöveg += $" WHERE id={item.Id}";
+                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }       
     }
 }

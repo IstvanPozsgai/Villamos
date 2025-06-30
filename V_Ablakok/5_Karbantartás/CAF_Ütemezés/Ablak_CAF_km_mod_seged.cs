@@ -74,7 +74,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             try
             {
                 //A rögzítés nem működik még.
-                KézAdatok.Módosítás_StátusEsKm(id, Segéd_KM_allas.Text.ToString());
+                //KézAdatok.Módosítás_StátusEsKm(id, Segéd_KM_allas.Text.ToString());
                 //Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
@@ -251,6 +252,18 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     ALAP_Üzemek_km.Text = Adat.Végezte_km;
                     Alap_dátum_km.Value = Adat.Vizsgdátum_km;
                     // JAVÍTANDÓ:ezt is úgy kell mint a 266-ban
+                    //KÉSZ✔
+                    //Lekérem az Adatok táblából a villamos utolsó KM alapú vizsgálatának rekordját az Alap tábla segítségével.
+                    //Erre azért van szükség, mivel az Alap táblában vannak az utolsó elvégzett javítások adatai.
+                    Adat_CAF_Adatok Alap_Tabla_Utolso_KM_Alapu = Caf_Adatok_Tabla.FirstOrDefault(a => a.Dátum == Adat.Vizsgdátum_km && a.Vizsgálat == Adat.Utolsó_Km);
+                    if (Alap_Tabla_Utolso_KM_Alapu.KmRogzitett_e)
+                    {
+                        Alap_KM_számláló.BackColor = Color.Red;
+                    }
+                    else
+                    {
+                        Alap_KM_számláló.BackColor = Color.Green;
+                    }
                     Alap_KM_számláló.Text = Adat.Számláló.ToString();
 
                     Alap_Havi_km.Text = Adat.Havikm.ToString();
@@ -265,16 +278,17 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Alap_Garancia.Checked = Adat.Garancia;
                     // JAVÍTANDÓ:mindig kap vissza km állást. Itt azt kellene vizsgálni, hogy azaz óra állás valós vagy tervezett-e.
                     // Ha valós akkor pl színezze a hátteret zöldre különben pl sárga 
-                    //Időalapú vizsgálat alatt jeleníti meg az utolsó rögzített km állást.
-                    //Ha nem kap vissza km állást '-' ír, különben kiírja.
-                    if (utolso_vizsgalat_km.Text != "" || utolso_vizsgalat_km != null)
+                    // KÉSZ✔
+                    if (Caf_Adatok_Tabla_Adat.KmRogzitett_e)
                     {
-                        utolso_vizsgalat_km.Text = Caf_Adatok_Tabla_Adat.Számláló.ToString();
+                        utolso_vizsgalat_km.BackColor = Color.Red;
                     }
                     else
                     {
-                        utolso_vizsgalat_km.Text = "-";
+                        utolso_vizsgalat_km.BackColor = Color.Green;
                     }
+                    utolso_vizsgalat_km.Text = Caf_Adatok_Tabla_Adat.Számláló.ToString();
+        
 
                 }
             }
@@ -564,10 +578,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         #endregion
 
         // JAVÍTANDÓ:Erre van szükség?
-        private void label13_Click(object sender, EventArgs e)
-        {
-
-        }
+        //KÉSZ✔
 
         private void Alap_KM_számláló_TextChanged(object sender, EventArgs e)
         {

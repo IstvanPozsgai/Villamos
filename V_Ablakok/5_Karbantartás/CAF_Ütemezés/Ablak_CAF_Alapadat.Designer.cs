@@ -495,7 +495,7 @@
             this.label13.Size = new System.Drawing.Size(166, 20);
             this.label13.TabIndex = 116;
             this.label13.Text = "Vizsgálatkori KM állás:";
-            this.label13.Click += new System.EventHandler(this.label13_Click);
+            //this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
             // utolso_vizsgalat_km
             // 
