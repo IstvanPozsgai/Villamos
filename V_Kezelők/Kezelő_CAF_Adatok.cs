@@ -50,7 +50,8 @@ namespace Villamos.Kezelők
                                         rekord["IDŐ_Sorszám"].ToÉrt_Int(),
                                         rekord["IDŐvKM"].ToÉrt_Int(),
                                         rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["KmRogzitett_e"].ToÉrt_Bool()
+                                        rekord["KmRogzitett_e"].ToÉrt_Bool(),
+                                        rekord["KmHibas_e"].ToÉrt_Bool()
                                         );
                                 Adatok.Add(Adat);
                             }
@@ -453,7 +454,7 @@ namespace Villamos.Kezelők
             string szöveg;
             try
             {
-                szöveg = $"UPDATE adatok  SET Számláló={Szamlalo}, KmRogzitett_e=FALSE WHERE id={Id}";
+                szöveg = $"UPDATE adatok SET Számláló={Szamlalo} WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -619,7 +620,8 @@ namespace Villamos.Kezelők
                                         rekord["IDŐ_Sorszám"].ToÉrt_Int(),
                                         rekord["IDŐvKM"].ToÉrt_Int(),
                                         rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["KmRogzitett_e"].ToÉrt_Bool()
+                                        rekord["KmRogzitett_e"].ToÉrt_Bool(),
+                                        rekord["KmHibas_e"].ToÉrt_Bool()
                                         );
                                 Adatok.Add(Adat);
                             }
@@ -657,5 +659,40 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }       
+
+        //public void KmHibas_eVizsgal(List<Adat_CAF_Adatok> Adatok)
+        //{
+           
+        //    var Villamos_Palyaszamok = Adatok.GroupBy(a => a.Azonosító)
+        //                                           .ToList();
+        //    try
+        //    {
+        //        for (global::System.Int32 i = 0; i < Villamos_Palyaszamok.Count; i++)
+        //        {
+        //            //Itt a végén azért kell a key, mert a GroupBy miat groupingolva adja vissza kulcs-értékként.
+        //            List<Adat_CAF_Adatok> Vizsgalando_Adatok = Adatok.Where(a => a.Státus == 6 && a.Megjegyzés != "Ütemezési Segéd" && a.Azonosító == Villamos_Palyaszamok[i].Key)
+        //                                  .OrderBy(a => a.Dátum)
+        //                                  .ToList();
+
+        //            for (global::System.Int32 j = 0; j < Vizsgalando_Adatok.Count - 1; j++)
+        //            {
+        //                if (Vizsgalando_Adatok[j].Számláló < Vizsgalando_Adatok[j + 1].Számláló)
+        //                {
+        //                    string szoveg = $"UPDATE adatok SET KmHibas_e=TRUE WHERE id={Vizsgalando_Adatok[j].Id}";
+        //                    MyA.ABMódosítás(hely, jelszó, szoveg);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (HibásBevittAdat ex)
+        //    {
+        //        MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+        //        MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
     }
 }

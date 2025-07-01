@@ -37,10 +37,8 @@
             // 
             // Tablalista
             // 
-            this.Tablalista.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.Tablalista.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tablalista.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Tablalista.FilterAndSortEnabled = true;
             this.Tablalista.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tablalista.Location = new System.Drawing.Point(3, 3);
@@ -73,8 +71,9 @@
             this.BackColor = System.Drawing.Color.BurlyWood;
             this.ClientSize = new System.Drawing.Size(1060, 591);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Ablak_CAF_KM";
             this.Text = "CAF Km Módosítás";
             this.Load += new System.EventHandler(this.Ablak_CAF_KM_Load);

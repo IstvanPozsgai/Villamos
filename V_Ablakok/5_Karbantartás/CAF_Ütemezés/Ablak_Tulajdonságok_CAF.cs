@@ -322,6 +322,7 @@ namespace Villamos
             try
             {
                 List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                
                 Adatok = (from a in Adatok
                           where a.Dátum >= Elő_Dátumtól.Value
                           && a.Dátum <= Elő_Dátumig.Value
@@ -902,7 +903,6 @@ namespace Villamos
                 AdatokCaf = KézAdatok.Lista_Adatok();
                 // JAVÍTANDÓ:Kezelőben
                 KézAdatok.StatustVizsgal(AdatokCaf);
-
                 List<Adat_CAF_Adatok_Pót> ADATOK = new List<Adat_CAF_Adatok_Pót>();
                 foreach (string elem in Elő_pályaszám.CheckedItems)
                 {
