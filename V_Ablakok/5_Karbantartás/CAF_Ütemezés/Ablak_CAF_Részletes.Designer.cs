@@ -161,6 +161,7 @@
             // 
             this.Ütem_Napkm.Location = new System.Drawing.Point(922, 319);
             this.Ütem_Napkm.Name = "Ütem_Napkm";
+            this.Ütem_Napkm.ReadOnly = true;
             this.Ütem_Napkm.Size = new System.Drawing.Size(146, 26);
             this.Ütem_Napkm.TabIndex = 275;
             // 
@@ -177,6 +178,7 @@
             // 
             this.Ütem_KM_futhatmég.Location = new System.Drawing.Point(922, 351);
             this.Ütem_KM_futhatmég.Name = "Ütem_KM_futhatmég";
+            this.Ütem_KM_futhatmég.ReadOnly = true;
             this.Ütem_KM_futhatmég.Size = new System.Drawing.Size(146, 26);
             this.Ütem_KM_futhatmég.TabIndex = 273;
             // 
@@ -193,6 +195,7 @@
             // 
             this.Ütem_havifutás.Location = new System.Drawing.Point(922, 287);
             this.Ütem_havifutás.Name = "Ütem_havifutás";
+            this.Ütem_havifutás.ReadOnly = true;
             this.Ütem_havifutás.Size = new System.Drawing.Size(146, 26);
             this.Ütem_havifutás.TabIndex = 271;
             // 
@@ -200,6 +203,7 @@
             // 
             this.Ütem_km_KMU.Location = new System.Drawing.Point(922, 159);
             this.Ütem_km_KMU.Name = "Ütem_km_KMU";
+            this.Ütem_km_KMU.ReadOnly = true;
             this.Ütem_km_KMU.Size = new System.Drawing.Size(146, 26);
             this.Ütem_km_KMU.TabIndex = 270;
             // 
@@ -243,6 +247,7 @@
             // 
             this.Ütem_KM_felső.Location = new System.Drawing.Point(922, 255);
             this.Ütem_KM_felső.Name = "Ütem_KM_felső";
+            this.Ütem_KM_felső.ReadOnly = true;
             this.Ütem_KM_felső.Size = new System.Drawing.Size(146, 26);
             this.Ütem_KM_felső.TabIndex = 265;
             // 
@@ -250,6 +255,7 @@
             // 
             this.Ütem_KM_alsó.Location = new System.Drawing.Point(922, 223);
             this.Ütem_KM_alsó.Name = "Ütem_KM_alsó";
+            this.Ütem_KM_alsó.ReadOnly = true;
             this.Ütem_KM_alsó.Size = new System.Drawing.Size(146, 26);
             this.Ütem_KM_alsó.TabIndex = 264;
             // 
@@ -257,6 +263,7 @@
             // 
             this.Ütem_KM_névleges.Location = new System.Drawing.Point(922, 191);
             this.Ütem_KM_névleges.Name = "Ütem_KM_névleges";
+            this.Ütem_KM_névleges.ReadOnly = true;
             this.Ütem_KM_névleges.Size = new System.Drawing.Size(146, 26);
             this.Ütem_KM_névleges.TabIndex = 263;
             // 
@@ -273,6 +280,7 @@
             // 
             this.Ütem_névleges_nap.Location = new System.Drawing.Point(922, 502);
             this.Ütem_névleges_nap.Name = "Ütem_névleges_nap";
+            this.Ütem_névleges_nap.ReadOnly = true;
             this.Ütem_névleges_nap.Size = new System.Drawing.Size(146, 26);
             this.Ütem_névleges_nap.TabIndex = 260;
             // 
@@ -280,6 +288,7 @@
             // 
             this.Ütem_Ciklus_IDŐ.Location = new System.Drawing.Point(922, 438);
             this.Ütem_Ciklus_IDŐ.Name = "Ütem_Ciklus_IDŐ";
+            this.Ütem_Ciklus_IDŐ.ReadOnly = true;
             this.Ütem_Ciklus_IDŐ.Size = new System.Drawing.Size(146, 26);
             this.Ütem_Ciklus_IDŐ.TabIndex = 259;
             // 
@@ -287,6 +296,7 @@
             // 
             this.Ütem_Ciklus_KM.Location = new System.Drawing.Point(922, 29);
             this.Ütem_Ciklus_KM.Name = "Ütem_Ciklus_KM";
+            this.Ütem_Ciklus_KM.ReadOnly = true;
             this.Ütem_Ciklus_KM.Size = new System.Drawing.Size(146, 26);
             this.Ütem_Ciklus_KM.TabIndex = 258;
             // 
@@ -295,6 +305,7 @@
             this.Ütem_köv_sorszám.Enabled = false;
             this.Ütem_köv_sorszám.Location = new System.Drawing.Point(397, 63);
             this.Ütem_köv_sorszám.Name = "Ütem_köv_sorszám";
+            this.Ütem_köv_sorszám.ReadOnly = true;
             this.Ütem_köv_sorszám.Size = new System.Drawing.Size(146, 26);
             this.Ütem_köv_sorszám.TabIndex = 255;
             // 
@@ -302,6 +313,7 @@
             // 
             this.Ütem_Köv_IDŐvKM.Location = new System.Drawing.Point(397, 295);
             this.Ütem_Köv_IDŐvKM.Name = "Ütem_Köv_IDŐvKM";
+            this.Ütem_Köv_IDŐvKM.ReadOnly = true;
             this.Ütem_Köv_IDŐvKM.Size = new System.Drawing.Size(146, 26);
             this.Ütem_Köv_IDŐvKM.TabIndex = 254;
             // 
@@ -326,11 +338,13 @@
             // 
             this.Ütem_Köv_Vizsgálat.Location = new System.Drawing.Point(397, 97);
             this.Ütem_Köv_Vizsgálat.Name = "Ütem_Köv_Vizsgálat";
+            this.Ütem_Köv_Vizsgálat.ReadOnly = true;
             this.Ütem_Köv_Vizsgálat.Size = new System.Drawing.Size(146, 26);
             this.Ütem_Köv_Vizsgálat.TabIndex = 251;
             // 
             // Ütem_Köv_Dátum
             // 
+            this.Ütem_Köv_Dátum.Enabled = false;
             this.Ütem_Köv_Dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Ütem_Köv_Dátum.Location = new System.Drawing.Point(397, 132);
             this.Ütem_Köv_Dátum.Name = "Ütem_Köv_Dátum";
@@ -341,6 +355,7 @@
             // 
             this.Ütem_sorszám.Location = new System.Drawing.Point(216, 63);
             this.Ütem_sorszám.Name = "Ütem_sorszám";
+            this.Ütem_sorszám.ReadOnly = true;
             this.Ütem_sorszám.Size = new System.Drawing.Size(146, 26);
             this.Ütem_sorszám.TabIndex = 249;
             // 
@@ -357,6 +372,7 @@
             // 
             this.Ütem_IDŐvKM.Location = new System.Drawing.Point(216, 295);
             this.Ütem_IDŐvKM.Name = "Ütem_IDŐvKM";
+            this.Ütem_IDŐvKM.ReadOnly = true;
             this.Ütem_IDŐvKM.Size = new System.Drawing.Size(146, 26);
             this.Ütem_IDŐvKM.TabIndex = 247;
             // 
@@ -373,6 +389,7 @@
             // 
             this.Ütem_Km_sorszám.Location = new System.Drawing.Point(216, 262);
             this.Ütem_Km_sorszám.Name = "Ütem_Km_sorszám";
+            this.Ütem_Km_sorszám.ReadOnly = true;
             this.Ütem_Km_sorszám.Size = new System.Drawing.Size(146, 26);
             this.Ütem_Km_sorszám.TabIndex = 245;
             // 
@@ -380,6 +397,7 @@
             // 
             this.Ütem_idő_sorszám.Location = new System.Drawing.Point(216, 230);
             this.Ütem_idő_sorszám.Name = "Ütem_idő_sorszám";
+            this.Ütem_idő_sorszám.ReadOnly = true;
             this.Ütem_idő_sorszám.Size = new System.Drawing.Size(146, 26);
             this.Ütem_idő_sorszám.TabIndex = 244;
             // 
@@ -424,6 +442,7 @@
             // 
             this.Ütem_számláló.Location = new System.Drawing.Point(216, 164);
             this.Ütem_számláló.Name = "Ütem_számláló";
+            this.Ütem_számláló.ReadOnly = true;
             this.Ütem_számláló.Size = new System.Drawing.Size(146, 26);
             this.Ütem_számláló.TabIndex = 239;
             // 
@@ -440,11 +459,13 @@
             // 
             this.Ütem_vizsgálat.Location = new System.Drawing.Point(216, 97);
             this.Ütem_vizsgálat.Name = "Ütem_vizsgálat";
+            this.Ütem_vizsgálat.ReadOnly = true;
             this.Ütem_vizsgálat.Size = new System.Drawing.Size(146, 26);
             this.Ütem_vizsgálat.TabIndex = 237;
             // 
             // Ütem_dátum
             // 
+            this.Ütem_dátum.Enabled = false;
             this.Ütem_dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Ütem_dátum.Location = new System.Drawing.Point(216, 132);
             this.Ütem_dátum.Name = "Ütem_dátum";
@@ -473,6 +494,7 @@
             // 
             this.Ütem_Utolsó_futott.Location = new System.Drawing.Point(922, 127);
             this.Ütem_Utolsó_futott.Name = "Ütem_Utolsó_futott";
+            this.Ütem_Utolsó_futott.ReadOnly = true;
             this.Ütem_Utolsó_futott.Size = new System.Drawing.Size(146, 26);
             this.Ütem_Utolsó_futott.TabIndex = 233;
             // 
@@ -489,6 +511,7 @@
             // 
             this.Ütem_számláló_KM.Location = new System.Drawing.Point(922, 95);
             this.Ütem_számláló_KM.Name = "Ütem_számláló_KM";
+            this.Ütem_számláló_KM.ReadOnly = true;
             this.Ütem_számláló_KM.Size = new System.Drawing.Size(146, 26);
             this.Ütem_számláló_KM.TabIndex = 231;
             // 
@@ -505,6 +528,7 @@
             // 
             this.Ütem_vizsgálat_KM.Location = new System.Drawing.Point(922, 63);
             this.Ütem_vizsgálat_KM.Name = "Ütem_vizsgálat_KM";
+            this.Ütem_vizsgálat_KM.ReadOnly = true;
             this.Ütem_vizsgálat_KM.Size = new System.Drawing.Size(146, 26);
             this.Ütem_vizsgálat_KM.TabIndex = 229;
             // 
@@ -541,6 +565,7 @@
             // 
             this.Ütem_vizsgálat_IDŐ.Location = new System.Drawing.Point(922, 470);
             this.Ütem_vizsgálat_IDŐ.Name = "Ütem_vizsgálat_IDŐ";
+            this.Ütem_vizsgálat_IDŐ.ReadOnly = true;
             this.Ütem_vizsgálat_IDŐ.Size = new System.Drawing.Size(146, 26);
             this.Ütem_vizsgálat_IDŐ.TabIndex = 225;
             // 

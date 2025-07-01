@@ -91,6 +91,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public int IDŐvKM { get; private set; }
         public string Megjegyzés { get; private set; }
         public bool KmRogzitett_e { get; private set; }
+        public bool KmHibas_e { get; private set; }
 
         public Adat_CAF_Adatok(double id, string azonosító, string vizsgálat, DateTime dátum, DateTime dátum_program, long számláló, int státus, int kM_Sorszám, int iDŐ_Sorszám, int iDŐvKM, string megjegyzés)
         {
@@ -107,7 +108,7 @@ namespace Villamos.Villamos_Adatszerkezet
             Megjegyzés = megjegyzés;
         }
 
-        public Adat_CAF_Adatok(double id, string azonosító, string vizsgálat, DateTime dátum, DateTime dátum_program, long számláló, int státus, int kM_Sorszám, int iDŐ_Sorszám, int iDŐvKM, string megjegyzés, bool kmRogzitett_e)
+        public Adat_CAF_Adatok(double id, string azonosító, string vizsgálat, DateTime dátum, DateTime dátum_program, long számláló, int státus, int kM_Sorszám, int iDŐ_Sorszám, int iDŐvKM, string megjegyzés, bool kmRogzitett_e, bool kmHibas_e)
         {
             Id = id;
             Azonosító = azonosító;
@@ -121,6 +122,7 @@ namespace Villamos.Villamos_Adatszerkezet
             IDŐvKM = iDŐvKM;
             Megjegyzés = megjegyzés;
             KmRogzitett_e = kmRogzitett_e;
+            KmHibas_e = kmHibas_e;
         }
     }
 
