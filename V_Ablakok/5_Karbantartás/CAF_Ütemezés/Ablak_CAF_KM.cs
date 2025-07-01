@@ -120,6 +120,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                     }
                     Soradat["KM vizsgálat sorszáma"] = villamos.KM_Sorszám;
                     Soradat["Idő vizsgálat sorszáma"] = villamos.IDŐ_Sorszám;
+
+                   
                     AdatTábla.Rows.Add(Soradat);
                 }
             }
