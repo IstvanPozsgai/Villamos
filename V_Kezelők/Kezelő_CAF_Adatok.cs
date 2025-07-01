@@ -639,7 +639,7 @@ namespace Villamos.Kezelők
             {
                 foreach (Adat_CAF_Adatok item in Adatok)
                 {
-                
+
                     if (item.Státus == 2)
                     {
                         string szöveg = "UPDATE adatok  SET ";
@@ -670,6 +670,7 @@ namespace Villamos.Kezelők
                                                    .ToList();
             try
             {
+                List<string> SzövegGy = new List<string>();
                 for (global::System.Int32 i = 0; i < Villamos_Palyaszamok.Count; i++)
                 {
                     //Itt a végén azért kell a key, mert a GroupBy miat groupingolva adja vissza kulcs-értékként.
@@ -682,10 +683,11 @@ namespace Villamos.Kezelők
                         if (Vizsgalando_Adatok[j + 1].Számláló < Vizsgalando_Adatok[j].Számláló)
                         {
                             string szoveg = $"UPDATE adatok SET KmHibas_e=TRUE WHERE id={Vizsgalando_Adatok[j + 1].Id}";
-                            MyA.ABMódosítás(hely, jelszó, szoveg);
+                            SzövegGy.Add(szoveg);
                         }
                     }
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {

@@ -232,7 +232,7 @@ namespace Villamos
         #region Táblázat Listázás    
         private void Tábla_frissítés_Click(object sender, EventArgs e)
         {
-            ListázzaElőtervet();            
+            ListázzaElőtervet();
         }
 
         private void ListázzaElőtervet()
@@ -322,7 +322,7 @@ namespace Villamos
             try
             {
                 List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
-                
+
                 Adatok = (from a in Adatok
                           where a.Dátum >= Elő_Dátumtól.Value
                           && a.Dátum <= Elő_Dátumig.Value
@@ -1808,11 +1808,13 @@ namespace Villamos
         {
             //Ennek készítsek egy külön gombot a megnyílt ablakban?
             KézAdatok.KmHibas_eVizsgal(KézAdatok.Lista_Adatok());
-            
+
             uj_ablak_Caf_Km_Mod?.Close();
 
-            uj_ablak_Caf_Km_Mod = new Ablak_CAF_KM();
-            uj_ablak_Caf_Km_Mod.StartPosition = FormStartPosition.CenterScreen;
+            uj_ablak_Caf_Km_Mod = new Ablak_CAF_KM
+            {
+                StartPosition = FormStartPosition.CenterScreen
+            };
             uj_ablak_Caf_Km_Mod.Show();
         }
 
