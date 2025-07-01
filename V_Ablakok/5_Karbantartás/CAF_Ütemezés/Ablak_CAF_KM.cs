@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -20,6 +21,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
         public Ablak_CAF_KM()
         {
             InitializeComponent();
+            Tablalista.CellValidating += Tablalista_CellValidating;
+            Tablalista.CellEndEdit += Tablalista_CellEndEdit;
         }
 
         private void Ablak_CAF_KM_Load(object sender, EventArgs e)
@@ -39,6 +42,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             ABFeltöltése();
             Tablalista.DataSource = AdatTábla;
             OszlopSzélesség();
+            OszlopEngedelyezes();
             Tablalista.Refresh();
             Tablalista.Visible = true;
             Tablalista.ClearSelection();
@@ -68,7 +72,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             AdatTábla.Clear();
             foreach (Adat_CAF_Adatok villamos in CafAdatok)
             {
-                if (villamos.KmRogzitett_e && villamos.Megjegyzés!= "Ütemezési Segéd")
+                if (villamos.KmRogzitett_e && villamos.Megjegyzés != "Ütemezési Segéd")
                 {
                     DataRow Soradat = AdatTábla.NewRow();
                     Soradat["Pályaszám"] = villamos.Azonosító;
@@ -80,7 +84,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                     Soradat["Idő vizsgálat sorszáma"] = villamos.IDŐ_Sorszám;
                     Soradat["Idő vagy Km vizsgálat"] = villamos.IDŐvKM;
                     AdatTábla.Rows.Add(Soradat);
-                }            
+                }
             }
         }
 
@@ -94,6 +98,65 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             Tablalista.Columns["KM vizsgálat sorszáma"].Width = 100;
             Tablalista.Columns["Idő vizsgálat sorszáma"].Width = 100;
             Tablalista.Columns["Idő vagy Km vizsgálat"].Width = 100;
+        }
+
+        private void OszlopEngedelyezes()
+        {
+            foreach (DataGridViewColumn column in Tablalista.Columns)
+            {
+                if (column.Name == "Számláló állás")
+                {
+                    column.ReadOnly = false;
+                }
+                else
+                {
+                    column.ReadOnly = true;
+                }
+            }
+        }
+
+        private void Tablalista_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (Tablalista.Columns[e.ColumnIndex].Name == "Számláló állás")
+            {
+                if (!int.TryParse(e.FormattedValue.ToString(), out _))
+                {
+                    MessageBox.Show("Kérem csak számot adjon meg a számláló állás mezőben!", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private void Tablalista_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (Tablalista.Columns[e.ColumnIndex].Name == "Számláló állás")
+            {
+                DataGridViewRow sor = Tablalista.Rows[e.RowIndex];
+
+                string azonosito = sor.Cells["Pályaszám"].Value?.ToString() ?? "";
+                string vizsgalat = sor.Cells["Vizsgálat"].Value?.ToString() ?? "";
+                string datum = sor.Cells["Dátum"].Value?.ToString() ?? "";
+                int szamlalo = int.Parse(sor.Cells["Számláló állás"].Value?.ToString() ?? "0");
+
+                Adat_CAF_Adatok villamos = CafAdatok.FirstOrDefault(a => a.Azonosító == azonosito && a.Vizsgálat == vizsgalat && a.Dátum.ToString() == datum);
+
+                if (villamos != null)
+                {
+                    try
+                    {
+                        KézAdatok.Módosítás_Km(villamos.Id, szamlalo);
+                        MessageBox.Show("Módosítás sikeres.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Hiba a mentés során: {ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("A módosítandó rekord nem található.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
         }
     }
 }
