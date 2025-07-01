@@ -119,9 +119,27 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
         {
             if (Tablalista.Columns[e.ColumnIndex].Name == "Számláló állás")
             {
-                if (!int.TryParse(e.FormattedValue.ToString(), out _))
+                string ujErtek = e.FormattedValue?.ToString() ?? "";
+
+                if (!int.TryParse(ujErtek, out int ujSzamlalo))
                 {
                     MessageBox.Show("Kérem csak számot adjon meg a számláló állás mezőben!", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    e.Cancel = true;
+                    return;
+                }
+
+                DataGridViewRow sor = Tablalista.Rows[e.RowIndex];
+
+                string azonosito = sor.Cells["Pályaszám"].Value?.ToString() ?? "";
+                string vizsgalat = sor.Cells["Vizsgálat"].Value?.ToString() ?? "";
+                string datum = sor.Cells["Dátum"].Value?.ToString() ?? "";
+
+                var villamos = CafAdatok.FirstOrDefault(a => a.Azonosító == azonosito && a.Vizsgálat == vizsgalat && a.Dátum.ToString() == datum);
+
+                if (villamos != null && ujSzamlalo < villamos.Számláló)
+                {
+                    MessageBox.Show($"Az új számláló érték nem lehet kisebb, mint a jelenlegi ({villamos.Számláló})!",
+                                    "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     e.Cancel = true;
                 }
             }
@@ -138,7 +156,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                 string datum = sor.Cells["Dátum"].Value?.ToString() ?? "";
                 int szamlalo = int.Parse(sor.Cells["Számláló állás"].Value?.ToString() ?? "0");
 
-                Adat_CAF_Adatok villamos = CafAdatok.FirstOrDefault(a => a.Azonosító == azonosito && a.Vizsgálat == vizsgalat && a.Dátum.ToString() == datum);
+                var villamos = CafAdatok.FirstOrDefault(a => a.Azonosító == azonosito && a.Vizsgálat == vizsgalat && a.Dátum.ToString() == datum);
 
                 if (villamos != null)
                 {

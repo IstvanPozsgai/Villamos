@@ -409,28 +409,9 @@ namespace Villamos.Kezelők
             {
                 if (státus == 2)
                 {
-                    szöveg = $"UPDATE adatok  SET státus={státus} WHERE id={Sorszám} AND KmRogzitett_e=TRUE";
+                    szöveg = $"UPDATE adatok  SET státus={státus}, KmRogzitett_e=TRUE WHERE id={Sorszám}";
                 }
-                szöveg = $"UPDATE adatok  SET státus={státus} WHERE id={Sorszám} AND KmRogzitett_e=FALSE";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosítás_Km(double Id, int Szamlalo)
-        {
-            string szöveg;
-            try
-            {
-                szöveg = $"UPDATE adatok  SET Számláló={Szamlalo} WHERE id={Id}";
+                szöveg = $"UPDATE adatok  SET státus={státus}, KmRogzitett_e=FALSE WHERE id={Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -451,9 +432,28 @@ namespace Villamos.Kezelők
             {
                 if (státus == 2)
                 {
-                    szöveg = $"UPDATE adatok  SET Státus={státus}  WHERE azonosító='{Azonosító}' AND id={Sorszám} AND KmRogzitett_e=TRUE";
+                    szöveg = $"UPDATE adatok  SET Státus={státus}, KmRogzitett_e=TRUE  WHERE azonosító='{Azonosító}' AND id={Sorszám}";
                 }
-                szöveg = $"UPDATE adatok  SET Státus={státus}  WHERE azonosító='{Azonosító}' AND id={Sorszám} AND KmRogzitett_e=FALSE";
+                szöveg = $"UPDATE adatok  SET Státus={státus}, KmRogzitett_e=FALSE  WHERE azonosító='{Azonosító}' AND id={Sorszám}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Km(double Id, int Szamlalo)
+        {
+            string szöveg;
+            try
+            {
+                szöveg = $"UPDATE adatok  SET Számláló={Szamlalo}, KmRogzitett_e=FALSE WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
