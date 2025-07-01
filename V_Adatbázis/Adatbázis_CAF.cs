@@ -38,7 +38,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[törölt] YESNO) ";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
-
+            // Kerdes:
             // JAVÍTANDÓ:Nem jó szintaktika, a char (255) után kellene egy vessző
             // KÉSZ✔
             // Adatok létrehozása
@@ -54,8 +54,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[IDŐ_Sorszám] SHORT,";
             szöveg += "[IDŐvKM] SHORT,";
             szöveg += "[Megjegyzés]  char (255),";
-            szöveg += "[KmRogzitett_e] YESNO),";
-            szöveg += "[KmHibas_e] YESNO))";
+            szöveg += "[KmRogzitett_e] YESNO,";
+            szöveg += "[KmHibas_e] YESNO)";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
@@ -99,8 +99,9 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[KM_Sorszám] SHORT,";
             szöveg += "[IDŐ_Sorszám] SHORT,";
             szöveg += "[IDŐvKM] SHORT,";
-            szöveg += "[Megjegyzés]  char (255)";
-            szöveg += "[KmRogzitett_e] YESNO))";
+            szöveg += "[Megjegyzés]  char (255),";
+            szöveg += "[KmRogzitett_e] YESNO)" +
+                ")";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
