@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés;
 using Villamos.Villamos_Ablakok.CAF_Ütemezés;
 using Villamos.Villamos_Adatszerkezet;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
@@ -1800,12 +1801,12 @@ namespace Villamos
         // JAVÍTANDÓ:Be kellene csukni amikor a tulajdonságokat becsukjuk
         // időközben becsukjuk akkor erre is fel kellene is készíteni
 
-        Ablak_Caf_km_mod uj_ablak_Caf_Km_Mod;
+        Ablak_CAF_KM uj_ablak_Caf_Km_Mod;
         private void Km_modosit_btn_Click(object sender, EventArgs e)
         {
             uj_ablak_Caf_Km_Mod?.Close();
 
-            uj_ablak_Caf_Km_Mod = new Ablak_Caf_km_mod();
+            uj_ablak_Caf_Km_Mod = new Ablak_CAF_KM();
             uj_ablak_Caf_Km_Mod.StartPosition = FormStartPosition.CenterScreen;
             uj_ablak_Caf_Km_Mod.Show();
         }
