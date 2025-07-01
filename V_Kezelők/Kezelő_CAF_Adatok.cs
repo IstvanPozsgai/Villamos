@@ -386,7 +386,7 @@ namespace Villamos.Kezelők
                 szöveg += $"km_sorszám={Adat.KM_Sorszám}, "; // km_sorszám
                 szöveg += $"idő_sorszám={Adat.IDŐ_Sorszám}, "; // idő_sorszám
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";// megjegyzés
-                szöveg += $"idővKM={Adat.IDŐvKM} ";
+                szöveg += $"idővKM={Adat.IDŐvKM}, ";
                 szöveg += $"KmRogzitett_e={Adat.KmRogzitett_e} ";
                 szöveg += $" WHERE id={Adat.Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -412,6 +412,25 @@ namespace Villamos.Kezelők
                     szöveg = $"UPDATE adatok  SET státus={státus} WHERE id={Sorszám} AND KmRogzitett_e=TRUE";
                 }
                 szöveg = $"UPDATE adatok  SET státus={státus} WHERE id={Sorszám} AND KmRogzitett_e=FALSE";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Km(double Id, int Szamlalo)
+        {
+            string szöveg;
+            try
+            {
+                szöveg = $"UPDATE adatok  SET Számláló={Szamlalo} WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

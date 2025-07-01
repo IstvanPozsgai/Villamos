@@ -78,6 +78,7 @@ namespace Villamos
             Új_Ablak_Caf_Lista?.Close();
             Új_Ablak_CAF_Segéd?.Close();
             Új_Ablak_CAF_Alapadat?.Close();
+            uj_ablak_Caf_Km_Mod?.Close();
         }
 
         private void Jogosultságkiosztás()
@@ -1800,6 +1801,7 @@ namespace Villamos
 
         // JAVÍTANDÓ:Be kellene csukni amikor a tulajdonságokat becsukjuk
         // időközben becsukjuk akkor erre is fel kellene is készíteni
+        // KÉSZ✔
 
         Ablak_CAF_KM uj_ablak_Caf_Km_Mod;
         private void Km_modosit_btn_Click(object sender, EventArgs e)
@@ -1809,6 +1811,11 @@ namespace Villamos
             uj_ablak_Caf_Km_Mod = new Ablak_CAF_KM();
             uj_ablak_Caf_Km_Mod.StartPosition = FormStartPosition.CenterScreen;
             uj_ablak_Caf_Km_Mod.Show();
+        }
+
+        private void Ablak_CAF_KM_Closed(object sender, FormClosedEventArgs e)
+        {
+            uj_ablak_Caf_Km_Mod = null;
         }
     }
 }

@@ -61,6 +61,7 @@ namespace Villamos
             this.Elő_tervező_telephely = new System.Windows.Forms.Button();
             this.Elő_ütemez = new System.Windows.Forms.Button();
             this.Segédablak_hívó = new System.Windows.Forms.Button();
+            this.km_modosit_btn = new System.Windows.Forms.Button();
             this.Elő_törölt = new System.Windows.Forms.CheckBox();
             this.Elő_pályaszám = new System.Windows.Forms.CheckedListBox();
             this.Elő_Idő = new System.Windows.Forms.RadioButton();
@@ -72,7 +73,6 @@ namespace Villamos
             this.Tábla_elő = new System.Windows.Forms.DataGridView();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.km_modosit_btn = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_elő)).BeginInit();
             this.SuspendLayout();
@@ -346,6 +346,18 @@ namespace Villamos
             this.Segédablak_hívó.UseVisualStyleBackColor = true;
             this.Segédablak_hívó.Click += new System.EventHandler(this.Segédablak_hívó_Click);
             // 
+            // km_modosit_btn
+            // 
+            this.km_modosit_btn.BackgroundImage = global::Villamos.Properties.Resources.Atyourservice_Service_Categories_Car_Repair;
+            this.km_modosit_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.km_modosit_btn.Location = new System.Drawing.Point(1118, 79);
+            this.km_modosit_btn.Name = "km_modosit_btn";
+            this.km_modosit_btn.Size = new System.Drawing.Size(40, 40);
+            this.km_modosit_btn.TabIndex = 241;
+            this.ToolTip1.SetToolTip(this.km_modosit_btn, "Excel tábla színkezelés");
+            this.km_modosit_btn.UseVisualStyleBackColor = true;
+            this.km_modosit_btn.Click += new System.EventHandler(this.Km_modosit_btn_Click);
+            // 
             // Elő_törölt
             // 
             this.Elő_törölt.AutoSize = true;
@@ -468,18 +480,6 @@ namespace Villamos
             // timer1
             // 
             this.timer1.Interval = 500;
-            // 
-            // km_modosit_btn
-            // 
-            this.km_modosit_btn.BackgroundImage = global::Villamos.Properties.Resources.Button_Forward_01;
-            this.km_modosit_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.km_modosit_btn.Location = new System.Drawing.Point(1118, 79);
-            this.km_modosit_btn.Name = "km_modosit_btn";
-            this.km_modosit_btn.Size = new System.Drawing.Size(40, 40);
-            this.km_modosit_btn.TabIndex = 241;
-            this.ToolTip1.SetToolTip(this.km_modosit_btn, "Excel tábla színkezelés");
-            this.km_modosit_btn.UseVisualStyleBackColor = true;
-            this.km_modosit_btn.Click += new System.EventHandler(this.Km_modosit_btn_Click);
             // 
             // Ablak_Tulajdonságok_CAF
             // 
