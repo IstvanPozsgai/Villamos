@@ -267,20 +267,18 @@
       <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </Compile>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelo_Eszterga_Muveletek_Naplo.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Kezelo_Eszterga_Uzemora.cs" />
 =======
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_km_mod.cs">
+=======
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_KM.cs">
+>>>>>>> 62342b4 (CAF Km módosító ablak)
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_km_mod.Designer.cs">
-      <DependentUpon>Ablak_Caf_km_mod.cs</DependentUpon>
-    </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_km_mod_seged.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_km_mod_seged.Designer.cs">
-      <DependentUpon>Ablak_CAF_km_mod_seged.cs</DependentUpon>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_KM.Designer.cs">
+      <DependentUpon>Ablak_CAF_KM.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\Homokozó\ExcelUtlity.cs" />
     <Compile Include="V_Ablakok\Homokozó\Form1.cs">
@@ -1411,11 +1409,8 @@
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Év.resx">
       <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_km_mod.resx">
-      <DependentUpon>Ablak_Caf_km_mod.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_km_mod_seged.resx">
-      <DependentUpon>Ablak_CAF_km_mod_seged.cs</DependentUpon>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_KM.resx">
+      <DependentUpon>Ablak_CAF_KM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.resx">
       <DependentUpon>Ablak_Tulajdonságok_CAF.cs</DependentUpon>
@@ -1676,6 +1671,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Properties\DataSources\Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés.Ablak_CAF_KM.datasource" />
     <None Include="Resources\justice-297629_1280.png" />
     <None Include="Resources\Graphicloads-Colorful-Long-Shadow-Arrow-download-3.ico" />
     <None Include="Resources\shopping_cart.ico" />
