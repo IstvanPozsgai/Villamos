@@ -77,7 +77,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                     DataRow Soradat = AdatTábla.NewRow();
                     Soradat["Pályaszám"] = villamos.Azonosító;
                     Soradat["Vizsgálat"] = villamos.Vizsgálat;
-                    Soradat["Dátum"] = villamos.Dátum;
+                    Soradat["Dátum"] = villamos.Dátum.ToString("yyyy.MM.dd");
                     Soradat["Számláló állás"] = villamos.Számláló;
                     //Soradat["Státusz"] = villamos.Státus;
                     switch (villamos.Státus)
@@ -173,7 +173,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                 string vizsgalat = sor.Cells["Vizsgálat"].Value?.ToString() ?? "";
                 string datum = sor.Cells["Dátum"].Value?.ToString() ?? "";
 
-                var villamos = CafAdatok.FirstOrDefault(a => a.Azonosító == azonosito && a.Vizsgálat == vizsgalat && a.Dátum.ToString() == datum);
+                var villamos = CafAdatok.FirstOrDefault(a => a.Azonosító == azonosito && a.Vizsgálat == vizsgalat && a.Dátum.ToString("yyyy.MM.dd") == datum);
 
                 if (villamos != null && ujSzamlalo < villamos.Számláló)
                 {
@@ -195,7 +195,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                 string datum = sor.Cells["Dátum"].Value?.ToString() ?? "";
                 int szamlalo = int.Parse(sor.Cells["Számláló állás"].Value?.ToString() ?? "0");
 
-                var villamos = CafAdatok.FirstOrDefault(a => a.Azonosító == azonosito && a.Vizsgálat == vizsgalat && a.Dátum.ToString() == datum);
+                var villamos = CafAdatok.FirstOrDefault(a => a.Azonosító == azonosito && a.Vizsgálat == vizsgalat && a.Dátum.ToString("yyyy.MM.dd") == datum);
 
                 if (villamos != null)
                 {
