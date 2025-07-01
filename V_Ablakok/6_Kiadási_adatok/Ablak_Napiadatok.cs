@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,6 +8,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static Villamos.Főkönyv_Funkciók;
+using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos
@@ -20,6 +22,9 @@ namespace Villamos
         readonly Kezelő_Főkönyv_Személyzet KézSzemély = new Kezelő_Főkönyv_Személyzet();
         readonly Kezelő_Főkönyv_Típuscsere KézTípus = new Kezelő_Főkönyv_Típuscsere();
         readonly Kezelő_Forte_Kiadási_Adatok KézKiadási = new Kezelő_Forte_Kiadási_Adatok();
+
+        DataTable AdatTábla = new DataTable();
+        string TáblaNév = "";
 
         public Ablak_Napiadatok()
         {
@@ -139,9 +144,10 @@ namespace Villamos
         {
             try
             {
-                if (Tábla.Visible == true & Tábla.Rows.Count <= 0) return;
-                if (Tábla1.Visible == true & Tábla1.Rows.Count <= 0) return;
-                if (Tábla2.Visible == true & Tábla2.Rows.Count <= 0) return;
+                if (Tábla.Visible == true && Tábla.Rows.Count <= 0) return;
+                if (Tábla1.Visible == true && Tábla1.Rows.Count <= 0) return;
+                if (Tábla2.Visible == true && Tábla2.Rows.Count <= 0) return;
+                if (Tábla3.Visible == true && Tábla3.Rows.Count <= 0) return;
 
                 string fájlexc;
 
@@ -158,13 +164,27 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
+                TáblaNév = "Havikiadás";
+                switch (TáblaNév)
+                {
+                    case "Havikiadás":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        break;
 
-                if (Tábla.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
-                else if (Tábla1.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla1);
-                else if (Tábla2.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla2);
+                    default:
+                        {
 
+                            if (Tábla.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
+                            else if (Tábla1.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla1);
+                            else if (Tábla2.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla2);
+
+                        }
+                        break;
+                }
+
+                Module_Excel.Megnyitás(fájlexc);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -233,51 +253,18 @@ namespace Villamos
                               select a).ToList();
                 }
 
+                Tábla.Visible = false;
+                Tábla.DataSource = null;
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
-                Tábla.Refresh();
-                Tábla.Visible = false;
-                Tábla.ColumnCount = 5;
 
-                // fejléc elkészítése
-                Tábla.Columns[0].HeaderText = "Azonosító";
-                Tábla.Columns[0].Width = 100;
-                Tábla.Columns[1].HeaderText = "Kezdő dátum";
-                Tábla.Columns[1].Width = 120;
-                Tábla.Columns[2].HeaderText = "Végső dátum";
-                Tábla.Columns[2].Width = 120;
-                Tábla.Columns[3].HeaderText = "Állási napok";
-                Tábla.Columns[3].Width = 120;
-                Tábla.Columns[4].HeaderText = "Hiba leírása";
-                Tábla.Columns[4].Width = 400;
+                NapiFejlécTábla();
 
+                NapiTartalomTábla(Adatok);
+                Tábla.DataSource = AdatTábla;
 
-                int i;
-                foreach (Adat_Jármű_Javításiátfutástábla rekord in Adatok)
-                {
-                    Tábla.RowCount++;
-                    i = Tábla.RowCount - 1;
-
-                    Tábla.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
-                    Tábla.Rows[i].Cells[1].Value = rekord.Kezdődátum.ToString("yyyy.MM.dd");
-                    if (rekord.Végdátum.ToString("yyyy.MM.dd") != (new DateTime(1900, 1, 1)).ToString("yyyy.MM.dd"))
-                        Tábla.Rows[i].Cells[2].Value = rekord.Végdátum.ToString("yyyy.MM.dd");
-                    // nincs vég dátum annál ami áll
-                    TimeSpan delta;
-                    if (rekord.Végdátum.ToString("yyyy.MM.dd") == (new DateTime(1900, 1, 1)).ToString("yyyy.MM.dd"))
-                    {
-                        delta = DateTime.Today - rekord.Kezdődátum;
-                        Tábla.Rows[i].Cells[3].Value = (int)delta.TotalDays;
-                    }
-                    else
-                    {
-                        delta = DateTime.Today - rekord.Végdátum;
-                        Tábla.Rows[i].Cells[3].Value = (int)delta.TotalDays;
-                    }
-                    Tábla.Rows[i].Cells[4].Value = rekord.Hibaleírása.Trim();
-                }
+                NapiSzélességTábla();
                 Tábla.Top = 50;
-
                 Tábla.Height = Height - Tábla.Top - 50;
                 Tábla.Width = Width - Tábla.Left - 20;
                 Tábla.Visible = true;
@@ -294,6 +281,65 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void NapiFejlécTábla()
+        {
+            AdatTábla.Columns.Clear();
+            AdatTábla.Columns.Add("Azonosító");
+            AdatTábla.Columns.Add("Kezdő dátum");
+            AdatTábla.Columns.Add("Végső dátum");
+            AdatTábla.Columns.Add("Állási napok").DataType = typeof(int);
+            AdatTábla.Columns.Add("Hiba leírása");
+        }
+        private void NapiSzélességTábla()
+        {
+            Tábla.Columns["Azonosító"].Width = 100;
+            Tábla.Columns["Kezdő dátum"].Width = 120;
+            Tábla.Columns["Végső dátum"].Width = 120;
+            Tábla.Columns["Állási napok"].Width = 120;
+            Tábla.Columns["Hiba leírása"].Width = 400;
+        }
+        private void NapiTartalomTábla(List<Adat_Jármű_Javításiátfutástábla> Adatok)
+        {
+            try
+            {
+                AdatTábla.Clear();
+                foreach (Adat_Jármű_Javításiátfutástábla rekord in Adatok)
+                {
+                    DataRow Soradat = AdatTábla.NewRow();
+                    Soradat["Azonosító"] = rekord.Azonosító.Trim();
+                    Soradat["Kezdő dátum"] = rekord.Kezdődátum.ToString("yyyy.MM.dd");
+                    if (rekord.Végdátum.ToString("yyyy.MM.dd") != (new DateTime(1900, 1, 1)).ToString("yyyy.MM.dd"))
+                        Soradat["Végső dátum"] = rekord.Végdátum.ToString("yyyy.MM.dd");
+                    // nincs vég dátum annál ami áll
+                    TimeSpan delta;
+                    if (rekord.Végdátum.ToString("yyyy.MM.dd") == (new DateTime(1900, 1, 1)).ToString("yyyy.MM.dd"))
+                    {
+                        delta = DateTime.Today - rekord.Kezdődátum;
+                        Soradat["Állási napok"] = (int)delta.TotalDays;
+                    }
+                    else
+                    {
+                        delta = DateTime.Today - rekord.Végdátum;
+                        Soradat["Állási napok"] = (int)delta.TotalDays;
+                    }
+                    Soradat["Hiba leírása"] = rekord.Hibaleírása.Trim();
+                    AdatTábla.Rows.Add(Soradat);
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
         #endregion
 
 
@@ -433,6 +479,7 @@ namespace Villamos
             Label7.BackColor = Color.LightGreen;
             Label8.BackColor = Color.LightGreen;
 
+            Tábla3.Visible = false;
             Tábla1.Visible = false;
             Tábla2.Visible = false;
             Tábla.Visible = true;
@@ -623,7 +670,9 @@ namespace Villamos
         {
             try
             {
+                TáblaNév = "Havikiadás";
                 Tábla.Visible = false;
+                Tábla3.Visible = false;
                 MilyenLista = "havilista";
 
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
@@ -636,57 +685,85 @@ namespace Villamos
                           orderby a.Dátum, a.Napszak, a.Típus
                           select a).ToList();
 
-                Tábla.Rows.Clear();
-                Tábla.Columns.Clear();
-                Tábla.Refresh();
-                Tábla.ColumnCount = 10;
+                Tábla3.Visible = false;
+                Tábla3.DataSource = null;
+                Tábla3.Rows.Clear();
+                Tábla3.Columns.Clear();
 
-                // fejléc elkészítése
-                Tábla.Columns[0].HeaderText = "Dátum";
-                Tábla.Columns[0].Width = 100;
-                Tábla.Columns[1].HeaderText = "Napszak";
-                Tábla.Columns[1].Width = 100;
-                Tábla.Columns[2].HeaderText = "Típus";
-                Tábla.Columns[2].Width = 100;
-                Tábla.Columns[3].HeaderText = "Forgalomban";
-                Tábla.Columns[3].Width = 100;
-                Tábla.Columns[4].HeaderText = "Tartalék";
-                Tábla.Columns[4].Width = 100;
-                Tábla.Columns[5].HeaderText = "Kocsiszíni";
-                Tábla.Columns[5].Width = 100;
-                Tábla.Columns[6].HeaderText = "Félreállítás";
-                Tábla.Columns[6].Width = 100;
-                Tábla.Columns[7].HeaderText = "Főjavítás";
-                Tábla.Columns[7].Width = 100;
-                Tábla.Columns[8].HeaderText = "Összesen";
-                Tábla.Columns[8].Width = 100;
-                Tábla.Columns[9].HeaderText = "Személyzethiány";
-                Tábla.Columns[9].Width = 200;
+                HaviFejlécTábla();
+                Tábla3.DataSource = AdatTábla;
+                HaviTartalomTábla(Adatok);
+                HaviSzélességTábla();
 
+                Tábla3.Top = 50;
+                Tábla3.Left = 230;
+                Tábla3.Height = Height - Tábla3.Top - 50;
+                Tábla3.Width = Width - Tábla3.Left - 20;
+                Tábla3.Visible = true;
+                Tábla3.Refresh();
+                Tábla3.ClearSelection();
 
-                int i;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void HaviFejlécTábla()
+        {
+            AdatTábla.Columns.Clear();
+            AdatTábla.Columns.Add("Dátum");
+            AdatTábla.Columns.Add("Napszak");
+            AdatTábla.Columns.Add("Típus");
+            AdatTábla.Columns.Add("Forgalomban").DataType = typeof(int);
+            AdatTábla.Columns.Add("Tartalék").DataType = typeof(int);
+            AdatTábla.Columns.Add("Kocsiszíni").DataType = typeof(int);
+            AdatTábla.Columns.Add("Félreállítás").DataType = typeof(int);
+            AdatTábla.Columns.Add("Főjavítás").DataType = typeof(int);
+            AdatTábla.Columns.Add("Összesen").DataType = typeof(int);
+            AdatTábla.Columns.Add("Személyzethiány").DataType = typeof(int);
+        }
+
+        private void HaviSzélességTábla()
+        {
+            Tábla3.Columns["Dátum"].Width = 100;
+            Tábla3.Columns["Napszak"].Width = 100;
+            Tábla3.Columns["Típus"].Width = 100;
+            Tábla3.Columns["Forgalomban"].Width = 100;
+            Tábla3.Columns["Tartalék"].Width = 100;
+            Tábla3.Columns["Kocsiszíni"].Width = 100;
+            Tábla3.Columns["Félreállítás"].Width = 100;
+            Tábla3.Columns["Főjavítás"].Width = 100;
+            Tábla3.Columns["Összesen"].Width = 100;
+            Tábla3.Columns["Személyzethiány"].Width = 200;
+        }
+
+        private void HaviTartalomTábla(List<Adat_Kiadás_összesítő> Adatok)
+        {
+            try
+            {
+                AdatTábla.Clear();
                 foreach (Adat_Kiadás_összesítő rekord in Adatok)
                 {
-                    Tábla.RowCount++;
-                    i = Tábla.RowCount - 1;
-                    Tábla.Rows[i].Cells[0].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                    Tábla.Rows[i].Cells[1].Value = rekord.Napszak.Trim();
-                    Tábla.Rows[i].Cells[2].Value = rekord.Típus.Trim();
-                    Tábla.Rows[i].Cells[3].Value = rekord.Forgalomban;
-                    Tábla.Rows[i].Cells[4].Value = rekord.Tartalék + rekord.Személyzet;
-                    Tábla.Rows[i].Cells[5].Value = rekord.Kocsiszíni;
-                    Tábla.Rows[i].Cells[6].Value = rekord.Félreállítás;
-                    Tábla.Rows[i].Cells[7].Value = rekord.Főjavítás;
-                    Tábla.Rows[i].Cells[8].Value = rekord.Forgalomban + rekord.Tartalék + rekord.Kocsiszíni + rekord.Félreállítás + rekord.Főjavítás + rekord.Személyzet;
-                    Tábla.Rows[i].Cells[9].Value = rekord.Személyzet;
+                    DataRow Soradat = AdatTábla.NewRow();
+                    Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
+                    Soradat["Napszak"] = rekord.Napszak.Trim();
+                    Soradat["Típus"] = rekord.Típus.Trim();
+                    Soradat["Forgalomban"] = rekord.Forgalomban;
+                    Soradat["Tartalék"] = rekord.Tartalék + rekord.Személyzet;
+                    Soradat["Kocsiszíni"] = rekord.Kocsiszíni;
+                    Soradat["Félreállítás"] = rekord.Félreállítás;
+                    Soradat["Főjavítás"] = rekord.Főjavítás;
+                    Soradat["Összesen"] = rekord.Forgalomban + rekord.Tartalék + rekord.Kocsiszíni + rekord.Félreállítás + rekord.Főjavítás + rekord.Személyzet;
+                    Soradat["Személyzethiány"] = rekord.Személyzet;
+                    AdatTábla.Rows.Add(Soradat);
                 }
-                Tábla.Top = 50;
-                Tábla.Left = 230;
-                Tábla.Height = Height - Tábla.Top - 50;
-                Tábla.Width = Width - Tábla.Left - 20;
-                Tábla.Visible = true;
-                Tábla.Refresh();
-                Tábla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {
