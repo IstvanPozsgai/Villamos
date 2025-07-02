@@ -1856,7 +1856,7 @@ namespace Villamos
             {
                 Gombok_típus.Items.Clear();
 
-                List<string> Típusok = AdatokJármű.Select(a => a.Valóstípus).Distinct().ToList();
+                List<string> Típusok = AdatokJármű.Select(a => a.Valóstípus2).Distinct().ToList();
                 foreach (string rekord in Típusok)
                     Gombok_típus.Items.Add(rekord);
                 Gombok_típus.Refresh();
