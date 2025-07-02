@@ -403,39 +403,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás_Státus(double Sorszám, int státus)
+        public void Módosítás_Státus(double Sorszám, int státus, string Telephely = "")
         {
             string szöveg;
             try
             {
-                if (státus == 2)
-                {
-                    szöveg = $"UPDATE adatok  SET státus={státus}, KmRogzitett_e=TRUE WHERE id={Sorszám}";
-                }
-                szöveg = $"UPDATE adatok  SET státus={státus}, KmRogzitett_e=FALSE WHERE id={Sorszám}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Módosítás_Státus(double Sorszám, string Azonosító, int státus)
-        {
-            string szöveg;
-            try
-            {
-                if (státus == 2)
-                {
-                    szöveg = $"UPDATE adatok  SET Státus={státus}, KmRogzitett_e=TRUE  WHERE azonosító='{Azonosító}' AND id={Sorszám}";
-                }
-                szöveg = $"UPDATE adatok  SET Státus={státus}, KmRogzitett_e=FALSE  WHERE azonosító='{Azonosító}' AND id={Sorszám}";
+                szöveg = $"UPDATE adatok  SET Státus={státus}, KmRogzitett_e={státus == 2}, Telephely='{Telephely}'  WHERE id={Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

@@ -177,7 +177,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     {
                         long havikm = 0;
                         long kmukm = 0;
-
+                        // JAVÍTANDÓ: havi km
                         List<Adat_Főkönyv_Zser_Km> vane = (from a in AdatokZser
                                                            where a.Azonosító.Trim() == rekord.Azonosító.Trim()
                                                            orderby a.Dátum descending
@@ -188,7 +188,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                 where t.Azonosító.Trim() == rekord.Azonosító.Trim()
                                 && t.Dátum > rekord.Vizsgdátum_km
                                 select t).ToList();
-
+                        // JAVÍTANDÓ:Számláló az utolsó vizsgálat km óra állása
+                        //kmu ==Jelenlegi becsült KM állás
                         if (vane != null) kmukm = rekord.Számláló + vane.Sum(t => t.Napikm);
 
                         Adat_CAF_alap ADAT = new Adat_CAF_alap(
@@ -291,11 +292,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                     if (Caf_Adatok_Tabla_Adat.Számláló > Adat.Számláló)
                     {
-                        vegso_km_tbox.Text = (Caf_Adatok_Tabla_Adat.Számláló+Adat.Havikm).ToString();
+                        vegso_km_tbox.Text = (Caf_Adatok_Tabla_Adat.Számláló + Adat.Havikm).ToString();
                     }
                     else
                     {
-                        vegso_km_tbox.Text = (Adat.Számláló+Adat.Havikm).ToString();
+                        vegso_km_tbox.Text = (Adat.Számláló + Adat.Havikm).ToString();
                     }
 
                 }
@@ -593,6 +594,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
-     
+
     }
 }

@@ -1425,7 +1425,7 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    KézCAFAdatok.Módosítás_Státus(Vsorszám_Jármű, Pályaszám.Text.Trim(), 6);
+                    KézCAFAdatok.Módosítás_Státus(Vsorszám_Jármű, 6);
 
                     // alaptáblában is módosítunk
                     if (Elem.IDŐvKM == 1)

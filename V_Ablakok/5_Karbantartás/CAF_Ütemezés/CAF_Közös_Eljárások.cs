@@ -247,11 +247,22 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 else
                     következő = Km_sorszám + 1;
 
+                bool első = true;
+
+
                 while (vége == true)
                 {
                     int KM_Sorszám = következő;
                     string Vizsgálat = Ciklus_Km[következő - 1].Vizsgálatfok.Trim();
-                    double futhatmég_Nap = (Ciklus_Km[következő - 1].Felsőérték - Vizsgálat_Óta_km) / NapiKm;
+                    double futhatmég_Nap = 0;
+                    if (első)
+                    {
+                        if (Ciklus_Km[következő - 1].Felsőérték > Vizsgálat_Óta_km) futhatmég_Nap = (Ciklus_Km[következő - 1].Felsőérték - Vizsgálat_Óta_km) / NapiKm;
+                        első = false;
+                    }
+                    else
+                        futhatmég_Nap = Ciklus_Km[következő - 1].Felsőérték / NapiKm;
+
                     Dátum = Dátum.AddDays(futhatmég_Nap);
                     Adat_CAF_Adatok ADAT = new Adat_CAF_Adatok(0, pályaszám, Vizsgálat, Dátum, Dátum, Számláló, Státus, KM_Sorszám, IDŐ_Sorszám, IDŐvKM, Megjegyzés);
                     Válasz.Add(ADAT);

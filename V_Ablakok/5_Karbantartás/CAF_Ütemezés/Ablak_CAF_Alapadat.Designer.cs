@@ -97,7 +97,7 @@
             // 
             // Utolsó_vizsgóta
             // 
-            this.Utolsó_vizsgóta.Location = new System.Drawing.Point(616, 233);
+            this.Utolsó_vizsgóta.Location = new System.Drawing.Point(412, 233);
             this.Utolsó_vizsgóta.Name = "Utolsó_vizsgóta";
             this.Utolsó_vizsgóta.ReadOnly = true;
             this.Utolsó_vizsgóta.Size = new System.Drawing.Size(146, 26);
@@ -106,7 +106,7 @@
             // Label22
             // 
             this.Label22.AutoSize = true;
-            this.Label22.Location = new System.Drawing.Point(379, 230);
+            this.Label22.Location = new System.Drawing.Point(175, 230);
             this.Label22.Name = "Label22";
             this.Label22.Size = new System.Drawing.Size(231, 20);
             this.Label22.TabIndex = 112;
@@ -114,7 +114,7 @@
             // 
             // Alap_KM_számláló
             // 
-            this.Alap_KM_számláló.Location = new System.Drawing.Point(616, 178);
+            this.Alap_KM_számláló.Location = new System.Drawing.Point(619, 178);
             this.Alap_KM_számláló.Name = "Alap_KM_számláló";
             this.Alap_KM_számláló.ReadOnly = true;
             this.Alap_KM_számláló.Size = new System.Drawing.Size(146, 26);
@@ -124,7 +124,7 @@
             // Label20
             // 
             this.Label20.AutoSize = true;
-            this.Label20.Location = new System.Drawing.Point(379, 175);
+            this.Label20.Location = new System.Drawing.Point(412, 175);
             this.Label20.Name = "Label20";
             this.Label20.Size = new System.Drawing.Size(201, 20);
             this.Label20.TabIndex = 110;
@@ -144,7 +144,7 @@
             // 
             // Alap_Típus
             // 
-            this.Alap_Típus.Location = new System.Drawing.Point(616, 393);
+            this.Alap_Típus.Location = new System.Drawing.Point(619, 393);
             this.Alap_Típus.Name = "Alap_Típus";
             this.Alap_Típus.Size = new System.Drawing.Size(146, 26);
             this.Alap_Típus.TabIndex = 108;
@@ -152,7 +152,7 @@
             // Label18
             // 
             this.Label18.AutoSize = true;
-            this.Label18.Location = new System.Drawing.Point(379, 390);
+            this.Label18.Location = new System.Drawing.Point(412, 390);
             this.Label18.Name = "Label18";
             this.Label18.Size = new System.Drawing.Size(51, 20);
             this.Label18.TabIndex = 107;
@@ -179,7 +179,7 @@
             // 
             // Alap_KMU
             // 
-            this.Alap_KMU.Location = new System.Drawing.Point(616, 268);
+            this.Alap_KMU.Location = new System.Drawing.Point(412, 268);
             this.Alap_KMU.Name = "Alap_KMU";
             this.Alap_KMU.ReadOnly = true;
             this.Alap_KMU.Size = new System.Drawing.Size(146, 26);
@@ -203,7 +203,7 @@
             // Alap_felújítás
             // 
             this.Alap_felújítás.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Alap_felújítás.Location = new System.Drawing.Point(616, 428);
+            this.Alap_felújítás.Location = new System.Drawing.Point(619, 428);
             this.Alap_felújítás.Name = "Alap_felújítás";
             this.Alap_felújítás.Size = new System.Drawing.Size(119, 26);
             this.Alap_felújítás.TabIndex = 101;
@@ -211,7 +211,7 @@
             // Alap_Garancia
             // 
             this.Alap_Garancia.AutoSize = true;
-            this.Alap_Garancia.Location = new System.Drawing.Point(616, 358);
+            this.Alap_Garancia.Location = new System.Drawing.Point(619, 358);
             this.Alap_Garancia.Name = "Alap_Garancia";
             this.Alap_Garancia.Size = new System.Drawing.Size(107, 24);
             this.Alap_Garancia.TabIndex = 100;
@@ -221,7 +221,7 @@
             // Alap_Státus
             // 
             this.Alap_Státus.AutoSize = true;
-            this.Alap_Státus.Location = new System.Drawing.Point(379, 358);
+            this.Alap_Státus.Location = new System.Drawing.Point(412, 358);
             this.Alap_Státus.Name = "Alap_Státus";
             this.Alap_Státus.Size = new System.Drawing.Size(68, 24);
             this.Alap_Státus.TabIndex = 99;
@@ -231,7 +231,7 @@
             // Label11
             // 
             this.Label11.AutoSize = true;
-            this.Label11.Location = new System.Drawing.Point(379, 425);
+            this.Label11.Location = new System.Drawing.Point(412, 425);
             this.Label11.Name = "Label11";
             this.Label11.Size = new System.Drawing.Size(130, 20);
             this.Label11.TabIndex = 98;
@@ -258,11 +258,11 @@
             // Label8
             // 
             this.Label8.AutoSize = true;
-            this.Label8.Location = new System.Drawing.Point(379, 265);
+            this.Label8.Location = new System.Drawing.Point(175, 265);
             this.Label8.Name = "Label8";
-            this.Label8.Size = new System.Drawing.Size(208, 20);
+            this.Label8.Size = new System.Drawing.Size(198, 20);
             this.Label8.TabIndex = 95;
-            this.Label8.Text = "Jármű kmóra becsültl állása:";
+            this.Label8.Text = "Utolsó Vizsgálat km értéke";
             // 
             // Label7
             // 
@@ -278,7 +278,7 @@
             this.Alap_ciklus_km.DropDownHeight = 300;
             this.Alap_ciklus_km.FormattingEnabled = true;
             this.Alap_ciklus_km.IntegralHeight = false;
-            this.Alap_ciklus_km.Location = new System.Drawing.Point(616, 3);
+            this.Alap_ciklus_km.Location = new System.Drawing.Point(619, 3);
             this.Alap_ciklus_km.Name = "Alap_ciklus_km";
             this.Alap_ciklus_km.Size = new System.Drawing.Size(146, 28);
             this.Alap_ciklus_km.TabIndex = 93;
@@ -286,7 +286,7 @@
             // 
             // Alap_vizsg_km
             // 
-            this.Alap_vizsg_km.Location = new System.Drawing.Point(616, 38);
+            this.Alap_vizsg_km.Location = new System.Drawing.Point(619, 38);
             this.Alap_vizsg_km.Name = "Alap_vizsg_km";
             this.Alap_vizsg_km.ReadOnly = true;
             this.Alap_vizsg_km.Size = new System.Drawing.Size(146, 26);
@@ -297,7 +297,7 @@
             this.Alap_vizsg_sorszám_km.DropDownHeight = 300;
             this.Alap_vizsg_sorszám_km.FormattingEnabled = true;
             this.Alap_vizsg_sorszám_km.IntegralHeight = false;
-            this.Alap_vizsg_sorszám_km.Location = new System.Drawing.Point(616, 73);
+            this.Alap_vizsg_sorszám_km.Location = new System.Drawing.Point(619, 73);
             this.Alap_vizsg_sorszám_km.Name = "Alap_vizsg_sorszám_km";
             this.Alap_vizsg_sorszám_km.Size = new System.Drawing.Size(121, 28);
             this.Alap_vizsg_sorszám_km.TabIndex = 89;
@@ -309,7 +309,7 @@
             this.ALAP_Üzemek_km.Enabled = false;
             this.ALAP_Üzemek_km.FormattingEnabled = true;
             this.ALAP_Üzemek_km.IntegralHeight = false;
-            this.ALAP_Üzemek_km.Location = new System.Drawing.Point(616, 108);
+            this.ALAP_Üzemek_km.Location = new System.Drawing.Point(619, 108);
             this.ALAP_Üzemek_km.Name = "ALAP_Üzemek_km";
             this.ALAP_Üzemek_km.Size = new System.Drawing.Size(198, 28);
             this.ALAP_Üzemek_km.TabIndex = 87;
@@ -317,7 +317,7 @@
             // Label12
             // 
             this.Label12.AutoSize = true;
-            this.Label12.Location = new System.Drawing.Point(379, 140);
+            this.Label12.Location = new System.Drawing.Point(412, 140);
             this.Label12.Name = "Label12";
             this.Label12.Size = new System.Drawing.Size(70, 20);
             this.Label12.TabIndex = 84;
@@ -326,7 +326,7 @@
             // Label14
             // 
             this.Label14.AutoSize = true;
-            this.Label14.Location = new System.Drawing.Point(379, 105);
+            this.Label14.Location = new System.Drawing.Point(412, 105);
             this.Label14.Name = "Label14";
             this.Label14.Size = new System.Drawing.Size(73, 20);
             this.Label14.TabIndex = 83;
@@ -335,7 +335,7 @@
             // Label15
             // 
             this.Label15.AutoSize = true;
-            this.Label15.Location = new System.Drawing.Point(379, 70);
+            this.Label15.Location = new System.Drawing.Point(412, 70);
             this.Label15.Name = "Label15";
             this.Label15.Size = new System.Drawing.Size(151, 20);
             this.Label15.TabIndex = 82;
@@ -344,7 +344,7 @@
             // Label16
             // 
             this.Label16.AutoSize = true;
-            this.Label16.Location = new System.Drawing.Point(379, 35);
+            this.Label16.Location = new System.Drawing.Point(412, 35);
             this.Label16.Name = "Label16";
             this.Label16.Size = new System.Drawing.Size(128, 20);
             this.Label16.TabIndex = 81;
@@ -353,7 +353,7 @@
             // Label17
             // 
             this.Label17.AutoSize = true;
-            this.Label17.Location = new System.Drawing.Point(379, 0);
+            this.Label17.Location = new System.Drawing.Point(412, 0);
             this.Label17.Name = "Label17";
             this.Label17.Size = new System.Drawing.Size(117, 20);
             this.Label17.TabIndex = 80;
@@ -363,7 +363,7 @@
             // 
             this.Alap_dátum_km.Enabled = false;
             this.Alap_dátum_km.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Alap_dátum_km.Location = new System.Drawing.Point(616, 143);
+            this.Alap_dátum_km.Location = new System.Drawing.Point(619, 143);
             this.Alap_dátum_km.Name = "Alap_dátum_km";
             this.Alap_dátum_km.Size = new System.Drawing.Size(119, 26);
             this.Alap_dátum_km.TabIndex = 74;
@@ -376,7 +376,7 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(14, 272);
+            this.Holtart.Location = new System.Drawing.Point(-1, 515);
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(892, 25);
             this.Holtart.TabIndex = 115;
@@ -525,12 +525,9 @@
             this.tableLayoutPanel1.Controls.Add(this.Label2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.utolso_vizsgalat_km, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.Alap_ciklus_idő, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Utolsó_vizsgóta, 3, 7);
             this.tableLayoutPanel1.Controls.Add(this.label13, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.Label22, 2, 7);
             this.tableLayoutPanel1.Controls.Add(this.Alap_ciklus_km, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.Alap_KM_számláló, 3, 5);
-            this.tableLayoutPanel1.Controls.Add(this.Alap_KMU, 3, 8);
             this.tableLayoutPanel1.Controls.Add(this.Label3, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.Label20, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.Alap_vizsg_idő, 1, 1);
@@ -540,7 +537,6 @@
             this.tableLayoutPanel1.Controls.Add(this.Label4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.Alap_vizsg_sorszám_idő, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.Label15, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.Label8, 2, 8);
             this.tableLayoutPanel1.Controls.Add(this.Alap_vizsg_sorszám_km, 3, 2);
             this.tableLayoutPanel1.Controls.Add(this.Label5, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.ALAP_Üzemek_nap, 1, 3);
@@ -564,6 +560,10 @@
             this.tableLayoutPanel1.Controls.Add(this.Alap_Típus, 3, 12);
             this.tableLayoutPanel1.Controls.Add(this.Alap_Garancia, 3, 11);
             this.tableLayoutPanel1.Controls.Add(this.valos_km_lbl, 1, 9);
+            this.tableLayoutPanel1.Controls.Add(this.Label8, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.Label22, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.Utolsó_vizsgóta, 2, 7);
+            this.tableLayoutPanel1.Controls.Add(this.Alap_KMU, 2, 8);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(19, 41);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 14;
@@ -586,7 +586,7 @@
             // 
             // vegso_km_tbox
             // 
-            this.vegso_km_tbox.Location = new System.Drawing.Point(379, 303);
+            this.vegso_km_tbox.Location = new System.Drawing.Point(412, 303);
             this.vegso_km_tbox.Name = "vegso_km_tbox";
             this.vegso_km_tbox.ReadOnly = true;
             this.vegso_km_tbox.Size = new System.Drawing.Size(146, 26);
@@ -606,7 +606,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Peru;
-            this.ClientSize = new System.Drawing.Size(915, 508);
+            this.ClientSize = new System.Drawing.Size(915, 552);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Kalkulál);
