@@ -75,6 +75,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 if (rekord != null)
                 {
                     // JAVÍTANDÓ:     throw 
+                    //kesz
                     Uzemora = rekord.Uzemora;
                     throw new HibásBevittAdat($"A mai napon már rögzítettek üzemóra adatot.\nAz utolsó rögzített üzemóra: {rekord.Uzemora}.");
                 }
@@ -891,6 +892,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             try
             {
                 //   JAVÍTANDÓ: ez konstans?
+                //kesz
                 if (string.IsNullOrEmpty(TxtBxNapiUzemoraAtlag.Text))
                     TxtBxNapiUzemoraAtlag.Text = Alap_Napi_Atlag.ToStrTrim();
 
@@ -902,7 +904,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                                       select a).ToList();
                 if (rekord.Count == 0)
                 {
-                    LblÁtlagÜzemóraSzám.Text = $"Nincs adat az átlag számításhoz.";
+                    LblÁtlagÜzemóraSzám.Text = "Nincs adat az átlag számításhoz.";
                     return;
                 }
 

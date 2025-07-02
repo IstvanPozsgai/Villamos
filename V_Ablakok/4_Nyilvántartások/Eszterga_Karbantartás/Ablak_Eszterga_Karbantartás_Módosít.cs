@@ -66,8 +66,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             Btn_Sorrend.Visible = false;
             // A DataGridView adatforrásának kötése után automatikusan meghívja a ToroltTablaSzinezes metódust,
             // hogy a törölt státuszú sorokat színezve jelenítse meg.
-            TablaMuvelet.DataBindingComplete += (s, ev) => ToroltTablaSzinezes(TablaMuvelet);
-            TablaUtolagMuvelet.DataBindingComplete += (s, ev) => ToroltTablaSzinezes(TablaUtolagMuvelet);
+            TablaMuvelet.DataBindingComplete += (s, ev) => TablaSzinezes(TablaMuvelet);
+            TablaUtolagMuvelet.DataBindingComplete += (s, ev) => TablaSzinezes(TablaUtolagMuvelet);
             EgysegBeallitasa();
             UzemoraKiolvasasEsBeiras(DtmPckrUtolagos.Value, TxtBxUtolagUzemora);
             TxtBxMennyiNap.Text = "0";
@@ -268,7 +268,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 TablaMuvelet.DataSource = AdatTabla;
                 OszlopSzelessegMuvelet();
-                ToroltTablaSzinezes(TablaMuvelet);
+                TablaSzinezes(TablaMuvelet);
                 TablaMuvelet.Visible = true;
                 TablaMuvelet.ClearSelection();
             }
@@ -407,7 +407,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 TablaUtolagMuvelet.DataSource = AdatTablaUtolag;
                 OszlopSzelessegMuveletUtolag();
                 TablaUtolagMuvelet.Visible = true;
-                ToroltTablaSzinezes(TablaUtolagMuvelet);
+                TablaSzinezes(TablaUtolagMuvelet);
                 TablaUtolagMuvelet.ClearSelection();
             }
             catch (HibásBevittAdat ex)
@@ -473,7 +473,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 // JAVÍTANDÓ:a true mikor lesz false?
                 //kesz
-                //A törlésnél megvan hivva és ott nem lehet uj adatot torolni szoval ezert ezeket kihagyja, és alapértelmezetten false
                 //olvasd el mégegyszer!!!!!!!!!!!!
                 if (ujRekord)
                 {
@@ -527,10 +526,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private List<Adat_Eszterga_Muveletek> SorKivalasztas()
         {
+            List<Adat_Eszterga_Muveletek> rekordok = new List<Adat_Eszterga_Muveletek>();
             try
             {
-                List<Adat_Eszterga_Muveletek> rekordok = new List<Adat_Eszterga_Muveletek>();
-
                 foreach (DataGridViewRow sor in TablaMuvelet.SelectedRows)
                 {
                     int id = sor.Cells[0].Value.ToÉrt_Int();
@@ -543,22 +541,19 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     rekordok.Add(rekord);
                 }
-
-                return rekordok;
-
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                throw;
                 // JAVÍTANDÓ:
+                //kesz
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw;
             }
+            return rekordok;
         }
 
         /// <summary>
@@ -575,19 +570,18 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 Enum.TryParse(CmbxEgység.SelectedItem.ToStrTrim(), out EsztergaEgyseg egyseg);
 
-                bool NincsValtozas =
-                    rekord.Művelet.Trim() == TxtBxMűvelet.Text.Trim() &&
-                    rekord.Egység == (int)egyseg &&
-                    rekord.Státus == ChckBxStátus.Checked &&
-                    rekord.Mennyi_Dátum == int.Parse(TxtBxMennyiNap.Text) &&
-                    rekord.Mennyi_Óra == int.Parse(TxtBxMennyiÓra.Text) &&
-                    rekord.Utolsó_Dátum == DtmPckrUtolsóDátum.Value &&
-                    rekord.Utolsó_Üzemóra_Állás == int.Parse(TxtBxUtolsóÜzemóraÁllás.Text);
+                return
+                    rekord.Művelet.Trim() != TxtBxMűvelet.Text.Trim() &&
+                    rekord.Egység != (int)egyseg &&
+                    rekord.Státus != ChckBxStátus.Checked &&
+                    rekord.Mennyi_Dátum != int.Parse(TxtBxMennyiNap.Text) &&
+                    rekord.Mennyi_Óra != int.Parse(TxtBxMennyiÓra.Text) &&
+                    rekord.Utolsó_Dátum != DtmPckrUtolsóDátum.Value &&
+                    rekord.Utolsó_Üzemóra_Állás != int.Parse(TxtBxUtolsóÜzemóraÁllás.Text);
 
-                if (NincsValtozas)
-                    return false;
                 // JAVÍTANDÓ:Mikor lesz igaz?
                 //Ezt még gondold át mégegyszer van egyszerűbb megoldás is
+                //kesz
             }
             catch (HibásBevittAdat ex)
             {
@@ -602,12 +596,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:Akkor tulajdonképpen táblát színez
+        //Igen kesz
         /// <summary>
         /// Színezi a táblázat sorait a státusz alapján, ha a státusz "Törölt".
         /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
         /// Ha a státusz nem "Törölt", visszaáll a szokásos megjelenítés fehér háttérre.
         /// </summary>
-        private void ToroltTablaSzinezes(DataGridView tabla)
+        private void TablaSzinezes(DataGridView tabla)
         {
             if (!tabla.Columns.Contains("Státusz"))
                 return;
@@ -647,14 +642,21 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private Adat_Eszterga_Uzemora KeresÜzemóra(long uzemora, DateTime datum, EsztergaEgyseg egyseg)
         {
+            Adat_Eszterga_Uzemora Eredmeny = null;
             try
             {
-                if (egyseg == EsztergaEgyseg.Bekövetkezés)
-                    return null;
-                if (egyseg == EsztergaEgyseg.Üzemóra)
-                    return AdatokUzemora.FirstOrDefault(u => u.Uzemora == uzemora && !u.Státus);
-                if (egyseg == EsztergaEgyseg.Dátum)
-                    return AdatokUzemora.FirstOrDefault(u => u.Dátum.Date == datum.Date && !u.Státus);
+                switch (egyseg)
+                {
+                    case EsztergaEgyseg.Bekövetkezés:
+                        Eredmeny = null;
+                        break;
+                    case EsztergaEgyseg.Üzemóra:
+                        Eredmeny = AdatokUzemora.FirstOrDefault(u => u.Uzemora == uzemora && !u.Státus);
+                        break;
+                    case EsztergaEgyseg.Dátum:
+                        Eredmeny = AdatokUzemora.FirstOrDefault(u => u.Dátum.Date == datum.Date && !u.Státus);
+                        break;
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -665,8 +667,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return Eredmeny;
             // JAVÍTANDÓ:Ez miért kell?
-            return null;
+            //kesz
         }
 
         /// <summary>
@@ -709,6 +712,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private bool UjUzemoraHozzaadasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
         {
+            bool Eredmney = true;
             try
             {
                 long ElozoUzemora = (from a in AdatokUzemora
@@ -722,7 +726,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                      select a.Uzemora).FirstOrDefault();
 
                 if (UjUzemora <= ElozoUzemora || (UtanaUzemora != 0 && UjUzemora >= UtanaUzemora))
+                {
+                    Eredmney = false;
                     throw new HibásBevittAdat($"Az üzemóra értéknek az előző: {ElozoUzemora} és következő: {UtanaUzemora} közé kell esnie.");
+                }
 
                 Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
                                                   UjUzemora,
@@ -740,7 +747,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             // JAVÍTANDÓ:Ez miért kell?
-            return true;
+            //kesz
+            return Eredmney;
         }
 
         #endregion
@@ -755,7 +763,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                bool UjRekord = string.IsNullOrEmpty(TxtBxId.Text) || !AdatokMuvelet.Any(a => a.ID == TxtBxId.Text.ToÉrt_Int());
+                int AktivId = TxtBxId.Text.ToÉrt_Int();
+                bool Letezik = AdatokMuvelet.Any(a => a.ID == AktivId);
+                bool UjRekord = AktivId == 0 || !Letezik;
 
                 TxtBxEllenorzes(UjRekord);
 
@@ -763,11 +773,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     throw new HibásBevittAdat("Nem történt változás.");
 
                 // JAVÍTANDÓ: Nem azt mondtam, hogy nem vezethetsz be új változót
-                if (!AdatokMuvelet.Any(a => a.ID == TxtBxId.Text.ToÉrt_Int()))
-                    TxtBxId.Text = Kez_Muvelet.Sorszam().ToStrTrim();
+                //kesz
+                if (!Letezik)
+                    AktivId = Kez_Muvelet.Sorszam();
 
                 Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(
-                    TxtBxId.Text.ToÉrt_Int(),
+                    AktivId,
                     TxtBxMűvelet.Text.ToStrTrim(),
                     (int)CmbxEgység.SelectedItem,
                     TxtBxMennyiNap.Text.ToÉrt_Int(),
@@ -777,7 +788,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     TxtBxUtolsóÜzemóraÁllás.Text.ToÉrt_Long()
                 );
 
-                if (AdatokMuvelet.Any(a => a.ID == ADAT.ID))
+                if (Letezik)
                     Kez_Muvelet.MeglevoMuvelet_Modositas(ADAT);
                 else
                     Kez_Muvelet.Rogzites(ADAT);
@@ -1126,7 +1137,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void TablaMuvelet_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            ToroltTablaSzinezes(TablaMuvelet);
+            TablaSzinezes(TablaMuvelet);
         }
 
         /// <summary>
@@ -1135,7 +1146,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void TablaUtolagMuvelet_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            ToroltTablaSzinezes(TablaUtolagMuvelet);
+            TablaSzinezes(TablaUtolagMuvelet);
         }
 
         /// <summary>
@@ -1217,17 +1228,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void DtmPckrUtolsóDátum_ValueChanged(object sender, EventArgs e)
         {
-
             if (frissul) return;
-
+            frissul = true;
             try
             {
-                frissul = true;
-
-                DateTime ValasztottDatum;
                 // JAVÍTANDÓ:ez miért van itt try-catch? Megint bonyolítasz
-                try { ValasztottDatum = DtmPckrUtolsóDátum.Value.Date; }
-                catch { return; }
+                //kesz
+                DateTime ValasztottDatum = DtmPckrUtolsóDátum.Value.Date;
+
                 if (ValasztottDatum > DateTime.Today)
                     throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
 
@@ -1242,10 +1250,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            finally
-            {
-                frissul = false;
-            }
+            frissul = false;
         }
 
         /// <summary>
@@ -1254,11 +1259,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void TxtBxUtolsóÜzemóraÁllás_TextChanged(object sender, EventArgs e)
         {
+            if (frissul) return;
+
+            frissul = true;
             try
             {
-                if (frissul) return;
-
-                frissul = true;
                 if (!long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out long ValasztottUzemora))
                     throw new HibásBevittAdat("Csak pozitív egész szám lehet az üzemóra állásánál.");
 
@@ -1278,10 +1283,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            finally
-            {
-                frissul = false;
-            }
+            frissul = false;
         }
 
         /// <summary>
@@ -1304,11 +1306,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 if (DtmPckrUtolagos.Value.Date > DateTime.Today)
                     throw new HibásBevittAdat("A kiválasztott dátum nem lehet későbbi, mint a mai dátum.");
-                bool sikeres = false;
+                bool sikeres = true;
                 if (TablaUtolagMuvelet.SelectedRows.Count != 0)
                     sikeres = UjUtolagosNaplozas();
                 else if (TablaNaplo.SelectedRows.Count != 0)
-                    sikeres = UtolagNaploModositas();
+                    UtolagNaploModositas();
 
                 if (sikeres)
                 {
@@ -1333,22 +1335,19 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// majd az új értékek alapján frissíti a memóriában lévő naplóadatokat és adatbázisban is módosítja őket.
         /// Hibák esetén megfelelő üzenetet jelenít meg.
         /// </summary>
-        private bool UtolagNaploModositas()
+        private void UtolagNaploModositas()
         {
             // JAVÍTANDÓ:
+            //Kesz
             try
             {
-                if (TablaNaplo.SelectedRows.Count == 0)
-                    throw new HibásBevittAdat("Kérlek, válassz ki legalább egy sort a naplóból!");
-
                 foreach (DataGridViewRow sor in TablaNaplo.SelectedRows)
                 {
                     int id = sor.Cells["Művelet Sorszáma"].Value.ToÉrt_Int();
                     DateTime eredetiDatum = sor.Cells["Utolsó Dátum"].Value.ToÉrt_DaTeTime();
 
                     Adat_Eszterga_Muveletek_Naplo eredeti = AdatokMuveletNaplo.FirstOrDefault(
-                        a => a.ID == id && a.Utolsó_Dátum.Date == eredetiDatum.Date)
-                        ?? throw new HibásBevittAdat($"A(z) {id} azonosítójú naplózott sor nem található a memóriában.");
+                        a => a.ID == id && a.Utolsó_Dátum.Date == eredetiDatum.Date);
 
                     DateTime ujDatum = DtmPckrUtolagos.Value.Date;
                     long ujUzemora = TxtBxUtolagUzemora.Text.ToÉrt_Long();
@@ -1375,18 +1374,15 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     );
                     Kez_Muvelet_Naplo.UtolagModositas(modositott, eredetiDatum);
                 }
-                return true;
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
             }
         }
 
@@ -1398,20 +1394,28 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private bool UjUtolagosNaplozas()
         {
+            bool Eredmeny = true;
             try
             {
                 // JAVÍTANDÓ:a dátum az nem dátum?
-                DateTime datum = DtmPckrUtolagos.Value.Date;
+                //kesz
+                DateTime datum = DtmPckrUtolagos.Value;
                 string megjegyzes = TxtBxUtolagMegjegyzes.Text.Trim();
 
                 if (TxtBxUtolagUzemora.Enabled)
                 {
                     if (!int.TryParse(TxtBxUtolagUzemora.Text, out int uzemora))
+                    {
+                        Eredmeny = false;
                         throw new HibásBevittAdat("Hibás üzemóra érték! Kérlek, csak számot adj meg.");
+                    }
 
                     bool sikeres = UjUzemoraHozzaadasa(datum, uzemora, false);
                     if (!sikeres)
+                    {
+                        Eredmeny = false;
                         throw new HibásBevittAdat("Az üzemóra rögzítése sikertelen volt.");
+                    }
                 }
 
                 List<Adat_Eszterga_Muveletek_Naplo> naploLista = new List<Adat_Eszterga_Muveletek_Naplo>();
@@ -1419,15 +1423,21 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 {
                     int id = sor.Cells[0].Value.ToÉrt_Int();
                     // JAVÍTANDÓ:ha ki tudta választani akkor ott van és több elem esetén nem futunk végig?
-                    Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == id)
-                        ?? throw new HibásBevittAdat($"A(z) {id} azonosítójú művelet nem található.");
+                    //kesz
+                    Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == id);
 
                     if (rekord.Státus)
+                    {
+                        Eredmeny = false;
                         throw new HibásBevittAdat("Törölt műveletet nem lehet naplózni.");
+                    }
 
                     bool VanE = AdatokMuveletNaplo.Any(a => a.ID == id && a.Utolsó_Dátum.Date == datum);
                     if (VanE)
+                    {
+                        Eredmeny = false;
                         throw new HibásBevittAdat("Erre a dátumra már rögzítve lett ez a feladat egyszer.");
+                    }
                     int MennyiNap = sor.Cells["Nap"].Value.ToÉrt_Int();
                     int MennyiÓra = sor.Cells["Óra"].Value.ToÉrt_Int();
 
@@ -1447,20 +1457,17 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     naploLista.Add(adat);
                 }
                 Kez_Muvelet_Naplo.EsztergaNaplozas(naploLista);
-                return true;
             }
-
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
             }
+            return Eredmeny;
         }
 
         /// <summary>
