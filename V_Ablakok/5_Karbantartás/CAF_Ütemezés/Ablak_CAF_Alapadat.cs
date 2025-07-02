@@ -162,6 +162,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
+                KezCafAdatok.KmHibas_eVizsgal(KezCafAdatok.Lista_Adatok());
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(true);
 
                 AdatokZser.Clear();

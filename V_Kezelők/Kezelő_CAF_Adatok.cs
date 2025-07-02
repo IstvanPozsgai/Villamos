@@ -454,7 +454,7 @@ namespace Villamos.Kezelők
             string szöveg;
             try
             {
-                szöveg = $"UPDATE adatok SET Számláló={Szamlalo} WHERE id={Id}";
+                szöveg = $"UPDATE adatok SET Számláló={Szamlalo}, KmRogzitett_e=FALSE WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

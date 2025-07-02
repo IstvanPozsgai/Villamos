@@ -78,8 +78,8 @@
             this.label13 = new System.Windows.Forms.Label();
             this.utolso_vizsgalat_km = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.valos_km_lbl = new System.Windows.Forms.Label();
             this.vegso_km_tbox = new System.Windows.Forms.TextBox();
+            this.valos_km_lbl = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -588,6 +588,14 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(828, 455);
             this.tableLayoutPanel1.TabIndex = 118;
             // 
+            // vegso_km_tbox
+            // 
+            this.vegso_km_tbox.Location = new System.Drawing.Point(379, 303);
+            this.vegso_km_tbox.Name = "vegso_km_tbox";
+            this.vegso_km_tbox.ReadOnly = true;
+            this.vegso_km_tbox.Size = new System.Drawing.Size(146, 26);
+            this.vegso_km_tbox.TabIndex = 120;
+            // 
             // valos_km_lbl
             // 
             this.valos_km_lbl.AutoSize = true;
@@ -596,14 +604,6 @@
             this.valos_km_lbl.Size = new System.Drawing.Size(189, 20);
             this.valos_km_lbl.TabIndex = 119;
             this.valos_km_lbl.Text = "Jelenlegi becsült KM állás";
-            // 
-            // vegso_km_tbox
-            // 
-            this.vegso_km_tbox.Location = new System.Drawing.Point(379, 303);
-            this.vegso_km_tbox.Name = "vegso_km_tbox";
-            this.vegso_km_tbox.ReadOnly = true;
-            this.vegso_km_tbox.Size = new System.Drawing.Size(146, 26);
-            this.vegso_km_tbox.TabIndex = 120;
             // 
             // Ablak_CAF_Alapadat
             // 
