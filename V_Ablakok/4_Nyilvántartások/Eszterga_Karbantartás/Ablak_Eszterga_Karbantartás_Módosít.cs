@@ -452,8 +452,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// Új rekord hozzáadása esetén ellenőrzi, hogy az azonosító már létezik-e az adatbázisban, 
         /// illetve biztosítja, hogy minden mező érvényes adatokat tartalmazzon.
         /// </summary>
-        private void TxtBxEllenorzes(bool ujRekord)
+        private bool TxtBxEllenorzes(bool ujRekord)
         {
+            bool Eredmeny = false;
             try
             {
                 bool VanE = AdatokMuvelet.Any(a => a.ID == TxtBxId.Text.ToÉrt_Int());
@@ -507,6 +508,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                 throw new HibásBevittAdat("Az Utolsó Üzemóra Állás nem lehet nagyobb, mint az aktuális Üzemóra érték.");
                         }
                     }
+                    Eredmeny = true;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -518,6 +520,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return Eredmeny;
         }
 
         /// <summary>
@@ -571,12 +574,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 Enum.TryParse(CmbxEgység.SelectedItem.ToStrTrim(), out EsztergaEgyseg egyseg);
 
                 return
-                    rekord.Művelet.Trim() != TxtBxMűvelet.Text.Trim() &&
-                    rekord.Egység != (int)egyseg &&
-                    rekord.Státus != ChckBxStátus.Checked &&
-                    rekord.Mennyi_Dátum != int.Parse(TxtBxMennyiNap.Text) &&
-                    rekord.Mennyi_Óra != int.Parse(TxtBxMennyiÓra.Text) &&
-                    rekord.Utolsó_Dátum != DtmPckrUtolsóDátum.Value &&
+                    rekord.Művelet.Trim() != TxtBxMűvelet.Text.Trim() ||
+                    rekord.Egység != (int)egyseg ||
+                    rekord.Státus != ChckBxStátus.Checked ||
+                    rekord.Mennyi_Dátum != int.Parse(TxtBxMennyiNap.Text) ||
+                    rekord.Mennyi_Óra != int.Parse(TxtBxMennyiÓra.Text) ||
+                    rekord.Utolsó_Dátum != DtmPckrUtolsóDátum.Value ||
                     rekord.Utolsó_Üzemóra_Állás != int.Parse(TxtBxUtolsóÜzemóraÁllás.Text);
 
                 // JAVÍTANDÓ:Mikor lesz igaz?
@@ -767,10 +770,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 bool Letezik = AdatokMuvelet.Any(a => a.ID == AktivId);
                 bool UjRekord = AktivId == 0 || !Letezik;
 
-                TxtBxEllenorzes(UjRekord);
-
                 if (!UjRekord && !ModositasEll(true))
                     throw new HibásBevittAdat("Nem történt változás.");
+
+                if (!TxtBxEllenorzes(UjRekord))
+                    return;
+
+               
 
                 // JAVÍTANDÓ: Nem azt mondtam, hogy nem vezethetsz be új változót
                 //kesz
@@ -818,7 +824,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                TxtBxEllenorzes(false);
+                if(!TxtBxEllenorzes(false))
+                    return;
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
                     if (row.Cells[5].Value.ToStrTrim() == "Törölt")
@@ -1237,7 +1244,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 DateTime ValasztottDatum = DtmPckrUtolsóDátum.Value.Date;
 
                 if (ValasztottDatum > DateTime.Today)
+                {
+                    DtmPckrUtolagos.Value = DateTime.Today;
+                    UzemoraKiolvasasEsBeiras(DateTime.Today, TxtBxUtolsóÜzemóraÁllás);
                     throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
+                }
 
                 UzemoraKiolvasasEsBeiras(ValasztottDatum, TxtBxUtolsóÜzemóraÁllás);
             }
