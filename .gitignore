@@ -383,3 +383,4 @@ FodyWeavers.xsd
 *.dll
 /Villamos.csproj
 /Adatok/főkönyv
+/Villamos_C#.exe
