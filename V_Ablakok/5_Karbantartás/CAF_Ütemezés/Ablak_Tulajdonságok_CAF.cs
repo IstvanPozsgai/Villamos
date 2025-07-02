@@ -1806,9 +1806,6 @@ namespace Villamos
         Ablak_CAF_KM uj_ablak_Caf_Km_Mod;
         private void Km_modosit_btn_Click(object sender, EventArgs e)
         {
-            //Ennek készítsek egy külön gombot a megnyílt ablakban?
-            KézAdatok.KmHibas_eVizsgal(KézAdatok.Lista_Adatok());
-
             uj_ablak_Caf_Km_Mod?.Close();
 
             uj_ablak_Caf_Km_Mod = new Ablak_CAF_KM

@@ -175,7 +175,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Rendezes(Adat_Eszterga_Muveletek Adat, int KovetkezoID)
+        public void IdModositas(Adat_Eszterga_Muveletek Adat, int KovetkezoID)
         {
             try
             {
@@ -305,7 +305,7 @@ namespace Villamos.Villamos_Kezelők
                 if (rekord.ID != ujID)
                 {
                     Adat_Eszterga_Muveletek adat = new Adat_Eszterga_Muveletek(rekord.ID);
-                    Rendezes(adat, ujID);
+                    IdModositas(adat, ujID);
                     rekord.ID = ujID;
                 }
                 ujID++;
