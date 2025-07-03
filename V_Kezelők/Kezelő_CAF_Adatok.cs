@@ -391,8 +391,8 @@ namespace Villamos.Kezelők
                 szöveg += $"idő_sorszám={Adat.IDŐ_Sorszám}, "; // idő_sorszám
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";// megjegyzés
                 szöveg += $"idővKM={Adat.IDŐvKM}, ";
-                szöveg += $"KmRogzitett_e={Adat.KmRogzitett_e} ";
-                szöveg += $"Telephely='{Adat.Telephely}'";
+                szöveg += $"KmRogzitett_e={Adat.KmRogzitett_e}, ";
+                szöveg += $"Telephely='{Adat.Telephely}')";
                 szöveg += $" WHERE id={Adat.Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
