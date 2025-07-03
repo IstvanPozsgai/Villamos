@@ -16,6 +16,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         readonly string tablaNev = "Műveletek_Napló";
 
         // JAVÍTANDÓ:Nem jó, hogyan fogjuk a tavalyi adatokat olvasni, itt csak az aktuális év adatai vannak
+        //Akkuban vannak ilyenek
 
         public Kezelo_Eszterga_Muveletek_Naplo()
         {
@@ -59,7 +60,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         }
 
         // JAVÍTANDÓ:Ez rögzítés
-        public void EsztergaNaplozas(List<Adat_Eszterga_Muveletek_Naplo> Adatok)
+        //kesz
+        public void Rogzites(List<Adat_Eszterga_Muveletek_Naplo> Adatok)
         {
             try
             {
@@ -94,7 +96,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
         }
         // JAVÍTANDÓ:az módosítás
-        public void UtolagModositas(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
+        //kesz
+        public void Modositas(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
         {
             try
             {
