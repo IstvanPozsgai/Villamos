@@ -474,8 +474,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
-                // JAVÍTANDÓ:
-                //kesz
+
                 long ElozoUzemora = (from a in AdatokUzemora
                                      where a.Dátum < UjDatum && !a.Státus
                                      orderby a.Dátum descending
@@ -485,8 +484,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                                      where a.Dátum > UjDatum && !a.Státus
                                      orderby a.Dátum
                                      select a.Uzemora).FirstOrDefault();
-                // JAVÍTANDÓ:
-                //kesz
+
                 if (UjUzemora <= ElozoUzemora || (UtanaUzemora != 0 && UjUzemora >= UtanaUzemora))
                     throw new HibásBevittAdat($"Az üzemóra értéknek az előző: {ElozoUzemora} és következő: {UtanaUzemora} közé kell esnie.");
 
@@ -507,8 +505,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            // JAVÍTANDÓ:
-            //kesz
         }
 
         /// <summary>
@@ -575,8 +571,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            // JAVÍTANDÓ:
-            //kesz
         }
 
         /// <summary>
@@ -585,8 +579,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private bool TablaEllenorzes(int AktivID, long UjUzemora, DateTime UjDatum, bool UjStatus)
         {
-            // JAVÍTANDÓ:
-            //kesz
             bool Valasz = true;
             try
             {
@@ -616,8 +608,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private bool UzemoraSzamEllenorzes(long UjUzemora, DateTime UjDatum)
         {
-            // JAVÍTANDÓ:
-            //kesz
             bool Valasz = true;
             try
             {

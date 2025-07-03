@@ -25,8 +25,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         private string AktivTablaTipus;
         DataTable AdatTabla = new DataTable();
-        // JAVÍTANDÓ:Ez most komoly? Miért szöveg?
-        //kesz
         private const int Alap_Napi_Atlag = 30;
         private const int Alap_Napi_Szam = 5;
         private const int Alap_Uzemora_Szam = 8;
@@ -74,8 +72,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 if (rekord != null)
                 {
-                    // JAVÍTANDÓ:     throw 
-                    //kesz
                     Uzemora = rekord.Uzemora;
                     throw new HibásBevittAdat($"A mai napon már rögzítettek üzemóra adatot.\nAz utolsó rögzített üzemóra: {rekord.Uzemora}.");
                 }
@@ -803,8 +799,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // JAVÍTANDÓ:
-                //kesz
             }
             catch (Exception ex)
             {
@@ -857,8 +851,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // JAVÍTANDÓ:
-                //kesz
             }
             catch (Exception ex)
             {
@@ -891,8 +883,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
-                //   JAVÍTANDÓ: ez konstans?
-                //kesz
                 if (string.IsNullOrEmpty(TxtBxNapiUzemoraAtlag.Text))
                     TxtBxNapiUzemoraAtlag.Text = Alap_Napi_Atlag.ToStrTrim();
 
@@ -1376,8 +1366,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 if (!string.IsNullOrEmpty(Megjegyzes))
                 {
-                    Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(Megjegyzes, ID);
-                    Kez_Muvelet.Megjegyzes_Modositas(ADAT);
+                    Kez_Muvelet.Modositas(Megjegyzes, ID);
                     MessageBox.Show("A megjegyzés mentésre került.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
