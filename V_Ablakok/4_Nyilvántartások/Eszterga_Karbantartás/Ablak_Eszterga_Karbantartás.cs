@@ -600,7 +600,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         DateTime.Today));
                 }
 
-                Kez_Muvelet_Naplo.Rogzites(naploLista);
+                Kez_Muvelet_Naplo.Rogzites(naploLista, DtmPckrElőTerv.Value.Year);
             }
             catch (HibásBevittAdat ex)
             {
