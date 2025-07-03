@@ -51,7 +51,7 @@ namespace Villamos.Kezelők
                                         rekord["IDŐvKM"].ToÉrt_Int(),
                                         rekord["Megjegyzés"].ToStrTrim(),
                                         rekord["KmRogzitett_e"].ToÉrt_Bool(),
-                                        rekord["KmHibas_e"].ToÉrt_Bool()
+                                        rekord["Telephely"].ToStrTrim()
                                         );
                                 Adatok.Add(Adat);
                             }
@@ -278,7 +278,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program) VALUES (";
+                string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely) VALUES (";
                 szöveg += $"{Sorszám}, "; // id 
                 szöveg += $"'{Adat.Azonosító}', "; // azonosító
                 szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -290,6 +290,7 @@ namespace Villamos.Kezelők
                 szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                 szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
                 szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
+                szöveg += $"'{Adat.Telephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -311,7 +312,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program) VALUES (";
+                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely) VALUES (";
                     szöveg += $"{sorszám}, "; // id 
                     szöveg += $"'{Adat.Azonosító}', "; // azonosító
                     szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -323,6 +324,7 @@ namespace Villamos.Kezelők
                     szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                     szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
                     szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
+                    szöveg += $"'{Adat.Telephely}'"; // Telephely
                     SzövegGy.Add(szöveg);
                     sorszám++;
                 }
@@ -347,7 +349,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program) VALUES (";
+                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely) VALUES (";
                     szöveg += $"{sorszám}, "; // id 
                     szöveg += $"'{Adat.Azonosító}', "; // azonosító
                     szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -359,6 +361,7 @@ namespace Villamos.Kezelők
                     szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                     szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
                     szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
+                    szöveg += $"'{Adat.Telephely}'";
                     SzövegGy.Add(szöveg);
                     sorszám++;
                 }
@@ -389,6 +392,7 @@ namespace Villamos.Kezelők
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";// megjegyzés
                 szöveg += $"idővKM={Adat.IDŐvKM}, ";
                 szöveg += $"KmRogzitett_e={Adat.KmRogzitett_e} ";
+                szöveg += $"Telephely='{Adat.Telephely}'";
                 szöveg += $" WHERE id={Adat.Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -422,12 +426,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás_Km(double Id, int Szamlalo)
+        public void Módosítás_Km(double Id, int Szamlalo, string Telephely = "")
         {
             string szöveg;
             try
             {
-                szöveg = $"UPDATE adatok SET Számláló={Szamlalo}, KmRogzitett_e=FALSE WHERE id={Id}";
+                szöveg = $"UPDATE adatok SET Számláló={Szamlalo}, KmRogzitett_e=FALSE, Telephely='{Telephely}' WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -594,7 +598,7 @@ namespace Villamos.Kezelők
                                         rekord["IDŐvKM"].ToÉrt_Int(),
                                         rekord["Megjegyzés"].ToStrTrim(),
                                         rekord["KmRogzitett_e"].ToÉrt_Bool(),
-                                        rekord["KmHibas_e"].ToÉrt_Bool()
+                                        rekord["Telephely"].ToStrTrim()
                                         );
                                 Adatok.Add(Adat);
                             }
@@ -636,41 +640,41 @@ namespace Villamos.Kezelők
         // Amikor 2x szerepel egy ID, akkor azt vegyük alapul, ahol a KM érték van és nem 0? Viszont vannak olyanok is,
         // ahol mindkét helyen eltérő KM szerepel (Pl. 47347 id - 2231 psz.).
         // Ilyenkor vegyem a nagyobbat alapul?
-        public void KmHibas_eVizsgal(List<Adat_CAF_Adatok> Adatok)
-        {
+        //public void KmHibas_eVizsgal(List<Adat_CAF_Adatok> Adatok)
+        //{
 
-            var Villamos_Palyaszamok = Adatok.GroupBy(a => a.Azonosító)
-                                                   .ToList();
-            try
-            {
-                List<string> SzövegGy = new List<string>();
-                for (global::System.Int32 i = 0; i < Villamos_Palyaszamok.Count; i++)
-                {
-                    //Itt a végén azért kell a key, mert a GroupBy miat groupingolva adja vissza kulcs-értékként.
-                    List<Adat_CAF_Adatok> Vizsgalando_Adatok = Adatok.Where(a => a.Státus == 6 && a.Megjegyzés != "Ütemezési Segéd" && a.Azonosító == Villamos_Palyaszamok[i].Key)
-                                          .OrderBy(a => a.Dátum)
-                                          .ToList();
+        //    var Villamos_Palyaszamok = Adatok.GroupBy(a => a.Azonosító)
+        //                                           .ToList();
+        //    try
+        //    {
+        //        List<string> SzövegGy = new List<string>();
+        //        for (global::System.Int32 i = 0; i < Villamos_Palyaszamok.Count; i++)
+        //        {
+        //            //Itt a végén azért kell a key, mert a GroupBy miat groupingolva adja vissza kulcs-értékként.
+        //            List<Adat_CAF_Adatok> Vizsgalando_Adatok = Adatok.Where(a => a.Státus == 6 && a.Megjegyzés != "Ütemezési Segéd" && a.Azonosító == Villamos_Palyaszamok[i].Key)
+        //                                  .OrderBy(a => a.Dátum)
+        //                                  .ToList();
 
-                    for (global::System.Int32 j = 0; j < Vizsgalando_Adatok.Count - 1; j++)
-                    {
-                        if (Vizsgalando_Adatok[j + 1].Számláló < Vizsgalando_Adatok[j].Számláló)
-                        {
-                            string szoveg = $"UPDATE adatok SET KmHibas_e=TRUE WHERE id={Vizsgalando_Adatok[j + 1].Id}";
-                            SzövegGy.Add(szoveg);
-                        }
-                    }
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        //            for (global::System.Int32 j = 0; j < Vizsgalando_Adatok.Count - 1; j++)
+        //            {
+        //                if (Vizsgalando_Adatok[j + 1].Számláló < Vizsgalando_Adatok[j].Számláló)
+        //                {
+        //                    string szoveg = $"UPDATE adatok SET KmHibas_e=TRUE WHERE id={Vizsgalando_Adatok[j + 1].Id}";
+        //                    SzövegGy.Add(szoveg);
+        //                }
+        //            }
+        //        }
+        //        MyA.ABMódosítás(hely, jelszó, SzövegGy);
+        //    }
+        //    catch (HibásBevittAdat ex)
+        //    {
+        //        MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+        //        MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
     }
 }

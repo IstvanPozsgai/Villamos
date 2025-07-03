@@ -56,7 +56,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             AdatTábla.Columns.Add("Pályaszám");
             AdatTábla.Columns.Add("Vizsgálat");
             AdatTábla.Columns.Add("Dátum");
-            AdatTábla.Columns.Add("Számláló állás"); 
+            AdatTábla.Columns.Add("Számláló állás");
+            AdatTábla.Columns.Add("Telephely");
         }
 
         private void Listázás()
@@ -77,6 +78,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                     Soradat["Vizsgálat"] = villamos.Vizsgálat;
                     Soradat["Dátum"] = villamos.Dátum.ToString("yyyy.MM.dd");
                     Soradat["Számláló állás"] = villamos.Számláló;
+                    Soradat["Telephely"] = villamos.Telephely;
                    
                     AdatTábla.Rows.Add(Soradat);
                 }

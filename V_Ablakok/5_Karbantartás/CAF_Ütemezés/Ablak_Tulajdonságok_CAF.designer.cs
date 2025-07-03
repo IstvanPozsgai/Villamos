@@ -354,7 +354,7 @@ namespace Villamos
             this.km_modosit_btn.Name = "km_modosit_btn";
             this.km_modosit_btn.Size = new System.Drawing.Size(40, 40);
             this.km_modosit_btn.TabIndex = 241;
-            this.ToolTip1.SetToolTip(this.km_modosit_btn, "Excel tábla színkezelés");
+            this.ToolTip1.SetToolTip(this.km_modosit_btn, "KM adatok megadása");
             this.km_modosit_btn.UseVisualStyleBackColor = true;
             this.km_modosit_btn.Click += new System.EventHandler(this.Km_modosit_btn_Click);
             // 

@@ -161,8 +161,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         private void Kalkulál_Click(object sender, EventArgs e)
         {
             try
-            {
-                KezCafAdatok.KmHibas_eVizsgal(KezCafAdatok.Lista_Adatok());
+            {                
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(true);
 
                 AdatokZser.Clear();

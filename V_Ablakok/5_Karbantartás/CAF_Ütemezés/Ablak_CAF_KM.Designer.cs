@@ -48,6 +48,7 @@
             this.Tablalista.Size = new System.Drawing.Size(1036, 564);
             this.Tablalista.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tablalista.TabIndex = 0;
+            //this.Tablalista.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tablalista_CellContentClick);
             // 
             // tableLayoutPanel1
             // 
