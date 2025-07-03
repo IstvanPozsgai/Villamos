@@ -486,7 +486,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 AdatTabla.Columns.Add("Rögzítő");
                 AdatTabla.Columns.Add("Rögzítés Dátuma");
 
-                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok();
+                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok(DtmPckrElőTerv.Value.Year);
                 List<DataRow> RendezettSorok = new List<DataRow>();
                 foreach (Adat_Eszterga_Muveletek_Naplo rekord in AdatokMuveletNaplo)
                 {

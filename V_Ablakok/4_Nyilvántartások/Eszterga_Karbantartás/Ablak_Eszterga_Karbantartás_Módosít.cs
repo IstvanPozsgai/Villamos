@@ -316,7 +316,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 AdatTablaNaplo.Columns.Add("Rögzítő");
                 AdatTablaNaplo.Columns.Add("Rögzítés Dátuma");
 
-                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok()
+                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok(DtmPckrUtolagos.Value.Year)
                     .OrderBy(a => a.Utolsó_Dátum)
                     .ThenBy(a => a.ID)
                     .ToList();
@@ -1361,7 +1361,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         Program.PostásNév.ToStrTrim(),
                         DateTime.Today
                     );
-                    Kez_Muvelet_Naplo.Modositas(modositott, eredetiDatum);
+                    Kez_Muvelet_Naplo.Modositas(modositott, eredetiDatum,DtmPckrUtolagos.Value.Year);
                 }
             }
             catch (HibásBevittAdat ex)
