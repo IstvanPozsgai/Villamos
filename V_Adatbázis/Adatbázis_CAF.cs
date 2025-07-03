@@ -55,7 +55,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[IDŐvKM] SHORT,";
             szöveg += "[Megjegyzés]  char (255),";
             szöveg += "[KmRogzitett_e] YESNO,";
-            szöveg += "[KmHibas_e] YESNO)";
+            szöveg += "[Telephely] char (50))";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
@@ -100,8 +100,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[IDŐ_Sorszám] SHORT,";
             szöveg += "[IDŐvKM] SHORT,";
             szöveg += "[Megjegyzés]  char (255),";
-            szöveg += "[KmRogzitett_e] YESNO)" +
-                ")";
+            szöveg += "[KmRogzitett_e] YESNO";
+            szöveg += "[Telephely] char (50))";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
 
