@@ -289,8 +289,8 @@ namespace Villamos.Kezelők
                 szöveg += $"{Adat.IDŐ_Sorszám}, "; // idő_sorszám
                 szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                 szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
-                szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
-                szöveg += $"'{Adat.Telephely}'";
+                szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}', ";
+                szöveg += $"'{Adat.Telephely}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -323,8 +323,8 @@ namespace Villamos.Kezelők
                     szöveg += $"{Adat.IDŐ_Sorszám}, "; // idő_sorszám
                     szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                     szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
-                    szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
-                    szöveg += $"'{Adat.Telephely}'"; // Telephely
+                    szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Telephely}')"; // Telephely
                     SzövegGy.Add(szöveg);
                     sorszám++;
                 }
@@ -360,8 +360,8 @@ namespace Villamos.Kezelők
                     szöveg += $"{Adat.IDŐ_Sorszám}, "; // idő_sorszám
                     szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                     szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
-                    szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}') ";
-                    szöveg += $"'{Adat.Telephely}'";
+                    szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Telephely}')";
                     SzövegGy.Add(szöveg);
                     sorszám++;
                 }

@@ -108,7 +108,7 @@ namespace Villamos.Villamos_Adatszerkezet
             Megjegyzés = megjegyzés;
         }
 
-        public Adat_CAF_Adatok(double id, string azonosító, string vizsgálat, DateTime dátum, DateTime dátum_program, long számláló, int státus, int kM_Sorszám, int iDŐ_Sorszám, int iDŐvKM, string megjegyzés, bool kmRogzitett_e, string telephely)
+        public Adat_CAF_Adatok(double id, string azonosító, string vizsgálat, DateTime dátum, DateTime dátum_program, long számláló, int státus, int kM_Sorszám, int iDŐ_Sorszám, int iDŐvKM, string megjegyzés, bool kmRogzitett_e, string telephely="")
         {
             Id = id;
             Azonosító = azonosító;

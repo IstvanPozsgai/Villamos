@@ -176,29 +176,35 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     foreach (Adat_CAF_alap rekord in Adatok)
                     {
                         long havikm = 0;
-                        long kmukm = 0;
+                        //long kmukm = 0;
                         // JAVÍTANDÓ: havi km
-                        List<Adat_Főkönyv_Zser_Km> vane = (from a in AdatokZser
-                                                           where a.Azonosító.Trim() == rekord.Azonosító.Trim()
-                                                           orderby a.Dátum descending
-                                                           select a).Take(30).ToList();
-                        if (vane != null) havikm = vane.Sum(t => t.Napikm);
+                        // KÉSZ✔
+                        for (int i = 0; i < 12; i++)
+                        {
+                            List<Adat_Főkönyv_Zser_Km> vane = (from a in AdatokZser
+                                                               where a.Azonosító.Trim() == rekord.Azonosító.Trim() && a.Dátum.Month == i+1
+                                                               select a).ToList();
+                            if (vane != null) havikm = vane.Sum(t => t.Napikm);
 
-                        vane = (from t in AdatokZser
-                                where t.Azonosító.Trim() == rekord.Azonosító.Trim()
-                                && t.Dátum > rekord.Vizsgdátum_km
-                                select t).ToList();
+                            // Kérdés: Erre szükség van?
+                            vane = (from t in AdatokZser
+                                    where t.Azonosító.Trim() == rekord.Azonosító.Trim()
+                                    && t.Dátum > rekord.Vizsgdátum_km
+                                    select t).ToList();
+                        }
+                        
                         // JAVÍTANDÓ:Számláló az utolsó vizsgálat km óra állása
                         //kmu ==Jelenlegi becsült KM állás
-                        if (vane != null) kmukm = rekord.Számláló + vane.Sum(t => t.Napikm);
-
+                        //if (vane != null) kmukm = rekord.Számláló + vane.Sum(t => t.Napikm);
+                        // Kérdés: Így megfelelő?
                         Adat_CAF_alap ADAT = new Adat_CAF_alap(
                                             rekord.Azonosító.Trim(),
                                             havikm,
-                                            kmukm,
-                                            DateTime.Today);
+                                            rekord.Számláló,
+                                            DateTime.Today);               
                         AdatokGy.Add(ADAT);
                         Holtart.Lép();
+
                     }
                     KézCAFAlap.Módosítás_kmAdat(AdatokGy);
                 }
