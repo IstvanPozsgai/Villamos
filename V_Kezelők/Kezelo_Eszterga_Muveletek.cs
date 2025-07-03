@@ -158,11 +158,16 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void Megjegyzes_Modositas(Adat_Eszterga_Muveletek Adat)
+
+        /// <summary>
+        /// Ez a megjegyzés módosítására való
+        /// </summary>
+        /// <param name="Adat"></param>
+        public void Modositas(string Megjegyzés, int ID)
         {
             try
             {
-                string szoveg = $"UPDATE {tablaNev} SET Megjegyzés='{Adat.Megjegyzés}' WHERE ID={Adat.ID}";
+                string szoveg = $"UPDATE {tablaNev} SET Megjegyzés='{Megjegyzés}' WHERE ID={ID}";
                 MyA.ABMódosítás(hely, jelszo, szoveg);
             }
             catch (HibásBevittAdat ex)
@@ -175,6 +180,7 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public void IdModositas(Adat_Eszterga_Muveletek Adat, int KovetkezoID)
         {
             try

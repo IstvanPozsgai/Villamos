@@ -548,8 +548,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // JAVÍTANDÓ:
-                //kesz
             }
             catch (Exception ex)
             {
@@ -612,6 +610,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
             foreach (DataGridViewRow sor in tabla.Rows)
             {
+                // JAVÍTANDÓ:
                 if (sor.IsNewRow) continue;
 
                 string statusz = sor.Cells["Státusz"].Value?.ToString().Trim();
@@ -671,8 +670,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return Eredmeny;
-            // JAVÍTANDÓ:Ez miért kell?
-            //kesz
         }
 
         /// <summary>
@@ -749,8 +746,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            // JAVÍTANDÓ:Ez miért kell?
-            //kesz
             return Eredmney;
         }
 
@@ -766,6 +761,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
+                // JAVÍTANDÓ:
                 int AktivId = TxtBxId.Text.ToÉrt_Int();
                 bool Letezik = AdatokMuvelet.Any(a => a.ID == AktivId);
                 bool UjRekord = AktivId == 0 || !Letezik;
@@ -776,7 +772,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (!TxtBxEllenorzes(UjRekord))
                     return;
 
-               
+
 
                 // JAVÍTANDÓ: Nem azt mondtam, hogy nem vezethetsz be új változót
                 //kesz
@@ -824,7 +820,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                if(!TxtBxEllenorzes(false))
+                if (!TxtBxEllenorzes(false))
                     return;
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
@@ -1136,8 +1132,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
-        // JAVÍTANDÓ:Ez annyiszor fut le ahány sor változott?
-        //kesz
         /// <summary>
         /// Eseménykezelő, amely a TablaMuvelet DataGridView adatforrásának kötése után hívódik meg.
         /// Meghívja a ToroltTablaSzinezes metódust, hogy a törölt státuszú sorokat megjelenítési színezéssel lássa el.
@@ -1239,8 +1233,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             frissul = true;
             try
             {
-                // JAVÍTANDÓ:ez miért van itt try-catch? Megint bonyolítasz
-                //kesz
                 DateTime ValasztottDatum = DtmPckrUtolsóDátum.Value.Date;
 
                 if (ValasztottDatum > DateTime.Today)
@@ -1433,8 +1425,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 foreach (DataGridViewRow sor in TablaUtolagMuvelet.SelectedRows)
                 {
                     int id = sor.Cells[0].Value.ToÉrt_Int();
-                    // JAVÍTANDÓ:ha ki tudta választani akkor ott van és több elem esetén nem futunk végig?
-                    //kesz
+
                     Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == id);
 
                     if (rekord.Státus)
