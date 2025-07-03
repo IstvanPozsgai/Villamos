@@ -161,7 +161,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         private void Kalkulál_Click(object sender, EventArgs e)
         {
             try
-            {                
+            {
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(true);
 
                 AdatokZser.Clear();
@@ -176,32 +176,30 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     foreach (Adat_CAF_alap rekord in Adatok)
                     {
                         long havikm = 0;
-                        //long kmukm = 0;
-                        // JAVÍTANDÓ: havi km
-                        // KÉSZ✔
-                        for (int i = 0; i < 12; i++)
-                        {
-                            List<Adat_Főkönyv_Zser_Km> vane = (from a in AdatokZser
-                                                               where a.Azonosító.Trim() == rekord.Azonosító.Trim() && a.Dátum.Month == i+1
-                                                               select a).ToList();
-                            if (vane != null) havikm = vane.Sum(t => t.Napikm);
 
-                            // Kérdés: Erre szükség van?
-                            vane = (from t in AdatokZser
-                                    where t.Azonosító.Trim() == rekord.Azonosító.Trim()
-                                    && t.Dátum > rekord.Vizsgdátum_km
-                                    select t).ToList();
-                        }
-                        
-                        // JAVÍTANDÓ:Számláló az utolsó vizsgálat km óra állása
+                        List<Adat_Főkönyv_Zser_Km> vane = (from a in AdatokZser
+                                                           where a.Azonosító.Trim() == rekord.Azonosító.Trim()
+                                                           && a.Dátum >= DateTime.Now.AddDays(-30)
+                                                           select a).ToList();
+
+                        if (vane != null) havikm = vane.Sum(t => t.Napikm);
+
+                        // Kérdés: Erre szükség van?
+                        vane = (from t in AdatokZser
+                                where t.Azonosító.Trim() == rekord.Azonosító.Trim()
+                                && t.Dátum > rekord.Vizsgdátum_km
+                                select t).ToList();
+
+                        //Számláló az utolsó vizsgálat km óra állása
                         //kmu ==Jelenlegi becsült KM állás
-                        //if (vane != null) kmukm = rekord.Számláló + vane.Sum(t => t.Napikm);
-                        // Kérdés: Így megfelelő?
+                        long kmukm = rekord.Számláló;
+                        if (vane != null) kmukm += vane.Sum(t => t.Napikm);
+
                         Adat_CAF_alap ADAT = new Adat_CAF_alap(
                                             rekord.Azonosító.Trim(),
                                             havikm,
-                                            rekord.Számláló,
-                                            DateTime.Today);               
+                                            kmukm,
+                                            DateTime.Today);
                         AdatokGy.Add(ADAT);
                         Holtart.Lép();
 
@@ -263,7 +261,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     //Lekérem az Adatok táblából a villamos utolsó KM alapú vizsgálatának rekordját az Alap tábla segítségével.
                     //Erre azért van szükség, mivel az Alap táblában vannak az utolsó elvégzett javítások adatai.
                     Adat_CAF_Adatok Alap_Tabla_Utolso_KM_Alapu = Caf_Adatok_Tabla.FirstOrDefault(a => a.Dátum == Adat.Vizsgdátum_km && a.Vizsgálat == Adat.Utolsó_Km);
-                    if (Alap_Tabla_Utolso_KM_Alapu.KmRogzitett_e)
+                    if (Alap_Tabla_Utolso_KM_Alapu == null)
                     {
                         Alap_KM_számláló.BackColor = Color.Red;
                     }
