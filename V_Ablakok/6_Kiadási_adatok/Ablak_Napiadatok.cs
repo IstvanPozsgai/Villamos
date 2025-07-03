@@ -23,7 +23,7 @@ namespace Villamos
         readonly Kezelő_Főkönyv_Típuscsere KézTípus = new Kezelő_Főkönyv_Típuscsere();
         readonly Kezelő_Forte_Kiadási_Adatok KézKiadási = new Kezelő_Forte_Kiadási_Adatok();
 
-        DataTable AdatTábla = new DataTable();
+        readonly DataTable AdatTábla = new DataTable();
         string TáblaNév = "";
 
         public Ablak_Napiadatok()
@@ -817,67 +817,32 @@ namespace Villamos
             Napihibalista();
         }
 
-        // JAVÍTANDÓ:   
+
         private void Haviszemélyzethiány_Click(object sender, EventArgs e)
         {
             try
             {
-                //MilyenLista = "haviszem";
-                //DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
-                //DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
+                MilyenLista = "haviszem";
 
-                //List<Adat_Főkönyv_Személyzet> Adatok = KézSzemély.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
-                //Adatok = (from a in Adatok
-                //          where a.Dátum >= MyF.Nap0000(hónapelsőnapja)
-                //          && a.Dátum <= MyF.Nap2359(hónaputolsónapja)
-                //          orderby a.Dátum, a.Napszak, a.Típus
-                //          select a).ToList();
+                Tábla.Visible = false;
+                Tábla.DataSource = null;
+                Tábla.Rows.Clear();
+                Tábla.Columns.Clear();
 
+                NapiSzemFejlécTábla();
 
-                //Tábla.Rows.Clear();
-                //Tábla.Columns.Clear();
-                //Tábla.Refresh();
-                //Tábla.Visible = false;
-                //Tábla.ColumnCount = 7;
+                NapiSzemTartalomTábla();
+                KötésiOsztály.DataSource = AdatTábla;
+                Tábla.DataSource = KötésiOsztály;
+                NapiSzemSzélességTábla();
 
-                //// fejléc elkészítése
-                //Tábla.Columns[0].HeaderText = "Dátum";
-                //Tábla.Columns[0].Width = 100;
-                //Tábla.Columns[1].HeaderText = "Napszak";
-                //Tábla.Columns[1].Width = 100;
-                //Tábla.Columns[2].HeaderText = "Típus";
-                //Tábla.Columns[2].Width = 100;
-                //Tábla.Columns[3].HeaderText = "Viszonylat";
-                //Tábla.Columns[3].Width = 100;
-                //Tábla.Columns[4].HeaderText = "Forgalmi";
-                //Tábla.Columns[4].Width = 100;
-                //Tábla.Columns[5].HeaderText = "Indulási idő";
-                //Tábla.Columns[5].Width = 100;
-                //Tábla.Columns[6].HeaderText = "Pályaszám";
-                //Tábla.Columns[6].Width = 100;
-                //int i;
-                //foreach (Adat_Főkönyv_Személyzet rekord in Adatok)
-                //{
-
-                //    Tábla.RowCount++;
-                //    i = Tábla.RowCount - 1;
-
-                //    Tábla.Rows[i].Cells[1].Value = rekord.Napszak.Trim();
-                //    Tábla.Rows[i].Cells[2].Value = rekord.Típus.Trim();
-                //    Tábla.Rows[i].Cells[0].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                //    Tábla.Rows[i].Cells[3].Value = rekord.Viszonylat.Trim();
-                //    Tábla.Rows[i].Cells[4].Value = rekord.Forgalmiszám.Trim();
-                //    Tábla.Rows[i].Cells[5].Value = rekord.Tervindulás.ToString("hh:mm");
-                //    Tábla.Rows[i].Cells[6].Value = rekord.Azonosító.Trim();
-                //}
-
-                //Tábla.Top = 50;
-                //Tábla.Left = 230;
-                //Tábla.Height = Height - Tábla.Top - 50;
-                //Tábla.Width = Width - Tábla.Left - 20;
-                //Tábla.Visible = true;
-                //Tábla.Refresh();
-                //Tábla.ClearSelection();
+                Tábla.Top = 50;
+                Tábla.Left = 230;
+                Tábla.Height = Height - Tábla.Top - 50;
+                Tábla.Width = Width - Tábla.Left - 20;
+                Tábla.Visible = true;
+                Tábla.Refresh();
+                Tábla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {
@@ -890,69 +855,156 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
+        private void NapiSzemFejlécTábla()
+        {
+            AdatTábla.Columns.Clear();
+            AdatTábla.Columns.Add("Dátum");
+            AdatTábla.Columns.Add("Napszak");
+            AdatTábla.Columns.Add("Típus");
+            AdatTábla.Columns.Add("Viszonylat");
+            AdatTábla.Columns.Add("Forgalmi");
+            AdatTábla.Columns.Add("Indulási idő");
+            AdatTábla.Columns.Add("Pályaszám");
+        }
+
+        private void NapiSzemSzélességTábla()
+        {
+            Tábla.Columns["Dátum"].Width = 100;
+            Tábla.Columns["Napszak"].Width = 100;
+            Tábla.Columns["Típus"].Width = 100;
+            Tábla.Columns["Viszonylat"].Width = 100;
+            Tábla.Columns["Forgalmi"].Width = 100;
+            Tábla.Columns["Indulási idő"].Width = 100;
+            Tábla.Columns["Pályaszám"].Width = 100;
+        }
+
+        private void NapiSzemTartalomTábla()
+        {
+            try
+            {
+                DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
+                DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
+
+                List<Adat_Főkönyv_Személyzet> Adatok = KézSzemély.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Dátum >= MyF.Nap0000(hónapelsőnapja)
+                          && a.Dátum <= MyF.Nap2359(hónaputolsónapja)
+                          orderby a.Dátum, a.Napszak, a.Típus
+                          select a).ToList();
+
+                AdatTábla.Clear();
+                foreach (Adat_Főkönyv_Személyzet rekord in Adatok)
+                {
+                    DataRow Soradat = AdatTábla.NewRow();
+                    Soradat["Dátum"] = rekord.Dátum.ToString("yyyy.MM.dd");
+                    Soradat["Napszak"] = rekord.Napszak.Trim();
+                    Soradat["Típus"] = rekord.Típus.Trim();
+                    Soradat["Viszonylat"] = rekord.Viszonylat.Trim();
+                    Soradat["Forgalmi"] = rekord.Forgalmiszám.Trim();
+                    Soradat["Indulási idő"] = rekord.Tervindulás.ToString("hh:mm");
+                    Soradat["Pályaszám"] = rekord.Azonosító.Trim();
+                    AdatTábla.Rows.Add(Soradat);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Havitípuscsere_Click(object sender, EventArgs e)
         {
             try
             {
-                //MilyenLista = "haviszem";
-                //DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
-                //DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
-                //List<Adat_FőKönyv_Típuscsere> Adatok = KézTípus.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
-                //Adatok = (from a in Adatok
-                //          where a.Dátum >= MyF.Nap0000(hónapelsőnapja)
-                //          && a.Dátum <= MyF.Nap2359(hónaputolsónapja)
-                //          orderby a.Dátum, a.Napszak, a.Típuselőírt
-                //          select a).ToList();
 
-                //Tábla.Rows.Clear();
-                //Tábla.Columns.Clear();
-                //Tábla.Refresh();
-                //Tábla.Visible = false;
-                //Tábla.ColumnCount = 8;
 
-                //// fejléc elkészítése
-                //Tábla.Columns[0].HeaderText = "Dátum";
-                //Tábla.Columns[0].Width = 100;
-                //Tábla.Columns[1].HeaderText = "Napszak";
-                //Tábla.Columns[1].Width = 100;
-                //Tábla.Columns[2].HeaderText = "Típus előírt";
-                //Tábla.Columns[2].Width = 100;
-                //Tábla.Columns[3].HeaderText = "Típus kiadott";
-                //Tábla.Columns[3].Width = 100;
-                //Tábla.Columns[4].HeaderText = "Viszonylat";
-                //Tábla.Columns[4].Width = 100;
-                //Tábla.Columns[5].HeaderText = "Forgalmi";
-                //Tábla.Columns[5].Width = 100;
-                //Tábla.Columns[6].HeaderText = "Indulási idő";
-                //Tábla.Columns[6].Width = 100;
-                //Tábla.Columns[7].HeaderText = "Pályaszám";
-                //Tábla.Columns[7].Width = 100;
+                Tábla.Visible = false;
+                Tábla.DataSource = null;
+                Tábla.Rows.Clear();
+                Tábla.Columns.Clear();
 
-                //int i;
+                HaviTípusFejlécTábla();
+                HaviTípusTartalomTábla();
+                KötésiOsztály.DataSource = AdatTábla;
+                Tábla.DataSource = KötésiOsztály;
+                HaviTípusSzélességTábla();
 
-                //foreach (Adat_FőKönyv_Típuscsere rekord in Adatok)
-                //{
-                //    Tábla.RowCount++;
-                //    i = Tábla.RowCount - 1;
+                Tábla.Top = 50;
+                Tábla.Left = 230;
+                Tábla.Height = Height - Tábla.Top - 50;
+                Tábla.Width = Width - Tábla.Left - 20;
+                Tábla.Visible = true;
+                Tábla.Refresh();
+                Tábla.ClearSelection();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-                //    Tábla.Rows[i].Cells[0].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                //    Tábla.Rows[i].Cells[1].Value = rekord.Napszak;
-                //    Tábla.Rows[i].Cells[2].Value = rekord.Típuselőírt;
-                //    Tábla.Rows[i].Cells[3].Value = rekord.Típuskiadott;
-                //    Tábla.Rows[i].Cells[4].Value = rekord.Viszonylat;
-                //    Tábla.Rows[i].Cells[5].Value = rekord.Forgalmiszám;
-                //    Tábla.Rows[i].Cells[6].Value = rekord.Tervindulás.ToString("HH:mm");
-                //    Tábla.Rows[i].Cells[7].Value = rekord.Azonosító;
-                //}
+        private void HaviTípusFejlécTábla()
+        {
+            AdatTábla.Columns.Clear();
+            AdatTábla.Columns.Add("Dátum");
+            AdatTábla.Columns.Add("Napszak");
+            AdatTábla.Columns.Add("Típus előírt");
+            AdatTábla.Columns.Add("Típus kiadott");
+            AdatTábla.Columns.Add("Viszonylat");
+            AdatTábla.Columns.Add("Forgalmi");
+            AdatTábla.Columns.Add("Indulási idő");
+            AdatTábla.Columns.Add("Pályaszám");
+        }
 
-                //Tábla.Top = 50;
-                //Tábla.Left = 230;
-                //Tábla.Height = Height - Tábla.Top - 50;
-                //Tábla.Width = Width - Tábla.Left - 20;
-                //Tábla.Visible = true;
-                //Tábla.Refresh();
-                //Tábla.ClearSelection();
+        private void HaviTípusSzélességTábla()
+        {
+            Tábla.Columns["Napszak"].Width = 100;
+            Tábla.Columns["Típus előírt"].Width = 100;
+            Tábla.Columns["Típus kiadott"].Width = 100;
+            Tábla.Columns["Viszonylat"].Width = 100;
+            Tábla.Columns["Forgalmi"].Width = 100;
+            Tábla.Columns["Indulási idő"].Width = 100;
+            Tábla.Columns["Pályaszám"].Width = 100;
+        }
+
+        private void HaviTípusTartalomTábla()
+        {
+            try
+            {
+                MilyenLista = "haviszem";
+                DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
+                DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
+                List<Adat_FőKönyv_Típuscsere> Adatok = KézTípus.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Dátum >= MyF.Nap0000(hónapelsőnapja)
+                          && a.Dátum <= MyF.Nap2359(hónaputolsónapja)
+                          orderby a.Dátum, a.Napszak, a.Típuselőírt
+                          select a).ToList();
+
+                AdatTábla.Clear();
+                foreach (Adat_FőKönyv_Típuscsere rekord in Adatok)
+                {
+                    DataRow Soradat = AdatTábla.NewRow();
+                    Soradat["Dátum"] = rekord.Dátum.ToString("yyyy.MM.dd");
+                    Soradat["Napszak"] = rekord.Napszak.Trim();
+                    Soradat["Típus előírt"] = rekord.Típuselőírt.Trim();
+                    Soradat["Típus kiadott"] = rekord.Típuskiadott.Trim();
+                    Soradat["Viszonylat"] = rekord.Viszonylat.Trim();
+                    Soradat["Forgalmi"] = rekord.Forgalmiszám.Trim();
+                    Soradat["Indulási idő"] = rekord.Tervindulás.ToString("HH:mm");
+                    Soradat["Pályaszám"] = rekord.Azonosító.Trim();
+                    AdatTábla.Rows.Add(Soradat);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -976,97 +1028,123 @@ namespace Villamos
             Napihibalista();
         }
 
-        // JAVÍTANDÓ:
         private void Napikarbantartás_Click(object sender, EventArgs e)
         {
             try
             {
-                //    Tábla.Rows.Clear();
-                //    Tábla.Columns.Clear();
-                //    Tábla.Refresh();
-                //    Tábla.Visible = false;
-                //    Tábla.ColumnCount = 7;
+                Tábla.Visible = false;
+                Tábla.DataSource = null;
+                Tábla.Rows.Clear();
+                Tábla.Columns.Clear();
 
-                //    // fejléc elkészítése
-                //    Tábla.Columns[0].HeaderText = "Srsz";
-                //    Tábla.Columns[0].Width = 80;
-                //    Tábla.Columns[1].HeaderText = "Psz";
-                //    Tábla.Columns[1].Width = 100;
-                //    Tábla.Columns[2].HeaderText = "Dátum";
-                //    Tábla.Columns[2].Width = 200;
-                //    Tábla.Columns[3].HeaderText = "Hiba szöveg";
-                //    Tábla.Columns[3].Width = 400;
-                //    Tábla.Columns[4].HeaderText = "Hiba státus";
-                //    Tábla.Columns[4].Width = 150;
-                //    Tábla.Columns[5].HeaderText = "Javítva?";
-                //    Tábla.Columns[5].Width = 100;
-                //    Tábla.Columns[6].HeaderText = "Módosító";
-                //    Tábla.Columns[6].Width = 100;
+                NapiKarbFejlécTábla();
+                NapiKarbTartalomTábla();
+                KötésiOsztály.DataSource = AdatTábla;
+                Tábla.DataSource = KötésiOsztály;
+                NapiKarbSzélességTábla();
 
-                //    // csak azokat listázzuk amik be vannak jelölve
+                Tábla.Top = 50;
+                Tábla.Left = 230;
+                Tábla.Height = Height - Tábla.Top - 50;
+                Tábla.Width = Width - Tábla.Left - 20;
+                Tábla.Visible = true;
+                Tábla.Refresh();
+                Tábla.ClearSelection();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-                //    List<Adat_Kiegészítő_Hibaterv> KAdatok = KézKiegHibaTerv.Lista_Adatok(Cmbtelephely.Text.Trim());
+        private void NapiKarbFejlécTábla()
+        {
+            AdatTábla.Columns.Clear();
+            AdatTábla.Columns.Add("Srsz");
+            AdatTábla.Columns.Add("Psz");
+            AdatTábla.Columns.Add("Dátum");
+            AdatTábla.Columns.Add("Hiba szöveg");
+            AdatTábla.Columns.Add("Hiba státus");
+            AdatTábla.Columns.Add("Javítva");
+            AdatTábla.Columns.Add("Módosító");
+        }
 
-                //    foreach (Adat_Kiegészítő_Hibaterv rekordkieg in KAdatok)
-                //    {
-                //        List<Adat_Jármű_hiba> Adatok = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
-                //        Adatok = (from a in Adatok
-                //                  where a.Idő >= MyF.Nap0000(Dátum.Value)
-                //                  && a.Idő < MyF.Nap2359(Dátum.Value)
-                //                  && a.Javítva == true
-                //                  orderby a.Azonosító
-                //                  select a).ToList();
-                //        int i;
-                //        foreach (Adat_Jármű_hiba rekord in Adatok)
-                //        {
-                //            if (rekord.Hibaleírása.Contains(rekordkieg.Szöveg.Trim()))
-                //            {
-                //                Tábla.RowCount++;
-                //                i = Tábla.RowCount - 1;
-                //                Tábla.Rows[i].Cells[0].Value = i;
-                //                Tábla.Rows[i].Cells[1].Value = rekord.Azonosító.Trim();
-                //                Tábla.Rows[i].Cells[2].Value = rekord.Idő.ToString("yyyy.MM.dd HH:mm");
-                //                Tábla.Rows[i].Cells[3].Value = rekord.Hibaleírása.Trim();
-                //                switch (rekord.Korlát)
-                //                {
-                //                    case 1:
-                //                        {
-                //                            Tábla.Rows[i].Cells[4].Value = "Szabad";
-                //                            break;
-                //                        }
-                //                    case 2:
-                //                        {
-                //                            Tábla.Rows[i].Cells[4].Value = "Beállóba kért";
-                //                            break;
-                //                        }
-                //                    case 3:
-                //                        {
-                //                            Tábla.Rows[i].Cells[4].Value = "Csak beálló";
-                //                            break;
-                //                        }
-                //                    case 4:
-                //                        {
-                //                            Tábla.Rows[i].Cells[4].Value = "Nem kiadható";
-                //                            break;
-                //                        }
-                //                }
-                //                if (rekord.Javítva == true)
-                //                    Tábla.Rows[i].Cells[5].Value = "Igen";
-                //                else
-                //                    Tábla.Rows[i].Cells[5].Value = "Nem";
+        private void NapiKarbSzélességTábla()
+        {
+            Tábla.Columns["Srsz"].Width = 80;
+            Tábla.Columns["Psz"].Width = 100;
+            Tábla.Columns["Dátum"].Width = 200;
+            Tábla.Columns["Hiba szöveg"].Width = 400;
+            Tábla.Columns["Hiba státus"].Width = 150;
+            Tábla.Columns["Javítva"].Width = 100;
+            Tábla.Columns["Módosító"].Width = 100;
+        }
 
-                //                Tábla.Rows[i].Cells[6].Value = rekord.Létrehozta.Trim();
-                //            }
-                //        }
-                //    }
+        private void NapiKarbTartalomTábla()
+        {
+            try
+            {
+                // csak azokat listázzuk amik be vannak jelölve
+                List<Adat_Kiegészítő_Hibaterv> KAdatok = KézKiegHibaTerv.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                //    Tábla.Top = 50;
-                //    Tábla.Left = 230;
-                //    Tábla.Height = Height - Tábla.Top - 50;
-                //    Tábla.Width = Width - Tábla.Left - 20;
-                //    Tábla.Visible = true;
-                //    Tábla.Refresh();
-                //    Tábla.ClearSelection();
+                foreach (Adat_Kiegészítő_Hibaterv rekordkieg in KAdatok)
+                {
+                    List<Adat_Jármű_hiba> Adatok = KézJárműHiba.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
+                    Adatok = (from a in Adatok
+                              where a.Idő >= MyF.Nap0000(Dátum.Value)
+                              && a.Idő < MyF.Nap2359(Dátum.Value)
+                              && a.Javítva == true
+                              orderby a.Azonosító
+                              select a).ToList();
+                    AdatTábla.Clear();
+                    int i = 1;
+                    foreach (Adat_Jármű_hiba rekord in Adatok)
+                    {
+                        if (rekord.Hibaleírása.Contains(rekordkieg.Szöveg.Trim()))
+                        {
+                            string Státusz = "";
+                            switch (rekord.Korlát)
+                            {
+                                case 1:
+                                    {
+                                        Státusz = "Szabad";
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        Státusz = "Beállóba kért";
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        Státusz = "Csak beálló";
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        Státusz = "Nem kiadható";
+                                        break;
+                                    }
+                            }
+
+                            DataRow Soradat = AdatTábla.NewRow();
+                            Soradat["Srsz"] = i++;
+                            Soradat["Psz"] = rekord.Azonosító.Trim();
+                            Soradat["Dátum"] = rekord.Idő.ToString("yyyy.MM.dd HH:mm");
+                            Soradat["Hiba szöveg"] = rekord.Hibaleírása.Trim();
+                            Soradat["Hiba státus"] = Státusz;
+                            Soradat["Javítva"] = rekord.Javítva ? "Igen" : "Nem";
+                            Soradat["Módosító"] = rekord.Létrehozta.Trim();
+                            AdatTábla.Rows.Add(Soradat);
+                        }
+                    }
+                }
+
             }
             catch (HibásBevittAdat ex)
             {

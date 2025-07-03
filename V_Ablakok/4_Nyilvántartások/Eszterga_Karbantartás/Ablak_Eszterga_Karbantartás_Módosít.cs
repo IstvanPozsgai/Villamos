@@ -1361,7 +1361,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         Program.PostásNév.ToStrTrim(),
                         DateTime.Today
                     );
-                    Kez_Muvelet_Naplo.Modositas(modositott, eredetiDatum,DtmPckrUtolagos.Value.Year);
+                    Kez_Muvelet_Naplo.Modositas(modositott, eredetiDatum, DtmPckrUtolagos.Value.Year);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1444,7 +1444,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     naploLista.Add(adat);
                 }
-                Kez_Muvelet_Naplo.Rogzites(naploLista);
+                // JAVÍTANDÓ:   Nincs Év
+                int év = 1900;
+                Kez_Muvelet_Naplo.Rogzites(naploLista, év);
             }
             catch (HibásBevittAdat ex)
             {
