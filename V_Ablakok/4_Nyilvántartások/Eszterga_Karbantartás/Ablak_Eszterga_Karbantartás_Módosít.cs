@@ -50,6 +50,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TablaNaploListazas();
             TablaListazasMuveletUtolag();
             TxtBxId.Enabled = false;
+            TxtBxId.Text = "0";
             CmbxEgység.DataSource = Enum.GetValues(typeof(EsztergaEgyseg));
         }
         /// <summary>
@@ -205,7 +206,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 CmbxEgység.SelectedItem = EsztergaEgyseg.Bekövetkezés;
                 // JAVÍTANDÓ:miért kell tudnunk itt , hogy mi az ID? kezelőben a helye
                 //Nem ezt beszéltük meg.
-                TxtBxId.Text = Kez_Muvelet.Sorszam().ToStrTrim();
+                //kesz
                 EgysegEllenorzes(EsztergaEgyseg.Bekövetkezés.ToStrTrim());
             }
             catch (HibásBevittAdat ex)
@@ -315,7 +316,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 AdatTablaNaplo.Columns.Add("Rögzítő");
                 AdatTablaNaplo.Columns.Add("Rögzítés Dátuma");
 
-                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok()
+                AdatokMuveletNaplo = Kez_Muvelet_Naplo.Lista_Adatok(DtmPckrUtolagos.Value.Year)
                     .OrderBy(a => a.Utolsó_Dátum)
                     .ThenBy(a => a.ID)
                     .ToList();
@@ -452,64 +453,55 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// Új rekord hozzáadása esetén ellenőrzi, hogy az azonosító már létezik-e az adatbázisban, 
         /// illetve biztosítja, hogy minden mező érvényes adatokat tartalmazzon.
         /// </summary>
-        private bool TxtBxEllenorzes(bool ujRekord)
+        private bool TxtBxEllenorzes(int ujRekord)
         {
             bool Eredmeny = false;
             try
             {
-                bool VanE = AdatokMuvelet.Any(a => a.ID == TxtBxId.Text.ToÉrt_Int());
-
                 //Ujrekordnal nem ellenőrizzük, hogy van-e kiválasztott sor
-                if (!ujRekord && TablaMuvelet.SelectedRows.Count < 1)
+                if (ujRekord != 0 && TablaMuvelet.SelectedRows.Count < 1)
                     throw new HibásBevittAdat("Nincs kiválasztott művelet.");
-
-                if (ujRekord && VanE)
-                    throw new HibásBevittAdat("Az azonosító már létezik az adatbázisban.");
 
                 if (string.IsNullOrEmpty(TxtBxId.Text))
                     throw new HibásBevittAdat("Töltse ki az Azonosító mezőt.");
 
-                if (!ujRekord && !VanE)
-                    throw new HibásBevittAdat("Az azonosító nem található az adatbázisban.");
-
                 // JAVÍTANDÓ:a true mikor lesz false?
                 //kesz
                 //olvasd el mégegyszer!!!!!!!!!!!!
-                if (ujRekord)
+                //három a magyar igazság
+                string Egyseg = CmbxEgység.SelectedItem?.ToStrTrim();
+                bool Nap = int.TryParse(TxtBxMennyiNap.Text, out int MennyiNap);
+                bool Ora = int.TryParse(TxtBxMennyiÓra.Text, out int MennyiÓra);
+
+                if (Egyseg == "Dátum" && (!Nap || MennyiNap <= 0))
+                    throw new HibásBevittAdat("A Nap mezőben csak pozitív egész szám szerepelhet.");
+
+                else if (Egyseg == "Üzemóra" && (!Ora || MennyiÓra <= 0))
+                    throw new HibásBevittAdat("Az Óra mezőben csak pozitív egész szám szerepelhet.");
+
+                else if (Egyseg == "Bekövetkezés" && (!Nap || !Ora || MennyiNap <= 0 || MennyiÓra <= 0))
+                    throw new HibásBevittAdat("A Nap és Óra mezőkben csak pozitív egész szám szerepelhetnek.");
+
+                if (string.IsNullOrEmpty(TxtBxMűvelet.Text))
+                    throw new HibásBevittAdat("Töltse ki a Művelet mezőt.");
+
+                if (Egyseg == "Üzemóra" || Egyseg == "Bekövetkezés")
                 {
-                    string Egyseg = CmbxEgység.SelectedItem?.ToStrTrim();
-                    bool Nap = int.TryParse(TxtBxMennyiNap.Text, out int MennyiNap);
-                    bool Ora = int.TryParse(TxtBxMennyiÓra.Text, out int MennyiÓra);
+                    AdatokUzemora = Kez_Uzemora.Lista_Adatok();
 
-                    if (Egyseg == "Dátum" && (!Nap || MennyiNap <= 0))
-                        throw new HibásBevittAdat("A Nap mezőben csak pozitív egész szám szerepelhet.");
+                    if (string.IsNullOrEmpty(TxtBxUtolsóÜzemóraÁllás.Text) || TxtBxUtolsóÜzemóraÁllás.Text == "0" ||
+                        !long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out _))
+                        throw new HibásBevittAdat("Az Utolsó Üzemóra Állás mező csak pozitív egész számot tartalmazhat.");
 
-                    else if (Egyseg == "Üzemóra" && (!Ora || MennyiÓra <= 0))
-                        throw new HibásBevittAdat("Az Óra mezőben csak pozitív egész szám szerepelhet.");
-
-                    else if (Egyseg == "Bekövetkezés" && (!Nap || !Ora || MennyiNap <= 0 || MennyiÓra <= 0))
-                        throw new HibásBevittAdat("A Nap és Óra mezőkben csak pozitív egész szám szerepelhetnek.");
-
-                    if (string.IsNullOrEmpty(TxtBxMűvelet.Text))
-                        throw new HibásBevittAdat("Töltse ki a Művelet mezőt.");
-
-                    if (Egyseg == "Üzemóra" || Egyseg == "Bekövetkezés")
+                    else
                     {
-                        AdatokUzemora = Kez_Uzemora.Lista_Adatok();
-
-                        if (string.IsNullOrEmpty(TxtBxUtolsóÜzemóraÁllás.Text) || TxtBxUtolsóÜzemóraÁllás.Text == "0" ||
-                            !long.TryParse(TxtBxUtolsóÜzemóraÁllás.Text, out _))
-                            throw new HibásBevittAdat("Az Utolsó Üzemóra Állás mező csak pozitív egész számot tartalmazhat.");
-
-                        else
-                        {
-                            long aktualisUzemora = AdatokUzemora.Count > 0 ? AdatokUzemora.Max(u => u.Uzemora) : 0;
-                            if (long.Parse(TxtBxUtolsóÜzemóraÁllás.Text) > aktualisUzemora)
-                                throw new HibásBevittAdat("Az Utolsó Üzemóra Állás nem lehet nagyobb, mint az aktuális Üzemóra érték.");
-                        }
+                        long aktualisUzemora = AdatokUzemora.Count > 0 ? AdatokUzemora.Max(u => u.Uzemora) : 0;
+                        if (long.Parse(TxtBxUtolsóÜzemóraÁllás.Text) > aktualisUzemora)
+                            throw new HibásBevittAdat("Az Utolsó Üzemóra Állás nem lehet nagyobb, mint az aktuális Üzemóra érték.");
                     }
-                    Eredmeny = true;
+
                 }
+                Eredmeny = true;
             }
             catch (HibásBevittAdat ex)
             {
@@ -611,8 +603,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             foreach (DataGridViewRow sor in tabla.Rows)
             {
                 // JAVÍTANDÓ:
-                if (sor.IsNewRow) continue;
-
+                //kesz
                 string statusz = sor.Cells["Státusz"].Value?.ToString().Trim();
 
                 if (statusz == "Törölt")
@@ -762,22 +753,16 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             try
             {
                 // JAVÍTANDÓ:
-                int AktivId = TxtBxId.Text.ToÉrt_Int();
-                bool Letezik = AdatokMuvelet.Any(a => a.ID == AktivId);
-                bool UjRekord = AktivId == 0 || !Letezik;
+                //kesz
+                int AktivId = int.TryParse(TxtBxId.Text?.Trim(), out int id) ? id : 0;
 
-                if (!UjRekord && !ModositasEll(true))
+                if (AktivId != 0 && !ModositasEll(true))
                     throw new HibásBevittAdat("Nem történt változás.");
 
-                if (!TxtBxEllenorzes(UjRekord))
+                if (!TxtBxEllenorzes(AktivId))
                     return;
-
-
-
                 // JAVÍTANDÓ: Nem azt mondtam, hogy nem vezethetsz be új változót
                 //kesz
-                if (!Letezik)
-                    AktivId = Kez_Muvelet.Sorszam();
 
                 Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(
                     AktivId,
@@ -790,7 +775,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     TxtBxUtolsóÜzemóraÁllás.Text.ToÉrt_Long()
                 );
 
-                if (Letezik)
+                if (AktivId != 0)
                     Kez_Muvelet.MeglevoMuvelet_Modositas(ADAT);
                 else
                     Kez_Muvelet.Rogzites(ADAT);
@@ -820,7 +805,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                if (!TxtBxEllenorzes(false))
+                int AktivId = int.TryParse(TxtBxId.Text?.Trim(), out int id) ? id : 0;
+                if (!TxtBxEllenorzes(AktivId))
                     return;
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
@@ -1375,7 +1361,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         Program.PostásNév.ToStrTrim(),
                         DateTime.Today
                     );
-                    Kez_Muvelet_Naplo.UtolagModositas(modositott, eredetiDatum);
+                    Kez_Muvelet_Naplo.Modositas(modositott, eredetiDatum,DtmPckrUtolagos.Value.Year);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1458,7 +1444,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     naploLista.Add(adat);
                 }
-                Kez_Muvelet_Naplo.EsztergaNaplozas(naploLista);
+                Kez_Muvelet_Naplo.Rogzites(naploLista);
             }
             catch (HibásBevittAdat ex)
             {

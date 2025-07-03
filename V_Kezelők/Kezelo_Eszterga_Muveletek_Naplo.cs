@@ -12,17 +12,19 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
     public class Kezelo_Eszterga_Muveletek_Naplo
     {
         readonly string jelszo = "bozaim";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{DateTime.Now.Year}_Napló.mdb".KönyvSzerk();
+        string hely;
         readonly string tablaNev = "Műveletek_Napló";
 
         // JAVÍTANDÓ:Nem jó, hogyan fogjuk a tavalyi adatokat olvasni, itt csak az aktuális év adatai vannak
-
-        public Kezelo_Eszterga_Muveletek_Naplo()
+        //Akkuban vannak ilyenek
+        private void FájlBeállítás(int Év)
         {
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{Év}_Napló.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartas_Naplo(hely);
         }
-        public List<Adat_Eszterga_Muveletek_Naplo> Lista_Adatok()
+        public List<Adat_Eszterga_Muveletek_Naplo> Lista_Adatok(int Év)
         {
+            FájlBeállítás(Év);
             string szoveg = "SELECT * FROM Műveletek_Napló ORDER BY ID ";
             List<Adat_Eszterga_Muveletek_Naplo> Adatok = new List<Adat_Eszterga_Muveletek_Naplo>();
             Adat_Eszterga_Muveletek_Naplo Adat;
@@ -59,10 +61,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         }
 
         // JAVÍTANDÓ:Ez rögzítés
-        public void EsztergaNaplozas(List<Adat_Eszterga_Muveletek_Naplo> Adatok)
+        //kesz
+        public void Rogzites(List<Adat_Eszterga_Muveletek_Naplo> Adatok, int Év)
         {
             try
             {
+                FájlBeállítás(Év);
                 List<string> sqlLista = new List<string>();
 
                 foreach (Adat_Eszterga_Muveletek_Naplo rekord in Adatok)
@@ -94,10 +98,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
         }
         // JAVÍTANDÓ:az módosítás
-        public void UtolagModositas(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum)
+        //kesz
+        public void Modositas(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum, int Év)
         {
             try
             {
+                FájlBeállítás(Év);
                 string szoveg = $"UPDATE {tablaNev} SET ";
                 szoveg += $"Utolsó_Dátum = #{újAdat.Utolsó_Dátum:yyyy-MM-dd}#, ";
                 szoveg += $"Utolsó_Üzemóra_Állás = {újAdat.Utolsó_Üzemóra_Állás}, ";
