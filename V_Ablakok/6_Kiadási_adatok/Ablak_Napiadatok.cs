@@ -178,15 +178,29 @@ namespace Villamos
                     case "Napikiadás":
                         MyE.DataTableToExcel(fájlexc, AdatTábla);
                         break;
-
-                    default:
-                        {
-
-                            if (Tábla.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
-                            else if (Tábla1.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla1);
-                            else if (Tábla2.Visible) Module_Excel.DataGridViewToExcel(fájlexc, Tábla2);
-
-                        }
+                    case "napiálló":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        break;
+                    case "Típuscsere":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla2);
+                        break;
+                    case "Személyzet":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla1);
+                        break;
+                    case "elkészült":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        break;
+                    case "havikészült":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        break;
+                    case "NapiKarban":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        break;
+                    case "HaviSzem":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        break;
+                    case "HaviTípus":
+                        MyE.DataTableToExcel(fájlexc, AdatTábla);
                         break;
                 }
 
@@ -221,6 +235,7 @@ namespace Villamos
         #region Állókocsik, Napi álló kocsik, Napielkészültek,Havielkészültkocsik
         private void Állókocsik_Click(object sender, EventArgs e)
         {
+            Napi_adatok_felirat();
             SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
             SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
             MilyenLista = "minden";
@@ -365,25 +380,32 @@ namespace Villamos
 
         private void Napiállókocsik_Click(object sender, EventArgs e)
         {
+            Napi_adatok_felirat();
             SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
             SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
             MilyenLista = "napiálló";
+            TáblaNév = "napiálló";
+
             Napihibalista();
         }
 
         private void Napielkészültek_Click(object sender, EventArgs e)
         {
+            Napi_adatok_felirat();
             SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
             SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
             MilyenLista = "elkészült";
+            TáblaNév = "elkészült";
             Napihibalista();
         }
 
         private void Havielkészültkocsik_Click(object sender, EventArgs e)
         {
+            Napi_adatok_felirat();
             SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
             SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
             MilyenLista = "havikészült";
+            TáblaNév = "havikészült";
             Napihibalista();
         }
         #endregion
@@ -557,6 +579,7 @@ namespace Villamos
             Tábla1.Visible = false;
             Tábla2.Visible = false;
             Tábla.Visible = true;
+            TáblaNév = "Napikiadás";
         }
 
         private void Label7_Click(object sender, EventArgs e)
@@ -573,6 +596,7 @@ namespace Villamos
             Tábla1.Visible = true;
             Tábla2.Visible = false;
             Tábla.Visible = false;
+            TáblaNév = "Személyzet";
         }
 
         private void Label8_Click(object sender, EventArgs e)
@@ -589,6 +613,7 @@ namespace Villamos
             Tábla1.Visible = false;
             Tábla2.Visible = true;
             Tábla.Visible = false;
+            TáblaNév = "Típuscsere";
         }
         #endregion
 
@@ -796,6 +821,7 @@ namespace Villamos
         {
             try
             {
+                Napi_adatok_felirat();
                 TáblaNév = "Havikiadás";
                 MilyenLista = "havilista";
 
@@ -905,6 +931,9 @@ namespace Villamos
         {
             try
             {
+                Napi_adatok_felirat();
+                TáblaNév = "HaviSzem";
+
                 MilyenLista = "haviszem";
                 Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
@@ -1003,6 +1032,9 @@ namespace Villamos
         {
             try
             {
+                Napi_adatok_felirat();
+                TáblaNév = "HaviTípus";
+
                 Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
                 Tábla.DataSource = null;
@@ -1105,6 +1137,9 @@ namespace Villamos
         {
             try
             {
+                Napi_adatok_felirat();
+                TáblaNév = "NapiKarban";
+
                 Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
                 Tábla.DataSource = null;
