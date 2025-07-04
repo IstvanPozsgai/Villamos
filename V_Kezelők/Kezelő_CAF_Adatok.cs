@@ -196,6 +196,22 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
+        public Adat_CAF_Adatok Utolso_Ido_Vizsgalat_Adatai(string Azonosító)
+        {
+            return Lista_Adatok()
+                .Where(a => a.Státus == 6 && a.Azonosító == $"{Azonosító}" && a.IDŐvKM == 1)
+                .OrderByDescending(a => a.Dátum)
+                .FirstOrDefault();            
+        }
+
+        public Adat_CAF_Adatok Utolso_Km_Vizsgalat_Adatai(string Azonosító)
+        {
+            return Lista_Adatok()
+                .Where(a => a.Státus == 6 && a.Azonosító == $"{Azonosító}" && a.IDŐvKM == 2)
+                .OrderByDescending(a => a.Dátum)
+                .FirstOrDefault();
+        }
+
         public double Sorszám()
         {
             double válasz = 1;

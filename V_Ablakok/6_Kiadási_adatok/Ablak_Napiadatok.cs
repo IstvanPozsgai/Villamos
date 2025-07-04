@@ -216,7 +216,7 @@ namespace Villamos
         #endregion
 
 
-        #region Állókocsik
+        #region Állókocsik, Napi álló kocsik, Napielkészültek,Havielkészültkocsik
         private void Állókocsik_Click(object sender, EventArgs e)
         {
             SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
@@ -230,11 +230,10 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Jármű_Javításiátfutástábla> Adatok = new List<Adat_Jármű_Javításiátfutástábla>();
+                List<Adat_Jármű_Javításiátfutástábla> Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 if (MilyenLista.Trim() == "napiálló")
                 {
-                    Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim());
                     Adatok = (from a in Adatok
                               where a.Kezdődátum >= MyF.Nap0000(Dátum.Value)
                               && a.Kezdődátum <= MyF.Nap2359(Dátum.Value)
@@ -243,7 +242,6 @@ namespace Villamos
                 }
                 if (MilyenLista.Trim() == "elkészült")
                 {
-                    Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                     Adatok = (from a in Adatok
                               where a.Végdátum >= MyF.Nap0000(Dátum.Value)
                               && a.Végdátum <= MyF.Nap2359(Dátum.Value)
@@ -252,7 +250,6 @@ namespace Villamos
                 }
                 if (MilyenLista.Trim() == "havikészült")
                 {
-                    Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                     Adatok = (from a in Adatok
                               where a.Végdátum >= MyF.Nap0000(MyF.Hónap_elsőnapja(Dátum.Value))
                               && a.Végdátum <= MyF.Nap2359(MyF.Hónap_utolsónapja(Dátum.Value))
@@ -260,14 +257,17 @@ namespace Villamos
                               select a).ToList();
                 }
 
+                Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
                 Tábla.DataSource = null;
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
 
+
                 NapiFejlécTábla();
                 NapiTartalomTábla(Adatok);
-                Tábla.DataSource = AdatTábla;
+                KötésiOsztály.DataSource = AdatTábla;
+                Tábla.DataSource = KötésiOsztály;
                 NapiSzélességTábla();
 
                 Tábla.Top = 50;
@@ -290,12 +290,26 @@ namespace Villamos
 
         private void NapiFejlécTábla()
         {
-            AdatTábla.Columns.Clear();
-            AdatTábla.Columns.Add("Azonosító");
-            AdatTábla.Columns.Add("Kezdő dátum");
-            AdatTábla.Columns.Add("Végső dátum");
-            AdatTábla.Columns.Add("Állási napok").DataType = typeof(int);
-            AdatTábla.Columns.Add("Hiba leírása");
+            try
+            {
+
+                AdatTábla.Rows.Clear();
+                AdatTábla.Columns.Clear();
+                AdatTábla.Columns.Add("Azonosító");
+                AdatTábla.Columns.Add("Kezdő dátum");
+                AdatTábla.Columns.Add("Végső dátum");
+                AdatTábla.Columns.Add("Állási napok", typeof(int));
+                AdatTábla.Columns.Add("Hiba leírása");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void NapiSzélességTábla()
@@ -346,6 +360,30 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Napiállókocsik_Click(object sender, EventArgs e)
+        {
+            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
+            SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
+            MilyenLista = "napiálló";
+            Napihibalista();
+        }
+
+        private void Napielkészültek_Click(object sender, EventArgs e)
+        {
+            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
+            SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
+            MilyenLista = "elkészült";
+            Napihibalista();
+        }
+
+        private void Havielkészültkocsik_Click(object sender, EventArgs e)
+        {
+            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
+            SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
+            MilyenLista = "havikészült";
+            Napihibalista();
+        }
         #endregion
 
 
@@ -369,6 +407,7 @@ namespace Villamos
         {
             try
             {
+                Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
                 Tábla.DataSource = null;
                 Tábla.Rows.Clear();
@@ -406,8 +445,8 @@ namespace Villamos
             {
                 foreach (DataGridViewRow Sor in Tábla.Rows)
                 {
-                    if (Sor.Cells["Eltérés"].Value.ToÉrt_Long() < 0) Sor.Cells["Lejárat dátum"].Style.BackColor = Color.Red;
-                    if (Sor.Cells["Eltérés"].Value.ToÉrt_Long() > 0) Sor.Cells["Lejárat dátum"].Style.BackColor = Color.Blue;
+                    if (Sor.Cells["Eltérés"].Value.ToÉrt_Long() > 0) Sor.Cells["Eltérés"].Style.BackColor = Color.Red;
+                    if (Sor.Cells["Eltérés"].Value.ToÉrt_Long() < 0) Sor.Cells["Eltérés"].Style.BackColor = Color.Blue;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -426,15 +465,15 @@ namespace Villamos
             AdatTábla.Columns.Clear();
             AdatTábla.Columns.Add("Napszak");
             AdatTábla.Columns.Add("Típus");
-            AdatTábla.Columns.Add("Eltérés").DataType = typeof(long);
-            AdatTábla.Columns.Add("Előírás").DataType = typeof(long);
-            AdatTábla.Columns.Add("Forgalomban").DataType = typeof(long);
-            AdatTábla.Columns.Add("Tartalék").DataType = typeof(long);
-            AdatTábla.Columns.Add("Kocsiszíni").DataType = typeof(long);
-            AdatTábla.Columns.Add("Félreállítás").DataType = typeof(long);
-            AdatTábla.Columns.Add("Főjavítás").DataType = typeof(long);
-            AdatTábla.Columns.Add("Összesen").DataType = typeof(long);
-            AdatTábla.Columns.Add("Személyzethiány").DataType = typeof(long);
+            AdatTábla.Columns.Add("Eltérés", typeof(long));
+            AdatTábla.Columns.Add("Előírás", typeof(long));
+            AdatTábla.Columns.Add("Forgalomban", typeof(long));
+            AdatTábla.Columns.Add("Tartalék", typeof(long));
+            AdatTábla.Columns.Add("Kocsiszíni", typeof(long));
+            AdatTábla.Columns.Add("Félreállítás", typeof(long));
+            AdatTábla.Columns.Add("Főjavítás", typeof(long));
+            AdatTábla.Columns.Add("Összesen", typeof(long));
+            AdatTábla.Columns.Add("Személyzethiány", typeof(long));
         }
 
         private void NapiKiadSzélességTábla()
@@ -688,24 +727,12 @@ namespace Villamos
         #endregion
 
 
-        #region Napi álló kocsik
-        private void Napiállókocsik_Click(object sender, EventArgs e)
-        {
-            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
-            SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
-            MilyenLista = "napiálló";
-            Napihibalista();
-        }
-        #endregion
-
-
         #region Havi adatok
         private void Havilista_Click(object sender, EventArgs e)
         {
             try
             {
                 TáblaNév = "Havikiadás";
-                Tábla.Visible = false;
                 MilyenLista = "havilista";
 
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
@@ -718,6 +745,7 @@ namespace Villamos
                           orderby a.Dátum, a.Napszak, a.Típus
                           select a).ToList();
 
+                Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
                 Tábla.DataSource = null;
                 Tábla.Rows.Clear();
@@ -735,7 +763,6 @@ namespace Villamos
                 Tábla.Visible = true;
                 Tábla.Refresh();
                 Tábla.ClearSelection();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -754,13 +781,13 @@ namespace Villamos
             AdatTábla.Columns.Add("Dátum");
             AdatTábla.Columns.Add("Napszak");
             AdatTábla.Columns.Add("Típus");
-            AdatTábla.Columns.Add("Forgalomban").DataType = typeof(int);
-            AdatTábla.Columns.Add("Tartalék").DataType = typeof(int);
-            AdatTábla.Columns.Add("Kocsiszíni").DataType = typeof(int);
-            AdatTábla.Columns.Add("Félreállítás").DataType = typeof(int);
-            AdatTábla.Columns.Add("Főjavítás").DataType = typeof(int);
-            AdatTábla.Columns.Add("Összesen").DataType = typeof(int);
-            AdatTábla.Columns.Add("Személyzethiány").DataType = typeof(int);
+            AdatTábla.Columns.Add("Forgalomban", typeof(int));
+            AdatTábla.Columns.Add("Tartalék", typeof(int));
+            AdatTábla.Columns.Add("Kocsiszíni", typeof(int));
+            AdatTábla.Columns.Add("Félreállítás", typeof(int));
+            AdatTábla.Columns.Add("Főjavítás", typeof(int));
+            AdatTábla.Columns.Add("Összesen", typeof(int));
+            AdatTábla.Columns.Add("Személyzethiány", typeof(int));
         }
 
         private void HaviSzélességTábla()
@@ -809,28 +836,18 @@ namespace Villamos
             }
         }
 
-        private void Havielkészültkocsik_Click(object sender, EventArgs e)
-        {
-            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
-            SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
-            MilyenLista = "havikészült";
-            Napihibalista();
-        }
-
-
         private void Haviszemélyzethiány_Click(object sender, EventArgs e)
         {
             try
             {
                 MilyenLista = "haviszem";
-
+                Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
                 Tábla.DataSource = null;
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
 
                 NapiSzemFejlécTábla();
-
                 NapiSzemTartalomTábla();
                 KötésiOsztály.DataSource = AdatTábla;
                 Tábla.DataSource = KötésiOsztály;
@@ -921,8 +938,7 @@ namespace Villamos
         {
             try
             {
-
-
+                Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
                 Tábla.DataSource = null;
                 Tábla.Rows.Clear();
@@ -1020,18 +1036,11 @@ namespace Villamos
 
 
         #region Napi adatok stb
-        private void Napielkészültek_Click(object sender, EventArgs e)
-        {
-            SUBnapihibagöngyölés(Cmbtelephely.Text.Trim());
-            SUBNapielkészültek(Dátum.Value, Cmbtelephely.Text.Trim());
-            MilyenLista = "elkészült";
-            Napihibalista();
-        }
-
         private void Napikarbantartás_Click(object sender, EventArgs e)
         {
             try
             {
+                Tábla.CleanFilterAndSort();
                 Tábla.Visible = false;
                 Tábla.DataSource = null;
                 Tábla.Rows.Clear();
