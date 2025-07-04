@@ -34,9 +34,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Kezelők
-        readonly Kezelo_Eszterga_Muveletek Kez_Muvelet = new Kezelo_Eszterga_Muveletek();
-        readonly Kezelo_Eszterga_Muveletek_Naplo Kez_Muvelet_Naplo = new Kezelo_Eszterga_Muveletek_Naplo();
-        readonly Kezelo_Eszterga_Uzemora Kez_Uzemora = new Kezelo_Eszterga_Uzemora();
+        readonly Kezelő_Eszterga_Műveletek Kez_Muvelet = new Kezelő_Eszterga_Műveletek();
+        readonly Kezelő_Eszterga_Műveletek_Napló Kez_Muvelet_Naplo = new Kezelő_Eszterga_Műveletek_Napló();
+        readonly Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
         #endregion
 
         #region Alap

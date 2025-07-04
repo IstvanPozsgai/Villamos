@@ -8,7 +8,7 @@ using MyA = Adatbázis;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 {
-    public class Kezelo_Eszterga_Uzemora
+    public class Kezelő_Eszterga_Üzemóra
     {
         readonly string jelszo = "bozaim";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";

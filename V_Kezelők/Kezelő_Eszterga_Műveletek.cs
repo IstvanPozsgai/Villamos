@@ -13,13 +13,13 @@ namespace Villamos.Villamos_Kezelők
     // JAVÍTANDÓ:
     //sok módosítás
     //meg nincs kesz
-    public class Kezelo_Eszterga_Muveletek
+    public class Kezelő_Eszterga_Műveletek
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb".KönyvSzerk();
         readonly string jelszo = "bozaim";
         readonly string tablaNev = "Műveletek";
 
-        public Kezelo_Eszterga_Muveletek()
+        public Kezelő_Eszterga_Műveletek()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartás(hely);
         }

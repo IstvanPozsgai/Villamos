@@ -9,7 +9,7 @@ using MyA = Adatbázis;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 {
-    public class Kezelo_Eszterga_Muveletek_Naplo
+    public class Kezelő_Eszterga_Műveletek_Napló
     {
         readonly string jelszo = "bozaim";
         string hely;
