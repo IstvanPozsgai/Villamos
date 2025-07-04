@@ -222,6 +222,30 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás_Kész_Ido(string utolso_nap, int utolso_nap_sorszama, DateTime vizsgdatum_km, string telephely, long szamlalo, string azonosito)
+        {
+            try
+            {
+                string szöveg = "UPDATE alap  SET ";
+                szöveg += $" Utolsó_km='{utolso_nap}', "; // vizsgálatot kapott
+                szöveg += $" Utolsó_km_sorszám={utolso_nap_sorszama}, ";  // vizsgálat sorszáma
+                szöveg += $" Vizsgdátum_km='{vizsgdatum_km:yyyy.MM.dd}', ";
+                szöveg += $" Végezte_km='{telephely}', ";
+                szöveg += $" számláló={szamlalo}";
+                szöveg += $" WHERE azonosító='{azonosito}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Módosítás_Kész_Km(Adat_CAF_alap Adat)
         {
             try
@@ -233,6 +257,30 @@ namespace Villamos.Kezelők
                 szöveg += $" Végezte_km='{Adat.Végezte_km}', ";
                 szöveg += $" számláló={Adat.Számláló}";
                 szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Kész_Km(string utolso_km, int utolso_km_sorszama, DateTime vizsgdatum_km, string telephely, long szamlalo, string azonosito)
+        {
+            try
+            {
+                string szöveg = "UPDATE alap  SET ";
+                szöveg += $" Utolsó_km='{utolso_km}', "; // vizsgálatot kapott
+                szöveg += $" Utolsó_km_sorszám={utolso_km_sorszama}, ";  // vizsgálat sorszáma
+                szöveg += $" Vizsgdátum_km='{vizsgdatum_km:yyyy.MM.dd}', ";
+                szöveg += $" Végezte_km='{telephely}', ";
+                szöveg += $" számláló={szamlalo}";
+                szöveg += $" WHERE azonosító='{azonosito}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
