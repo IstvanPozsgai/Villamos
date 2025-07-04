@@ -23,7 +23,9 @@ namespace Villamos
         readonly Kezelő_Főkönyv_Típuscsere KézTípus = new Kezelő_Főkönyv_Típuscsere();
         readonly Kezelő_Forte_Kiadási_Adatok KézKiadási = new Kezelő_Forte_Kiadási_Adatok();
 
-        readonly DataTable AdatTábla = new DataTable();
+        //#pragma warning disable IDE0044 // Add readonly modifier
+        DataTable AdatTábla = new DataTable();
+        //#pragma warning restore IDE0044 // Add readonly modifier
         string TáblaNév = "";
 
         public Ablak_Napiadatok()
@@ -230,11 +232,10 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Jármű_Javításiátfutástábla> Adatok = new List<Adat_Jármű_Javításiátfutástábla>();
+                List<Adat_Jármű_Javításiátfutástábla> Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 if (MilyenLista.Trim() == "napiálló")
                 {
-                    Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim());
                     Adatok = (from a in Adatok
                               where a.Kezdődátum >= MyF.Nap0000(Dátum.Value)
                               && a.Kezdődátum <= MyF.Nap2359(Dátum.Value)
@@ -243,7 +244,6 @@ namespace Villamos
                 }
                 if (MilyenLista.Trim() == "elkészült")
                 {
-                    Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                     Adatok = (from a in Adatok
                               where a.Végdátum >= MyF.Nap0000(Dátum.Value)
                               && a.Végdátum <= MyF.Nap2359(Dátum.Value)
@@ -252,7 +252,6 @@ namespace Villamos
                 }
                 if (MilyenLista.Trim() == "havikészült")
                 {
-                    Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                     Adatok = (from a in Adatok
                               where a.Végdátum >= MyF.Nap0000(MyF.Hónap_elsőnapja(Dátum.Value))
                               && a.Végdátum <= MyF.Nap2359(MyF.Hónap_utolsónapja(Dátum.Value))
@@ -267,7 +266,8 @@ namespace Villamos
 
                 NapiFejlécTábla();
                 NapiTartalomTábla(Adatok);
-                Tábla.DataSource = AdatTábla;
+                KötésiOsztály.DataSource = AdatTábla;
+                Tábla.DataSource = KötésiOsztály;
                 NapiSzélességTábla();
 
                 Tábla.Top = 50;
@@ -290,12 +290,26 @@ namespace Villamos
 
         private void NapiFejlécTábla()
         {
-            AdatTábla.Columns.Clear();
-            AdatTábla.Columns.Add("Azonosító");
-            AdatTábla.Columns.Add("Kezdő dátum");
-            AdatTábla.Columns.Add("Végső dátum");
-            AdatTábla.Columns.Add("Állási napok").DataType = typeof(int);
-            AdatTábla.Columns.Add("Hiba leírása");
+            try
+            {
+
+                AdatTábla.Rows.Clear();
+                AdatTábla.Columns.Clear();
+                AdatTábla.Columns.Add("Azonosító");
+                AdatTábla.Columns.Add("Kezdő dátum");
+                AdatTábla.Columns.Add("Végső dátum");
+                AdatTábla.Columns.Add("Állási napok", typeof(int));
+                AdatTábla.Columns.Add("Hiba leírása");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void NapiSzélességTábla()
