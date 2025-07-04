@@ -204,9 +204,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         Holtart.Lép();
 
                     }
-                    KézCAFAlap.Módosítás_kmAdat(AdatokGy);
+                    KézCAFAlap.Módosítás_kmAdat(AdatokGy);                   
                 }
-
                 Holtart.Ki();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -300,13 +299,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     }
                     utolso_vizsgalat_km.Text = utolso_ido.Számláló.ToString();
 
-                    if (Caf_Adatok_Tabla_Adat.Számláló > Adat.Számláló)
+                    if (utolso_km.Számláló > utolso_ido.Számláló)
                     {
-                        vegso_km_tbox.Text = (Caf_Adatok_Tabla_Adat.Számláló + Adat.Havikm).ToString();
+                        vegso_km_tbox.Text = (utolso_km.Számláló + Adat.Havikm).ToString();
                     }
                     else
                     {
-                        vegso_km_tbox.Text = (Adat.Számláló + Adat.Havikm).ToString();
+                        vegso_km_tbox.Text = (utolso_ido.Számláló + Adat.Havikm).ToString();
                     }
 
                 }
