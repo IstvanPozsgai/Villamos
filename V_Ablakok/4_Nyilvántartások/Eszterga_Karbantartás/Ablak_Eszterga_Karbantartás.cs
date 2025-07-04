@@ -632,8 +632,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 foreach (DataGridViewRow row in Tabla.Rows)
                 {
-                    if (row.IsNewRow) continue;
-
                     if (row.Cells["Sorszám"].Value != null && int.TryParse(row.Cells["Sorszám"].Value.ToStrTrim(), out int Sorszam))
                     {
                         Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(r => r.ID == Sorszam);
@@ -1163,8 +1161,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                     // Sorok bejárása
                     foreach (DataGridViewRow row in tábla.Rows)
                     {
-                        if (row.IsNewRow) continue;
-
                         foreach (DataGridViewCell cell in row.Cells)
                         {
                             string szoveg = cell.Value?.ToStrTrim() ?? "";

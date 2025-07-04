@@ -1075,8 +1075,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     // Sorok bejárása
                     foreach (DataGridViewRow row in tábla.Rows)
                     {
-                        if (row.IsNewRow) continue;
-
                         foreach (DataGridViewCell cell in row.Cells)
                         {
                             string szoveg = cell.Value?.ToString() ?? "";

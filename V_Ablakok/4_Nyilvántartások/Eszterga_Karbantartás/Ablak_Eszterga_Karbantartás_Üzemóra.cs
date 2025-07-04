@@ -163,8 +163,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             foreach (DataGridViewRow sor in tabla.Rows)
             {
-                if (sor.IsNewRow) continue;
-
                 string statusz = sor.Cells["Státusz"].Value?.ToStrTrim();
 
                 if (statusz == "Törölt")
@@ -397,8 +395,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     // Sorok bejárása
                     foreach (DataGridViewRow row in tábla.Rows)
                     {
-                        if (row.IsNewRow) continue;
-
                         foreach (DataGridViewCell cell in row.Cells)
                         {
                             string szoveg = cell.Value?.ToString() ?? "";
