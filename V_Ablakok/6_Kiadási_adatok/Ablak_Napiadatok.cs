@@ -24,6 +24,8 @@ namespace Villamos
         readonly Kezelő_Forte_Kiadási_Adatok KézKiadási = new Kezelő_Forte_Kiadási_Adatok();
 
         readonly DataTable AdatTábla = new DataTable();
+        readonly DataTable AdatTábla1 = new DataTable();
+        readonly DataTable AdatTábla2 = new DataTable();
         string TáblaNév = "";
 
         public Ablak_Napiadatok()
@@ -587,55 +589,26 @@ namespace Villamos
             Tábla2.Visible = true;
             Tábla.Visible = false;
         }
+        #endregion
 
-        // JAVÍTANDÓ:
+
+        #region Személyzet hiány tábla
         private void Táblázatlistázásszemélyzet()
         {
             try
             {
-                List<Adat_Főkönyv_Személyzet> Adatok = KézSzemély.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
-                Adatok = (from a in Adatok
-                          where a.Dátum >= MyF.Nap0000(Dátum.Value)
-                          && a.Dátum <= MyF.Nap2359(Dátum.Value)
-                          orderby a.Napszak, a.Típus
-                          select a).ToList();
 
+                Tábla1.CleanFilterAndSort();
+                Tábla1.Visible = false;
+                Tábla1.DataSource = null;
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
-                Tábla1.Refresh();
-                Tábla1.Visible = false;
-                Tábla1.ColumnCount = 7;
 
-                // fejléc elkészítése
-                Tábla1.Columns[0].HeaderText = "Dátum";
-                Tábla1.Columns[0].Width = 150;
-                Tábla1.Columns[1].HeaderText = "Napszak";
-                Tábla1.Columns[1].Width = 150;
-                Tábla1.Columns[2].HeaderText = "Típus";
-                Tábla1.Columns[2].Width = 150;
-                Tábla1.Columns[3].HeaderText = "Viszonylat";
-                Tábla1.Columns[3].Width = 150;
-                Tábla1.Columns[4].HeaderText = "Forgalmi";
-                Tábla1.Columns[4].Width = 150;
-                Tábla1.Columns[5].HeaderText = "Indulási idő";
-                Tábla1.Columns[5].Width = 150;
-                Tábla1.Columns[6].HeaderText = "Pályaszám";
-                Tábla1.Columns[6].Width = 150;
-
-                int i;
-                foreach (Adat_Főkönyv_Személyzet rekord in Adatok)
-                {
-                    Tábla1.RowCount++;
-                    i = Tábla1.RowCount - 1;
-
-                    Tábla1.Rows[i].Cells[0].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                    Tábla1.Rows[i].Cells[1].Value = rekord.Napszak.Trim();
-                    Tábla1.Rows[i].Cells[2].Value = rekord.Típus.Trim();
-                    Tábla1.Rows[i].Cells[3].Value = rekord.Viszonylat.Trim();
-                    Tábla1.Rows[i].Cells[4].Value = rekord.Forgalmiszám.Trim();
-                    Tábla1.Rows[i].Cells[5].Value = rekord.Tervindulás.ToString("hh:mm");
-                    Tábla1.Rows[i].Cells[6].Value = rekord.Azonosító.Trim();
-                }
+                SzemélyFejlécTábla();
+                SzemélyTartalomTábla();
+                KötésiOsztály.DataSource = AdatTábla1;
+                Tábla1.DataSource = KötésiOsztály;
+                SzemélySzélességTábla();
 
                 Tábla1.Top = 50;
                 Tábla1.Left = 230;
@@ -655,7 +628,68 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
+        private void SzemélyFejlécTábla()
+        {
+            AdatTábla1.Columns.Clear();
+            AdatTábla1.Columns.Add("Dátum");
+            AdatTábla1.Columns.Add("Napszak");
+            AdatTábla1.Columns.Add("Típus");
+            AdatTábla1.Columns.Add("Viszonylat");
+            AdatTábla1.Columns.Add("Forgalmi");
+            AdatTábla1.Columns.Add("Indulási idő");
+            AdatTábla1.Columns.Add("Pályaszám");
+        }
+
+        private void SzemélySzélességTábla()
+        {
+            Tábla1.Columns["Dátum"].Width = 150;
+            Tábla1.Columns["Napszak"].Width = 150;
+            Tábla1.Columns["Típus"].Width = 150;
+            Tábla1.Columns["Viszonylat"].Width = 150;
+            Tábla1.Columns["Forgalmi"].Width = 150;
+            Tábla1.Columns["Indulási idő"].Width = 150;
+            Tábla1.Columns["Pályaszám"].Width = 150;
+        }
+
+        private void SzemélyTartalomTábla()
+        {
+            try
+            {
+                List<Adat_Főkönyv_Személyzet> Adatok = KézSzemély.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Dátum >= MyF.Nap0000(Dátum.Value)
+                          && a.Dátum <= MyF.Nap2359(Dátum.Value)
+                          orderby a.Napszak, a.Típus
+                          select a).ToList();
+
+                AdatTábla1.Clear();
+                foreach (Adat_Főkönyv_Személyzet rekord in Adatok)
+                {
+                    DataRow Soradat = AdatTábla1.NewRow();
+                    Soradat["Dátum"] = rekord.Dátum.ToString("yyyy.MM.dd");
+                    Soradat["Napszak"] = rekord.Napszak.Trim();
+                    Soradat["Típus"] = rekord.Típus.Trim();
+                    Soradat["Viszonylat"] = rekord.Viszonylat.Trim();
+                    Soradat["Forgalmi"] = rekord.Forgalmiszám.Trim();
+                    Soradat["Indulási idő"] = rekord.Tervindulás.ToString("hh:mm");
+                    Soradat["Pályaszám"] = rekord.Azonosító.Trim();
+                    AdatTábla1.Rows.Add(Soradat);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+
+        #region Típus csere tábla
         private void Táblázatlistázástípuscsere()
         {
             try
@@ -752,7 +786,8 @@ namespace Villamos
                 Tábla.Columns.Clear();
 
                 HaviFejlécTábla();
-                Tábla.DataSource = AdatTábla;
+                KötésiOsztály.DataSource = AdatTábla;
+                Tábla.DataSource = KötésiOsztály;
                 HaviTartalomTábla(Adatok);
                 HaviSzélességTábla();
 
