@@ -220,6 +220,63 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
+        // Kérdés: Ez így helyes, vagy jó volt az eddigi Alap táblás megoldás?
+        private Adat_CAF_alap Kalkulál_Temp(Adat_CAF_Adatok villamos)
+        {
+            try
+            {
+                Adat_CAF_Adatok Adatok = villamos;
+
+                AdatokZser.Clear();
+                AdatokZser = KézZSerKm.Lista_adatok(DateTime.Today.Year - 1);
+                List<Adat_Főkönyv_Zser_Km> Ideig = KézZSerKm.Lista_adatok(DateTime.Today.Year);
+                AdatokZser.AddRange(Ideig);
+                Adat_CAF_alap visszaAdat = null;
+
+                if (Adatok != null)
+                {
+                   
+                        long havikm = 0;
+                        List<Adat_Főkönyv_Zser_Km> vane = (from a in AdatokZser
+                                                           where a.Azonosító.Trim() == Adatok.Azonosító.Trim()
+                                                           && a.Dátum >= DateTime.Now.AddDays(-30)
+                                                           select a).ToList();
+
+                        if (vane != null) havikm = vane.Sum(t => t.Napikm);
+
+                        // Kérdés: Erre szükség van?
+                        vane = (from t in AdatokZser
+                                where t.Azonosító.Trim() == Adatok.Azonosító.Trim()
+                                && t.Dátum > Adatok.Dátum
+                                select t).ToList();
+
+                        //Számláló az utolsó vizsgálat km óra állása
+                        //kmu ==Jelenlegi becsült KM állás
+                        long kmukm = Adatok.Számláló;
+                        if (vane != null) kmukm += vane.Sum(t => t.Napikm);
+
+                        visszaAdat = new Adat_CAF_alap(
+                                            Adatok.Azonosító.Trim(),
+                                            havikm,
+                                            kmukm,
+                                            DateTime.Today);
+                }       
+                return visszaAdat;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+
         private void Lekérdezés_lekérdezés_Click(object sender, EventArgs e)
         {
             Alapadatokat_kiír();
@@ -242,6 +299,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 
                 Adat_CAF_Adatok utolso_km = KezCafAdatok.Utolso_Km_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
                 Adat_CAF_Adatok utolso_ido = KezCafAdatok.Utolso_Ido_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
+                Adat_CAF_alap zser = Kalkulál_Temp(KezCafAdatok.Lista_Adatok().FirstOrDefault(a => a.Azonosító == Alap_pályaszám.Text.Trim()));
 
                 if (Adat != null)
                 {
@@ -275,11 +333,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     }
                     Alap_KM_számláló.Text = utolso_km.Számláló.ToString();
 
-                    Alap_Havi_km.Text = Adat.Havikm.ToString();
-                    Alap_KMU.Text = Adat.KMUkm.ToString();
-                    Alap_Össz_km.Text = Adat.Teljeskm.ToString();
-                    Alap_Dátum_frissítés.Value = Adat.KMUdátum;
-                    Alap_Típus.Text = Adat.Típus;
+                    Alap_Havi_km.Text = zser.Havikm.ToString();
+                    Alap_KMU.Text = zser.KMUkm.ToString();
+                    Alap_Össz_km.Text = zser.Teljeskm.ToString();
+                    Alap_Dátum_frissítés.Value = zser.KMUdátum;
+                    Alap_Típus.Text = zser.Típus;
 
                     Alap_felújítás.Value = Adat.Fudátum;
 
