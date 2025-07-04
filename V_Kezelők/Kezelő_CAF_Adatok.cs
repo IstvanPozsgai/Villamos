@@ -201,7 +201,7 @@ namespace Villamos.Kezelők
             return Lista_Adatok()
                 .Where(a => a.Státus == 6 && a.Azonosító == $"{Azonosító}" && a.IDŐvKM == 1)
                 .OrderByDescending(a => a.Dátum)
-                .FirstOrDefault();            
+                .FirstOrDefault();
         }
 
         public Adat_CAF_Adatok Utolso_Km_Vizsgalat_Adatai(string Azonosító)
@@ -408,8 +408,8 @@ namespace Villamos.Kezelők
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";// megjegyzés
                 szöveg += $"idővKM={Adat.IDŐvKM}, ";
                 szöveg += $"KmRogzitett_e={Adat.KmRogzitett_e}, ";
-                szöveg += $"Telephely='{Adat.Telephely}')";
-                szöveg += $" WHERE id={Adat.Id}";
+                szöveg += $"Telephely='{Adat.Telephely}' ";
+                szöveg += $"WHERE id={Adat.Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
