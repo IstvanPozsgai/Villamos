@@ -394,6 +394,7 @@ namespace Villamos
         {
             TáblaNév = "Napikiadás";
             Napi_kiadási_adatok();
+
         }
 
         private void Napi_kiadási_adatok()
@@ -606,8 +607,8 @@ namespace Villamos
 
                 SzemélyFejlécTábla();
                 SzemélyTartalomTábla();
-                KötésiOsztály.DataSource = AdatTábla1;
-                Tábla1.DataSource = KötésiOsztály;
+                KötésiOsztály1.DataSource = AdatTábla1;
+                Tábla1.DataSource = KötésiOsztály1;
                 SzemélySzélességTábla();
 
                 Tábla1.Top = 50;
@@ -694,52 +695,18 @@ namespace Villamos
         {
             try
             {
-                List<Adat_FőKönyv_Típuscsere> Adatok = KézTípus.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
-                Adatok = (from a in Adatok
-                          where a.Dátum >= MyF.Nap0000(Dátum.Value)
-                          && a.Dátum <= MyF.Nap2359(Dátum.Value)
-                          orderby a.Napszak, a.Típuselőírt, a.Viszonylat, a.Forgalmiszám
-                          select a).ToList();
-
+                Tábla2.CleanFilterAndSort();
+                Tábla2.Visible = false;
+                Tábla2.DataSource = null;
                 Tábla2.Rows.Clear();
                 Tábla2.Columns.Clear();
-                Tábla2.Refresh();
-                Tábla2.Visible = false;
-                Tábla2.ColumnCount = 8;
 
-                // fejléc elkészítése
-                Tábla2.Columns[0].HeaderText = "Dátum";
-                Tábla2.Columns[0].Width = 100;
-                Tábla2.Columns[1].HeaderText = "Napszak";
-                Tábla2.Columns[1].Width = 80;
-                Tábla2.Columns[2].HeaderText = "Típus előírt";
-                Tábla2.Columns[2].Width = 100;
-                Tábla2.Columns[3].HeaderText = "Típus kiadott";
-                Tábla2.Columns[3].Width = 100;
-                Tábla2.Columns[4].HeaderText = "Viszonylat";
-                Tábla2.Columns[4].Width = 100;
-                Tábla2.Columns[5].HeaderText = "Forgalmi";
-                Tábla2.Columns[5].Width = 100;
-                Tábla2.Columns[6].HeaderText = "Indulási idő";
-                Tábla2.Columns[6].Width = 100;
-                Tábla2.Columns[7].HeaderText = "Pályaszám";
-                Tábla2.Columns[7].Width = 100;
-                int i;
+                TípusCsereFejlécTábla();
+                TípusCsereTartalomTábla();
+                KötésiOsztály2.DataSource = AdatTábla2;
+                Tábla2.DataSource = KötésiOsztály2;
+                TípusCsereSzélességTábla();
 
-                foreach (Adat_FőKönyv_Típuscsere rekord in Adatok)
-                {
-                    Tábla2.RowCount++;
-                    i = Tábla2.RowCount - 1;
-
-                    Tábla2.Rows[i].Cells[0].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                    Tábla2.Rows[i].Cells[1].Value = rekord.Napszak;
-                    Tábla2.Rows[i].Cells[2].Value = rekord.Típuselőírt;
-                    Tábla2.Rows[i].Cells[3].Value = rekord.Típuskiadott;
-                    Tábla2.Rows[i].Cells[4].Value = rekord.Viszonylat;
-                    Tábla2.Rows[i].Cells[5].Value = rekord.Forgalmiszám;
-                    Tábla2.Rows[i].Cells[6].Value = rekord.Tervindulás.ToString("HH:mm");
-                    Tábla2.Rows[i].Cells[7].Value = rekord.Azonosító;
-                }
 
                 Tábla2.Top = 50;
                 Tábla2.Left = 230;
@@ -747,6 +714,69 @@ namespace Villamos
                 Tábla2.Width = Width - Tábla2.Left - 20;
                 Tábla2.Visible = true;
                 Tábla2.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TípusCsereFejlécTábla()
+        {
+            AdatTábla2.Columns.Clear();
+            AdatTábla2.Columns.Add("Dátum");
+            AdatTábla2.Columns.Add("Napszak");
+            AdatTábla2.Columns.Add("Típus előírt");
+            AdatTábla2.Columns.Add("Típus kiadott");
+            AdatTábla2.Columns.Add("Viszonylat");
+            AdatTábla2.Columns.Add("Forgalmi");
+            AdatTábla2.Columns.Add("Indulási idő");
+            AdatTábla2.Columns.Add("Pályaszám");
+        }
+
+        private void TípusCsereSzélességTábla()
+        {
+            Tábla2.Columns["Dátum"].Width = 100;
+            Tábla2.Columns["Napszak"].Width = 80;
+            Tábla2.Columns["Típus előírt"].Width = 200;
+            Tábla2.Columns["Típus kiadott"].Width = 200;
+            Tábla2.Columns["Viszonylat"].Width = 100;
+            Tábla2.Columns["Forgalmi"].Width = 100;
+            Tábla2.Columns["Indulási idő"].Width = 100;
+            Tábla2.Columns["Pályaszám"].Width = 100;
+        }
+
+        private void TípusCsereTartalomTábla()
+        {
+            try
+            {
+                List<Adat_FőKönyv_Típuscsere> Adatok = KézTípus.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Dátum >= MyF.Nap0000(Dátum.Value)
+                          && a.Dátum <= MyF.Nap2359(Dátum.Value)
+                          orderby a.Napszak, a.Típuselőírt, a.Viszonylat, a.Forgalmiszám
+                          select a).ToList();
+                AdatTábla2.Clear();
+
+                foreach (Adat_FőKönyv_Típuscsere rekord in Adatok)
+                {
+                    DataRow Soradat = AdatTábla2.NewRow();
+                    Soradat["Dátum"] = rekord.Dátum.ToString("yyyy.MM.dd");
+                    Soradat["Napszak"] = rekord.Napszak;
+                    Soradat["Típus előírt"] = rekord.Típuselőírt;
+                    Soradat["Típus kiadott"] = rekord.Típuskiadott;
+                    Soradat["Viszonylat"] = rekord.Viszonylat;
+                    Soradat["Forgalmi"] = rekord.Forgalmiszám;
+                    Soradat["Indulási idő"] = rekord.Tervindulás.ToString("HH:mm");
+                    Soradat["Pályaszám"] = rekord.Azonosító;
+
+                    AdatTábla2.Rows.Add(Soradat);
+                }
             }
             catch (HibásBevittAdat ex)
             {

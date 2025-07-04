@@ -62,11 +62,15 @@ namespace Villamos
             this.Tábla1 = new Zuby.ADGV.AdvancedDataGridView();
             this.Tábla2 = new Zuby.ADGV.AdvancedDataGridView();
             this.KötésiOsztály = new System.Windows.Forms.BindingSource(this.components);
+            this.KötésiOsztály1 = new System.Windows.Forms.BindingSource(this.components);
+            this.KötésiOsztály2 = new System.Windows.Forms.BindingSource(this.components);
             this.Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály2)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel2
@@ -299,7 +303,7 @@ namespace Villamos
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.FilterAndSortEnabled = true;
             this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla.Location = new System.Drawing.Point(220, 50);
+            this.Tábla.Location = new System.Drawing.Point(230, 50);
             this.Tábla.MaxFilterButtonImageHeight = 23;
             this.Tábla.Name = "Tábla";
             this.Tábla.ReadOnly = true;
@@ -319,7 +323,7 @@ namespace Villamos
             this.Tábla1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla1.FilterAndSortEnabled = true;
             this.Tábla1.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla1.Location = new System.Drawing.Point(221, 50);
+            this.Tábla1.Location = new System.Drawing.Point(230, 50);
             this.Tábla1.MaxFilterButtonImageHeight = 23;
             this.Tábla1.Name = "Tábla1";
             this.Tábla1.ReadOnly = true;
@@ -339,7 +343,7 @@ namespace Villamos
             this.Tábla2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla2.FilterAndSortEnabled = true;
             this.Tábla2.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla2.Location = new System.Drawing.Point(220, 50);
+            this.Tábla2.Location = new System.Drawing.Point(230, 50);
             this.Tábla2.MaxFilterButtonImageHeight = 23;
             this.Tábla2.Name = "Tábla2";
             this.Tábla2.ReadOnly = true;
@@ -389,6 +393,8 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -419,5 +425,7 @@ namespace Villamos
         private Zuby.ADGV.AdvancedDataGridView Tábla1;
         private Zuby.ADGV.AdvancedDataGridView Tábla2;
         internal BindingSource KötésiOsztály;
+        internal BindingSource KötésiOsztály1;
+        internal BindingSource KötésiOsztály2;
     }
 }
