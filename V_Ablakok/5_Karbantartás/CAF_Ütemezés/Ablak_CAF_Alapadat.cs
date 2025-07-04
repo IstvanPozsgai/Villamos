@@ -1,5 +1,4 @@
-﻿using ADOX;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -163,14 +162,17 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
+                // JAVÍTANDÓ:Ez majdnem jó
+                // Ebben az eljárásban minden kocsi adatát akarjuk  ellenőrizni
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(true);
 
+                // JAVÍTANDÓ:Ez csak egy kocsi adatait akarja ellenőrizni be kell tenni a ciklusba.
                 Adat_CAF_Adatok utolso_km = KezCafAdatok.Utolso_Km_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
                 Adat_CAF_Adatok utolso_ido = KezCafAdatok.Utolso_Ido_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
-  
+
                 KézCAFAlap.Módosítás_Kész_Ido(utolso_ido.Vizsgálat, utolso_ido.IDŐ_Sorszám, utolso_ido.Dátum, utolso_ido.Telephely, utolso_ido.Számláló, utolso_ido.Azonosító);
                 KézCAFAlap.Módosítás_Kész_Km(utolso_km.Vizsgálat, utolso_km.KM_Sorszám, utolso_km.Dátum, utolso_km.Telephely, utolso_km.Számláló, utolso_km.Azonosító);
-                
+
                 AdatokZser.Clear();
                 AdatokZser = KézZSerKm.Lista_adatok(DateTime.Today.Year - 1);
                 List<Adat_Főkönyv_Zser_Km> Ideig = KézZSerKm.Lista_adatok(DateTime.Today.Year);
@@ -190,7 +192,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                                            select a).ToList();
 
                         if (vane != null) havikm = vane.Sum(t => t.Napikm);
- 
+
                         vane = (from t in AdatokZser
                                 where t.Azonosító.Trim() == rekord.Azonosító.Trim()
                                 && t.Dátum > rekord.Vizsgdátum_km
@@ -217,9 +219,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     KézCAFAlap.Módosítás_kmAdat(AdatokGy);
                 }
                 Holtart.Ki();
-
+                // JAVÍTANDÓ:Ezeket a kiírásokat elvégzi részben a Alapadatokat_kiír metódus, nem  kell elvenni tőle a munkát
                 Adat_CAF_alap Adat = Adatok.FirstOrDefault(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
-                
+
                 Alap_Havi_km.Text = Adat.Havikm.ToString();
                 if (utolso_km.Számláló > utolso_ido.Számláló)
                 {
@@ -230,7 +232,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 {
                     Alap_KMU.Text = utolso_ido.Számláló.ToString();
                     vegso_km_tbox.Text = (utolso_ido.Számláló + Adat.Havikm).ToString();
-                }                
+                }
                 Alap_Össz_km.Text = Adat.Teljeskm.ToString();
                 Alap_Dátum_frissítés.Value = Adat.KMUdátum;
                 Alap_Típus.Text = Adat.Típus;
@@ -595,15 +597,5 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Alapadatokat_kiír();
         }
         #endregion
-
-        // JAVÍTANDÓ:Erre van szükség?
-        //KÉSZ✔
-
-        private void Alap_KM_számláló_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
     }
 }

@@ -119,7 +119,6 @@
             this.Alap_KM_számláló.ReadOnly = true;
             this.Alap_KM_számláló.Size = new System.Drawing.Size(146, 26);
             this.Alap_KM_számláló.TabIndex = 111;
-            this.Alap_KM_számláló.TextChanged += new System.EventHandler(this.Alap_KM_számláló_TextChanged);
             // 
             // Label20
             // 
