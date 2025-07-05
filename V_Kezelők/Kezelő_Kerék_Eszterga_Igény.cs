@@ -93,9 +93,19 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Év);
                 string szöveg;
                 if (Törlés)
-                    szöveg = $"UPDATE {táblanév} SET státus={Adat.Státus}, ütemezés_dátum='{Adat.Ütemezés_dátum:yyyy.MM.dd}' WHERE státus=2 AND telephely='{Adat.Telephely}' AND pályaszám='{Adat.Pályaszám}'";
+                    szöveg = $"UPDATE {táblanév} SET " +
+                        $"státus={Adat.Státus}, " +
+                        $"ütemezés_dátum='{Adat.Ütemezés_dátum:yyyy.MM.dd}' " +
+                        $"WHERE státus=2 " +
+                        $"AND telephely='{Adat.Telephely}' " +
+                        $"AND pályaszám='{Adat.Pályaszám}'";
                 else
-                    szöveg = $"UPDATE {táblanév} SET státus={Adat.Státus}, ütemezés_dátum='{Adat.Ütemezés_dátum:yyyy.MM.dd}' WHERE státus<=2 AND telephely='{Adat.Telephely}' AND pályaszám='{Adat.Pályaszám}'";
+                    szöveg = $"UPDATE {táblanév} SET " +
+                        $"státus={Adat.Státus}, " +
+                        $"ütemezés_dátum='{Adat.Ütemezés_dátum:yyyy.MM.dd}' " +
+                        $"WHERE státus<=2 " +
+                        $"AND telephely='{Adat.Telephely}' " +
+                        $"AND pályaszám='{Adat.Pályaszám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -108,6 +118,29 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Módosítás_Státus(int Év, string Pályaszám, int volt, int lesz)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                string szöveg = $"UPDATE {táblanév} SET státus={lesz}";
+                szöveg += $" WHERE státus={volt} ";
+                szöveg += $"AND pályaszám='{Pályaszám}'";
+
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         //Elkopó
         public List<Adat_Kerék_Eszterga_Igény> Lista_Adatok(string hely, string jelszó, string szöveg)

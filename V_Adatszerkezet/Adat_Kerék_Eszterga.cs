@@ -92,6 +92,17 @@ namespace Villamos.Villamos_Adatszerkezet
             Marad = marad;
         }
 
+        public Adat_Kerék_Eszterga_Naptár(DateTime idő, bool foglalt, string pályaszám, string megjegyzés, long betűSzín, long háttérSzín, bool marad)
+        {
+            Idő = idő;
+            Foglalt = foglalt;
+            Pályaszám = pályaszám;
+            Megjegyzés = megjegyzés;
+            BetűSzín = betűSzín;
+            HáttérSzín = háttérSzín;
+            Marad = marad;
+        }
+
         public Adat_Kerék_Eszterga_Naptár(DateTime idő)
         {
             Idő = idő;

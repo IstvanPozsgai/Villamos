@@ -59,6 +59,96 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public void Módosítás_Idő(int Év, List<DateTime> Idők)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (DateTime Idő in Idők)
+                {
+                    string szöveg = $"UPDATE naptár SET pályaszám='_', " +
+                        $"foglalt=false, " +
+                        $"Megjegyzés='', " +
+                        $" betűszín=0, " +
+                        $"háttérszín=12632256, " +
+                        $"marad=false " +
+                        $"WHERE idő=#{Idő:MM-dd-yyyy H:m:s}#";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(int Év, List<Adat_Kerék_Eszterga_Naptár> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE naptár SET" +
+                        $"pályaszám='{Adat.Pályaszám.Trim()}', " +
+                        $"foglalt={Adat.Foglalt}, " +
+                        $"Megjegyzés='{Adat.Megjegyzés.Trim()}', " +
+                        $"betűszín={Adat.BetűSzín}, " +
+                        $"háttérszín={Adat.HáttérSzín}, " +
+                        $"marad={Adat.Marad} " +
+                        $"WHERE idő=#{Adat.Idő:MM-dd-yyyy HH:mm}#";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Státus(int Év, DateTime Idő, string Pályaszám, bool EgyElem)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                string szöveg;
+                if (EgyElem)
+                {
+                    szöveg = $"UPDATE naptár SET  foglalt=false, Megjegyzés='', betűszín=0, háttérszín=12632256, pályaszám='', marad=false ";
+                    szöveg += $" WHERE idő=#{Idő:MM-dd-yyyy H:m:s}# AND pályaszám='{Pályaszám}'";
+                }
+                else
+                {
+                    szöveg = $"UPDATE naptár SET  foglalt=false, Megjegyzés='', betűszín=0, háttérszín=12632256, pályaszám='', marad=false ";
+                    szöveg += $" WHERE idő>=#{Idő:MM-dd-yyyy H:m:s}# AND pályaszám='{Pályaszám}'";
+                }
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         //elkopó
         public List<Adat_Kerék_Eszterga_Naptár> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -156,48 +246,6 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
-        public void Adat_RögzítésIdő(string hely, string jelszó, Adat_Kerék_Eszterga_Naptár Adat)
-        {
-            string szöveg = $"UPDATE naptár SET pályaszám='_', foglalt=false, Megjegyzés='', ";
-            szöveg += $" betűszín=0, háttérszín=12632256, marad=false ";
-            szöveg += $"WHERE idő=#{Adat.Idő:MM-dd-yyyy H:m:s}#";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        public void Adat_Rögzítés(string hely, string jelszó, Adat_Kerék_Eszterga_Naptár Adat)
-        {
-            string szöveg = $"UPDATE naptár SET pályaszám='{Adat.Pályaszám.Trim()}', foglalt=true, Megjegyzés='{Adat.Megjegyzés.Trim()}', ";
-            szöveg += $" betűszín={Adat.BetűSzín}, háttérszín={Adat.HáttérSzín}, marad={Adat.Marad} ";
-            szöveg += $"WHERE idő=#{Adat.Idő:MM-dd-yyyy HH:mm}#";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-
-        public List<string> Lista_MindenbőlEgy(string hely, string jelszó, string szöveg)
-        {
-            List<string> Adatok = new List<string>();
-            string Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = rekord["Pályaszám"].ToStrTrim();
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
     }
 
 }
