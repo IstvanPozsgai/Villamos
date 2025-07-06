@@ -17,6 +17,7 @@ namespace Villamos
 
     public partial class Ablak_reklám
     {
+        // JAVÍTANDÓ:
         readonly string Hely_reklám = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos5.mdb";
         readonly string Jelszó_Reklám = "morecs";
         string Hely_Napló = "";
@@ -35,7 +36,9 @@ namespace Villamos
         readonly Kezelő_Reklám KézReklám = new Kezelő_Reklám();
         readonly Kezelő_Reklám_Napló KézReklámNapló = new Kezelő_Reklám_Napló();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
-
+        readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
+        readonly Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
+        readonly Kezelő_Kiegészítő_Reklám KézKiegReklám = new Kezelő_Kiegészítő_Reklám();
 
         List<Adat_Jármű_hiba> AdatokHiba = new List<Adat_Jármű_hiba>();
         List<Adat_Jármű> AdatokJármű_Teljes = new List<Adat_Jármű>();
@@ -43,19 +46,21 @@ namespace Villamos
         List<Adat_Reklám> AdatokReklám = new List<Adat_Reklám>();
         List<Adat_Reklám_Napló> AdatokReklámNapló = new List<Adat_Reklám_Napló>();
         List<string> Adatok_ReklámNév = new List<string>();
+
+        #region Alap
         public Ablak_reklám()
         {
             InitializeComponent();
+            Start();
         }
-
 
         private void Ablak_reklám_Load(object sender, EventArgs e)
         {
 
         }
 
-
-        private void Ablak_reklám_Shown(object sender, EventArgs e)
+        // JAVÍTANDÓ:
+        private void Start()
         {
             Telephelyekfeltöltése();
 
@@ -66,7 +71,6 @@ namespace Villamos
 
             Naplótól.Value = DateTime.Today;
             Naplóig.Value = DateTime.Today;
-
             Rekezd.Value = DateTime.Today;
             Revég.Value = DateTime.Today;
             Ragaszt.Value = new DateTime(2000, 1, 1);
@@ -75,14 +79,11 @@ namespace Villamos
 
             Jogosultságkiosztás();
             Telephely.Text = Cmbtelephely.Text;
-
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            Listák_Feltöltése();
+            AdatokJármű_Teljes = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).OrderBy(a => a.Azonosító).ToList();
+            AdatokReklám = KézReklám.Lista_Adatok();
         }
 
-
-
-        #region alap
         private void Telephelyekfeltöltése()
         {
             try
@@ -93,10 +94,7 @@ namespace Villamos
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
                     Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim();
                 else
-                {
                     Cmbtelephely.Text = Program.PostásTelephely;
-
-                }
 
                 Cmbtelephely.Text = Program.PostásTelephely;
                 Cmbtelephely.Enabled = Program.Postás_Vezér;
@@ -113,12 +111,11 @@ namespace Villamos
             }
         }
 
-
         private void Button13_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Reklám.html";
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Reklám.html";
                 MyE.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
@@ -131,7 +128,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -174,12 +170,10 @@ namespace Villamos
             }
         }
 
-
         private void LAPFülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
-
 
         private void Fülekkitöltése()
         {
@@ -195,8 +189,8 @@ namespace Villamos
                         // Áttekintés
                         if (!Cmbtelephely.Enabled)
                         {
-                            Villamos_feltöltése_telep();
-                            Hibák_feltöltése();
+                            AdatokJármű_Telep = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Törölt == false).OrderBy(a => a.Azonosító).ToList();
+                            AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
                         }
                         Reklámnevelistázása();
                         Típusfeltöltés();
@@ -220,14 +214,13 @@ namespace Villamos
             }
         }
 
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
             Telephely.Text = Cmbtelephely.Text;
-            Listák_Feltöltése();
+            AdatokJármű_Teljes = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).OrderBy(a => a.Azonosító).ToList();
+            AdatokReklám = KézReklám.Lista_Adatok();
         }
-
 
         private void Lapfülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -273,7 +266,6 @@ namespace Villamos
             Utasítás_generálás();
         }
 
-
         private void Utasítás_generálás()
         {
             try
@@ -318,7 +310,6 @@ namespace Villamos
             }
         }
 
-
         private void Vezénylésbeírás_Click(object sender, EventArgs e)
         {
             try
@@ -329,7 +320,6 @@ namespace Villamos
                 Txtírásimező.Text = Txtírásimező.Text.Replace(Convert.ToString('"'), "°").Replace(Convert.ToString('\''), "°");
 
                 // csak aktuális évben tudunk rögzíteni
-                Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
                 Adat_Utasítás ADAT = new Adat_Utasítás(0, Txtírásimező.Text.Trim(), Program.PostásNév.Trim(), DateTime.Now, 0);
                 double UtasításSorszáma = KézUtasítás.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Now.Year, ADAT);
                 MessageBox.Show($"Az utasítás rögzítése {UtasításSorszáma} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -372,11 +362,11 @@ namespace Villamos
             }
         }
 
-
         private void Command5_Click(object sender, EventArgs e)
         {
             try
             {
+                // JAVÍTANDÓ:
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Napló\Reklámnapló{Naplótól.Value.Year}.mdb";
                 string szöveg = "SELECT * FROM reklámtábla";
                 AdatokReklámNapló = KézReklámNapló.Lista_Adatok(hely, Jelszó_Reklám, szöveg);
@@ -461,7 +451,6 @@ namespace Villamos
             }
         }
 
-
         private void Command6_Click(object sender, EventArgs e)
         {
             try
@@ -474,7 +463,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Reklámnapló_export_" + Program.PostásNév.Trim() + "-" + DateTime.Today.ToString("yyyyMMdd"),
+                    FileName = $"Reklámnapló_export_{Program.PostásNév.Trim()}-{DateTime.Today:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -484,9 +473,8 @@ namespace Villamos
                     return;
 
                 MyE.DataGridViewToExcel(fájlexc, TáblaNapló);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 MyE.Megnyitás(fájlexc);
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -516,7 +504,6 @@ namespace Villamos
             Reklámnevelista.Refresh();
         }
 
-
         private void Típusfeltöltés()
         {
             Típuslista.Items.Clear();
@@ -528,12 +515,10 @@ namespace Villamos
             Típuslista.Refresh();
         }
 
-
         private void Button3_Click(object sender, EventArgs e)
         {
             Reklám_lekérdezés();
         }
-
 
         private void Reklám_lekérdezés()
         {
@@ -622,7 +607,6 @@ namespace Villamos
             }
         }
 
-
         private void Telephelyi_Kiírás(int i, string Azonosító)
         {
             Adat_Jármű EgyKocsi = (from a in AdatokJármű_Telep
@@ -638,7 +622,6 @@ namespace Villamos
             Jármű_Hibái(i, EgyHiba);
         }
 
-
         private void Jármű_Hibái(int i, List<Adat_Jármű_hiba> EgyHiba)
         {
             Tábla.Rows[i].Cells[11].Value = "";
@@ -650,7 +633,6 @@ namespace Villamos
                 }
             }
         }
-
 
         private void Jármű_Státusa(int i, Adat_Jármű EgyKocsi)
         {
@@ -693,7 +675,6 @@ namespace Villamos
             }
         }
 
-
         private void Reklám_Adatok(int i, Adat_Reklám rekord)
         {
             if (rekord != null)
@@ -710,7 +691,6 @@ namespace Villamos
                 Tábla.Rows[i].Cells[13].Value = rekord.Szerelvényben;
             }
         }
-
 
         private void TáblaFejléc()
         {
@@ -750,14 +730,12 @@ namespace Villamos
             Tábla.Columns[13].Width = 80;
         }
 
-
         private void Telephelyfeltöltés()
         {
             try
             {
                 TelephelyList.Items.Clear();
-                Kezelő_kiegészítő_telephely Kéz = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> Telephelyek = Kéz.Lista_Adatok();
+                List<Adat_kiegészítő_telephely> Telephelyek = KézTelep.Lista_Adatok();
 
                 TelephelyList.BeginUpdate();
                 foreach (Adat_kiegészítő_telephely Elem in Telephelyek)
@@ -791,7 +769,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -900,7 +877,6 @@ namespace Villamos
             Mmegjegyzés = Megjegyzés.Text.Trim();
         }
 
-
         private void Beilleszt_Click(object sender, EventArgs e)
         {
             Rekezd.Value = Mrekezd;
@@ -912,7 +888,6 @@ namespace Villamos
             CheckBox1.Checked = MCheckBox1;
             Megjegyzés.Text = Mmegjegyzés;
         }
-
 
         private void Üresmezők()
         {
@@ -926,6 +901,7 @@ namespace Villamos
             CheckBox1.Checked = false;
             Megjegyzés.Text = "";
         }
+
         private void ÜresmezőkTörlés()
         {
             Ragaszt.Value = new DateTime(2000, 1, 1);
@@ -940,12 +916,10 @@ namespace Villamos
             Típus.Text = "*";
         }
 
-
         private void Listáz_Click(object sender, EventArgs e)
         {
             Listázza_pályaszámadatait();
         }
-
 
         private void Listázza_pályaszámadatait()
         {
@@ -1013,7 +987,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Command3_Click(object sender, EventArgs e)
         {
             try
@@ -1055,7 +1029,7 @@ namespace Villamos
 
                     NaplózzukRögzítést();
                 }
-                Reklám_Feltöltés();
+                AdatokReklám = KézReklám.Lista_Adatok();
                 Listázza_pályaszámadatait();
                 MessageBox.Show("A ragasztási tilalom rögzítése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1069,7 +1043,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void NaplózzukRögzítést()
         {
             try
@@ -1130,8 +1104,7 @@ namespace Villamos
             try
             {
                 Méret.Items.Clear();
-                Kezelő_Kiegészítő_Reklám KézReklám = new Kezelő_Kiegészítő_Reklám();
-                List<Adat_Kiegészítő_Reklám> Adatok = KézReklám.Lista_Adatok();
+                List<Adat_Kiegészítő_Reklám> Adatok = KézKiegReklám.Lista_Adatok();
                 foreach (Adat_Kiegészítő_Reklám Elem in Adatok)
                     Méret.Items.Add(Elem.Méret);
                 Méret.Refresh();
@@ -1146,8 +1119,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         private void Törlés_Click(object sender, EventArgs e)
         {
@@ -1169,10 +1140,10 @@ namespace Villamos
                     ÜresmezőkTörlés();
                     Reklám_Módosítás();
                     NaplózzukRögzítést();
-                    Reklám_Feltöltés();
+                    AdatokReklám = KézReklám.Lista_Adatok();
                     Üresmezők();
                     Listázza_pályaszámadatait();
-                    Reklám_Feltöltés();
+                    AdatokReklám = KézReklám.Lista_Adatok();
                     MessageBox.Show("A reklám törlése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -1188,7 +1159,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -1230,10 +1201,10 @@ namespace Villamos
                 }
                 Reklám_Módosítás();
                 NaplózzukRögzítést();                // naplózás
-                Reklám_Feltöltés();
+                AdatokReklám = KézReklám.Lista_Adatok();
                 Üresmezők();
                 Listázza_pályaszámadatait();
-                Reklám_Feltöltés();
+                AdatokReklám = KézReklám.Lista_Adatok();
                 MessageBox.Show("A reklám rögzítése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -1246,7 +1217,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Reklám_Módosítás()
         {
             try
@@ -1300,7 +1271,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Reklámnapló_export_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Reklámnapló_export_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1310,102 +1281,8 @@ namespace Villamos
                     return;
 
                 MyE.DataGridViewToExcel(fájlexc, Tábla);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 MyE.Megnyitás(fájlexc);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        #endregion
-
-
-        #region Listák betöltése
-        private void Listák_Feltöltése()
-        {
-            Villamos_feltöltése();
-            Reklám_Feltöltés();
-        }
-
-        private void Reklám_Feltöltés()
-        {
-            try
-            {
-                AdatokReklám.Clear();
-                string szöveg = $"SELECT * FROM reklámtábla";
-                AdatokReklám = KézReklám.Lista_Adatok(Hely_reklám, Jelszó_Reklám, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Villamos_feltöltése()
-        {
-            try
-            {
-                AdatokJármű_Teljes.Clear();
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla WHERE törölt=0  ORDER BY azonosító";
-
-                AdatokJármű_Teljes = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Villamos_feltöltése_telep()
-        {
-            try
-            {
-                AdatokJármű_Telep.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla WHERE törölt=0  ORDER BY azonosító";
-
-                AdatokJármű_Telep = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private void Hibák_feltöltése()
-        {
-            try
-            {
-                AdatokHiba.Clear();
-                AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1465,42 +1342,35 @@ namespace Villamos
             Reklámnevelista.Height = 500;
         }
 
-
         private void Reklámnevelista_MouseEnter(object sender, EventArgs e)
         {
             Reklámnevelista.Height = 25;
         }
-
 
         private void Reklámnevelista_MouseLeave(object sender, EventArgs e)
         {
             Reklámnevelista.Height = 25;
         }
 
-
         private void Típuslista_MouseHover(object sender, EventArgs e)
         {
             Típuslista.Height = 500;
         }
-
 
         private void Típuslista_MouseEnter(object sender, EventArgs e)
         {
             Típuslista.Height = 25;
         }
 
-
         private void Típuslista_MouseLeave(object sender, EventArgs e)
         {
             Típuslista.Height = 25;
         }
 
-
         private void TelephelyList_MouseEnter(object sender, EventArgs e)
         {
             TelephelyList.Height = 25;
         }
-
 
         private void TelephelyList_MouseHover(object sender, EventArgs e)
         {

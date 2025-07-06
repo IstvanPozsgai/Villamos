@@ -838,7 +838,6 @@ namespace Villamos
             this.Text = "Ablak_reklám";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_reklám_Load);
-            this.Shown += new System.EventHandler(this.Ablak_reklám_Shown);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             this.Lapfülek.ResumeLayout(false);
