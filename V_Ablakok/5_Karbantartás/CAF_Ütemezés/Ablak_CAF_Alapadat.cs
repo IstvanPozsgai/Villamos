@@ -162,7 +162,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                // JAVÍTANDÓ:Ez majdnem jó
                 // Ebben az eljárásban minden kocsi adatát akarjuk  ellenőrizni
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(true);
 

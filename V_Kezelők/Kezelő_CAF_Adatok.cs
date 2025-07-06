@@ -531,8 +531,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        // JAVÍTANDÓ:ide
-        // KÉSZ✔
         public void Ütemez(List<Adat_CAF_Adatok_Pót> Adatok)
         {
             try
