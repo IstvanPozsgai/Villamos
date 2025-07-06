@@ -5,10 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -17,11 +14,6 @@ namespace Villamos
 
     public partial class Ablak_reklám
     {
-        // JAVÍTANDÓ:
-        readonly string Hely_reklám = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos5.mdb";
-        readonly string Jelszó_Reklám = "morecs";
-        string Hely_Napló = "";
-
         //Másoláshoz
         DateTime Mrekezd;
         DateTime Mrevég;
@@ -59,16 +51,9 @@ namespace Villamos
 
         }
 
-        // JAVÍTANDÓ:
         private void Start()
         {
             Telephelyekfeltöltése();
-
-            if (!Exists(Hely_reklám)) Adatbázis_Létrehozás.Villamostábla5reklám(Hely_reklám);
-
-            Hely_Napló = $@"{Application.StartupPath}\Főmérnökség\Napló\Reklámnapló{DateTime.Today.Year}.mdb";
-            if (!Exists(Hely_Napló)) Adatbázis_Létrehozás.Villamostábla5reklámnapló(Hely_Napló);
-
             Naplótól.Value = DateTime.Today;
             Naplóig.Value = DateTime.Today;
             Rekezd.Value = DateTime.Today;
@@ -366,10 +351,8 @@ namespace Villamos
         {
             try
             {
-                // JAVÍTANDÓ:
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Napló\Reklámnapló{Naplótól.Value.Year}.mdb";
-                string szöveg = "SELECT * FROM reklámtábla";
-                AdatokReklámNapló = KézReklámNapló.Lista_Adatok(hely, Jelszó_Reklám, szöveg);
+                AdatokReklámNapló = KézReklámNapló.Lista_Adatok(Naplótól.Value.Year);
 
                 TáblaNapló.Rows.Clear();
                 TáblaNapló.Columns.Clear();
@@ -987,7 +970,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Command3_Click(object sender, EventArgs e)
         {
             try
@@ -1002,27 +985,25 @@ namespace Villamos
                 Adat_Reklám EgyReklám = (from a in AdatokReklám
                                          where a.Azonosító == Pályaszám.Text.Trim()
                                          select a).FirstOrDefault();
-                string szöveg;
                 if (EgyReklám == null)
                 {
                     // ha nincs akkor hozzáad egy sort
-                    szöveg = "INSERT INTO reklámtábla  (azonosító, kezdődátum, befejeződátum, reklámneve, viszonylat, telephely, reklámmérete,";
-                    szöveg += " ragasztásitilalom, szerelvény, szerelvényben, megjegyzés, típus   ) VALUES (";
-                    szöveg += "'" + Pályaszám.Text.Trim() + "', '2000.01.01', '2000.01.01', '*', '*',";
-                    szöveg += "'" + Telephely.Text.Trim() + "', '*',";
-                    szöveg += "'" + Ragaszt.Value.ToString("yyyy.MM.dd") + "', '*', 0,  '*', ";
-                    szöveg += "'" + Típus.Text.Trim() + "')";
-                    MyA.ABMódosítás(Hely_reklám, Jelszó_Reklám, szöveg);
+                    Adat_Reklám ADAT = new Adat_Reklám(
+                        Pályaszám.Text.Trim(),
+                        Telephely.Text.Trim(),
+                        Ragaszt.Value,
+                        Típus.Text.Trim());
+                    KézReklám.RögzítésTilalom(ADAT);
                 }
                 else
                 {
                     string reklámneve = EgyReklám.Reklámneve;
                     if (reklámneve == "*" || reklámneve.Trim() == "")
                     {
-                        szöveg = "UPDATE reklámtábla  SET ";
-                        szöveg += $"ragasztásitilalom='{Ragaszt.Value:yyyy.MM.dd}' ";
-                        szöveg += $" WHERE [azonosító]='{Pályaszám.Text.Trim()}'";
-                        MyA.ABMódosítás(Hely_reklám, Jelszó_Reklám, szöveg);
+                        Adat_Reklám ADAT = new Adat_Reklám(
+                            Pályaszám.Text.Trim(),
+                            Ragaszt.Value);
+                        KézReklám.MódosításTilalom(ADAT);
                     }
                     else
                         throw new HibásBevittAdat("A ragasztási tilalmat csak leszedett reklámmal lehet rögzíteni.");
@@ -1043,50 +1024,29 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void NaplózzukRögzítést()
         {
             try
-            {      // naplózás
-                   // megkeressük az utolsó sorszámot
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Napló\Reklámnapló{DateTime.Today.Year}.mdb";
-                string szöveg = "SELECT * FROM reklámtábla";
-                AdatokReklámNapló = KézReklámNapló.Lista_Adatok(hely, Jelszó_Reklám, szöveg);
-                long utolsó;
-                if (AdatokReklámNapló.Count == 0)
-                    utolsó = 1;
-                else
-                    utolsó = AdatokReklámNapló.Max(x => x.Id) + 1;
-
-                szöveg = "INSERT INTO reklámtábla  (azonosító, kezdődátum, befejeződátum, reklámneve, viszonylat, telephely, reklámmérete,";
-                szöveg += " ragasztásitilalom, szerelvény, szerelvényben, megjegyzés, típus, id, módosító, mikor   ) VALUES (";
-                szöveg += $"'{Pályaszám.Text.Trim()}',"; //azonosító
-                szöveg += $" '{Rekezd.Value:yyyy.MM.dd}',";               //       kezdődátum
-                szöveg += $" '{Revég.Value:yyyy.MM.dd}',";               //        befejeződátum
-                szöveg += $" '{MyF.Szöveg_Tisztítás(Reklám.Text.Trim())}',"; //        reklámneve
-                szöveg += $" '{Vonal.Text.Trim()}',";                        //        viszonylat
-                szöveg += $"'{Telephely.Text.Trim()}',";   //        telephely
-                szöveg += $" '{Méret.Text.Trim()}',";                        //        reklámmérete
-                szöveg += $"'{Ragaszt.Value:yyyy.MM.dd}',";//        ragasztásitilalom
-                if (CheckBox1.Checked)
-                {
-                    szöveg += $" '{Szerelvény.Text.Trim()}',"; //        szerelvény
-                    szöveg += $" 1,";                          //        szerelvényben
-                }
-                else
-                {
-                    szöveg += $" '*',";                        //        szerelvény
-                    szöveg += $" 0,";                          //        szerelvényben
-                }
-                szöveg += $"  '{MyF.Szöveg_Tisztítás(Megjegyzés.Text.Trim())}', ";       //        megjegyzés
-                szöveg += $"'{Típus.Text.Trim()}', ";      //        típus
-                szöveg += $"{utolsó},";                    //        id
-                szöveg += $" '{Program.PostásNév.Trim()}',";   //    módosító
-                szöveg += $" '{DateTime.Now}')";               //    mikor
-
-
-
-                MyA.ABMódosítás(Hely_Napló, Jelszó_Reklám, szöveg);
+            {
+                // naplózás
+                Adat_Reklám_Napló ADAT = new Adat_Reklám_Napló(
+                      Pályaszám.Text.Trim(),
+                      Rekezd.Value,
+                      Revég.Value,
+                      MyF.Szöveg_Tisztítás(Reklám.Text.Trim()),
+                      Vonal.Text.Trim(),
+                      Telephely.Text.Trim(),
+                      Méret.Text.Trim(),
+                      CheckBox1.Checked ? 1 : 0,
+                      CheckBox1.Checked ? Szerelvény.Text.Trim() : "*",
+                      Ragaszt.Value,
+                      MyF.Szöveg_Tisztítás(Megjegyzés.Text.Trim()),
+                      Típus.Text.Trim(),
+                      0, // id, itt 0 mert új rekord
+                      DateTime.Now,
+                      Program.PostásNév.Trim());
+                KézReklámNapló.Rögzítés(DateTime.Now.Year, ADAT);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1159,7 +1119,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -1182,18 +1142,15 @@ namespace Villamos
                 Adat_Reklám EgyReklám = (from a in AdatokReklám
                                          where a.Azonosító == Pályaszám.Text.Trim()
                                          select a).FirstOrDefault();
-                string szöveg;
                 if (EgyReklám == null)
                 {
-
                     // ha nincs akkor hozzáad egy sort
-                    szöveg = "INSERT INTO reklámtábla  (azonosító, kezdődátum, befejeződátum, reklámneve, viszonylat, telephely, reklámmérete,";
-                    szöveg += " ragasztásitilalom, szerelvény, szerelvényben, megjegyzés, típus) VALUES (";
-                    szöveg += $"'{Pályaszám.Text.Trim()}', '2000.01.01', '2000.01.01', '*', '*',";
-                    szöveg += $"'{Telephely.Text.Trim()}', '*',";
-                    szöveg += $"'{Ragaszt.Value:yyyy.MM.dd}', '*', 0,  '*', ";
-                    szöveg += $"'{Típus.Text.Trim()}')";
-                    MyA.ABMódosítás(Hely_reklám, Jelszó_Reklám, szöveg);
+                    Adat_Reklám ADAT = new Adat_Reklám(
+                         Pályaszám.Text.Trim(),
+                         Telephely.Text.Trim(),
+                         Ragaszt.Value,
+                         Típus.Text.Trim());
+                    KézReklám.RögzítésTilalom(ADAT);
                 }
                 else
                 {
@@ -1217,36 +1174,25 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Reklám_Módosítás()
         {
             try
             {
-                string szöveg = "UPDATE reklámtábla  SET ";
-                szöveg += $"kezdődátum='{Rekezd.Value:yyyy.MM.dd}', ";
-                szöveg += $"befejeződátum='{Revég.Value:yyyy.MM.dd}', ";
-                szöveg += $"reklámneve='{MyF.Szöveg_Tisztítás(Reklám.Text.Trim())}', ";
-                szöveg += $"viszonylat='{Vonal.Text.Trim()}', ";
-                szöveg += $"telephely='{Telephely.Text.Trim()}', ";
-                szöveg += $"reklámmérete='{Méret.Text.Trim()}', ";
-                szöveg += $"ragasztásitilalom='{Ragaszt.Value:yyyy.MM.dd}', ";
-                if (CheckBox1.Checked)
-                {
-                    szöveg += "szerelvényben=1, ";
-                    szöveg += $"szerelvény='{Szerelvény.Text.Trim()}', ";
-                }
-                else
-                {
-                    szöveg += "szerelvényben=0, ";
-                    szöveg += "szerelvény='*', ";
-                }
-                szöveg += $"megjegyzés=' {MyF.Szöveg_Tisztítás(Megjegyzés.Text.Trim())}', ";
-
-                szöveg += $"típus='{Típus.Text.Trim()}' ";
-                szöveg += $" WHERE [azonosító]='{Pályaszám.Text.Trim()}'";
-                MyA.ABMódosítás(Hely_reklám, Jelszó_Reklám, szöveg);
-
-
+                Adat_Reklám ADAT = new Adat_Reklám(
+                    Pályaszám.Text.Trim(),
+                    Rekezd.Value,
+                    Revég.Value,
+                    MyF.Szöveg_Tisztítás(Reklám.Text.Trim()),
+                    Vonal.Text.Trim(),
+                    Telephely.Text.Trim(),
+                    Méret.Text.Trim(),
+                    CheckBox1.Checked ? 1 : 0,
+                    CheckBox1.Checked ? Szerelvény.Text.Trim() : "*",
+                    Ragaszt.Value,
+                    MyF.Szöveg_Tisztítás(Megjegyzés.Text.Trim()),
+                    Típus.Text.Trim());
+                KézReklám.Módosítás(ADAT);
             }
             catch (HibásBevittAdat ex)
             {

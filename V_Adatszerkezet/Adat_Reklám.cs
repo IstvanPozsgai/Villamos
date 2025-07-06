@@ -32,6 +32,20 @@ namespace Villamos.Villamos_Adatszerkezet
             Megjegyzés = megjegyzés;
             Típus = típus;
         }
+
+        public Adat_Reklám(string azonosító, string telephely, DateTime ragasztásitilalom, string típus)
+        {
+            Azonosító = azonosító;
+            Telephely = telephely;
+            Ragasztásitilalom = ragasztásitilalom;
+            Típus = típus;
+        }
+
+        public Adat_Reklám(string azonosító, DateTime ragasztásitilalom)
+        {
+            Azonosító = azonosító;
+            Ragasztásitilalom = ragasztásitilalom;
+        }
     }
 
 
@@ -49,7 +63,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public DateTime Ragasztásitilalom { get; private set; }
         public string Megjegyzés { get; private set; }
         public string Típus { get; private set; }
-         public long Id { get; private set; }
+        public long Id { get; private set; }
         public DateTime Mikor { get; private set; }
         public string Módosító { get; private set; }
 
