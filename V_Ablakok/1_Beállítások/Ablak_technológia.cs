@@ -873,10 +873,14 @@ namespace Villamos.Villamos_Ablakok
                     if (!bool.TryParse(MyE.Beolvas($"N{i}"), out bool Kenés)) Kenés = false;
 
                     string Karb_fok = MyE.Beolvas($"G{i}").Trim();
-                    int Karb_sor1 = Adatok_ciklus.First(x => x.Fokozat == Karb_fok).Sorszám;
+                    int Karb_sor1 = 1;
+                    if (Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_fok) != null)
+                        Karb_sor1 = Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_fok).Sorszám;
 
                     Karb_fok = MyE.Beolvas($"H{i}").Trim();
-                    int Karb_sor2 = Adatok_ciklus.First(x => x.Fokozat == Karb_fok).Sorszám;
+                    int Karb_sor2 = 1;
+                    if (Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_fok) != null)
+                        Karb_sor2 = Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_fok).Sorszám;
 
 
                     Adat_Technológia_Új Adat = new Adat_Technológia_Új(

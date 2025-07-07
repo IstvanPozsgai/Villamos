@@ -97,7 +97,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE naptár SET" +
+                    string szöveg = $"UPDATE naptár SET " +
                         $"pályaszám='{Adat.Pályaszám.Trim()}', " +
                         $"foglalt={Adat.Foglalt}, " +
                         $"Megjegyzés='{Adat.Megjegyzés.Trim()}', " +
@@ -212,38 +212,6 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
-        }
-
-        public Adat_Kerék_Eszterga_Naptár Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Kerék_Eszterga_Naptár Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_Kerék_Eszterga_Naptár(
-                                          rekord["Idő"].ToÉrt_DaTeTime(),
-                                          rekord["Munkaidő"].ToÉrt_Bool(),
-                                          rekord["Foglalt"].ToÉrt_Bool(),
-                                          rekord["Pályaszám"].ToStrTrim(),
-                                          rekord["Megjegyzés"].ToStrTrim(),
-                                          rekord["betűszín"].ToÉrt_Long(),
-                                          rekord["háttérszín"].ToÉrt_Long(),
-                                          rekord["Marad"].ToÉrt_Bool()
-                                          );
-                        }
-                    }
-                }
-            }
-            return Adat;
         }
 
     }
