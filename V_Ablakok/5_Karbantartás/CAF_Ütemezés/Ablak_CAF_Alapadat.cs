@@ -66,7 +66,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 Alap_rögzít.Enabled = false;
 
-                Kalkulál.Enabled = true;
+                Kalkulál.Enabled = false;
 
 
                 // csak főmérnökségi belépéssel módosítható
