@@ -94,7 +94,8 @@ namespace Villamos
                 Előtervet_készít.Enabled = false;
                 ELő_törlés.Enabled = false;
                 Elő_ütemez.Enabled = false;
-
+                // JAVÍTANDÓ:vissza kell kapcsolni ha elkészült
+                km_modosit_btn.Enabled = false;
                 Elő_Lehívás.Enabled = false;
 
                 // csak főmérnökségi belépéssel módosítható
@@ -904,7 +905,7 @@ namespace Villamos
 
                 Holtart.Be();
                 AdatokCaf = KézAdatok.Lista_Adatok();
-               
+
                 List<Adat_CAF_Adatok_Pót> ADATOK = new List<Adat_CAF_Adatok_Pót>();
                 foreach (string elem in Elő_pályaszám.CheckedItems)
                 {
