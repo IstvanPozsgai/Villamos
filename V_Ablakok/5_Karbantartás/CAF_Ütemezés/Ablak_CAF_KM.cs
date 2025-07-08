@@ -71,14 +71,14 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             AdatTábla.Clear();
             foreach (Adat_CAF_Adatok villamos in CafAdatok)
             {
-                if (villamos.KmRogzitett_e && villamos.Megjegyzés != "Ütemezési Segéd")
+                if (villamos.Státus == 6 && villamos.Megjegyzés != "Ütemezési Segéd")
                 {
                     DataRow Soradat = AdatTábla.NewRow();
                     Soradat["Pályaszám"] = villamos.Azonosító;
                     Soradat["Vizsgálat"] = villamos.Vizsgálat;
                     Soradat["Dátum"] = villamos.Dátum.ToString("yyyy.MM.dd");
                     Soradat["Számláló állás"] = villamos.Számláló;
-                    Soradat["Telephely"] = villamos.Telephely;
+                    Soradat["Telephely"] = villamos.Telephely;                    
                    
                     AdatTábla.Rows.Add(Soradat);
                 }

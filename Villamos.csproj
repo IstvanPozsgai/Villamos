@@ -1298,6 +1298,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_kiadás.resx">
       <DependentUpon>Ablak_alap_program_kiadás.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.resx">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
@@ -1559,6 +1560,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Ablak_Akkumulátor.resx">
       <DependentUpon>Ablak_Akkumulátor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\Ablak_Bejelentkezés.resx">
       <DependentUpon>Ablak_Bejelentkezés.cs</DependentUpon>

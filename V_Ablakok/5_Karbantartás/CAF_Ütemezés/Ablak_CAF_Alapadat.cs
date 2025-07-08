@@ -66,7 +66,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 Alap_rögzít.Enabled = false;
 
-                Kalkulál.Enabled = false;
+                Kalkulál.Enabled = true;
 
 
                 // csak főmérnökségi belépéssel módosítható
@@ -166,11 +166,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(true);
 
                 // JAVÍTANDÓ:Ez csak egy kocsi adatait akarja ellenőrizni be kell tenni a ciklusba.
-                Adat_CAF_Adatok utolso_km = KezCafAdatok.Utolso_Km_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
-                Adat_CAF_Adatok utolso_ido = KezCafAdatok.Utolso_Ido_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
-
-                KézCAFAlap.Módosítás_Kész_Ido(utolso_ido.Vizsgálat, utolso_ido.IDŐ_Sorszám, utolso_ido.Dátum, utolso_ido.Telephely, utolso_ido.Számláló, utolso_ido.Azonosító);
-                KézCAFAlap.Módosítás_Kész_Km(utolso_km.Vizsgálat, utolso_km.KM_Sorszám, utolso_km.Dátum, utolso_km.Telephely, utolso_km.Számláló, utolso_km.Azonosító);
+                // KÉSZ✔
 
                 AdatokZser.Clear();
                 AdatokZser = KézZSerKm.Lista_adatok(DateTime.Today.Year - 1);
@@ -212,6 +208,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                             kmukm,
                                             DateTime.Today);
                         AdatokGy.Add(ADAT);
+
+                        Adat_CAF_Adatok utolso_km = KezCafAdatok.Utolso_Km_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
+                        Adat_CAF_Adatok utolso_ido = KezCafAdatok.Utolso_Ido_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
+
+                        KézCAFAlap.Módosítás_Kész_Ido(utolso_ido.Vizsgálat, utolso_ido.IDŐ_Sorszám, utolso_ido.Dátum, utolso_ido.Telephely, utolso_ido.Számláló, utolso_ido.Azonosító);
+                        KézCAFAlap.Módosítás_Kész_Km(utolso_km.Vizsgálat, utolso_km.KM_Sorszám, utolso_km.Dátum, utolso_km.Telephely, utolso_km.Számláló, utolso_km.Azonosító);
+
                         Holtart.Lép();
 
                     }
@@ -219,26 +222,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 }
                 Holtart.Ki();
                 // JAVÍTANDÓ:Ezeket a kiírásokat elvégzi részben a Alapadatokat_kiír metódus, nem  kell elvenni tőle a munkát
-                Adat_CAF_alap Adat = Adatok.FirstOrDefault(a => a.Azonosító.Trim() == Alap_pályaszám.Text.Trim());
-
-                Alap_Havi_km.Text = Adat.Havikm.ToString();
-                if (utolso_km.Számláló > utolso_ido.Számláló)
-                {
-                    Alap_KMU.Text = utolso_km.Számláló.ToString();
-                    vegso_km_tbox.Text = (utolso_km.Számláló + Adat.Havikm).ToString();
-                }
-                else
-                {
-                    Alap_KMU.Text = utolso_ido.Számláló.ToString();
-                    vegso_km_tbox.Text = (utolso_ido.Számláló + Adat.Havikm).ToString();
-                }
-                Alap_Össz_km.Text = Adat.Teljeskm.ToString();
-                Alap_Dátum_frissítés.Value = Adat.KMUdátum;
-                Alap_Típus.Text = Adat.Típus;
-                Alap_felújítás.Value = Adat.Fudátum;
-                Alap_Státus.Checked = Adat.Törölt;
-                Alap_Garancia.Checked = Adat.Garancia;
-
+                // KÉSZ✔
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -310,6 +294,24 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                         utolso_vizsgalat_km.BackColor = Color.Green;
                     }
                     utolso_vizsgalat_km.Text = utolso_ido.Számláló.ToString();
+
+                    Alap_Havi_km.Text = Adat.Havikm.ToString();
+                    if (utolso_km.Számláló > utolso_ido.Számláló)
+                    {
+                        Alap_KMU.Text = utolso_km.Számláló.ToString();
+                        vegso_km_tbox.Text = (utolso_km.Számláló + Adat.Havikm).ToString();
+                    }
+                    else
+                    {
+                        Alap_KMU.Text = utolso_ido.Számláló.ToString();
+                        vegso_km_tbox.Text = (utolso_ido.Számláló + Adat.Havikm).ToString();
+                    }
+                    Alap_Össz_km.Text = Adat.Teljeskm.ToString();
+                    Alap_Dátum_frissítés.Value = Adat.KMUdátum;
+                    Alap_Típus.Text = Adat.Típus;
+                    Alap_felújítás.Value = Adat.Fudátum;
+                    Alap_Státus.Checked = Adat.Törölt;
+                    Alap_Garancia.Checked = Adat.Garancia;
                 }
             }
             catch (HibásBevittAdat ex)
