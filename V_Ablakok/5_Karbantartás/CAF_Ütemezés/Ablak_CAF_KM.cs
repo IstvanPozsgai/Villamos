@@ -34,8 +34,9 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
         {
             ABFejléc();
             Tablalista_kiírás();
-            
             Tablalista.DefaultCellStyle.Font = new Font(Tablalista.Font.FontFamily, 11);
+
+            Tablalista.RowPrePaint += Tablalista_RowPrePaint; // piros színezés aktiválása
         }
 
         private void Tablalista_kiírás()
@@ -63,8 +64,12 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
         private void Listázás()
         {
             CafAdatok.Clear();
-            CafAdatok = KézAdatok.Lista_Adatok();
+            CafAdatok = KézAdatok.Lista_Adatok()
+                .OrderBy(a => a.Azonosító)
+                .ThenBy(a => a.Dátum)
+                .ToList();
         }
+
 
         private void ABFeltöltése()
         {
@@ -78,8 +83,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                     Soradat["Vizsgálat"] = villamos.Vizsgálat;
                     Soradat["Dátum"] = villamos.Dátum.ToString("yyyy.MM.dd");
                     Soradat["Számláló állás"] = villamos.Számláló;
-                    Soradat["Telephely"] = villamos.Telephely;                    
-                   
+                    Soradat["Telephely"] = villamos.Telephely;
+
                     AdatTábla.Rows.Add(Soradat);
                 }
             }
@@ -90,7 +95,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             Tablalista.Columns["Pályaszám"].Width = 80;
             Tablalista.Columns["Vizsgálat"].Width = 150;
             Tablalista.Columns["Dátum"].Width = 100;
-            Tablalista.Columns["Számláló állás"].Width = 120;       
+            Tablalista.Columns["Számláló állás"].Width = 120;
         }
 
         private void OszlopEngedelyezes()
@@ -170,5 +175,53 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                 }
             }
         }
+
+        private void Tablalista_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= Tablalista.Rows.Count)
+                return;
+
+            DataGridViewRow jelenlegiRow = Tablalista.Rows[e.RowIndex];
+            string jelenlegiAzonosito = jelenlegiRow.Cells["Pályaszám"].Value?.ToString() ?? "";
+            string jelenlegiDatumStr = jelenlegiRow.Cells["Dátum"].Value?.ToString() ?? "";
+            int.TryParse(jelenlegiRow.Cells["Számláló állás"].Value?.ToString(), out int jelenlegiSzamlalo);
+
+            jelenlegiRow.DefaultCellStyle.BackColor = Tablalista.DefaultCellStyle.BackColor;
+            jelenlegiRow.DefaultCellStyle.ForeColor = Tablalista.DefaultCellStyle.ForeColor;
+
+            bool hiba = false;
+
+            if (jelenlegiSzamlalo == 0)
+            {
+                hiba = true;
+            }
+            else
+            {
+                //Hátulról nézem
+                for (int i = e.RowIndex - 1; i >= 0; i--)
+                {
+                    var elozoRow = Tablalista.Rows[i];
+                    string elozoAzonosito = elozoRow.Cells["Pályaszám"].Value?.ToString() ?? "";
+
+                    if (elozoAzonosito != jelenlegiAzonosito)
+                        break;
+
+                    int.TryParse(elozoRow.Cells["Számláló állás"].Value?.ToString(), out int elozoSzamlalo);
+
+                    if (jelenlegiSzamlalo < elozoSzamlalo)
+                    {
+                        hiba = true;
+                    }
+
+                    break;
+                }
+            }
+            if (hiba)
+            {
+                jelenlegiRow.DefaultCellStyle.BackColor = Color.Red;
+                jelenlegiRow.DefaultCellStyle.ForeColor = Color.White;
+            }
+        }
+
     }
 }
