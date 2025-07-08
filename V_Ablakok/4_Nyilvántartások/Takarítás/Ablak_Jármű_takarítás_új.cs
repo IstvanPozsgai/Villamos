@@ -5493,24 +5493,27 @@ namespace Villamos
                                                      "Gépi",
                                                      Cmbtelephely.Text.Trim(),
                                                      státus);
-                if (AdatTakarítások != null)
+                if (AdatTakarítások == null)
                 {
-                    if (státus == 0)
-                    {
-                        // ha módosítjuk
-                        KézTak.Módosítás_Dátum(ADAT);
-                        //Naplózás
-                        Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
-                                                            ADAT.Azonosító,
-                                                            ADAT.Dátum,
-                                                            ADAT.Takarítási_fajta,
-                                                            ADAT.Telephely,
-                                                            DateTime.Now,
-                                                            Program.PostásNév,
-                                                            ADAT.Státus);
-                        KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
-                    }
-                    else
+                    //Rögzítjük az új pályaszámot
+                    KézTak.Rögzítés(ADAT);
+                    //Naplózás
+                    Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
+                                                        ADAT.Azonosító,
+                                                        ADAT.Dátum,
+                                                        ADAT.Takarítási_fajta,
+                                                        ADAT.Telephely,
+                                                        DateTime.Now,
+                                                        Program.PostásNév,
+                                                        ADAT.Státus);
+                    KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
+                    MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    //Töröljük a meglévő adatot 
+
+                    if (státus != AdatTakarítások.Státus && státus == 1)
                     {
                         //Kitöröljük a Naplóból
                         Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
@@ -5553,26 +5556,14 @@ namespace Villamos
                                                 Program.PostásNév,
                                                 ADAT.Státus);
                             KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
+                            MessageBox.Show("Az adatok módosítása megtörtént.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
+
                     }
-                }
-                else
-                {
-                    KézTak.Rögzítés(ADAT);
-                    //Naplózás
-                    Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
-                                                        ADAT.Azonosító,
-                                                        ADAT.Dátum,
-                                                        ADAT.Takarítási_fajta,
-                                                        ADAT.Telephely,
-                                                        DateTime.Now,
-                                                        Program.PostásNév,
-                                                        ADAT.Státus);
-                    KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
-                }
+                    else
 
-
-                MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Van már erre a napra rögzítve Gépi mosás", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (HibásBevittAdat ex)
             {
