@@ -303,6 +303,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Ütem_km_KMU.Text = EgyCAF.KMUkm.ToString();
                 Ütem_havifutás.Text = EgyCAF.Havikm.ToString();
                 Ütem_Napkm.Text = ((int)(EgyCAF.Havikm / 30)).ToString();
+                // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
+                // hogy nincs havi km, kivéve ha törött/selejtes.
                 Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
             }
             catch (Exception ex)
@@ -677,7 +679,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                if (Ütem_Köv_Számláló.Text.ToÉrt_Int() > Ütem_számláló.Text.ToÉrt_Int() && Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
+                if (int.Parse(Ütem_Köv_Számláló.Text) > int.Parse(Ütem_számláló.Text) )
                 {
                     if (Ütem_pályaszám.Text.Trim() == "") return;
                     if (Ütem_Köv_Vizsgálat.Text.Trim() == "") return;
@@ -707,7 +709,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 }
                 else
                 {
-                    MessageBox.Show($"Az adatok rögzítése sikertelen!\nAz új számláló állása kevesebb, mint az előző!\n({Ütem_számláló.Text} km)\nVagy a státusz nem 6- Elvégzett!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Az adatok rögzítése sikertelen!\nAz új számláló állása kevesebb, mint az előző!\n({Ütem_számláló.Text} km)\n,vagy a státusz nem 6- Elvégzett!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 
             }

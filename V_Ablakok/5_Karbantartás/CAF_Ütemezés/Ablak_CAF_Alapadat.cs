@@ -258,7 +258,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Adat_CAF_Adatok utolso_ido = KezCafAdatok.Utolso_Ido_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
                 //Adat_CAF_alap zser = Kalkulál_Temp(KezCafAdatok.Lista_Adatok().FirstOrDefault(a => a.Azonosító == Alap_pályaszám.Text.Trim()));
 
-                if (Adat != null)
+                if (Adat != null && utolso_km != null && utolso_ido != null)
                 {
                     Alap_ciklus_idő.Text = Adat.Ciklusnap;
                     Ciklus_IDŐ_Sorszám_feltöltés();

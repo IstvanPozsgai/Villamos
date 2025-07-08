@@ -54,6 +54,9 @@ namespace Villamos
         {
             try
             {
+                // Ezt kell futtatni az első alkalommal amikor felkerül ez a verzió.
+                //KézAdatok.StatustVizsgal(KézAdatok.Lista_Adatok());
+
                 ELő_Pályaszámokfeltöltése();
                 Jogosultságkiosztás();
                 DateTime elsődát = MyF.Hónap_elsőnapja(DateTime.Today).AddDays(-10);
