@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
@@ -210,6 +211,19 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 KiírEgyAdatot(Adat);
                 Adat = KézAdatok.Egy_Adat_Id_Előző(Posta_Segéd.Azonosító.Trim(), Posta_Segéd.Sorszám);
                 KiírElőzőAdatot(Adat);
+                if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
+                {
+                    Ütem_Köv_Számláló.ReadOnly = false;
+                }
+                else
+                {
+                    Ütem_Köv_Számláló.ReadOnly = true;
+                }
+                
+                if ((int.Parse(Ütem_számláló.Text) > int.Parse(Ütem_Köv_Számláló.Text) || int.Parse(Ütem_számláló.Text) == 0) && Ütem_státus.SelectedItem.ToString() == "6- Elvégzett")
+                {                    
+                    Ütem_számláló.BackColor = Color.Red;
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -289,6 +303,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Ütem_km_KMU.Text = EgyCAF.KMUkm.ToString();
                 Ütem_havifutás.Text = EgyCAF.Havikm.ToString();
                 Ütem_Napkm.Text = ((int)(EgyCAF.Havikm / 30)).ToString();
+                // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
+                // hogy nincs havi km, kivéve ha törött/selejtes.
                 Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
             }
             catch (Exception ex)
@@ -348,7 +364,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                 Ütem_IDŐvKM.Text = "Km";
                                 break;
                             }
-                    }
+                    }                    
                 }
             }
             catch (HibásBevittAdat ex)
@@ -436,6 +452,18 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Ütem_KM_névleges.Text = Adat.Névleges.ToString();
                 Ütem_Köv_Vizsgálat.Text = Ütem_vizsgálat_KM.Text;
             }
+        }
+
+        private void Ütem_Köv_Státus_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
+            {
+                Ütem_Köv_Számláló.ReadOnly = false;
+            }
+            else
+            {
+                Ütem_Köv_Számláló.ReadOnly = true;
+            }          
         }
 
         private void KM_ciklus_kiirás()
@@ -644,37 +672,46 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         private void Ütem_Rögzít_Click(object sender, EventArgs e)
         {
             Rögzíti_ütemet();
-            MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            
         }
 
         private void Rögzíti_ütemet()
         {
             try
             {
-                if (Ütem_pályaszám.Text.Trim() == "") return;
-                if (Ütem_Köv_Vizsgálat.Text.Trim() == "") return;
-                if (!int.TryParse(MyF.Szöveg_Tisztítás(Ütem_Köv_Státus.Text, 0, 1), out int státus)) return;
-                if (!int.TryParse(Ütem_vizsg_sorszám_km.Text.Trim(), out int Kmsorszám)) return;
-                if (!int.TryParse(Ütem_vizsg_sorszám_idő.Text.Trim(), out int Idősorszám)) return;
-                if (Ütem_megjegyzés.Text.Trim() == "") Ütem_megjegyzés.Text = "_";
-                if (!long.TryParse(Ütem_Köv_Számláló.Text.Trim(), out long számláló)) számláló = 0;
-                if (!double.TryParse(Ütem_köv_sorszám.Text, out double ID)) ID = 0;
-                Ütem_megjegyzés.Text = MyF.Szöveg_Tisztítás(Ütem_megjegyzés.Text, 0, 254);
+                if (int.Parse(Ütem_Köv_Számláló.Text) > int.Parse(Ütem_számláló.Text) )
+                {
+                    if (Ütem_pályaszám.Text.Trim() == "") return;
+                    if (Ütem_Köv_Vizsgálat.Text.Trim() == "") return;
+                    if (!int.TryParse(MyF.Szöveg_Tisztítás(Ütem_Köv_Státus.Text, 0, 1), out int státus)) return;
+                    if (!int.TryParse(Ütem_vizsg_sorszám_km.Text.Trim(), out int Kmsorszám)) return;
+                    if (!int.TryParse(Ütem_vizsg_sorszám_idő.Text.Trim(), out int Idősorszám)) return;
+                    if (Ütem_megjegyzés.Text.Trim() == "") Ütem_megjegyzés.Text = "_";
+                    if (!long.TryParse(Ütem_Köv_Számláló.Text.Trim(), out long számláló)) számláló = 0;
+                    if (!double.TryParse(Ütem_köv_sorszám.Text, out double ID)) ID = 0;
+                    Ütem_megjegyzés.Text = MyF.Szöveg_Tisztítás(Ütem_megjegyzés.Text, 0, 254);
 
-                Adat_CAF_Adatok ADAT = new Adat_CAF_Adatok(
-                                   ID,
-                                   Ütem_pályaszám.Text.Trim(),
-                                   Ütem_Köv_Vizsgálat.Text.Trim(),
-                                   Ütem_Köv_Dátum.Value,
-                                   Ütem_dátum_program.Value,
-                                   számláló,
-                                   státus,
-                                   Kmsorszám,
-                                   Idősorszám,
-                                   Ütem_Köv_IDŐvKM.Text.Trim() == "Idő" ? 1 : 2,
-                                   Ütem_megjegyzés.Text.Trim());
-                KézAdatok.Döntés(ADAT);
-                Változás?.Invoke();
+                    Adat_CAF_Adatok ADAT = new Adat_CAF_Adatok(
+                                       ID,
+                                       Ütem_pályaszám.Text.Trim(),
+                                       Ütem_Köv_Vizsgálat.Text.Trim(),
+                                       Ütem_Köv_Dátum.Value,
+                                       Ütem_dátum_program.Value,
+                                       számláló,
+                                       státus,
+                                       Kmsorszám,
+                                       Idősorszám,
+                                       Ütem_Köv_IDŐvKM.Text.Trim() == "Idő" ? 1 : 2,
+                                       Ütem_megjegyzés.Text.Trim());
+                    KézAdatok.Döntés(ADAT);
+                    Változás?.Invoke();
+                    MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"Az adatok rögzítése sikertelen!\nAz új számláló állása kevesebb, mint az előző!\n({Ütem_számláló.Text} km)\n,vagy a státusz nem 6- Elvégzett!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                
             }
             catch (HibásBevittAdat ex)
             {

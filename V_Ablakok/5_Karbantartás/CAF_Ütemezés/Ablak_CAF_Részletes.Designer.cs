@@ -542,6 +542,7 @@
             this.Ütem_vizsg_sorszám_km.Size = new System.Drawing.Size(145, 28);
             this.Ütem_vizsg_sorszám_km.TabIndex = 228;
             this.Ütem_vizsg_sorszám_km.SelectionChangeCommitted += new System.EventHandler(this.Ütem_vizsg_sorszám_km_SelectionChangeCommitted);
+            this.Ütem_Köv_Státus.SelectionChangeCommitted += new System.EventHandler(this.Ütem_Köv_Státus_SelectionChangeCommitted);
             // 
             // Label38
             // 

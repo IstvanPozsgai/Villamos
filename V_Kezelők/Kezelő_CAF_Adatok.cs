@@ -294,7 +294,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely) VALUES (";
+                string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
                 szöveg += $"{Sorszám}, "; // id 
                 szöveg += $"'{Adat.Azonosító}', "; // azonosító
                 szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -306,7 +306,8 @@ namespace Villamos.Kezelők
                 szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                 szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
                 szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}', ";
-                szöveg += $"'{Adat.Telephely}')";
+                szöveg += $"'{Adat.Telephely}',";
+                szöveg += $"{Adat.Státus == 2})"; //KmRogzitett_e
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -328,7 +329,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely) VALUES (";
+                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
                     szöveg += $"{sorszám}, "; // id 
                     szöveg += $"'{Adat.Azonosító}', "; // azonosító
                     szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -340,7 +341,8 @@ namespace Villamos.Kezelők
                     szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                     szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
                     szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}', ";
-                    szöveg += $"'{Adat.Telephely}')"; // Telephely
+                    szöveg += $"'{Adat.Telephely}',"; // Telephely
+                    szöveg += $"{Adat.Státus == 2})"; //KmRogzitett_e
                     SzövegGy.Add(szöveg);
                     sorszám++;
                 }
@@ -365,7 +367,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely) VALUES (";
+                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
                     szöveg += $"{sorszám}, "; // id 
                     szöveg += $"'{Adat.Azonosító}', "; // azonosító
                     szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -377,7 +379,8 @@ namespace Villamos.Kezelők
                     szöveg += $"{Adat.IDŐvKM}, ";// idővKM
                     szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
                     szöveg += $"'{Adat.Dátum_program:yyyy.MM.dd}', ";
-                    szöveg += $"'{Adat.Telephely}')";
+                    szöveg += $"'{Adat.Telephely}',";
+                    szöveg += $"{Adat.Státus == 2})"; //KmRogzitett_e
                     SzövegGy.Add(szöveg);
                     sorszám++;
                 }
@@ -407,9 +410,9 @@ namespace Villamos.Kezelők
                 szöveg += $"idő_sorszám={Adat.IDŐ_Sorszám}, "; // idő_sorszám
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";// megjegyzés
                 szöveg += $"idővKM={Adat.IDŐvKM}, ";
-                szöveg += $"KmRogzitett_e={Adat.KmRogzitett_e}, ";
-                szöveg += $"Telephely='{Adat.Telephely}' ";
-                szöveg += $"WHERE id={Adat.Id}";
+                szöveg += $"Telephely='{Adat.Telephely}', ";
+                szöveg += $"KmRogzitett_e={Adat.Státus == 2}"; //KmRogzitett_e
+                szöveg += $" WHERE id={Adat.Id} ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

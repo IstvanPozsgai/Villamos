@@ -54,6 +54,9 @@ namespace Villamos
         {
             try
             {
+                // Ezt kell futtatni az első alkalommal amikor felkerül ez a verzió.
+                //KézAdatok.StatustVizsgal(KézAdatok.Lista_Adatok());
+
                 ELő_Pályaszámokfeltöltése();
                 Jogosultságkiosztás();
                 DateTime elsődát = MyF.Hónap_elsőnapja(DateTime.Today).AddDays(-10);
@@ -901,8 +904,7 @@ namespace Villamos
 
                 Holtart.Be();
                 AdatokCaf = KézAdatok.Lista_Adatok();
-                // JAVÍTANDÓ:Kezelőben
-                KézAdatok.StatustVizsgal(AdatokCaf);
+               
                 List<Adat_CAF_Adatok_Pót> ADATOK = new List<Adat_CAF_Adatok_Pót>();
                 foreach (string elem in Elő_pályaszám.CheckedItems)
                 {
