@@ -901,8 +901,7 @@ namespace Villamos
 
                 Holtart.Be();
                 AdatokCaf = KézAdatok.Lista_Adatok();
-                // JAVÍTANDÓ:Kezelőben
-                KézAdatok.StatustVizsgal(AdatokCaf);
+               
                 List<Adat_CAF_Adatok_Pót> ADATOK = new List<Adat_CAF_Adatok_Pót>();
                 foreach (string elem in Elő_pályaszám.CheckedItems)
                 {
