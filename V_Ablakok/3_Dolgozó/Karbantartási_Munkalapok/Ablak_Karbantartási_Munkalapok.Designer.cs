@@ -65,10 +65,6 @@
             this.Hiba_sor = new System.Windows.Forms.NumericUpDown();
             this.Chk_szerszám = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.CHKMinta = new System.Windows.Forms.CheckBox();
-            this.CHKKMU = new System.Windows.Forms.CheckBox();
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.Beosztás = new System.Windows.Forms.CheckBox();
             this.PDFmentés = new System.Windows.Forms.Button();
             this.FelExcel = new System.Windows.Forms.Button();
             this.Digitális = new System.Windows.Forms.Button();
@@ -82,6 +78,10 @@
             this.Elem_törlés = new System.Windows.Forms.Button();
             this.Hozzá_ad = new System.Windows.Forms.Button();
             this.Excel_mentés = new System.Windows.Forms.Button();
+            this.CHKMinta = new System.Windows.Forms.CheckBox();
+            this.CHKKMU = new System.Windows.Forms.CheckBox();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Beosztás = new System.Windows.Forms.CheckBox();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_Beosztás)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_psz)).BeginInit();
@@ -479,57 +479,11 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
-            // CHKMinta
-            // 
-            this.CHKMinta.AutoSize = true;
-            this.CHKMinta.BackColor = System.Drawing.Color.Silver;
-            this.CHKMinta.Location = new System.Drawing.Point(247, 232);
-            this.CHKMinta.Name = "CHKMinta";
-            this.CHKMinta.Size = new System.Drawing.Size(140, 24);
-            this.CHKMinta.TabIndex = 239;
-            this.CHKMinta.Text = "Minta Munkalap";
-            this.CHKMinta.UseVisualStyleBackColor = false;
-            this.CHKMinta.Visible = false;
-            // 
-            // CHKKMU
-            // 
-            this.CHKKMU.AutoSize = true;
-            this.CHKKMU.BackColor = System.Drawing.Color.Silver;
-            this.CHKKMU.Checked = true;
-            this.CHKKMU.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CHKKMU.Enabled = false;
-            this.CHKKMU.Location = new System.Drawing.Point(16, 172);
-            this.CHKKMU.Name = "CHKKMU";
-            this.CHKKMU.Size = new System.Drawing.Size(219, 24);
-            this.CHKKMU.TabIndex = 240;
-            this.CHKKMU.Text = "Korrigált KMU értéket kitölti";
-            this.CHKKMU.UseVisualStyleBackColor = false;
-            // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(390, 21);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(847, 23);
-            this.Holtart.TabIndex = 241;
-            this.Holtart.Visible = false;
-            // 
-            // Beosztás
-            // 
-            this.Beosztás.AutoSize = true;
-            this.Beosztás.Location = new System.Drawing.Point(820, 232);
-            this.Beosztás.Name = "Beosztás";
-            this.Beosztás.Size = new System.Drawing.Size(223, 24);
-            this.Beosztás.TabIndex = 242;
-            this.Beosztás.Text = "Beosztás szerint dolgoznak";
-            this.Beosztás.UseVisualStyleBackColor = true;
-            this.Beosztás.CheckedChanged += new System.EventHandler(this.Beosztás_CheckedChanged);
-            // 
             // PDFmentés
             // 
             this.PDFmentés.BackgroundImage = global::Villamos.Properties.Resources.pdf;
             this.PDFmentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PDFmentés.Enabled = false;
             this.PDFmentés.Location = new System.Drawing.Point(67, 538);
             this.PDFmentés.Name = "PDFmentés";
             this.PDFmentés.Size = new System.Drawing.Size(45, 45);
@@ -682,6 +636,53 @@
             this.toolTip1.SetToolTip(this.Excel_mentés, "Munkalap készítés a beállítottaknak megfelelően.");
             this.Excel_mentés.UseVisualStyleBackColor = true;
             this.Excel_mentés.Click += new System.EventHandler(this.Excel_mentés_Click);
+            // 
+            // CHKMinta
+            // 
+            this.CHKMinta.AutoSize = true;
+            this.CHKMinta.BackColor = System.Drawing.Color.Silver;
+            this.CHKMinta.Location = new System.Drawing.Point(247, 232);
+            this.CHKMinta.Name = "CHKMinta";
+            this.CHKMinta.Size = new System.Drawing.Size(140, 24);
+            this.CHKMinta.TabIndex = 239;
+            this.CHKMinta.Text = "Minta Munkalap";
+            this.CHKMinta.UseVisualStyleBackColor = false;
+            this.CHKMinta.Visible = false;
+            // 
+            // CHKKMU
+            // 
+            this.CHKKMU.AutoSize = true;
+            this.CHKKMU.BackColor = System.Drawing.Color.Silver;
+            this.CHKKMU.Checked = true;
+            this.CHKKMU.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CHKKMU.Enabled = false;
+            this.CHKKMU.Location = new System.Drawing.Point(16, 172);
+            this.CHKKMU.Name = "CHKKMU";
+            this.CHKKMU.Size = new System.Drawing.Size(219, 24);
+            this.CHKKMU.TabIndex = 240;
+            this.CHKKMU.Text = "Korrigált KMU értéket kitölti";
+            this.CHKKMU.UseVisualStyleBackColor = false;
+            // 
+            // Holtart
+            // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Holtart.Location = new System.Drawing.Point(390, 21);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(847, 23);
+            this.Holtart.TabIndex = 241;
+            this.Holtart.Visible = false;
+            // 
+            // Beosztás
+            // 
+            this.Beosztás.AutoSize = true;
+            this.Beosztás.Location = new System.Drawing.Point(820, 232);
+            this.Beosztás.Name = "Beosztás";
+            this.Beosztás.Size = new System.Drawing.Size(223, 24);
+            this.Beosztás.TabIndex = 242;
+            this.Beosztás.Text = "Beosztás szerint dolgoznak";
+            this.Beosztás.UseVisualStyleBackColor = true;
+            this.Beosztás.CheckedChanged += new System.EventHandler(this.Beosztás_CheckedChanged);
             // 
             // Ablak_Karbantartási_Munkalapok
             // 

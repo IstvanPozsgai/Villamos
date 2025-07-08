@@ -1,4 +1,5 @@
-﻿using iTextSharp.text;
+﻿
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
@@ -2024,7 +2025,7 @@ namespace Villamos.Villamos_Ablakok
                 {
                     foreach (string psz in Pályaszám_TáblaAdatok)
                     {
-                        string fájlnév = $"Technológia_{Program.PostásNév}_{psz}_{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                        string fájlnév = $"Technológia_{Program.PostásNév}_{psz}_{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.pdf";
                         string fájlexc = $@"{könyvtár}\{fájlnév}";
                         Pályaszám.Text = psz;
                         PDF_tábla(fájlexc);
@@ -2134,17 +2135,29 @@ namespace Villamos.Villamos_Ablakok
                             // Betűtípus betöltése (Arial, Unicode támogatás)
                             string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
                             BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                            PdfPTable DíszesTábla = DíszesTartalom(Verzió);
+                            iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png");
+                            Kép.ScaleToFit(50, 125);
+                            BaseColor háttérSzín = BaseColor.WHITE;
+                            BaseColor szovegSzín = BaseColor.BLACK;
+                            // Betűtípus az adott cella szövegszínével
+                            iTextSharp.text.Font betűvastag = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                            string szöveg = "Budapesti Közlekedési Zártkörűen Működő Részvénytársaság";
+                            PdfPCell pdfCell = new PdfPCell(new Phrase(szöveg, betűvastag));
 
+                            PdfPTable pdfTable = new PdfPTable(3);
 
-                            pdfDoc.Add(DíszesTábla);
+                            pdfTable.AddCell(Kép);
+                            pdfTable.AddCell("");
+                            pdfTable.AddCell(pdfCell);
+                            pdfTable.WidthPercentage = 100;
+                            pdfDoc.Add(pdfTable);
                             pdfDoc.Close();
                         }
                     }
                     bytes = ms.ToArray();
                 }
 
-                sor = Díszesblokk(sor, Verzió);
+                // sor = Díszesblokk(sor, Verzió);
                 //sor = FejlécÁltalános(sor);
                 //sor = MunkaFejléc(sor);
                 //sor = Fejlécspec(sor);
@@ -2190,8 +2203,6 @@ namespace Villamos.Villamos_Ablakok
 
                 System.IO.File.WriteAllBytes(fájlexc, bytes);
 
-                MyE.Megnyitás(fájlexc);
-                MessageBox.Show("A nyomtatvány elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -2210,54 +2221,59 @@ namespace Villamos.Villamos_Ablakok
             PdfPTable Válasz = null;
             try
             {
-                string Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
-                MyE.Kép_beillesztés(munkalap, "A1", Kép, 5, 5, 50, 125);
+                Válasz = new PdfPTable(3);
+                iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png");
+                Kép.SetAbsolutePosition(5, 5);
+                Kép.ScaleToFit(50, 125);
+                Válasz.AddCell(Kép);
+                //string Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
+                //MyE.Kép_beillesztés(munkalap, "A1", Kép, 5, 5, 50, 125);
 
-                sor++;
-                MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
-                MyE.Kiir("Budapesti Közlekedési Zártkörűen Működő Részvénytársaság", $"E{sor}");
-                MyE.Betű($"E{sor}", 12);
-                MyE.Betű($"E{sor}", false, false, true);
-                MyE.Igazít_vízszintes($"E{sor}", "jobb");
+                //sor++;
+                //MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
+                //MyE.Kiir("Budapesti Közlekedési Zártkörűen Működő Részvénytársaság", $"E{sor}");
+                //MyE.Betű($"E{sor}", 12);
+                //MyE.Betű($"E{sor}", false, false, true);
+                //MyE.Igazít_vízszintes($"E{sor}", "jobb");
 
-                sor++;
-                MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
-                MyE.Kiir("MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG", $"E{sor}");
-                MyE.Betű($"E{sor}", 12);
-                MyE.Betű($"E{sor}", false, false, true);
-                MyE.Betű($"E{sor}", Color.Green);
-                MyE.Igazít_vízszintes($"E{sor}", "jobb");
-                sor++;
-                MyE.Vastagkeret($"A1:Q{sor}");
+                //sor++;
+                //MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
+                //MyE.Kiir("MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG", $"E{sor}");
+                //MyE.Betű($"E{sor}", 12);
+                //MyE.Betű($"E{sor}", false, false, true);
+                //MyE.Betű($"E{sor}", Color.Green);
+                //MyE.Igazít_vízszintes($"E{sor}", "jobb");
+                //sor++;
+                //MyE.Vastagkeret($"A1:Q{sor}");
 
-                sor += 5;
-                MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
-                MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
-                MyE.Kiir("Km óra állás:", $"A{sor}");
-                MyE.Betű($"{sor}:{sor}", false, true, true);
+                //sor += 5;
+                //MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
+                //MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
+                //MyE.Kiir("Km óra állás:", $"A{sor}");
+                //MyE.Betű($"{sor}:{sor}", false, true, true);
 
-                MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
-                MyE.Kiir("Verzió:", $"N{sor}");
-                MyE.Betű($"{sor}:{sor}", false, true, true);
+                //MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
+                //MyE.Kiir("Verzió:", $"N{sor}");
+                //MyE.Betű($"{sor}:{sor}", false, true, true);
 
-                sor++;
-                MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
-                MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
-                MyE.Rácsoz($"A{sor - 1}:D{sor}");
-                if (csoportos)
-                    MyE.FerdeVonal($"A{sor}:D{sor}");
-                else
-                    MyE.Kiir($"{KM_korr}", $"A{sor}");
+                //sor++;
+                //MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
+                //MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
+                //MyE.Rácsoz($"A{sor - 1}:D{sor}");
+                //if (csoportos)
+                //    MyE.FerdeVonal($"A{sor}:D{sor}");
+                //else
+                //    MyE.Kiir($"{KM_korr}", $"A{sor}");
 
-                MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
-                MyE.Kiir(Verzió, $"N{sor}");
-                MyE.Betű($"{sor}:{sor}", false, true, true);
-                MyE.Rácsoz($"N{sor - 1}:Q{sor}");
+                //MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
+                //MyE.Kiir(Verzió, $"N{sor}");
+                //MyE.Betű($"{sor}:{sor}", false, true, true);
+                //MyE.Rácsoz($"N{sor - 1}:Q{sor}");
 
-                sor++;
-                Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
-                if (File.Exists(Kép)) MyE.Kép_beillesztés(munkalap, "F5", Kép, 245, 70, 100, 225);
-                MyE.Vastagkeret($"A5:Q{sor}");
+                //sor++;
+                //Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
+                //if (File.Exists(Kép)) MyE.Kép_beillesztés(munkalap, "F5", Kép, 245, 70, 100, 225);
+                //MyE.Vastagkeret($"A5:Q{sor}");
             }
             catch (HibásBevittAdat ex)
             {
