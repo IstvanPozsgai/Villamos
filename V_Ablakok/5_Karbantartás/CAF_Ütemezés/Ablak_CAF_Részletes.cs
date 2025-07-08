@@ -220,7 +220,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Ütem_Köv_Számláló.ReadOnly = true;
                 }
                 
-                if (int.Parse(Ütem_számláló.Text) < int.Parse(Ütem_Köv_Számláló.Text) && Ütem_státus.SelectedItem.ToString() == "6- Elvégzett")
+                if ((int.Parse(Ütem_számláló.Text) > int.Parse(Ütem_Köv_Számláló.Text) || int.Parse(Ütem_számláló.Text) == 0) && Ütem_státus.SelectedItem.ToString() == "6- Elvégzett")
                 {                    
                     Ütem_számláló.BackColor = Color.Red;
                 }
