@@ -411,8 +411,8 @@ namespace Villamos.Kezelők
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";// megjegyzés
                 szöveg += $"idővKM={Adat.IDŐvKM}, ";
                 szöveg += $"Telephely='{Adat.Telephely}', ";
-                szöveg += $"KmRogzitett_e={Adat.Státus == 2})"; //KmRogzitett_e
-                szöveg += $"WHERE id={Adat.Id}";
+                szöveg += $"KmRogzitett_e={Adat.Státus == 2}"; //KmRogzitett_e
+                szöveg += $" WHERE id={Adat.Id} ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
