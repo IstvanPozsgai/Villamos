@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -42,6 +44,8 @@ namespace Villamos.Villamos_Ablakok
         List<string> PályaszámLista = new List<string>();
         List<string> Pályaszám_TáblaAdatok = new List<string>();
         Dictionary<string, string> Személy = new Dictionary<string, string>();
+
+        Byte[] bytes;
 
         /// <summary>
         /// Ez a változó jegyzi meg, hogy melyik sorszámtól kell a feladandó Excelt kiírni
@@ -1878,7 +1882,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
+
 
         private void FelExcel_Click(object sender, EventArgs e)
         {
@@ -1989,5 +1993,284 @@ namespace Villamos.Villamos_Ablakok
             Holtart.Ki();
             Holtart.Ki();
         }
+        #endregion
+
+
+        #region PDF munkalap
+        private void PDFmentés_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DateTime Eleje = DateTime.Now;
+                if (Combo_KarbCiklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy ciklus fokozat sem!");
+                if (Járműtípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy járműtípus sem!");
+                if (Pályaszám_TáblaAdatok.Count < 1) throw new HibásBevittAdat("Nincs a táblázatba felvéve egy pályaszám sem!");
+
+                PDFmentés.Visible = false;
+                string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                if (csoportos)
+                {
+                    string fájlnév = $"Technológia_{Program.PostásNév}_{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.pdf";
+                    string fájlexc = $@"{könyvtár}\{fájlnév}";
+                    PDF_tábla(fájlexc);
+
+                    //fájl törlése
+                    if (Töröl_igen.Checked)
+                        MyIO.File.Delete(fájlexc);
+                    else
+                        Module_Excel.Megnyitás(fájlexc);
+                }
+                else
+                {
+                    foreach (string psz in Pályaszám_TáblaAdatok)
+                    {
+                        string fájlnév = $"Technológia_{Program.PostásNév}_{psz}_{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                        string fájlexc = $@"{könyvtár}\{fájlnév}";
+                        Pályaszám.Text = psz;
+                        PDF_tábla(fájlexc);
+
+                        //fájl törlése
+                        if (Töröl_igen.Checked)
+                            MyIO.File.Delete(fájlexc);
+                        else
+                            Module_Excel.Megnyitás(fájlexc);
+                    }
+                }
+
+                DateTime Vége = DateTime.Now;
+                MessageBox.Show($"A nyomtatvány elkészült:{Vége - Eleje}", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Holtart.Ki();
+                PDFmentés.Visible = true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                Excel_mentés.Visible = true;
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void PDF_tábla(string fájlexc)
+        {
+
+            try
+            {
+                Adat_technológia_Ciklus AdatCikk = (from a in AdatokCiklus
+                                                    where a.Fokozat == Combo_KarbCiklus.Text.Trim()
+                                                    select a).FirstOrDefault();
+
+                Holtart.Be(25, MyColor.ColorToHex(Color.DeepSkyBlue));
+
+                //Változatok
+                List<Adat_Technológia_Változat> VÁLTAdatok = (from a in AdatokVáltozat
+                                                              where a.Változatnév == Munkalap_Változatnév.Text.Trim()
+                                                              select a).ToList();
+
+                //pályaszám kivételei
+                AdatokKivétel = MyLista.KivételekLista(Járműtípus.Text.Trim());
+                AdatokKivételCsop = CsoportosKivételek();
+
+
+                List<Adat_Technológia_Új> Adatok = (from a in AdatokTechnológia
+                                                    where a.Karb_ciklus_eleje <= AdatCikk.Sorszám && a.Karb_ciklus_vége >= AdatCikk.Sorszám
+                                                    && a.Érv_kezdete <= Dátum.Value && a.Érv_vége >= Dátum.Value
+                                                    orderby a.Részegység, a.Munka_utasítás_szám, a.ID
+                                                    select a).ToList();
+                KM_korr = 0;
+                //Egyedi munkalapokon kiírja a km adatokat
+                if (CHKKMU.Checked && !csoportos)
+                {
+                    //KMU érték
+                    List<Adat_T5C5_Kmadatok> KmAdatok = KézKM.Lista_Adatok();
+                    Adat_T5C5_Kmadatok EgyKmAdat = (from a in KmAdatok
+                                                    where a.Azonosító == Pályaszám.Text.Trim()
+                                                    orderby a.Vizsgdátumk descending
+                                                    select a).FirstOrDefault();
+                    KM_korr = 0;
+                    if (EgyKmAdat != null) KM_korr = EgyKmAdat.KMUkm;
+
+                    //KMU korrekció
+                    List<Adat_Főkönyv_Zser_Km> AdatokZSER = KézZser.Lista_adatok(Dátum.Value.Year);
+                    if (Dátum.Value.Month < 4)
+                    {
+                        List<Adat_Főkönyv_Zser_Km> AdatokZSERelőző = KézZser.Lista_adatok(Dátum.Value.Year - 1);
+                        AdatokZSER.AddRange(AdatokZSERelőző);
+                    }
+
+
+                    if (AdatokZSER != null && EgyKmAdat != null)
+                    {
+                        List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER
+                                                                     where a.Azonosító == Pályaszám.Text.Trim() && a.Dátum > EgyKmAdat.KMUdátum
+                                                                     select a).ToList();
+                        long KorNapikm = 0;
+                        if (KorNapikmLista != null)
+                            KorNapikm = KorNapikmLista.Sum(a => a.Napikm);
+                        KM_korr += KorNapikm;
+                    }
+                }
+
+
+                //legkisebb dátum
+                DateTime hatályos = Adatok.Min(a => a.Érv_kezdete);
+                string hatályos_str = $"Hatálybalépés dátuma:{hatályos:yyyy.MM.dd}";
+
+                string Verzió = $"{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{AdatCikk.Verzió}";
+                if (Járműtípus.Text.Trim().Length > 15) Verzió = $"{Járműtípus.Text.Trim()}\n_{Combo_KarbCiklus.Text.Trim()}_{AdatCikk.Verzió}";
+
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (Document pdfDoc = new Document(PageSize.A4.Rotate(), 25f, 25f, 20f, 20f))
+                    {
+                        using (PdfWriter writer = PdfWriter.GetInstance(pdfDoc, ms))
+                        {
+                            pdfDoc.Open();
+                            // Betűtípus betöltése (Arial, Unicode támogatás)
+                            string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                            BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                            PdfPTable DíszesTábla = DíszesTartalom(Verzió);
+
+
+                            pdfDoc.Add(DíszesTábla);
+                            pdfDoc.Close();
+                        }
+                    }
+                    bytes = ms.ToArray();
+                }
+
+                sor = Díszesblokk(sor, Verzió);
+                //sor = FejlécÁltalános(sor);
+                //sor = MunkaFejléc(sor);
+                //sor = Fejlécspec(sor);
+
+                //if (csoportos)
+                //{
+                //    foreach (string dolgnév in Személy.OrderBy(a => a.Value).Select(a => a.Value).Distinct())
+                //    {
+                //        sor = CsoportosPályaszámokÚj(sor, dolgnév);
+                //    }
+                //}
+
+                ////Tartalom
+                //sor = Részletes(munkalap, Adatok, AdatokKivétel, sormagagasság, VÁLTAdatok, sor);
+
+
+                //Holtart.Be(7, MyColor.ColorToHex(Color.Green));
+                ////Karbantartó tevékenység
+                //if (Chk_hibássorok.Checked) sor = KarbantartóSorok(sor);
+                //Holtart.Lép();
+
+                ////Szerszámok
+                //if (Chk_szerszám.Checked == true) sor = SzerszámokSorok(sor);
+                //Holtart.Lép();
+
+                ////Pályaszámok
+                ////   if (csoportos && Munkalap_Változatnév.Text.Trim() == "Egyszerűsített") sor = CsoportosPályaszámok(sor);
+                //Holtart.Lép();
+
+                ////Megjegyzések
+                //sor = MegjegyzésSorok(sor);
+                //Holtart.Lép();
+
+                ////Nyomtatási beállítások
+                //MyE.NyomtatásiTerület_részletes(munkalap, $"A1:Q{sor}", munkafejléchelye, "", "", "", "", hatályos_str, "&P / &N oldal",
+                //     Verzió, "", 0.236220472440945d, 0.236220472440945d, 0.551181102362205d, 0.354330708661417d, 0.31496062992126d, 0.31496062992126d
+                //    , true, false);
+                //Holtart.Lép();
+
+                ////nyomtatás
+                //if (Nyomtat_igen.Checked) MyE.Nyomtatás(munkalap, 1, 1);
+                //Holtart.Lép();
+
+                System.IO.File.WriteAllBytes(fájlexc, bytes);
+
+                MyE.Megnyitás(fájlexc);
+                MessageBox.Show("A nyomtatvány elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Holtart.Ki();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private PdfPTable DíszesTartalom(string Verzió)
+        {
+            PdfPTable Válasz = null;
+            try
+            {
+                string Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
+                MyE.Kép_beillesztés(munkalap, "A1", Kép, 5, 5, 50, 125);
+
+                sor++;
+                MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
+                MyE.Kiir("Budapesti Közlekedési Zártkörűen Működő Részvénytársaság", $"E{sor}");
+                MyE.Betű($"E{sor}", 12);
+                MyE.Betű($"E{sor}", false, false, true);
+                MyE.Igazít_vízszintes($"E{sor}", "jobb");
+
+                sor++;
+                MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
+                MyE.Kiir("MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG", $"E{sor}");
+                MyE.Betű($"E{sor}", 12);
+                MyE.Betű($"E{sor}", false, false, true);
+                MyE.Betű($"E{sor}", Color.Green);
+                MyE.Igazít_vízszintes($"E{sor}", "jobb");
+                sor++;
+                MyE.Vastagkeret($"A1:Q{sor}");
+
+                sor += 5;
+                MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
+                MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
+                MyE.Kiir("Km óra állás:", $"A{sor}");
+                MyE.Betű($"{sor}:{sor}", false, true, true);
+
+                MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
+                MyE.Kiir("Verzió:", $"N{sor}");
+                MyE.Betű($"{sor}:{sor}", false, true, true);
+
+                sor++;
+                MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
+                MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
+                MyE.Rácsoz($"A{sor - 1}:D{sor}");
+                if (csoportos)
+                    MyE.FerdeVonal($"A{sor}:D{sor}");
+                else
+                    MyE.Kiir($"{KM_korr}", $"A{sor}");
+
+                MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
+                MyE.Kiir(Verzió, $"N{sor}");
+                MyE.Betű($"{sor}:{sor}", false, true, true);
+                MyE.Rácsoz($"N{sor - 1}:Q{sor}");
+
+                sor++;
+                Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
+                if (File.Exists(Kép)) MyE.Kép_beillesztés(munkalap, "F5", Kép, 245, 70, 100, 225);
+                MyE.Vastagkeret($"A5:Q{sor}");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        #endregion
     }
 }

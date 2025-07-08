@@ -34,10 +34,6 @@
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
-            this.BtnCsoportosítás = new System.Windows.Forms.Button();
-            this.RendelésAdatok = new System.Windows.Forms.Button();
-            this.Új_sor = new System.Windows.Forms.Button();
-            this.Dolgozó_Hozzárendelés = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.Dolgozók = new System.Windows.Forms.ComboBox();
@@ -45,14 +41,9 @@
             this.Tábla_Beosztás = new System.Windows.Forms.DataGridView();
             this.label10 = new System.Windows.Forms.Label();
             this.Munkalap_Változatnév = new System.Windows.Forms.ComboBox();
-            this.Tábla_ürítés = new System.Windows.Forms.Button();
-            this.Minden_Pályaszám = new System.Windows.Forms.Button();
-            this.Elem_törlés = new System.Windows.Forms.Button();
             this.Tábla_psz = new System.Windows.Forms.DataGridView();
-            this.Hozzá_ad = new System.Windows.Forms.Button();
             this.Pályaszám = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.Excel_mentés = new System.Windows.Forms.Button();
             this.Kiadta = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -74,13 +65,23 @@
             this.Hiba_sor = new System.Windows.Forms.NumericUpDown();
             this.Chk_szerszám = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Digitális = new System.Windows.Forms.Button();
-            this.FelExcel = new System.Windows.Forms.Button();
             this.CHKMinta = new System.Windows.Forms.CheckBox();
             this.CHKKMU = new System.Windows.Forms.CheckBox();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Beosztás = new System.Windows.Forms.CheckBox();
+            this.PDFmentés = new System.Windows.Forms.Button();
+            this.FelExcel = new System.Windows.Forms.Button();
+            this.Digitális = new System.Windows.Forms.Button();
+            this.BtnCsoportosítás = new System.Windows.Forms.Button();
+            this.RendelésAdatok = new System.Windows.Forms.Button();
+            this.Új_sor = new System.Windows.Forms.Button();
+            this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Dolgozó_Hozzárendelés = new System.Windows.Forms.Button();
+            this.Tábla_ürítés = new System.Windows.Forms.Button();
+            this.Minden_Pályaszám = new System.Windows.Forms.Button();
+            this.Elem_törlés = new System.Windows.Forms.Button();
+            this.Hozzá_ad = new System.Windows.Forms.Button();
+            this.Excel_mentés = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_Beosztás)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_psz)).BeginInit();
@@ -115,54 +116,6 @@
             this.Label13.Size = new System.Drawing.Size(145, 20);
             this.Label13.TabIndex = 17;
             this.Label13.Text = "Telephelyi beállítás:";
-            // 
-            // BtnCsoportosítás
-            // 
-            this.BtnCsoportosítás.BackgroundImage = global::Villamos.Properties.Resources.Gear_01;
-            this.BtnCsoportosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnCsoportosítás.Location = new System.Drawing.Point(1090, 48);
-            this.BtnCsoportosítás.Name = "BtnCsoportosítás";
-            this.BtnCsoportosítás.Size = new System.Drawing.Size(45, 45);
-            this.BtnCsoportosítás.TabIndex = 238;
-            this.toolTip1.SetToolTip(this.BtnCsoportosítás, "Éves rendelésszám adatok beállítása");
-            this.BtnCsoportosítás.UseVisualStyleBackColor = true;
-            this.BtnCsoportosítás.Click += new System.EventHandler(this.BtnCsoportosítás_Click);
-            // 
-            // RendelésAdatok
-            // 
-            this.RendelésAdatok.BackgroundImage = global::Villamos.Properties.Resources.Calendar;
-            this.RendelésAdatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.RendelésAdatok.Location = new System.Drawing.Point(1141, 48);
-            this.RendelésAdatok.Name = "RendelésAdatok";
-            this.RendelésAdatok.Size = new System.Drawing.Size(45, 45);
-            this.RendelésAdatok.TabIndex = 237;
-            this.toolTip1.SetToolTip(this.RendelésAdatok, "Éves rendelésszám adatok beállítása");
-            this.RendelésAdatok.UseVisualStyleBackColor = true;
-            this.RendelésAdatok.Click += new System.EventHandler(this.RendelésAdatok_Click);
-            // 
-            // Új_sor
-            // 
-            this.Új_sor.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.Új_sor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Új_sor.Location = new System.Drawing.Point(760, 214);
-            this.Új_sor.Name = "Új_sor";
-            this.Új_sor.Size = new System.Drawing.Size(45, 45);
-            this.Új_sor.TabIndex = 236;
-            this.toolTip1.SetToolTip(this.Új_sor, "Új sort szúr be az előző alapján. ");
-            this.Új_sor.UseVisualStyleBackColor = true;
-            this.Új_sor.Click += new System.EventHandler(this.Új_sor_Click);
-            // 
-            // Dolgozó_Hozzárendelés
-            // 
-            this.Dolgozó_Hozzárendelés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Dolgozó_Hozzárendelés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Dolgozó_Hozzárendelés.Location = new System.Drawing.Point(390, 450);
-            this.Dolgozó_Hozzárendelés.Name = "Dolgozó_Hozzárendelés";
-            this.Dolgozó_Hozzárendelés.Size = new System.Drawing.Size(45, 45);
-            this.Dolgozó_Hozzárendelés.TabIndex = 235;
-            this.toolTip1.SetToolTip(this.Dolgozó_Hozzárendelés, "Rögzíti/módosítja az adatokat");
-            this.Dolgozó_Hozzárendelés.UseVisualStyleBackColor = true;
-            this.Dolgozó_Hozzárendelés.Click += new System.EventHandler(this.Dolgozó_Hozzárendelés_Click);
             // 
             // label12
             // 
@@ -251,42 +204,6 @@
             this.Munkalap_Változatnév.TabIndex = 229;
             this.Munkalap_Változatnév.SelectedIndexChanged += new System.EventHandler(this.Munkalap_Változatnév_SelectedIndexChanged);
             // 
-            // Tábla_ürítés
-            // 
-            this.Tábla_ürítés.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
-            this.Tábla_ürítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Tábla_ürítés.Location = new System.Drawing.Point(832, 48);
-            this.Tábla_ürítés.Name = "Tábla_ürítés";
-            this.Tábla_ürítés.Size = new System.Drawing.Size(45, 45);
-            this.Tábla_ürítés.TabIndex = 228;
-            this.toolTip1.SetToolTip(this.Tábla_ürítés, "A táblázat kiürítése");
-            this.Tábla_ürítés.UseVisualStyleBackColor = true;
-            this.Tábla_ürítés.Click += new System.EventHandler(this.Tábla_ürítés_Click);
-            // 
-            // Minden_Pályaszám
-            // 
-            this.Minden_Pályaszám.BackgroundImage = global::Villamos.Properties.Resources.mndent_kijelöl;
-            this.Minden_Pályaszám.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Minden_Pályaszám.Location = new System.Drawing.Point(781, 48);
-            this.Minden_Pályaszám.Name = "Minden_Pályaszám";
-            this.Minden_Pályaszám.Size = new System.Drawing.Size(45, 45);
-            this.Minden_Pályaszám.TabIndex = 227;
-            this.toolTip1.SetToolTip(this.Minden_Pályaszám, "Minden pályaszám átvétele");
-            this.Minden_Pályaszám.UseVisualStyleBackColor = true;
-            this.Minden_Pályaszám.Click += new System.EventHandler(this.Minden_Pályaszám_Click);
-            // 
-            // Elem_törlés
-            // 
-            this.Elem_törlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.Elem_törlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Elem_törlés.Location = new System.Drawing.Point(730, 48);
-            this.Elem_törlés.Name = "Elem_törlés";
-            this.Elem_törlés.Size = new System.Drawing.Size(45, 45);
-            this.Elem_törlés.TabIndex = 226;
-            this.toolTip1.SetToolTip(this.Elem_törlés, "Kijelölt pályaszám törlése a táblázatból");
-            this.Elem_törlés.UseVisualStyleBackColor = true;
-            this.Elem_törlés.Click += new System.EventHandler(this.Elem_törlés_Click);
-            // 
             // Tábla_psz
             // 
             this.Tábla_psz.AllowUserToAddRows = false;
@@ -299,18 +216,6 @@
             this.Tábla_psz.Size = new System.Drawing.Size(745, 109);
             this.Tábla_psz.TabIndex = 225;
             this.Tábla_psz.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_psz_CellClick);
-            // 
-            // Hozzá_ad
-            // 
-            this.Hozzá_ad.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Hozzá_ad.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Hozzá_ad.Location = new System.Drawing.Point(679, 48);
-            this.Hozzá_ad.Name = "Hozzá_ad";
-            this.Hozzá_ad.Size = new System.Drawing.Size(45, 45);
-            this.Hozzá_ad.TabIndex = 224;
-            this.toolTip1.SetToolTip(this.Hozzá_ad, "Kiválasztott pályaszám hozzáadása a táblázathoz");
-            this.Hozzá_ad.UseVisualStyleBackColor = true;
-            this.Hozzá_ad.Click += new System.EventHandler(this.Hozzá_ad_Click);
             // 
             // Pályaszám
             // 
@@ -331,18 +236,6 @@
             this.label4.Size = new System.Drawing.Size(106, 20);
             this.label4.TabIndex = 222;
             this.label4.Text = "Pályaszámok:";
-            // 
-            // Excel_mentés
-            // 
-            this.Excel_mentés.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.Excel_mentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_mentés.Location = new System.Drawing.Point(16, 538);
-            this.Excel_mentés.Name = "Excel_mentés";
-            this.Excel_mentés.Size = new System.Drawing.Size(45, 45);
-            this.Excel_mentés.TabIndex = 205;
-            this.toolTip1.SetToolTip(this.Excel_mentés, "Munkalap készítés a beállítottaknak megfelelően.");
-            this.Excel_mentés.UseVisualStyleBackColor = true;
-            this.Excel_mentés.Click += new System.EventHandler(this.Excel_mentés_Click);
             // 
             // Kiadta
             // 
@@ -586,43 +479,6 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
-            // BtnSúgó
-            // 
-            this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(1250, 6);
-            this.BtnSúgó.Name = "BtnSúgó";
-            this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
-            this.BtnSúgó.TabIndex = 206;
-            this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
-            this.BtnSúgó.UseVisualStyleBackColor = true;
-            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
-            // 
-            // Digitális
-            // 
-            this.Digitális.BackgroundImage = global::Villamos.Properties.Resources.Device_zip;
-            this.Digitális.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Digitális.Location = new System.Drawing.Point(144, 538);
-            this.Digitális.Name = "Digitális";
-            this.Digitális.Size = new System.Drawing.Size(45, 45);
-            this.Digitális.TabIndex = 243;
-            this.toolTip1.SetToolTip(this.Digitális, "Munkalap készítés a beállítottaknak megfelelően.");
-            this.Digitális.UseVisualStyleBackColor = true;
-            this.Digitális.Click += new System.EventHandler(this.Digitális_Click);
-            // 
-            // FelExcel
-            // 
-            this.FelExcel.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
-            this.FelExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.FelExcel.Location = new System.Drawing.Point(195, 538);
-            this.FelExcel.Name = "FelExcel";
-            this.FelExcel.Size = new System.Drawing.Size(45, 45);
-            this.FelExcel.TabIndex = 244;
-            this.toolTip1.SetToolTip(this.FelExcel, "Munkalap készítés a beállítottaknak megfelelően.");
-            this.FelExcel.UseVisualStyleBackColor = true;
-            this.FelExcel.Click += new System.EventHandler(this.FelExcel_Click);
-            // 
             // CHKMinta
             // 
             this.CHKMinta.AutoSize = true;
@@ -670,12 +526,170 @@
             this.Beosztás.UseVisualStyleBackColor = true;
             this.Beosztás.CheckedChanged += new System.EventHandler(this.Beosztás_CheckedChanged);
             // 
+            // PDFmentés
+            // 
+            this.PDFmentés.BackgroundImage = global::Villamos.Properties.Resources.pdf;
+            this.PDFmentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PDFmentés.Location = new System.Drawing.Point(67, 538);
+            this.PDFmentés.Name = "PDFmentés";
+            this.PDFmentés.Size = new System.Drawing.Size(45, 45);
+            this.PDFmentés.TabIndex = 245;
+            this.toolTip1.SetToolTip(this.PDFmentés, "Munkalap készítés a beállítottaknak megfelelően PDF");
+            this.PDFmentés.UseVisualStyleBackColor = true;
+            this.PDFmentés.Click += new System.EventHandler(this.PDFmentés_Click);
+            // 
+            // FelExcel
+            // 
+            this.FelExcel.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
+            this.FelExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.FelExcel.Location = new System.Drawing.Point(195, 538);
+            this.FelExcel.Name = "FelExcel";
+            this.FelExcel.Size = new System.Drawing.Size(45, 45);
+            this.FelExcel.TabIndex = 244;
+            this.toolTip1.SetToolTip(this.FelExcel, "Munkalap készítés a beállítottaknak megfelelően.");
+            this.FelExcel.UseVisualStyleBackColor = true;
+            this.FelExcel.Click += new System.EventHandler(this.FelExcel_Click);
+            // 
+            // Digitális
+            // 
+            this.Digitális.BackgroundImage = global::Villamos.Properties.Resources.Device_zip;
+            this.Digitális.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Digitális.Location = new System.Drawing.Point(144, 538);
+            this.Digitális.Name = "Digitális";
+            this.Digitális.Size = new System.Drawing.Size(45, 45);
+            this.Digitális.TabIndex = 243;
+            this.toolTip1.SetToolTip(this.Digitális, "Munkalap készítés a beállítottaknak megfelelően.");
+            this.Digitális.UseVisualStyleBackColor = true;
+            this.Digitális.Click += new System.EventHandler(this.Digitális_Click);
+            // 
+            // BtnCsoportosítás
+            // 
+            this.BtnCsoportosítás.BackgroundImage = global::Villamos.Properties.Resources.Gear_01;
+            this.BtnCsoportosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnCsoportosítás.Location = new System.Drawing.Point(1090, 48);
+            this.BtnCsoportosítás.Name = "BtnCsoportosítás";
+            this.BtnCsoportosítás.Size = new System.Drawing.Size(45, 45);
+            this.BtnCsoportosítás.TabIndex = 238;
+            this.toolTip1.SetToolTip(this.BtnCsoportosítás, "Éves rendelésszám adatok beállítása");
+            this.BtnCsoportosítás.UseVisualStyleBackColor = true;
+            this.BtnCsoportosítás.Click += new System.EventHandler(this.BtnCsoportosítás_Click);
+            // 
+            // RendelésAdatok
+            // 
+            this.RendelésAdatok.BackgroundImage = global::Villamos.Properties.Resources.Calendar;
+            this.RendelésAdatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.RendelésAdatok.Location = new System.Drawing.Point(1141, 48);
+            this.RendelésAdatok.Name = "RendelésAdatok";
+            this.RendelésAdatok.Size = new System.Drawing.Size(45, 45);
+            this.RendelésAdatok.TabIndex = 237;
+            this.toolTip1.SetToolTip(this.RendelésAdatok, "Éves rendelésszám adatok beállítása");
+            this.RendelésAdatok.UseVisualStyleBackColor = true;
+            this.RendelésAdatok.Click += new System.EventHandler(this.RendelésAdatok_Click);
+            // 
+            // Új_sor
+            // 
+            this.Új_sor.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
+            this.Új_sor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Új_sor.Location = new System.Drawing.Point(760, 214);
+            this.Új_sor.Name = "Új_sor";
+            this.Új_sor.Size = new System.Drawing.Size(45, 45);
+            this.Új_sor.TabIndex = 236;
+            this.toolTip1.SetToolTip(this.Új_sor, "Új sort szúr be az előző alapján. ");
+            this.Új_sor.UseVisualStyleBackColor = true;
+            this.Új_sor.Click += new System.EventHandler(this.Új_sor_Click);
+            // 
+            // BtnSúgó
+            // 
+            this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSúgó.Location = new System.Drawing.Point(1250, 6);
+            this.BtnSúgó.Name = "BtnSúgó";
+            this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
+            this.BtnSúgó.TabIndex = 206;
+            this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
+            this.BtnSúgó.UseVisualStyleBackColor = true;
+            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
+            // 
+            // Dolgozó_Hozzárendelés
+            // 
+            this.Dolgozó_Hozzárendelés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Dolgozó_Hozzárendelés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Dolgozó_Hozzárendelés.Location = new System.Drawing.Point(390, 450);
+            this.Dolgozó_Hozzárendelés.Name = "Dolgozó_Hozzárendelés";
+            this.Dolgozó_Hozzárendelés.Size = new System.Drawing.Size(45, 45);
+            this.Dolgozó_Hozzárendelés.TabIndex = 235;
+            this.toolTip1.SetToolTip(this.Dolgozó_Hozzárendelés, "Rögzíti/módosítja az adatokat");
+            this.Dolgozó_Hozzárendelés.UseVisualStyleBackColor = true;
+            this.Dolgozó_Hozzárendelés.Click += new System.EventHandler(this.Dolgozó_Hozzárendelés_Click);
+            // 
+            // Tábla_ürítés
+            // 
+            this.Tábla_ürítés.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
+            this.Tábla_ürítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Tábla_ürítés.Location = new System.Drawing.Point(832, 48);
+            this.Tábla_ürítés.Name = "Tábla_ürítés";
+            this.Tábla_ürítés.Size = new System.Drawing.Size(45, 45);
+            this.Tábla_ürítés.TabIndex = 228;
+            this.toolTip1.SetToolTip(this.Tábla_ürítés, "A táblázat kiürítése");
+            this.Tábla_ürítés.UseVisualStyleBackColor = true;
+            this.Tábla_ürítés.Click += new System.EventHandler(this.Tábla_ürítés_Click);
+            // 
+            // Minden_Pályaszám
+            // 
+            this.Minden_Pályaszám.BackgroundImage = global::Villamos.Properties.Resources.mndent_kijelöl;
+            this.Minden_Pályaszám.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Minden_Pályaszám.Location = new System.Drawing.Point(781, 48);
+            this.Minden_Pályaszám.Name = "Minden_Pályaszám";
+            this.Minden_Pályaszám.Size = new System.Drawing.Size(45, 45);
+            this.Minden_Pályaszám.TabIndex = 227;
+            this.toolTip1.SetToolTip(this.Minden_Pályaszám, "Minden pályaszám átvétele");
+            this.Minden_Pályaszám.UseVisualStyleBackColor = true;
+            this.Minden_Pályaszám.Click += new System.EventHandler(this.Minden_Pályaszám_Click);
+            // 
+            // Elem_törlés
+            // 
+            this.Elem_törlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.Elem_törlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Elem_törlés.Location = new System.Drawing.Point(730, 48);
+            this.Elem_törlés.Name = "Elem_törlés";
+            this.Elem_törlés.Size = new System.Drawing.Size(45, 45);
+            this.Elem_törlés.TabIndex = 226;
+            this.toolTip1.SetToolTip(this.Elem_törlés, "Kijelölt pályaszám törlése a táblázatból");
+            this.Elem_törlés.UseVisualStyleBackColor = true;
+            this.Elem_törlés.Click += new System.EventHandler(this.Elem_törlés_Click);
+            // 
+            // Hozzá_ad
+            // 
+            this.Hozzá_ad.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Hozzá_ad.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Hozzá_ad.Location = new System.Drawing.Point(679, 48);
+            this.Hozzá_ad.Name = "Hozzá_ad";
+            this.Hozzá_ad.Size = new System.Drawing.Size(45, 45);
+            this.Hozzá_ad.TabIndex = 224;
+            this.toolTip1.SetToolTip(this.Hozzá_ad, "Kiválasztott pályaszám hozzáadása a táblázathoz");
+            this.Hozzá_ad.UseVisualStyleBackColor = true;
+            this.Hozzá_ad.Click += new System.EventHandler(this.Hozzá_ad_Click);
+            // 
+            // Excel_mentés
+            // 
+            this.Excel_mentés.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.Excel_mentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Excel_mentés.Location = new System.Drawing.Point(16, 538);
+            this.Excel_mentés.Name = "Excel_mentés";
+            this.Excel_mentés.Size = new System.Drawing.Size(45, 45);
+            this.Excel_mentés.TabIndex = 205;
+            this.toolTip1.SetToolTip(this.Excel_mentés, "Munkalap készítés a beállítottaknak megfelelően.");
+            this.Excel_mentés.UseVisualStyleBackColor = true;
+            this.Excel_mentés.Click += new System.EventHandler(this.Excel_mentés_Click);
+            // 
             // Ablak_Karbantartási_Munkalapok
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGreen;
             this.ClientSize = new System.Drawing.Size(1307, 637);
+            this.Controls.Add(this.PDFmentés);
             this.Controls.Add(this.FelExcel);
             this.Controls.Add(this.Digitális);
             this.Controls.Add(this.Beosztás);
@@ -794,5 +808,6 @@
         private System.Windows.Forms.CheckBox Beosztás;
         internal System.Windows.Forms.Button Digitális;
         internal System.Windows.Forms.Button FelExcel;
+        internal System.Windows.Forms.Button PDFmentés;
     }
 }

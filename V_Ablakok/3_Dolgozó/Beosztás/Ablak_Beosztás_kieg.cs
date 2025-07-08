@@ -558,11 +558,11 @@ namespace Villamos.Villamos_Ablakok
                 {
                     case 1:
                         {
-                            DirectoryInfo Directories = new DirectoryInfo($@"{Application.StartupPath}\Főmérnökség\adatok\dokumentumok");
-                            string mialapján = $"{Hrazonosító.Trim()}_tul_{Dátum.Year}*.pdf";
+                            DirectoryInfo Directories = new DirectoryInfo($@"{Application.StartupPath}\Főmérnökség\Munkakör\{Cmbtelephely.Trim()}");
+                            string mialapján = $"{Hrazonosító.Trim()}_Nyil*.pdf";
                             FileInfo[] fileInfo = Directories.GetFiles(mialapján, SearchOption.TopDirectoryOnly);
 
-                            if (fileInfo.Count() < 1)
+                            if (fileInfo.Count() < 1 || !fileInfo.Any(a => a.Name.Contains(Dátum.Year.ToString())))
                                 throw new HibásBevittAdat("A Túlórát dolgozói nyilatkozat hiányában nem lehet rögzíteni!");
                             break;
                         }

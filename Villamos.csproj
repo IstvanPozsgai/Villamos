@@ -1657,6 +1657,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\pdf.ico" />
     <None Include="Resources\justice-297629_1280.png" />
     <None Include="Resources\Graphicloads-Colorful-Long-Shadow-Arrow-download-3.ico" />
     <None Include="Resources\shopping_cart.ico" />
