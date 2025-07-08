@@ -375,7 +375,7 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(-1, 515);
+            this.Holtart.Location = new System.Drawing.Point(11, 515);
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(892, 25);
             this.Holtart.TabIndex = 115;

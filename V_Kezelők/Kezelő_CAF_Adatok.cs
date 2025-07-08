@@ -207,7 +207,7 @@ namespace Villamos.Kezelők
         public Adat_CAF_Adatok Utolso_Km_Vizsgalat_Adatai(string Azonosító)
         {
             return Lista_Adatok()
-                .Where(a => a.Státus == 6 && a.Azonosító == $"{Azonosító}" && a.IDŐvKM == 2)
+                .Where(a => a.Státus == 6 && a.Azonosító == $"{Azonosító}" && a.IDŐvKM == 2 && a.Megjegyzés.Trim() != "Ütemezési Segéd")
                 .OrderByDescending(a => a.Dátum)
                 .FirstOrDefault();
         }

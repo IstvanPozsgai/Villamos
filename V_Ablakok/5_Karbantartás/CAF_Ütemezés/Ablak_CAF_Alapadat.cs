@@ -165,9 +165,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // Ebben az eljárásban minden kocsi adatát akarjuk  ellenőrizni
                 List<Adat_CAF_alap> Adatok = KézCAFAlap.Lista_Adatok(true);
 
-                // JAVÍTANDÓ:Ez csak egy kocsi adatait akarja ellenőrizni be kell tenni a ciklusba.
-                // KÉSZ✔
-
                 AdatokZser.Clear();
                 AdatokZser = KézZSerKm.Lista_adatok(DateTime.Today.Year - 1);
                 List<Adat_Főkönyv_Zser_Km> Ideig = KézZSerKm.Lista_adatok(DateTime.Today.Year);
@@ -209,11 +206,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                             DateTime.Today);
                         AdatokGy.Add(ADAT);
 
-                        Adat_CAF_Adatok utolso_km = KezCafAdatok.Utolso_Km_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
-                        Adat_CAF_Adatok utolso_ido = KezCafAdatok.Utolso_Ido_Vizsgalat_Adatai(Alap_pályaszám.Text.Trim());
+                        Adat_CAF_Adatok utolso_km = KezCafAdatok.Utolso_Km_Vizsgalat_Adatai(rekord.Azonosító.Trim());
+                        Adat_CAF_Adatok utolso_ido = KezCafAdatok.Utolso_Ido_Vizsgalat_Adatai(rekord.Azonosító.Trim());
 
-                        KézCAFAlap.Módosítás_Kész_Ido(utolso_ido.Vizsgálat, utolso_ido.IDŐ_Sorszám, utolso_ido.Dátum, utolso_ido.Telephely, utolso_ido.Számláló, utolso_ido.Azonosító);
-                        KézCAFAlap.Módosítás_Kész_Km(utolso_km.Vizsgálat, utolso_km.KM_Sorszám, utolso_km.Dátum, utolso_km.Telephely, utolso_km.Számláló, utolso_km.Azonosító);
+                        if (utolso_ido != null) KézCAFAlap.Módosítás_Kész_Ido(utolso_ido.Vizsgálat, utolso_ido.IDŐ_Sorszám, utolso_ido.Dátum, utolso_ido.Telephely, utolso_ido.Számláló, utolso_ido.Azonosító);
+                        if (utolso_km != null) KézCAFAlap.Módosítás_Kész_Km(utolso_km.Vizsgálat, utolso_km.KM_Sorszám, utolso_km.Dátum, utolso_km.Telephely, utolso_km.Számláló, utolso_km.Azonosító);
 
                         Holtart.Lép();
 
