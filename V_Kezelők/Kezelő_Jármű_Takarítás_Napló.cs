@@ -87,6 +87,32 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Rögzítés(int Év, Adat_Jármű_Takarítás_Takarítások Adat)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                string szöveg = "INSERT INTO takarítások_napló  (azonosító, dátum, takarítási_fajta, telephely, státus, Mikor, Módosító ) VALUES (";
+                szöveg += $"'{Adat.Azonosító}', ";        // azonosító
+                szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // dátum
+                szöveg += $"'{Adat.Takarítási_fajta}', "; // takarítási_fajta
+                szöveg += $"'{Adat.Telephely}', ";        // telephely
+                szöveg += $" {Adat.Státus}, ";            // státus
+                szöveg += $"'{DateTime.Now}',";             // Mikor
+                szöveg += $"'{Program.PostásNév}')";          // Módosító
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void NaplóTörlés(int Év, Adat_Jármű_Takarítás_Napló Adat)
         {
 

@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Jármű_Takarítás
     {
+        readonly Kezelő_Jármű_Takarítás_Napló KézNapló = new Kezelő_Jármű_Takarítás_Napló();
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_takarítás.mdb";
         readonly string jelszó = "seprűéslapát";
 
@@ -64,6 +65,7 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Telephely}', ";         // telephely
                 szöveg += $" {Adat.Státus})";              // státus
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+                KézNapló.Rögzítés(DateTime.Now.Year, Adat);
             }
             catch (HibásBevittAdat ex)
             {
@@ -87,6 +89,30 @@ namespace Villamos.Kezelők
                 szöveg += $" AND takarítási_fajta='{Adat.Takarítási_fajta}'";
                 szöveg += $" AND Telephely='{Adat.Telephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(Adat_Jármű_Takarítás_Takarítások Adat)
+        {
+            try
+            {
+                string szöveg = "UPDATE takarítások  SET ";
+                szöveg += $"dátum ='{Adat.Dátum:yyyy.MM.dd}', ";
+                szöveg += $"státus ={Adat.Státus} ";
+                szöveg += $" WHERE [azonosító]='{Adat.Azonosító}'";
+                szöveg += $" AND takarítási_fajta='{Adat.Takarítási_fajta}'";
+                szöveg += $" AND Telephely='{Adat.Telephely}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+                KézNapló.Rögzítés(DateTime.Now.Year, Adat);
             }
             catch (HibásBevittAdat ex)
             {

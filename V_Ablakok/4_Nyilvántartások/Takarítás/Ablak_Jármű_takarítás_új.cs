@@ -5495,26 +5495,27 @@ namespace Villamos
                                                      státus);
                 if (AdatTakarítások == null)
                 {
-                    //Rögzítjük az új pályaszámot
+                    //Rögzítjük az új pályaszámot és naplózzuk
                     KézTak.Rögzítés(ADAT);
-                    //Naplózás
-                    Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
-                                                        ADAT.Azonosító,
-                                                        ADAT.Dátum,
-                                                        ADAT.Takarítási_fajta,
-                                                        ADAT.Telephely,
-                                                        DateTime.Now,
-                                                        Program.PostásNév,
-                                                        ADAT.Státus);
-                    KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
                     MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    //Töröljük a meglévő adatot 
-
-                    if (státus != AdatTakarítások.Státus && státus == 1)
+                    //Ha van csak a dátumot módosítjuk
+                    if (státus == 0)
                     {
+                        if (Gepi_datum.Value.ToShortDateString() != AdatTakarítások.Dátum.ToShortDateString())
+                        {
+                            KézTak.Módosítás(ADAT);
+                            MessageBox.Show("Az adatok módosítása befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                            MessageBox.Show("Erre a napra már volt rögzítve.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    }
+                    else
+                    {
+                        //töröljük az adott napi takarítást és megkeressük az előzőt
                         //Kitöröljük a Naplóból
                         Adat_Jármű_Takarítás_Napló ADATNAP = new Adat_Jármű_Takarítás_Napló(
                                     ADAT.Azonosító,
@@ -5546,23 +5547,9 @@ namespace Villamos
                                 Cmbtelephely.Text.Trim(),
                                 0);
                             KézTak.Módosítás_Dátum(ADAT);
-
-                            ADATNAP = new Adat_Jármű_Takarítás_Napló(
-                                                ADAT.Azonosító,
-                                                ADAT.Dátum,
-                                                ADAT.Takarítási_fajta,
-                                                ADAT.Telephely,
-                                                DateTime.Now,
-                                                Program.PostásNév,
-                                                ADAT.Státus);
-                            KézTakNapló.Rögzítés(DateTime.Now.Year, ADATNAP);
                             MessageBox.Show("Az adatok módosítása megtörtént.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-
                     }
-                    else
-
-                        MessageBox.Show("Van már erre a napra rögzítve Gépi mosás", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (HibásBevittAdat ex)
