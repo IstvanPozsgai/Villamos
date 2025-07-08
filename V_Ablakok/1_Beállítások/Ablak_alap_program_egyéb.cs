@@ -1085,6 +1085,8 @@ namespace Villamos
                            select a).ToList();
 
                 Tak_Ár_Tábla.Visible = false;
+                Tak_Ár_Tábla.CleanFilterAndSort();
+
                 Tak_Ár_Tábla_Fejléc();
                 AdatÁRTábla.Clear();
 
