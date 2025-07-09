@@ -39,49 +39,120 @@ namespace Villamos.Villamos_Ablakok
 
         private void ListaVillamos()
         {
-            string hely = Application.StartupPath + @"\" + Cmbtelephely.Text + @"\adatok\villamos\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = $"SELECT * FROM állománytábla";
-            AdatokJármű?.Clear();
-            AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
+            try
+            {
+                string hely = Application.StartupPath + @"\" + Cmbtelephely.Text + @"\adatok\villamos\villamos.mdb";
+                string jelszó = "pozsgaii";
+                string szöveg = $"SELECT * FROM állománytábla";
+                AdatokJármű?.Clear();
+                AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void ListaJadatok2()
         {
-            string hely = Application.StartupPath + @"\" + Cmbtelephely.Text + @"\adatok\villamos\villamos2.mdb"; //takarítás dátumok
-            string jelszó = "pozsgaii";
-            string szöveg = $"SELECT * FROM állománytábla";
-            JAdatok_2?.Clear();
-            JAdatok_2 = KJAdat_2.Lista_Adatok(hely, jelszó, szöveg);
+            try
+            {
+                string hely = Application.StartupPath + @"\" + Cmbtelephely.Text + @"\adatok\villamos\villamos2.mdb"; //takarítás dátumok
+                string jelszó = "pozsgaii";
+                string szöveg = $"SELECT * FROM állománytábla";
+                JAdatok_2?.Clear();
+                JAdatok_2 = KJAdat_2.Lista_Adatok(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void ListaFutásNapNoszt()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
-            string jelszó = "kloczkal";
-            string szöveg = $"SELECT * FROM Tevékenység";
-            AdatokÁllomány?.Clear();
-            AdatokÁllomány = KézÁllomány.Lista_Adat(hely, jelszó, szöveg);
+            try
+            {
+                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
+                string jelszó = "kloczkal";
+                string szöveg = $"SELECT * FROM Tevékenység";
+                AdatokÁllomány?.Clear();
+                AdatokÁllomány = KézÁllomány.Lista_Adat(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void ListaCiklus()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Ciklus.mdb";
-            string jelszó = "pocsaierzsi";
-            string szöveg = $"SELECT * FROM Ciklusrendtábla";
-            AdatokCiklus?.Clear();
-            AdatokCiklus = KézCiklus.Lista_Adatok(hely, jelszó, szöveg);
+            try
+            {
+                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Ciklus.mdb";
+                string jelszó = "pocsaierzsi";
+                string szöveg = $"SELECT * FROM Ciklusrendtábla";
+                AdatokCiklus?.Clear();
+                AdatokCiklus = KézCiklus.Lista_Adatok(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void ListaÉvesFutás()
         {
-            string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb";
-            string jelszó = "kloczkal";
-            string szöveg = $"SELECT * FROM Futás";
-            AdatokFutás.Clear();
-            AdatokFutás = KézFutás.Lista_Adat(hely, jelszó, szöveg);
-
+            try
+            {
+                string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Value.Year}.mdb";
+                string jelszó = "kloczkal";
+                string szöveg = $"SELECT * FROM Futás";
+                AdatokFutás.Clear();
+                AdatokFutás = KézFutás.Lista_Adat(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void ListaHiba()
         {
-            AdatokHiba.Clear();
-            AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
+            try
+            {
+                AdatokHiba.Clear();
+                AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ListaFeltöltés()
@@ -92,6 +163,7 @@ namespace Villamos.Villamos_Ablakok
             ListaCiklus();
             ListaÉvesFutás();
             ListaHiba();
+            AdatokRendezése();
         }
         #endregion
 
@@ -365,20 +437,11 @@ namespace Villamos.Villamos_Ablakok
                     switch (rekord.Korlát)
                     {
                         case 4:
-                            {
-                                álló += rekord.Hibaleírása.Trim() + "-";
-                                break;
-                            }
+                            { álló += rekord.Hibaleírása.Trim() + "-"; break; }
                         case 3:
-                            {
-                                beálló += rekord.Hibaleírása.Trim() + "-";
-                                break;
-                            }
+                            { beálló += rekord.Hibaleírása.Trim() + "-"; break; }
                         case 1:
-                            {
-                                szabad += rekord.Hibaleírása.Trim() + "-";
-                                break;
-                            }
+                            { szabad += rekord.Hibaleírása.Trim() + "-"; break; }
                     }
                     Adat_Jármű Elem = (from a in AdatokJármű
                                        where a.Azonosító == Pályaszám
