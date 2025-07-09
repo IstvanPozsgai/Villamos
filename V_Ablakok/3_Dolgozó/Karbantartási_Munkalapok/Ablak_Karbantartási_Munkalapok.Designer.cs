@@ -483,7 +483,6 @@
             // 
             this.PDFmentés.BackgroundImage = global::Villamos.Properties.Resources.pdf;
             this.PDFmentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PDFmentés.Enabled = false;
             this.PDFmentés.Location = new System.Drawing.Point(67, 538);
             this.PDFmentés.Name = "PDFmentés";
             this.PDFmentés.Size = new System.Drawing.Size(45, 45);

@@ -1,5 +1,4 @@
-﻿
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
@@ -2127,30 +2126,16 @@ namespace Villamos.Villamos_Ablakok
 
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    using (Document pdfDoc = new Document(PageSize.A4.Rotate(), 25f, 25f, 20f, 20f))
+                    using (Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 15f, 15f))
                     {
                         using (PdfWriter writer = PdfWriter.GetInstance(pdfDoc, ms))
                         {
                             pdfDoc.Open();
-                            // Betűtípus betöltése (Arial, Unicode támogatás)
-                            string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
-                            BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                            iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png");
-                            Kép.ScaleToFit(50, 125);
-                            BaseColor háttérSzín = BaseColor.WHITE;
-                            BaseColor szovegSzín = BaseColor.BLACK;
-                            // Betűtípus az adott cella szövegszínével
-                            iTextSharp.text.Font betűvastag = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-                            string szöveg = "Budapesti Közlekedési Zártkörűen Működő Részvénytársaság";
-                            PdfPCell pdfCell = new PdfPCell(new Phrase(szöveg, betűvastag));
+                            PdfPTable Tábla = DíszesTartalom(Verzió);
+                            Tábla.WidthPercentage = 100;
 
-                            PdfPTable pdfTable = new PdfPTable(3);
 
-                            pdfTable.AddCell(Kép);
-                            pdfTable.AddCell("");
-                            pdfTable.AddCell(pdfCell);
-                            pdfTable.WidthPercentage = 100;
-                            pdfDoc.Add(pdfTable);
+                            pdfDoc.Add(Tábla);
                             pdfDoc.Close();
                         }
                     }
@@ -2218,14 +2203,68 @@ namespace Villamos.Villamos_Ablakok
 
         private PdfPTable DíszesTartalom(string Verzió)
         {
-            PdfPTable Válasz = null;
+            PdfPTable Válasz = new PdfPTable(1);
             try
             {
-                Válasz = new PdfPTable(3);
+                // Betűtípus betöltése (Arial, Unicode támogatás)
+                string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png");
-                Kép.SetAbsolutePosition(5, 5);
-                Kép.ScaleToFit(50, 125);
-                Válasz.AddCell(Kép);
+                Kép.ScaleToFit(100, 250);
+                BaseColor háttérSzín = BaseColor.WHITE;
+                BaseColor szovegSzín = BaseColor.BLACK;
+                // Betűtípus az adott cella szövegszínével
+                iTextSharp.text.Font betűvastagFekete = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                iTextSharp.text.Font betűvastagZöld = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.GREEN);
+                string szöveg = "Budapesti Közlekedési Zártkörűen Működő Részvénytársaság";
+                string szöveg1 = "MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG";
+                PdfPCell pdfCell = new PdfPCell(new Phrase(szöveg, betűvastagFekete));
+
+                PdfPTable pdfTable = new PdfPTable(2);
+                pdfTable.WidthPercentage = 100;
+
+
+                pdfTable.SetWidths(new float[] { 1, 2 });
+
+
+                PdfPCell imageCell = new PdfPCell(Kép);
+
+
+                imageCell.Border = PdfPCell.NO_BORDER;
+
+
+                imageCell.PaddingLeft = 5; // Move image 5 points to the jobbra
+                imageCell.PaddingTop = 2; // Move image 2 points le
+
+
+
+                pdfTable.AddCell(imageCell);
+
+
+                // Add text to the right cell
+                PdfPCell textCell = new PdfPCell();
+                textCell.Border = PdfPCell.NO_BORDER;
+
+                Paragraph p1 = new Paragraph(szöveg, betűvastagFekete);
+                p1.Alignment = Element.ALIGN_RIGHT;
+                Paragraph p2 = new Paragraph(szöveg1, betűvastagZöld);
+                p2.Alignment = Element.ALIGN_RIGHT;
+
+                textCell.AddElement(p1);
+                textCell.AddElement(p2);
+                pdfTable.AddCell(textCell);
+
+                // Add the table to the document with a border around the table
+                //PdfPCell tableWrapper = new PdfPCell(pdfTable);
+                //tableWrapper.Border = PdfPCell.BOX;
+                //tableWrapper.BorderWidth = 1f; // Set the border width
+                //PdfPTable outerTable = new PdfPTable(1);
+                //outerTable.WidthPercentage = 100;
+                //outerTable.AddCell(tableWrapper);
+                //Válasz.AddCell(outerTable);
+
+                Válasz.AddCell(pdfTable);
+
                 //string Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
                 //MyE.Kép_beillesztés(munkalap, "A1", Kép, 5, 5, 50, 125);
 
