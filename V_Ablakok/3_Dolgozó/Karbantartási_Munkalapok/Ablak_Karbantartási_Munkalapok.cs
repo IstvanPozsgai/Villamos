@@ -2131,19 +2131,32 @@ namespace Villamos.Villamos_Ablakok
                         using (PdfWriter writer = PdfWriter.GetInstance(pdfDoc, ms))
                         {
                             pdfDoc.Open();
-                            PdfPTable Tábla = DíszesTartalom(Verzió);
+                            PdfPTable Tábla = BKVfejléc();
                             Tábla.WidthPercentage = 100;
-
-
                             pdfDoc.Add(Tábla);
+
+                            Tábla = Kmóraállás(Verzió, KM_korr);
+                            Tábla.WidthPercentage = 100;
+                            pdfDoc.Add(Tábla);
+
+                            Tábla = PályaszámTábla();
+                            Tábla.WidthPercentage = 100;
+                            pdfDoc.Add(Tábla);
+
+                            Tábla = DátumTábla();
+                            Tábla.WidthPercentage = 100;
+                            pdfDoc.Add(Tábla);
+
+
+
                             pdfDoc.Close();
                         }
                     }
                     bytes = ms.ToArray();
                 }
 
-                // sor = Díszesblokk(sor, Verzió);
-                //sor = FejlécÁltalános(sor);
+
+                //  sor = FejlécÁltalános(sor);
                 //sor = MunkaFejléc(sor);
                 //sor = Fejlécspec(sor);
 
@@ -2201,118 +2214,23 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        private PdfPTable DíszesTartalom(string Verzió)
+        private PdfPTable PályaszámTábla()
         {
             PdfPTable Válasz = new PdfPTable(1);
             try
             {
-                // Betűtípus betöltése (Arial, Unicode támogatás)
-                string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
-                BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png");
-                Kép.ScaleToFit(100, 250);
-                BaseColor háttérSzín = BaseColor.WHITE;
-                BaseColor szovegSzín = BaseColor.BLACK;
-                // Betűtípus az adott cella szövegszínével
-                iTextSharp.text.Font betűvastagFekete = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-                iTextSharp.text.Font betűvastagZöld = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.GREEN);
-                string szöveg = "Budapesti Közlekedési Zártkörűen Működő Részvénytársaság";
-                string szöveg1 = "MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG";
-                PdfPCell pdfCell = new PdfPCell(new Phrase(szöveg, betűvastagFekete));
-
-                PdfPTable pdfTable = new PdfPTable(2);
+                PdfPTable pdfTable = new PdfPTable(3);
                 pdfTable.WidthPercentage = 100;
+                pdfTable.SetWidths(new float[] { 1, 1, 1 });
 
-
-                pdfTable.SetWidths(new float[] { 1, 2 });
-
-
-                PdfPCell imageCell = new PdfPCell(Kép);
-
-
-                imageCell.Border = PdfPCell.NO_BORDER;
-
-
-                imageCell.PaddingLeft = 5; // Move image 5 points to the jobbra
-                imageCell.PaddingTop = 2; // Move image 2 points le
-
-
-
-                pdfTable.AddCell(imageCell);
-
-
-                // Add text to the right cell
-                PdfPCell textCell = new PdfPCell();
-                textCell.Border = PdfPCell.NO_BORDER;
-
-                Paragraph p1 = new Paragraph(szöveg, betűvastagFekete);
-                p1.Alignment = Element.ALIGN_RIGHT;
-                Paragraph p2 = new Paragraph(szöveg1, betűvastagZöld);
-                p2.Alignment = Element.ALIGN_RIGHT;
-
-                textCell.AddElement(p1);
-                textCell.AddElement(p2);
-                pdfTable.AddCell(textCell);
-
-                // Add the table to the document with a border around the table
-                //PdfPCell tableWrapper = new PdfPCell(pdfTable);
-                //tableWrapper.Border = PdfPCell.BOX;
-                //tableWrapper.BorderWidth = 1f; // Set the border width
-                //PdfPTable outerTable = new PdfPTable(1);
-                //outerTable.WidthPercentage = 100;
-                //outerTable.AddCell(tableWrapper);
-                //Válasz.AddCell(outerTable);
-
+                pdfTable.AddCell(Cella(Kiírás($"Pályaszám:{Pályaszám.Text.Trim()}", "betűD")));
+                string szöveg = Járműtípus.Text.Trim();
+                if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
+                szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
+                pdfTable.AddCell(Cella(Kiírás(szöveg, "betűV")));
+                pdfTable.AddCell(Cella(Kiírás($"Készítve: {DateTime.Now}", "betűD")));
                 Válasz.AddCell(pdfTable);
 
-                //string Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
-                //MyE.Kép_beillesztés(munkalap, "A1", Kép, 5, 5, 50, 125);
-
-                //sor++;
-                //MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
-                //MyE.Kiir("Budapesti Közlekedési Zártkörűen Működő Részvénytársaság", $"E{sor}");
-                //MyE.Betű($"E{sor}", 12);
-                //MyE.Betű($"E{sor}", false, false, true);
-                //MyE.Igazít_vízszintes($"E{sor}", "jobb");
-
-                //sor++;
-                //MyE.Egyesít(munkalap, $"E{sor}:Q{sor}");
-                //MyE.Kiir("MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG", $"E{sor}");
-                //MyE.Betű($"E{sor}", 12);
-                //MyE.Betű($"E{sor}", false, false, true);
-                //MyE.Betű($"E{sor}", Color.Green);
-                //MyE.Igazít_vízszintes($"E{sor}", "jobb");
-                //sor++;
-                //MyE.Vastagkeret($"A1:Q{sor}");
-
-                //sor += 5;
-                //MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
-                //MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
-                //MyE.Kiir("Km óra állás:", $"A{sor}");
-                //MyE.Betű($"{sor}:{sor}", false, true, true);
-
-                //MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
-                //MyE.Kiir("Verzió:", $"N{sor}");
-                //MyE.Betű($"{sor}:{sor}", false, true, true);
-
-                //sor++;
-                //MyE.Sormagasság($"{sor}:{sor}", sormagagasság);
-                //MyE.Egyesít(munkalap, $"A{sor}:D{sor}");
-                //MyE.Rácsoz($"A{sor - 1}:D{sor}");
-                //if (csoportos)
-                //    MyE.FerdeVonal($"A{sor}:D{sor}");
-                //else
-                //    MyE.Kiir($"{KM_korr}", $"A{sor}");
-
-                //MyE.Egyesít(munkalap, $"N{sor}:Q{sor}");
-                //MyE.Kiir(Verzió, $"N{sor}");
-                //MyE.Betű($"{sor}:{sor}", false, true, true);
-                //MyE.Rácsoz($"N{sor - 1}:Q{sor}");
-
-                //sor++;
-                //Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
-                //if (File.Exists(Kép)) MyE.Kép_beillesztés(munkalap, "F5", Kép, 245, 70, 100, 225);
-                //MyE.Vastagkeret($"A5:Q{sor}");
             }
             catch (HibásBevittAdat ex)
             {
@@ -2326,6 +2244,214 @@ namespace Villamos.Villamos_Ablakok
             return Válasz;
         }
 
+        private PdfPTable DátumTábla(long Sorszám = 0)
+        {
+            PdfPTable Válasz = new PdfPTable(1);
+            try
+            {
+                PdfPTable pdfTable = new PdfPTable(4);
+                pdfTable.WidthPercentage = 100;
+                pdfTable.SetWidths(new float[] { 1, 1, 1, 1 });
+
+                pdfTable.AddCell(Cella(Kiírás("Kezdő Dátum", "betűVD")));
+                pdfTable.AddCell(Cella(Kiírás("Befejező Dátum", "betűVD")));
+                pdfTable.AddCell(Cella(Kiírás("Rendelés Szám:", "betűVD")));
+                pdfTable.AddCell(Cella(Kiírás("Telephely", "betűVD")));
+
+                pdfTable.AddCell(Cella(Kiírás(Dátum.Value.ToString("yyyy.MM.dd"), "betű")));
+                pdfTable.AddCell(Cella(Kiírás("", "betűVD")));
+                pdfTable.AddCell(Cella(Kiírás(Rendelés_Keresés(Sorszám), "betű")));
+                pdfTable.AddCell(Cella(Kiírás(Cmbtelephely.Text.Trim(), "betűVD")));
+
+                Válasz.AddCell(pdfTable);
+                Válasz.TotalWidth = 100;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private PdfPCell Cella(Paragraph érték)
+        {
+            PdfPCell válasz = new PdfPCell
+            {
+                Border = iTextSharp.text.Rectangle.BOX,
+                BorderWidth = 0.5f,
+                BorderColor = BaseColor.BLACK
+            };
+            válasz.AddElement(érték);
+
+            return válasz;
+        }
+
+        private Paragraph Kiírás(string szöveg, string betű)
+        {
+            Paragraph válasz;
+            string betűtípus = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+            BaseFont alapFont = BaseFont.CreateFont(betűtípus, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            iTextSharp.text.Font Betű;
+            switch (betű)
+            {
+                case "betűVB":
+                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
+                    break;
+                case "betűV":
+                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
+                    break;
+                case "betűB":
+                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    break;
+                case "betű":
+                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                    break;
+                default:
+                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                    break;
+            }
+            válasz = new Paragraph(szöveg, Betű)
+            {
+                Alignment = Element.ALIGN_CENTER
+            };
+            return válasz;
+        }
+
+        private PdfPTable Kmóraállás(string verzió, long kM_korr)
+        {
+            PdfPTable Válasz = new PdfPTable(1);
+            try
+            {
+                PdfPTable pdfTable = new PdfPTable(3);
+                pdfTable.WidthPercentage = 100;
+                pdfTable.SetWidths(new float[] { 1, 2, 1 });
+
+                //Kép
+                iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png");
+                Kép.ScaleToFit(200, 500);
+                PdfPCell imageCell = new PdfPCell(Kép);
+                imageCell.Border = PdfPCell.NO_BORDER;
+                imageCell.PaddingLeft = 5; // Move image 5 points to the jobbra
+                imageCell.PaddingTop = 2; // Move image 2 points le
+
+
+                //Szöveg
+                PdfPCell textCell = new PdfPCell();
+                string betűtípus = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                BaseFont alapFont = BaseFont.CreateFont(betűtípus, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                iTextSharp.text.Font BetűVD = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
+
+                //Első tábla
+                PdfPTable Tábla = new PdfPTable(1);
+                Paragraph p1 = new Paragraph("Km óra állás:", BetűVD);
+                p1.Alignment = Element.ALIGN_CENTER;
+                textCell.AddElement(p1);
+                Tábla.AddCell(textCell);
+
+                p1 = new Paragraph(kM_korr.ToString(), BetűVD);
+                p1.Alignment = Element.ALIGN_CENTER;
+                textCell = new PdfPCell();
+                textCell.AddElement(p1);
+                Tábla.AddCell(textCell);
+
+                PdfPTable Tábla2 = new PdfPTable(1);
+                p1 = new Paragraph("Verzió:", BetűVD);
+                p1.Alignment = Element.ALIGN_CENTER;
+                textCell = new PdfPCell();
+                textCell.AddElement(p1);
+                Tábla2.AddCell(textCell);
+
+                p1 = new Paragraph(verzió, BetűVD);
+                p1.Alignment = Element.ALIGN_CENTER;
+                textCell = new PdfPCell();
+                textCell.AddElement(p1);
+                Tábla2.AddCell(textCell);
+
+                PdfPCell textCell1 = new PdfPCell();
+                textCell1.Border = PdfPCell.NO_BORDER;
+                textCell1.AddElement(Tábla);
+                pdfTable.AddCell(textCell1);
+
+                pdfTable.AddCell(imageCell);
+
+                textCell1 = new PdfPCell();
+                textCell1.Border = PdfPCell.NO_BORDER;
+                textCell1.AddElement(Tábla2);
+                pdfTable.AddCell(textCell1);
+
+                Válasz.AddCell(pdfTable);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private PdfPTable BKVfejléc()
+        {
+            PdfPTable Válasz = new PdfPTable(1);
+            try
+            {
+                PdfPTable pdfTable = new PdfPTable(2);
+                pdfTable.WidthPercentage = 100;
+                pdfTable.SetWidths(new float[] { 1, 2 });
+
+                //Kép
+                iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png");
+                Kép.ScaleToFit(100, 250);
+                PdfPCell imageCell = new PdfPCell(Kép);
+                imageCell.Border = PdfPCell.NO_BORDER;
+                imageCell.PaddingLeft = 5; // Move image 5 points to the jobbra
+                imageCell.PaddingTop = 2; // Move image 2 points le
+                pdfTable.AddCell(imageCell);
+
+
+                //Szöveg jobbra igazítva
+                PdfPCell textCell = new PdfPCell();
+                textCell.Border = PdfPCell.NO_BORDER;
+
+                // Betűtípus az adott cella szövegszínével
+                // Betűtípus betöltése (Arial, Unicode támogatás)
+                string betűtípus = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                BaseFont alapFont = BaseFont.CreateFont(betűtípus, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                iTextSharp.text.Font betűvastagFekete = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                iTextSharp.text.Font betűvastagZöld = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.GREEN);
+                string szöveg = "Budapesti Közlekedési Zártkörűen Működő Részvénytársaság";
+                string szöveg1 = "MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG";
+                Paragraph p1 = new Paragraph(szöveg, betűvastagFekete);
+                p1.Alignment = Element.ALIGN_RIGHT;
+                Paragraph p2 = new Paragraph(szöveg1, betűvastagZöld);
+                p2.Alignment = Element.ALIGN_RIGHT;
+
+                textCell.AddElement(p1);
+                textCell.AddElement(p2);
+                pdfTable.AddCell(textCell);
+
+                Válasz.AddCell(pdfTable);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
         #endregion
     }
 }

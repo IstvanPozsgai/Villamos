@@ -326,6 +326,7 @@
             this.Ütem_Köv_Státus.Name = "Ütem_Köv_Státus";
             this.Ütem_Köv_Státus.Size = new System.Drawing.Size(147, 28);
             this.Ütem_Köv_Státus.TabIndex = 253;
+            this.Ütem_Köv_Státus.SelectionChangeCommitted += new System.EventHandler(this.Ütem_Köv_Státus_SelectionChangeCommitted);
             // 
             // Ütem_Köv_Számláló
             // 
@@ -344,7 +345,6 @@
             // 
             // Ütem_Köv_Dátum
             // 
-            this.Ütem_Köv_Dátum.Enabled = false;
             this.Ütem_Köv_Dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Ütem_Köv_Dátum.Location = new System.Drawing.Point(397, 132);
             this.Ütem_Köv_Dátum.Name = "Ütem_Köv_Dátum";
@@ -465,7 +465,6 @@
             // 
             // Ütem_dátum
             // 
-            this.Ütem_dátum.Enabled = false;
             this.Ütem_dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Ütem_dátum.Location = new System.Drawing.Point(216, 132);
             this.Ütem_dátum.Name = "Ütem_dátum";
@@ -542,7 +541,6 @@
             this.Ütem_vizsg_sorszám_km.Size = new System.Drawing.Size(145, 28);
             this.Ütem_vizsg_sorszám_km.TabIndex = 228;
             this.Ütem_vizsg_sorszám_km.SelectionChangeCommitted += new System.EventHandler(this.Ütem_vizsg_sorszám_km_SelectionChangeCommitted);
-            this.Ütem_Köv_Státus.SelectionChangeCommitted += new System.EventHandler(this.Ütem_Köv_Státus_SelectionChangeCommitted);
             // 
             // Label38
             // 
