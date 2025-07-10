@@ -368,7 +368,7 @@ namespace Villamos.Villamos_Ablakok
                     {
                         Adat_Kerék_Eszterga_Naptár ADAT = new Adat_Kerék_Eszterga_Naptár(
                                         rekord.Idő,
-                                        rekord.Foglalt,
+                                        true,
                                         Tevékenység_Vál.Text.Trim(),
                                         MyF.Szöveg_Tisztítás(Megjegyzés.Text, 0, -1, true),
                                         betűSzín,
@@ -385,7 +385,7 @@ namespace Villamos.Villamos_Ablakok
                     if (Futóidő >= NormaIdő) break;
                     Holtart.Lép();
                 }
-                KézNaptár.Módosítás(DátumésIdő.Year, AdatokGy);
+                if (AdatokGy.Count > 0) KézNaptár.Módosítás(DátumésIdő.Year, AdatokGy);
                 if (Futóidő <= NormaIdő) Maradék_beírása_Rögzítés(Futóidő, NormaIdő);
             }
             catch (HibásBevittAdat ex)
