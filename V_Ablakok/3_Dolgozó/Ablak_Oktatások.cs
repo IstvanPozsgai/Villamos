@@ -42,6 +42,7 @@ namespace Villamos
         private void AblakOktatások_Load(object sender, EventArgs e)
         {
             Telephelyekfeltöltése();
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Csoportfeltöltés();
             Névfeltöltés();
