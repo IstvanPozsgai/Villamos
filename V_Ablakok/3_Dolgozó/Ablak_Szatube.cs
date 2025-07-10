@@ -56,6 +56,7 @@ namespace Villamos
             TúlCsopNyom.Visible = false;
             Túl_Eng_Beáll.Visible = false;
 
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
 
             TabFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
