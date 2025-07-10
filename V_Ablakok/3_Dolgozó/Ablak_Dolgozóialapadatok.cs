@@ -54,6 +54,7 @@ namespace Villamos
         private void Ablak_Dolgozóialapadatok_Shown(object sender, EventArgs e)
         {
             Telephelyekfeltöltése();
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             DolgozóAdatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
             Névfeltöltés();
