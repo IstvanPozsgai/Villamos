@@ -2139,10 +2139,6 @@ namespace Villamos.Villamos_Ablakok
                             Tábla.WidthPercentage = 100;
                             pdfDoc.Add(Tábla);
 
-                            Tábla = PályaszámTábla();
-                            Tábla.WidthPercentage = 100;
-                            pdfDoc.Add(Tábla);
-
                             Tábla = DátumTábla();
                             Tábla.WidthPercentage = 100;
                             pdfDoc.Add(Tábla);
@@ -2151,16 +2147,30 @@ namespace Villamos.Villamos_Ablakok
                             Tábla.WidthPercentage = 100;
                             pdfDoc.Add(Tábla);
 
+                            if (Chk_hibássorok.Checked)
+                            {
+                                Tábla = Javítások();
+                                Tábla.WidthPercentage = 100;
+                                pdfDoc.Add(Tábla);
+                            }
+                            if (Chk_szerszám.Checked == true)
+                            {
+                                Tábla = Szerszámok();
+                                Tábla.WidthPercentage = 100;
+                                pdfDoc.Add(Tábla);
+                            }
+                            Tábla = Megjegyzés();
+                            Tábla.WidthPercentage = 100;
+                            pdfDoc.Add(Tábla);
 
-
+                            Tábla = Aláírás();
+                            Tábla.WidthPercentage = 100;
+                            pdfDoc.Add(Tábla);
                             pdfDoc.Close();
                         }
                     }
                     bytes = ms.ToArray();
                 }
-
-                //sor = Fejlécspec(sor);
-
                 //if (csoportos)
                 //{
                 //    foreach (string dolgnév in Személy.OrderBy(a => a.Value).Select(a => a.Value).Distinct())
@@ -2169,26 +2179,6 @@ namespace Villamos.Villamos_Ablakok
                 //    }
                 //}
 
-                ////Tartalom
-                //     sor = Részletes(munkalap, Adatok, AdatokKivétel, sormagagasság, VÁLTAdatok, sor);
-
-
-                //Holtart.Be(7, MyColor.ColorToHex(Color.Green));
-                ////Karbantartó tevékenység
-                //if (Chk_hibássorok.Checked) sor = KarbantartóSorok(sor);
-                //Holtart.Lép();
-
-                ////Szerszámok
-                //if (Chk_szerszám.Checked == true) sor = SzerszámokSorok(sor);
-                //Holtart.Lép();
-
-                ////Pályaszámok
-                ////   if (csoportos && Munkalap_Változatnév.Text.Trim() == "Egyszerűsített") sor = CsoportosPályaszámok(sor);
-                //Holtart.Lép();
-
-                ////Megjegyzések
-                //sor = MegjegyzésSorok(sor);
-                //Holtart.Lép();
 
                 ////Nyomtatási beállítások
                 //MyE.NyomtatásiTerület_részletes(munkalap, $"A1:Q{sor}", munkafejléchelye, "", "", "", "", hatályos_str, "&P / &N oldal",
@@ -2215,33 +2205,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        private PdfPTable PályaszámTábla()
-        {
-            PdfPTable Válasz = new PdfPTable(3);
-            try
-            {
-                Válasz.WidthPercentage = 100;
-                Válasz.SetWidths(new float[] { 1, 1, 1 });
-
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás($"Pályaszám:{Pályaszám.Text.Trim()}", "V")));
-                string szöveg = Járműtípus.Text.Trim();
-                if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
-                szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(szöveg, "V")));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás($"Készítve: {DateTime.Now}", "D")));
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Válasz;
-        }
-
         private PdfPTable DátumTábla(long Sorszám = 0)
         {
             PdfPTable Válasz = new PdfPTable(4);
@@ -2256,7 +2219,7 @@ namespace Villamos.Villamos_Ablakok
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Telephely", "VD")));
 
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(Dátum.Value.ToString("yyyy.MM.dd"))));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("", "VD")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "N", 12f, 1, 24f)));
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(Rendelés_Keresés(Sorszám))));
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(Cmbtelephely.Text.Trim())));
 
@@ -2374,16 +2337,34 @@ namespace Villamos.Villamos_Ablakok
         private PdfPTable Tartalom(List<Adat_Technológia_Új> Adatok, List<Adat_Technológia_Kivételek> KivételAdatok,
                   List<Adat_Technológia_Változat> VÁLTAdatok)
         {
-            PdfPTable Válasz = new PdfPTable(7);
+            PdfPTable Válasz = new PdfPTable(8);
             try
             {
-                PdfPTable pdfTable = new PdfPTable(7);
                 Válasz.WidthPercentage = 100;
-                Válasz.SetWidths(new float[] { 1, 8, 1, 1, 1, 3, 2 });
+                Válasz.SetWidths(new float[] { 1, 4, 4, 1, 1, 1, 3, 2 });
+
+                string szöveg = Járműtípus.Text.Trim();
+                if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
+                szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
+                //Nulladik sor
+                PdfPCell ECell = MyPDF.Cella(MyPDF.Kiírás($"Pályaszám:{Pályaszám.Text.Trim()}", "V"));
+                ECell.Colspan = 2;
+                Válasz.AddCell(ECell);
+
+                ECell = MyPDF.Cella(MyPDF.Kiírás(szöveg, "V"));
+                ECell.Colspan = 4;
+                Válasz.AddCell(ECell);
+
+                ECell = MyPDF.Cella(MyPDF.Kiírás($"Készítve: {DateTime.Now}", "D"));
+                ECell.Colspan = 2;
+                Válasz.AddCell(ECell);
+
 
                 //Munkalap fejléc kiírása  első sor
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Nr.", "V"), true, false, true, "LIGHT_GRAY"));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("MUNKAUTASÍTÁS LEÍRÁSA", "V"), true, false, true, "LIGHT_GRAY"));
+                ECell = MyPDF.Cella(MyPDF.Kiírás("MUNKAUTASÍTÁS LEÍRÁSA", "V"), true, false, true, "LIGHT_GRAY");
+                ECell.Colspan = 2;
+                Válasz.AddCell(ECell);
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Karb.", "V"), true, false, true, "LIGHT_GRAY"));
 
                 PdfPCell mergedCell = MyPDF.Cella(MyPDF.Kiírás("Státusz** ", "V"), true, true, true, "LIGHT_GRAY");
@@ -2395,13 +2376,15 @@ namespace Villamos.Villamos_Ablakok
 
                 //Második sor
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "V"), true, true, false, "LIGHT_GRAY"));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "V"), true, true, false, "LIGHT_GRAY"));
+                ECell = MyPDF.Cella(MyPDF.Kiírás(" ", "V"), true, true, false, "LIGHT_GRAY");
+                ECell.Colspan = 2;
+                Válasz.AddCell(ECell);
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" Cikl.", "V"), true, true, false, "LIGHT_GRAY"));
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("OK", "V"), true, true, true, "LIGHT_GRAY"));
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Jav.*", "V"), true, true, true, "LIGHT_GRAY"));
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Végrehajtotta***", "V"), true, true, false, "LIGHT_GRAY"));
                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "V"), true, true, false, "LIGHT_GRAY"));
-                Válasz.HeaderRows = 2;
+                Válasz.HeaderRows = 3;
 
                 Holtart.Be(Adatok.Count + 2, MyColor.ColorToHex(Color.Orange));
 
@@ -2421,33 +2404,38 @@ namespace Villamos.Villamos_Ablakok
                         {
                             Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(a.Részegység.Trim() + ". " + a.Munka_utasítás_szám.Trim(), "N")));
 
-                            Paragraph Cím = MyPDF.Kiírás(a.Utasítás_Cím, "V");
-                            Paragraph Leírás = MyPDF.Kiírás(a.Utasítás_leírás, "N");
-                            Paragraph Paraméter = MyPDF.Kiírás(a.Paraméter, "D");
+                            Paragraph Cím = MyPDF.Kiírás(a.Utasítás_Cím, "V", 12, 0);
+                            Paragraph Leírás = MyPDF.Kiírás(a.Utasítás_leírás, "N", 12, 0);
+                            Paragraph Paraméter = MyPDF.Kiírás(a.Paraméter, "D", 12, 0);
                             PdfPCell Egyesít = new PdfPCell();
                             if (Chk_paraméter.Checked && Chk_utasítás.Checked)
                             {
                                 //Minden kiírás
-                                Egyesít.AddElement(Cím);
-                                Egyesít.AddElement(Leírás);
-                                Egyesít.AddElement(Paraméter);
+                                if (a.Utasítás_Cím.Trim() != "_") Egyesít.AddElement(Cím);
+                                if (a.Utasítás_leírás.Trim() != "_") Egyesít.AddElement(Leírás);
+                                if (a.Paraméter.Trim() != "_") Egyesít.AddElement(Paraméter);
+
+                                Egyesít.Colspan = 2;
                                 Válasz.AddCell(Egyesít);
                             }
                             else if (Chk_paraméter.Checked && !Chk_utasítás.Checked)
                             {
-                                Egyesít.AddElement(Cím);
-                                Egyesít.AddElement(Paraméter);
+                                if (a.Utasítás_Cím.Trim() != "_") Egyesít.AddElement(Cím);
+                                if (a.Paraméter.Trim() != "_") Egyesít.AddElement(Paraméter);
+                                Egyesít.Colspan = 2;
                                 Válasz.AddCell(Egyesít);
                             }
                             else if (!Chk_paraméter.Checked && Chk_utasítás.Checked)
                             {
-                                Egyesít.AddElement(Cím);
-                                Egyesít.AddElement(Leírás);
+                                if (a.Utasítás_Cím.Trim() != "_") Egyesít.AddElement(Cím);
+                                if (a.Utasítás_leírás.Trim() != "_") Egyesít.AddElement(Leírás);
+                                Egyesít.Colspan = 2;
                                 Válasz.AddCell(Egyesít);
                             }
                             else
                             {
-                                Egyesít.AddElement(Cím);
+                                if (a.Utasítás_Cím.Trim() != "_") Egyesít.AddElement(Cím);
+                                Egyesít.Colspan = 2;
                                 Válasz.AddCell(Egyesít);
                             }
 
@@ -2460,7 +2448,7 @@ namespace Villamos.Villamos_Ablakok
                             {
                                 string ideignév = Dolgozónév_kiíratása(VÁLTAdatok, a.ID, Személy);
                                 ideignév = ideignév.Trim() != "_" ? ideignév : "";
-                                string szöveg = ideignév.Replace("_", "\n");
+                                szöveg = ideignév.Replace("_", "\n");
                                 Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(szöveg, "N")));
                             }
                             else
@@ -2470,6 +2458,134 @@ namespace Villamos.Villamos_Ablakok
                     }
                     Holtart.Lép();
                 }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private PdfPTable Javítások()
+        {
+            PdfPTable Válasz = new PdfPTable(1);
+            try
+            {
+                Válasz.WidthPercentage = 100;
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("A KARBANTARTÓ TEVÉKENYSÉG SORÁN FELMERÜLŐ ÉSZREVÉTELEK, JAVÍTÁSOK", "N"), true, true, true, "LIGHT_GRAY"));
+                for (int i = 0; i < Hiba_sor.Value; i++)
+                {
+                    Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "N", 12, 1, 24f)));
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private PdfPTable Szerszámok()
+        {
+            PdfPTable Válasz = new PdfPTable(1);
+            try
+            {
+                Válasz.WidthPercentage = 100;
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("A KARBANTARTÓ TEVÉKENYSÉG SORÁN HASZNÁLT KALIBRÁLT ESZKÖZÖK, SZERSZÁMOK LISTÁJA", "N"), true, true, true, "LIGHT_GRAY"));
+                PdfPTable pdfTable = new PdfPTable(4);
+                pdfTable.SetWidths(new float[] { 6, 3, 5, 3 });
+                pdfTable.AddCell(MyPDF.Cella(MyPDF.Kiírás("ESZKÖZ, SZERSZÁM TÍPUSA", "N")));
+                pdfTable.AddCell(MyPDF.Cella(MyPDF.Kiírás("SOROZATSZÁMA", "N")));
+                pdfTable.AddCell(MyPDF.Cella(MyPDF.Kiírás("MUNKAUTASÍTÁS SORSZÁMA", "N")));
+                pdfTable.AddCell(MyPDF.Cella(MyPDF.Kiírás("ALÁÍRÁS", "N")));
+                for (int i = 0; i < Szerszám_sor.Value * 4; i++)
+                {
+                    pdfTable.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "N", 12, 1, 24f)));
+                }
+                Válasz.AddCell(pdfTable);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private PdfPTable Megjegyzés()
+        {
+            PdfPTable Válasz = new PdfPTable(1);
+            try
+            {
+                Válasz.WidthPercentage = 100;
+                PdfPCell textCell = new PdfPCell();
+                string szövegrész = "Megjegyzés: \n" +
+                   "(*) Nemmegfelelősségeket jelezd részletsesen írásban\n" +
+                   "(**) Státusz oszlopba pipálással jelezd a munkafolyamat eredeményét\n" +
+                   "(***) Aláírásommal igazolom, hogy a felsorolt járműveken, a típusra aktuálisan" +
+                   " érvényes Főtechnológia jelölt karbantartási ciklusban előírt feladatait elvégeztem.";
+                textCell.AddElement(MyPDF.Kiírás(szövegrész, "N", 11f, 0));
+                textCell.Border = PdfPCell.NO_BORDER;
+                Válasz.AddCell(textCell);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private PdfPTable Aláírás()
+        {
+            PdfPTable Válasz = new PdfPTable(2);
+            try
+            {
+                Válasz.WidthPercentage = 100;
+                Válasz.SetWidths(new float[] { 11, 5 });
+
+                PdfPCell textCell = MyPDF.Cella(MyPDF.Kiírás("\n\nAz ellenőrzések, javítások elvégzését követően a jármű forgalomképes. Ellenőrizte:", "N", 10f));
+                textCell.Border = PdfPCell.NO_BORDER;
+                Válasz.AddCell(textCell);
+                textCell = MyPDF.Cella(MyPDF.Kiírás(" ", "N"));
+                textCell.Border = PdfPCell.NO_BORDER;
+                Válasz.AddCell(textCell);
+
+                textCell = MyPDF.Cella(MyPDF.Kiírás(" ", "N"));
+                textCell.Border = PdfPCell.NO_BORDER;
+                Válasz.AddCell(textCell);
+                if (Kiadta.Text.Trim() == "")
+                {
+                    textCell = MyPDF.Cella(MyPDF.Kiírás("Irányító", "N", 10f));
+                    textCell.Border = PdfPCell.NO_BORDER;
+                }
+                else
+                {
+                    string ideig = Kiadta.Text.Trim().Replace("-", "\n");
+                    textCell = MyPDF.Cella(MyPDF.Kiírás(ideig, "N", 10f));
+                    textCell.Border = PdfPCell.NO_BORDER;
+                }
+                Válasz.AddCell(textCell);
+
             }
             catch (HibásBevittAdat ex)
             {

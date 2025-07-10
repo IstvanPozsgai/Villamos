@@ -483,7 +483,7 @@
             // 
             this.PDFmentés.BackgroundImage = global::Villamos.Properties.Resources.pdf;
             this.PDFmentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PDFmentés.Location = new System.Drawing.Point(67, 538);
+            this.PDFmentés.Location = new System.Drawing.Point(16, 589);
             this.PDFmentés.Name = "PDFmentés";
             this.PDFmentés.Size = new System.Drawing.Size(45, 45);
             this.PDFmentés.TabIndex = 245;
@@ -495,7 +495,7 @@
             // 
             this.FelExcel.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
             this.FelExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.FelExcel.Location = new System.Drawing.Point(195, 538);
+            this.FelExcel.Location = new System.Drawing.Point(242, 538);
             this.FelExcel.Name = "FelExcel";
             this.FelExcel.Size = new System.Drawing.Size(45, 45);
             this.FelExcel.TabIndex = 244;
@@ -507,7 +507,7 @@
             // 
             this.Digitális.BackgroundImage = global::Villamos.Properties.Resources.Device_zip;
             this.Digitális.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Digitális.Location = new System.Drawing.Point(144, 538);
+            this.Digitális.Location = new System.Drawing.Point(191, 538);
             this.Digitális.Name = "Digitális";
             this.Digitális.Size = new System.Drawing.Size(45, 45);
             this.Digitális.TabIndex = 243;

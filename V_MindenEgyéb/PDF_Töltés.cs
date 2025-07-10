@@ -17,6 +17,8 @@ namespace Villamos.MindenEgyéb
         {
             PdfPCell válasz = new PdfPCell();
             válasz.AddElement(érték);
+
+            // Vízszintesen és függőlegesen középre igazítás
             if (keret)
             {
                 válasz.Border = iTextSharp.text.Rectangle.BOX;
@@ -38,7 +40,6 @@ namespace Villamos.MindenEgyéb
             return válasz;
         }
 
-
         /// <summary>
         /// A kiírandó szöveget kiírja arial 12 betűként
         /// </summary>
@@ -50,7 +51,7 @@ namespace Villamos.MindenEgyéb
         /// A- Aláhúzott
         /// </param>
         /// <returns></returns>
-        public static Paragraph Kiírás(string szöveg, string betű = "N", Single méret = 12f, int igazítás = 1)
+        public static Paragraph Kiírás(string szöveg, string betű = "N", Single méret = 12f, int igazítás = 1, Single sortáv = 12f)
         {
             Paragraph válasz;
             string betűtípus = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
@@ -86,12 +87,14 @@ namespace Villamos.MindenEgyéb
                 case 2:
                     válasz.Alignment = Element.ALIGN_RIGHT;
                     break;
+                case -1:
+                    válasz.Alignment = Element.ALIGN_UNDEFINED;
+                    break;
+                case 5:
+                    válasz.Alignment = Element.ALIGN_MIDDLE;
+                    break;
             }
-            válasz.Leading = 12f; //sorok között 
-
-            //  válasz.Alignment = Element.ALIGN_JUSTIFIED;      //sorkizárt szöveg
-
-
+            válasz.Leading = sortáv; //sorok között 
             return válasz;
         }
 
