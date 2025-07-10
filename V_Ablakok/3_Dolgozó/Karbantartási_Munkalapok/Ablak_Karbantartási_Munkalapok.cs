@@ -2147,6 +2147,10 @@ namespace Villamos.Villamos_Ablakok
                             Tábla.WidthPercentage = 100;
                             pdfDoc.Add(Tábla);
 
+                            Tábla = Tartalom();
+                            Tábla.WidthPercentage = 100;
+                            pdfDoc.Add(Tábla);
+
 
 
                             pdfDoc.Close();
@@ -2155,9 +2159,6 @@ namespace Villamos.Villamos_Ablakok
                     bytes = ms.ToArray();
                 }
 
-
-                //  sor = FejlécÁltalános(sor);
-                //sor = MunkaFejléc(sor);
                 //sor = Fejlécspec(sor);
 
                 //if (csoportos)
@@ -2169,7 +2170,7 @@ namespace Villamos.Villamos_Ablakok
                 //}
 
                 ////Tartalom
-                //sor = Részletes(munkalap, Adatok, AdatokKivétel, sormagagasság, VÁLTAdatok, sor);
+                sor = Részletes(munkalap, Adatok, AdatokKivétel, sormagagasság, VÁLTAdatok, sor);
 
 
                 //Holtart.Be(7, MyColor.ColorToHex(Color.Green));
@@ -2357,6 +2358,44 @@ namespace Villamos.Villamos_Ablakok
                 pdfTable.AddCell(textCell);
 
                 Válasz.AddCell(pdfTable);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
+        private PdfPTable Tartalom()
+        {
+            PdfPTable Válasz = new PdfPTable(1);
+            try
+            {
+                PdfPTable pdfTable = new PdfPTable(7);
+                pdfTable.WidthPercentage = 100;
+                pdfTable.SetWidths(new float[] { 1, 8, 1, 1, 1, 3, 2 });
+
+                //Munkalap fejléc kiírása
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Nr.", "V")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("MUNKAUTASÍTÁS LEÍRÁSA", "V")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Karb. Cikl.", "V")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Nr.", "V")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Nr.", "V")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Utasítást Végrehajtotta***", "V")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Aláírás", "V")));
+
+                //MyE.Kiir("Státusz** ", $"K{sor}");
+                //MyE.Kiir("OK", $"K{sor}");
+                //MyE.Kiir("Jav.*", $"L{sor}");
+
+                //MyE.Háttérszín($"A{sor - 1}:Q{sor}", System.Drawing.Color.Gainsboro);
+                MyE.Sormagasság($"{sor - 1}:{sor}", 20);
+
             }
             catch (HibásBevittAdat ex)
             {

@@ -444,8 +444,11 @@ namespace Villamos
                 {
                     //Ha van ehhez a szervezethez joga akkor engedélyezzük a kiírást
                     string[] gomb = CmbGombok.Text.Split('=');
+                    Adat_Oldalak EgyOldal = AdatokOldal.Where(a => a.MenuFelirat == CmbAblak.Text.Trim()).FirstOrDefault();
+                    if (EgyOldal == null) return;
                     Adat_Gombok EgyGomb = (from a in AdatokGombok
                                            where a.Szervezet.Contains(szervezet.Név)
+                                           && a.FromName == EgyOldal.FromName
                                            && a.GombName == gomb[1].Trim()
                                            select a).FirstOrDefault();
                     if (EgyGomb != null)
