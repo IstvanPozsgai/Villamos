@@ -15,7 +15,7 @@ using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyIO = System.IO;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;
-
+using MyPDF = Villamos.MindenEgyéb.PDF_Töltés;
 
 namespace Villamos.Villamos_Ablakok
 {
@@ -2216,21 +2216,18 @@ namespace Villamos.Villamos_Ablakok
 
         private PdfPTable PályaszámTábla()
         {
-            PdfPTable Válasz = new PdfPTable(1);
+            PdfPTable Válasz = new PdfPTable(3);
             try
             {
-                PdfPTable pdfTable = new PdfPTable(3);
-                pdfTable.WidthPercentage = 100;
-                pdfTable.SetWidths(new float[] { 1, 1, 1 });
+                Válasz.WidthPercentage = 100;
+                Válasz.SetWidths(new float[] { 1, 1, 1 });
 
-                pdfTable.AddCell(Cella(Kiírás($"Pályaszám:{Pályaszám.Text.Trim()}", "betűD")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás($"Pályaszám:{Pályaszám.Text.Trim()}", "V")));
                 string szöveg = Járműtípus.Text.Trim();
                 if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
                 szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
-                pdfTable.AddCell(Cella(Kiírás(szöveg, "betűV")));
-                pdfTable.AddCell(Cella(Kiírás($"Készítve: {DateTime.Now}", "betűD")));
-                Válasz.AddCell(pdfTable);
-
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(szöveg, "V")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás($"Készítve: {DateTime.Now}", "D")));
             }
             catch (HibásBevittAdat ex)
             {
@@ -2246,25 +2243,21 @@ namespace Villamos.Villamos_Ablakok
 
         private PdfPTable DátumTábla(long Sorszám = 0)
         {
-            PdfPTable Válasz = new PdfPTable(1);
+            PdfPTable Válasz = new PdfPTable(4);
             try
             {
-                PdfPTable pdfTable = new PdfPTable(4);
-                pdfTable.WidthPercentage = 100;
-                pdfTable.SetWidths(new float[] { 1, 1, 1, 1 });
+                Válasz.WidthPercentage = 100;
+                Válasz.SetWidths(new float[] { 1, 1, 1, 1 });
 
-                pdfTable.AddCell(Cella(Kiírás("Kezdő Dátum", "betűVD")));
-                pdfTable.AddCell(Cella(Kiírás("Befejező Dátum", "betűVD")));
-                pdfTable.AddCell(Cella(Kiírás("Rendelés Szám:", "betűVD")));
-                pdfTable.AddCell(Cella(Kiírás("Telephely", "betűVD")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Kezdő Dátum", "VD")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Befejező Dátum", "VD")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Rendelés Szám:", "VD")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Telephely", "VD")));
 
-                pdfTable.AddCell(Cella(Kiírás(Dátum.Value.ToString("yyyy.MM.dd"), "betű")));
-                pdfTable.AddCell(Cella(Kiírás("", "betűVD")));
-                pdfTable.AddCell(Cella(Kiírás(Rendelés_Keresés(Sorszám), "betű")));
-                pdfTable.AddCell(Cella(Kiírás(Cmbtelephely.Text.Trim(), "betűVD")));
-
-                Válasz.AddCell(pdfTable);
-                Válasz.TotalWidth = 100;
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(Dátum.Value.ToString("yyyy.MM.dd"))));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("", "VD")));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(Rendelés_Keresés(Sorszám))));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(Cmbtelephely.Text.Trim())));
 
             }
             catch (HibásBevittAdat ex)
@@ -2279,58 +2272,14 @@ namespace Villamos.Villamos_Ablakok
             return Válasz;
         }
 
-        private PdfPCell Cella(Paragraph érték)
-        {
-            PdfPCell válasz = new PdfPCell
-            {
-                Border = iTextSharp.text.Rectangle.BOX,
-                BorderWidth = 0.5f,
-                BorderColor = BaseColor.BLACK
-            };
-            válasz.AddElement(érték);
-
-            return válasz;
-        }
-
-        private Paragraph Kiírás(string szöveg, string betű)
-        {
-            Paragraph válasz;
-            string betűtípus = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
-            BaseFont alapFont = BaseFont.CreateFont(betűtípus, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            iTextSharp.text.Font Betű;
-            switch (betű)
-            {
-                case "betűVB":
-                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
-                    break;
-                case "betűV":
-                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
-                    break;
-                case "betűB":
-                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-                    break;
-                case "betű":
-                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
-                    break;
-                default:
-                    Betű = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
-                    break;
-            }
-            válasz = new Paragraph(szöveg, Betű)
-            {
-                Alignment = Element.ALIGN_CENTER
-            };
-            return válasz;
-        }
-
         private PdfPTable Kmóraállás(string verzió, long kM_korr)
         {
             PdfPTable Válasz = new PdfPTable(1);
             try
             {
-                PdfPTable pdfTable = new PdfPTable(3);
+                PdfPTable pdfTable = new PdfPTable(2);
                 pdfTable.WidthPercentage = 100;
-                pdfTable.SetWidths(new float[] { 1, 2, 1 });
+                pdfTable.SetWidths(new float[] { 1, 3 });
 
                 //Kép
                 iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png");
@@ -2339,51 +2288,19 @@ namespace Villamos.Villamos_Ablakok
                 imageCell.Border = PdfPCell.NO_BORDER;
                 imageCell.PaddingLeft = 5; // Move image 5 points to the jobbra
                 imageCell.PaddingTop = 2; // Move image 2 points le
+                imageCell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                imageCell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
 
-
-                //Szöveg
-                PdfPCell textCell = new PdfPCell();
-                string betűtípus = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
-                BaseFont alapFont = BaseFont.CreateFont(betűtípus, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                iTextSharp.text.Font BetűVD = new iTextSharp.text.Font(alapFont, 12f, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
-
-                //Első tábla
                 PdfPTable Tábla = new PdfPTable(1);
-                Paragraph p1 = new Paragraph("Km óra állás:", BetűVD);
-                p1.Alignment = Element.ALIGN_CENTER;
-                textCell.AddElement(p1);
-                Tábla.AddCell(textCell);
+                Tábla.AddCell(MyPDF.Cella(MyPDF.Kiírás("Km óra állás:", "VD")));
+                Tábla.AddCell(MyPDF.Cella(MyPDF.Kiírás(kM_korr.ToString(), "VD")));
+                Tábla.AddCell(MyPDF.Cella(MyPDF.Kiírás("Verzió:", "VD"), true));
+                Tábla.AddCell(MyPDF.Cella(MyPDF.Kiírás(verzió, "VD"), true));
 
-                p1 = new Paragraph(kM_korr.ToString(), BetűVD);
-                p1.Alignment = Element.ALIGN_CENTER;
-                textCell = new PdfPCell();
-                textCell.AddElement(p1);
-                Tábla.AddCell(textCell);
-
-                PdfPTable Tábla2 = new PdfPTable(1);
-                p1 = new Paragraph("Verzió:", BetűVD);
-                p1.Alignment = Element.ALIGN_CENTER;
-                textCell = new PdfPCell();
-                textCell.AddElement(p1);
-                Tábla2.AddCell(textCell);
-
-                p1 = new Paragraph(verzió, BetűVD);
-                p1.Alignment = Element.ALIGN_CENTER;
-                textCell = new PdfPCell();
-                textCell.AddElement(p1);
-                Tábla2.AddCell(textCell);
-
-                PdfPCell textCell1 = new PdfPCell();
-                textCell1.Border = PdfPCell.NO_BORDER;
-                textCell1.AddElement(Tábla);
-                pdfTable.AddCell(textCell1);
-
+                PdfPCell TáblaCell = new PdfPCell(Tábla);
+                TáblaCell.Border = PdfPCell.NO_BORDER;
+                pdfTable.AddCell(TáblaCell);
                 pdfTable.AddCell(imageCell);
-
-                textCell1 = new PdfPCell();
-                textCell1.Border = PdfPCell.NO_BORDER;
-                textCell1.AddElement(Tábla2);
-                pdfTable.AddCell(textCell1);
 
                 Válasz.AddCell(pdfTable);
             }
