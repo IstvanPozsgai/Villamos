@@ -2147,7 +2147,7 @@ namespace Villamos.Villamos_Ablakok
                             Tábla.WidthPercentage = 100;
                             pdfDoc.Add(Tábla);
 
-                            Tábla = Tartalom();
+                            Tábla = Tartalom(Adatok, AdatokKivétel, VÁLTAdatok);
                             Tábla.WidthPercentage = 100;
                             pdfDoc.Add(Tábla);
 
@@ -2170,7 +2170,7 @@ namespace Villamos.Villamos_Ablakok
                 //}
 
                 ////Tartalom
-                sor = Részletes(munkalap, Adatok, AdatokKivétel, sormagagasság, VÁLTAdatok, sor);
+                //     sor = Részletes(munkalap, Adatok, AdatokKivétel, sormagagasság, VÁLTAdatok, sor);
 
 
                 //Holtart.Be(7, MyColor.ColorToHex(Color.Green));
@@ -2371,31 +2371,105 @@ namespace Villamos.Villamos_Ablakok
             return Válasz;
         }
 
-        private PdfPTable Tartalom()
+        private PdfPTable Tartalom(List<Adat_Technológia_Új> Adatok, List<Adat_Technológia_Kivételek> KivételAdatok,
+                  List<Adat_Technológia_Változat> VÁLTAdatok)
         {
-            PdfPTable Válasz = new PdfPTable(1);
+            PdfPTable Válasz = new PdfPTable(7);
             try
             {
                 PdfPTable pdfTable = new PdfPTable(7);
-                pdfTable.WidthPercentage = 100;
-                pdfTable.SetWidths(new float[] { 1, 8, 1, 1, 1, 3, 2 });
+                Válasz.WidthPercentage = 100;
+                Válasz.SetWidths(new float[] { 1, 8, 1, 1, 1, 3, 2 });
 
-                //Munkalap fejléc kiírása
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Nr.", "V")));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("MUNKAUTASÍTÁS LEÍRÁSA", "V")));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Karb. Cikl.", "V")));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Nr.", "V")));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Nr.", "V")));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Utasítást Végrehajtotta***", "V")));
-                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Aláírás", "V")));
+                //Munkalap fejléc kiírása  első sor
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Nr.", "V"), true, false, true, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("MUNKAUTASÍTÁS LEÍRÁSA", "V"), true, false, true, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Karb.", "V"), true, false, true, "LIGHT_GRAY"));
 
-                //MyE.Kiir("Státusz** ", $"K{sor}");
-                //MyE.Kiir("OK", $"K{sor}");
-                //MyE.Kiir("Jav.*", $"L{sor}");
+                PdfPCell mergedCell = MyPDF.Cella(MyPDF.Kiírás("Státusz** ", "V"), true, true, true, "LIGHT_GRAY");
+                mergedCell.Colspan = 2;
+                Válasz.AddCell(mergedCell);
 
-                //MyE.Háttérszín($"A{sor - 1}:Q{sor}", System.Drawing.Color.Gainsboro);
-                MyE.Sormagasság($"{sor - 1}:{sor}", 20);
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Utasítást", "V"), true, false, true, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Aláírás", "V"), true, false, true, "LIGHT_GRAY"));
 
+                //Második sor
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "V"), true, true, false, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "V"), true, true, false, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" Cikl.", "V"), true, true, false, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("OK", "V"), true, true, true, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Jav.*", "V"), true, true, true, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás("Végrehajtotta***", "V"), true, true, false, "LIGHT_GRAY"));
+                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "V"), true, true, false, "LIGHT_GRAY"));
+                Válasz.HeaderRows = 2;
+
+                Holtart.Be(Adatok.Count + 2, MyColor.ColorToHex(Color.Orange));
+
+                //munkalap érdemi része
+                foreach (Adat_Technológia_Új a in Adatok)
+                {
+                    //Ha speciális, akkor kiírja különben kihagy
+                    if (Ki_kell_írni(a.Altípus, csoportos, KivételAdatok))
+                    {
+                        sor++;
+                        if (a.Munka_utasítás_szám.Trim() == "0")
+                        {
+                            //főcímsor
+                            //    Főcím_kiírása(sor, sormagagasság, munkalap, a.Részegység, a.Utasítás_Cím);
+                        }
+                        else
+                        {
+                            Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(a.Részegység.Trim() + ". " + a.Munka_utasítás_szám.Trim(), "N")));
+
+                            Paragraph Cím = MyPDF.Kiírás(a.Utasítás_Cím, "V");
+                            Paragraph Leírás = MyPDF.Kiírás(a.Utasítás_leírás, "N");
+                            Paragraph Paraméter = MyPDF.Kiírás(a.Paraméter, "D");
+                            PdfPCell Egyesít = new PdfPCell();
+                            if (Chk_paraméter.Checked && Chk_utasítás.Checked)
+                            {
+                                //Minden kiírás
+                                Egyesít.AddElement(Cím);
+                                Egyesít.AddElement(Leírás);
+                                Egyesít.AddElement(Paraméter);
+                                Válasz.AddCell(Egyesít);
+                            }
+                            else if (Chk_paraméter.Checked && !Chk_utasítás.Checked)
+                            {
+                                Egyesít.AddElement(Cím);
+                                Egyesít.AddElement(Paraméter);
+                                Válasz.AddCell(Egyesít);
+                            }
+                            else if (!Chk_paraméter.Checked && Chk_utasítás.Checked)
+                            {
+                                Egyesít.AddElement(Cím);
+                                Egyesít.AddElement(Leírás);
+                                Válasz.AddCell(Egyesít);
+                            }
+                            else
+                            {
+                                Egyesít.AddElement(Cím);
+                                Válasz.AddCell(Egyesít);
+                            }
+
+                            Adat_technológia_Ciklus cikluselelje = AdatokCiklus.Where(B => B.Sorszám == a.Karb_ciklus_eleje).FirstOrDefault();
+                            Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(cikluselelje.Fokozat, "N")));
+                            Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "N")));
+                            Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "N")));
+
+                            if (VÁLTAdatok.Count > 0)
+                            {
+                                string ideignév = Dolgozónév_kiíratása(VÁLTAdatok, a.ID, Személy);
+                                ideignév = ideignév.Trim() != "_" ? ideignév : "";
+                                string szöveg = ideignév.Replace("_", "\n");
+                                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(szöveg, "N")));
+                            }
+                            else
+                                Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "N")));
+                            Válasz.AddCell(MyPDF.Cella(MyPDF.Kiírás(" ", "N")));
+                        }
+                    }
+                    Holtart.Lép();
+                }
             }
             catch (HibásBevittAdat ex)
             {
