@@ -1203,8 +1203,11 @@ namespace Villamos
             try
             {
                 List<Adat_Akkumulátor> Adatok = KézAkku.Lista_Adatok().OrderBy(a => a.Gyáriszám).ToList();
+                int státus = 0;
+                if (Beép_Státus.Text.Trim() != "")
+                    if (!int.TryParse(Beép_Státus.Text.Substring(0, 1), out státus)) státus = 0;
 
-                if (!int.TryParse(Beép_Státus.Text.Substring(0, 1), out int státus)) státus = 0;
+
 
                 if (Beép_Státus.Text.Trim() != "") Adatok = Adatok.Where(a => a.Státus == státus).ToList();
                 if (Beép_Gyári.Text.Trim() != "") Adatok = Adatok.Where(a => a.Gyáriszám.Contains(Beép_Gyári.Text.Trim())).ToList();
