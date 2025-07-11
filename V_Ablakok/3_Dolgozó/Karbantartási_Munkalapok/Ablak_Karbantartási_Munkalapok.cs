@@ -3,7 +3,6 @@ using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -1992,10 +1991,7 @@ namespace Villamos.Villamos_Ablakok
                     string fájlnév = $"Technológia_{Program.PostásNév}_{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.pdf";
                     string fájlexc = $@"{könyvtár}\{fájlnév}";
                     PDF_tábla(fájlexc);
-
-                    //fájl törlése
-                    if (!Töröl_igen.Checked)
-                        Module_Excel.Megnyitás(fájlexc);
+                    Module_Excel.Megnyitás(fájlexc);
                 }
                 else
                 {
@@ -2005,9 +2001,7 @@ namespace Villamos.Villamos_Ablakok
                         string fájlexc = $@"{könyvtár}\{fájlnév}";
                         Pályaszám.Text = psz;
                         PDF_tábla(fájlexc);
-
-                        //fájl törlése
-                        if (!Töröl_igen.Checked) Module_Excel.Megnyitás(fájlexc);
+                        Module_Excel.Megnyitás(fájlexc);
                     }
                 }
 
@@ -2160,15 +2154,6 @@ namespace Villamos.Villamos_Ablakok
 
                 System.IO.File.WriteAllBytes(fájlexc, bytes);
 
-                //nyomtatás
-                if (Nyomtat_igen.Checked)
-                    if (Töröl_igen.Checked)
-                        PrintAndDelete(fájlexc);
-                    else
-                        PrintPdf(fájlexc);
-
-
-
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -2181,49 +2166,6 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        public void PrintAndDelete(string filePath)
-        {
-            try
-            {
-                if (!File.Exists(filePath)) throw new HibásBevittAdat($"A fájl nem található: {filePath}");
-                Process printProcess = new Process();
-                printProcess.StartInfo.FileName = filePath;
-                printProcess.StartInfo.Arguments = $"/h /t \"{filePath}\"";
-                printProcess.StartInfo.Verb = "print";
-                printProcess.StartInfo.CreateNoWindow = true;
-                printProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                printProcess.Start();
-
-                // Várunk néhány másodpercet, hogy a nyomtatás elinduljon
-                printProcess.WaitForExit(10000); // 10 másodperc
-
-                // Megpróbáljuk törölni a fájlt
-                File.Delete(filePath);
-                Console.WriteLine("Fájl törölve: " + filePath);
-                throw new HibásBevittAdat($"A fájl törölve: {filePath}");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void PrintPdf(string filePath)
-        {
-            Process printProcess = new Process();
-            printProcess.StartInfo.FileName = filePath;
-            printProcess.StartInfo.Verb = "print";
-            printProcess.StartInfo.CreateNoWindow = true;
-            printProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            printProcess.Start();
-        }
-
 
         private PdfPTable PályaszámokCsoportos(string dolgozónév)
         {
