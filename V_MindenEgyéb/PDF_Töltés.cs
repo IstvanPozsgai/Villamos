@@ -41,7 +41,7 @@ namespace Villamos.MindenEgyéb
         }
 
         /// <summary>
-        /// A kiírandó szöveget kiírja arial 12 betűként
+        /// A kiírandó szöveget kiírja arial 10 betűként
         /// </summary>
         /// <param name="szöveg">Kiírandó szöveg</param>
         /// <param name="betű">
@@ -51,7 +51,7 @@ namespace Villamos.MindenEgyéb
         /// A- Aláhúzott
         /// </param>
         /// <returns></returns>
-        public static Paragraph Kiírás(string szöveg, string betű = "N", Single méret = 12f, int igazítás = 1, Single sortáv = 12f)
+        public static Paragraph Kiírás(string szöveg, string betű = "N", Single méret = 10f, int igazítás = 1, Single sortáv = 10f)
         {
             Paragraph válasz;
             string betűtípus = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
@@ -99,4 +99,67 @@ namespace Villamos.MindenEgyéb
         }
 
     }
+
+
+    public class CustomFooter : PdfPageEventHelper
+    {
+        private PdfTemplate totalPages;
+        private BaseFont baseFont;
+        private readonly string leftText;
+        private readonly string rightText;
+
+
+        public CustomFooter(string leftText, string rightText)
+        {
+            this.leftText = leftText;
+            this.rightText = rightText;
+        }
+
+
+        public override void OnOpenDocument(PdfWriter writer, Document document)
+        {
+            totalPages = writer.DirectContent.CreateTemplate(50, 50);
+            baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+        }
+
+        public override void OnEndPage(PdfWriter writer, Document document)
+        {
+            PdfContentByte cb = writer.DirectContent;
+            float leftMargin = document.LeftMargin;
+            float rightMargin = document.RightMargin;
+            float pageWidth = document.PageSize.Width;
+            float y = document.BottomMargin / 2;
+
+            // Bal alsó sarok: "hatályos"
+            cb.BeginText();
+            cb.SetFontAndSize(baseFont, 9);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, leftText, leftMargin, y, 0);
+            cb.EndText();
+
+            // Középen: "Oldal X / Y"
+            string text = "Oldal " + writer.PageNumber + " / ";
+            float textWidth = baseFont.GetWidthPoint(text, 9);
+            float centerX = pageWidth / 2;
+            cb.BeginText();
+            cb.SetFontAndSize(baseFont, 9);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_CENTER, text, centerX, y, 0);
+            cb.EndText();
+            cb.AddTemplate(totalPages, centerX + textWidth / 2, y);
+
+            // Jobb alsó sarok: "technológia"
+            cb.BeginText();
+            cb.SetFontAndSize(baseFont, 9);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_RIGHT, rightText, pageWidth - rightMargin, y, 0);
+            cb.EndText();
+        }
+
+        public override void OnCloseDocument(PdfWriter writer, Document document)
+        {
+            totalPages.BeginText();
+            totalPages.SetFontAndSize(baseFont, 9);
+            totalPages.ShowText("" + (writer.PageNumber));
+            totalPages.EndText();
+        }
+    }
+
 }
