@@ -25,6 +25,8 @@ namespace Villamos
         string Altípus = "";
         int VálasztottNap = 0;
         int Telephelyekszáma = 0;
+        private Button Telephelygomb;
+        string Munkanap = "Munkanap";
 
         readonly Kezelő_Kiegészítő_Típusrendezéstábla KézTipRend = new Kezelő_Kiegészítő_Típusrendezéstábla();
         readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgTelep = new Kezelő_Kiegészítő_Szolgálattelepei();
@@ -34,6 +36,8 @@ namespace Villamos
         readonly Kezelő_FőTípuscsere_Adatok KézTípuscsere = new Kezelő_FőTípuscsere_Adatok();
         readonly Kezelő_Kiadás_Összesítő KézTelepKiadás = new Kezelő_Kiadás_Összesítő();
         readonly Kezelő_Forte_Kiadási_Adatok KézFőForte = new Kezelő_Forte_Kiadási_Adatok();
+        readonly Kezelő_Főkönyv_Személyzet KézSzem = new Kezelő_Főkönyv_Személyzet();
+        readonly Kezelő_Főkönyv_Típuscsere KézCsere = new Kezelő_Főkönyv_Típuscsere();
 
 
         List<Adat_Kiegészítő_Típusrendezéstábla> AdatokTipRend = new List<Adat_Kiegészítő_Típusrendezéstábla>();
@@ -43,38 +47,30 @@ namespace Villamos
         List<Adat_Személyzet_Adatok> AdatokSzemélyzet = new List<Adat_Személyzet_Adatok>();
         List<Adat_Típuscsere_Adatok> AdatokTípuscsere = new List<Adat_Típuscsere_Adatok>();
         List<Adat_Kiadás_összesítő> AdatokKiadásTelep = new List<Adat_Kiadás_összesítő>();
+
+        #region Alap     
         public Ablak_Fő_Napiadatok()
         {
             InitializeComponent();
+            Start();
         }
 
-
-        private Button Telephelygomb;
-        string Munkanap = "Munkanap";
+        private void Start()
+        {
+            TáblákLétrehozása();
+            Dátum.Value = DateTime.Today;
+            Dátum.MaxDate = DateTime.Today;
+            Listák_Töltése();
+            Táblaalaphelyzet();
+            Gombokfel();
+            Jogosultságkiosztás();
+        }
 
         private void Ablak_Fő_Napiadatok_Load(object sender, EventArgs e)
         {
-            try
-            {
-                TáblákLétrehozása();
-                Dátum.Value = DateTime.Today;
-                Dátum.MaxDate = DateTime.Today;
-                Listák_Töltése();
-                Táblaalaphelyzet();
-                Gombokfel();
-                Jogosultságkiosztás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
+        // JAVÍTANDÓ:
         private void TáblákLétrehozása()
         {
             string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}";
@@ -96,7 +92,6 @@ namespace Villamos
             hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_fortekiadási_adatok.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -143,12 +138,11 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Főmérnökség_napi_rögzítés.html";
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Főmérnökség_napi_rögzítés.html";
                 MyE.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
@@ -161,6 +155,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        #endregion
+
 
         #region Tábla 
         private void Táblaalaphelyzet()
@@ -183,13 +181,11 @@ namespace Villamos
             Label8.BackColor = Color.Black;
         }
 
-
         private void Táblázatlistázás()
         {
             try
             {
-                Kezelő_Kiadás_Összesítő KézKiadás = new Kezelő_Kiadás_Összesítő();
-                List<Adat_Kiadás_összesítő> AdatokKiad = KézKiadás.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
+                List<Adat_Kiadás_összesítő> AdatokKiad = KézTelepKiadás.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
                 if (AdatokKiad == null || AdatokKiad.Count == 0) return;
                 List<Adat_Kiadás_összesítő> AdatokKiadás = (from a in AdatokKiad
                                                             where a.Dátum == Dátum.Value
@@ -306,12 +302,10 @@ namespace Villamos
             }
         }
 
-
         private void Táblázatlistázásszemélyzet()
         {
             try
             {
-                Kezelő_Főkönyv_Személyzet KézSzem = new Kezelő_Főkönyv_Személyzet();
                 List<Adat_Főkönyv_Személyzet> AdatokSzem = KézSzem.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
                 if (AdatokSzem == null || AdatokSzem.Count == 0) return;
                 List<Adat_Főkönyv_Személyzet> Adatok = (from a in AdatokSzem
@@ -371,14 +365,11 @@ namespace Villamos
             }
         }
 
-
         private void Táblázatlistázástípuscsere()
         {
             try
             {
-                Kezelő_Főkönyv_Típuscsere KézCsere = new Kezelő_Főkönyv_Típuscsere();
                 List<Adat_FőKönyv_Típuscsere> AdatokCsere = KézCsere.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
-
                 List<Adat_FőKönyv_Típuscsere> Adatok = (from a in AdatokCsere
                                                         where a.Dátum == Dátum.Value
                                                         orderby a.Napszak, a.Típuselőírt, a.Viszonylat, a.Forgalmiszám
@@ -439,8 +430,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        // JAVÍTANDÓ:
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -557,8 +547,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        // JAVÍTANDÓ:
         private void Telephelyre_MouseDown(object sender, MouseEventArgs e)
         {
             try
@@ -605,7 +594,6 @@ namespace Villamos
             Rögzítgomb();
         }
 
-
         private void Délután_Click(object sender, EventArgs e)
         {
             Listázás();
@@ -613,14 +601,12 @@ namespace Villamos
             Rögzítgomb();
         }
 
-
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
             Gombokfel();
             Rögzítgomb();
             Munkanap_lekérdezés();
         }
-
 
         private void Munkanap_lekérdezés()
         {
@@ -645,7 +631,6 @@ namespace Villamos
             }
         }
 
-
         private void Label7_Click(object sender, EventArgs e)
         {
             // személyzet hiány tábla
@@ -659,12 +644,10 @@ namespace Villamos
             Label8.BackColor = Color.Black;
         }
 
-
         private void Label6_Click(object sender, EventArgs e)
         {
             Label6_eseménye();
         }
-
 
         private void Label6_eseménye()
         {
@@ -677,7 +660,6 @@ namespace Villamos
             Label8.BackColor = Color.Black;
         }
 
-
         private void Label8_Click(object sender, EventArgs e)
         {
             Táblaalaphelyzet();
@@ -689,12 +671,10 @@ namespace Villamos
             Label8.BackColor = Color.Green;
         }
 
-
         private void Lista_Click(object sender, EventArgs e)
         {
             Listázás();
         }
-
 
         private void Listázás()
         {
@@ -704,7 +684,6 @@ namespace Villamos
             Táblázatlistázásszemélyzet();
             Táblázatlistázástípuscsere();
         }
-
 
         private void Rögzítgomb()
         {
@@ -743,7 +722,6 @@ namespace Villamos
             }
         }
 
-
         private void HiányzóAlap_Click(object sender, EventArgs e)
         {
             try
@@ -755,7 +733,8 @@ namespace Villamos
                 SzolgálatNév = "nem";
 
                 int hónapnap = DateTime.DaysInMonth(Dátum.Value.Year, Dátum.Value.Month);
-                DateTime hónaputolsónapja = new DateTime(Dátum.Value.Year, Dátum.Value.Month, hónapnap);
+                DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
+                DateTime Hónapelső = MyF.Hónap_elsőnapja(Dátum.Value);
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -783,14 +762,13 @@ namespace Villamos
                         Tábla.Rows[sor].Cells[oszlop].Style.BackColor = Color.Red;
                     }
                 }
-                Kezelő_Kiadás_Összesítő KKö_kéz = new Kezelő_Kiadás_Összesítő();
+
                 List<Adat_Kiadás_összesítő> Adatok = new List<Adat_Kiadás_összesítő>();
-                DateTime Hónapelső = MyF.Hónap_elsőnapja(Dátum.Value);
 
                 for (int oszlop = 1; oszlop < Tábla.Columns.Count; oszlop++)
                 {
                     Adatok.Clear();
-                    Adatok = KKö_kéz.Lista_Adatok(AdatokTelep[oszlop - 1].Telephelynév, Dátum.Value.Year);
+                    Adatok = KézTelepKiadás.Lista_Adatok(AdatokTelep[oszlop - 1].Telephelynév, Dátum.Value.Year);
 
                     // ha létezik a fájl akkor kiolvaasuk
                     if (Adatok != null && Adatok.Count > 0)
@@ -827,7 +805,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void HiányzóRögz_Click(object sender, EventArgs e)
         {
             try
@@ -912,7 +890,6 @@ namespace Villamos
             }
         }
 
-
         private void Button3_Click(object sender, EventArgs e)
         {
             try
@@ -928,7 +905,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Napi_adatok_" + Program.PostásNév + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + Dátum.Value.ToString("yyyyMMdd"),
+                    FileName = $"Napi_adatok_{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}-{Dátum.Value:yyyyMMdd}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -944,7 +921,6 @@ namespace Villamos
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc + ".xlsx");
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -956,12 +932,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
         #region Adatok rögzítése törlése
-
         private void Command1_Click(object sender, EventArgs e)
         {
             try
@@ -986,8 +960,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        // JAVÍTANDÓ:
         private void Command4_Click(object sender, EventArgs e)
         {
             try
@@ -1055,8 +1028,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        // JAVÍTANDÓ:
         private void Napikiadásiadatokrögzítése()
         {
             try
@@ -1149,12 +1121,10 @@ namespace Villamos
             }
         }
 
-
         private void Kategórizál(int sor)
         {
             try
             {
-
                 Főkategória = "";
                 Típus = "";
                 Altípus = "";
@@ -1180,7 +1150,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Napiszemélyzethiányrögzítése()
         {
             try
@@ -1211,8 +1181,7 @@ namespace Villamos
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
 
-                Kezelő_Főkönyv_Személyzet KFK_Kéz = new Kezelő_Főkönyv_Személyzet();
-                List<Adat_Főkönyv_Személyzet> Adatok = KFK_Kéz.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
+                List<Adat_Főkönyv_Személyzet> Adatok = KézSzem.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
                 Adatok = (from a in Adatok
                           where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
                           && a.Napszak == (Délelőtt.Checked ? "de" : "du")
@@ -1251,7 +1220,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Napitípuscsererögzítése()
         {
             try
@@ -1286,8 +1255,7 @@ namespace Villamos
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
 
-                Kezelő_Főkönyv_Típuscsere KFT_kéz = new Kezelő_Főkönyv_Típuscsere();
-                List<Adat_FőKönyv_Típuscsere> Adatok = KFT_kéz.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
+                List<Adat_FőKönyv_Típuscsere> Adatok = KézCsere.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
                 Adatok = (from a in Adatok
                           where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString()
                           && a.Napszak == (Délelőtt.Checked ? "de" : "du")
@@ -1339,7 +1307,7 @@ namespace Villamos
         {
             KiegTípusRendezés_feltöltés();
             KiegSzolgTelep_feltöltés();
-            KiegTelepek_feltöltés();
+            AdatokTelep = KézTelep.Lista_Adatok();
         }
 
         private void KiegTípusRendezés_feltöltés()
@@ -1360,6 +1328,7 @@ namespace Villamos
             }
         }
 
+        // JAVÍTANDÓ:
         private void KiegSzolgTelep_feltöltés()
         {
             try
@@ -1381,25 +1350,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void KiegTelepek_feltöltés()
-        {
-            try
-            {
-                AdatokTelep.Clear();
-                AdatokTelep = KézTelep.Lista_Adatok();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        // JAVÍTANDÓ:
         private void FőmérnökségListaFeltöltés()
         {
             try
@@ -1420,7 +1371,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void FőSzemélyzetListaFeltöltés()
         {
             try
@@ -1442,7 +1393,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void FőTípuscsereListaFeltöltés()
         {
             try
@@ -1464,8 +1415,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
-
     }
 }
