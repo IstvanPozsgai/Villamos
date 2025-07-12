@@ -66,7 +66,8 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Év);
                 string szöveg = $"DELETE FROM típuscseretábla WHERE [dátum]=#{Adat.Dátum:M-d-yy}#";
-                szöveg += $" and napszak='{Adat.Napszak}'";
+                if (Adat.Napszak.Trim() != "")
+                    szöveg += $" and napszak='{Adat.Napszak}'";
                 szöveg += $" and telephely='{Adat.Telephely}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

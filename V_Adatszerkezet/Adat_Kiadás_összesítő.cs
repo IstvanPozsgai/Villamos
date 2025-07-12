@@ -68,6 +68,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Telephelyitípus = telephelyitípus;
             Munkanap = munkanap;
         }
+
+        public Adat_FőKiadási_adatok(DateTime dátum, string napszak, string telephely)
+        {
+            Dátum = dátum;
+            Napszak = napszak;
+            Telephely = telephely;
+        }
     }
 
     public class Adat_Személyzet_Adatok

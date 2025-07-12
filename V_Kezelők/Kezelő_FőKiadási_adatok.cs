@@ -1,5 +1,4 @@
-﻿using Microsoft.Office.Interop.Excel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
@@ -153,6 +152,27 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Törlés(int Év, Adat_FőKiadási_adatok Adat)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                string szöveg = $"DELETE FROM kiadástábla WHERE [dátum]=#{Adat.Dátum:M-d-yy}#";
+                if (Adat.Napszak.Trim() != "")
+                    szöveg += $" and napszak='{Adat.Napszak}' ";
+                szöveg += $" and telephely='{Adat.Telephely.Trim()}'";
+                MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         //Elkopó
         public List<Adat_FőKiadási_adatok> Lista_adatok(string hely, string jelszó, string szöveg)

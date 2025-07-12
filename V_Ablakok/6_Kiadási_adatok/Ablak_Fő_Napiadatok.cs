@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -16,8 +13,6 @@ namespace Villamos
 
     public partial class Ablak_Fő_Napiadatok
     {
-        string Gyökér_telephely = "";
-
         string SzolgálatNév = "";
         string Vál_Telephely = "";
         string Főkategória = "";
@@ -57,7 +52,6 @@ namespace Villamos
 
         private void Start()
         {
-            TáblákLétrehozása();
             Dátum.Value = DateTime.Today;
             Dátum.MaxDate = DateTime.Today;
             AdatokTipRend = KézTipRend.Lista_Adatok();
@@ -70,20 +64,6 @@ namespace Villamos
 
         private void Ablak_Fő_Napiadatok_Load(object sender, EventArgs e)
         {
-        }
-
-        // JAVÍTANDÓ:
-        private void TáblákLétrehozása()
-        {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}";
-            if (!File.Exists(hely)) Directory.CreateDirectory(hely);
-
-            // éves kiadási darabok
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_kiadási_adatok.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiösszesítőfőmérnöktábla(hely);
-
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_fortekiadási_adatok.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
         }
 
         private void Jogosultságkiosztás()
@@ -423,47 +403,42 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 int oszlop, sor;
-                if (Gyökér_telephely.Trim() == "")
+                // a rögzítési  tábla esetén kiírjuk a telephely adatait
+                if (SzolgálatNév.Trim() == "")
                 {
-                    // a rögzítési  tábla esetén kiírjuk a telephely adatait
-                    if (SzolgálatNév.Trim() == "")
+                    if (Tábla.Columns.Count == 0) return;
+                    // ma vagy a múlt esetén
+                    DateTime ideig = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Tábla.Rows[e.RowIndex].Cells[0].Value.ToÉrt_Int());
+                    if (ideig <= DateTime.Today)
                     {
-                        if (Tábla.Columns.Count == 0) return;
-                        // ma vagy a múlt esetén
-                        DateTime ideig = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Tábla.Rows[e.RowIndex].Cells[0].Value.ToÉrt_Int());
-                        if (ideig <= DateTime.Today)
-                        {
-                            oszlop = e.ColumnIndex;
-                            sor = e.RowIndex;
-                            Vál_Telephely = Tábla.Columns[oszlop].HeaderText.Trim();
-                            VálasztottNap = Tábla.Rows[sor].Cells[0].Value.ToÉrt_Int();
+                        oszlop = e.ColumnIndex;
+                        sor = e.RowIndex;
+                        Vál_Telephely = Tábla.Columns[oszlop].HeaderText.Trim();
+                        VálasztottNap = Tábla.Rows[sor].Cells[0].Value.ToÉrt_Int();
 
-                            Dátum.Value = new DateTime(Dátum.Value.Year, Dátum.Value.Month, VálasztottNap);
+                        Dátum.Value = new DateTime(Dátum.Value.Year, Dátum.Value.Month, VálasztottNap);
 
-                            SzolgálatNév = "";
+                        SzolgálatNév = "";
 
-                            Adat_Kiegészítő_Szolgálattelepei Elem = (from a in AdatokSzolgTelep
-                                                                     where a.Telephelynév == Vál_Telephely.Trim()
-                                                                     select a).FirstOrDefault();
-                            if (Elem != null)
-                                SzolgálatNév = Elem.Szolgálatnév.Trim();
+                        Adat_Kiegészítő_Szolgálattelepei Elem = (from a in AdatokSzolgTelep
+                                                                 where a.Telephelynév == Vál_Telephely.Trim()
+                                                                 select a).FirstOrDefault();
+                        if (Elem != null)
+                            SzolgálatNév = Elem.Szolgálatnév.Trim();
 
+                        LabelTelephely.Text = Vál_Telephely;
 
-                            Gyökér_telephely = $@"{Application.StartupPath}\{Vál_Telephely}";
-                            LabelTelephely.Text = Vál_Telephely;
-
-                            Táblázatlistázás();
-                            Táblázatlistázásszemélyzet();
-                            Táblázatlistázástípuscsere();
-                            Rögzítgomb();
-                            Label6_eseménye();
-                        }
+                        Táblázatlistázás();
+                        Táblázatlistázásszemélyzet();
+                        Táblázatlistázástípuscsere();
+                        Rögzítgomb();
+                        Label6_eseménye();
                     }
                 }
             }
@@ -540,7 +515,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Telephelyre_MouseDown(object sender, MouseEventArgs e)
         {
             try
@@ -551,8 +526,6 @@ namespace Villamos
                 if ((sender as Button).BackColor == Color.Green)
                 {
                     LabelTelephely.Text = (sender as Button).Text.Trim();
-                    Gyökér_telephely = $@"{Application.StartupPath}\{LabelTelephely.Text}";
-
                     // megkeressük, hogy melyik szolgálat
                     SzolgálatNév = (from a in AdatokSzolgTelep
                                     where a.Telephelynév == LabelTelephely.Text.Trim()
@@ -671,8 +644,6 @@ namespace Villamos
 
         private void Listázás()
         {
-            if (Gyökér_telephely == null || Gyökér_telephely == "") return;
-
             Táblázatlistázás();
             Táblázatlistázásszemélyzet();
             Táblázatlistázástípuscsere();
@@ -721,7 +692,6 @@ namespace Villamos
             {
                 LabelTelephely.Text = "";
                 Command4.Enabled = false;
-                Gyökér_telephely = "";
                 Vál_Telephely = "";
                 SzolgálatNév = "nem";
 
@@ -804,7 +774,6 @@ namespace Villamos
             {
                 LabelTelephely.Text = "";
                 Command4.Enabled = false;
-                Gyökér_telephely = "";
                 Vál_Telephely = "";
                 SzolgálatNév = "";
 
@@ -927,7 +896,6 @@ namespace Villamos
         {
             try
             {
-                if (Gyökér_telephely.Trim() == "") return;
                 if (SzolgálatNév.Trim() == "") return;
 
                 Napikiadásiadatokrögzítése();
@@ -947,17 +915,13 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Command4_Click(object sender, EventArgs e)
         {
             try
             {
                 // töröljük a napi adatokat
-                string hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_kiadási_adatok.mdb";
-                string jelszó = "pozsi";
-                string szöveg;
                 AdatokKiadási = KézKiadás.Lista_adatok(Dátum.Value.Year);
-
 
                 Adat_FőKiadási_adatok Elem = (from a in AdatokKiadási
                                               where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString() &&
@@ -965,28 +929,29 @@ namespace Villamos
                                               select a).FirstOrDefault();
                 if (Elem != null)
                 {
-                    szöveg = $"DELETE FROM kiadástábla WHERE [dátum]=#{Dátum.Value:M-d-yy}#";
-                    szöveg += $" and telephely='{Vál_Telephely.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    Adat_FőKiadási_adatok Adat = new Adat_FőKiadási_adatok(
+                         Dátum.Value,
+                         "",
+                         Vál_Telephely.Trim());
+                    KézKiadás.Törlés(Dátum.Value.Year, Adat);
                 }
 
                 // töröljük a személyzethiányt
-                hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_személyzet_adatok.mdb";
                 AdatokSzemélyzet = KézSzeméyzet.Lista_adatok(Dátum.Value.Year);
-
                 Adat_Személyzet_Adatok Elemszemélyzet = (from a in AdatokSzemélyzet
                                                          where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString() &&
                                                          a.Telephely == Vál_Telephely.Trim()
                                                          select a).FirstOrDefault();
                 if (Elemszemélyzet != null)
                 {
-                    szöveg = $"DELETE FROM személyzettábla WHERE [dátum]=#{Dátum.Value:M-d-yy}#";
-                    szöveg += $" and telephely='{Vál_Telephely.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    Adat_Személyzet_Adatok Adatsz = new Adat_Személyzet_Adatok(
+                          Dátum.Value,
+                          "",
+                          Vál_Telephely.ToStrTrim());
+                    KézSzeméyzet.Törlés(Dátum.Value.Year, Adatsz);
                 }
 
                 // töröljük a típuscseréket
-                hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_típuscsere_adatok.mdb";
                 AdatokTípuscsere = KézTípuscsere.Lista_adatok(Dátum.Value.Year);
 
                 Adat_Típuscsere_Adatok ElemTípuscsere = (from a in AdatokTípuscsere
@@ -996,14 +961,15 @@ namespace Villamos
 
                 if (ElemTípuscsere != null)
                 {
-                    szöveg = $"DELETE FROM típuscseretábla WHERE [dátum]=#{Dátum.Value:M-d-yy}#";
-                    szöveg += $" and telephely='{Vál_Telephely.Trim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    Adat_Típuscsere_Adatok ADATcs = new Adat_Típuscsere_Adatok(
+                         Dátum.Value,
+                         "",
+                         Vál_Telephely.Trim());
+                    KézTípuscsere.Törlés(Dátum.Value.Year, ADATcs);
                 }
 
                 Rögzítgomb();
                 MessageBox.Show("Az adatok törölve lettek!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
             catch (HibásBevittAdat ex)
             {
