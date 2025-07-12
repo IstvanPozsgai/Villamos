@@ -44,9 +44,7 @@ namespace Villamos
             InitializeComponent();
         }
 
-
-
-
+        // JAVÍTANDÓ:   
         private void Ablak_Fő_Egyesített_Load(object sender, EventArgs e)
         {
             try
@@ -121,7 +119,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Kategóriák()
         {
             try
@@ -151,12 +149,11 @@ namespace Villamos
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Főmérnökség_napi_lekérdezés.html";
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Főmérnökség_napi_lekérdezés.html";
                 MyE.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
@@ -173,6 +170,7 @@ namespace Villamos
 
 
         #region Napi adatok
+        // JAVÍTANDÓ:
         private void KiadaNapi_Click(object sender, EventArgs e)
         {
             try
@@ -207,7 +205,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Táblázatlistázás(List<Adat_FőKiadási_adatok> Adatok)
         {
@@ -333,7 +330,6 @@ namespace Villamos
             }
         }
 
-
         private List<Adat_FőKiadási_adatok> Szűrt_Kiadás()
         {
             List<Adat_FőKiadási_adatok> Adatok = new List<Adat_FőKiadási_adatok>();
@@ -364,7 +360,7 @@ namespace Villamos
             return Adatok;
         }
 
-
+        // JAVÍTANDÓ:
         private void KiadHavi_Click(object sender, EventArgs e)
         {
             try
@@ -390,6 +386,7 @@ namespace Villamos
 
 
         #region Személyzet
+        // JAVÍTANDÓ:
         private void SzemélyNapi_Click(object sender, EventArgs e)
         {
             try
@@ -422,8 +419,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        // JAVÍTANDÓ:
         private void SzemélyHavi_Click(object sender, EventArgs e)
         {
             try
@@ -456,7 +452,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Táblázatszemélyzet(List<Adat_Személyzet_Adatok> Adatok)
         {
@@ -520,6 +515,7 @@ namespace Villamos
 
 
         #region Típuscsere
+        // JAVÍTANDÓ:
         private void TípusNapi_Click(object sender, EventArgs e)
         {
             try
@@ -551,8 +547,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        // JAVÍTANDÓ:
         private void TípusHavi_Click(object sender, EventArgs e)
         {
             try
@@ -586,7 +581,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Táblázattípus(List<Adat_Típuscsere_Adatok> Adatok)
         {
@@ -661,7 +655,6 @@ namespace Villamos
             Csuk.Visible = true;
         }
 
-
         private void Csuk_Click(object sender, EventArgs e)
         {
             Kategórilista.Height = 25;
@@ -669,13 +662,11 @@ namespace Villamos
             Csuk.Visible = false;
         }
 
-
         private void CsoportkijelölMind_Click(object sender, EventArgs e)
         {
             for (int i = 0; i <= Kategórilista.Items.Count - 1; i++)
                 Kategórilista.SetItemChecked(i, true);
         }
-
 
         private void CsoportVissza_Click(object sender, EventArgs e)
         {
@@ -683,7 +674,7 @@ namespace Villamos
                 Kategórilista.SetItemChecked(i, false);
         }
 
-
+        // JAVÍTANDÓ:
         private void Button3_Click(object sender, EventArgs e)
         {
             try
@@ -750,8 +741,7 @@ namespace Villamos
             }
             return Adatok;
         }
-
-
+        // JAVÍTANDÓ:
         private void TípusÁllományDb_Click(object sender, EventArgs e)
         {
             try
@@ -903,7 +893,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Command7_Click(object sender, EventArgs e)
         {
             try
@@ -1056,12 +1046,11 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
         #region Kimutatás
-
+        // JAVÍTANDÓ:
         private void Kimutatás_Click(object sender, EventArgs e)
         {
             try
@@ -1205,7 +1194,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Állomány1tábla()
         {
             try
@@ -1388,7 +1377,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Állomány2tábla()
         {
             try
@@ -1593,6 +1582,7 @@ namespace Villamos
             }
         }
 
+        // JAVÍTANDÓ:
         private void Állomány3tábla()
         {
             try
@@ -1852,7 +1842,6 @@ namespace Villamos
             }
         }
 
-
         private void Rácsoz_3(string MunkaLap)
         {
             int oszlopmax = Oszlop_Max;
@@ -1980,7 +1969,7 @@ namespace Villamos
                 Holtart_Lép();
             }
         }
-
+        // JAVÍTANDÓ:
         private void Kiadott1tábla()
         {
             try
@@ -2152,7 +2141,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Kiadott2tábla()
         {
             try
@@ -2354,7 +2343,6 @@ namespace Villamos
 
         }
 
-
         private void Kiadott3tábla()
         {
             try
@@ -2376,7 +2364,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Üzemképes1tábla()
         {
             try
@@ -2556,7 +2544,7 @@ namespace Villamos
 
         }
 
-
+        // JAVÍTANDÓ:
         private void Üzemképes2tábla()
         {
             try
@@ -2757,6 +2745,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Üzemképes3tábla()
         {
             try
@@ -2779,7 +2768,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Adatkiiró1()
         {
             try
@@ -2883,6 +2872,7 @@ namespace Villamos
             }
         }
 
+        // JAVÍTANDÓ:
         private void Adatkiiró2()
         {
             try
@@ -2955,7 +2945,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Adatkiiró3()
         {
             try
@@ -3029,7 +3019,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Telephelytábla()
         {
             try
@@ -3176,8 +3166,8 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
+
         private void Kimutatásvarázsló()
         {
             try
@@ -3220,6 +3210,8 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
             }
         }
+
+        // JAVÍTANDÓ:
         private void Telephelytábla_1()
         {
             try
@@ -3366,7 +3358,6 @@ namespace Villamos
             }
         }
 
-
         private void Napok_kiírása()
         {
             try
@@ -3505,9 +3496,9 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
+        // JAVÍTANDÓ:
         #region Holtartok
 
         void Holtart_Be(int maximum = 20)
@@ -3544,7 +3535,7 @@ namespace Villamos
             hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
             ElőzőDátum = Dátum.Value;
         }
-
+        // JAVÍTANDÓ:
         private void Kiadás_Lista_Feltöltése()
         {
             try
@@ -3567,7 +3558,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Személyzet_Lista_Feltöltése()
         {
             try
@@ -3591,7 +3582,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void TípusCsere_Lista_Feltöltése()
         {
             try
@@ -3613,7 +3604,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Forte_Lista_Feltöltése()
         {
             try
@@ -3633,7 +3624,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void TípusLista_Feltöltése()
         {
             try
@@ -3667,7 +3658,5 @@ namespace Villamos
             hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
             ElőzőDátum = Dátum.Value;
         }
-
-
     }
 }
