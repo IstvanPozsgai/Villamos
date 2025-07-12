@@ -80,10 +80,6 @@ namespace Villamos
             hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_kiadási_adatok.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiösszesítőfőmérnöktábla(hely);
 
-            // személyzet hiány tábla
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_személyzet_adatok.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiszemélyzetfőmérnöktábla(hely);
-
             // típuscsere tábla
             hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_típuscsere_adatok.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásitípuscserefőmérnöktábla(hely);
@@ -985,7 +981,7 @@ namespace Villamos
 
                 // töröljük a személyzethiányt
                 hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_személyzet_adatok.mdb";
-                FőSzemélyzetListaFeltöltés();
+                AdatokSzemélyzet = KézSzeméyzet.Lista_adatok(Dátum.Value.Year);
 
                 Adat_Személyzet_Adatok Elemszemélyzet = (from a in AdatokSzemélyzet
                                                          where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString() &&
@@ -1000,7 +996,7 @@ namespace Villamos
 
                 // töröljük a típuscseréket
                 hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_típuscsere_adatok.mdb";
-                FőTípuscsereListaFeltöltés();
+                AdatokTípuscsere = KézTípuscsere.Lista_adatok(Dátum.Value.Year);
 
                 Adat_Típuscsere_Adatok ElemTípuscsere = (from a in AdatokTípuscsere
                                                          where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString() &&
@@ -1150,17 +1146,11 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Napiszemélyzethiányrögzítése()
         {
             try
             {
-                string szöveg;
-
-                FőSzemélyzetListaFeltöltés();
-                string hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_személyzet_adatok.mdb";
-                string jelszó = "pozsi";
-
+                AdatokSzemélyzet = KézSzeméyzet.Lista_adatok(Dátum.Value.Year);
                 Adat_Személyzet_Adatok Elem = (from a in AdatokSzemélyzet
                                                where a.Napszak == (Délelőtt.Checked ? "de" : "du") &&
                                                a.Telephely == Vál_Telephely.ToStrTrim() &&
@@ -1170,15 +1160,11 @@ namespace Villamos
                 // leellenőrizzük, hogy volt-e a napra már rögzítve, ha volt töröljük
                 if (Elem != null)
                 {
-                    szöveg = $"DELETE FROM személyzettábla WHERE [dátum]=#{Dátum.Value:M-d-yy}#";
-
-                    if (Délelőtt.Checked)
-                        szöveg += " and napszak='de'";
-                    else
-                        szöveg += " and napszak='du'";
-
-                    szöveg += $" and telephely='{Vál_Telephely.ToStrTrim()}'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    Adat_Személyzet_Adatok Adat = new Adat_Személyzet_Adatok(
+                        Dátum.Value,
+                        Délelőtt.Checked ? "de" : "du",
+                        Vál_Telephely.ToStrTrim());
+                    KézSzeméyzet.Törlés(Dátum.Value.Year, Adat);
                 }
 
                 List<Adat_Főkönyv_Személyzet> Adatok = KézSzem.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
@@ -1187,27 +1173,25 @@ namespace Villamos
                           && a.Napszak == (Délelőtt.Checked ? "de" : "du")
                           select a).ToList();
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Személyzet_Adatok> AdatokGy = new List<Adat_Személyzet_Adatok>();
                 foreach (Adat_Főkönyv_Személyzet rekord in Adatok)
                 {
                     string újtípus = (from a in AdatokTipRend
                                       where a.Telephely == LabelTelephely.Text.Trim() && a.Telephelyitípus == rekord.Típus.Trim()
                                       select a.AlTípus).FirstOrDefault() ?? "?";
-
-                    szöveg = "INSERT INTO személyzettábla (dátum, napszak, telephely, szolgálat, típus, viszonylat, forgalmiszám, tervindulás, azonosító ) VALUES (";
-                    szöveg += "'" + rekord.Dátum.ToString("yyyy.MM.dd") + "', ";
-                    szöveg += "'" + rekord.Napszak + "', ";
-                    szöveg += "'" + Vál_Telephely.ToStrTrim() + "', ";
-                    szöveg += "'" + SzolgálatNév.ToStrTrim() + "', ";
-                    szöveg += "'" + újtípus.ToStrTrim() + "', ";
-                    szöveg += "'" + rekord.Viszonylat + "', ";
-                    szöveg += "'" + rekord.Forgalmiszám + "', ";
-                    szöveg += "'" + rekord.Tervindulás.ToString("HH:mm") + "', ";
-                    szöveg += "'" + rekord.Azonosító + "') ";
-
-                    SzövegGy.Add(szöveg);
+                    Adat_Személyzet_Adatok ADAT = new Adat_Személyzet_Adatok(
+                        rekord.Dátum,
+                        rekord.Napszak,
+                        Vál_Telephely.ToStrTrim(),
+                        SzolgálatNév.ToStrTrim(),
+                        újtípus.ToStrTrim(),
+                        rekord.Viszonylat,
+                        rekord.Forgalmiszám,
+                        rekord.Tervindulás,
+                        rekord.Azonosító);
+                    AdatokGy.Add(ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (AdatokGy.Count > 0) KézSzeméyzet.Rögzítés(Dátum.Value.Year, AdatokGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1234,7 +1218,7 @@ namespace Villamos
                     szöveg += " and napszak='du'";
                 szöveg = szöveg + " and telephely='" + Vál_Telephely.Trim() + "'";
 
-                FőTípuscsereListaFeltöltés();
+                AdatokTípuscsere = KézTípuscsere.Lista_adatok(Dátum.Value.Year);
                 Adat_Típuscsere_Adatok Elem = (from a in AdatokTípuscsere
                                                where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString() &&
                                                a.Napszak == (Délelőtt.Checked ? "de" : "du") &&
@@ -1360,50 +1344,6 @@ namespace Villamos
                 string szöveg = "SELECT * FROM kiadástábla ";
                 AdatokKiadási.Clear();
                 AdatokKiadási = KézKiadás.Lista_adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        // JAVÍTANDÓ:
-        private void FőSzemélyzetListaFeltöltés()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_személyzet_adatok.mdb";
-                string jelszó = "pozsi";
-                string szöveg = "SELECT * FROM személyzettábla ";
-
-                AdatokSzemélyzet.Clear();
-                AdatokSzemélyzet = KézSzeméyzet.Lista_adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        // JAVÍTANDÓ:
-        private void FőTípuscsereListaFeltöltés()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_típuscsere_adatok.mdb";
-                string jelszó = "pozsi";
-                string szöveg = "SELECT * FROM típuscseretábla ";
-
-                AdatokTípuscsere.Clear();
-                AdatokTípuscsere = KézTípuscsere.Lista_adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

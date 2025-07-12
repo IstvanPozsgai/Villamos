@@ -95,6 +95,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Tervindulás = tervindulás;
             Azonosító = azonosító;
         }
+
+        public Adat_Személyzet_Adatok(DateTime dátum, string napszak, string telephely)
+        {
+            Dátum = dátum;
+            Napszak = napszak;
+            Telephely = telephely;
+        }
     }
 
     public class Adat_Típuscsere_Adatok
@@ -137,7 +144,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public long Kiadás { get; private set; }
         public long Munkanap { get; private set; }
 
-        public Adat_Forte_Kiadási_Adatok(DateTime dátum, string napszak, string telephelyforte, 
+        public Adat_Forte_Kiadási_Adatok(DateTime dátum, string napszak, string telephelyforte,
             string típusforte, string telephely, string típus, long kiadás, long munkanap)
         {
             Dátum = dátum;
