@@ -80,11 +80,6 @@ namespace Villamos
             hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_kiadási_adatok.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásiösszesítőfőmérnöktábla(hely);
 
-            // típuscsere tábla
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_típuscsere_adatok.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásitípuscserefőmérnöktábla(hely);
-
-
             hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today.Year}\{DateTime.Today.Year}_fortekiadási_adatok.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely);
         }
@@ -1204,20 +1199,10 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Napitípuscsererögzítése()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_típuscsere_adatok.mdb";
-                string jelszó = "pozsi";
-                string szöveg = "SELECT * FROM típuscseretábla where [dátum]=#" + Dátum.Value.ToString("M-d-yy") + "#";
-                if (Délelőtt.Checked)
-                    szöveg += " and napszak='de'";
-                else
-                    szöveg += " and napszak='du'";
-                szöveg = szöveg + " and telephely='" + Vál_Telephely.Trim() + "'";
-
                 AdatokTípuscsere = KézTípuscsere.Lista_adatok(Dátum.Value.Year);
                 Adat_Típuscsere_Adatok Elem = (from a in AdatokTípuscsere
                                                where a.Dátum.ToShortDateString() == Dátum.Value.ToShortDateString() &&
@@ -1225,18 +1210,13 @@ namespace Villamos
                                                a.Telephely == Vál_Telephely.Trim()
                                                select a).FirstOrDefault();
 
-
                 if (Elem != null)
                 {
-                    szöveg = "DELETE FROM típuscseretábla WHERE [dátum]=#" + Dátum.Value.ToString("M-d-yy") + "#";
-
-                    if (Délelőtt.Checked)
-                        szöveg += " and napszak='de'";
-                    else
-                        szöveg += " and napszak='du'";
-
-                    szöveg += " and telephely='" + Vál_Telephely.Trim() + "'";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
+                    Adat_Típuscsere_Adatok ADAT = new Adat_Típuscsere_Adatok(
+                        Dátum.Value,
+                        Délelőtt.Checked ? "de" : "du",
+                        Vál_Telephely.Trim());
+                    KézTípuscsere.Törlés(Dátum.Value.Year, ADAT);
                 }
 
                 List<Adat_FőKönyv_Típuscsere> Adatok = KézCsere.Lista_Adatok(Vál_Telephely, Dátum.Value.Year);
@@ -1245,33 +1225,31 @@ namespace Villamos
                           && a.Napszak == (Délelőtt.Checked ? "de" : "du")
                           select a).ToList();
 
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_FőKönyv_Típuscsere rekord in Adatok)
+                List<Adat_Típuscsere_Adatok> AdatokGy = new List<Adat_Típuscsere_Adatok>();
+                foreach (Adat_FőKönyv_Típuscsere Adat in Adatok)
                 {
 
                     string típuskiadott = (from a in AdatokTipRend
-                                           where a.Telephely == LabelTelephely.Text.Trim() && a.Telephelyitípus == rekord.Típuskiadott.ToStrTrim()
+                                           where a.Telephely == LabelTelephely.Text.Trim() && a.Telephelyitípus == Adat.Típuskiadott.ToStrTrim()
                                            select a.AlTípus).FirstOrDefault() ?? "?";
 
                     string típuselőírt = (from a in AdatokTipRend
-                                          where a.Telephely == LabelTelephely.Text.Trim() && a.Telephelyitípus == rekord.Típuselőírt.ToStrTrim()
+                                          where a.Telephely == LabelTelephely.Text.Trim() && a.Telephelyitípus == Adat.Típuselőírt.ToStrTrim()
                                           select a.AlTípus).FirstOrDefault() ?? "?";
-
-                    szöveg = "INSERT INTO típuscseretábla (dátum, napszak, telephely, szolgálat, típuselőírt, típuskiadott, viszonylat, forgalmiszám, tervindulás, azonosító  ) VALUES (";
-                    szöveg += "'" + rekord.Dátum.ToString("yyyy.MM.dd") + "', ";
-                    szöveg += "'" + rekord.Napszak.ToStrTrim() + "', ";
-                    szöveg += "'" + Vál_Telephely.Trim() + "', ";
-                    szöveg += "'" + SzolgálatNév.Trim() + "', ";
-                    szöveg += "'" + típuselőírt.ToStrTrim() + "', ";
-                    szöveg += "'" + típuskiadott.ToStrTrim() + "', ";
-                    szöveg += "'" + rekord.Viszonylat.ToStrTrim() + "', ";
-                    szöveg += "'" + rekord.Forgalmiszám.ToStrTrim() + "', ";
-                    szöveg += "'" + rekord.Tervindulás.ToString("HH:mm") + "', ";
-                    szöveg += "'" + rekord.Azonosító + "') ";
-
-                    SzövegGy.Add(szöveg);
+                    Adat_Típuscsere_Adatok adat_Típuscsere_Adatok = new Adat_Típuscsere_Adatok(
+                        Adat.Dátum,
+                        Adat.Napszak,
+                        Vál_Telephely.Trim(),
+                        SzolgálatNév.ToStrTrim(),
+                        típuselőírt.ToStrTrim(),
+                        típuskiadott.ToStrTrim(),
+                        Adat.Viszonylat.ToStrTrim(),
+                        Adat.Forgalmiszám.ToStrTrim(),
+                        Adat.Tervindulás,
+                        Adat.Azonosító);
+                    AdatokGy.Add(adat_Típuscsere_Adatok);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                KézTípuscsere.Rögzítés(Dátum.Value.Year, AdatokGy);
             }
             catch (HibásBevittAdat ex)
             {

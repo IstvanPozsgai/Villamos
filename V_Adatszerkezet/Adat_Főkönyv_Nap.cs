@@ -135,6 +135,8 @@ namespace Villamos.Villamos_Adatszerkezet
             Azonosító = azonosító;
             Kocsi = kocsi;
         }
+
+
     }
 
     public class Adat_Főkönyv_ZSER

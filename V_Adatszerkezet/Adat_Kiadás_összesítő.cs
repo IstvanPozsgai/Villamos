@@ -131,6 +131,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Tervindulás = tervindulás;
             Azonosító = azonosító;
         }
+
+        public Adat_Típuscsere_Adatok(DateTime dátum, string napszak, string telephely)
+        {
+            Dátum = dátum;
+            Napszak = napszak;
+            Telephely = telephely;
+        }
     }
 
     public class Adat_Forte_Kiadási_Adatok

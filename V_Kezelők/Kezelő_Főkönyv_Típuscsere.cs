@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "plédke";
         string hely;
+        string táblanév = "típuscseretábla";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_FőKönyv_Típuscsere> Lista_Adatok(string Telephely, int Év)
         {
-            string szöveg = "SELECT * FROM típuscseretábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             FájlBeállítás(Telephely, Év);
             List<Adat_FőKönyv_Típuscsere> Adatok = new List<Adat_FőKönyv_Típuscsere>();
             Adat_FőKönyv_Típuscsere Adat;
