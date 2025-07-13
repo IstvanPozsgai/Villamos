@@ -18,40 +18,6 @@ namespace Villamos.Kezelők
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
-
-        //elkopó
-        public List<Adat_Kiegészítő_Típusaltípustábla> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Típusaltípustábla> Adatok = new List<Adat_Kiegészítő_Típusaltípustábla>();
-            Adat_Kiegészítő_Típusaltípustábla Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Típusaltípustábla(
-                                     rekord["sorszám"].ToÉrt_Long(),
-                                     rekord["főkategória"].ToStrTrim(),
-                                     rekord["típus"].ToStrTrim(),
-                                     rekord["alTípus"].ToStrTrim()
-                                     );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
         public List<Adat_Kiegészítő_Típusaltípustábla> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM típusaltípustábla order by sorszám";
