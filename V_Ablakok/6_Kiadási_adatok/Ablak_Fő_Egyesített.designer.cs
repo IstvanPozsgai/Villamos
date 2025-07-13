@@ -54,7 +54,6 @@ namespace Villamos
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Délután = new System.Windows.Forms.RadioButton();
             this.Délelőtt = new System.Windows.Forms.RadioButton();
-            this.Holtart = new System.Windows.Forms.ProgressBar();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Tábla = new System.Windows.Forms.DataGridView();
             this.Kategórilista = new System.Windows.Forms.CheckedListBox();
@@ -62,9 +61,10 @@ namespace Villamos
             this.CsoportVissza = new System.Windows.Forms.Button();
             this.Csuk = new System.Windows.Forms.Button();
             this.Nyit = new System.Windows.Forms.Button();
-            this.Holtartfő = new System.Windows.Forms.ProgressBar();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.alsóPanels4 = new System.Windows.Forms.TextBox();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Holtartfő = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel2.SuspendLayout();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -275,16 +275,6 @@ namespace Villamos
             this.Délelőtt.Text = "Délelőtt";
             this.Délelőtt.UseVisualStyleBackColor = false;
             // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(353, 7);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(737, 19);
-            this.Holtart.TabIndex = 207;
-            this.Holtart.Visible = false;
-            // 
             // BtnSúgó
             // 
             this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -373,17 +363,6 @@ namespace Villamos
             this.Nyit.UseVisualStyleBackColor = true;
             this.Nyit.Click += new System.EventHandler(this.Nyit_Click);
             // 
-            // Holtartfő
-            // 
-            this.Holtartfő.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtartfő.BackColor = System.Drawing.Color.Red;
-            this.Holtartfő.Location = new System.Drawing.Point(353, 31);
-            this.Holtartfő.Name = "Holtartfő";
-            this.Holtartfő.Size = new System.Drawing.Size(737, 19);
-            this.Holtartfő.TabIndex = 216;
-            this.Holtartfő.Visible = false;
-            // 
             // toolTip1
             // 
             this.toolTip1.IsBalloon = true;
@@ -396,14 +375,29 @@ namespace Villamos
             this.alsóPanels4.TabIndex = 217;
             this.alsóPanels4.Visible = false;
             // 
+            // Holtart
+            // 
+            this.Holtart.Location = new System.Drawing.Point(338, 7);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(752, 18);
+            this.Holtart.TabIndex = 218;
+            // 
+            // Holtartfő
+            // 
+            this.Holtartfő.Location = new System.Drawing.Point(338, 32);
+            this.Holtartfő.Name = "Holtartfő";
+            this.Holtartfő.Size = new System.Drawing.Size(752, 18);
+            this.Holtartfő.TabIndex = 218;
+            // 
             // Ablak_Fő_Egyesített
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(1172, 591);
-            this.Controls.Add(this.alsóPanels4);
             this.Controls.Add(this.Holtartfő);
+            this.Controls.Add(this.Holtart);
+            this.Controls.Add(this.alsóPanels4);
             this.Controls.Add(this.Nyit);
             this.Controls.Add(this.Csuk);
             this.Controls.Add(this.CsoportkijelölMind);
@@ -411,7 +405,6 @@ namespace Villamos
             this.Controls.Add(this.Kategórilista);
             this.Controls.Add(this.Tábla);
             this.Controls.Add(this.Panel2);
-            this.Controls.Add(this.Holtart);
             this.Controls.Add(this.BtnSúgó);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -441,7 +434,6 @@ namespace Villamos
         internal Panel Panel1;
         internal RadioButton Délután;
         internal RadioButton Délelőtt;
-        internal ProgressBar Holtart;
         internal Button BtnSúgó;
         internal Button Kimutatás;
         internal Label Label2;
@@ -455,8 +447,9 @@ namespace Villamos
         internal Button CsoportVissza;
         internal Button Csuk;
         internal Button Nyit;
-        internal ProgressBar Holtartfő;
         private ToolTip toolTip1;
         internal TextBox alsóPanels4;
+        private V_MindenEgyéb.MyProgressbar Holtart;
+        private V_MindenEgyéb.MyProgressbar Holtartfő;
     }
 }
