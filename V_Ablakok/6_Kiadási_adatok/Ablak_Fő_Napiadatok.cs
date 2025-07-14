@@ -665,6 +665,7 @@ namespace Villamos
                     // ha volt rögzítve
                     Command1.BackColor = Color.CornflowerBlue;
                     Command1.ForeColor = Color.Black;
+                    Command1.Enabled = false;
                     Command4.Enabled = true;
                 }
                 else
@@ -672,6 +673,7 @@ namespace Villamos
                     // ha nem volt rögzítve
                     Command1.BackColor = Color.Green;
                     Command1.ForeColor = Color.White;
+                    Command1.Enabled = true;
                     Command4.Enabled = false;
                 }
             }

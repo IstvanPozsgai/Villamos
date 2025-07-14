@@ -720,6 +720,7 @@ namespace Villamos
             {
 
                 if (Kategórilista.SelectedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy kategória sem.");
+                AdatokKiad = KézKiad.Lista_adatok(Dátum.Value.Year);
                 Holtart.Be(hónapnap + 1);
 
                 Tábla.Rows.Clear();

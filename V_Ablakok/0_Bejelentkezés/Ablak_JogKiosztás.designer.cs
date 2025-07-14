@@ -208,6 +208,7 @@ namespace Villamos
             // 
             // LstChkSzervezet
             // 
+            this.LstChkSzervezet.CheckOnClick = true;
             this.LstChkSzervezet.FormattingEnabled = true;
             this.LstChkSzervezet.Location = new System.Drawing.Point(1036, 68);
             this.LstChkSzervezet.Name = "LstChkSzervezet";
