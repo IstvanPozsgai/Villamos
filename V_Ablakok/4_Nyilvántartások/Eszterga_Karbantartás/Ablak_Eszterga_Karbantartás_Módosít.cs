@@ -358,7 +358,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
-
         /// <summary>
         /// A naplótábla oszlopszélességeit állítja be
         /// </summary>
@@ -436,6 +435,15 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TablaUtolagMuvelet.Columns["Óra"].Visible = false;
         }
 
+        /// <summary>
+        /// Meghivja a tabla listazasokat egyszerre
+        /// </summary>
+        private void TablakListazasa()
+        {
+            TablaListazasMuvelet();
+            TablaListazasMuveletUtolag();
+            TorlesEllenorzes();
+        }
         #endregion
 
         #region Metodusok
@@ -781,9 +789,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     Kez_Muvelet.Rogzites(ADAT);
 
                 Eszterga_Valtozas?.Invoke();
-                TablaListazasMuvelet();
-                TablaListazasMuveletUtolag();
-                TorlesEllenorzes();
+                TablakListazasa();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Rögzítve.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -829,9 +835,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 }
                 Kez_Muvelet.Torles(TorlesAdatok, true);
                 Eszterga_Valtozas?.Invoke();
-                TablaListazasMuvelet();
-                TablaListazasMuveletUtolag();
-                TorlesEllenorzes();
+                TablakListazasa();
                 Btn_Törlés.Visible = false;
                 MessageBox.Show("Az adatok törlése megtörtént.", "Törölve.", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -882,7 +886,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:Kezelőben
-        //felig kesz
+        //kesz
         /// Két kijelölt rekord sorrendjének felcserélése az adatbázisban.
         /// Ellenőrzi, hogy pontosan két sor van-e kijelölve, majd végrehajtja a cserét, frissíti a táblázatot.
         /// </summary>
@@ -895,14 +899,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 List<Adat_Eszterga_Muveletek> rekordok = SorKivalasztas();
 
-                Adat_Eszterga_Muveletek rekord1 = rekordok[0];
-                Adat_Eszterga_Muveletek rekord2 = rekordok[1];
+                int Id1 = rekordok[0].ID;
+                int Id2 = rekordok[1].ID;
 
-                Kez_Muvelet.MuveletCsere(rekord1, rekord2);
-                Kez_Muvelet.Rendezes();
-                TablaListazasMuvelet();
-                TablaListazasMuveletUtolag();
-                TorlesEllenorzes();
+                Kez_Muvelet.Csere(Id1, Id2);
+                TablakListazasa();
                 MessageBox.Show("A sorok sorszámai sikeresen kicserélve.", "Sikeres csere", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -917,6 +918,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
 
         // JAVÍTANDÓ:ez miben tér el az előzőtől?
+        //kesz
         /// <summary>
         /// Két kijelölt sor sorrendjét felcseréli az adatbázisban úgy, hogy az egyik rekord a másik helyére kerül.
         /// Először ellenőrzi, hogy pontosan két sor van-e kijelölve, majd a cserét végrehajtja, frissíti a listát.
@@ -930,16 +932,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 List<Adat_Eszterga_Muveletek> rekordok = SorKivalasztas();
 
-                Adat_Eszterga_Muveletek elso = rekordok[1];
-                Adat_Eszterga_Muveletek masodik = rekordok[0];
-                int ElsoID = elso.ID;
-                int MasodikID = masodik.ID;
+                int Id1 = rekordok[1].ID;
+                int Id2 = rekordok[0].ID;
 
-                Kez_Muvelet.MuveletSorrend(ElsoID, MasodikID);
-                Kez_Muvelet.Rendezes();
-                TablaListazasMuvelet();
-                TablaListazasMuveletUtolag();
-                TorlesEllenorzes();
+                Kez_Muvelet.Sorrendezes(Id1, Id2);
+                TablakListazasa();
                 MessageBox.Show("A sorrend módosítása sikeresen megtörtént.", "Sikeres módosítás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
