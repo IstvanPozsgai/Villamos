@@ -338,6 +338,7 @@
             // 
             // ChkSzervezet
             // 
+            this.ChkSzervezet.CheckOnClick = true;
             this.ChkSzervezet.FormattingEnabled = true;
             this.ChkSzervezet.Location = new System.Drawing.Point(3, 53);
             this.ChkSzervezet.Name = "ChkSzervezet";

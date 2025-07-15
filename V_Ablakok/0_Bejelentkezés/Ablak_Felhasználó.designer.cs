@@ -328,6 +328,7 @@ namespace Villamos
             // 
             // ChkSzervezet
             // 
+            this.ChkSzervezet.CheckOnClick = true;
             this.ChkSzervezet.FormattingEnabled = true;
             this.ChkSzervezet.Location = new System.Drawing.Point(3, 33);
             this.ChkSzervezet.Name = "ChkSzervezet";
@@ -340,7 +341,7 @@ namespace Villamos
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             this.tableLayoutPanel2.Controls.Add(this.BtnSugó, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnFrissít, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.BtnDolgozóilsta, 1, 0);
