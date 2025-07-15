@@ -12,7 +12,7 @@ namespace Villamos.Villamos_Kezelők
 {
     // JAVÍTANDÓ:
     //sok módosítás
-    //meg nincs kesz
+    //kesz
     public class Kezelő_Eszterga_Műveletek
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb".KönyvSzerk();
@@ -23,7 +23,9 @@ namespace Villamos.Villamos_Kezelők
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartás(hely);
         }
-
+        /// <summary>
+        /// Lekéri az esztergaműveletek listáját az adatbázisból.
+        /// </summary>
         public List<Adat_Eszterga_Muveletek> Lista_Adatok()
         {
             string szoveg = $"SELECT * FROM {tablaNev} ORDER BY ID  ";
@@ -60,6 +62,10 @@ namespace Villamos.Villamos_Kezelők
             }
             return Adatok;
         }
+
+        /// <summary>
+        /// Új műveleti rekordot rögzít az adatbázisban.
+        /// </summary>
         public void Rogzites(Adat_Eszterga_Muveletek Adat)
         {
             try
@@ -85,6 +91,10 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// A megadott rekordokat logikailag törli (Státusz beállítása vagy Megjegyzés nullázása).
+        /// </summary>
         public void Torles(List<Adat_Eszterga_Muveletek> Adatok, bool torles)
         {
             try
@@ -110,6 +120,10 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Meghatározza a következő elérhető azonosítót az új rekordhoz.
+        /// </summary>
         public int Sorszam()
         {
             int valasz = 1;
@@ -130,6 +144,9 @@ namespace Villamos.Villamos_Kezelők
             return valasz;
         }
 
+        /// <summary>
+        /// Több rekord "Utolsó_Dátum" és "Utolsó_Üzemóra_Állás" mezőit frissíti.
+        /// </summary>
         public void Modositas(List<Adat_Eszterga_Muveletek> Adatok)
         {
             try
@@ -181,24 +198,10 @@ namespace Villamos.Villamos_Kezelők
             }
         }
 
-        public void IdModositas(Adat_Eszterga_Muveletek Adat, int KovetkezoID)
-        {
-            try
-            {
-                string szoveg = $"UPDATE {tablaNev} SET ID = {KovetkezoID} WHERE ID = {Adat.ID}";
-                MyA.ABMódosítás(hely, jelszo, szoveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private string UpdateSzoveg(Adat_Eszterga_Muveletek Adat)
+        /// <summary>
+        /// Egy meglévő műveleti rekord összes mezőjét módosítja.
+        /// </summary>
+        private string UpdateEgesz(Adat_Eszterga_Muveletek Adat)
         {
             return $"UPDATE {tablaNev} SET " +
                    $"Művelet='{Adat.Művelet}', " +
@@ -211,11 +214,14 @@ namespace Villamos.Villamos_Kezelők
                    $"WHERE ID={Adat.ID}";
         }
 
+        /// <summary>
+        /// Egy meglévő műveleti rekord összes mezőjét módosítja.
+        /// </summary>
         public void MeglevoMuvelet_Modositas(Adat_Eszterga_Muveletek Adat)
         {
             try
             {
-                string sql = UpdateSzoveg(Adat);
+                string sql = UpdateEgesz(Adat);
                 MyA.ABMódosítás(hely, jelszo, sql);
             }
             catch (HibásBevittAdat ex)
@@ -228,43 +234,25 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void MuveletCsere(Adat_Eszterga_Muveletek rekord1, Adat_Eszterga_Muveletek rekord2)
+
+        /// <summary>
+        /// Két rekord ID-jét felcseréli az adatbázisban.
+        /// </summary>
+        public void Csere(int Id1, int Id2)
         {
             try
             {
-                Adat_Eszterga_Muveletek masolat1 = new Adat_Eszterga_Muveletek
-                    (
-                        rekord1.ID,
-                        rekord2.Művelet,
-                        rekord2.Egység,
-                        rekord2.Mennyi_Dátum,
-                        rekord2.Mennyi_Óra,
-                        rekord2.Státus,
-                        rekord2.Utolsó_Dátum,
-                        rekord2.Utolsó_Üzemóra_Állás,
-                        rekord2.Megjegyzés
-                    );
-
-                Adat_Eszterga_Muveletek masolat2 = new Adat_Eszterga_Muveletek
-                    (
-                        rekord2.ID,
-                        rekord1.Művelet,
-                        rekord1.Egység,
-                        rekord1.Mennyi_Dátum,
-                        rekord1.Mennyi_Óra,
-                        rekord1.Státus,
-                        rekord1.Utolsó_Dátum,
-                        rekord1.Utolsó_Üzemóra_Állás,
-                        rekord1.Megjegyzés
-                    );
-
                 List<string> sqlLista = new List<string>
                 {
-                    UpdateSzoveg(masolat1),
-                    UpdateSzoveg(masolat2)
+                    $"UPDATE {tablaNev} SET ID = 0 WHERE ID = {Id1}",
+                    $"UPDATE {tablaNev} SET ID = {Id1} WHERE ID = {Id2}",
+                    $"UPDATE {tablaNev} SET ID = {Id2} WHERE ID = 0"
                 };
 
                 MyA.ABMódosítás(hely, jelszo, sqlLista);
+
+                string torles = $"DELETE FROM {tablaNev} WHERE ID = 0";
+                MyA.ABtörlés(hely, jelszo, torles);
             }
             catch (HibásBevittAdat ex)
             {
@@ -276,19 +264,20 @@ namespace Villamos.Villamos_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void MuveletSorrend(int ElsoID, int MasodikID)
+
+        /// <summary>
+        /// A rekordok sorrendjét módosítja a megadott új sorrend szerint.
+        /// </summary>
+        public void Sorrendezes(int elsoId, int masodikId)
         {
             try
             {
-                List<string> sqlLista = new List<string>();
-
-                sqlLista.Add($"UPDATE {tablaNev} SET ID = ID + 1 WHERE ID >= {MasodikID}");
-                if (ElsoID < MasodikID)
-                    sqlLista.Add($"UPDATE {tablaNev} SET ID = {MasodikID} WHERE ID = {ElsoID}");
+                if (elsoId < masodikId)
+                    for (int i = elsoId; i < masodikId - 1; i++)
+                        Csere(i, i + 1);
                 else
-                    sqlLista.Add($"UPDATE {tablaNev} SET ID = {MasodikID} WHERE ID = {ElsoID + 1}");
-
-                MyA.ABMódosítás(hely, jelszo, sqlLista);
+                    for (int i = elsoId; i > masodikId + 1; i--)
+                        Csere(i, i - 1);
             }
             catch (HibásBevittAdat ex)
             {
@@ -298,23 +287,6 @@ namespace Villamos.Villamos_Kezelők
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void Rendezes()
-        {
-            List<Adat_Eszterga_Muveletek> rekordok = Lista_Adatok().OrderBy(a => a.ID).ToList();
-
-            int ujID = 1;
-            foreach (Adat_Eszterga_Muveletek rekord in rekordok)
-            {
-                if (rekord.ID != ujID)
-                {
-                    Adat_Eszterga_Muveletek adat = new Adat_Eszterga_Muveletek(rekord.ID);
-                    IdModositas(adat, ujID);
-                    rekord.ID = ujID;
-                }
-                ujID++;
             }
         }
     }
