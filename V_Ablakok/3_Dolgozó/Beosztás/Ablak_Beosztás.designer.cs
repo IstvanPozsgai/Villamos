@@ -52,7 +52,7 @@ namespace Villamos
             this.Nyolcórás = new System.Windows.Forms.ComboBox();
             this.Tizenkétórás = new System.Windows.Forms.ComboBox();
             this.Minden = new System.Windows.Forms.ComboBox();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Ledolgozottidő = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Gomb_nappalos = new System.Windows.Forms.Button();
@@ -352,6 +352,13 @@ namespace Villamos
             this.Váltós.Visible = false;
             this.Váltós.Click += new System.EventHandler(this.Váltós_Click);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(0, 0);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 0;
+            // 
             // CsukDolgozó
             // 
             this.CsukDolgozó.BackgroundImage = global::Villamos.Properties.Resources.fel;
@@ -397,6 +404,8 @@ namespace Villamos
             this.Kiegészítő_Doboz.Name = "Kiegészítő_Doboz";
             this.Kiegészítő_Doboz.Size = new System.Drawing.Size(40, 40);
             this.Kiegészítő_Doboz.TabIndex = 139;
+            this.ToolTip1.SetToolTip(this.Kiegészítő_Doboz, "Adott napi kiegészítő információk beviteléhez szükséges segédablakot jeleníti meg" +
+        "");
             this.Kiegészítő_Doboz.UseVisualStyleBackColor = true;
             this.Kiegészítő_Doboz.Click += new System.EventHandler(this.Kiegészítő_Doboz_Click);
             // 
@@ -409,6 +418,7 @@ namespace Villamos
             this.DolgozóFrissít.Name = "DolgozóFrissít";
             this.DolgozóFrissít.Size = new System.Drawing.Size(40, 40);
             this.DolgozóFrissít.TabIndex = 120;
+            this.ToolTip1.SetToolTip(this.DolgozóFrissít, "Listáz");
             this.DolgozóFrissít.UseVisualStyleBackColor = true;
             this.DolgozóFrissít.Click += new System.EventHandler(this.DolgozóFrissít_Click);
             // 
@@ -421,6 +431,7 @@ namespace Villamos
             this.Dolgozóvissza.Name = "Dolgozóvissza";
             this.Dolgozóvissza.Size = new System.Drawing.Size(40, 40);
             this.Dolgozóvissza.TabIndex = 119;
+            this.ToolTip1.SetToolTip(this.Dolgozóvissza, "A kijelöléseket eltávolítja");
             this.Dolgozóvissza.UseVisualStyleBackColor = true;
             this.Dolgozóvissza.Click += new System.EventHandler(this.Dolgozóvissza_Click);
             // 
@@ -433,6 +444,7 @@ namespace Villamos
             this.Dolgozókijelölmind.Name = "Dolgozókijelölmind";
             this.Dolgozókijelölmind.Size = new System.Drawing.Size(40, 40);
             this.Dolgozókijelölmind.TabIndex = 118;
+            this.ToolTip1.SetToolTip(this.Dolgozókijelölmind, "Mindent kijelöl");
             this.Dolgozókijelölmind.UseVisualStyleBackColor = true;
             this.Dolgozókijelölmind.Click += new System.EventHandler(this.Dolgozókijelölmind_Click);
             // 
@@ -457,6 +469,7 @@ namespace Villamos
             this.Csoportvissza.Name = "Csoportvissza";
             this.Csoportvissza.Size = new System.Drawing.Size(40, 40);
             this.Csoportvissza.TabIndex = 115;
+            this.ToolTip1.SetToolTip(this.Csoportvissza, "A kijelöléseket eltávolítja");
             this.Csoportvissza.UseVisualStyleBackColor = true;
             this.Csoportvissza.Click += new System.EventHandler(this.Csoportvissza_Click);
             // 
@@ -469,6 +482,7 @@ namespace Villamos
             this.Csoportkijelölmind.Name = "Csoportkijelölmind";
             this.Csoportkijelölmind.Size = new System.Drawing.Size(40, 40);
             this.Csoportkijelölmind.TabIndex = 114;
+            this.ToolTip1.SetToolTip(this.Csoportkijelölmind, "Mindent kijelöl");
             this.Csoportkijelölmind.UseVisualStyleBackColor = true;
             this.Csoportkijelölmind.Click += new System.EventHandler(this.Csoportkijelölmind_Click);
             // 
@@ -493,6 +507,7 @@ namespace Villamos
             this.CsoportFrissít.Name = "CsoportFrissít";
             this.CsoportFrissít.Size = new System.Drawing.Size(40, 40);
             this.CsoportFrissít.TabIndex = 110;
+            this.ToolTip1.SetToolTip(this.CsoportFrissít, "Listáz");
             this.CsoportFrissít.UseVisualStyleBackColor = true;
             this.CsoportFrissít.Click += new System.EventHandler(this.CsoportFrissít_Click);
             // 
@@ -505,6 +520,7 @@ namespace Villamos
             this.Excel_gomb.Name = "Excel_gomb";
             this.Excel_gomb.Size = new System.Drawing.Size(40, 40);
             this.Excel_gomb.TabIndex = 106;
+            this.ToolTip1.SetToolTip(this.Excel_gomb, "Excelt készít");
             this.Excel_gomb.UseVisualStyleBackColor = true;
             this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
             // 

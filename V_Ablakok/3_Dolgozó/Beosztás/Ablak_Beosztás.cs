@@ -145,7 +145,8 @@ namespace Villamos
 
 
             Cursor = Cursors.Default; // homokóra vége
-            Jogosultságkiosztás();
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
 
 
         }
