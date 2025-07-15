@@ -50,6 +50,7 @@ namespace Villamos
             Turnuskiirás();
             // Munkaidő keret feltöltés
             Kötelezőidők();
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Csoportfeltöltés();
             Névfeltöltés();
