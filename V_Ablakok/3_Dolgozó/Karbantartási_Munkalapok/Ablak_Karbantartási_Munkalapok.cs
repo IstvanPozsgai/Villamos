@@ -80,6 +80,7 @@ namespace Villamos.Villamos_Ablakok
             Irányítófeltöltés();
             Csoportfeltöltés();
             Dolgozók_feltöltése();
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap";
             if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
