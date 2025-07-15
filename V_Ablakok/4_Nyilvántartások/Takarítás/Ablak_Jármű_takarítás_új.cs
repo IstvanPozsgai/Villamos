@@ -82,7 +82,8 @@ namespace Villamos
         {
             Visible = false;
             Telephelyekfeltöltése();
-            Jogosultságkiosztás();
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
             Fülekkitöltése();
 
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
