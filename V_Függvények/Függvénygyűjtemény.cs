@@ -53,33 +53,40 @@ public static partial class Függvénygyűjtemény
     /// <summary>
     /// Elkopó
     /// Az Excel táblát kapja és a fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
+    /// Csak akkor ad vissza igaz értéket, ha a beolvasni kívánt változókat tartalmazza az excel tábla
     /// </summary>
     /// <param name="Melyik"></param>
     /// <param name="Fejlécsor"></param>
     /// <returns></returns>
     public static bool Betöltéshelyes(string Melyik, DataTable Tábla)
     {
-        bool válasz = false;
+        bool válasz = true;
         try
         {
-            //  beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
-            string fejlécbeolvas = "";
-            for (int i = 0; i < Tábla.Columns.Count; i++)
-                fejlécbeolvas += Tábla.Columns[i].ColumnName.ToStrTrim();
-
-
-            List<Adat_Alap_Beolvasás> Adatok = KézBeolvasás.Lista_Adatok();
+            List<Adat_Excel_Beolvasás> Adatok = Kéz_Beolvasás.Lista_Adatok();
+            //csak azokat az adatokat nézzük amit be kell tölteni.
             Adatok = (from a in Adatok
                       where a.Csoport == Melyik.Trim()
-                      && a.Törölt == "0"
+                      && a.Státusz == false
+                      && a.Változónév.Trim() != "0"
                       orderby a.Oszlop
                       select a).ToList();
-
-            string szöveg = "";
-            foreach (Adat_Alap_Beolvasás rekord in Adatok)
-                szöveg += rekord.Fejléc;
-
-            if (szöveg.Trim() == fejlécbeolvas.Trim()) válasz = true;
+            //             Végignézzük a változók listáját és ha van benne olyan ami nincs a táblázatban átállítjuk a státusszát
+            foreach (Adat_Excel_Beolvasás rekord in Adatok)
+            {
+                bool volt = false;
+                int i = 0;
+                while (volt == false && i < Tábla.Columns.Count)
+                {
+                    if (rekord.Fejléc.Trim() == Tábla.Columns[i].ColumnName.Trim()) volt = true;
+                    i++;
+                }
+                if (volt == false)
+                {
+                    válasz = false;
+                    break;
+                }
+            }
         }
         catch (HibásBevittAdat ex)
         {
