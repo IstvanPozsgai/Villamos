@@ -31,7 +31,8 @@ namespace Villamos
             Telephelyekfeltöltése();
             Dátum.Value = DateTime.Today.AddDays(-1);
             DekádDátum.Value = DateTime.Today.AddDays(-1);
-            Jogosultságkiosztás();
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
 
             Fülekkitöltése();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
