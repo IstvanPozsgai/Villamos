@@ -29,7 +29,8 @@ namespace Villamos
             {
                 Telephelyekfeltöltése();
                 Dátum.Value = DateTime.Today;
-                Jogosultságkiosztás();
+                GombLathatosagKezelo.Beallit(this);
+                //Jogosultságkiosztás();
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             }
             catch (HibásBevittAdat ex)
