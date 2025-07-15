@@ -18,6 +18,7 @@ namespace Villamos.Villamos_Nyomtatványok
         readonly Kezelő_Jármű_Állomány_Típus KézJárműÁllTípus = new Kezelő_Jármű_Állomány_Típus();
         readonly Kezelő_Főkönyv_SegédTábla KézSegédTábla = new Kezelő_Főkönyv_SegédTábla();
         readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
+        readonly Kezelő_Menetkimaradás Kéz_Menet = new Kezelő_Menetkimaradás();
         #endregion
 
 
@@ -1221,21 +1222,20 @@ namespace Villamos.Villamos_Nyomtatványok
             // itt kell majd beolvasni a menetkimaradásokat.
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\főkönyv\menet" + Dátum.ToString("yyyy") + ".mdb";
 
-            if (!File.Exists(hely))
-                Adatbázis_Létrehozás.Menekimaradás_telephely(hely);
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Menekimaradás_telephely(hely);
             int napia = 0;
             int napib = 0;
             int napic = 0;
             int napi = 0;
             jelszó = "lilaakác";
 
-            szöveg = "SELECT * FROM menettábla where [bekövetkezés]>=#" + Dátum.ToString("M-d-yy") + " 00:00:0#";
-            szöveg += " and [bekövetkezés]<#" + Dátum.ToString("M-d-yy") + " 23:59:0#";
-            szöveg += " and [törölt]=0";
-            szöveg += " order by eseményjele";
-            Kezelő_Menetkimaradás KM_kéz = new Kezelő_Menetkimaradás();
-            List<Adat_Menetkimaradás> Madatok = KM_kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+            List<Adat_Menetkimaradás> Madatok = Kéz_Menet.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+            Madatok = (from a in Madatok
+                       where a.Bekövetkezés >= MyF.Nap0000(Dátum)
+                       && a.Bekövetkezés <= MyF.Nap2359(Dátum)
+                       && a.Törölt == false
+                       orderby a.Eseményjele
+                       select a).ToList();
 
             // van menetkimaradás
 
@@ -1312,12 +1312,13 @@ namespace Villamos.Villamos_Nyomtatványok
             int göngyc = 0;
             int göngymenet = 0;
 
-            szöveg = "SELECT * FROM menettábla where ";
-            szöveg += "[bekövetkezés]>=#" + Dátum.ToString("MM") + "-1-" + Dátum.ToString("yyyy") + " 00:00:0#";
-            szöveg += " and [bekövetkezés]<#" + Dátum.ToString("MM-d-yyyy") + " 23:59:0#";
-            szöveg += " and [törölt]=0";
-
-            Madatok = KM_kéz.Lista_Adatok(hely, jelszó, szöveg);
+            Madatok = Kéz_Menet.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+            Madatok = (from a in Madatok
+                       where a.Bekövetkezés >= MyF.Nap0000(MyF.Hónap_elsőnapja(Dátum))
+                       && a.Bekövetkezés <= MyF.Nap2359(Dátum)
+                       && a.Törölt == false
+                       orderby a.Eseményjele
+                       select a).ToList();
 
             foreach (Adat_Menetkimaradás rekord in Madatok)
             {

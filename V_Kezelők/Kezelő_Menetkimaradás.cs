@@ -65,35 +65,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Módosítás(string Telephely, int Év, Adat_Menetkimaradás Adat)
-        {
-            try
-            {
-                FájlBeállítás(Telephely, Év);
-                string szöveg = $"UPDATE {táblanév} SET viszonylat='{Adat.Viszonylat}'";
-                szöveg += $", azonosító='{Adat.Azonosító}'";
-                szöveg += $", típus='{Adat.Típus}'";
-                szöveg += $", Eseményjele='{Adat.Eseményjele}'";
-                szöveg += $", Bekövetkezés='{Adat.Bekövetkezés}'";
-                szöveg += $", kimaradtmenet={Adat.Kimaradtmenet}";
-                szöveg += $", jvbeírás='{Adat.Jvbeírás}'";
-                szöveg += $", vmbeírás='{Adat.Vmbeírás}'";
-                szöveg += $", javítás='{Adat.Javítás}'";
-                szöveg += $", törölt={Adat.Törölt} ";
-                szöveg += $" WHERE tétel={Adat.Tétel} and jelentés='{Adat.Jelentés}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         public void Módosítás(string Telephely, int Év, List<Adat_Menetkimaradás> Adatok)
         {
             try
@@ -159,41 +130,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(string Telephely, int Év, Adat_Menetkimaradás Adat)
-        {
-            try
-            {
-                FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO {táblanév} ";
-                szöveg += " ([viszonylat], [azonosító], [típus], [Eseményjele], [Bekövetkezés],";
-                szöveg += " [kimaradtmenet], [jvbeírás], [vmbeírás], [javítás], [id], [törölt], [tétel], [jelentés]) ";
-                szöveg += " VALUES (";
-                szöveg += $"'{Adat.Viszonylat}', ";
-                szöveg += $"'{Adat.Azonosító}', ";
-                szöveg += $"'{Adat.Típus}', ";
-                szöveg += $"'{Adat.Eseményjele}', ";
-                szöveg += $"'{Adat.Bekövetkezés}', ";
-                szöveg += $"{Adat.Kimaradtmenet}, ";
-                szöveg += $"'{Adat.Jvbeírás}', ";
-                szöveg += $"'{Adat.Vmbeírás}', ";
-                szöveg += $"'{Adat.Javítás}', ";
-                szöveg += $" {Sorszám(Telephely, Év)}, ";
-                szöveg += $" {Adat.Törölt}, ";
-                szöveg += $" {Adat.Tétel}, ";
-                szöveg += $"'{Adat.Jelentés}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         public void Döntés(string Telephely, int Év, List<Adat_Menetkimaradás> Adatok)
         {
             try
@@ -214,8 +150,6 @@ namespace Villamos.Kezelők
                 }
                 if (AdatokRögzítés.Count > 0) Rögzítés(Telephely, Év, AdatokRögzítés);
                 if (AdatokMódosítás.Count > 0) Módosítás(Telephely, Év, AdatokMódosítás);
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -228,7 +162,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public long Sorszám(string Telephely, int Év)
+        private long Sorszám(string Telephely, int Év)
         {
             long válasz = 1;
             try
@@ -246,48 +180,6 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return válasz;
-        }
-
-        //elkopó
-        public List<Adat_Menetkimaradás> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Menetkimaradás> Adatok = new List<Adat_Menetkimaradás>();
-            Adat_Menetkimaradás Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Menetkimaradás(
-                                    rekord["viszonylat"].ToStrTrim(),
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["típus"].ToStrTrim(),
-                                    rekord["eseményjele"].ToStrTrim(),
-                                    rekord["bekövetkezés"].ToÉrt_DaTeTime(),
-                                    rekord["kimaradtmenet"].ToÉrt_Long(),
-                                    rekord["jvbeírás"].ToStrTrim(),
-                                    rekord["vmbeírás"].ToStrTrim(),
-                                    rekord["javítás"].ToStrTrim(),
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["törölt"].ToÉrt_Bool(),
-                                    rekord["jelentés"].ToStrTrim(),
-                                    rekord["tétel"].ToÉrt_Long()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
         }
     }
 }

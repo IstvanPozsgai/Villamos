@@ -29,6 +29,11 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             Cmbtelephely = cmbTelephely;
         }
 
+        public Ablak_Karbantartás_Csoport()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Karbantartás_Csoport_Load(object sender, EventArgs e)
         {
             Jogosultságkiosztás();
