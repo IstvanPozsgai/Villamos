@@ -584,60 +584,64 @@ namespace Villamos
                     {
                         Holtart.Lép();
                         string telep = MyE.Beolvas(MyE.Oszlopnév(j) + "1").Trim();
-                        List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(telep, Dátum.Value.Year);
-                        Adatok = (from a in Adatok
-                                  where a.Bekövetkezés >= MyF.Nap0000(utolsónap)
-                                  && a.Bekövetkezés <= MyF.Nap2359(utolsónap)
-                                  && a.Eseményjele != "_"
-                                  orderby a.Eseményjele, a.Típus
-                                  select a).ToList();
-
-                        szöveg1 = "";
-                        szöveg_html = "<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 12pt'>";
-                        szöveg_html += $"<tr><td style='background-color: #B8DBFD;border: 1px solid #ccc'>{telep}</td></tr>";
-
-                        if (Adatok.Count != 0)
+                        //Megvizsgáljuk, hogy telephelynév-e
+                        if (Lstüzemek.Items.Contains(telep))
                         {
-                            //Fejléc
-                            szöveg_html += "<tr><th style='background-color: #B8DBFD;border: 1px solid #ccc'>Jel</th>";
-                            szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Viszonylat</th>";
-                            szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Típus</th>";
-                            szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Psz</th>";
-                            szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Járművezetői beírás</th>";
-                            szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Javítás</th>";
-                            szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Menet</th></tr>";
-                            foreach (Adat_Menetkimaradás rekord in Adatok)
+                            List<Adat_Menetkimaradás> Adatok = KézMenet.Lista_Adatok(telep, Dátum.Value.Year);
+                            Adatok = (from a in Adatok
+                                      where a.Bekövetkezés >= MyF.Nap0000(utolsónap)
+                                      && a.Bekövetkezés <= MyF.Nap2359(utolsónap)
+                                      && a.Eseményjele != "_"
+                                      orderby a.Eseményjele, a.Típus
+                                      select a).ToList();
+
+                            szöveg1 = "";
+                            szöveg_html = "<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 12pt'>";
+                            szöveg_html += $"<tr><td style='background-color: #B8DBFD;border: 1px solid #ccc'>{telep}</td></tr>";
+
+                            if (Adatok.Count != 0)
                             {
-                                szöveg1 += " " + rekord.Eseményjele.Trim();
-                                szöveg1 += " " + rekord.Viszonylat.Trim();
-                                szöveg1 += " " + rekord.Típus.Trim();
-                                szöveg1 += " " + rekord.Azonosító.Trim();
-                                szöveg1 += " " + rekord.Jvbeírás.Trim();
-                                szöveg1 += " - " + rekord.Javítás.Trim();
-                                szöveg1 += " " + rekord.Kimaradtmenet.ToString() + " menet\n";
+                                //Fejléc
+                                szöveg_html += "<tr><th style='background-color: #B8DBFD;border: 1px solid #ccc'>Jel</th>";
+                                szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Viszonylat</th>";
+                                szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Típus</th>";
+                                szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Psz</th>";
+                                szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Járművezetői beírás</th>";
+                                szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Javítás</th>";
+                                szöveg_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>Menet</th></tr>";
+                                foreach (Adat_Menetkimaradás rekord in Adatok)
+                                {
+                                    szöveg1 += " " + rekord.Eseményjele.Trim();
+                                    szöveg1 += " " + rekord.Viszonylat.Trim();
+                                    szöveg1 += " " + rekord.Típus.Trim();
+                                    szöveg1 += " " + rekord.Azonosító.Trim();
+                                    szöveg1 += " " + rekord.Jvbeírás.Trim();
+                                    szöveg1 += " - " + rekord.Javítás.Trim();
+                                    szöveg1 += " " + rekord.Kimaradtmenet.ToString() + " menet\n";
 
-                                szöveg_html += $"<tr><td style='border: 1px solid #ccc'>{rekord.Eseményjele.Trim()}</td>" +
-                                             $"<td style='border: 1px solid #ccc'>{rekord.Viszonylat.Trim()}</td>" +
-                                             $"<td style='border: 1px solid #ccc'>{rekord.Típus.Trim()}</td>" +
-                                             $"<td style='border: 1px solid #ccc'>{rekord.Azonosító.Trim()}</td>" +
-                                             $"<td style='border: 1px solid #ccc'>{rekord.Jvbeírás.Trim()}</td>" +
-                                             $"<td style='border: 1px solid #ccc'>{rekord.Javítás.Trim()}</td>" +
-                                             $"<td style='border: 1px solid #ccc'>{rekord.Kimaradtmenet}</td></tr>";
+                                    szöveg_html += $"<tr><td style='border: 1px solid #ccc'>{rekord.Eseményjele.Trim()}</td>" +
+                                                 $"<td style='border: 1px solid #ccc'>{rekord.Viszonylat.Trim()}</td>" +
+                                                 $"<td style='border: 1px solid #ccc'>{rekord.Típus.Trim()}</td>" +
+                                                 $"<td style='border: 1px solid #ccc'>{rekord.Azonosító.Trim()}</td>" +
+                                                 $"<td style='border: 1px solid #ccc'>{rekord.Jvbeírás.Trim()}</td>" +
+                                                 $"<td style='border: 1px solid #ccc'>{rekord.Javítás.Trim()}</td>" +
+                                                 $"<td style='border: 1px solid #ccc'>{rekord.Kimaradtmenet}</td></tr>";
+                                }
                             }
-                        }
-                        else
-                        {
-                            szöveg1 += "OK";
-                            szöveg_html += $"<tr><td style='border: 1px solid #ccc'> OK </td></tr>";
-                        }
-                        szöveg_html += "</table>";
-                        Html_szöveg += szöveg_html;
+                            else
+                            {
+                                szöveg1 += "OK";
+                                szöveg_html += $"<tr><td style='border: 1px solid #ccc'> OK </td></tr>";
+                            }
+                            szöveg_html += "</table>";
+                            Html_szöveg += szöveg_html;
 
-                        szöveg2 = MyE.Beolvas(MyE.Oszlopnév(j) + $"{szám}");
-                        if (szöveg2.Trim() != "_")
-                            szöveg1 = szöveg2 + "\n" + szöveg1;
-                        MyE.Kiir(szöveg1, MyE.Oszlopnév(j) + szám.ToString());
+                            szöveg2 = MyE.Beolvas(MyE.Oszlopnév(j) + $"{szám}");
+                            if (szöveg2.Trim() != "_")
+                                szöveg1 = szöveg2 + "\n" + szöveg1;
+                            MyE.Kiir(szöveg1, MyE.Oszlopnév(j) + szám.ToString());
 
+                        }
                     }
                 }
                 MyE.Kiir("X", "a" + szám.ToString());
