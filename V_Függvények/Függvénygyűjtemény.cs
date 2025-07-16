@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos;
@@ -13,47 +12,12 @@ public static partial class Függvénygyűjtemény
 {
     readonly static Kezelő_Alap_Beolvasás KézBeolvasás = new Kezelő_Alap_Beolvasás();
     readonly static Kezelő_Excel_Beolvasás Kéz_Beolvasás = new Kezelő_Excel_Beolvasás();
-    /// <summary>
-    /// Az Excel tábla fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
-    /// </summary>
-    /// <param name="Melyik"></param>
-    /// <param name="Fejlécsor"></param>
-    /// <returns></returns>
-    public static bool Betöltéshelyes(string Melyik, string Fejlécsor)
-    {
-        bool válasz = false;
-        try
-        {
-            List<Adat_Alap_Beolvasás> Adatok = KézBeolvasás.Lista_Adatok();
-            Adatok = (from a in Adatok
-                      where a.Csoport == Melyik.Trim()
-                      && a.Törölt == "0"
-                      orderby a.Oszlop
-                      select a).ToList();
-
-            string szöveg = "";
-            foreach (Adat_Alap_Beolvasás rekord in Adatok)
-                szöveg += rekord.Fejléc;
-
-            if (szöveg.Trim() == Fejlécsor.Trim()) válasz = true;
-        }
-        catch (HibásBevittAdat ex)
-        {
-            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "Függvénygyűjtemény - Betöltéshelyes", ex.StackTrace, ex.Source, ex.HResult);
-            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        return válasz;
-    }
-
 
     /// <summary>
-    /// Elkopó
+    /// Ez lesz a végleges változat
     /// Az Excel táblát kapja és a fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
     /// Csak akkor ad vissza igaz értéket, ha a beolvasni kívánt változókat tartalmazza az excel tábla
+    /// Tehát ha a sorrend nem jó, de a változók benne vannak akkor is igazat ad vissza.
     /// </summary>
     /// <param name="Melyik"></param>
     /// <param name="Fejlécsor"></param>
@@ -101,7 +65,43 @@ public static partial class Függvénygyűjtemény
     }
 
     /// <summary>
-    /// Ez lesz a véglegez változat
+    /// Elkoptatni
+    /// Az Excel tábla fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
+    /// </summary>
+    /// <param name="Melyik"></param>
+    /// <param name="Fejlécsor"></param>
+    /// <returns></returns>
+    public static bool Betöltéshelyes(string Melyik, string Fejlécsor)
+    {
+        bool válasz = false;
+        try
+        {
+            List<Adat_Alap_Beolvasás> Adatok = KézBeolvasás.Lista_Adatok();
+            Adatok = (from a in Adatok
+                      where a.Csoport == Melyik.Trim()
+                      && a.Törölt == "0"
+                      orderby a.Oszlop
+                      select a).ToList();
+
+            string szöveg = "";
+            foreach (Adat_Alap_Beolvasás rekord in Adatok)
+                szöveg += rekord.Fejléc;
+
+            if (szöveg.Trim() == Fejlécsor.Trim()) válasz = true;
+        }
+        catch (HibásBevittAdat ex)
+        {
+            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Függvénygyűjtemény - Betöltéshelyes", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        return válasz;
+    }
+    /// <summary>
+    /// Elkoptatni
     ///  Az Excel táblát kapja és a fejlécét hasonlítja össze a táblázatban letárolt értékekkel.
     /// </summary>
     /// <param name="Melyik"></param>
@@ -292,46 +292,6 @@ public static partial class Függvénygyűjtemény
 
     #endregion
 
-
-    public static AdatCombohoz[] ComboFeltöltés(string sqlhely, string sqljelszó, string sqlszöveg, string rekordoszlop)
-    {
-
-        string kapcsolatiszöveg = "Provider=Microsoft.Jet.OleDb.4.0;Data Source= '" + sqlhely + "'; Jet Oledb:Database Password=" + sqljelszó;
-        OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg);
-        OleDbCommand Parancs = new OleDbCommand(sqlszöveg, Kapcsolat);
-
-        int sorszám = 0;
-
-        // elemek száma
-        Kapcsolat.Open();
-        OleDbDataReader rekord = Parancs.ExecuteReader();
-        if (rekord.HasRows)
-        {
-            while (rekord.Read())
-                sorszám += 1;
-        }
-        Kapcsolat.Close();
-
-        // 0 elemmel kezdődik
-        var Combo_lista = new AdatCombohoz[sorszám];
-        Kapcsolat.Open();
-        rekord = Parancs.ExecuteReader();
-        sorszám = 0;
-        if (rekord.HasRows)
-        {
-            while (rekord.Read())
-            {
-                Combo_lista[sorszám] = new AdatCombohoz(rekord[rekordoszlop].ToString().Trim(), sorszám);
-                sorszám += 1;
-            }
-        }
-
-        rekord.Close();
-        Parancs.Dispose();
-        Kapcsolat.Close();
-        return Combo_lista;
-    }
-
     public static long Futás_km(string azonosító, DateTime dátum_érték)
     {
         long mennyi = 0;
@@ -416,25 +376,4 @@ public static partial class Függvénygyűjtemény
 }
 
 
-
-public partial class AdatCombohoz
-{
-    private int Data;
-    private string Name;
-    public AdatCombohoz(string NameArgument, int Value)
-    {
-        Name = NameArgument;
-        Data = Value;
-    }
-
-    public override string ToString()
-    {
-        return Convert.ToString(Name);
-    }
-
-    public int GetData()
-    {
-        return Data;
-    }
-}
 
