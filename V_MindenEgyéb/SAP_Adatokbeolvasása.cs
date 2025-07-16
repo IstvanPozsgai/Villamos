@@ -19,7 +19,7 @@ namespace Villamos.V_MindenEgyéb
             {
                 DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
                 //Ellenőrzés
-                if (!MyF.BetöltésHelyes("KM adatok", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+                if (!MyF.Betöltéshelyes("KM adatok", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
 
                 // Beolvasni kívánt oszlopok
                 Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
@@ -110,7 +110,7 @@ namespace Villamos.V_MindenEgyéb
                 List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
                 //Ellenőrzés
-                if (!MyF.BetöltésHelyes("Menet", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+                if (!MyF.Betöltéshelyes("Menet", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
 
                 // Beolvasni kívánt oszlopok
                 Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();

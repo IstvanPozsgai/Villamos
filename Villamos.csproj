@@ -266,6 +266,24 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Felmentés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Felmentés.Designer.cs">
+      <DependentUpon>Ablak_T5C5_Felmentés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Vonalak.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Vonalak.Designer.cs">
+      <DependentUpon>Ablak_T5C5_Vonalak.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\2_Információ\Ablak_Utasítás_Generálás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\2_Információ\Ablak_Utasítás_Generálás.Designer.cs">
+      <DependentUpon>Ablak_Utasítás_Generálás.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Műveletek_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Üzemóra.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_KM.cs">
@@ -1412,6 +1430,9 @@
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Nosztalgia\Ablak_Nosztalgia.resx">
       <DependentUpon>Ablak_Nosztalgia.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Felmentés.resx">
+      <DependentUpon>Ablak_T5C5_Felmentés.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_fűtés.resx">
       <DependentUpon>Ablak_T5C5_fűtés.cs</DependentUpon>
     </EmbeddedResource>
@@ -1426,6 +1447,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_futás.resx">
       <DependentUpon>Ablak_T5C5_futás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Vonalak.resx">
+      <DependentUpon>Ablak_T5C5_Vonalak.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.resx">
       <DependentUpon>Ablak_TW6000_Tulajdonság.cs</DependentUpon>
@@ -1655,6 +1679,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\Közös\Ablak_PDF_Feltöltés.resx">
       <DependentUpon>Ablak_PDF_Feltöltés.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\2_Információ\Ablak_Utasítás_Generálás.resx">
+      <DependentUpon>Ablak_Utasítás_Generálás.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
   </ItemGroup>

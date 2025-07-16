@@ -45,7 +45,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[vizsgsorszám] Long,";
             szöveg += "[fudátum] DATE,";
             szöveg += "[Teljeskm] Long,";
-            szöveg += "[Ciklusrend]  char (10),";
+            szöveg += "[Ciklusrend]  char (15),";
             szöveg += "[V2végezte]  char (50),";
             szöveg += "[KövV2_sorszám] Long,";
             szöveg += "[KövV2]  char (10),";

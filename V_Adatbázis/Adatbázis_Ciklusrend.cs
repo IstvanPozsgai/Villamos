@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Villamos.Adatszerkezet;
+﻿using Villamos.Adatszerkezet;
 
 namespace Villamos.Villamos_Adatbázis_Funkció
 {
@@ -18,7 +13,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
             szöveg = "CREATE TABLE Ciklusrendtábla (";
-            szöveg += "[Típus]  char (10),";
+            szöveg += "[Típus]  char (15),";
             szöveg += "[Sorszám] Long,";
             szöveg += "[Vizsgálatfok]  char (10),";
             szöveg += "[Törölt]  char (1),";

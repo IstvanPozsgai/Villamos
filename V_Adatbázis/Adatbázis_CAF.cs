@@ -15,13 +15,13 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg = "CREATE TABLE Alap (";
             szöveg += "[azonosító]  char (10),";
 
-            szöveg += "[Ciklusnap]  char (10),";
+            szöveg += "[Ciklusnap]  char (15),";
             szöveg += "[Utolsó_Nap]  char (10),";
             szöveg += "[Utolsó_Nap_sorszám] Long,";
             szöveg += "[Végezte_nap]  char (50),";
             szöveg += "[Vizsgdátum_nap] DATE,";
 
-            szöveg += "[Cikluskm]  char (10),";
+            szöveg += "[Cikluskm]  char (15),";
             szöveg += "[Utolsó_Km]  char (10),";
             szöveg += "[Utolsó_Km_sorszám] Long,";
             szöveg += "[Végezte_km]  char (50),";

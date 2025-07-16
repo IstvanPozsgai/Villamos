@@ -59,9 +59,9 @@ namespace Villamos
             this.Alsóeltérés = new System.Windows.Forms.TextBox();
             this.Felsőeltérés = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.CsoportosMásolás = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.ÚjCiklus = new System.Windows.Forms.TextBox();
-            this.CsoportosMásolás = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.SuspendLayout();
             // 
@@ -164,7 +164,7 @@ namespace Villamos
             // 
             this.CiklusTípus.FormattingEnabled = true;
             this.CiklusTípus.Location = new System.Drawing.Point(174, 12);
-            this.CiklusTípus.MaxLength = 10;
+            this.CiklusTípus.MaxLength = 15;
             this.CiklusTípus.Name = "CiklusTípus";
             this.CiklusTípus.Size = new System.Drawing.Size(162, 28);
             this.CiklusTípus.TabIndex = 174;
@@ -264,6 +264,19 @@ namespace Villamos
             // 
             this.toolTip1.IsBalloon = true;
             // 
+            // CsoportosMásolás
+            // 
+            this.CsoportosMásolás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CsoportosMásolás.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.CsoportosMásolás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CsoportosMásolás.Location = new System.Drawing.Point(291, 469);
+            this.CsoportosMásolás.Name = "CsoportosMásolás";
+            this.CsoportosMásolás.Size = new System.Drawing.Size(45, 45);
+            this.CsoportosMásolás.TabIndex = 190;
+            this.toolTip1.SetToolTip(this.CsoportosMásolás, "Új ciklus másolása");
+            this.CsoportosMásolás.UseVisualStyleBackColor = true;
+            this.CsoportosMásolás.Click += new System.EventHandler(this.CsoportosMásolás_Click);
+            // 
             // label8
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -278,23 +291,10 @@ namespace Villamos
             // 
             this.ÚjCiklus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ÚjCiklus.Location = new System.Drawing.Point(174, 433);
-            this.ÚjCiklus.MaxLength = 10;
+            this.ÚjCiklus.MaxLength = 15;
             this.ÚjCiklus.Name = "ÚjCiklus";
             this.ÚjCiklus.Size = new System.Drawing.Size(162, 26);
             this.ÚjCiklus.TabIndex = 187;
-            // 
-            // CsoportosMásolás
-            // 
-            this.CsoportosMásolás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CsoportosMásolás.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.CsoportosMásolás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.CsoportosMásolás.Location = new System.Drawing.Point(291, 469);
-            this.CsoportosMásolás.Name = "CsoportosMásolás";
-            this.CsoportosMásolás.Size = new System.Drawing.Size(45, 45);
-            this.CsoportosMásolás.TabIndex = 190;
-            this.toolTip1.SetToolTip(this.CsoportosMásolás, "Új ciklus másolása");
-            this.CsoportosMásolás.UseVisualStyleBackColor = true;
-            this.CsoportosMásolás.Click += new System.EventHandler(this.CsoportosMásolás_Click);
             // 
             // Ablak_Ciklus
             // 

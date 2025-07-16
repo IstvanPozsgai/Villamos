@@ -990,7 +990,7 @@ namespace Villamos
             {
                 //beolvassuk az excel táblát és megnézzük, hogy megegyezik-e a két fejléc
                 DataTable Tábla = MyF.Excel_Tábla_Beolvas(Excel_hely);
-                if (!MyF.BetöltésHelyes("Dolgozó", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+                if (!MyF.Betöltéshelyes("Dolgozó", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
 
                 // Beolvasni kívánt oszlopok
                 List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
@@ -1044,6 +1044,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         /// <summary>
         /// Megnézi, hogy a dolgozó már létezik-e a dolgozói körben

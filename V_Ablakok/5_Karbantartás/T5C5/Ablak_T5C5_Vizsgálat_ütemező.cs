@@ -8,7 +8,6 @@ using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
-using MyO = Microsoft.Office.Interop.Outlook;
 
 namespace Villamos
 {
@@ -16,6 +15,7 @@ namespace Villamos
     public partial class Ablak_T5C5_Vizsgálat_ütemező
     {
         string AlsóPanel1;
+        string UtasításSzöveg = "";
         Ablak_Kereső Új_Ablak_Kereső;
         Ablak_T5C5_Segéd Új_Ablak_T5C5_Segéd;
 #pragma warning disable IDE0044 // Add readonly modifier
@@ -35,7 +35,7 @@ namespace Villamos
         readonly Kezelő_Vezénylés KézVezény = new Kezelő_Vezénylés();
         readonly Kezelő_Hétvége_Beosztás KézHBeosztás = new Kezelő_Hétvége_Beosztás();
         readonly Kezelő_Kiegészítő_Felmentés KézFelmentés = new Kezelő_Kiegészítő_Felmentés();
-        readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
+
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         List<Adat_Szerelvény> AdatokSzer = new List<Adat_Szerelvény>();
@@ -79,10 +79,6 @@ namespace Villamos
 
         private void Ablak_Vizsgálat_ütemező_Load(object sender, EventArgs e)
         {
-            Fülek.SelectedIndex = 0;
-            Fülekkitöltése();
-            Vonal_tábla_író();
-            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
         private void Ablak_T5C5_Vizsgálat_ütemező_FormClosed(object sender, FormClosedEventArgs e)
@@ -124,15 +120,6 @@ namespace Villamos
 
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
 
-                Command10_Listát_töröl.Enabled = false;
-                Vonal_fel.Enabled = false;
-                Command7_Rögzítés.Enabled = false;
-
-                Btnrögzítés.Enabled = false;
-
-                Email.Enabled = false;
-                Ciklus_Mentés.Enabled = false;
-
                 melyikelem = 103;
                 // módosítás 1 Dolgozók ki és beléptetése
 
@@ -154,16 +141,11 @@ namespace Villamos
 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-                    Command10_Listát_töröl.Enabled = true;
-                    Vonal_fel.Enabled = true;
-                    Command7_Rögzítés.Enabled = true;
                 }
                 // módosítás 2 
 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-                    Email.Enabled = true;
-                    Ciklus_Mentés.Enabled = true;
                 }
 
                 // módosítás 3 
@@ -175,7 +157,7 @@ namespace Villamos
                 // módosítás 1 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-                    Btnrögzítés.Enabled = true;
+
                 }
                 // módosítás 2 
                 if (MyF.Vanjoga(melyikelem, 1))
@@ -198,56 +180,7 @@ namespace Villamos
             }
         }
 
-        private void BtnSúgó_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\V2Vizsgálat.html";
-                Module_Excel.Megnyitás(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
-        private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Fülekkitöltése();
-        }
-
-        private void Fülekkitöltése()
-        {
-            switch (Fülek.SelectedIndex)
-            {
-                case 0:
-                    {
-                        break;
-                    }
-
-                case 1:
-                    {
-                        Vonal_tábla_író();
-                        break;
-                    }
-
-                case 2:
-                    {
-                        Utasítás_Írás();
-                        break;
-                    }
-                case 3:
-                    {
-                        Felmentés_kiírás();
-                        break;
-                    }
-            }
-        }
 
         private void Ablak_Vizsgálat_ütemező_KeyDown(object sender, KeyEventArgs e)
         {
@@ -266,297 +199,19 @@ namespace Villamos
             }
 
         }
-
-        private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            // Határozza meg, hogy melyik lap van jelenleg kiválasztva
-            TabPage SelectedTab = Fülek.TabPages[e.Index];
-
-            // Szerezze be a lap fejlécének területét
-            Rectangle HeaderRect = Fülek.GetTabRect(e.Index);
-
-            // Hozzon létreecsetet a szöveg megfestéséhez
-            SolidBrush BlackTextBrush = new SolidBrush(Color.Black);
-
-            // Állítsa be a szöveg igazítását
-            StringFormat sf = new StringFormat
-            {
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center
-            };
-
-            // Festse meg a szöveget a megfelelő félkövér és szín beállítással
-            if ((e.State & DrawItemState.Selected) != 0)
-            {
-                Font BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
-                // háttér szín beállítása
-                e.Graphics.FillRectangle(new SolidBrush(Color.DarkGray), e.Bounds);
-                Rectangle paddedBounds = e.Bounds;
-                paddedBounds.Inflate(0, 0);
-                e.Graphics.DrawString(SelectedTab.Text, BoldFont, BlackTextBrush, paddedBounds, sf);
-            }
-            else
-            {
-                e.Graphics.DrawString(SelectedTab.Text, e.Font, BlackTextBrush, HeaderRect, sf);
-            }
-            // Munka kész – dobja ki a keféket
-            BlackTextBrush.Dispose();
-        }
         #endregion
 
-
-        #region Vonalak lapfül
-        private void Command9_színkereső_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ColorDialog ColorDialog1 = new ColorDialog();
-                if (ColorDialog1.ShowDialog() != DialogResult.Cancel)
-                {
-                    Vonal_red.BackColor = ColorDialog1.Color;
-                    Vonal_green.BackColor = ColorDialog1.Color;
-                    Vonal_blue.BackColor = ColorDialog1.Color;
-
-                    Vonal_red.Text = ColorDialog1.Color.R.ToString();
-                    Vonal_green.Text = ColorDialog1.Color.G.ToString();
-                    Vonal_blue.Text = ColorDialog1.Color.B.ToString();
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Command8_Új_Click(object sender, EventArgs e)
-        {
-            Vonal_kiürít();
-        }
-
-        private void Command7_Rögzítés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Vonal_Vonal.Text.Trim() == "") throw new HibásBevittAdat("A Vonal beviteli mező nem lehet üres.");
-                if (Vonal_Mennyiség.Text.Trim() == "") throw new HibásBevittAdat("A Mennyiség beviteli mező nem lehet üres.");
-                if (Vonal_red.Text.Trim() == "") throw new HibásBevittAdat("A Szín beviteli mező nem lehet üres.");
-                if (Vonal_green.Text.Trim() == "") throw new HibásBevittAdat("A Szín beviteli mező nem lehet üres.");
-                if (Vonal_blue.Text.Trim() == "") throw new HibásBevittAdat("A Szín beviteli mező nem lehet üres.");
-                if (!int.TryParse(Vonal_red.Text.Trim(), out int Red)) Red = 0;
-                if (!int.TryParse(Vonal_green.Text.Trim(), out int Green)) Green = 0;
-                if (!int.TryParse(Vonal_blue.Text.Trim(), out int Blue)) Blue = 0;
-                if (!long.TryParse(Vonal_Mennyiség.Text.Trim(), out long Mennyiség)) Mennyiség = 0;
-                if (!long.TryParse(Vonal_Id.Text.Trim(), out long Id)) Id = 0;
-
-
-                Vonal_Vonal.Text = MyF.Szöveg_Tisztítás(Vonal_Vonal.Text, 0, 20);
-
-                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
-                Adat_Hétvége_Előírás ElőírásElem = (from a in AdatokElőírás
-                                                    where a.Id == Id
-                                                    select a).FirstOrDefault();
-
-                Adat_Hétvége_Előírás ADAT = new Adat_Hétvége_Előírás(
-                    Id,
-                    Vonal_Vonal.Text.Trim(),
-                    Mennyiség,
-                    Red,
-                    Green,
-                    Blue);
-
-                if (ElőírásElem != null)
-                    KézElőírás.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
-                else
-                    KézElőírás.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
-
-                Vonal_tábla_író();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Command11_frissít_Click(object sender, EventArgs e)
-        {
-            Vonal_tábla_író();
-        }
-
-        private void Vonal_tábla_író()
-        {
-            try
-            {
-                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
-
-                Vonal_tábla.Rows.Clear();
-                Vonal_tábla.Columns.Clear();
-                Vonal_tábla.Refresh();
-                Vonal_tábla.Visible = false;
-                Vonal_tábla.ColumnCount = 6;
-
-                // fejléc elkészítése
-                Vonal_tábla.Columns[0].HeaderText = "Sorszám";
-                Vonal_tábla.Columns[0].Width = 100;
-                Vonal_tábla.Columns[1].HeaderText = "Vonal";
-                Vonal_tábla.Columns[1].Width = 200;
-                Vonal_tábla.Columns[2].HeaderText = "Mennyiség";
-                Vonal_tábla.Columns[2].Width = 200;
-                Vonal_tábla.Columns[3].HeaderText = "Piros";
-                Vonal_tábla.Columns[3].Width = 100;
-                Vonal_tábla.Columns[4].HeaderText = "Zöld";
-                Vonal_tábla.Columns[4].Width = 100;
-                Vonal_tábla.Columns[5].HeaderText = "Kék";
-                Vonal_tábla.Columns[5].Width = 100;
-
-                foreach (Adat_Hétvége_Előírás rekord in AdatokElőírás)
-                {
-                    Vonal_tábla.RowCount++;
-                    int i = Vonal_tábla.RowCount - 1;
-
-                    Vonal_tábla.Rows[i].Cells[0].Value = rekord.Id;
-                    Vonal_tábla.Rows[i].Cells[1].Value = rekord.Vonal;
-                    Vonal_tábla.Rows[i].Cells[2].Value = rekord.Mennyiség;
-                    Vonal_tábla.Rows[i].Cells[3].Value = rekord.Red;
-                    Vonal_tábla.Rows[i].Cells[4].Value = rekord.Green;
-                    Vonal_tábla.Rows[i].Cells[5].Value = rekord.Blue;
-                    Vonal_tábla.Rows[i].Cells[3].Style.BackColor = Color.FromArgb(rekord.Red, rekord.Green, rekord.Blue);
-                    Vonal_tábla.Rows[i].Cells[4].Style.BackColor = Color.FromArgb(rekord.Red, rekord.Green, rekord.Blue);
-                    Vonal_tábla.Rows[i].Cells[5].Style.BackColor = Color.FromArgb(rekord.Red, rekord.Green, rekord.Blue);
-                }
-
-                Vonal_tábla.Visible = true;
-                Vonal_tábla.Refresh();
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Command10_Listát_töröl_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Vonal_Id.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelöve a törlendő tétel");
-                if (!long.TryParse(Vonal_Id.Text, out long Id)) throw new HibásBevittAdat("Nincs kijelöve a törlendő tétel");
-                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
-
-                Adat_Hétvége_Előírás ElőírásElem = (from a in AdatokElőírás
-                                                    where a.Id == Id
-                                                    select a).FirstOrDefault();
-
-                if (ElőírásElem != null)
-                    KézElőírás.Törlés(Cmbtelephely.Text.Trim(), Id);
-
-                Vonal_tábla_író();
-                Vonal_kiürít();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Vonal_kiürít()
-        {
-            Vonal_Id.Text = "";
-            Vonal_Vonal.Text = "";
-            Vonal_Mennyiség.Text = "";
-            Vonal_red.Text = "";
-            Vonal_green.Text = "";
-            Vonal_blue.Text = "";
-            Vonal_red.BackColor = Color.White;
-            Vonal_green.BackColor = Color.White;
-            Vonal_blue.BackColor = Color.White;
-        }
-
-        private void Vonal_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (e.RowIndex < 0) return;
-
-                Vonal_Id.Text = Vonal_tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
-                Vonal_Vonal.Text = Vonal_tábla.Rows[e.RowIndex].Cells[1].Value.ToString();
-                Vonal_Mennyiség.Text = Vonal_tábla.Rows[e.RowIndex].Cells[2].Value.ToString();
-
-                Vonal_red.Text = Vonal_tábla.Rows[e.RowIndex].Cells[3].Value.ToString();
-                Vonal_green.Text = Vonal_tábla.Rows[e.RowIndex].Cells[4].Value.ToString();
-                Vonal_blue.Text = Vonal_tábla.Rows[e.RowIndex].Cells[5].Value.ToString();
-
-                Vonal_red.BackColor = Color.FromArgb(int.Parse(Vonal_red.Text), int.Parse(Vonal_green.Text), int.Parse(Vonal_blue.Text));
-                Vonal_green.BackColor = Color.FromArgb(int.Parse(Vonal_red.Text), int.Parse(Vonal_green.Text), int.Parse(Vonal_blue.Text));
-                Vonal_blue.BackColor = Color.FromArgb(int.Parse(Vonal_red.Text), int.Parse(Vonal_green.Text), int.Parse(Vonal_blue.Text));
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Vonal_fel_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Vonal_Id.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve Vonal.");
-                if (!long.TryParse(Vonal_Id.Text.Trim(), out long ID)) ID = 0;
-                if (ID <= 1) throw new HibásBevittAdat("Az első elemet nem lehet előrébb tenni.");
-                KézElőírás.Csere(Cmbtelephely.Text.Trim(), ID);
-                Vonal_tábla_író();
-                Vonal_kiürít();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
 
 
         #region V ütemező
         private void AktuálisSzerelvénySzerintiListaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Fülek.SelectedIndex = 0;
-            Tábla_kitöltés();
-            Terv = false;
+
         }
 
         private void ElőírtSzerelvénySzerintiListaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Fülek.SelectedIndex = 0;
-            Tábla_kitöltés();
-            Terv = true;
+
         }
 
         private void Tábla_kitöltés()
@@ -1556,11 +1211,6 @@ namespace Villamos
                     else
                         Tény = Tábla.Rows[sor].Cells[25].Value.ToString();
                 }
-                //Ciklusba átírjuk a pályaszámot és a többi adatot
-                Ciklus_Pályaszám.Text = Tábla.Rows[sor].Cells[1].Value.ToString();
-                CiklusTípus.Text = Tábla.Rows[sor].Cells[19].Value.ToString();
-                J_tőlFutott.Text = Tábla.Rows[sor].Cells[18].Value.ToString();
-                Következő_vizsgálat.Text = Tábla.Rows[sor].Cells[8].Value.ToString();
 
                 //Hány kocsiból áll a szerelvény
                 string[] darab = Tény.Split('-');
@@ -1706,8 +1356,9 @@ namespace Villamos
         #endregion
 
 
-        #region Menü
-        private void SzínválasztóToolStripMenuItem_Click(object sender, EventArgs e)
+        #region Gombok
+
+        private void Színválasztó_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1741,25 +1392,12 @@ namespace Villamos
             }
         }
 
-        private void SzínezToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!SzínezToolStripMenuItem.Checked)
-                SzínezToolStripMenuItem.Checked = true;
-            else
-                SzínezToolStripMenuItem.Checked = false;
-        }
-
-        private void KeresésCtrlFToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Keresés_metódus();
-        }
-
-        private void BeosztásAdatokTörléseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
             {
-                if (MessageBox.Show("Valóban töröljük az eddigi adatokat?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                    KézHBeosztás.Törlés(Cmbtelephely.Text.Trim());
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\V2Vizsgálat.html";
+                Module_Excel.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1772,7 +1410,27 @@ namespace Villamos
             }
         }
 
-        private void AktuálisSzerelvénySzerintVizsgálatToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void Előírt_Click(object sender, EventArgs e)
+        {
+
+            Tábla_kitöltés();
+            Terv = true;
+        }
+
+        private void AktuálisLista_Click(object sender, EventArgs e)
+        {
+
+            Tábla_kitöltés();
+            Terv = false;
+        }
+
+        private void Excel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AktSzerelvény_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1887,29 +1545,17 @@ namespace Villamos
             }
         }
 
-        private void ExcelKimenetKészítéseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Kereső_Click(object sender, EventArgs e)
+        {
+            Keresés_metódus();
+        }
+
+        private void BeosztásTörlés_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla.Rows.Count <= 0) return;
-                string fájlexc;
-
-                // kimeneti fájl helye és neve
-                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = $"T5C5_Vizsgálat_{Program.PostásTelephely.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
-                    Filter = "Excel |*.xlsx"
-                };
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    fájlexc = SaveFileDialog1.FileName;
-                else
-                    return;
-                Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
-                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                if (MessageBox.Show("Valóban töröljük az eddigi adatokat?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    KézHBeosztás.Törlés(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -1921,56 +1567,51 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
         #endregion
+        private void Utasítás_Click(object sender, EventArgs e)
+        { }
 
-
-        #region Utasítás
-        private void Utasítás_tervezet_Click(object sender, EventArgs e)
-        {
-            Utasítás_Írás();
-        }
-
-        private void Utasítás_Írás()
+        private void UtasításSzövegTervezet()
         {
             try
             {
-                Txtírásimező.Text = "";
-                // kiírja a hétvégi előírást
-
+                UtasításSzöveg = "";
                 string előzővonal = "";
-                Txtírásimező.Text = "";
-                string szöveg0;
+
+                string szöveg;
                 int i = 0;
                 List<Adat_Hétvége_Beosztás> Adatok = KézHBeosztás.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                szöveg0 = "20 -n forgalomba kell adni:\r\n";
+                szöveg = "20 -n forgalomba kell adni:\r\n";
 
                 foreach (Adat_Hétvége_Beosztás rekord in Adatok)
                 {
                     if (előzővonal.Trim() == "" || előzővonal.Trim() != rekord.Vonal.Trim())
                     {
                         előzővonal = rekord.Vonal.Trim();
-                        szöveg0 += $"\r\n {rekord.Vonal.Trim()} Vonal\r\n\r\n";
+                        szöveg += $"\r\n {rekord.Vonal.Trim()} Vonal\r\n\r\n";
                         i = 0;
                     }
                     i++;
-                    szöveg0 += i.ToString() + "- ";
-                    if (rekord.Kocsi1.Trim() != "") szöveg0 += rekord.Kocsi1.Trim();
-                    if (rekord.Kocsi2.Trim() != "") szöveg0 += "-" + rekord.Kocsi2.Trim();
-                    if (rekord.Kocsi3.Trim() != "") szöveg0 += "-" + rekord.Kocsi3.Trim();
-                    if (rekord.Kocsi4.Trim() != "") szöveg0 += "-" + rekord.Kocsi4.Trim();
-                    if (rekord.Kocsi5.Trim() != "") szöveg0 += "-" + rekord.Kocsi5.Trim();
-                    if (rekord.Kocsi6.Trim() != "") szöveg0 += "-" + rekord.Kocsi6.Trim();
+                    szöveg += i.ToString() + "- ";
+                    if (rekord.Kocsi1.Trim() != "") szöveg += rekord.Kocsi1.Trim();
+                    if (rekord.Kocsi2.Trim() != "") szöveg += "-" + rekord.Kocsi2.Trim();
+                    if (rekord.Kocsi3.Trim() != "") szöveg += "-" + rekord.Kocsi3.Trim();
+                    if (rekord.Kocsi4.Trim() != "") szöveg += "-" + rekord.Kocsi4.Trim();
+                    if (rekord.Kocsi5.Trim() != "") szöveg += "-" + rekord.Kocsi5.Trim();
+                    if (rekord.Kocsi6.Trim() != "") szöveg += "-" + rekord.Kocsi6.Trim();
 
-                    if (rekord.Vissza1 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi1.Trim();
-                    if (rekord.Vissza2 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi2.Trim();
-                    if (rekord.Vissza3 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi3.Trim();
-                    if (rekord.Vissza4 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi4.Trim();
-                    if (rekord.Vissza5 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi5.Trim();
-                    if (rekord.Vissza6 == "1") szöveg0 += " Vissza kell csatolni:" + rekord.Kocsi6.Trim();
-                    szöveg0 += "\r\n";
+                    if (rekord.Vissza1 == "1") szöveg += " Vissza kell csatolni:" + rekord.Kocsi1.Trim();
+                    if (rekord.Vissza2 == "1") szöveg += " Vissza kell csatolni:" + rekord.Kocsi2.Trim();
+                    if (rekord.Vissza3 == "1") szöveg += " Vissza kell csatolni:" + rekord.Kocsi3.Trim();
+                    if (rekord.Vissza4 == "1") szöveg += " Vissza kell csatolni:" + rekord.Kocsi4.Trim();
+                    if (rekord.Vissza5 == "1") szöveg += " Vissza kell csatolni:" + rekord.Kocsi5.Trim();
+                    if (rekord.Vissza6 == "1") szöveg += " Vissza kell csatolni:" + rekord.Kocsi6.Trim();
+                    szöveg += "\r\n";
                 }
-                Txtírásimező.Text += szöveg0 + "\r\n";
+                UtasításSzöveg += szöveg + "\r\n";
             }
             catch (HibásBevittAdat ex)
             {
@@ -1982,391 +1623,5 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void Btnrögzítés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Txtírásimező.Text.Trim() == "") return;
-                // megtisztítjuk a szöveget
-
-                Txtírásimező.Text = Txtírásimező.Text.Replace('"', '°').Replace('\'', '°');
-
-                Adat_Utasítás ADAT = new Adat_Utasítás(
-                              0,
-                              Txtírásimező.Text.Trim(),
-                              Program.PostásNév.Trim(),
-                              DateTime.Now,
-                              0);
-                KézUtasítás.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today.Year, ADAT);
-
-                MessageBox.Show($"Az utasítás rögzítése megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Utasítás_törlés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Valóban töröljük az eddigi adatokat?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                    KézHBeosztás.Törlés(Cmbtelephely.Text.Trim());
-                Utasítás_Írás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-
-
-        #region Ciklus eltolás
-        private void Email_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MyO._Application _app = new MyO.Application();
-                MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
-                string Tábla_html;
-
-                // címzett
-                mail.To = Címzett.Text.Trim();
-
-                mail.CC = Másolat.Text.Trim(); // másolatot kap
-
-                string szöveg = Tárgy.Text.Trim();
-                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("ŁŁ", Következő_vizsgálat.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
-                mail.Subject = szöveg.Trim(); // üzenet tárgya
-
-                // üzent szövege
-                mail.HTMLBody = "<html><body> <p> ";
-                // üzent szövege
-                szöveg = Bevezetés.Text.Trim() + "<br>";
-                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("ŁŁ", Következő_vizsgálat.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
-                mail.HTMLBody += szöveg + "</p>";
-
-                // Table start.
-                // Adding fejléc.
-                Tábla_html = "<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 12pt'><tr>";
-                foreach (DataGridViewColumn column in Vizs_tábla.Columns)
-                    Tábla_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>" + column.HeaderText + "</th>";
-                Tábla_html += "</tr>";
-                // Adding adatsorok.
-                foreach (DataGridViewRow row in Vizs_tábla.Rows)
-                {
-                    Tábla_html += "<tr>";
-
-                    foreach (DataGridViewCell cell in row.Cells)
-                        Tábla_html += "<td style='width:120px;border: 1px solid #ccc'>" + cell.Value.ToString() + "</td>";
-
-                    Tábla_html += "</tr>";
-                }
-                Tábla_html += "</table>";
-                // Table end.
-                mail.HTMLBody += Tábla_html;
-
-                szöveg = "<p>" + Tárgyalás.Text.Trim() + "<br>";
-                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("ŁŁ", Következő_vizsgálat.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
-                mail.HTMLBody += szöveg + "</p>";
-
-
-                // Table start.
-                // Adding fejléc.
-                Tábla_html = "<table cellpadding='5' cellspacing='0' style='border: 1px solid #ccc;font-size: 12pt'><tr>";
-                foreach (DataGridViewColumn column in Keréktábla.Columns)
-                    Tábla_html += "<th style='background-color: #B8DBFD;border: 1px solid #ccc'>" + column.HeaderText + "</th>";
-                Tábla_html += "</tr>";
-                // Adding adatsorok.
-                foreach (DataGridViewRow row in Keréktábla.Rows)
-                {
-                    Tábla_html += "<tr>";
-
-                    foreach (DataGridViewCell cell in row.Cells)
-                        Tábla_html += "<td style='width:120px;border: 1px solid #ccc'>" + cell.Value.ToString() + "</td>";
-
-                    Tábla_html += "</tr>";
-                }
-                Tábla_html += "</table>";
-                // Table end.
-                mail.HTMLBody += Tábla_html;
-                szöveg = "<p>" + Befejezés.Text.Trim() + "<br>";
-                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("ŁŁ", Következő_vizsgálat.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
-                mail.HTMLBody += szöveg;
-
-                mail.HTMLBody += "</p></body></html>  ";
-
-                // outlook
-                mail.Importance = MyO.OlImportance.olImportanceNormal;
-                ((MyO._MailItem)mail).Send();
-
-                MessageBox.Show("Üzenet el lett küldve", "Üzenet küldés sikeres", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Berendezés_adatok()
-        {
-            try
-            {
-                if (Ciklus_Pályaszám.Text.Trim() == "") throw new HibásBevittAdat("A Pályaszám beviteli mező nem lehet üres");
-
-                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
-                Adatok = (from a in Adatok
-                          where a.Azonosító == Ciklus_Pályaszám.Text.Trim()
-                          && a.Objektumfajta == "V.KERÉKPÁR"
-                          orderby a.Pozíció
-                          select a).ToList();
-
-                List<Adat_Kerék_Mérés> AdatokMérés = Mérés_kéz.Lista_Adatok(DateTime.Today.Year);
-                List<Adat_Kerék_Mérés> Ideig = Mérés_kéz.Lista_Adatok(DateTime.Today.Year - 1);
-                AdatokMérés.AddRange(Ideig);
-                AdatokMérés = (from a in AdatokMérés
-                               orderby a.Kerékberendezés ascending, a.Mikor descending
-                               select a).ToList();
-
-                Keréktábla.Rows.Clear();
-                Keréktábla.Columns.Clear();
-                Keréktábla.Refresh();
-                Keréktábla.Visible = false;
-                Keréktábla.ColumnCount = 8;
-
-                // fejléc elkészítése
-                Keréktábla.Columns[0].HeaderText = "Psz";
-                Keréktábla.Columns[0].Width = 50;
-                Keréktábla.Columns[1].HeaderText = "Berendezésszám";
-                Keréktábla.Columns[1].Width = 150;
-                Keréktábla.Columns[2].HeaderText = "Gyári szám";
-                Keréktábla.Columns[2].Width = 100;
-                Keréktábla.Columns[3].HeaderText = "Pozíció";
-                Keréktábla.Columns[3].Width = 100;
-                Keréktábla.Columns[4].HeaderText = "Mérés Dátuma";
-                Keréktábla.Columns[4].Width = 170;
-                Keréktábla.Columns[5].HeaderText = "Állapot";
-                Keréktábla.Columns[5].Width = 100;
-                Keréktábla.Columns[6].HeaderText = "Méret";
-                Keréktábla.Columns[6].Width = 100;
-                Keréktábla.Columns[7].HeaderText = "Megnevezés";
-                Keréktábla.Columns[7].Width = 300;
-
-                foreach (Adat_Kerék_Tábla rekord in Adatok)
-                {
-                    Keréktábla.RowCount++;
-                    int i = Keréktábla.RowCount - 1;
-                    Keréktábla.Rows[i].Cells[0].Value = rekord.Azonosító;
-                    Keréktábla.Rows[i].Cells[1].Value = rekord.Kerékberendezés;
-                    Keréktábla.Rows[i].Cells[2].Value = rekord.Kerékgyártásiszám;
-                    Keréktábla.Rows[i].Cells[3].Value = rekord.Pozíció;
-                    Keréktábla.Rows[i].Cells[7].Value = rekord.Kerékmegnevezés;
-                    Adat_Kerék_Mérés Mérés = (from a in AdatokMérés
-                                              where a.Kerékberendezés == rekord.Kerékberendezés
-                                              select a).FirstOrDefault();
-                    if (Mérés != null)
-                    {
-                        Keréktábla.Rows[i].Cells[4].Value = Mérés.Mikor;
-                        Keréktábla.Rows[i].Cells[5].Value = Mérés.Állapot.Trim();
-                        Keréktábla.Rows[i].Cells[6].Value = Mérés.Méret;
-                    }
-                }
-
-                Keréktábla.Visible = true;
-                Keréktábla.Refresh();
-                Keréktábla.Sort(Keréktábla.Columns[3], System.ComponentModel.ListSortDirection.Ascending);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void CiklusFrissít_Click(object sender, EventArgs e)
-        {
-            KMU_kiírása();
-            Berendezés_adatok();
-            Kiirjaatörténelmet();
-        }
-
-        private void KMU_kiírása()
-        {
-            try
-            {
-                if (Ciklus_Pályaszám.Text.Trim() == "") return;
-                V_km_adatok_lista();
-                Adat_T5C5_Kmadatok ElemKm = (from a in AdatokVkm
-                                             where a.Azonosító == Ciklus_Pályaszám.Text.Trim()
-                                             && a.Törölt == false
-                                             orderby a.Vizsgdátumk descending
-                                             select a).FirstOrDefault();
-                J_tőlFutott.Text = ElemKm.KMUkm.ToString();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Kiirjaatörténelmet()
-        {
-            try
-            {
-                V_km_adatok_lista();
-                List<Adat_T5C5_Kmadatok> Adatok = (from a in AdatokVkm
-                                                   where a.Azonosító == Ciklus_Pályaszám.Text.Trim()
-                                                   && a.Törölt == false
-                                                   orderby a.Vizsgdátumv descending
-                                                   select a).ToList();
-                Vizs_tábla.Rows.Clear();
-                Vizs_tábla.Columns.Clear();
-                Vizs_tábla.Refresh();
-                Vizs_tábla.Visible = false;
-                Vizs_tábla.ColumnCount = 5;
-
-                // fejléc elkészítése
-                Vizs_tábla.Columns[0].HeaderText = "Ssz.";
-                Vizs_tábla.Columns[0].Width = 80;
-                Vizs_tábla.Columns[1].HeaderText = "Psz";
-                Vizs_tábla.Columns[1].Width = 80;
-                Vizs_tábla.Columns[2].HeaderText = "Vizsg. foka";
-                Vizs_tábla.Columns[2].Width = 80;
-                Vizs_tábla.Columns[3].HeaderText = "Vizsg. Ssz.";
-                Vizs_tábla.Columns[3].Width = 80;
-                Vizs_tábla.Columns[4].HeaderText = "Vizsg. Vége";
-                Vizs_tábla.Columns[4].Width = 110;
-
-                int i;
-
-                foreach (Adat_T5C5_Kmadatok rekord in Adatok)
-                {
-                    if (rekord.Vizsgfok.Contains("V2") || rekord.Vizsgfok.Contains("V3") || rekord.Vizsgfok.Contains("J"))
-                    {
-                        Vizs_tábla.RowCount++;
-                        i = Vizs_tábla.RowCount - 1;
-                        Vizs_tábla.Rows[i].Cells[0].Value = rekord.ID;
-                        Vizs_tábla.Rows[i].Cells[1].Value = rekord.Azonosító;
-                        Vizs_tábla.Rows[i].Cells[2].Value = rekord.Vizsgfok;
-                        Vizs_tábla.Rows[i].Cells[3].Value = rekord.Vizsgsorszám;
-                        Vizs_tábla.Rows[i].Cells[4].Value = rekord.Vizsgdátumv.ToString("yyyy.MM.dd");
-                    }
-                    if (rekord.Vizsgsorszám == 0)
-                        break;
-                }
-                Vizs_tábla.Visible = true;
-                Vizs_tábla.Sort(Vizs_tábla.Columns[4], System.ComponentModel.ListSortDirection.Ascending);
-                Vizs_tábla.Refresh();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Ciklus_Mentés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Címzett.Text.Trim() == "") throw new HibásBevittAdat("A Címzett mező nem lehet üres.");
-                if (CiklusTípus.Text.Trim() == "") throw new HibásBevittAdat("A Ciklus típus mező nem lehet üres.");
-                if (Másolat.Text.Trim() == "") Másolat.Text = "_";
-                if (Tárgy.Text.Trim() == "") throw new HibásBevittAdat("A Tárgy mező nem lehet üres.");
-                if (Kért_vizsgálat.Text.Trim() == "") throw new HibásBevittAdat("A Kért vizsgálat mező nem lehet üres.");
-                if (Bevezetés.Text.Trim() == "") throw new HibásBevittAdat("A Bevezetés mező nem lehet üres.");
-                if (Tárgyalás.Text.Trim() == "") throw new HibásBevittAdat("A Tárgyalás mező nem lehet üres.");
-                if (Befejezés.Text.Trim() == "") throw new HibásBevittAdat("A Befejezés mező nem lehet üres.");
-                if (!int.TryParse(Felmentés_Id.Text, out int Id)) Id = 0;
-
-                List<Adat_Kiegészítő_Felmentés> Adatok = KézFelmentés.Lista_Adatok(Cmbtelephely.Text.Trim());
-                Adat_Kiegészítő_Felmentés Elem = (from a in Adatok
-                                                  where a.CiklusTípus == CiklusTípus.Text.Trim()
-                                                  select a).FirstOrDefault();
-                Adat_Kiegészítő_Felmentés ADAT = new Adat_Kiegészítő_Felmentés(
-                                          Id,
-                                          Címzett.Text.Trim(),
-                                          Másolat.Text.Trim(),
-                                          Tárgy.Text.Trim(),
-                                          Kért_vizsgálat.Text.Trim(),
-                                          Bevezetés.Text.Trim(),
-                                          Tárgyalás.Text.Trim(),
-                                          Befejezés.Text.Trim(),
-                                          CiklusTípus.Text.Trim());
-                if (Elem != null)
-                    KézFelmentés.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
-                else
-                    KézFelmentés.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
-
-                MessageBox.Show("Az adatok Mentése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Felmentés_kiírás()
-        {
-            List<Adat_Kiegészítő_Felmentés> Adatok = KézFelmentés.Lista_Adatok(Cmbtelephely.Text.Trim());
-
-            Adat_Kiegészítő_Felmentés rekord = (from a in Adatok
-                                                where a.CiklusTípus == CiklusTípus.Text.Trim()
-                                                select a).FirstOrDefault();
-
-            if (rekord != null)
-            {
-                Címzett.Text = rekord.Címzett;
-                Másolat.Text = rekord.Másolat;
-                Tárgy.Text = rekord.Tárgy;
-                Kért_vizsgálat.Text = rekord.Kértvizsgálat;
-                Bevezetés.Text = rekord.Bevezetés;
-                Tárgyalás.Text = rekord.Tárgyalás;
-                Befejezés.Text = rekord.Befejezés;
-                CiklusTípus.Text = rekord.CiklusTípus;
-                Felmentés_Id.Text = rekord.Id.ToString();
-            }
-            else
-            {
-                MessageBox.Show("Ehhez a Ciklus típushoz nincsenek még beállítva adatok!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-        #endregion
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Villamos.Adatszerkezet;
+﻿using Villamos.Adatszerkezet;
 
 namespace Villamos.Villamos_Adatbázis_Funkció
 {
@@ -19,7 +14,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
             szöveg = "CREATE TABLE Alap (";
             szöveg += "[azonosító]  char (10),";
-            szöveg += "[Ciklusrend]  char (10),";
+            szöveg += "[Ciklusrend]  char (15),";
             szöveg += "[kötöttstart] YESNO, ";
             szöveg += "[megállítás] YESNO, ";
             szöveg += "[start] DATE,";
@@ -70,7 +65,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
             szöveg = "CREATE TABLE Alapnapló (";
             szöveg += "[azonosító]  char (10),";
-            szöveg += "[Ciklusrend]  char (10),";
+            szöveg += "[Ciklusrend]  char (15),";
             szöveg += "[kötöttstart] YESNO, ";
             szöveg += "[megállítás] YESNO, ";
             szöveg += "[Oka]  char (255),";
@@ -94,7 +89,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
             szöveg = "CREATE TABLE ütemezésnapló (";
             szöveg += "[azonosító]  char (10),";
-            szöveg += "[Ciklusrend]  char (10),";
+            szöveg += "[Ciklusrend]  char (15),";
             szöveg += "[Elkészült] YESNO, ";
             szöveg += "[Megjegyzés]  char (255),";
             szöveg += "[rögzítésideje] DATE,";
