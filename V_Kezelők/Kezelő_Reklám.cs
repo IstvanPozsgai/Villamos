@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos5.mdb";
         readonly string jelszó = "morecs";
+        readonly string táblanév = "reklámtábla";
 
         public Kezelő_Reklám()
         {
@@ -26,7 +27,7 @@ namespace Villamos.Kezelők
             try
             {
                 Adat_Reklám Adat;
-                string szöveg = $"SELECT * FROM reklámtábla";
+                string szöveg = $"SELECT * FROM {táblanév}";
 
                 string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
                 using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -72,7 +73,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE reklámtábla  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"kezdődátum='{Adat.Kezdődátum:yyyy.MM.dd}', ";
                 szöveg += $"befejeződátum='{Adat.Befejeződátum:yyyy.MM.dd}', ";
                 szöveg += $"reklámneve='{MyF.Szöveg_Tisztítás(Adat.Reklámneve)}', ";
@@ -102,11 +103,11 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO reklámtábla  (azonosító, kezdődátum, befejeződátum, reklámneve, viszonylat, telephely, reklámmérete,";
+                string szöveg = $"INSERT INTO {táblanév}  (azonosító, kezdődátum, befejeződátum, reklámneve, viszonylat, telephely, reklámmérete,";
                 szöveg += " ragasztásitilalom, szerelvény, szerelvényben, megjegyzés, típus) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', '2000.01.01', '2000.01.01', '*', '*',";
                 szöveg += $"'{Adat.Telephely}', '*',";
-                szöveg += $"'{Adat.Ragasztásitilalom:yyyy.MM.dd}'', '*', 0,  '*', ";
+                szöveg += $"'{Adat.Ragasztásitilalom:yyyy.MM.dd}', '*', 0,  '*', ";
                 szöveg += $"'{Adat.Típus}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -125,7 +126,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE reklámtábla  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"ragasztásitilalom='{Adat.Ragasztásitilalom:yyyy.MM.dd}' ";
                 szöveg += $" WHERE [azonosító]='{Adat.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

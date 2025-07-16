@@ -1528,7 +1528,7 @@ namespace Villamos
 
                 for (int j = 0; j < Cmbtelephely.Items.Count; j++)
                 {
-                    if (Cmbtelephely.GetItemChecked(j) == true)
+                    if (Cmbtelephely.GetItemChecked(j))
                     {
                         List<Adat_Dolgozó_Alap> Adatok = KézDolg.Lista_Adatok(Cmbtelephely.Items[j].ToStrTrim());
                         Adatok = (from a in Adatok
@@ -1716,7 +1716,13 @@ namespace Villamos
                 if (PDFMunkakör.Text.Trim() == "") return;
 
                 List<Adat_Munkakör> AdatokÖ = KézMunkakör.Lista_Adatok();
-                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolg.Lista_Adatok(Cmbtelephely.Text.Trim());
+                List<Adat_Dolgozó_Alap> AdatokDolg = new List<Adat_Dolgozó_Alap>();
+                for (int i = 0; i < Cmbtelephely.CheckedItems.Count; i++)
+                {
+                    List<Adat_Dolgozó_Alap> ideig = KézDolg.Lista_Adatok(Cmbtelephely.CheckedItems[i].ToString());
+                    AdatokDolg.AddRange(ideig);
+                }
+
 
                 Munkakörtábla.Rows.Clear();
                 Munkakörtábla.Columns.Clear();
@@ -1744,46 +1750,50 @@ namespace Villamos
                 Munkakörtábla.Columns[8].Width = 100;
 
                 List<Adat_Munkakör> Adatok = (from a in AdatokÖ
-                                              where a.Telephely == Cmbtelephely.Text.Trim()
-                                              && a.Megnevezés == PDFMunkakör.Text.Trim()
+                                              where a.Megnevezés == PDFMunkakör.Text.Trim()
                                               && a.Státus == 0
                                               orderby a.ID
                                               select a).ToList();
 
                 foreach (Adat_Munkakör rekord in Adatok)
                 {
-                    Munkakörtábla.RowCount++;
-                    int i = Munkakörtábla.RowCount - 1;
-
-                    string Név = (from a in AdatokDolg
-                                  where a.Dolgozószám.Trim() == rekord.HRazonosító.Trim()
-                                  select a.DolgozóNév).FirstOrDefault().Trim();
-
-                    Munkakörtábla.Rows[i].Cells[0].Value = rekord.ID;
-                    Munkakörtábla.Rows[i].Cells[1].Value = rekord.HRazonosító.Trim();
-                    Munkakörtábla.Rows[i].Cells[2].Value = Név;
-                    Munkakörtábla.Rows[i].Cells[3].Value = rekord.Megnevezés.Trim();
-                    Munkakörtábla.Rows[i].Cells[4].Value = rekord.Telephely.Trim();
-                    Munkakörtábla.Rows[i].Cells[5].Value = rekord.PDFfájlnév.Trim();
-                    Munkakörtábla.Rows[i].Cells[6].Value = rekord.Rögzítő.Trim();
-                    Munkakörtábla.Rows[i].Cells[7].Value = rekord.Dátum.ToString("yyyy.MM.dd");
-                    switch (rekord.Státus)
+                    Adat_Dolgozó_Alap AdatNév = (from a in AdatokDolg
+                                                 where a.Dolgozószám.Trim() == rekord.HRazonosító.Trim()
+                                                 select a).FirstOrDefault();
+                    if (AdatNév != null)
                     {
-                        case 0:
-                            {
-                                Munkakörtábla.Rows[i].Cells[8].Value = "Érvényes";
-                                break;
-                            }
-                        case 1:
-                            {
-                                Munkakörtábla.Rows[i].Cells[8].Value = "Törölt";
-                                break;
-                            }
+                        Munkakörtábla.RowCount++;
+                        int i = Munkakörtábla.RowCount - 1;
+
+                        string Név = AdatNév.DolgozóNév;
+
+                        Munkakörtábla.Rows[i].Cells[0].Value = rekord.ID;
+                        Munkakörtábla.Rows[i].Cells[1].Value = rekord.HRazonosító.Trim();
+                        Munkakörtábla.Rows[i].Cells[2].Value = Név;
+                        Munkakörtábla.Rows[i].Cells[3].Value = rekord.Megnevezés.Trim();
+                        Munkakörtábla.Rows[i].Cells[4].Value = rekord.Telephely.Trim();
+                        Munkakörtábla.Rows[i].Cells[5].Value = rekord.PDFfájlnév.Trim();
+                        Munkakörtábla.Rows[i].Cells[6].Value = rekord.Rögzítő.Trim();
+                        Munkakörtábla.Rows[i].Cells[7].Value = rekord.Dátum.ToString("yyyy.MM.dd");
+                        switch (rekord.Státus)
+                        {
+                            case 0:
+                                {
+                                    Munkakörtábla.Rows[i].Cells[8].Value = "Érvényes";
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    Munkakörtábla.Rows[i].Cells[8].Value = "Törölt";
+                                    break;
+                                }
+                        }
                     }
                 }
 
                 Munkakörtábla.Visible = true;
                 Munkakörtábla.Refresh();
+                Munkakörtábla_Színezés();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1796,7 +1806,7 @@ namespace Villamos
             }
         }
 
-        private void Munkakörtábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void Munkakörtábla_Színezés()
         {
             // egész sor színezése ha törölt
             foreach (DataGridViewRow row in Munkakörtábla.Rows)
@@ -1852,6 +1862,7 @@ namespace Villamos
 
         private void Munkakörtábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 1) return;
             Munkakörtábla.Rows[e.RowIndex].Selected = true;
         }
         #endregion

@@ -775,7 +775,6 @@ namespace Villamos
             this.Munkakörtábla.Size = new System.Drawing.Size(1176, 245);
             this.Munkakörtábla.TabIndex = 120;
             this.Munkakörtábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Munkakörtábla_CellClick);
-            this.Munkakörtábla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Munkakörtábla_CellFormatting);
             this.Munkakörtábla.SelectionChanged += new System.EventHandler(this.Munkakörtábla_SelectionChanged);
             // 
             // TabPage5
