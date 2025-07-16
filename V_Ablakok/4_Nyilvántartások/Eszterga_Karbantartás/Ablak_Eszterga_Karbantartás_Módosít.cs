@@ -784,7 +784,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 );
 
                 if (AktivId != 0)
-                    Kez_Muvelet.MeglevoMuvelet_Modositas(ADAT);
+                    Kez_Muvelet.Modositas_MeglevoMuvelet(ADAT);
                 else
                     Kez_Muvelet.Rogzites(ADAT);
 

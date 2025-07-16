@@ -180,7 +180,7 @@ namespace Villamos.Villamos_Kezelők
         /// Ez a megjegyzés módosítására való
         /// </summary>
         /// <param name="Adat"></param>
-        public void Modositas(string Megjegyzés, int ID)
+        public void Modositas_Megjegyzes(string Megjegyzés, int ID)
         {
             try
             {
@@ -217,7 +217,7 @@ namespace Villamos.Villamos_Kezelők
         /// <summary>
         /// Egy meglévő műveleti rekord összes mezőjét módosítja.
         /// </summary>
-        public void MeglevoMuvelet_Modositas(Adat_Eszterga_Muveletek Adat)
+        public void Modositas_MeglevoMuvelet(Adat_Eszterga_Muveletek Adat)
         {
             try
             {

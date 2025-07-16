@@ -317,149 +317,151 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 AdatTabla.Columns.Add("Becsült Üzemóra");
                 AdatTabla.Columns.Add("Megjegyzés");
 
-                AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
-                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
-                TervDatum = DtmPckrElőTerv.Value.Date;
-                double SzuksegesNapok;
+                    AdatokMuvelet = Kez_Muvelet.Lista_Adatok()
+                        .Where(rekord => !rekord.Státus)
+                        .OrderBy(rekord => rekord.Művelet)
+                        .ToList();
+                    AdatokUzemora = Kez_Uzemora.Lista_Adatok();
+                    TervDatum = DtmPckrElőTerv.Value.Date;
+                    double SzuksegesNapok;
 
-                List<DataRow> RendezettSorok = new List<DataRow>();
+                    List<DataRow> RendezettSorok = new List<DataRow>();
 
-                foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
-                {
-                    // JAVÍTANDÓ: Ez miért kell?
-                    //kesz
-                    // Nincs kész miért nem linq?
-                    if (rekord.Státus) continue;
-
-                    int ID = rekord.ID;
-                    DateTime UtolsoDatum = rekord.Utolsó_Dátum;
-                    long UtolsoUzemora = rekord.Utolsó_Üzemóra_Állás;
-                    long BecsultUzemora = this.BecsultUzemora(TervDatum);
-
-                    // JAVÍTANDÓ:Mit csinálunk itt?
-                    //kesz felig
-                    // Addig generáljuk az új esedékességeket, amíg a dátum vagy az üzemóra nem lépi túl a tervezett határt.
-                    while (UtolsoDatum.AddDays(rekord.Mennyi_Dátum) <= TervDatum || (UtolsoUzemora + rekord.Mennyi_Óra) >= BecsultUzemora)
+                    foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
                     {
-                        bool Esedekes = false;
+                        // JAVÍTANDÓ: Ez miért kell?
+                        //kesz
+                        // Nincs kész miért nem linq?
 
-                        // --- DÁTUM típusú egység esetén ---
-                        if (rekord.Egység == (int)EsztergaEgyseg.Dátum)
+                        int ID = rekord.ID;
+                        DateTime UtolsoDatum = rekord.Utolsó_Dátum;
+                        long UtolsoUzemora = rekord.Utolsó_Üzemóra_Állás;
+                        long BecsultUzemora = this.BecsultUzemora(TervDatum);
+
+                        // JAVÍTANDÓ:Mit csinálunk itt?
+                        //kesz felig
+                        // Addig generáljuk az új esedékességeket, amíg a dátum vagy az üzemóra nem lépi túl a tervezett határt.
+                        while (UtolsoDatum.AddDays(rekord.Mennyi_Dátum) <= TervDatum || (UtolsoUzemora + rekord.Mennyi_Óra) >= BecsultUzemora)
                         {
-                            if ((TervDatum - UtolsoDatum).TotalDays >= rekord.Mennyi_Dátum)
+                            bool Esedekes = false;
+
+                            // --- DÁTUM típusú egység esetén ---
+                            if (rekord.Egység == (int)EsztergaEgyseg.Dátum)
                             {
-                                Esedekes = true;
-                                UtolsoDatum = UtolsoDatum.AddDays(rekord.Mennyi_Dátum);
-                            }
-                        }
-                        else
-                        {
-                            double AtlagosNapiUzemNovekedes = AtlagUzemoraNovekedesKiszamitasa(TervDatum);
-
-                            // --- ÜZEMÓRA típusú egység esetén ---
-                            if (rekord.Egység == (int)EsztergaEgyseg.Üzemóra)
-                            {
-                                if ((BecsultUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra)
-                                {
-                                    Esedekes = true;
-
-                                    SzuksegesNapok = Math.Ceiling(rekord.Mennyi_Óra / AtlagosNapiUzemNovekedes);
-
-                                    UtolsoDatum = UtolsoDatum.AddDays(SzuksegesNapok);
-                                    UtolsoUzemora += rekord.Mennyi_Óra;
-                                }
-                            }
-
-                            // --- BEKÖVETKEZÉS típus: dátum és üzemóra egyszerre számít ---
-                            else if (rekord.Egység == (int)EsztergaEgyseg.Bekövetkezés)
-                            {
-                                bool NapEsedekes = (TervDatum - UtolsoDatum).TotalDays >= rekord.Mennyi_Dátum;
-                                bool UzemoraEsedekes = (BecsultUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra;
-
-                                if (NapEsedekes && UzemoraEsedekes)
-                                {
-                                    // Mindkettő teljesült: a korábbi időpont számít
-                                    DateTime EsedekesDatumNap = UtolsoDatum.AddDays(rekord.Mennyi_Dátum);
-                                    DateTime EsedekesDatumUzemora = UtolsoDatum.AddDays(Math.Ceiling(rekord.Mennyi_Óra / AtlagosNapiUzemNovekedes));
-
-                                    if (EsedekesDatumNap <= EsedekesDatumUzemora)
-                                    {
-                                        Esedekes = true;
-                                        UtolsoDatum = EsedekesDatumNap;
-                                    }
-                                    else
-                                    {
-                                        Esedekes = true;
-                                        UtolsoDatum = EsedekesDatumUzemora;
-                                        UtolsoUzemora += rekord.Mennyi_Óra;
-                                    }
-                                }
-                                else if (NapEsedekes)
+                                if ((TervDatum - UtolsoDatum).TotalDays >= rekord.Mennyi_Dátum)
                                 {
                                     Esedekes = true;
                                     UtolsoDatum = UtolsoDatum.AddDays(rekord.Mennyi_Dátum);
                                 }
-                                else if (UzemoraEsedekes)
+                            }
+                            else
+                            {
+                                double AtlagosNapiUzemNovekedes = AtlagUzemoraNovekedesKiszamitasa(TervDatum);
+
+                                // --- ÜZEMÓRA típusú egység esetén ---
+                                if (rekord.Egység == (int)EsztergaEgyseg.Üzemóra)
                                 {
-                                    Esedekes = true;
-                                    SzuksegesNapok = Math.Ceiling(rekord.Mennyi_Óra / AtlagosNapiUzemNovekedes);
-                                    UtolsoUzemora += rekord.Mennyi_Óra;
-                                    UtolsoDatum = UtolsoDatum.AddDays(SzuksegesNapok);
+                                    if ((BecsultUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra)
+                                    {
+                                        Esedekes = true;
+
+                                        SzuksegesNapok = Math.Ceiling(rekord.Mennyi_Óra / AtlagosNapiUzemNovekedes);
+
+                                        UtolsoDatum = UtolsoDatum.AddDays(SzuksegesNapok);
+                                        UtolsoUzemora += rekord.Mennyi_Óra;
+                                    }
+                                }
+
+                                // --- BEKÖVETKEZÉS típus: dátum és üzemóra egyszerre számít ---
+                                else if (rekord.Egység == (int)EsztergaEgyseg.Bekövetkezés)
+                                {
+                                    bool NapEsedekes = (TervDatum - UtolsoDatum).TotalDays >= rekord.Mennyi_Dátum;
+                                    bool UzemoraEsedekes = (BecsultUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra;
+
+                                    if (NapEsedekes && UzemoraEsedekes)
+                                    {
+                                        // Mindkettő teljesült: a korábbi időpont számít
+                                        DateTime EsedekesDatumNap = UtolsoDatum.AddDays(rekord.Mennyi_Dátum);
+                                        DateTime EsedekesDatumUzemora = UtolsoDatum.AddDays(Math.Ceiling(rekord.Mennyi_Óra / AtlagosNapiUzemNovekedes));
+
+                                        if (EsedekesDatumNap <= EsedekesDatumUzemora)
+                                        {
+                                            Esedekes = true;
+                                            UtolsoDatum = EsedekesDatumNap;
+                                        }
+                                        else
+                                        {
+                                            Esedekes = true;
+                                            UtolsoDatum = EsedekesDatumUzemora;
+                                            UtolsoUzemora += rekord.Mennyi_Óra;
+                                        }
+                                    }
+                                    else if (NapEsedekes)
+                                    {
+                                        Esedekes = true;
+                                        UtolsoDatum = UtolsoDatum.AddDays(rekord.Mennyi_Dátum);
+                                    }
+                                    else if (UzemoraEsedekes)
+                                    {
+                                        Esedekes = true;
+                                        SzuksegesNapok = Math.Ceiling(rekord.Mennyi_Óra / AtlagosNapiUzemNovekedes);
+                                        UtolsoUzemora += rekord.Mennyi_Óra;
+                                        UtolsoDatum = UtolsoDatum.AddDays(SzuksegesNapok);
+                                    }
                                 }
                             }
+
+                            if (Esedekes && UtolsoDatum.Date <= DtmPckrElőTerv.Value.Date)
+                            {
+                                DataRow Soradat = AdatTabla.NewRow();
+
+                                Soradat["Sorszám"] = rekord.ID;
+                                Soradat["Művelet"] = rekord.Művelet;
+                                Soradat["Egység"] = Enum.GetName(typeof(EsztergaEgyseg), rekord.Egység);
+                                Soradat["Nap"] = rekord.Mennyi_Dátum;
+                                Soradat["Óra"] = rekord.Mennyi_Óra;
+                                Soradat["Státusz"] = rekord.Státus ? "Törölt" : "Aktív";
+                                Soradat["Utolsó Dátum"] = rekord.Utolsó_Dátum.ToShortDateString();
+
+                                Adat_Eszterga_Uzemora uzemoraRekord = AdatokUzemora
+                                    .FirstOrDefault(a => a.Dátum.Date == rekord.Utolsó_Dátum.Date && a.Státus == false);
+                                Soradat["Utolsó Üzemóra"] = uzemoraRekord != null ? uzemoraRekord.Uzemora : rekord.Utolsó_Üzemóra_Állás;
+
+                                Soradat["Esedékesség Dátuma"] = UtolsoDatum.ToShortDateString();
+                                Soradat["Becsült Üzemóra"] = this.BecsultUzemora(UtolsoDatum);
+                                Soradat["Megjegyzés"] = rekord.Megjegyzés;
+
+                                RendezettSorok.Add(Soradat);
+                            }
+                            if (!Esedekes) break;
                         }
-
-                        if (Esedekes && UtolsoDatum.Date <= DtmPckrElőTerv.Value.Date)
-                        {
-                            DataRow Soradat = AdatTabla.NewRow();
-
-                            Soradat["Sorszám"] = rekord.ID;
-                            Soradat["Művelet"] = rekord.Művelet;
-                            Soradat["Egység"] = Enum.GetName(typeof(EsztergaEgyseg), rekord.Egység);
-                            Soradat["Nap"] = rekord.Mennyi_Dátum;
-                            Soradat["Óra"] = rekord.Mennyi_Óra;
-                            Soradat["Státusz"] = rekord.Státus ? "Törölt" : "Aktív";
-                            Soradat["Utolsó Dátum"] = rekord.Utolsó_Dátum.ToShortDateString();
-
-                            Adat_Eszterga_Uzemora uzemoraRekord = AdatokUzemora
-                                .FirstOrDefault(a => a.Dátum.Date == rekord.Utolsó_Dátum.Date && a.Státus == false);
-                            Soradat["Utolsó Üzemóra"] = uzemoraRekord != null ? uzemoraRekord.Uzemora : rekord.Utolsó_Üzemóra_Állás;
-
-                            Soradat["Esedékesség Dátuma"] = UtolsoDatum.ToShortDateString();
-                            Soradat["Becsült Üzemóra"] = this.BecsultUzemora(UtolsoDatum);
-                            Soradat["Megjegyzés"] = rekord.Megjegyzés;
-
-                            RendezettSorok.Add(Soradat);
-                        }
-                        if (!Esedekes) break;
                     }
+
+                    IEnumerable<DataRow> RendezettAdatok = RendezettSorok
+                        .OrderBy(sor => DateTime.Parse(sor["Esedékesség Dátuma"].ToStrTrim()))
+                        .ThenBy(sor => int.Parse(sor["Sorszám"].ToStrTrim()));
+
+                    foreach (DataRow sor in RendezettAdatok)
+                        AdatTabla.Rows.Add(sor);
+
+                    Tabla.DataSource = AdatTabla;
+                    SorSzinezes();
+                    OszlopSzelesseg();
+                    for (int i = 0; i < 11; i++)
+                        Tabla.Columns[i].ReadOnly = true;
+                    Tabla.Visible = true;
+                    Tabla.ClearSelection();
                 }
-
-                IEnumerable<DataRow> RendezettAdatok = RendezettSorok
-                    .OrderBy(sor => DateTime.Parse(sor["Esedékesség Dátuma"].ToStrTrim()))
-                    .ThenBy(sor => int.Parse(sor["Sorszám"].ToStrTrim()));
-
-                foreach (DataRow sor in RendezettAdatok)
-                    AdatTabla.Rows.Add(sor);
-
-                Tabla.DataSource = AdatTabla;
-                SorSzinezes();
-                OszlopSzelesseg();
-                for (int i = 0; i < 11; i++)
-                    Tabla.Columns[i].ReadOnly = true;
-                Tabla.Visible = true;
-                Tabla.ClearSelection();
+                catch (HibásBevittAdat ex)
+                {
+                    MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                    MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         /// <summary>
         /// Betölti a karbantartási műveletek naplózott adatait a táblázatba.
@@ -1362,7 +1364,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 if (!string.IsNullOrEmpty(Megjegyzes))
                 {
-                    Kez_Muvelet.Modositas(Megjegyzes, ID);
+                    Kez_Muvelet.Modositas_Megjegyzes(Megjegyzes, ID);
                     MessageBox.Show("A megjegyzés mentésre került.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
