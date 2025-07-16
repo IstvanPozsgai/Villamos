@@ -916,9 +916,10 @@ namespace Villamos
                                        && a.Üzem == Cmbtelephely.Text.Trim()
                                        select a).FirstOrDefault();
 
+                Üresmezők();
                 if (EgyJármű == null)
                 {
-                    Üresmezők();
+
                     throw new HibásBevittAdat("A telephelyen nincs ilyen jármű!");
                 }
                 else
@@ -945,7 +946,7 @@ namespace Villamos
                 }
                 else
                 {
-                    Üresmezők();
+
                     if (Ragaszt.Value > DateTime.Today)
                     {
                         Panel2.BackColor = Color.Red;
