@@ -52,10 +52,10 @@ namespace Villamos
             this.AktSzerelvény = new System.Windows.Forms.Button();
             this.AktuálisLista = new System.Windows.Forms.Button();
             this.Előírt = new System.Windows.Forms.Button();
+            this.BeosztásTörlés = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Tábla = new System.Windows.Forms.DataGridView();
-            this.BeosztásTörlés = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -105,7 +105,7 @@ namespace Villamos
             this.Színválasztó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Színválasztó.BackgroundImage = global::Villamos.Properties.Resources.Dtafalonso_Modern_Xp_ModernXP_12_Workstation_Desktop_Colors;
             this.Színválasztó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Színválasztó.Location = new System.Drawing.Point(507, 3);
+            this.Színválasztó.Location = new System.Drawing.Point(562, 3);
             this.Színválasztó.Name = "Színválasztó";
             this.Színválasztó.Size = new System.Drawing.Size(40, 40);
             this.Színválasztó.TabIndex = 64;
@@ -166,13 +166,13 @@ namespace Villamos
             // Vonalak
             // 
             this.Vonalak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Vonalak.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.Vonalak.BackgroundImage = global::Villamos.Properties.Resources.Elegantthemes_Beautiful_Flat_Running;
             this.Vonalak.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Vonalak.Location = new System.Drawing.Point(562, 3);
+            this.Vonalak.Location = new System.Drawing.Point(617, 3);
             this.Vonalak.Name = "Vonalak";
             this.Vonalak.Size = new System.Drawing.Size(40, 40);
             this.Vonalak.TabIndex = 69;
-            this.ToolTip1.SetToolTip(this.Vonalak, "Beosztás adatok törlése");
+            this.ToolTip1.SetToolTip(this.Vonalak, "Vonal adatok rögzítése");
             this.Vonalak.UseVisualStyleBackColor = true;
             // 
             // AktSzerelvény
@@ -214,6 +214,19 @@ namespace Villamos
             this.Előírt.UseVisualStyleBackColor = true;
             this.Előírt.Click += new System.EventHandler(this.Előírt_Click);
             // 
+            // BeosztásTörlés
+            // 
+            this.BeosztásTörlés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BeosztásTörlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.BeosztásTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BeosztásTörlés.Location = new System.Drawing.Point(342, 3);
+            this.BeosztásTörlés.Name = "BeosztásTörlés";
+            this.BeosztásTörlés.Size = new System.Drawing.Size(40, 40);
+            this.BeosztásTörlés.TabIndex = 66;
+            this.ToolTip1.SetToolTip(this.BeosztásTörlés, "Beosztás adatok törlése");
+            this.BeosztásTörlés.UseVisualStyleBackColor = true;
+            this.BeosztásTörlés.Click += new System.EventHandler(this.BeosztásTörlés_Click);
+            // 
             // Holtart
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -250,13 +263,13 @@ namespace Villamos
             this.tableLayoutPanel1.Controls.Add(this.Felmentés, 15, 0);
             this.tableLayoutPanel1.Controls.Add(this.Excel, 13, 0);
             this.tableLayoutPanel1.Controls.Add(this.Kereső, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Vonalak, 10, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Színválasztó, 9, 0);
             this.tableLayoutPanel1.Controls.Add(this.Utasítás, 7, 0);
             this.tableLayoutPanel1.Controls.Add(this.BeosztásTörlés, 6, 0);
             this.tableLayoutPanel1.Controls.Add(this.AktuálisLista, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.Előírt, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.AktSzerelvény, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Vonalak, 11, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Színválasztó, 10, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 45);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
@@ -280,19 +293,7 @@ namespace Villamos
             this.Tábla.Size = new System.Drawing.Size(1203, 614);
             this.Tábla.TabIndex = 70;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            // 
-            // BeosztásTörlés
-            // 
-            this.BeosztásTörlés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BeosztásTörlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.BeosztásTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BeosztásTörlés.Location = new System.Drawing.Point(342, 3);
-            this.BeosztásTörlés.Name = "BeosztásTörlés";
-            this.BeosztásTörlés.Size = new System.Drawing.Size(40, 40);
-            this.BeosztásTörlés.TabIndex = 66;
-            this.ToolTip1.SetToolTip(this.BeosztásTörlés, "Beosztás adatok törlése");
-            this.BeosztásTörlés.UseVisualStyleBackColor = true;
-            this.BeosztásTörlés.Click += new System.EventHandler(this.BeosztásTörlés_Click);
+            this.Tábla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_CellFormatting);
             // 
             // Ablak_T5C5_Vizsgálat_ütemező
             // 

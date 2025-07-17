@@ -1050,7 +1050,7 @@ namespace Villamos
             }
             Holtart.Lép();
         }
-
+        // JAVÍTANDÓ:
         private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             // cellák színezése
