@@ -31,7 +31,8 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
         private void Start()
         {
-            Jogosultságkiosztás();
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
             Státuscombo_Feltöltés();
             Dátumtól.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             dátumig.Value = new DateTime(DateTime.Today.Year, 12, 31);
