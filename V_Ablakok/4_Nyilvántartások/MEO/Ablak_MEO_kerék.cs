@@ -71,6 +71,7 @@ namespace Villamos
 
             if (!File.Exists(KerékMéréshely)) Adatbázis_Létrehozás.Kerékmérésekjogtábla(hely);
 
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             AdatokKerékMérés_Feltöltés();
             Fülekkitöltése();
