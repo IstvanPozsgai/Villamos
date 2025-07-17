@@ -36,6 +36,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
         private void Ablak_Karbantartás_Csoport_Load(object sender, EventArgs e)
         {
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Csoport_Típus_feltöltés();
         }
