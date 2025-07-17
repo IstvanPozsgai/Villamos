@@ -154,8 +154,9 @@
             this.Vonal_tábla.Name = "Vonal_tábla";
             this.Vonal_tábla.ReadOnly = true;
             this.Vonal_tábla.RowHeadersVisible = false;
-            this.Vonal_tábla.Size = new System.Drawing.Size(1180, 487);
+            this.Vonal_tábla.Size = new System.Drawing.Size(1180, 550);
             this.Vonal_tábla.TabIndex = 78;
+            this.Vonal_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Vonal_tábla_CellClick);
             // 
             // Vonal_fel
             // 
@@ -166,6 +167,7 @@
             this.Vonal_fel.Size = new System.Drawing.Size(45, 45);
             this.Vonal_fel.TabIndex = 91;
             this.Vonal_fel.UseVisualStyleBackColor = true;
+            this.Vonal_fel.Click += new System.EventHandler(this.Vonal_fel_Click);
             // 
             // Command7_Rögzítés
             // 
@@ -176,6 +178,7 @@
             this.Command7_Rögzítés.Size = new System.Drawing.Size(45, 45);
             this.Command7_Rögzítés.TabIndex = 86;
             this.Command7_Rögzítés.UseVisualStyleBackColor = true;
+            this.Command7_Rögzítés.Click += new System.EventHandler(this.Command7_Rögzítés_Click);
             // 
             // Command8_Új
             // 
@@ -186,6 +189,7 @@
             this.Command8_Új.Size = new System.Drawing.Size(45, 45);
             this.Command8_Új.TabIndex = 85;
             this.Command8_Új.UseVisualStyleBackColor = true;
+            this.Command8_Új.Click += new System.EventHandler(this.Command8_Új_Click);
             // 
             // Command11_frissít
             // 
@@ -196,6 +200,7 @@
             this.Command11_frissít.Size = new System.Drawing.Size(45, 45);
             this.Command11_frissít.TabIndex = 84;
             this.Command11_frissít.UseVisualStyleBackColor = true;
+            this.Command11_frissít.Click += new System.EventHandler(this.Command11_frissít_Click);
             // 
             // Command10_Listát_töröl
             // 
@@ -206,6 +211,7 @@
             this.Command10_Listát_töröl.Size = new System.Drawing.Size(45, 45);
             this.Command10_Listát_töröl.TabIndex = 83;
             this.Command10_Listát_töröl.UseVisualStyleBackColor = true;
+            this.Command10_Listát_töröl.Click += new System.EventHandler(this.Command10_Listát_töröl_Click);
             // 
             // Command9_színkereső
             // 
@@ -216,12 +222,13 @@
             this.Command9_színkereső.Size = new System.Drawing.Size(45, 45);
             this.Command9_színkereső.TabIndex = 82;
             this.Command9_színkereső.UseVisualStyleBackColor = true;
+            this.Command9_színkereső.Click += new System.EventHandler(this.Command9_színkereső_Click);
             // 
             // Holtart
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(356, 21);
+            this.Holtart.Location = new System.Drawing.Point(351, 18);
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(796, 21);
             this.Holtart.TabIndex = 127;
@@ -232,11 +239,12 @@
             this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
             this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(1159, 12);
+            this.BtnSúgó.Location = new System.Drawing.Point(1153, 9);
             this.BtnSúgó.Name = "BtnSúgó";
             this.BtnSúgó.Size = new System.Drawing.Size(40, 40);
             this.BtnSúgó.TabIndex = 126;
             this.BtnSúgó.UseVisualStyleBackColor = true;
+            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
             // Panel2
             // 

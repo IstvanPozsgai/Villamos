@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Utasítás_Generálás));
             this.Txtírásimező = new System.Windows.Forms.RichTextBox();
             this.Btnrögzítés = new System.Windows.Forms.Button();
             this.Label13 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // Txtírásimező
@@ -56,6 +58,7 @@
             this.Btnrögzítés.Name = "Btnrögzítés";
             this.Btnrögzítés.Size = new System.Drawing.Size(48, 48);
             this.Btnrögzítés.TabIndex = 83;
+            this.toolTip1.SetToolTip(this.Btnrögzítés, "Rögzíti az utasítást");
             this.Btnrögzítés.UseVisualStyleBackColor = true;
             this.Btnrögzítés.Click += new System.EventHandler(this.Btnrögzítés_Click);
             // 
@@ -91,5 +94,6 @@
         internal System.Windows.Forms.Button Btnrögzítés;
         internal System.Windows.Forms.ComboBox Cmbtelephely;
         internal System.Windows.Forms.Label Label13;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

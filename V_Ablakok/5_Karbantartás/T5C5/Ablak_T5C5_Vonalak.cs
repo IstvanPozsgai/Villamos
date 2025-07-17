@@ -14,11 +14,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
     {
         readonly Kezelő_Hétvége_Előírás KézElőírás = new Kezelő_Hétvége_Előírás();
 
-
         List<Adat_Hétvége_Előírás> AdatokElőírás = new List<Adat_Hétvége_Előírás>();
-        public Ablak_T5C5_Vonalak()
+
+        public string Telephely { get; private set; }
+
+        public Ablak_T5C5_Vonalak(string telephely)
         {
-            InitializeComponent();
+            Telephely = telephely;
         }
 
         private void Ablak_T5C5_Vonalak_Load(object sender, EventArgs e)
@@ -26,7 +28,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
 
         }
 
-        #region Vonalak lapfül
+
         private void Command9_színkereső_Click(object sender, EventArgs e)
         {
             try
@@ -262,6 +264,25 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
+
+        private void BtnSúgó_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\V2Vizsgálat.html";
+                Module_Excel.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
     }
 }

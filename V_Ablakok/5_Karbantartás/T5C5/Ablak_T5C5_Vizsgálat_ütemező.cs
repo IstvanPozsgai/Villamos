@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._5_Karbantartás.T5C5;
 using Villamos.V_Ablakok.Közös;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
@@ -181,8 +182,6 @@ namespace Villamos
             }
         }
 
-
-
         private void Ablak_Vizsgálat_ütemező_KeyDown(object sender, KeyEventArgs e)
         {
 
@@ -205,15 +204,6 @@ namespace Villamos
 
 
         #region V ütemező
-        private void AktuálisSzerelvénySzerintiListaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ElőírtSzerelvénySzerintiListaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void Tábla_kitöltés()
         {
@@ -1551,12 +1541,17 @@ namespace Villamos
             Keresés_metódus();
         }
 
+
         private void BeosztásTörlés_Click(object sender, EventArgs e)
         {
             try
             {
                 if (MessageBox.Show("Valóban töröljük az eddigi adatokat?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                {
                     KézHBeosztás.Törlés(Cmbtelephely.Text.Trim());
+                    Új_Ablak_Utasítás_Generálás.Close();
+                }
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -1642,6 +1637,22 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return válasz;
+        }
+
+        Ablak_T5C5_Vonalak Új_Ablak_T5C5_Vonalak;
+        private void Vonalak_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_T5C5_Vonalak == null)
+            {
+                Új_Ablak_T5C5_Vonalak = new Ablak_T5C5_Vonalak(Cmbtelephely.Text.Trim(), UtasításSzövegTervezet());
+                Új_Ablak_T5C5_Vonalak.FormClosed += Ablak_Utasítás_Generálás_FormClosed;
+                Új_Ablak_T5C5_Vonalak.Show();
+            }
+            else
+            {
+                Új_Ablak_T5C5_Vonalak.Activate();
+                Új_Ablak_T5C5_Vonalak.WindowState = FormWindowState.Maximized;
+            }
         }
     }
 }

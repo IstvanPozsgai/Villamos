@@ -174,6 +174,7 @@ namespace Villamos
             this.Vonalak.TabIndex = 69;
             this.ToolTip1.SetToolTip(this.Vonalak, "Vonal adatok rögzítése");
             this.Vonalak.UseVisualStyleBackColor = true;
+            this.Vonalak.Click += new System.EventHandler(this.Vonalak_Click);
             // 
             // AktSzerelvény
             // 
