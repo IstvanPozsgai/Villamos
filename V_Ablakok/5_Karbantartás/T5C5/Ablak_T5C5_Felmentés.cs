@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyO = Microsoft.Office.Interop.Outlook;
@@ -15,6 +16,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
         readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
         readonly Kezelő_Kerék_Mérés Mérés_kéz = new Kezelő_Kerék_Mérés();
         readonly Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok("T5C5");
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         List<Adat_T5C5_Kmadatok> AdatokVkm = new List<Adat_T5C5_Kmadatok>();
         public string Telephely { get; private set; }
@@ -23,6 +25,23 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
         {
             InitializeComponent();
             Telephely = telephely;
+            Start();
+        }
+
+        private void Start()
+        {
+            Pályaszámok();
+        }
+
+        private void Pályaszámok()
+        {
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Telephely);
+            Adatok = (from a in Adatok
+                      where a.Valóstípus.Contains("T5C5")
+                      select a).ToList();
+            foreach (Adat_Jármű Elem in Adatok)
+                Ciklus_Pályaszám.Items.Add(Elem.Azonosító.Trim());
+
         }
 
 
@@ -384,6 +403,17 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Ciklus_Pályaszám_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            V_km_adatok_lista();
+            Ciklus_Pályaszám.Text = Ciklus_Pályaszám.Items[Ciklus_Pályaszám.SelectedIndex].ToString();
+            Adat_T5C5_Kmadatok rekordszer = (from a in AdatokVkm
+                                             where a.Azonosító == Ciklus_Pályaszám.Text.Trim()
+                                             select a).FirstOrDefault();
+            if (rekordszer != null) CiklusTípus.Text = rekordszer.Ciklusrend;
+            Felmentés_kiírás();
         }
     }
 }
