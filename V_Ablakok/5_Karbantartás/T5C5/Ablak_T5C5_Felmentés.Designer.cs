@@ -54,11 +54,11 @@
             this.Label32 = new System.Windows.Forms.Label();
             this.Label31 = new System.Windows.Forms.Label();
             this.Label30 = new System.Windows.Forms.Label();
-            this.Ciklus_Pályaszám = new System.Windows.Forms.TextBox();
             this.Email = new System.Windows.Forms.Button();
             this.CiklusFrissít = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Ciklus_Pályaszám = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.Keréktábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Vizs_tábla)).BeginInit();
             this.SuspendLayout();
@@ -282,13 +282,6 @@
             this.Label30.TabIndex = 97;
             this.Label30.Text = "Pályaszám: ($$)";
             // 
-            // Ciklus_Pályaszám
-            // 
-            this.Ciklus_Pályaszám.Location = new System.Drawing.Point(146, 54);
-            this.Ciklus_Pályaszám.Name = "Ciklus_Pályaszám";
-            this.Ciklus_Pályaszám.Size = new System.Drawing.Size(122, 26);
-            this.Ciklus_Pályaszám.TabIndex = 94;
-            // 
             // Email
             // 
             this.Email.BackgroundImage = global::Villamos.Properties.Resources.email;
@@ -332,12 +325,22 @@
             this.BtnSúgó.TabIndex = 123;
             this.BtnSúgó.UseVisualStyleBackColor = true;
             // 
+            // Ciklus_Pályaszám
+            // 
+            this.Ciklus_Pályaszám.FormattingEnabled = true;
+            this.Ciklus_Pályaszám.Location = new System.Drawing.Point(146, 54);
+            this.Ciklus_Pályaszám.Name = "Ciklus_Pályaszám";
+            this.Ciklus_Pályaszám.Size = new System.Drawing.Size(121, 28);
+            this.Ciklus_Pályaszám.TabIndex = 125;
+            this.Ciklus_Pályaszám.SelectionChangeCommitted += new System.EventHandler(this.Ciklus_Pályaszám_SelectionChangeCommitted);
+            // 
             // Ablak_T5C5_Felmentés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSalmon;
             this.ClientSize = new System.Drawing.Size(1210, 609);
+            this.Controls.Add(this.Ciklus_Pályaszám);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.BtnSúgó);
             this.Controls.Add(this.Felmentés_Id);
@@ -365,7 +368,6 @@
             this.Controls.Add(this.Label32);
             this.Controls.Add(this.Label31);
             this.Controls.Add(this.Label30);
-            this.Controls.Add(this.Ciklus_Pályaszám);
             this.Controls.Add(this.Email);
             this.Controls.Add(this.CiklusFrissít);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -408,10 +410,10 @@
         internal System.Windows.Forms.Label Label32;
         internal System.Windows.Forms.Label Label31;
         internal System.Windows.Forms.Label Label30;
-        internal System.Windows.Forms.TextBox Ciklus_Pályaszám;
         internal System.Windows.Forms.Button Email;
         internal System.Windows.Forms.Button CiklusFrissít;
         private V_MindenEgyéb.MyProgressbar Holtart;
         internal System.Windows.Forms.Button BtnSúgó;
+        private System.Windows.Forms.ComboBox Ciklus_Pályaszám;
     }
 }

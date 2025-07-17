@@ -35,8 +35,6 @@ namespace Villamos
         readonly Kezelő_Kerék_Mérés Mérés_kéz = new Kezelő_Kerék_Mérés();
         readonly Kezelő_Vezénylés KézVezény = new Kezelő_Vezénylés();
         readonly Kezelő_Hétvége_Beosztás KézHBeosztás = new Kezelő_Hétvége_Beosztás();
-        readonly Kezelő_Kiegészítő_Felmentés KézFelmentés = new Kezelő_Kiegészítő_Felmentés();
-
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         List<Adat_Szerelvény> AdatokSzer = new List<Adat_Szerelvény>();
