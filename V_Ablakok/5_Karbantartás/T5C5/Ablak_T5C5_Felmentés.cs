@@ -17,11 +17,14 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
         readonly Kezelő_T5C5_Kmadatok KézVkm = new Kezelő_T5C5_Kmadatok("T5C5");
 
         List<Adat_T5C5_Kmadatok> AdatokVkm = new List<Adat_T5C5_Kmadatok>();
+        public string Telephely { get; private set; }
 
-        public Ablak_T5C5_Felmentés()
+        public Ablak_T5C5_Felmentés(string telephely)
         {
             InitializeComponent();
+            Telephely = telephely;
         }
+
 
         private void Ablak_T5C5_Felmentés_Load(object sender, EventArgs e)
         {

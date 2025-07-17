@@ -1661,7 +1661,7 @@ namespace Villamos
         {
             if (Új_Ablak_T5C5_Felmentés == null)
             {
-                Új_Ablak_T5C5_Felmentés = new Ablak_T5C5_Felmentés();
+                Új_Ablak_T5C5_Felmentés = new Ablak_T5C5_Felmentés(Cmbtelephely.Text.Trim());
                 Új_Ablak_T5C5_Felmentés.FormClosed += Ablak_T5C5_Felmentés_FormClosed;
                 Új_Ablak_T5C5_Felmentés.Show();
             }

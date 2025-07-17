@@ -59,12 +59,8 @@
             this.CiklusFrissít = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Panel2 = new System.Windows.Forms.Panel();
-            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
-            this.Label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Keréktábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Vizs_tábla)).BeginInit();
-            this.Panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // Felmentés_Id
@@ -319,9 +315,9 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(355, 21);
+            this.Holtart.Location = new System.Drawing.Point(9, 21);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(796, 21);
+            this.Holtart.Size = new System.Drawing.Size(1142, 21);
             this.Holtart.TabIndex = 124;
             this.Holtart.Visible = false;
             // 
@@ -332,35 +328,9 @@
             this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.BtnSúgó.Location = new System.Drawing.Point(1158, 12);
             this.BtnSúgó.Name = "BtnSúgó";
-            this.BtnSúgó.Size = new System.Drawing.Size(40, 40);
+            this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
             this.BtnSúgó.TabIndex = 123;
             this.BtnSúgó.UseVisualStyleBackColor = true;
-            // 
-            // Panel2
-            // 
-            this.Panel2.Controls.Add(this.Cmbtelephely);
-            this.Panel2.Controls.Add(this.Label13);
-            this.Panel2.Location = new System.Drawing.Point(9, 12);
-            this.Panel2.Name = "Panel2";
-            this.Panel2.Size = new System.Drawing.Size(335, 33);
-            this.Panel2.TabIndex = 122;
-            // 
-            // Cmbtelephely
-            // 
-            this.Cmbtelephely.FormattingEnabled = true;
-            this.Cmbtelephely.Location = new System.Drawing.Point(149, 3);
-            this.Cmbtelephely.Name = "Cmbtelephely";
-            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
-            this.Cmbtelephely.TabIndex = 18;
-            // 
-            // Label13
-            // 
-            this.Label13.AutoSize = true;
-            this.Label13.Location = new System.Drawing.Point(3, 7);
-            this.Label13.Name = "Label13";
-            this.Label13.Size = new System.Drawing.Size(145, 20);
-            this.Label13.TabIndex = 17;
-            this.Label13.Text = "Telephelyi beállítás:";
             // 
             // Ablak_T5C5_Felmentés
             // 
@@ -370,7 +340,6 @@
             this.ClientSize = new System.Drawing.Size(1210, 609);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.BtnSúgó);
-            this.Controls.Add(this.Panel2);
             this.Controls.Add(this.Felmentés_Id);
             this.Controls.Add(this.CiklusTípus);
             this.Controls.Add(this.label5);
@@ -407,8 +376,6 @@
             this.Load += new System.EventHandler(this.Ablak_T5C5_Felmentés_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Keréktábla)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Vizs_tábla)).EndInit();
-            this.Panel2.ResumeLayout(false);
-            this.Panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -446,8 +413,5 @@
         internal System.Windows.Forms.Button CiklusFrissít;
         private V_MindenEgyéb.MyProgressbar Holtart;
         internal System.Windows.Forms.Button BtnSúgó;
-        internal System.Windows.Forms.Panel Panel2;
-        internal System.Windows.Forms.ComboBox Cmbtelephely;
-        internal System.Windows.Forms.Label Label13;
     }
 }
