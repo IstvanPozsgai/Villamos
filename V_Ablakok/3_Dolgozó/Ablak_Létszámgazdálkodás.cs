@@ -43,7 +43,7 @@ namespace Villamos
             try
             {
                 GombLathatosagKezelo.Beallit(this);
-                //Jogosultságkiosztás();
+                Jogosultságkiosztás();
                 Telephelyekfeltöltése();
                 Fülek.SelectedIndex = 0;
                 Fülekkitöltése();

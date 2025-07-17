@@ -56,6 +56,11 @@ namespace Villamos.Villamos_Ablakok
             Start();
         }
 
+        public Ablak_Beosztás_kieg()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Beosztás_kieg_Load(object sender, EventArgs e)
         {
             this.Text = $"Dolgozó neve: {DolgozóNév}  Dátum: {Dátum:yyyy.MM.dd}";
@@ -63,6 +68,7 @@ namespace Villamos.Villamos_Ablakok
 
         private void Start()
         {
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
 
             Kiürít_Füleket();

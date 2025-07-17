@@ -47,7 +47,7 @@
             this.Csoport_változat = new System.Windows.Forms.ComboBox();
             this.Csoport_Végző = new System.Windows.Forms.ComboBox();
             this.Excel = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Sorszám = new System.Windows.Forms.TextBox();
             this.CHKÉrvényes = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Csoport_tábla)).BeginInit();
@@ -61,7 +61,7 @@
             this.Csoport_Töröl.Name = "Csoport_Töröl";
             this.Csoport_Töröl.Size = new System.Drawing.Size(45, 45);
             this.Csoport_Töröl.TabIndex = 252;
-            this.toolTip1.SetToolTip(this.Csoport_Töröl, "Kiválasztott pályaszám hozzáadása a táblázathoz");
+            this.toolTip1.SetToolTip(this.Csoport_Töröl, "Kiválasztott pályaszám eltávolítása a táblázatból");
             this.Csoport_Töröl.UseVisualStyleBackColor = true;
             this.Csoport_Töröl.Click += new System.EventHandler(this.Csoport_Töröl_Click);
             // 
@@ -161,9 +161,14 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Csoport_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Csoport_tábla.FilterAndSortEnabled = true;
+            this.Csoport_tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Csoport_tábla.Location = new System.Drawing.Point(11, 114);
+            this.Csoport_tábla.MaxFilterButtonImageHeight = 23;
             this.Csoport_tábla.Name = "Csoport_tábla";
+            this.Csoport_tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Csoport_tábla.Size = new System.Drawing.Size(1177, 320);
+            this.Csoport_tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Csoport_tábla.TabIndex = 246;
             this.Csoport_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Csoport_tábla_CellClick);
             // 

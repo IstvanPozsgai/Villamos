@@ -32,7 +32,7 @@ namespace Villamos
             Dátum.Value = DateTime.Today.AddDays(-1);
             DekádDátum.Value = DateTime.Today.AddDays(-1);
             GombLathatosagKezelo.Beallit(this);
-            //Jogosultságkiosztás();
+            Jogosultságkiosztás();
 
             Fülekkitöltése();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
