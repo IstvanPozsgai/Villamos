@@ -58,6 +58,8 @@ namespace Villamos.Villamos_Ablakok
         {
             Dátum.Value = DateTime.Today;
             Telephelyekfeltöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Fülekkitöltése();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
