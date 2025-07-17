@@ -306,7 +306,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                 if (Befejezés.Text.Trim() == "") throw new HibásBevittAdat("A Befejezés mező nem lehet üres.");
                 if (!int.TryParse(Felmentés_Id.Text, out int Id)) Id = 0;
 
-                List<Adat_Kiegészítő_Felmentés> Adatok = KézFelmentés.Lista_Adatok(Cmbtelephely.Text.Trim());
+                List<Adat_Kiegészítő_Felmentés> Adatok = KézFelmentés.Lista_Adatok(Telephely);
                 Adat_Kiegészítő_Felmentés Elem = (from a in Adatok
                                                   where a.CiklusTípus == CiklusTípus.Text.Trim()
                                                   select a).FirstOrDefault();
@@ -321,9 +321,9 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                                           Befejezés.Text.Trim(),
                                           CiklusTípus.Text.Trim());
                 if (Elem != null)
-                    KézFelmentés.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
+                    KézFelmentés.Módosítás(Telephely, ADAT);
                 else
-                    KézFelmentés.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
+                    KézFelmentés.Rögzítés(Telephely, ADAT);
 
                 MessageBox.Show("Az adatok Mentése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -340,7 +340,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
 
         private void Felmentés_kiírás()
         {
-            List<Adat_Kiegészítő_Felmentés> Adatok = KézFelmentés.Lista_Adatok(Cmbtelephely.Text.Trim());
+            List<Adat_Kiegészítő_Felmentés> Adatok = KézFelmentés.Lista_Adatok(Telephely);
 
             Adat_Kiegészítő_Felmentés rekord = (from a in Adatok
                                                 where a.CiklusTípus == CiklusTípus.Text.Trim()
