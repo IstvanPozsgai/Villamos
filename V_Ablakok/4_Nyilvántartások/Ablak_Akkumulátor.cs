@@ -37,6 +37,7 @@ namespace Villamos
             try
             {
                 MérésDátuma.MaxDate = DateTime.Today;
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 Telephelyekfeltöltése();
                 Fülekkitöltése();

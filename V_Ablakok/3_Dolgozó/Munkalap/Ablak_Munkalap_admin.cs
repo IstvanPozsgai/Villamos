@@ -30,7 +30,7 @@ namespace Villamos
                 Telephelyekfeltöltése();
                 Dátum.Value = DateTime.Today;
                 GombLathatosagKezelo.Beallit(this);
-                //Jogosultságkiosztás();
+                Jogosultságkiosztás();
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             }
             catch (HibásBevittAdat ex)

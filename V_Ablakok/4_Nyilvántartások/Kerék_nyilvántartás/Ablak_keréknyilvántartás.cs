@@ -78,6 +78,8 @@ namespace Villamos
                 Dátumig.Value = DateTime.Today;
                 Eszterga.Value = DateTime.Today;
                 Dátumtól.Value = new DateTime(DateTime.Today.Year, 1, 1);
+
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 Irányítófeltöltés();
                 Jegyzettömb.Visible = false;
