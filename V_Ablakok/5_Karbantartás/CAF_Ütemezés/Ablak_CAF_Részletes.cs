@@ -211,16 +211,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 KiírEgyAdatot(Adat);
                 Adat = KézAdatok.Egy_Adat_Id_Előző(Posta_Segéd.Azonosító.Trim(), Posta_Segéd.Sorszám);
                 KiírElőzőAdatot(Adat);
-
-                // Itt vizsgálja, hogy a kiírt adat 6-os státuszu-e. Ha igen, akkor engedi a KM-t módosítani, ha nem akkor nem engedi.
-                //if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
-                //{
-                //    Ütem_Köv_Számláló.ReadOnly = false;
-                //}
-                //else
-                //{
-                //    Ütem_Köv_Számláló.ReadOnly = true;
-                //}
+                if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
+                {
+                    Ütem_Köv_Számláló.ReadOnly = false;
+                }
+                else
+                {
+                    Ütem_Köv_Számláló.ReadOnly = true;
+                }
 
                 if ((int.Parse(Ütem_számláló.Text) > int.Parse(Ütem_Köv_Számláló.Text) || int.Parse(Ütem_számláló.Text) == 0) && Ütem_státus.SelectedItem.ToString() == "6- Elvégzett")
                 {
@@ -456,17 +454,16 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        // Itt vizsgálja, hogy a kiválasztott státusz 6-e?
         private void Ütem_Köv_Státus_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            //if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
-            //{
-            //    Ütem_Köv_Számláló.ReadOnly = false;
-            //}
-            //else
-            //{
-            //    Ütem_Köv_Számláló.ReadOnly = true;
-            //}
+            if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
+            {
+                Ütem_Köv_Számláló.ReadOnly = false;
+            }
+            else
+            {
+                Ütem_Köv_Számláló.ReadOnly = true;
+            }
         }
 
         private void KM_ciklus_kiirás()
