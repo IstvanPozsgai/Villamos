@@ -807,7 +807,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyE.Egyesít(munkalap, $"A{sor}:H{sor}");
                 irateleje = "A Megrendelésben foglalt feladatok ellenértéke összesen nettó ";
                 string iratközepe = Math.Round(Nettó, 0).ToStrTrim();
-                iratvége = " Ft.+ ÁFA, azaz ";
+                iratvége = " Ft.+ ÁFA,\n azaz ";
                 string irateleje1 = MyF.Számszóban((long)Math.Round(Nettó, 0));
                 string iratvége1 = "+Áfa";
                 string irat = irateleje + iratközepe + iratvége + irateleje1 + iratvége1;
@@ -1087,7 +1087,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyE.Betű($"D{sor}", "", "#,###.##");
                 MyE.Kiir(Math.Round(Elem.Összesen).ToString(), $"E{sor}");
                 MyE.Betű($"E{sor}", "", "#,###.##");
-                Összesen += Elem.Összesen;
+                Összesen += Math.Round(Elem.Összesen);
 
                 MyE.Betű($"E{sor}", "", "#,##0");
                 MyE.Kiir("27", $"F{sor}");
