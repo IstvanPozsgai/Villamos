@@ -79,6 +79,8 @@ namespace Villamos
         {
             Új_Ablak_Kereső?.Close();
             Új_Ablak_T5C5_Segéd?.Close();
+            Új_Ablak_Utasítás_Generálás?.Close();
+            Új_Ablak_T5C5_Vonalak?.Close();
         }
 
         private void Telephelyekfeltöltése()
@@ -196,7 +198,6 @@ namespace Villamos
 
 
         #region V ütemező
-
         private void Tábla_kitöltés()
         {
             try
@@ -380,6 +381,7 @@ namespace Villamos
                 }
                 Tábla.Sort(Tábla.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
                 Holtart.Ki();
+                TáblaSzínezés();
                 Tábla.ClearSelection();
                 Tábla.Visible = true;
             }
@@ -1037,59 +1039,62 @@ namespace Villamos
         {
             AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
         }
-        // JAVÍTANDÓ:
-        private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+
+        private void TáblaSzínezés()
         {
             // cellák színezése
             if (AlsóPanel1.Trim() == "lista")
             {
-                if (Tábla.Rows[e.RowIndex].Cells[29].Value != null)
+                for (int sor = 0; sor < Tábla.Rows.Count; sor++)
                 {
-                    switch (int.Parse(Tábla.Rows[e.RowIndex].Cells[29].Value.ToString()))
+                    if (Tábla.Rows[sor].Cells[29].Value != null)
                     {
-                        case 3:
-                            {
-                                // ha beálló
-                                Tábla.Rows[e.RowIndex].Cells[1].Style.BackColor = Color.Yellow;
-                                Tábla.Rows[e.RowIndex].Cells[1].Style.ForeColor = Color.Black;
-                                Tábla.Rows[e.RowIndex].Cells[1].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
-
-                                Tábla.Rows[e.RowIndex].Cells[13].Style.BackColor = Color.Yellow;
-                                Tábla.Rows[e.RowIndex].Cells[13].Style.ForeColor = Color.Black;
-                                Tábla.Rows[e.RowIndex].Cells[13].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
-                                break;
-                            }
-                        case 4:
-                            {
-                                // ha BM
-                                Tábla.Rows[e.RowIndex].Cells[1].Style.BackColor = Color.Red;
-                                Tábla.Rows[e.RowIndex].Cells[1].Style.ForeColor = Color.White;
-                                Tábla.Rows[e.RowIndex].Cells[1].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
-
-                                Tábla.Rows[e.RowIndex].Cells[13].Style.BackColor = Color.Red;
-                                Tábla.Rows[e.RowIndex].Cells[13].Style.ForeColor = Color.White;
-                                Tábla.Rows[e.RowIndex].Cells[13].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
-                                break;
-                            }
-                    }
-                }
-                if (Tábla.Rows[e.RowIndex].Cells[20].Value != null)
-                {
-                    foreach (Adat_Hétvége_Előírás Elem in AdatokElőírás)
-                    {
-                        if (Tábla.Rows[e.RowIndex].Cells[20].Value.ToStrTrim() == Elem.Vonal.Trim())
+                        switch (int.Parse(Tábla.Rows[sor].Cells[29].Value.ToString()))
                         {
-                            Tábla.Rows[e.RowIndex].Cells[0].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
-                            Tábla.Rows[e.RowIndex].Cells[2].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
-                            Tábla.Rows[e.RowIndex].Cells[15].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
-                            break;
+                            case 3:
+                                {
+                                    // ha beálló
+                                    Tábla.Rows[sor].Cells[1].Style.BackColor = Color.Yellow;
+                                    Tábla.Rows[sor].Cells[1].Style.ForeColor = Color.Black;
+                                    Tábla.Rows[sor].Cells[1].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
+
+                                    Tábla.Rows[sor].Cells[13].Style.BackColor = Color.Yellow;
+                                    Tábla.Rows[sor].Cells[13].Style.ForeColor = Color.Black;
+                                    Tábla.Rows[sor].Cells[13].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
+                                    break;
+                                }
+                            case 4:
+                                {
+                                    // ha BM
+                                    Tábla.Rows[sor].Cells[1].Style.BackColor = Color.Red;
+                                    Tábla.Rows[sor].Cells[1].Style.ForeColor = Color.White;
+                                    Tábla.Rows[sor].Cells[1].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
+
+                                    Tábla.Rows[sor].Cells[13].Style.BackColor = Color.Red;
+                                    Tábla.Rows[sor].Cells[13].Style.ForeColor = Color.White;
+                                    Tábla.Rows[sor].Cells[13].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
+                                    break;
+                                }
                         }
-                        if (Tábla.Rows[e.RowIndex].Cells[20].Value.ToStrTrim() == "")
+                    }
+                    if (Tábla.Rows[sor].Cells[20].Value != null)
+                    {
+                        foreach (Adat_Hétvége_Előírás Elem in AdatokElőírás)
                         {
-                            Tábla.Rows[e.RowIndex].Cells[0].Style.BackColor = default;
-                            Tábla.Rows[e.RowIndex].Cells[2].Style.BackColor = default;
-                            Tábla.Rows[e.RowIndex].Cells[15].Style.BackColor = default;
-                            break;
+                            if (Tábla.Rows[sor].Cells[20].Value.ToStrTrim() == Elem.Vonal.Trim())
+                            {
+                                Tábla.Rows[sor].Cells[0].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
+                                Tábla.Rows[sor].Cells[2].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
+                                Tábla.Rows[sor].Cells[15].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
+                                break;
+                            }
+                            if (Tábla.Rows[sor].Cells[20].Value.ToStrTrim() == "")
+                            {
+                                Tábla.Rows[sor].Cells[0].Style.BackColor = default;
+                                Tábla.Rows[sor].Cells[2].Style.BackColor = default;
+                                Tábla.Rows[sor].Cells[15].Style.BackColor = default;
+                                break;
+                            }
                         }
                     }
                 }
@@ -1339,13 +1344,13 @@ namespace Villamos
         {
             Előírás_listázásFrissít();
             Tábla.Sort(Tábla.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+            TáblaSzínezés();
             Holtart.Ki();
         }
         #endregion
 
 
         #region Gombok
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
@@ -1363,7 +1368,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Előírt_Click(object sender, EventArgs e)
         {
@@ -1534,7 +1538,6 @@ namespace Villamos
             Keresés_metódus();
         }
 
-
         private void BeosztásTörlés_Click(object sender, EventArgs e)
         {
             try
@@ -1542,7 +1545,7 @@ namespace Villamos
                 if (MessageBox.Show("Valóban töröljük az eddigi adatokat?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                 {
                     KézHBeosztás.Törlés(Cmbtelephely.Text.Trim());
-                    Új_Ablak_Utasítás_Generálás.Close();
+                    Új_Ablak_Utasítás_Generálás?.Close();
                 }
 
             }
@@ -1556,9 +1559,9 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
+
+
         Ablak_Utasítás_Generálás Új_Ablak_Utasítás_Generálás;
         private void Utasítás_Click(object sender, EventArgs e)
         {

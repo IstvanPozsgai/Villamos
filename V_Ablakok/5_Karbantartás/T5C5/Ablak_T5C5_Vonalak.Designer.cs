@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_T5C5_Vonalak));
             this.Vonal_blue = new System.Windows.Forms.TextBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.Label3 = new System.Windows.Forms.Label();
@@ -44,11 +45,11 @@
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.Vonal_green = new System.Windows.Forms.TextBox();
-            this.Vonal_Mennyiség = new System.Windows.Forms.TextBox();
-            this.Vonal_Vonal = new System.Windows.Forms.TextBox();
-            this.Vonal_Id = new System.Windows.Forms.TextBox();
             this.Vonal_red = new System.Windows.Forms.TextBox();
+            this.Vonal_Id = new System.Windows.Forms.TextBox();
+            this.Vonal_Vonal = new System.Windows.Forms.TextBox();
+            this.Vonal_Mennyiség = new System.Windows.Forms.TextBox();
+            this.Vonal_green = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Vonal_tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -107,11 +108,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Vonal_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Vonal_tábla.Location = new System.Drawing.Point(10, 130);
+            this.Vonal_tábla.Location = new System.Drawing.Point(10, 85);
             this.Vonal_tábla.Name = "Vonal_tábla";
             this.Vonal_tábla.ReadOnly = true;
             this.Vonal_tábla.RowHeadersVisible = false;
-            this.Vonal_tábla.Size = new System.Drawing.Size(1180, 550);
+            this.Vonal_tábla.Size = new System.Drawing.Size(1063, 383);
             this.Vonal_tábla.TabIndex = 78;
             this.Vonal_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Vonal_tábla_CellClick);
             // 
@@ -185,9 +186,9 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(17, 12);
+            this.Holtart.Location = new System.Drawing.Point(10, 189);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(1155, 21);
+            this.Holtart.Size = new System.Drawing.Size(1058, 21);
             this.Holtart.TabIndex = 127;
             this.Holtart.Visible = false;
             // 
@@ -196,7 +197,7 @@
             this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
             this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(567, 3);
+            this.BtnSúgó.Location = new System.Drawing.Point(450, 3);
             this.BtnSúgó.Name = "BtnSúgó";
             this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
             this.BtnSúgó.TabIndex = 126;
@@ -207,9 +208,7 @@
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 11;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel1.ColumnCount = 9;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
@@ -228,12 +227,12 @@
             this.tableLayoutPanel1.Controls.Add(this.Command11_frissít, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.Vonal_fel, 5, 0);
             this.tableLayoutPanel1.Controls.Add(this.Command10_Listát_töröl, 6, 0);
-            this.tableLayoutPanel1.Controls.Add(this.BtnSúgó, 10, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(575, 64);
+            this.tableLayoutPanel1.Controls.Add(this.BtnSúgó, 8, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(575, 19);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(615, 60);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(498, 60);
             this.tableLayoutPanel1.TabIndex = 128;
             // 
             // tableLayoutPanel2
@@ -244,7 +243,7 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87F));
             this.tableLayoutPanel2.Controls.Add(this.Label1, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.Label2, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.Label4, 2, 0);
@@ -255,47 +254,13 @@
             this.tableLayoutPanel2.Controls.Add(this.Vonal_Mennyiség, 2, 1);
             this.tableLayoutPanel2.Controls.Add(this.Label3, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.Vonal_green, 4, 1);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 50);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 10);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.Size = new System.Drawing.Size(557, 69);
             this.tableLayoutPanel2.TabIndex = 129;
-            // 
-            // Vonal_green
-            // 
-            this.Vonal_green.BackColor = System.Drawing.Color.White;
-            this.Vonal_green.Enabled = false;
-            this.Vonal_green.Location = new System.Drawing.Point(413, 38);
-            this.Vonal_green.Name = "Vonal_green";
-            this.Vonal_green.Size = new System.Drawing.Size(62, 26);
-            this.Vonal_green.TabIndex = 93;
-            // 
-            // Vonal_Mennyiség
-            // 
-            this.Vonal_Mennyiség.BackColor = System.Drawing.Color.White;
-            this.Vonal_Mennyiség.Location = new System.Drawing.Point(250, 38);
-            this.Vonal_Mennyiség.Name = "Vonal_Mennyiség";
-            this.Vonal_Mennyiség.Size = new System.Drawing.Size(85, 26);
-            this.Vonal_Mennyiség.TabIndex = 90;
-            // 
-            // Vonal_Vonal
-            // 
-            this.Vonal_Vonal.BackColor = System.Drawing.Color.White;
-            this.Vonal_Vonal.Location = new System.Drawing.Point(85, 38);
-            this.Vonal_Vonal.Name = "Vonal_Vonal";
-            this.Vonal_Vonal.Size = new System.Drawing.Size(159, 26);
-            this.Vonal_Vonal.TabIndex = 88;
-            // 
-            // Vonal_Id
-            // 
-            this.Vonal_Id.BackColor = System.Drawing.Color.White;
-            this.Vonal_Id.Enabled = false;
-            this.Vonal_Id.Location = new System.Drawing.Point(3, 38);
-            this.Vonal_Id.Name = "Vonal_Id";
-            this.Vonal_Id.Size = new System.Drawing.Size(72, 26);
-            this.Vonal_Id.TabIndex = 87;
             // 
             // Vonal_red
             // 
@@ -306,19 +271,55 @@
             this.Vonal_red.Size = new System.Drawing.Size(62, 26);
             this.Vonal_red.TabIndex = 94;
             // 
+            // Vonal_Id
+            // 
+            this.Vonal_Id.BackColor = System.Drawing.Color.White;
+            this.Vonal_Id.Enabled = false;
+            this.Vonal_Id.Location = new System.Drawing.Point(3, 38);
+            this.Vonal_Id.Name = "Vonal_Id";
+            this.Vonal_Id.Size = new System.Drawing.Size(72, 26);
+            this.Vonal_Id.TabIndex = 87;
+            // 
+            // Vonal_Vonal
+            // 
+            this.Vonal_Vonal.BackColor = System.Drawing.Color.White;
+            this.Vonal_Vonal.Location = new System.Drawing.Point(85, 38);
+            this.Vonal_Vonal.Name = "Vonal_Vonal";
+            this.Vonal_Vonal.Size = new System.Drawing.Size(159, 26);
+            this.Vonal_Vonal.TabIndex = 88;
+            // 
+            // Vonal_Mennyiség
+            // 
+            this.Vonal_Mennyiség.BackColor = System.Drawing.Color.White;
+            this.Vonal_Mennyiség.Location = new System.Drawing.Point(250, 38);
+            this.Vonal_Mennyiség.Name = "Vonal_Mennyiség";
+            this.Vonal_Mennyiség.Size = new System.Drawing.Size(85, 26);
+            this.Vonal_Mennyiség.TabIndex = 90;
+            // 
+            // Vonal_green
+            // 
+            this.Vonal_green.BackColor = System.Drawing.Color.White;
+            this.Vonal_green.Enabled = false;
+            this.Vonal_green.Location = new System.Drawing.Point(413, 38);
+            this.Vonal_green.Name = "Vonal_green";
+            this.Vonal_green.Size = new System.Drawing.Size(62, 26);
+            this.Vonal_green.TabIndex = 93;
+            // 
             // Ablak_T5C5_Vonalak
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.BackColor = System.Drawing.Color.Tan;
+            this.ClientSize = new System.Drawing.Size(1083, 480);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Vonal_tábla);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_T5C5_Vonalak";
-            this.Text = "Ablak_T5C5_Vonalak";
+            this.Text = "T5C5 Vonalak";
             this.Load += new System.EventHandler(this.Ablak_T5C5_Vonalak_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Vonal_tábla)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
