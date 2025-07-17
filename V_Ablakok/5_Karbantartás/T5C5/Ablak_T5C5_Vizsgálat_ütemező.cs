@@ -17,7 +17,6 @@ namespace Villamos
     public partial class Ablak_T5C5_Vizsgálat_ütemező
     {
         string AlsóPanel1;
-        string UtasításSzöveg = "";
         Ablak_Kereső Új_Ablak_Kereső;
         Ablak_T5C5_Segéd Új_Ablak_T5C5_Segéd;
 #pragma warning disable IDE0044 // Add readonly modifier
@@ -52,13 +51,7 @@ namespace Villamos
         List<Adat_Kerék_Mérés> Mérés_Adatok = new List<Adat_Kerék_Mérés>();
         List<Adat_Vezénylés> AdatokVezény = new List<Adat_Vezénylés>();
 
-        // alapkijelölés
-        int Alap_red;
-        int Alap_green;
-        int Alap_blue;
-        int Vál_red;
-        int Vál_green;
-        int Vál_blue;
+
         bool Terv = false;
         // Számításhoz
         long KorNapikm = 0;
@@ -77,6 +70,7 @@ namespace Villamos
         {
             Telephelyekfeltöltése();
             Jogosultságkiosztás();
+            VonalasFrissít();
         }
 
         private void Ablak_Vizsgálat_ütemező_Load(object sender, EventArgs e)
@@ -276,7 +270,7 @@ namespace Villamos
                 Tábla.Columns[25].Width = 70;
                 Tábla.Columns[26].HeaderText = "Előírt Szer Sz";
                 Tábla.Columns[26].Width = 70;
-                Tábla.Columns[27].HeaderText = "Előírt Szerelvény";
+                Tábla.Columns[27].HeaderText = "Előírt Szerelvény1";
                 Tábla.Columns[27].Width = 70;
                 Tábla.Columns[28].HeaderText = "EÍ Szer hossz";
                 Tábla.Columns[28].Width = 70;
@@ -1040,6 +1034,11 @@ namespace Villamos
             }
             Holtart.Lép();
         }
+
+        private void VonalasFrissít()
+        {
+            AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
+        }
         // JAVÍTANDÓ:
         private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -1349,40 +1348,6 @@ namespace Villamos
 
         #region Gombok
 
-        private void Színválasztó_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ColorDialog ColorDialog1 = new ColorDialog();
-                if (ColorDialog1.ShowDialog() != DialogResult.Cancel)
-                {
-                    Alap_red = ColorDialog1.Color.R;
-                    Alap_green = ColorDialog1.Color.G;
-                    Alap_blue = ColorDialog1.Color.B;
-
-                    Vál_red = ColorDialog1.Color.R;
-                    Vál_green = ColorDialog1.Color.G;
-                    Vál_blue = ColorDialog1.Color.B;
-                }
-                else
-                {
-                    // visszaírjuk az eredetit
-                    Vál_red = 148;
-                    Vál_green = 148;
-                    Vál_blue = 148;
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
@@ -1418,7 +1383,37 @@ namespace Villamos
 
         private void Excel_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (Tábla.Rows.Count <= 0) return;
+                string fájlexc;
 
+                // kimeneti fájl helye és neve
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"T5C5_Vizsgálat_{Program.PostásTelephely.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+                Module_Excel.DataGridViewToExcel(fájlexc, Tábla, true);
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Module_Excel.Megnyitás(fájlexc);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void AktSzerelvény_Click(object sender, EventArgs e)
@@ -1644,8 +1639,9 @@ namespace Villamos
         {
             if (Új_Ablak_T5C5_Vonalak == null)
             {
-                Új_Ablak_T5C5_Vonalak = new Ablak_T5C5_Vonalak(Cmbtelephely.Text.Trim(), UtasításSzövegTervezet());
-                Új_Ablak_T5C5_Vonalak.FormClosed += Ablak_Utasítás_Generálás_FormClosed;
+                Új_Ablak_T5C5_Vonalak = new Ablak_T5C5_Vonalak(Cmbtelephely.Text.Trim());
+                Új_Ablak_T5C5_Vonalak.FormClosed += Ablak_T5C5_Vonalak_FormClosed;
+                Új_Ablak_T5C5_Vonalak.Változás += VonalasFrissít;
                 Új_Ablak_T5C5_Vonalak.Show();
             }
             else
@@ -1653,6 +1649,32 @@ namespace Villamos
                 Új_Ablak_T5C5_Vonalak.Activate();
                 Új_Ablak_T5C5_Vonalak.WindowState = FormWindowState.Maximized;
             }
+        }
+
+        private void Ablak_T5C5_Vonalak_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_T5C5_Vonalak = null;
+        }
+
+        Ablak_T5C5_Felmentés Új_Ablak_T5C5_Felmentés;
+        private void Felmentés_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_T5C5_Felmentés == null)
+            {
+                Új_Ablak_T5C5_Felmentés = new Ablak_T5C5_Felmentés();
+                Új_Ablak_T5C5_Felmentés.FormClosed += Ablak_T5C5_Felmentés_FormClosed;
+                Új_Ablak_T5C5_Felmentés.Show();
+            }
+            else
+            {
+                Új_Ablak_T5C5_Felmentés.Activate();
+                Új_Ablak_T5C5_Felmentés.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Ablak_T5C5_Felmentés_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_T5C5_Vonalak = null;
         }
     }
 }

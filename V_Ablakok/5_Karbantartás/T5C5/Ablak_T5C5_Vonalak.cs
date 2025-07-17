@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
+using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
@@ -12,6 +13,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
 {
     public partial class Ablak_T5C5_Vonalak : Form
     {
+        public event Event_Kidobó Változás;
+
         readonly Kezelő_Hétvége_Előírás KézElőírás = new Kezelő_Hétvége_Előírás();
 
         List<Adat_Hétvége_Előírás> AdatokElőírás = new List<Adat_Hétvége_Előírás>();
@@ -20,6 +23,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
 
         public Ablak_T5C5_Vonalak(string telephely)
         {
+            InitializeComponent();
             Telephely = telephely;
         }
 
@@ -79,7 +83,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
 
                 Vonal_Vonal.Text = MyF.Szöveg_Tisztítás(Vonal_Vonal.Text, 0, 20);
 
-                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokElőírás = KézElőírás.Lista_Adatok(Telephely);
                 Adat_Hétvége_Előírás ElőírásElem = (from a in AdatokElőírás
                                                     where a.Id == Id
                                                     select a).FirstOrDefault();
@@ -93,11 +97,12 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                     Blue);
 
                 if (ElőírásElem != null)
-                    KézElőírás.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
+                    KézElőírás.Módosítás(Telephely, ADAT);
                 else
-                    KézElőírás.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
+                    KézElőírás.Rögzítés(Telephely, ADAT);
 
                 Vonal_tábla_író();
+                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {
@@ -119,7 +124,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
         {
             try
             {
-                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokElőírás = KézElőírás.Lista_Adatok(Telephely);
 
                 Vonal_tábla.Rows.Clear();
                 Vonal_tábla.Columns.Clear();
@@ -178,14 +183,14 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
             {
                 if (Vonal_Id.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelöve a törlendő tétel");
                 if (!long.TryParse(Vonal_Id.Text, out long Id)) throw new HibásBevittAdat("Nincs kijelöve a törlendő tétel");
-                AdatokElőírás = KézElőírás.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokElőírás = KézElőírás.Lista_Adatok(Telephely);
 
                 Adat_Hétvége_Előírás ElőírásElem = (from a in AdatokElőírás
                                                     where a.Id == Id
                                                     select a).FirstOrDefault();
 
                 if (ElőírásElem != null)
-                    KézElőírás.Törlés(Cmbtelephely.Text.Trim(), Id);
+                    KézElőírás.Törlés(Telephely, Id);
 
                 Vonal_tábla_író();
                 Vonal_kiürít();
@@ -250,7 +255,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                 if (Vonal_Id.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve Vonal.");
                 if (!long.TryParse(Vonal_Id.Text.Trim(), out long ID)) ID = 0;
                 if (ID <= 1) throw new HibásBevittAdat("Az első elemet nem lehet előrébb tenni.");
-                KézElőírás.Csere(Cmbtelephely.Text.Trim(), ID);
+                KézElőírás.Csere(Telephely, ID);
                 Vonal_tábla_író();
                 Vonal_kiürít();
             }

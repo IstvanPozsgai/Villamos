@@ -43,7 +43,6 @@ namespace Villamos
             this.Label13 = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Kereső = new System.Windows.Forms.Button();
-            this.Színválasztó = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Felmentés = new System.Windows.Forms.Button();
             this.Excel = new System.Windows.Forms.Button();
@@ -100,19 +99,6 @@ namespace Villamos
             this.Kereső.UseVisualStyleBackColor = true;
             this.Kereső.Click += new System.EventHandler(this.Kereső_Click);
             // 
-            // Színválasztó
-            // 
-            this.Színválasztó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Színválasztó.BackgroundImage = global::Villamos.Properties.Resources.Dtafalonso_Modern_Xp_ModernXP_12_Workstation_Desktop_Colors;
-            this.Színválasztó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Színválasztó.Location = new System.Drawing.Point(562, 3);
-            this.Színválasztó.Name = "Színválasztó";
-            this.Színválasztó.Size = new System.Drawing.Size(40, 40);
-            this.Színválasztó.TabIndex = 64;
-            this.ToolTip1.SetToolTip(this.Színválasztó, "Felmentési engedély generálás");
-            this.Színválasztó.UseVisualStyleBackColor = true;
-            this.Színválasztó.Click += new System.EventHandler(this.Színválasztó_Click);
-            // 
             // BtnSúgó
             // 
             this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -137,6 +123,7 @@ namespace Villamos
             this.Felmentés.TabIndex = 63;
             this.ToolTip1.SetToolTip(this.Felmentés, "Felmentési engedély generálás");
             this.Felmentés.UseVisualStyleBackColor = true;
+            this.Felmentés.Click += new System.EventHandler(this.Felmentés_Click);
             // 
             // Excel
             // 
@@ -149,6 +136,7 @@ namespace Villamos
             this.Excel.TabIndex = 67;
             this.ToolTip1.SetToolTip(this.Excel, "Excel kimenet készítése");
             this.Excel.UseVisualStyleBackColor = true;
+            this.Excel.Click += new System.EventHandler(this.Excel_Click);
             // 
             // Utasítás
             // 
@@ -270,7 +258,6 @@ namespace Villamos
             this.tableLayoutPanel1.Controls.Add(this.Előírt, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.AktSzerelvény, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.Vonalak, 11, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Színválasztó, 10, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 45);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
@@ -331,7 +318,6 @@ namespace Villamos
         internal Button BtnSúgó;
         private V_MindenEgyéb.MyProgressbar Holtart;
         private TableLayoutPanel tableLayoutPanel1;
-        internal Button Színválasztó;
         internal Button Felmentés;
         internal Button Kereső;
         internal Button Excel;
