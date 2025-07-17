@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok.Közös;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
@@ -1570,9 +1571,25 @@ namespace Villamos
 
 
         #endregion
+        Ablak_Utasítás_Generálás Új_Ablak_Utasítás_Generálás;
         private void Utasítás_Click(object sender, EventArgs e)
         {
+            if (Új_Ablak_Utasítás_Generálás == null)
+            {
+                Új_Ablak_Utasítás_Generálás = new Ablak_Utasítás_Generálás(Cmbtelephely.Text.Trim(), UtasításSzövegTervezet());
+                Új_Ablak_Utasítás_Generálás.FormClosed += Ablak_Utasítás_Generálás_FormClosed;
+                Új_Ablak_Utasítás_Generálás.Show();
+            }
+            else
+            {
+                Új_Ablak_Utasítás_Generálás.Activate();
+                Új_Ablak_Utasítás_Generálás.WindowState = FormWindowState.Maximized;
+            }
+        }
 
+        private void Ablak_Utasítás_Generálás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Utasítás_Generálás = null;
         }
 
         private string UtasításSzövegTervezet()
@@ -1580,7 +1597,6 @@ namespace Villamos
             string válasz = "";
             try
             {
-                UtasításSzöveg = "";
                 string előzővonal = "";
 
                 string szöveg;
@@ -1614,7 +1630,7 @@ namespace Villamos
                     if (rekord.Vissza6 == "1") szöveg += " Vissza kell csatolni:" + rekord.Kocsi6.Trim();
                     szöveg += "\r\n";
                 }
-                UtasításSzöveg += szöveg + "\r\n";
+                válasz += szöveg + "\r\n";
             }
             catch (HibásBevittAdat ex)
             {

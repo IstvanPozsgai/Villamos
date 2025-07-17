@@ -19,6 +19,7 @@ namespace Villamos.V_Ablakok.Közös
             InitializeComponent();
         }
 
+
         public Ablak_Utasítás_Generálás(string telephely, string előterv)
         {
             InitializeComponent();
@@ -28,20 +29,9 @@ namespace Villamos.V_Ablakok.Közös
 
         private void Ablak_Utasítás_Generálás_Load(object sender, EventArgs e)
         {
-
+            Txtírásimező.Text = Előterv;
         }
 
-
-        #region Utasítás
-        private void Utasítás_tervezet_Click(object sender, EventArgs e)
-        {
-            Utasítás_Írás();
-        }
-
-        private void Utasítás_Írás()
-        {
-
-        }
 
         private void Btnrögzítés_Click(object sender, EventArgs e)
         {
@@ -72,27 +62,5 @@ namespace Villamos.V_Ablakok.Közös
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void Utasítás_törlés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Valóban töröljük az eddigi adatokat?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                    KézHBeosztás.Törlés(Cmbtelephely.Text.Trim());
-                Utasítás_Írás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-
-
     }
 }

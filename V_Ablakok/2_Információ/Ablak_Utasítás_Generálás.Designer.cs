@@ -57,6 +57,7 @@
             this.Btnrögzítés.Size = new System.Drawing.Size(48, 48);
             this.Btnrögzítés.TabIndex = 83;
             this.Btnrögzítés.UseVisualStyleBackColor = true;
+            this.Btnrögzítés.Click += new System.EventHandler(this.Btnrögzítés_Click);
             // 
             // Label13
             // 
@@ -71,6 +72,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(1073, 509);
             this.Controls.Add(this.Txtírásimező);
             this.Controls.Add(this.Btnrögzítés);
@@ -78,7 +80,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Utasítás_Generálás";
-            this.Text = "Ablak_Utasítás_Generálás";
+            this.Text = "Utasítás  Írás";
             this.Load += new System.EventHandler(this.Ablak_Utasítás_Generálás_Load);
             this.ResumeLayout(false);
 
