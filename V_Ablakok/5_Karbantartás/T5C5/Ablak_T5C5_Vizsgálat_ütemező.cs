@@ -1571,10 +1571,13 @@ namespace Villamos
 
         #endregion
         private void Utasítás_Click(object sender, EventArgs e)
-        { }
-
-        private void UtasításSzövegTervezet()
         {
+
+        }
+
+        private string UtasításSzövegTervezet()
+        {
+            string válasz = "";
             try
             {
                 UtasításSzöveg = "";
@@ -1622,6 +1625,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return válasz;
         }
     }
 }
