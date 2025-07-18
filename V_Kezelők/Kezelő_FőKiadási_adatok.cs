@@ -81,7 +81,7 @@ namespace Villamos.Kezelők
                     szöveg += $"szolgálat='{Adat.Szolgálat}', ";
                     szöveg += $"forgalomban={Adat.Forgalomban}, ";
                     szöveg += $"tartalék={Adat.Tartalék}, ";
-                    szöveg += $"kocsiszíni={Adat.Forgalomban}, ";
+                    szöveg += $"kocsiszíni={Adat.Kocsiszíni}, ";
                     szöveg += $"félreállítás={Adat.Félreállítás}, ";
                     szöveg += $"főjavítás={Adat.Főjavítás}, ";
                     szöveg += $"munkanap={Adat.Munkanap}, ";
