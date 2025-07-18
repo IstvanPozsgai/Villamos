@@ -153,7 +153,7 @@
             this.Btn_Pdf.Name = "Btn_Pdf";
             this.Btn_Pdf.Size = new System.Drawing.Size(40, 40);
             this.Btn_Pdf.TabIndex = 257;
-            this.toolTip1.SetToolTip(this.Btn_Pdf, "Excel táblázatot készít a táblázat adataiból");
+            this.toolTip1.SetToolTip(this.Btn_Pdf, "PDF készítés a táblázat adataiból");
             this.Btn_Pdf.UseVisualStyleBackColor = true;
             this.Btn_Pdf.Click += new System.EventHandler(this.Btn_Pdf_Click);
             // 

@@ -54,9 +54,10 @@
             this.Btn_Csere = new System.Windows.Forms.Button();
             this.Btn_Sorrend = new System.Windows.Forms.Button();
             this.Btn_Törlés = new System.Windows.Forms.Button();
-            this.Üzemóra_Oldal = new System.Windows.Forms.Button();
+            this.Btn_Uzemora_Oldal = new System.Windows.Forms.Button();
             this.BttnUtolag_Modosit = new System.Windows.Forms.Button();
             this.Btn_Pdf = new System.Windows.Forms.Button();
+            this.Btn_Naplo_Oldal = new System.Windows.Forms.Button();
             this.GrpBxMűveletek = new System.Windows.Forms.GroupBox();
             this.GrpBxUtolagos = new System.Windows.Forms.GroupBox();
             this.TxtBxUtolagMegjegyzes = new System.Windows.Forms.TextBox();
@@ -336,19 +337,19 @@
             this.Btn_Törlés.UseVisualStyleBackColor = true;
             this.Btn_Törlés.Click += new System.EventHandler(this.Btn_Törlés_Click);
             // 
-            // Üzemóra_Oldal
+            // Btn_Uzemora_Oldal
             // 
-            this.Üzemóra_Oldal.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Üzemóra_Oldal.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
-            this.Üzemóra_Oldal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Üzemóra_Oldal.Image = global::Villamos.Properties.Resources.Action_configure;
-            this.Üzemóra_Oldal.Location = new System.Drawing.Point(10, 405);
-            this.Üzemóra_Oldal.Name = "Üzemóra_Oldal";
-            this.Üzemóra_Oldal.Size = new System.Drawing.Size(40, 40);
-            this.Üzemóra_Oldal.TabIndex = 249;
-            this.toolTip1.SetToolTip(this.Üzemóra_Oldal, "Üzemóra állítása");
-            this.Üzemóra_Oldal.UseVisualStyleBackColor = true;
-            this.Üzemóra_Oldal.Click += new System.EventHandler(this.Üzemóra_Oldal_Click);
+            this.Btn_Uzemora_Oldal.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Uzemora_Oldal.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
+            this.Btn_Uzemora_Oldal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Uzemora_Oldal.Image = global::Villamos.Properties.Resources.Action_configure;
+            this.Btn_Uzemora_Oldal.Location = new System.Drawing.Point(10, 405);
+            this.Btn_Uzemora_Oldal.Name = "Btn_Uzemora_Oldal";
+            this.Btn_Uzemora_Oldal.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Uzemora_Oldal.TabIndex = 249;
+            this.toolTip1.SetToolTip(this.Btn_Uzemora_Oldal, "Üzemóra állítása");
+            this.Btn_Uzemora_Oldal.UseVisualStyleBackColor = true;
+            this.Btn_Uzemora_Oldal.Click += new System.EventHandler(this.Btn_Uzemora_Oldal_Click);
             // 
             // BttnUtolag_Modosit
             // 
@@ -376,17 +377,32 @@
             this.Btn_Pdf.Name = "Btn_Pdf";
             this.Btn_Pdf.Size = new System.Drawing.Size(40, 40);
             this.Btn_Pdf.TabIndex = 250;
-            this.toolTip1.SetToolTip(this.Btn_Pdf, "Excel táblázatot készít a táblázat adataiból");
+            this.toolTip1.SetToolTip(this.Btn_Pdf, "PDF készítés a táblázat adataiból");
             this.Btn_Pdf.UseVisualStyleBackColor = true;
             this.Btn_Pdf.Click += new System.EventHandler(this.Btn_Pdf_Click);
+            // 
+            // Btn_Naplo_Oldal
+            // 
+            this.Btn_Naplo_Oldal.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Naplo_Oldal.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
+            this.Btn_Naplo_Oldal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Naplo_Oldal.Image = global::Villamos.Properties.Resources.App_dict;
+            this.Btn_Naplo_Oldal.Location = new System.Drawing.Point(56, 405);
+            this.Btn_Naplo_Oldal.Name = "Btn_Naplo_Oldal";
+            this.Btn_Naplo_Oldal.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Naplo_Oldal.TabIndex = 251;
+            this.toolTip1.SetToolTip(this.Btn_Naplo_Oldal, "Napló műveletek");
+            this.Btn_Naplo_Oldal.UseVisualStyleBackColor = true;
+            this.Btn_Naplo_Oldal.Click += new System.EventHandler(this.Btn_Naplo_Oldal_Click);
             // 
             // GrpBxMűveletek
             // 
             this.GrpBxMűveletek.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GrpBxMűveletek.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(200)))), ((int)(((byte)(184)))));
+            this.GrpBxMűveletek.Controls.Add(this.Btn_Naplo_Oldal);
             this.GrpBxMűveletek.Controls.Add(this.Btn_Pdf);
-            this.GrpBxMűveletek.Controls.Add(this.Üzemóra_Oldal);
+            this.GrpBxMűveletek.Controls.Add(this.Btn_Uzemora_Oldal);
             this.GrpBxMűveletek.Controls.Add(this.Btn_Módosít);
             this.GrpBxMűveletek.Controls.Add(this.Btn_Excel);
             this.GrpBxMűveletek.Controls.Add(this.TablaMuvelet);
@@ -619,7 +635,7 @@
         internal System.Windows.Forms.Button Btn_Módosít;
         internal System.Windows.Forms.Button Btn_Excel;
         internal System.Windows.Forms.GroupBox GrpBxMűveletek;
-        internal System.Windows.Forms.Button Üzemóra_Oldal;
+        internal System.Windows.Forms.Button Btn_Uzemora_Oldal;
         private System.Windows.Forms.GroupBox GrpBxUtolagos;
         internal Zuby.ADGV.AdvancedDataGridView TablaNaplo;
         internal System.Windows.Forms.DateTimePicker DtmPckrUtolagos;
@@ -633,5 +649,6 @@
         internal System.Windows.Forms.Label LblMegjegyzes;
         internal System.Windows.Forms.TextBox TxtBxUtolagMegjegyzes;
         internal System.Windows.Forms.Button Btn_Pdf;
+        internal System.Windows.Forms.Button Btn_Naplo_Oldal;
     }
 }
