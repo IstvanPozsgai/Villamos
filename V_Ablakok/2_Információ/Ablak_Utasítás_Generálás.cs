@@ -48,7 +48,7 @@ namespace Villamos.V_Ablakok.Közös
                               Program.PostásNév.Trim(),
                               DateTime.Now,
                               0);
-                KézUtasítás.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today.Year, ADAT);
+                KézUtasítás.Rögzítés(Telephely, DateTime.Today.Year, ADAT);
 
                 MessageBox.Show($"Az utasítás rögzítése megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

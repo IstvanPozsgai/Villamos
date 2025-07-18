@@ -1105,8 +1105,8 @@ namespace Villamos
                     Adat_Személyzet_Adatok ADAT = new Adat_Személyzet_Adatok(
                         rekord.Dátum,
                         rekord.Napszak,
-                        Vál_Telephely.ToStrTrim(),
                         SzolgálatNév.ToStrTrim(),
+                        Vál_Telephely.ToStrTrim(),
                         újtípus.ToStrTrim(),
                         rekord.Viszonylat,
                         rekord.Forgalmiszám,
@@ -1167,8 +1167,8 @@ namespace Villamos
                     Adat_Típuscsere_Adatok adat_Típuscsere_Adatok = new Adat_Típuscsere_Adatok(
                         Adat.Dátum,
                         Adat.Napszak,
-                        Vál_Telephely.Trim(),
                         SzolgálatNév.ToStrTrim(),
+                        Vál_Telephely.Trim(),
                         típuselőírt.ToStrTrim(),
                         típuskiadott.ToStrTrim(),
                         Adat.Viszonylat.ToStrTrim(),

@@ -92,7 +92,6 @@
         #endregion
         internal System.Windows.Forms.RichTextBox Txtírásimező;
         internal System.Windows.Forms.Button Btnrögzítés;
-        internal System.Windows.Forms.ComboBox Cmbtelephely;
         internal System.Windows.Forms.Label Label13;
         private System.Windows.Forms.ToolTip toolTip1;
     }
