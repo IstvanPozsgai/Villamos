@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
@@ -1333,6 +1334,7 @@ namespace Villamos
             if (e.RowIndex < 0) return;
 
             Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            if (long.TryParse(Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString(), out long ID)) RögzítésAblak(ID);
 
             Vizsgsorszám.Text = Tábla1.Rows[e.RowIndex].Cells[3].Value.ToString();
             Vizsgfok.Text = Tábla1.Rows[e.RowIndex].Cells[2].Value.ToString();
@@ -1363,6 +1365,32 @@ namespace Villamos
 
 
             Fülek.SelectedIndex = 3;
+        }
+
+        Karbantartás_Rögzítés Új_Karbantartás_Rögzítés;
+        private void RögzítésAblak(long Id)
+        {
+            Adat_T5C5_Kmadatok adat = (from a in AdatokKmAdatok
+                                       where a.ID == Id
+                                       select a).FirstOrDefault();
+            if (adat == null) return;
+
+            if (Új_Karbantartás_Rögzítés == null)
+            {
+                Új_Karbantartás_Rögzítés = new Karbantartás_Rögzítés("T5C5", adat);
+                Új_Karbantartás_Rögzítés.FormClosed += Karbantartás_Rögzítés_FormClosed;
+                Új_Karbantartás_Rögzítés.Show();
+            }
+            else
+            {
+                Új_Karbantartás_Rögzítés.Activate();
+                Új_Karbantartás_Rögzítés.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Karbantartás_Rögzítés_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Karbantartás_Rögzítés = null;
         }
         #endregion
 
