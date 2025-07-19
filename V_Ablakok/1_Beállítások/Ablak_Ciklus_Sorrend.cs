@@ -60,12 +60,12 @@ namespace Villamos.V_Ablakok._1_Beállítások
                     Tábla.RowCount++;
                     int i = Tábla.RowCount - 1;
 
-                    Tábla.Rows[i].Cells[0].Value = rekord.Típus;
-                    Tábla.Rows[i].Cells[1].Value = rekord.Sorszám;
-                    Tábla.Rows[i].Cells[2].Value = rekord.Vizsgálatfok;
-                    Tábla.Rows[i].Cells[3].Value = rekord.Névleges;
-                    Tábla.Rows[i].Cells[4].Value = rekord.Alsóérték;
-                    Tábla.Rows[i].Cells[5].Value = rekord.Felsőérték;
+                    //Tábla.Rows[i].Cells[0].Value = rekord.Típus;
+                    //Tábla.Rows[i].Cells[1].Value = rekord.Sorszám;
+                    //Tábla.Rows[i].Cells[2].Value = rekord.Vizsgálatfok;
+                    //Tábla.Rows[i].Cells[3].Value = rekord.Névleges;
+                    //Tábla.Rows[i].Cells[4].Value = rekord.Alsóérték;
+                    //Tábla.Rows[i].Cells[5].Value = rekord.Felsőérték;
                 }
 
                 Tábla.Visible = true;

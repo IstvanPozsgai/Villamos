@@ -300,6 +300,8 @@
     <Compile Include="V_Ablakok\2_Információ\Ablak_Utasítás_Generálás.Designer.cs">
       <DependentUpon>Ablak_Utasítás_Generálás.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Ciklus_Sorrend.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Műveletek_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Üzemóra.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_KM.cs">

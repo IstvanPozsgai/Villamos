@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Ciklus_Sorrend));
             this.label1 = new System.Windows.Forms.Label();
             this.Sorszám = new System.Windows.Forms.TextBox();
             this.Tábla = new System.Windows.Forms.DataGridView();
@@ -190,6 +191,7 @@
             this.Controls.Add(this.Rögzítés);
             this.Controls.Add(this.Tábla);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Ciklus_Sorrend";
             this.Text = "Ciklus Sorrend";
