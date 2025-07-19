@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._1_Beállítások;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -382,9 +383,25 @@ namespace Villamos
             }
         }
 
+        Ablak_Ciklus_Sorrend Új_Ablak_Ciklus_Sorrend;
         private void CiklusSorrend_Click(object sender, EventArgs e)
         {
+            if (Új_Ablak_Ciklus_Sorrend == null)
+            {
+                Új_Ablak_Ciklus_Sorrend = new Ablak_Ciklus_Sorrend();
+                Új_Ablak_Ciklus_Sorrend.FormClosed += Ablak_Ciklus_Sorrend_FormClosed;
+                Új_Ablak_Ciklus_Sorrend.Show();
+            }
+            else
+            {
+                Új_Ablak_Ciklus_Sorrend.Activate();
+                Új_Ablak_Ciklus_Sorrend.WindowState = FormWindowState.Maximized;
+            }
+        }
 
+        private void Ablak_Ciklus_Sorrend_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Ciklus_Sorrend = null;
         }
     }
 }
