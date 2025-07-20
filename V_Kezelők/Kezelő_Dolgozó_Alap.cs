@@ -21,6 +21,12 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Adatok(hely.KönyvSzerk());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Telephely">Melyik telephely adatai</param>
+        /// <param name="Aktív">true csak aktív dolgozók vannak a listában</param>
+        /// <returns></returns>
         public List<Adat_Dolgozó_Alap> Lista_Adatok(string Telephely, bool Aktív = false)
         {
             FájlBeállítás(Telephely);
