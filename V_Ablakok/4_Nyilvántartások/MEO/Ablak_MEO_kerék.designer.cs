@@ -301,7 +301,7 @@ namespace Villamos
             this.Tábla.Name = "Tábla";
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.RowHeadersWidth = 51;
-            this.Tábla.Size = new System.Drawing.Size(1005, 228);
+            this.Tábla.Size = new System.Drawing.Size(1005, 286);
             this.Tábla.TabIndex = 83;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -446,7 +446,7 @@ namespace Villamos
             this.ListaTábla.Name = "ListaTábla";
             this.ListaTábla.RowHeadersVisible = false;
             this.ListaTábla.RowHeadersWidth = 51;
-            this.ListaTábla.Size = new System.Drawing.Size(1266, 205);
+            this.ListaTábla.Size = new System.Drawing.Size(1266, 226);
             this.ListaTábla.TabIndex = 154;
             // 
             // Btn_Mérés_Lista_Frissit
@@ -648,7 +648,7 @@ namespace Villamos
             this.LekérdTábla.Name = "LekérdTábla";
             this.LekérdTábla.RowHeadersVisible = false;
             this.LekérdTábla.RowHeadersWidth = 51;
-            this.LekérdTábla.Size = new System.Drawing.Size(1270, 218);
+            this.LekérdTábla.Size = new System.Drawing.Size(1270, 232);
             this.LekérdTábla.TabIndex = 167;
             // 
             // Label9
@@ -748,7 +748,7 @@ namespace Villamos
             this.FelhasználóTábla.Name = "FelhasználóTábla";
             this.FelhasználóTábla.RowHeadersVisible = false;
             this.FelhasználóTábla.RowHeadersWidth = 51;
-            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 261);
+            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 289);
             this.FelhasználóTábla.TabIndex = 82;
             this.FelhasználóTábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FelhasználóTábla_CellClick);
             // 
