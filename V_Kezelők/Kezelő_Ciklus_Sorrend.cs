@@ -23,7 +23,7 @@ namespace Villamos.V_Kezelők
 
         public List<Adat_Ciklus_Sorrend> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM {táblanév} ORDER BY sorszám";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY JárműTípus,sorszám";
             List<Adat_Ciklus_Sorrend> Adatok = new List<Adat_Ciklus_Sorrend>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -61,7 +61,9 @@ namespace Villamos.V_Kezelők
                 Adat_Ciklus_Sorrend ADAT = Adatok.Where(a => a.JárműTípus == Adat.JárműTípus && a.CiklusNév == Adat.CiklusNév).FirstOrDefault();
                 if (ADAT == null)
                 {
-                    List<Adat_Ciklus_Sorrend> Szűrt = Adatok.Where(a => a.JárműTípus == Adat.JárműTípus && a.CiklusNév == Adat.CiklusNév).ToList();
+                    List<Adat_Ciklus_Sorrend> Szűrt = (from a in Adatok
+                                                       where a.JárműTípus == Adat.JárműTípus
+                                                       select a).ToList();
                     //Ha minusz -1-el érkezik akkor az utolsó sorszámot kell adni neki
                     int Id = Adat.Sorszám;
                     if (Adat.Sorszám < 0)
@@ -110,7 +112,7 @@ namespace Villamos.V_Kezelők
             try
             {
                 string szöveg = $"UPDATE {táblanév} SET  ";
-                szöveg += $" Sorszám={Adat.Sorszám}, ";
+                szöveg += $" Sorszám={Adat.Sorszám} ";
                 szöveg += $" WHERE [JárműTípus]='{Adat.JárműTípus}' AND [CiklusNév]='{Adat.CiklusNév}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -131,7 +133,7 @@ namespace Villamos.V_Kezelők
             try
             {
                 string szöveg = $"DELETE FROM {táblanév} WHERE [JárműTípus]='{Adat.JárműTípus}' AND [CiklusNév]='{Adat.CiklusNév}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

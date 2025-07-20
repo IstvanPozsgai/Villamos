@@ -41,7 +41,6 @@
             this.BeoFrissít = new System.Windows.Forms.Button();
             this.BeoÚj = new System.Windows.Forms.Button();
             this.Töröl = new System.Windows.Forms.Button();
-            this.BtnOktatásFel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -64,18 +63,26 @@
             // 
             // Tábla
             // 
+            this.Tábla.AllowUserToAddRows = false;
+            this.Tábla.AllowUserToDeleteRows = false;
+            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla.Location = new System.Drawing.Point(12, 141);
+            this.Tábla.Location = new System.Drawing.Point(12, 119);
             this.Tábla.Name = "Tábla";
-            this.Tábla.Size = new System.Drawing.Size(384, 329);
+            this.Tábla.RowHeadersVisible = false;
+            this.Tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.Tábla.Size = new System.Drawing.Size(666, 351);
             this.Tábla.TabIndex = 3;
+            this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
             // Rögzítés
             // 
             this.Rögzítés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Rögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Rögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Rögzítés.Location = new System.Drawing.Point(309, 5);
+            this.Rögzítés.Location = new System.Drawing.Point(353, 6);
             this.Rögzítés.Name = "Rögzítés";
             this.Rögzítés.Size = new System.Drawing.Size(45, 45);
             this.Rögzítés.TabIndex = 191;
@@ -120,7 +127,7 @@
             this.tableLayoutPanel1.Controls.Add(this.CiklusTípus, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.JárműTípus, 1, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 5);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 5);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -142,7 +149,7 @@
             // 
             this.BeoFrissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.BeoFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BeoFrissít.Location = new System.Drawing.Point(411, 68);
+            this.BeoFrissít.Location = new System.Drawing.Point(455, 69);
             this.BeoFrissít.Name = "BeoFrissít";
             this.BeoFrissít.Size = new System.Drawing.Size(45, 45);
             this.BeoFrissít.TabIndex = 197;
@@ -153,40 +160,30 @@
             // 
             this.BeoÚj.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
             this.BeoÚj.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BeoÚj.Location = new System.Drawing.Point(360, 68);
+            this.BeoÚj.Location = new System.Drawing.Point(404, 69);
             this.BeoÚj.Name = "BeoÚj";
             this.BeoÚj.Size = new System.Drawing.Size(45, 45);
             this.BeoÚj.TabIndex = 196;
             this.BeoÚj.UseVisualStyleBackColor = true;
+            this.BeoÚj.Click += new System.EventHandler(this.BeoÚj_Click);
             // 
             // Töröl
             // 
             this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Töröl.Location = new System.Drawing.Point(309, 68);
+            this.Töröl.Location = new System.Drawing.Point(353, 69);
             this.Töröl.Name = "Töröl";
             this.Töröl.Size = new System.Drawing.Size(45, 45);
             this.Töröl.TabIndex = 195;
             this.Töröl.UseVisualStyleBackColor = true;
             this.Töröl.Click += new System.EventHandler(this.Töröl_Click);
             // 
-            // BtnOktatásFel
-            // 
-            this.BtnOktatásFel.BackgroundImage = global::Villamos.Properties.Resources.Up_gyűjtemény;
-            this.BtnOktatásFel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnOktatásFel.Location = new System.Drawing.Point(462, 68);
-            this.BtnOktatásFel.Name = "BtnOktatásFel";
-            this.BtnOktatásFel.Size = new System.Drawing.Size(45, 45);
-            this.BtnOktatásFel.TabIndex = 198;
-            this.BtnOktatásFel.UseVisualStyleBackColor = true;
-            // 
             // Ablak_Ciklus_Sorrend
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Peru;
-            this.ClientSize = new System.Drawing.Size(803, 480);
-            this.Controls.Add(this.BtnOktatásFel);
+            this.ClientSize = new System.Drawing.Size(688, 480);
             this.Controls.Add(this.BeoFrissít);
             this.Controls.Add(this.BeoÚj);
             this.Controls.Add(this.Töröl);
@@ -219,7 +216,6 @@
         internal System.Windows.Forms.Button BeoFrissít;
         internal System.Windows.Forms.Button BeoÚj;
         internal System.Windows.Forms.Button Töröl;
-        internal System.Windows.Forms.Button BtnOktatásFel;
         private System.Windows.Forms.ComboBox JárműTípus;
     }
 }

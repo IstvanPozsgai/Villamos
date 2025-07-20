@@ -57,17 +57,21 @@ namespace Villamos
             Töröl.Enabled = false;
             Rögzít.Enabled = false;
             CsoportosMásolás.Enabled = false;
+            CiklusSorrend.Enabled = false;
+
             if (Program.PostásTelephely.Trim() == "Főmérnökség")
             {
                 Töröl.Visible = true;
                 Rögzít.Visible = true;
                 CsoportosMásolás.Visible = true;
+                CiklusSorrend.Visible = true;
             }
             else
             {
                 Töröl.Visible = false;
                 Rögzít.Visible = false;
                 CsoportosMásolás.Visible = false;
+                CiklusSorrend.Visible = false;
             }
 
             melyikelem = 7;
@@ -77,6 +81,7 @@ namespace Villamos
                 Töröl.Enabled = true;
                 Rögzít.Enabled = true;
                 CsoportosMásolás.Enabled = true;
+                CiklusSorrend.Enabled = true;
             }
             // módosítás 2
             if (MyF.Vanjoga(melyikelem, 2))

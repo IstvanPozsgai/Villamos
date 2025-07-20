@@ -12,11 +12,11 @@ namespace Villamos.V_Ablakok._1_Beállítások
 {
     public partial class Ablak_Ciklus_Sorrend : Form
     {
-        readonly Kezelő_Ciklus Kéz = new Kezelő_Ciklus();
+        readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_Ciklus_Sorrend KézSorrend = new Kezelő_Ciklus_Sorrend();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
-        List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
+        List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
         List<Adat_Jármű> Adatok_Állomány = new List<Adat_Jármű>();
 
         public Ablak_Ciklus_Sorrend()
@@ -27,10 +27,11 @@ namespace Villamos.V_Ablakok._1_Beállítások
 
         private void Start()
         {
-            Adatok = Kéz.Lista_Adatok();
+            AdatokCiklus = KézCiklus.Lista_Adatok();
             Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
             CiklusTípusfeltöltés();
             Típusfeltöltés();
+            Táblaíró();
         }
 
         private void Ablak_Ciklus_Sorrend_Load(object sender, EventArgs e)
@@ -44,43 +45,56 @@ namespace Villamos.V_Ablakok._1_Beállítások
         {
             try
             {
+                List<Adat_Ciklus_Sorrend> Adatok = KézSorrend.Lista_Adatok();
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
                 Tábla.Visible = false;
-                Tábla.ColumnCount = 6;
+                Tábla.ColumnCount = 3;
 
                 // fejléc elkészítése 
-                Tábla.Columns[0].HeaderText = "Ciklus Típus";
-                Tábla.Columns[0].Width = 120;
-                Tábla.Columns[1].HeaderText = "Sorszám";
-                Tábla.Columns[1].Width = 80;
-                Tábla.Columns[2].HeaderText = "Vizsgálat";
+                Tábla.Columns[0].HeaderText = "Sorszám";
+                Tábla.Columns[0].Width = 80;
+                Tábla.Columns[1].HeaderText = "Jármű típus";
+                Tábla.Columns[1].Width = 200;
+                Tábla.Columns[2].HeaderText = "Ciklus típus";
                 Tábla.Columns[2].Width = 200;
-                Tábla.Columns[3].HeaderText = "Névleges";
-                Tábla.Columns[3].Width = 150;
-                Tábla.Columns[4].HeaderText = "Alsó eltérés";
-                Tábla.Columns[4].Width = 150;
-                Tábla.Columns[5].HeaderText = "Felső eltérés";
-                Tábla.Columns[5].Width = 150;
 
-                //       foreach (Adat_Ciklus rekord in AdatokSzűrt)
+                foreach (Adat_Ciklus_Sorrend rekord in Adatok)
                 {
                     Tábla.RowCount++;
                     int i = Tábla.RowCount - 1;
 
-                    //Tábla.Rows[i].Cells[0].Value = rekord.Típus;
-                    //Tábla.Rows[i].Cells[1].Value = rekord.Sorszám;
-                    //Tábla.Rows[i].Cells[2].Value = rekord.Vizsgálatfok;
-                    //Tábla.Rows[i].Cells[3].Value = rekord.Névleges;
-                    //Tábla.Rows[i].Cells[4].Value = rekord.Alsóérték;
-                    //Tábla.Rows[i].Cells[5].Value = rekord.Felsőérték;
+                    Tábla.Rows[i].Cells[0].Value = rekord.Sorszám;
+                    Tábla.Rows[i].Cells[1].Value = rekord.JárműTípus;
+                    Tábla.Rows[i].Cells[2].Value = rekord.CiklusNév;
                 }
 
                 Tábla.Visible = true;
                 Tábla.Refresh();
                 Tábla.ClearSelection();
 
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (e.RowIndex < 0) return; // Ellenőrizzük, hogy érvényes sorra kattintottunk-e
+
+                Sorszám.Text = Tábla.Rows[e.RowIndex].Cells[0].Value.ToString();
+                CiklusTípus.Text = Tábla.Rows[e.RowIndex].Cells[2].Value.ToString();
+                JárműTípus.Text = Tábla.Rows[e.RowIndex].Cells[1].Value.ToString();
             }
             catch (HibásBevittAdat ex)
             {
@@ -101,7 +115,7 @@ namespace Villamos.V_Ablakok._1_Beállítások
             try
             {
                 CiklusTípus.Items.Clear();
-                List<string> SzűrtAdatok = (from a in Adatok
+                List<string> SzűrtAdatok = (from a in AdatokCiklus
                                             where a.Törölt == "0"
                                             orderby a.Típus
                                             select a.Típus).ToList().Distinct().ToList();
@@ -160,6 +174,8 @@ namespace Villamos.V_Ablakok._1_Beállítások
                 if (string.IsNullOrWhiteSpace(JárműTípus.Text)) throw new HibásBevittAdat("A jármű típus nem lehet üres!");
                 Adat_Ciklus_Sorrend ADAT = new Adat_Ciklus_Sorrend(sorszám, JárműTípus.Text, CiklusTípus.Text);
                 KézSorrend.Döntés(ADAT);
+                Táblaíró();
+                MezőkŰrítése();
             }
             catch (HibásBevittAdat ex)
             {
@@ -181,6 +197,8 @@ namespace Villamos.V_Ablakok._1_Beállítások
                 if (string.IsNullOrWhiteSpace(JárműTípus.Text)) throw new HibásBevittAdat("A jármű típus nem lehet üres!");
                 Adat_Ciklus_Sorrend ADAT = new Adat_Ciklus_Sorrend(sorszám, JárműTípus.Text, CiklusTípus.Text);
                 KézSorrend.Törlés(ADAT);
+                Táblaíró();
+                MezőkŰrítése();
             }
             catch (HibásBevittAdat ex)
             {
@@ -197,8 +215,18 @@ namespace Villamos.V_Ablakok._1_Beállítások
         {
             Táblaíró();
         }
+
+        private void BeoÚj_Click(object sender, EventArgs e)
+        {
+            MezőkŰrítése();
+        }
+
+        private void MezőkŰrítése()
+        {
+            Sorszám.Text = "";
+            CiklusTípus.Text = "";
+            JárműTípus.Text = "";
+        }
         #endregion
-
-
     }
 }
