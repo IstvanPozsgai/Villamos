@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "kiskakas";
         string hely;
+        readonly string táblanév = "Beosztás";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = $"SELECT * FROM Beosztás";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Dolgozó_Beosztás_Új> Adatok = new List<Adat_Dolgozó_Beosztás_Új>();
             Adat_Dolgozó_Beosztás_Új Adat;
 

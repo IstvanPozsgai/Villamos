@@ -20,14 +20,17 @@ namespace Villamos
     {
         string MelyikAdat = "";
 
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+
+        #region Alap
         public Ablak_T5C5_fűtés()
         {
             InitializeComponent();
             Start();
         }
 
-
-        void Start()
+        // JAVÍTANDÓ:
+        private void Start()
         {
             Telephelyekfeltöltése();
 
@@ -50,12 +53,13 @@ namespace Villamos
             PictureBox2.Width = 450;
             PictureBox2.Height = 570;
             PictureBox2.Visible = false;
-        }
 
+            Dolgozófeltöltés();
+            Pályaszámok_feltöltése();
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         { }
-
 
         private void Telephelyekfeltöltése()
         {
@@ -82,21 +86,11 @@ namespace Villamos
             }
         }
 
-
-        private void Form1_Shown(object sender, EventArgs e)
-        {
-            Dolgozófeltöltés();
-            Pályaszámok_feltöltése();
-        }
-
-
-
-        #region Alap
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\T5C5_fűtés.html";
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\T5C5_fűtés.html";
                 MyE.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
@@ -109,7 +103,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -149,36 +142,11 @@ namespace Villamos
             }
         }
 
-
-        private void Fülekkitöltése()
-        {
-            switch (Fülek.SelectedIndex)
-            {
-                case 0:
-                    {
-                        break;
-                    }
-
-                case 1:
-                    {
-                        break;
-                    }
-            }
-        }
-
-
-        private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Fülekkitöltése();
-        }
-
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             Dolgozófeltöltés();
             Pályaszámok_feltöltése();
         }
-
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -219,6 +187,7 @@ namespace Villamos
 
 
         #region Rögzítés
+        // JAVÍTANDÓ:
         private void Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -299,7 +268,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
 
         private string Jófűtés()
         {
@@ -335,9 +303,10 @@ namespace Villamos
             else
                 return "2";
         }
+        #endregion
+
+
         #region Gombok
-
-
         private void RadioButton1_CheckedChanged(object sender, EventArgs e)
         {
             Gombválasztás();
@@ -366,7 +335,6 @@ namespace Villamos
             else
                 T5C5K2_automata();
         }
-
 
         private void T5C5_fűtések()
         {
@@ -417,7 +385,6 @@ namespace Villamos
             CheckBox15.Visible = true;
         }
 
-
         private void T5C5K2_fűtések()
         {
             CheckBox1.Text = "1";
@@ -466,7 +433,6 @@ namespace Villamos
             CheckBox15.BackColor = Color.Aqua;
             CheckBox15.Visible = true;
         }
-
 
         private void T5C5K2_automata()
         {
@@ -517,12 +483,10 @@ namespace Villamos
             CheckBox15.Visible = true;
         }
 
-
         private void Btnkilelöltörlés_Click(object sender, EventArgs e)
         {
             Mezők_ürítése_check();
         }
-
 
         private void Mezők_ürítése_check()
         {
@@ -547,7 +511,6 @@ namespace Villamos
             CheckBox19.Checked = false;
         }
 
-
         private void BtnKijelölcsop_Click(object sender, EventArgs e)
         {
             CheckBox1.Checked = true;
@@ -571,12 +534,10 @@ namespace Villamos
             CheckBox19.Checked = true;
         }
 
-
         private void Beállítási_értékek_MouseLeave(object sender, EventArgs e)
         {
             PictureBox2.Visible = false;
         }
-
 
         private void Beállítási_értékek_MouseEnter(object sender, EventArgs e)
         {
@@ -593,7 +554,6 @@ namespace Villamos
                 Pályaszám.Items.Clear();
                 if (Cmbtelephely.Text.ToStrTrim() == "") return;
 
-                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
                 Adatok = (from a in Adatok
                           where a.Törölt == false
@@ -617,7 +577,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Dolgozófeltöltés()
         {
             try
@@ -654,7 +614,6 @@ namespace Villamos
             Mezők_ürítése_check();
         }
 
-
         private void Mezők_ürítése_szűk()
         {
             I_szakasz.Text = "";
@@ -662,7 +621,6 @@ namespace Villamos
             Megjegyzés.Text = "";
             Beállítási_értékek.Checked = false;
         }
-
 
         private void Új_elem_Click(object sender, EventArgs e)
         {
@@ -672,6 +630,7 @@ namespace Villamos
 
 
         #region Lekérdezés
+        // JAVÍTANDÓ:
         private void Lekérdezés_Click(object sender, EventArgs e)
         {
             try
@@ -784,7 +743,6 @@ namespace Villamos
             }
         }
 
-
         private void Lekérdezés_Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -889,15 +847,12 @@ namespace Villamos
             }
         }
 
-
         private bool Jelölt(string Betű)
         {
             bool válasz = false;
             if (Betű == "1") válasz = true;
             return válasz;
-
         }
-
 
         private bool Látszik(string Betű)
         {
@@ -905,7 +860,6 @@ namespace Villamos
             if (Betű == "0") válasz = false;
             return válasz;
         }
-
 
         private void BtnExcelkimenet_Click(object sender, EventArgs e)
         {
@@ -919,7 +873,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "T5C5_fűtés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMdd"),
+                    FileName = $"T5C5_fűtés_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMdd}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -944,7 +898,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void PSZ_hiány_Click(object sender, EventArgs e)
         {
             try
@@ -990,8 +944,8 @@ namespace Villamos
                 Lekérdezés_Tábla.Columns[2].HeaderText = "Ellenőrzés elkészült";
                 Lekérdezés_Tábla.Columns[2].Width = 100;
 
-                Kezelő_Jármű Kéz = new Kezelő_Jármű();
-                List<Adat_Jármű> AdatokJármű = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
 
                 hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum_év.Value.Year}\T5C5_Fűtés.mdb";
                 jelszó = "RózsahegyiK";
@@ -1035,9 +989,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
+        // JAVÍTANDÓ:
         private void Kimutatás_készítés_Click(object sender, EventArgs e)
         {
             try

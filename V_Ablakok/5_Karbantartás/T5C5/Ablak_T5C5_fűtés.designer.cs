@@ -127,7 +127,6 @@ namespace Villamos
             this.Fülek.Size = new System.Drawing.Size(1322, 673);
             this.Fülek.TabIndex = 0;
             this.Fülek.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.Fülek_DrawItem);
-            this.Fülek.SelectedIndexChanged += new System.EventHandler(this.Fülek_SelectedIndexChanged);
             // 
             // TabPage1
             // 
@@ -890,7 +889,6 @@ namespace Villamos
             this.Text = "T5C5 utastér fűtés";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.Fülek.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();
