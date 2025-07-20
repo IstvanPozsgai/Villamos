@@ -166,6 +166,7 @@ namespace Villamos
             this.Pályaszámkereső = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.Módosítás = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -1084,6 +1085,7 @@ namespace Villamos
             // TabPage6
             // 
             this.TabPage6.BackColor = System.Drawing.Color.ForestGreen;
+            this.TabPage6.Controls.Add(this.Módosítás);
             this.TabPage6.Controls.Add(this.VizsgAdat_Excel);
             this.TabPage6.Controls.Add(this.VizsgAdat_Frissít);
             this.TabPage6.Controls.Add(this.Tábla1);
@@ -1565,6 +1567,18 @@ namespace Villamos
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // Módosítás
+            // 
+            this.Módosítás.BackgroundImage = global::Villamos.Properties.Resources.Action_configure;
+            this.Módosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Módosítás.Location = new System.Drawing.Point(192, 4);
+            this.Módosítás.Name = "Módosítás";
+            this.Módosítás.Size = new System.Drawing.Size(45, 45);
+            this.Módosítás.TabIndex = 168;
+            this.ToolTip1.SetToolTip(this.Módosítás, "Frissíti a lekérdezést");
+            this.Módosítás.UseVisualStyleBackColor = true;
+            this.Módosítás.Click += new System.EventHandler(this.Módosítás_Click);
+            // 
             // Ablak_T5C5_Tulajdonság
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1747,5 +1761,6 @@ namespace Villamos
         internal Timer timer1;
         internal Button VizsgAdat_Excel;
         internal Button VizsgAdat_Frissít;
+        internal Button Módosítás;
     }
 }

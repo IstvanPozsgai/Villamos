@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
@@ -20,9 +21,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_T5C5_Kmadatok KézKmAdatok;
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
+        readonly Kezelő_Ciklus_Sorrend KézSorrend = new Kezelő_Ciklus_Sorrend();
         readonly Kezelő_kiegészítő_telephely KézKieg = new Kezelő_kiegészítő_telephely();
 
         readonly List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
+        List<Adat_Ciklus_Sorrend> AdatokSorrend = new List<Adat_Ciklus_Sorrend>();
         List<Adat_T5C5_Kmadatok> AdatokKmAdatok = new List<Adat_T5C5_Kmadatok>();
 
         public Karbantartás_Rögzítés(string típus, Adat_T5C5_Kmadatok adat)
@@ -32,11 +35,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             Adat = adat;
             KézKmAdatok = new Kezelő_T5C5_Kmadatok(Típus);
             Start();
-
         }
 
         private void Start()
         {
+
             Kiír();
             Üzemek_listázása();
             CiklusrendCombo_feltöltés();
@@ -141,12 +144,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
         {
             try
             {
+                AdatokSorrend = KézSorrend.Lista_Adatok().Where(a => a.JárműTípus == Típus.Trim()).ToList();
                 CiklusrendCombo.Items.Clear();
-                List<string> CiklusTípus = (from a in AdatokCiklus
-                                            orderby a.Típus
-                                            select a.Típus).Distinct().ToList();
-                foreach (string Elem in CiklusTípus)
-                    CiklusrendCombo.Items.Add(Elem);
+
+                foreach (Adat_Ciklus_Sorrend Elem in AdatokSorrend)
+                    CiklusrendCombo.Items.Add(Elem.CiklusNév);
 
                 CiklusrendCombo.Refresh();
             }
@@ -452,6 +454,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             Vizsgdátumk.Value = DateTime.Today;
             Vizsgdátumv.Value = DateTime.Today;
             VizsgKm.Text = KMUkm.Text;
+        }
+
+        private void Karbantartás_Rögzítés_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

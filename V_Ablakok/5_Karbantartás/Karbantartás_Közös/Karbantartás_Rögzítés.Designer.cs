@@ -87,14 +87,14 @@
             this.UtolsóVSzámláló = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Következő_V = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -697,7 +697,7 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
             this.tableLayoutPanel5.Controls.Add(this.Utolsó_V_rögzítés, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.Új_adat, 0, 1);
             this.tableLayoutPanel5.Controls.Add(this.SAP_adatok, 0, 2);
@@ -717,20 +717,6 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(225, 217);
             this.tableLayoutPanel5.TabIndex = 141;
-            // 
-            // timer1
-            // 
-            this.timer1.Interval = 500;
-            // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(8, 159);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(751, 13);
-            this.Holtart.TabIndex = 142;
-            this.Holtart.Visible = false;
             // 
             // Következő_V
             // 
@@ -780,6 +766,20 @@
             this.button4.TabIndex = 147;
             this.button4.UseVisualStyleBackColor = true;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 500;
+            // 
+            // Holtart
+            // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Holtart.Location = new System.Drawing.Point(8, 159);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(751, 13);
+            this.Holtart.TabIndex = 142;
+            this.Holtart.Visible = false;
+            // 
             // Karbantartás_Rögzítés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -796,6 +796,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Karbantartás_Rögzítés";
             this.Text = "Pályaszámú jármű vizsgálata";
+            this.Load += new System.EventHandler(this.Karbantartás_Rögzítés_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);

@@ -23,6 +23,7 @@ namespace Villamos
         string _fájlexc;
         DataTable _AdatTábla = new DataTable();
         long utolsósor;
+        long JelöltSor = -1;
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Jármű2 KézVizsgálat = new Kezelő_Jármű2();
         readonly Kezelő_T5C5_Kmadatok KézKmAdatok = new Kezelő_T5C5_Kmadatok("T5C5");
@@ -100,23 +101,27 @@ namespace Villamos
 
                 Utolsó_V_rögzítés.Enabled = false;
                 Töröl.Enabled = false;
+                Módosítás.Enabled = false;
 
                 // csak főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     Töröl.Visible = true;
                     Új_adat.Visible = true;
+                    Módosítás.Visible = true;
                 }
                 else
                 {
                     Töröl.Visible = false;
                     Új_adat.Visible = false;
+                    Módosítás.Visible = false;
                 }
                 melyikelem = 106;
                 // módosítás 1 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
                     Rögzítnap.Enabled = true;
+                    Módosítás.Enabled = true;
                 }
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))
@@ -1334,7 +1339,7 @@ namespace Villamos
             if (e.RowIndex < 0) return;
 
             Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString();
-            if (long.TryParse(Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString(), out long ID)) RögzítésAblak(ID);
+            if (!long.TryParse(Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString(), out JelöltSor)) JelöltSor = -1;
 
             Vizsgsorszám.Text = Tábla1.Rows[e.RowIndex].Cells[3].Value.ToString();
             Vizsgfok.Text = Tábla1.Rows[e.RowIndex].Cells[2].Value.ToString();
@@ -1391,6 +1396,25 @@ namespace Villamos
         private void Karbantartás_Rögzítés_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Karbantartás_Rögzítés = null;
+        }
+
+        private void Módosítás_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (JelöltSor == -1) return;
+                RögzítésAblak(JelöltSor);
+                JelöltSor = -1;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
 
@@ -2675,5 +2699,7 @@ namespace Villamos
             }
         }
         #endregion
+
+
     }
 }
