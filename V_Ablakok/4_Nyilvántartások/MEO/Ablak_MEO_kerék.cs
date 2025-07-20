@@ -38,6 +38,7 @@ namespace Villamos
         Adat_Jármű AdatJármű;
         Adat_MEO_Naptábla AdatNaptábla;
 
+        // JAVÍTANDÓ:
         readonly string Járműhely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
         readonly string KerékMéréshely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
 
@@ -48,12 +49,16 @@ namespace Villamos
 
         readonly string Járműszöveg = "SELECT * FROM állománytábla";
 
+
+        #region Alap
         public Ablak_MEO_kerék()
         {
             InitializeComponent();
+            Start();
         }
 
-        private void Ablak_MEO_kerék_Load(object sender, EventArgs e)
+        // JAVÍTANDÓ:
+        private void Start()
         {
             Dátum.Value = DateTime.Today;
             Dátumig.Value = DateTime.Today;
@@ -79,12 +84,16 @@ namespace Villamos
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
+        private void Ablak_MEO_kerék_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void Ablak_MEO_kerék_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Kerék_Konverter?.Close();
         }
 
-        #region Alap
         private void Jogosultságkiosztás()
         {
             try
@@ -359,7 +368,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Btn_Jog_Hatarnap_Rogzit_Click(object sender, EventArgs e)
         {
             try
@@ -392,7 +401,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Btn_Jog_Torles_Click(object sender, EventArgs e)
         {
             try
@@ -429,7 +438,6 @@ namespace Villamos
             }
         }
 
-
         private void Btn_Jog_Tipus_Rogzit_Click(object sender, EventArgs e)
         {
             try
@@ -464,7 +472,6 @@ namespace Villamos
             }
         }
 
-
         private void FelhasználóTábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
@@ -475,7 +482,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Napkiirás()
         {
             try
@@ -505,7 +512,6 @@ namespace Villamos
         {
             Listáz();
         }
-
 
         private void Listáz()
         {
@@ -549,8 +555,7 @@ namespace Villamos
             }
         }
 
-
-        void ListaTartalma()
+        private void ListaTartalma()
         {
             try
             {
@@ -585,7 +590,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Pályaszámfeltöltés()
         {
             try
@@ -635,7 +640,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -712,20 +717,18 @@ namespace Villamos
             }
         }
 
-
-        void Pályaszám_LostFocus(object sender, EventArgs e)
+        private void Pályaszám_LostFocus(object sender, EventArgs e)
         {
             Pályaszám_bezonosítás();
         }
-
 
         private void Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             Pályaszám_bezonosítás();
         }
 
-
-        void Pályaszám_bezonosítás()
+        // JAVÍTANDÓ:
+        private void Pályaszám_bezonosítás()
         {
             try
             {
@@ -757,7 +760,6 @@ namespace Villamos
             }
         }
 
-
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (Tábla.Rows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve cella!");
@@ -770,7 +772,7 @@ namespace Villamos
             Típus2.Text = Tábla.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
         }
 
-
+        // JAVÍTANDÓ:
         private void Töröl_Click(object sender, EventArgs e)
         {
             try
@@ -814,7 +816,6 @@ namespace Villamos
             }
         }
 
-
         private void Telephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             Pályaszámfeltöltés();
@@ -848,7 +849,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Típuslistafeltöltés()
         {
             try
@@ -877,7 +878,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Rögzítőfeltöltés()
         {
             try
@@ -908,7 +909,6 @@ namespace Villamos
             }
         }
 
-
         private void Excellekérdezés_Click(object sender, EventArgs e)
         {
             try
@@ -932,7 +932,7 @@ namespace Villamos
 
                 Module_Excel.DataGridViewToExcel(fájlexc, ListaTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás($"{fájlexc}.xlsx");
+                Module_Excel.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -945,13 +945,12 @@ namespace Villamos
             }
         }
 
-
         private void Btn_Mérés_Lista_Frissit_Click(object sender, EventArgs e)
         {
             Listalistáz();
         }
 
-
+        // JAVÍTANDÓ:
         private void Listalistáz()
         {
             try
@@ -1034,7 +1033,6 @@ namespace Villamos
             }
         }
 
-
         private void List_lista_tartalom(string honnan, string jelszava, string szövege)
         {
             if (File.Exists(honnan))
@@ -1083,7 +1081,7 @@ namespace Villamos
                 Module_Excel.DataGridViewToExcel(fájlexc, LekérdTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                Module_Excel.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1096,12 +1094,10 @@ namespace Villamos
             }
         }
 
-
         private void Btn_Mérés_Frissit_Click(object sender, EventArgs e)
         {
             Listalistáz1();
         }
-
 
         private void Típuslista1feltöltés()
         {
@@ -1129,7 +1125,6 @@ namespace Villamos
             }
         }
 
-
         private void Telephelyfeltöltéslist1()
         {
             try
@@ -1155,7 +1150,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Listalistáz1()
         {
             try
@@ -1269,7 +1264,6 @@ namespace Villamos
             Új_Ablak_Kerék_Konverter.Show();
         }
 
-
         private void Ablak_Kerék_Konverter_Closed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Kerék_Konverter = null;
@@ -1278,6 +1272,7 @@ namespace Villamos
 
 
         #region Listák_Feltöltése
+        // JAVÍTANDÓ:
         private void AdatokKerékMérés_Feltöltés()
         {
             try
@@ -1305,7 +1300,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Lista_Mérés1(Adat_Jármű rekord, DataGridView LekérdTábla, int i, List<Adat_MEO_KerékMérés> AdatokKerékMérés, int HatárNap)
         {
             try
@@ -1334,7 +1329,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Lista_Mérés2(Adat_Jármű rekord, DataGridView LekérdTábla, int i)
         {
             try
@@ -1383,7 +1378,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Hiba_Lista()
         {
             foreach (Adat_kiegészítő_telephely rekord in AdatokKiegTelephely)
@@ -1394,6 +1389,7 @@ namespace Villamos
         }
         #endregion
 
+
         #region Checkbox kijelölés/törlések
         private void BtnKijelölTípus_Click(object sender, EventArgs e)
         {
@@ -1401,13 +1397,11 @@ namespace Villamos
                 Típuslista.SetItemChecked(i, true);
         }
 
-
         private void BtnkijelölTípustörlés_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Típuslista.Items.Count; i++)
                 Típuslista.SetItemChecked(i, false);
         }
-
 
         private void BtnKijelölTelephely_Click(object sender, EventArgs e)
         {
@@ -1415,13 +1409,11 @@ namespace Villamos
                 TelephelyList.SetItemChecked(i, true);
         }
 
-
         private void BtnkijelölTelephelytörlés_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < TelephelyList.Items.Count; i++)
                 TelephelyList.SetItemChecked(i, false);
         }
-
 
         private void BtnKijelölTípus1_Click(object sender, EventArgs e)
         {
@@ -1429,13 +1421,11 @@ namespace Villamos
                 Típuslista1.SetItemChecked(i, true);
         }
 
-
         private void BtnKijelölTípus1Törlés_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Típuslista1.Items.Count; i++)
                 Típuslista1.SetItemChecked(i, false);
         }
-
 
         private void BtnKijelölTelephely1_Click(object sender, EventArgs e)
         {
@@ -1443,17 +1433,12 @@ namespace Villamos
                 TelephelyList1.SetItemChecked(i, true);
         }
 
-
         private void BtnKijelölTelephely1Törlés_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < TelephelyList1.Items.Count; i++)
                 TelephelyList1.SetItemChecked(i, false);
         }
-        #endregion
 
-
-
-        #region CheckBox kijelölése
         private void MindenElemKijelölve(CheckedListBox CheckListBox)
         {
             for (int i = 0; i < CheckListBox.Items.Count; i++)
@@ -1462,49 +1447,41 @@ namespace Villamos
         #endregion
 
 
-
         #region CheckBox Lenyilasa
         private void TelephelyList_MouseLeave(object sender, EventArgs e)
         {
             TelephelyList.Height = 25;
         }
 
-
         private void TelephelyList_MouseHover(object sender, EventArgs e)
         {
             TelephelyList.Height = 300;
         }
-
 
         private void Típuslista_MouseLeave(object sender, EventArgs e)
         {
             Típuslista.Height = 25;
         }
 
-
         private void Típuslista_MouseHover(object sender, EventArgs e)
         {
             Típuslista.Height = 300;
         }
-
 
         private void Típuslista1_MouseLeave(object sender, EventArgs e)
         {
             Típuslista1.Height = 25;
         }
 
-
         private void Típuslista1_MouseHover(object sender, EventArgs e)
         {
             Típuslista1.Height = 300;
         }
 
-
         private void TelephelyList1_MouseLeave(object sender, EventArgs e)
         {
             TelephelyList1.Height = 25;
         }
-
 
         private void TelephelyList1_MouseHover(object sender, EventArgs e)
         {
