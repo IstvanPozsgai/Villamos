@@ -36,11 +36,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.CiklusTípus = new System.Windows.Forms.ComboBox();
-            this.JárműTípus = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.JárműTípus = new System.Windows.Forms.ComboBox();
             this.BeoFrissít = new System.Windows.Forms.Button();
             this.BeoÚj = new System.Windows.Forms.Button();
-            this.BeoTöröl = new System.Windows.Forms.Button();
+            this.Töröl = new System.Windows.Forms.Button();
             this.BtnOktatásFel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -109,25 +109,17 @@
             this.CiklusTípus.Size = new System.Drawing.Size(173, 28);
             this.CiklusTípus.TabIndex = 192;
             // 
-            // JárműTípus
-            // 
-            this.JárműTípus.Location = new System.Drawing.Point(104, 38);
-            this.JárműTípus.MaxLength = 15;
-            this.JárműTípus.Name = "JárműTípus";
-            this.JárműTípus.Size = new System.Drawing.Size(173, 26);
-            this.JárműTípus.TabIndex = 193;
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.JárműTípus, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.Sorszám, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.CiklusTípus, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.JárműTípus, 1, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 5);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
@@ -136,6 +128,15 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(298, 108);
             this.tableLayoutPanel1.TabIndex = 194;
+            // 
+            // JárműTípus
+            // 
+            this.JárműTípus.FormattingEnabled = true;
+            this.JárműTípus.Location = new System.Drawing.Point(104, 38);
+            this.JárműTípus.MaxLength = 15;
+            this.JárműTípus.Name = "JárműTípus";
+            this.JárműTípus.Size = new System.Drawing.Size(173, 28);
+            this.JárműTípus.TabIndex = 192;
             // 
             // BeoFrissít
             // 
@@ -146,6 +147,7 @@
             this.BeoFrissít.Size = new System.Drawing.Size(45, 45);
             this.BeoFrissít.TabIndex = 197;
             this.BeoFrissít.UseVisualStyleBackColor = true;
+            this.BeoFrissít.Click += new System.EventHandler(this.BeoFrissít_Click);
             // 
             // BeoÚj
             // 
@@ -157,15 +159,16 @@
             this.BeoÚj.TabIndex = 196;
             this.BeoÚj.UseVisualStyleBackColor = true;
             // 
-            // BeoTöröl
+            // Töröl
             // 
-            this.BeoTöröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.BeoTöröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BeoTöröl.Location = new System.Drawing.Point(309, 68);
-            this.BeoTöröl.Name = "BeoTöröl";
-            this.BeoTöröl.Size = new System.Drawing.Size(45, 45);
-            this.BeoTöröl.TabIndex = 195;
-            this.BeoTöröl.UseVisualStyleBackColor = true;
+            this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Töröl.Location = new System.Drawing.Point(309, 68);
+            this.Töröl.Name = "Töröl";
+            this.Töröl.Size = new System.Drawing.Size(45, 45);
+            this.Töröl.TabIndex = 195;
+            this.Töröl.UseVisualStyleBackColor = true;
+            this.Töröl.Click += new System.EventHandler(this.Töröl_Click);
             // 
             // BtnOktatásFel
             // 
@@ -186,7 +189,7 @@
             this.Controls.Add(this.BtnOktatásFel);
             this.Controls.Add(this.BeoFrissít);
             this.Controls.Add(this.BeoÚj);
-            this.Controls.Add(this.BeoTöröl);
+            this.Controls.Add(this.Töröl);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Rögzítés);
             this.Controls.Add(this.Tábla);
@@ -212,11 +215,11 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox CiklusTípus;
-        private System.Windows.Forms.TextBox JárműTípus;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         internal System.Windows.Forms.Button BeoFrissít;
         internal System.Windows.Forms.Button BeoÚj;
-        internal System.Windows.Forms.Button BeoTöröl;
+        internal System.Windows.Forms.Button Töröl;
         internal System.Windows.Forms.Button BtnOktatásFel;
+        private System.Windows.Forms.ComboBox JárműTípus;
     }
 }

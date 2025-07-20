@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -57,7 +58,18 @@ namespace Villamos.V_Kezelők
             try
             {
                 List<Adat_Ciklus_Sorrend> Adatok = Lista_Adatok();
-
+                Adat_Ciklus_Sorrend ADAT = Adatok.Where(a => a.JárműTípus == Adat.JárműTípus && a.CiklusNév == Adat.CiklusNév).FirstOrDefault();
+                if (ADAT == null)
+                {
+                    List<Adat_Ciklus_Sorrend> Szűrt = Adatok.Where(a => a.JárműTípus == Adat.JárműTípus && a.CiklusNév == Adat.CiklusNév).ToList();
+                    //Ha minusz -1-el érkezik akkor az utolsó sorszámot kell adni neki
+                    int Id = Adat.Sorszám;
+                    if (Adat.Sorszám < 0)
+                        Id = Szűrt.Count > 0 ? Adatok.Max(a => a.Sorszám) + 1 : 1;
+                    Rögzítés(Adat, Id);
+                }
+                else
+                    Módosítás(Adat);
             }
             catch (HibásBevittAdat ex)
             {
@@ -70,12 +82,12 @@ namespace Villamos.V_Kezelők
             }
         }
 
-        public void Rögzítés(Adat_Ciklus_Sorrend Adat)
+        public void Rögzítés(Adat_Ciklus_Sorrend Adat, int Id)
         {
             try
             {
                 string szöveg = $"INSERT INTO {táblanév} ( Sorszám, JárműTípus, CiklusNév) VALUES (";
-                szöveg += $"{Adat.Sorszám}, ";
+                szöveg += $"{Id}, ";
                 szöveg += $"'{Adat.JárműTípus}', ";
                 szöveg += $"'{Adat.CiklusNév}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -131,6 +143,7 @@ namespace Villamos.V_Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
     }
 }

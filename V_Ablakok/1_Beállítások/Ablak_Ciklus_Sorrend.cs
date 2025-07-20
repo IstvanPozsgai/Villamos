@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.V_Ablakok._1_Beállítások
@@ -11,8 +13,11 @@ namespace Villamos.V_Ablakok._1_Beállítások
     public partial class Ablak_Ciklus_Sorrend : Form
     {
         readonly Kezelő_Ciklus Kéz = new Kezelő_Ciklus();
+        readonly Kezelő_Ciklus_Sorrend KézSorrend = new Kezelő_Ciklus_Sorrend();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
+        List<Adat_Jármű> Adatok_Állomány = new List<Adat_Jármű>();
 
         public Ablak_Ciklus_Sorrend()
         {
@@ -23,7 +28,9 @@ namespace Villamos.V_Ablakok._1_Beállítások
         private void Start()
         {
             Adatok = Kéz.Lista_Adatok();
+            Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
             CiklusTípusfeltöltés();
+            Típusfeltöltés();
         }
 
         private void Ablak_Ciklus_Sorrend_Load(object sender, EventArgs e)
@@ -31,6 +38,8 @@ namespace Villamos.V_Ablakok._1_Beállítások
 
         }
 
+
+        #region Táblázat
         private void Táblaíró()
         {
             try
@@ -83,12 +92,10 @@ namespace Villamos.V_Ablakok._1_Beállítások
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
 
-        private void Rögzítés_Click(object sender, EventArgs e)
-        {
 
-        }
-
+        #region Listák Feltöltése
         private void CiklusTípusfeltöltés()
         {
             try
@@ -112,5 +119,86 @@ namespace Villamos.V_Ablakok._1_Beállítások
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Típusfeltöltés()
+        {
+            try
+            {
+                List<string> Valóstípus = (from a in Adatok_Állomány
+                                           orderby a.Valóstípus
+                                           select a.Valóstípus).ToList().Distinct().ToList();
+
+                JárműTípus.Items.Clear();
+
+                foreach (string Elem in Valóstípus)
+                {
+                    JárműTípus.Items.Add(Elem);
+                }
+
+                JárműTípus.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+
+        #region Gombok
+        private void Rögzítés_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(Sorszám.Text, out int sorszám)) sorszám = -1;
+                if (string.IsNullOrWhiteSpace(CiklusTípus.Text)) throw new HibásBevittAdat("A ciklus típus nem lehet üres!");
+                if (string.IsNullOrWhiteSpace(JárműTípus.Text)) throw new HibásBevittAdat("A jármű típus nem lehet üres!");
+                Adat_Ciklus_Sorrend ADAT = new Adat_Ciklus_Sorrend(sorszám, JárműTípus.Text, CiklusTípus.Text);
+                KézSorrend.Döntés(ADAT);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Töröl_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(Sorszám.Text, out int sorszám)) sorszám = -1;
+                if (string.IsNullOrWhiteSpace(CiklusTípus.Text)) throw new HibásBevittAdat("A ciklus típus nem lehet üres!");
+                if (string.IsNullOrWhiteSpace(JárműTípus.Text)) throw new HibásBevittAdat("A jármű típus nem lehet üres!");
+                Adat_Ciklus_Sorrend ADAT = new Adat_Ciklus_Sorrend(sorszám, JárműTípus.Text, CiklusTípus.Text);
+                KézSorrend.Törlés(ADAT);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BeoFrissít_Click(object sender, EventArgs e)
+        {
+            Táblaíró();
+        }
+        #endregion
+
+
     }
 }
