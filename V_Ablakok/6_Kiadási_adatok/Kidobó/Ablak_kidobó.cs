@@ -694,7 +694,7 @@ namespace Villamos
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     InitialDirectory = "MyDocuments",
-                    Title = "Berendezések adatlap készítés",
+                    Title = "Kidobó készítés",
                     FileName = "Kidobó_" + Dátum.Value.ToString("yyyy.MM.dd"),
                     Filter = "Excel |*.xlsx"
                 };
@@ -1734,6 +1734,196 @@ namespace Villamos
                                 Tábla1.Rows[e.RowIndex].Cells[6].Value.ToStrTrim()
                                 );
                 Ablakot_Nyit();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+        #region Ittassági
+
+
+        private void Btn_Ittasági_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // kimeneti fájl helye és neve
+                string fájlexc;
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Ittasságvizsgálatilap készítés",
+                    FileName = $"IttasságVizgyLap_{DateTime.Now:yyyyMMddhhmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+
+                Holtart.Be();
+                // Létrehozzuk az excelt
+                MyE.ExcelLétrehozás();
+
+                MyE.Munkalap_betű("Arial", 16);
+                string munkalap = "Munka1";
+
+                IttaságiTartalom();
+
+                // bezárjuk az Excel-t
+                MyE.Munkalap_aktív(munkalap);
+                MyE.Aktív_Cella(munkalap, "A1");
+                MyE.ExcelMentés(fájlexc);
+                MyE.ExcelBezárás();
+
+                Holtart.Ki();
+                MyE.Megnyitás(fájlexc);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void IttaságiTartalom()
+        {
+            try
+            {
+                string munkalap = "Munka1";
+                int sor;
+                MyE.Munkalap_aktív(munkalap);
+
+                MyE.Oszlopszélesség(munkalap, "a:a", 17);
+                MyE.Oszlopszélesség(munkalap, "b:b", 8);
+                MyE.Oszlopszélesség(munkalap, "c:c", 15);
+                MyE.Oszlopszélesség(munkalap, "d:d", 38);
+                MyE.Oszlopszélesség(munkalap, "e:e", 12);
+                MyE.Oszlopszélesség(munkalap, "f:f", 30);
+                MyE.Oszlopszélesség(munkalap, "g:g", 12);
+                MyE.Oszlopszélesség(munkalap, "h:h", 30);
+                MyE.Oszlopszélesség(munkalap, "i:i", 19);
+                MyE.Oszlopszélesség(munkalap, "j:j", 30);
+                MyE.Oszlopszélesség(munkalap, "k:k", 20);
+                MyE.Egyesít(munkalap, "a1:k1");
+                MyE.Betű("a1", 36);
+                MyE.Sormagasság("1:1", 45);
+                MyE.Kiir(Dátum.Value.ToString("yyyy.MMMM.dd. dddd"), "a1");
+                sor = 3;
+                MyE.Egyesít(munkalap, $"a{sor}:k{sor}");
+                MyE.Betű($"a{sor}", 30);
+                MyE.Kiir("Délelőtti kiállás", $"a{sor}");
+                MyE.Sormagasság($"{sor}:{sor}", 39);
+                sor += 1;
+                // fejléc
+                // délelőtti lista
+                MyE.Kiir("Viszonylat/\nSzolg.szám", $"a{sor}");
+                MyE.Kiir("Forg.\nszám", $"b{sor}");
+                MyE.Kiir("Törzsszám", $"c{sor}");
+                MyE.Kiir("Járművezető neve", $"d{sor}");
+                MyE.Kiir("Kezdési\n idő", $"e{sor}");
+                MyE.Kiir("Kezdési hely", $"f{sor}");
+                MyE.Kiir("Végzési\n idő", $"g{sor}");
+                MyE.Kiir("Végzési hely", $"h{sor}");
+                MyE.Kiir("Eredmény", $"i{sor}");
+                MyE.Kiir("Járművezető aláírása", $"j{sor}");
+                MyE.Kiir("Diszpécser", $"k{sor}");
+                MyE.Rácsoz($"a{sor}:k{sor}");
+                MyE.Vastagkeret($"a{sor}:k{sor}");
+                MyE.Háttérszín($"a{sor}:k{sor}", Color.Yellow);
+
+                DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
+                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
+                List<Adat_Kidobó> Adatok = (from a in AdatokÖ
+                                            where a.Kezdéshely == AlsóPanels.Trim()
+                                            && a.Kezdés < Határóra
+                                            orderby a.Kezdés
+                                            select a).ToList();
+
+                Holtart.Be(20);
+                foreach (Adat_Kidobó rekord in Adatok)
+                {
+                    sor += 1;
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"a{sor}");
+                    MyE.Kiir(rekord.Forgalmiszám.Trim(), $"b{sor}");
+                    MyE.Kiir("?", $"c{sor}");
+                    MyE.Kiir(rekord.Jvez.Trim(), $"d{sor}");
+                    MyE.Kiir(rekord.Kezdés.ToString("HH:mm"), $"e{sor}");
+                    MyE.Kiir(rekord.Kezdéshely, $"f{sor}");
+                    MyE.Kiir(rekord.Végzés.ToString("HH:mm"), $"g{sor}");
+                    MyE.Kiir(rekord.Végzéshely, $"h{sor}");
+                    Holtart.Lép();
+                }
+
+                MyE.Rácsoz($"a5:k{sor}");
+                MyE.Vastagkeret($"a5:k{sor}");
+                MyE.Sormagasság($"5:{sor}", 30);
+                sor += 2;
+
+                MyE.Egyesít(munkalap, $"a{sor}:j{sor}");
+                MyE.Kiir("Délutáni kiállás", $"a{sor}");
+                MyE.Sormagasság($"{sor}:{sor}", 45);
+                MyE.Betű($"a{sor}", 30);
+                sor += 1;
+                int blokkeleje = sor;
+                // fejléc
+                // délutáni lista
+                MyE.Kiir("Viszonylat/\nSzolg.szám", $"a{sor}");
+                MyE.Kiir("Forg.\nszám", $"b{sor}");
+                MyE.Kiir("Törzsszám", $"c{sor}");
+                MyE.Kiir("Járművezető neve", $"d{sor}");
+                MyE.Kiir("Kezdési\n idő", $"e{sor}");
+                MyE.Kiir("Kezdési hely", $"f{sor}");
+                MyE.Kiir("Végzési\n idő", $"g{sor}");
+                MyE.Kiir("Végzési hely", $"h{sor}");
+                MyE.Kiir("Eredmény", $"i{sor}");
+                MyE.Kiir("Járművezető aláírása", $"j{sor}");
+                MyE.Kiir("Diszpécser", $"k{sor}");
+                MyE.Rácsoz($"a{sor}:k{sor}");
+                MyE.Vastagkeret($"a{sor}:k{sor}");
+                MyE.Háttérszín($"a{sor}:k{sor}", Color.Yellow);
+
+                Adatok = (from a in AdatokÖ
+                          where a.Kezdéshely == AlsóPanels.Trim()
+                          && a.Kezdés > Határóra
+                          orderby a.Kezdés
+                          select a).ToList();
+                Holtart.Lép();
+
+                foreach (Adat_Kidobó rekord in Adatok)
+                {
+                    sor += 1;
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"a{sor}");
+                    MyE.Kiir(rekord.Forgalmiszám.Trim(), $"b{sor}");
+                    MyE.Kiir("?", $"c{sor}");
+                    MyE.Kiir(rekord.Jvez.Trim(), $"d{sor}");
+                    MyE.Kiir(rekord.Kezdés.ToString("HH:mm"), $"e{sor}");
+                    MyE.Kiir(rekord.Kezdéshely, $"f{sor}");
+                    MyE.Kiir(rekord.Végzés.ToString("HH:mm"), $"g{sor}");
+                    MyE.Kiir(rekord.Végzéshely, $"h{sor}");
+                    Holtart.Lép();
+                }
+
+                MyE.Rácsoz($"a{blokkeleje + 1}:k{sor}");
+                MyE.Vastagkeret($"a{blokkeleje}:k{sor}");
+                MyE.Sormagasság($"{blokkeleje}:{blokkeleje}", 45);
+                MyE.Sormagasság($"{blokkeleje + 1}:{sor}", 30);
+
+                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:K{sor}", "", "", false);
+                MyE.Munkalap_aktív(munkalap);
+                MyE.Aktív_Cella(munkalap, "A1");
             }
             catch (HibásBevittAdat ex)
             {
