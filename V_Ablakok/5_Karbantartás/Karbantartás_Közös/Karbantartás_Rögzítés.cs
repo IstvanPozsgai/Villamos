@@ -144,7 +144,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
         {
             try
             {
-                AdatokSorrend = KézSorrend.Lista_Adatok().Where(a => a.JárműTípus == Típus.Trim()).ToList();
+                AdatokSorrend = KézSorrend.Lista_Adatok().Where(a => a.JárműTípus == Típus.Trim() && a.Sorszám >= 0).ToList();
                 CiklusrendCombo.Items.Clear();
 
                 foreach (Adat_Ciklus_Sorrend Elem in AdatokSorrend)

@@ -88,10 +88,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.Következő_V = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.Btn_Követekező_Ciklus = new System.Windows.Forms.Button();
+            this.Btn_Biztonsági = new System.Windows.Forms.Button();
+            this.Btn_V1Plusz = new System.Windows.Forms.Button();
+            this.Btn_SelejtreFutat = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
@@ -703,10 +703,10 @@
             this.tableLayoutPanel5.Controls.Add(this.SAP_adatok, 0, 2);
             this.tableLayoutPanel5.Controls.Add(this.Töröl, 3, 0);
             this.tableLayoutPanel5.Controls.Add(this.Következő_V, 1, 1);
-            this.tableLayoutPanel5.Controls.Add(this.button1, 0, 4);
-            this.tableLayoutPanel5.Controls.Add(this.button2, 1, 4);
-            this.tableLayoutPanel5.Controls.Add(this.button3, 2, 4);
-            this.tableLayoutPanel5.Controls.Add(this.button4, 3, 4);
+            this.tableLayoutPanel5.Controls.Add(this.Btn_Követekező_Ciklus, 0, 4);
+            this.tableLayoutPanel5.Controls.Add(this.Btn_V1Plusz, 3, 4);
+            this.tableLayoutPanel5.Controls.Add(this.Btn_Biztonsági, 2, 4);
+            this.tableLayoutPanel5.Controls.Add(this.Btn_SelejtreFutat, 1, 4);
             this.tableLayoutPanel5.Location = new System.Drawing.Point(429, 181);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 5;
@@ -730,41 +730,45 @@
             this.Következő_V.UseVisualStyleBackColor = true;
             this.Következő_V.Click += new System.EventHandler(this.Következő_V_Click);
             // 
-            // button1
+            // Btn_Követekező_Ciklus
             // 
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(3, 173);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(44, 41);
-            this.button1.TabIndex = 144;
-            this.button1.UseVisualStyleBackColor = true;
+            this.Btn_Követekező_Ciklus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Követekező_Ciklus.Location = new System.Drawing.Point(3, 173);
+            this.Btn_Követekező_Ciklus.Name = "Btn_Követekező_Ciklus";
+            this.Btn_Követekező_Ciklus.Size = new System.Drawing.Size(44, 41);
+            this.Btn_Követekező_Ciklus.TabIndex = 144;
+            this.ToolTip1.SetToolTip(this.Btn_Követekező_Ciklus, "Következő ciklus");
+            this.Btn_Követekező_Ciklus.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // Btn_Biztonsági
             // 
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button2.Location = new System.Drawing.Point(53, 173);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(44, 41);
-            this.button2.TabIndex = 145;
-            this.button2.UseVisualStyleBackColor = true;
+            this.Btn_Biztonsági.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Biztonsági.Location = new System.Drawing.Point(103, 173);
+            this.Btn_Biztonsági.Name = "Btn_Biztonsági";
+            this.Btn_Biztonsági.Size = new System.Drawing.Size(44, 41);
+            this.Btn_Biztonsági.TabIndex = 145;
+            this.ToolTip1.SetToolTip(this.Btn_Biztonsági, "Biztonsági V1");
+            this.Btn_Biztonsági.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // Btn_V1Plusz
             // 
-            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button3.Location = new System.Drawing.Point(103, 173);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(44, 41);
-            this.button3.TabIndex = 146;
-            this.button3.UseVisualStyleBackColor = true;
+            this.Btn_V1Plusz.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_V1Plusz.Location = new System.Drawing.Point(153, 173);
+            this.Btn_V1Plusz.Name = "Btn_V1Plusz";
+            this.Btn_V1Plusz.Size = new System.Drawing.Size(44, 41);
+            this.Btn_V1Plusz.TabIndex = 146;
+            this.ToolTip1.SetToolTip(this.Btn_V1Plusz, "V1 ");
+            this.Btn_V1Plusz.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // Btn_SelejtreFutat
             // 
-            this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button4.Location = new System.Drawing.Point(153, 173);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(44, 41);
-            this.button4.TabIndex = 147;
-            this.button4.UseVisualStyleBackColor = true;
+            this.Btn_SelejtreFutat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_SelejtreFutat.Location = new System.Drawing.Point(53, 173);
+            this.Btn_SelejtreFutat.Name = "Btn_SelejtreFutat";
+            this.Btn_SelejtreFutat.Size = new System.Drawing.Size(44, 41);
+            this.Btn_SelejtreFutat.TabIndex = 147;
+            this.ToolTip1.SetToolTip(this.Btn_SelejtreFutat, "Selejtre futattás");
+            this.Btn_SelejtreFutat.UseVisualStyleBackColor = true;
             // 
             // timer1
             // 
@@ -876,9 +880,9 @@
         internal System.Windows.Forms.Label label4;
         internal System.Windows.Forms.Label label5;
         internal System.Windows.Forms.Button Következő_V;
-        internal System.Windows.Forms.Button button1;
-        internal System.Windows.Forms.Button button2;
-        internal System.Windows.Forms.Button button3;
-        internal System.Windows.Forms.Button button4;
+        internal System.Windows.Forms.Button Btn_Követekező_Ciklus;
+        internal System.Windows.Forms.Button Btn_Biztonsági;
+        internal System.Windows.Forms.Button Btn_V1Plusz;
+        internal System.Windows.Forms.Button Btn_SelejtreFutat;
     }
 }
