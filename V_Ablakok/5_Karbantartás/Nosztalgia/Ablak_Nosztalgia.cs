@@ -36,7 +36,6 @@ namespace Villamos.Villamos_Ablakok
         List<Adat_Karbantartási> AdatokKarbantartási = new List<Adat_Karbantartási>();
         List<Adat_Szerelvény> AdatokSzer = new List<Adat_Szerelvény>();
 
-
         private void ListaVillamos()
         {
             try
@@ -154,7 +153,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void KarbantartásiAdatAlapRögzítés()
+        {
 
+        }
         private void ListaFeltöltés()
         {
             ListaVillamos();
@@ -165,6 +167,7 @@ namespace Villamos.Villamos_Ablakok
             ListaHiba();
             AdatokRendezése();
         }
+
         #endregion
 
         #region Ablak
@@ -206,6 +209,8 @@ namespace Villamos.Villamos_Ablakok
             Fülekkitöltése();
             Jogosultságkiosztás();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+
+            ListaFeltöltés();
         }
         #endregion
 
@@ -273,32 +278,34 @@ namespace Villamos.Villamos_Ablakok
         }
         private void Fülekkitöltése()
         {
-            switch (Fülek.SelectedIndex)
+            try
             {
-                case 0:
-                    {
-                        Kiirjaalapadatokat();
-                        break;
-                    }
-                case 1: break;
+                switch (Fülek.SelectedIndex)
+                {
+                    case 0:
+                        {
+                            Kiirjaalapadatokat();
+                            break;
+                        }
+                    case 1: break;
 
-                case 2: break;
+                    case 2: break;
 
-                case 3: break;
+                    case 3: break;
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void Jogosultságkiosztás()
         {
-            //int melyikelem;
-
-            //// ide kell az összes gombot tenni amit szabályozni akarunk false
-            //alapadatRögzít.Enabled = false;
-            //melyikelem = 125;
-            //// módosítás 1 
-            //if (MyF.Vanjoga(melyikelem, 1))
-            //{
-            //    alapadatRögzít.Enabled = true;
-            //}
         }
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -364,6 +371,10 @@ namespace Villamos.Villamos_Ablakok
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Nosztalgia.html";
                 MyE.Megnyitás(hely);
             }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
@@ -373,43 +384,68 @@ namespace Villamos.Villamos_Ablakok
         private string SzerelvényÖÁ(string Azonosító)
         {
             string válasz = "";
-            Adat_Szerelvény rekordszer = (from a in AdatokSzer
-                                          where a.Kocsi1 == Azonosító || a.Kocsi2 == Azonosító || a.Kocsi3 == Azonosító ||
-                                                a.Kocsi4 == Azonosító || a.Kocsi5 == Azonosító || a.Kocsi6 == Azonosító
-                                          select a).FirstOrDefault();
-            if (rekordszer != null)
+            try
             {
-                válasz = rekordszer.Kocsi1;
-                if (rekordszer.Kocsi2 != "0") válasz += "-" + rekordszer.Kocsi2;
-                if (rekordszer.Kocsi3 != "0") válasz += "-" + rekordszer.Kocsi3;
-                if (rekordszer.Kocsi4 != "0") válasz += "-" + rekordszer.Kocsi4;
-                if (rekordszer.Kocsi5 != "0") válasz += "-" + rekordszer.Kocsi5;
-                if (rekordszer.Kocsi6 != "0") válasz += "-" + rekordszer.Kocsi6;
+                Adat_Szerelvény rekordszer = (from a in AdatokSzer
+                                              where a.Kocsi1 == Azonosító || a.Kocsi2 == Azonosító || a.Kocsi3 == Azonosító ||
+                                                    a.Kocsi4 == Azonosító || a.Kocsi5 == Azonosító || a.Kocsi6 == Azonosító
+                                              select a).FirstOrDefault();
+                if (rekordszer != null)
+                {
+                    válasz = rekordszer.Kocsi1;
+                    if (rekordszer.Kocsi2 != "0") válasz += "-" + rekordszer.Kocsi2;
+                    if (rekordszer.Kocsi3 != "0") válasz += "-" + rekordszer.Kocsi3;
+                    if (rekordszer.Kocsi4 != "0") válasz += "-" + rekordszer.Kocsi4;
+                    if (rekordszer.Kocsi5 != "0") válasz += "-" + rekordszer.Kocsi5;
+                    if (rekordszer.Kocsi6 != "0") válasz += "-" + rekordszer.Kocsi6;
+                }
+
             }
-            return válasz;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return válasz; // Ensure all code paths return a value
         }
 
         private void AdatokListábaRakása(string Azonosító, string Típus, string álló, string beálló, string szabad)
         {
-            DateTime miótaáll = new DateTime(2000, 1, 1);
-            Adat_Jármű Elem = (from a in AdatokJármű
-                               where a.Azonosító == Azonosító
-                               select a).FirstOrDefault();
-            if (Elem != null)
-                if (Elem.Miótaáll > new DateTime(2000, 1, 1))
-                    miótaáll = Elem.Miótaáll;
+            try
+            {
+                DateTime miótaáll = new DateTime(2000, 1, 1);
+                Adat_Jármű Elem = (from a in AdatokJármű
+                                   where a.Azonosító == Azonosító && a.Típus == "Nosztalgia"
+                                   select a).FirstOrDefault();
+                if (Elem != null)
+                    if (Elem.Miótaáll > new DateTime(2000, 1, 1))
+                        miótaáll = Elem.Miótaáll;
 
-            string szerelvény = SzerelvényÖÁ(Azonosító);
+                string szerelvény = SzerelvényÖÁ(Azonosító);
 
-            Adat_Karbantartási Adat = new Adat_Karbantartási(
-                                Azonosító,
-                                álló,
-                                beálló,
-                                szabad,
-                                Típus,
-                                miótaáll,
-                                szerelvény);
-            AdatokKarbantartási.Add(Adat);
+                Adat_Karbantartási Adat = new Adat_Karbantartási(
+                                    Azonosító,
+                                    álló,
+                                    beálló,
+                                    szabad,
+                                    Típus,
+                                    miótaáll,
+                                    szerelvény);
+                AdatokKarbantartási.Add(Adat);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void AdatokRendezése()
@@ -424,6 +460,7 @@ namespace Villamos.Villamos_Ablakok
                 string szabad = "";
                 foreach (Adat_Jármű_hiba rekord in AdatokHiba)
                 {
+                    if (rekord.Típus != "Nosztalgia") return;
                     if (Pályaszám.Trim() == "") Pályaszám = rekord.Azonosító;
                     if (Pályaszám.Trim() != "" && rekord.Azonosító != Pályaszám.Trim())
                     {
@@ -475,104 +512,116 @@ namespace Villamos.Villamos_Ablakok
         #region Alapadatok lapfül
         private void Kiirjaalapadatokat()
         {
-            if (Cmbtelephely.Text.Trim() == "") return;
-            if (Pályaszám.Text.Trim() == "") return;
-
-            ListaFeltöltés();
-
-            // ürítjük a mezőket
+            try
             {
-                Típus_text.Text = "";
-                Státus_text.Text = "";
-                Miótaáll_text.Text = "";
-                Takarítás_text.Text = "";
-                Főmérnökség_text.Text = "";
-                Járműtípus_text.Text = "";
-            }
-
-            Adat_Jármű KiválKocsi = (from a in AdatokJármű
-                                     where a.Üzem.Trim() == Cmbtelephely.Text.Trim()
-                                     && a.Azonosító.Trim() == Pályaszám.Text.Trim()
-                                     select a).FirstOrDefault();
-
-            Adat_Nosztalgia_Állomány KiválKocsi1 = (from a in AdatokÁllomány
-                                                    where a.Azonosító.Trim() == Pályaszám.Text.Trim()
-                                                    select a).FirstOrDefault();
-
-            if (KiválKocsi == null) MessageBox.Show("Az adatbázisban nem található a pályaszám!", "Figyelmeztetés!");
-            else
-            {
+                if (Cmbtelephely.Text.Trim() == "") return;
+                if (Pályaszám.Text.Trim() == "") return;
 
 
-                Járműtípus_text.Text = KiválKocsi.Valóstípus2.Trim();
-                Főmérnökség_text.Text = KiválKocsi.Valóstípus.Trim();
-                switch (KiválKocsi.Státus)
+
+                // ürítjük a mezőket
                 {
-                    case 0: Státus_text.Text = "Nincs hibája"; break;
-                    case 1: Státus_text.Text = "Szabad"; break;
-                    case 2: Státus_text.Text = "Beállóba kért"; break;
-                    case 3: Státus_text.Text = "Beállóba adott"; break;
-                    case 4: Státus_text.Text = "Benn maradó"; break;
+                    Típus_text.Text = "";
+                    Státus_text.Text = "";
+                    Miótaáll_text.Text = "";
+                    Takarítás_text.Text = "";
+                    Főmérnökség_text.Text = "";
+                    Járműtípus_text.Text = "";
                 }
-                if (KiválKocsi.Miótaáll == null) Miótaáll_text.Text = "";
-                else Miótaáll_text.Text = KiválKocsi.Miótaáll.ToShortDateString();
-                TárH_text.Text = KiválKocsi.Üzem.Trim();
-            }
 
-            if (KiválKocsi1 == null) MessageBox.Show("Az adatbázisban nem található a pályaszám!", "Figyelmeztetés!");
-            else
+                Adat_Jármű KiválKocsi = (from a in AdatokJármű
+                                         where a.Üzem.Trim() == Cmbtelephely.Text.Trim()
+                                         && a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                         select a).FirstOrDefault();
+
+                Adat_Nosztalgia_Állomány KiválKocsi1 = (from a in AdatokÁllomány
+                                                        where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                                        select a).FirstOrDefault();
+
+                if (KiválKocsi == null) MessageBox.Show("Az adatbázisban nem található a pályaszám!", "Figyelmeztetés!");
+                else
+                {
+
+
+                    Járműtípus_text.Text = KiválKocsi.Valóstípus2.Trim();
+                    Főmérnökség_text.Text = KiválKocsi.Valóstípus.Trim();
+                    switch (KiválKocsi.Státus)
+                    {
+                        case 0: Státus_text.Text = "Nincs hibája"; break;
+                        case 1: Státus_text.Text = "Szabad"; break;
+                        case 2: Státus_text.Text = "Beállóba kért"; break;
+                        case 3: Státus_text.Text = "Beállóba adott"; break;
+                        case 4: Státus_text.Text = "Benn maradó"; break;
+                    }
+                    if (KiválKocsi.Miótaáll == null) Miótaáll_text.Text = "";
+                    else Miótaáll_text.Text = KiválKocsi.Miótaáll.ToShortDateString();
+                    TárH_text.Text = KiválKocsi.Üzem.Trim();
+                }
+
+                if (KiválKocsi1 == null) MessageBox.Show("Az adatbázisban nem található a pályaszám!", "Figyelmeztetés!");
+                else
+                {
+
+
+                    //Típus_text.Text = KiválKocsi1.Ntípus.Trim();
+                    //Gyártó_text.Text = KiválKocsi1.Gyártó.Trim();
+                    //Év_text.Text = KiválKocsi1.Év.ToString();
+                    //EszkSz_text.Text = KiválKocsi1.Eszközszám.Trim();
+                    //LeltSz_text.Text = KiválKocsi1.Leltári_szám.Trim();
+                    ut_forg_text.Text = KiválKocsi1.Utolsóforgalminap.ToString().Trim();
+                    Fut_dátum.Value = KiválKocsi1.Vizsgálatdátuma_idő;
+                    if (KiválKocsi1.Vizsgálatfokozata.Contains("V")) Cmb_FutCiklusE.Text = "-";
+                    else Cmb_FutCiklusE.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
+                    Fut_sorszám.Text = KiválKocsi1.Vizsgálatszáma_idő.Trim();
+                    Txt_V1_dátum.Value = KiválKocsi1.Vizsgálatdátuma_km;
+                    Cmb_KmCiklus_V1.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
+                    Txt_V1_sorszám.Text = KiválKocsi1.Vizsgálatszáma_km.Trim();
+                    Txt_V1_Kmv.Text = KiválKocsi1.Km_v.ToString().Trim();
+                    Txt_V1_Kmu.Text = KiválKocsi1.Km_u.ToString().Trim();
+                    Txt_V2_dátum.Value = KiválKocsi1.Vizsgálatdátuma_km;
+                    Cmb_KmCiklus_V2.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
+                    Txt_V2_sorszám.Text = KiválKocsi1.Vizsgálatszáma_km.Trim();
+                    Txt_V2_Kmv.Text = KiválKocsi1.Km_v.ToString().Trim();
+                    Txt_V2_Kmu.Text = KiválKocsi1.Km_u.ToString().Trim();
+                }
+
+                AdatokCiklus = (from a in AdatokCiklus
+                                where a.Típus.Contains("Noszt")
+                                orderby a.Sorszám ascending
+                                select a).ToList();
+
+                Cmb_FutCiklusE.Items.Clear();
+                Cmb_KmCiklus_V1.Items.Clear();
+                Cmb_KmCiklus_V2.Items.Clear();
+                Cmb_FutCiklusE_Cnév.Items.Add("Noszt_idő");
+                Cmb_KmCiklus_V1_Cnév.Items.Add("Noszt_km");
+                Cmb_KmCiklus_V1_Cnév.Items.Add("Noszt_km+i");
+                Cmb_KmCiklus_V2_Cnév.Items.Add("Noszt_km+i");
+                Cmb_KmCiklus_V2_Cnév.Items.Add("Noszt_km");
+
+                foreach (Adat_Ciklus rekord in AdatokCiklus)
+                {
+                    if (rekord.Típus.Trim() == "Noszt_idő") Cmb_FutCiklusE.Items.Add(rekord.Vizsgálatfok);
+                    else if (rekord.Típus.Trim() == "Noszt_km") Cmb_KmCiklus_V1.Items.Add(rekord.Vizsgálatfok);
+                    else Cmb_KmCiklus_V2.Items.Add(rekord.Vizsgálatfok);
+                }
+
+                Adat_Jármű_2 TakDátum = (from a in JAdatok_2
+                                         where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                         select a).FirstOrDefault();
+
+                if (TakDátum == null) return;
+                Takarítás_text.Text = TakDátum.Takarítás.ToStrTrim();
+            }
+            catch (HibásBevittAdat ex)
             {
-
-
-                //Típus_text.Text = KiválKocsi1.Ntípus.Trim();
-                //Gyártó_text.Text = KiválKocsi1.Gyártó.Trim();
-                //Év_text.Text = KiválKocsi1.Év.ToString();
-                //EszkSz_text.Text = KiválKocsi1.Eszközszám.Trim();
-                //LeltSz_text.Text = KiválKocsi1.Leltári_szám.Trim();
-                ut_forg_text.Text = KiválKocsi1.Utolsóforgalminap.ToString().Trim();
-                Fut_dátum.Value = KiválKocsi1.Vizsgálatdátuma_idő;
-                if (KiválKocsi1.Vizsgálatfokozata.Contains("V")) Cmb_FutCiklusE.Text = "-";
-                else Cmb_FutCiklusE.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
-                Fut_sorszám.Text = KiválKocsi1.Vizsgálatszáma_idő.Trim();
-                Txt_V1_dátum.Value = KiválKocsi1.Vizsgálatdátuma_km;
-                Cmb_KmCiklus_V1.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
-                Txt_V1_sorszám.Text = KiválKocsi1.Vizsgálatszáma_km.Trim();
-                Txt_V1_Kmv.Text = KiválKocsi1.Km_v.ToString().Trim();
-                Txt_V1_Kmu.Text = KiválKocsi1.Km_u.ToString().Trim();
-                Txt_V2_dátum.Value = KiválKocsi1.Vizsgálatdátuma_km;
-                Cmb_KmCiklus_V2.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
-                Txt_V2_sorszám.Text = KiválKocsi1.Vizsgálatszáma_km.Trim();
-                Txt_V2_Kmv.Text = KiválKocsi1.Km_v.ToString().Trim();
-                Txt_V2_Kmu.Text = KiválKocsi1.Km_u.ToString().Trim();
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            AdatokCiklus = (from a in AdatokCiklus
-                            where a.Típus.Contains("Noszt")
-                            orderby a.Sorszám ascending
-                            select a).ToList();
-
-            Cmb_FutCiklusE.Items.Clear();
-            Cmb_KmCiklus_V1.Items.Clear();
-            Cmb_KmCiklus_V2.Items.Clear();
-            Cmb_FutCiklusE_Cnév.Items.Add("Noszt_idő");
-            Cmb_KmCiklus_V1_Cnév.Items.Add("Noszt_km");
-            Cmb_KmCiklus_V1_Cnév.Items.Add("Noszt_km+i");
-            Cmb_KmCiklus_V2_Cnév.Items.Add("Noszt_km+i");
-            Cmb_KmCiklus_V2_Cnév.Items.Add("Noszt_km");
-
-            foreach (Adat_Ciklus rekord in AdatokCiklus)
+            catch (Exception ex)
             {
-                if (rekord.Típus.Trim() == "Noszt_idő") Cmb_FutCiklusE.Items.Add(rekord.Vizsgálatfok);
-                else if (rekord.Típus.Trim() == "Noszt_km") Cmb_KmCiklus_V1.Items.Add(rekord.Vizsgálatfok);
-                else Cmb_KmCiklus_V2.Items.Add(rekord.Vizsgálatfok);
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            Adat_Jármű_2 TakDátum = (from a in JAdatok_2
-                                     where a.Azonosító.Trim() == Pályaszám.Text.Trim()
-                                     select a).FirstOrDefault();
-
-            if (TakDátum == null) return;
-            Takarítás_text.Text = TakDátum.Takarítás.ToStrTrim();
         }
         private void Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
