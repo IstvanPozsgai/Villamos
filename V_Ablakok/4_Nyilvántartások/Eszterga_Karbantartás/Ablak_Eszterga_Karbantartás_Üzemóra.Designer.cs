@@ -38,10 +38,11 @@
             this.LblÜzem = new System.Windows.Forms.Label();
             this.LblDátum = new System.Windows.Forms.Label();
             this.DtmPckrDátum = new System.Windows.Forms.DateTimePicker();
+            this.Btn_Pdf = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Tabla)).BeginInit();
             this.SuspendLayout();
             // 
-            // Tábla
+            // Tabla
             // 
             this.Tabla.AllowUserToAddRows = false;
             this.Tabla.AllowUserToDeleteRows = false;
@@ -54,7 +55,7 @@
             this.Tabla.Location = new System.Drawing.Point(24, 14);
             this.Tabla.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Tabla.MaxFilterButtonImageHeight = 23;
-            this.Tabla.Name = "Tábla";
+            this.Tabla.Name = "Tabla";
             this.Tabla.ReadOnly = true;
             this.Tabla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Tabla.RowHeadersVisible = false;
@@ -64,7 +65,7 @@
             this.Tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tabla.TabIndex = 261;
             this.Tabla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            this.Tabla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_CellFormatting);
+            this.Tabla.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.Tabla_DataBindingComplete);
             // 
             // Btn_Excel
             // 
@@ -74,7 +75,7 @@
             this.Btn_Excel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Excel.ForeColor = System.Drawing.Color.Transparent;
             this.Btn_Excel.Image = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.Btn_Excel.Location = new System.Drawing.Point(712, 382);
+            this.Btn_Excel.Location = new System.Drawing.Point(726, 382);
             this.Btn_Excel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Btn_Excel.Name = "Btn_Excel";
             this.Btn_Excel.Size = new System.Drawing.Size(60, 62);
@@ -90,7 +91,7 @@
             this.Btn_ÚjFelvétel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_ÚjFelvétel.ForeColor = System.Drawing.Color.Transparent;
             this.Btn_ÚjFelvétel.Image = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.Btn_ÚjFelvétel.Location = new System.Drawing.Point(574, 382);
+            this.Btn_ÚjFelvétel.Location = new System.Drawing.Point(522, 382);
             this.Btn_ÚjFelvétel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Btn_ÚjFelvétel.Name = "Btn_ÚjFelvétel";
             this.Btn_ÚjFelvétel.Size = new System.Drawing.Size(60, 62);
@@ -115,7 +116,7 @@
             this.Btn_Módosít.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Módosít.ForeColor = System.Drawing.Color.Transparent;
             this.Btn_Módosít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Btn_Módosít.Location = new System.Drawing.Point(642, 382);
+            this.Btn_Módosít.Location = new System.Drawing.Point(590, 382);
             this.Btn_Módosít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Btn_Módosít.Name = "Btn_Módosít";
             this.Btn_Módosít.Size = new System.Drawing.Size(60, 62);
@@ -178,12 +179,29 @@
             this.DtmPckrDátum.Size = new System.Drawing.Size(170, 26);
             this.DtmPckrDátum.TabIndex = 256;
             // 
+            // Btn_Pdf
+            // 
+            this.Btn_Pdf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_Pdf.BackColor = System.Drawing.Color.Transparent;
+            this.Btn_Pdf.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Pdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Pdf.ForeColor = System.Drawing.Color.Transparent;
+            this.Btn_Pdf.Image = global::Villamos.Properties.Resources.pdf_32;
+            this.Btn_Pdf.Location = new System.Drawing.Point(658, 382);
+            this.Btn_Pdf.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Btn_Pdf.Name = "Btn_Pdf";
+            this.Btn_Pdf.Size = new System.Drawing.Size(60, 62);
+            this.Btn_Pdf.TabIndex = 262;
+            this.Btn_Pdf.UseVisualStyleBackColor = false;
+            this.Btn_Pdf.Click += new System.EventHandler(this.Btn_Pdf_Click);
+            // 
             // Ablak_Eszterga_Karbantartás_Üzemóra
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
             this.ClientSize = new System.Drawing.Size(797, 458);
+            this.Controls.Add(this.Btn_Pdf);
             this.Controls.Add(this.Tabla);
             this.Controls.Add(this.Btn_Excel);
             this.Controls.Add(this.Btn_ÚjFelvétel);
@@ -219,5 +237,6 @@
         internal System.Windows.Forms.Label LblÜzem;
         internal System.Windows.Forms.Label LblDátum;
         internal System.Windows.Forms.DateTimePicker DtmPckrDátum;
+        internal System.Windows.Forms.Button Btn_Pdf;
     }
 }
