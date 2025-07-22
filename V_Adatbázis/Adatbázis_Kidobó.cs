@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Villamos.Adatszerkezet;
+﻿using Villamos.Adatszerkezet;
 
 namespace Villamos.Villamos_Adatbázis_Funkció
 {
@@ -55,7 +50,8 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[Tárolásihely]  char (30), ";
             szöveg += "[Villamos]  char (30), ";
             szöveg += "[megjegyzés]  char (50), ";
-            szöveg += "[szerelvénytípus]  char (30)) ";
+            szöveg += "[szerelvénytípus]  char (30), ";
+            szöveg += "[Törzsszám]  char (10)) ";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
