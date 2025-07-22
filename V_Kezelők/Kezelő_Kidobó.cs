@@ -41,25 +41,7 @@ namespace Villamos.Kezelők
                             while (rekord.Read())
                             {
                                 if (Törzsszám)
-                                {
-                                    Adat = new Adat_Kidobó(
-                                         rekord["viszonylat"].ToStrTrim(),
-                                         rekord["forgalmiszám"].ToStrTrim(),
-                                         rekord["szolgálatiszám"].ToStrTrim(),
-                                         rekord["jvez"].ToStrTrim(),
-                                         rekord["kezdés"].ToÉrt_DaTeTime(),
-                                         rekord["végzés"].ToÉrt_DaTeTime(),
-                                         rekord["Kezdéshely"].ToStrTrim(),
-                                         rekord["Végzéshely"].ToStrTrim(),
-                                         rekord["Kód"].ToStrTrim(),
-                                         rekord["Tárolásihely"].ToStrTrim(),
-                                         rekord["Villamos"].ToStrTrim(),
-                                         rekord["megjegyzés"].ToStrTrim(),
-                                         rekord["szerelvénytípus"].ToStrTrim()
-                                         );
-                                    Adatok.Add(Adat);
-                                }
-                                else
+
                                 {
                                     Adat = new Adat_Kidobó(
                                     rekord["viszonylat"].ToStrTrim(),
@@ -77,6 +59,25 @@ namespace Villamos.Kezelők
                                     rekord["szerelvénytípus"].ToStrTrim(),
                                     rekord["Törzsszám"].ToStrTrim()
                                     );
+                                    Adatok.Add(Adat);
+                                }
+                                else
+                                {
+                                    Adat = new Adat_Kidobó(
+                                         rekord["viszonylat"].ToStrTrim(),
+                                         rekord["forgalmiszám"].ToStrTrim(),
+                                         rekord["szolgálatiszám"].ToStrTrim(),
+                                         rekord["jvez"].ToStrTrim(),
+                                         rekord["kezdés"].ToÉrt_DaTeTime(),
+                                         rekord["végzés"].ToÉrt_DaTeTime(),
+                                         rekord["Kezdéshely"].ToStrTrim(),
+                                         rekord["Végzéshely"].ToStrTrim(),
+                                         rekord["Kód"].ToStrTrim(),
+                                         rekord["Tárolásihely"].ToStrTrim(),
+                                         rekord["Villamos"].ToStrTrim(),
+                                         rekord["megjegyzés"].ToStrTrim(),
+                                         rekord["szerelvénytípus"].ToStrTrim()
+                                         );
                                     Adatok.Add(Adat);
                                 }
                             }

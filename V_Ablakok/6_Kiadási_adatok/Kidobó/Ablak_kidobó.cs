@@ -794,7 +794,7 @@ namespace Villamos
                 foreach (Adat_Kidobó rekord in Adatok)
                 {
                     sor += 1;
-                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"b{sor}");
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim().Replace("/", "|"), $"b{sor}");
                     MyE.Kiir(rekord.Forgalmiszám.Trim(), $"c{sor}");
                     MyE.Kiir(rekord.Kezdés.ToString("HH:mm"), $"a{sor}");
                     MyE.Kiir(rekord.Végzés.ToString("HH:mm"), $"d{sor}");
@@ -850,7 +850,7 @@ namespace Villamos
                 foreach (Adat_Kidobó rekord in Adatok)
                 {
                     sor += 1;
-                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"b{sor}");
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim().Replace("/", "|"), $"b{sor}");
                     MyE.Kiir(rekord.Forgalmiszám.Trim(), $"c{sor}");
                     MyE.Kiir(rekord.Kezdés.ToString("HH:mm"), $"a{sor}");
                     MyE.Kiir(rekord.Végzés.ToString("HH:mm"), $"d{sor}");
@@ -902,7 +902,7 @@ namespace Villamos
                 foreach (Adat_Kidobó rekord in Adatok)
                 {
                     sor += 1;
-                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"b{sor}");
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim().Replace("/", "|"), $"b{sor}");
                     MyE.Kiir(rekord.Forgalmiszám.Trim(), $"c{sor}");
                     MyE.Kiir(rekord.Kezdés.ToString("HH:mm"), $"a{sor}");
                     MyE.Kiir(rekord.Végzés.ToString("HH:mm"), $"d{sor}");
@@ -1019,7 +1019,7 @@ namespace Villamos
                         utolsóviszonylat = rekord.Viszonylat.Trim();
                     }
                     sor += 1;
-                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"b{sor}");
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim().Replace("/", "|"), $"b{sor}");
                     MyE.Kiir(rekord.Forgalmiszám.Trim(), $"c{sor}");
                     MyE.Kiir(rekord.Kezdés.ToString("HH: mm"), $"a{sor}");
                     MyE.Kiir(rekord.Végzés.ToString("HH: mm"), $"d{sor}");
@@ -1097,7 +1097,7 @@ namespace Villamos
                     }
                     sor += 1;
 
-                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"b{sor}");
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim().Replace("/", "|"), $"b{sor}");
                     MyE.Kiir(rekord.Forgalmiszám.Trim(), $"c{sor}");
                     MyE.Kiir(rekord.Kezdés.ToString("HH: mm"), $"a{sor}");
                     MyE.Kiir(rekord.Végzés.ToString("HH: mm"), $"d{sor}");
@@ -1847,7 +1847,7 @@ namespace Villamos
                 MyE.Háttérszín($"a{sor}:k{sor}", Color.Yellow);
 
                 DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
-                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
+                List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value, true);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
                                             && a.Kezdés < Határóra
@@ -1858,7 +1858,7 @@ namespace Villamos
                 foreach (Adat_Kidobó rekord in Adatok)
                 {
                     sor += 1;
-                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"a{sor}");
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim().Replace("/", "|"), $"a{sor}");
                     MyE.Kiir(rekord.Forgalmiszám.Trim(), $"b{sor}");
                     MyE.Kiir(rekord.Törzsszám.Trim(), $"c{sor}");
                     MyE.Kiir(rekord.Jvez.Trim(), $"d{sor}");
@@ -1907,7 +1907,7 @@ namespace Villamos
                 foreach (Adat_Kidobó rekord in Adatok)
                 {
                     sor += 1;
-                    MyE.Kiir(rekord.Szolgálatiszám.Trim() + "_", $"a{sor}");
+                    MyE.Kiir(rekord.Szolgálatiszám.Trim().Replace("/", "|"), $"a{sor}");
                     MyE.Kiir(rekord.Forgalmiszám.Trim(), $"b{sor}");
                     MyE.Kiir(rekord.Törzsszám.Trim(), $"c{sor}");
                     MyE.Kiir(rekord.Jvez.Trim(), $"d{sor}");
