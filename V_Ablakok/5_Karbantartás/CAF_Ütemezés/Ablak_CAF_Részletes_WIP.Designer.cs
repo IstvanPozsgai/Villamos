@@ -686,9 +686,8 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 204F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p2, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p2, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.tb_megtett_p1, 1, 4);
@@ -704,18 +703,18 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(685, 13);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 6;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.42857F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48.57143F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 57F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 296F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(389, 515);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 515);
             this.tableLayoutPanel1.TabIndex = 284;
             // 
             // tb_rendben_p2
             // 
-            this.tb_rendben_p2.Location = new System.Drawing.Point(188, 221);
+            this.tb_rendben_p2.Location = new System.Drawing.Point(303, 178);
             this.tb_rendben_p2.Name = "tb_rendben_p2";
             this.tb_rendben_p2.ReadOnly = true;
             this.tb_rendben_p2.Size = new System.Drawing.Size(139, 26);
@@ -724,15 +723,15 @@
             // lb_rendben_p2
             // 
             this.lb_rendben_p2.AutoSize = true;
-            this.lb_rendben_p2.Location = new System.Drawing.Point(3, 218);
+            this.lb_rendben_p2.Location = new System.Drawing.Point(3, 175);
             this.lb_rendben_p2.Name = "lb_rendben_p2";
-            this.lb_rendben_p2.Size = new System.Drawing.Size(132, 40);
+            this.lb_rendben_p2.Size = new System.Drawing.Size(200, 20);
             this.lb_rendben_p2.TabIndex = 10;
             this.lb_rendben_p2.Text = "Első P2 vizsgálat rendben?";
             // 
             // tb_megtett_p1
             // 
-            this.tb_megtett_p1.Location = new System.Drawing.Point(188, 164);
+            this.tb_megtett_p1.Location = new System.Drawing.Point(303, 143);
             this.tb_megtett_p1.Name = "tb_megtett_p1";
             this.tb_megtett_p1.ReadOnly = true;
             this.tb_megtett_p1.Size = new System.Drawing.Size(139, 26);
@@ -741,15 +740,15 @@
             // lb_megtett_p1
             // 
             this.lb_megtett_p1.AutoSize = true;
-            this.lb_megtett_p1.Location = new System.Drawing.Point(3, 161);
+            this.lb_megtett_p1.Location = new System.Drawing.Point(3, 140);
             this.lb_megtett_p1.Name = "lb_megtett_p1";
-            this.lb_megtett_p1.Size = new System.Drawing.Size(164, 40);
+            this.lb_megtett_p1.Size = new System.Drawing.Size(294, 20);
             this.lb_megtett_p1.TabIndex = 8;
             this.lb_megtett_p1.Text = "Utolsó P1 vizsgálatok között megtett KM";
             // 
             // tb_megtett_p0
             // 
-            this.tb_megtett_p0.Location = new System.Drawing.Point(188, 111);
+            this.tb_megtett_p0.Location = new System.Drawing.Point(303, 108);
             this.tb_megtett_p0.Name = "tb_megtett_p0";
             this.tb_megtett_p0.ReadOnly = true;
             this.tb_megtett_p0.Size = new System.Drawing.Size(139, 26);
@@ -758,15 +757,15 @@
             // lb_megtett_p0
             // 
             this.lb_megtett_p0.AutoSize = true;
-            this.lb_megtett_p0.Location = new System.Drawing.Point(3, 108);
+            this.lb_megtett_p0.Location = new System.Drawing.Point(3, 105);
             this.lb_megtett_p0.Name = "lb_megtett_p0";
-            this.lb_megtett_p0.Size = new System.Drawing.Size(164, 40);
+            this.lb_megtett_p0.Size = new System.Drawing.Size(294, 20);
             this.lb_megtett_p0.TabIndex = 6;
             this.lb_megtett_p0.Text = "Utolsó P0 vizsgálatok között megtett KM";
             // 
             // tb_futhatmeg_p2
             // 
-            this.tb_futhatmeg_p2.Location = new System.Drawing.Point(188, 82);
+            this.tb_futhatmeg_p2.Location = new System.Drawing.Point(303, 73);
             this.tb_futhatmeg_p2.Name = "tb_futhatmeg_p2";
             this.tb_futhatmeg_p2.ReadOnly = true;
             this.tb_futhatmeg_p2.Size = new System.Drawing.Size(139, 26);
@@ -774,7 +773,7 @@
             // 
             // tb_futhatmeg_p1
             // 
-            this.tb_futhatmeg_p1.Location = new System.Drawing.Point(188, 44);
+            this.tb_futhatmeg_p1.Location = new System.Drawing.Point(303, 38);
             this.tb_futhatmeg_p1.Name = "tb_futhatmeg_p1";
             this.tb_futhatmeg_p1.ReadOnly = true;
             this.tb_futhatmeg_p1.Size = new System.Drawing.Size(139, 26);
@@ -782,7 +781,7 @@
             // 
             // tb_futhatmeg_p0
             // 
-            this.tb_futhatmeg_p0.Location = new System.Drawing.Point(188, 3);
+            this.tb_futhatmeg_p0.Location = new System.Drawing.Point(303, 3);
             this.tb_futhatmeg_p0.Name = "tb_futhatmeg_p0";
             this.tb_futhatmeg_p0.ReadOnly = true;
             this.tb_futhatmeg_p0.Size = new System.Drawing.Size(139, 26);
@@ -791,7 +790,7 @@
             // lb_futhatmeg_p1
             // 
             this.lb_futhatmeg_p1.AutoSize = true;
-            this.lb_futhatmeg_p1.Location = new System.Drawing.Point(3, 41);
+            this.lb_futhatmeg_p1.Location = new System.Drawing.Point(3, 35);
             this.lb_futhatmeg_p1.Name = "lb_futhatmeg_p1";
             this.lb_futhatmeg_p1.Size = new System.Drawing.Size(173, 20);
             this.lb_futhatmeg_p1.TabIndex = 0;
@@ -809,7 +808,7 @@
             // lb_futhatmeg_p2
             // 
             this.lb_futhatmeg_p2.AutoSize = true;
-            this.lb_futhatmeg_p2.Location = new System.Drawing.Point(3, 79);
+            this.lb_futhatmeg_p2.Location = new System.Drawing.Point(3, 70);
             this.lb_futhatmeg_p2.Name = "lb_futhatmeg_p2";
             this.lb_futhatmeg_p2.Size = new System.Drawing.Size(173, 20);
             this.lb_futhatmeg_p2.TabIndex = 4;
@@ -820,7 +819,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Peru;
-            this.ClientSize = new System.Drawing.Size(1086, 540);
+            this.ClientSize = new System.Drawing.Size(1143, 540);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Ütem_dátum_program);
             this.Controls.Add(this.Label48);

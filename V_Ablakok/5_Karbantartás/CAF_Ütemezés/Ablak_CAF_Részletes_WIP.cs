@@ -761,7 +761,23 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
         #endregion
 
+
         #region KM vizsgálatok
+        // JAVÍTANDÓ:
+        // 1- 14000 legyen változó
+        // 2- Kovetkezo_P0_Vizsgalat_KM_Erteke a következő P vizsgálat legyen az P1, P1, P2
+        // 3- Ezt lehetett volna LINQ-val hamár megmutattam
+        //  for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
+        //  {
+        //      if (i % 5 != 0 && i % 20 != 0)
+        //      {
+        //      return (i + 1) * 14000;
+        //      }
+        //  }
+        // 4-  Utolso_KM_Vizsgalat_Erteke miért nincs hivatkozva ha lehet?
+        // 5- int vagy long?
+
+
         // Itt próbáltam dinamikusan megoldani a KM sorszámok és értékének vizsgálatát és generálását, így nem kell beégetni a kódba.
         // Vizsgálat_Km_Állása = Vizsgálat_Sorszám * 14.000 Km
 
@@ -850,7 +866,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
             return Utolso_P0.Számláló - Utolso_Elotti_P0.Számláló;
         }
-        
+
         // Itt majd figyelni kell, hogyha nem talál legalább 2 ilyen vizsgálatot az idei táblában, akkor keressen a régiben is.
         private long P1_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
         {
@@ -883,7 +899,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             // Ha nem talált az aktuális éviben 20-as vizsgálatot, akkor visszafele elkezdi keresni az előző éviekben.
             else
             {
-                for (global::System.Int32 i = DateTime.Now.Year-1; i >= 2016; i--)
+                for (global::System.Int32 i = DateTime.Now.Year - 1; i >= 2016; i--)
                 {
                     Vizsgalat_Adatai = KézAdatok.Lista_Adatok(i).FirstOrDefault(a => a.KM_Sorszám == 20);
                     if (Vizsgalat_Adatai != null)
