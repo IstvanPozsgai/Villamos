@@ -103,18 +103,17 @@ namespace Villamos
                 Töröl.Enabled = false;
                 Módosítás.Enabled = false;
 
+
                 // csak főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     Töröl.Visible = true;
                     Új_adat.Visible = true;
-                    Módosítás.Visible = true;
                 }
                 else
                 {
                     Töröl.Visible = false;
                     Új_adat.Visible = false;
-                    Módosítás.Visible = false;
                 }
                 melyikelem = 106;
                 // módosítás 1 

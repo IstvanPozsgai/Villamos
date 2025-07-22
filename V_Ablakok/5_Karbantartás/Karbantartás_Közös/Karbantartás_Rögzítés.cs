@@ -79,6 +79,38 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             KövV2km.Text = "0";
         }
 
+        private void MezőEngedélyezés(bool Engedély)
+        {
+            Sorszám.Enabled = Engedély;
+
+            Vizsgsorszám.Enabled = Engedély;
+            Vizsgfok.Enabled = Engedély;
+            Vizsgdátumk.Enabled = Engedély;
+            Vizsgdátumv.Enabled = Engedély;
+            VizsgKm.Enabled = Engedély;
+            Üzemek.Enabled = Engedély;
+
+            KMUkm.Enabled = Engedély;
+            KMUdátum.Enabled = Engedély;
+
+            HaviKm.Enabled = Engedély;
+            KMUdátum.Enabled = Engedély;
+
+            KövV.Enabled = Engedély;
+            KövV_Sorszám.Enabled = Engedély;
+            KövV1km.Enabled = Engedély;
+            KövV2.Enabled = Engedély;
+            KövV2_Sorszám.Enabled = Engedély;
+            KövV2_számláló.Enabled = Engedély;
+            KövV2km.Enabled = Engedély;
+            Vizsgfok.Enabled = Engedély;
+            CiklusrendCombo.Enabled = Engedély;
+            Jjavszám.Enabled = Engedély;
+            TEljesKmText.Enabled = Engedély;
+            Utolsófelújításdátuma.Enabled = Engedély;
+            UtolsóVSzámláló.Enabled = Engedély;
+        }
+
         private void Kiír()
         {
             Pályaszám.Text = Adat.Azonosító;
@@ -126,7 +158,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                           select a).ToList();
 
                 foreach (Adat_Ciklus Elem in Adatok)
-                    Vizsgsorszám.Items.Add(Elem.Sorszám);
+                    Vizsgsorszám.Items.Add(Elem.Sorszám.ToString());
                 Vizsgsorszám.Refresh();
             }
             catch (HibásBevittAdat ex)
@@ -403,11 +435,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 // csak főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
+                    MezőEngedélyezés(true);
                     Töröl.Visible = true;
                     Új_adat.Visible = true;
                 }
                 else
                 {
+                    MezőEngedélyezés(false);
                     Töröl.Visible = false;
                     Új_adat.Visible = false;
                 }
@@ -457,6 +491,41 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
         }
 
         private void Karbantartás_Rögzítés_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Btn_Követekező_Ciklus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //kiválasztjuk azt ami a textben van
+                int index = CiklusrendCombo.Items.IndexOf(CiklusrendCombo.Text);
+                if (index < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő szöveg nem eleme a választási listának.");
+                if (CiklusrendCombo.SelectedIndex == CiklusrendCombo.Items.Count - 1) throw new HibásBevittAdat("Nincs több választható cillus rend.");
+
+                //Következő ciklus kiírása
+                CiklusrendCombo.Text = CiklusrendCombo.Items[index + 1].ToString();
+
+                // Ugyan azt a sorszámot választjuk
+                int sorszámIndex = Vizsgsorszám.Items.IndexOf(Vizsgsorszám.Text);
+                if (sorszámIndex < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő sorszám nem eleme a választási listának.");
+
+                Vizsgsorszám.Text = Vizsgsorszám.Items[sorszámIndex].ToString();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Btn_SelejtreFutat_Click(object sender, EventArgs e)
         {
 
         }

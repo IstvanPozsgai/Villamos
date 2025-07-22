@@ -89,8 +89,8 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.Következő_V = new System.Windows.Forms.Button();
             this.Btn_Követekező_Ciklus = new System.Windows.Forms.Button();
-            this.Btn_Biztonsági = new System.Windows.Forms.Button();
             this.Btn_V1Plusz = new System.Windows.Forms.Button();
+            this.Btn_Biztonsági = new System.Windows.Forms.Button();
             this.Btn_SelejtreFutat = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -739,16 +739,7 @@
             this.Btn_Követekező_Ciklus.TabIndex = 144;
             this.ToolTip1.SetToolTip(this.Btn_Követekező_Ciklus, "Következő ciklus");
             this.Btn_Követekező_Ciklus.UseVisualStyleBackColor = true;
-            // 
-            // Btn_Biztonsági
-            // 
-            this.Btn_Biztonsági.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Biztonsági.Location = new System.Drawing.Point(103, 173);
-            this.Btn_Biztonsági.Name = "Btn_Biztonsági";
-            this.Btn_Biztonsági.Size = new System.Drawing.Size(44, 41);
-            this.Btn_Biztonsági.TabIndex = 145;
-            this.ToolTip1.SetToolTip(this.Btn_Biztonsági, "Biztonsági V1");
-            this.Btn_Biztonsági.UseVisualStyleBackColor = true;
+            this.Btn_Követekező_Ciklus.Click += new System.EventHandler(this.Btn_Követekező_Ciklus_Click);
             // 
             // Btn_V1Plusz
             // 
@@ -760,8 +751,19 @@
             this.ToolTip1.SetToolTip(this.Btn_V1Plusz, "V1 ");
             this.Btn_V1Plusz.UseVisualStyleBackColor = true;
             // 
+            // Btn_Biztonsági
+            // 
+            this.Btn_Biztonsági.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Biztonsági.Location = new System.Drawing.Point(103, 173);
+            this.Btn_Biztonsági.Name = "Btn_Biztonsági";
+            this.Btn_Biztonsági.Size = new System.Drawing.Size(44, 41);
+            this.Btn_Biztonsági.TabIndex = 145;
+            this.ToolTip1.SetToolTip(this.Btn_Biztonsági, "Biztonsági V1");
+            this.Btn_Biztonsági.UseVisualStyleBackColor = true;
+            // 
             // Btn_SelejtreFutat
             // 
+            this.Btn_SelejtreFutat.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Group_stroke;
             this.Btn_SelejtreFutat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn_SelejtreFutat.Location = new System.Drawing.Point(53, 173);
             this.Btn_SelejtreFutat.Name = "Btn_SelejtreFutat";
@@ -769,6 +771,7 @@
             this.Btn_SelejtreFutat.TabIndex = 147;
             this.ToolTip1.SetToolTip(this.Btn_SelejtreFutat, "Selejtre futattás");
             this.Btn_SelejtreFutat.UseVisualStyleBackColor = true;
+            this.Btn_SelejtreFutat.Click += new System.EventHandler(this.Btn_SelejtreFutat_Click);
             // 
             // timer1
             // 
