@@ -181,7 +181,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 //    else
                 //        következő = Idő_sorszám + 1;
 
-                if (IDŐvKM == 1 && Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám == Idő_sorszám)
+                if (IDŐvKM == 1 && Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám != Idő_sorszám)
                     következő = Idő_sorszám + 1;
 
 
