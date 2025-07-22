@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "lilaakác";
         string hely;
+        readonly string táblanév = "kidobótábla";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -20,10 +21,10 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kidobóadattábla(hely.KönyvSzerk());
         }
 
-        public List<Adat_Kidobó> Lista_Adat(string Telephely, DateTime Dátum)
+        public List<Adat_Kidobó> Lista_Adat(string Telephely, DateTime Dátum, bool Törzsszám = false)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = "SELECT * FROM kidobótábla  order by szolgálatiszám";
+            string szöveg = $"SELECT * FROM {táblanév}  order by szolgálatiszám";
             List<Adat_Kidobó> Adatok = new List<Adat_Kidobó>();
             Adat_Kidobó Adat;
 
@@ -39,7 +40,10 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat = new Adat_Kidobó(
+                                if (Törzsszám)
+
+                                {
+                                    Adat = new Adat_Kidobó(
                                     rekord["viszonylat"].ToStrTrim(),
                                     rekord["forgalmiszám"].ToStrTrim(),
                                     rekord["szolgálatiszám"].ToStrTrim(),
@@ -52,9 +56,30 @@ namespace Villamos.Kezelők
                                     rekord["Tárolásihely"].ToStrTrim(),
                                     rekord["Villamos"].ToStrTrim(),
                                     rekord["megjegyzés"].ToStrTrim(),
-                                    rekord["szerelvénytípus"].ToStrTrim()
+                                    rekord["szerelvénytípus"].ToStrTrim(),
+                                    rekord["Törzsszám"].ToStrTrim()
                                     );
-                                Adatok.Add(Adat);
+                                    Adatok.Add(Adat);
+                                }
+                                else
+                                {
+                                    Adat = new Adat_Kidobó(
+                                         rekord["viszonylat"].ToStrTrim(),
+                                         rekord["forgalmiszám"].ToStrTrim(),
+                                         rekord["szolgálatiszám"].ToStrTrim(),
+                                         rekord["jvez"].ToStrTrim(),
+                                         rekord["kezdés"].ToÉrt_DaTeTime(),
+                                         rekord["végzés"].ToÉrt_DaTeTime(),
+                                         rekord["Kezdéshely"].ToStrTrim(),
+                                         rekord["Végzéshely"].ToStrTrim(),
+                                         rekord["Kód"].ToStrTrim(),
+                                         rekord["Tárolásihely"].ToStrTrim(),
+                                         rekord["Villamos"].ToStrTrim(),
+                                         rekord["megjegyzés"].ToStrTrim(),
+                                         rekord["szerelvénytípus"].ToStrTrim()
+                                         );
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
@@ -130,7 +155,7 @@ namespace Villamos.Kezelők
                     szöveg += " jvez, kezdés, végzés, ";
                     szöveg += " Kezdéshely, Végzéshely, Kód, ";
                     szöveg += " Tárolásihely, Villamos, Megjegyzés, ";
-                    szöveg += " szerelvénytípus ) VALUES (";
+                    szöveg += " szerelvénytípus, Törzsszám ) VALUES (";
                     szöveg += $"'{Adat.Viszonylat}', "; // viszonylat
                     szöveg += $"'{Adat.Forgalmiszám}', "; // forgalmiszám
                     szöveg += $"'{Adat.Szolgálatiszám}', "; // szolgálatiszám
@@ -143,7 +168,8 @@ namespace Villamos.Kezelők
                     szöveg += $"'{Adat.Tárolásihely}', "; // tárolásihely
                     szöveg += $"'{Adat.Villamos}', "; // villamos
                     szöveg += $"'{Adat.Megjegyzés}', "; // megjegyzés
-                    szöveg += $"'{Adat.Szerelvénytípus}') "; // szerelvénytípus
+                    szöveg += $"'{Adat.Szerelvénytípus}', "; // szerelvénytípus
+                    szöveg += $"'{Adat.Törzsszám}') "; // Törzsszám
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
