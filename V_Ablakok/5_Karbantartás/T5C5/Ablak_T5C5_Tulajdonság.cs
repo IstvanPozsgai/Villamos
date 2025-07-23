@@ -1367,8 +1367,8 @@ namespace Villamos
             KövV1km.Text = (int.Parse(KMUkm.Text) - int.Parse(VizsgKm.Text)).ToString();
             KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
 
-
-            Fülek.SelectedIndex = 3;
+            //maradunk a lapon
+            //Fülek.SelectedIndex = 3;
         }
 
         Karbantartás_Rögzítés Új_Karbantartás_Rögzítés;

@@ -277,6 +277,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
         private void Utolsó_V_rögzítés_Click(object sender, EventArgs e)
         {
+            AdatokRögzítés();
+        }
+
+        private void AdatokRögzítés()
+        {
             try
             {
                 // leellenőrizzük, hogy minden adat ki van-e töltve
@@ -512,6 +517,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (sorszámIndex < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő sorszám nem eleme a választási listának.");
 
                 Vizsgsorszám.Text = Vizsgsorszám.Items[sorszámIndex].ToString();
+                AdatokRögzítés();
 
             }
             catch (HibásBevittAdat ex)
@@ -525,9 +531,77 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             }
         }
 
+
         private void Btn_SelejtreFutat_Click(object sender, EventArgs e)
         {
 
+            try
+            {
+                if (CiklusrendCombo.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva cillusrend.");
+                int index = CiklusrendCombo.Items.IndexOf(CiklusrendCombo.Text);
+                if (CiklusrendCombo.Items.Count - 1 != index) throw new HibásBevittAdat("Az adatok alapján a jármű még nem az utolsó Ciklus eleménél tart.");
+                string újNév = "";
+                //Felírjuk a plusszos V2 nevét és növeljük eggyel
+                if (CiklusrendCombo.Text.Contains("P"))
+                {
+                    string[] darabol = CiklusrendCombo.Text.Split('P');
+                    újNév = darabol[0] + "P" + (int.Parse(darabol[1]) + 1).ToString();
+                }
+                else
+                {
+                    CiklusrendCombo.Text += " P";
+                }
+
+                AdatokRögzítés();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Btn_Biztonsági_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                AdatokRögzítés();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Btn_V1Plusz_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+
+                AdatokRögzítés();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

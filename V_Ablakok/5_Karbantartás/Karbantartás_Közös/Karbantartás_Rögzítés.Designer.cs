@@ -732,6 +732,7 @@
             // 
             // Btn_Követekező_Ciklus
             // 
+            this.Btn_Követekező_Ciklus.BackgroundImage = global::Villamos.Properties.Resources.CiklusLéptetés;
             this.Btn_Követekező_Ciklus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn_Követekező_Ciklus.Location = new System.Drawing.Point(3, 173);
             this.Btn_Követekező_Ciklus.Name = "Btn_Követekező_Ciklus";
@@ -750,6 +751,7 @@
             this.Btn_V1Plusz.TabIndex = 146;
             this.ToolTip1.SetToolTip(this.Btn_V1Plusz, "V1 ");
             this.Btn_V1Plusz.UseVisualStyleBackColor = true;
+            this.Btn_V1Plusz.Click += new System.EventHandler(this.Btn_V1Plusz_Click);
             // 
             // Btn_Biztonsági
             // 
@@ -760,6 +762,7 @@
             this.Btn_Biztonsági.TabIndex = 145;
             this.ToolTip1.SetToolTip(this.Btn_Biztonsági, "Biztonsági V1");
             this.Btn_Biztonsági.UseVisualStyleBackColor = true;
+            this.Btn_Biztonsági.Click += new System.EventHandler(this.Btn_Biztonsági_Click);
             // 
             // Btn_SelejtreFutat
             // 

@@ -1720,6 +1720,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\CiklusLéptetés.ico" />
     <None Include="Resources\Fatcow-Farm-Fresh-Group-stroke.ico" />
     <None Include="Resources\Fatcow-Farm-Fresh-Sort-ascending1.ico" />
     <None Include="Resources\Fatcow-Farm-Fresh-Sort-ascending.ico" />
