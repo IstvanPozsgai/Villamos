@@ -119,9 +119,10 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                 Adat_CAF_Adatok ADAT = (from a in CafAdatok
                                         where a.Azonosító == azonosito
                                         && a.Státus <= 6
-                                        && a.Dátum < datum
+                                        && a.Dátum == datum
                                         orderby a.Dátum
                                         select a).LastOrDefault();
+                
                 if (ADAT.Számláló > ujSzamlalo) throw new HibásBevittAdat($"Az új számláló érték nem lehet kisebb, mint az előző ({ADAT.Számláló})!");
 
 
