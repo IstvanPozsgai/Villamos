@@ -704,7 +704,7 @@ namespace Villamos.Villamos_Ablakok
                     Milyen = V_Következő_1.Text.Trim();
                 else
                     Milyen = "E3";
-                Ütemezés_általános(VizsgálatÜtemez_1.Checked, BennMarad_1.Checked, Azonosító_1.Text.Trim(), Milyen, V_Sorszám_1.Text.Trim());
+                KézHiba.Ütemezés_általános(VizsgálatÜtemez_1.Checked, BennMarad_1.Checked, Azonosító_1.Text.Trim(), Milyen, V_Sorszám_1.Text.ToÉrt_Long(), Dátum);
             }
             catch (HibásBevittAdat ex)
             {
@@ -726,7 +726,7 @@ namespace Villamos.Villamos_Ablakok
                     Milyen = V_Következő_2.Text.Trim();
                 else
                     Milyen = "E3";
-                Ütemezés_általános(VizsgálatÜtemez_2.Checked, BennMarad_2.Checked, Azonosító_2.Text.Trim(), Milyen, V_Sorszám_2.Text.Trim());
+                KézHiba.Ütemezés_általános(VizsgálatÜtemez_2.Checked, BennMarad_2.Checked, Azonosító_2.Text.Trim(), Milyen, V_Sorszám_2.Text.ToÉrt_Long(), Dátum);
             }
             catch (HibásBevittAdat ex)
             {
@@ -748,7 +748,7 @@ namespace Villamos.Villamos_Ablakok
                     Milyen = V_Következő_3.Text.Trim();
                 else
                     Milyen = "E3";
-                Ütemezés_általános(VizsgálatÜtemez_3.Checked, BennMarad_3.Checked, Azonosító_3.Text.Trim(), Milyen, V_Sorszám_3.Text.Trim());
+                KézHiba.Ütemezés_általános(VizsgálatÜtemez_3.Checked, BennMarad_3.Checked, Azonosító_3.Text.Trim(), Milyen, V_Sorszám_3.Text.ToÉrt_Long(), Dátum);
             }
             catch (HibásBevittAdat ex)
             {
@@ -770,7 +770,7 @@ namespace Villamos.Villamos_Ablakok
                     Milyen = V_Következő_4.Text.Trim();
                 else
                     Milyen = "E3";
-                Ütemezés_általános(VizsgálatÜtemez_4.Checked, BennMarad_4.Checked, Azonosító_4.Text.Trim(), Milyen, V_Sorszám_4.Text.Trim());
+                KézHiba.Ütemezés_általános(VizsgálatÜtemez_4.Checked, BennMarad_4.Checked, Azonosító_4.Text.Trim(), Milyen, V_Sorszám_4.Text.ToÉrt_Long(), Dátum);
             }
             catch (HibásBevittAdat ex)
             {
@@ -792,7 +792,7 @@ namespace Villamos.Villamos_Ablakok
                     Milyen = V_Következő_5.Text.Trim();
                 else
                     Milyen = "E3";
-                Ütemezés_általános(VizsgálatÜtemez_5.Checked, BennMarad_5.Checked, Azonosító_5.Text.Trim(), Milyen, V_Sorszám_5.Text.Trim());
+                KézHiba.Ütemezés_általános(VizsgálatÜtemez_5.Checked, BennMarad_5.Checked, Azonosító_5.Text.Trim(), Milyen, V_Sorszám_5.Text.ToÉrt_Long(), Dátum);
             }
             catch (HibásBevittAdat ex)
             {
@@ -814,7 +814,7 @@ namespace Villamos.Villamos_Ablakok
                     Milyen = V_Következő_6.Text.Trim();
                 else
                     Milyen = "E3";
-                Ütemezés_általános(VizsgálatÜtemez_6.Checked, BennMarad_6.Checked, Azonosító_6.Text.Trim(), Milyen, V_Sorszám_6.Text.Trim());
+                KézHiba.Ütemezés_általános(VizsgálatÜtemez_6.Checked, BennMarad_6.Checked, Azonosító_6.Text.Trim(), Milyen, V_Sorszám_6.Text.ToÉrt_Long(), Dátum);
             }
             catch (HibásBevittAdat ex)
             {
@@ -827,149 +827,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        private void Ütemezés_általános(bool Vizsgálatraütemez, bool BennMarad, string Azonosító, string MireÜtemez, string Sorszám)
-        {
-            try
-            {
-                AdatokJárműHiba = KézHiba.Lista_Adatok(Cmbtelephely.Trim());
-                AdatokÁllomány = Kéz_Jármű.Lista_Adatok(Cmbtelephely.Trim());
-
-                bool talált;
-                long státus;
-                long újstátus = 0;
-                string típusa = "";
-                long hibáksorszáma;
-                long hiba;
-
-                if (Vizsgálatraütemez)
-                {
-                    // hiba leírása
-                    string szöveg1 = "";
-                    string szöveg3 = "KARÓRARUGÓ";
-                    if (Vizsgálatraütemez)
-                    {
-                        if (MireÜtemez.Contains("V"))
-                        {
-                            szöveg1 += MireÜtemez.Trim() + "-" + Sorszám;
-                            szöveg3 = szöveg1;
-                        }
-                        else
-                        {
-                            szöveg1 += MireÜtemez.Trim() + " ";
-                        }
-                    }
-
-                    if (BennMarad)
-                        szöveg1 += "-" + Dátum.ToString("yyyy.MM.dd.") + " Maradjon benn ";
-                    else
-                        szöveg1 += "-" + Dátum.ToString("yyyy.MM.dd.") + " Beálló ";
-
-                    // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
-                    talált = false;
-
-
-                    Adat_Jármű_hiba AdatJárműHiba = (from a in AdatokJárműHiba
-                                                     where a.Azonosító == Azonosító.Trim()
-                                                     && a.Hibaleírása.Contains(szöveg3.Trim())
-                                                     select a).FirstOrDefault();
-                    if (AdatJárműHiba != null) talált = true;
-
-
-                    AdatJárműHiba = (from a in AdatokJárműHiba
-                                     where a.Azonosító == Azonosító.Trim()
-                                     && a.Hibaleírása.Contains(szöveg1.Trim())
-                                     select a).FirstOrDefault();
-                    if (AdatJárműHiba != null) talált = true;
-
-
-                    Adat_Jármű AdatÁllomány = (from a in AdatokÁllomány
-                                               where a.Azonosító == Azonosító.Trim()
-                                               select a).FirstOrDefault();
-
-                    // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
-                    if (!talált)
-                    {
-                        // hibák számát emeljük és státus állítjuk ha kell
-                        hibáksorszáma = AdatÁllomány.Hibák;
-                        hiba = hibáksorszáma + 1;
-                        típusa = AdatÁllomány.Típus;
-                        státus = AdatÁllomány.Státus;
-                        újstátus = 0;
-                        if (státus != 4) // ha 4 státusa akkor nem kell módosítani.
-                        {
-                            if (BennMarad)
-                                státus = 4;
-                            else
-                                státus = 3;
-                        }
-                        else
-                        {
-                            újstátus = 1;
-                        }
-
-                        // csak akkor módosítjuk a dátumot, ha nem áll
-                        if (státus == 4 && újstátus == 0)
-                        {
-                            Adat_Jármű ADAT = new Adat_Jármű(
-                                           Azonosító.Trim(),
-                                           hiba,
-                                           státus,
-                                           DateTime.Today);
-                            Kéz_Jármű.Módosítás_Státus_Hiba_Dátum(Cmbtelephely, ADAT);
-                        }
-                        else
-                        {
-                            Adat_Jármű ADAT = new Adat_Jármű(
-                                      Azonosító.Trim(),
-                                      hiba,
-                                      státus);
-                            Kéz_Jármű.Módosítás_Hiba_Státus(Cmbtelephely, ADAT);
-                        }
-
-                        // beírjuk a hibákat
-                        Adat_Jármű_hiba AdatJármű;
-
-                        if (DateTime.Today.AddDays(1) >= Dátum)
-                        {
-                            AdatJármű = new Adat_Jármű_hiba(
-                                               Program.PostásNév.Trim(),
-                                               státus,
-                                               szöveg1.Trim(),
-                                               DateTime.Now,
-                                               false,
-                                               típusa.Trim(),
-                                               Azonosító.Trim(),
-                                               hibáksorszáma);
-                        }
-                        else
-                        {
-                            AdatJármű = new Adat_Jármű_hiba(
-                                                Program.PostásNév.Trim(),
-                                                3,
-                                                szöveg1.Trim(),
-                                                DateTime.Now,
-                                                false,
-                                                típusa.Trim(),
-                                                Azonosító.Trim(),
-                                                hibáksorszáma);
-                        }
-                        KézHiba.Rögzítés(Cmbtelephely, AdatJármű);
-                        MessageBox.Show("Az adatok rögzítése megtörtént!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-                else
-                    throw new HibásBevittAdat("Nem lett a vizsgálat elvégzése kijelölve.");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion
 
 
@@ -1183,32 +1040,32 @@ namespace Villamos.Villamos_Ablakok
         #region Ütemezés
         private void Ütemez_V_1_Click(object sender, EventArgs e)
         {
-            Ütemezés_általános(true, true, Azonosító_1.Text.Trim(), V_Következő_1.Text.Trim(), V_Sorszám_1.Text.Trim());
+            KézHiba.Ütemezés_általános(true, true, Azonosító_1.Text.Trim(), V_Következő_1.Text.Trim(), V_Sorszám_1.Text.ToÉrt_Long(), Dátum);
         }
 
         private void Ütemez_V_2_Click(object sender, EventArgs e)
         {
-            Ütemezés_általános(true, true, Azonosító_2.Text.Trim(), V_Következő_2.Text.Trim(), V_Sorszám_2.Text.Trim());
+            KézHiba.Ütemezés_általános(true, true, Azonosító_2.Text.Trim(), V_Következő_2.Text.Trim(), V_Sorszám_2.Text.ToÉrt_Long(), Dátum);
         }
 
         private void Ütemez_V_3_Click(object sender, EventArgs e)
         {
-            Ütemezés_általános(true, true, Azonosító_3.Text.Trim(), V_Következő_3.Text.Trim(), V_Sorszám_3.Text.Trim());
+            KézHiba.Ütemezés_általános(true, true, Azonosító_3.Text.Trim(), V_Következő_3.Text.Trim(), V_Sorszám_3.Text.ToÉrt_Long(), Dátum);
         }
 
         private void Ütemez_V_4_Click(object sender, EventArgs e)
         {
-            Ütemezés_általános(true, true, Azonosító_4.Text.Trim(), V_Következő_4.Text.Trim(), V_Sorszám_4.Text.Trim());
+            KézHiba.Ütemezés_általános(true, true, Azonosító_4.Text.Trim(), V_Következő_4.Text.Trim(), V_Sorszám_4.Text.ToÉrt_Long(), Dátum);
         }
 
         private void Ütemez_V_5_Click(object sender, EventArgs e)
         {
-            Ütemezés_általános(true, true, Azonosító_5.Text.Trim(), V_Következő_5.Text.Trim(), V_Sorszám_5.Text.Trim());
+            KézHiba.Ütemezés_általános(true, true, Azonosító_5.Text.Trim(), V_Következő_5.Text.Trim(), V_Sorszám_5.Text.ToÉrt_Long(), Dátum);
         }
 
         private void Ütemez_V_6_Click(object sender, EventArgs e)
         {
-            Ütemezés_általános(true, true, Azonosító_6.Text.Trim(), V_Következő_6.Text.Trim(), V_Sorszám_6.Text.Trim());
+            KézHiba.Ütemezés_általános(true, true, Azonosító_6.Text.Trim(), V_Következő_6.Text.Trim(), V_Sorszám_6.Text.ToÉrt_Long(), Dátum);
         }
         #endregion
     }
