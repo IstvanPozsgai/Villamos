@@ -111,6 +111,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lb_rendben_p3 = new System.Windows.Forms.Label();
+            this.tb_rendben_p3 = new System.Windows.Forms.TextBox();
+            this.lb_p3_p2_kozott = new System.Windows.Forms.Label();
+            this.tb_p3_p2_kozott = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -694,6 +698,10 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.tb_p3_p2_kozott, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.lb_p3_p2_kozott, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p3, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p3, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p2, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p2, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.tb_megtett_p1, 1, 4);
@@ -708,13 +716,15 @@
             this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p2, 0, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 6);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 471);
             this.tableLayoutPanel1.TabIndex = 284;
             // 
@@ -881,6 +891,40 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Számítások";
             // 
+            // lb_rendben_p3
+            // 
+            this.lb_rendben_p3.AutoSize = true;
+            this.lb_rendben_p3.Location = new System.Drawing.Point(3, 210);
+            this.lb_rendben_p3.Name = "lb_rendben_p3";
+            this.lb_rendben_p3.Size = new System.Drawing.Size(200, 20);
+            this.lb_rendben_p3.TabIndex = 12;
+            this.lb_rendben_p3.Text = "Első P3 vizsgálat rendben?";
+            // 
+            // tb_rendben_p3
+            // 
+            this.tb_rendben_p3.Location = new System.Drawing.Point(303, 213);
+            this.tb_rendben_p3.Name = "tb_rendben_p3";
+            this.tb_rendben_p3.ReadOnly = true;
+            this.tb_rendben_p3.Size = new System.Drawing.Size(139, 26);
+            this.tb_rendben_p3.TabIndex = 13;
+            // 
+            // lb_p3_p2_kozott
+            // 
+            this.lb_p3_p2_kozott.AutoSize = true;
+            this.lb_p3_p2_kozott.Location = new System.Drawing.Point(3, 242);
+            this.lb_p3_p2_kozott.Name = "lb_p3_p2_kozott";
+            this.lb_p3_p2_kozott.Size = new System.Drawing.Size(179, 20);
+            this.lb_p3_p2_kozott.TabIndex = 14;
+            this.lb_p3_p2_kozott.Text = "P3 és P2 között megtett";
+            // 
+            // tb_p3_p2_kozott
+            // 
+            this.tb_p3_p2_kozott.Location = new System.Drawing.Point(303, 245);
+            this.tb_p3_p2_kozott.Name = "tb_p3_p2_kozott";
+            this.tb_p3_p2_kozott.ReadOnly = true;
+            this.tb_p3_p2_kozott.Size = new System.Drawing.Size(139, 26);
+            this.tb_p3_p2_kozott.TabIndex = 15;
+            // 
             // Ablak_CAF_Részletes_WIP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1027,5 +1071,9 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TextBox tb_rendben_p3;
+        private System.Windows.Forms.Label lb_rendben_p3;
+        private System.Windows.Forms.TextBox tb_p3_p2_kozott;
+        private System.Windows.Forms.Label lb_p3_p2_kozott;
     }
 }

@@ -64,7 +64,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        private List<Adat_CAF_Adatok> ElőzőÉvek(int Év)
+        public List<Adat_CAF_Adatok> ElőzőÉvek(int Év)
         {
             List<Adat_CAF_Adatok> Válasz = new List<Adat_CAF_Adatok>();
             try
