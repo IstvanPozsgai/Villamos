@@ -61,9 +61,10 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             CafAdatok.Clear();
             CafAdatok = KézAdatok.Lista_Adatok();
             CafAdatok = (from a in CafAdatok
-                         where a.Státus == 6
+                         where a.Státus <= 6
                          && a.Megjegyzés != "Ütemezési Segéd"
                          && a.KmRogzitett_e
+                         && a.Dátum <= DateTime.Today
                          orderby a.Azonosító, a.Dátum
                          select a).ToList();
         }
@@ -117,7 +118,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
 
                 Adat_CAF_Adatok ADAT = (from a in CafAdatok
                                         where a.Azonosító == azonosito
-                                        && a.Státus == 6
+                                        && a.Státus <= 6
                                         && a.Dátum < datum
                                         orderby a.Dátum
                                         select a).LastOrDefault();
