@@ -24,6 +24,7 @@ namespace Villamos
         DataTable _AdatTábla = new DataTable();
         long utolsósor;
         long JelöltSor = -1;
+        long TáblaUtolsóSor = -1;
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Jármű2 KézVizsgálat = new Kezelő_Jármű2();
         readonly Kezelő_T5C5_Kmadatok KézKmAdatok = new Kezelő_T5C5_Kmadatok("T5C5");
@@ -1283,7 +1284,6 @@ namespace Villamos
                                                    where a.Azonosító == Pályaszám.Text.Trim()
                                                    orderby a.Vizsgdátumk
                                                    select a).ToList();
-
                 foreach (Adat_T5C5_Kmadatok rekord in Adatok)
                 {
 
@@ -1291,6 +1291,7 @@ namespace Villamos
                     Tábla1.RowCount++;
                     int i = Tábla1.RowCount - 1;
                     Tábla1.Rows[i].Cells[0].Value = rekord.ID;
+                    TáblaUtolsóSor = rekord.ID;
                     Tábla1.Rows[i].Cells[1].Value = rekord.Azonosító;
                     Tábla1.Rows[i].Cells[2].Value = rekord.Vizsgfok;
                     Tábla1.Rows[i].Cells[3].Value = rekord.Vizsgsorszám;
@@ -1325,6 +1326,7 @@ namespace Villamos
 
                 Tábla1.Visible = true;
                 Tábla1.Refresh();
+                Tábla1.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1377,16 +1379,17 @@ namespace Villamos
         }
 
         Karbantartás_Rögzítés Új_Karbantartás_Rögzítés;
-        private void RögzítésAblak(long Id)
+        private void RögzítésAblak()
         {
             Adat_T5C5_Kmadatok adat = (from a in AdatokKmAdatok
-                                       where a.ID == Id
+                                       where a.ID == JelöltSor
                                        select a).FirstOrDefault();
             if (adat == null) return;
+            bool Utolsó = JelöltSor == TáblaUtolsóSor;
 
             Új_Karbantartás_Rögzítés?.Close();
 
-            Új_Karbantartás_Rögzítés = new Karbantartás_Rögzítés("T5C5", adat);
+            Új_Karbantartás_Rögzítés = new Karbantartás_Rögzítés("T5C5", adat, Utolsó);
             Új_Karbantartás_Rögzítés.FormClosed += Karbantartás_Rögzítés_FormClosed;
             Új_Karbantartás_Rögzítés.Változás += Kiirjaatörténelmet;
             Új_Karbantartás_Rögzítés.Show();
@@ -1403,8 +1406,10 @@ namespace Villamos
             try
             {
                 if (JelöltSor == -1) return;
-                RögzítésAblak(JelöltSor);
+                if (TáblaUtolsóSor == -1) return;
+                RögzítésAblak();
                 JelöltSor = -1;
+
             }
             catch (HibásBevittAdat ex)
             {
