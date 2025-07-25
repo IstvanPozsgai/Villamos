@@ -93,10 +93,10 @@
             this.Btn_Biztonsági = new System.Windows.Forms.Button();
             this.Btn_SelejtreFutat = new System.Windows.Forms.Button();
             this.Vezényel = new System.Windows.Forms.Button();
+            this.JJavítás = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.JJavítás = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -765,7 +765,7 @@
             this.Btn_Biztonsági.Name = "Btn_Biztonsági";
             this.Btn_Biztonsági.Size = new System.Drawing.Size(44, 41);
             this.Btn_Biztonsági.TabIndex = 145;
-            this.ToolTip1.SetToolTip(this.Btn_Biztonsági, "Biztonsági V1");
+            this.ToolTip1.SetToolTip(this.Btn_Biztonsági, "Biztonsági V1 x nap meghaladó állást követően");
             this.Btn_Biztonsági.UseVisualStyleBackColor = true;
             this.Btn_Biztonsági.Click += new System.EventHandler(this.Btn_Biztonsági_Click);
             // 
@@ -793,6 +793,16 @@
             this.Vezényel.UseVisualStyleBackColor = true;
             this.Vezényel.Click += new System.EventHandler(this.Vezényel_Click);
             // 
+            // JJavítás
+            // 
+            this.JJavítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.JJavítás.Location = new System.Drawing.Point(223, 223);
+            this.JJavítás.Name = "JJavítás";
+            this.JJavítás.Size = new System.Drawing.Size(44, 41);
+            this.JJavítás.TabIndex = 149;
+            this.ToolTip1.SetToolTip(this.JJavítás, "J javítás esedékesség előtt ütemez");
+            this.JJavítás.UseVisualStyleBackColor = true;
+            // 
             // timer1
             // 
             this.timer1.Interval = 500;
@@ -806,16 +816,6 @@
             this.Holtart.Size = new System.Drawing.Size(751, 13);
             this.Holtart.TabIndex = 142;
             this.Holtart.Visible = false;
-            // 
-            // JJavítás
-            // 
-            this.JJavítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.JJavítás.Location = new System.Drawing.Point(223, 223);
-            this.JJavítás.Name = "JJavítás";
-            this.JJavítás.Size = new System.Drawing.Size(44, 41);
-            this.JJavítás.TabIndex = 149;
-            this.ToolTip1.SetToolTip(this.JJavítás, "J javítás esedékesség előtt ütemez");
-            this.JJavítás.UseVisualStyleBackColor = true;
             // 
             // Karbantartás_Rögzítés
             // 
