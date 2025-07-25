@@ -279,14 +279,39 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Ütem_vizsg_sorszám_idő.Text = rekord.IDŐ_Sorszám.ToString();
                     Ütem_megjegyzés.Text = rekord.Megjegyzés.Trim();
                     Ütem_dátum_program.Value = rekord.Dátum_program;
-                    tb_futhatmeg_p0.Text = ($"{Kovetkezo_P0_Vizsgalat_KM_Erteke(rekord.Azonosító) - Utolso_KM_Vizsgalat_Erteke(rekord.Azonosító)}");
-                    tb_futhatmeg_p1.Text = ($"{Kovetkezo_P1_Vizsgalat_KM_Erteke(rekord.Azonosító) - Utolso_KM_Vizsgalat_Erteke(rekord.Azonosító)}");
-                    tb_futhatmeg_p2.Text = ($"{Kovetkezo_P2_Vizsgalat_KM_Erteke(rekord.Azonosító) - Utolso_KM_Vizsgalat_Erteke(rekord.Azonosító)}");
-                    tb_megtett_p0.Text = ($"{P0_vizsgalatok_kozott_megtett_KM_Erteke(rekord.Azonosító)}");
-                    tb_megtett_p1.Text = ($"{P1_vizsgalatok_kozott_megtett_KM_Erteke(rekord.Azonosító)}");
-                    tb_rendben_p2.Text = ($"{Elso_P2_rendben_van_e(rekord.Azonosító)}");
-                    tb_rendben_p3.Text = ($"{Elso_P3_rendben_van_e(rekord.Azonosító)}");
-                    tb_p3_p2_kozott.Text = ($"{Utolso_P3_es_P2_kozotti_futas(rekord.Azonosító)}");
+
+                    /// P0: határ -1400
+                    tb_futhatmeg_p0.Text = $"{Kovetkezo_P0_Vizsgalat_KM_Erteke(rekord.Azonosító)}";
+                    SzinezdFuthatMeg(tb_futhatmeg_p0, 1400);
+
+                    // P1: határ -7000
+                    tb_futhatmeg_p1.Text = $"{Kovetkezo_P1_Vizsgalat_KM_Erteke(rekord.Azonosító)}";
+                    SzinezdFuthatMeg(tb_futhatmeg_p1, 7000);
+
+                    // P2: határ -28000
+                    tb_futhatmeg_p2.Text = $"{Kovetkezo_P2_Vizsgalat_KM_Erteke(rekord.Azonosító)}";
+                    SzinezdFuthatMeg(tb_futhatmeg_p2, 28000);
+
+
+                    // Megtett P0
+                    tb_megtett_p0.Text = $"{P0_vizsgalatok_kozott_megtett_KM_Erteke(rekord.Azonosító)}";
+                    SzinezdTextBox(tb_megtett_p0, 14000, 15400);
+
+                    // Megtett P1
+                    tb_megtett_p1.Text = $"{P1_vizsgalatok_kozott_megtett_KM_Erteke(rekord.Azonosító)}";
+                    SzinezdTextBox(tb_megtett_p1, 70000, 77000);
+
+                    // P2 rendben
+                    tb_rendben_p2.Text = $"{Elso_P2_rendben_van_e(rekord.Azonosító)}";
+                    SzinezdTextBox(tb_rendben_p2, 280000, 308000);
+
+                    // P3 rendben
+                    tb_rendben_p3.Text = $"{Elso_P3_rendben_van_e(rekord.Azonosító)}";
+                    SzinezdTextBox(tb_rendben_p3, 560000, 616000);
+
+                    // P3–P2 közötti futás
+                    tb_p3_p2_kozott.Text = $"{Utolso_P3_es_P2_kozotti_futas(rekord.Azonosító)}";
+                    SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -297,6 +322,54 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void SzinezdTextBox(TextBox tb, int alsoHatar, int felsoHatar)
+        {
+            if (int.TryParse(tb.Text, out int ertek))
+            {
+                if (ertek <= alsoHatar)
+                {
+                    tb.BackColor = Color.LightGreen; 
+                }
+                else if (ertek <= felsoHatar)
+                {
+                    tb.BackColor = Color.PaleGoldenrod; 
+                }
+                else
+                {
+                    tb.BackColor = ControlPaint.Light(Color.Red); 
+                }
+                tb.Text = tb.Text + " Km";
+            }
+            else
+            {
+                tb.BackColor = SystemColors.Window;
+            }
+        }
+
+        void SzinezdFuthatMeg(TextBox tb, int pirosHatar)
+        {
+            if (int.TryParse(tb.Text, out int ertek))
+            {
+                if (ertek < -pirosHatar)
+                {
+                    tb.BackColor = ControlPaint.Light(Color.Red); 
+                }
+                else if (ertek < 0)
+                {
+                    tb.BackColor = Color.PaleGoldenrod; 
+                }
+                else
+                {
+                    tb.BackColor = Color.LightGreen; 
+                }
+                tb.Text = tb.Text + " Km";
+            }
+            else
+            {
+                tb.BackColor = SystemColors.Window;
             }
         }
 
@@ -792,7 +865,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
         // Itt a metódusokban lévő utolsó KM kivételeket egységesíteni kell.
-        private int Kovetkezo_P0_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
+        private long Kovetkezo_P0_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
             Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
@@ -800,9 +873,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
             // Visszaadja a következő P vizsgálat KM várt értékét.
-        
-             return (Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km;
-          
+
+            return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+
         }
 
         // Ez már benne van a kezelőben félig meddig, overload-olva beleteszem ezt a verziót is később
@@ -830,7 +903,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 if (i % 5 == 0 && i % 20 != 0)
                 {
-                    return i * Vizsgalatok_Kozott_Megteheto_Km;
+                    return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
                 }
             }
             return 0;
@@ -848,7 +921,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 if (i % 20 == 0)
                 {
-                    return i * Vizsgalatok_Kozott_Megteheto_Km;
+                    return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
                 }
             }
             return 0;
@@ -856,7 +929,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private long P0_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
         {
-            
+
             // P0: nem osztható 5-tel
             var p0Vizsgalatok = ÖsszesCAFAdat()
                 .Where(a => a.IDŐvKM == 2 &&
@@ -936,7 +1009,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                             a.Azonosító == Aktualis_palyaszam &&
                             (a.Vizsgálat == "P2" || a.Vizsgálat == "3P2") &&
                             a.Megjegyzés != "Ütemezési Segéd")
-                .OrderBy(a => a.Dátum) 
+                .OrderBy(a => a.Dátum)
                 .FirstOrDefault();
 
             return elsoP2 != null
@@ -961,7 +1034,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 : "Nem történt P3.";
         }
 
-       
+
 
         #endregion
     }
