@@ -624,13 +624,12 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
         private void Vezényel_Click(object sender, EventArgs e)
         {
-
             try
             {
                 if (CiklusrendCombo.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva ciklusrend.");
                 if (Vizsgsorszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs feltöltve a ciklusrend.");
                 int index = Vizsgsorszám.Items.IndexOf(Vizsgsorszám.Text);
-                KézHiba.Ütemezés_általános(true, true, Adat.Azonosító, Adat.KövV, Adat.KövV_sorszám, DateTime.Today);
+                KézHiba.Ütemezés_általános(true, true, Adat.Azonosító, Adat.KövV, Adat.KövV_sorszám, DateTime.Today, Típus);
                 Változás?.Invoke();
                 this.Close();
             }

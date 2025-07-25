@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
+using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
@@ -184,16 +185,27 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Ütemezés_általános(bool Vizsgálatraütemez, bool BennMarad, string Azonosító, string MireÜtemez, long Sorszám, DateTime Dátum)
+        public void Ütemezés_általános(bool Vizsgálatraütemez, bool BennMarad, string Azonosító, string MireÜtemez, long Sorszám, DateTime Dátum, string Típus = "T5C5")
         {
             try
             {
                 Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
                 List<Adat_Jármű> AdatokÁllomány = Kéz_Jármű.Lista_Adatok("Főmérnökség");
-                string Telephely = (from a in AdatokÁllomány
-                                    where a.Azonosító == Azonosító
-                                    select a.Üzem).FirstOrDefault() ?? throw new HibásBevittAdat("Nincs üzemhez rendelve a jármű.");
+                Adat_Jármű Adat = (from a in AdatokÁllomány
+                                   where a.Azonosító == Azonosító
+                                   select a).FirstOrDefault() ?? throw new HibásBevittAdat("Nincs ilyen jármű.");
+                if (Adat == null) return;
+                string Telephely = Adat.Üzem;
                 List<Adat_Jármű_hiba> AdatokJárműHiba = Lista_Adatok(Telephely);
+
+                //Leellenőrizzük, hogy volt-e már ütemezve erre a napra
+                Kezelő_T5C5_Kmadatok KézKM = new Kezelő_T5C5_Kmadatok(Típus);
+                Adat_T5C5_Kmadatok EgyKM = (from a in KézKM.Lista_Adatok()
+                                            where a.Azonosító == Azonosító
+                                            && a.Törölt == false
+                                            && a.Vizsgdátumk == Dátum
+                                            select a).FirstOrDefault();
+                if (EgyKM != null) return;
 
 
                 bool talált;
