@@ -184,6 +184,156 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Ütemezés_általános(bool Vizsgálatraütemez, bool BennMarad, string Azonosító, string MireÜtemez, long Sorszám, DateTime Dátum)
+        {
+            try
+            {
+                Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
+                List<Adat_Jármű> AdatokÁllomány = Kéz_Jármű.Lista_Adatok("Főmérnökség");
+                string Telephely = (from a in AdatokÁllomány
+                                    where a.Azonosító == Azonosító
+                                    select a.Üzem).FirstOrDefault() ?? throw new HibásBevittAdat("Nincs üzemhez rendelve a jármű.");
+                List<Adat_Jármű_hiba> AdatokJárműHiba = Lista_Adatok(Telephely);
+
+
+                bool talált;
+                long státus;
+                long újstátus = 0;
+                string típusa = "";
+                long hibáksorszáma;
+                long hiba;
+
+                if (Vizsgálatraütemez)
+                {
+                    // hiba leírása
+                    string szöveg1 = "";
+                    string szöveg3 = "KARÓRARUGÓ";
+                    if (Vizsgálatraütemez)
+                    {
+                        if (MireÜtemez.Contains("V"))
+                        {
+                            szöveg1 += MireÜtemez.Trim() + "-" + Sorszám;
+                            szöveg3 = szöveg1;
+                        }
+                        else
+                        {
+                            szöveg1 += MireÜtemez.Trim() + " ";
+                        }
+                    }
+
+                    if (BennMarad)
+                        szöveg1 += "-" + Dátum.ToString("yyyy.MM.dd.") + " Maradjon benn ";
+                    else
+                        szöveg1 += "-" + Dátum.ToString("yyyy.MM.dd.") + " Beálló ";
+
+                    // Megnézzük, hogy volt-e már rögzítve ilyen szöveg
+                    talált = false;
+
+
+                    Adat_Jármű_hiba AdatJárműHiba = (from a in AdatokJárműHiba
+                                                     where a.Azonosító == Azonosító.Trim()
+                                                     && a.Hibaleírása.Contains(szöveg3.Trim())
+                                                     select a).FirstOrDefault();
+                    if (AdatJárműHiba != null) talált = true;
+
+
+                    AdatJárműHiba = (from a in AdatokJárműHiba
+                                     where a.Azonosító == Azonosító.Trim()
+                                     && a.Hibaleírása.Contains(szöveg1.Trim())
+                                     select a).FirstOrDefault();
+                    if (AdatJárműHiba != null) talált = true;
+
+
+                    Adat_Jármű AdatÁllomány = (from a in AdatokÁllomány
+                                               where a.Azonosító == Azonosító.Trim()
+                                               select a).FirstOrDefault();
+
+                    // ha már volt ilyen szöveg rögzítve a pályaszámhoz akkor nem rögzítjük mégegyszer
+                    if (!talált)
+                    {
+                        // hibák számát emeljük és státus állítjuk ha kell
+                        hibáksorszáma = AdatÁllomány.Hibák;
+                        hiba = hibáksorszáma + 1;
+                        típusa = AdatÁllomány.Típus;
+                        státus = AdatÁllomány.Státus;
+                        újstátus = 0;
+                        if (státus != 4) // ha 4 státusa akkor nem kell módosítani.
+                        {
+                            if (BennMarad)
+                                státus = 4;
+                            else
+                                státus = 3;
+                        }
+                        else
+                        {
+                            újstátus = 1;
+                        }
+
+                        // csak akkor módosítjuk a dátumot, ha nem áll
+                        if (státus == 4 && újstátus == 0)
+                        {
+                            Adat_Jármű ADAT = new Adat_Jármű(
+                                           Azonosító.Trim(),
+                                           hiba,
+                                           státus,
+                                           DateTime.Today);
+                            Kéz_Jármű.Módosítás_Státus_Hiba_Dátum(Telephely, ADAT);
+                        }
+                        else
+                        {
+                            Adat_Jármű ADAT = new Adat_Jármű(
+                                      Azonosító.Trim(),
+                                      hiba,
+                                      státus);
+                            Kéz_Jármű.Módosítás_Hiba_Státus(Telephely, ADAT);
+                        }
+
+                        // beírjuk a hibákat
+                        Adat_Jármű_hiba AdatJármű;
+
+                        if (DateTime.Today.AddDays(1) >= Dátum)
+                        {
+                            AdatJármű = new Adat_Jármű_hiba(
+                                               Program.PostásNév.Trim(),
+                                               státus,
+                                               szöveg1.Trim(),
+                                               DateTime.Now,
+                                               false,
+                                               típusa.Trim(),
+                                               Azonosító.Trim(),
+                                               hibáksorszáma);
+                        }
+                        else
+                        {
+                            AdatJármű = new Adat_Jármű_hiba(
+                                                Program.PostásNév.Trim(),
+                                                3,
+                                                szöveg1.Trim(),
+                                                DateTime.Now,
+                                                false,
+                                                típusa.Trim(),
+                                                Azonosító.Trim(),
+                                                hibáksorszáma);
+                        }
+                        Rögzítés(Telephely, AdatJármű);
+                        MessageBox.Show("Az adatok rögzítése megtörtént!", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                    throw new HibásBevittAdat("Nem lett a vizsgálat elvégzése kijelölve.");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
 
 
 

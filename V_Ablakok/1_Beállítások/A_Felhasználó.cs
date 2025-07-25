@@ -38,7 +38,7 @@ namespace Villamos
                 Neveklistája();
                 Fülek.TabIndex = 0;
                 TextNév.Focus();
-            //    GombLathatosagKezelo.Beallit(this);
+                //    GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 Táblaíró();
 
@@ -719,7 +719,7 @@ namespace Villamos
                 menünév[116] = "CAF karbantartás";
                 menüleírás[116] = " 1- Előtervet készít , 2- Előtervet töröl, 3- Előtervet véglegesít ";
                 menünév[117] = "CAF karbantartás";
-                menüleírás[117] = " 1- Előjegyez a hibák közé , 2- Segédtáblás módosítások, 3- ";
+                menüleírás[117] = " 1- Előjegyez a hibák közé , 2- Segédtáblás km módosítások, 3- ";
                 menünév[118] = "CAF karbantartás";
                 menüleírás[118] = " 1-Ütemezés módosítás , 2-, 3- ";
                 menünév[119] = "CAF karbantartás";

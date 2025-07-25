@@ -211,14 +211,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 KiírEgyAdatot(Adat);
                 Adat = KézAdatok.Egy_Adat_Id_Előző(Posta_Segéd.Azonosító.Trim(), Posta_Segéd.Sorszám);
                 KiírElőzőAdatot(Adat);
-                if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
-                {
-                    Ütem_Köv_Számláló.ReadOnly = false;
-                }
-                else
-                {
-                    Ütem_Köv_Számláló.ReadOnly = true;
-                }
+
+                Ütem_Köv_Számláló.ReadOnly = Ütem_Köv_Státus.SelectedItem.ToString() != "6- Elvégzett";
+
 
                 if ((int.Parse(Ütem_számláló.Text) > int.Parse(Ütem_Köv_Számláló.Text) || int.Parse(Ütem_számláló.Text) == 0) && Ütem_státus.SelectedItem.ToString() == "6- Elvégzett")
                 {

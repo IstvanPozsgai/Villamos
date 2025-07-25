@@ -7,6 +7,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
+using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
@@ -14,6 +15,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 {
     public partial class Karbantartás_Rögzítés : Form
     {
+        public event Event_Kidobó Változás;
         static string Típus { get; set; }
         Adat_T5C5_Kmadatok Adat { get; set; }
         string _fájlexc;
@@ -23,6 +25,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_Ciklus_Sorrend KézSorrend = new Kezelő_Ciklus_Sorrend();
         readonly Kezelő_kiegészítő_telephely KézKieg = new Kezelő_kiegészítő_telephely();
+        readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
         readonly List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
         List<Adat_Ciklus_Sorrend> AdatokSorrend = new List<Adat_Ciklus_Sorrend>();
@@ -277,6 +280,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
         private void Utolsó_V_rögzítés_Click(object sender, EventArgs e)
         {
+            AdatokRögzítés();
+        }
+
+        private void AdatokRögzítés()
+        {
             try
             {
                 // leellenőrizzük, hogy minden adat ki van-e töltve
@@ -344,7 +352,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 {
                     MessageBox.Show("A pályaszám nem T5C5! ", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                //  Kiirjaatörténelmet();
+                Változás?.Invoke();
 
 
             }
@@ -368,7 +376,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                     if (MessageBox.Show("Valóban töröljük az adatsort?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                     {
                         KézKmAdatok.Törlés(sorSzám);
-                        //  Kiirjaatörténelmet();
+                        Változás?.Invoke();
 
                     }
                 }
@@ -512,6 +520,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (sorszámIndex < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő sorszám nem eleme a választási listának.");
 
                 Vizsgsorszám.Text = Vizsgsorszám.Items[sorszámIndex].ToString();
+                AdatokRögzítés();
+                Változás?.Invoke();
 
             }
             catch (HibásBevittAdat ex)
@@ -525,9 +535,115 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             }
         }
 
+
         private void Btn_SelejtreFutat_Click(object sender, EventArgs e)
         {
 
+            try
+            {
+                string újNév = "";
+                //Felírjuk a plusszos V2 nevét és növeljük eggyel
+                List<Adat_T5C5_Kmadatok> KMAdatok = KézKmAdatok.Lista_Adatok();
+
+                Adat_T5C5_Kmadatok ElőzőV2 = (from a in KMAdatok
+                                              where a.Azonosító == Adat.Azonosító
+                                                                                          && a.Vizsgfok.Contains("V2")
+                                                                                          && a.Törölt == false
+                                              orderby a.Vizsgdátumk descending
+                                              select a).FirstOrDefault();
+                if (ElőzőV2.Vizsgfok.Contains("P"))
+                {
+                    string[] darabol = ElőzőV2.Vizsgfok.Split('P');
+                    újNév = darabol[0] + "P" + (int.Parse(darabol[1]) + 1).ToString();
+                }
+                else
+                {
+                    string[] darabol = ElőzőV2.Vizsgfok.Split('_');
+                    újNév = darabol[0] + "P1";
+                }
+
+                if (Adat.KövV_sorszám != 0) throw new HibásBevittAdat($"A következő sorszámú {Adat.KövV_sorszám} vizsgálata {Adat.KövV}, \nmely esetén nem lehet beállítani V2 vizsgálatot.");
+                KövV.Text = újNév;
+                KövV2.Text = újNév;
+                KövV_Sorszám.Text = ElőzőV2.Vizsgsorszám.ToString();
+                KövV2_Sorszám.Text = ElőzőV2.Vizsgsorszám.ToString();
+                AdatokRögzítés();
+                Változás?.Invoke();
+                this.Close();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Btn_Biztonsági_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                AdatokRögzítés();
+                Változás?.Invoke();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Btn_V1Plusz_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+
+                AdatokRögzítés();
+                Változás?.Invoke();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Vezényel_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (CiklusrendCombo.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva ciklusrend.");
+                if (Vizsgsorszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs feltöltve a ciklusrend.");
+                int index = Vizsgsorszám.Items.IndexOf(Vizsgsorszám.Text);
+                KézHiba.Ütemezés_általános(true, true, Adat.Azonosító, Adat.KövV, Adat.KövV_sorszám, DateTime.Today);
+                Változás?.Invoke();
+                this.Close();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

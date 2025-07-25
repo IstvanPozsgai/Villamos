@@ -143,6 +143,7 @@ namespace Villamos
                 // módosítás 2 
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
+                    km_modosit_btn.Enabled = true;
                 }
                 // módosítás 3 
                 if (MyF.Vanjoga(melyikelem, 3))

@@ -65,6 +65,11 @@ namespace Villamos
         {
         }
 
+        private void Ablak_T5C5_Tulajdonság_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Karbantartás_Rögzítés?.Close();
+        }
+
         private void Telephelyekfeltöltése()
         {
             try
@@ -1367,8 +1372,8 @@ namespace Villamos
             KövV1km.Text = (int.Parse(KMUkm.Text) - int.Parse(VizsgKm.Text)).ToString();
             KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
 
-
-            Fülek.SelectedIndex = 3;
+            //maradunk a lapon
+            //Fülek.SelectedIndex = 3;
         }
 
         Karbantartás_Rögzítés Új_Karbantartás_Rögzítés;
@@ -1379,17 +1384,13 @@ namespace Villamos
                                        select a).FirstOrDefault();
             if (adat == null) return;
 
-            if (Új_Karbantartás_Rögzítés == null)
-            {
-                Új_Karbantartás_Rögzítés = new Karbantartás_Rögzítés("T5C5", adat);
-                Új_Karbantartás_Rögzítés.FormClosed += Karbantartás_Rögzítés_FormClosed;
-                Új_Karbantartás_Rögzítés.Show();
-            }
-            else
-            {
-                Új_Karbantartás_Rögzítés.Activate();
-                Új_Karbantartás_Rögzítés.WindowState = FormWindowState.Maximized;
-            }
+            Új_Karbantartás_Rögzítés?.Close();
+
+            Új_Karbantartás_Rögzítés = new Karbantartás_Rögzítés("T5C5", adat);
+            Új_Karbantartás_Rögzítés.FormClosed += Karbantartás_Rögzítés_FormClosed;
+            Új_Karbantartás_Rögzítés.Változás += Kiirjaatörténelmet;
+            Új_Karbantartás_Rögzítés.Show();
+
         }
 
         private void Karbantartás_Rögzítés_FormClosed(object sender, FormClosedEventArgs e)
@@ -2697,6 +2698,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
 
 
