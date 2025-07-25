@@ -782,6 +782,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         const int Vizsgalatok_Kozott_Megteheto_Km = 14000;
 
+        // Visszaadja az összes ADB-t összefűzve. Muszáj végigmenni rajtuk. Sebességben picit jobb, mintha egyesével beolvassa őket.
+        // Ezt kiszervezem a kezelőbe.
+        private IEnumerable<Adat_CAF_Adatok> ÖsszesCAFAdat()
+        {
+            return KézAdatok.Lista_Adatok()
+                .Concat(Enumerable.Range(2016, DateTime.Now.Year - 2016 + 1)
+                    .SelectMany(ev => KézAdatok.ElőzőÉvek(ev)));
+        }
+
         // Itt a metódusokban lévő utolsó KM kivételeket egységesíteni kell.
         private int Kovetkezo_P0_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
         {
@@ -845,149 +854,114 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             return 0;
         }
 
-        // Itt majd figyelni kell, hogyha nem talál legalább 2 ilyen vizsgálatot az idei táblában, akkor keressen a régiben is.
         private long P0_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
         {
-            // Lekéri az összes P0 vizsgálatot
-            List<Adat_CAF_Adatok> KM_Vizsgalatok = KézAdatok.Lista_Adatok()
-                                                   .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.KM_Sorszám % 5 != 0)
-                                                   .OrderByDescending(a => a.Dátum)
-                                                   .ToList();
+            
+            // P0: nem osztható 5-tel
+            var p0Vizsgalatok = ÖsszesCAFAdat()
+                .Where(a => a.IDŐvKM == 2 &&
+                            a.Státus == 6 &&
+                            a.Azonosító == Aktualis_palyaszam &&
+                            a.KM_Sorszám % 5 != 0)
+                .OrderByDescending(a => a.Dátum)
+                .Take(2)
+                .ToList();
 
-            // Kiveszi az utolsó teljesített vizsgálatot
-            Adat_CAF_Adatok Utolso_P0 = KM_Vizsgalatok.FirstOrDefault();
-            //  Kiveszi az utolsó előtti teljesített vizsgálatot
-            Adat_CAF_Adatok Utolso_Elotti_P0 = KM_Vizsgalatok.Skip(1).FirstOrDefault();
+            if (p0Vizsgalatok.Count < 2)
+                return 0;
 
-            return Utolso_P0.Számláló - Utolso_Elotti_P0.Számláló;
+            return p0Vizsgalatok[0].Számláló - p0Vizsgalatok[1].Számláló;
         }
 
-        // Itt majd figyelni kell, hogyha nem talál legalább 2 ilyen vizsgálatot az idei táblában, akkor keressen a régiben is.
         private long P1_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
         {
-            // Lekéri az összes P1 vizsgálatot
-            List<Adat_CAF_Adatok> KM_Vizsgalatok = KézAdatok.Lista_Adatok()
-                                                   .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.KM_Sorszám % 5 == 0 && a.KM_Sorszám % 20 != 0)
-                                                   .OrderByDescending(a => a.Dátum)
-                                                   .ToList();
+            // P1: osztható 5-tel, de nem 20-szal
+            var p1Vizsgalatok = ÖsszesCAFAdat()
+                .Where(a => a.IDŐvKM == 2 &&
+                            a.Státus == 6 &&
+                            a.Azonosító == Aktualis_palyaszam &&
+                            a.KM_Sorszám % 5 == 0 &&
+                            a.KM_Sorszám % 20 != 0)
+                .OrderByDescending(a => a.Dátum)
+                .Take(2)
+                .ToList();
 
-            // Kiveszi az utolsó teljesített vizsgálatot
-            Adat_CAF_Adatok Utolso_P1 = KM_Vizsgalatok.FirstOrDefault();
-            //  Kiveszi az utolsó előtti teljesített vizsgálatot
-            Adat_CAF_Adatok Utolso_Elotti_P1 = KM_Vizsgalatok.Skip(1).FirstOrDefault();
+            if (p1Vizsgalatok.Count < 2)
+                return 0;
 
-            //return Utolso_P1.Számláló - Utolso_Elotti_P1.Számláló;
-            return 69;
+            return p1Vizsgalatok[0].Számláló - p1Vizsgalatok[1].Számláló;
         }
 
-        private long Elso_P2_rendben_van_e(string Aktualis_palyaszam)
+        private string Utolso_P3_es_P2_kozotti_futas(string Aktualis_palyaszam)
         {
-            // Dominik által kért 0 km - 250.000 km vizsgálat.
-            // Probléma, hogy a régi adatbázisban nincs számozva a km, ezt holnap megnézem. (Pl. Megkeresem az első 20 P-t containelő vizsgálatot)
+            // Utolsó P3 keresése
+            Adat_CAF_Adatok P3 = ÖsszesCAFAdat()
+                .Where(a => a.IDŐvKM == 2 &&
+                            a.Státus == 6 &&
+                            a.Azonosító == Aktualis_palyaszam &&
+                            (a.Vizsgálat == "P3/2P2" || a.Vizsgálat == "2P3") &&
+                            a.Megjegyzés != "Ütemezési Segéd")
+                .OrderByDescending(a => a.Dátum)
+                .FirstOrDefault();
 
-            // Kiveszi a 20. vizsgálatot.
-            Adat_CAF_Adatok Vizsgalat_Adatai = KézAdatok.Lista_Adatok().FirstOrDefault(a => a.KM_Sorszám == 20 && a.Azonosító == Aktualis_palyaszam && a.IDŐvKM == 2);
-            // Ha nem null, akkor talált az aktuális évi adatbázisban ilyen vizsgálatot.
-            if (Vizsgalat_Adatai != null)
-            {
-                return Vizsgalat_Adatai.Számláló;
-            }
-            // Ha nem talált az aktuális éviben 20-as vizsgálatot, akkor visszafele elkezdi keresni az előző éviekben.
-            else
-            {
-                for (global::System.Int32 i = DateTime.Now.Year - 2; i >= 2016; i--)
-                {
-                    Vizsgalat_Adatai = KézAdatok.ElőzőÉvek(i).FirstOrDefault(a => a.KM_Sorszám == 20 && a.Azonosító == Aktualis_palyaszam && a.IDŐvKM == 2);
-                    if (Vizsgalat_Adatai != null)
-                    {
-                        return Vizsgalat_Adatai.Számláló;                        
-                    }
-                }
-            }
-            return -1;
+            // Ha nem találunk P3 vizsgálatot
+            if (P3 == null)
+                return "Nem történt P3";
+
+            // Utolsó P2 keresése
+            Adat_CAF_Adatok P2 = ÖsszesCAFAdat()
+                .Where(a => a.IDŐvKM == 2 &&
+                            a.Státus == 6 &&
+                            a.Azonosító == Aktualis_palyaszam &&
+                            (a.Vizsgálat == "P2" || a.Vizsgálat == "3P2") &&
+                            a.Megjegyzés != "Ütemezési Segéd")
+                .OrderByDescending(a => a.Dátum)
+                .FirstOrDefault();
+
+            // Ha nem találunk P2 vizsgálatot.
+            if (P2 == null)
+                return "Nem történt P2";
+
+            return $"{P3.Számláló - P2.Számláló}";
         }
 
-        private long Elso_P3_rendben_van_e(string Aktualis_palyaszam)
+        // A 2 alábbi metódus nem fog minden megnyíláskor lefutni, kapni fog ADB-ben 3 mezőt és verziócserekor lefuttatjuk őket.
+        // A jövőben az új villamosok miatt figyelni kell majd, hogy ezek a mezők csak 1x frissülhetnek a villamos élete során, tehát amikor a 20. és 40. vizsgálat megvolt.
+        private string Elso_P2_rendben_van_e(string Aktualis_palyaszam)
         {
-            // Dominik által kért 0 km - 250.000 km vizsgálat.
-            // Probléma, hogy a régi adatbázisban nincs számozva a km, ezt holnap megnézem. (Pl. Megkeresem az első 20 P-t containelő vizsgálatot)
+            // Megkeresem az első P2 vizsgálatot.
+            Adat_CAF_Adatok elsoP2 = ÖsszesCAFAdat()
+                .Where(a => a.IDŐvKM == 2 &&
+                            a.Státus == 6 &&
+                            a.Azonosító == Aktualis_palyaszam &&
+                            (a.Vizsgálat == "P2" || a.Vizsgálat == "3P2") &&
+                            a.Megjegyzés != "Ütemezési Segéd")
+                .OrderBy(a => a.Dátum) 
+                .FirstOrDefault();
 
-            // Kiveszi a 20. vizsgálatot.
-            Adat_CAF_Adatok Vizsgalat_Adatai = KézAdatok.Lista_Adatok().FirstOrDefault(a => a.KM_Sorszám == 40 && a.Azonosító == Aktualis_palyaszam && a.IDŐvKM == 2);
-            // Ha nem null, akkor talált az aktuális évi adatbázisban ilyen vizsgálatot.
-            if (Vizsgalat_Adatai != null)
-            {
-                return Vizsgalat_Adatai.Számláló;
-            }
-            // Ha nem talált az aktuális éviben 20-as vizsgálatot, akkor visszafele elkezdi keresni az előző éviekben.
-            else
-            {
-                for (global::System.Int32 i = DateTime.Now.Year - 2; i >= 2016; i--)
-                {
-                    Vizsgalat_Adatai = KézAdatok.ElőzőÉvek(i).FirstOrDefault(a => a.KM_Sorszám == 40 && a.Azonosító == Aktualis_palyaszam && a.IDŐvKM == 2);
-                    if (Vizsgalat_Adatai != null)
-                    {
-                        return Vizsgalat_Adatai.Számláló;
-                    }
-                }
-            }
-            return -1;
+            return elsoP2 != null
+                ? $"{elsoP2.Számláló}"
+                : "Nem történt P2.";
         }
 
-        // Ez még nem működik rendben
-        private long Utolso_P3_es_P2_kozotti_futas(string Aktualis_palyaszam)
+        private string Elso_P3_rendben_van_e(string Aktualis_palyaszam)
         {
-            long Utolso_P3_KM;
-            long Utolso_P2_KM;
+            // Megkeresem az első P3 vizsgálatot
+            Adat_CAF_Adatok elsoP3 = ÖsszesCAFAdat()
+                .Where(a => a.IDŐvKM == 2 &&
+                            a.Státus == 6 &&
+                            a.Azonosító == Aktualis_palyaszam &&
+                            (a.Vizsgálat == "P3/2P2" || a.Vizsgálat == "2P3") &&
+                            a.Megjegyzés != "Ütemezési Segéd")
+                .OrderBy(a => a.Dátum)
+                .FirstOrDefault();
 
-            Adat_CAF_Adatok Adott_Villamos_Utolso_P3 = KézAdatok.Lista_Adatok()
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.KM_Sorszám % 20 == 0 && a.KM_Sorszám % 5 != 0 && a.KM_Sorszám != 0)
-                                                       .OrderByDescending(a => a.Dátum)                                                       
-                                                       .FirstOrDefault();
-            if (Adott_Villamos_Utolso_P3 != null)
-            {
-                Utolso_P3_KM = Adott_Villamos_Utolso_P3.Számláló;
-            }
-            // Ha nem talált az aktuális éviben 20-as vizsgálatot, akkor visszafele elkezdi keresni az előző éviekben.
-            else
-            {
-                for (global::System.Int32 i = DateTime.Now.Year - 2; i >= 2016; i--)
-                {
-                    Adott_Villamos_Utolso_P3 = KézAdatok.ElőzőÉvek(i).FirstOrDefault(a => (a.KM_Sorszám == 40 || a.KM_Sorszám == 80) && a.Azonosító == Aktualis_palyaszam && a.IDŐvKM == 2);
-                    if (Adott_Villamos_Utolso_P3 != null)
-                    {
-                        Utolso_P3_KM = Adott_Villamos_Utolso_P3.Számláló;
-                    }
-                }
-            }
-
-
-            Adat_CAF_Adatok Adott_Villamos_Utolso_P2 = KézAdatok.Lista_Adatok()
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.KM_Sorszám % 20 == 0 && (a.KM_Sorszám != 40 || a.KM_Sorszám != 80) && a.Megjegyzés != "Ütemezési Segéd")
-                                                       .OrderByDescending(a => a.Dátum)
-                                                       .FirstOrDefault();
-            if (Adott_Villamos_Utolso_P2 != null)
-            {
-                Utolso_P2_KM = Adott_Villamos_Utolso_P2.Számláló;
-            }
-            // Ha nem talált az aktuális éviben 20-as vizsgálatot, akkor visszafele elkezdi keresni az előző éviekben.
-            else
-            {
-                for (global::System.Int32 i = DateTime.Now.Year - 2; i >= 2016; i--)
-                {
-                    Adott_Villamos_Utolso_P2 = KézAdatok.ElőzőÉvek(i).Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.KM_Sorszám % 20 == 0 && (a.KM_Sorszám != 40 || a.KM_Sorszám != 80) && a.Megjegyzés != "Ütemezési Segéd")
-                                                       .OrderByDescending(a => a.Dátum)
-                                                       .FirstOrDefault();
-                    if (Adott_Villamos_Utolso_P2 != null)
-                    {
-                        Utolso_P3_KM = Adott_Villamos_Utolso_P2.Számláló;
-                    }
-                }
-            }
-
-            return Adott_Villamos_Utolso_P3.Számláló - Adott_Villamos_Utolso_P2.Számláló;
-
+            return elsoP3 != null
+                ? $"{elsoP3.Számláló}"
+                : "Nem történt P3.";
         }
+
+       
 
         #endregion
     }
