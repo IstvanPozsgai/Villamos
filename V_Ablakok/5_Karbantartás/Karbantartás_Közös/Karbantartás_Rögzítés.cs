@@ -17,6 +17,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
     {
         public event Event_Kidobó Változás;
         static string Típus { get; set; }
+        static bool UtolsóElem { get; set; }
         Adat_T5C5_Kmadatok Adat { get; set; }
         string _fájlexc;
 
@@ -27,15 +28,15 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
         readonly Kezelő_kiegészítő_telephely KézKieg = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
-        readonly List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
         List<Adat_Ciklus_Sorrend> AdatokSorrend = new List<Adat_Ciklus_Sorrend>();
         List<Adat_T5C5_Kmadatok> AdatokKmAdatok = new List<Adat_T5C5_Kmadatok>();
 
-        public Karbantartás_Rögzítés(string típus, Adat_T5C5_Kmadatok adat)
+        public Karbantartás_Rögzítés(string típus, Adat_T5C5_Kmadatok adat, bool utolsóelem)
         {
             InitializeComponent();
             Típus = típus;
             Adat = adat;
+            UtolsóElem = utolsóelem;
             KézKmAdatok = new Kezelő_T5C5_Kmadatok(Típus);
             Start();
         }
@@ -441,18 +442,30 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 Utolsó_V_rögzítés.Enabled = false;
                 Töröl.Enabled = false;
 
+
+                Btn_Követekező_Ciklus.Enabled = false;
+                Btn_SelejtreFutat.Enabled = false;
+                Btn_Biztonsági.Enabled = false;
+                Btn_V1Plusz.Enabled = false;
+                JJavítás.Enabled = false;
+                Vezényel.Enabled = false;
+
                 // csak főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     MezőEngedélyezés(true);
                     Töröl.Visible = true;
                     Új_adat.Visible = true;
+                    Utolsó_V_rögzítés.Visible = true;
+                    Következő_V.Visible = true;
                 }
                 else
                 {
                     MezőEngedélyezés(false);
                     Töröl.Visible = false;
                     Új_adat.Visible = false;
+                    Utolsó_V_rögzítés.Visible = false;
+                    Következő_V.Visible = false;
                 }
 
                 melyikelem = 107;
@@ -465,7 +478,12 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
-
+                    Btn_Követekező_Ciklus.Enabled = true;
+                    Btn_SelejtreFutat.Enabled = true;
+                    Btn_Biztonsági.Enabled = true;
+                    Btn_V1Plusz.Enabled = true;
+                    JJavítás.Enabled = true;
+                    Vezényel.Enabled = true;
                 }
                 // módosítás 3 
                 if (MyF.Vanjoga(melyikelem, 3))
@@ -508,6 +526,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
         {
             try
             {
+                if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
                 //kiválasztjuk azt ami a textben van
                 int index = CiklusrendCombo.Items.IndexOf(CiklusrendCombo.Text);
                 if (index < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő szöveg nem eleme a választási listának.");
@@ -521,9 +540,6 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (sorszámIndex < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő sorszám nem eleme a választási listának.");
 
                 Vizsgsorszám.Text = Vizsgsorszám.Items[sorszámIndex].ToString();
-                AdatokRögzítés();
-                Változás?.Invoke();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -542,6 +558,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
             try
             {
+                if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
                 string újNév = "";
                 //Felírjuk a plusszos V2 nevét és növeljük eggyel
                 List<Adat_T5C5_Kmadatok> KMAdatok = KézKmAdatok.Lista_Adatok();
@@ -568,7 +585,10 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 KövV2.Text = újNév;
                 KövV_Sorszám.Text = ElőzőV2.Vizsgsorszám.ToString();
                 KövV2_Sorszám.Text = ElőzőV2.Vizsgsorszám.ToString();
+
                 AdatokRögzítés();
+                Változás?.Invoke();
+                this.Close();
 
 
             }
@@ -587,8 +607,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
         {
             try
             {
+                if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
+                KövV.Text = "V1_B";
+                KövV_Sorszám.Text = Vizsgsorszám.Text.Trim();
 
                 AdatokRögzítés();
+                Változás?.Invoke();
+                this.Close();
             }
             catch (HibásBevittAdat ex)
             {
@@ -606,10 +631,16 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
             try
             {
+                if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
+                if (!Vizsgfok.Text.Contains("V1")) throw new HibásBevittAdat("Csak V1 vizsgálat után lehet alkalmazni.");
+                string[] darabol = Vizsgfok.Text.Split('_');
 
+                KövV.Text = $"{darabol[0]}_{darabol[1].ToÉrt_Int() + 1}";
+                KövV_Sorszám.Text = Vizsgsorszám.Text.Trim();
 
                 AdatokRögzítés();
                 Változás?.Invoke();
+                this.Close();
             }
             catch (HibásBevittAdat ex)
             {
@@ -628,9 +659,34 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             {
                 if (CiklusrendCombo.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva ciklusrend.");
                 if (Vizsgsorszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs feltöltve a ciklusrend.");
+                if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
                 int index = Vizsgsorszám.Items.IndexOf(Vizsgsorszám.Text);
                 KézHiba.Ütemezés_általános(true, true, Adat.Azonosító, Adat.KövV, Adat.KövV_sorszám, DateTime.Today, Típus);
-                Változás?.Invoke();
+                this.Close();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void JJavítás_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
+                CiklusrendCombo.Text = CiklusrendCombo.Items[0].ToString();
+                KövV.Text = "J";
+                KövV2.Text = "J";
+                KövV_Sorszám.Text = "0";
+                KövV2_Sorszám.Text = "0";
+
+                AdatokRögzítés();
                 this.Close();
             }
             catch (HibásBevittAdat ex)
