@@ -218,8 +218,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     KézCAFAlap.Módosítás_kmAdat(AdatokGy);
                 }
                 Holtart.Ki();
-                // JAVÍTANDÓ:Ezeket a kiírásokat elvégzi részben a Alapadatokat_kiír metódus, nem  kell elvenni tőle a munkát
-                // KÉSZ✔
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

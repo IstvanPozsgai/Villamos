@@ -22,7 +22,6 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             Start();
         }
 
-        // Kérdés: Jól látom, hogy csak az utolsó vizsgálat telephelyét tároljuk az alap táblában?
         private void Ablak_CAF_KM_Load(object sender, EventArgs e)
         {
 
@@ -122,7 +121,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                                         && a.Dátum == datum
                                         orderby a.Dátum
                                         select a).LastOrDefault();
-                
+
                 if (ADAT.Számláló > ujSzamlalo) throw new HibásBevittAdat($"Az új számláló érték nem lehet kisebb, mint az előző ({ADAT.Számláló})!");
 
 

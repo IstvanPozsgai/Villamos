@@ -331,15 +331,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 if (ertek <= alsoHatar)
                 {
-                    tb.BackColor = Color.LightGreen; 
+                    tb.BackColor = Color.LightGreen;
                 }
                 else if (ertek <= felsoHatar)
                 {
-                    tb.BackColor = Color.PaleGoldenrod; 
+                    tb.BackColor = Color.PaleGoldenrod;
                 }
                 else
                 {
-                    tb.BackColor = ControlPaint.Light(Color.Red); 
+                    tb.BackColor = ControlPaint.Light(Color.Red);
                 }
                 tb.Text = tb.Text + " Km";
             }
@@ -355,15 +355,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 if (ertek < -pirosHatar)
                 {
-                    tb.BackColor = ControlPaint.Light(Color.Red); 
+                    tb.BackColor = ControlPaint.Light(Color.Red);
                 }
                 else if (ertek < 0)
                 {
-                    tb.BackColor = Color.PaleGoldenrod; 
+                    tb.BackColor = Color.PaleGoldenrod;
                 }
                 else
                 {
-                    tb.BackColor = Color.LightGreen; 
+                    tb.BackColor = Color.LightGreen;
                 }
                 tb.Text = tb.Text + " Km";
             }
@@ -838,21 +838,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
 
         #region KM vizsgálatok
-        // JAVÍTANDÓ:                
-        // 3- Ezt lehetett volna LINQ-val hamár megmutattam
-        //  for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
-        //  {
-        //      if (i % 5 != 0 && i % 20 != 0)
-        //      {
-        //      return (i + 1) * 14000;
-        //      }
-        //  }
-        // 4-  Utolso_KM_Vizsgalat_Erteke miért nincs hivatkozva ha lehet?
-
-
-        // Itt próbáltam dinamikusan megoldani a KM sorszámok és értékének vizsgálatát és generálását, így nem kell beégetni a kódba.
-        // Vizsgálat_Km_Állása = Vizsgálat_Sorszám * 14.000 Km
-
+        // JAVÍTANDÓ: a ciklusrendben van meghatározva, hogy mennyi km van egy vizsgálat között.
+        //Tételezzük fel, hogy változik az üzemeltetési tapasztalatok alapján, vagy gazdasági okokból a 14 helyett 15 lesz a következő vizsgálat.
+        //Akkor valakinek tudnia kell programozni, hogy ezt átírja. 
+        //Próbálj általánosítani.
         const int Vizsgalatok_Kozott_Megteheto_Km = 14000;
 
         // Visszaadja az összes ADB-t összefűzve. Muszáj végigmenni rajtuk. Sebességben picit jobb, mintha egyesével beolvassa őket.
