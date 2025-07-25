@@ -1043,6 +1043,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap J_eleje {
+            get {
+                object obj = ResourceManager.GetObject("J_eleje", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Junior_Icon_111 {
             get {
                 object obj = ResourceManager.GetObject("Junior Icon 111", resourceCulture);
@@ -1466,6 +1476,26 @@ namespace Villamos.Properties {
         internal static System.Drawing.Bitmap user_vendég1 {
             get {
                 object obj = ResourceManager.GetObject("user_vendég1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap V1_B {
+            get {
+                object obj = ResourceManager.GetObject("V1_B", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap V1_Plusz {
+            get {
+                object obj = ResourceManager.GetObject("V1_Plusz", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

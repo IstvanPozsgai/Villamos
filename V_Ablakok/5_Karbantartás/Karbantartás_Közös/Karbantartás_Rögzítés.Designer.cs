@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.Töröl = new System.Windows.Forms.Button();
             this.KövV2km = new System.Windows.Forms.TextBox();
             this.Label35 = new System.Windows.Forms.Label();
             this.KövV2_Sorszám = new System.Windows.Forms.TextBox();
@@ -53,9 +52,6 @@
             this.Utolsófelújításdátuma = new System.Windows.Forms.DateTimePicker();
             this.Vizsgdátumk = new System.Windows.Forms.DateTimePicker();
             this.Vizsgdátumv = new System.Windows.Forms.DateTimePicker();
-            this.SAP_adatok = new System.Windows.Forms.Button();
-            this.Új_adat = new System.Windows.Forms.Button();
-            this.Utolsó_V_rögzítés = new System.Windows.Forms.Button();
             this.Label33 = new System.Windows.Forms.Label();
             this.Label32 = new System.Windows.Forms.Label();
             this.Label31 = new System.Windows.Forms.Label();
@@ -87,6 +83,10 @@
             this.UtolsóVSzámláló = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Utolsó_V_rögzítés = new System.Windows.Forms.Button();
             this.Következő_V = new System.Windows.Forms.Button();
             this.Btn_Követekező_Ciklus = new System.Windows.Forms.Button();
             this.Btn_V1Plusz = new System.Windows.Forms.Button();
@@ -94,9 +94,9 @@
             this.Btn_SelejtreFutat = new System.Windows.Forms.Button();
             this.Vezényel = new System.Windows.Forms.Button();
             this.JJavítás = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Töröl = new System.Windows.Forms.Button();
+            this.SAP_adatok = new System.Windows.Forms.Button();
+            this.Új_adat = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -104,18 +104,6 @@
             this.panel2.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Töröl
-            // 
-            this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Töröl.Location = new System.Drawing.Point(113, 3);
-            this.Töröl.Name = "Töröl";
-            this.Töröl.Size = new System.Drawing.Size(45, 44);
-            this.Töröl.TabIndex = 119;
-            this.ToolTip1.SetToolTip(this.Töröl, "Törli az adott sorszámhoz tartozó adatokat");
-            this.Töröl.UseVisualStyleBackColor = true;
-            this.Töröl.Click += new System.EventHandler(this.Töröl_Click);
             // 
             // KövV2km
             // 
@@ -293,42 +281,6 @@
             this.Vizsgdátumv.Name = "Vizsgdátumv";
             this.Vizsgdátumv.Size = new System.Drawing.Size(118, 26);
             this.Vizsgdátumv.TabIndex = 99;
-            // 
-            // SAP_adatok
-            // 
-            this.SAP_adatok.BackgroundImage = global::Villamos.Properties.Resources.SAP;
-            this.SAP_adatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.SAP_adatok.Location = new System.Drawing.Point(223, 3);
-            this.SAP_adatok.Name = "SAP_adatok";
-            this.SAP_adatok.Size = new System.Drawing.Size(44, 44);
-            this.SAP_adatok.TabIndex = 118;
-            this.ToolTip1.SetToolTip(this.SAP_adatok, "SAP adatokkal frissíti az adatbázist");
-            this.SAP_adatok.UseVisualStyleBackColor = true;
-            this.SAP_adatok.Click += new System.EventHandler(this.SAP_adatok_Click);
-            // 
-            // Új_adat
-            // 
-            this.Új_adat.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.Új_adat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Új_adat.Location = new System.Drawing.Point(3, 58);
-            this.Új_adat.Name = "Új_adat";
-            this.Új_adat.Size = new System.Drawing.Size(44, 44);
-            this.Új_adat.TabIndex = 115;
-            this.ToolTip1.SetToolTip(this.Új_adat, "Előkészíti az új adatnak a beviteli mezőket");
-            this.Új_adat.UseVisualStyleBackColor = true;
-            this.Új_adat.Click += new System.EventHandler(this.Új_adat_Click);
-            // 
-            // Utolsó_V_rögzítés
-            // 
-            this.Utolsó_V_rögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Utolsó_V_rögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Utolsó_V_rögzítés.Location = new System.Drawing.Point(3, 3);
-            this.Utolsó_V_rögzítés.Name = "Utolsó_V_rögzítés";
-            this.Utolsó_V_rögzítés.Size = new System.Drawing.Size(44, 44);
-            this.Utolsó_V_rögzítés.TabIndex = 110;
-            this.ToolTip1.SetToolTip(this.Utolsó_V_rögzítés, "Rögzíti az adatokat");
-            this.Utolsó_V_rögzítés.UseVisualStyleBackColor = true;
-            this.Utolsó_V_rögzítés.Click += new System.EventHandler(this.Utolsó_V_rögzítés_Click);
             // 
             // Label33
             // 
@@ -723,86 +675,6 @@
             this.tableLayoutPanel5.Size = new System.Drawing.Size(275, 276);
             this.tableLayoutPanel5.TabIndex = 141;
             // 
-            // Következő_V
-            // 
-            this.Következő_V.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
-            this.Következő_V.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Következő_V.Location = new System.Drawing.Point(58, 58);
-            this.Következő_V.Name = "Következő_V";
-            this.Következő_V.Size = new System.Drawing.Size(45, 45);
-            this.Következő_V.TabIndex = 143;
-            this.ToolTip1.SetToolTip(this.Következő_V, "A soron következő adatokkal kitölti a beviteli mezőket");
-            this.Következő_V.UseVisualStyleBackColor = true;
-            this.Következő_V.Click += new System.EventHandler(this.Következő_V_Click);
-            // 
-            // Btn_Követekező_Ciklus
-            // 
-            this.Btn_Követekező_Ciklus.BackgroundImage = global::Villamos.Properties.Resources.CiklusLéptetés;
-            this.Btn_Követekező_Ciklus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Követekező_Ciklus.Location = new System.Drawing.Point(3, 223);
-            this.Btn_Követekező_Ciklus.Name = "Btn_Követekező_Ciklus";
-            this.Btn_Követekező_Ciklus.Size = new System.Drawing.Size(44, 41);
-            this.Btn_Követekező_Ciklus.TabIndex = 144;
-            this.ToolTip1.SetToolTip(this.Btn_Követekező_Ciklus, "Következő ciklus");
-            this.Btn_Követekező_Ciklus.UseVisualStyleBackColor = true;
-            this.Btn_Követekező_Ciklus.Click += new System.EventHandler(this.Btn_Követekező_Ciklus_Click);
-            // 
-            // Btn_V1Plusz
-            // 
-            this.Btn_V1Plusz.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_V1Plusz.Location = new System.Drawing.Point(168, 223);
-            this.Btn_V1Plusz.Name = "Btn_V1Plusz";
-            this.Btn_V1Plusz.Size = new System.Drawing.Size(44, 41);
-            this.Btn_V1Plusz.TabIndex = 146;
-            this.ToolTip1.SetToolTip(this.Btn_V1Plusz, "V1 ");
-            this.Btn_V1Plusz.UseVisualStyleBackColor = true;
-            this.Btn_V1Plusz.Click += new System.EventHandler(this.Btn_V1Plusz_Click);
-            // 
-            // Btn_Biztonsági
-            // 
-            this.Btn_Biztonsági.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Biztonsági.Location = new System.Drawing.Point(113, 223);
-            this.Btn_Biztonsági.Name = "Btn_Biztonsági";
-            this.Btn_Biztonsági.Size = new System.Drawing.Size(44, 41);
-            this.Btn_Biztonsági.TabIndex = 145;
-            this.ToolTip1.SetToolTip(this.Btn_Biztonsági, "Biztonsági V1 x nap meghaladó állást követően");
-            this.Btn_Biztonsági.UseVisualStyleBackColor = true;
-            this.Btn_Biztonsági.Click += new System.EventHandler(this.Btn_Biztonsági_Click);
-            // 
-            // Btn_SelejtreFutat
-            // 
-            this.Btn_SelejtreFutat.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Group_stroke;
-            this.Btn_SelejtreFutat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_SelejtreFutat.Location = new System.Drawing.Point(58, 223);
-            this.Btn_SelejtreFutat.Name = "Btn_SelejtreFutat";
-            this.Btn_SelejtreFutat.Size = new System.Drawing.Size(44, 41);
-            this.Btn_SelejtreFutat.TabIndex = 147;
-            this.ToolTip1.SetToolTip(this.Btn_SelejtreFutat, "Selejtre futattás");
-            this.Btn_SelejtreFutat.UseVisualStyleBackColor = true;
-            this.Btn_SelejtreFutat.Click += new System.EventHandler(this.Btn_SelejtreFutat_Click);
-            // 
-            // Vezényel
-            // 
-            this.Vezényel.BackgroundImage = global::Villamos.Properties.Resources.leadott;
-            this.Vezényel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Vezényel.Location = new System.Drawing.Point(113, 58);
-            this.Vezényel.Name = "Vezényel";
-            this.Vezényel.Size = new System.Drawing.Size(45, 45);
-            this.Vezényel.TabIndex = 148;
-            this.ToolTip1.SetToolTip(this.Vezényel, "Beütemezzük a soronkövetkező Vizsgálatot");
-            this.Vezényel.UseVisualStyleBackColor = true;
-            this.Vezényel.Click += new System.EventHandler(this.Vezényel_Click);
-            // 
-            // JJavítás
-            // 
-            this.JJavítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.JJavítás.Location = new System.Drawing.Point(223, 223);
-            this.JJavítás.Name = "JJavítás";
-            this.JJavítás.Size = new System.Drawing.Size(44, 41);
-            this.JJavítás.TabIndex = 149;
-            this.ToolTip1.SetToolTip(this.JJavítás, "J javítás esedékesség előtt ütemez");
-            this.JJavítás.UseVisualStyleBackColor = true;
-            // 
             // timer1
             // 
             this.timer1.Interval = 500;
@@ -816,6 +688,138 @@
             this.Holtart.Size = new System.Drawing.Size(751, 13);
             this.Holtart.TabIndex = 142;
             this.Holtart.Visible = false;
+            // 
+            // Utolsó_V_rögzítés
+            // 
+            this.Utolsó_V_rögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Utolsó_V_rögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Utolsó_V_rögzítés.Location = new System.Drawing.Point(3, 3);
+            this.Utolsó_V_rögzítés.Name = "Utolsó_V_rögzítés";
+            this.Utolsó_V_rögzítés.Size = new System.Drawing.Size(49, 49);
+            this.Utolsó_V_rögzítés.TabIndex = 110;
+            this.ToolTip1.SetToolTip(this.Utolsó_V_rögzítés, "Rögzíti az adatokat");
+            this.Utolsó_V_rögzítés.UseVisualStyleBackColor = true;
+            this.Utolsó_V_rögzítés.Click += new System.EventHandler(this.Utolsó_V_rögzítés_Click);
+            // 
+            // Következő_V
+            // 
+            this.Következő_V.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
+            this.Következő_V.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Következő_V.Location = new System.Drawing.Point(58, 58);
+            this.Következő_V.Name = "Következő_V";
+            this.Következő_V.Size = new System.Drawing.Size(49, 49);
+            this.Következő_V.TabIndex = 143;
+            this.ToolTip1.SetToolTip(this.Következő_V, "A soron következő adatokkal kitölti a beviteli mezőket");
+            this.Következő_V.UseVisualStyleBackColor = true;
+            this.Következő_V.Click += new System.EventHandler(this.Következő_V_Click);
+            // 
+            // Btn_Követekező_Ciklus
+            // 
+            this.Btn_Követekező_Ciklus.BackgroundImage = global::Villamos.Properties.Resources.CiklusLéptetés;
+            this.Btn_Követekező_Ciklus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Követekező_Ciklus.Location = new System.Drawing.Point(3, 223);
+            this.Btn_Követekező_Ciklus.Name = "Btn_Követekező_Ciklus";
+            this.Btn_Követekező_Ciklus.Size = new System.Drawing.Size(49, 50);
+            this.Btn_Követekező_Ciklus.TabIndex = 144;
+            this.ToolTip1.SetToolTip(this.Btn_Követekező_Ciklus, "Következő ciklus");
+            this.Btn_Követekező_Ciklus.UseVisualStyleBackColor = true;
+            this.Btn_Követekező_Ciklus.Click += new System.EventHandler(this.Btn_Követekező_Ciklus_Click);
+            // 
+            // Btn_V1Plusz
+            // 
+            this.Btn_V1Plusz.BackgroundImage = global::Villamos.Properties.Resources.V1_Plusz;
+            this.Btn_V1Plusz.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_V1Plusz.Location = new System.Drawing.Point(168, 223);
+            this.Btn_V1Plusz.Name = "Btn_V1Plusz";
+            this.Btn_V1Plusz.Size = new System.Drawing.Size(49, 50);
+            this.Btn_V1Plusz.TabIndex = 146;
+            this.ToolTip1.SetToolTip(this.Btn_V1Plusz, "V1 ");
+            this.Btn_V1Plusz.UseVisualStyleBackColor = true;
+            this.Btn_V1Plusz.Click += new System.EventHandler(this.Btn_V1Plusz_Click);
+            // 
+            // Btn_Biztonsági
+            // 
+            this.Btn_Biztonsági.BackgroundImage = global::Villamos.Properties.Resources.V1_B;
+            this.Btn_Biztonsági.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Biztonsági.Location = new System.Drawing.Point(113, 223);
+            this.Btn_Biztonsági.Name = "Btn_Biztonsági";
+            this.Btn_Biztonsági.Size = new System.Drawing.Size(49, 50);
+            this.Btn_Biztonsági.TabIndex = 145;
+            this.ToolTip1.SetToolTip(this.Btn_Biztonsági, "Biztonsági V1 x nap meghaladó állást követően");
+            this.Btn_Biztonsági.UseVisualStyleBackColor = true;
+            this.Btn_Biztonsági.Click += new System.EventHandler(this.Btn_Biztonsági_Click);
+            // 
+            // Btn_SelejtreFutat
+            // 
+            this.Btn_SelejtreFutat.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Group_stroke;
+            this.Btn_SelejtreFutat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_SelejtreFutat.Location = new System.Drawing.Point(58, 223);
+            this.Btn_SelejtreFutat.Name = "Btn_SelejtreFutat";
+            this.Btn_SelejtreFutat.Size = new System.Drawing.Size(49, 50);
+            this.Btn_SelejtreFutat.TabIndex = 147;
+            this.ToolTip1.SetToolTip(this.Btn_SelejtreFutat, "Selejtre futattás");
+            this.Btn_SelejtreFutat.UseVisualStyleBackColor = true;
+            this.Btn_SelejtreFutat.Click += new System.EventHandler(this.Btn_SelejtreFutat_Click);
+            // 
+            // Vezényel
+            // 
+            this.Vezényel.BackgroundImage = global::Villamos.Properties.Resources.leadott;
+            this.Vezényel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Vezényel.Location = new System.Drawing.Point(113, 58);
+            this.Vezényel.Name = "Vezényel";
+            this.Vezényel.Size = new System.Drawing.Size(49, 49);
+            this.Vezényel.TabIndex = 148;
+            this.ToolTip1.SetToolTip(this.Vezényel, "Beütemezzük a soronkövetkező Vizsgálatot");
+            this.Vezényel.UseVisualStyleBackColor = true;
+            this.Vezényel.Click += new System.EventHandler(this.Vezényel_Click);
+            // 
+            // JJavítás
+            // 
+            this.JJavítás.BackgroundImage = global::Villamos.Properties.Resources.J_eleje;
+            this.JJavítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.JJavítás.Location = new System.Drawing.Point(223, 223);
+            this.JJavítás.Name = "JJavítás";
+            this.JJavítás.Size = new System.Drawing.Size(49, 50);
+            this.JJavítás.TabIndex = 149;
+            this.ToolTip1.SetToolTip(this.JJavítás, "J javítás esedékesség előtt ütemez");
+            this.JJavítás.UseVisualStyleBackColor = true;
+            this.JJavítás.Click += new System.EventHandler(this.JJavítás_Click);
+            // 
+            // Töröl
+            // 
+            this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Töröl.Location = new System.Drawing.Point(113, 3);
+            this.Töröl.Name = "Töröl";
+            this.Töröl.Size = new System.Drawing.Size(49, 49);
+            this.Töröl.TabIndex = 119;
+            this.ToolTip1.SetToolTip(this.Töröl, "Törli az adott sorszámhoz tartozó adatokat");
+            this.Töröl.UseVisualStyleBackColor = true;
+            this.Töröl.Click += new System.EventHandler(this.Töröl_Click);
+            // 
+            // SAP_adatok
+            // 
+            this.SAP_adatok.BackgroundImage = global::Villamos.Properties.Resources.SAP;
+            this.SAP_adatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAP_adatok.Location = new System.Drawing.Point(223, 3);
+            this.SAP_adatok.Name = "SAP_adatok";
+            this.SAP_adatok.Size = new System.Drawing.Size(49, 49);
+            this.SAP_adatok.TabIndex = 118;
+            this.ToolTip1.SetToolTip(this.SAP_adatok, "SAP adatokkal frissíti az adatbázist");
+            this.SAP_adatok.UseVisualStyleBackColor = true;
+            this.SAP_adatok.Click += new System.EventHandler(this.SAP_adatok_Click);
+            // 
+            // Új_adat
+            // 
+            this.Új_adat.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
+            this.Új_adat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Új_adat.Location = new System.Drawing.Point(3, 58);
+            this.Új_adat.Name = "Új_adat";
+            this.Új_adat.Size = new System.Drawing.Size(49, 49);
+            this.Új_adat.TabIndex = 115;
+            this.ToolTip1.SetToolTip(this.Új_adat, "Előkészíti az új adatnak a beviteli mezőket");
+            this.Új_adat.UseVisualStyleBackColor = true;
+            this.Új_adat.Click += new System.EventHandler(this.Új_adat_Click);
             // 
             // Karbantartás_Rögzítés
             // 
