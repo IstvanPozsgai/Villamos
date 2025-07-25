@@ -123,8 +123,10 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
             Sorszám.Text = Adat.ID.ToString();
             CiklusrendCombo.Text = Adat.Ciklusrend.Trim();
-
+            Vizsgsorszámcombofeltölés();
             Vizsgsorszám.Text = Adat.Vizsgsorszám.ToString();
+
+
             Vizsgfok.Text = Adat.Vizsgfok;
             Vizsgdátumk.Value = Adat.Vizsgdátumk;
             Vizsgdátumv.Value = Adat.Vizsgdátumv;
@@ -353,8 +355,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                     MessageBox.Show("A pályaszám nem T5C5! ", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 Változás?.Invoke();
-
-
+                this.Close();
             }
             catch (HibásBevittAdat ex)
             {
@@ -377,7 +378,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                     {
                         KézKmAdatok.Törlés(sorSzám);
                         Változás?.Invoke();
-
+                        this.Close();
                     }
                 }
             }
@@ -559,7 +560,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 else
                 {
                     string[] darabol = ElőzőV2.Vizsgfok.Split('_');
-                    újNév = darabol[0] + "P1";
+                    újNév = darabol[0] + "_P1";
                 }
 
                 if (Adat.KövV_sorszám != 0) throw new HibásBevittAdat($"A következő sorszámú {Adat.KövV_sorszám} vizsgálata {Adat.KövV}, \nmely esetén nem lehet beállítani V2 vizsgálatot.");
@@ -568,8 +569,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 KövV_Sorszám.Text = ElőzőV2.Vizsgsorszám.ToString();
                 KövV2_Sorszám.Text = ElőzőV2.Vizsgsorszám.ToString();
                 AdatokRögzítés();
-                Változás?.Invoke();
-                this.Close();
+
 
             }
             catch (HibásBevittAdat ex)
@@ -589,7 +589,6 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             {
 
                 AdatokRögzítés();
-                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {
