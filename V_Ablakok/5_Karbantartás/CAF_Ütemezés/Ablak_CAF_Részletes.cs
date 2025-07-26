@@ -670,14 +670,17 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
+        // JAVÍTANDÓ: Ezt módosítottam, mert van olyan eset amikor nem az előző vizsgálat van a baloldalon.
+        // Át kell írni a WIP-be
         private void Rögzíti_ütemet()
         {
             try
             {
                 if (!long.TryParse(Ütem_Köv_Számláló.Text.Trim(), out long számláló)) számláló = 0;
-                if (!long.TryParse(Ütem_számláló.Text.Trim(), out long eszámláló)) eszámláló = 0;
-                if (számláló <= eszámláló && Ütem_Köv_Státus.Text.Substring(0, 1) == "6")
-                    throw new HibásBevittAdat($"Az adatok rögzítése sikertelen!\nAz új számláló állása kevesebb, mint az előző!\n({Ütem_számláló.Text} km)");
+                long ElőzőKM = KMUtolsó();
+                if (Ütem_Köv_Státus.Text.Substring(0, 1) == "6" && ElőzőKM > számláló)
+                    throw new HibásBevittAdat($"Az adatok rögzítése sikertelen!\nAz új számláló állása {számláló}km kevesebb,\n mint az előző {ElőzőKM}km !");
+
                 if (Ütem_pályaszám.Text.Trim() == "") return;
                 if (Ütem_Köv_Vizsgálat.Text.Trim() == "") return;
                 if (!int.TryParse(MyF.Szöveg_Tisztítás(Ütem_Köv_Státus.Text, 0, 1), out int státus)) return;
@@ -703,8 +706,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 KézAdatok.Döntés(ADAT);
                 Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -715,6 +716,35 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        // JAVÍTANDÓ: Át kell írni a WIP-be
+        // A következő vizsgálat számlálója nem lehet kisebb, mint az előző vizsgálat számlálója.
+        private long KMUtolsó()
+        {
+            long válasz = 0;
+            try
+            {
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                List<Adat_CAF_Adatok> SzűrAdatok = (from a in Adatok
+                                                    where a.Azonosító.Trim() == Ütem_pályaszám.Text.Trim()
+                                                    && a.Státus == 6 // Elvégzett
+                                                    && a.Dátum < Ütem_Köv_Dátum.Value
+                                                    orderby a.Dátum descending
+                                                    select a).ToList();
+                if (SzűrAdatok != null) válasz = SzűrAdatok[0].Számláló;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return válasz;
+
         }
         #endregion
 

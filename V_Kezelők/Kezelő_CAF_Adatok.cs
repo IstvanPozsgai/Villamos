@@ -464,12 +464,6 @@ namespace Villamos.Kezelők
             }
         }
 
-        // JAVÍTANDÓ:Nem kell külön eljárás erre  ezt kell kiegészíteni:Ütemez
-        // KÉSZ✔
-
-        // JAVÍTANDÓ:Ez is felesleges, mert a Módosítás_Státus-t kellene használni kicsit átalakítva
-        // KÉSZ✔
-
         public void Törlés(DateTime Dátum, string Azonosító, int státus = 0)
         {
             try
