@@ -298,21 +298,35 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
+        // JAVÍTANDÓ:
+        // Olvasás után töröld Kezdet: int.tryParse, helyett használd a .ToÉrt_Int() fejlesztett függvényt
+        // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
+        // hogy nincs havi km, kivéve ha törött/selejtes.
+        // Nem tenném bele catch mert későbbiek folyamán a ki nem töltött mező problémát fog okozni
+        // Azért, hogy ne okozzon hibát javítottam, de nem tekintem véglegesnek a megoldást.
+        // Olvasás után töröld Vége:
         private void KiírJobbOldal()
         {
             try
             {
                 KM_ciklus_kiirás();
-                int KM_felső = int.TryParse(Ütem_KM_felső.Text, out KM_felső) ? KM_felső : 0;
+                int KM_felső = Ütem_KM_felső.Text.ToÉrt_Int();
                 Ütem_számláló_KM.Text = EgyCAF.Számláló.ToString();
                 Ütem_Utolsó_futott.Text = (EgyCAF.KMUkm - EgyCAF.Számláló).ToString();
                 Ütem_km_KMU.Text = EgyCAF.KMUkm.ToString();
                 Ütem_havifutás.Text = EgyCAF.Havikm.ToString();
+                //Meg kell kérdezni,hogy mit csináljon akkor ha nincs havifutás, ha áll akkor nem okoz proplémát,
+                //ha indult és még nincs havi adata, akkor továbbra sem ütemezi.
+                //Megoldások
+                //* Ha hosszú állás után elkészült, akkor kézzel kell a havi km-t nulláról átállítani valamilyen számra
+                //* Ha 0 lenne akkor a típus átlagos futással fog számolni a program és a beütemezett vizsgálatokat ki kell törölni a tervből.
+                //Mindkét javaslatommal felhasználói beavatkozást igényel
                 Ütem_Napkm.Text = ((int)(EgyCAF.Havikm / 30)).ToString();
-                // JAVÍTANDÓ:
-                // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
-                // hogy nincs havi km, kivéve ha törött/selejtes.
-                Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
+                // JAVÍTANDÓ: Módosítani szükséges  ezzel ki van küszöbölve a 0-val való osztás
+                if ((EgyCAF.Havikm / 30) <= 100)
+                    Ütem_KM_futhatmég.Text = (KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)).ToString();
+                else
+                    Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
             }
             catch (Exception ex)
             {
