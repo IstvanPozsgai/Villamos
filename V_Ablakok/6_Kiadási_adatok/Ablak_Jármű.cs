@@ -787,6 +787,7 @@ namespace Villamos
                     AdatTábla.Rows.Add(Soradat);
 
                 }
+                Tábla.CleanFilterAndSort();
                 Tábla.DataSource = AdatTábla;
 
                 Tábla.Columns["Dátum"].Width = 170;

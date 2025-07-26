@@ -702,6 +702,7 @@ namespace Villamos
 
                     AdatTábla.Rows.Add(Soradat);
                 }
+                Tábla.CleanFilterAndSort();
                 Tábla.DataSource = AdatTábla;
 
                 Tábla.Columns["Sorszám"].Width = 100;
@@ -939,6 +940,7 @@ namespace Villamos
 
                     AdatTábla.Rows.Add(Soradat);
                 }
+                Tábla1.CleanFilterAndSort();
                 Tábla1.DataSource = AdatTábla;
 
                 Tábla1.Columns["Sorszám"].Width = 100;

@@ -284,7 +284,7 @@ namespace Villamos
             AdatokKarbantartási.Clear();
             AdatokRendezése();
             ABFeltöltése();
-
+            Táblalista.CleanFilterAndSort();
             Táblalista.DataSource = AdatTábla;
             OszlopSzélesség();
             Táblalista.Refresh();

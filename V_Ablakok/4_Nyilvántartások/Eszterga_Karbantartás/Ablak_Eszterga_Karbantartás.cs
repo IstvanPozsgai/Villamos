@@ -262,7 +262,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                     AdatTabla.Rows.Add(Soradat);
                 }
-
+                Tabla.CleanFilterAndSort();
                 Tabla.DataSource = AdatTabla;
                 SorSzinezes();
                 OszlopSzelesseg();
@@ -433,7 +433,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 foreach (DataRow sor in RendezettAdatok)
                     AdatTabla.Rows.Add(sor);
-
+                Tabla.CleanFilterAndSort();
                 Tabla.DataSource = AdatTabla;
                 SorSzinezes();
                 OszlopSzelesseg();
@@ -503,6 +503,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 foreach (DataRow sor in RendezettAdatok)
                     AdatTabla.Rows.Add(sor);
 
+                Tabla.CleanFilterAndSort();
                 Tabla.DataSource = AdatTabla;
 
                 Tabla.Columns["Művelet Sorszáma"].Width = 110;

@@ -37,6 +37,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
         {
             Listázás();
             ABFeltöltése();
+            Tablalista.CleanFilterAndSort();
             Tablalista.DataSource = AdatTábla;
             OszlopSzélesség();
             Tablalista.Refresh();

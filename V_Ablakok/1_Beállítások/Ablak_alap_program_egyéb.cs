@@ -1091,7 +1091,7 @@ namespace Villamos
                 AdatÁRTábla.Clear();
 
                 Tak_Ár_tábla_Feltöltés(AdatokÖ);
-
+                Tak_Ár_Tábla.CleanFilterAndSort();
                 Tak_Ár_Tábla.DataSource = AdatÁRTábla;
                 Tak_Ár_Tábla_Szélesség();
 

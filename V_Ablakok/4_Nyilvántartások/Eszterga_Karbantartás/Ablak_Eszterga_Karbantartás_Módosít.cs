@@ -266,7 +266,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     AdatTabla.Rows.Add(Soradat);
                 }
-
+                TablaMuvelet.CleanFilterAndSort();
                 TablaMuvelet.DataSource = AdatTabla;
                 OszlopSzelessegMuvelet();
                 TablaSzinezes(TablaMuvelet);
@@ -335,7 +335,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                     AdatTablaNaplo.Rows.Add(sor);
                 }
-
+                TablaNaplo.CleanFilterAndSort();
                 TablaNaplo.DataSource = AdatTablaNaplo;
 
                 OszlopSzelessegNaplo();
