@@ -28,7 +28,7 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Kerék_Eszterga_Naptár KézNaptár = new Kezelő_Kerék_Eszterga_Naptár();
         readonly Kezelő_Kerék_Eszterga_Igény KézIgény = new Kezelő_Kerék_Eszterga_Igény();
         readonly Kezelő_Kerék_Eszterga_Terjesztés KézTerjeszt = new Kezelő_Kerék_Eszterga_Terjesztés();
-
+        readonly Kezelő_Kerék_Eszterga_Automata KézAuto = new Kezelő_Kerék_Eszterga_Automata();
         List<Adat_Dolgozó_Beosztás_Új> Adatok_Beoszt_Új = new List<Adat_Dolgozó_Beosztás_Új>();
 
         #region Alap
@@ -1348,46 +1348,35 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Lejelentés
-        // JAVÍTANDÓ:
         private void Automata_Jelentés()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-            string jelszó = "RónaiSándor";
-            string szöveg = "SELECT * FROM automata ORDER BY UtolsóÜzenet ";
-            Kezelő_Kerék_Eszterga_Automata Kéz = new Kezelő_Kerék_Eszterga_Automata();
-
-            Adat_Kerék_Eszterga_Automata Egy = Kéz.Egy_Adat(hely, jelszó, szöveg);
-            DateTime Utolsó = Egy.UtolsóÜzenet;
-
-            if (Egy != null)
+            try
             {
-                List<Adat_Kerék_Eszterga_Automata> Lista = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga_Automata> Lista = KézAuto.Lista_Adatok();
+                if (Lista == null) return;
 
-                //ha a héten még nem küldött üzenetet
-                if (Utolsó < MyF.Hét_elsőnapja(DateTime.Today))
+                DateTime Utolsó = Lista.Max(a => a.UtolsóÜzenet);
+                if (Utolsó >= MyF.Hét_elsőnapja(DateTime.Today)) return;   //ha a héten már küldött  valaki üzenetet
+                if (!Lista.Any(a => a.FelhasználóiNév.Trim() == Program.PostásNév.Trim())) return;  //ha nincs benne a listában a személy akkor nem küld a nevében
+
+                while (Utolsó < MyF.Hét_elsőnapja(DateTime.Today))
                 {
-                    //ha benne van a listában
-                    bool volt = false;
-                    foreach (Adat_Kerék_Eszterga_Automata rekord in Lista)
-                    {
-                        if (rekord.FelhasználóiNév.Trim() == Program.PostásNév.Trim()) volt = true;
-                    }
-                    //küldi 
-                    if (volt)
-                    {
-                        while (Utolsó < MyF.Hét_elsőnapja(DateTime.Today))
-                        {
-                            Dátum.Value = Utolsó;
-                            Heti_jelentés_eljárás();
-                            Utolsó = Utolsó.AddDays(7);
-                        }
-
-                        szöveg = $"UPDATE automata SET UtolsóÜzenet='{DateTime.Today:yyyy.MM.dd}' ";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                        Dátum.Value = DateTime.Today;
-                    }
+                    Dátum.Value = Utolsó;
+                    Heti_jelentés_eljárás();
+                    Utolsó = Utolsó.AddDays(7);
                 }
+                Adat_Kerék_Eszterga_Automata ADAT = new Adat_Kerék_Eszterga_Automata(Program.PostásNév.Trim(), DateTime.Today);
+                KézAuto.Módosítás(ADAT);
+                Dátum.Value = DateTime.Today;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -459,9 +459,9 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(8, 62);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(131, 20);
+            this.label10.Size = new System.Drawing.Size(61, 20);
             this.label10.TabIndex = 212;
-            this.label10.Text = "Felhasználói név:";
+            this.label10.Text = "Dátum:";
             // 
             // Felhasználók
             // 
