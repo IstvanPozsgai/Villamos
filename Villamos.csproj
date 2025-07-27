@@ -806,6 +806,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Terjesztés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tevékenység.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szabadságok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_MEO_KerékMérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Users.cs" />

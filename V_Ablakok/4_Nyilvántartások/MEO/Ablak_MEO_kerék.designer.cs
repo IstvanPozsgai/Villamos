@@ -301,7 +301,7 @@ namespace Villamos
             this.Tábla.Name = "Tábla";
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.RowHeadersWidth = 51;
-            this.Tábla.Size = new System.Drawing.Size(1005, 286);
+            this.Tábla.Size = new System.Drawing.Size(1005, 279);
             this.Tábla.TabIndex = 83;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -325,10 +325,10 @@ namespace Villamos
             this.TabPage2.Controls.Add(this.Label5);
             this.TabPage2.Controls.Add(this.Label4);
             this.TabPage2.Controls.Add(this.Excellekérdezés);
-            this.TabPage2.Location = new System.Drawing.Point(4, 29);
+            this.TabPage2.Location = new System.Drawing.Point(4, 22);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(1278, 298);
+            this.TabPage2.Size = new System.Drawing.Size(1278, 305);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Rögzítési listák";
             // 
@@ -538,9 +538,9 @@ namespace Villamos
             this.TabPage3.Controls.Add(this.Label10);
             this.TabPage3.Controls.Add(this.Btn_Mérés_Frissit);
             this.TabPage3.Controls.Add(this.Btn_Mérés_Excel);
-            this.TabPage3.Location = new System.Drawing.Point(4, 29);
+            this.TabPage3.Location = new System.Drawing.Point(4, 22);
             this.TabPage3.Name = "TabPage3";
-            this.TabPage3.Size = new System.Drawing.Size(1278, 298);
+            this.TabPage3.Size = new System.Drawing.Size(1278, 305);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Mérések listázása";
             // 
@@ -748,7 +748,7 @@ namespace Villamos
             this.FelhasználóTábla.Name = "FelhasználóTábla";
             this.FelhasználóTábla.RowHeadersVisible = false;
             this.FelhasználóTábla.RowHeadersWidth = 51;
-            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 289);
+            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 282);
             this.FelhasználóTábla.TabIndex = 82;
             this.FelhasználóTábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FelhasználóTábla_CellClick);
             // 

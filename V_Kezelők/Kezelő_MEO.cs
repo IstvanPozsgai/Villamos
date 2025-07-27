@@ -1,42 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_MEO_Naptábla
     {
-        public List<Adat_MEO_Naptábla> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_MEO_Naptábla> Adatok = new List<Adat_MEO_Naptábla>();
-            Adat_MEO_Naptábla Adat;
+        readonly string jelszó = "rudolfg";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
+        readonly string táblanév = "naptábla";
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_MEO_Naptábla(
-                                        rekord["Id"].ToÉrt_Int());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
+        public Kezelő_MEO_Naptábla()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kerékmérésekjogtábla(hely.KönyvSzerk());
         }
-        public Adat_MEO_Naptábla Egy_Adat(string hely, string jelszó, string szöveg)
+
+        public Adat_MEO_Naptábla Egy_Adat()
         {
             Adat_MEO_Naptábla Adat = null;
-
+            string szöveg = $"SELECT * FROM {táblanév} ";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -58,78 +44,41 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
-    }
 
-
-
-    public class Kezelő_MEO_KerékMérés
-    {
-        public List<Adat_MEO_KerékMérés> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public void Rögzítés(int HatárNap)
         {
-            List<Adat_MEO_KerékMérés> Adatok = new List<Adat_MEO_KerékMérés>();
-            Adat_MEO_KerékMérés Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_MEO_KerékMérés(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["Bekövetkezés"].ToÉrt_DaTeTime(),
-                                        rekord["Üzem"].ToStrTrim(),
-                                        rekord["Törölt"].ToÉrt_Bool(),
-                                        rekord["Mikor"].ToÉrt_DaTeTime(),
-                                        rekord["Ki"].ToStrTrim(),
-                                        rekord["Típus"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
+                string szöveg = $"INSERT INTO naptábla (id) VALUES ({HatárNap})";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        public Adat_MEO_KerékMérés Egy_Adat(string hely, string jelszó, string szöveg)
+        public void Módosítás(int HatárNap, int előző)
         {
-            Adat_MEO_KerékMérés Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_MEO_KerékMérés(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["Bekövetkezés"].ToÉrt_DaTeTime(),
-                                        rekord["Üzem"].ToStrTrim(),
-                                        rekord["Törölt"].ToÉrt_Bool(),
-                                        rekord["Mikor"].ToÉrt_DaTeTime(),
-                                        rekord["Ki"].ToStrTrim(),
-                                        rekord["Típus"].ToStrTrim()
-                                        );
-                            }
-                        }
-                    }
-                }
+                string szöveg = $"UPDATE naptábla SET id={HatárNap} WHERE id={előző}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
-            return Adat;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
