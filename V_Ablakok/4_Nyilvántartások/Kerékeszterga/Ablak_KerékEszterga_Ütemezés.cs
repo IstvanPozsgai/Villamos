@@ -26,6 +26,7 @@ namespace Villamos.Villamos_Ablakok
         List<Adat_Jármű> Honos = null;
         readonly Kezelő_Dolgozó_Beosztás_Új Kezelő_Beoszt_Új = new Kezelő_Dolgozó_Beosztás_Új();
         readonly Kezelő_Kerék_Eszterga_Naptár KézNaptár = new Kezelő_Kerék_Eszterga_Naptár();
+        readonly Kezelő_Kerék_Eszterga_Igény KézIgény = new Kezelő_Kerék_Eszterga_Igény();
 
         List<Adat_Dolgozó_Beosztás_Új> Adatok_Beoszt_Új = new List<Adat_Dolgozó_Beosztás_Új>();
 
@@ -108,7 +109,7 @@ namespace Villamos.Villamos_Ablakok
                     Cmbtelephely.Items.Add(Elem);
 
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
-                    Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim();
+                    Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim();
                 else
                     Cmbtelephely.Text = Program.PostásTelephely;
 
@@ -433,8 +434,8 @@ namespace Villamos.Villamos_Ablakok
                             szöveg += $" AND típus='{Igény_Típus.Text.Trim()}' ORDER BY Prioritás desc, Rögzítés_dátum ";
 
 
-                        Kezelő_Kerék_Eszterga_Igény kéz = new Kezelő_Kerék_Eszterga_Igény();
-                        List<Adat_Kerék_Eszterga_Igény> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                        List<Adat_Kerék_Eszterga_Igény> Adatok = KézIgény.Lista_Adatok(hely, jelszó, szöveg);
                         int i;
 
                         foreach (Adat_Kerék_Eszterga_Igény rekord in Adatok)
@@ -1572,49 +1573,26 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
-        // JAVÍTANDÓ:
-        public void Státus_állítás(string Pályaszám, int Státus_Lesz, DateTime Dátum)
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Igény.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"UPDATE igény SET státus={Státus_Lesz}";
-                szöveg += $"   WHERE  pályaszám='{Pályaszám.Trim()}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        // JAVÍTANDÓ:
+
+        #region Igények
         private void Elkészült_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve módosítandó sor.");
+                if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve módosítandó sor.");
                 foreach (DataGridViewRow SOR in Tábla.SelectedRows)
                 {
                     //Csak az ütemezett kocsikkal foglalkozunk
-                    if ("Ütemezett" == SOR.Cells[5].Value.ToString().Trim())
+                    if ("Ütemezett" == SOR.Cells[5].Value.ToStrTrim())
                     {
-                        string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
-                        if (File.Exists(hely))
-                        {
-                            Státus_állítás(SOR.Cells[2].Value.ToString(), 7, DateTime.Parse(SOR.Cells[1].Value.ToString()));
-                        }
+                        KézIgény.Módosítás_Státus(DateTime.Parse(SOR.Cells[1].Value.ToString()).Year,
+                                                  SOR.Cells[2].Value.ToString(),
+                                                  2,
+                                                  7);
                     }
                     else
-                    {
                         MessageBox.Show("Csak Ütemezett feladatokat lehet készre jelenteni.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+
                 }
                 Lista_Tábla_kiírás();
             }
@@ -1628,23 +1606,21 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Visszaállítás_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve módosítandó sor.");
+                if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve módosítandó sor.");
                 foreach (DataGridViewRow SOR in Tábla.SelectedRows)
                 {
                     //Csak az Elkészült kocsikkal foglalkozunk
-                    if ("Elkészült" == SOR.Cells[5].Value.ToString().Trim())
+                    if ("Elkészült" == SOR.Cells[5].Value.ToStrTrim())
                     {
-                        string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
-                        if (File.Exists(hely))
-                        {
-                            Státus_állítás(SOR.Cells[2].Value.ToString(), 2, DateTime.Parse(SOR.Cells[1].Value.ToString()));
-                        }
+                        KézIgény.Módosítás_Státus(DateTime.Parse(SOR.Cells[1].Value.ToString()).Year,
+                                           SOR.Cells[2].Value.ToString(),
+                                           7,
+                                           2);
                     }
                     else
                         MessageBox.Show("Csak Elkészült feladatokat lehet visszaállítani ütemezettre.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1661,27 +1637,24 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Törölt_Click(object sender, EventArgs e)
         {
             try
             {
-
-                if (Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve módosítandó sor.");
+                if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve módosítandó sor.");
                 foreach (DataGridViewRow SOR in Tábla.SelectedRows)
                 {
                     //Csak a saját telephely igényeit lehet törölni
-                    if (Cmbtelephely.Text.Trim() == SOR.Cells[3].Value.ToString().Trim())
+                    if (Cmbtelephely.Text.Trim() == SOR.Cells[3].Value.ToStrTrim())
                     {
-                        //Csak az Elkészült kocsikkal foglalkozunk
-                        if ("Igény" == SOR.Cells[5].Value.ToString().Trim())
+                        //Csak az igény státusú kocsikkal foglalkozunk
+                        if ("Igény" == SOR.Cells[5].Value.ToStrTrim())
                         {
-                            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Parse(SOR.Cells[1].Value.ToString()).Year}_Igény.mdb";
-                            if (File.Exists(hely))
-                            {
-                                Státus_állítás(SOR.Cells[2].Value.ToString(), 9, DateTime.Parse(SOR.Cells[1].Value.ToString()));
-                            }
+                            KézIgény.Módosítás_Státus(DateTime.Parse(SOR.Cells[1].Value.ToString()).Year,
+                                           SOR.Cells[2].Value.ToString(),
+                                           0,
+                                           9);
                         }
                         else
                             MessageBox.Show("Csak Igény státusú feladatokat lehet törölni.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1714,7 +1687,7 @@ namespace Villamos.Villamos_Ablakok
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Eszterga_Igény_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Eszterga_Igény_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1737,6 +1710,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
 
 
         #region Terjesztési lista
