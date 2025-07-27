@@ -30,6 +30,7 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Kerék_Eszterga_Terjesztés KézTerjeszt = new Kezelő_Kerék_Eszterga_Terjesztés();
         readonly Kezelő_Kerék_Eszterga_Automata KézAuto = new Kezelő_Kerék_Eszterga_Automata();
         List<Adat_Dolgozó_Beosztás_Új> Adatok_Beoszt_Új = new List<Adat_Dolgozó_Beosztás_Új>();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
 
         #region Alap
         public Ablak_KerékEszterga_Ütemezés()
@@ -1334,15 +1335,26 @@ namespace Villamos.Villamos_Ablakok
             }
             return válasz;
         }
-        // JAVÍTANDÓ:
+
         private void Honos_feltöltés()
         {
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-            string jelszó = "pozsgaii";
-            string szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-
-            Kezelő_Jármű Kéz = new Kezelő_Jármű();
-            Honos = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            try
+            {
+                Honos = KézJármű.Lista_Adatok("Főmérnökség");
+                Honos = (from a in Honos
+                         where a.Törölt == false
+                         orderby a.Azonosító
+                         select a).ToList();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
 
@@ -1407,15 +1419,23 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Heti_jelentés_Click(object sender, EventArgs e)
         {
-            Heti_jelentés_eljárás();
-
-            string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-            string jelszó = "RónaiSándor";
-            string szöveg = $"UPDATE automata SET UtolsóÜzenet='{DateTime.Today:yyyy.MM.dd}' ";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                Heti_jelentés_eljárás();
+                KézAuto.Módosítás(new Adat_Kerék_Eszterga_Automata(Program.PostásNév.Trim(), DateTime.Today));
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Email_jelentés(string fájlexc)
