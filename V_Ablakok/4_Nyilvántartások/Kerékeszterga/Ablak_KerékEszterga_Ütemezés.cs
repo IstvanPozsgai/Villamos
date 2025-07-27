@@ -1757,29 +1757,6 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
-        // JAVÍTANDÓ:
-        #region Jobb egér
-        private void RögzítésTörlésToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Ablak_nyitás(DátumÉsIdő, 0);
-        }
-
-        private void BeszúrásCsúsztatássalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Ablak_nyitás(DátumÉsIdő, 1);
-        }
-
-        private void TörlésCsúsztatássalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Ablak_nyitás(DátumÉsIdő, 2);
-        }
-
-        private void MunkaköziSzünetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-            Ablak_nyitás(DátumÉsIdő, 3);
-        }
-        #endregion
 
         #region beosztásAblak
         Ablak_Eszterga_Beosztás Új_Ablak_Eszterga_Beosztás;
