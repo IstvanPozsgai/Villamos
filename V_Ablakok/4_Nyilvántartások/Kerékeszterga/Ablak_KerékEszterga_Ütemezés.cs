@@ -27,6 +27,7 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Dolgozó_Beosztás_Új Kezelő_Beoszt_Új = new Kezelő_Dolgozó_Beosztás_Új();
         readonly Kezelő_Kerék_Eszterga_Naptár KézNaptár = new Kezelő_Kerék_Eszterga_Naptár();
         readonly Kezelő_Kerék_Eszterga_Igény KézIgény = new Kezelő_Kerék_Eszterga_Igény();
+        readonly Kezelő_Kerék_Eszterga_Terjesztés KézTerjeszt = new Kezelő_Kerék_Eszterga_Terjesztés();
 
         List<Adat_Dolgozó_Beosztás_Új> Adatok_Beoszt_Új = new List<Adat_Dolgozó_Beosztás_Új>();
 
@@ -1198,7 +1199,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Email()
         {
             try
@@ -1264,11 +1265,13 @@ namespace Villamos.Villamos_Ablakok
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
 
                 // címzettek
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"SELECT * FROM terjesztés WHERE változat=1 OR változat=3 ORDER BY név";
-                Kezelő_Kerék_Eszterga_Terjesztés Kéz = new Kezelő_Kerék_Eszterga_Terjesztés();
-                List<Adat_Kerék_Eszterga_Terjesztés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga_Terjesztés> Adatok = KézTerjeszt.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Változat == 1
+                          || a.Változat == 3
+                          orderby a.Név
+                          select a).ToList();
+
                 string címzettek = "";
                 foreach (Adat_Kerék_Eszterga_Terjesztés rekord in Adatok)
                     címzettek += rekord.Email + "; ";
@@ -1425,7 +1428,7 @@ namespace Villamos.Villamos_Ablakok
             string szöveg = $"UPDATE automata SET UtolsóÜzenet='{DateTime.Today:yyyy.MM.dd}' ";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
-        // JAVÍTANDÓ:
+
         private void Email_jelentés(string fájlexc)
         {
             try
@@ -1442,11 +1445,13 @@ namespace Villamos.Villamos_Ablakok
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
 
                 // címzettek
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"SELECT * FROM terjesztés WHERE változat=2 OR változat=3 ORDER BY név";
-                Kezelő_Kerék_Eszterga_Terjesztés Kéz = new Kezelő_Kerék_Eszterga_Terjesztés();
-                List<Adat_Kerék_Eszterga_Terjesztés> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga_Terjesztés> Adatok = KézTerjeszt.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Változat == 2
+                          || a.Változat == 3
+                          orderby a.Név
+                          select a).ToList();
+
                 string címzettek = "";
                 foreach (Adat_Kerék_Eszterga_Terjesztés rekord in Adatok)
                     címzettek += rekord.Email + "; ";
