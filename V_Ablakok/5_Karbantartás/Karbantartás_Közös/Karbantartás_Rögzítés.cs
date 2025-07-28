@@ -50,6 +50,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             CiklusrendCombo_feltöltés();
             this.Text = $"Pályaszámú {Adat.Azonosító} jármű {Adat.ID} számú vizsgálata";
             Jogosultságkiosztás();
+            AdatokKmAdatok = KézKmAdatok.Lista_Adatok();
         }
 
         private void Új_adat_Click(object sender, EventArgs e)
@@ -315,7 +316,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
                 if (ElemJármű != null)
                 {
-                    AdatokKmAdatok = KézKmAdatok.Lista_Adatok().OrderByDescending(a => a.ID).ToList();
+                    AdatokKmAdatok = AdatokKmAdatok.OrderByDescending(a => a.ID).ToList();
                     if (!long.TryParse(Sorszám.Text, out long sorszám))
                     {
                         sorszám = 1;
@@ -533,6 +534,20 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (index < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő szöveg nem eleme a választási listának.");
                 if (CiklusrendCombo.SelectedIndex == CiklusrendCombo.Items.Count - 1) throw new HibásBevittAdat("Nincs több választható cillus rend.");
                 if (CiklusrendCombo.Items.Count <= index + 1) throw new HibásBevittAdat("A kiválasztott Ciklus rend az utolós így nem lehet tovább léptetni.");
+                if (!Adat.KövV.Contains("V3")) throw new HibásBevittAdat($"A következő sorszámú {Adat.KövV_sorszám} vizsgálata {Adat.KövV}, \nmely esetén nem lehet ciklus rendet változtatni.");
+
+
+                //Megnézzük, hogy mi volt az utolsó rögzített
+                Adat_T5C5_Kmadatok UtolsóKM = (from a in AdatokKmAdatok
+                                               where a.Azonosító == Adat.Azonosító
+                                               && a.Vizsgdátumk < Adat.Vizsgdátumk
+                                               orderby a.Vizsgdátumk descending
+                                               select a).FirstOrDefault();
+                if (UtolsóKM == null) return;
+                // visszakeressük az előző ciklus sorszámát
+                int indexUtolsó = CiklusrendCombo.Items.IndexOf(UtolsóKM.Ciklusrend);
+
+                if (indexUtolsó != index) throw new HibásBevittAdat("Csak egy ciklusrendet lehet léptetni.");
 
                 //Következő ciklus kiírása
                 CiklusrendCombo.Text = CiklusrendCombo.Items[index + 1].ToString();
@@ -542,10 +557,15 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (sorszámIndex < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő sorszám nem eleme a választási listának.");
 
                 Vizsgsorszám.Text = Vizsgsorszám.Items[sorszámIndex].ToString();
+
+                AdatokRögzítés();
+                Változás?.Invoke();
+                this.Close();
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -562,6 +582,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             {
                 if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
                 string újNév = "";
+                if (Adat.KövV_sorszám != 0) throw new HibásBevittAdat($"A következő sorszámú {Adat.KövV_sorszám} vizsgálata {Adat.KövV}, \nmely esetén nem lehet beállítani V2 vizsgálatot.");
+
                 //Felírjuk a plusszos V2 nevét és növeljük eggyel
                 List<Adat_T5C5_Kmadatok> KMAdatok = KézKmAdatok.Lista_Adatok();
 
@@ -582,7 +604,6 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                     újNév = "V2" + "_P1";
                 }
 
-                if (Adat.KövV_sorszám != 0) throw new HibásBevittAdat($"A következő sorszámú {Adat.KövV_sorszám} vizsgálata {Adat.KövV}, \nmely esetén nem lehet beállítani V2 vizsgálatot.");
                 KövV.Text = újNév;
                 KövV2.Text = újNév;
                 KövV_Sorszám.Text = ElőzőV2.Vizsgsorszám.ToString();
@@ -704,6 +725,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 KövV2_Sorszám.Text = "0";
 
                 AdatokRögzítés();
+                Változás?.Invoke();
                 this.Close();
             }
             catch (HibásBevittAdat ex)

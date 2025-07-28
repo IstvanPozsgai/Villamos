@@ -231,6 +231,12 @@ namespace Villamos.Kezelők
                         {
                             szöveg1 += MireÜtemez.Trim() + " ";
                         }
+
+                        if (MireÜtemez.Contains("J"))
+                        {
+                            szöveg1 = MireÜtemez.Trim() + "-" + Sorszám;
+                            szöveg3 = szöveg1;
+                        }
                     }
 
                     if (BennMarad)
