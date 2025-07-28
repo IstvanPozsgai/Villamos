@@ -700,7 +700,7 @@ namespace Villamos
                 menünév[106] = "T5C5 adatok módosítása";
                 menüleírás[106] = " 1- Futás adatok lapfül rögzítés, 2- nincs, 3- nincs";
                 menünév[107] = "T5C5 adatok módosítása";
-                menüleírás[107] = " 1- Utolsó vizsgálati adatok lapfül rögzítés/törlés, 2-nincs, 3- nincs";
+                menüleírás[107] = " 1- Utolsó vizsgálati adatok lapfül rögzítés/törlés, 2-Területi módosítási gombok, 3- nincs";
                 menünév[108] = "Kiadási és Javítási adatok";
                 menüleírás[108] = " 1- Napi adatok frissítése, 2- nincs, 3- nincs";
                 menünév[109] = "&Fogaskerekű adatok és ütemezés";

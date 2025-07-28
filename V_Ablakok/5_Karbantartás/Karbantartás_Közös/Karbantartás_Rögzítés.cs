@@ -30,6 +30,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
         List<Adat_Ciklus_Sorrend> AdatokSorrend = new List<Adat_Ciklus_Sorrend>();
         List<Adat_T5C5_Kmadatok> AdatokKmAdatok = new List<Adat_T5C5_Kmadatok>();
+        List<Adat_Ciklus> AdatokCiklus = new List<Adat_Ciklus>();
 
         public Karbantartás_Rögzítés(string típus, Adat_T5C5_Kmadatok adat, bool utolsóelem)
         {
@@ -157,13 +158,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 Vizsgsorszám.Items.Clear();
 
                 if (CiklusrendCombo.Text.Trim() == "") return;
-                List<Adat_Ciklus> Adatok = KézCiklus.Lista_Adatok();
-                Adatok = (from a in Adatok
-                          where a.Típus.Trim() == CiklusrendCombo.Text.Trim()
-                          orderby a.Sorszám
-                          select a).ToList();
+                AdatokCiklus = KézCiklus.Lista_Adatok();
+                AdatokCiklus = (from a in AdatokCiklus
+                                where a.Típus.Trim() == CiklusrendCombo.Text.Trim()
+                                orderby a.Sorszám
+                                select a).ToList();
 
-                foreach (Adat_Ciklus Elem in Adatok)
+                foreach (Adat_Ciklus Elem in AdatokCiklus)
                     Vizsgsorszám.Items.Add(Elem.Sorszám.ToString());
                 Vizsgsorszám.Refresh();
             }
@@ -531,6 +532,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 int index = CiklusrendCombo.Items.IndexOf(CiklusrendCombo.Text);
                 if (index < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő szöveg nem eleme a választási listának.");
                 if (CiklusrendCombo.SelectedIndex == CiklusrendCombo.Items.Count - 1) throw new HibásBevittAdat("Nincs több választható cillus rend.");
+                if (CiklusrendCombo.Items.Count <= index + 1) throw new HibásBevittAdat("A kiválasztott Ciklus rend az utolós így nem lehet tovább léptetni.");
 
                 //Következő ciklus kiírása
                 CiklusrendCombo.Text = CiklusrendCombo.Items[index + 1].ToString();
@@ -565,19 +567,19 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
                 Adat_T5C5_Kmadatok ElőzőV2 = (from a in KMAdatok
                                               where a.Azonosító == Adat.Azonosító
-                                                                                          && a.Vizsgfok.Contains("V2")
-                                                                                          && a.Törölt == false
+                                              && (a.Vizsgfok.Contains("V2") || a.Vizsgfok.Contains("V3"))
+                                              && a.Törölt == false
                                               orderby a.Vizsgdátumk descending
                                               select a).FirstOrDefault();
                 if (ElőzőV2.Vizsgfok.Contains("P"))
                 {
                     string[] darabol = ElőzőV2.Vizsgfok.Split('P');
-                    újNév = darabol[0] + "P" + (int.Parse(darabol[1]) + 1).ToString();
+                    újNév = "V2" + "P" + (int.Parse(darabol[1]) + 1).ToString();
                 }
                 else
                 {
                     string[] darabol = ElőzőV2.Vizsgfok.Split('_');
-                    újNév = darabol[0] + "_P1";
+                    újNév = "V2" + "_P1";
                 }
 
                 if (Adat.KövV_sorszám != 0) throw new HibásBevittAdat($"A következő sorszámú {Adat.KövV_sorszám} vizsgálata {Adat.KövV}, \nmely esetén nem lehet beállítani V2 vizsgálatot.");
@@ -634,10 +636,25 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
                 if (!Vizsgfok.Text.Contains("V1")) throw new HibásBevittAdat("Csak V1 vizsgálat után lehet alkalmazni.");
                 string[] darabol = Vizsgfok.Text.Split('_');
+                if (darabol[1] == "B")
+                {
+                    //Ha V1_B volt az utolsó akkor az eredetinek megfelelő sorszámot léptetjük
+                    Adat_Ciklus EgyCiklus = (from a in AdatokCiklus
+                                             where a.Sorszám == Vizsgsorszám.Text.ToÉrt_Long()
+                                             select a).FirstOrDefault();
+                    if (EgyCiklus != null)
+                    {
+                        string[] darabol1 = EgyCiklus.Vizsgálatfok.Split('_');
+                        KövV.Text = $"{darabol[0]}_{darabol1[1].ToÉrt_Int() + 1}";
+                    }
 
-                KövV.Text = $"{darabol[0]}_{darabol[1].ToÉrt_Int() + 1}";
+                }
+                else
+                {
+                    KövV.Text = $"{darabol[0]}_{darabol[1].ToÉrt_Int() + 1}";
+
+                }
                 KövV_Sorszám.Text = Vizsgsorszám.Text.Trim();
-
                 AdatokRögzítés();
                 Változás?.Invoke();
                 this.Close();
