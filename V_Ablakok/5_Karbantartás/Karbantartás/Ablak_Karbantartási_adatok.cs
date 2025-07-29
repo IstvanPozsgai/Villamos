@@ -1604,65 +1604,6 @@ namespace Villamos
 
         }
 
-        private void T5C5elkészülésJ()
-        {
-            try
-            {
-                //Van-e ilyen pályaszámú jármű a T5C5 között
-                Adat_Jármű Elem = (from a in AdatokFőJármű
-                                   where a.Azonosító == Pályaszám.Text.Trim()
-                                   && a.Valóstípus.Contains("T5C5")
-                                   && !a.Törölt
-                                   select a).FirstOrDefault();
-
-                if (Elem != null)
-                {
-                    List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adatok();
-
-                    long i = 1;
-                    if (AdatokT5C5.Count > 0) i = AdatokT5C5.Max(a => a.ID) + 1;
-
-                    // Új adat
-                    Adat_T5C5_Kmadatok ADATÚJ = new Adat_T5C5_Kmadatok(
-                                         i,
-                                         Pályaszám.Text.Trim(),
-                                         0,
-                                         0,
-                                         DateTime.Today,
-                                         Vizsgfoka_Jármű,
-                                         Vütemezés_Jármű_Dátum,
-                                         DateTime.Today,
-                                         VizsgKm_Jármű + Korrekció,
-                                         0,
-                                         Vsorszám_Jármű,
-                                         new DateTime(1900, 1, 1),
-                                         0,
-                                         CiklusrendCombo,
-                                         Program.PostásTelephely.Trim(),
-                                         KövV2_Sorszám,
-                                         KövV2,
-                                         KövV_Sorszám,
-                                         KövV.Trim(),
-                                         false,
-                                         KövV2_számláló);
-                    KéZT5C5.Rögzítés(ADATÚJ);
-                    MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                    throw new HibásBevittAdat("A pályaszám nem T5C5!");
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void ICSelkészülés()
         {
             try
