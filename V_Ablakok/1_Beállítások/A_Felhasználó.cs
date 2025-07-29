@@ -704,7 +704,7 @@ namespace Villamos
                 menünév[108] = "Kiadási és Javítási adatok";
                 menüleírás[108] = " 1- Napi adatok frissítése, 2- nincs, 3- nincs";
                 menünév[109] = "&Fogaskerekű adatok és ütemezés";
-                menüleírás[109] = " 1- Utolsó vizsgálati adatok lapfül rögzítés/törlés, 2-nincs, 3- nincs";
+                menüleírás[109] = " 1- Utolsó vizsgálati adatok lapfül rögzítés/törlés, 2-Területi módosítási gombok, 3- nincs";
                 menünév[110] = "TW6000 ütemezés és adatok";
                 menüleírás[110] = " 1- járműadatok lapfül rögzítés , 2-Ütemezés lapfül Előzetes terv készítés, 3- Ütemezés lapfül Vizsgálat ütemezés ";
                 menünév[111] = "TW6000 ütemezés és adatok";

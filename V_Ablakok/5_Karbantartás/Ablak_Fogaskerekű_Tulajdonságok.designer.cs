@@ -1194,6 +1194,7 @@ namespace Villamos
             this.Name = "Ablak_Fogaskerekű_Tulajdonságok";
             this.Text = "Fogaskerekű adatok";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Fogaskerekű_Tulajdonságok_FormClosed);
             this.Load += new System.EventHandler(this.Tulajdonságok_Fogaskerekű_Load);
             this.Panel2.ResumeLayout(false);
             this.Panel2.PerformLayout();

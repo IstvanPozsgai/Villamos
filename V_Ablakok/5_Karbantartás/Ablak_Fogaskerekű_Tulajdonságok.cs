@@ -63,6 +63,11 @@ namespace Villamos
         {
         }
 
+        private void Ablak_Fogaskerekű_Tulajdonságok_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Karbantartás_Rögzítés?.Close();
+        }
+
         private void Telephelyekfeltöltése()
         {
             try
@@ -716,6 +721,7 @@ namespace Villamos
                     Tábla1.RowCount++;
                     int i = Tábla1.RowCount - 1;
                     Tábla1.Rows[i].Cells[0].Value = rekord.ID;
+                    TáblaUtolsóSor = rekord.ID;
                     Tábla1.Rows[i].Cells[1].Value = rekord.Azonosító;
                     Tábla1.Rows[i].Cells[2].Value = rekord.Vizsgfok;
                     Tábla1.Rows[i].Cells[3].Value = rekord.Vizsgsorszám;
@@ -804,7 +810,7 @@ namespace Villamos
             KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
 
 
-            Fülek.SelectedIndex = 1;
+            //    Fülek.SelectedIndex = 1;
         }
 
 
@@ -2312,6 +2318,7 @@ namespace Villamos
             }
         }
         #endregion
+
 
     }
 }

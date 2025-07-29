@@ -492,6 +492,28 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 {
 
                 }
+                melyikelem = 109;
+                // módosítás 1 
+                if (MyF.Vanjoga(melyikelem, 1))
+                {
+                    Utolsó_V_rögzítés.Enabled = true;
+                    Töröl.Enabled = true;
+                }
+                // módosítás 2
+                if (MyF.Vanjoga(melyikelem, 2))
+                {
+                    Btn_Követekező_Ciklus.Enabled = true;
+                    Btn_SelejtreFutat.Enabled = true;
+                    Btn_Biztonsági.Enabled = true;
+                    Btn_V1Plusz.Enabled = true;
+                    JJavítás.Enabled = true;
+                    Vezényel.Enabled = true;
+                }
+                // módosítás 3 
+                if (MyF.Vanjoga(melyikelem, 3))
+                {
+
+                }
             }
             catch (HibásBevittAdat ex)
             {
