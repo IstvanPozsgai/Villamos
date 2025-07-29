@@ -83,9 +83,6 @@
             this.UtolsóVSzámláló = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Utolsó_V_rögzítés = new System.Windows.Forms.Button();
             this.Következő_V = new System.Windows.Forms.Button();
             this.Btn_Követekező_Ciklus = new System.Windows.Forms.Button();
@@ -97,6 +94,9 @@
             this.Töröl = new System.Windows.Forms.Button();
             this.SAP_adatok = new System.Windows.Forms.Button();
             this.Új_adat = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -659,11 +659,11 @@
             this.tableLayoutPanel5.Controls.Add(this.Btn_V1Plusz, 3, 4);
             this.tableLayoutPanel5.Controls.Add(this.Btn_Biztonsági, 2, 4);
             this.tableLayoutPanel5.Controls.Add(this.Btn_SelejtreFutat, 1, 4);
-            this.tableLayoutPanel5.Controls.Add(this.Vezényel, 2, 1);
             this.tableLayoutPanel5.Controls.Add(this.JJavítás, 4, 4);
             this.tableLayoutPanel5.Controls.Add(this.Töröl, 2, 0);
             this.tableLayoutPanel5.Controls.Add(this.SAP_adatok, 4, 0);
             this.tableLayoutPanel5.Controls.Add(this.Új_adat, 0, 1);
+            this.tableLayoutPanel5.Controls.Add(this.Vezényel, 4, 3);
             this.tableLayoutPanel5.Location = new System.Drawing.Point(429, 181);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 5;
@@ -674,20 +674,6 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(275, 276);
             this.tableLayoutPanel5.TabIndex = 141;
-            // 
-            // timer1
-            // 
-            this.timer1.Interval = 500;
-            // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(8, 159);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(751, 13);
-            this.Holtart.TabIndex = 142;
-            this.Holtart.Visible = false;
             // 
             // Utolsó_V_rögzítés
             // 
@@ -765,7 +751,7 @@
             // 
             this.Vezényel.BackgroundImage = global::Villamos.Properties.Resources.leadott;
             this.Vezényel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Vezényel.Location = new System.Drawing.Point(113, 58);
+            this.Vezényel.Location = new System.Drawing.Point(223, 168);
             this.Vezényel.Name = "Vezényel";
             this.Vezényel.Size = new System.Drawing.Size(49, 49);
             this.Vezényel.TabIndex = 148;
@@ -820,6 +806,20 @@
             this.ToolTip1.SetToolTip(this.Új_adat, "Előkészíti az új adatnak a beviteli mezőket");
             this.Új_adat.UseVisualStyleBackColor = true;
             this.Új_adat.Click += new System.EventHandler(this.Új_adat_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 500;
+            // 
+            // Holtart
+            // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Holtart.Location = new System.Drawing.Point(8, 159);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(751, 13);
+            this.Holtart.TabIndex = 142;
+            this.Holtart.Visible = false;
             // 
             // Karbantartás_Rögzítés
             // 
