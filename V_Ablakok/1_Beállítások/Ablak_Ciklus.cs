@@ -408,5 +408,10 @@ namespace Villamos
         {
             Új_Ablak_Ciklus_Sorrend = null;
         }
+
+        private void Ablak_Ciklus_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Új_Ablak_Ciklus_Sorrend?.Close();
+        }
     }
 }

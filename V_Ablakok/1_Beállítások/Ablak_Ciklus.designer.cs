@@ -54,8 +54,6 @@ namespace Villamos
             this.Alsóeltérés = new System.Windows.Forms.TextBox();
             this.Felsőeltérés = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label8 = new System.Windows.Forms.Label();
-            this.ÚjCiklus = new System.Windows.Forms.TextBox();
             this.CiklusSorrend = new System.Windows.Forms.Button();
             this.CsoportosMásolás = new System.Windows.Forms.Button();
             this.Töröl = new System.Windows.Forms.Button();
@@ -63,6 +61,8 @@ namespace Villamos
             this.Lekérdezés_lekérdezés = new System.Windows.Forms.Button();
             this.Excel_gomb = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.ÚjCiklus = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.SuspendLayout();
             // 
@@ -204,25 +204,6 @@ namespace Villamos
             // 
             this.toolTip1.IsBalloon = true;
             // 
-            // label8
-            // 
-            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 439);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(141, 20);
-            this.label8.TabIndex = 188;
-            this.label8.Text = "Új ciklusrend neve:";
-            // 
-            // ÚjCiklus
-            // 
-            this.ÚjCiklus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ÚjCiklus.Location = new System.Drawing.Point(174, 433);
-            this.ÚjCiklus.MaxLength = 15;
-            this.ÚjCiklus.Name = "ÚjCiklus";
-            this.ÚjCiklus.Size = new System.Drawing.Size(162, 26);
-            this.ÚjCiklus.TabIndex = 187;
-            // 
             // CiklusSorrend
             // 
             this.CiklusSorrend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -310,6 +291,25 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 439);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(141, 20);
+            this.label8.TabIndex = 188;
+            this.label8.Text = "Új ciklusrend neve:";
+            // 
+            // ÚjCiklus
+            // 
+            this.ÚjCiklus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ÚjCiklus.Location = new System.Drawing.Point(174, 433);
+            this.ÚjCiklus.MaxLength = 15;
+            this.ÚjCiklus.Name = "ÚjCiklus";
+            this.ÚjCiklus.Size = new System.Drawing.Size(162, 26);
+            this.ÚjCiklus.TabIndex = 187;
+            // 
             // Ablak_Ciklus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -344,6 +344,7 @@ namespace Villamos
             this.Name = "Ablak_Ciklus";
             this.Text = "Ciklus rend definiálása";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Ablak_Ciklus_FormClosing);
             this.Load += new System.EventHandler(this.Ablak_Ciklus_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.ResumeLayout(false);
