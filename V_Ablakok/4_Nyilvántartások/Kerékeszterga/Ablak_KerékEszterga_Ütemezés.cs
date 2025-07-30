@@ -1067,7 +1067,7 @@ namespace Villamos.Villamos_Ablakok
         {
             Terv_lista_elj();
         }
-        // JAVÍTANDÓ:
+
         private void Terv_lista_elj()
         {
             try
@@ -1105,31 +1105,21 @@ namespace Villamos.Villamos_Ablakok
                     óra = óra.AddMinutes(30);
                 }
 
+
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum.Value);
                 DateTime IdeigDát = Hételső;
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum.Value);
-
-                string szöveg = $"SELECT * FROM naptár where [idő]>=# {Hételső:MM-dd-yyyy} 00:00:0#";
-                szöveg += $" and [idő]<=#{Hétutolsó:MM-dd-yyyy} 23:59:0# ORDER BY idő";
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
-                string jelszó = "RónaiSándor";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Kerék_Éves(hely);
-
-
-                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(Hételső.Year);
                 if (Hételső.Year != Hétutolsó.Year)
                 {
-                    hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hétutolsó.Year}_Esztergálás.mdb";
-                    if (!File.Exists(hely)) Adatbázis_Létrehozás.Kerék_Éves(hely);
-                    List<Adat_Kerék_Eszterga_Naptár> Adatokköv = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
-                    Adatok.AddRange(Adatokköv);
+                    List<Adat_Kerék_Eszterga_Naptár> AdatokIdeig = KézNaptár.Lista_Adatok(Hétutolsó.Year);
+                    Adatok.AddRange(AdatokIdeig);
                 }
-
-
-
-
-
+                Adatok = (from a in Adatok
+                          where a.Idő >= MyF.Nap0000(Hételső)
+                          && a.Idő <= MyF.Nap2359(Hétutolsó)
+                          orderby a.Idő
+                          select a).ToList();
                 Szín_kódolás Szín;
 
                 HétAlapAdatai();
@@ -1299,7 +1289,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         string Pályaszám_ellenőrzés(string vezényelt)
         {
             if (Honos == null) Honos_feltöltés();
@@ -1318,17 +1308,8 @@ namespace Villamos.Villamos_Ablakok
                     pályaszám = darabol[0].Trim();
 
                 string telephely = "";
-                // JAVÍTANDÓ:
-                //var telephelyek = from Elem in Honos
-                //                  where Elem.Azonosító.Trim() == pályaszám.Trim()
-                //                  select Elem.Üzem;
-                List<Adat_Jármű> telephelyek = Honos.Where(Elem => Elem.Azonosító.Trim() == pályaszám.Trim()).ToList();
-
-
-                foreach (Adat_Jármű item in telephelyek)
-                {
-                    telephely = item.Üzem.Trim();
-                }
+                Adat_Jármű EgyJármű = Honos.Where(Elem => Elem.Azonosító.Trim() == pályaszám.Trim()).FirstOrDefault();
+                if (EgyJármű != null) telephely = EgyJármű.Üzem.Trim();
 
                 if (telephely.Trim() != "" && darabol[1].Trim() != telephely.Trim())
                     válasz += "<br>Honos:" + telephely.Trim();
