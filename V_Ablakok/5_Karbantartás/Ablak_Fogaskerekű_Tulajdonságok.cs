@@ -879,7 +879,7 @@ namespace Villamos
 
             Új_Karbantartás_Rögzítés?.Close();
 
-            Új_Karbantartás_Rögzítés = new Karbantartás_Rögzítés("T5C5", adat, Utolsó);
+            Új_Karbantartás_Rögzítés = new Karbantartás_Rögzítés("SGP", adat, Utolsó);
             Új_Karbantartás_Rögzítés.FormClosed += Karbantartás_Rögzítés_FormClosed;
             Új_Karbantartás_Rögzítés.Változás += Kiirjaatörténelmet;
             Új_Karbantartás_Rögzítés.Show();
