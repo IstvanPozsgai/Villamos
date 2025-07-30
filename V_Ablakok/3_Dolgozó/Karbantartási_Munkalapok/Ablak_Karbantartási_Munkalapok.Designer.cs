@@ -489,6 +489,7 @@
             this.PDFmentés.TabIndex = 245;
             this.toolTip1.SetToolTip(this.PDFmentés, "Munkalap készítés a beállítottaknak megfelelően PDF");
             this.PDFmentés.UseVisualStyleBackColor = true;
+            this.PDFmentés.Visible = false;
             this.PDFmentés.Click += new System.EventHandler(this.PDFmentés_Click);
             // 
             // FelExcel
