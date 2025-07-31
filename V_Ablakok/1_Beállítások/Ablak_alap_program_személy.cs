@@ -2740,6 +2740,7 @@ namespace Villamos
         {
             try
             {
+                BeosztásTábla.CleanFilterAndSort();
                 AdatokBeoKód = kézBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 DataTable AdatTábla = new DataTable();
@@ -2769,12 +2770,9 @@ namespace Villamos
                     Soradat["Éjszakás"] = rekord.Éjszakás ? "Igen" : "Nem";
                     Soradat["Magyarázat"] = rekord.Magyarázat;
                     Soradat["Számoló"] = rekord.Számoló ? "Igen" : "Nem";
-
-
                     AdatTábla.Rows.Add(Soradat);
-
                 }
-                BeosztásTábla.Rows.Clear();
+
                 BeosztásTábla.DataSource = AdatTábla;
 
                 BeosztásTábla.Columns["Sorszám"].Width = 80;
