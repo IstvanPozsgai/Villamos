@@ -639,12 +639,12 @@ namespace Villamos
 
         private void Lista_Click(object sender, EventArgs e)
         {
-            if (LabelTelephely.Text.Trim() == "") return;
             Listázás();
         }
 
         private void Listázás()
         {
+            if (LabelTelephely.Text.Trim() == "") return;
             Táblázatlistázás();
             Táblázatlistázásszemélyzet();
             Táblázatlistázástípuscsere();
