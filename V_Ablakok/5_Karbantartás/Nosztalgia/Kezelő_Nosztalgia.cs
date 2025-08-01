@@ -1,42 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Nosztalgia_Állomány
     {
-        public List<Adat_Nosztalgia_Állomány> Lista_Adat(string hely, string jelszó, string szöveg)
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
+        readonly string jelszó = "kloczkal";
+        readonly string táblanév = "Tevékenység";
+
+        public Kezelő_Nosztalgia_Állomány()
         {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Futásnaptábla_Nosztalgia(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Nosztalgia_Állomány> Lista_Adat()
+        {
+            string szöveg = $"SELECT * FROM {táblanév}";
+
             Adat_Nosztalgia_Állomány Adat;
             List<Adat_Nosztalgia_Állomány> Adatok = new List<Adat_Nosztalgia_Állomány>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
-                Kapcsolat.Open();
                 using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                 {
+                    Kapcsolat.Open();
                     using (OleDbDataReader rekord = Parancs.ExecuteReader())
                     {
                         if (rekord.HasRows)
                         {
                             while (rekord.Read())
                             {
-                                //DateTime utolsórögzítés = DateTime.TryParse(rekord["utolsórögzítés"].ToString(), out utolsórögzítés) ? utolsórögzítés : new DateTime(1900, 1, 1);
-                                //DateTime vizsgálatdátuma = DateTime.TryParse(rekord["vizsgálatdátuma"].ToString(), out vizsgálatdátuma) ? vizsgálatdátuma : new DateTime(1900, 1, 1);
-                                //DateTime utolsóforgalminap = DateTime.TryParse(rekord["utolsóforgalminap"].ToString(), out utolsóforgalminap) ? utolsóforgalminap : new DateTime(1900, 1, 1);
 
                                 Adat = new Adat_Nosztalgia_Állomány(
                                                         rekord["azonosító"].ToStrTrim(),
                                                         rekord["ciklus_idő"].ToStrTrim(),
                                                         rekord["ciklus_km1"].ToStrTrim(),
                                                         rekord["ciklus_km2"].ToStrTrim(),
-                                                        //rekord["gyártó"].ToStrTrim(),
-                                                        //rekord["év"].ToÉrt_Int(),
-                                                        //rekord["Ntípus"].ToStrTrim(),
-                                                        //rekord["eszközszám"].ToStrTrim(),
-                                                        //rekord["leltári_szám"].ToStrTrim(),
                                                         rekord["vizsgálatdátuma_idő"].ToÉrt_DaTeTime(),
                                                         rekord["vizsgálatdátuma_km"].ToÉrt_DaTeTime(),
                                                         rekord["vizsgálatfokozata"].ToStrTrim(),
@@ -60,17 +67,25 @@ namespace Villamos.Kezelők
 
     public class Kezelő_Nosztagia_Futás
     {
-        public List<Adat_Nosztagia_Futás> Lista_Adat(string hely, string jelszó, string szöveg)
+        readonly string jelszó = "kloczkal";
+        readonly string táblanév = "Futás";
+        public List<Adat_Nosztagia_Futás> Lista_Adat(DateTime Dátum)
         {
+
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Nosztalgia\Futás_{Dátum.Year}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.NosztFutás(hely.KönyvSzerk());
+
+            string szöveg = $"SELECT * FROM {táblanév}";
+
             Adat_Nosztagia_Futás Adat;
             List<Adat_Nosztagia_Futás> Adatok = new List<Adat_Nosztagia_Futás>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
-                Kapcsolat.Open();
                 using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                 {
+                    Kapcsolat.Open();
                     using (OleDbDataReader rekord = Parancs.ExecuteReader())
                     {
                         if (rekord.HasRows)
