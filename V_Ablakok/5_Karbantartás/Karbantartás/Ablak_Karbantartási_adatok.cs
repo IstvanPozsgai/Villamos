@@ -1308,7 +1308,7 @@ namespace Villamos
             try
             {
                 string[] tömb = Hibaszöveg.Text.Trim().Split('-');
-                if (tömb.Length > 2)
+                if (tömb.Length > 2 && (tömb[0].Contains("V") || tömb[0].Contains("J")))
                 {
                     Vsorszám_Jármű = tömb[1].ToÉrt_Int();
                     Vizsgfoka_Jármű = tömb[0];
