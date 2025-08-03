@@ -67,7 +67,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (DateTime Idő in Idők)
                 {
-                    string szöveg = $"UPDATE naptár SET pályaszám='_', " +
+                    string szöveg = $"UPDATE {táblanév} SET pályaszám='_', " +
                         $"foglalt=false, " +
                         $"Megjegyzés='', " +
                         $" betűszín=0, " +
@@ -97,7 +97,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE naptár SET " +
+                    string szöveg = $"UPDATE {táblanév} SET " +
                         $"pályaszám='{Adat.Pályaszám.Trim()}', " +
                         $"foglalt={Adat.Foglalt}, " +
                         $"Megjegyzés='{Adat.Megjegyzés.Trim()}', " +
@@ -128,12 +128,12 @@ namespace Villamos.Kezelők
                 string szöveg;
                 if (EgyElem)
                 {
-                    szöveg = $"UPDATE naptár SET  foglalt=false, Megjegyzés='', betűszín=0, háttérszín=12632256, pályaszám='', marad=false ";
+                    szöveg = $"UPDATE {táblanév} SET  foglalt=false, Megjegyzés='', betűszín=0, háttérszín=12632256, pályaszám='', marad=false ";
                     szöveg += $" WHERE idő=#{Idő:MM-dd-yyyy H:m:s}# AND pályaszám='{Pályaszám}'";
                 }
                 else
                 {
-                    szöveg = $"UPDATE naptár SET  foglalt=false, Megjegyzés='', betűszín=0, háttérszín=12632256, pályaszám='', marad=false ";
+                    szöveg = $"UPDATE {táblanév} SET  foglalt=false, Megjegyzés='', betűszín=0, háttérszín=12632256, pályaszám='', marad=false ";
                     szöveg += $" WHERE idő>=#{Idő:MM-dd-yyyy H:m:s}# AND pályaszám='{Pályaszám}'";
                 }
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -154,7 +154,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"UPDATE naptár SET munkaidő=false WHERE [idő]>=# {Dátumtól:MM-dd-yyyy} 00:00:0#";
+                string szöveg = $"UPDATE {táblanév} SET munkaidő=false WHERE [idő]>=# {Dátumtól:MM-dd-yyyy} 00:00:0#";
                 szöveg += $" and [idő]<=#{Dátumig:MM-dd-yyyy} 23:59:0# AND munkaidő=true";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -177,7 +177,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO Naptár (idő, munkaidő, foglalt, pályaszám, megjegyzés, betűszín, háttérszín, marad) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (idő, munkaidő, foglalt, pályaszám, megjegyzés, betűszín, háttérszín, marad) VALUES (";
                     szöveg += $"'{Adat.Idő}', false, false, '_', '', 0, 0, false )";
                     szövegGy.Add(szöveg);
                 }
