@@ -149,6 +149,30 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Rögzítés(int Év, List<Adat_Kerék_Eszterga_Naptár> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> szövegGy = new List<string>();
+                foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO Naptár (idő, munkaidő, foglalt, pályaszám, megjegyzés, betűszín, háttérszín, marad) VALUES (";
+                    szöveg += $"'{Adat.Idő}', false, false, '_', '', 0, 0, false )";
+                    szövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, szövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         //elkopó
         public List<Adat_Kerék_Eszterga_Naptár> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -186,34 +210,6 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-        public List<DateTime> Lista_Adatok_Idő(string hely, string jelszó, string szöveg)
-        {
-            List<DateTime> Adatok = new List<DateTime>();
-            DateTime Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = rekord["Idő"].ToÉrt_DaTeTime();
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
     }
 
 }

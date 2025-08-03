@@ -110,6 +110,7 @@ namespace Villamos.Villamos_Adatszerkezet
 
     }
 
+
     public class Adat_Kerék_Eszterga_Tevékenység
     {
         public string Tevékenység { get; private set; }

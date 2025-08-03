@@ -29,6 +29,7 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Kerék_Eszterga_Terjesztés KézTerjeszt = new Kezelő_Kerék_Eszterga_Terjesztés();
         readonly Kezelő_Kerék_Eszterga_Automata KézAuto = new Kezelő_Kerék_Eszterga_Automata();
         readonly Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
+        readonly Kezelő_Kiegészítő_Beosztáskódok KézB = new Kezelő_Kiegészítő_Beosztáskódok();
 
         List<Adat_Dolgozó_Beosztás_Új> Adatok_Beoszt_Új = new List<Adat_Dolgozó_Beosztás_Új>();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
@@ -308,30 +309,22 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Igény
-        // JAVÍTANDÓ:
         private void Igény_Típus_Feltöltés()
         {
             try
             {
                 Igény_Típus.Items.Clear();
                 Igény_Típus.Items.Add("");
-                for (int ii = -1; ii < 1; ii++)
-                {
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{DateTime.Today.AddYears(ii).Year}_Igény.mdb";
-                    if (File.Exists(hely))
-                    {
-                        string jelszó = "RónaiSándor";
-                        string szöveg = $"SELECT DISTINCT típus FROM Igény WHERE státus<8  ORDER BY  típus";
-                        Kezelő_Általános_String kéz = new Kezelő_Általános_String();
-                        List<string> Adatok = kéz.Lista_Adatok(hely, jelszó, szöveg, "típus");
-
-                        foreach (string rekord in Adatok)
-                        {
-                            if (!Igény_Típus.Items.Contains(rekord.Trim()))
-                                Igény_Típus.Items.Add(rekord);
-                        }
-                    }
-                }
+                //Aktuális év és előző év adatait betesszük egy listába, melyet sorbarendezzünk típus 
+                //szerint majd minden típusból kiveszünk egy elemet
+                List<Adat_Kerék_Eszterga_Igény> Adatok = KézIgény.Lista_Adatok(DateTime.Today.Year);
+                List<Adat_Kerék_Eszterga_Igény> AdatokE = KézIgény.Lista_Adatok(DateTime.Today.Year - 1);
+                Adatok.AddRange(AdatokE);
+                Adatok = Adatok.OrderBy(a => a.Típus).ToList();
+                List<string> Típusok = Adatok.Select(a => a.Típus.Trim()).Distinct().ToList();
+                //betesszük az igény comboboxba 
+                foreach (string item in Típusok)
+                    Igény_Típus.Items.Add(item);
             }
             catch (HibásBevittAdat ex)
             {
@@ -498,7 +491,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void HétAlapAdatai()
         {
             try
@@ -506,32 +499,33 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Be(20);
 
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum.Value);
-                DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum.Value).AddHours(23).AddMinutes(30);
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"SELECT * FROM naptár WHERE idő>=#{Hételső:MM-dd-yyyy HH:mm}# AND idő<=#{Hétutolsó:MM-dd-yyyy HH:mm}#";
+                DateTime Hétutolsó = MyF.Nap2359(MyF.Hét_Utolsónapja(Dátum.Value));
 
+                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(Hételső.Year);
+                if (Hételső.Year != Hétutolsó.Year)
+                {
+                    List<Adat_Kerék_Eszterga_Naptár> AdatokK = KézNaptár.Lista_Adatok(Hétutolsó.Year);
+                    Adatok.AddRange(AdatokK);
+                    Adatok = Adatok.OrderBy(a => a.Idő).ToList();
+                }
 
-                List<DateTime> Adatok = KézNaptár.Lista_Adatok_Idő(hely, jelszó, szöveg);
+                Adatok = (from a in Adatok
+                          where a.Idő >= Hételső && a.Idő <= Hétutolsó
+                          orderby a.Idő
+                          select a).ToList();
 
                 DateTime FutóIdő = new DateTime(Hételső.Year, Hételső.Month, Hételső.Day, 0, 0, 0);
                 DateTime VégeIdő = FutóIdő.AddDays(7);
 
-                List<string> szövegGy = new List<string>();
+                List<Adat_Kerék_Eszterga_Naptár> AdatokGy = new List<Adat_Kerék_Eszterga_Naptár>();
                 while (FutóIdő < VégeIdő)
                 {
-                    szöveg = "INSERT INTO Naptár (idő, munkaidő, foglalt, pályaszám, megjegyzés, betűszín, háttérszín, marad) VALUES (";
-                    szöveg += $"'{FutóIdő}', false, false, '_', '',0 , 0, false )";
-                    if (Adatok == null)
-                        szövegGy.Add(szöveg);        //Ha nincs egy adat sem
-                    else
-                        if (!Adatok.Contains(FutóIdő)) szövegGy.Add(szöveg);    //Ha nincs még akkor létrehozza
-
+                    Adat_Kerék_Eszterga_Naptár ADAT = new Adat_Kerék_Eszterga_Naptár(FutóIdő);
+                    AdatokGy.Add(ADAT);
                     FutóIdő = FutóIdő.AddMinutes(30);
-
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                KézNaptár.Rögzítés(Hételső.Year, AdatokGy);
 
                 Holtart.Ki();
             }
@@ -673,19 +667,17 @@ namespace Villamos.Villamos_Ablakok
             {
                 Holtart.Be(20);
                 //Beosztás adatok betöltése
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\segéd\Kiegészítő.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM beosztáskódok WHERE számoló=true  ORDER BY beosztáskód";
-
-                Kezelő_Kiegészítő_Beosztáskódok KézB = new Kezelő_Kiegészítő_Beosztáskódok();
-                List<Adat_Kiegészítő_Beosztáskódok> AdatB = KézB.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Beosztáskódok> AdatB = KézB.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatB = (from a in AdatB
+                         where a.Számoló == true
+                         orderby a.Beosztáskód
+                         select a).ToList();
 
                 DateTime Hételső = MyF.Hét_elsőnapja(NapTÁR);
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(NapTÁR);
 
 
-                Kezelő_Dolgozó_Beosztás_Új KézBEO = new Kezelő_Dolgozó_Beosztás_Új();
+
                 List<Adat_Dolgozó_Beosztás_Új> AdatBEO;
 
                 foreach (Adat_Kiegészítő_Beosztáskódok rekordBKód in AdatB)
@@ -693,13 +685,13 @@ namespace Villamos.Villamos_Ablakok
                     string helydolg = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{NapTÁR.Year}\EsztBeosztás{NapTÁR:yyyyMM}.mdb";
                     if (!File.Exists(helydolg)) Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(helydolg);
                     string jelszódolg = "kiskakas";
-                    szöveg = $"SELECT * FROM beosztás where [nap]>=# {Hételső:MM-dd-yyyy} 00:00:0#";
+                    string szöveg = $"SELECT * FROM beosztás where [nap]>=# {Hételső:MM-dd-yyyy} 00:00:0#";
                     szöveg += $" and [nap]<=#{Hétutolsó:MM-dd-yyyy} 23:59:0# AND (beosztáskód='{rekordBKód.Beosztáskód.Trim()}' OR beosztáskód='#' )";
                     szöveg += " ORDER BY nap";
-                    AdatBEO = KézBEO.Lista_Adatok(helydolg, jelszódolg, szöveg);
+                    AdatBEO = Kezelő_Beoszt_Új.Lista_Adatok(helydolg, jelszódolg, szöveg);
 
-                    hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
-                    jelszó = "RónaiSándor";
+                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Hételső.Year}_Esztergálás.mdb";
+                    string jelszó = "RónaiSándor";
                     List<string> szövegGy = new List<string>();
 
                     foreach (Adat_Dolgozó_Beosztás_Új rekord in AdatBEO)
