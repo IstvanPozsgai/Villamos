@@ -660,8 +660,6 @@ namespace Villamos.Villamos_Ablakok
                 DateTime Hételső = MyF.Hét_elsőnapja(NapTÁR);
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(NapTÁR);
 
-
-
                 List<Adat_Dolgozó_Beosztás_Új> AdatBEO;
 
                 foreach (Adat_Kiegészítő_Beosztáskódok rekordBKód in AdatB)
@@ -985,37 +983,18 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Eszt_Beosztás_Törlés(string Telephely, DateTime Dátumtól, DateTime Dátumig)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumtól.Year}\EsztBeosztás{Dátumtól:yyyyMM}.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "kiskakas";
-                string szöveg = $"SELECT * FROM Beosztás";
-                bool vane;
-
-                Adatok_Beoszt_Új = Kezelő_Beoszt_Új.Lista_Adatok(hely, jelszó, szöveg);
+                //Beolvassuk az adatokat
+                Adatok_Beoszt_Új = Kezelő_Beoszt_Új.Lista_Adatok(Telephely.Trim(), Dátumtól, true);
+                //ha nem ugyanabban a hónapban van a két dátum és van adat a két idő között, akkor töröljük az eddigi adatokat.
                 if (Dátumtól.Month != Dátumig.Month)
-                {
-                    vane = Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig);
-                    if (vane)
-                    {
-                        szöveg = $"DELETE FROM beosztás WHERE  nap>=#{Dátumtól:yyyy-MM-dd}# AND nap<=#{Dátumig:yyyy-MM-dd}# ";
-                        MyA.ABtörlés(hely, jelszó, szöveg);
-                    }
-                }
-
-                hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\Beosztás\{Dátumig.Year}\EsztBeosztás{Dátumig:yyyyMM}.mdb";
-                if (!File.Exists(hely)) return;
-                jelszó = "kiskakas";
-                vane = Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig);
-                if (vane)
-                {
-                    szöveg = $"DELETE FROM beosztás WHERE nap>=#{Dátumtól:yyyy-MM-dd} # AND nap<=# {Dátumig:yyyy-MM-dd}# ";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                }
+                    if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumtól, Dátumtól, Dátumig, true);
+                    else
+                     if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumig, Dátumtól, Dátumig, true);
             }
             catch (HibásBevittAdat ex)
             {

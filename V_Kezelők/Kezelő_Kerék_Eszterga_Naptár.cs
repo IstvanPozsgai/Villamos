@@ -194,5 +194,4 @@ namespace Villamos.Kezelők
             }
         }
     }
-
 }

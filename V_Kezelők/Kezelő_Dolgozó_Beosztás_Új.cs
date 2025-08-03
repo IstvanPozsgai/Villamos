@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -14,16 +15,19 @@ namespace Villamos.Kezelők
         string hely;
         readonly string táblanév = "Beosztás";
 
-        private void FájlBeállítás(string Telephely, DateTime Dátum)
+        private void FájlBeállítás(string Telephely, DateTime Dátum, bool Eszterga)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+            if (Eszterga)
+                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás\{Dátum.Year}\EsztBeosztás{Dátum:yyyyMM}.mdb";
+            else
+                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(hely.KönyvSzerk());
         }
 
 
-        public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string Telephely, DateTime Dátum)
+        public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string Telephely, DateTime Dátum, bool Eszterga = false)
         {
-            FájlBeállítás(Telephely, Dátum);
+            FájlBeállítás(Telephely, Dátum, Eszterga);
             string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Dolgozó_Beosztás_Új> Adatok = new List<Adat_Dolgozó_Beosztás_Új>();
             Adat_Dolgozó_Beosztás_Új Adat;
@@ -75,11 +79,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat)
+        public void Rögzítés(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat, bool Eszterga = false)
         {
             try
             {
-                FájlBeállítás(Telephely, Dátum);
+                FájlBeállítás(Telephely, Dátum, Eszterga);
 
             }
             catch (HibásBevittAdat ex)
@@ -94,11 +98,11 @@ namespace Villamos.Kezelők
         }
 
 
-        public void Módosítás(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat)
+        public void Módosítás(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat, bool Eszterga = false)
         {
             try
             {
-                FájlBeállítás(Telephely, Dátum);
+                FájlBeállítás(Telephely, Dátum, Eszterga);
 
             }
             catch (HibásBevittAdat ex)
@@ -113,12 +117,13 @@ namespace Villamos.Kezelők
         }
 
 
-        public void Törlés(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat)
+        public void Törlés(string Telephely, DateTime Dátum, DateTime Dátumtól, DateTime Dátumig, bool Eszterga = false)
         {
             try
             {
-                FájlBeállítás(Telephely, Dátum);
-
+                FájlBeállítás(Telephely, Dátum, Eszterga);
+                string szöveg = $"DELETE FROM beosztás WHERE  nap>=#{Dátumtól:yyyy-MM-dd}# AND nap<=#{Dátumig:yyyy-MM-dd}# ";
+                MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -130,6 +135,8 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
         //elkopó
         public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string hely, string jelszó, string szöveg)
