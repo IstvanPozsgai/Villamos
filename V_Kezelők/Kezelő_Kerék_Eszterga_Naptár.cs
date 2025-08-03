@@ -149,6 +149,26 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(int Év, DateTime Dátumtól, DateTime Dátumig)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                string szöveg = $"UPDATE naptár SET munkaidő=false WHERE [idő]>=# {Dátumtól:MM-dd-yyyy} 00:00:0#";
+                szöveg += $" and [idő]<=#{Dátumig:MM-dd-yyyy} 23:59:0# AND munkaidő=true";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Rögzítés(int Év, List<Adat_Kerék_Eszterga_Naptár> Adatok)
         {
             try
@@ -172,43 +192,6 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        //elkopó
-        public List<Adat_Kerék_Eszterga_Naptár> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kerék_Eszterga_Naptár> Adatok = new List<Adat_Kerék_Eszterga_Naptár>();
-            Adat_Kerék_Eszterga_Naptár Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kerék_Eszterga_Naptár(
-                                        rekord["Idő"].ToÉrt_DaTeTime(),
-                                        rekord["Munkaidő"].ToÉrt_Bool(),
-                                        rekord["Foglalt"].ToÉrt_Bool(),
-                                        rekord["Pályaszám"].ToStrTrim(),
-                                        rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["betűszín"].ToÉrt_Long(),
-                                        rekord["háttérszín"].ToÉrt_Long(),
-                                        rekord["Marad"].ToÉrt_Bool()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
         }
     }
 

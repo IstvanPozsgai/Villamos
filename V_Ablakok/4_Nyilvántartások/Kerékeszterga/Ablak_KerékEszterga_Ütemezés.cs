@@ -30,6 +30,7 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Kerék_Eszterga_Automata KézAuto = new Kezelő_Kerék_Eszterga_Automata();
         readonly Kezelő_kiegészítő_telephely KézTelep = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_Kiegészítő_Beosztáskódok KézB = new Kezelő_Kiegészítő_Beosztáskódok();
+        readonly Kezelő_Kerék_Eszterga_Esztergályos KézEsztergályos = new Kezelő_Kerék_Eszterga_Esztergályos();
 
         List<Adat_Dolgozó_Beosztás_Új> Adatok_Beoszt_Új = new List<Adat_Dolgozó_Beosztás_Új>();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
@@ -544,7 +545,7 @@ namespace Villamos.Villamos_Ablakok
         {
             Beosztás_Adatok();
         }
-        // JAVÍTANDÓ:
+
         /// <summary>
         /// Beosztásból kiszűri azon dolgozókat akik esztergálnak és csak az Ő adatai jelennek meg
         /// Így 2-3 fő adatai külön kezelhetők
@@ -554,17 +555,10 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 //Betöltjük a dolgozókat akik beosztását nézzük
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Törzs.mdb";
-                if (!File.Exists(hely)) return;
-
-                string szöveg = $"SELECT * FROM Esztergályos  ORDER BY dolgozószám ";
-
-                Kezelő_Kerék_Eszterga_Esztergályos kézE = new Kezelő_Kerék_Eszterga_Esztergályos();
-                List<Adat_Kerék_Eszterga_Esztergályos> AdatokE = kézE.Lista_Adatok();
+                List<Adat_Kerék_Eszterga_Esztergályos> AdatokE = KézEsztergályos.Lista_Adatok();
 
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum.Value);
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum.Value);
-
 
                 Holtart.Be(20);
 
@@ -600,34 +594,24 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Munkaidő_Töröl()
         {
             try
             {
                 Holtart.Be(20);
 
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Value.Year}_Esztergálás.mdb";
-                string jelszó = "RónaiSándor";
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum.Value);
                 DateTime Hétutolsó = MyF.Hét_Utolsónapja(Dátum.Value);
-
-                string szöveg = $"SELECT * FROM naptár";
-
-                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga_Naptár> Adatok = KézNaptár.Lista_Adatok(Dátum.Value.Year);
 
                 bool vane = Adatok.Any(n =>
                 n.Idő >= Hételső.Date &&
                 n.Idő <= Hétutolsó.Date.AddDays(1).AddTicks(-1) &&
                 n.Munkaidő == true);
 
-                if (vane)
-                {
-                    szöveg = $"UPDATE naptár SET munkaidő=false WHERE [idő]>=# {Hételső:MM-dd-yyyy} 00:00:0#";
-                    szöveg += $" and [idő]<=#{Hétutolsó:MM-dd-yyyy} 23:59:0# AND munkaidő=true";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                }
+                if (vane) KézNaptár.Módosítás(Hételső.Year, Hételső, Hétutolsó);
+
             }
             catch (HibásBevittAdat ex)
             {
