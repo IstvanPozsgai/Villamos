@@ -79,12 +79,39 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat, bool Eszterga = false)
+        public void Rögzítés(string Telephely, DateTime Dátum, List<Adat_Dolgozó_Beosztás_Új> Adatok, bool Eszterga = false)
         {
             try
             {
                 FájlBeállítás(Telephely, Dátum, Eszterga);
-
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Dolgozó_Beosztás_Új Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO beosztás (Dolgozószám, Nap, Beosztáskód, Ledolgozott, " +
+                                                        "Túlóra, Túlórakezd, Túlóravég, Csúszóra, " +
+                                                        "CSúszórakezd, Csúszóravég, Megjegyzés, Túlóraok, " +
+                                                        "Szabiok, kért, Csúszok, AFTóra, " +
+                                                        "AFTok ) VALUES (";
+                    szöveg += $"'{Adat.Dolgozószám}', ";   //    Dolgozószám,
+                    szöveg += $"'{Adat.Nap}', ";   //    Nap,
+                    szöveg += $"'{Adat.Beosztáskód}', ";   //    Beosztáskód,
+                    szöveg += $"{Adat.Ledolgozott}, ";   //    Ledolgozott,
+                    szöveg += $"{Adat.Túlóra}, ";   //    Túlóra,
+                    szöveg += $"'{Adat.Túlórakezd}', ";   //    Túlórakezd,
+                    szöveg += $"'{Adat.Túlóravég}', ";   //    Túlóravég,
+                    szöveg += $"{Adat.Csúszóra}, ";   //    Csúszóra,
+                    szöveg += $"'{Adat.CSúszórakezd}', ";   //    CSúszórakezd,
+                    szöveg += $"'{Adat.Csúszóravég}', ";   //    Csúszóravég,
+                    szöveg += $"'{Adat.Megjegyzés}', ";   //    MegjegyzésVáltozó,
+                    szöveg += $"'{Adat.Túlóraok}', ";   //    Túlóraok,
+                    szöveg += $"'{Adat.Szabiok}', ";   //    Szabiok,
+                    szöveg += $"{Adat.Kért} , ";   //    kért,
+                    szöveg += $"'{Adat.Csúszok}', ";   //    Csúszok,
+                    szöveg += $"{Adat.AFTóra}, ";   //    AFTóra,
+                    szöveg += $"'{Adat.AFTok}' ) ";   //    AFTok,
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {

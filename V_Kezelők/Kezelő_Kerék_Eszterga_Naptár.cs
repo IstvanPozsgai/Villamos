@@ -149,14 +149,39 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(int Év, DateTime Dátumtól, DateTime Dátumig)
+        public void Módosítás_Munkaidő(int Év, Adat_Kerék_Eszterga_Naptár Adat)
         {
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"UPDATE {táblanév} SET munkaidő=false WHERE [idő]>=# {Dátumtól:MM-dd-yyyy} 00:00:0#";
-                szöveg += $" and [idő]<=#{Dátumig:MM-dd-yyyy} 23:59:0# AND munkaidő=true";
+                string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy} 00:00:0#";
+                szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy} 23:59:0# ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás_Munkaidő(int Év, List<Adat_Kerék_Eszterga_Naptár> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy} 00:00:0#";
+                    szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy} 23:59:0#";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
