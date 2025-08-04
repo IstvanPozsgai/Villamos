@@ -293,29 +293,20 @@ namespace Villamos
             try
             {
                 //ha nincs még kész a munkaidőnaptár akkor, kilépünk
-                string helymunka = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum2.Value.Year}\munkaidőnaptár.mdb";
-                if (!File.Exists(helymunka)) return;
-
-
-                string jelszómunka = "katalin";
-                int hónapnap = MyF.Hónap_hossza(Dátum2.Value);
-                int év = Dátum2.Value.Year;
-                int hónap = Dátum2.Value.Month;
-                DateTime eleje = new DateTime(év, hónap, 1);
-
-                int hónaputolsónapja_szám = MyF.Hónap_hossza(DateTime.Today);
+                DateTime eleje = MyF.Hónap_elsőnapja(Dátum2.Value);
                 DateTime vége = MyF.Hónap_utolsónapja(Dátum2.Value);
+                List<Adat_Váltós_Naptár> Adatok = KézNaptár.Lista_Adatok(Dátum2.Value.Year, "");
+                Adatok = (from a in Adatok
+                          where a.Dátum >= eleje
+                          && a.Dátum <= vége
+                          orderby a.Dátum
+                          select a).ToList();
+                if (Adatok.Count < 1) return;
+
                 string újszöveg = "";
-
-                string szöveg = "SELECT * FROM naptár WHERE dátum>=#" + eleje.ToString("MM-dd-yyyy") +
-                    "# And dátum<=#" + vége.ToString("MM-dd-yyyy") + "# ORDER BY dátum";
-
-
-                List<Adat_Váltós_Naptár> Adatok = KézNaptár.Lista_Adatok(Dátum2.Value.Year,);
-
                 foreach (Adat_Váltós_Naptár rekord in Adatok)
                 {
-                    if (rekord.Nap.ToString().Trim() == "1")
+                    if (rekord.Nap.ToStrTrim() == "1")
                         újszöveg += "1";
                     else
                         újszöveg += "0";
@@ -324,7 +315,7 @@ namespace Villamos
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\" + Dátum2.Value.Year + @"épülettakarítás.mdb";
                 string jelszó = "seprűéslapát";
-                szöveg = "INSERT INTO Naptár  (előterv, hónap, igazolás, napok ) VALUES (";
+                string szöveg = "INSERT INTO Naptár  (előterv, hónap, igazolás, napok ) VALUES (";
                 szöveg += $"false, {Dátum2.Value.Month}, false,'{újszöveg.Trim()}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
