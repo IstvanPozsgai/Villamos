@@ -17,6 +17,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 {
     public partial class Ablak_Eszterga_Karbantartás_Módosít : Form
     {
+        /// <summary>
+        /// nem tudom
+        /// 
+        /// </summary>
         #region Osztalyszintű elemek
         public event Event_Kidobó Eszterga_Valtozas;
         // JAVÍTANDÓ:
