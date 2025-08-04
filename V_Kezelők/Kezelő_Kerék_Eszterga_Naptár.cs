@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -155,8 +154,8 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy HH:mm:ss}#";
-                szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy HH:mm:ss}# ";
+                string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy} 00:00:0#";
+                szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy} 23:59:0# ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -178,8 +177,8 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=#{Adat.Dátumtól:MM-dd-yyyy HH:mm:ss}#";
-                    szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy HH:mm:ss}#";
+                    string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy} 00:00:0#";
+                    szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy} 23:59:0#";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
@@ -200,16 +199,12 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                List<Adat_Kerék_Eszterga_Naptár> RögzítettAdatok = Lista_Adatok(Év);
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
                 {
-                    if (!RögzítettAdatok.Any(a => a.Idő == Adat.Idő))
-                    {
-                        string szöveg = $"INSERT INTO {táblanév} (idő, munkaidő, foglalt, pályaszám, megjegyzés, betűszín, háttérszín, marad) VALUES (";
-                        szöveg += $"'{Adat.Idő}', false, false, '_', '', 0, 0, false )";
-                        szövegGy.Add(szöveg);
-                    }
+                    string szöveg = $"INSERT INTO {táblanév} (idő, munkaidő, foglalt, pályaszám, megjegyzés, betűszín, háttérszín, marad) VALUES (";
+                    szöveg += $"'{Adat.Idő}', false, false, '_', '', 0, 0, false )";
+                    szövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, szövegGy);
             }
