@@ -125,7 +125,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                     AdatTabla.Rows.Add(Soradat);
                 }
-                Tabla.CleanFilterAndSort();
+
                 Tabla.DataSource = AdatTabla;
                 OszlopSzelesseg();
                 ToroltTablaSzinezes(Tabla);
