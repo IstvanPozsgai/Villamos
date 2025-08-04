@@ -55,8 +55,6 @@ namespace Villamos
             Fülekkitöltése();
             Jogosultságkiosztás();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            Ciklusrendcombofeltöltés();
-            Üzemek_listázása();
         }
 
         private void Tulajdonságok_Fogaskerekű_Load(object sender, EventArgs e)
@@ -98,24 +96,17 @@ namespace Villamos
             int melyikelem;
 
             // ide kell az összes gombot tenni amit szabályozni akarunk false
-
-            Utolsó_V_rögzítés.Enabled = false;
-            Töröl.Enabled = false;
             // csak főmérnökségi belépéssel törölhető
             if ((Program.PostásTelephely) == "Főmérnökség")
             {
-                Töröl.Visible = true;
             }
             else
             {
-                Töröl.Visible = false;
             }
             melyikelem = 109;
             // módosítás 1 
             if (MyF.Vanjoga(melyikelem, 1))
             {
-                Utolsó_V_rögzítés.Enabled = true;
-                Töröl.Enabled = true;
             }
             // módosítás 2
             if (MyF.Vanjoga(melyikelem, 2))
@@ -196,8 +187,7 @@ namespace Villamos
                 {
                     case 1:
                         {
-                            Vizsgfokcombofeltölés();
-                            break;
+                                             break;
                         }
                     case 2:
                         {
@@ -332,51 +322,6 @@ namespace Villamos
             }
         }
 
-        private void Ciklusrendcombofeltöltés()
-        {
-            try
-            {
-                CiklusrendCombo.Items.Clear();
-                List<Adat_Ciklus> AdatokCiklus = KézCiklus.Lista_Adatok();
-                List<string> CiklusTípus = (from a in AdatokCiklus
-                                            orderby a.Típus
-                                            select a.Típus).Distinct().ToList();
-                foreach (string Elem in CiklusTípus)
-                    CiklusrendCombo.Items.Add(Elem);
-
-                CiklusrendCombo.Refresh();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Üzemek_listázása()
-        {
-            try
-            {
-                Üzemek.Items.Clear();
-                List<Adat_kiegészítő_telephely> Adatok = KézKieg.Lista_Adatok();
-                foreach (Adat_kiegészítő_telephely Elem in Adatok)
-                    Üzemek.Items.Add(Elem.Telephelykönyvtár);
-                Üzemek.Refresh();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -776,41 +721,8 @@ namespace Villamos
         ///// <param name="e"></param>
         private void Tábla1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            Kiüríti_lapfül();
             if (e.RowIndex < 0) return;
-
-            Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString();
             if (!long.TryParse(Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString(), out JelöltSor)) JelöltSor = -1;
-
-            Vizsg_sorszám_combo.Text = Tábla1.Rows[e.RowIndex].Cells[3].Value.ToString();
-            Vizsgfok_új.Text = Tábla1.Rows[e.RowIndex].Cells[2].Value.ToString();
-            Vizsgdátumk.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[4].Value.ToString());
-            Vizsgdátumv.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[5].Value.ToString());
-            VizsgKm.Text = Tábla1.Rows[e.RowIndex].Cells[6].Value.ToString();
-            Üzemek.Text = Tábla1.Rows[e.RowIndex].Cells[15].Value.ToString();
-
-            KMUkm.Text = Tábla1.Rows[e.RowIndex].Cells[8].Value.ToString();
-            Jjavszám.Text = Tábla1.Rows[e.RowIndex].Cells[11].Value.ToString();
-            Utolsófelújításdátuma.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[12].Value.ToString());
-
-
-            TEljesKmText.Text = Tábla1.Rows[e.RowIndex].Cells[14].Value.ToString();
-            CiklusrendCombo.Text = Tábla1.Rows[e.RowIndex].Cells[13].Value.ToString();
-
-            HaviKm.Text = Tábla1.Rows[e.RowIndex].Cells[10].Value.ToString();
-            KMUdátum.Value = DateTime.Parse(Tábla1.Rows[e.RowIndex].Cells[7].Value.ToString());
-
-            KövV.Text = Tábla1.Rows[e.RowIndex].Cells[16].Value.ToString();
-            KövV_Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[17].Value.ToString();
-            KövV2.Text = Tábla1.Rows[e.RowIndex].Cells[18].Value.ToString();
-            KövV2_Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[19].Value.ToString();
-            KövV2_számláló.Text = Tábla1.Rows[e.RowIndex].Cells[20].Value.ToString();
-
-            KövV1km.Text = (int.Parse(KMUkm.Text) - int.Parse(VizsgKm.Text)).ToString();
-            KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
-
-
-            //    Fülek.SelectedIndex = 1;
         }
 
 
@@ -900,359 +812,6 @@ namespace Villamos
                 RögzítésAblak();
                 JelöltSor = -1;
 
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-
-        #region Rögzítés lap
-        /// <summary>
-        /// Ürítjük a mezőket
-        /// </summary>
-        private void Kiüríti_lapfül()
-        {
-            Sorszám.Text = "";
-
-            Sorszám.Text = "0";
-            Vizsgfok_új.Text = "";
-            Vizsgdátumk.Value = DateTime.Today;
-            Vizsgdátumv.Value = DateTime.Today;
-            VizsgKm.Text = "0";
-            Üzemek.Text = "";
-
-            KMUkm.Text = "0";
-            KMUdátum.Value = DateTime.Today;
-
-            HaviKm.Text = "0";
-            KMUdátum.Value = DateTime.Today;
-
-            KövV.Text = "";
-            KövV_Sorszám.Text = "";
-            KövV1km.Text = "0";
-            KövV2.Text = "";
-            KövV2_Sorszám.Text = "";
-            KövV2_számláló.Text = "0";
-            KövV2km.Text = "0";
-        }
-
-        /// <summary>
-        /// A vizsgafok combot feltöltjük a kiválasztott ciklus rend alapján
-        /// </summary>
-        private void Vizsgfokcombofeltölés()
-        {
-            try
-            {
-                string ideig = Vizsg_sorszám_combo.Text;
-                List<Adat_Ciklus> Adatok = KézCiklus.Lista_Adatok();
-                Adatok = (from a in Adatok
-                          where a.Típus == CiklusrendCombo.Text.Trim()
-                          && a.Törölt == "0"
-                          orderby a.Sorszám
-                          select a).ToList();
-                Vizsg_sorszám_combo.Items.Clear();
-                foreach (Adat_Ciklus Elem in Adatok)
-                    Vizsg_sorszám_combo.Items.Add(Elem.Sorszám);
-                Vizsg_sorszám_combo.Refresh();
-                Vizsg_sorszám_combo.Text = ideig;
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Kiírja a kiválasztott rekord adatait a mezőkbe
-        /// </summary>
-        /// <param name="sorszám">long</param>
-        private void KiírjaAdatot(long sorszám)
-        {
-            try
-            {
-                Kiüríti_lapfül();
-                List<Adat_T5C5_Kmadatok> Adatok = KézKMAdatok.Lista_Adatok();
-                Adat_T5C5_Kmadatok rekord = (from a in Adatok
-                                             where a.ID == sorszám
-                                             select a).FirstOrDefault();
-                if (rekord != null)
-                {
-                    Vizsgfok_új.Text = rekord.Vizsgfok.Trim();
-                    Vizsg_sorszám_combo.Text = rekord.Vizsgsorszám.ToString();
-                    Vizsgdátumk.Value = rekord.Vizsgdátumk;
-                    Vizsgdátumv.Value = rekord.Vizsgdátumv;
-                    VizsgKm.Text = rekord.Vizsgkm.ToString();
-                    KMUdátum.Value = rekord.KMUdátum;
-                    KMUkm.Text = rekord.KMUkm.ToString();
-                    HaviKm.Text = rekord.Havikm.ToString();
-                    Jjavszám.Text = rekord.Jjavszám.ToString();
-                    Utolsófelújításdátuma.Value = rekord.Fudátum;
-                    TEljesKmText.Text = rekord.Teljeskm.ToString();
-                    CiklusrendCombo.Text = rekord.Ciklusrend.ToString();
-                    Sorszám.Text = rekord.ID.ToString();
-                    if (rekord.V2végezte.Trim() != "")
-                        Üzemek.Text = rekord.V2végezte.Trim();
-                    else
-                        Üzemek.Text = "";
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// A kiválasztott ciklus rend alapján feltöltjük a vizsgafok combot
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CiklusrendCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Vizsgfokcombofeltölés();
-        }
-
-        /// <summary>
-        /// Ürítjük a mezőket
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Új_adat_Click(object sender, EventArgs e)
-        {
-            Kiüríti_lapfül();
-        }
-
-        /// <summary>
-        /// Következő vizsgálat sorszámát kiírja a mezőbe
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Következő_V_Click(object sender, EventArgs e)
-        {
-            if (Vizsg_sorszám_combo.Text.Trim() == "") return;
-            Sorszám.Text = "";
-            Vizsg_sorszám_combo.Text = (int.Parse(Vizsg_sorszám_combo.Text) + 1).ToString();
-            Vizsgdátumk.Value = DateTime.Today;
-            Vizsgdátumv.Value = DateTime.Today;
-            VizsgKm.Text = KMUkm.Text;
-        }
-
-        /// <summary>
-        /// A kiválasztott vizsgálat sorszám alapján kiírja a vizsgálat fokát
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Vizsg_sorszám_combo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                int i = Vizsg_sorszám_combo.SelectedIndex;
-                if (CiklusrendCombo.Text.Trim() == "") return;
-
-                List<Adat_Ciklus> CiklusAdat = KézCiklus.Lista_Adatok();
-                CiklusAdat = CiklusAdat.Where(a => a.Típus.Trim() == CiklusrendCombo.Text.Trim()).OrderBy(a => a.Sorszám).ToList();
-                string Vizsgálatfok = (from a in CiklusAdat
-                                       where a.Sorszám == i
-                                       select a.Vizsgálatfok).FirstOrDefault();
-
-                if (Vizsgálatfok != null)
-                    Vizsgfok_új.Text = Vizsgálatfok;
-
-                // következő vizsgálat sorszáma
-                Vizsgálatfok = (from a in CiklusAdat
-                                where a.Sorszám == i + 1
-                                select a.Vizsgálatfok).FirstOrDefault();
-                if (Vizsgálatfok != null)
-                    KövV.Text = Vizsgálatfok;
-
-                KövV_Sorszám.Text = (i + 1).ToString();
-                // követekező V2-V3
-                KövV2.Text = "J";
-                KövV2_Sorszám.Text = "0";
-                for (int j = i + 1; j < CiklusAdat.Count; j++)
-                {
-                    if (CiklusAdat[j].Vizsgálatfok.Contains("V2"))
-                    {
-                        KövV2.Text = CiklusAdat[j].Vizsgálatfok;
-                        KövV2_Sorszám.Text = j.ToString();
-                        break;
-                    }
-                    if (CiklusAdat[j].Vizsgálatfok.Contains("V3"))
-                    {
-                        KövV2.Text = CiklusAdat[j].Vizsgálatfok;
-                        KövV2_Sorszám.Text = j.ToString();
-                        break;
-                    }
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Rögzíti/Módosítja a kiválasztott vizsgálat adatait
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Utolsó_V_rögzítés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // leellenőrizzük, hogy minden adat ki van-e töltve
-
-                if (VizsgKm.Text.Trim() == "") throw new HibásBevittAdat("Vizsgálat km számláló állása mező nem lehet üres");
-                if (!long.TryParse(VizsgKm.Text, out long vizsgKm)) throw new HibásBevittAdat("Vizsgálat km számláló állása mezőnek egész számnak kell lennie.");
-                if (Vizsgfok_új.Text.Trim() == "") throw new HibásBevittAdat("Vizsgálat fok mező nem lehet üres");
-                if (Vizsg_sorszám_combo.Text.Trim() == "") throw new HibásBevittAdat("Vizsgálat sorszáma mező nem lehet üres.");
-                if (!long.TryParse(Vizsg_sorszám_combo.Text, out long sorszám)) throw new HibásBevittAdat("Vizsgálat sorszáma mezőnek egész számnak kell lennie.");
-                if (KMUkm.Text.Trim() == "") KMUkm.Text = "0";
-                if (!long.TryParse(KMUkm.Text, out long kmukm)) throw new HibásBevittAdat("Utolsó felújítás óta futott km mezőnek egész számnak kell lennie.");
-                if (HaviKm.Text.Trim() == "") HaviKm.Text = 0.ToString();
-                if (!long.TryParse(HaviKm.Text, out long haviKm)) throw new HibásBevittAdat("Havi futásteljesítmény mezőnek egész számnak kell lennie.");
-                if (Jjavszám.Text.Trim() == "") Jjavszám.Text = "0";
-                if (!int.TryParse(Jjavszám.Text, out int jjavszám)) throw new HibásBevittAdat("Felújítás sorszáma mezőnek egész számnak kell lennie.");
-                if (TEljesKmText.Text.Trim() == "") TEljesKmText.Text = 0.ToString();
-                if (!long.TryParse(TEljesKmText.Text, out long tEljesKmText)) throw new HibásBevittAdat("Üzembehelyezés óta futott mezőnek egész számnak kell lennie.");
-                if (CiklusrendCombo.Text.Trim() == "") throw new HibásBevittAdat("Ütemezés típusa mező nem lehet üres.");
-                if (!long.TryParse(Sorszám.Text.Trim(), out long sorszámId)) sorszámId = 0;
-                if (!int.TryParse(KövV2_Sorszám.Text, out int kövV2_Sorszám)) throw new HibásBevittAdat("Következő V2-V3 sorszám mező nem lehet üres és egész számnak kell lennie.");
-                if (!int.TryParse(KövV_Sorszám.Text, out int kövV_Sorszám)) throw new HibásBevittAdat("Következő V mező nem lehet üres és egész számnak kell lennie.");
-                if (!int.TryParse(KövV2km.Text, out int kövV2km)) throw new HibásBevittAdat("V2-V3-tól futott km mező nem lehet üres és egész számnak kell lennie.");
-                if (!long.TryParse(KövV2_számláló.Text, out long kövV2_számláló)) throw new HibásBevittAdat("V2-V3 számláló állás mező nem lehet üres és egész számnak kell lennie.");
-
-
-                Adat_T5C5_Kmadatok ADAT = new Adat_T5C5_Kmadatok(
-                                sorszámId,
-                                Pályaszám.Text.Trim(),
-                                jjavszám,
-                                kmukm,
-                                KMUdátum.Value,
-                                Vizsgfok_új.Text,
-                                Vizsgdátumk.Value,
-                                Vizsgdátumv.Value,
-                                vizsgKm,
-                                haviKm,
-                                sorszám,
-                                Utolsófelújításdátuma.Value,
-                                tEljesKmText,
-                                MyF.Szöveg_Tisztítás(CiklusrendCombo.Text.Trim()),
-                                MyF.Szöveg_Tisztítás(Üzemek.Text.Trim()),
-                                kövV2_Sorszám,
-                                MyF.Szöveg_Tisztítás(KövV2.Text.Trim()),
-                                kövV_Sorszám,
-                                MyF.Szöveg_Tisztítás(KövV.Text.Trim()),
-                                false,
-                                kövV2_számláló);
-
-                if (Sorszám.Text.Trim() == "")
-                    KézKMAdatok.Rögzítés(ADAT);
-                else
-                    KézKMAdatok.Módosítás(ADAT);
-
-                MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Kiirjaatörténelmet();
-                Fülek.SelectedIndex = 2;
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// SAP-s adatokat Excel tábla segítségével betölti
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void SAP_adatok_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // megpróbáljuk megnyitni az excel táblát.
-                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "SAP-s Adatok betöltése",
-                    FileName = "",
-                    Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls"
-                };
-
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
-                    _fájlexc = OpenFileDialog1.FileName;
-                else
-                    return;
-
-                timer1.Enabled = true;
-                Holtart.Visible = true;
-
-                // Wrap the void method in a Task.Run to make it awaitable
-                await Task.Run(() => SAP_Adatokbeolvasása.Km_beolvasó(_fájlexc, "SGP"));
-
-                //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                timer1.Enabled = false;
-                Holtart.Visible = false;
-                MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Törli a kiválasztott rekordot
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Töröl_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (long.TryParse(Sorszám.Text.Trim(), out long IDsorszám))
-                {
-                    if (MessageBox.Show("Valóban töröljük az adatsort?", "Biztonsági kérdés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                    {
-                        KézKMAdatok.Törlés(IDsorszám);
-                        Kiirjaatörténelmet();
-                        Fülek.SelectedIndex = 4;
-                    }
-                }
             }
             catch (HibásBevittAdat ex)
             {
