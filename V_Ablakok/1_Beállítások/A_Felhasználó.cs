@@ -38,7 +38,7 @@ namespace Villamos
                 Neveklistája();
                 Fülek.TabIndex = 0;
                 TextNév.Focus();
-            //    GombLathatosagKezelo.Beallit(this);
+                //    GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 Táblaíró();
 
@@ -700,11 +700,11 @@ namespace Villamos
                 menünév[106] = "T5C5 adatok módosítása";
                 menüleírás[106] = " 1- Futás adatok lapfül rögzítés, 2- nincs, 3- nincs";
                 menünév[107] = "T5C5 adatok módosítása";
-                menüleírás[107] = " 1- Utolsó vizsgálati adatok lapfül rögzítés/törlés, 2-nincs, 3- nincs";
+                menüleírás[107] = " 1- Utolsó vizsgálati adatok lapfül rögzítés/törlés, 2-Területi módosítási gombok, 3- nincs";
                 menünév[108] = "Kiadási és Javítási adatok";
                 menüleírás[108] = " 1- Napi adatok frissítése, 2- nincs, 3- nincs";
                 menünév[109] = "&Fogaskerekű adatok és ütemezés";
-                menüleírás[109] = " 1- Utolsó vizsgálati adatok lapfül rögzítés/törlés, 2-nincs, 3- nincs";
+                menüleírás[109] = " 1- Utolsó vizsgálati adatok lapfül rögzítés/törlés, 2-Területi módosítási gombok, 3- nincs";
                 menünév[110] = "TW6000 ütemezés és adatok";
                 menüleírás[110] = " 1- járműadatok lapfül rögzítés , 2-Ütemezés lapfül Előzetes terv készítés, 3- Ütemezés lapfül Vizsgálat ütemezés ";
                 menünév[111] = "TW6000 ütemezés és adatok";
@@ -719,7 +719,7 @@ namespace Villamos
                 menünév[116] = "CAF karbantartás";
                 menüleírás[116] = " 1- Előtervet készít , 2- Előtervet töröl, 3- Előtervet véglegesít ";
                 menünév[117] = "CAF karbantartás";
-                menüleírás[117] = " 1- Előjegyez a hibák közé , 2- Segédtáblás módosítások, 3- ";
+                menüleírás[117] = " 1- Előjegyez a hibák közé , 2- Segédtáblás km módosítások, 3- ";
                 menünév[118] = "CAF karbantartás";
                 menüleírás[118] = " 1-Ütemezés módosítás , 2-, 3- ";
                 menünév[119] = "CAF karbantartás";

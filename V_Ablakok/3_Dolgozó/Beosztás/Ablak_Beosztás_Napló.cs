@@ -125,6 +125,7 @@ namespace Villamos
         {
             ABFejléc();
             ABFeltöltése();
+            Tábla.CleanFilterAndSort();
             Tábla.DataSource = AdatTábla;
             OszlopSzélesség();
             Tábla.Visible = true;

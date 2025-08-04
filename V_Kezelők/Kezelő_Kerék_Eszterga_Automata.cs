@@ -79,7 +79,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Automata SET UtolsóÜzenet='{Adat.UtolsóÜzenet:yyyy.MM.dd}' WHERE FelhasználóiNév='{Adat.FelhasználóiNév}'";
+                string szöveg = $"UPDATE Automata SET UtolsóÜzenet='{Adat.UtolsóÜzenet:yyyy.MM.dd}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -127,64 +127,6 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-
-        //Elkopó
-        public List<Adat_Kerék_Eszterga_Automata> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kerék_Eszterga_Automata> Adatok = new List<Adat_Kerék_Eszterga_Automata>();
-            Adat_Kerék_Eszterga_Automata Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kerék_Eszterga_Automata(
-                                        rekord["FelhasználóiNév"].ToStrTrim(),
-                                        rekord["UtolsóÜzenet"].ToÉrt_DaTeTime()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public Adat_Kerék_Eszterga_Automata Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Kerék_Eszterga_Automata Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_Kerék_Eszterga_Automata(
-                                    rekord["FelhasználóiNév"].ToStrTrim(),
-                                    rekord["UtolsóÜzenet"].ToÉrt_DaTeTime()
-                                    );
-                        }
-                    }
-                }
-            }
-            return Adat;
         }
     }
 }

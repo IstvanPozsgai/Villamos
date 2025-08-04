@@ -140,7 +140,7 @@ namespace Villamos.Villamos_Ablakok
             this.Miótaáll_text = new System.Windows.Forms.TextBox();
             this.Státus_text = new System.Windows.Forms.TextBox();
             this.Típus_text = new System.Windows.Forms.TextBox();
-            this.alapadatRögzít = new System.Windows.Forms.Button();
+            this.btn_AlapadatRögzít = new System.Windows.Forms.Button();
             this.Típus_label = new System.Windows.Forms.Label();
             this.Státus_label = new System.Windows.Forms.Label();
             this.Miótaáll_label = new System.Windows.Forms.Label();
@@ -1098,7 +1098,7 @@ namespace Villamos.Villamos_Ablakok
             this.Alap.Controls.Add(this.Miótaáll_text);
             this.Alap.Controls.Add(this.Státus_text);
             this.Alap.Controls.Add(this.Típus_text);
-            this.Alap.Controls.Add(this.alapadatRögzít);
+            this.Alap.Controls.Add(this.btn_AlapadatRögzít);
             this.Alap.Controls.Add(this.Típus_label);
             this.Alap.Controls.Add(this.Státus_label);
             this.Alap.Controls.Add(this.Miótaáll_label);
@@ -1297,15 +1297,15 @@ namespace Villamos.Villamos_Ablakok
             this.Típus_text.Size = new System.Drawing.Size(187, 27);
             this.Típus_text.TabIndex = 206;
             // 
-            // alapadatRögzít
+            // btn_AlapadatRögzít
             // 
-            this.alapadatRögzít.Image = ((System.Drawing.Image)(resources.GetObject("alapadatRögzít.Image")));
-            this.alapadatRögzít.Location = new System.Drawing.Point(358, 5);
-            this.alapadatRögzít.Name = "alapadatRögzít";
-            this.alapadatRögzít.Size = new System.Drawing.Size(50, 50);
-            this.alapadatRögzít.TabIndex = 205;
-            this.alapadatRögzít.UseVisualStyleBackColor = true;
-            this.alapadatRögzít.Click += new System.EventHandler(this.AlapadatRögzít_Click);
+            this.btn_AlapadatRögzít.Image = ((System.Drawing.Image)(resources.GetObject("btn_AlapadatRögzít.Image")));
+            this.btn_AlapadatRögzít.Location = new System.Drawing.Point(358, 5);
+            this.btn_AlapadatRögzít.Name = "btn_AlapadatRögzít";
+            this.btn_AlapadatRögzít.Size = new System.Drawing.Size(50, 50);
+            this.btn_AlapadatRögzít.TabIndex = 205;
+            this.btn_AlapadatRögzít.UseVisualStyleBackColor = true;
+            this.btn_AlapadatRögzít.Click += new System.EventHandler(this.AlapadatRögzít_Click);
             // 
             // Típus_label
             // 
@@ -1686,7 +1686,7 @@ namespace Villamos.Villamos_Ablakok
         internal TextBox Miótaáll_text;
         internal TextBox Státus_text;
         internal TextBox Típus_text;
-        internal Button alapadatRögzít;
+        internal Button btn_AlapadatRögzít;
         internal Label Típus_label;
         internal Label Státus_label;
         internal Label Miótaáll_label;

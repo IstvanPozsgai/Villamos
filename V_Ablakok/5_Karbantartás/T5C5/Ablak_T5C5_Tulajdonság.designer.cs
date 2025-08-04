@@ -123,6 +123,7 @@ namespace Villamos
             this.Label18 = new System.Windows.Forms.Label();
             this.Label17 = new System.Windows.Forms.Label();
             this.TabPage6 = new System.Windows.Forms.TabPage();
+            this.Módosítás = new System.Windows.Forms.Button();
             this.VizsgAdat_Excel = new System.Windows.Forms.Button();
             this.VizsgAdat_Frissít = new System.Windows.Forms.Button();
             this.Tábla1 = new System.Windows.Forms.DataGridView();
@@ -1084,6 +1085,7 @@ namespace Villamos
             // TabPage6
             // 
             this.TabPage6.BackColor = System.Drawing.Color.ForestGreen;
+            this.TabPage6.Controls.Add(this.Módosítás);
             this.TabPage6.Controls.Add(this.VizsgAdat_Excel);
             this.TabPage6.Controls.Add(this.VizsgAdat_Frissít);
             this.TabPage6.Controls.Add(this.Tábla1);
@@ -1092,6 +1094,18 @@ namespace Villamos
             this.TabPage6.Size = new System.Drawing.Size(1136, 446);
             this.TabPage6.TabIndex = 5;
             this.TabPage6.Text = "Vizsgálati adatok";
+            // 
+            // Módosítás
+            // 
+            this.Módosítás.BackgroundImage = global::Villamos.Properties.Resources.Action_configure;
+            this.Módosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Módosítás.Location = new System.Drawing.Point(192, 4);
+            this.Módosítás.Name = "Módosítás";
+            this.Módosítás.Size = new System.Drawing.Size(45, 45);
+            this.Módosítás.TabIndex = 168;
+            this.ToolTip1.SetToolTip(this.Módosítás, "Frissíti a lekérdezést");
+            this.Módosítás.UseVisualStyleBackColor = true;
+            this.Módosítás.Click += new System.EventHandler(this.Módosítás_Click);
             // 
             // VizsgAdat_Excel
             // 
@@ -1585,6 +1599,7 @@ namespace Villamos
             this.Name = "Ablak_T5C5_Tulajdonság";
             this.Text = "T5C5 járművek adatai";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_T5C5_Tulajdonság_FormClosed);
             this.Load += new System.EventHandler(this.Tulajdonság_T5C5_Load);
             this.Panel2.ResumeLayout(false);
             this.Panel2.PerformLayout();
@@ -1747,5 +1762,6 @@ namespace Villamos
         internal Timer timer1;
         internal Button VizsgAdat_Excel;
         internal Button VizsgAdat_Frissít;
+        internal Button Módosítás;
     }
 }

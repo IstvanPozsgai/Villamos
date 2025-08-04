@@ -41,11 +41,6 @@ namespace Villamos
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Ciklus));
             this.Tábla = new System.Windows.Forms.DataGridView();
-            this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Excel_gomb = new System.Windows.Forms.Button();
-            this.Lekérdezés_lekérdezés = new System.Windows.Forms.Button();
-            this.Rögzít = new System.Windows.Forms.Button();
-            this.Töröl = new System.Windows.Forms.Button();
             this.CiklusTípus = new System.Windows.Forms.ComboBox();
             this.Vizsálatsorszám = new System.Windows.Forms.TextBox();
             this.Label1 = new System.Windows.Forms.Label();
@@ -59,7 +54,13 @@ namespace Villamos
             this.Alsóeltérés = new System.Windows.Forms.TextBox();
             this.Felsőeltérés = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.CiklusSorrend = new System.Windows.Forms.Button();
             this.CsoportosMásolás = new System.Windows.Forms.Button();
+            this.Töröl = new System.Windows.Forms.Button();
+            this.Rögzít = new System.Windows.Forms.Button();
+            this.Lekérdezés_lekérdezés = new System.Windows.Forms.Button();
+            this.Excel_gomb = new System.Windows.Forms.Button();
+            this.BtnSúgó = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.ÚjCiklus = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -98,67 +99,6 @@ namespace Villamos
             this.Tábla.Size = new System.Drawing.Size(555, 502);
             this.Tábla.TabIndex = 168;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            // 
-            // BtnSúgó
-            // 
-            this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(12, 260);
-            this.BtnSúgó.Name = "BtnSúgó";
-            this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
-            this.BtnSúgó.TabIndex = 169;
-            this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
-            this.BtnSúgó.UseVisualStyleBackColor = true;
-            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
-            // 
-            // Excel_gomb
-            // 
-            this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_gomb.Location = new System.Drawing.Point(12, 310);
-            this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Excel_gomb.Name = "Excel_gomb";
-            this.Excel_gomb.Size = new System.Drawing.Size(45, 45);
-            this.Excel_gomb.TabIndex = 170;
-            this.toolTip1.SetToolTip(this.Excel_gomb, "Excel táblázatot készít a táblázatból");
-            this.Excel_gomb.UseVisualStyleBackColor = true;
-            this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
-            // 
-            // Lekérdezés_lekérdezés
-            // 
-            this.Lekérdezés_lekérdezés.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Lekérdezés_lekérdezés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Lekérdezés_lekérdezés.Location = new System.Drawing.Point(233, 256);
-            this.Lekérdezés_lekérdezés.Name = "Lekérdezés_lekérdezés";
-            this.Lekérdezés_lekérdezés.Size = new System.Drawing.Size(45, 45);
-            this.Lekérdezés_lekérdezés.TabIndex = 171;
-            this.toolTip1.SetToolTip(this.Lekérdezés_lekérdezés, "Frissíti a táblázatot");
-            this.Lekérdezés_lekérdezés.UseVisualStyleBackColor = true;
-            this.Lekérdezés_lekérdezés.Click += new System.EventHandler(this.Lekérdezés_lekérdezés_Click);
-            // 
-            // Rögzít
-            // 
-            this.Rögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Rögzít.Location = new System.Drawing.Point(291, 256);
-            this.Rögzít.Name = "Rögzít";
-            this.Rögzít.Size = new System.Drawing.Size(45, 45);
-            this.Rögzít.TabIndex = 172;
-            this.toolTip1.SetToolTip(this.Rögzít, "Rögzít / Módosít");
-            this.Rögzít.UseVisualStyleBackColor = true;
-            this.Rögzít.Click += new System.EventHandler(this.Rögzít_Click);
-            // 
-            // Töröl
-            // 
-            this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Töröl.Location = new System.Drawing.Point(174, 256);
-            this.Töröl.Name = "Töröl";
-            this.Töröl.Size = new System.Drawing.Size(45, 45);
-            this.Töröl.TabIndex = 173;
-            this.toolTip1.SetToolTip(this.Töröl, "Törli az adatokat");
-            this.Töröl.UseVisualStyleBackColor = true;
-            this.Töröl.Click += new System.EventHandler(this.Töröl_Click);
             // 
             // CiklusTípus
             // 
@@ -264,6 +204,19 @@ namespace Villamos
             // 
             this.toolTip1.IsBalloon = true;
             // 
+            // CiklusSorrend
+            // 
+            this.CiklusSorrend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CiklusSorrend.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Sort_ascending1;
+            this.CiklusSorrend.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CiklusSorrend.Location = new System.Drawing.Point(12, 469);
+            this.CiklusSorrend.Name = "CiklusSorrend";
+            this.CiklusSorrend.Size = new System.Drawing.Size(40, 40);
+            this.CiklusSorrend.TabIndex = 190;
+            this.toolTip1.SetToolTip(this.CiklusSorrend, "Ciklusok sorrendisége");
+            this.CiklusSorrend.UseVisualStyleBackColor = true;
+            this.CiklusSorrend.Click += new System.EventHandler(this.CiklusSorrend_Click);
+            // 
             // CsoportosMásolás
             // 
             this.CsoportosMásolás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -276,6 +229,67 @@ namespace Villamos
             this.toolTip1.SetToolTip(this.CsoportosMásolás, "Új ciklus másolása");
             this.CsoportosMásolás.UseVisualStyleBackColor = true;
             this.CsoportosMásolás.Click += new System.EventHandler(this.CsoportosMásolás_Click);
+            // 
+            // Töröl
+            // 
+            this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Töröl.Location = new System.Drawing.Point(174, 256);
+            this.Töröl.Name = "Töröl";
+            this.Töröl.Size = new System.Drawing.Size(45, 45);
+            this.Töröl.TabIndex = 173;
+            this.toolTip1.SetToolTip(this.Töröl, "Törli az adatokat");
+            this.Töröl.UseVisualStyleBackColor = true;
+            this.Töröl.Click += new System.EventHandler(this.Töröl_Click);
+            // 
+            // Rögzít
+            // 
+            this.Rögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Rögzít.Location = new System.Drawing.Point(291, 256);
+            this.Rögzít.Name = "Rögzít";
+            this.Rögzít.Size = new System.Drawing.Size(45, 45);
+            this.Rögzít.TabIndex = 172;
+            this.toolTip1.SetToolTip(this.Rögzít, "Rögzít / Módosít");
+            this.Rögzít.UseVisualStyleBackColor = true;
+            this.Rögzít.Click += new System.EventHandler(this.Rögzít_Click);
+            // 
+            // Lekérdezés_lekérdezés
+            // 
+            this.Lekérdezés_lekérdezés.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Lekérdezés_lekérdezés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Lekérdezés_lekérdezés.Location = new System.Drawing.Point(233, 256);
+            this.Lekérdezés_lekérdezés.Name = "Lekérdezés_lekérdezés";
+            this.Lekérdezés_lekérdezés.Size = new System.Drawing.Size(45, 45);
+            this.Lekérdezés_lekérdezés.TabIndex = 171;
+            this.toolTip1.SetToolTip(this.Lekérdezés_lekérdezés, "Frissíti a táblázatot");
+            this.Lekérdezés_lekérdezés.UseVisualStyleBackColor = true;
+            this.Lekérdezés_lekérdezés.Click += new System.EventHandler(this.Lekérdezés_lekérdezés_Click);
+            // 
+            // Excel_gomb
+            // 
+            this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Excel_gomb.Location = new System.Drawing.Point(12, 310);
+            this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Excel_gomb.Name = "Excel_gomb";
+            this.Excel_gomb.Size = new System.Drawing.Size(45, 45);
+            this.Excel_gomb.TabIndex = 170;
+            this.toolTip1.SetToolTip(this.Excel_gomb, "Excel táblázatot készít a táblázatból");
+            this.Excel_gomb.UseVisualStyleBackColor = true;
+            this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
+            // 
+            // BtnSúgó
+            // 
+            this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSúgó.Location = new System.Drawing.Point(12, 260);
+            this.BtnSúgó.Name = "BtnSúgó";
+            this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
+            this.BtnSúgó.TabIndex = 169;
+            this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
+            this.BtnSúgó.UseVisualStyleBackColor = true;
+            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
             // label8
             // 
@@ -302,6 +316,7 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Peru;
             this.ClientSize = new System.Drawing.Size(909, 526);
+            this.Controls.Add(this.CiklusSorrend);
             this.Controls.Add(this.CsoportosMásolás);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.ÚjCiklus);
@@ -329,6 +344,7 @@ namespace Villamos
             this.Name = "Ablak_Ciklus";
             this.Text = "Ciklus rend definiálása";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Ablak_Ciklus_FormClosing);
             this.Load += new System.EventHandler(this.Ablak_Ciklus_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.ResumeLayout(false);
@@ -358,5 +374,6 @@ namespace Villamos
         internal Label label8;
         internal TextBox ÚjCiklus;
         internal Button CsoportosMásolás;
+        internal Button CiklusSorrend;
     }
 }

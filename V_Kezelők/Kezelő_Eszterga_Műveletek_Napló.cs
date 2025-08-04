@@ -17,14 +17,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
         // JAVÍTANDÓ:Nem jó, hogyan fogjuk a tavalyi adatokat olvasni, itt csak az aktuális év adatai vannak
         //Akkuban vannak ilyenek
-        private void FájlBeállítás(int Ev)
+        private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{Ev}_Napló.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{Év}_Napló.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartas_Naplo(hely);
         }
-        public List<Adat_Eszterga_Muveletek_Naplo> Lista_Adatok(int Ev)
+        public List<Adat_Eszterga_Muveletek_Naplo> Lista_Adatok(int Év)
         {
-            FájlBeállítás(Ev);
+            FájlBeállítás(Év);
             string szoveg = "SELECT * FROM Műveletek_Napló ORDER BY ID ";
             List<Adat_Eszterga_Muveletek_Naplo> Adatok = new List<Adat_Eszterga_Muveletek_Naplo>();
             Adat_Eszterga_Muveletek_Naplo Adat;

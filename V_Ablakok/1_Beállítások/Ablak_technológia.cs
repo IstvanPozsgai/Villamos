@@ -424,7 +424,7 @@ namespace Villamos.Villamos_Ablakok
 
                     AdatTábla.Rows.Add(Soradat);
                 }
-
+                Tábla.CleanFilterAndSort();
                 Tábla.DataSource = AdatTábla;
 
                 Tábla.Columns["ID"].Width = 70;

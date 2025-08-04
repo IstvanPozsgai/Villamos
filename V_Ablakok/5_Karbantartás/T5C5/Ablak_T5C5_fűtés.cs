@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -20,42 +17,42 @@ namespace Villamos
     {
         string MelyikAdat = "";
 
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_T5C5_Fűtés KézFűtés = new Kezelő_T5C5_Fűtés();
+        readonly Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
+
+        #region Alap
         public Ablak_T5C5_fűtés()
         {
             InitializeComponent();
             Start();
         }
 
-
-        void Start()
+        private void Start()
         {
             Telephelyekfeltöltése();
 
             // Szakszolgálati lekérdezés esetén működik csak a lekérdezés
-
             Kimutatás_készítés.Visible = Cmbtelephely.Enabled;
-
-
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{DateTime.Now.Year}\T5C5_Fűtés.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.T5C5_fűtés_tábla(hely);
             Jogosultságkiosztás();
             Dátum_év.Value = DateTime.Today;
             Dátum.Value = DateTime.Today;
 
             // virtuálisan megnyitjuk a képet
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Fűtés_beállítás.jpg";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Fűtés_beállítás.jpg";
             Kezelő_Kép.KépMegnyitás(PictureBox2, hely, ToolTip1);
             PictureBox2.Top = 10;
             PictureBox2.Left = 10;
             PictureBox2.Width = 450;
             PictureBox2.Height = 570;
             PictureBox2.Visible = false;
-        }
 
+            Dolgozófeltöltés();
+            Pályaszámok_feltöltése();
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         { }
-
 
         private void Telephelyekfeltöltése()
         {
@@ -82,21 +79,11 @@ namespace Villamos
             }
         }
 
-
-        private void Form1_Shown(object sender, EventArgs e)
-        {
-            Dolgozófeltöltés();
-            Pályaszámok_feltöltése();
-        }
-
-
-
-        #region Alap
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\T5C5_fűtés.html";
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\T5C5_fűtés.html";
                 MyE.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
@@ -109,7 +96,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -149,36 +135,11 @@ namespace Villamos
             }
         }
 
-
-        private void Fülekkitöltése()
-        {
-            switch (Fülek.SelectedIndex)
-            {
-                case 0:
-                    {
-                        break;
-                    }
-
-                case 1:
-                    {
-                        break;
-                    }
-            }
-        }
-
-
-        private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Fülekkitöltése();
-        }
-
-
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             Dolgozófeltöltés();
             Pályaszámok_feltöltése();
         }
-
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -239,15 +200,7 @@ namespace Villamos
                 Dolgozó.Text = MyF.Szöveg_Tisztítás(Dolgozó.Text, 0, 50, true); ;
                 Pályaszám.Text = MyF.Szöveg_Tisztítás(Pályaszám.Text, 0, 10, true); ;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value.Year}";
-                if (!Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value.Year}\T5C5_Fűtés.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.T5C5_fűtés_tábla(hely);
-                string jelszó = "RózsahegyiK";
-
-                string szöveg = "SELECT * FROM Fűtés_tábla";
-                Kezelő_T5C5_Fűtés Kéz = new Kezelő_T5C5_Fűtés();
-                List<Adat_T5C5_Fűtés> AdatokÖ = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_T5C5_Fűtés> AdatokÖ = KézFűtés.Lista_Adatok(Dátum.Value.Year);
 
                 long id = 1;
                 if (AdatokÖ.Count > 0) id = AdatokÖ.Max(a => a.ID) + 1;
@@ -284,7 +237,7 @@ namespace Villamos
                                                                DateTime.Now
                                                                );
 
-                Kéz.Rögzítés(hely, jelszó, AdatKüld);
+                KézFűtés.Rögzítés(Dátum.Value.Year, AdatKüld);
 
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Mezők_ürítése_szűk();
@@ -299,7 +252,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
 
         private string Jófűtés()
         {
@@ -335,9 +287,10 @@ namespace Villamos
             else
                 return "2";
         }
+        #endregion
+
+
         #region Gombok
-
-
         private void RadioButton1_CheckedChanged(object sender, EventArgs e)
         {
             Gombválasztás();
@@ -366,7 +319,6 @@ namespace Villamos
             else
                 T5C5K2_automata();
         }
-
 
         private void T5C5_fűtések()
         {
@@ -417,7 +369,6 @@ namespace Villamos
             CheckBox15.Visible = true;
         }
 
-
         private void T5C5K2_fűtések()
         {
             CheckBox1.Text = "1";
@@ -466,7 +417,6 @@ namespace Villamos
             CheckBox15.BackColor = Color.Aqua;
             CheckBox15.Visible = true;
         }
-
 
         private void T5C5K2_automata()
         {
@@ -517,12 +467,10 @@ namespace Villamos
             CheckBox15.Visible = true;
         }
 
-
         private void Btnkilelöltörlés_Click(object sender, EventArgs e)
         {
             Mezők_ürítése_check();
         }
-
 
         private void Mezők_ürítése_check()
         {
@@ -547,7 +495,6 @@ namespace Villamos
             CheckBox19.Checked = false;
         }
 
-
         private void BtnKijelölcsop_Click(object sender, EventArgs e)
         {
             CheckBox1.Checked = true;
@@ -571,12 +518,10 @@ namespace Villamos
             CheckBox19.Checked = true;
         }
 
-
         private void Beállítási_értékek_MouseLeave(object sender, EventArgs e)
         {
             PictureBox2.Visible = false;
         }
-
 
         private void Beállítási_értékek_MouseEnter(object sender, EventArgs e)
         {
@@ -593,7 +538,6 @@ namespace Villamos
                 Pályaszám.Items.Clear();
                 if (Cmbtelephely.Text.ToStrTrim() == "") return;
 
-                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
                 Adatok = (from a in Adatok
                           where a.Törölt == false
@@ -624,14 +568,8 @@ namespace Villamos
             {
                 Dolgozó.Items.Clear();
                 Dolgozó.Items.Add("");
-                string hely, jelszó, szöveg;
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                if (!File.Exists(hely)) return;
-                jelszó = "forgalmiutasítás";
-                szöveg = "SELECT * FROM Dolgozóadatok where kilépésiidő=#1/1/1900#  order by DolgozóNév asc";
 
-                Kezelő_Dolgozó_Alap Kéz = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim(), true).OrderBy(a => a.DolgozóNév).ToList();
 
                 foreach (Adat_Dolgozó_Alap Elem in Adatok)
                     Dolgozó.Items.Add(Elem.DolgozóNév);
@@ -654,7 +592,6 @@ namespace Villamos
             Mezők_ürítése_check();
         }
 
-
         private void Mezők_ürítése_szűk()
         {
             I_szakasz.Text = "";
@@ -662,7 +599,6 @@ namespace Villamos
             Megjegyzés.Text = "";
             Beállítási_értékek.Checked = false;
         }
-
 
         private void Új_elem_Click(object sender, EventArgs e)
         {
@@ -677,29 +613,23 @@ namespace Villamos
             try
             {
                 MelyikAdat = "Fő";
-                string hely, jelszó, szöveg;
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum_év.Value.Year}";
-                if (!Exists(hely)) System.IO.Directory.CreateDirectory(hely);
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum_év.Value.Year}\T5C5_Fűtés.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.T5C5_fűtés_tábla(hely);
-                jelszó = "RózsahegyiK";
-                bool minden;
+                bool minden = Lekérdezés_minden.Checked;
 
-
+                List<Adat_T5C5_Fűtés> AdatokÖ = KézFűtés.Lista_Adatok(Dátum_év.Value.Year);
                 if (Lekérdezés_minden.Checked)
                 {
                     // Minden rögzítés
-                    szöveg = "SELECT * FROM Fűtés_tábla order by pályaszám,id";
-                    minden = true;
+                    AdatokÖ = (from a in AdatokÖ
+                               orderby a.Pályaszám, a.ID
+                               select a).ToList();
                 }
                 else
                 {
                     // elemenként egy lekérdezés
-                    szöveg = "SELECT * FROM Fűtés_tábla order by pályaszám asc, id desc";
-                    minden = false;
+                    AdatokÖ = (from a in AdatokÖ
+                               orderby a.Pályaszám, a.ID descending
+                               select a).ToList();
                 }
-
-                string előzőpsz;
 
                 Lekérdezés_Tábla.Rows.Clear();
                 Lekérdezés_Tábla.Columns.Clear();
@@ -735,8 +665,6 @@ namespace Villamos
                 Lekérdezés_Tábla.Columns[12].HeaderText = "Rögzítés ideje";
                 Lekérdezés_Tábla.Columns[12].Width = 200;
 
-                Kezelő_T5C5_Fűtés Kéz = new Kezelő_T5C5_Fűtés();
-                List<Adat_T5C5_Fűtés> AdatokÖ = Kéz.Lista_Adatok(hely, jelszó, szöveg);
                 List<Adat_T5C5_Fűtés> Adatok = new List<Adat_T5C5_Fűtés>();
                 if (!Cmbtelephely.Enabled)
                     Adatok = (from a in AdatokÖ
@@ -746,8 +674,7 @@ namespace Villamos
                     Adatok.AddRange(AdatokÖ);
 
                 int i;
-
-                előzőpsz = "_";
+                string előzőpsz = "_";
                 foreach (Adat_T5C5_Fűtés rekord in Adatok)
                 {
                     if (minden == true || előzőpsz.Trim() != rekord.Pályaszám)
@@ -783,7 +710,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Lekérdezés_Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -889,15 +815,12 @@ namespace Villamos
             }
         }
 
-
         private bool Jelölt(string Betű)
         {
             bool válasz = false;
             if (Betű == "1") válasz = true;
             return válasz;
-
         }
-
 
         private bool Látszik(string Betű)
         {
@@ -905,7 +828,6 @@ namespace Villamos
             if (Betű == "0") válasz = false;
             return válasz;
         }
-
 
         private void BtnExcelkimenet_Click(object sender, EventArgs e)
         {
@@ -919,7 +841,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "T5C5_fűtés_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMdd"),
+                    FileName = $"T5C5_fűtés_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMdd}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -944,36 +866,24 @@ namespace Villamos
             }
         }
 
-
         private void PSZ_hiány_Click(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum_év.Value.Year}\T5C5_Fűtés.mdb";
-                if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben még nincsenek mérési adatok.");
                 MelyikAdat = "Kieg";
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
+                AdatokJármű = (from a in AdatokJármű
+                               where a.Törölt == false
+                               && a.Típus.Contains("T5C5")
+                               orderby a.Azonosító
+                               select a).ToList();
+                //Ha telephelyről lépünk be akkor a saját kocsikat látja csak
+                if (!Program.Postás_Vezér && Program.PostásTelephely == Cmbtelephely.Text.ToStrTrim())
+                    AdatokJármű = AdatokJármű.Where(a => a.Üzem == Cmbtelephely.Text.ToStrTrim()).ToList();
 
-                if (Cmbtelephely.Text.ToStrTrim() == "") return;
-                hely = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg;
-                // ha nem telephelyről kérdezzük le akkor minden kocsit kiír
-                int volt = 0;
+                List<Adat_T5C5_Fűtés> AdatokFűtés = KézFűtés.Lista_Adatok(Dátum_év.Value.Year);
+                if (AdatokFűtés.Count < 1) throw new HibásBevittAdat("Ebben az évben még nincsenek mérési adatok.");
 
-                for (int ij = 0; ij < Cmbtelephely.Items.Count; ij++)
-                {
-                    if (Cmbtelephely.Items[ij].ToStrTrim() == Program.PostásTelephely)
-                        volt = 1;
-                }
-                if (volt == 1)
-                {
-                    szöveg = "Select * FROM Állománytábla WHERE Üzem='" + Cmbtelephely.Text.ToStrTrim() + "' AND ";
-                    szöveg += " törölt=0 AND valóstípus Like  '%T5C5%' ORDER BY azonosító";
-                }
-                else
-                {
-                    szöveg = "Select * FROM Állománytábla WHERE  törölt=0 AND valóstípus Like  '%T5C5%' ORDER BY azonosító";
-                }
                 // feltöltjük az összes pályaszámot a Comboba
                 Lekérdezés_Tábla.Rows.Clear();
                 Lekérdezés_Tábla.Columns.Clear();
@@ -982,31 +892,18 @@ namespace Villamos
                 Lekérdezés_Tábla.ColumnCount = 3;
 
                 // fejléc elkészítése
-
                 Lekérdezés_Tábla.Columns[0].HeaderText = "Pályaszám";
                 Lekérdezés_Tábla.Columns[0].Width = 100;
                 Lekérdezés_Tábla.Columns[1].HeaderText = "Telephely";
                 Lekérdezés_Tábla.Columns[1].Width = 100;
                 Lekérdezés_Tábla.Columns[2].HeaderText = "Ellenőrzés elkészült";
                 Lekérdezés_Tábla.Columns[2].Width = 100;
-
-                Kezelő_Jármű Kéz = new Kezelő_Jármű();
-                List<Adat_Jármű> AdatokJármű = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum_év.Value.Year}\T5C5_Fűtés.mdb";
-                jelszó = "RózsahegyiK";
-                szöveg = "SELECT * FROM Fűtés_tábla";
-
-                Kezelő_T5C5_Fűtés KézFűtés = new Kezelő_T5C5_Fűtés();
-                List<Adat_T5C5_Fűtés> AdatokFűtés = KézFűtés.Lista_Adatok(hely, jelszó, szöveg);
-
                 Holtart.Be(AdatokJármű.Count + 1);
 
-                int i;
                 foreach (Adat_Jármű rekord in AdatokJármű)
                 {
                     Lekérdezés_Tábla.RowCount++;
-                    i = Lekérdezés_Tábla.RowCount - 1;
+                    int i = Lekérdezés_Tábla.RowCount - 1;
 
                     Lekérdezés_Tábla.Rows[i].Cells[0].Value = rekord.Azonosító;
                     Lekérdezés_Tábla.Rows[i].Cells[1].Value = rekord.Üzem;
@@ -1036,24 +933,15 @@ namespace Villamos
             }
         }
 
-
-
         private void Kimutatás_készítés_Click(object sender, EventArgs e)
         {
             try
             {
                 MelyikAdat = "Összesítés";
-                string hely, jelszó, szöveg;
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum_év.Value.Year}";
-                if (!Exists(hely))
-                    System.IO.Directory.CreateDirectory(hely);
-                hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum_év.Value.Year}\T5C5_Fűtés.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.T5C5_fűtés_tábla(hely);
-                jelszó = "RózsahegyiK";
-                // elemenként egy lekérdezés
-                szöveg = "SELECT * FROM Fűtés_tábla order by pályaszám asc, id desc";
-
-                string előzőpsz;
+                List<Adat_T5C5_Fűtés> AdatokFűtés = KézFűtés.Lista_Adatok(Dátum_év.Value.Year);
+                AdatokFűtés = (from a in AdatokFűtés
+                               orderby a.Pályaszám, a.ID descending
+                               select a).ToList();
 
                 Lekérdezés_Tábla.Rows.Clear();
                 Lekérdezés_Tábla.Columns.Clear();
@@ -1062,7 +950,6 @@ namespace Villamos
                 Lekérdezés_Tábla.ColumnCount = 10;
 
                 // fejléc elkészítése
-
                 Lekérdezés_Tábla.Columns[0].HeaderText = "Pályaszám";
                 Lekérdezés_Tábla.Columns[0].Width = 100;
                 Lekérdezés_Tábla.Columns[1].HeaderText = "Telephely";
@@ -1084,8 +971,6 @@ namespace Villamos
                 Lekérdezés_Tábla.Columns[9].HeaderText = "Megjegyzés";
                 Lekérdezés_Tábla.Columns[9].Width = 300;
 
-
-
                 string ideigkód = "_,1,0,2,3,4,5,6,7,0,0,8,9,0,0,10,TP1,TP4,TP2,TP3";
                 string ideigkódK = "_,1,0,2,3,0,0,6,7,0,0,8,9,0,0,10,TP1,TP4,TP2,TP3";
                 string ideigkódA = "_,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,TP1,TP4,TP2,TP3";
@@ -1093,19 +978,14 @@ namespace Villamos
                 string[] hagyományosK = ideigkódK.Split(',');
                 string[] automata = ideigkódA.Split(',');
 
-                Kezelő_T5C5_Fűtés KézFűtés = new Kezelő_T5C5_Fűtés();
-                List<Adat_T5C5_Fűtés> AdatokFűtés = KézFűtés.Lista_Adatok(hely, jelszó, szöveg);
-
-                int i;
-
-                előzőpsz = "_";
+                string előzőpsz = "_";
                 Holtart.Be(AdatokFűtés.Count + 1);
                 foreach (Adat_T5C5_Fűtés rekord in AdatokFűtés)
                 {
                     if (előzőpsz.Trim() != rekord.Pályaszám)
                     {
                         Lekérdezés_Tábla.RowCount++;
-                        i = Lekérdezés_Tábla.RowCount - 1;
+                        int i = Lekérdezés_Tábla.RowCount - 1;
                         Lekérdezés_Tábla.Rows[i].Cells[0].Value = rekord.Pályaszám;
                         előzőpsz = rekord.Pályaszám;
                         Lekérdezés_Tábla.Rows[i].Cells[1].Value = rekord.Telephely;

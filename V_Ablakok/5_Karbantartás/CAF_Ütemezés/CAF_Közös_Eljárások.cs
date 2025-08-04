@@ -175,7 +175,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // ha km alapú az utolsó, vagy ha a maximálist elérte akkor 1
                 // különben a ciklus következő elemét veszi
                 int következő = 1;
-                if (!(IDŐvKM == 1 && Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám == Idő_sorszám))
+                //if (IDŐvKM == 1)
+                //    if (Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám == Idő_sorszám)
+                //        következő = 1;
+                //    else
+                //        következő = Idő_sorszám + 1;
+
+                if (IDŐvKM == 1 && Ciklus_Idő[Ciklus_Idő.Count - 1].Sorszám != Idő_sorszám)
                     következő = Idő_sorszám + 1;
 
 

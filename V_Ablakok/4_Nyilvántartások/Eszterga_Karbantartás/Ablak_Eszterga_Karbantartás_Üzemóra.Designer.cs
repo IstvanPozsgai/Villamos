@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.Tabla = new Zuby.ADGV.AdvancedDataGridView();
             this.Btn_Excel = new System.Windows.Forms.Button();
             this.Btn_ÚjFelvétel = new System.Windows.Forms.Button();
@@ -40,7 +39,6 @@
             this.LblDátum = new System.Windows.Forms.Label();
             this.DtmPckrDátum = new System.Windows.Forms.DateTimePicker();
             this.Btn_Pdf = new System.Windows.Forms.Button();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Tabla)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,7 +80,6 @@
             this.Btn_Excel.Name = "Btn_Excel";
             this.Btn_Excel.Size = new System.Drawing.Size(60, 62);
             this.Btn_Excel.TabIndex = 260;
-            this.toolTip1.SetToolTip(this.Btn_Excel, "Excel táblázatot készít a táblázat adataiból");
             this.Btn_Excel.UseVisualStyleBackColor = false;
             this.Btn_Excel.Click += new System.EventHandler(this.Btn_Excel_Click);
             // 
@@ -99,7 +96,6 @@
             this.Btn_ÚjFelvétel.Name = "Btn_ÚjFelvétel";
             this.Btn_ÚjFelvétel.Size = new System.Drawing.Size(60, 62);
             this.Btn_ÚjFelvétel.TabIndex = 259;
-            this.toolTip1.SetToolTip(this.Btn_ÚjFelvétel, "Új üzemóra hozzáadása");
             this.Btn_ÚjFelvétel.UseVisualStyleBackColor = false;
             this.Btn_ÚjFelvétel.Click += new System.EventHandler(this.Btn_ÚjFelvétel_Click);
             // 
@@ -125,7 +121,6 @@
             this.Btn_Módosít.Name = "Btn_Módosít";
             this.Btn_Módosít.Size = new System.Drawing.Size(60, 62);
             this.Btn_Módosít.TabIndex = 252;
-            this.toolTip1.SetToolTip(this.Btn_Módosít, "Üzemóra rögzítése");
             this.Btn_Módosít.UseVisualStyleBackColor = false;
             this.Btn_Módosít.Click += new System.EventHandler(this.Btn_Módosít_Click);
             // 
@@ -197,13 +192,8 @@
             this.Btn_Pdf.Name = "Btn_Pdf";
             this.Btn_Pdf.Size = new System.Drawing.Size(60, 62);
             this.Btn_Pdf.TabIndex = 262;
-            this.toolTip1.SetToolTip(this.Btn_Pdf, "PDF készítés a táblázat adataiból");
             this.Btn_Pdf.UseVisualStyleBackColor = false;
             this.Btn_Pdf.Click += new System.EventHandler(this.Btn_Pdf_Click);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.IsBalloon = true;
             // 
             // Ablak_Eszterga_Karbantartás_Üzemóra
             // 
@@ -248,6 +238,5 @@
         internal System.Windows.Forms.Label LblDátum;
         internal System.Windows.Forms.DateTimePicker DtmPckrDátum;
         internal System.Windows.Forms.Button Btn_Pdf;
-        internal System.Windows.Forms.ToolTip toolTip1;
     }
 }

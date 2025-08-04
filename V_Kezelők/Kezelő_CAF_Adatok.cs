@@ -64,7 +64,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        private List<Adat_CAF_Adatok> ElőzőÉvek(int Év)
+        public List<Adat_CAF_Adatok> ElőzőÉvek(int Év)
         {
             List<Adat_CAF_Adatok> Válasz = new List<Adat_CAF_Adatok>();
             try
@@ -108,29 +108,6 @@ namespace Villamos.Kezelők
                                 && a.IDŐvKM == 2
                                 orderby a.Dátum descending
                                 select a).FirstOrDefault();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Adat;
-        }
-
-        public Adat_CAF_Adatok Egy_Adat_Id(double Id)
-        {
-            Adat_CAF_Adatok Adat = null;
-            try
-            {
-                List<Adat_CAF_Adatok> Adatok = Lista_Adatok();
-                if (Adatok.Count > 0)
-                    Adat = (from a in Adatok
-                            where a.Id == Id
-                            select a).FirstOrDefault();
             }
             catch (HibásBevittAdat ex)
             {
@@ -463,12 +440,6 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        // JAVÍTANDÓ:Nem kell külön eljárás erre  ezt kell kiegészíteni:Ütemez
-        // KÉSZ✔
-
-        // JAVÍTANDÓ:Ez is felesleges, mert a Módosítás_Státus-t kellene használni kicsit átalakítva
-        // KÉSZ✔
 
         public void Törlés(DateTime Dátum, string Azonosító, int státus = 0)
         {

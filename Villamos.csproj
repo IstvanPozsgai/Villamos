@@ -114,12 +114,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Holtart.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Messaging" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -131,10 +134,11 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources1.Designer.cs">
+    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -192,6 +196,12 @@
     </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.Designer.cs">
       <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.Designer.cs">
+      <DependentUpon>Ablak_Ciklus_Sorrend.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_technológia.cs">
       <SubType>Form</SubType>
@@ -254,12 +264,6 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Módosít.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Napló.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Napló.Designer.cs">
-      <DependentUpon>Ablak_Eszterga_Karbantartás_Napló.cs</DependentUpon>
-    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -271,6 +275,18 @@
     </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Üzemóra.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Üzemóra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.Designer.cs">
+      <DependentUpon>Ablak_CAF_Részletes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Karbantartás_Közös\Karbantartás_Rögzítés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Karbantartás\Karbantartás_Közös\Karbantartás_Rögzítés.Designer.cs">
+      <DependentUpon>Karbantartás_Rögzítés.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_Felmentés.cs">
       <SubType>Form</SubType>
@@ -290,6 +306,8 @@
     <Compile Include="V_Ablakok\2_Információ\Ablak_Utasítás_Generálás.Designer.cs">
       <DependentUpon>Ablak_Utasítás_Generálás.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Ciklus_Sorrend.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Műveletek_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Üzemóra.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_KM.cs">
@@ -623,11 +641,11 @@
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_Lista.Designer.cs">
       <DependentUpon>Ablak_Caf_Lista.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.cs">
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes_WIP.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.Designer.cs">
-      <DependentUpon>Ablak_CAF_Részletes.cs</DependentUpon>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes_WIP.Designer.cs">
+      <DependentUpon>Ablak_CAF_Részletes_WIP.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Segéd.cs">
       <SubType>Form</SubType>
@@ -788,6 +806,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Terjesztés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tevékenység.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szabadságok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_MEO_KerékMérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Users.cs" />
@@ -1304,7 +1323,7 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_nyomtatványok.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Felhasználó.resx">
       <DependentUpon>Ablak_Felhasználó.cs</DependentUpon>
@@ -1330,6 +1349,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.resx">
       <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.resx">
+      <DependentUpon>Ablak_Ciklus_Sorrend.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_technológia.resx">
       <DependentUpon>Ablak_technológia.cs</DependentUpon>
@@ -1360,9 +1382,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.resx">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Módosít.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Napló.resx">
-      <DependentUpon>Ablak_Eszterga_Karbantartás_Napló.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.resx">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Segéd.cs</DependentUpon>
@@ -1427,6 +1446,9 @@
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_KM.resx">
       <DependentUpon>Ablak_CAF_KM.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.resx">
+      <DependentUpon>Ablak_CAF_Részletes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.resx">
       <DependentUpon>Ablak_Tulajdonságok_CAF.cs</DependentUpon>
     </EmbeddedResource>
@@ -1435,6 +1457,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Karbantartás\Ablak_Karbantartási_adatok.resx">
       <DependentUpon>Ablak_Karbantartási_adatok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Karbantartás_Közös\Karbantartás_Rögzítés.resx">
+      <DependentUpon>Karbantartás_Rögzítés.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Nosztalgia\Ablak_Nosztalgia.resx">
       <DependentUpon>Ablak_Nosztalgia.cs</DependentUpon>
@@ -1550,8 +1575,8 @@
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_Lista.resx">
       <DependentUpon>Ablak_Caf_Lista.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.resx">
-      <DependentUpon>Ablak_CAF_Részletes.cs</DependentUpon>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes_WIP.resx">
+      <DependentUpon>Ablak_CAF_Részletes_WIP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Segéd.resx">
       <DependentUpon>Ablak_CAF_Segéd.cs</DependentUpon>
@@ -1696,6 +1721,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\J_eleje.ico" />
+    <None Include="Resources\V1_Plusz.ico" />
+    <None Include="Resources\V1_B.ico" />
+    <None Include="Resources\CiklusLéptetés.ico" />
+    <None Include="Resources\Fatcow-Farm-Fresh-Group-stroke.ico" />
+    <None Include="Resources\Fatcow-Farm-Fresh-Sort-ascending1.ico" />
+    <None Include="Resources\Fatcow-Farm-Fresh-Sort-ascending.ico" />
+    <None Include="Resources\SorbaRendezés.ico" />
     <None Include="Resources\pdf.ico" />
     <None Include="Resources\justice-297629_1280.png" />
     <None Include="Resources\Graphicloads-Colorful-Long-Shadow-Arrow-download-3.ico" />
@@ -1961,7 +1994,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

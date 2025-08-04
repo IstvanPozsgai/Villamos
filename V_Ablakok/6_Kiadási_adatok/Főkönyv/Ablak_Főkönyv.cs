@@ -1674,7 +1674,7 @@ namespace Villamos
 
                     AdatTábla.Rows.Add(Soradat);
                 }
-
+                ZSER_tábla.CleanFilterAndSort();
                 ZSER_tábla.DataSource = AdatTábla;
 
                 ZSER_tábla.Columns["Visz."].Width = 70;
@@ -1829,6 +1829,8 @@ namespace Villamos
 
                     AdatTábla.Rows.Add(Soradat);
                 }
+
+                ZSER_tábla_idő.CleanFilterAndSort();
                 ZSER_tábla_idő.DataSource = AdatTábla;
 
                 ZSER_tábla_idő.Columns["Visz."].Width = 70;
@@ -1943,6 +1945,7 @@ namespace Villamos
 
                     AdatTábla.Rows.Add(Soradat);
                 }
+                NapiTábla.CleanFilterAndSort();
                 NapiTábla.DataSource = AdatTábla;
 
                 NapiTábla.Columns["Státus"].Width = 150;

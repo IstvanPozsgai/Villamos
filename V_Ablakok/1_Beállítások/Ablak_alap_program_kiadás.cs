@@ -3948,6 +3948,7 @@ namespace Villamos
 
                     AdatTábla.Rows.Add(Soradat);
                 }
+                TáblaKapcsolatKapcsolt.CleanFilterAndSort();
                 TáblaKapcsolatKapcsolt.DataSource = AdatTábla;
 
                 TáblaKapcsolatKapcsolt.Columns["Sorszám"].Width = 80;

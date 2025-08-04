@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
@@ -20,6 +21,8 @@ namespace Villamos
     public partial class Ablak_Fogaskerekű_Tulajdonságok
     {
         long utolsósor;
+        long JelöltSor = -1;
+        long TáblaUtolsóSor = -1;
         string _fájlexc;
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
@@ -58,6 +61,11 @@ namespace Villamos
 
         private void Tulajdonságok_Fogaskerekű_Load(object sender, EventArgs e)
         {
+        }
+
+        private void Ablak_Fogaskerekű_Tulajdonságok_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Karbantartás_Rögzítés?.Close();
         }
 
         private void Telephelyekfeltöltése()
@@ -713,6 +721,7 @@ namespace Villamos
                     Tábla1.RowCount++;
                     int i = Tábla1.RowCount - 1;
                     Tábla1.Rows[i].Cells[0].Value = rekord.ID;
+                    TáblaUtolsóSor = rekord.ID;
                     Tábla1.Rows[i].Cells[1].Value = rekord.Azonosító;
                     Tábla1.Rows[i].Cells[2].Value = rekord.Vizsgfok;
                     Tábla1.Rows[i].Cells[3].Value = rekord.Vizsgsorszám;
@@ -771,6 +780,7 @@ namespace Villamos
             if (e.RowIndex < 0) return;
 
             Sorszám.Text = Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            if (!long.TryParse(Tábla1.Rows[e.RowIndex].Cells[0].Value.ToString(), out JelöltSor)) JelöltSor = -1;
 
             Vizsg_sorszám_combo.Text = Tábla1.Rows[e.RowIndex].Cells[3].Value.ToString();
             Vizsgfok_új.Text = Tábla1.Rows[e.RowIndex].Cells[2].Value.ToString();
@@ -800,9 +810,9 @@ namespace Villamos
             KövV2km.Text = (int.Parse(KMUkm.Text) - int.Parse(KövV2_számláló.Text)).ToString();
 
 
-            Fülek.SelectedIndex = 1;
+            //    Fülek.SelectedIndex = 1;
         }
-        #endregion
+
 
         /// <summary>
         /// Frissíti a táblázat adatait
@@ -858,6 +868,50 @@ namespace Villamos
             }
         }
 
+        Karbantartás_Rögzítés Új_Karbantartás_Rögzítés;
+        private void RögzítésAblak()
+        {
+            Adat_T5C5_Kmadatok adat = (from a in AdatokKm
+                                       where a.ID == JelöltSor
+                                       select a).FirstOrDefault();
+            if (adat == null) return;
+            bool Utolsó = JelöltSor == TáblaUtolsóSor;
+
+            Új_Karbantartás_Rögzítés?.Close();
+
+            Új_Karbantartás_Rögzítés = new Karbantartás_Rögzítés("SGP", adat, Utolsó);
+            Új_Karbantartás_Rögzítés.FormClosed += Karbantartás_Rögzítés_FormClosed;
+            Új_Karbantartás_Rögzítés.Változás += Kiirjaatörténelmet;
+            Új_Karbantartás_Rögzítés.Show();
+
+        }
+
+        private void Karbantartás_Rögzítés_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Karbantartás_Rögzítés = null;
+        }
+
+        private void Módosítás_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (JelöltSor == -1) return;
+                if (TáblaUtolsóSor == -1) return;
+                RögzítésAblak();
+                JelöltSor = -1;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
 
         #region Rögzítés lap
         /// <summary>
@@ -2239,6 +2293,7 @@ namespace Villamos
         }
         #endregion
 
+
         #region ListákFeltöltése
         private void KerékadatokListaFeltöltés()
         {
@@ -2263,5 +2318,7 @@ namespace Villamos
             }
         }
         #endregion
+
+
     }
 }

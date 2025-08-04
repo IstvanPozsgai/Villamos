@@ -203,26 +203,32 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
 
         #region Kiírások
+        // JAVÍTANDÓ: WIN-be átvittem  Mivel az ID nem folytonos, ezért nem használható az előző vizsgálatra
         private void AdatokKiírása()
         {
             try
             {
-                Adat_CAF_Adatok Adat = KézAdatok.Egy_Adat_Id(Posta_Segéd.Sorszám);
-                KiírEgyAdatot(Adat);
-                Adat = KézAdatok.Egy_Adat_Id_Előző(Posta_Segéd.Azonosító.Trim(), Posta_Segéd.Sorszám);
-                KiírElőzőAdatot(Adat);
-                if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
-                {
-                    Ütem_Köv_Számláló.ReadOnly = false;
-                }
-                else
-                {
-                    Ütem_Köv_Számláló.ReadOnly = true;
-                }
+                List<Adat_CAF_Adatok> Adatok = KézAdatok.Lista_Adatok();
+                //kiírjuk azt a sorszámot, amire rá kattintottunk
+                Adat_CAF_Adatok Adat = (from a in Adatok
+                                        where a.Id == Posta_Segéd.Sorszám
+                                        select a).FirstOrDefault();
+                if (Adat != null) KiírEgyAdatot(Adat);
+
+                //Kiírjuk azokat az adatokat ami megelőzte a kiválasztottat
+                Adat = (from a in Adatok
+                        where a.Azonosító.Trim() == Ütem_pályaszám.Text.Trim()
+                        && a.Státus < 8 // nem  törölt
+                        && a.Dátum < Ütem_Köv_Dátum.Value
+                        orderby a.Dátum descending
+                        select a).FirstOrDefault();
+                if (Adat != null) KiírElőzőAdatot(Adat);
+
+                Ütem_Köv_Számláló.ReadOnly = Ütem_Köv_Státus.SelectedItem.ToString() != "6- Elvégzett";
 
                 if ((int.Parse(Ütem_számláló.Text) > int.Parse(Ütem_Köv_Számláló.Text) || int.Parse(Ütem_számláló.Text) == 0) && Ütem_státus.SelectedItem.ToString() == "6- Elvégzett")
                 {
-                    Ütem_számláló.BackColor = Color.Red;
+                    Ütem_Köv_Számláló.BackColor = Color.LightPink;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -292,20 +298,35 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
+        // JAVÍTANDÓ:
+        // Olvasás után töröld Kezdet: int.tryParse, helyett használd a .ToÉrt_Int() fejlesztett függvényt
+        // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
+        // hogy nincs havi km, kivéve ha törött/selejtes.
+        // Nem tenném bele catch mert későbbiek folyamán a ki nem töltött mező problémát fog okozni
+        // Azért, hogy ne okozzon hibát javítottam, de nem tekintem véglegesnek a megoldást.
+        // Olvasás után töröld Vége:
         private void KiírJobbOldal()
         {
             try
             {
                 KM_ciklus_kiirás();
-                int KM_felső = int.TryParse(Ütem_KM_felső.Text, out KM_felső) ? KM_felső : 0;
+                int KM_felső = Ütem_KM_felső.Text.ToÉrt_Int();
                 Ütem_számláló_KM.Text = EgyCAF.Számláló.ToString();
                 Ütem_Utolsó_futott.Text = (EgyCAF.KMUkm - EgyCAF.Számláló).ToString();
                 Ütem_km_KMU.Text = EgyCAF.KMUkm.ToString();
                 Ütem_havifutás.Text = EgyCAF.Havikm.ToString();
+                //Meg kell kérdezni,hogy mit csináljon akkor ha nincs havifutás, ha áll akkor nem okoz proplémát,
+                //ha indult és még nincs havi adata, akkor továbbra sem ütemezi.
+                //Megoldások
+                //* Ha hosszú állás után elkészült, akkor kézzel kell a havi km-t nulláról átállítani valamilyen számra
+                //* Ha 0 lenne akkor a típus átlagos futással fog számolni a program és a beütemezett vizsgálatokat ki kell törölni a tervből.
+                //Mindkét javaslatommal felhasználói beavatkozást igényel
                 Ütem_Napkm.Text = ((int)(EgyCAF.Havikm / 30)).ToString();
-                // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
-                // hogy nincs havi km, kivéve ha törött/selejtes.
-                Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
+                // JAVÍTANDÓ: Módosítani szükséges  ezzel ki van küszöbölve a 0-val való osztás
+                if ((EgyCAF.Havikm / 30) <= 100)
+                    Ütem_KM_futhatmég.Text = (KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)).ToString();
+                else
+                    Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
             }
             catch (Exception ex)
             {
@@ -681,8 +702,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 if (!long.TryParse(Ütem_Köv_Számláló.Text.Trim(), out long számláló)) számláló = 0;
                 if (!long.TryParse(Ütem_számláló.Text.Trim(), out long eszámláló)) eszámláló = 0;
-                if (számláló <= eszámláló && Ütem_Köv_Státus.Text.Substring(0, 1) == "6")
-                    throw new HibásBevittAdat($"Az adatok rögzítése sikertelen!\nAz új számláló állása kevesebb, mint az előző!\n({Ütem_számláló.Text} km)");
+                if (Ütem_Köv_Státus.Text.Substring(0, 1) == "6" && eszámláló > számláló)
+                    throw new HibásBevittAdat($"Az adatok rögzítése sikertelen!\nAz új számláló állása {számláló}km kevesebb,\n mint az előző {eszámláló}km !");
+
                 if (Ütem_pályaszám.Text.Trim() == "") return;
                 if (Ütem_Köv_Vizsgálat.Text.Trim() == "") return;
                 if (!int.TryParse(MyF.Szöveg_Tisztítás(Ütem_Köv_Státus.Text, 0, 1), out int státus)) return;
@@ -708,8 +730,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 KézAdatok.Döntés(ADAT);
                 Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -721,6 +741,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
         #endregion
 
 

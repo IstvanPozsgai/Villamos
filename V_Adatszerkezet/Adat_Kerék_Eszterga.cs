@@ -80,6 +80,9 @@ namespace Villamos.Villamos_Adatszerkezet
 
         public bool Marad { get; set; }
 
+        public DateTime Dátumtól { get; private set; }
+        public DateTime Dátumig { get; private set; }
+
         public Adat_Kerék_Eszterga_Naptár(DateTime idő, bool munkaidő, bool foglalt, string pályaszám, string megjegyzés, long betűSzín, long háttérSzín, bool marad)
         {
             Idő = idő;
@@ -108,7 +111,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Idő = idő;
         }
 
+        public Adat_Kerék_Eszterga_Naptár(bool munkaidő, DateTime dátumtól, DateTime dátumig)
+        {
+            Munkaidő = munkaidő;
+            Dátumtól = dátumtól;
+            Dátumig = dátumig;
+        }
     }
+
 
     public class Adat_Kerék_Eszterga_Tevékenység
     {

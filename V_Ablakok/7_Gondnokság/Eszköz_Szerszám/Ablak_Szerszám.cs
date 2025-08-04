@@ -557,6 +557,7 @@ namespace Villamos
                 // fejléc elkészítése
                 AdatCikk_Fejléc();
                 AdatCikk_Tartalom();
+                Alap_tábla.CleanFilterAndSort();
                 Alap_tábla.DataSource = AdatTáblaCikk;
                 CikkOszlopSzélesség();
                 Alap_tábla.Visible = true;
@@ -948,6 +949,7 @@ namespace Villamos
 
                     AdatTáblaKönyv.Rows.Add(Soradat);
                 }
+                Könyv_tábla.CleanFilterAndSort();
                 Könyv_tábla.DataSource = AdatTáblaKönyv;
 
                 Könyv_tábla.Columns["Könyvszám"].Width = 100;
@@ -1218,6 +1220,7 @@ namespace Villamos
 
                 Lekérd_Tábla.Visible = false;
                 AdatTáblaLekérd.Clear();
+                Lekérd_Tábla.CleanFilterAndSort();
                 Lekérd_Tábla_Fejléc();
                 Lekérd_Tábla_tartalom();
                 Lekérd_Tábla.DataSource = AdatTáblaLekérd;
@@ -1443,6 +1446,7 @@ namespace Villamos
             {
                 Lekérd_Tábla.Visible = false;
                 AdatTáblaLekérd.Clear();
+                Lekérd_Tábla.CleanFilterAndSort();
                 Lekérd_Tábla_Fejléc();
                 Lekérd_Tábla_tartalom_Anyag();
                 Lekérd_Tábla.DataSource = AdatTáblaLekérd;
@@ -1609,7 +1613,7 @@ namespace Villamos
                             AdatTáblaLekérd.Rows.Add(Soradat);
                             Holtart.Lép();
                         }
-
+                        Lekérd_Tábla.CleanFilterAndSort();
                         Lekérd_Tábla.DataSource = AdatTáblaLekérd;
                         Lekérd_Tábla_Szélesség();
                         Lekérd_Tábla.Visible = true;
@@ -2281,6 +2285,7 @@ namespace Villamos
             {
                 Napló_Tábla.Visible = false;
                 AdatTáblaNapló.Clear();
+                Napló_Tábla.CleanFilterAndSort();
                 Napló_Fejléc();
                 Napló_Tartalom();
                 Napló_Tábla.DataSource = AdatTáblaNapló;
@@ -3015,6 +3020,7 @@ namespace Villamos
 
                     Holtart.Lép();
                 }
+                Könyvelés_tábla.CleanFilterAndSort();
                 Könyvelés_tábla.DataSource = AdatTáblaKönyvelés;
 
                 Könyvelés_tábla.Columns["Azonosító"].Width = 200;
