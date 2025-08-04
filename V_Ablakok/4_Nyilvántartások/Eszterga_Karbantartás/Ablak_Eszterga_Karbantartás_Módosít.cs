@@ -23,19 +23,15 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
         private bool frissul = false;
         DataTable AdatTablaMuvelet = new DataTable();
-        DataTable AdatTablaUtolag = new DataTable();
-        DataTable AdatTablaNaplo = new DataTable();
         #endregion
 
         #region Listák
         List<Adat_Eszterga_Muveletek> AdatokMuvelet = new List<Adat_Eszterga_Muveletek>();
         List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
-        List<Adat_Eszterga_Muveletek_Naplo> AdatokMuveletNaplo = new List<Adat_Eszterga_Muveletek_Naplo>();
         #endregion
 
         #region Kezelők
         readonly Kezelő_Eszterga_Műveletek Kez_Muvelet = new Kezelő_Eszterga_Műveletek();
-        readonly Kezelő_Eszterga_Műveletek_Napló Kez_Muvelet_Naplo = new Kezelő_Eszterga_Műveletek_Napló();
         readonly Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
         #endregion
 
@@ -80,6 +76,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 Btn_Törlés.Visible = Baross;
                 Btn_ÚjFelvétel.Visible = Baross;
                 Btn_Csere.Visible = Baross;
+                Btn_Naplo_Oldal.Visible = Baross;
 
                 // módosítás 1 
                 //Ablak_Eszterga_Karbantartás_Segéd oldal használja az 1. módosításokat
@@ -462,9 +459,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// </summary>
         private void TablaSzinezes(DataGridView tabla)
         {
-            if (!tabla.Columns.Contains("Státusz"))
-                return;
-
             foreach (DataGridViewRow sor in tabla.Rows)
             {
                 // JAVÍTANDÓ:

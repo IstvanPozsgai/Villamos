@@ -111,6 +111,7 @@
             this.TablaMuvelet.Size = new System.Drawing.Size(700, 314);
             this.TablaMuvelet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TablaMuvelet.TabIndex = 47;
+            this.TablaMuvelet.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.TablaMuvelet_DataBindingComplete);
             this.TablaMuvelet.SelectionChanged += new System.EventHandler(this.TablaMuvelet_SelectionChanged);
             // 
             // TablaNaplo

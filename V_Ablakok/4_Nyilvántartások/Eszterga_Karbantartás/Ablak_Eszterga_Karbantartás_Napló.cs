@@ -14,7 +14,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
     public partial class Ablak_Eszterga_Karbantartás_Napló : Form
     {
         public delegate void Event_Kidobo();
-
+        //hiba a rogzitesnel uzemorat rogziti amikor nem is kellene, tovabb megy amikor ki kene dobnia. 
+        //databindingot elhanyagolni mas mod a szinezesre keresni egy masik oldalon 
+        //ugyanezek a modosit oldalra
         #region Osztalyszintű elemek
 
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
@@ -88,14 +90,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void TablaSzinezes(DataGridView tabla)
         {
-            if (!tabla.Columns.Contains("Státusz"))
-                return;
-
             foreach (DataGridViewRow sor in tabla.Rows)
             {
-                // JAVÍTANDÓ:
-                //kesz
-                string statusz = sor.Cells["Státusz"].Value?.ToString().Trim();
+                string statusz = sor.Cells["Státusz"].Value?.ToStrTrim();
 
                 if (statusz == "Törölt")
                 {
@@ -125,6 +122,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
+                TablaNaplo.CleanFilterAndSort();
                 TablaNaplo.DataSource = null;
                 AdatTablaNaplo = new DataTable();
                 AdatTablaNaplo.Columns.Add("Művelet Sorszáma");
@@ -156,7 +154,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 }
 
                 TablaNaplo.DataSource = AdatTablaNaplo;
-
                 OszlopSzelessegNaplo();
 
                 for (int i = 0; i < TablaNaplo.Columns.Count; i++)
@@ -198,6 +195,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             try
             {
+                TablaMuvelet.CleanFilterAndSort();
                 TablaMuvelet.DataSource = null;
                 AdatTablaMuvelet = new DataTable();
                 AdatTablaMuvelet.Columns.Clear();
@@ -343,19 +341,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 string megjegyzes = TxtBxMegjegyzes.Text.Trim();
 
                 if(!UjUzemora(datum, false))
-                    Eredmeny = false;
-
-                //if (txtBxUzemora.Enabled)
-                //{
-                //    if (!int.TryParse(txtBxUzemora.Text, out int uzemora))
-                //    {
-                //        return false;
-                //        throw new HibásBevittAdat("Hibás üzemóra érték! Kérlek, csak számot adj meg.");
-                //    }
-                //    bool sikeres = UjUzemoraHozzaadasa(datum, uzemora, false);
-                //    if (!sikeres)
-                //        return false;
-                //}
+                    return false;
 
                 List<Adat_Eszterga_Muveletek_Naplo> naploLista = new List<Adat_Eszterga_Muveletek_Naplo>();
                 foreach (DataGridViewRow sor in TablaMuvelet.SelectedRows)
@@ -679,5 +665,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             finally { frissul = false; }
         }
         #endregion
+
+        private void TablaMuvelet_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            TablaSzinezes(TablaMuvelet);
+        }
     }
 }
