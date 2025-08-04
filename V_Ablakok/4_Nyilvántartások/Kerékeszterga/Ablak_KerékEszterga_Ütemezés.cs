@@ -897,11 +897,11 @@ namespace Villamos.Villamos_Ablakok
             {
                 //Beolvassuk az adatokat
                 Adatok_Beoszt_Új = Kezelő_Beoszt_Új.Lista_Adatok(Telephely.Trim(), Dátumtól, true);
-
-                if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumtól, Dátumtól, Dátumig, true);
                 //ha nem ugyanabban a hónapban van a két dátum és van adat a két idő között, akkor töröljük az eddigi adatokat.
                 if (Dátumtól.Month != Dátumig.Month)
-                    if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumig, Dátumtól, Dátumig, true);
+                    if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumtól, Dátumtól, Dátumig, true);
+                    else
+                     if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumig, Dátumtól, Dátumig, true);
             }
             catch (HibásBevittAdat ex)
             {
