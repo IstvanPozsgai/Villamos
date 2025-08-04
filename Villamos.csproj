@@ -264,6 +264,12 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.Designer.cs">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Módosít.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Napló.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Napló.Designer.cs">
+      <DependentUpon>Ablak_Eszterga_Karbantartás_Napló.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1382,6 +1388,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Módosít.resx">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Módosít.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Napló.resx">
+      <DependentUpon>Ablak_Eszterga_Karbantartás_Napló.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Eszterga_Karbantartás\Ablak_Eszterga_Karbantartás_Segéd.resx">
       <DependentUpon>Ablak_Eszterga_Karbantartás_Segéd.cs</DependentUpon>
