@@ -286,39 +286,43 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Ütem_megjegyzés.Text = rekord.Megjegyzés.Trim();
                     Ütem_dátum_program.Value = rekord.Dátum_program;
 
+                    Teszt_Feltolt();
+
+                    Adat_CAF_KM_Attekintes teszt_adat = KézCafKm.Egy_Adat(rekord.Azonosító);
+
                     /// P0: határ -1400
-                    tb_futhatmeg_p0.Text = $"{Kovetkezo_P0_Vizsgalat_KM_Erteke(rekord.Azonosító)}";
+                    tb_futhatmeg_p0.Text = $"{teszt_adat.kov_p0}";
                     SzinezdFuthatMeg(tb_futhatmeg_p0, 1400);
 
                     // P1: határ -7000
-                    tb_futhatmeg_p1.Text = $"{Kovetkezo_P1_Vizsgalat_KM_Erteke(rekord.Azonosító)}";
+                    tb_futhatmeg_p1.Text = $"{teszt_adat.kov_p1}";
                     SzinezdFuthatMeg(tb_futhatmeg_p1, 7000);
 
                     // P2: határ -28000
-                    tb_futhatmeg_p2.Text = $"{Kovetkezo_P2_Vizsgalat_KM_Erteke(rekord.Azonosító)}";
+                    tb_futhatmeg_p2.Text = $"{teszt_adat.kov_p2}";
                     SzinezdFuthatMeg(tb_futhatmeg_p2, 28000);
 
 
                     // Megtett P0
-                    tb_megtett_p0.Text = $"{P0_vizsgalatok_kozott_megtett_KM_Erteke(rekord.Azonosító)}";
+                    tb_megtett_p0.Text = $"{teszt_adat.utolso_p0_kozott}";
                     SzinezdTextBox(tb_megtett_p0, 14000, 15400);
 
                     // Megtett P1
-                    tb_megtett_p1.Text = $"{P1_vizsgalatok_kozott_megtett_KM_Erteke(rekord.Azonosító)}";
+                    tb_megtett_p1.Text = $"{teszt_adat.utolso_p1_kozott}";
                     SzinezdTextBox(tb_megtett_p1, 70000, 77000);
 
                     // P2 rendben
-                    tb_rendben_p2.Text = $"{Elso_P2_rendben_van_e(rekord.Azonosító)}";
+                    tb_rendben_p2.Text = $"{teszt_adat.elso_p2}";
                     SzinezdTextBox(tb_rendben_p2, 280000, 308000);
 
                     // P3 rendben
-                    tb_rendben_p3.Text = $"{Elso_P3_rendben_van_e(rekord.Azonosító)}";
+                    tb_rendben_p3.Text = $"{teszt_adat.elso_p3}";
                     SzinezdTextBox(tb_rendben_p3, 560000, 616000);
 
                     // P3–P2 közötti futás
-                    tb_p3_p2_kozott.Text = $"{Utolso_P3_es_P2_kozotti_futas(rekord.Azonosító)}";
+                    tb_p3_p2_kozott.Text = $"{teszt_adat.utolso_p3_es_p2_kozott}";
                     SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
-                    Teszt_Feltolt();
+                                       
                 }
             }
             catch (HibásBevittAdat ex)
@@ -846,201 +850,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
 
         #region KM vizsgálatok
-        // JAVÍTANDÓ: a ciklusrendben van meghatározva, hogy mennyi km van egy vizsgálat között.
-        //Tételezzük fel, hogy változik az üzemeltetési tapasztalatok alapján, vagy gazdasági okokból a 14 helyett 15 lesz a következő vizsgálat.
-        //Akkor valakinek tudnia kell programozni, hogy ezt átírja. 
-        //Próbálj általánosítani.
-        const int Vizsgalatok_Kozott_Megteheto_Km = 14000;
-
-        // Visszaadja az összes ADB-t összefűzve. Muszáj végigmenni rajtuk. Sebességben picit jobb, mintha egyesével beolvassa őket.
-        // Ezt kiszervezem a kezelőbe.
-        private IEnumerable<Adat_CAF_Adatok> ÖsszesCAFAdat()
-        {
-            return KézAdatok.Lista_Adatok()
-                .Concat(Enumerable.Range(2016, DateTime.Now.Year - 2016 + 1)
-                    .SelectMany(ev => KézAdatok.ElőzőÉvek(ev)));
-        }
-
-        // Itt a metódusokban lévő utolsó KM kivételeket egységesíteni kell.
-        private long Kovetkezo_P0_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
-        {
-            // Kiveszi az utolsó teljesített km alapú vizsgálatot.
-            Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
-                                                       .OrderByDescending(a => a.Dátum)
-                                                       .First();
-            // Visszaadja a következő P vizsgálat KM várt értékét.
-
-            return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
-
-        }
-
-        // Ez már benne van a kezelőben félig meddig, overload-olva beleteszem ezt a verziót is később
-        private long Utolso_KM_Vizsgalat_Erteke(string Aktualis_palyaszam)
-        {
-            // Kiveszi az utolsó teljesített km alapú vizsgálatot.
-            Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
-                                                       .OrderByDescending(a => a.Dátum)
-                                                       .First();
-            // Visszaadja a következő sorszámú vizsgálat KM várt értékét.
-            return Adott_Villamos.Számláló;
-
-        }
-
-        private long Kovetkezo_P1_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
-        {
-            // Kiveszi az utolsó teljesített km alapú vizsgálatot.
-            Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
-                                                       .OrderByDescending(a => a.Dátum)
-                                                       .First();
-            // Ha 5-el osztható, de 20-al nem, akkor P1 vizsgálat.
-            for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
-            {
-                if (i % 5 == 0 && i % 20 != 0)
-                {
-                    return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
-                }
-            }
-            return 0;
-        }
-
-        private long Kovetkezo_P2_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
-        {
-            // Kiveszi az utolsó teljesített km alapú vizsgálatot.
-            Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
-                                                       .OrderByDescending(a => a.Dátum)
-                                                       .First();
-            // Ha csak 20-al osztható, akkor P2/P3 vizsgálat.
-            for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
-            {
-                if (i % 20 == 0)
-                {
-                    return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
-                }
-            }
-            return 0;
-        }
-
-        private long P0_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
-        {
-
-            // P0: nem osztható 5-tel
-            var p0Vizsgalatok = ÖsszesCAFAdat()
-                .Where(a => a.IDŐvKM == 2 &&
-                            a.Státus == 6 &&
-                            a.Azonosító == Aktualis_palyaszam &&
-                            a.KM_Sorszám % 5 != 0)
-                .OrderByDescending(a => a.Dátum)
-                .Take(2)
-                .ToList();
-
-            if (p0Vizsgalatok.Count < 2)
-                return 0;
-
-            return p0Vizsgalatok[0].Számláló - p0Vizsgalatok[1].Számláló;
-        }
-
-        private long P1_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
-        {
-            // P1: osztható 5-tel, de nem 20-szal
-            var p1Vizsgalatok = ÖsszesCAFAdat()
-                .Where(a => a.IDŐvKM == 2 &&
-                            a.Státus == 6 &&
-                            a.Azonosító == Aktualis_palyaszam &&
-                            a.KM_Sorszám % 5 == 0 &&
-                            a.KM_Sorszám % 20 != 0)
-                .OrderByDescending(a => a.Dátum)
-                .Take(2)
-                .ToList();
-
-            if (p1Vizsgalatok.Count < 2)
-                return 0;
-
-            return p1Vizsgalatok[0].Számláló - p1Vizsgalatok[1].Számláló;
-        }
-
-        private string Utolso_P3_es_P2_kozotti_futas(string Aktualis_palyaszam)
-        {
-            // Utolsó P3 keresése
-            Adat_CAF_Adatok P3 = ÖsszesCAFAdat()
-                .Where(a => a.IDŐvKM == 2 &&
-                            a.Státus == 6 &&
-                            a.Azonosító == Aktualis_palyaszam &&
-                            (a.Vizsgálat == "P3/2P2" || a.Vizsgálat == "2P3") &&
-                            a.Megjegyzés != "Ütemezési Segéd")
-                .OrderByDescending(a => a.Dátum)
-                .FirstOrDefault();
-
-            // Ha nem találunk P3 vizsgálatot
-            if (P3 == null)
-                return "Nem történt P3";
-
-            // Utolsó P2 keresése
-            Adat_CAF_Adatok P2 = ÖsszesCAFAdat()
-                .Where(a => a.IDŐvKM == 2 &&
-                            a.Státus == 6 &&
-                            a.Azonosító == Aktualis_palyaszam &&
-                            (a.Vizsgálat == "P2" || a.Vizsgálat == "3P2") &&
-                            a.Megjegyzés != "Ütemezési Segéd")
-                .OrderByDescending(a => a.Dátum)
-                .FirstOrDefault();
-
-            // Ha nem találunk P2 vizsgálatot.
-            if (P2 == null)
-                return "Nem történt P2";
-
-            return $"{P3.Számláló - P2.Számláló}";
-        }
-
-        // A 2 alábbi metódus nem fog minden megnyíláskor lefutni, kapni fog ADB-ben 3 mezőt és verziócserekor lefuttatjuk őket.
-        // A jövőben az új villamosok miatt figyelni kell majd, hogy ezek a mezők csak 1x frissülhetnek a villamos élete során, tehát amikor a 20. és 40. vizsgálat megvolt.
-        private string Elso_P2_rendben_van_e(string Aktualis_palyaszam)
-        {
-            // Megkeresem az első P2 vizsgálatot.
-            Adat_CAF_Adatok elsoP2 = ÖsszesCAFAdat()
-                .Where(a => a.IDŐvKM == 2 &&
-                            a.Státus == 6 &&
-                            a.Azonosító == Aktualis_palyaszam &&
-                            (a.Vizsgálat == "P2" || a.Vizsgálat == "3P2") &&
-                            a.Megjegyzés != "Ütemezési Segéd")
-                .OrderBy(a => a.Dátum)
-                .FirstOrDefault();
-
-            return elsoP2 != null
-                ? $"{elsoP2.Számláló}"
-                : "Nem történt P2.";
-        }
-
-        private string Elso_P3_rendben_van_e(string Aktualis_palyaszam)
-        {
-            // Megkeresem az első P3 vizsgálatot
-            Adat_CAF_Adatok elsoP3 = ÖsszesCAFAdat()
-                .Where(a => a.IDŐvKM == 2 &&
-                            a.Státus == 6 &&
-                            a.Azonosító == Aktualis_palyaszam &&
-                            (a.Vizsgálat == "P3/2P2" || a.Vizsgálat == "2P3") &&
-                            a.Megjegyzés != "Ütemezési Segéd")
-                .OrderBy(a => a.Dátum)
-                .FirstOrDefault();
-
-            return elsoP3 != null
-                ? $"{elsoP3.Számláló}"
-                : "Nem történt P3.";
-        }
-
-        
-
+       
         private void Teszt_Feltolt()
         {
-            for (int i = 2102; i < 2118; i++)
-            {
-                string palya = $"{i}";
-                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya).ToÉrt_Long(), Elso_P2_rendben_van_e(palya).ToÉrt_Long(), Elso_P3_rendben_van_e(palya).ToÉrt_Long());
-                KézCafKm.Rögzítés_Elso(teszt);
-            }
+            KézCafKm.Feltolt();
         }     
 
 

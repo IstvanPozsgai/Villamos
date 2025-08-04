@@ -78,7 +78,7 @@ namespace Villamos.Villamos_Adatbázis_Funkció
 
             // KM_Attekintes tábla
             szöveg = "CREATE TABLE KM_Attekintes (";
-            szöveg += "[Azonosito]  char (10),";
+            szöveg += "[azonosito]  char (10),";
             szöveg += "[kov_p0]  Long,";
             szöveg += "[kov_p1]  Long,";
             szöveg += "[kov_p2]  Long,";
