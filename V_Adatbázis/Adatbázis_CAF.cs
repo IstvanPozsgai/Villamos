@@ -75,6 +75,20 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[Szín_nagyobb] DOUBLE)";
 
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
+
+            // KM_Attekintes tábla
+            szöveg = "CREATE TABLE KM_Attekintes (";
+            szöveg += "[Azonosito]  char (10),";
+            szöveg += "[kov_p0]  Long,";
+            szöveg += "[kov_p1]  Long,";
+            szöveg += "[kov_p2]  Long,";
+            szöveg += "[utolso_p0_kozott]  Long,";
+            szöveg += "[utolso_p1_kozott]  Long,";
+            szöveg += "[utolso_p3_es_p2_kozott]  Long,";
+            szöveg += "[elso_p2]  Long,";
+            szöveg += "[elso_p3] Long)";
+
+            ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
         }
 
         public static void CAFAdatokArchív(string hely)

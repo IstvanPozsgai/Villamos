@@ -19,6 +19,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         readonly Kezelő_CAF_alap AlapKéz = new Kezelő_CAF_alap();
         readonly Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
+        readonly Kezelő_CAF_KM_Attekintes KézCafKm = new Kezelő_CAF_KM_Attekintes();
 
         Adat_CAF_alap EgyCAF;
 
@@ -317,6 +318,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     // P3–P2 közötti futás
                     tb_p3_p2_kozott.Text = $"{Utolso_P3_es_P2_kozotti_futas(rekord.Azonosító)}";
                     SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
+                    Teszt_Feltolt();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1028,6 +1030,18 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 ? $"{elsoP3.Számláló}"
                 : "Nem történt P3.";
         }
+
+        
+
+        private void Teszt_Feltolt()
+        {
+            for (int i = 2102; i < 2118; i++)
+            {
+                string palya = $"{i}";
+                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya).ToÉrt_Long(), Elso_P2_rendben_van_e(palya).ToÉrt_Long(), Elso_P3_rendben_van_e(palya).ToÉrt_Long());
+                KézCafKm.Rögzítés_Elso(teszt);
+            }
+        }     
 
 
 

@@ -307,6 +307,7 @@
       <DependentUpon>Ablak_Utasítás_Generálás.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
+    <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />
     <Compile Include="V_Kezelők\Kezelő_Ciklus_Sorrend.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Műveletek_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Üzemóra.cs" />
