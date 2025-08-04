@@ -287,7 +287,6 @@ namespace Villamos
 
 
         #region Naptár
-        // JAVÍTANDÓ:
         private void Naptár_átvétel()
         {
             try
@@ -312,12 +311,12 @@ namespace Villamos
                         újszöveg += "0";
                 }
 
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\" + Dátum2.Value.Year + @"épülettakarítás.mdb";
-                string jelszó = "seprűéslapát";
-                string szöveg = "INSERT INTO Naptár  (előterv, hónap, igazolás, napok ) VALUES (";
-                szöveg += $"false, {Dátum2.Value.Month}, false,'{újszöveg.Trim()}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Épület_Naptár ADAT = new Adat_Épület_Naptár(
+                                false,
+                                Dátum2.Value.Month,
+                                false,
+                                újszöveg.Trim());
+                KézÉpületNaptár.Rögzítés(Cmbtelephely.Text.Trim(), Dátum2.Value.Year, ADAT);
             }
             catch (HibásBevittAdat ex)
             {
