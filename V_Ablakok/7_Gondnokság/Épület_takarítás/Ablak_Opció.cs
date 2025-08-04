@@ -89,7 +89,6 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
                 AdatTábla.Clear();
                 ABFejlécMeg();
                 ABFeltöltéseMeg();
-                Opció_Tábla.CleanFilterAndSort();
                 Opció_Tábla.DataSource = AdatTábla;
                 ABOszlopSzélességMeg();
             }

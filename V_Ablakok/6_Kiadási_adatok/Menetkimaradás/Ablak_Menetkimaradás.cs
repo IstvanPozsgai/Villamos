@@ -791,7 +791,7 @@ namespace Villamos
                           && z.Törölt == false
                           orderby z.Viszonylat, z.Típus, z.Eseményjele, z.Bekövetkezés
                           select z).ToList();
-                if (Adatok.Count < 1) throw new HibásBevittAdat("Nincs a feltételeknek megfelelő adat.");
+                if (Adatok.Count < 0) throw new HibásBevittAdat("Nincs a feltételeknek megfelelő adat.");
 
                 // kiírjuk az adatokat a táblába
                 Tábla.Visible = false;

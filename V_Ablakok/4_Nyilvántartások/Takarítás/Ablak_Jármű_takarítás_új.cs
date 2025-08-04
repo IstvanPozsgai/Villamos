@@ -2302,7 +2302,6 @@ namespace Villamos
 
                 AdatokTak = AdatokTakÖ;
                 Tábla_utolsó.Visible = false;
-                Tábla_utolsó.CleanFilterAndSort();
                 Tábla_utolsó_Fejléc();
                 Tábla_utolsó_Tartalom();
                 Tábla_utolsó.DataSource = AdatTábla_Utolsó;
@@ -2487,7 +2486,6 @@ namespace Villamos
 
                     AdatTábla_Utolsó.Rows.Add(Soradat);
                 }
-                Tábla_utolsó.CleanFilterAndSort();
                 Tábla_utolsó.DataSource = AdatTábla_Utolsó;
 
                 Tábla_utolsó.Columns["Azonosító"].Width = 100;
@@ -2628,7 +2626,6 @@ namespace Villamos
                 Tábla_utolsó.Visible = false;
                 Tábla_utolsó_Fejléc();
                 Tábla_Tartalom(Adatok);
-                Tábla_utolsó.CleanFilterAndSort();
                 Tábla_utolsó.DataSource = AdatTábla_Utolsó;
                 Tábla_utolsó_OszlopSzél();
                 Tábla_utolsó.Visible = true;

@@ -2,9 +2,6 @@
 
 namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 {
-    // JAVÍTANDÓ:
-    // Az osztály neve Adat_CAF_Segéd helye  V_Adatszerkezetben
-    //gondold át, hogy kell-e új adatszerkezet, vagy ezzel az struktúrával túl lehet-e terhelni a Adat_CAF_Adatok-t
     public class CAF_Segéd_Adat
     {
         public string Azonosító { get; private set; }
@@ -15,7 +12,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             Azonosító = azonosító;
             Dátum = dátum;
-            Sorszám = sorszám;
+            Sorszám = sorszám;  
         }
     }
 

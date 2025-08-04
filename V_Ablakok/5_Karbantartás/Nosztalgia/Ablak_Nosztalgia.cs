@@ -1415,6 +1415,7 @@ namespace Villamos.Villamos_Ablakok
         {
             //kmu és dátum adatokat rögzíti
 
+
             try
             {
                 //// megnézzük, hogy létezik-e adott új helyen napi tábla

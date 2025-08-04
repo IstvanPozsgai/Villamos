@@ -529,7 +529,6 @@ namespace Villamos.Villamos_Ablakok
 
                     AdatTábla.Rows.Add(Soradat);
                 }
-                Tábla.CleanFilterAndSort();
                 Tábla.DataSource = AdatTábla;
 
                 Tábla.Columns["Eszközszám"].Width = 140;
@@ -800,7 +799,6 @@ namespace Villamos.Villamos_Ablakok
 
                     AdatTábla.Rows.Add(Soradat);
                 }
-                Ellen_Tábla.CleanFilterAndSort();
                 Ellen_Tábla.DataSource = AdatTábla;
 
                 Ellen_Tábla.Columns["Eszközszám"].Width = 140;

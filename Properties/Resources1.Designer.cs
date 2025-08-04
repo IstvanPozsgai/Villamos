@@ -493,16 +493,6 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap CiklusLéptetés {
-            get {
-                object obj = ResourceManager.GetObject("CiklusLéptetés", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap CKD {
             get {
                 object obj = ResourceManager.GetObject("CKD", resourceCulture);
@@ -783,36 +773,6 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Fatcow_Farm_Fresh_Group_stroke {
-            get {
-                object obj = ResourceManager.GetObject("Fatcow-Farm-Fresh-Group-stroke", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Fatcow_Farm_Fresh_Sort_ascending {
-            get {
-                object obj = ResourceManager.GetObject("Fatcow-Farm-Fresh-Sort-ascending", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Fatcow_Farm_Fresh_Sort_ascending1 {
-            get {
-                object obj = ResourceManager.GetObject("Fatcow-Farm-Fresh-Sort-ascending1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Fatcow_Farm_Fresh_Sum {
             get {
                 object obj = ResourceManager.GetObject("Fatcow-Farm-Fresh-Sum", resourceCulture);
@@ -1036,16 +996,6 @@ namespace Villamos.Properties {
         internal static System.Drawing.Bitmap image_add32 {
             get {
                 object obj = ResourceManager.GetObject("image_add32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap J_eleje {
-            get {
-                object obj = ResourceManager.GetObject("J_eleje", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1476,26 +1426,6 @@ namespace Villamos.Properties {
         internal static System.Drawing.Bitmap user_vendég1 {
             get {
                 object obj = ResourceManager.GetObject("user_vendég1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap V1_B {
-            get {
-                object obj = ResourceManager.GetObject("V1_B", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap V1_Plusz {
-            get {
-                object obj = ResourceManager.GetObject("V1_Plusz", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

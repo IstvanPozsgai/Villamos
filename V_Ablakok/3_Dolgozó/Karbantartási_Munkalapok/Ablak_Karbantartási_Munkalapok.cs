@@ -119,8 +119,8 @@ namespace Villamos.Villamos_Ablakok
             // módosítás 3 
             if (MyF.Vanjoga(melyikelem, 3))
             {
-                //Digitális.Visible = true;
-                //FelExcel.Visible = true;
+                Digitális.Visible = true;
+                FelExcel.Visible = true;
             }
         }
 

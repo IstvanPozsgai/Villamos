@@ -94,6 +94,7 @@ namespace Villamos
                 Előtervet_készít.Enabled = false;
                 ELő_törlés.Enabled = false;
                 Elő_ütemez.Enabled = false;
+                // JAVÍTANDÓ:vissza kell kapcsolni ha elkészült
                 km_modosit_btn.Enabled = false;
                 Elő_Lehívás.Enabled = false;
 
@@ -142,7 +143,6 @@ namespace Villamos
                 // módosítás 2 
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
-                    km_modosit_btn.Enabled = true;
                 }
                 // módosítás 3 
                 if (MyF.Vanjoga(melyikelem, 3))
@@ -1802,6 +1802,9 @@ namespace Villamos
         }
         #endregion
 
+        // JAVÍTANDÓ:Be kellene csukni amikor a tulajdonságokat becsukjuk
+        // időközben becsukjuk akkor erre is fel kellene is készíteni
+        // KÉSZ✔
 
         Ablak_CAF_KM uj_ablak_Caf_Km_Mod;
         private void Km_modosit_btn_Click(object sender, EventArgs e)

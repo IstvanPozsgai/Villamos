@@ -975,7 +975,6 @@ namespace Villamos
             try
             {
                 AdatTábla.Clear();
-                Opció_Tábla.CleanFilterAndSort();
                 ABFejléc();
                 ABFeltöltése();
                 Opció_Tábla.DataSource = AdatTábla;

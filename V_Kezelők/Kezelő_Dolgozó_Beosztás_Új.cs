@@ -5,7 +5,6 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -13,22 +12,18 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "kiskakas";
         string hely;
-        readonly string táblanév = "Beosztás";
 
-        private void FájlBeállítás(string Telephely, DateTime Dátum, bool Eszterga)
+        private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
-            if (Eszterga)
-                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás\{Dátum.Year}\EsztBeosztás{Dátum:yyyyMM}.mdb";
-            else
-                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Dolgozói_Beosztás_Adatok_Új(hely.KönyvSzerk());
         }
 
 
-        public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string Telephely, DateTime Dátum, bool Eszterga = false)
+        public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string Telephely, DateTime Dátum)
         {
-            FájlBeállítás(Telephely, Dátum, Eszterga);
-            string szöveg = $"SELECT * FROM {táblanév}";
+            FájlBeállítás(Telephely, Dátum);
+            string szöveg = $"SELECT * FROM Beosztás";
             List<Adat_Dolgozó_Beosztás_Új> Adatok = new List<Adat_Dolgozó_Beosztás_Új>();
             Adat_Dolgozó_Beosztás_Új Adat;
 
@@ -79,57 +74,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string Telephely, DateTime Dátum, List<Adat_Dolgozó_Beosztás_Új> Adatok, bool Eszterga = false)
+        public void Rögzítés(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat)
         {
             try
             {
-                FájlBeállítás(Telephely, Dátum, Eszterga);
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Dolgozó_Beosztás_Új Adat in Adatok)
-                {
-                    string szöveg = "INSERT INTO beosztás (Dolgozószám, Nap, Beosztáskód, Ledolgozott, " +
-                                                        "Túlóra, Túlórakezd, Túlóravég, Csúszóra, " +
-                                                        "CSúszórakezd, Csúszóravég, Megjegyzés, Túlóraok, " +
-                                                        "Szabiok, kért, Csúszok, AFTóra, " +
-                                                        "AFTok ) VALUES (";
-                    szöveg += $"'{Adat.Dolgozószám}', ";   //    Dolgozószám,
-                    szöveg += $"'{Adat.Nap}', ";   //    Nap,
-                    szöveg += $"'{Adat.Beosztáskód}', ";   //    Beosztáskód,
-                    szöveg += $"{Adat.Ledolgozott}, ";   //    Ledolgozott,
-                    szöveg += $"{Adat.Túlóra}, ";   //    Túlóra,
-                    szöveg += $"'{Adat.Túlórakezd}', ";   //    Túlórakezd,
-                    szöveg += $"'{Adat.Túlóravég}', ";   //    Túlóravég,
-                    szöveg += $"{Adat.Csúszóra}, ";   //    Csúszóra,
-                    szöveg += $"'{Adat.CSúszórakezd}', ";   //    CSúszórakezd,
-                    szöveg += $"'{Adat.Csúszóravég}', ";   //    Csúszóravég,
-                    szöveg += $"'{Adat.Megjegyzés}', ";   //    MegjegyzésVáltozó,
-                    szöveg += $"'{Adat.Túlóraok}', ";   //    Túlóraok,
-                    szöveg += $"'{Adat.Szabiok}', ";   //    Szabiok,
-                    szöveg += $"{Adat.Kért} , ";   //    kért,
-                    szöveg += $"'{Adat.Csúszok}', ";   //    Csúszok,
-                    szöveg += $"{Adat.AFTóra}, ";   //    AFTóra,
-                    szöveg += $"'{Adat.AFTok}' ) ";   //    AFTok,
-                    SzövegGy.Add(szöveg);
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        public void Módosítás(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat, bool Eszterga = false)
-        {
-            try
-            {
-                FájlBeállítás(Telephely, Dátum, Eszterga);
+                FájlBeállítás(Telephely, Dátum);
 
             }
             catch (HibásBevittAdat ex)
@@ -144,13 +93,12 @@ namespace Villamos.Kezelők
         }
 
 
-        public void Törlés(string Telephely, DateTime Dátum, DateTime Dátumtól, DateTime Dátumig, bool Eszterga = false)
+        public void Módosítás(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat)
         {
             try
             {
-                FájlBeállítás(Telephely, Dátum, Eszterga);
-                string szöveg = $"DELETE FROM beosztás WHERE  nap>=#{Dátumtól:yyyy-MM-dd}# AND nap<=#{Dátumig:yyyy-MM-dd}# ";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                FájlBeállítás(Telephely, Dátum);
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -164,6 +112,23 @@ namespace Villamos.Kezelők
         }
 
 
+        public void Törlés(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         //elkopó
         public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string hely, string jelszó, string szöveg)

@@ -2142,7 +2142,7 @@ namespace Villamos.Ablakok
 
                     AdatTábla.Rows.Add(Soradat);
                 }
-                Tábla_napló.CleanFilterAndSort();
+
                 Tábla_napló.DataSource = AdatTábla;
 
                 Tábla_napló.Columns["Kocsi 1"].Width = 100;

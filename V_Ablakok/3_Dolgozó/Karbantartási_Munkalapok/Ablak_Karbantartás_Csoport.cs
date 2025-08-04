@@ -265,7 +265,6 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 if (Csoport_Ciklus.Text.Trim() == "") throw new HibásBevittAdat("Karbantartási ciklusoz tartozó címet választani kell.");
                 Csoport_tábla.Visible = false;
                 AdatTábla.Clear();
-                Csoport_tábla.CleanFilterAndSort();
                 ABFejléc();
                 ABTartalom();
                 Csoport_tábla.DataSource = AdatTábla;

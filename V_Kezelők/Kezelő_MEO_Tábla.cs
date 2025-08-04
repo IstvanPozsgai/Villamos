@@ -11,7 +11,35 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
         readonly string jelszó = "rudolfg";
-        readonly string táblanév = "tábla";
+        public List<Adat_MEO_Tábla> Lista_Adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_MEO_Tábla> Adatok = new List<Adat_MEO_Tábla>();
+            Adat_MEO_Tábla Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_MEO_Tábla(
+                                        rekord["Név"].ToStrTrim(),
+                                        rekord["Típus"].ToStrTrim()
+                                        );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
 
         public List<Adat_MEO_Tábla> Lista_Adatok()
         {
@@ -48,7 +76,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO {táblanév}  (név, típus ) VALUES (";
+                string szöveg = "INSERT INTO tábla  (név, típus ) VALUES (";
                 szöveg += $"'{Adat.Név}', ";
                 szöveg += $"'{Adat.Típus}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -64,13 +92,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Törlés(Adat_MEO_Tábla Adat)
+        public void Módosítás(Adat_MEO_Tábla Adat)
         {
             try
             {
-                string szöveg = $"DELETE FROM {táblanév} WHERE név='{Adat.Név}'";
-                szöveg += $" AND típus='{Adat.Típus}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+
             }
             catch (HibásBevittAdat ex)
             {

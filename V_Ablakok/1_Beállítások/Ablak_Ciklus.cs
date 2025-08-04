@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.V_Ablakok._1_Beállítások;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -57,21 +56,17 @@ namespace Villamos
             Töröl.Enabled = false;
             Rögzít.Enabled = false;
             CsoportosMásolás.Enabled = false;
-            CiklusSorrend.Enabled = false;
-
             if (Program.PostásTelephely.Trim() == "Főmérnökség")
             {
                 Töröl.Visible = true;
                 Rögzít.Visible = true;
                 CsoportosMásolás.Visible = true;
-                CiklusSorrend.Visible = true;
             }
             else
             {
                 Töröl.Visible = false;
                 Rögzít.Visible = false;
                 CsoportosMásolás.Visible = false;
-                CiklusSorrend.Visible = false;
             }
 
             melyikelem = 7;
@@ -81,7 +76,6 @@ namespace Villamos
                 Töröl.Enabled = true;
                 Rögzít.Enabled = true;
                 CsoportosMásolás.Enabled = true;
-                CiklusSorrend.Enabled = true;
             }
             // módosítás 2
             if (MyF.Vanjoga(melyikelem, 2))
@@ -386,32 +380,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        Ablak_Ciklus_Sorrend Új_Ablak_Ciklus_Sorrend;
-        private void CiklusSorrend_Click(object sender, EventArgs e)
-        {
-            if (Új_Ablak_Ciklus_Sorrend == null)
-            {
-                Új_Ablak_Ciklus_Sorrend = new Ablak_Ciklus_Sorrend();
-                Új_Ablak_Ciklus_Sorrend.FormClosed += Ablak_Ciklus_Sorrend_FormClosed;
-                Új_Ablak_Ciklus_Sorrend.Show();
-            }
-            else
-            {
-                Új_Ablak_Ciklus_Sorrend.Activate();
-                Új_Ablak_Ciklus_Sorrend.WindowState = FormWindowState.Maximized;
-            }
-        }
-
-        private void Ablak_Ciklus_Sorrend_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Új_Ablak_Ciklus_Sorrend = null;
-        }
-
-        private void Ablak_Ciklus_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Új_Ablak_Ciklus_Sorrend?.Close();
         }
     }
 }

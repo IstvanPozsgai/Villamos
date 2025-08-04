@@ -381,7 +381,6 @@ namespace Villamos
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(752, 18);
             this.Holtart.TabIndex = 218;
-            this.Holtart.Visible = false;
             // 
             // Holtartfő
             // 
@@ -389,7 +388,6 @@ namespace Villamos
             this.Holtartfő.Name = "Holtartfő";
             this.Holtartfő.Size = new System.Drawing.Size(752, 18);
             this.Holtartfő.TabIndex = 218;
-            this.Holtartfő.Visible = false;
             // 
             // Ablak_Fő_Egyesített
             // 

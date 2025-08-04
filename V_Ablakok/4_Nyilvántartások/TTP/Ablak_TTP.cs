@@ -341,7 +341,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 Tábla.Visible = false;
 
                 KötésiOsztály.DataSource = TTP_VezénylésFeltölt(AdatokTelep, AdatokHiba, Dátum.Value, ChkKötelezett.Checked);
-                Tábla.CleanFilterAndSort();
                 Tábla.DataSource = KötésiOsztály;
 
                 OszlopSzélesség();

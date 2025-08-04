@@ -24,20 +24,14 @@ namespace Villamos
         public Ablak_Fő_Kiadás_Forte()
         {
             InitializeComponent();
-            Start();
         }
 
-        private void Start()
+        private void Ablak_Fő_Kiadás_Forte_Load(object sender, EventArgs e)
         {
             Dátum.Value = DateTime.Today;
             Dátumról.Value = DateTime.Today;
             Jogosultságkiosztás();
             Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
-        }
-
-        private void Ablak_Fő_Kiadás_Forte_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void Jogosultságkiosztás()

@@ -644,7 +644,6 @@ namespace Villamos
 
         private void Listázás()
         {
-            if (LabelTelephely.Text.Trim() == "") return;
             Táblázatlistázás();
             Táblázatlistázásszemélyzet();
             Táblázatlistázástípuscsere();
@@ -899,7 +898,7 @@ namespace Villamos
         {
             try
             {
-                if (LabelTelephely.Text.Trim() == "") return;
+                if (SzolgálatNév.Trim() == "") return;
 
                 Napikiadásiadatokrögzítése();
                 Napitípuscsererögzítése();
@@ -923,7 +922,6 @@ namespace Villamos
         {
             try
             {
-                if (LabelTelephely.Text.Trim() == "") return;
                 // töröljük a napi adatokat
                 AdatokKiadási = KézKiadás.Lista_adatok(Dátum.Value.Year);
 

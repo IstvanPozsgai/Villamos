@@ -452,7 +452,6 @@ namespace Villamos
                     AdatTábla.Rows.Add(Soradat);
 
                 }
-
                 CafTábla.DataSource = AdatTábla;
 
                 CafTábla.Columns["S.sz"].Width = 100;
@@ -1082,7 +1081,6 @@ namespace Villamos
                     AdatTábla.Rows.Add(Soradat);
                     Holtart.Lép();
                 }
-
                 Tábla.DataSource = AdatTábla;
 
                 Tábla.Columns["S.sz"].Width = 50;

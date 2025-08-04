@@ -1308,12 +1308,11 @@ namespace Villamos
             try
             {
                 string[] tömb = Hibaszöveg.Text.Trim().Split('-');
-                if (tömb.Length > 2 && (tömb[0].Contains("V") || tömb[0].Contains("J")))
+                if (tömb.Length >= 2)
                 {
                     Vsorszám_Jármű = tömb[1].ToÉrt_Int();
                     Vizsgfoka_Jármű = tömb[0];
-
-                    if (Vsorszám_Jármű >= 0)
+                    if (Vsorszám_Jármű > 0)
                     {
                         Vütemezés_Jármű_Dátum = MyF.Szöveg_Tisztítás(tömb[2], 0, 10).ToÉrt_DaTeTime();
                         // ellenőrizzük, hogy szám-e
@@ -1341,13 +1340,6 @@ namespace Villamos
                                 KövV2_számláló = VizsgKm_Jármű + Korrekció;       // V2/V3 volt
                             else
                                 KövV2_számláló = EgyAdat.V2V3Számláló + Korrekció;      // minden egyéb
-
-                            // J javítás esetén
-                            if (Vizsgfoka_Jármű.Contains("J"))
-                            {
-                                KövV2_számláló = 0;
-                                VizsgKm_Jármű = 0;
-                            }
 
                             KéZT5C5.Módosítás(EgyAdat.ID, EgyAdat.KMUkm + Korrekció);
 
@@ -1601,7 +1593,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void ICSelkészülés()

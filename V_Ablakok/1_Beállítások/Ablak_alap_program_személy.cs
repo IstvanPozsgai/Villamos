@@ -710,7 +710,6 @@ namespace Villamos
 
                     AdatTábla.Rows.Add(Soradat);
                 }
-                TáblaOktatás.CleanFilterAndSort();
                 TáblaOktatás.DataSource = AdatTábla;
 
                 TáblaOktatás.Columns["Sor- szám"].Width = 50;
@@ -1261,7 +1260,6 @@ namespace Villamos
                     AdatTábla.Rows.Add(Soradat);
 
                 }
-                FeorTábla.CleanFilterAndSort();
                 FeorTábla.DataSource = AdatTábla;
 
                 FeorTábla.Columns["Sorszám"].Width = 80;
@@ -1483,7 +1481,6 @@ namespace Villamos
 
                     AdatTábla.Rows.Add(Soradat);
                 }
-                Tábla2.CleanFilterAndSort();
                 Tábla2.DataSource = AdatTábla;
 
                 Tábla2.Columns["Sorszám"].Width = 80;
@@ -1651,7 +1648,6 @@ namespace Villamos
                     AdatTábla.Rows.Add(Soradat);
 
                 }
-                Tábla1.CleanFilterAndSort();
                 Tábla1.DataSource = AdatTábla;
 
                 Tábla1.Columns["Sorszám"].Width = 80;
@@ -2148,7 +2144,6 @@ namespace Villamos
                     AdatTábla.Rows.Add(Soradat);
 
                 }
-                Munka_Tábla.CleanFilterAndSort();
                 Munka_Tábla.DataSource = AdatTábla;
 
                 Munka_Tábla.Columns["Sorszám"].Width = 100;
@@ -2740,7 +2735,6 @@ namespace Villamos
         {
             try
             {
-                BeosztásTábla.CleanFilterAndSort();
                 AdatokBeoKód = kézBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 DataTable AdatTábla = new DataTable();
@@ -2770,9 +2764,11 @@ namespace Villamos
                     Soradat["Éjszakás"] = rekord.Éjszakás ? "Igen" : "Nem";
                     Soradat["Magyarázat"] = rekord.Magyarázat;
                     Soradat["Számoló"] = rekord.Számoló ? "Igen" : "Nem";
-                    AdatTábla.Rows.Add(Soradat);
-                }
 
+
+                    AdatTábla.Rows.Add(Soradat);
+
+                }
                 BeosztásTábla.DataSource = AdatTábla;
 
                 BeosztásTábla.Columns["Sorszám"].Width = 80;

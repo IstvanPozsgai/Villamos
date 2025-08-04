@@ -38,7 +38,7 @@ namespace Villamos
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_kidobó));
-            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new V_MindenEgyéb.MyProgressbar();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
@@ -57,7 +57,6 @@ namespace Villamos
             this.Keresés = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Btn_Ittasági = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
@@ -256,26 +255,12 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
-            // Btn_Ittasági
-            // 
-            this.Btn_Ittasági.BackgroundImage = global::Villamos.Properties.Resources.felhasználók32;
-            this.Btn_Ittasági.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Ittasági.Location = new System.Drawing.Point(175, 427);
-            this.Btn_Ittasági.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Btn_Ittasági.Name = "Btn_Ittasági";
-            this.Btn_Ittasági.Size = new System.Drawing.Size(45, 45);
-            this.Btn_Ittasági.TabIndex = 214;
-            this.toolTip1.SetToolTip(this.Btn_Ittasági, "Kiválogatja az embereket");
-            this.Btn_Ittasági.UseVisualStyleBackColor = true;
-            this.Btn_Ittasági.Click += new System.EventHandler(this.Btn_Ittasági_Click);
-            // 
             // Ablak_kidobó
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Orange;
             this.ClientSize = new System.Drawing.Size(1074, 563);
-            this.Controls.Add(this.Btn_Ittasági);
             this.Controls.Add(this.Forte_Beolvasás);
             this.Controls.Add(this.Keresés);
             this.Controls.Add(this.Label18);
@@ -330,6 +315,5 @@ namespace Villamos
         internal Button Keresés;
         internal Button Forte_Beolvasás;
         private ToolTip toolTip1;
-        internal Button Btn_Ittasági;
     }
 }
