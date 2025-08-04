@@ -1063,6 +1063,7 @@
     <Compile Include="V_Kezelők\Kezelő_Általános.cs" />
     <Compile Include="V_Kezelők\Kezelő_Épület.cs" />
     <Compile Include="V_Kezelők\Kezelő_Épület_Adattábla.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Épület_Naptár.cs" />
     <Compile Include="V_Kezelők\Kezelő_Épület_Osztály.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_Akkumulátor.cs">
       <SubType>Form</SubType>
