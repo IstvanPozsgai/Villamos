@@ -26,6 +26,7 @@ namespace Villamos
         readonly Kezelő_Épület_Takarításrakijelölt KézTakarításrakijelölt = new Kezelő_Épület_Takarításrakijelölt();
         readonly Kezelő_Épület_Adattábla KézAdatTábla = new Kezelő_Épület_Adattábla();
         readonly Kezelő_Épület_Takarítás_Osztály KézOsztály = new Kezelő_Épület_Takarítás_Osztály();
+        readonly Kezelő_Váltós_Naptár KézNaptár = new Kezelő_Váltós_Naptár();
         #endregion
 
 
@@ -309,8 +310,8 @@ namespace Villamos
                 string szöveg = "SELECT * FROM naptár WHERE dátum>=#" + eleje.ToString("MM-dd-yyyy") +
                     "# And dátum<=#" + vége.ToString("MM-dd-yyyy") + "# ORDER BY dátum";
 
-                Kezelő_Váltós_Naptár kéz = new Kezelő_Váltós_Naptár();
-                List<Adat_Váltós_Naptár> Adatok = kéz.Lista_Adatok(helymunka, jelszómunka, szöveg);
+
+                List<Adat_Váltós_Naptár> Adatok = KézNaptár.Lista_Adatok(Dátum2.Value.Year,);
 
                 foreach (Adat_Váltós_Naptár rekord in Adatok)
                 {

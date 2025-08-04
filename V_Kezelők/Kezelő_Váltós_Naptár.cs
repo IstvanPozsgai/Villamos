@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Váltós_Naptár
     {
         readonly string jelszó = "katalin";
+        readonly string táblanév = "Naptár";
         string hely;
 
         private void FájlBeállítás(int Év)
@@ -20,11 +21,10 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely.KönyvSzerk());
         }
 
-
         public List<Adat_Váltós_Naptár> Lista_Adatok(int Év, string Tábla)
         {
             FájlBeállítás(Év);
-            string szöveg = $"SELECT * FROM naptár{Tábla}";
+            string szöveg = $"SELECT * FROM {táblanév}{Tábla}";
             List<Adat_Váltós_Naptár> Adatok = new List<Adat_Váltós_Naptár>();
             Adat_Váltós_Naptár Adat;
 
@@ -58,7 +58,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"INSERT INTO naptár{Tábla} (nap, dátum) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}{Tábla} (nap, dátum) VALUES (";
                 szöveg += $"'{Adat.Nap}', ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -79,7 +79,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"UPDATE  naptár{Tábla} SET ";
+                string szöveg = $"UPDATE  {táblanév}{Tábla} SET ";
                 szöveg += $" nap='{Adat.Nap}'";
                 szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -103,7 +103,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Naptár Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO naptár{Tábla} (nap, dátum) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév}{Tábla} (nap, dátum) VALUES (";
                     szöveg += $"'{Adat.Nap}', ";
                     szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
                     SzövegGy.Add(szöveg);
@@ -129,7 +129,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Naptár Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE  naptár{Tábla} SET ";
+                    string szöveg = $"UPDATE  {táblanév}{Tábla} SET ";
                     szöveg += $" nap='{Adat.Nap}'";
                     szöveg += $" WHERE dátum= {Adat.Dátum:M-d-yy}'";
                     SzövegGy.Add(szöveg);
