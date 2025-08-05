@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.IO;
 using System.Linq;
@@ -17,16 +18,54 @@ namespace Villamos.Kezelők
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         IEnumerable<Adat_CAF_Adatok> osszes_adat;
+        static IEnumerable<Adat_CAF_Adatok> cache_osszes_adat = null;
 
         public Kezelő_CAF_KM_Attekintes()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
-            osszes_adat = ÖsszesCAFAdat();
+            if (!Km_Attekintes_Tabla_Letezik_E())
+            {
+                Tabla_Letrehozasa();
+            }
+            if (cache_osszes_adat == null)
+            {
+                cache_osszes_adat = ÖsszesCAFAdat();
+            }
+
+            osszes_adat = cache_osszes_adat;
         }
 
+        private bool Km_Attekintes_Tabla_Letezik_E()
+        {
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+
+            using (OleDbConnection kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                kapcsolat.Open();
+                // Lekéri az táblákat
+                DataTable tables = kapcsolat.GetSchema("Tables");
+                // Megnézi, hogy van-e KM_Attekintes nevű tábla
+                return tables.Rows.Cast<DataRow>().Any(row => row["TABLE_NAME"].ToString().Equals("KM_Attekintes", StringComparison.OrdinalIgnoreCase));
+            }
+        }
+        private void Tabla_Letrehozasa()
+        {
+            string szöveg = "CREATE TABLE KM_Attekintes (";
+            szöveg += "azonosito CHAR(10), "; 
+            szöveg += "kov_p0 LONG, ";        
+            szöveg += "kov_p1 LONG, ";
+            szöveg += "kov_p2 LONG, ";
+            szöveg += "utolso_p0_kozott LONG, ";
+            szöveg += "utolso_p1_kozott LONG, ";
+            szöveg += "utolso_p3_es_p2_kozott LONG, ";
+            szöveg += "elso_p2 LONG, ";
+            szöveg += "elso_p3 LONG);";
+
+            MyA.ABMódosítás(hely, jelszó, szöveg);
+        }
         public List<Adat_CAF_KM_Attekintes> Lista_Adatok()
         {
-            string szöveg;           
+            string szöveg;
             szöveg = $"SELECT * FROM KM_Attekintes ORDER BY azonosito";
 
             List<Adat_CAF_KM_Attekintes> Adatok = new List<Adat_CAF_KM_Attekintes>();
@@ -44,17 +83,18 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
+                                // Itt azért van null vizsgálat, mivel ha nem volt még olyan vizsgálat null értéket kap adatbázisban.
                                 Adat = new Adat_CAF_KM_Attekintes(
-                                        rekord["azonosito"].ToStrTrim(),
-                                        rekord["kov_p0"].ToÉrt_Long(),
-                                        rekord["kov_p1"].ToÉrt_Long(),
-                                        rekord["kov_p2"].ToÉrt_Long(),
-                                        rekord["utolso_p0_kozott"].ToÉrt_Long(),
-                                        rekord["utolso_p1_kozott"].ToÉrt_Long(),
-                                        rekord["utolso_p3_es_p2_kozott"].ToÉrt_Long(),
-                                        rekord["elso_p2"].ToÉrt_Long(),
-                                        rekord["elso_p3"].ToÉrt_Long()
-                                        );
+                                 rekord["azonosito"].ToStrTrim(),
+                                 rekord["kov_p0"] != DBNull.Value ? rekord["kov_p0"].ToÉrt_Long() : (long?)null,
+                                 rekord["kov_p1"] != DBNull.Value ? rekord["kov_p1"].ToÉrt_Long() : (long?)null,
+                                 rekord["kov_p2"] != DBNull.Value ? rekord["kov_p2"].ToÉrt_Long() : (long?)null,
+                                 rekord["utolso_p0_kozott"] != DBNull.Value ? rekord["utolso_p0_kozott"].ToÉrt_Long() : (long?)null,
+                                 rekord["utolso_p1_kozott"] != DBNull.Value ? rekord["utolso_p1_kozott"].ToÉrt_Long() : (long?)null,
+                                 rekord["utolso_p3_es_p2_kozott"] != DBNull.Value ? rekord["utolso_p3_es_p2_kozott"].ToÉrt_Long() : (long?)null,
+                                 rekord["elso_p2"] != DBNull.Value ? rekord["elso_p2"].ToÉrt_Long() : (long?)null,
+                                 rekord["elso_p3"] != DBNull.Value ? rekord["elso_p3"].ToÉrt_Long() : (long?)null
+                                 );
                                 Adatok.Add(Adat);
                             }
                         }
@@ -87,21 +127,48 @@ namespace Villamos.Kezelők
         public void Rögzítés_Elso(Adat_CAF_KM_Attekintes Adat)
         {
             try
-            {                
+            {
                 if (Egy_Adat(Adat.azonosito) == null)
-                {                    
+                {
                     string szöveg = "INSERT INTO KM_Attekintes (azonosito, kov_p0, kov_p1, kov_p2, utolso_p0_kozott, utolso_p1_kozott, utolso_p3_es_p2_kozott, elso_p2, elso_p3) VALUES (";
+
                     szöveg += $"'{Adat.azonosito}', "; // azonosító
-                    szöveg += $"'{Adat.kov_p0}', "; // Megtehető KM a következő vizsgálatig.
-                    szöveg += $"'{Adat.kov_p1}', "; // Megtehető KM a következő P1 vizsgálatig.
-                    szöveg += $"{Adat.kov_p2}, "; // Megtehető KM a következő P2 vizsgálatig.
-                    szöveg += $"'{Adat.utolso_p0_kozott}', "; // Megtett KM az előző P0 vizsgálatok között.
-                    szöveg += $"'{Adat.utolso_p1_kozott}', "; // Megtett KM az előző P1 vizsgálatok között.
-                    szöveg += Adat.utolso_p3_es_p2_kozott == null ? "null, " : $"'{Adat.utolso_p3_es_p2_kozott}', "; // Megtett KM az előző P3 és P2 vizsgálatok között.
-                    szöveg += Adat.elso_p2 == null ? "null, " : $"'{Adat.elso_p2}', "; // Első P2-es vizsgálat KM értéke
-                    szöveg += Adat.elso_p3 == null ? "null)" : $"'{Adat.elso_p3}')"; // Első P3-as vizsgálat KM értéke
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+
+                    szöveg += Adat.kov_p0 == null
+                        ? "null, "
+                        : $"'{Adat.kov_p0}', "; // Megtehető KM a következő P0 vizsgálatig
+
+                    szöveg += Adat.kov_p1 == null
+                        ? "null, "
+                        : $"'{Adat.kov_p1}', "; // Megtehető KM a következő P1 vizsgálatig
+
+                    szöveg += Adat.kov_p2 == null
+                        ? "null, "
+                        : $"'{Adat.kov_p2}', "; // Megtehető KM a következő P2 vizsgálatig
+
+                    szöveg += Adat.utolso_p0_kozott == null
+                        ? "null, "
+                        : $"'{Adat.utolso_p0_kozott}', "; // Megtett KM az előző P0 vizsgálatok között
+
+                    szöveg += Adat.utolso_p1_kozott == null
+                        ? "null, "
+                        : $"'{Adat.utolso_p1_kozott}', "; // Megtett KM az előző P1 vizsgálatok között
+
+                    szöveg += Adat.utolso_p3_es_p2_kozott == null
+                        ? "null, "
+                        : $"'{Adat.utolso_p3_es_p2_kozott}', "; // Megtett KM az előző P3 és P2 vizsgálatok között
+
+                    szöveg += Adat.elso_p2 == null
+                        ? "null, "
+                        : $"'{Adat.elso_p2}', "; // Első P2-es vizsgálat KM értéke
+
+                    szöveg += Adat.elso_p3 == null
+                        ? "null)"
+                        : $"'{Adat.elso_p3}')"; // Első P3-as vizsgálat KM értéke
+
+                    MyA.ABMódosítás(hely, jelszó, szöveg); // SQL beszúrás futtatása
                 }
+
                 // Ezt kell lefuttatni a programrész bevezetésekor a verziócsere után               
             }
             catch (HibásBevittAdat ex)
@@ -121,12 +188,12 @@ namespace Villamos.Kezelők
             try
             {
                 string szöveg = "UPDATE KM_Attekintes SET ";
-                szöveg += $"kov_p0='{Adat.kov_p0}', "; 
-                szöveg += $"kov_p1='{Adat.kov_p1}', "; 
-                szöveg += $"kov_p2={Adat.kov_p2}, "; 
-                szöveg += $"utolso_p0_kozott='{Adat.utolso_p0_kozott}', "; 
-                szöveg += $"utolso_p1_kozott='{Adat.utolso_p1_kozott}', "; 
-                szöveg += $"utolso_p3_es_p2_kozott='{Adat.utolso_p3_es_p2_kozott}', "; 
+                szöveg += $"kov_p0='{Adat.kov_p0}', ";
+                szöveg += $"kov_p1='{Adat.kov_p1}', ";
+                szöveg += $"kov_p2={Adat.kov_p2}, ";
+                szöveg += $"utolso_p0_kozott='{Adat.utolso_p0_kozott}', ";
+                szöveg += $"utolso_p1_kozott='{Adat.utolso_p1_kozott}', ";
+                szöveg += $"utolso_p3_es_p2_kozott='{Adat.utolso_p3_es_p2_kozott}', ";
                 szöveg += $" WHERE azonosito='{Adat.azonosito}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -156,7 +223,7 @@ namespace Villamos.Kezelők
         private long Kovetkezo_P0_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
-            Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
+            Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
@@ -170,7 +237,7 @@ namespace Villamos.Kezelők
         private long Utolso_KM_Vizsgalat_Erteke(string Aktualis_palyaszam)
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
-            Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
+            Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
@@ -182,7 +249,7 @@ namespace Villamos.Kezelők
         private long Kovetkezo_P1_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
-            Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
+            Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
@@ -200,7 +267,7 @@ namespace Villamos.Kezelők
         private long Kovetkezo_P2_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
-            Adat_CAF_Adatok Adott_Villamos = KézAdatok.Lista_Adatok()
+            Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
