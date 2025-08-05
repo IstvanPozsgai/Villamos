@@ -21,26 +21,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarítótábla(hely);
         }
 
-        public void Rögzítés(string Telephely, int Év, Adat_Épület_Naptár Adat)
-        {
-            try
-            {
-                FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO {táblanév}  (előterv, hónap, igazolás, napok ) VALUES (";
-                szöveg += $"false, {Adat.Hónap}, false,'{Adat.Napok}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         public List<Adat_Épület_Naptár> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
@@ -75,8 +55,49 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        //elkopó
+        public void Rögzítés(string Telephely, int Év, Adat_Épület_Naptár Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = $"INSERT INTO {táblanév}  (előterv, hónap, igazolás, napok ) VALUES (";
+                szöveg += $"false, {Adat.Hónap}, false,'{Adat.Napok}')";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        public void Módosítás(string Telephely, int Év, string Napok, int Hónap)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = "UPDATE naptár  SET ";
+                szöveg += $"napok='{Napok}'";
+                szöveg += $"  WHERE hónap={Hónap}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        //elkopó
         public Adat_Épület_Naptár Egy_Adat(string hely, string jelszó, string szöveg)
         {
 

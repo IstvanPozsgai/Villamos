@@ -386,13 +386,11 @@ namespace Villamos
             Naptárkiirása();
         }
 
-        // JAVÍTANDÓ:
         private void Naptár_Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
             {
-                if (Naptár_Tábla.RowCount < 0)
-                    return;
+                if (Naptár_Tábla.RowCount < 0) return;
                 foreach (DataGridViewRow row in Naptár_Tábla.Rows)
                 {
 
@@ -420,27 +418,17 @@ namespace Villamos
             Naptárkiirása();
         }
 
-        // JAVÍTANDÓ:
         private void Alap_Rögzít_Click(object sender, EventArgs e)
         {
             try
             {
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum2.Value.Year}épülettakarítás.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarítótábla(hely);
-
                 AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum2.Value.Year);
 
                 int hónapnap = MyF.Hónap_hossza(Dátum2.Value);
-                DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum2.Value);
-                string szöveg1 = "";
-                string jelszó = "seprűéslapát";
-                string szöveg;
-
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum2.Value.Month
                                            select a).FirstOrDefault();
-
+                string szöveg1 = "";
                 for (int i = 0; i < hónapnap; i++)
                 {
                     if (Naptár_Tábla.Rows[i].Cells["Hétvége"].Value != null && bool.Parse(Naptár_Tábla.Rows[i].Cells["Hétvége"].Value.ToString()) == true)
@@ -452,17 +440,15 @@ namespace Villamos
                 if (Elem == null)
                 {
                     // új
-                    szöveg = "INSERT INTO naptár (előterv, hónap, igazolás, napok ) VALUES (";
-                    szöveg += $"false, {Dátum2.Value.Month}, false, '{szöveg1}' )";
+                    Adat_Épület_Naptár Adat = new Adat_Épület_Naptár(false, Dátum2.Value.Month, false, szöveg1);
+                    KézÉpületNaptár.Rögzítés(Cmbtelephely.Text.Trim(), Dátum2.Value.Year, Adat);
                 }
                 else
                 {
                     // módosít
-                    szöveg = "UPDATE naptár  SET ";
-                    szöveg += $"napok='{szöveg1}'";
-                    szöveg += $"  WHERE hónap={Dátum2.Value.Month}";
+                    KézÉpületNaptár.Módosítás(Cmbtelephely.Text.Trim(), Dátum2.Value.Year, szöveg1, Dátum2.Value.Month);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+
                 Naptárkiirása();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
