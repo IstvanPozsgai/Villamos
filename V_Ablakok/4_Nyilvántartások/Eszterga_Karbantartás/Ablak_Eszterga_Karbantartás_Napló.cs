@@ -531,6 +531,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 if (DtmPckr.Value.Date > DateTime.Today)
                     throw new HibásBevittAdat("A kiválasztott dátum nem lehet későbbi, mint a mai dátum.");
+
+                if (TablaMuvelet.SelectedRows[0].Cells["Státusz"].Value?.ToStrTrim() == "Törölt")
+                    throw new HibásBevittAdat("Törölt művelethez nem rögzíthető üzemóra!");
+
                 bool sikeres = true;
                 if (TablaMuvelet.SelectedRows.Count != 0)
                     sikeres = UjNaplozas();

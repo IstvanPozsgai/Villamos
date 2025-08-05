@@ -467,9 +467,6 @@
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\Nosztalgia\Adat_Nosztalgia.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\Nosztalgia\Kezelő_Nosztalgia.cs" />
-    <Compile Include="V_Ablakok\5_Karbantartás\Nosztalgia\Nosztalgia_Ütemezés.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_fűtés.cs">
       <SubType>Form</SubType>
     </Compile>
