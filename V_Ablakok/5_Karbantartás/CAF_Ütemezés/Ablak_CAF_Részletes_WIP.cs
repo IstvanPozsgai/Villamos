@@ -286,7 +286,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Ütem_megjegyzés.Text = rekord.Megjegyzés.Trim();
                     Ütem_dátum_program.Value = rekord.Dátum_program;
 
-                    Teszt_Feltolt();
+                    //Teszt_Feltolt();
 
                     Adat_CAF_KM_Attekintes teszt_adat = KézCafKm.Egy_Adat(rekord.Azonosító);
 
@@ -304,25 +304,25 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
 
                     // Megtett P0
-                    tb_megtett_p0.Text = $"{teszt_adat.utolso_p0_kozott}";
-                    SzinezdTextBox(tb_megtett_p0, 14000, 15400);
+                    tb_megtett_p0.Text = string.IsNullOrEmpty(teszt_adat.utolso_p0_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p0_kozott}";
+                    if (tb_megtett_p0.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p0, 14000, 15400);
 
                     // Megtett P1
-                    tb_megtett_p1.Text = $"{teszt_adat.utolso_p1_kozott}";
-                    SzinezdTextBox(tb_megtett_p1, 70000, 77000);
+                    tb_megtett_p1.Text = string.IsNullOrEmpty(teszt_adat.utolso_p1_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p1_kozott}";
+                    if (tb_megtett_p1.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p1, 70000, 77000);
 
                     // P2 rendben
-                    tb_rendben_p2.Text = $"{teszt_adat.elso_p2}";
-                    SzinezdTextBox(tb_rendben_p2, 280000, 308000);
+                    tb_rendben_p2.Text = string.IsNullOrEmpty(teszt_adat.elso_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p2}";
+                    if (tb_rendben_p2.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p2, 280000, 308000);
 
                     // P3 rendben
-                    tb_rendben_p3.Text = $"{teszt_adat.elso_p3}";
-                    SzinezdTextBox(tb_rendben_p3, 560000, 616000);
+                    tb_rendben_p3.Text = string.IsNullOrEmpty(teszt_adat.elso_p3?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p3}";
+                    if (tb_rendben_p3.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p3, 560000, 616000);
 
                     // P3–P2 közötti futás
-                    tb_p3_p2_kozott.Text = $"{teszt_adat.utolso_p3_es_p2_kozott}";
-                    SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
-                                       
+                    tb_p3_p2_kozott.Text = string.IsNullOrEmpty(teszt_adat.utolso_p3_es_p2_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p3_es_p2_kozott}";
+                    if (tb_p3_p2_kozott.Text != "Még nem történt.") SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
+
                 }
             }
             catch (HibásBevittAdat ex)
