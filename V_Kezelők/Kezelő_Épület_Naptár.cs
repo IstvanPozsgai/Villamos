@@ -41,7 +41,39 @@ namespace Villamos.Kezelők
             }
         }
 
+        public List<Adat_Épület_Naptár> Lista_Adatok(string Telephely, int Év)
+        {
+            FájlBeállítás(Telephely, Év);
+            string szöveg = $"SELECT * FROM {táblanév}";
 
+            List<Adat_Épület_Naptár> Adatok = new List<Adat_Épület_Naptár>();
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat_Épület_Naptár Adat = new Adat_Épület_Naptár(
+                                          rekord["Előterv"].ToÉrt_Bool(),
+                                          rekord["Hónap"].ToÉrt_Int(),
+                                          rekord["Igazolás"].ToÉrt_Bool(),
+                                          rekord["Napok"].ToStrTrim());
+
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
+        }
 
         //elkopó
         public List<Adat_Épület_Naptár> Lista_Adatok(string hely, string jelszó, string szöveg)

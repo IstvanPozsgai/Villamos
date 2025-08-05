@@ -317,19 +317,13 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Naptárkiirása()
         {
             try
             {
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum2.Value.Year}épülettakarítás.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarítótábla(hely);
-
-                NaptárListaFeltöltése(Dátum2.Value);
+                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum2.Value.Year);
 
                 int hónapnap = MyF.Hónap_hossza(Dátum2.Value);
-                DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum2.Value);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum2.Value.Month
@@ -338,7 +332,7 @@ namespace Villamos
                 if (Elem == null)
                 {
                     Naptár_átvétel();
-                    NaptárListaFeltöltése(Dátum2.Value);
+                    AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum2.Value.Year);
                 }
 
 
@@ -370,11 +364,11 @@ namespace Villamos
                             Naptár_Tábla.Rows[i].Cells["Hétvége"].Value = true;
                         }
                     }
+                    Holtart.Lép();
                 }
                 Naptár_Tábla.Visible = true;
                 Naptár_Tábla.Refresh();
                 Holtart.Ki();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -435,7 +429,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum2.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarítótábla(hely);
 
-                NaptárListaFeltöltése(Dátum2.Value);
+                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum2.Value.Year);
 
                 int hónapnap = MyF.Hónap_hossza(Dátum2.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum2.Value);
@@ -824,7 +818,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) return;
 
-                NaptárListaFeltöltése(Dátum1.Value);
+                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
@@ -867,7 +861,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) return;
 
-                NaptárListaFeltöltése(Dátum1.Value);
+                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
@@ -908,7 +902,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) return;
 
-                NaptárListaFeltöltése(Dátum1.Value);
+                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
@@ -2744,7 +2738,7 @@ namespace Villamos
 
                 int hónapnap = MyF.Hónap_hossza(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
-                NaptárListaFeltöltése(Dátum.Value);
+                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum.Value.Month
@@ -2790,7 +2784,7 @@ namespace Villamos
 
                 int hónapnap = MyF.Hónap_hossza(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
-                NaptárListaFeltöltése(Dátum.Value);
+                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum.Value.Month
@@ -2860,7 +2854,7 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value.Year}épülettakarítás.mdb";
                 if (!File.Exists(hely)) return;
 
-                NaptárListaFeltöltése(Dátum.Value);
+                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum.Value.Month
@@ -2910,29 +2904,7 @@ namespace Villamos
 
 
         #region Listák
-        // JAVÍTANDÓ:
-        private void NaptárListaFeltöltése(DateTime Dátum)
-        {
-            try
-            {
-                AdatokÉNaptár.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Year}épülettakarítás.mdb";
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Épülettakarítótábla(hely);
 
-                string szöveg = $"SELECT * FROM naptár";
-                string jelszó = "seprűéslapát";
-                AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         // JAVÍTANDÓ:   
         private void AdatTáblaListaFeltöltés()
         {
