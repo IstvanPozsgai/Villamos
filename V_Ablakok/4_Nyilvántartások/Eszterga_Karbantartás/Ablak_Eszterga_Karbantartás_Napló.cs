@@ -346,6 +346,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             {
                 if (TablaMuvelet.SelectedRows[0].Cells["Státusz"].Value?.ToStrTrim() == "Törölt")
                     throw new HibásBevittAdat("Törölt műveletet nem lehet naplózni");
+
+                if (TxtBxMegjegyzes.Text == "")
+                    throw new HibásBevittAdat("A megjegyzés mező nem lehet üres.");
+
                 // JAVÍTANDÓ:a dátum az nem dátum?
                 //kesz
                 DateTime datum = DtmPckr.Value;
@@ -536,9 +540,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 if (DtmPckr.Value.Date > DateTime.Today)
                     throw new HibásBevittAdat("A kiválasztott dátum nem lehet későbbi, mint a mai dátum.");
-
-                if (TxtBxMegjegyzes.Text == "")
-                    throw new HibásBevittAdat("A megjegyzés mező nem lehet üres.");
 
                 bool sikeres = true;
                 if (TablaMuvelet.SelectedRows.Count != 0)
