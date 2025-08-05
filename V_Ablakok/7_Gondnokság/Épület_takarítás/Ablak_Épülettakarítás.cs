@@ -796,36 +796,30 @@ namespace Villamos
             List1.Height = 25;
         }
 
-        // JAVÍTANDÓ:
         private void Zárva1_Click(object sender, EventArgs e)
         {
             try
-            {// Hónap lezárása
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
-                if (!File.Exists(hely)) return;
-
+            {
+                // Hónap lezárása
                 AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
                                            select a).FirstOrDefault();
-                string jelszó = "seprűéslapát";
 
-                string szöveg;
                 if (Elem != null)
                 {
-                    szöveg = "UPDATE naptár  SET ";
-                    szöveg += " igazolás=true ";
-                    szöveg += $" WHERE hónap={Dátum1.Value.Month}";
+                    KézÉpületNaptár.Módosítás(Cmbtelephely.Text.Trim(), Dátum1.Value.Year, true, Dátum1.Value.Month);
                 }
                 else
                 {
-                    szöveg = "INSERT INTO naptár (előterv, hónap, igazolás, napok) VALUES (";
-                    szöveg += "false, ";
-                    szöveg += $"{Dátum1.Value.Month}, true, ";
-                    szöveg += "'0000000000000000000000000000000')";
+                    Adat_Épület_Naptár Adat = new Adat_Épület_Naptár(
+                        false,
+                        Dátum1.Value.Month,
+                        true,
+                        "0000000000000000000000000000000");
+                    KézÉpületNaptár.Rögzítés(Cmbtelephely.Text.Trim(), Dátum1.Value.Year, Adat);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
                 Gombokfel2();
             }
             catch (HibásBevittAdat ex)
@@ -839,34 +833,29 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Nyitva1_Click(object sender, EventArgs e)
         {
             try
-            {// Hónap lezárása
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
-                if (!File.Exists(hely)) return;
-
+            {
+                // Hónap lezárása
                 AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
 
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
                                            select a).FirstOrDefault();
-                string jelszó = "seprűéslapát";
-
-                string szöveg;
                 if (Elem != null)
                 {
-                    szöveg = "UPDATE naptár  SET  igazolás=false ";
-                    szöveg += $" WHERE hónap={Dátum1.Value.Month}";
+                    KézÉpületNaptár.Módosítás(Cmbtelephely.Text.Trim(), Dátum1.Value.Year, false, Dátum1.Value.Month);
                 }
                 else
                 {
-                    szöveg = "INSERT INTO naptár (előterv, hónap, igazolás, napok) VALUES (";
-                    szöveg += $"false, {Dátum1.Value.Month}, false, '0000000000000000000000000000000')";
+                    Adat_Épület_Naptár Adat = new Adat_Épület_Naptár(
+                                false,
+                                Dátum1.Value.Month,
+                                false,
+                                "0000000000000000000000000000000");
+                    KézÉpületNaptár.Rögzítés(Cmbtelephely.Text.Trim(), Dátum1.Value.Year, Adat);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
                 Gombokfel2();
             }
             catch (HibásBevittAdat ex)

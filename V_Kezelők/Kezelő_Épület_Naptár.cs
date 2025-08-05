@@ -80,9 +80,31 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "UPDATE naptár  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"napok='{Napok}'";
                 szöveg += $"  WHERE hónap={Hónap}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(string Telephely, int Év, bool igazolás, int Hónap)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+
+                string szöveg = $"UPDATE {táblanév}  SET ";
+                szöveg += $" igazolás={igazolás} ";
+                szöveg += $" WHERE hónap={Hónap}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
