@@ -78,30 +78,18 @@ namespace Villamos
 
             Idő_lakat.Left = 535;
             Idő_lakat.Top = 95;
+            Dátum.Value = DateTime.Today;
+            Dátum1.Value = DateTime.Today;
+            Dátum2.Value = DateTime.Today;
+            LapFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+            LapFülek.SelectedIndex = 0;
+            Fülekkitöltése();
+            Idő_lakat_működés();
+            Lakat_állapot();
         }
 
         private void Ablak_Épülettakarítás_Load(object sender, EventArgs e)
         {
-            try
-            {
-                Dátum.Value = DateTime.Today;
-                Dátum1.Value = DateTime.Today;
-                Dátum2.Value = DateTime.Today;
-                LapFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-                LapFülek.SelectedIndex = 0;
-                Fülekkitöltése();
-                Idő_lakat_működés();
-                Lakat_állapot();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void Jogosultságkiosztás()
