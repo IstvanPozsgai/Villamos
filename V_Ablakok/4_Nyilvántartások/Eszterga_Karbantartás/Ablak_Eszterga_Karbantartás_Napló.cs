@@ -311,12 +311,21 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 if (!int.TryParse(txtBxUzemora.Text, out int uzemora))
+                {
+                    Eredmeny = false;
                     throw new HibásBevittAdat("Hibás üzemóra érték! Kérlek, csak számot adj meg.");
+                }
 
-                bool sikeres = UjUzemoraHozzaadasa(datum, uzemora, status);
+                Adat_Eszterga_Uzemora VanEUzemora = AdatokUzemora
+                    .FirstOrDefault(u => u.Dátum.Date == datum.Date && !u.Státus);
+
+                bool sikeres = true;
+
+                if (VanEUzemora == null)
+                    sikeres = UjUzemoraHozzaadasa(datum, uzemora, status);
+
                 if (!sikeres)
                     Eredmeny = false;
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -335,12 +344,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             bool Eredmeny = true;
             try
             {
+                if (TablaMuvelet.SelectedRows[0].Cells["Státusz"].Value?.ToStrTrim() == "Törölt")
+                    throw new HibásBevittAdat("Törölt műveletet nem lehet naplózni");
                 // JAVÍTANDÓ:a dátum az nem dátum?
                 //kesz
                 DateTime datum = DtmPckr.Value;
                 string megjegyzes = TxtBxMegjegyzes.Text.Trim();
 
-                if(!UjUzemora(datum, false))
+                if (!UjUzemora(datum, false))
                     return false;
 
                 List<Adat_Eszterga_Muveletek_Naplo> naploLista = new List<Adat_Eszterga_Muveletek_Naplo>();
@@ -349,12 +360,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     int id = sor.Cells[0].Value.ToÉrt_Int();
 
                     Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == id);
-
-                    if (rekord.Státus)
-                    {
-                        Eredmeny = false;
-                        throw new HibásBevittAdat("Törölt műveletet nem lehet naplózni.");
-                    }
 
                     bool VanE = AdatokMuveletNaplo.Any(a => a.ID == id && a.Utolsó_Dátum.Date == datum);
                     if (VanE)
@@ -532,8 +537,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 if (DtmPckr.Value.Date > DateTime.Today)
                     throw new HibásBevittAdat("A kiválasztott dátum nem lehet későbbi, mint a mai dátum.");
 
-                if (TablaMuvelet.SelectedRows[0].Cells["Státusz"].Value?.ToStrTrim() == "Törölt")
-                    throw new HibásBevittAdat("Törölt művelethez nem rögzíthető üzemóra!");
+                if (TxtBxMegjegyzes.Text == "")
+                    throw new HibásBevittAdat("A megjegyzés mező nem lehet üres.");
 
                 bool sikeres = true;
                 if (TablaMuvelet.SelectedRows.Count != 0)
