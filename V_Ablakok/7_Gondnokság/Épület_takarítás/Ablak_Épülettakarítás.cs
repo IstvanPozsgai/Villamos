@@ -869,16 +869,11 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Gombokfel2()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum1.Value.Year}épülettakarítás.mdb";
-                if (!File.Exists(hely)) return;
-
                 AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
-
                 Adat_Épület_Naptár Elem = (from a in AdatokÉNaptár
                                            where a.Hónap == Dátum1.Value.Month
                                            select a).FirstOrDefault();
