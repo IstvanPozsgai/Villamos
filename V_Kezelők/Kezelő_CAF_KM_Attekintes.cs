@@ -30,9 +30,8 @@ namespace Villamos.Kezelők
             }
             if (cache_osszes_adat == null)
             {
-                cache_osszes_adat = ÖsszesCAFAdat();
+                InitializeCache(KézAdatok); // egyszeri töltés
             }
-
             osszes_adat = cache_osszes_adat;
         }
         private bool Km_Attekintes_Tabla_Letezik_E()
@@ -122,7 +121,7 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
-        public void Rögzítés_Elso(Adat_CAF_KM_Attekintes Adat)
+        private void Rögzítés_Elso(Adat_CAF_KM_Attekintes Adat)
         {
             try
             {
@@ -226,11 +225,15 @@ namespace Villamos.Kezelők
         }
         // Visszaadja az összes ADB-t összefűzve. Muszáj végigmenni rajtuk. Sebességben picit jobb, mintha egyesével beolvassa őket.
         // Ezt kiszervezem a kezelőbe.
-        private IEnumerable<Adat_CAF_Adatok> ÖsszesCAFAdat()
+        public static void InitializeCache(Kezelő_CAF_Adatok kézAdatok)
         {
-            return KézAdatok.Lista_Adatok()
-                .Concat(Enumerable.Range(2016, DateTime.Now.Year - 2016 + 1)
-                    .SelectMany(ev => KézAdatok.ElőzőÉvek(ev)));
+            if (cache_osszes_adat == null)
+            {
+                cache_osszes_adat = kézAdatok.Lista_Adatok()
+                    .Concat(Enumerable.Range(2016, DateTime.Now.Year - 2016 + 1)
+                    .SelectMany(ev => kézAdatok.ElőzőÉvek(ev)))
+                    .ToList(); // fontos, hogy ténylegesen memóriában tárolja
+            }
         }
         // Itt a metódusokban lévő utolsó KM kivételeket egységesíteni kell.
         private long Kovetkezo_P0_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
@@ -387,20 +390,40 @@ namespace Villamos.Kezelők
 
             return elsoP3?.Számláló;
         }
-        public void Feltolt()
+        public void Tabla_Feltoltese()
         {
-            for (int i = 2101; i < 2117; i++)
+            List<int> azonositoLista_HosszuCaf = KézAdatok.Lista_Adatok()
+                                                          .Where(x => x.Azonosító.StartsWith("21"))
+                                                          .Select(x => int.Parse(x.Azonosító))
+                                                          .Distinct()
+                                                          .ToList();
+
+            List<int> azonositoLista_RovidCaf = KézAdatok.Lista_Adatok()
+                                                         .Where(x => x.Azonosító.StartsWith("22"))
+                                                         .Select(x => int.Parse(x.Azonosító))
+                                                         .Distinct()
+                                                         .ToList();
+
+
+            for (int i = azonositoLista_HosszuCaf.First(); i <= azonositoLista_HosszuCaf.Last(); i++)
             {
-                string palya = $"{i}";
-                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya));
+                string Palyaszam = $"{i}";
+                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam));
+                Rögzítés_Elso(teszt);
+            }
+
+
+            for (int i = azonositoLista_RovidCaf.First(); i <= azonositoLista_RovidCaf.Last(); i++)
+            {
+                string Palyaszam = $"{i}";
+                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam));
                 Rögzítés_Elso(teszt);
             }
         }
-
         public void Erteket_Frissit(string palya)
         {
             Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya));
-            Erteket_Frissit(teszt);            
+            Erteket_Frissit(teszt);
         }
     }
 }
