@@ -311,7 +311,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
                 Adat_Jármű ElemJármű = (from a in AdatokJármű
                                         where a.Azonosító == Pályaszám.Text.Trim()
-                                        && (a.Valóstípus.Contains("T5C5") || a.Típus.Contains("T5C5"))
+                                        && (a.Valóstípus.Contains(Típus) || a.Típus.Contains(Típus))
                                         select a).FirstOrDefault();
 
                 if (ElemJármű != null)
@@ -355,7 +355,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 }
                 else
                 {
-                    MessageBox.Show("A pályaszám nem T5C5! ", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"A pályaszám nem {Típus}! ", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 Változás?.Invoke();
                 this.Close();
