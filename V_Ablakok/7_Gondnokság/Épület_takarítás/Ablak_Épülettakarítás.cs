@@ -914,7 +914,7 @@ namespace Villamos
 
         private void ValidateKeyPress(object sender, KeyPressEventArgs e)
         {
-            if ((char)(e.KeyChar) != 13 && (char)(e.KeyChar) != 8 && !int.TryParse(e.KeyChar.ToString(), out int result))
+            if (!((char)(e.KeyChar) >= 48 && (char)(e.KeyChar) <= 57))
             {
                 MessageBox.Show("Csak számot lehet beírni!");
                 e.Handled = true;
@@ -972,15 +972,10 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Dátum1_ValueChanged(object sender, EventArgs e)
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\" + Dátum1.Value.ToString("yyyy") + @"épülettakarítás.mdb";
-                if (!File.Exists(hely))
-                    Adatbázis_Létrehozás.Épülettakarítótábla(hely);
-
                 Gombokfel2();
             }
             catch (HibásBevittAdat ex)
@@ -2365,10 +2360,8 @@ namespace Villamos
                         // **********************************************
                         // **Nyomtatás                                 **
                         // **********************************************
-                        if (Option9.Checked == true)
-                        {
-                            MyE.Nyomtatás(munkalap, 1, 1);
-                        }
+                        if (Option9.Checked) MyE.Nyomtatás(munkalap, 1, 1);
+
                         // bezárjuk az Excel-t
                         MyE.Aktív_Cella(munkalap, "A1");
                         MyE.ExcelMentés(fájlexc);
@@ -2441,12 +2434,9 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
                 string jelszó = "seprűéslapát";
 
-
-                string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
-                string szövegép;
                 List<Adat_Épület_Takarításrakijelölt> AdatokÉpület = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
-
                 List<Adat_Épület_Takarítás_Osztály> AdatokO = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
+
                 AdatokO = (from a in AdatokO
                            where a.Státus == false
                            orderby a.Id

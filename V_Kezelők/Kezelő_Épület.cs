@@ -22,7 +22,7 @@ namespace Villamos.Kezelők
         public List<Adat_Épület_Takarításrakijelölt> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM takarításrakijelölt";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Épület_Takarításrakijelölt> Adatok = new List<Adat_Épület_Takarításrakijelölt>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
