@@ -1939,7 +1939,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        INTO naptár
+
         private void Tábla_terv_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
@@ -2185,6 +2185,7 @@ namespace Villamos
                 string fájlexc;
                 int sor;
 
+                List<Adat_Épület_Naptár> AdatokNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 Adat_Épület_Takarításrakijelölt rekord;
                 Kezelő_Épület_Adattábla KézA = new Kezelő_Épület_Adattábla();
@@ -2324,10 +2325,9 @@ namespace Villamos
                         MyE.Vastagkeret("h10:n" + sor.ToString());
                         MyE.Vastagkeret("a" + sor.ToString() + ":n" + sor.ToString());
                         // Szombat vasárnap
-
-                        szöveg = "SELECT * FROM naptár where hónap=" + Dátum.Value.Month;
-
-                        Naptár = KézÉpületNaptár.Egy_Adat(hely, jelszó, szöveg);
+                        Naptár = (from a in AdatokNaptár
+                                  where a.Hónap == Dátum.Value.Month
+                                  select a).FirstOrDefault();
 
                         if (Naptár != null)
                         {

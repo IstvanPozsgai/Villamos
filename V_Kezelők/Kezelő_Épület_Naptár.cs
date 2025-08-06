@@ -138,38 +138,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        //elkopó
-        public Adat_Épület_Naptár Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-
-            Adat_Épület_Naptár Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Épület_Naptár(
-                                          rekord["Előterv"].ToÉrt_Bool(),
-                                          rekord["Hónap"].ToÉrt_Int(),
-                                          rekord["Igazolás"].ToÉrt_Bool(),
-                                          rekord["Napok"].ToStrTrim()
-                                          );
-                            }
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
     }
 }
