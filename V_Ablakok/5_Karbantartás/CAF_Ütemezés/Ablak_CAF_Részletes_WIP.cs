@@ -231,6 +231,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 {
                     Ütem_Köv_Számláló.BackColor = Color.LightPink;
                 }
+                KiirPvizsgalat();
             }
             catch (HibásBevittAdat ex)
             {
@@ -285,9 +286,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Ütem_vizsg_sorszám_km.Text = rekord.KM_Sorszám.ToString();
                     Ütem_vizsg_sorszám_idő.Text = rekord.IDŐ_Sorszám.ToString();
                     Ütem_megjegyzés.Text = rekord.Megjegyzés.Trim();
-                    Ütem_dátum_program.Value = rekord.Dátum_program;
-
-                    KiirPvizsgalat();
+                    Ütem_dátum_program.Value = rekord.Dátum_program;                   
                 }
             }
             catch (HibásBevittAdat ex)
@@ -868,14 +867,39 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void btn_frissit_Click(object sender, EventArgs e)
         {
-            KézCafKm.Erteket_Frissit(Posta_Segéd.Azonosító);
-            KiirPvizsgalat();
+            try
+            {
+                KézCafKm.Erteket_Frissit(Posta_Segéd.Azonosító);
+                KiirPvizsgalat();
+                MessageBox.Show("Sikeres frissítés!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }           
         }
-
         private void btn_elso_futtatas_Click(object sender, EventArgs e)
         {
-            Kezelő_CAF_KM_Attekintes.InitializeCache(KézAdatok);
-            KézCafKm.Tabla_Feltoltese();
+            try
+            {
+                Kezelő_CAF_KM_Attekintes.InitializeCache(KézAdatok);
+                KézCafKm.Tabla_Feltoltese();
+                MessageBox.Show("Sikeres feltöltés!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }         
         }
     }
 }

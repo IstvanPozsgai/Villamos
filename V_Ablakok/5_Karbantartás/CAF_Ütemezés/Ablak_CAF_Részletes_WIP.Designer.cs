@@ -952,6 +952,7 @@
             this.btn_elso_futtatas.Size = new System.Drawing.Size(45, 45);
             this.btn_elso_futtatas.TabIndex = 17;
             this.btn_elso_futtatas.UseVisualStyleBackColor = true;
+            this.btn_elso_futtatas.Visible = false;
             this.btn_elso_futtatas.Click += new System.EventHandler(this.btn_elso_futtatas_Click);
             // 
             // Ablak_CAF_Részletes_WIP
