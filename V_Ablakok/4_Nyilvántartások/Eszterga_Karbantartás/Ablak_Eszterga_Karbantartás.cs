@@ -20,6 +20,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
     public delegate void Event_Kidobó();
     public partial class Ablak_Eszterga_Karbantartás : Form
     {
+        //szinezesnel a hiba nem csak a pirosakat lehet rogziteni hanem a zold es sargakat.
         #region Osztalyszintu elemek
         DateTime TervDatum;
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
