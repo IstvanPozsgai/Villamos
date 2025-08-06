@@ -62,6 +62,7 @@ namespace Villamos
 
             Méretbetöltés();
 
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Telephely.Text = Cmbtelephely.Text;
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
