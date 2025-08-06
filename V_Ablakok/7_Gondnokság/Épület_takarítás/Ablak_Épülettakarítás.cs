@@ -483,7 +483,7 @@ namespace Villamos
 
                 Holtart.Be(20);
 
-                List<Adat_Épület_Takarításrakijelölt> Adatok = KézTakarításrakijelölt.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Épület_Takarításrakijelölt> Adatok = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
 
                 int E1db;
                 int E2db;
@@ -693,9 +693,8 @@ namespace Villamos
             {
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\" + Dátum1.Value.ToString("yyyy") + @"épülettakarítás.mdb";
 
-                if (!File.Exists(hely))
-                    return;
-                string jelszó = "seprűéslapát";
+                if (!File.Exists(hely)) return;
+
 
 
                 string szöveg = "SELECT * FROM takarításrakijelölt where hónap=" + Dátum1.Value.Month.ToString();
@@ -707,7 +706,7 @@ namespace Villamos
                 Tábla1.Visible = false;
 
 
-                List<Adat_Épület_Takarításrakijelölt> Adatok = KézTakarításrakijelölt.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Épület_Takarításrakijelölt> Adatok = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
 
                 int i = 0;
 
@@ -1083,7 +1082,7 @@ namespace Villamos
                 int idE2dbv;
                 int idE3dbv;
 
-
+                List<Adat_Épület_Takarításrakijelölt> AdatokÉpület = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
                 List<Adat_Épület_Takarítás_Osztály> Adatok = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adatok = (from a in Adatok
                           where a.Státus == false
@@ -1222,12 +1221,9 @@ namespace Villamos
                 // a táblázat érdemi része
 
                 string szöveg1;
-                string szövegép;
                 sor = 2;
 
-
                 List<Adat_Épület_Adattábla> AdatA;
-
 
                 Adat_Épület_Takarításrakijelölt EgyA;
 
@@ -1269,9 +1265,11 @@ namespace Villamos
                                 idE1dbv = 0;
                                 idE2dbv = 0;
                                 idE3dbv = 0;
-                                szövegép = "SELECT * FROM takarításrakijelölt where hónap=" + Dátum1.Value.Month.ToString();
-                                szövegép += " and  helységkód='" + rekord1.Helységkód.Trim() + "'";
-                                EgyA = KézTakarításrakijelölt.Egy_Adat(helyép, jelszó, szövegép);
+
+                                EgyA = (from a in AdatokÉpület
+                                        where a.Hónap == Dátum1.Value.Month
+                                        && a.Helységkód == rekord1.Helységkód.Trim()
+                                        select a).FirstOrDefault();
 
                                 if (EgyA != null)
                                 {
@@ -1877,18 +1875,12 @@ namespace Villamos
             if ((int)e.KeyCode == 17) Chk_CTRL.Checked = true;
         }
 
-        // JAVÍTANDÓ:
         private void Tábla_terv_listázás()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value.Year}épülettakarítás.mdb";
-                if (!File.Exists(hely))
-                    return;
-                string jelszó = "seprűéslapát";
                 int hónapnap = MyF.Hónap_hossza(Dátum.Value);
-                DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
-                string szöveg = "SELECT * FROM naptár WHERE hónap=" + Dátum.Value.Month;
+                List<Adat_Épület_Takarításrakijelölt> AdatokÉpület = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 Holtart.Be(hónapnap + 2);
                 Tábla_terv_Ürítés();
@@ -1896,11 +1888,10 @@ namespace Villamos
                 // kiírjuk ha van terv
                 if (HelységKód.Trim() != "")
                 {
-                    szöveg = "SELECT * FROM takarításrakijelölt WHERE hónap=" + Dátum.Value.Month;
-                    szöveg += " AND helységkód='" + HelységKód.Trim() + "'";
-
-
-                    Adat_Épület_Takarításrakijelölt rekord = KézTakarításrakijelölt.Egy_Adat(hely, jelszó, szöveg);
+                    Adat_Épület_Takarításrakijelölt rekord = (from a in AdatokÉpület
+                                                              where a.Hónap == Dátum.Value.Month
+                                                              && a.Helységkód == HelységKód.Trim()
+                                                              select a).FirstOrDefault();
                     if (rekord != null)
                     {
                         for (int i = 0; i < hónapnap; i++)
@@ -1995,7 +1986,7 @@ namespace Villamos
                 string szöveg;
                 string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
 
-                KijelöltListaFeltöltés();
+                AdatokKijelöltek = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
                 AdatTáblaListaFeltöltés();
 
                 Holtart.Be(Helyiséglista.Items.Count + 2);
@@ -2186,6 +2177,7 @@ namespace Villamos
                 int sor;
 
                 List<Adat_Épület_Naptár> AdatokNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
+                List<Adat_Épület_Takarításrakijelölt> AdatokÉpület = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 Adat_Épület_Takarításrakijelölt rekord;
                 Kezelő_Épület_Adattábla KézA = new Kezelő_Épület_Adattábla();
@@ -2277,8 +2269,11 @@ namespace Villamos
                         MyE.Vastagkeret("b8:g9");
                         MyE.Vastagkeret("h8:n9");
                         sor = 1;
-                        string szöveg = $"SELECT * FROM takarításrakijelölt where hónap={Dátum.Value.Month} AND helységkód='{helységkód.Trim()}'";
-                        rekord = KézTakarításrakijelölt.Egy_Adat(hely, jelszó, szöveg);
+
+                        rekord = (from a in AdatokÉpület
+                                  where a.Hónap == Dátum.Value.Month
+                                  && a.Helységkód == helységkód.Trim()
+                                  select a).FirstOrDefault();
 
                         if (rekord != null)
                         {
@@ -2449,7 +2444,7 @@ namespace Villamos
 
                 string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value:yyyy}épülettakarítás.mdb";
                 string szövegép;
-
+                List<Adat_Épület_Takarításrakijelölt> AdatokÉpület = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 List<Adat_Épület_Takarítás_Osztály> AdatokO = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
                 AdatokO = (from a in AdatokO
@@ -2569,9 +2564,10 @@ namespace Villamos
                         idE2db = 0;
                         idE3db = 0;
 
-                        szövegép = "SELECT * FROM takarításrakijelölt where hónap=" + Dátum.Value.Month;
-                        szövegép += " and  helységkód='" + rekord1.Helységkód.Trim() + "'";
-                        rekordép = KézTakarításrakijelölt.Egy_Adat(helyép, jelszó, szövegép);
+                        rekordép = (from a in AdatokÉpület
+                                    where a.Hónap == Dátum.Value.Month
+                                    && a.Helységkód == rekord1.Helységkód.Trim()
+                                    select a).FirstOrDefault();
 
                         if (rekordép != null)
                         {
@@ -2861,29 +2857,6 @@ namespace Villamos
                 string jelszó = "seprűéslapát";
 
                 AdatokAdatTábla = KézAdatTábla.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-        // JAVÍTANDÓ:
-        private void KijelöltListaFeltöltés()
-        {
-            try
-            {
-                AdatokKijelöltek.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\{Dátum.Value.Year}épülettakarítás.mdb";
-                string szöveg = "SELECT * FROM takarításrakijelölt";
-                string jelszó = "seprűéslapát";
-
-                AdatokKijelöltek = KézTakarításrakijelölt.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {

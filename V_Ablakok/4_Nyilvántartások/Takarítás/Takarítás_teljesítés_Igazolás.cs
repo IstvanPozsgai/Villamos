@@ -70,7 +70,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             AdatokRészletes = KézAdatTábla.Lista_Adatok(hely, jelszó, szöveg);
 
             szöveg = "SELECT * FROM takarításrakijelölt";
-            AdatokKijelöltek = KézTakarításrakijelölt.Lista_Adatok(helyép, jelszó, szöveg);
+            AdatokKijelöltek = KézTakarításrakijelölt.Lista_Adatok(Telephely, Dátum.Year);
             AdatokTIG.Clear();
 
             AdatokTakOpció = KézOpció.Lista_Adatok();
