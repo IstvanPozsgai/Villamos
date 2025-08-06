@@ -99,6 +99,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            GombLathatosagKezelo.Beallit(this);
             Jogosultsagkiosztas();
             TablaListazas();
             AtlagUzemoraFrissites(Alap_Napi_Atlag);
