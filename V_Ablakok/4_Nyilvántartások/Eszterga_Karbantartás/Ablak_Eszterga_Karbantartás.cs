@@ -716,25 +716,29 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private double AtlagUzemoraNovekedesKiszamitasa(DateTime tervDatum)
         {
-            double NapiAtlagaosUzemNovekedes = 0;
-            List<Adat_Eszterga_Uzemora> rekord = new List<Adat_Eszterga_Uzemora>();
+            double Szamlalo = 0;
+            double Osszeg = 0;
             try
             {
-                rekord = AdatokUzemora
-                     .Where(a => a.Dátum <= tervDatum && !a.Státus)
-                     .OrderBy(a => a.Dátum)
-                     .ToList();
+                List<Adat_Eszterga_Uzemora> Rekordok = AdatokUzemora
+                    .Where(a => a.Dátum <= tervDatum && !a.Státus)
+                    .OrderBy(a => a.Dátum)
+                    .ToList();
 
-                if (rekord.Count < 1)
-                    throw new Exception("Nincs elegendő adat az üzemóra átlagának számításához.");
+                if (Rekordok.Count < 2)
+                    return 0;
 
-                for (int i = 1; i < rekord.Count; i++)
+                List<Adat_Eszterga_Uzemora> utolsoNUzemora = Rekordok.Skip(Math.Max(0, Rekordok.Count - 5)).ToList();
+
+                for (int i = 1; i < utolsoNUzemora.Count; i++)
                 {
-                    double napok = (rekord[i].Dátum - rekord[i - 1].Dátum).TotalDays;
-                    if (napok > 0)
-                        NapiAtlagaosUzemNovekedes += (rekord[i].Uzemora - rekord[i - 1].Uzemora) / napok;
+                    double Napok = (utolsoNUzemora[i].Dátum - utolsoNUzemora[i - 1].Dátum).TotalDays;
+                    if (Napok > 0)
+                    {
+                        Osszeg += (utolsoNUzemora[i].Uzemora - utolsoNUzemora[i - 1].Uzemora) / Napok;
+                        Szamlalo++;
+                    }
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -745,7 +749,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return NapiAtlagaosUzemNovekedes / (rekord.Count - 1);
+            return Szamlalo > 0 ? Osszeg / Szamlalo : 0;
         }
 
 
@@ -754,49 +758,45 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// figyelembe véve mind a dátum-, mind az üzemóra-alapú ütemezést.  
         /// A két lehetséges esedékességi dátum közül a korábbit adja vissza.
         /// </summary>
-        private DateTime DatumEsedekesegSzamitasa(DateTime UtolsoDatum, Adat_Eszterga_Muveletek rekord, Adat_Eszterga_Uzemora uzemoraRekord)
+        private DateTime DatumEsedekesegSzamitasa(DateTime utolsoDatum, Adat_Eszterga_Muveletek rekord, Adat_Eszterga_Uzemora uzemoraRekord)
         {
-            try
+            DateTime? EsedekesDatumNap = null;
+            if (rekord.Mennyi_Dátum > 0)
+                EsedekesDatumNap = utolsoDatum.AddDays(rekord.Mennyi_Dátum);
+
+            DateTime? EsedekesDatumUzemora = null;
+            if (rekord.Mennyi_Óra > 0 && uzemoraRekord != null)
             {
-                DateTime? EsedekesDatumNap = null;
-                if (rekord.Mennyi_Dátum > 0)
-                    EsedekesDatumNap = UtolsoDatum.AddDays(rekord.Mennyi_Dátum);
-
-                DateTime? EsedekesDatumUzemora = null;
-                if (rekord.Mennyi_Óra > 0 && uzemoraRekord != null)
+                double NapiNov = AtlagUzemoraNovekedesKiszamitasa(DateTime.Today);
+                if (NapiNov > 0)
                 {
-                    double NapiUzemoraNovekedes = AtlagUzemoraNovekedesKiszamitasa(UtolsoDatum);
+                    long AktualisUzemora = AdatokUzemora
+                        .Where(a => !a.Státus)
+                        .OrderByDescending(a => a.Dátum)
+                        .FirstOrDefault()?.Uzemora ?? 0;
 
-                    if (NapiUzemoraNovekedes > 0)
+                    if (AktualisUzemora - uzemoraRekord.Uzemora >= rekord.Mennyi_Óra)
+                        EsedekesDatumUzemora = DateTime.Today;
+                    else
                     {
-                        double NapokEsedekessegig = rekord.Mennyi_Óra / NapiUzemoraNovekedes;
-                        EsedekesDatumUzemora = UtolsoDatum.AddDays(Math.Ceiling(NapokEsedekessegig));
+                        double Napok = rekord.Mennyi_Óra / NapiNov;
+                        EsedekesDatumUzemora = utolsoDatum.AddDays(Math.Ceiling(Napok));
                     }
                 }
-
-                if (EsedekesDatumNap.HasValue && EsedekesDatumUzemora.HasValue)
-                {
-                    return EsedekesDatumNap.Value <= EsedekesDatumUzemora.Value
-                        ? EsedekesDatumNap.Value
-                        : EsedekesDatumUzemora.Value;
-                }
-
-                if (EsedekesDatumNap.HasValue)
-                    return EsedekesDatumNap.Value;
-
-                if (EsedekesDatumUzemora.HasValue)
-                    return EsedekesDatumUzemora.Value;
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return UtolsoDatum;
+
+            if (EsedekesDatumNap.HasValue && EsedekesDatumUzemora.HasValue)
+                return EsedekesDatumNap.Value <= EsedekesDatumUzemora.Value
+                    ? EsedekesDatumNap.Value
+                    : EsedekesDatumUzemora.Value;
+
+            if (EsedekesDatumNap.HasValue)
+                return EsedekesDatumNap.Value;
+
+            if (EsedekesDatumUzemora.HasValue)
+                return EsedekesDatumUzemora.Value;
+
+            return utolsoDatum;
         }
 
         /// <summary>
