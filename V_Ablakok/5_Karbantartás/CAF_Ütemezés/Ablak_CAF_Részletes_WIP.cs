@@ -37,6 +37,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Elő_Dátumig = elő_Dátumig;
             Start();
 
+            if (Program.PostásNév == "POZSGAII" || Program.PostásNév == "PAPR")
+            {
+                btn_elso_futtatas.Visible = true;
+            }
         }
 
         private void Ablak_CAF_Részletes_Load(object sender, EventArgs e)
