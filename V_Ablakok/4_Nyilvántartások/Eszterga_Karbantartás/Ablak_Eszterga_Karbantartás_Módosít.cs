@@ -315,11 +315,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// Új rekord hozzáadása esetén ellenőrzi, hogy az azonosító már létezik-e az adatbázisban, 
         /// illetve biztosítja, hogy minden mező érvényes adatokat tartalmazzon.
         /// </summary>
-        private bool TxtBxEllenorzes(int ujRekord)
+        private bool TxtBxEllenorzes(int ujRekord, bool torles = false)
         {
             bool Eredmeny = false;
             try
             {
+                if (torles)
+                    return true;
                 //Ujrekordnal nem ellenőrizzük, hogy van-e kiválasztott sor
                 if (ujRekord != 0 && TablaMuvelet.SelectedRows.Count < 1)
                     throw new HibásBevittAdat("Nincs kiválasztott művelet.");
@@ -618,7 +620,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (AktivId != 0 && !ModositasEll(true))
                     throw new HibásBevittAdat("Nem történt változás.");
 
-                if (!TxtBxEllenorzes(AktivId))
+                if (!TxtBxEllenorzes(AktivId, false))
                     return;
                 // JAVÍTANDÓ: Nem azt mondtam, hogy nem vezethetsz be új változót
                 //kesz
@@ -663,7 +665,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             try
             {
                 int AktivId = int.TryParse(TxtBxId.Text?.Trim(), out int id) ? id : 0;
-                if (!TxtBxEllenorzes(AktivId))
+                if (!TxtBxEllenorzes(AktivId, true))
                     return;
 
                 foreach (DataGridViewRow row in TablaMuvelet.SelectedRows)
