@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ADODB;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -286,43 +287,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Ütem_megjegyzés.Text = rekord.Megjegyzés.Trim();
                     Ütem_dátum_program.Value = rekord.Dátum_program;
 
-                    //Teszt_Feltolt();
-
-                    Adat_CAF_KM_Attekintes teszt_adat = KézCafKm.Egy_Adat(rekord.Azonosító);
-
-                    /// P0: határ -1400
-                    tb_futhatmeg_p0.Text = $"{teszt_adat.kov_p0}";
-                    SzinezdFuthatMeg(tb_futhatmeg_p0, 1400);
-
-                    // P1: határ -7000
-                    tb_futhatmeg_p1.Text = $"{teszt_adat.kov_p1}";
-                    SzinezdFuthatMeg(tb_futhatmeg_p1, 7000);
-
-                    // P2: határ -28000
-                    tb_futhatmeg_p2.Text = $"{teszt_adat.kov_p2}";
-                    SzinezdFuthatMeg(tb_futhatmeg_p2, 28000);
-
-
-                    // Megtett P0
-                    tb_megtett_p0.Text = string.IsNullOrEmpty(teszt_adat.utolso_p0_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p0_kozott}";
-                    if (tb_megtett_p0.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p0, 14000, 15400);
-
-                    // Megtett P1
-                    tb_megtett_p1.Text = string.IsNullOrEmpty(teszt_adat.utolso_p1_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p1_kozott}";
-                    if (tb_megtett_p1.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p1, 70000, 77000);
-
-                    // P2 rendben
-                    tb_rendben_p2.Text = string.IsNullOrEmpty(teszt_adat.elso_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p2}";
-                    if (tb_rendben_p2.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p2, 280000, 308000);
-
-                    // P3 rendben
-                    tb_rendben_p3.Text = string.IsNullOrEmpty(teszt_adat.elso_p3?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p3}";
-                    if (tb_rendben_p3.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p3, 560000, 616000);
-
-                    // P3–P2 közötti futás
-                    tb_p3_p2_kozott.Text = string.IsNullOrEmpty(teszt_adat.utolso_p3_es_p2_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p3_es_p2_kozott}";
-                    if (tb_p3_p2_kozott.Text != "Még nem történt.") SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
-
+                    KiirPvizsgalat();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -334,6 +299,47 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void KiirPvizsgalat()
+        {
+            //Teszt_Feltolt();
+
+            Adat_CAF_KM_Attekintes teszt_adat = KézCafKm.Egy_Adat(Posta_Segéd.Azonosító);
+
+            /// P0: határ -1400
+            tb_futhatmeg_p0.Text = $"{teszt_adat.kov_p0}";
+            SzinezdFuthatMeg(tb_futhatmeg_p0, 1400);
+
+            // P1: határ -7000
+            tb_futhatmeg_p1.Text = $"{teszt_adat.kov_p1}";
+            SzinezdFuthatMeg(tb_futhatmeg_p1, 7000);
+
+            // P2: határ -28000
+            tb_futhatmeg_p2.Text = $"{teszt_adat.kov_p2}";
+            SzinezdFuthatMeg(tb_futhatmeg_p2, 28000);
+
+
+            // Megtett P0
+            tb_megtett_p0.Text = string.IsNullOrEmpty(teszt_adat.utolso_p0_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p0_kozott}";
+            if (tb_megtett_p0.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p0, 14000, 15400);
+
+            // Megtett P1
+            tb_megtett_p1.Text = string.IsNullOrEmpty(teszt_adat.utolso_p1_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p1_kozott}";
+            if (tb_megtett_p1.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p1, 70000, 77000);
+
+            // P2 rendben
+            tb_rendben_p2.Text = string.IsNullOrEmpty(teszt_adat.elso_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p2}";
+            if (tb_rendben_p2.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p2, 280000, 308000);
+
+            // P3 rendben
+            tb_rendben_p3.Text = string.IsNullOrEmpty(teszt_adat.elso_p3?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p3}";
+            if (tb_rendben_p3.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p3, 560000, 616000);
+
+            // P3–P2 közötti futás
+            tb_p3_p2_kozott.Text = string.IsNullOrEmpty(teszt_adat.utolso_p3_es_p2_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p3_es_p2_kozott}";
+            if (tb_p3_p2_kozott.Text != "Még nem történt.") SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
+
         }
 
         private void SzinezdTextBox(TextBox tb, int alsoHatar, int felsoHatar)
@@ -854,10 +860,16 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         private void Teszt_Feltolt()
         {
             KézCafKm.Feltolt();
-        }     
+        }
 
 
 
         #endregion
+
+        private void btn_frissit_Click(object sender, EventArgs e)
+        {
+            KézCafKm.Erteket_Frissit(Posta_Segéd.Azonosító);
+            KiirPvizsgalat();
+        }
     }
 }

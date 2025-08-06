@@ -115,8 +115,8 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.lb_vizsgalatok_kozotti_km = new System.Windows.Forms.Label();
-            this.tb_vizsgalatok_kozotti_km = new System.Windows.Forms.TextBox();
+            this.btn_frissit = new System.Windows.Forms.Button();
+            this.btn_elso_futtatas = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -700,7 +700,7 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.tb_vizsgalatok_kozotti_km, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.btn_elso_futtatas, 1, 8);
             this.tableLayoutPanel1.Controls.Add(this.tb_p3_p2_kozott, 1, 7);
             this.tableLayoutPanel1.Controls.Add(this.lb_p3_p2_kozott, 0, 7);
             this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p3, 1, 6);
@@ -717,7 +717,7 @@
             this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p2, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.lb_vizsgalatok_kozotti_km, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.btn_frissit, 0, 8);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 6);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 9;
@@ -728,8 +728,9 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 176F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 471);
             this.tableLayoutPanel1.TabIndex = 284;
             // 
@@ -930,22 +931,27 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Számítások";
             // 
-            // lb_vizsgalatok_kozotti_km
+            // btn_frissit
             // 
-            this.lb_vizsgalatok_kozotti_km.AutoSize = true;
-            this.lb_vizsgalatok_kozotti_km.Location = new System.Drawing.Point(3, 277);
-            this.lb_vizsgalatok_kozotti_km.Name = "lb_vizsgalatok_kozotti_km";
-            this.lb_vizsgalatok_kozotti_km.Size = new System.Drawing.Size(169, 20);
-            this.lb_vizsgalatok_kozotti_km.TabIndex = 16;
-            this.lb_vizsgalatok_kozotti_km.Text = "Vizsgálatok közötti KM";
+            this.btn_frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.btn_frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_frissit.Location = new System.Drawing.Point(3, 421);
+            this.btn_frissit.Name = "btn_frissit";
+            this.btn_frissit.Size = new System.Drawing.Size(45, 45);
+            this.btn_frissit.TabIndex = 16;
+            this.btn_frissit.UseVisualStyleBackColor = true;
+            this.btn_frissit.Click += new System.EventHandler(this.btn_frissit_Click);
             // 
-            // tb_vizsgalatok_kozotti_km
+            // btn_elso_futtatas
             // 
-            this.tb_vizsgalatok_kozotti_km.Location = new System.Drawing.Point(303, 280);
-            this.tb_vizsgalatok_kozotti_km.Name = "tb_vizsgalatok_kozotti_km";
-            this.tb_vizsgalatok_kozotti_km.ReadOnly = true;
-            this.tb_vizsgalatok_kozotti_km.Size = new System.Drawing.Size(139, 26);
-            this.tb_vizsgalatok_kozotti_km.TabIndex = 17;
+            this.btn_elso_futtatas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_elso_futtatas.BackgroundImage = global::Villamos.Properties.Resources.Graphicloads_Colorful_Long_Shadow_Arrow_download_3;
+            this.btn_elso_futtatas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_elso_futtatas.Location = new System.Drawing.Point(400, 421);
+            this.btn_elso_futtatas.Name = "btn_elso_futtatas";
+            this.btn_elso_futtatas.Size = new System.Drawing.Size(45, 45);
+            this.btn_elso_futtatas.TabIndex = 17;
+            this.btn_elso_futtatas.UseVisualStyleBackColor = true;
             // 
             // Ablak_CAF_Részletes_WIP
             // 
@@ -1097,7 +1103,7 @@
         private System.Windows.Forms.Label lb_rendben_p3;
         private System.Windows.Forms.TextBox tb_p3_p2_kozott;
         private System.Windows.Forms.Label lb_p3_p2_kozott;
-        private System.Windows.Forms.TextBox tb_vizsgalatok_kozotti_km;
-        private System.Windows.Forms.Label lb_vizsgalatok_kozotti_km;
+        private System.Windows.Forms.Button btn_frissit;
+        private System.Windows.Forms.Button btn_elso_futtatas;
     }
 }
