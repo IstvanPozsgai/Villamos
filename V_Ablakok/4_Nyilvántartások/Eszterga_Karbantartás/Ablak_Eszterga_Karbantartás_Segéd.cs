@@ -62,7 +62,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
-
         /// <summary>
         /// Az ablak betöltésekor eldönti, hogy a felhasználó rögzíthet-e új üzemóra adatot.  
         /// Ha nincs jogosultsága, megjeleníti az utolsó rögzített üzemórát, majd bezárja az ablakot.  
@@ -140,7 +139,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
         #endregion
 
-        #region Gombok
+        #region Gombok && Muveletek
 
         /// <summary>
         /// Ellenőrzi az üzemóra mező értékét, majd ha az érvényes és nem kisebb az utolsó rögzített értéknél,
@@ -189,8 +188,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
-
         private void TxtBxUzemOra_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -199,5 +196,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 BtnRogzit.PerformClick();
             }
         }
+        #endregion
     }
 }

@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Eszterga_Karbantartás_Segéd));
             this.TxtBxUzemOra = new System.Windows.Forms.TextBox();
-            this.Lbl_Üzemóra = new System.Windows.Forms.Label();
+            this.Lbl_Uzemora = new System.Windows.Forms.Label();
             this.LblElözö = new System.Windows.Forms.Label();
             this.LblSzöveg = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -46,14 +46,14 @@
             this.TxtBxUzemOra.TabIndex = 1;
             this.TxtBxUzemOra.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtBxUzemOra_KeyDown);
             // 
-            // Lbl_Üzemóra
+            // Lbl_Uzemora
             // 
-            this.Lbl_Üzemóra.AutoSize = true;
-            this.Lbl_Üzemóra.Location = new System.Drawing.Point(27, 56);
-            this.Lbl_Üzemóra.Name = "Lbl_Üzemóra";
-            this.Lbl_Üzemóra.Size = new System.Drawing.Size(78, 20);
-            this.Lbl_Üzemóra.TabIndex = 2;
-            this.Lbl_Üzemóra.Text = "Üzemóra:";
+            this.Lbl_Uzemora.AutoSize = true;
+            this.Lbl_Uzemora.Location = new System.Drawing.Point(27, 56);
+            this.Lbl_Uzemora.Name = "Lbl_Uzemora";
+            this.Lbl_Uzemora.Size = new System.Drawing.Size(78, 20);
+            this.Lbl_Uzemora.TabIndex = 2;
+            this.Lbl_Uzemora.Text = "Üzemóra:";
             // 
             // LblElözö
             // 
@@ -98,7 +98,7 @@
             this.Controls.Add(this.BtnRogzit);
             this.Controls.Add(this.LblSzöveg);
             this.Controls.Add(this.LblElözö);
-            this.Controls.Add(this.Lbl_Üzemóra);
+            this.Controls.Add(this.Lbl_Uzemora);
             this.Controls.Add(this.TxtBxUzemOra);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -114,7 +114,7 @@
 
         #endregion
         private System.Windows.Forms.TextBox TxtBxUzemOra;
-        private System.Windows.Forms.Label Lbl_Üzemóra;
+        private System.Windows.Forms.Label Lbl_Uzemora;
         private System.Windows.Forms.Label LblElözö;
         private System.Windows.Forms.Label LblSzöveg;
         private System.Windows.Forms.ToolTip toolTip1;

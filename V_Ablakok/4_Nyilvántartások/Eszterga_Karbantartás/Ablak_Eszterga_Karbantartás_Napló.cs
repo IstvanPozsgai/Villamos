@@ -50,7 +50,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             JogosultsagKiosztas();
             TablaMuvelet.ClearSelection();
             TablaNaplo.ClearSelection();
-            UzemoraKiolvasasEsBeiras(DtmPckr.Value, txtBxUzemora);
+            UzemoraKiolvasasEsBeiras(DtmPckr.Value, TxtBxUzemora);
         }
 
         /// <summary>
@@ -84,6 +84,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Tablak listazasa
+
         /// <summary>
         /// Színezi a táblázat sorait a státusz alapján, ha a státusz "Törölt".
         /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
@@ -262,6 +263,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Metodusok
+
         /// <summary>
         /// Új üzemóra rekordot ad hozzá az adatbázishoz a megadott dátum, üzemóra érték és státusz alapján.
         /// Az új üzemórát csak akkor rögzíti, ha az érték az előző és következő üzemóra értékek között helyezkedik el.
@@ -311,7 +313,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             bool Eredmeny = true;
             try
             {
-                if (!int.TryParse(txtBxUzemora.Text, out int uzemora))
+                if (!int.TryParse(TxtBxUzemora.Text, out int uzemora))
                 {
                     Eredmeny = false;
                     throw new HibásBevittAdat("Hibás üzemóra érték! Kérlek, csak számot adj meg.");
@@ -339,7 +341,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             return Eredmeny;
         }
-
         private bool UjNaplozas()
         {
             bool Eredmeny = true;
@@ -375,7 +376,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     int MennyiNap = sor.Cells["Nap"].Value.ToÉrt_Int();
                     int MennyiÓra = sor.Cells["Óra"].Value.ToÉrt_Int();
 
-                    long utolsoUzemora = txtBxUzemora.Text.ToÉrt_Long();
+                    long utolsoUzemora = TxtBxUzemora.Text.ToÉrt_Long();
 
                     Adat_Eszterga_Muveletek_Naplo adat = new Adat_Eszterga_Muveletek_Naplo(
                         id,
@@ -412,7 +413,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// Ha a 'Bekövetkezés' egységet választjuk, akkor a függvény null-t ad vissza.
         /// A 'Üzemóra' és 'Dátum' esetén az adatokat az AdatokUzemora lista alapján keresük.
         /// </summary>
-        private Adat_Eszterga_Uzemora KeresÜzemóra(long uzemora, DateTime datum, EsztergaEgyseg egyseg)
+        private Adat_Eszterga_Uzemora KeresUzemora(long uzemora, DateTime datum, EsztergaEgyseg egyseg)
         {
             Adat_Eszterga_Uzemora Eredmeny = null;
             try
@@ -446,7 +447,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 AdatokUzemora = Kez_Uzemora.Lista_Adatok();
-                Adat_Eszterga_Uzemora uzemoraRekord = KeresÜzemóra(0, datum, EsztergaEgyseg.Dátum);
+                Adat_Eszterga_Uzemora uzemoraRekord = KeresUzemora(0, datum, EsztergaEgyseg.Dátum);
                 if (uzemoraRekord != null)
                 {
                     txt.Text = uzemoraRekord.Uzemora.ToStrTrim();
@@ -494,7 +495,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                         a => a.ID == id && a.Utolsó_Dátum.Date == eredetiDatum.Date);
 
                     DateTime ujDatum = DtmPckr.Value.Date;
-                    long ujUzemora = txtBxUzemora.Text.ToÉrt_Long();
+                    long ujUzemora = TxtBxUzemora.Text.ToÉrt_Long();
                     string ujMegjegyzes = TxtBxMegjegyzes.Text.Trim();
 
                     bool Valtozas =
@@ -532,6 +533,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Gombok,Muveletek
+
         private void Btn_Modosit_Click(object sender, EventArgs e)
         {
             try
@@ -578,7 +580,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 DataGridViewRow sor = TablaNaplo.SelectedRows[0];
 
                 DtmPckr.Value = sor.Cells["Utolsó Dátum"].Value.ToÉrt_DaTeTime();
-                txtBxUzemora.Text = sor.Cells["Utolsó Üzemóra"].Value.ToStrTrim();
+                TxtBxUzemora.Text = sor.Cells["Utolsó Üzemóra"].Value.ToStrTrim();
                 TxtBxMegjegyzes.Text = sor.Cells["Megjegyzés"].Value.ToStrTrim();
             }
             catch (HibásBevittAdat ex)
@@ -606,7 +608,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 DateTime maiNap = DateTime.Today;
                 DtmPckr.Value = maiNap;
 
-                UzemoraKiolvasasEsBeiras(maiNap, txtBxUzemora);
+                UzemoraKiolvasasEsBeiras(maiNap, TxtBxUzemora);
 
                 TxtBxMegjegyzes.Text = string.Empty;
             }
@@ -634,7 +636,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 if (AktualisDatum > DateTime.Today)
                 {
                     DtmPckr.Value = DateTime.Today;
-                    UzemoraKiolvasasEsBeiras(DateTime.Today, txtBxUzemora);
+                    UzemoraKiolvasasEsBeiras(DateTime.Today, TxtBxUzemora);
                     throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
                 }
 
@@ -651,17 +653,17 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     TablaNaploListazas(AktualisDatum.Year);
                     elozoEv = AktualisDatum.Year;
                 }
-                Adat_Eszterga_Uzemora uzemoraRekord = KeresÜzemóra(0, AktualisDatum, EsztergaEgyseg.Dátum);
+                Adat_Eszterga_Uzemora uzemoraRekord = KeresUzemora(0, AktualisDatum, EsztergaEgyseg.Dátum);
 
                 if (uzemoraRekord != null)
                 {
-                    txtBxUzemora.Text = uzemoraRekord.Uzemora.ToStrTrim();
-                    txtBxUzemora.Enabled = false;
+                    TxtBxUzemora.Text = uzemoraRekord.Uzemora.ToStrTrim();
+                    TxtBxUzemora.Enabled = false;
                 }
                 else
                 {
-                    txtBxUzemora.Text = "0";
-                    txtBxUzemora.Enabled = true;
+                    TxtBxUzemora.Text = "0";
+                    TxtBxUzemora.Enabled = true;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -675,11 +677,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             finally { frissul = false; }
         }
-        #endregion
-
         private void TablaMuvelet_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             TablaSzinezes(TablaMuvelet);
         }
+        #endregion
     }
 }

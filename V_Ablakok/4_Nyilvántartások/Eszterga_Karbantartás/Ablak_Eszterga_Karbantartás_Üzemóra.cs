@@ -57,7 +57,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             Jogosultsagkiosztas();
             // A DataGridView adatforrásának kötése után automatikusan meghívja a ToroltTablaSzinezes metódust,
             // hogy a törölt státuszú sorokat színezve jelenítse meg.
-            Tabla.DataBindingComplete += (s, ev) => ToroltTablaSzinezes(Tabla);
+            Tabla.DataBindingComplete += (s, ev) => Szinezes(Tabla);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 int melyikelem = 160;
-                Btn_Módosít.Visible = Baross;
+                Btn_Modosit.Visible = Baross;
 
                 // módosítás 1 
                 //Ablak_Eszterga_Karbantartás_Segéd oldal használja az 1. módosításokat
@@ -78,8 +78,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 //Ablak_Eszterga_Karbantartás oldal használja a 2. módosításokat
 
                 // módosítás 3 
-                Btn_Módosít.Enabled = MyF.Vanjoga(melyikelem, 3);
-                Btn_ÚjFelvétel.Enabled = MyF.Vanjoga(melyikelem, 3);
+                Btn_Modosit.Enabled = MyF.Vanjoga(melyikelem, 3);
+                Btn_UjFelvetel.Enabled = MyF.Vanjoga(melyikelem, 3);
             }
             catch (HibásBevittAdat ex)
             {
@@ -128,7 +128,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 Tabla.DataSource = AdatTabla;
                 OszlopSzelesseg();
-                ToroltTablaSzinezes(Tabla);
+                Szinezes(Tabla);
                 Tabla.Visible = true;
                 Tabla.ClearSelection();
             }
@@ -159,7 +159,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
         /// Ha a státusz nem "Törölt", visszaáll a szokásos megjelenítés fehér háttérre.
         /// </summary>
-        private void ToroltTablaSzinezes(DataGridView tabla)
+        private void Szinezes(DataGridView tabla)
         {
             foreach (DataGridViewRow sor in tabla.Rows)
             {
@@ -192,22 +192,22 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void Tabla_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            ToroltTablaSzinezes(Tabla);
+            Szinezes(Tabla);
         }
 
         /// <summary>
         /// Sor kijelölésekor betölti annak adatait a szerkesztőmezőkbe (üzemóra, dátum, státusz).
         /// </summary>
-        private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void Tabla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 if (e.RowIndex >= 0)
                 {
                     DataGridViewRow row = Tabla.Rows[e.RowIndex];
-                    TxtBxÜzem.Text = row.Cells[1].Value.ToStrTrim();
-                    DtmPckrDátum.Value = row.Cells[2].Value.ToÉrt_DaTeTime();
-                    ChckBxStátus.Checked = row.Cells[3].Value.ToStrTrim() == "Törölt";
+                    TxtBxUzem.Text = row.Cells[1].Value.ToStrTrim();
+                    DtmPckr.Value = row.Cells[2].Value.ToÉrt_DaTeTime();
+                    ChckBxStatus.Checked = row.Cells[3].Value.ToStrTrim() == "Törölt";
                 }
             }
             catch (HibásBevittAdat ex)
@@ -227,29 +227,29 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// <summary>
         /// Előkészíti az űrlapot egy új üzemóra adat rögzítéséhez: törli a mezők értékeit, beállítja a mai dátumot.
         /// </summary>
-        private void Btn_ÚjFelvétel_Click(object sender, EventArgs e)
+        private void Btn_UjFelvetel_Click(object sender, EventArgs e)
         {
             Tabla.ClearSelection();
-            TxtBxÜzem.Text = string.Empty;
-            TxtBxÜzem.Focus();
-            DtmPckrDátum.Value = DateTime.Today;
-            ChckBxStátus.Checked = false;
+            TxtBxUzem.Text = string.Empty;
+            TxtBxUzem.Focus();
+            DtmPckr.Value = DateTime.Today;
+            ChckBxStatus.Checked = false;
         }
 
         /// <summary>
         /// A kijelölt sor adatait módosítja vagy új rekordot hoz létre, ha nincs kiválasztott sor.
         /// Előtte érvényesíti az adatokat, majd a változásokat adatbázisba menti, és frissíti a táblát.
         /// </summary>
-        private void Btn_Módosít_Click(object sender, EventArgs e)
+        private void Btn_Modosit_Click(object sender, EventArgs e)
         {
             try
             {
                 if (Tabla.SelectedRows.Count > 1)
                     throw new HibásBevittAdat("Egyszerre csak 1 sort lehet módosítani");
 
-                long UjUzemora = TxtBxÜzem.Text.ToÉrt_Long();
-                DateTime UjDatum = DtmPckrDátum.Value.Date;
-                bool UjStatus = ChckBxStátus.Checked;
+                long UjUzemora = TxtBxUzem.Text.ToÉrt_Long();
+                DateTime UjDatum = DtmPckr.Value.Date;
+                bool UjStatus = ChckBxStatus.Checked;
 
                 AdatokUzemora = Kez_Uzemora.Lista_Adatok();
 
@@ -340,7 +340,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 if (!fajlNev.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
                     fajlNev += ".pdf";
 
-                PDFtábla(fajlNev, Tabla);
+                PDFtabla(fajlNev, Tabla);
 
                 MessageBox.Show($"Elkészült a PDF fájl:\n{fajlNev}", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fajlNev);
@@ -360,7 +360,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// Egy adott DataGridView tartalmát exportálja PDF formátumba, megtartva a cellák háttér- és szövegszínét.
         /// Unicode-kompatibilis betűtípussal dolgozik, és Arial-t használ a PDF generálásához.
         /// </summary>
-        private void PDFtábla(string fájlNév, DataGridView tábla)
+        private void PDFtabla(string fájlNév, DataGridView tábla)
         {
             try
             {
