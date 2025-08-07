@@ -96,7 +96,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string Telephely, int Év, bool igazolás, int Hónap)
+        public void Módosítás_igazolás(string Telephely, int Év, bool igazolás, int Hónap)
         {
             try
             {
@@ -118,37 +118,25 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        //elkopó
-        public Adat_Épület_Naptár Egy_Adat(string hely, string jelszó, string szöveg)
+        public void Módosítás_előterv(string Telephely, int Év, bool előterv, int Hónap)
         {
-
-            Adat_Épület_Naptár Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Épület_Naptár(
-                                          rekord["Előterv"].ToÉrt_Bool(),
-                                          rekord["Hónap"].ToÉrt_Int(),
-                                          rekord["Igazolás"].ToÉrt_Bool(),
-                                          rekord["Napok"].ToStrTrim()
-                                          );
-                            }
-                        }
-                    }
-                }
+                FájlBeállítás(Telephely, Év);
+                string szöveg = "UPDATE naptár  SET ";
+                szöveg += $"előterv={előterv} ";
+                szöveg += $"  WHERE hónap={Hónap}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
-            return Adat;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
