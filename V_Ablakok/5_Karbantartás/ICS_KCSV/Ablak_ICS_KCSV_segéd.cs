@@ -23,7 +23,14 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
             Dátum_ütem = dátum_ütem;
             Telephely = telephely;
             Adat = adat;
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
+        }
+
+        public Ablak_ICS_KCSV_segéd()
+        {
+            InitializeComponent();
         }
 
         private void Ablak_ICS_KCSV_segéd_Load(object sender, EventArgs e)

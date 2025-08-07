@@ -70,6 +70,8 @@ namespace Villamos
             AdatokCiklus = KézCiklus.Lista_Adatok();
             Fülek.SelectedIndex = 0;
             Fülekkitöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
