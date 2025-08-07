@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 {
@@ -60,7 +61,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 int melyikelem = 160;
-
+                Btn_Modosit.Visible = Baross;
                 // módosítás 1 
                 //Ablak_Eszterga_Karbantartás_Segéd oldal használja az 1. módosításokat
 
@@ -68,6 +69,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 //Ablak_Eszterga_Karbantartás oldal használja a 2. módosításokat
 
                 // módosítás 3 
+                Btn_Modosit.Enabled = MyF.Vanjoga(melyikelem, 3);
             }
             catch (HibásBevittAdat ex)
             {

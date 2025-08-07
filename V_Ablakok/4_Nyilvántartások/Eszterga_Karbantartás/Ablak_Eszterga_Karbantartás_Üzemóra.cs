@@ -76,10 +76,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                 // módosítás 2
                 //Ablak_Eszterga_Karbantartás oldal használja a 2. módosításokat
-                Btn_Módosít.Enabled = MyF.Vanjoga(melyikelem, 2);
-                Btn_ÚjFelvétel.Enabled = MyF.Vanjoga(melyikelem, 2);
 
                 // módosítás 3 
+                Btn_Módosít.Enabled = MyF.Vanjoga(melyikelem, 3);
+                Btn_ÚjFelvétel.Enabled = MyF.Vanjoga(melyikelem, 3);
             }
             catch (HibásBevittAdat ex)
             {
