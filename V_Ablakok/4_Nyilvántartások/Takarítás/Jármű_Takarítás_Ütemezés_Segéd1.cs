@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
 {
@@ -19,7 +20,31 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
         {
             AblakTakFő = főTakAblak as Ablak_Jármű_takarítás_új;
             InitializeComponent();
+            Start();
         }
+
+        private void Start()
+        {
+            Jogosultságkiosztás();
+        }
+
+        private void Jogosultságkiosztás()
+        {
+            int melyikelem;
+            // ide kell az összes gombot tenni amit szabályozni akarunk false
+
+            Ütem_Rögzít.Enabled = false;
+            Ütem_Töröl.Enabled = false;
+
+            melyikelem = 181;
+            // módosítás 2 
+            if (MyF.Vanjoga(melyikelem, 2))
+            {
+                Ütem_Rögzít.Enabled = true;
+                Ütem_Töröl.Enabled = true;
+            }
+        }
+
 
         private void Jármű_Takarítás_Ütemezés_Segéd1_Load(object sender, EventArgs e)
         {

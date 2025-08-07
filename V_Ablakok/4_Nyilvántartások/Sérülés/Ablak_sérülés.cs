@@ -108,7 +108,7 @@ namespace Villamos
                 Üresrögzítő();
 
                 GombLathatosagKezelo.Beallit(this);
-                //Jogosultságkiosztás();
+                Jogosultságkiosztás();
                 AdatokSérülés_Feltöltés();
                 AdatokKöltség_Feltöltés();
                 AdatokKöltségNullás_Feltöltés();
