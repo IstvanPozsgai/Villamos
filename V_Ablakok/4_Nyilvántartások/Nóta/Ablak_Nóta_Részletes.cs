@@ -28,7 +28,13 @@ namespace Villamos.Villamos_Ablakok
         {
             InitializeComponent();
             Sorszám = sorszám;
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
+        }
+
+        public Ablak_Nóta_Részletes()
+        {
+            InitializeComponent();
         }
 
         private void Jogosultságkiosztás()

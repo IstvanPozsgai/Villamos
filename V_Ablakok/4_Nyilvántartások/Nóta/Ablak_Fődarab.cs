@@ -34,6 +34,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
         private void Start()
         {
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             FődarabTípusok_Feltöltése();
         }
