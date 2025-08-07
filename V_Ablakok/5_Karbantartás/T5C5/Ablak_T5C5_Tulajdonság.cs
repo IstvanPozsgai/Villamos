@@ -58,6 +58,8 @@ namespace Villamos
             Pályaszám_feltöltés();
             Fülek.SelectedIndex = 0;
             Fülekkitöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
