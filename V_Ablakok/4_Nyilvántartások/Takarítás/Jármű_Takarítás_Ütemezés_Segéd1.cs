@@ -31,7 +31,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
         private void Start()
         {
             GombLathatosagKezelo.Beallit(this);
-            //Jogosultságkiosztás();
+            Jogosultságkiosztás();
         }
 
         private void Jogosultságkiosztás()

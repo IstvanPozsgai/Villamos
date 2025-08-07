@@ -43,7 +43,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             StátusokFeltöltése();
 
             GombLathatosagKezelo.Beallit(this);
-            //Jogosultságkiosztás();
+            Jogosultságkiosztás();
             AdatokTeljes = KézTábla.Lista_Adatok();
             CmbAzonosító.Text = Azonosító;
             TáblaListázás();

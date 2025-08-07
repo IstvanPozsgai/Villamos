@@ -55,7 +55,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             PályaszámListaFeltölt();
 
             GombLathatosagKezelo.Beallit(this);
-            //Jogosultságkiosztás();
+            Jogosultságkiosztás();
             Gombok_Ki();
         }
 
