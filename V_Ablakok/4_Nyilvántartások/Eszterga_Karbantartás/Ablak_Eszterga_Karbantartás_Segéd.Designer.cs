@@ -32,8 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Eszterga_Karbantartás_Segéd));
             this.TxtBxUzemOra = new System.Windows.Forms.TextBox();
             this.Lbl_Uzemora = new System.Windows.Forms.Label();
-            this.LblElözö = new System.Windows.Forms.Label();
-            this.LblSzöveg = new System.Windows.Forms.Label();
+            this.LblElozo = new System.Windows.Forms.Label();
+            this.LblSzoveg = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Btn_Rogzit = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -55,21 +55,21 @@
             this.Lbl_Uzemora.TabIndex = 2;
             this.Lbl_Uzemora.Text = "Üzemóra:";
             // 
-            // LblElözö
+            // LblElozo
             // 
-            this.LblElözö.AutoSize = true;
-            this.LblElözö.Location = new System.Drawing.Point(27, 119);
-            this.LblElözö.Name = "LblElözö";
-            this.LblElözö.Size = new System.Drawing.Size(0, 20);
-            this.LblElözö.TabIndex = 3;
+            this.LblElozo.AutoSize = true;
+            this.LblElozo.Location = new System.Drawing.Point(27, 119);
+            this.LblElozo.Name = "LblElozo";
+            this.LblElozo.Size = new System.Drawing.Size(0, 20);
+            this.LblElozo.TabIndex = 3;
             // 
-            // LblSzöveg
+            // LblSzoveg
             // 
-            this.LblSzöveg.AutoSize = true;
-            this.LblSzöveg.Location = new System.Drawing.Point(27, 23);
-            this.LblSzöveg.Name = "LblSzöveg";
-            this.LblSzöveg.Size = new System.Drawing.Size(0, 20);
-            this.LblSzöveg.TabIndex = 4;
+            this.LblSzoveg.AutoSize = true;
+            this.LblSzoveg.Location = new System.Drawing.Point(27, 23);
+            this.LblSzoveg.Name = "LblSzoveg";
+            this.LblSzoveg.Size = new System.Drawing.Size(0, 20);
+            this.LblSzoveg.TabIndex = 4;
             // 
             // toolTip1
             // 
@@ -96,8 +96,8 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(234)))), ((int)(((byte)(214)))));
             this.ClientSize = new System.Drawing.Size(365, 189);
             this.Controls.Add(this.Btn_Rogzit);
-            this.Controls.Add(this.LblSzöveg);
-            this.Controls.Add(this.LblElözö);
+            this.Controls.Add(this.LblSzoveg);
+            this.Controls.Add(this.LblElozo);
             this.Controls.Add(this.Lbl_Uzemora);
             this.Controls.Add(this.TxtBxUzemOra);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -115,8 +115,8 @@
         #endregion
         private System.Windows.Forms.TextBox TxtBxUzemOra;
         private System.Windows.Forms.Label Lbl_Uzemora;
-        private System.Windows.Forms.Label LblElözö;
-        private System.Windows.Forms.Label LblSzöveg;
+        private System.Windows.Forms.Label LblElozo;
+        private System.Windows.Forms.Label LblSzoveg;
         private System.Windows.Forms.ToolTip toolTip1;
         internal System.Windows.Forms.Button Btn_Rogzit;
     }
