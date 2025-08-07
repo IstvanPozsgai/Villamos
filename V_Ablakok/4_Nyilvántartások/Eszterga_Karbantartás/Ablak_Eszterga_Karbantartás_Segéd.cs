@@ -81,16 +81,16 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                      select a).FirstOrDefault();
 
                     if (Uzemora != null)
-                        LblElözö.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Uzemora}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
+                        LblElozo.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Uzemora}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
                     else
-                        LblElözö.Text = "Nincs előző napi üzemóra rögzítve.";
+                        LblElozo.Text = "Nincs előző napi üzemóra rögzítve.";
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                     return;
                 }
 
-                LblSzöveg.Text = $"Írja be mai napi Üzemóra állását.";
+                LblSzoveg.Text = $"Írja be mai napi Üzemóra állását.";
 
                 AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                 Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
@@ -99,7 +99,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                 select a).FirstOrDefault();
                 if (rekord == null)
                 {
-                    LblElözö.Text = "Még nem volt üzemóra rögzítés\n az adatbázisban.";
+                    LblElozo.Text = "Még nem volt üzemóra rögzítés\n az adatbázisban.";
                     return;
                 }
                 else if (rekord != null && rekord.Dátum == DateTime.Today)
@@ -109,7 +109,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     this.Close();
                 }
 
-                LblElözö.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Uzemora}\nDátum: {rekord.Dátum.ToShortDateString()}";
+                LblElozo.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Uzemora}\nDátum: {rekord.Dátum.ToShortDateString()}";
             }
             catch (HibásBevittAdat ex)
             {
