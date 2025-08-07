@@ -795,6 +795,7 @@ namespace Villamos.Villamos_Ablakok
             this.V_Idő_CiklusRögzít_gom.Size = new System.Drawing.Size(50, 50);
             this.V_Idő_CiklusRögzít_gom.TabIndex = 205;
             this.V_Idő_CiklusRögzít_gom.UseVisualStyleBackColor = true;
+            this.V_Idő_CiklusRögzít_gom.Click += new System.EventHandler(this.V_Idő_CiklusRögzít_gom_Click);
             // 
             // label45
             // 

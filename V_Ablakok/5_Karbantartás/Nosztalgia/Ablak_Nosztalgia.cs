@@ -20,7 +20,6 @@ namespace Villamos.Villamos_Ablakok
     {
         #region Kezelők - Listák
 
-
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
         readonly Kezelő_Nosztalgia_Állomány KézÁllomány = new Kezelő_Nosztalgia_Állomány();
         readonly Kezelő_Nosztalgia_Tevékenység KézTevékenység = new Kezelő_Nosztalgia_Tevékenység();
@@ -28,6 +27,7 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Nosztagia_Futás KézFutás = new Kezelő_Nosztagia_Futás();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
         readonly Kezelő_Jármű2 KJAdat_2 = new Kezelő_Jármű2();
+        readonly Kezelő_Jármű_Takarítás_Vezénylés KézTakarítás = new Kezelő_Jármű_Takarítás_Vezénylés();
 
         List<Adat_Jármű_2> JAdatok_2 = new List<Adat_Jármű_2>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
@@ -37,7 +37,8 @@ namespace Villamos.Villamos_Ablakok
         List<Adat_Nosztagia_Futás> AdatokFutás = new List<Adat_Nosztagia_Futás>();
         List<Adat_Jármű_hiba> AdatokHiba = new List<Adat_Jármű_hiba>();
         List<Adat_Karbantartási> AdatokKarbantartási = new List<Adat_Karbantartási>();
-        readonly List<Adat_Szerelvény> AdatokSzer = new List<Adat_Szerelvény>();
+        List<Adat_Szerelvény> AdatokSzer = new List<Adat_Szerelvény>();
+        List<Adat_Jármű_Takarítás_Vezénylés> AdatokTakarítás = new List<Adat_Jármű_Takarítás_Vezénylés>();
 
         private void ListaAdatokJármű()
         {
@@ -158,18 +159,35 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        private void ListaAdatokTakarítás()
+        {
+            try
+            {
+                AdatokTakarítás.Clear();
+                AdatokTakarítás = KézTakarítás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void ListaFeltöltés()
         {
             ListaAdatokJármű();
             ListaJadatok2();
             ListaAdatokÁllomány();
+            ListaAdatokTevékenység();
             ListaCiklus();
             ListaÉvesFutás();
-
-            //HIBÁS VILLAMOSOK TÁBLÁJA
+            ListaAdatokTakarítás();
             ListaHiba();
         }
+
         #endregion
 
         #region Ablak
@@ -177,25 +195,15 @@ namespace Villamos.Villamos_Ablakok
         {
             InitializeComponent();
         }
+
         private void Ablak_Nosztalgia_Load(object sender, EventArgs e)
         {
             Telephelyekfeltöltése();
 
-            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            Fülek.SelectedIndex = 0;
 
             // létrehozzuk a  könyvtárat
             string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia";
             if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-            hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\VillamosNoszt.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.NosztTábla(hely);
-
-            hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.Futásnaptábla_Nosztalgia(hely);
-
-            hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\Futás_{DateTime.Today.Year}.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.NosztFutás(hely);
 
             Pályaszám_feltöltés();
 
@@ -207,10 +215,13 @@ namespace Villamos.Villamos_Ablakok
             hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\Pdf";
             if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
 
-            Fülek.SelectedIndex = 0;
             Fülekkitöltése();
             Jogosultságkiosztás();
+            ListaFeltöltés();
+
+
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+            Fülek.SelectedIndex = 0;
         }
         #endregion
 
@@ -495,16 +506,22 @@ namespace Villamos.Villamos_Ablakok
             if (Cmbtelephely.Text.Trim() == "") return;
             if (Pályaszám.Text.Trim() == "") return;
 
-            ListaFeltöltés();
 
             // ürítjük a mezőket
             {
                 Típus_text.Text = "";
+                Gyártó_text.Text = "";
+                Év_text.Text = "";
+                EszkSz_text.Text = "";
+                LeltSz_text.Text = "";
+                TárH_text.Text = "";
                 Státus_text.Text = "";
                 Miótaáll_text.Text = "";
                 Takarítás_text.Text = "";
                 Főmérnökség_text.Text = "";
                 Járműtípus_text.Text = "";
+                ut_forg_text.Text = "";
+                Fut_nap_text.Text = "";
             }
 
             Adat_Jármű KiválKocsi = (from a in AdatokJármű
@@ -512,9 +529,19 @@ namespace Villamos.Villamos_Ablakok
                                      && a.Azonosító.Trim() == Pályaszám.Text.Trim()
                                      select a).FirstOrDefault();
 
-            Adat_Nosztalgia_Tevékenység KiválKocsi1 = (from a in AdatokTevékenység
-                                                       where a.Azonosító.Trim() == Pályaszám.Text.Trim()
-                                                    select a).FirstOrDefault();
+            Adat_Jármű_Takarítás_Vezénylés KiválKocsiTakarítás = (from a in AdatokTakarítás
+                                                                  where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                                                  orderby a.Dátum descending
+                                                                  select a).FirstOrDefault();
+
+            Adat_Nosztalgia_Tevékenység KiválKocsiTev = (from a in AdatokTevékenység
+                                                         where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                                         select a).FirstOrDefault();
+
+            Adat_Nosztalgia_Állomány KiválKocsiÁll = (from a in AdatokÁllomány
+                                                      where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                                      select a).FirstOrDefault();
+
 
             if (KiválKocsi == null) MessageBox.Show("Az adatbázisban nem található a pályaszám!", "Figyelmeztetés!");
             else
@@ -536,26 +563,32 @@ namespace Villamos.Villamos_Ablakok
                 TárH_text.Text = KiválKocsi.Üzem.Trim();
             }
 
-            if (KiválKocsi1 == null) MessageBox.Show("Az adatbázisban nem található a pályaszám!", "Figyelmeztetés!");
+            if (KiválKocsiTev == null && KiválKocsiÁll == null) MessageBox.Show("Az adatbázisban nem található a pályaszám!", "Figyelmeztetés!");
             else
             {
-                //TODO
-
-                ut_forg_text.Text = KiválKocsi1.Utolsóforgalminap.ToString().Trim();
-                Fut_dátum.Value = KiválKocsi1.Vizsgálatdátuma_idő;
-                if (KiválKocsi1.Vizsgálatfokozata.Contains("V")) Cmb_FutCiklusE.Text = "-";
-                else Cmb_FutCiklusE.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
-                Fut_sorszám.Text = KiválKocsi1.Vizsgálatszáma_idő.Trim();
-                Txt_V1_dátum.Value = KiválKocsi1.Vizsgálatdátuma_km;
-                Cmb_KmCiklus_V1.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
-                Txt_V1_sorszám.Text = KiválKocsi1.Vizsgálatszáma_km.Trim();
-                Txt_V1_Kmv.Text = KiválKocsi1.Km_v.ToString().Trim();
-                Txt_V1_Kmu.Text = KiválKocsi1.Km_u.ToString().Trim();
-                Txt_V2_dátum.Value = KiválKocsi1.Vizsgálatdátuma_km;
-                Cmb_KmCiklus_V2.Text = KiválKocsi1.Vizsgálatfokozata.Trim();
-                Txt_V2_sorszám.Text = KiválKocsi1.Vizsgálatszáma_km.Trim();
-                Txt_V2_Kmv.Text = KiválKocsi1.Km_v.ToString().Trim();
-                Txt_V2_Kmu.Text = KiválKocsi1.Km_u.ToString().Trim();
+                Típus_text.Text = "Nosztalgia";
+                Járműtípus_text.Text = KiválKocsiÁll.Ntípus?.Trim();
+                Év_text.Text = KiválKocsiÁll.Év?.Trim();
+                Gyártó_text.Text = KiválKocsiÁll.Gyártó?.Trim();
+                EszkSz_text.Text = KiválKocsiÁll.Eszközszám?.Trim();
+                LeltSz_text.Text = KiválKocsiÁll.Leltári_szám?.Trim();
+                TárH_text.Text = KiválKocsi.Üzem?.Trim();
+                ut_forg_text.Text = KiválKocsiTev.Utolsóforgalminap.ToStrTrim();
+                Fut_dátum.Value = KiválKocsiTev.Vizsgálatdátuma_idő;
+                if (KiválKocsiTev.Vizsgálatfokozata.Contains("V")) Cmb_FutCiklusE.Text = "-";
+                else Cmb_FutCiklusE.Text = KiválKocsiTev.Vizsgálatfokozata?.Trim();
+                Fut_sorszám.Text = KiválKocsiTev.Vizsgálatszáma_idő?.Trim();
+                Txt_V1_dátum.Value = KiválKocsiTev.Vizsgálatdátuma_km;
+                Cmb_KmCiklus_V1.Text = KiválKocsiTev.Vizsgálatfokozata?.Trim();
+                Txt_V1_sorszám.Text = KiválKocsiTev.Vizsgálatszáma_km?.Trim();
+                Txt_V1_Kmv.Text = KiválKocsiTev.Km_v.ToStrTrim();
+                Txt_V1_Kmu.Text = KiválKocsiTev.Km_u.ToStrTrim();
+                Txt_V2_dátum.Value = KiválKocsiTev.Vizsgálatdátuma_km;
+                Cmb_KmCiklus_V2.Text = KiválKocsiTev.Vizsgálatfokozata?.Trim();
+                Txt_V2_sorszám.Text = KiválKocsiTev.Vizsgálatszáma_km?.Trim();
+                Txt_V2_Kmv.Text = KiválKocsiTev.Km_v.ToStrTrim();
+                Txt_V2_Kmu.Text = KiválKocsiTev.Km_u.ToStrTrim();
+                Takarítás_text.Text = KiválKocsiTakarítás?.Dátum.ToStrTrim();
             }
 
             AdatokCiklus = (from a in AdatokCiklus
@@ -596,6 +629,7 @@ namespace Villamos.Villamos_Ablakok
         }
         private void AlapadatRögzít_Click(object sender, EventArgs e)
         {
+            //TODO: Átnézni és módosítani ab műveletekkel
             try
             {
                 string hibaszöveg = "";
@@ -675,26 +709,26 @@ namespace Villamos.Villamos_Ablakok
                     throw new HibásBevittAdat(hibaszöveg);
                 }
 
-                ListaAdatokÁllomány();
-                Adat_Nosztalgia_Állomány AdatÁllomány = (from a in AdatokÁllomány
-                                                         where a.Azonosító.Trim() == Pályaszám.Text.Trim()
-                                                         select a).FirstOrDefault();
+                ListaAdatokTevékenység();
+                Adat_Nosztalgia_Tevékenység AdatTevékenység = (from a in AdatokTevékenység
+                                                               where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                                               select a).FirstOrDefault();
                 string szöveg = "";
-                if (AdatokÁllomány.Count() != 0)
+                if (AdatTevékenység != null)
                 {
                     // módosítás
-                    szöveg = "UPDATE Állomány  SET ";
-                    szöveg += $"vizsgálatdátuma=' {Fut_dátum.Value:yyyy.MM.dd}', ";
+                    szöveg = "UPDATE Tevékenység  SET ";
+                    szöveg += $"vizsgálatdátuma_idő=' {Fut_dátum.Value:yyyy.MM.dd}', ";
                     szöveg += $"vizsgálatfokozata= '{Cmb_FutCiklusE.Text.Trim()}', ";
-                    szöveg += $"vizsgálatszáma= '{Fut_sorszám.Text.Trim()}',  ";
+                    szöveg += $"vizsgálatszáma_idő= '{Fut_sorszám.Text.Trim()}',  ";
                     szöveg += $"utolsórögzítés= '{DateTime.Now:yyyy.MM.dd}'  ";
                     szöveg += " WHERE azonosító='" + Pályaszám.Text.Trim() + "'";
                 }
                 else
                 {
                     // új adat
-                    szöveg = "INSERT INTO Állomány (azonosító, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
-                    szöveg += $"'{Pályaszám.Text.Trim()} ', '{Év_text.Text.Trim()}', '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}')";
+                    szöveg = "INSERT INTO Tevékenység (azonosító, vizsgálatdátuma, vizsgálatfokozata, vizsgálatszáma, utolsórögzítés) VALUES (";
+                    szöveg += $"'{Pályaszám.Text.Trim()}', '{Fut_dátum.Value:yyyy.MM.dd}', '{Cmb_FutCiklusE.Text.Trim()}', '{Fut_sorszám.Text.Trim()}', '{DateTime.Now:yyyy.MM.dd}')";
                 }
 
                 string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
@@ -723,20 +757,33 @@ namespace Villamos.Villamos_Ablakok
                     hibaszöveg += "A pályaszám megadása kötelező.\n";
                     throw new HibásBevittAdat(hibaszöveg);
                 }
+                if (Cmb_KmCiklus_V1_Cnév.Text == null) throw new HibásBevittAdat("A ciklus kiválasztása Kötelező!");
 
-                ListaAdatokÁllomány();
-                AdatokÁllomány = (from a in AdatokÁllomány
-                                  where a.Azonosító.Trim() == Pályaszám.Text.Trim()
-                                  select a).ToList();
+
+                ListaAdatokTevékenység();
+                Adat_Nosztalgia_Tevékenység AdatTevékenység = (from a in AdatokTevékenység
+                                                               where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+                                                               select a).FirstOrDefault();
 
                 string szöveg = "";
-                if (AdatokÁllomány.Count() != 0)
+                if (AdatTevékenység != null)
                 {
                     // módosítás
-                    szöveg = "UPDATE Állomány  SET ";
-                    szöveg += $"vizsgálatdátuma=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
-                    szöveg += $"vizsgálatfokozata= '{Cmb_KmCiklus_V1.Text.Trim()}', ";
-                    szöveg += $"vizsgálatszáma= '{Txt_V1_sorszám.Text.Trim()}',  ";
+                    szöveg = "UPDATE Tevékenység  SET ";
+                    if (Cmb_KmCiklus_V1_Cnév.Text.Contains("+"))
+                    {
+                        szöveg += $"vizsgálatdátuma_idő=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
+                        szöveg += $"vizsgálatdátuma_km=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
+                        szöveg += $"vizsgálatfokozata= '{Cmb_KmCiklus_V1.Text.Trim()}', ";
+                        szöveg += $"vizsgálatszáma_idő= '{Txt_V1_sorszám.Text.Trim()}',  ";
+                        szöveg += $"vizsgálatszáma_km= '{Txt_V1_sorszám.Text.Trim()}',  ";
+                    }
+                    else
+                    {
+                        szöveg += $"vizsgálatdátuma_km=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
+                        szöveg += $"vizsgálatfokozata= '{Cmb_KmCiklus_V1.Text.Trim()}', ";
+                        szöveg += $"vizsgálatszáma_km= '{Txt_V1_sorszám.Text.Trim()}',  ";
+                    }
                     szöveg += $"km_v= '{Txt_V1_Kmv.Text.Trim()}',  ";
                     szöveg += $"km_u= '{Txt_V1_Kmu.Text.Trim()}',  ";
                     szöveg += $"utolsórögzítés= '{DateTime.Now:yyyy.MM.dd}'  ";
@@ -745,7 +792,7 @@ namespace Villamos.Villamos_Ablakok
                 else
                 {
                     // új adat
-                    szöveg = "INSERT INTO Állomány (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
+                    szöveg = "INSERT INTO Tevékenység (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
                     szöveg += $"'{Pályaszám.Text.Trim()} ', '{Gyártó_text.Text.Trim()}', '{Év_text.Text.Trim()}', '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}')";
                 }
 
@@ -1668,6 +1715,52 @@ namespace Villamos.Villamos_Ablakok
             }
 
 
+        }
+
+        private void V_Idő_CiklusRögzít_gom_Click(object sender, EventArgs e)
+        {
+            //if (Cmb_KmCiklus_V1_Cnév.Text == null) throw new HibásBevittAdat("A ciklus kiválasztása Kötelező!");
+
+
+            //ListaAdatokTevékenység();
+            //Adat_Nosztalgia_Tevékenység AdatTevékenység = (from a in AdatokTevékenység
+            //                                               where a.Azonosító.Trim() == Pályaszám.Text.Trim()
+            //                                               select a).FirstOrDefault();
+
+            //string szöveg = "";
+            //if (AdatTevékenység != null)
+            //{
+            //    // módosítás
+            //    szöveg = "UPDATE Tevékenység  SET ";
+            //    if (Cmb_KmCiklus_V1_Cnév.Text.Contains("+"))
+            //    {
+            //        szöveg += $"vizsgálatdátuma_idő=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
+            //        szöveg += $"vizsgálatdátuma_km=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
+            //        szöveg += $"vizsgálatfokozata= '{Cmb_KmCiklus_V1.Text.Trim()}', ";
+            //        szöveg += $"vizsgálatszáma_idő= '{Txt_V1_sorszám.Text.Trim()}',  ";
+            //        szöveg += $"vizsgálatszáma_km= '{Txt_V1_sorszám.Text.Trim()}',  ";
+            //    }
+            //    else
+            //    {
+            //        szöveg += $"vizsgálatdátuma_km=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
+            //        szöveg += $"vizsgálatfokozata= '{Cmb_KmCiklus_V1.Text.Trim()}', ";
+            //        szöveg += $"vizsgálatszáma_km= '{Txt_V1_sorszám.Text.Trim()}',  ";
+            //    }
+            //    szöveg += $"km_v= '{Txt_V1_Kmv.Text.Trim()}',  ";
+            //    szöveg += $"km_u= '{Txt_V1_Kmu.Text.Trim()}',  ";
+            //    szöveg += $"utolsórögzítés= '{DateTime.Now:yyyy.MM.dd}'  ";
+            //    szöveg += " WHERE azonosító='" + Pályaszám.Text.Trim() + "'";
+            //}
+            //else
+            //{
+            //    // új adat
+            //    szöveg = "INSERT INTO Tevékenység (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
+            //    szöveg += $"'{Pályaszám.Text.Trim()} ', '{Gyártó_text.Text.Trim()}', '{Év_text.Text.Trim()}', '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}')";
+            //}
+
+            //string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
+            //string jelszó = "kloczkal";
+            //MyA.ABMódosítás(hely, jelszó, szöveg);
         }
     }
 }
