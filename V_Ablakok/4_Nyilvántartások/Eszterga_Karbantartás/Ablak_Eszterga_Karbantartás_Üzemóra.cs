@@ -21,6 +21,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
     public partial class Ablak_Eszterga_Karbantartás_Üzemóra : Form
     {
         #region Osztályszintű elemek
+
         DataTable AdatTabla = new DataTable();
         public event Event_Kidobo Eszterga_Valtozas;
         // JAVÍTANDÓ:?

@@ -41,12 +41,23 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Alap
+
+        /// <summary>
+        /// Az ablak konstruktorfüggvénye.  
+        /// Betölti az aktuális évhez tartozó naplóbejegyzéseket, valamint az összes karbantartási műveletet.
+        /// </summary>
         public Ablak_Eszterga_Karbantartás_Napló()
         {
             InitializeComponent();
             TablaNaploListazas(DtmPckr.Value.Year);
             TablaListazasMuvelet();
         }
+
+        /// <summary>
+        /// Az ablak betöltésekor fut le.  
+        /// Jogosultságokat állít be, majd alapértelmezetten törli a kijelölést a táblázatokból,  
+        /// és beolvassa az aktuális dátumhoz tartozó üzemóra értéket.
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_Napló_Load(object sender, EventArgs e)
         {
             JogosultsagKiosztas();
@@ -256,6 +267,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Egyseg
+
+        /// <summary>
+        /// Az esztergagép karbantartási egységeit leíró felsorolás.
+        /// Meghatározza, hogy a karbantartási művelet milyen típusú ütemezés szerint történik.
+        /// </summary>
         public enum EsztergaEgyseg
         {
             Dátum = 1,
@@ -310,6 +326,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             return Eredmeny;
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy az adott dátumhoz tartozik-e már üzemóra bejegyzés.
+        /// Ha nem létezik, létrehoz egy újat a megadott érték alapján.
+        /// </summary>
         private bool UjUzemora(DateTime datum, bool status)
         {
             bool Eredmeny = true;
@@ -343,6 +364,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             return Eredmeny;
         }
+
+        /// <summary>
+        /// Új naplóbejegyzés(ek) létrehozása a kijelölt műveletek alapján a megadott dátumra.
+        /// Előtte ellenőrzi, hogy a bejegyzés nem ismétlődik-e, valamint az üzemóra mező is érvényes-e.
+        /// </summary>
         private bool UjNaplozas()
         {
             bool Eredmeny = true;
@@ -444,6 +470,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             return Eredmeny;
         }
+
+        /// <summary>
+        /// Beolvassa az adott dátumhoz tartozó üzemóra adatot, és megjeleníti a megadott szövegdobozban.
+        /// Ha nincs ilyen adat, akkor alapértelmezetten 0-t állít be és szerkeszthetővé teszi a mezőt.
+        /// </summary>
         private void UzemoraKiolvasasEsBeiras(DateTime datum, TextBox txt)
         {
             try
@@ -536,6 +567,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
         #region Gombok,Muveletek
 
+        /// <summary>
+        /// Művelet naplózása vagy meglévő napló módosítása a kiválasztott sor alapján.
+        /// Ha a műveletlistából van kiválasztva sor, új naplóbejegyzést hoz létre.
+        /// Ha a naplóból van kiválasztva sor, akkor azt módosítja.
+        /// </summary>
         private void Btn_Modosit_Click(object sender, EventArgs e)
         {
             try
@@ -569,6 +605,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
         }
 
+        /// <summary>
+        /// Ha a napló táblában új sort választunk ki, akkor a dátum, üzemóra és megjegyzés mezők frissülnek az adott rekord alapján.
+        /// Emellett törli a művelet táblából a kijelölést.
+        /// </summary>
         private void TablaNaplo_SelectionChanged(object sender, EventArgs e)
         {
             if (frissul || !TablaNaplo.Focused || TablaNaplo.SelectedRows.Count != 1)
@@ -597,6 +637,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             finally { frissul = false; }
         }
 
+        /// <summary>
+        /// Ha a művelet táblában új sort választunk ki, az aznapi dátum, az aktuális üzemóra (ha van), és egy üres megjegyzés jelenik meg.
+        /// Emellett törli a napló táblából a kijelölést.
+        /// </summary>
         private void TablaMuvelet_SelectionChanged(object sender, EventArgs e)
         {
             if (frissul || !TablaMuvelet.Focused || TablaMuvelet.SelectedRows.Count != 1)
@@ -626,6 +670,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             finally { frissul = false; }
         }
 
+        /// <summary>
+        /// A dátumválasztó módosítására frissíti a megjelenített adatokat.
+        /// Ha más évre váltunk, új adatbázist tölt be.
+        /// Ha a választott dátumhoz nem tartozik rögzített üzemóra, akkor engedélyezi az üzemóra mezőt.
+        /// </summary>
         private void DtmPckr_ValueChanged(object sender, EventArgs e)
         {
             if (frissul) return;
@@ -679,6 +728,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             finally { frissul = false; }
         }
+
+        /// <summary>
+        /// A művelet táblázat adatainak betöltése után meghívódik a sorok színezésének frissítésére.
+        /// </summary>
         private void TablaMuvelet_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             TablaSzinezes(TablaMuvelet);

@@ -18,6 +18,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
     public partial class Ablak_Eszterga_Karbantartás_Módosít : Form
     {
         #region Osztalyszintű elemek
+
         public event Event_Kidobó Eszterga_Valtozas;
         // JAVÍTANDÓ:
         readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
@@ -26,11 +27,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Listák
+
         List<Adat_Eszterga_Muveletek> AdatokMuvelet = new List<Adat_Eszterga_Muveletek>();
         List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
         #endregion
 
         #region Kezelők
+
         readonly Kezelő_Eszterga_Műveletek Kez_Muvelet = new Kezelő_Eszterga_Műveletek();
         readonly Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
         #endregion
@@ -107,6 +110,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Egyseg
+
+        /// <summary>
+        /// Az esztergagép karbantartási egységeit leíró felsorolás.
+        /// Meghatározza, hogy a karbantartási művelet milyen típusú ütemezés szerint történik.
+        /// </summary>
         public enum EsztergaEgyseg
         {
             Dátum = 1,
@@ -216,6 +224,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Táblák Listázása
+
         /// <summary>
         /// A karbantartási műveletek adatainak betöltése és megjelenítése a TáblaMűveletbe
         /// </summary>
@@ -1057,7 +1066,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Ablakok
-
         Ablak_Eszterga_Karbantartás_Üzemóra Uj_ablak_EsztergaUzemora;
 
         /// <summary>
