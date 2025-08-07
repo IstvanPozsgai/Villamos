@@ -633,6 +633,9 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         {
                             Color hatterszin = Kiszinezes(rekord, TervDatum);
 
+                            row.DefaultCellStyle.BackColor = hatterszin;
+                            row.DefaultCellStyle.ForeColor = Color.Black;
+
                             foreach (DataGridViewCell cell in row.Cells)
                                 cell.Style.BackColor = hatterszin;
                         }
