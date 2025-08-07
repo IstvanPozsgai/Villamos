@@ -69,7 +69,7 @@ namespace Villamos
             Telephelyekfeltöltése();
 
             GombLathatosagKezelo.Beallit(this);
-            //Jogosultságkiosztás();
+            Jogosultságkiosztás();
             Dátum.Value = DateTime.Today;
         }
 

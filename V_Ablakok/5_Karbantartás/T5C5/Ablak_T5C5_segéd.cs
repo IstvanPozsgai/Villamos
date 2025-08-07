@@ -125,7 +125,7 @@ namespace Villamos.Villamos_Ablakok
             Kiírja_Vizsgálat();
 
             GombLathatosagKezelo.Beallit(this);
-            //Jogosultságkiosztás();
+            Jogosultságkiosztás();
             Vonalfeltöltés();
             Panel_Váltás();
         }
