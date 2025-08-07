@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Eszterga_Karbantartás_Napló));
             this.TxtBxMegjegyzes = new System.Windows.Forms.TextBox();
             this.LblMegjegyzes = new System.Windows.Forms.Label();
             this.LblAznapiUzemora = new System.Windows.Forms.Label();
@@ -36,11 +37,11 @@
             this.TablaMuvelet = new Zuby.ADGV.AdvancedDataGridView();
             this.TablaNaplo = new Zuby.ADGV.AdvancedDataGridView();
             this.Btn_Modosit = new System.Windows.Forms.Button();
-            this.LblUtolagMuvelet = new System.Windows.Forms.Label();
-            this.LblUtolagNaplozasTabla = new System.Windows.Forms.Label();
-            this.lblUzemora = new System.Windows.Forms.Label();
-            this.txtBxUzemora = new System.Windows.Forms.TextBox();
-            this.lblDatum = new System.Windows.Forms.Label();
+            this.LblMuveletTabla = new System.Windows.Forms.Label();
+            this.LblNaplozasTabla = new System.Windows.Forms.Label();
+            this.LblUzemora = new System.Windows.Forms.Label();
+            this.TxtBxUzemora = new System.Windows.Forms.TextBox();
+            this.LblDatum = new System.Windows.Forms.Label();
             this.DtmPckr = new System.Windows.Forms.DateTimePicker();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.TablaMuvelet)).BeginInit();
@@ -156,58 +157,58 @@
             this.Btn_Modosit.UseVisualStyleBackColor = true;
             this.Btn_Modosit.Click += new System.EventHandler(this.Btn_Modosit_Click);
             // 
-            // LblUtolagMuvelet
+            // LblMuveletTabla
             // 
-            this.LblUtolagMuvelet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.LblMuveletTabla.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblUtolagMuvelet.AutoSize = true;
-            this.LblUtolagMuvelet.Location = new System.Drawing.Point(12, 18);
-            this.LblUtolagMuvelet.Name = "LblUtolagMuvelet";
-            this.LblUtolagMuvelet.Size = new System.Drawing.Size(107, 20);
-            this.LblUtolagMuvelet.TabIndex = 55;
-            this.LblUtolagMuvelet.Text = "Művelet tábla:";
+            this.LblMuveletTabla.AutoSize = true;
+            this.LblMuveletTabla.Location = new System.Drawing.Point(12, 18);
+            this.LblMuveletTabla.Name = "LblMuveletTabla";
+            this.LblMuveletTabla.Size = new System.Drawing.Size(107, 20);
+            this.LblMuveletTabla.TabIndex = 55;
+            this.LblMuveletTabla.Text = "Művelet tábla:";
             // 
-            // LblUtolagNaplozasTabla
+            // LblNaplozasTabla
             // 
-            this.LblUtolagNaplozasTabla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.LblNaplozasTabla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblUtolagNaplozasTabla.AutoSize = true;
-            this.LblUtolagNaplozasTabla.Location = new System.Drawing.Point(12, 373);
-            this.LblUtolagNaplozasTabla.Name = "LblUtolagNaplozasTabla";
-            this.LblUtolagNaplozasTabla.Size = new System.Drawing.Size(121, 20);
-            this.LblUtolagNaplozasTabla.TabIndex = 54;
-            this.LblUtolagNaplozasTabla.Text = "Naplózási tábla:";
+            this.LblNaplozasTabla.AutoSize = true;
+            this.LblNaplozasTabla.Location = new System.Drawing.Point(12, 373);
+            this.LblNaplozasTabla.Name = "LblNaplozasTabla";
+            this.LblNaplozasTabla.Size = new System.Drawing.Size(121, 20);
+            this.LblNaplozasTabla.TabIndex = 54;
+            this.LblNaplozasTabla.Text = "Naplózási tábla:";
             // 
-            // lblUzemora
+            // LblUzemora
             // 
-            this.lblUzemora.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblUzemora.AutoSize = true;
-            this.lblUzemora.Location = new System.Drawing.Point(959, 18);
-            this.lblUzemora.Name = "lblUzemora";
-            this.lblUzemora.Size = new System.Drawing.Size(164, 20);
-            this.lblUzemora.TabIndex = 57;
-            this.lblUzemora.Text = "Aznapi üzemóra állás:";
+            this.LblUzemora.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.LblUzemora.AutoSize = true;
+            this.LblUzemora.Location = new System.Drawing.Point(959, 18);
+            this.LblUzemora.Name = "LblUzemora";
+            this.LblUzemora.Size = new System.Drawing.Size(164, 20);
+            this.LblUzemora.TabIndex = 57;
+            this.LblUzemora.Text = "Aznapi üzemóra állás:";
             // 
-            // txtBxUzemora
+            // TxtBxUzemora
             // 
-            this.txtBxUzemora.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBxUzemora.Enabled = false;
-            this.txtBxUzemora.Location = new System.Drawing.Point(963, 44);
-            this.txtBxUzemora.Name = "txtBxUzemora";
-            this.txtBxUzemora.Size = new System.Drawing.Size(179, 26);
-            this.txtBxUzemora.TabIndex = 56;
+            this.TxtBxUzemora.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.TxtBxUzemora.Enabled = false;
+            this.TxtBxUzemora.Location = new System.Drawing.Point(963, 44);
+            this.TxtBxUzemora.Name = "TxtBxUzemora";
+            this.TxtBxUzemora.Size = new System.Drawing.Size(179, 26);
+            this.TxtBxUzemora.TabIndex = 56;
             // 
-            // lblDatum
+            // LblDatum
             // 
-            this.lblDatum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDatum.AutoSize = true;
-            this.lblDatum.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblDatum.Location = new System.Drawing.Point(728, 18);
-            this.lblDatum.Name = "lblDatum";
-            this.lblDatum.Size = new System.Drawing.Size(61, 20);
-            this.lblDatum.TabIndex = 59;
-            this.lblDatum.Text = "Dátum:";
+            this.LblDatum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.LblDatum.AutoSize = true;
+            this.LblDatum.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.LblDatum.Location = new System.Drawing.Point(728, 18);
+            this.LblDatum.Name = "LblDatum";
+            this.LblDatum.Size = new System.Drawing.Size(61, 20);
+            this.LblDatum.TabIndex = 59;
+            this.LblDatum.Text = "Dátum:";
             // 
             // DtmPckr
             // 
@@ -229,12 +230,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Wheat;
             this.ClientSize = new System.Drawing.Size(1155, 736);
-            this.Controls.Add(this.lblDatum);
+            this.Controls.Add(this.LblDatum);
             this.Controls.Add(this.DtmPckr);
-            this.Controls.Add(this.lblUzemora);
-            this.Controls.Add(this.txtBxUzemora);
-            this.Controls.Add(this.LblUtolagMuvelet);
-            this.Controls.Add(this.LblUtolagNaplozasTabla);
+            this.Controls.Add(this.LblUzemora);
+            this.Controls.Add(this.TxtBxUzemora);
+            this.Controls.Add(this.LblMuveletTabla);
+            this.Controls.Add(this.LblNaplozasTabla);
             this.Controls.Add(this.Btn_Modosit);
             this.Controls.Add(this.LblMegjegyzes);
             this.Controls.Add(this.TxtBxMegjegyzes);
@@ -243,6 +244,7 @@
             this.Controls.Add(this.TxtBxUtolagUzemora);
             this.Controls.Add(this.TablaMuvelet);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Eszterga_Karbantartás_Napló";
             this.Text = "Ablak_Eszterga_Karbantartás_Napló";
@@ -263,11 +265,11 @@
         internal System.Windows.Forms.TextBox TxtBxUtolagUzemora;
         internal Zuby.ADGV.AdvancedDataGridView TablaMuvelet;
         internal Zuby.ADGV.AdvancedDataGridView TablaNaplo;
-        internal System.Windows.Forms.Label LblUtolagMuvelet;
-        internal System.Windows.Forms.Label LblUtolagNaplozasTabla;
-        internal System.Windows.Forms.Label lblUzemora;
-        internal System.Windows.Forms.TextBox txtBxUzemora;
-        internal System.Windows.Forms.Label lblDatum;
+        internal System.Windows.Forms.Label LblMuveletTabla;
+        internal System.Windows.Forms.Label LblNaplozasTabla;
+        internal System.Windows.Forms.Label LblUzemora;
+        internal System.Windows.Forms.TextBox TxtBxUzemora;
+        internal System.Windows.Forms.Label LblDatum;
         internal System.Windows.Forms.DateTimePicker DtmPckr;
         internal System.Windows.Forms.ToolTip toolTip1;
     }

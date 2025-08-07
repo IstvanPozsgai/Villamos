@@ -29,16 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Eszterga_Karbantartás_Üzemóra));
             this.Tabla = new Zuby.ADGV.AdvancedDataGridView();
             this.Btn_Excel = new System.Windows.Forms.Button();
-            this.Btn_ÚjFelvétel = new System.Windows.Forms.Button();
-            this.TxtBxÜzem = new System.Windows.Forms.TextBox();
-            this.Btn_Módosít = new System.Windows.Forms.Button();
-            this.LblStátuszÜzem = new System.Windows.Forms.Label();
-            this.ChckBxStátus = new System.Windows.Forms.CheckBox();
-            this.LblÜzem = new System.Windows.Forms.Label();
-            this.LblDátum = new System.Windows.Forms.Label();
-            this.DtmPckrDátum = new System.Windows.Forms.DateTimePicker();
+            this.Btn_UjFelvetel = new System.Windows.Forms.Button();
+            this.TxtBxUzem = new System.Windows.Forms.TextBox();
+            this.Btn_Modosit = new System.Windows.Forms.Button();
+            this.LblStatusz = new System.Windows.Forms.Label();
+            this.ChckBxStatus = new System.Windows.Forms.CheckBox();
+            this.LblUzem = new System.Windows.Forms.Label();
+            this.LblDatum = new System.Windows.Forms.Label();
+            this.DtmPckr = new System.Windows.Forms.DateTimePicker();
             this.Btn_Pdf = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Tabla)).BeginInit();
@@ -66,7 +67,7 @@
             this.Tabla.Size = new System.Drawing.Size(472, 430);
             this.Tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tabla.TabIndex = 261;
-            this.Tabla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
+            this.Tabla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tabla_CellClick);
             this.Tabla.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.Tabla_DataBindingComplete);
             // 
             // Btn_Excel
@@ -86,103 +87,103 @@
             this.Btn_Excel.UseVisualStyleBackColor = false;
             this.Btn_Excel.Click += new System.EventHandler(this.Btn_Excel_Click);
             // 
-            // Btn_ÚjFelvétel
+            // Btn_UjFelvetel
             // 
-            this.Btn_ÚjFelvétel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_ÚjFelvétel.BackColor = System.Drawing.Color.Transparent;
-            this.Btn_ÚjFelvétel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_ÚjFelvétel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn_ÚjFelvétel.ForeColor = System.Drawing.Color.Transparent;
-            this.Btn_ÚjFelvétel.Image = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.Btn_ÚjFelvétel.Location = new System.Drawing.Point(522, 382);
-            this.Btn_ÚjFelvétel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Btn_ÚjFelvétel.Name = "Btn_ÚjFelvétel";
-            this.Btn_ÚjFelvétel.Size = new System.Drawing.Size(60, 62);
-            this.Btn_ÚjFelvétel.TabIndex = 259;
-            this.toolTip1.SetToolTip(this.Btn_ÚjFelvétel, "Új üzemóra hozzáadása");
-            this.Btn_ÚjFelvétel.UseVisualStyleBackColor = false;
-            this.Btn_ÚjFelvétel.Click += new System.EventHandler(this.Btn_ÚjFelvétel_Click);
+            this.Btn_UjFelvetel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_UjFelvetel.BackColor = System.Drawing.Color.Transparent;
+            this.Btn_UjFelvetel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_UjFelvetel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_UjFelvetel.ForeColor = System.Drawing.Color.Transparent;
+            this.Btn_UjFelvetel.Image = global::Villamos.Properties.Resources.New_gyűjtemény;
+            this.Btn_UjFelvetel.Location = new System.Drawing.Point(522, 382);
+            this.Btn_UjFelvetel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Btn_UjFelvetel.Name = "Btn_UjFelvetel";
+            this.Btn_UjFelvetel.Size = new System.Drawing.Size(60, 62);
+            this.Btn_UjFelvetel.TabIndex = 259;
+            this.toolTip1.SetToolTip(this.Btn_UjFelvetel, "Új üzemóra hozzáadása");
+            this.Btn_UjFelvetel.UseVisualStyleBackColor = false;
+            this.Btn_UjFelvetel.Click += new System.EventHandler(this.Btn_UjFelvetel_Click);
             // 
-            // TxtBxÜzem
+            // TxtBxUzem
             // 
-            this.TxtBxÜzem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TxtBxÜzem.Location = new System.Drawing.Point(600, 212);
-            this.TxtBxÜzem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.TxtBxÜzem.Name = "TxtBxÜzem";
-            this.TxtBxÜzem.Size = new System.Drawing.Size(170, 26);
-            this.TxtBxÜzem.TabIndex = 253;
+            this.TxtBxUzem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TxtBxUzem.Location = new System.Drawing.Point(600, 212);
+            this.TxtBxUzem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TxtBxUzem.Name = "TxtBxUzem";
+            this.TxtBxUzem.Size = new System.Drawing.Size(170, 26);
+            this.TxtBxUzem.TabIndex = 253;
             // 
-            // Btn_Módosít
+            // Btn_Modosit
             // 
-            this.Btn_Módosít.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_Módosít.BackColor = System.Drawing.Color.Transparent;
-            this.Btn_Módosít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Módosít.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn_Módosít.ForeColor = System.Drawing.Color.Transparent;
-            this.Btn_Módosít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Btn_Módosít.Location = new System.Drawing.Point(590, 382);
-            this.Btn_Módosít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Btn_Módosít.Name = "Btn_Módosít";
-            this.Btn_Módosít.Size = new System.Drawing.Size(60, 62);
-            this.Btn_Módosít.TabIndex = 252;
-            this.toolTip1.SetToolTip(this.Btn_Módosít, "Üzemóra rögzítése");
-            this.Btn_Módosít.UseVisualStyleBackColor = false;
-            this.Btn_Módosít.Click += new System.EventHandler(this.Btn_Módosít_Click);
+            this.Btn_Modosit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_Modosit.BackColor = System.Drawing.Color.Transparent;
+            this.Btn_Modosit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Modosit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Modosit.ForeColor = System.Drawing.Color.Transparent;
+            this.Btn_Modosit.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Btn_Modosit.Location = new System.Drawing.Point(590, 382);
+            this.Btn_Modosit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Btn_Modosit.Name = "Btn_Modosit";
+            this.Btn_Modosit.Size = new System.Drawing.Size(60, 62);
+            this.Btn_Modosit.TabIndex = 252;
+            this.toolTip1.SetToolTip(this.Btn_Modosit, "Üzemóra rögzítése");
+            this.Btn_Modosit.UseVisualStyleBackColor = false;
+            this.Btn_Modosit.Click += new System.EventHandler(this.Btn_Modosit_Click);
             // 
-            // LblStátuszÜzem
+            // LblStatusz
             // 
-            this.LblStátuszÜzem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LblStátuszÜzem.AutoSize = true;
-            this.LblStátuszÜzem.Location = new System.Drawing.Point(504, 328);
-            this.LblStátuszÜzem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.LblStátuszÜzem.Name = "LblStátuszÜzem";
-            this.LblStátuszÜzem.Size = new System.Drawing.Size(68, 20);
-            this.LblStátuszÜzem.TabIndex = 257;
-            this.LblStátuszÜzem.Text = "Státusz:";
+            this.LblStatusz.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LblStatusz.AutoSize = true;
+            this.LblStatusz.Location = new System.Drawing.Point(504, 328);
+            this.LblStatusz.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LblStatusz.Name = "LblStatusz";
+            this.LblStatusz.Size = new System.Drawing.Size(68, 20);
+            this.LblStatusz.TabIndex = 257;
+            this.LblStatusz.Text = "Státusz:";
             // 
-            // ChckBxStátus
+            // ChckBxStatus
             // 
-            this.ChckBxStátus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ChckBxStátus.AutoSize = true;
-            this.ChckBxStátus.Location = new System.Drawing.Point(600, 328);
-            this.ChckBxStátus.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ChckBxStátus.Name = "ChckBxStátus";
-            this.ChckBxStátus.Size = new System.Drawing.Size(79, 24);
-            this.ChckBxStátus.TabIndex = 258;
-            this.ChckBxStátus.Text = "Törölve";
-            this.ChckBxStátus.UseVisualStyleBackColor = true;
+            this.ChckBxStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ChckBxStatus.AutoSize = true;
+            this.ChckBxStatus.Location = new System.Drawing.Point(600, 328);
+            this.ChckBxStatus.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ChckBxStatus.Name = "ChckBxStatus";
+            this.ChckBxStatus.Size = new System.Drawing.Size(79, 24);
+            this.ChckBxStatus.TabIndex = 258;
+            this.ChckBxStatus.Text = "Törölve";
+            this.ChckBxStatus.UseVisualStyleBackColor = true;
             // 
-            // LblÜzem
+            // LblUzem
             // 
-            this.LblÜzem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LblÜzem.AutoSize = true;
-            this.LblÜzem.Location = new System.Drawing.Point(504, 212);
-            this.LblÜzem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.LblÜzem.Name = "LblÜzem";
-            this.LblÜzem.Size = new System.Drawing.Size(78, 20);
-            this.LblÜzem.TabIndex = 254;
-            this.LblÜzem.Text = "Üzemóra:";
+            this.LblUzem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LblUzem.AutoSize = true;
+            this.LblUzem.Location = new System.Drawing.Point(504, 212);
+            this.LblUzem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LblUzem.Name = "LblUzem";
+            this.LblUzem.Size = new System.Drawing.Size(78, 20);
+            this.LblUzem.TabIndex = 254;
+            this.LblUzem.Text = "Üzemóra:";
             // 
-            // LblDátum
+            // LblDatum
             // 
-            this.LblDátum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LblDátum.AutoSize = true;
-            this.LblDátum.Location = new System.Drawing.Point(504, 275);
-            this.LblDátum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.LblDátum.Name = "LblDátum";
-            this.LblDátum.Size = new System.Drawing.Size(61, 20);
-            this.LblDátum.TabIndex = 255;
-            this.LblDátum.Text = "Dátum:";
+            this.LblDatum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LblDatum.AutoSize = true;
+            this.LblDatum.Location = new System.Drawing.Point(504, 275);
+            this.LblDatum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LblDatum.Name = "LblDatum";
+            this.LblDatum.Size = new System.Drawing.Size(61, 20);
+            this.LblDatum.TabIndex = 255;
+            this.LblDatum.Text = "Dátum:";
             // 
-            // DtmPckrDátum
+            // DtmPckr
             // 
-            this.DtmPckrDátum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.DtmPckrDátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtmPckrDátum.Location = new System.Drawing.Point(600, 269);
-            this.DtmPckrDátum.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.DtmPckrDátum.Name = "DtmPckrDátum";
-            this.DtmPckrDátum.Size = new System.Drawing.Size(170, 26);
-            this.DtmPckrDátum.TabIndex = 256;
+            this.DtmPckr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.DtmPckr.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DtmPckr.Location = new System.Drawing.Point(600, 269);
+            this.DtmPckr.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.DtmPckr.Name = "DtmPckr";
+            this.DtmPckr.Size = new System.Drawing.Size(170, 26);
+            this.DtmPckr.TabIndex = 256;
             // 
             // Btn_Pdf
             // 
@@ -214,15 +215,16 @@
             this.Controls.Add(this.Btn_Pdf);
             this.Controls.Add(this.Tabla);
             this.Controls.Add(this.Btn_Excel);
-            this.Controls.Add(this.Btn_ÚjFelvétel);
-            this.Controls.Add(this.TxtBxÜzem);
-            this.Controls.Add(this.Btn_Módosít);
-            this.Controls.Add(this.LblStátuszÜzem);
-            this.Controls.Add(this.ChckBxStátus);
-            this.Controls.Add(this.LblÜzem);
-            this.Controls.Add(this.LblDátum);
-            this.Controls.Add(this.DtmPckrDátum);
+            this.Controls.Add(this.Btn_UjFelvetel);
+            this.Controls.Add(this.TxtBxUzem);
+            this.Controls.Add(this.Btn_Modosit);
+            this.Controls.Add(this.LblStatusz);
+            this.Controls.Add(this.ChckBxStatus);
+            this.Controls.Add(this.LblUzem);
+            this.Controls.Add(this.LblDatum);
+            this.Controls.Add(this.DtmPckr);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimizeBox = false;
             this.Name = "Ablak_Eszterga_Karbantartás_Üzemóra";
@@ -239,14 +241,14 @@
 
         internal Zuby.ADGV.AdvancedDataGridView Tabla;
         internal System.Windows.Forms.Button Btn_Excel;
-        internal System.Windows.Forms.Button Btn_ÚjFelvétel;
-        internal System.Windows.Forms.TextBox TxtBxÜzem;
-        internal System.Windows.Forms.Button Btn_Módosít;
-        internal System.Windows.Forms.Label LblStátuszÜzem;
-        internal System.Windows.Forms.CheckBox ChckBxStátus;
-        internal System.Windows.Forms.Label LblÜzem;
-        internal System.Windows.Forms.Label LblDátum;
-        internal System.Windows.Forms.DateTimePicker DtmPckrDátum;
+        internal System.Windows.Forms.Button Btn_UjFelvetel;
+        internal System.Windows.Forms.TextBox TxtBxUzem;
+        internal System.Windows.Forms.Button Btn_Modosit;
+        internal System.Windows.Forms.Label LblStatusz;
+        internal System.Windows.Forms.CheckBox ChckBxStatus;
+        internal System.Windows.Forms.Label LblUzem;
+        internal System.Windows.Forms.Label LblDatum;
+        internal System.Windows.Forms.DateTimePicker DtmPckr;
         internal System.Windows.Forms.Button Btn_Pdf;
         internal System.Windows.Forms.ToolTip toolTip1;
     }

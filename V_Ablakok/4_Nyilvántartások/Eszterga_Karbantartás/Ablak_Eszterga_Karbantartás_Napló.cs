@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 {
@@ -27,30 +27,43 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Listák
+
         List<Adat_Eszterga_Muveletek> AdatokMuvelet = new List<Adat_Eszterga_Muveletek>();
         List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
         List<Adat_Eszterga_Muveletek_Naplo> AdatokMuveletNaplo = new List<Adat_Eszterga_Muveletek_Naplo>();
         #endregion
 
         #region Kezelők
+
         readonly Kezelő_Eszterga_Műveletek Kez_Muvelet = new Kezelő_Eszterga_Műveletek();
         readonly Kezelő_Eszterga_Műveletek_Napló Kez_Muvelet_Naplo = new Kezelő_Eszterga_Műveletek_Napló();
         readonly Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
         #endregion
 
         #region Alap
+
+        /// <summary>
+        /// Az ablak konstruktorfüggvénye.  
+        /// Betölti az aktuális évhez tartozó naplóbejegyzéseket, valamint az összes karbantartási műveletet.
+        /// </summary>
         public Ablak_Eszterga_Karbantartás_Napló()
         {
             InitializeComponent();
             TablaNaploListazas(DtmPckr.Value.Year);
             TablaListazasMuvelet();
         }
+
+        /// <summary>
+        /// Az ablak betöltésekor fut le.  
+        /// Jogosultságokat állít be, majd alapértelmezetten törli a kijelölést a táblázatokból,  
+        /// és beolvassa az aktuális dátumhoz tartozó üzemóra értéket.
+        /// </summary>
         private void Ablak_Eszterga_Karbantartás_Napló_Load(object sender, EventArgs e)
         {
             JogosultsagKiosztas();
             TablaMuvelet.ClearSelection();
             TablaNaplo.ClearSelection();
-            UzemoraKiolvasasEsBeiras(DtmPckr.Value, txtBxUzemora);
+            UzemoraKiolvasasEsBeiras(DtmPckr.Value, TxtBxUzemora);
         }
 
         /// <summary>
@@ -61,7 +74,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 int melyikelem = 160;
-
+                Btn_Modosit.Visible = Baross;
                 // módosítás 1 
                 //Ablak_Eszterga_Karbantartás_Segéd oldal használja az 1. módosításokat
 
@@ -69,6 +82,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 //Ablak_Eszterga_Karbantartás oldal használja a 2. módosításokat
 
                 // módosítás 3 
+                Btn_Modosit.Enabled = MyF.Vanjoga(melyikelem, 3);
             }
             catch (HibásBevittAdat ex)
             {
@@ -83,6 +97,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Tablak listazasa
+
         /// <summary>
         /// Színezi a táblázat sorait a státusz alapján, ha a státusz "Törölt".
         /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
@@ -252,6 +267,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Egyseg
+
+        /// <summary>
+        /// Az esztergagép karbantartási egységeit leíró felsorolás.
+        /// Meghatározza, hogy a karbantartási művelet milyen típusú ütemezés szerint történik.
+        /// </summary>
         public enum EsztergaEgyseg
         {
             Dátum = 1,
@@ -261,6 +281,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Metodusok
+
         /// <summary>
         /// Új üzemóra rekordot ad hozzá az adatbázishoz a megadott dátum, üzemóra érték és státusz alapján.
         /// Az új üzemórát csak akkor rögzíti, ha az érték az előző és következő üzemóra értékek között helyezkedik el.
@@ -305,12 +326,17 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             return Eredmeny;
         }
+
+        /// <summary>
+        /// Ellenőrzi, hogy az adott dátumhoz tartozik-e már üzemóra bejegyzés.
+        /// Ha nem létezik, létrehoz egy újat a megadott érték alapján.
+        /// </summary>
         private bool UjUzemora(DateTime datum, bool status)
         {
             bool Eredmeny = true;
             try
             {
-                if (!int.TryParse(txtBxUzemora.Text, out int uzemora))
+                if (!int.TryParse(TxtBxUzemora.Text, out int uzemora))
                 {
                     Eredmeny = false;
                     throw new HibásBevittAdat("Hibás üzemóra érték! Kérlek, csak számot adj meg.");
@@ -339,6 +365,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             return Eredmeny;
         }
 
+        /// <summary>
+        /// Új naplóbejegyzés(ek) létrehozása a kijelölt műveletek alapján a megadott dátumra.
+        /// Előtte ellenőrzi, hogy a bejegyzés nem ismétlődik-e, valamint az üzemóra mező is érvényes-e.
+        /// </summary>
         private bool UjNaplozas()
         {
             bool Eredmeny = true;
@@ -374,7 +404,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     int MennyiNap = sor.Cells["Nap"].Value.ToÉrt_Int();
                     int MennyiÓra = sor.Cells["Óra"].Value.ToÉrt_Int();
 
-                    long utolsoUzemora = txtBxUzemora.Text.ToÉrt_Long();
+                    long utolsoUzemora = TxtBxUzemora.Text.ToÉrt_Long();
 
                     Adat_Eszterga_Muveletek_Naplo adat = new Adat_Eszterga_Muveletek_Naplo(
                         id,
@@ -411,7 +441,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// Ha a 'Bekövetkezés' egységet választjuk, akkor a függvény null-t ad vissza.
         /// A 'Üzemóra' és 'Dátum' esetén az adatokat az AdatokUzemora lista alapján keresük.
         /// </summary>
-        private Adat_Eszterga_Uzemora KeresÜzemóra(long uzemora, DateTime datum, EsztergaEgyseg egyseg)
+        private Adat_Eszterga_Uzemora KeresUzemora(long uzemora, DateTime datum, EsztergaEgyseg egyseg)
         {
             Adat_Eszterga_Uzemora Eredmeny = null;
             try
@@ -440,12 +470,17 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             return Eredmeny;
         }
+
+        /// <summary>
+        /// Beolvassa az adott dátumhoz tartozó üzemóra adatot, és megjeleníti a megadott szövegdobozban.
+        /// Ha nincs ilyen adat, akkor alapértelmezetten 0-t állít be és szerkeszthetővé teszi a mezőt.
+        /// </summary>
         private void UzemoraKiolvasasEsBeiras(DateTime datum, TextBox txt)
         {
             try
             {
                 AdatokUzemora = Kez_Uzemora.Lista_Adatok();
-                Adat_Eszterga_Uzemora uzemoraRekord = KeresÜzemóra(0, datum, EsztergaEgyseg.Dátum);
+                Adat_Eszterga_Uzemora uzemoraRekord = KeresUzemora(0, datum, EsztergaEgyseg.Dátum);
                 if (uzemoraRekord != null)
                 {
                     txt.Text = uzemoraRekord.Uzemora.ToStrTrim();
@@ -493,7 +528,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                         a => a.ID == id && a.Utolsó_Dátum.Date == eredetiDatum.Date);
 
                     DateTime ujDatum = DtmPckr.Value.Date;
-                    long ujUzemora = txtBxUzemora.Text.ToÉrt_Long();
+                    long ujUzemora = TxtBxUzemora.Text.ToÉrt_Long();
                     string ujMegjegyzes = TxtBxMegjegyzes.Text.Trim();
 
                     bool Valtozas =
@@ -531,6 +566,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         #endregion
 
         #region Gombok,Muveletek
+
+        /// <summary>
+        /// Művelet naplózása vagy meglévő napló módosítása a kiválasztott sor alapján.
+        /// Ha a műveletlistából van kiválasztva sor, új naplóbejegyzést hoz létre.
+        /// Ha a naplóból van kiválasztva sor, akkor azt módosítja.
+        /// </summary>
         private void Btn_Modosit_Click(object sender, EventArgs e)
         {
             try
@@ -564,6 +605,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
         }
 
+        /// <summary>
+        /// Ha a napló táblában új sort választunk ki, akkor a dátum, üzemóra és megjegyzés mezők frissülnek az adott rekord alapján.
+        /// Emellett törli a művelet táblából a kijelölést.
+        /// </summary>
         private void TablaNaplo_SelectionChanged(object sender, EventArgs e)
         {
             if (frissul || !TablaNaplo.Focused || TablaNaplo.SelectedRows.Count != 1)
@@ -577,7 +622,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 DataGridViewRow sor = TablaNaplo.SelectedRows[0];
 
                 DtmPckr.Value = sor.Cells["Utolsó Dátum"].Value.ToÉrt_DaTeTime();
-                txtBxUzemora.Text = sor.Cells["Utolsó Üzemóra"].Value.ToStrTrim();
+                TxtBxUzemora.Text = sor.Cells["Utolsó Üzemóra"].Value.ToStrTrim();
                 TxtBxMegjegyzes.Text = sor.Cells["Megjegyzés"].Value.ToStrTrim();
             }
             catch (HibásBevittAdat ex)
@@ -592,6 +637,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             finally { frissul = false; }
         }
 
+        /// <summary>
+        /// Ha a művelet táblában új sort választunk ki, az aznapi dátum, az aktuális üzemóra (ha van), és egy üres megjegyzés jelenik meg.
+        /// Emellett törli a napló táblából a kijelölést.
+        /// </summary>
         private void TablaMuvelet_SelectionChanged(object sender, EventArgs e)
         {
             if (frissul || !TablaMuvelet.Focused || TablaMuvelet.SelectedRows.Count != 1)
@@ -605,7 +654,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 DateTime maiNap = DateTime.Today;
                 DtmPckr.Value = maiNap;
 
-                UzemoraKiolvasasEsBeiras(maiNap, txtBxUzemora);
+                UzemoraKiolvasasEsBeiras(maiNap, TxtBxUzemora);
 
                 TxtBxMegjegyzes.Text = string.Empty;
             }
@@ -621,6 +670,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             finally { frissul = false; }
         }
 
+        /// <summary>
+        /// A dátumválasztó módosítására frissíti a megjelenített adatokat.
+        /// Ha más évre váltunk, új adatbázist tölt be.
+        /// Ha a választott dátumhoz nem tartozik rögzített üzemóra, akkor engedélyezi az üzemóra mezőt.
+        /// </summary>
         private void DtmPckr_ValueChanged(object sender, EventArgs e)
         {
             if (frissul) return;
@@ -633,7 +687,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 if (AktualisDatum > DateTime.Today)
                 {
                     DtmPckr.Value = DateTime.Today;
-                    UzemoraKiolvasasEsBeiras(DateTime.Today, txtBxUzemora);
+                    UzemoraKiolvasasEsBeiras(DateTime.Today, TxtBxUzemora);
                     throw new HibásBevittAdat($"A választott dátum nem lehet később mint a mai nap {DateTime.Today}");
                 }
 
@@ -650,17 +704,17 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     TablaNaploListazas(AktualisDatum.Year);
                     elozoEv = AktualisDatum.Year;
                 }
-                Adat_Eszterga_Uzemora uzemoraRekord = KeresÜzemóra(0, AktualisDatum, EsztergaEgyseg.Dátum);
+                Adat_Eszterga_Uzemora uzemoraRekord = KeresUzemora(0, AktualisDatum, EsztergaEgyseg.Dátum);
 
                 if (uzemoraRekord != null)
                 {
-                    txtBxUzemora.Text = uzemoraRekord.Uzemora.ToStrTrim();
-                    txtBxUzemora.Enabled = false;
+                    TxtBxUzemora.Text = uzemoraRekord.Uzemora.ToStrTrim();
+                    TxtBxUzemora.Enabled = false;
                 }
                 else
                 {
-                    txtBxUzemora.Text = "0";
-                    txtBxUzemora.Enabled = true;
+                    TxtBxUzemora.Text = "0";
+                    TxtBxUzemora.Enabled = true;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -674,11 +728,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             }
             finally { frissul = false; }
         }
-        #endregion
 
+        /// <summary>
+        /// A művelet táblázat adatainak betöltése után meghívódik a sorok színezésének frissítésére.
+        /// </summary>
         private void TablaMuvelet_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             TablaSzinezes(TablaMuvelet);
         }
+        #endregion
     }
 }

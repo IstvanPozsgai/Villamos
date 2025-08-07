@@ -17,7 +17,8 @@ namespace Villamos
         /// <param name="sorismétlődés"> "" vagy "$1:$1"</param>
         /// /// <param name="oszlopisnétlődés">"" vagy "$A:$B"</param>
         /// <param name="álló">Álló esetén true, fekvó esetén false</param>
-        public static void NyomtatásiTerület_részletes(string munkalap, string terület, string sorismétlődés, string oszlopisnétlődés, bool álló)
+        public static void NyomtatásiTerület_részletes(string munkalap, string terület, string sorismétlődés, string oszlopisnétlődés,
+                                                       bool álló, string oldalszéles="1",string oldalmagas="")
         {
             try
             {
@@ -58,8 +59,14 @@ namespace Villamos
                     Táblaterület.Order = MyExcel.XlOrder.xlDownThenOver;
                     Táblaterület.BlackAndWhite = false;
                     Táblaterület.Zoom = false;
-                    Táblaterület.FitToPagesWide = 1;
-                    Táblaterület.FitToPagesTall = false;
+                    if (int.TryParse(oldalszéles, out int széles))
+                        Táblaterület.FitToPagesWide = széles;
+                    else
+                        Táblaterület.FitToPagesWide = false;
+                    if (int.TryParse(oldalmagas, out int magas))
+                        Táblaterület.FitToPagesTall = magas;
+                    else
+                        Táblaterület.FitToPagesTall = false;
                     Táblaterület.PrintErrors = MyExcel.XlPrintErrors.xlPrintErrorsDisplayed;
                 }
             }

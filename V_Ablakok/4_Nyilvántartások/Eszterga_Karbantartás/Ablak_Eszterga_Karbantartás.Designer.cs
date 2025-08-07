@@ -31,22 +31,22 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Eszterga_Karbantartás));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Btn_Módosítás = new System.Windows.Forms.Button();
+            this.Btn_Modositas = new System.Windows.Forms.Button();
             this.Btn_Excel = new System.Windows.Forms.Button();
-            this.Btn_Frissít = new System.Windows.Forms.Button();
-            this.Btn_Súgó = new System.Windows.Forms.Button();
-            this.Btn_Rögzít = new System.Windows.Forms.Button();
-            this.Bttn_Napló_Listáz = new System.Windows.Forms.Button();
+            this.Btn_Frissit = new System.Windows.Forms.Button();
+            this.Btn_Sugo = new System.Windows.Forms.Button();
+            this.Btn_Rogzit = new System.Windows.Forms.Button();
+            this.Btn_Naplo_Listaz = new System.Windows.Forms.Button();
             this.Btn_Pdf = new System.Windows.Forms.Button();
             this.GrpBx = new System.Windows.Forms.GroupBox();
             this.LblÜzemÁtlag = new System.Windows.Forms.Label();
             this.TxtBxNapiUzemoraAtlag = new System.Windows.Forms.TextBox();
             this.LblÁtlagÜzemóraSzám = new System.Windows.Forms.Label();
-            this.TxtBxÜzem = new System.Windows.Forms.TextBox();
+            this.TxtBxUzem = new System.Windows.Forms.TextBox();
             this.TxtBxNapi = new System.Windows.Forms.TextBox();
             this.LblNap = new System.Windows.Forms.Label();
             this.LblÜzemóra = new System.Windows.Forms.Label();
-            this.DtmPckrElőTerv = new System.Windows.Forms.DateTimePicker();
+            this.DtmPckrEloTerv = new System.Windows.Forms.DateTimePicker();
             this.LblElőterv = new System.Windows.Forms.Label();
             this.Tabla = new Zuby.ADGV.AdvancedDataGridView();
             this.GrpBx.SuspendLayout();
@@ -57,19 +57,19 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
-            // Btn_Módosítás
+            // Btn_Modositas
             // 
-            this.Btn_Módosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Módosítás.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
-            this.Btn_Módosítás.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn_Módosítás.Image = global::Villamos.Properties.Resources.Gear_01;
-            this.Btn_Módosítás.Location = new System.Drawing.Point(236, 22);
-            this.Btn_Módosítás.Name = "Btn_Módosítás";
-            this.Btn_Módosítás.Size = new System.Drawing.Size(40, 40);
-            this.Btn_Módosítás.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.Btn_Módosítás, "Módosítás");
-            this.Btn_Módosítás.UseVisualStyleBackColor = true;
-            this.Btn_Módosítás.Click += new System.EventHandler(this.Btn_Módosítás_Click);
+            this.Btn_Modositas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Modositas.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
+            this.Btn_Modositas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Modositas.Image = global::Villamos.Properties.Resources.Gear_01;
+            this.Btn_Modositas.Location = new System.Drawing.Point(236, 22);
+            this.Btn_Modositas.Name = "Btn_Modositas";
+            this.Btn_Modositas.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Modositas.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.Btn_Modositas, "Módosítás");
+            this.Btn_Modositas.UseVisualStyleBackColor = true;
+            this.Btn_Modositas.Click += new System.EventHandler(this.Btn_Modositas_Click);
             // 
             // Btn_Excel
             // 
@@ -85,63 +85,63 @@
             this.Btn_Excel.UseVisualStyleBackColor = true;
             this.Btn_Excel.Click += new System.EventHandler(this.Btn_Excel_Click);
             // 
-            // Btn_Frissít
+            // Btn_Frissit
             // 
-            this.Btn_Frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Frissít.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
-            this.Btn_Frissít.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn_Frissít.Image = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Btn_Frissít.Location = new System.Drawing.Point(6, 22);
-            this.Btn_Frissít.Name = "Btn_Frissít";
-            this.Btn_Frissít.Size = new System.Drawing.Size(40, 40);
-            this.Btn_Frissít.TabIndex = 193;
-            this.toolTip1.SetToolTip(this.Btn_Frissít, "Táblázat frissítése");
-            this.Btn_Frissít.UseVisualStyleBackColor = true;
-            this.Btn_Frissít.Click += new System.EventHandler(this.Btn_Frissít_Click);
+            this.Btn_Frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Frissit.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
+            this.Btn_Frissit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Frissit.Image = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Btn_Frissit.Location = new System.Drawing.Point(6, 22);
+            this.Btn_Frissit.Name = "Btn_Frissit";
+            this.Btn_Frissit.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Frissit.TabIndex = 193;
+            this.toolTip1.SetToolTip(this.Btn_Frissit, "Táblázat frissítése");
+            this.Btn_Frissit.UseVisualStyleBackColor = true;
+            this.Btn_Frissit.Click += new System.EventHandler(this.Btn_Frissit_Click);
             // 
-            // Btn_Súgó
+            // Btn_Sugo
             // 
-            this.Btn_Súgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_Súgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Súgó.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
-            this.Btn_Súgó.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn_Súgó.Image = global::Villamos.Properties.Resources.Help_Support;
-            this.Btn_Súgó.Location = new System.Drawing.Point(1123, 20);
-            this.Btn_Súgó.Name = "Btn_Súgó";
-            this.Btn_Súgó.Size = new System.Drawing.Size(45, 45);
-            this.Btn_Súgó.TabIndex = 66;
-            this.toolTip1.SetToolTip(this.Btn_Súgó, "Súgó");
-            this.Btn_Súgó.UseVisualStyleBackColor = true;
-            this.Btn_Súgó.Click += new System.EventHandler(this.Btn_Súgó_Click);
+            this.Btn_Sugo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_Sugo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Sugo.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
+            this.Btn_Sugo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Sugo.Image = global::Villamos.Properties.Resources.Help_Support;
+            this.Btn_Sugo.Location = new System.Drawing.Point(1123, 20);
+            this.Btn_Sugo.Name = "Btn_Sugo";
+            this.Btn_Sugo.Size = new System.Drawing.Size(45, 45);
+            this.Btn_Sugo.TabIndex = 66;
+            this.toolTip1.SetToolTip(this.Btn_Sugo, "Súgó");
+            this.Btn_Sugo.UseVisualStyleBackColor = true;
+            this.Btn_Sugo.Click += new System.EventHandler(this.Btn_Sugo_Click);
             // 
-            // Btn_Rögzít
+            // Btn_Rogzit
             // 
-            this.Btn_Rögzít.BackColor = System.Drawing.Color.Tan;
-            this.Btn_Rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Rögzít.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
-            this.Btn_Rögzít.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn_Rögzít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Btn_Rögzít.Location = new System.Drawing.Point(52, 22);
-            this.Btn_Rögzít.Name = "Btn_Rögzít";
-            this.Btn_Rögzít.Size = new System.Drawing.Size(40, 40);
-            this.Btn_Rögzít.TabIndex = 194;
-            this.toolTip1.SetToolTip(this.Btn_Rögzít, "Művelet Rügzítése");
-            this.Btn_Rögzít.UseVisualStyleBackColor = false;
-            this.Btn_Rögzít.Click += new System.EventHandler(this.Btn_Rögzít_Click);
+            this.Btn_Rogzit.BackColor = System.Drawing.Color.Tan;
+            this.Btn_Rogzit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Rogzit.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
+            this.Btn_Rogzit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Rogzit.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Btn_Rogzit.Location = new System.Drawing.Point(52, 22);
+            this.Btn_Rogzit.Name = "Btn_Rogzit";
+            this.Btn_Rogzit.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Rogzit.TabIndex = 194;
+            this.toolTip1.SetToolTip(this.Btn_Rogzit, "Művelet Rügzítése");
+            this.Btn_Rogzit.UseVisualStyleBackColor = false;
+            this.Btn_Rogzit.Click += new System.EventHandler(this.Btn_Rogzit_Click);
             // 
-            // Bttn_Napló_Listáz
+            // Btn_Naplo_Listaz
             // 
-            this.Bttn_Napló_Listáz.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Bttn_Napló_Listáz.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
-            this.Bttn_Napló_Listáz.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Bttn_Napló_Listáz.Image = global::Villamos.Properties.Resources.Treetog_Junior_Document_scroll;
-            this.Bttn_Napló_Listáz.Location = new System.Drawing.Point(190, 22);
-            this.Bttn_Napló_Listáz.Name = "Bttn_Napló_Listáz";
-            this.Bttn_Napló_Listáz.Size = new System.Drawing.Size(40, 40);
-            this.Bttn_Napló_Listáz.TabIndex = 254;
-            this.toolTip1.SetToolTip(this.Bttn_Napló_Listáz, "Napló listázása");
-            this.Bttn_Napló_Listáz.UseVisualStyleBackColor = true;
-            this.Bttn_Napló_Listáz.Click += new System.EventHandler(this.Btn_Napló_Listáz_Click);
+            this.Btn_Naplo_Listaz.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Naplo_Listaz.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
+            this.Btn_Naplo_Listaz.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Naplo_Listaz.Image = global::Villamos.Properties.Resources.Treetog_Junior_Document_scroll;
+            this.Btn_Naplo_Listaz.Location = new System.Drawing.Point(190, 22);
+            this.Btn_Naplo_Listaz.Name = "Btn_Naplo_Listaz";
+            this.Btn_Naplo_Listaz.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Naplo_Listaz.TabIndex = 254;
+            this.toolTip1.SetToolTip(this.Btn_Naplo_Listaz, "Napló listázása");
+            this.Btn_Naplo_Listaz.UseVisualStyleBackColor = true;
+            this.Btn_Naplo_Listaz.Click += new System.EventHandler(this.Btn_Naplo_Listaz_Click);
             // 
             // Btn_Pdf
             // 
@@ -165,19 +165,19 @@
             this.GrpBx.Controls.Add(this.Btn_Pdf);
             this.GrpBx.Controls.Add(this.LblÜzemÁtlag);
             this.GrpBx.Controls.Add(this.TxtBxNapiUzemoraAtlag);
-            this.GrpBx.Controls.Add(this.Bttn_Napló_Listáz);
+            this.GrpBx.Controls.Add(this.Btn_Naplo_Listaz);
             this.GrpBx.Controls.Add(this.LblÁtlagÜzemóraSzám);
-            this.GrpBx.Controls.Add(this.TxtBxÜzem);
+            this.GrpBx.Controls.Add(this.TxtBxUzem);
             this.GrpBx.Controls.Add(this.TxtBxNapi);
             this.GrpBx.Controls.Add(this.LblNap);
             this.GrpBx.Controls.Add(this.LblÜzemóra);
-            this.GrpBx.Controls.Add(this.DtmPckrElőTerv);
-            this.GrpBx.Controls.Add(this.Btn_Módosítás);
+            this.GrpBx.Controls.Add(this.DtmPckrEloTerv);
+            this.GrpBx.Controls.Add(this.Btn_Modositas);
             this.GrpBx.Controls.Add(this.Btn_Excel);
             this.GrpBx.Controls.Add(this.LblElőterv);
-            this.GrpBx.Controls.Add(this.Btn_Frissít);
-            this.GrpBx.Controls.Add(this.Btn_Rögzít);
-            this.GrpBx.Controls.Add(this.Btn_Súgó);
+            this.GrpBx.Controls.Add(this.Btn_Frissit);
+            this.GrpBx.Controls.Add(this.Btn_Rogzit);
+            this.GrpBx.Controls.Add(this.Btn_Sugo);
             this.GrpBx.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.GrpBx.Location = new System.Drawing.Point(14, 12);
             this.GrpBx.Name = "GrpBx";
@@ -217,15 +217,15 @@
             this.LblÁtlagÜzemóraSzám.Size = new System.Drawing.Size(0, 20);
             this.LblÁtlagÜzemóraSzám.TabIndex = 253;
             // 
-            // TxtBxÜzem
+            // TxtBxUzem
             // 
-            this.TxtBxÜzem.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.TxtBxÜzem.Location = new System.Drawing.Point(988, 46);
-            this.TxtBxÜzem.Name = "TxtBxÜzem";
-            this.TxtBxÜzem.Size = new System.Drawing.Size(100, 26);
-            this.TxtBxÜzem.TabIndex = 252;
-            this.TxtBxÜzem.Text = "8";
-            this.TxtBxÜzem.TextChanged += new System.EventHandler(this.TxtBxÜzem_TextChanged);
+            this.TxtBxUzem.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.TxtBxUzem.Location = new System.Drawing.Point(988, 46);
+            this.TxtBxUzem.Name = "TxtBxUzem";
+            this.TxtBxUzem.Size = new System.Drawing.Size(100, 26);
+            this.TxtBxUzem.TabIndex = 252;
+            this.TxtBxUzem.Text = "8";
+            this.TxtBxUzem.TextChanged += new System.EventHandler(this.TxtBxUzem_TextChanged);
             // 
             // TxtBxNapi
             // 
@@ -257,16 +257,16 @@
             this.LblÜzemóra.TabIndex = 248;
             this.LblÜzemóra.Text = "Üzemóra figyelmeztetés";
             // 
-            // DtmPckrElőTerv
+            // DtmPckrEloTerv
             // 
-            this.DtmPckrElőTerv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.DtmPckrEloTerv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.DtmPckrElőTerv.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtmPckrElőTerv.Location = new System.Drawing.Point(415, 20);
-            this.DtmPckrElőTerv.Name = "DtmPckrElőTerv";
-            this.DtmPckrElőTerv.Size = new System.Drawing.Size(139, 26);
-            this.DtmPckrElőTerv.TabIndex = 198;
-            this.DtmPckrElőTerv.ValueChanged += new System.EventHandler(this.DtmPckrElőTerv_ValueChanged);
+            this.DtmPckrEloTerv.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DtmPckrEloTerv.Location = new System.Drawing.Point(415, 20);
+            this.DtmPckrEloTerv.Name = "DtmPckrEloTerv";
+            this.DtmPckrEloTerv.Size = new System.Drawing.Size(139, 26);
+            this.DtmPckrEloTerv.TabIndex = 198;
+            this.DtmPckrEloTerv.ValueChanged += new System.EventHandler(this.DtmPckrEloTerv_ValueChanged);
             // 
             // LblElőterv
             // 
@@ -302,7 +302,7 @@
             this.Tabla.Size = new System.Drawing.Size(1174, 596);
             this.Tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tabla.TabIndex = 196;
-            this.Tabla.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellEndEdit);
+            this.Tabla.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tabla_CellEndEdit);
             this.Tabla.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.Tabla_DataBindingComplete);
             // 
             // Ablak_Eszterga_Karbantartás
@@ -319,7 +319,7 @@
             this.Name = "Ablak_Eszterga_Karbantartás";
             this.Text = "Kerékeszterga Műveletek";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Eszterga_Karbantartás_FormClosed);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Eszterga_Karbantartas_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_Eszterga_Karbantartás_Load);
             this.GrpBx.ResumeLayout(false);
             this.GrpBx.PerformLayout();
@@ -329,21 +329,21 @@
         }
 
         #endregion
-        internal System.Windows.Forms.Button Btn_Súgó;
-        internal System.Windows.Forms.Button Btn_Frissít;
-        internal System.Windows.Forms.Button Btn_Módosítás;
+        internal System.Windows.Forms.Button Btn_Sugo;
+        internal System.Windows.Forms.Button Btn_Frissit;
+        internal System.Windows.Forms.Button Btn_Modositas;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.GroupBox GrpBx;
         internal System.Windows.Forms.Button Btn_Excel;
         private System.Windows.Forms.Label LblElőterv;
-        private System.Windows.Forms.DateTimePicker DtmPckrElőTerv;
-        private System.Windows.Forms.Button Btn_Rögzít;
+        private System.Windows.Forms.DateTimePicker DtmPckrEloTerv;
+        private System.Windows.Forms.Button Btn_Rogzit;
         private System.Windows.Forms.Label LblNap;
         private System.Windows.Forms.Label LblÜzemóra;
         private System.Windows.Forms.Label LblÁtlagÜzemóraSzám;
-        private System.Windows.Forms.TextBox TxtBxÜzem;
+        private System.Windows.Forms.TextBox TxtBxUzem;
         private System.Windows.Forms.TextBox TxtBxNapi;
-        internal System.Windows.Forms.Button Bttn_Napló_Listáz;
+        internal System.Windows.Forms.Button Btn_Naplo_Listaz;
         internal Zuby.ADGV.AdvancedDataGridView Tabla;
         private System.Windows.Forms.TextBox TxtBxNapiUzemoraAtlag;
         private System.Windows.Forms.Label LblÜzemÁtlag;

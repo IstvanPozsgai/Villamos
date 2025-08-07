@@ -11,6 +11,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
     public partial class Ablak_Eszterga_Karbantartás_Segéd : Form
     {
         #region osztalyszintű elemek
+
         List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
         readonly Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
         // JAVÍTANDÓ:Biztos?
@@ -39,14 +40,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 int melyikelem;
                 melyikelem = 160;
-                BtnRogzit.Visible = Baross;
+                Btn_Rogzit.Visible = Baross;
                 TxtBxUzemOra.Enabled = Baross;
 
                 //módosítás 1
                 //Ablak_Eszterga_Karbantartás oldalon is felhasználva.
 
                 //módosítás 2
-                BtnRogzit.Enabled = MyF.Vanjoga(melyikelem, 2);
+                Btn_Rogzit.Enabled = MyF.Vanjoga(melyikelem, 2);
 
                 //módosítás 3
                 //Ablak_Eszterga_Karbantartás_Módosít oldalon felhasználva.
@@ -61,7 +62,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         /// <summary>
         /// Az ablak betöltésekor eldönti, hogy a felhasználó rögzíthet-e új üzemóra adatot.  
@@ -81,16 +81,16 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                      select a).FirstOrDefault();
 
                     if (Uzemora != null)
-                        LblElözö.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Uzemora}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
+                        LblElozo.Text = $"Előző napi Üzemóra:\nÜzemóra: {Uzemora.Uzemora}\nDátum: {Uzemora.Dátum.ToShortDateString()}";
                     else
-                        LblElözö.Text = "Nincs előző napi üzemóra rögzítve.";
+                        LblElozo.Text = "Nincs előző napi üzemóra rögzítve.";
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                     return;
                 }
 
-                LblSzöveg.Text = $"Írja be mai napi Üzemóra állását.";
+                LblSzoveg.Text = $"Írja be mai napi Üzemóra állását.";
 
                 AdatokUzemora = Kez_Uzemora.Lista_Adatok();
                 Adat_Eszterga_Uzemora rekord = (from a in AdatokUzemora
@@ -99,7 +99,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                                 select a).FirstOrDefault();
                 if (rekord == null)
                 {
-                    LblElözö.Text = "Még nem volt üzemóra rögzítés\n az adatbázisban.";
+                    LblElozo.Text = "Még nem volt üzemóra rögzítés\n az adatbázisban.";
                     return;
                 }
                 else if (rekord != null && rekord.Dátum == DateTime.Today)
@@ -109,7 +109,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     this.Close();
                 }
 
-                LblElözö.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Uzemora}\nDátum: {rekord.Dátum.ToShortDateString()}";
+                LblElozo.Text = $"Előző Üzemóra ami rögzítésre került:\nÜzemóra: {rekord.Uzemora}\nDátum: {rekord.Dátum.ToShortDateString()}";
             }
             catch (HibásBevittAdat ex)
             {
@@ -140,7 +140,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         }
         #endregion
 
-        #region Gombok
+        #region Gombok && Muveletek
 
         /// <summary>
         /// Ellenőrzi az üzemóra mező értékét, majd ha az érvényes és nem kisebb az utolsó rögzített értéknél,
@@ -189,15 +189,19 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
 
+        /// <summary>
+        /// Leüti az Enter billentyűt az Üzemóra mezőben, akkor a napló rögzítése gomb automatikusan lefut.
+        /// Ezzel gyorsabb adatbevitel valósítható meg billentyűzetről.
+        /// </summary>
         private void TxtBxUzemOra_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                BtnRogzit.PerformClick();
+                Btn_Rogzit.PerformClick();
             }
         }
+        #endregion
     }
 }

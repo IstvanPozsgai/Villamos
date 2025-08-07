@@ -21,8 +21,9 @@ namespace Villamos
         readonly Kezelő_Jármű_Állomány_Típus KézTípus = new Kezelő_Jármű_Állomány_Típus();
         readonly Kezelő_Ciklus KézCiklus = new Kezelő_Ciklus();
         readonly Kezelő_Jármű_Xnapos KézXnapos = new Kezelő_Jármű_Xnapos();
-        readonly Kezelő_T5C5_Kmadatok KéZT5C5 = new Kezelő_T5C5_Kmadatok("T5C5");
-        readonly Kezelő_T5C5_Kmadatok KéZICS = new Kezelő_T5C5_Kmadatok("ICS");
+        readonly Kezelő_T5C5_Kmadatok KézT5C5 = new Kezelő_T5C5_Kmadatok("T5C5");
+        readonly Kezelő_T5C5_Kmadatok KézICS = new Kezelő_T5C5_Kmadatok("ICS");
+        readonly Kezelő_T5C5_Kmadatok KézSGP = new Kezelő_T5C5_Kmadatok("SGP");
         readonly Kezelő_T5C5_Kmadatok_Napló KézKmNapló = new Kezelő_T5C5_Kmadatok_Napló();
         readonly Kezelő_Főkönyv_Zser_Km KézFőkönyvKm = new Kezelő_Főkönyv_Zser_Km();
         readonly Kezelő_kiegészítő_Hibaterv KézHibaterv = new Kezelő_kiegészítő_Hibaterv();
@@ -915,6 +916,11 @@ namespace Villamos
                     if (Hibaszöveg.Text.Contains("-")) Terv_lezárás_T5C5();
                 }
 
+                if (Egyed_Típus.Contains("SGP") && Javítva.Checked)
+                {
+                    if (Hibaszöveg.Text.Contains("-")) Terv_lezárás_SGP();
+                }
+
                 if ((Egyed_Típus.Contains("ICS") || Egyed_Típus.Contains("KCSV")) && Javítva.Checked)
                 {
                     if (Hibaszöveg.Text.Contains("-")) Terv_lezárás_ICS();
@@ -1204,7 +1210,7 @@ namespace Villamos
                     {
                         Vütemezés_Jármű_Dátum = MyF.Szöveg_Tisztítás(tömb[2], 0, 11).ToÉrt_DaTeTime();
 
-                        List<Adat_T5C5_Kmadatok> Adatok = KéZICS.Lista_Adatok();
+                        List<Adat_T5C5_Kmadatok> Adatok = KézICS.Lista_Adatok();
                         Adat_T5C5_Kmadatok EgyAdat = (from a in Adatok
                                                       where a.Törölt == false
                                                       && a.Azonosító == Pályaszám.Text.Trim()
@@ -1323,7 +1329,7 @@ namespace Villamos
 
                         //A következő vizsgálatot nézzük, ami soron következne, ha van ilyen legalább egy akkor rögzítjük,
                         //így biztosítja a program, hogy a ciklusterv szerint legyen végezve.
-                        List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adatok();
+                        List<Adat_T5C5_Kmadatok> AdatokT5C5 = KézT5C5.Lista_Adatok();
                         Adat_T5C5_Kmadatok EgyAdat = (from a in AdatokT5C5
                                                       where a.Törölt == false
                                                       && a.Azonosító == Pályaszám.Text.Trim()
@@ -1351,7 +1357,7 @@ namespace Villamos
                                 VizsgKm_Jármű = 0;
                             }
 
-                            KéZT5C5.Módosítás(EgyAdat.ID, EgyAdat.KMUkm + Korrekció);
+                            KézT5C5.Módosítás(EgyAdat.ID, EgyAdat.KMUkm + Korrekció);
 
                             List<Adat_Ciklus> SzűrtCiklus = (from a in AdatokCiklus
                                                              where a.Típus == CiklusrendCombo
@@ -1360,6 +1366,76 @@ namespace Villamos
                             KövetkezőVizsgálat(SzűrtCiklus);
                             KövetkezőV2V3vizsgálat(SzűrtCiklus);
                             T5C5elkészülés();
+                        }
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    
+        private void Terv_lezárás_SGP()
+        {
+            try
+            {
+                string[] tömb = Hibaszöveg.Text.Trim().Split('-');
+                if (tömb.Length > 2 && (tömb[0].Contains("V") || tömb[0].Contains("J")))
+                {
+                    Vsorszám_Jármű = tömb[1].ToÉrt_Int();
+                    Vizsgfoka_Jármű = tömb[0];
+
+                    if (Vsorszám_Jármű >= 0)
+                    {
+                        Vütemezés_Jármű_Dátum = MyF.Szöveg_Tisztítás(tömb[2], 0, 10).ToÉrt_DaTeTime();
+                        // ellenőrizzük, hogy szám-e
+                        // rögzítendő adatokat ellenőrizzük, hogy tényleg azt akarjuk
+
+                        //A következő vizsgálatot nézzük, ami soron következne, ha van ilyen legalább egy akkor rögzítjük,
+                        //így biztosítja a program, hogy a ciklusterv szerint legyen végezve.
+                        List<Adat_T5C5_Kmadatok> AdatokSGP = KézSGP.Lista_Adatok();
+                        Adat_T5C5_Kmadatok EgyAdat = (from a in AdatokSGP
+                                                      where a.Törölt == false
+                                                      && a.Azonosító == Pályaszám.Text.Trim()
+                                                      && a.KövV == Vizsgfoka_Jármű
+                                                      && a.KövV_sorszám == Vsorszám_Jármű
+                                                      orderby a.ID descending
+                                                      select a).FirstOrDefault();
+                        if (EgyAdat != null)
+                        {
+                            // kiírjuk az örökítendő adatokat
+                            CiklusrendCombo = EgyAdat.Ciklusrend;
+                            VizsgKm_Jármű = EgyAdat.KMUkm;
+                            Korrekció = KézFőkönyvKm.FutottKm(Pályaszám.Text.Trim(), EgyAdat.KMUdátum);
+
+                            // ha V2/V3 volt akkor változik, ha nem akkor marad 
+                            if (Vizsgfoka_Jármű.Contains("V2") || Vizsgfoka_Jármű.Contains("V3"))
+                                KövV2_számláló = VizsgKm_Jármű + Korrekció;       // V2/V3 volt
+                            else
+                                KövV2_számláló = EgyAdat.V2V3Számláló + Korrekció;      // minden egyéb
+
+                            // J javítás esetén
+                            if (Vizsgfoka_Jármű.Contains("J"))
+                            {
+                                KövV2_számláló = 0;
+                                VizsgKm_Jármű = 0;
+                            }
+
+                            KézSGP.Módosítás(EgyAdat.ID, EgyAdat.KMUkm + Korrekció);
+
+                            List<Adat_Ciklus> SzűrtCiklus = (from a in AdatokCiklus
+                                                             where a.Típus == CiklusrendCombo
+                                                             orderby a.Sorszám
+                                                             select a).ToList();
+                            KövetkezőVizsgálat(SzűrtCiklus);
+                            KövetkezőV2V3vizsgálat(SzűrtCiklus);
+                            SGPelkészülés();
                         }
                     }
                 }
@@ -1560,7 +1636,7 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    List<Adat_T5C5_Kmadatok> AdatokT5C5 = KéZT5C5.Lista_Adatok();
+                    List<Adat_T5C5_Kmadatok> AdatokT5C5 = KézT5C5.Lista_Adatok();
                     long i = 1;
                     if (AdatokT5C5.Count > 0) i = AdatokT5C5.Max(a => a.ID) + 1;
 
@@ -1587,11 +1663,69 @@ namespace Villamos
                                          KövV.Trim(),
                                          false,
                                          KövV2_számláló);
-                    KéZT5C5.Rögzítés(ADATÚJ);
+                    KézT5C5.Rögzítés(ADATÚJ);
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                     throw new HibásBevittAdat("A pályaszám nem T5C5!");
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+   
+        private void SGPelkészülés()
+        {
+            try
+            {
+                Adat_Jármű Elem = (from a in AdatokFőJármű
+                                   where a.Azonosító == Pályaszám.Text.Trim()
+                                   && a.Valóstípus.Contains("SGP")
+                                   && !a.Törölt
+                                   select a).FirstOrDefault();
+
+                if (Elem != null)
+                {
+                    List<Adat_T5C5_Kmadatok> AdatokT5C5 = KézSGP.Lista_Adatok();
+                    long i = 1;
+                    if (AdatokT5C5.Count > 0) i = AdatokT5C5.Max(a => a.ID) + 1;
+
+                    // Új adat
+                    Adat_T5C5_Kmadatok ADATÚJ = new Adat_T5C5_Kmadatok(
+                                         i,
+                                         Pályaszám.Text.Trim(),
+                                         0,
+                                         VizsgKm_Jármű + Korrekció,
+                                         DateTime.Today,
+                                         Vizsgfoka_Jármű,
+                                         Vütemezés_Jármű_Dátum,
+                                         DateTime.Today,
+                                         VizsgKm_Jármű + Korrekció,
+                                         0,
+                                         Vsorszám_Jármű,
+                                         new DateTime(1900, 1, 1),
+                                         0,
+                                         CiklusrendCombo,
+                                         Program.PostásTelephely.Trim(),
+                                         KövV2_Sorszám,
+                                         KövV2,
+                                         KövV_Sorszám,
+                                         KövV.Trim(),
+                                         false,
+                                         KövV2_számláló);
+                    KézSGP.Rögzítés(ADATÚJ);
+                    MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                    throw new HibásBevittAdat("A pályaszám nem SGP!");
 
             }
             catch (HibásBevittAdat ex)
@@ -1617,7 +1751,7 @@ namespace Villamos
                                    select a).FirstOrDefault();
                 if (Elem != null)
                 {
-                    List<Adat_T5C5_Kmadatok> Adatok = KéZICS.Lista_Adatok();
+                    List<Adat_T5C5_Kmadatok> Adatok = KézICS.Lista_Adatok();
 
                     long i = 1;
                     if (Adatok.Count > 0) i = Adatok.Max(a => a.ID) + 1;
@@ -1629,7 +1763,7 @@ namespace Villamos
                                            VizsgKm_Jármű, 0, Vsorszám_Jármű, new DateTime(1900, 1, 1),
                                            0, CiklusrendCombo, Program.PostásTelephely.Trim(), KövV2_Sorszám, KövV2,
                                            KövV_Sorszám, KövV, false, KövV2_számláló);
-                    KéZICS.Rögzítés(ADAT);
+                    KézICS.Rögzítés(ADAT);
                     MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
