@@ -34,6 +34,8 @@ namespace Villamos
 
             // Szakszolgálati lekérdezés esetén működik csak a lekérdezés
             Kimutatás_készítés.Visible = Cmbtelephely.Enabled;
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Dátum_év.Value = DateTime.Today;
             Dátum.Value = DateTime.Today;
