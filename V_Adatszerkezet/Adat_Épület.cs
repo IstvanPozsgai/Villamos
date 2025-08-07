@@ -109,6 +109,15 @@
             Megnevezés = megnevezés;
             Osztály = osztály;
         }
+
+        public Adat_Épület_Takarításrakijelölt(int e1kijelöltdb, int e2kijelöltdb, int e3kijelöltdb, string helységkód, int hónap)
+        {
+            E1kijelöltdb = e1kijelöltdb;
+            E2kijelöltdb = e2kijelöltdb;
+            E3kijelöltdb = e3kijelöltdb;
+            Helységkód = helységkód;
+            Hónap = hónap;
+        }
     }
 }
 

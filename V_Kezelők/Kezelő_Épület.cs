@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -62,5 +64,52 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+
+        public void Rögzítés(string Telephely, int Év, Adat_Épület_Takarításrakijelölt Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void Módosítás(string Telephely, int Év, List<Adat_Épület_Takarításrakijelölt> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
+                {
+                    string szöveg = "UPDATE takarításrakijelölt SET ";
+                    szöveg += $"E1kijelöltdb={Adat.E1kijelöltdb}, ";
+                    szöveg += $"E2kijelöltdb={Adat.E2kijelöltdb}, ";
+                    szöveg += $"E3kijelöltdb={Adat.E3kijelöltdb} ";
+                    szöveg += $" WHERE hónap={Adat.Hónap} ";
+                    szöveg += $" AND helységkód='{Adat.Helységkód}'";
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

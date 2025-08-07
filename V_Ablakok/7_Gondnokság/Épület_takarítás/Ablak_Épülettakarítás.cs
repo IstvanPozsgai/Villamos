@@ -471,64 +471,29 @@ namespace Villamos
             Épület_tábla_lista();
             Gombokfel2();
         }
-        // JAVÍTANDÓ:
+
         private void Frissítiadarabszámokat()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\" + Dátum1.Value.ToString("yyyy") + @"épülettakarítás.mdb";
-                if (!File.Exists(hely)) return;
-                string jelszó = "seprűéslapát";
-                string szöveg = "SELECT * FROM takarításrakijelölt WHERE hónap=" + Dátum1.Value.Month;
-
-                Holtart.Be(20);
-
+                Holtart.Be();
                 List<Adat_Épület_Takarításrakijelölt> Adatok = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Hónap == Dátum1.Value.Month
+                          select a).ToList();
 
-                int E1db;
-                int E2db;
-                int E3db;
-                int utolsónap = MyF.Hónap_utolsónapja(Dátum1.Value).Day;
-
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Épület_Takarításrakijelölt> AdatokGY = new List<Adat_Épület_Takarításrakijelölt>();
                 foreach (Adat_Épület_Takarításrakijelölt rekord in Adatok)
                 {
-                    E1db = 0;
-                    for (int k = 0; k < utolsónap; k++)
-                    {
-                        if (MyF.Szöveg_Tisztítás(rekord.E1rekijelölt, k, 1) == "1")
-                        {
-                            E1db += 1;
-                        }
-                    }
-                    E2db = 0;
-                    for (int k = 0; k < utolsónap; k++)
-                    {
-                        if (MyF.Szöveg_Tisztítás(rekord.E2rekijelölt, k, 1) == "1")
-                        {
-                            E2db += 1;
-                        }
-                    }
-                    E3db = 0;
-                    for (int k = 0; k < utolsónap; k++)
-                    {
-                        if (MyF.Szöveg_Tisztítás(rekord.E3rekijelölt, k, 1) == "1")
-                        {
-                            E3db += 1;
-                        }
-                    }
-                    szöveg = "UPDATE takarításrakijelölt SET ";
-                    szöveg += "E1kijelöltdb=" + E1db.ToString() + ", ";
-                    szöveg += "E2kijelöltdb=" + E2db.ToString() + ", ";
-                    szöveg += "E3kijelöltdb=" + E3db.ToString();
-                    szöveg += " WHERE hónap=" + Dátum1.Value.Month.ToString();
-                    szöveg += " AND helységkód='" + rekord.Helységkód.Trim() + "'";
-                    SzövegGy.Add(szöveg);
-
+                    int E1db = rekord.E1rekijelölt.Count(c => c == '1'); ;
+                    int E2db = rekord.E2rekijelölt.Count(c => c == '1'); ;
+                    int E3db = rekord.E3rekijelölt.Count(c => c == '1'); ;
+                    Adat_Épület_Takarításrakijelölt Adat = new Adat_Épület_Takarításrakijelölt(E1db, E2db, E3db, rekord.Helységkód.Trim(), Dátum1.Value.Month);
+                    AdatokGY.Add(Adat);
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-
+                KézTakarításrakijelölt.Módosítás(Cmbtelephely.Text.Trim(), Dátum1.Value.Year, AdatokGY);
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -569,43 +534,33 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Épület_tábla_lista()
         {
             try
             {
                 Frissítiadarabszámokat();
+                List<Adat_Épület_Takarításrakijelölt> AdatokKijelkölt = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
 
                 // kilistázzuk a adatbázis adatait
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                if (!File.Exists(hely))
-                    return;
-                string jelszó = "seprűéslapát";
+                List<Adat_Épület_Adattábla> AdatokÖ = KézAdatTábla.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokÖ = AdatokÖ.Where(a => a.Státus == false).ToList();
 
-                int volt;
-                string szöveg = "SELECT * FROM Adattábla where státus=0 ";
+                List<Adat_Épület_Adattábla> Adatok = new List<Adat_Épület_Adattábla>();
                 // ha nem összes
-                if (List1.GetItemChecked(0) == false)
+                if (!List1.GetItemChecked(0))
                 {
                     // további típus szűrés
-                    volt = 0;
-                    for (int j = 0; j < List1.Items.Count; j++)
+                    for (int j = 0; j < List1.CheckedItems.Count; j++)
                     {
-
-                        if (List1.GetItemChecked(j) == true)
-                        {
-                            if (volt == 0)
-                                szöveg += " and (";
-                            if (volt != 0)
-                                szöveg += " or ";
-                            szöveg += " osztály='" + List1.Items[j].ToString().Trim() + "'";
-                            volt = 1;
-                        }
+                        List<Adat_Épület_Adattábla> Ideig = (from a in AdatokÖ
+                                                             where a.Osztály == List1.Items[j].ToStrTrim()
+                                                             select a).ToList();
+                        Adatok.AddRange(Ideig);
                     }
-                    if (volt == 1)
-                        szöveg += " )";
                 }
-                szöveg += " order by id";
+                else
+                    Adatok.AddRange(AdatokÖ);
+                Adatok = Adatok.OrderBy(a => a.ID).ToList();
 
                 Holtart.Be(20);
                 {
@@ -645,125 +600,46 @@ namespace Villamos
                     Tábla1.Columns[9].HeaderText = "E3 kész db";
                     Tábla1.Columns[9].Width = 80;
 
-                    List<Adat_Épület_Adattábla> Adatok = KézAdatTábla.Lista_Adatok(hely, jelszó, szöveg);
-
-                    int i;
                     foreach (Adat_Épület_Adattábla rekord in Adatok)
                     {
 
                         Tábla1.RowCount++;
-                        i = Tábla1.RowCount - 1;
+                        int i = Tábla1.RowCount - 1;
                         Tábla1.Rows[i].Cells[0].Value = rekord.Helységkód.Trim();
                         Tábla1.Rows[i].Cells[1].Value = int.TryParse(rekord.Helységkód.ToString().Replace("E", ""), out int Sorszám) ? Sorszám : 0;
                         Tábla1.Rows[i].Cells[2].Value = rekord.Osztály.Trim();
                         Tábla1.Rows[i].Cells[3].Value = rekord.Megnevezés.Trim();
-                        Tábla1.Rows[i].Cells[4].Value = 0;
-                        Tábla1.Rows[i].Cells[5].Value = 0;
-                        Tábla1.Rows[i].Cells[6].Value = 0;
-                        Tábla1.Rows[i].Cells[7].Value = 0;
-                        Tábla1.Rows[i].Cells[8].Value = 0;
-                        Tábla1.Rows[i].Cells[9].Value = 0;
+                        Adat_Épület_Takarításrakijelölt Adat = (from a in AdatokKijelkölt
+                                                                where a.Helységkód.Trim() == rekord.Helységkód.Trim()
+                                                                && a.Hónap == Dátum1.Value.Month
+                                                                select a).FirstOrDefault();
+                        if (Adat != null)
+                        {
+                            Tábla1.Rows[i].Cells[4].Value = Adat.E1kijelöltdb;
+                            Tábla1.Rows[i].Cells[5].Value = Adat.E2kijelöltdb;
+                            Tábla1.Rows[i].Cells[6].Value = Adat.E3kijelöltdb;
+                            Tábla1.Rows[i].Cells[7].Value = Adat.E1elvégzettdb;
+                            Tábla1.Rows[i].Cells[8].Value = Adat.E2elvégzettdb;
+                            Tábla1.Rows[i].Cells[9].Value = Adat.E3elvégzettdb;
+                        }
+                        else
+                        {
+                            Tábla1.Rows[i].Cells[4].Value = 0;
+                            Tábla1.Rows[i].Cells[5].Value = 0;
+                            Tábla1.Rows[i].Cells[6].Value = 0;
+                            Tábla1.Rows[i].Cells[7].Value = 0;
+                            Tábla1.Rows[i].Cells[8].Value = 0;
+                            Tábla1.Rows[i].Cells[9].Value = 0;
+                        }
 
                         Holtart.Lép();
                     }
-
-                    Épület_tábla_lista_folyt();
                     Tábla1.Visible = true;
                     Tábla1.Refresh();
                 }
 
                 Call_fel1_Click();
                 Holtart.Ki();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // JAVÍTANDÓ:
-        private void Épület_tábla_lista_folyt()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\" + Dátum1.Value.ToString("yyyy") + @"épülettakarítás.mdb";
-
-                if (!File.Exists(hely)) return;
-
-
-
-                string szöveg = "SELECT * FROM takarításrakijelölt where hónap=" + Dátum1.Value.Month.ToString();
-                szöveg += " ORDER BY helységkód";
-
-                // sorbarendezzük a táblát pályaszám szerint
-
-                Tábla1.Sort(Tábla1.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-                Tábla1.Visible = false;
-
-
-                List<Adat_Épület_Takarításrakijelölt> Adatok = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum1.Value.Year);
-
-                int i = 0;
-
-                int hiba = 0;
-
-                Holtart.Be(20);
-                foreach (Adat_Épület_Takarításrakijelölt rekord in Adatok)
-                {
-
-                    if (String.Compare(Tábla1.Rows[i].Cells[0].Value.ToString().Trim(), rekord.Helységkód.Trim()) <= 0)
-                    {
-                        // ha kisebb a táblázatban lévő szám akkor addig növeljük amíg egyenlő nem lesz
-                        while (String.Compare(Tábla1.Rows[i].Cells[0].Value.ToString().Trim(), rekord.Helységkód.Trim()) < 0)
-                        {
-                            i += 1;
-                            if (i == Tábla1.Rows.Count)
-                            {
-                                hiba = 1;
-                                break;
-                            }
-                        }
-
-                        if (hiba == 1)
-                            break;
-                        while (String.Compare(Tábla1.Rows[i].Cells[0].Value.ToString().Trim(), rekord.Helységkód.Trim()) <= 0)
-                        {
-                            if (Tábla1.Rows[i].Cells[0].Value.ToString().Trim() == rekord.Helységkód.Trim())
-                            {
-                                // ha egyforma akkor kiírjuk
-                                Tábla1.Rows[i].Cells[4].Value = rekord.E1kijelöltdb;
-                                Tábla1.Rows[i].Cells[5].Value = rekord.E2kijelöltdb;
-                                Tábla1.Rows[i].Cells[6].Value = rekord.E3kijelöltdb;
-                                Tábla1.Rows[i].Cells[7].Value = rekord.E1elvégzettdb;
-                                Tábla1.Rows[i].Cells[8].Value = rekord.E2elvégzettdb;
-                                Tábla1.Rows[i].Cells[9].Value = rekord.E3elvégzettdb;
-
-                            }
-
-                            i += 1;
-
-                            if (i == Tábla1.Rows.Count)
-                            {
-                                hiba = 1;
-                                break;
-                            }
-                        }
-
-                        if (hiba == 1)
-                            break;
-                    }
-                    Holtart.Lép();
-
-                }
-
-                Tábla1.Refresh();
-                Tábla1.Sort(Tábla1.Columns[0], System.ComponentModel.ListSortDirection.Descending);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1772,7 +1648,7 @@ namespace Villamos
                 string[] darabol = Helyiséglista.Items[Helyiséglista.SelectedIndex].ToString().Split('-');
                 HelységKód = darabol[0].Trim();
 
-                AdatTáblaListaFeltöltés();
+                AdatokAdatTábla = KézAdatTábla.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Státus == false).ToList();
                 // A szemetes és a kapcsolt helyiség ellenőrzés kiirás
 
                 Adat_Épület_Adattábla AlapAdat = (from a in AdatokAdatTábla
@@ -1982,7 +1858,7 @@ namespace Villamos
                 string helyép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
 
                 AdatokKijelöltek = KézTakarításrakijelölt.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
-                AdatTáblaListaFeltöltés();
+                AdatokAdatTábla = KézAdatTábla.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Státus == false).ToList();
 
                 Holtart.Be(Helyiséglista.Items.Count + 2);
 
@@ -2834,32 +2710,7 @@ namespace Villamos
         #endregion
 
 
-        #region Listák
 
-        // JAVÍTANDÓ:   
-        private void AdatTáblaListaFeltöltés()
-        {
-            try
-            {
-                AdatokAdatTábla.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\épülettörzs.mdb";
-                string szöveg = "SELECT * FROM Adattábla where státus=0";
-                string jelszó = "seprűéslapát";
-
-                AdatokAdatTábla = KézAdatTábla.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-        #endregion
 
 
         #region Opció
