@@ -23,9 +23,15 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
             Start();
         }
 
+        public Jármű_Takarítás_Ütemezés_Segéd1()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
-            Jogosultságkiosztás();
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
         }
 
         private void Jogosultságkiosztás()
