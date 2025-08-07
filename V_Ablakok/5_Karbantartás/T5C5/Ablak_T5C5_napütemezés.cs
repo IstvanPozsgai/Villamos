@@ -67,7 +67,9 @@ namespace Villamos
         private void Start()
         {
             Telephelyekfeltöltése();
-            Jogosultságkiosztás();
+
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
             Dátum.Value = DateTime.Today;
         }
 

@@ -48,6 +48,11 @@ namespace Villamos.Villamos_Ablakok
             Start();
         }
 
+        public Ablak_T5C5_Segéd()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
             string[] darab;
@@ -118,7 +123,9 @@ namespace Villamos.Villamos_Ablakok
             }
 
             Kiírja_Vizsgálat();
-            Jogosultságkiosztás();
+
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
             Vonalfeltöltés();
             Panel_Váltás();
         }
