@@ -56,6 +56,8 @@ namespace Villamos
         private void Start()
         {
             Telephelyekfeltöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Pályaszám_feltöltés();
             CiklusListaFeltöltés();
