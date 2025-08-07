@@ -174,6 +174,7 @@
             this.GombNév.Name = "GombNév";
             this.GombNév.Size = new System.Drawing.Size(607, 28);
             this.GombNév.TabIndex = 226;
+            this.GombNév.SelectedIndexChanged += new System.EventHandler(this.GombNév_SelectedIndexChanged);
             // 
             // GombFelirat
             // 

@@ -2,17 +2,12 @@
 
 namespace Villamos.Villamos_Adatszerkezet
 {
-    public class Adat_Nosztalgia_Állomány
+    public class Adat_Nosztalgia_Tevékenység
     {
         public string Azonosító { get; private set; }
         public string Ciklus_idő { get; private set; }
         public string Ciklus_km1 { get; private set; }
         public string Ciklus_km2 { get; private set; }
-        //public string Gyártó { get; private set; }
-        //public int Év { get; private set; }
-        //public string Ntípus { get; private set; }
-        //public string Eszközszám { get; private set; }
-        //public string Leltári_szám { get; private set; }
         public DateTime Vizsgálatdátuma_idő { get; private set; }
         public DateTime Vizsgálatdátuma_km { get; private set; }
         public string Vizsgálatfokozata { get; private set; }
@@ -24,17 +19,12 @@ namespace Villamos.Villamos_Adatszerkezet
         public DateTime Utolsórögzítés { get; private set; }
         public string Telephely { get; private set; }
 
-        public Adat_Nosztalgia_Állomány(string azonosító, string ciklus_idő, string ciklus_km1, string ciklus_km2,/* string gyártó, int év, string ntípus, string eszközszám, string leltári_szám, */DateTime vizsgálatdátuma_idő, DateTime vizsgálatdátuma_km, string vizsgálatfokozata, string vizsgálatszáma_idő, string vizsgálatszáma_km, DateTime utolsóforgalminap, int km_v, int km_u, DateTime utolsórögzítés, string telephely)
+        public Adat_Nosztalgia_Tevékenység(string azonosító, string ciklus_idő, string ciklus_km1, string ciklus_km2, DateTime vizsgálatdátuma_idő, DateTime vizsgálatdátuma_km, string vizsgálatfokozata, string vizsgálatszáma_idő, string vizsgálatszáma_km, DateTime utolsóforgalminap, int km_v, int km_u, DateTime utolsórögzítés, string telephely)
         {
             Azonosító = azonosító;
             Ciklus_idő = ciklus_idő;
             Ciklus_km1 = ciklus_km1;
             Ciklus_km2 = ciklus_km2;
-            //Gyártó = gyártó;
-            //Év = év;
-            //Ntípus = ntípus;
-            //Eszközszám = eszközszám;
-            //Leltári_szám = leltári_szám;
             Vizsgálatdátuma_idő = vizsgálatdátuma_idő;
             Vizsgálatdátuma_km = vizsgálatdátuma_km;
             Vizsgálatfokozata = vizsgálatfokozata;
@@ -47,6 +37,27 @@ namespace Villamos.Villamos_Adatszerkezet
             Telephely = telephely;
         }
     }
+
+    public class Adat_Nosztalgia_Állomány
+    {
+        public string Azonosító { get; private set; }
+        public string Gyártó { get; private set; }
+        public string Év { get; private set; }
+        public string Ntípus { get; private set; }
+        public string Eszközszám { get; private set; }
+        public string Leltári_szám { get; private set; }
+
+        public Adat_Nosztalgia_Állomány(string azonosító, string gyártó, string év, string ntípus, string eszközszám, string leltári_szám)
+        {
+            Azonosító = azonosító;
+            Gyártó = gyártó;
+            Év = év;
+            Ntípus = ntípus;
+            Eszközszám = eszközszám;
+            Leltári_szám = leltári_szám;
+        }
+    }
+
 
     public class Adat_Nosztagia_Futás
     {

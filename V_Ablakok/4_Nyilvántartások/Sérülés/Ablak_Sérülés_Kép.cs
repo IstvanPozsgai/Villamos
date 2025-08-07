@@ -27,6 +27,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
             InitializeComponent();
         }
 
+        public Ablak_Sérülés_Kép()
+        {
+            InitializeComponent();
+        }
+
         public void Képpekkel()
         {
             try

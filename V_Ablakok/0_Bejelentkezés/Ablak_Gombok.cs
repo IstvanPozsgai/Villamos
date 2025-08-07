@@ -318,6 +318,7 @@ namespace Villamos.Ablakok
                                     where a.GombokId == ID
                                     select a).FirstOrDefault();
                 if (adat == null) return;
+
                 TxtId.Text = adat.GombokId.ToString();
                 GombFelirat.Text = adat.GombFelirat;
                 GombNév.Text = adat.GombName;
@@ -403,6 +404,33 @@ namespace Villamos.Ablakok
             for (int i = 0; i < ChkSzervezet.Items.Count; i++)
                 ChkSzervezet.SetItemChecked(i, kell);
         }
-    }
 
+        private void GombNév_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (GombNév.SelectedIndex < 0) return;
+                GombNév.Text = GombNév.Items[GombNév.SelectedIndex].ToString();
+                TxtId.Text = "";
+                Adat_Gombok adat = (from a in Adatok
+                                    where a.GombName == GombNév.Text.Trim()
+                                    select a).FirstOrDefault();
+                if (adat != null)
+                {
+                    TxtId.Text = adat.GombokId.ToString();
+                    Adatokkiírása(adat.GombokId);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+    }
 }

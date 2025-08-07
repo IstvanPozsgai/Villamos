@@ -135,11 +135,6 @@ namespace Villamos
         {
             int melyikelem;
             // ide kell az összes gombot tenni amit szabályozni akarunk false
-            if (AblakTakSegéd1 != null)
-            {
-                AblakTakSegéd1.Ütem_Rögzít.Enabled = false;
-                AblakTakSegéd1.Ütem_Töröl.Enabled = false;
-            }
             Btn_Vezénylésbeírás.Enabled = false;
 
             Utolsó_módosít.Enabled = false;
@@ -161,12 +156,6 @@ namespace Villamos
             // módosítás 2 
             if (MyF.Vanjoga(melyikelem, 2))
             {
-                if (AblakTakSegéd1 != null)
-                {
-                    AblakTakSegéd1.Ütem_Rögzít.Enabled = true;
-                    AblakTakSegéd1.Ütem_Töröl.Enabled = true;
-                }
-
                 Btn_Vezénylésbeírás.Enabled = true;
             }
             // módosítás 3 
