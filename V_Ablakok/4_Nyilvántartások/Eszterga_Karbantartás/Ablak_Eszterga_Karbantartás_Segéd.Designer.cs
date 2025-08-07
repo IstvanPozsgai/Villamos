@@ -35,7 +35,7 @@
             this.LblElözö = new System.Windows.Forms.Label();
             this.LblSzöveg = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.BtnRogzit = new System.Windows.Forms.Button();
+            this.Btn_Rogzit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TxtBxUzemOra
@@ -75,19 +75,19 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
-            // BtnRogzit
+            // Btn_Rogzit
             // 
-            this.BtnRogzit.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.BtnRogzit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnRogzit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(234)))), ((int)(((byte)(214)))));
-            this.BtnRogzit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnRogzit.Location = new System.Drawing.Point(157, 76);
-            this.BtnRogzit.Name = "BtnRogzit";
-            this.BtnRogzit.Size = new System.Drawing.Size(40, 40);
-            this.BtnRogzit.TabIndex = 46;
-            this.toolTip1.SetToolTip(this.BtnRogzit, "Művelet módosítása");
-            this.BtnRogzit.UseVisualStyleBackColor = true;
-            this.BtnRogzit.Click += new System.EventHandler(this.BtnRogzit_Click);
+            this.Btn_Rogzit.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Btn_Rogzit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Rogzit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(234)))), ((int)(((byte)(214)))));
+            this.Btn_Rogzit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Rogzit.Location = new System.Drawing.Point(157, 76);
+            this.Btn_Rogzit.Name = "Btn_Rogzit";
+            this.Btn_Rogzit.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Rogzit.TabIndex = 46;
+            this.toolTip1.SetToolTip(this.Btn_Rogzit, "Művelet módosítása");
+            this.Btn_Rogzit.UseVisualStyleBackColor = true;
+            this.Btn_Rogzit.Click += new System.EventHandler(this.BtnRogzit_Click);
             // 
             // Ablak_Eszterga_Karbantartás_Segéd
             // 
@@ -95,7 +95,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(234)))), ((int)(((byte)(214)))));
             this.ClientSize = new System.Drawing.Size(365, 189);
-            this.Controls.Add(this.BtnRogzit);
+            this.Controls.Add(this.Btn_Rogzit);
             this.Controls.Add(this.LblSzöveg);
             this.Controls.Add(this.LblElözö);
             this.Controls.Add(this.Lbl_Uzemora);
@@ -118,6 +118,6 @@
         private System.Windows.Forms.Label LblElözö;
         private System.Windows.Forms.Label LblSzöveg;
         private System.Windows.Forms.ToolTip toolTip1;
-        internal System.Windows.Forms.Button BtnRogzit;
+        internal System.Windows.Forms.Button Btn_Rogzit;
     }
 }

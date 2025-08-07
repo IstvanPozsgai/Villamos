@@ -36,7 +36,7 @@
             this.Btn_Frissit = new System.Windows.Forms.Button();
             this.Btn_Sugo = new System.Windows.Forms.Button();
             this.Btn_Rogzit = new System.Windows.Forms.Button();
-            this.Bttn_Naplo_Listaz = new System.Windows.Forms.Button();
+            this.Btn_Naplo_Listaz = new System.Windows.Forms.Button();
             this.Btn_Pdf = new System.Windows.Forms.Button();
             this.GrpBx = new System.Windows.Forms.GroupBox();
             this.LblÜzemÁtlag = new System.Windows.Forms.Label();
@@ -129,19 +129,19 @@
             this.Btn_Rogzit.UseVisualStyleBackColor = false;
             this.Btn_Rogzit.Click += new System.EventHandler(this.Btn_Rogzit_Click);
             // 
-            // Bttn_Naplo_Listaz
+            // Btn_Naplo_Listaz
             // 
-            this.Bttn_Naplo_Listaz.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Bttn_Naplo_Listaz.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
-            this.Bttn_Naplo_Listaz.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Bttn_Naplo_Listaz.Image = global::Villamos.Properties.Resources.Treetog_Junior_Document_scroll;
-            this.Bttn_Naplo_Listaz.Location = new System.Drawing.Point(190, 22);
-            this.Bttn_Naplo_Listaz.Name = "Bttn_Naplo_Listaz";
-            this.Bttn_Naplo_Listaz.Size = new System.Drawing.Size(40, 40);
-            this.Bttn_Naplo_Listaz.TabIndex = 254;
-            this.toolTip1.SetToolTip(this.Bttn_Naplo_Listaz, "Napló listázása");
-            this.Bttn_Naplo_Listaz.UseVisualStyleBackColor = true;
-            this.Bttn_Naplo_Listaz.Click += new System.EventHandler(this.Btn_Naplo_Listaz_Click);
+            this.Btn_Naplo_Listaz.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Naplo_Listaz.FlatAppearance.BorderColor = System.Drawing.Color.Tan;
+            this.Btn_Naplo_Listaz.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Naplo_Listaz.Image = global::Villamos.Properties.Resources.Treetog_Junior_Document_scroll;
+            this.Btn_Naplo_Listaz.Location = new System.Drawing.Point(190, 22);
+            this.Btn_Naplo_Listaz.Name = "Btn_Naplo_Listaz";
+            this.Btn_Naplo_Listaz.Size = new System.Drawing.Size(40, 40);
+            this.Btn_Naplo_Listaz.TabIndex = 254;
+            this.toolTip1.SetToolTip(this.Btn_Naplo_Listaz, "Napló listázása");
+            this.Btn_Naplo_Listaz.UseVisualStyleBackColor = true;
+            this.Btn_Naplo_Listaz.Click += new System.EventHandler(this.Btn_Naplo_Listaz_Click);
             // 
             // Btn_Pdf
             // 
@@ -165,7 +165,7 @@
             this.GrpBx.Controls.Add(this.Btn_Pdf);
             this.GrpBx.Controls.Add(this.LblÜzemÁtlag);
             this.GrpBx.Controls.Add(this.TxtBxNapiUzemoraAtlag);
-            this.GrpBx.Controls.Add(this.Bttn_Naplo_Listaz);
+            this.GrpBx.Controls.Add(this.Btn_Naplo_Listaz);
             this.GrpBx.Controls.Add(this.LblÁtlagÜzemóraSzám);
             this.GrpBx.Controls.Add(this.TxtBxUzem);
             this.GrpBx.Controls.Add(this.TxtBxNapi);
@@ -343,7 +343,7 @@
         private System.Windows.Forms.Label LblÁtlagÜzemóraSzám;
         private System.Windows.Forms.TextBox TxtBxUzem;
         private System.Windows.Forms.TextBox TxtBxNapi;
-        internal System.Windows.Forms.Button Bttn_Naplo_Listaz;
+        internal System.Windows.Forms.Button Btn_Naplo_Listaz;
         internal Zuby.ADGV.AdvancedDataGridView Tabla;
         private System.Windows.Forms.TextBox TxtBxNapiUzemoraAtlag;
         private System.Windows.Forms.Label LblÜzemÁtlag;

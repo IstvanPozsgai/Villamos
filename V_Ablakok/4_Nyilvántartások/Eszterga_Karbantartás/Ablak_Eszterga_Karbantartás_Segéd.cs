@@ -39,14 +39,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 int melyikelem;
                 melyikelem = 160;
-                BtnRogzit.Visible = Baross;
+                Btn_Rogzit.Visible = Baross;
                 TxtBxUzemOra.Enabled = Baross;
 
                 //módosítás 1
                 //Ablak_Eszterga_Karbantartás oldalon is felhasználva.
 
                 //módosítás 2
-                BtnRogzit.Enabled = MyF.Vanjoga(melyikelem, 2);
+                Btn_Rogzit.Enabled = MyF.Vanjoga(melyikelem, 2);
 
                 //módosítás 3
                 //Ablak_Eszterga_Karbantartás_Módosít oldalon felhasználva.
@@ -193,7 +193,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                BtnRogzit.PerformClick();
+                Btn_Rogzit.PerformClick();
             }
         }
         #endregion
