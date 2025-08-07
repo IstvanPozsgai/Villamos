@@ -629,7 +629,6 @@ namespace Villamos.Villamos_Ablakok
         }
         private void AlapadatRögzít_Click(object sender, EventArgs e)
         {
-            //TODO: Átnézni és módosítani ab műveletekkel
             try
             {
                 string hibaszöveg = "";
@@ -1006,6 +1005,7 @@ namespace Villamos.Villamos_Ablakok
         }
         private void SAP_Beolv_Click(object sender, EventArgs e)
         {
+            //TODO Valamiért hibát dob
             ZSER_Beolvasás();
             Pályaszám_feltöltés();
 
@@ -1025,6 +1025,8 @@ namespace Villamos.Villamos_Ablakok
         }
         private void Futásnaptábla_Rögzítés_Click(object sender, EventArgs e)
         {
+
+            //TODO ADATBÁZIS ROGZÍTÉSI HIBA
             try
             {
                 string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";
@@ -1064,9 +1066,10 @@ namespace Villamos.Villamos_Ablakok
                     else
                     {
                         nap = 1;
-                        szöveg = "INSERT INTO Állomány (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, vizsgálatfokozata, vizsgálatszáma, futásnap, telephely)  VALUES (";
+                        szöveg = "INSERT INTO Tevékenység (azonosító, utolsórögzítés, vizsgálatdátuma_idő, vizsgálatdátuma_km, utolsóforgalminap, vizsgálatfokozata_idő, vizsgálatfokozata_km, vizsgálatszáma, telephely)  VALUES (";
                         szöveg += $"'{azon.Trim()}', ";
                         szöveg += "'" + DateTime.Now.ToString() + "', ";
+                        szöveg += $" '{alap}', ";
                         szöveg += $" '{alap}', ";
                         szöveg += $"'{forgNap}', ";
                         szöveg += "'-', ";
