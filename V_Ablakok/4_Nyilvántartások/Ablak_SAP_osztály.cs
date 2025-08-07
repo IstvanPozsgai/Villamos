@@ -43,6 +43,7 @@ namespace Villamos
             AdatokOsztály = KézOsztály.Lista_Adat();
             AdatokNév = KézNév.Lista_Adat();
 
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Fülekkitöltése();
             Pályaszámfeltöltés();
