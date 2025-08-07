@@ -36,6 +36,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Alap
+
         /// <summary>
         /// Ablak inicializálása és adatok betöltése a vezérlőelemekbe
         /// </summary>
@@ -47,6 +48,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             TxtBxId.Text = "0";
             CmbxEgyseg.DataSource = Enum.GetValues(typeof(EsztergaEgyseg));
         }
+
         /// <summary>
         /// Az ablak betöltésekor lefutó inicializálási műveletek
         /// </summary>
@@ -63,6 +65,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             EgysegBeallitasa();
             TxtBxMennyiNap.Text = "0";
         }
+
         /// <summary>
         /// Jogosultságok alapján gombok láthatóságát és engedélyezettségét állítja be
         /// </summary>
@@ -1054,6 +1057,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #endregion
 
         #region Ablakok
+
         Ablak_Eszterga_Karbantartás_Üzemóra Uj_ablak_EsztergaUzemora;
 
         /// <summary>
@@ -1088,6 +1092,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         Ablak_Eszterga_Karbantartás_Napló Uj_ablak_EsztergaNaplo;
         private void Btn_Naplo_Oldal_Click(object sender, EventArgs e)
         {
@@ -1132,6 +1137,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             Uj_ablak_EsztergaUzemora = null;
         }
+
         private void Uj_ablak_EsztergaNaplo_Closed(object sender, FormClosedEventArgs e)
         {
             Uj_ablak_EsztergaNaplo = null;
