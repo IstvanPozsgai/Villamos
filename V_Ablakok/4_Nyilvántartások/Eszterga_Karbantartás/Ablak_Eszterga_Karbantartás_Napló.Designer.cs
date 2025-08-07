@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Eszterga_Karbantartás_Napló));
             this.TxtBxMegjegyzes = new System.Windows.Forms.TextBox();
             this.LblMegjegyzes = new System.Windows.Forms.Label();
             this.LblAznapiUzemora = new System.Windows.Forms.Label();
@@ -243,6 +244,7 @@
             this.Controls.Add(this.TxtBxUtolagUzemora);
             this.Controls.Add(this.TablaMuvelet);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Eszterga_Karbantartás_Napló";
             this.Text = "Ablak_Eszterga_Karbantartás_Napló";

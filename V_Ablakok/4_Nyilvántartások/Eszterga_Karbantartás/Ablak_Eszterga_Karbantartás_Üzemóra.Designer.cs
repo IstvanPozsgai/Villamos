@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Eszterga_Karbantartás_Üzemóra));
             this.Tabla = new Zuby.ADGV.AdvancedDataGridView();
             this.Btn_Excel = new System.Windows.Forms.Button();
             this.Btn_ÚjFelvétel = new System.Windows.Forms.Button();
@@ -223,6 +224,7 @@
             this.Controls.Add(this.LblDátum);
             this.Controls.Add(this.DtmPckrDátum);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimizeBox = false;
             this.Name = "Ablak_Eszterga_Karbantartás_Üzemóra";
