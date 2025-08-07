@@ -77,6 +77,8 @@ namespace Villamos
         void Start()
         {
             Telephelyekfeltöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             ABFejléc();
             ListákFeltöltése();
