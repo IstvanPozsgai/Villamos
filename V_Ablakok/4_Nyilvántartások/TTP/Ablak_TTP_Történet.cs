@@ -41,7 +41,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             BevitelÜres();
             Pályaszámok_feltöltése();
             StátusokFeltöltése();
-            Jogosultságkiosztás();
+
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
             AdatokTeljes = KézTábla.Lista_Adatok();
             CmbAzonosító.Text = Azonosító;
             TáblaListázás();
@@ -55,7 +57,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             Új_Ablak_PDF_Feltöltés?.Close();
         }
 
-
+        public Ablak_TTP_Történet()
+        {
+            InitializeComponent();
+        }
 
         #region Alap
 
