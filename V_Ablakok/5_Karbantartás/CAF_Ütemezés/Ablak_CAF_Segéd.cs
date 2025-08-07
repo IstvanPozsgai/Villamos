@@ -27,8 +27,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Start();
         }
 
+        public Ablak_CAF_Segéd()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
 
             if (Adat != null)

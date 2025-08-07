@@ -24,9 +24,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Start();
         }
 
+
         private void Start()
         {
             Telephelyekfeltöltése();
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
 
@@ -34,6 +36,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
 
         }
+
 
         private void Jogosultságkiosztás()
         {

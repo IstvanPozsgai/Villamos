@@ -36,9 +36,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
+        public Ablak_CAF_Alapadat()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
             AdatokCiklus = KézCiklus.Lista_Adatok(true);
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Pályaszámokfeltöltése();
             Vizsgsorszámcombofeltölés();

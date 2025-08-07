@@ -31,7 +31,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Végdát = végdát;
             Elsődát = elsődát;
             Start();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
+        }
+
+        public Ablak_Caf_Lista()
+        {
+            InitializeComponent();
         }
 
         void Start()

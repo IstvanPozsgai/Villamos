@@ -58,6 +58,8 @@ namespace Villamos
                 //KézAdatok.StatustVizsgal(KézAdatok.Lista_Adatok());
 
                 ELő_Pályaszámokfeltöltése();
+
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 DateTime elsődát = MyF.Hónap_elsőnapja(DateTime.Today).AddDays(-10);
                 DateTime végdát = MyF.Hónap_elsőnapja(DateTime.Today).AddDays(40);
