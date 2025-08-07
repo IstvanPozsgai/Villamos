@@ -53,7 +53,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             HibákFeltöltése();
             AdatokTábla = KézTábla.Lista_Adatok();
             PályaszámListaFeltölt();
-            Jogosultságkiosztás();
+
+            GombLathatosagKezelo.Beallit(this);
+            //Jogosultságkiosztás();
             Gombok_Ki();
         }
 

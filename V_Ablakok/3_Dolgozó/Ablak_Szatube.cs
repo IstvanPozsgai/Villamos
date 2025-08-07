@@ -1797,8 +1797,7 @@ namespace Villamos
             try
             {
 
-                if (Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kiválasztva érvényes sor a táblázatban.");
+                if (Tábla.SelectedRows.Count < 1)                    throw new HibásBevittAdat("Nincs kiválasztva érvényes sor a táblázatban.");
                 Holtart.Be();
 
                 string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + "Túlóra_egyéni_" + Program.PostásNév.Trim() + "_" + DateTime.Now.ToString("yyyyMMddhhmmss");
@@ -2012,7 +2011,7 @@ namespace Villamos
                     MyE.Kiir(Beosztás, "d30");
                     MyE.Kiir(Beosztás, "m30");
                 }
-                MyE.NyomtatásiTerület_részletes(munkalap, "a1:p30", "", "", false);
+                MyE.NyomtatásiTerület_részletes(munkalap, "a1:p30", "", "", false,"1","1");
 
                 helym = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 jelszóm = "forgalmiutasítás";

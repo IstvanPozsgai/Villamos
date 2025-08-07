@@ -106,6 +106,8 @@ namespace Villamos
                 Cafkiiró();
 
                 Üresrögzítő();
+
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 AdatokSérülés_Feltöltés();
                 AdatokKöltség_Feltöltés();
