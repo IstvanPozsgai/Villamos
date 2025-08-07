@@ -47,6 +47,8 @@ namespace Villamos
         private void Start()
         {
             Telephelyekfeltöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Pályaszám = Pályaszám_feltöltés();
             Dátum.MaxDate = DateTime.Today;
