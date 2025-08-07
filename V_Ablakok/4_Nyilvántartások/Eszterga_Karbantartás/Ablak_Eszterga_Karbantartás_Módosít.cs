@@ -556,51 +556,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        /// <summary>
-        /// Új üzemóra rekordot ad hozzá az adatbázishoz a megadott dátum, üzemóra érték és státusz alapján.
-        /// Az új üzemórát csak akkor rögzíti, ha az érték az előző és következő üzemóra értékek között helyezkedik el.
-        /// Ha a feltételek nem teljesülnek, akkor figyelmeztetést ad, és nem rögzíti az új üzemórát.
-        /// </summary>
-        private bool UjUzemoraHozzaadasa(DateTime UjDatum, long UjUzemora, bool UjStatus)
-        {
-            bool Eredmney = true;
-            try
-            {
-                long ElozoUzemora = (from a in AdatokUzemora
-                                     where a.Dátum < UjDatum && !a.Státus
-                                     orderby a.Dátum descending
-                                     select a.Uzemora).FirstOrDefault();
-
-                long UtanaUzemora = (from a in AdatokUzemora
-                                     where a.Dátum > UjDatum && !a.Státus
-                                     orderby a.Dátum
-                                     select a.Uzemora).FirstOrDefault();
-
-                if (UjUzemora <= ElozoUzemora || (UtanaUzemora != 0 && UjUzemora >= UtanaUzemora))
-                {
-                    Eredmney = false;
-                    throw new HibásBevittAdat($"Az üzemóra értéknek az előző: {ElozoUzemora} és következő: {UtanaUzemora} közé kell esnie.");
-                }
-
-                Adat_Eszterga_Uzemora ADAT = new Adat_Eszterga_Uzemora(0,
-                                                  UjUzemora,
-                                                  UjDatum,
-                                                  UjStatus);
-                Kez_Uzemora.Rogzites(ADAT);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return Eredmney;
-        }
-
         #endregion
 
         #region Gombok,Muveletek
@@ -1143,7 +1098,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     Uj_ablak_EsztergaNaplo = new Ablak_Eszterga_Karbantartás_Napló();
                     Uj_ablak_EsztergaNaplo.FormClosed += Uj_ablak_EsztergaNaplo_Closed;
                     Uj_ablak_EsztergaNaplo.Show();
-                   // Uj_ablak_EsztergaNaplo.Eszterga_Valtozas += TablaListazasMuvelet;
                 }
                 else
                 {
