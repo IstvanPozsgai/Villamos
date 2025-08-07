@@ -465,7 +465,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 // JAVÍTANDÓ:
                 //kesz
-                string statusz = sor.Cells["Státusz"].Value?.ToString().Trim();
+                string statusz = sor.Cells["Státusz"].Value?.ToStrTrim();
 
                 if (statusz == "Törölt")
                 {

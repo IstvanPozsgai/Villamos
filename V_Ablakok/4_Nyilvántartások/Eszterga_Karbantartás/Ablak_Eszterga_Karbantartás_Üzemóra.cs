@@ -397,7 +397,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     {
                         foreach (DataGridViewCell cell in row.Cells)
                         {
-                            string szoveg = cell.Value?.ToString() ?? "";
+                            string szoveg = cell.Value?.ToStrTrim() ?? "";
 
                             // Színek lekérése az InheritedStyle-ból (ez tartalmazza a tényleges megjelenő színt)
                             BaseColor háttérSzín = cell.InheritedStyle.BackColor.IsEmpty
