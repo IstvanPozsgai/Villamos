@@ -542,7 +542,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     if (UjStatus)
                         Kez_Uzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
                     else
-                        //Bozai mikor kovetkezik be?
+                        //statusz toroltrol aktivra allitasnal fut le
                         Kez_Uzemora.Rogzites(new Adat_Eszterga_Uzemora(0, EredetiUzemora, EredetiDatum, false));
                 }
                 else
