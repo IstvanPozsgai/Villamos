@@ -1,5 +1,4 @@
-﻿using ADODB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -296,7 +295,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     Ütem_vizsg_sorszám_km.Text = rekord.KM_Sorszám.ToString();
                     Ütem_vizsg_sorszám_idő.Text = rekord.IDŐ_Sorszám.ToString();
                     Ütem_megjegyzés.Text = rekord.Megjegyzés.Trim();
-                    Ütem_dátum_program.Value = rekord.Dátum_program;                   
+                    Ütem_dátum_program.Value = rekord.Dátum_program;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -311,9 +310,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
         private void KiirPvizsgalat()
-        {            
+        {
+            if (Ütem_pályaszám.Text.Trim() == "") return;
 
-            Adat_CAF_KM_Attekintes teszt_adat = KézCafKm.Egy_Adat(Posta_Segéd.Azonosító);
+            Adat_CAF_KM_Attekintes teszt_adat = KézCafKm.Egy_Adat(Ütem_pályaszám.Text);
 
             if (teszt_adat != null)
             {
@@ -891,8 +891,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }           
+            }
         }
+
+        //Javítás :élesítés után törlendő
         private void btn_elso_futtatas_Click(object sender, EventArgs e)
         {
             try
@@ -909,7 +911,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }         
+            }
         }
     }
 }
