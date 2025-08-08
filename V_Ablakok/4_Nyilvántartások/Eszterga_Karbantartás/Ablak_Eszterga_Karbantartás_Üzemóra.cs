@@ -263,7 +263,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 else
                     UjRekordHozzaadasa(UjDatum, UjUzemora, UjStatus);
 
-                TablaListazas();
+                if (Form.ActiveForm is Ablak_Eszterga_Karbantartás_Üzemóra)
+                    TablaListazas();
             }
             catch (HibásBevittAdat ex)
             {
@@ -556,8 +557,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     }
                     UtolsoTorles = true;
                 }
-                TablaListazas();
-                Eszterga_Valtozas?.Invoke();
+                if (Form.ActiveForm is Ablak_Eszterga_Karbantartás_Üzemóra)
+                {
+                    TablaListazas();
+                    Eszterga_Valtozas?.Invoke();
+                }
                 if (!UtolsoTorles)
                     MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
