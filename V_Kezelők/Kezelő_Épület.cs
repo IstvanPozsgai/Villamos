@@ -83,7 +83,12 @@ namespace Villamos.Kezelők
             }
         }
 
-
+        /// <summary>
+        /// A kijelölések módosítását követően összesített darabszámokat rögzítjük az adatbázisban.
+        /// </summary>
+        /// <param name="Telephely"></param>
+        /// <param name="Év"></param>
+        /// <param name="Adatok"></param>
         public void Módosítás(string Telephely, int Év, List<Adat_Épület_Takarításrakijelölt> Adatok)
         {
             try
@@ -98,6 +103,41 @@ namespace Villamos.Kezelők
                     szöveg += $"E3kijelöltdb={Adat.E3kijelöltdb} ";
                     szöveg += $" WHERE hónap={Adat.Hónap} ";
                     szöveg += $" AND helységkód='{Adat.Helységkód}'";
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Az elvégzett darabszámok módosítását követően összesített darabszámokat rögzítjük az adatbázisban.
+        /// </summary>
+        /// <param name="Év"></param>
+        /// <param name="Telephely"></param>
+        /// <param name="Adatok"></param>
+        public void Módosítás(int Év, string Telephely, List<Adat_Épület_Takarításrakijelölt> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
+                {
+                    string szöveg = "UPDATE takarításrakijelölt  SET ";
+                    szöveg += $"E1elvégzettdb={Adat.E1elvégzettdb}, ";
+                    szöveg += $"E2elvégzettdb={Adat.E2elvégzettdb}, ";
+                    szöveg += $"E3elvégzettdb={Adat.E3elvégzettdb} ";
+                    szöveg += $" WHERE hónap={Adat.Hónap} ";
+                    szöveg += $" AND helységkód='{Adat.Helységkód}'";
+
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }

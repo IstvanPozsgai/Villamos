@@ -103,7 +103,7 @@ namespace Villamos
                 Zárva.Enabled = false;
                 Terv_Rögzítés.Enabled = false;
 
-                Command11.Enabled = false;
+                Mentés.Enabled = false;
                 Zárva1.Enabled = false;
                 Nyitva1.Enabled = false;
 
@@ -120,7 +120,7 @@ namespace Villamos
                 // módosítás 2 
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
-                    Command11.Enabled = true;
+                    Mentés.Enabled = true;
                     Zárva1.Enabled = true;
                     Nyitva1.Enabled = true;
                 }
@@ -759,7 +759,7 @@ namespace Villamos
                     {
                         Nyitva1.Visible = true;
                         Zárva1.Visible = false;
-                        Command11.Visible = true;
+                        Mentés.Visible = true;
                         Command9.Visible = false;
                         Command10.Visible = false;
                         Opció_Megrendelés.Visible = false;
@@ -769,7 +769,7 @@ namespace Villamos
                     {
                         Zárva1.Visible = true;
                         Nyitva1.Visible = false;
-                        Command11.Visible = false;
+                        Mentés.Visible = false;
                         Command9.Visible = true;
                         Command10.Visible = true;
                         Opció_Megrendelés.Visible = true;
@@ -821,8 +821,7 @@ namespace Villamos
 
         private void Tábla1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (Tábla1.RowCount < 0)
-                return;
+            if (Tábla1.RowCount < 0) return;
             {
                 foreach (DataGridViewRow row in Tábla1.Rows)
                 {
@@ -865,32 +864,26 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
-        private void Command11_Click(object sender, EventArgs e)
+        private void Mentés_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla1.Rows.Count < 1)
-                    return;
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Épület\" + Dátum1.Value.ToString("yyyy") + @"épülettakarítás.mdb";
-                string jelszó = "seprűéslapát";
-
+                if (Tábla1.Rows.Count < 1) return;
                 Holtart.Be(Tábla1.Rows.Count + 2);
+
+                List<Adat_Épület_Takarításrakijelölt> AdatokGy = new List<Adat_Épület_Takarításrakijelölt>();
+                for (int i = 0; i < Tábla1.Rows.Count; i++)
                 {
-                    List<string> SzövegGy = new List<string>();
-                    for (int i = 0; i < Tábla1.Rows.Count; i++)
-                    {
-                        string szöveg = "UPDATE takarításrakijelölt  SET ";
-                        szöveg += "E1elvégzettdb=" + Tábla1.Rows[i].Cells[7].Value.ToString() + ", ";
-                        szöveg += "E2elvégzettdb=" + Tábla1.Rows[i].Cells[8].Value.ToString() + ", ";
-                        szöveg += "E3elvégzettdb=" + Tábla1.Rows[i].Cells[9].Value.ToString();
-                        szöveg += " WHERE  hónap=" + Dátum1.Value.Month + " AND helységkód='" + Tábla1.Rows[i].Cells[0].Value.ToString().Trim() + "'";
-                        SzövegGy.Add(szöveg);
-                        Holtart.Lép();
-                    }
-                    MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                    Adat_Épület_Takarításrakijelölt Adat = new Adat_Épület_Takarításrakijelölt(
+                        Tábla1.Rows[i].Cells[0].Value.ToStrTrim(),
+                        Dátum1.Value.Month,
+                        Tábla1.Rows[i].Cells[7].Value.ToÉrt_Int(),
+                        Tábla1.Rows[i].Cells[8].Value.ToÉrt_Int(),
+                        Tábla1.Rows[i].Cells[9].Value.ToÉrt_Int());
+                    AdatokGy.Add(Adat);
+                    Holtart.Lép();
                 }
+                KézTakarításrakijelölt.Módosítás(Dátum1.Value.Year, Cmbtelephely.Text.Trim(), AdatokGy);
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Holtart.Ki();
             }

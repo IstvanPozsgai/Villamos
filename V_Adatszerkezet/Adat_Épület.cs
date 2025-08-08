@@ -118,6 +118,16 @@
             Helységkód = helységkód;
             Hónap = hónap;
         }
+
+        public Adat_Épület_Takarításrakijelölt(string helységkód, int hónap, int e1elvégzettdb, int e2elvégzettdb, int e3elvégzettdb)
+        {
+            Helységkód = helységkód;
+            Hónap = hónap;
+            E1elvégzettdb = e1elvégzettdb;
+            E2elvégzettdb = e2elvégzettdb;
+            E3elvégzettdb = e3elvégzettdb;
+
+        }
     }
 }
 
