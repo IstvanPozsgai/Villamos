@@ -374,11 +374,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 if (TablaMuvelet.SelectedRows[0].Cells["Státusz"].Value?.ToStrTrim() == "Törölt")
+                {
+                    Eredmeny = false;
                     throw new HibásBevittAdat("Törölt műveletet nem lehet naplózni");
+                }
 
                 if (TxtBxMegjegyzes.Text == "")
+                {
+                    Eredmeny = false;
                     throw new HibásBevittAdat("A megjegyzés mező nem lehet üres.");
-
+                }
                 // JAVÍTANDÓ:a dátum az nem dátum?
                 //kesz
                 DateTime datum = DtmPckr.Value;
