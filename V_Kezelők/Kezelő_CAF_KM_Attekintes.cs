@@ -240,7 +240,7 @@ namespace Villamos.Kezelők
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
+                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
             // Visszaadja a következő P vizsgálat KM várt értékét.
@@ -253,7 +253,7 @@ namespace Villamos.Kezelők
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
+                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
             // Visszaadja a következő sorszámú vizsgálat KM várt értékét.
@@ -264,7 +264,7 @@ namespace Villamos.Kezelők
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
+                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
             // Ha 5-el osztható, de 20-al nem, akkor P1 vizsgálat.
@@ -281,7 +281,7 @@ namespace Villamos.Kezelők
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
-                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam)
+                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
                                                        .First();
             // Ha csak 20-al osztható, akkor P2/P3 vizsgálat.
@@ -411,7 +411,6 @@ namespace Villamos.Kezelők
                 Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam));
                 Rögzítés_Elso(teszt);
             }
-
 
             for (int i = azonositoLista_RovidCaf.First(); i <= azonositoLista_RovidCaf.Last(); i++)
             {
