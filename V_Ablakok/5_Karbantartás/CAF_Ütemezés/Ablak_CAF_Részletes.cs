@@ -47,16 +47,18 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             InitializeComponent();
         }
 
-        private void Ablak_CAF_Részletes_Load(object sender, EventArgs e)
+        private void Start()
         {
             GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
 
-        private void Ablak_CAF_Részletes_FormClosed(object sender, FormClosedEventArgs e)
+        private void Ablak_CAF_Részletes_Load(object sender, EventArgs e)
         {
 
         }
+
+
 
         private void Jogosultságkiosztás()
         {

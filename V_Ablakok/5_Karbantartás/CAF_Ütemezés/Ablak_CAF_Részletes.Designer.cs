@@ -1005,7 +1005,6 @@
             this.Name = "Ablak_CAF_Részletes_WIP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ütemezés Módosítás";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_CAF_Részletes_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_CAF_Részletes_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

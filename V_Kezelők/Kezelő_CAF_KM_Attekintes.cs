@@ -15,10 +15,13 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
+        /// JAVÍTANDÓ:  Kérem a táblanév legyen, mert így könnyebb karbantartani.
+        readonly string táblanév = "KM_Attekintes";
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         IEnumerable<Adat_CAF_Adatok> osszes_adat;
         static IEnumerable<Adat_CAF_Adatok> cache_osszes_adat = null;
+        // JAVÍTANDÓ: Ezt kívüéről tudni kell állítani!
         const int Vizsgalatok_Kozott_Megteheto_Km = 14000;
 
         public Kezelő_CAF_KM_Attekintes()
@@ -34,6 +37,8 @@ namespace Villamos.Kezelők
             }
             osszes_adat = cache_osszes_adat;
         }
+
+        // JAVÍTANDÓ: Adatbázis ABvanTábla lehet használni , vagy ezt átvinni oda
         private bool Km_Attekintes_Tabla_Letezik_E()
         {
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -47,6 +52,8 @@ namespace Villamos.Kezelők
                 return tables.Rows.Cast<DataRow>().Any(row => row["TABLE_NAME"].ToString().Equals("KM_Attekintes", StringComparison.OrdinalIgnoreCase));
             }
         }
+
+        // JAVÍTANDÓ: kerüljön át  Adatbázis_Létrehozás osztályba a CAF alá
         private void Tabla_Letrehozasa()
         {
             string szöveg = "CREATE TABLE KM_Attekintes (";
@@ -62,6 +69,8 @@ namespace Villamos.Kezelők
 
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
+
+        // JAVÍTANDÓ:táblanév legyen, mert így könnyebb karbantartani.
         public List<Adat_CAF_KM_Attekintes> Lista_Adatok()
         {
             string szöveg;
@@ -82,6 +91,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
+                                // JAVÍTANDÓ: és miért nem jó, ha 0 értéket kap?
                                 // Itt azért van null vizsgálat, mivel ha nem volt még olyan vizsgálat null értéket kap adatbázisban.
                                 Adat = new Adat_CAF_KM_Attekintes(
                                  rekord["azonosito"].ToStrTrim(),
@@ -102,6 +112,7 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
+
         public Adat_CAF_KM_Attekintes Egy_Adat(string Azonosító)
         {
             Adat_CAF_KM_Attekintes Adat = null;
@@ -121,6 +132,8 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
+
+        // JAVÍTANDÓ:táblanév legyen, mert így könnyebb karbantartani.
         private void Rögzítés_Elso(Adat_CAF_KM_Attekintes Adat)
         {
             try
@@ -178,6 +191,8 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        // JAVÍTANDÓ:táblanév legyen, mert így könnyebb karbantartani.
         // Ez fog lefutni a frissítés gomb hatására / javítás beírásakor.
         private void Erteket_Frissit(Adat_CAF_KM_Attekintes Adat)
         {
@@ -223,6 +238,7 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         // Visszaadja az összes ADB-t összefűzve. Muszáj végigmenni rajtuk. Sebességben picit jobb, mintha egyesével beolvassa őket.
         // Ezt kiszervezem a kezelőbe.
         public static void InitializeCache(Kezelő_CAF_Adatok kézAdatok)
@@ -235,7 +251,12 @@ namespace Villamos.Kezelők
                     .ToList(); // fontos, hogy ténylegesen memóriában tárolja
             }
         }
-        // Itt a metódusokban lévő utolsó KM kivételeket egységesíteni kell.
+
+        /// <summary>
+        ///  Itt a metódusokban lévő utolsó KM kivételeket egységesíteni kell.
+        /// </summary>
+        /// <param name="Aktualis_palyaszam"></param>
+        /// <returns></returns>
         private long Kovetkezo_P0_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
@@ -246,8 +267,8 @@ namespace Villamos.Kezelők
             // Visszaadja a következő P vizsgálat KM várt értékét.
 
             return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
-
         }
+
         // Ez már benne van a kezelőben félig meddig, overload-olva beleteszem ezt a verziót is később
         private long Utolso_KM_Vizsgalat_Erteke(string Aktualis_palyaszam)
         {
@@ -260,6 +281,7 @@ namespace Villamos.Kezelők
             return Adott_Villamos.Számláló;
 
         }
+
         private long Kovetkezo_P1_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
@@ -277,6 +299,7 @@ namespace Villamos.Kezelők
             }
             return 0;
         }
+
         private long Kovetkezo_P2_Vizsgalat_KM_Erteke(string Aktualis_palyaszam)
         {
             // Kiveszi az utolsó teljesített km alapú vizsgálatot.
@@ -294,6 +317,7 @@ namespace Villamos.Kezelők
             }
             return 0;
         }
+
         private long P0_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
         {
 
@@ -312,6 +336,7 @@ namespace Villamos.Kezelők
 
             return p0Vizsgalatok[0].Számláló - p0Vizsgalatok[1].Számláló;
         }
+
         private long P1_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
         {
             // P1: osztható 5-tel, de nem 20-szal
@@ -330,6 +355,7 @@ namespace Villamos.Kezelők
 
             return p1Vizsgalatok[0].Számláló - p1Vizsgalatok[1].Számláló;
         }
+
         private long? Utolso_P3_es_P2_kozotti_futas(string Aktualis_palyaszam)
         {
             // Utolsó P3 keresése
@@ -360,6 +386,7 @@ namespace Villamos.Kezelők
 
             return P3.Számláló - P2.Számláló;
         }
+
         // A 2 alábbi metódus nem fog minden megnyíláskor lefutni, kapni fog ADB-ben 3 mezőt és verziócserekor lefuttatjuk őket.
         // A jövőben az új villamosok miatt figyelni kell majd, hogy ezek a mezők csak 1x frissülhetnek a villamos élete során, tehát amikor a 20. és 40. vizsgálat megvolt.
         private long? Elso_P2_rendben_van_e(string Aktualis_palyaszam)
@@ -376,6 +403,7 @@ namespace Villamos.Kezelők
 
             return elsoP2?.Számláló;
         }
+
         private long? Elso_P3_rendben_van_e(string Aktualis_palyaszam)
         {
             // Megkeresem az első P3 vizsgálatot
@@ -390,6 +418,8 @@ namespace Villamos.Kezelők
 
             return elsoP3?.Számláló;
         }
+
+        // JAVÍTANDÓ: A pályaszám, helyett a típust használd
         public void Tabla_Feltoltese()
         {
             List<int> azonositoLista_HosszuCaf = KézAdatok.Lista_Adatok()
@@ -419,6 +449,7 @@ namespace Villamos.Kezelők
                 Rögzítés_Elso(teszt);
             }
         }
+
         public void Erteket_Frissit(string palya)
         {
             Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya));
