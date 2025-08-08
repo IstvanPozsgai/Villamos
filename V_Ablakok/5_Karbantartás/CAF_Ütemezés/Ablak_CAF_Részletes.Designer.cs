@@ -1,6 +1,6 @@
 ﻿namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 {
-    partial class Ablak_CAF_Részletes_WIP
+    partial class Ablak_CAF_Részletes
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_CAF_Részletes_WIP));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_CAF_Részletes));
             this.Ütem_dátum_program = new System.Windows.Forms.DateTimePicker();
             this.Label48 = new System.Windows.Forms.Label();
             this.Label47 = new System.Windows.Forms.Label();

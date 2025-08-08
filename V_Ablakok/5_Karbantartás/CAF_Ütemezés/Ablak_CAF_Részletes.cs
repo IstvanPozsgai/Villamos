@@ -11,7 +11,7 @@ using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 {
-    public partial class Ablak_CAF_Részletes_WIP : Form
+    public partial class Ablak_CAF_Részletes : Form
     {
         public event Event_Kidobó Változás;
         public CAF_Segéd_Adat Posta_Segéd { get; private set; }
@@ -29,7 +29,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         List<Adat_Ciklus> Ciklus_Km = null;
 
         #region Alap
-        public Ablak_CAF_Részletes_WIP(CAF_Segéd_Adat posta_Segéd, DateTime elő_Dátumig)
+        public Ablak_CAF_Részletes(CAF_Segéd_Adat posta_Segéd, DateTime elő_Dátumig)
         {
             InitializeComponent();
 
@@ -43,7 +43,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        public Ablak_CAF_Részletes_WIP()
+        public Ablak_CAF_Részletes()
         {
             InitializeComponent();
         }

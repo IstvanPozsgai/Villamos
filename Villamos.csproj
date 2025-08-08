@@ -639,11 +639,11 @@
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_Lista.Designer.cs">
       <DependentUpon>Ablak_Caf_Lista.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes_WIP.cs">
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes_WIP.Designer.cs">
-      <DependentUpon>Ablak_CAF_Részletes_WIP.cs</DependentUpon>
+    <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.Designer.cs">
+      <DependentUpon>Ablak_CAF_Részletes.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Segéd.cs">
       <SubType>Form</SubType>
@@ -1574,8 +1574,8 @@
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Caf_Lista.resx">
       <DependentUpon>Ablak_Caf_Lista.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes_WIP.resx">
-      <DependentUpon>Ablak_CAF_Részletes_WIP.cs</DependentUpon>
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Részletes.resx">
+      <DependentUpon>Ablak_CAF_Részletes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_CAF_Segéd.resx">
       <DependentUpon>Ablak_CAF_Segéd.cs</DependentUpon>
