@@ -19,6 +19,7 @@ namespace Villamos.Kezelők
         readonly string táblanév = "KM_Attekintes";
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
+        // JAVÍTANDÓ:message
         IEnumerable<Adat_CAF_Adatok> osszes_adat;
         static IEnumerable<Adat_CAF_Adatok> cache_osszes_adat = null;
         // JAVÍTANDÓ: Ezt kívüéről tudni kell állítani!
@@ -70,11 +71,11 @@ namespace Villamos.Kezelők
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
-        // JAVÍTANDÓ:táblanév legyen, mert így könnyebb karbantartani.
+        // JAVÍTANDÓ:táblanév legyen, mert így könnyebb karbantartani.      Megcsináltam mert zavart a warning
         public List<Adat_CAF_KM_Attekintes> Lista_Adatok()
         {
             string szöveg;
-            szöveg = $"SELECT * FROM KM_Attekintes ORDER BY azonosito";
+            szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosito";
 
             List<Adat_CAF_KM_Attekintes> Adatok = new List<Adat_CAF_KM_Attekintes>();
             Adat_CAF_KM_Attekintes Adat;

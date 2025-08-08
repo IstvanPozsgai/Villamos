@@ -46,9 +46,26 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             InitializeComponent();
         }
-
         private void Start()
         {
+            EgyCAF = AlapKéz.Egy_Adat(Posta_Segéd.Azonosító.Trim());
+
+            Státus_feltöltés();
+            Ütem_Pályaszámokfeltöltése();
+
+            Ciklus = Kéz_Ciklus.Lista_Adatok(true);
+            Ütem_Ciklus_IDŐ_Sorszám_feltöltés();
+            Ütem_Ciklus_KM_Sorszám_feltöltés();
+            if (Posta_Segéd.Sorszám > 0)
+            {
+                AdatokKiírása();
+                KiírJobbOldal();
+            }
+            else
+            {
+                AdatokKeresés();
+                KiírJobbOldal();
+            }
             GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
@@ -57,8 +74,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
 
         }
-
-
 
         private void Jogosultságkiosztás()
         {
@@ -108,28 +123,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        private void Start()
-        {
-            EgyCAF = AlapKéz.Egy_Adat(Posta_Segéd.Azonosító.Trim());
 
-            Státus_feltöltés();
-            Ütem_Pályaszámokfeltöltése();
-
-            Ciklus = Kéz_Ciklus.Lista_Adatok(true);
-            Ütem_Ciklus_IDŐ_Sorszám_feltöltés();
-            Ütem_Ciklus_KM_Sorszám_feltöltés();
-            if (Posta_Segéd.Sorszám > 0)
-            {
-                AdatokKiírása();
-                KiírJobbOldal();
-            }
-            else
-            {
-                AdatokKeresés();
-                KiírJobbOldal();
-            }
-        }
-
+        // JAVÍTANDÓ:ez lehetne enum
         private void Státus_feltöltés()
         {
             Ütem_státus.Items.Clear();
