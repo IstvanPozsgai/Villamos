@@ -712,7 +712,7 @@ namespace Villamos
             this.Helyiséglista.FormattingEnabled = true;
             this.Helyiséglista.Location = new System.Drawing.Point(5, 50);
             this.Helyiséglista.Name = "Helyiséglista";
-            this.Helyiséglista.Size = new System.Drawing.Size(412, 361);
+            this.Helyiséglista.Size = new System.Drawing.Size(412, 466);
             this.Helyiséglista.TabIndex = 132;
             this.Helyiséglista.Click += new System.EventHandler(this.Helyiséglista_Click);
             // 

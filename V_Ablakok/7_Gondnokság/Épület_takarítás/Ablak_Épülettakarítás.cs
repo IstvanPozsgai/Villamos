@@ -1611,28 +1611,22 @@ namespace Villamos
 
                 if (AlapAdat != null)
                 {
-
                     Szemetes.Visible = AlapAdat.Szemetes;
-
                     KapcsoltHelység = AlapAdat.Kapcsolthelység;
                     // ha üres a kapcsolthelység, akkor fő lehet
-                    if (!(KapcsoltHelység.Trim() == "" || KapcsoltHelység.Trim() == "_"))
+                    if (!(KapcsoltHelység.Trim() == "" || KapcsoltHelység.Trim() == "_")) KapcsoltHelységAl.Visible = true;
+
+                    Adat_Épület_Adattábla KapcsoltHelységElem = (from a in AdatokAdatTábla
+                                                                 where a.Státus == false
+                                                                 && a.Kapcsolthelység == HelységKód.Trim()
+                                                                 select a).FirstOrDefault();
+
+                    if (KapcsoltHelységElem != null)
                     {
-                        KapcsoltHelységAl.Visible = true;
+                        KapcsoltHelységFő.Visible = true;
+                        KapcsoltHelység = "";
                     }
                 }
-
-                Adat_Épület_Adattábla KapcsoltHelységElem = (from a in AdatokAdatTábla
-                                                             where a.Státus == false
-                                                             && a.Kapcsolthelység.Contains(HelységKód.Trim())
-                                                             select a).FirstOrDefault();
-
-                if (KapcsoltHelységElem != null)
-                {
-                    KapcsoltHelységFő.Visible = true;
-                    KapcsoltHelység = "";
-                }
-
                 // hogy ki tudja listázni a kiválasztott elemet
                 Tábla_terv_listázás();
 
@@ -1881,7 +1875,7 @@ namespace Villamos
                     Holtart.Lép();
                 }
                 if (AdatokR.Count > 0) KézTakarításrakijelölt.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, AdatokR);
-                if (AdatokM.Count > 0) KézTakarításrakijelölt.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, AdatokM);
+                if (AdatokM.Count > 0) KézTakarításrakijelölt.Módosítás(AdatokM, Dátum.Value.Year, Cmbtelephely.Text.Trim());
 
                 Holtart.Ki();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);

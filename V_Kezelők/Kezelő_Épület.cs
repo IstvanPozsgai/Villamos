@@ -119,6 +119,40 @@ namespace Villamos.Kezelők
                     szöveg += $"E3kijelöltdb={Adat.E3kijelöltdb} ";
                     szöveg += $" WHERE hónap={Adat.Hónap} ";
                     szöveg += $" AND helységkód='{Adat.Helységkód}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void Módosítás(List<Adat_Épület_Takarításrakijelölt> Adatok, int Év, string Telephely)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
+                {
+                    string szöveg = "UPDATE takarításrakijelölt SET ";
+                    szöveg += $"E1kijelöltdb={Adat.E1kijelöltdb}, ";
+                    szöveg += $"E2kijelöltdb={Adat.E2kijelöltdb}, ";
+                    szöveg += $"E3kijelöltdb={Adat.E3kijelöltdb}, ";
+                    szöveg += $"E1rekijelölt='{Adat.E1rekijelölt}', ";
+                    szöveg += $"E2rekijelölt='{Adat.E2rekijelölt}', ";
+                    szöveg += $"E3rekijelölt='{Adat.E3rekijelölt}' ";
+                    szöveg += $" WHERE hónap={Adat.Hónap} ";
+                    szöveg += $" AND helységkód='{Adat.Helységkód}'";
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
@@ -153,7 +187,7 @@ namespace Villamos.Kezelők
                     szöveg += $"E3elvégzettdb={Adat.E3elvégzettdb} ";
                     szöveg += $" WHERE hónap={Adat.Hónap} ";
                     szöveg += $" AND helységkód='{Adat.Helységkód}'";
-
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
