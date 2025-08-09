@@ -129,19 +129,20 @@ namespace Villamos
                 Törlés.Enabled = false;
                 Rögzít.Enabled = false;
                 Command3.Enabled = false;
+                Utasítás.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
 
                 melyikelem = 89;
                 // módosítás 1 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-                    Törlés.Enabled = true;
+                    Rögzít.Enabled = true;
+                    Utasítás.Enabled = true;
                 }
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
-                    Rögzít.Enabled = true;
+                    Törlés.Enabled = true;
                 }
                 // módosítás 3 
                 if (MyF.Vanjoga(melyikelem, 3))
