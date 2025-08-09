@@ -58,6 +58,7 @@ namespace Villamos.Ablakok
             this.HibásTábla = new System.Windows.Forms.DataGridView();
             this.Szerelvénytáblasor = new System.Windows.Forms.DataGridView();
             this.TabPage2 = new System.Windows.Forms.TabPage();
+            this.Utasítás = new System.Windows.Forms.Button();
             this.E2_panel = new System.Windows.Forms.Panel();
             this.E2_Törlés = new System.Windows.Forms.Button();
             this.E2_rögzítés = new System.Windows.Forms.Button();
@@ -83,16 +84,12 @@ namespace Villamos.Ablakok
             this.DátumNapló = new System.Windows.Forms.DateTimePicker();
             this.Tábla_napló = new Zuby.ADGV.AdvancedDataGridView();
             this.Napló_Frissít = new System.Windows.Forms.Button();
-            this.TabPage4 = new System.Windows.Forms.TabPage();
-            this.Txtírásimező = new System.Windows.Forms.RichTextBox();
-            this.Btnrögzítés = new System.Windows.Forms.Button();
-            this.Utasítás_tervezet = new System.Windows.Forms.Button();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.Panel2.SuspendLayout();
@@ -105,7 +102,6 @@ namespace Villamos.Ablakok
             ((System.ComponentModel.ISupportInitialize)(this.Előírt_Szerelvénytáblasor)).BeginInit();
             this.TabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_napló)).BeginInit();
-            this.TabPage4.SuspendLayout();
             this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,7 +113,6 @@ namespace Villamos.Ablakok
             this.Fülek.Controls.Add(this.TabPage1);
             this.Fülek.Controls.Add(this.TabPage2);
             this.Fülek.Controls.Add(this.TabPage3);
-            this.Fülek.Controls.Add(this.TabPage4);
             this.Fülek.Location = new System.Drawing.Point(5, 55);
             this.Fülek.Name = "Fülek";
             this.Fülek.Padding = new System.Drawing.Point(16, 3);
@@ -368,6 +363,7 @@ namespace Villamos.Ablakok
             // TabPage2
             // 
             this.TabPage2.BackColor = System.Drawing.Color.DarkOrange;
+            this.TabPage2.Controls.Add(this.Utasítás);
             this.TabPage2.Controls.Add(this.E2_panel);
             this.TabPage2.Controls.Add(this.Előírt_Keresés);
             this.TabPage2.Controls.Add(this.Előírt_Egyszerelvényminusz);
@@ -388,6 +384,19 @@ namespace Villamos.Ablakok
             this.TabPage2.Size = new System.Drawing.Size(1182, 372);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Előírt összeállítás";
+            // 
+            // Utasítás
+            // 
+            this.Utasítás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Utasítás.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
+            this.Utasítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Utasítás.Location = new System.Drawing.Point(112, 207);
+            this.Utasítás.Name = "Utasítás";
+            this.Utasítás.Size = new System.Drawing.Size(40, 40);
+            this.Utasítás.TabIndex = 199;
+            this.ToolTip1.SetToolTip(this.Utasítás, "Szerelvény összeállítás utasításban rögzítése");
+            this.Utasítás.UseVisualStyleBackColor = true;
+            this.Utasítás.Click += new System.EventHandler(this.Utasítás_Click);
             // 
             // E2_panel
             // 
@@ -700,56 +709,6 @@ namespace Villamos.Ablakok
             this.Napló_Frissít.UseVisualStyleBackColor = true;
             this.Napló_Frissít.Click += new System.EventHandler(this.Napló_Frissít_Click);
             // 
-            // TabPage4
-            // 
-            this.TabPage4.BackColor = System.Drawing.Color.Green;
-            this.TabPage4.Controls.Add(this.Txtírásimező);
-            this.TabPage4.Controls.Add(this.Btnrögzítés);
-            this.TabPage4.Controls.Add(this.Utasítás_tervezet);
-            this.TabPage4.Location = new System.Drawing.Point(4, 29);
-            this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1182, 372);
-            this.TabPage4.TabIndex = 3;
-            this.TabPage4.Text = "Utasítás írás";
-            // 
-            // Txtírásimező
-            // 
-            this.Txtírásimező.AcceptsTab = true;
-            this.Txtírásimező.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Txtírásimező.Location = new System.Drawing.Point(5, 60);
-            this.Txtírásimező.Name = "Txtírásimező";
-            this.Txtírásimező.Size = new System.Drawing.Size(1168, 304);
-            this.Txtírásimező.TabIndex = 78;
-            this.Txtírásimező.Text = "";
-            // 
-            // Btnrögzítés
-            // 
-            this.Btnrögzítés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btnrögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Btnrögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btnrögzítés.Location = new System.Drawing.Point(56, 10);
-            this.Btnrögzítés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Btnrögzítés.Name = "Btnrögzítés";
-            this.Btnrögzítés.Size = new System.Drawing.Size(40, 40);
-            this.Btnrögzítés.TabIndex = 76;
-            this.ToolTip1.SetToolTip(this.Btnrögzítés, "Utasításokba berögzíti az előírást");
-            this.Btnrögzítés.UseVisualStyleBackColor = true;
-            this.Btnrögzítés.Click += new System.EventHandler(this.Btnrögzítés_Click);
-            // 
-            // Utasítás_tervezet
-            // 
-            this.Utasítás_tervezet.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Utasítás_tervezet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Utasítás_tervezet.Location = new System.Drawing.Point(11, 10);
-            this.Utasítás_tervezet.Name = "Utasítás_tervezet";
-            this.Utasítás_tervezet.Size = new System.Drawing.Size(40, 40);
-            this.Utasítás_tervezet.TabIndex = 74;
-            this.ToolTip1.SetToolTip(this.Utasítás_tervezet, "Elkészíti az előtervet");
-            this.Utasítás_tervezet.UseVisualStyleBackColor = true;
-            this.Utasítás_tervezet.Click += new System.EventHandler(this.Utasítás_tervezet_Click);
-            // 
             // Panel1
             // 
             this.Panel1.Controls.Add(this.Cmbtelephely);
@@ -846,7 +805,6 @@ namespace Villamos.Ablakok
             ((System.ComponentModel.ISupportInitialize)(this.Előírt_Szerelvénytáblasor)).EndInit();
             this.TabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_napló)).EndInit();
-            this.TabPage4.ResumeLayout(false);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -901,13 +859,10 @@ namespace Villamos.Ablakok
         internal RadioButton E2_1;
         internal RadioButton E2_0;
         internal Button E2_rögzítés;
-        internal TabPage TabPage4;
-        internal Button Btnrögzítés;
-        internal Button Utasítás_tervezet;
         internal Button E2_Törlés;
         internal ToolTip ToolTip1;
         internal V_MindenEgyéb.MyProgressbar Holtart;
-        internal RichTextBox Txtírásimező;
         internal Button Napló_Excel;
+        internal Button Utasítás;
     }
 }

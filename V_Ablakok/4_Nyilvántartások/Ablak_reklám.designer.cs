@@ -194,7 +194,6 @@ namespace Villamos
             // 
             // Utasítás
             // 
-            this.Utasítás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Utasítás.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
             this.Utasítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Utasítás.Location = new System.Drawing.Point(619, 32);
