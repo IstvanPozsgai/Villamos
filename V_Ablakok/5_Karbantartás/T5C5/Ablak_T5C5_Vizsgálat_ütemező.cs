@@ -1565,17 +1565,11 @@ namespace Villamos
         Ablak_Utasítás_Generálás Új_Ablak_Utasítás_Generálás;
         private void Utasítás_Click(object sender, EventArgs e)
         {
-            if (Új_Ablak_Utasítás_Generálás == null)
-            {
-                Új_Ablak_Utasítás_Generálás = new Ablak_Utasítás_Generálás(Cmbtelephely.Text.Trim(), UtasításSzövegTervezet());
-                Új_Ablak_Utasítás_Generálás.FormClosed += Ablak_Utasítás_Generálás_FormClosed;
-                Új_Ablak_Utasítás_Generálás.Show();
-            }
-            else
-            {
-                Új_Ablak_Utasítás_Generálás.Activate();
-                Új_Ablak_Utasítás_Generálás.WindowState = FormWindowState.Maximized;
-            }
+            Új_Ablak_Utasítás_Generálás?.Close();
+
+            Új_Ablak_Utasítás_Generálás = new Ablak_Utasítás_Generálás(Cmbtelephely.Text.Trim(), UtasításSzövegTervezet());
+            Új_Ablak_Utasítás_Generálás.FormClosed += Ablak_Utasítás_Generálás_FormClosed;
+            Új_Ablak_Utasítás_Generálás.Show();
         }
 
         private void Ablak_Utasítás_Generálás_FormClosed(object sender, FormClosedEventArgs e)
