@@ -126,7 +126,18 @@
             E1elvégzettdb = e1elvégzettdb;
             E2elvégzettdb = e2elvégzettdb;
             E3elvégzettdb = e3elvégzettdb;
+        }
 
+        public Adat_Épület_Takarításrakijelölt(int e1kijelöltdb, int e2kijelöltdb, int e3kijelöltdb, string helységkód, int hónap, string e1rekijelölt, string e2rekijelölt, string e3rekijelölt)
+        {
+            E1kijelöltdb = e1kijelöltdb;
+            E2kijelöltdb = e2kijelöltdb;
+            E3kijelöltdb = e3kijelöltdb;
+            Helységkód = helységkód;
+            Hónap = hónap;
+            E1rekijelölt = e1rekijelölt;
+            E2rekijelölt = e2rekijelölt;
+            E3rekijelölt = e3rekijelölt;
         }
     }
 }

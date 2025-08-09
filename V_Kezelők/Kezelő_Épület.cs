@@ -65,12 +65,28 @@ namespace Villamos.Kezelők
         }
 
 
-        public void Rögzítés(string Telephely, int Év, Adat_Épület_Takarításrakijelölt Adat)
+        public void Rögzítés(string Telephely, int Év, List<Adat_Épület_Takarításrakijelölt> Adatok)
         {
             try
             {
                 FájlBeállítás(Telephely, Év);
-
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO takarításrakijelölt (E1elvégzettdb, E1kijelöltdb, E1rekijelölt,";
+                    szöveg += " E2elvégzettdb, E2kijelöltdb, E2rekijelölt,";
+                    szöveg += " E3elvégzettdb, E3kijelöltdb, E3rekijelölt,";
+                    szöveg += " helységkód, hónap, Megnevezés, osztály ) VALUES (";
+                    szöveg += $" {Adat.E1elvégzettdb}, {Adat.E1kijelöltdb}, '{Adat.E1rekijelölt}', ";
+                    szöveg += $" {Adat.E2elvégzettdb}, {Adat.E2kijelöltdb}, '{Adat.E2rekijelölt}', ";
+                    szöveg += $" {Adat.E3elvégzettdb}, {Adat.E3kijelöltdb}, '{Adat.E3rekijelölt}', ";
+                    szöveg += $"'{Adat.Helységkód}',";
+                    szöveg += $"{Adat.Hónap},";
+                    szöveg += $"'{Adat.Megnevezés}',";
+                    szöveg += $"'{Adat.Osztály}')";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
