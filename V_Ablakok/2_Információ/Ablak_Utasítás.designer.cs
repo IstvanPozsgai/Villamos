@@ -59,7 +59,6 @@ namespace Villamos
             this.Előző = new System.Windows.Forms.Button();
             this.Első = new System.Windows.Forms.Button();
             this.Frissít = new System.Windows.Forms.Button();
-            this.btnrögzítés = new System.Windows.Forms.Button();
             this.Excel_kimenet = new System.Windows.Forms.Button();
             this.Lefelé = new System.Windows.Forms.Button();
             this.Felfelé = new System.Windows.Forms.Button();
@@ -73,7 +72,7 @@ namespace Villamos
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             ((System.ComponentModel.ISupportInitialize)(this.tábla)).BeginInit();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -321,19 +320,6 @@ namespace Villamos
             this.Frissít.UseVisualStyleBackColor = true;
             this.Frissít.Click += new System.EventHandler(this.Frissít_Click);
             // 
-            // btnrögzítés
-            // 
-            this.btnrögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.btnrögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnrögzítés.Location = new System.Drawing.Point(727, 5);
-            this.btnrögzítés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnrögzítés.Name = "btnrögzítés";
-            this.btnrögzítés.Size = new System.Drawing.Size(40, 40);
-            this.btnrögzítés.TabIndex = 45;
-            this.ToolTip1.SetToolTip(this.btnrögzítés, "Üzenet rögzítése");
-            this.btnrögzítés.UseVisualStyleBackColor = true;
-            this.btnrögzítés.Click += new System.EventHandler(this.Btnrögzítés_Click);
-            // 
             // Excel_kimenet
             // 
             this.Excel_kimenet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -500,7 +486,6 @@ namespace Villamos
             this.panel1.Controls.Add(this.btnOlvasva);
             this.panel1.Controls.Add(this.Utolsó);
             this.panel1.Controls.Add(this.btnújüzenet);
-            this.panel1.Controls.Add(this.btnrögzítés);
             this.panel1.Location = new System.Drawing.Point(5, 290);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(965, 50);
@@ -586,7 +571,6 @@ namespace Villamos
         internal Panel panel2;
         internal ComboBox Cmbtelephely;
         internal Label label2;
-        internal Button btnrögzítés;
         internal Button Excel_kimenet;
         internal Panel panel1;
         internal Button Lefelé;

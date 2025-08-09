@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
@@ -11,7 +12,7 @@ namespace Villamos.V_Ablakok.Közös
 {
     public partial class Ablak_Utasítás_Generálás : Form
     {
-        readonly Kezelő_Hétvége_Beosztás KézHBeosztás = new Kezelő_Hétvége_Beosztás();
+        public event Event_Kidobó Változás;
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgTelep = new Kezelő_Kiegészítő_Szolgálattelepei();
@@ -45,19 +46,20 @@ namespace Villamos.V_Ablakok.Közös
             try
             {
                 GombokLátszanak(false);
+                Btnrögzítés.Visible = false;
 
 
-                int melyikelem;
 
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
 
-                melyikelem = 202;
+                int melyikelem = 203;
                 // módosítás 1
 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-                    //telephelyi belépésnél nem kell tudni választani, így nincs gombja
+                    Btnrögzítés.Visible = true;
                 }
+                melyikelem = 202;
                 // módosítás 2 főmérnökségi belépés és mindenhova tud írni
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
@@ -65,12 +67,7 @@ namespace Villamos.V_Ablakok.Közös
                     GombokLátszanak(true);
 
                 }
-                // módosítás 3 szakszolgálati belépés és sajátjaiba tud írni
-                if (MyF.Vanjoga(melyikelem, 3))
-                {
-                    //Csak a szakszolgálat telephelyére tud írni
 
-                }
 
             }
             catch (HibásBevittAdat ex)
@@ -108,6 +105,7 @@ namespace Villamos.V_Ablakok.Közös
                     KézUtasítás.Rögzítés(Üzemek.CheckedItems[i].ToString(), DateTime.Today.Year, ADAT);
 
                 MessageBox.Show($"Az utasítás rögzítése megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Változás?.Invoke();
             }
             catch (HibásBevittAdat ex)
             {
