@@ -89,7 +89,7 @@
             this.IIISzak.Name = "IIISzak";
             this.IIISzak.Size = new System.Drawing.Size(45, 45);
             this.IIISzak.TabIndex = 88;
-            this.toolTip1.SetToolTip(this.IIISzak, "Előre definiált Excel táblába kiírja az adatokat szakszolgálatonként");
+            this.toolTip1.SetToolTip(this.IIISzak, "III Vontatási üzemeinek kijelölése");
             this.IIISzak.UseVisualStyleBackColor = true;
             this.IIISzak.Click += new System.EventHandler(this.IIISzak_Click);
             // 
@@ -102,7 +102,7 @@
             this.IISzak.Name = "IISzak";
             this.IISzak.Size = new System.Drawing.Size(45, 45);
             this.IISzak.TabIndex = 87;
-            this.toolTip1.SetToolTip(this.IISzak, "Előre definiált Excel táblába kiírja az adatokat szakszolgálatonként");
+            this.toolTip1.SetToolTip(this.IISzak, "II Vontatási üzemeinek kijelölése");
             this.IISzak.UseVisualStyleBackColor = true;
             this.IISzak.Click += new System.EventHandler(this.IISzak_Click);
             // 
@@ -115,7 +115,7 @@
             this.ISzak.Name = "ISzak";
             this.ISzak.Size = new System.Drawing.Size(45, 45);
             this.ISzak.TabIndex = 86;
-            this.toolTip1.SetToolTip(this.ISzak, "Előre definiált Excel táblába kiírja az adatokat szakszolgálatonként");
+            this.toolTip1.SetToolTip(this.ISzak, "I Vontatási üzemeinek kijelölése");
             this.ISzak.UseVisualStyleBackColor = true;
             this.ISzak.Click += new System.EventHandler(this.ISzak_Click);
             // 

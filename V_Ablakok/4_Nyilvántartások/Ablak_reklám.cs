@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok.Közös;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -50,7 +51,10 @@ namespace Villamos
         {
 
         }
-
+        private void Ablak_reklám_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Utasítás_Generálás?.Close();
+        }
         private void Start()
         {
             Telephelyekfeltöltése();
@@ -191,12 +195,6 @@ namespace Villamos
                         break;
                     }
 
-                case 3:
-                    {
-                        // utasítás
-                        Utasítás_generálás();
-                        break;
-                    }
             }
         }
 
@@ -247,17 +245,12 @@ namespace Villamos
 
 
         #region Utasítás lap
-        private void Command12_Click(object sender, EventArgs e)
+        private string UtasításSzövegTervezet()
         {
-            Utasítás_generálás();
-        }
-
-        private void Utasítás_generálás()
-        {
+            string Válasz = "";
             try
             {
-                Txtírásimező.Visible = false;
-                Txtírásimező.Text = "A következő járműveknek az alábbi vonalakon kell futnia reklám miatt:\r\n";
+                Válasz = "A következő járműveknek az alábbi vonalakon kell futnia reklám miatt:\r\n";
                 List<Adat_Jármű> AdatokJármű = (from a in AdatokJármű_Teljes
                                                 where a.Üzem == Cmbtelephely.Text.Trim()
                                                 select a).ToList();
@@ -276,14 +269,12 @@ namespace Villamos
                             {
                                 string szöveg = $"{rekord.Azonosító}-nek a {Elem.Viszonylat}-on kell közlednie {Elem.Kezdődátum:yyyy.MM.dd}-tól ";
                                 szöveg += $"{Elem.Befejeződátum:yyyy.MM.dd}-ig a reklám szövege: {Elem.Reklámneve}";
-                                Txtírásimező.Text += szöveg + "\r\n";
+                                Válasz += szöveg + "\r\n";
                             }
                         }
                     }
 
                 }
-                Txtírásimező.Refresh();
-                Txtírásimező.Visible = true;
             }
             catch (HibásBevittAdat ex)
             {
@@ -294,31 +285,23 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return Válasz;
         }
 
-        private void Vezénylésbeírás_Click(object sender, EventArgs e)
+
+        Ablak_Utasítás_Generálás Új_Ablak_Utasítás_Generálás;
+        private void Utasítás_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (Txtírásimező.Text.Trim() == "") return;
+            Új_Ablak_Utasítás_Generálás?.Close();
 
-                // megtisztítjuk a szöveget
-                Txtírásimező.Text = Txtírásimező.Text.Replace(Convert.ToString('"'), "°").Replace(Convert.ToString('\''), "°");
+            Új_Ablak_Utasítás_Generálás = new Ablak_Utasítás_Generálás(Cmbtelephely.Text.Trim(), UtasításSzövegTervezet());
+            Új_Ablak_Utasítás_Generálás.FormClosed += Ablak_Utasítás_Generálás_FormClosed;
+            Új_Ablak_Utasítás_Generálás.Show();
+        }
 
-                // csak aktuális évben tudunk rögzíteni
-                Adat_Utasítás ADAT = new Adat_Utasítás(0, Txtírásimező.Text.Trim(), Program.PostásNév.Trim(), DateTime.Now, 0);
-                double UtasításSorszáma = KézUtasítás.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Now.Year, ADAT);
-                MessageBox.Show($"Az utasítás rögzítése {UtasításSorszáma} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        private void Ablak_Utasítás_Generálás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Utasítás_Generálás = null;
         }
         #endregion
 
@@ -1329,6 +1312,9 @@ namespace Villamos
         {
             TelephelyList.Height = 25;
         }
+
         #endregion
+
+
     }
 }

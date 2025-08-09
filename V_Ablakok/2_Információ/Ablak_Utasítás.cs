@@ -43,6 +43,11 @@ namespace Villamos
             Jogosultságkiosztás();
         }
 
+        private void Ablak_Utasítás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Utasítás_Generálás?.Close();
+        }
+
         #region Alapadatok
         private void Telephelyekfeltöltése()
         {
@@ -688,6 +693,7 @@ namespace Villamos
             }
         }
         #endregion
+
 
     }
 }

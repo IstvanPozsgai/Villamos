@@ -530,6 +530,7 @@ namespace Villamos
             this.Name = "Ablak_Utasítás";
             this.Text = "Utasítások";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Utasítás_FormClosed);
             this.Load += new System.EventHandler(this.Ablaküzenet_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tábla)).EndInit();
             this.panel2.ResumeLayout(false);
