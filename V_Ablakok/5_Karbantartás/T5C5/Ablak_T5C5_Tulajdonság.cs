@@ -102,25 +102,11 @@ namespace Villamos
         {
             try
             {
-                int melyikelem;
-
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 Rögzítnap.Enabled = false;
-
-        
                 Módosítás.Enabled = false;
 
-
-                // csak főmérnökségi belépéssel törölhető
-                if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                {
-  
-                }
-                else
-                {
-      
-                }
-                melyikelem = 106;
+                int melyikelem = 106;
                 // módosítás 1 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
@@ -141,7 +127,7 @@ namespace Villamos
                 // módosítás 1 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-          
+
                 }
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))
@@ -264,13 +250,13 @@ namespace Villamos
                     }
                 case 4:
                     {
-                    
+
                         Kiirjaatörténelmet();
                         break;
                     }
                 case 5:
                     {
-           
+
                         Kiirjaatörténelmet();
                         break;
                     }
@@ -323,7 +309,7 @@ namespace Villamos
         private void Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             Frissít();
-         }
+        }
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -893,7 +879,7 @@ namespace Villamos
         {
             try
             {
-                   if (e.RowIndex < 0) return;
+                if (e.RowIndex < 0) return;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1415,7 +1401,7 @@ namespace Villamos
 
             if (!int.TryParse(Text1.Text, out int result))
                 Text1.Text = "";
-           Option8.Checked = true;
+            Option8.Checked = true;
         }
 
         private void Command1_Click(object sender, EventArgs e)
