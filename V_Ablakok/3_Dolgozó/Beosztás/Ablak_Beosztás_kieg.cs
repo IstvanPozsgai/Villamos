@@ -32,9 +32,10 @@ namespace Villamos.Villamos_Ablakok
         #region Kezelők
         readonly Kezelő_Kiegészítő_Beosztáskódok KézBeoKód = new Kezelő_Kiegészítő_Beosztáskódok();
         readonly Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-
-
+        readonly Kezelő_Kiegészítő_Szabadságok KézSzab = new Kezelő_Kiegészítő_Szabadságok();
         readonly Beosztás_Rögzítés BR = new Beosztás_Rögzítés();
+        readonly Kezelő_Kiegészítő_Beosegéd KézBeo = new Kezelő_Kiegészítő_Beosegéd();
+
         #endregion
 
 
@@ -459,7 +460,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //aaa tartok
+
         private void Túlóratörlés_Click(object sender, EventArgs e)
         {
             try
@@ -486,19 +487,13 @@ namespace Villamos.Villamos_Ablakok
             KitöltésMintával_sub();
         }
 
-
         private void KitöltésMintával_sub()
         {
             try
             {
                 Túlóra.Text = "0";
                 // megkeressük a beosztáskódhoz tertozó sablont
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kiegészítő1.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM beosegéd";
-
-                Kezelő_Kiegészítő_Beosegéd KézBeo = new Kezelő_Kiegészítő_Beosegéd();
-                List<Adat_Kiegészítő_Beosegéd> Adatok = KézBeo.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Beosegéd> Adatok = KézBeo.Lista_Adatok();
 
                 Adat_Kiegészítő_Beosegéd Rekord = (from a in Adatok
                                                    where a.Beosztáskód == BeosztáskódVálasztott && a.Telephely == Cmbtelephely.Trim()
@@ -537,8 +532,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        // JAVÍTANDÓ:
         private void TúlóraRögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -615,17 +609,13 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
-
         private void Túlóra_Leave(object sender, EventArgs e)
         {
             try
             {
 
-                if (Túlóra.Text.Trim() == "")
-                    return;
-                if (!int.TryParse(Túlóra.Text, out int túlóra))
-                    return;
+                if (Túlóra.Text.Trim() == "") return;
+                if (!int.TryParse(Túlóra.Text, out int túlóra)) return;
 
                 if (túlóra == 695)
                     Túlóravég.Value = Túlórakezd.Value.AddMinutes(720);
@@ -646,16 +636,12 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Túlórakezd_Leave(object sender, EventArgs e)
         {
-
             try
             {
-                if (Túlóra.Text.Trim() == "")
-                    return;
-                if (!int.TryParse(Túlóra.Text, out int túlóra))
-                    return;
+                if (Túlóra.Text.Trim() == "") return;
+                if (!int.TryParse(Túlóra.Text, out int túlóra)) return;
                 Túlóravég.Value = Túlórakezd.Value.AddMinutes(túlóra);
                 TúlóraOk.Text = "&";
 
@@ -671,7 +657,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
         #endregion
-
 
 
         #region Csúsztatás lapfül
@@ -707,7 +692,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void CsúsztatásTörlés_Click(object sender, EventArgs e)
         {
             try
@@ -727,25 +711,19 @@ namespace Villamos.Villamos_Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-
 
         private void CsúsztatásRögzítés_Click(object sender, EventArgs e)
         {
             try
             {
-                if (CsúszóraVég.Value == Csúszórakezd.Value)
-                    throw new HibásBevittAdat("A Csúsztatás kezdetének és a végének különbözni kell!");
-                if (CsúszOk.Text.Trim() == "")
-                    throw new HibásBevittAdat("A Csúsztatás okát ki kell tölteni!");
-                if (!int.TryParse(Csúszóra.Text, out int csúszóra))
-                    throw new HibásBevittAdat("A Csúsztatás óráját ki kell tölteni és egész számnak kell lennie!");
+                if (CsúszóraVég.Value == Csúszórakezd.Value) throw new HibásBevittAdat("A Csúsztatás kezdetének és a végének különbözni kell!");
+                if (CsúszOk.Text.Trim() == "") throw new HibásBevittAdat("A Csúsztatás okát ki kell tölteni!");
+                if (!int.TryParse(Csúszóra.Text, out int csúszóra)) throw new HibásBevittAdat("A Csúsztatás óráját ki kell tölteni és egész számnak kell lennie!");
 
                 BR.Rögzít_Csúsztatás(Cmbtelephely, Dátum, BeosztáskódVálasztott, Hrazonosító, Ledolgozott, Csúszórakezd.Value, CsúszóraVég.Value, csúszóra, CsúszOk.Text.Trim(), DolgozóNév);
                 Változás?.Invoke();
                 this.Close();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -765,7 +743,6 @@ namespace Villamos.Villamos_Ablakok
                 if (!int.TryParse(Csúszóra.Text, out int csúszóra)) return;
                 if (csúszóra < 0) csúszóra = -1 * csúszóra;
                 CsúszóraVég.Value = Csúszórakezd.Value.AddHours(csúszóra);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -785,7 +762,6 @@ namespace Villamos.Villamos_Ablakok
                 if (!int.TryParse(Csúszóra.Text, out int csúszóra)) return;
                 if (csúszóra < 0) csúszóra = -1 * csúszóra;
                 CsúszóraVég.Value = Csúszórakezd.Value.AddHours(csúszóra);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -807,7 +783,6 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 SzabadságOka.Items.Clear();
-                Kezelő_Kiegészítő_Szabadságok KézSzab = new Kezelő_Kiegészítő_Szabadságok();
                 List<Adat_Kiegészítő_Szabadságok> Adatok = KézSzab.Lista_Adatok(Cmbtelephely.Trim());
                 Adatok = (from a in Adatok
                           where a.Megnevezés.Contains("kivétel")
@@ -827,13 +802,11 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Szabadság_kiírása()
         {
             try
             {
-                if (Adat != null)
-                    SzabadságOka.Text = Adat.Szabiok.Trim();
+                if (Adat != null) SzabadságOka.Text = Adat.Szabiok.Trim();
             }
             catch (HibásBevittAdat ex)
             {
@@ -846,15 +819,11 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void SzabadságRögzítés_Click(object sender, EventArgs e)
         {
             try
             {
-                if (SzabadságOka.Text.Trim() == "")
-                    throw new HibásBevittAdat("Az Szabadság okát ki kell tölteni!");
-
-
+                if (SzabadságOka.Text.Trim() == "") throw new HibásBevittAdat("Az Szabadság okát ki kell tölteni!");
                 BR.Rögzít_Szabadság(Cmbtelephely, Dátum, BeosztáskódVálasztott, Hrazonosító, Ledolgozott, SzabadságOka.Text.Trim(), DolgozóNév.Trim());
 
                 Változás?.Invoke();
@@ -870,10 +839,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
-
 
 
         #region Megjegyzés lapfül
@@ -898,7 +864,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void MegjegyzésRögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -918,7 +883,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
         #endregion
-
 
 
         #region AFT lapfül
@@ -943,7 +907,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void AftTörlés_Click(object sender, EventArgs e)
         {
             try
@@ -963,15 +926,12 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void AftRögzítés_Click(object sender, EventArgs e)
         {
             try
             {
-                if (AFTok.Text.Trim() == "")
-                    throw new HibásBevittAdat("Az AFT okát ki kell tölteni!");
-                if (!int.TryParse(AFTóra.Text, out int AftÓra))
-                    throw new HibásBevittAdat("Az AFT percének számnak kell lennie!");
+                if (AFTok.Text.Trim() == "") throw new HibásBevittAdat("Az AFT okát ki kell tölteni!");
+                if (!int.TryParse(AFTóra.Text, out int AftÓra)) throw new HibásBevittAdat("Az AFT percének számnak kell lennie!");
 
                 BR.Rögzít_AFT(Cmbtelephely, Dátum, BeosztáskódVálasztott, Hrazonosító, Ledolgozott, AFTok.Text.Trim(), AftÓra, DolgozóNév);
                 Változás?.Invoke();
