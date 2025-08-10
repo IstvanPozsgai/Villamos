@@ -58,18 +58,18 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         #region Épület
         public void ExcelÉpületTábla(string fájlexc)
         {
-
-            string hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\épülettörzs.mdb";
-            string jelszó = "seprűéslapát";
-            string szöveg = "SELECT * FROM takarításosztály where státus=0 ORDER BY id";
             AdatokOsztály = KézTakarításOsztály.Lista_Adatok(Telephely);
+            AdatokOsztály = (from a in AdatokOsztály
+                             where a.Státus == false
+                             orderby a.Id
+                             select a).ToList();
 
-            string helyép = $@"{Application.StartupPath}\{Telephely}\Adatok\Épület\{Dátum.Year}épülettakarítás.mdb";
+            AdatokRészletes = KézAdatTábla.Lista_Adatok(Telephely);
+            AdatokRészletes = (from a in AdatokRészletes
+                               where a.Státus == false
+                               orderby a.ID
+                               select a).ToList();
 
-            szöveg = "SELECT * FROM Adattábla where státus=0  ORDER BY id";
-            AdatokRészletes = KézAdatTábla.Lista_Adatok(hely, jelszó, szöveg);
-
-            szöveg = "SELECT * FROM takarításrakijelölt";
             AdatokKijelöltek = KézTakarításrakijelölt.Lista_Adatok(Telephely, Dátum.Year);
             AdatokTIG.Clear();
 
@@ -1117,6 +1117,5 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             return sor;
         }
         #endregion
-
     }
 }
