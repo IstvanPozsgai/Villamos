@@ -4,13 +4,11 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
-using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -187,7 +185,7 @@ namespace Villamos
                 {
                     case 1:
                         {
-                                             break;
+                            break;
                         }
                     case 2:
                         {
@@ -522,7 +520,7 @@ namespace Villamos
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
+        private async void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
         {
             try
             {
@@ -546,15 +544,15 @@ namespace Villamos
                 AdatTábla = MyF.ToDataTable(AdatokKm);
                 Holtart.Be();
                 timer1.Enabled = true;
-                SZál_ABadatbázis(() =>
-                { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                    timer1.Enabled = false;
-                    Holtart.Be();
-                    MessageBox.Show("Az Excel tábla elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    MyE.Megnyitás(_fájlexc);
-                    Holtart.Ki();
-                });
 
+                await Task.Run(() => MyE.DataTableToExcel(_fájlexc, AdatTábla));
+
+                //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+                timer1.Enabled = false;
+                Holtart.Be();
+                MessageBox.Show("Az Excel tábla elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyE.Megnyitás(_fájlexc);
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -565,22 +563,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        /// <summary>
-        /// Szálban futó eljárás, ami elkészíti az Excel fájlt
-        /// </summary>
-        /// <param name="callback"></param>
-        private void SZál_ABadatbázis(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót
-                MyE.DataTableToExcel(_fájlexc, AdatTábla);
-
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
         }
 
         /// <summary>
