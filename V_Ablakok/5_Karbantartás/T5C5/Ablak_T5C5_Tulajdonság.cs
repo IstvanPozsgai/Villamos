@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -2123,7 +2122,7 @@ namespace Villamos
 
 
         #region Másik Kimenet
-        private void Kimutatás_más_Click(object sender, EventArgs e)
+        private async void Kimutatás_más_Click(object sender, EventArgs e)
         {
             // kimeneti fájl helye és neve
             SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -2143,31 +2142,18 @@ namespace Villamos
 
             Holtart.Be();
             timer1.Enabled = true;
-            SZál_Kimutatás(() =>
-            { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                timer1.Enabled = false;
-                Holtart.Ki();
-                MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            });
-        }
 
-        private void SZál_Kimutatás(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
-                SZál_Kimutatás_Eljárás();
-
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
+            await Task.Run(() => SZál_Kimutatás_Eljárás());
+            //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+            timer1.Enabled = false;
+            Holtart.Ki();
+            MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void SZál_Kimutatás_Eljárás()
         {
             try
             {
-
                 MyE.ExcelLétrehozás();
                 string munkalap = "Adatok";
                 MyE.Munkalap_átnevezés("Munka1", munkalap);
