@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.Beosztás;
 using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok
@@ -35,10 +34,8 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Kiegészítő_Szabadságok KézSzab = new Kezelő_Kiegészítő_Szabadságok();
         readonly Beosztás_Rögzítés BR = new Beosztás_Rögzítés();
         readonly Kezelő_Kiegészítő_Beosegéd KézBeo = new Kezelő_Kiegészítő_Beosegéd();
-
+        readonly Kezelő_Dolgozó_Alap KéZalap = new Kezelő_Dolgozó_Alap();
         #endregion
-
-
 
 
         #region Alap
@@ -532,7 +529,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void TúlóraRögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -552,7 +549,6 @@ namespace Villamos.Villamos_Ablakok
                 if (ideig == "&t" || ideig == "&T") túlóravolt = true;
                 if (!túlóravolt) throw new HibásBevittAdat("A Túlóra okának &T, &EB, &EP, &V- vel kell kezdődnie!");
 
-                string hely;
                 int parancs = BR.Túlóra_Keret_Ellenőrzés(Cmbtelephely, Dátum, Hrazonosító);
                 switch (parancs)
                 {
@@ -568,19 +564,15 @@ namespace Villamos.Villamos_Ablakok
                         }
                     case 5:
                         {
-                            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
-                            string jelszó = "forgalmiutasítás";
-                            string szöveg = $" select * from  dolgozóadatok where dolgozószám='{Hrazonosító.Trim()}'";
-
-                            Kezelő_Dolgozó_Alap KéZalap = new Kezelő_Dolgozó_Alap();
-                            Adat_Dolgozó_Alap Dolgozó = KéZalap.Egy_Adat(hely, jelszó, szöveg);
-
+                            List<Adat_Dolgozó_Alap> Dolgozók = KéZalap.Lista_Adatok(Cmbtelephely.Trim());
+                            Adat_Dolgozó_Alap Dolgozó = (from a in Dolgozók
+                                                         where a.Dolgozószám == Hrazonosító.Trim()
+                                                         select a).FirstOrDefault();
                             if (Dolgozó != null)
                             {
                                 if (Dolgozó.Túlóraeng)
                                 {
-                                    szöveg = $"UPDATE dolgozóadatok SET túlóraeng=false WHERE dolgozószám='{Hrazonosító.Trim()}'";
-                                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                                    KéZalap.Módosít_Túl(Cmbtelephely.Trim(), Hrazonosító.Trim(), false);
                                 }
                                 else
                                     throw new HibásBevittAdat("A Túlóra engedélyezése nem történt meg, így ennek hiányában nem lehet rögzíteni!");
@@ -774,7 +766,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
         #endregion
-
 
 
         #region Szabadság lapfül
