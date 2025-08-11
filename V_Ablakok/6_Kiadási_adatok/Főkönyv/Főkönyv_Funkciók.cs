@@ -607,7 +607,7 @@ namespace Villamos
                 }
                 else
                 {
-                    HibaNapló.Log(ex.Message, "ZSER_Betöltés", ex.StackTrace, ex.Source, ex.HResult);
+                    HibaNapló.Log(ex.Message, $"ZSER_Betöltés \nÁtjött adatok\n{Telephely}-{Dátum}-{Napszak}\n{ExcelFájl}", ex.StackTrace, ex.Source, ex.HResult);
                     MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

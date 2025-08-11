@@ -789,7 +789,7 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"{Cella.Value}", ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"A cella :{honnan} tartalma:{Cella.Value}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return válasz;
