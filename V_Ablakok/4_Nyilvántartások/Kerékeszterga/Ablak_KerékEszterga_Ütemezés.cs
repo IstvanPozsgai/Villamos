@@ -511,6 +511,7 @@ namespace Villamos.Villamos_Ablakok
                           where a.Idő >= Hételső && a.Idő <= Hétutolsó
                           orderby a.Idő
                           select a).ToList();
+                if (Adatok.Count > 0) return;
 
                 DateTime FutóIdő = new DateTime(Hételső.Year, Hételső.Month, Hételső.Day, 0, 0, 0);
                 DateTime VégeIdő = FutóIdő.AddDays(7);
@@ -523,7 +524,7 @@ namespace Villamos.Villamos_Ablakok
                     FutóIdő = FutóIdő.AddMinutes(30);
                     Holtart.Lép();
                 }
-                KézNaptár.Rögzítés(Hételső.Year, AdatokGy);
+                if (AdatokGy.Count > 0) KézNaptár.Rögzítés(Hételső.Year, AdatokGy);
 
                 Holtart.Ki();
             }
@@ -722,7 +723,7 @@ namespace Villamos.Villamos_Ablakok
                         }
                         Holtart.Lép();
                     }
-                    KézNaptár.Módosítás_Munkaidő(Hételső.Year, AdatokGy);
+             if(AdatokGy.Count >0)       KézNaptár.Módosítás_Munkaidő(Hételső.Year, AdatokGy);
                 }
                 Holtart.Ki();
             }
@@ -819,10 +820,10 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Adatok_Beoszt_Új = Kezelő_Beoszt_Új.Lista_Adatok(Telephely.Trim(), Dátumtól);
-                bool vane = (from a in Adatok_Beoszt_Új
-                             where a.Dolgozószám == dolgozószám.Trim()
-                             select a).Any();
-                if (vane)
+                List<Adat_Dolgozó_Beosztás_Új> AdatokSzűrt = (from a in Adatok_Beoszt_Új
+                                                              where a.Dolgozószám == dolgozószám.Trim()
+                                                              select a).ToList();
+                if (AdatokSzűrt.Count > 0)
                 {
                     List<Adat_Dolgozó_Beosztás_Új> Adatok = new List<Adat_Dolgozó_Beosztás_Új>();
                     if (Dátumtól > Dátumig)
@@ -839,7 +840,7 @@ namespace Villamos.Villamos_Ablakok
                                   orderby a.Nap
                                   select a).ToList();
 
-                    Kezelő_Beoszt_Új.Rögzítés(Telephely.Trim(), Dátumtól, Adatok_Beoszt_Új, true);
+                    Kezelő_Beoszt_Új.Rögzítés(Telephely.Trim(), Dátumtól, Adatok, true);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -858,10 +859,10 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Adatok_Beoszt_Új = Kezelő_Beoszt_Új.Lista_Adatok(Telephely.Trim(), Dátumtól);
-                bool vane = (from a in Adatok_Beoszt_Új
-                             where a.Dolgozószám == dolgozószám.Trim()
-                             select a).Any();
-                if (vane)
+                List<Adat_Dolgozó_Beosztás_Új> AdatokSzűrt = (from a in Adatok_Beoszt_Új
+                                                              where a.Dolgozószám == dolgozószám.Trim()
+                                                              select a).ToList();
+                if (AdatokSzűrt.Count > 0)
                 {
                     List<Adat_Dolgozó_Beosztás_Új> Adatok = new List<Adat_Dolgozó_Beosztás_Új>();
                     if (Dátumtól > Dátumig)
@@ -877,7 +878,7 @@ namespace Villamos.Villamos_Ablakok
                                   && a.Nap <= Dátumig
                                   orderby a.Nap
                                   select a).ToList();
-                    Kezelő_Beoszt_Új.Rögzítés(Telephely.Trim(), Dátumtól, Adatok_Beoszt_Új, true);
+                    Kezelő_Beoszt_Új.Rögzítés(Telephely.Trim(), Dátumtól, Adatok, true);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -898,9 +899,8 @@ namespace Villamos.Villamos_Ablakok
                 //Beolvassuk az adatokat
                 Adatok_Beoszt_Új = Kezelő_Beoszt_Új.Lista_Adatok(Telephely.Trim(), Dátumtól, true);
                 //ha nem ugyanabban a hónapban van a két dátum és van adat a két idő között, akkor töröljük az eddigi adatokat.
+                if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumtól, Dátumtól, Dátumig, true);
                 if (Dátumtól.Month != Dátumig.Month)
-                    if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumtól, Dátumtól, Dátumig, true);
-                    else
                      if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumig, Dátumtól, Dátumig, true);
             }
             catch (HibásBevittAdat ex)
@@ -973,10 +973,9 @@ namespace Villamos.Villamos_Ablakok
                           where a.Idő >= MyF.Nap0000(Hételső)
                           && a.Idő <= MyF.Nap2359(Hétutolsó)
                           orderby a.Idő
+                          orderby a.Idő
                           select a).ToList();
                 Szín_kódolás Szín;
-
-                HétAlapAdatai();
 
                 int k = 1;
                 while (k < 8)
