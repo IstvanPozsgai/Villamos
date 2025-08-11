@@ -29,6 +29,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Oka = oka;
             SAP = sAP;
         }
+
+        public Adat_Kerék_Mérés(string kerékberendezés, DateTime mikor, int sAP)
+        {
+            Kerékberendezés = kerékberendezés;
+            Mikor = mikor;
+            SAP = sAP;
+        }
     }
 
 
