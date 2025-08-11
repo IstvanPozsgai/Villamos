@@ -1779,7 +1779,7 @@ namespace Villamos
             }
         }
 
-        string MilyenÁllapot(string Állapot)
+        private string MilyenÁllapot(string Állapot)
         {
             string MilyenÁllapot = "";
             try
