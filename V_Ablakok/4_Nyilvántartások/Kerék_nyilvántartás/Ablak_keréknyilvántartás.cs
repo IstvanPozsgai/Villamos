@@ -1248,38 +1248,28 @@ namespace Villamos
 
 
         #region Eredmények listázása lapfül
-        // JAVÍTANDÓ:
         private void Command5_Click(object sender, EventArgs e)
         {
             try
             {
                 Feltöltések();
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-
                 // oszlopok számának meghatározása
                 int oszlop = 0;
 
-                string szöveg, helyvill, jelszóvill;
-                if (Típus_Szűrő.Text.Trim() == "")
-                    szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-                else
-                    szöveg = $"SELECT * FROM állománytábla where típus='{Típus_Szűrő.Text.Trim()}' AND törölt=0 order by  azonosító";
-
-
+                List<Adat_Jármű> Jármű = new List<Adat_Jármű>();
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                {
-                    helyvill = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                    jelszóvill = "pozsgaii";
-                }
+                    Jármű = KézJármű.Lista_Adatok("Főmérnökség");
                 else
-                {
-                    helyvill = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\villamos.mdb";
-                    jelszóvill = "pozsgaii";
-                }
+                    Jármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-                List<Adat_Jármű> Jármű = KézJármű.Lista_Adatok(helyvill, jelszóvill, szöveg);
+                if (Típus_Szűrő.Text.Trim() == "")
+                    Jármű = Jármű.Where(a => a.Típus.Trim() == Típus_Szűrő.Text.Trim()).ToList();
+
+                Jármű = (from a in Jármű
+                         where a.Törölt == false
+                         orderby a.Azonosító
+                         select a).ToList();
+
                 Holtart.Be(Jármű.Count + 1);
                 foreach (Adat_Jármű Elem in Jármű)
                 {
