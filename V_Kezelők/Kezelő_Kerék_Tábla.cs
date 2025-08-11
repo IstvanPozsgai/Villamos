@@ -20,7 +20,6 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kerékbeolvasástábla(hely.KönyvSzerk());
         }
 
-
         public List<Adat_Kerék_Tábla> Lista_Adatok()
         {
             string szöveg = $"SELECT * FROM {táblanév}";
@@ -57,13 +56,23 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
-        public void Módosítás(List<Adat_Kerék_Tábla> Adatok)
+        /// <summary>
+        /// Alapra állítja a beépítési adatokat
+        /// </summary>
+        /// <param name="Adatok"></param>
+        public void Módosítás_Alapra(List<Adat_Kerék_Tábla> Adatok)
         {
             try
             {
-
-
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Kerék_Tábla Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $" [pozíció]='{Adat.Pozíció}', azonosító='{Adat.Azonosító}', föléberendezés='{Adat.Föléberendezés}'";
+                    szöveg += $" WHERE [kerékberendezés]='{Adat.Kerékberendezés}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -76,6 +85,36 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(List<Adat_Kerék_Tábla> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Kerék_Tábla Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET";
+                    szöveg += $" kerékmegnevezés='{Adat.Kerékmegnevezés}', ";
+                    szöveg += $" kerékgyártásiszám='{Adat.Kerékgyártásiszám}', ";
+                    szöveg += $" föléberendezés='{Adat.Föléberendezés}', ";
+                    szöveg += $" azonosító='{Adat.Azonosító}', ";
+                    szöveg += $" pozíció='{Adat.Pozíció}', ";
+                    szöveg += $" objektumfajta='{Adat.Objektumfajta}', ";
+                    szöveg += $" dátum='{Adat.Dátum:yyyy.MM.dd}' ";
+                    szöveg += $" WHERE  [kerékberendezés]='{Adat.Kerékberendezés}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         public void Rögzítés(List<Adat_Kerék_Tábla> Adatok)
         {

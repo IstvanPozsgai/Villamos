@@ -29,6 +29,8 @@ namespace Villamos
         readonly Kezelő_Kerék_Eszterga_Igény KézEsztIgény = new Kezelő_Kerék_Eszterga_Igény();
         readonly Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
         readonly Kezelő_Kiegészítő_Jelenlétiív KézKiegJelenlét = new Kezelő_Kiegészítő_Jelenlétiív();
+        readonly Kezelő_T5C5_Kmadatok KézT5C5Elő = new Kezelő_T5C5_Kmadatok("T5C5");
+        readonly Kezelő_T5C5_Kmadatok KézICSElő = new Kezelő_T5C5_Kmadatok("ICS");
 
         List<Adat_Kerék_Mérés> AdatokMérés = new List<Adat_Kerék_Mérés>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
@@ -742,6 +744,28 @@ namespace Villamos
             }
         }
 
+        private void Command7_Click(object sender, EventArgs e)
+        {
+            try
+            {      // ha üres a tábla akkor kilép
+                if (SAPPályaszám.Text.Trim() == "") return;
+
+                Csakkerék.Checked = false;
+                Berendezés_adatok("Minden");
+
+                Nyomtatvány_készítés1();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Nyomtatvány_készítés()
         {
             try
@@ -896,27 +920,17 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private string Km_Adat(string Azonosító, string Típus)
         {
             long KMU = 0;
-
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
-            string jelszó = "pocsaierzsi";
-            string szöveg = "Select * FROM KMtábla";
-
-            Kezelő_T5C5_Kmadatok KézT5C5Elő = new Kezelő_T5C5_Kmadatok("T5C5");
-            List<Adat_T5C5_Kmadatok> AdatokT5CElő = KézT5C5Elő.Lista_Adat(hely, jelszó, szöveg);
-
+            List<Adat_T5C5_Kmadatok> AdatokT5CElő = KézT5C5Elő.Lista_Adatok();
             Adat_T5C5_Kmadatok AdatT5C5Elő = (from a in AdatokT5CElő
                                               where a.Törölt == false
                                               && a.Azonosító == Azonosító.Trim()
                                               orderby a.Vizsgdátumk descending
                                               select a).FirstOrDefault();
 
-            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-
-            List<Adat_T5C5_Kmadatok> AdatokICSelő = KézT5C5Elő.Lista_Adat(hely, jelszó, szöveg);
+            List<Adat_T5C5_Kmadatok> AdatokICSelő = KézICSElő.Lista_Adatok();
             Adat_T5C5_Kmadatok AdatICSelő = (from a in AdatokICSelő
                                              where a.Törölt == false
                                              && a.Azonosító == Azonosító.Trim()
@@ -946,33 +960,10 @@ namespace Villamos
             return KMU.ToString();
         }
 
-        private void Command7_Click(object sender, EventArgs e)
-        {
-            try
-            {      // ha üres a tábla akkor kilép
-                if (SAPPályaszám.Text.Trim() == "") return;
-
-                Csakkerék.Checked = false;
-                Berendezés_adatok("Minden");
-
-                Nyomtatvány_készítés1();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Nyomtatvány_készítés1()
         {
             try
             {
-                //string hely, jelszó, szöveg;
                 // kimeneti fájl helye és neve
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -1183,21 +1174,16 @@ namespace Villamos
             return Adatok;
         }
 
-        // JAVÍTANDÓ:
         private void SAP(List<Adat_Kerék_Tábla> ELista)
         {
             try
             {
-
                 Holtart.Be(ELista.Count + 1);
 
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-                string jelszó = "szabólászló";
-                string szöveg = "SELECT * FROM tábla ";
-
-
-                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok(hely, jelszó, szöveg);
-                List<string> szövegGY = new List<string>();
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
+                List<Adat_Kerék_Tábla> AdatokGyAlap = new List<Adat_Kerék_Tábla>();
+                List<Adat_Kerék_Tábla> AdatokGy = new List<Adat_Kerék_Tábla>();
+                List<Adat_Kerék_Tábla> AdatokGyR = new List<Adat_Kerék_Tábla>();
                 if (Adatok != null)
                 {
                     foreach (Adat_Kerék_Tábla Elem in ELista)
@@ -1208,32 +1194,29 @@ namespace Villamos
                                               select a.Kerékberendezés).FirstOrDefault();
                         if (RégiBerszám != null)
                         {
-                            szöveg = " UPDATE tábla SET";
-                            szöveg += " [pozíció]='_',  azonosító='_', föléberendezés='_' ";
-                            szöveg += $" WHERE [kerékberendezés]='{RégiBerszám}'";
-                            szövegGY.Add(szöveg);
-                            //   MyA.ABMódosítás(hely, jelszó, szöveg);
+                            Adat_Kerék_Tábla Adat = new Adat_Kerék_Tábla(RégiBerszám, "_", "_", "_");
+                            AdatokGy.Add(Adat);
                         }
                         //Ha benne van, de rossz helyen
                         Adat_Kerék_Tábla Rekord_berendezés = (from a in Adatok
                                                               where (a.Kerékberendezés == Elem.Kerékberendezés && a.Azonosító != Elem.Azonosító)
                                                                  || (a.Kerékberendezés == Elem.Kerékberendezés && a.Pozíció != Elem.Pozíció)
                                                               select a).FirstOrDefault();
-                        if (Rekord_berendezés != null) szövegGY.Add(Kerék_módosítás(Méretrevág(Elem)));
-                        //if (Rekord_berendezés != null) Kerék_módosítás(Méretrevág(Elem));
+                        if (Rekord_berendezés != null) AdatokGy.Add(Méretrevág(Elem));
 
                         //Ha nincs benne
                         Rekord_berendezés = (from a in Adatok
                                              where (a.Kerékberendezés == Elem.Kerékberendezés)
                                              select a).FirstOrDefault();
-                        //    if (Rekord_berendezés == null) Kerék_rögzítés(Méretrevág(Elem));
-                        if (Rekord_berendezés == null) szövegGY.Add(Kerék_rögzítés(Méretrevág(Elem)));
+                        if (Rekord_berendezés == null) AdatokGyR.Add(Méretrevág(Elem));
 
                         Holtart.Lép();
                     }
-                    MyA.ABMódosítás(hely, jelszó, szövegGY);
+
                 }
-
+                if (AdatokGyAlap.Count > 0) KézKerék.Módosítás_Alapra(AdatokGyAlap);
+                if (AdatokGy.Count > 0) KézKerék.Módosítás(AdatokGy);
+                if (AdatokGyR.Count > 0) KézKerék.Rögzítés(AdatokGyR);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1245,63 +1228,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        // JAVÍTANDÓ:
-        private string Kerék_módosítás(Adat_Kerék_Tábla SAP_kerék)
-        {
-            string szöveg = "";
-            try
-            {
-                szöveg = "UPDATE tábla SET";
-                szöveg += $" kerékmegnevezés='{SAP_kerék.Kerékmegnevezés}', ";
-                szöveg += $" kerékgyártásiszám='{SAP_kerék.Kerékgyártásiszám}', ";
-                szöveg += $" föléberendezés='{SAP_kerék.Föléberendezés}', ";
-                szöveg += $" azonosító='{SAP_kerék.Azonosító}', ";
-                szöveg += $" pozíció='{SAP_kerék.Pozíció}', ";
-                szöveg += $" objektumfajta='{SAP_kerék.Objektumfajta}', ";
-                szöveg += $" dátum='{SAP_kerék.Dátum:yyyy.MM.dd}' ";
-                szöveg += $" WHERE  [kerékberendezés]='{SAP_kerék.Kerékberendezés}'";
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return szöveg;
-        }
-        // JAVÍTANDÓ:
-        private string Kerék_rögzítés(Adat_Kerék_Tábla SAP_kerék)
-        {
-            string szöveg = "";
-            try
-            {
-                szöveg = "INSERT INTO tábla (kerékberendezés, kerékmegnevezés, kerékgyártásiszám, föléberendezés, azonosító, pozíció, objektumfajta, dátum) VALUES (";
-                szöveg += $"'{SAP_kerék.Kerékberendezés}', ";
-                szöveg += $"'{SAP_kerék.Kerékmegnevezés}', ";
-                szöveg += $"'{SAP_kerék.Kerékgyártásiszám}', ";
-                szöveg += $"'{SAP_kerék.Föléberendezés}', ";
-                szöveg += $"'{SAP_kerék.Azonosító}', ";
-                szöveg += $"'{SAP_kerék.Pozíció}', ";
-                szöveg += $"'{SAP_kerék.Objektumfajta}', ";
-                szöveg += $"'{SAP_kerék.Dátum:yyyy.MM.dd}') ";
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return szöveg;
-        }
-        #endregion
 
         private Adat_Kerék_Tábla Méretrevág(Adat_Kerék_Tábla elem)
         {
@@ -1317,6 +1243,7 @@ namespace Villamos
                     );
             return válasz;
         }
+        #endregion
         #endregion
 
 
