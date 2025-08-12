@@ -548,14 +548,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 else
                 {
                     if (UjStatus && EredetiDatum == DateTime.Today)
+                    {
                         UtolsoUzemoraTorles(AktivID);
+                        UtolsoTorles = true;
+                    }
 
                     else
                     {
                         Kez_Uzemora.Torles(new Adat_Eszterga_Uzemora(AktivID));
                         Kez_Uzemora.Rogzites(new Adat_Eszterga_Uzemora(0, UjUzemora, UjDatum, false));
                     }
-                    UtolsoTorles = true;
                 }
                 if (Form.ActiveForm is Ablak_Eszterga_Karbantartás_Üzemóra)
                 {
