@@ -20,7 +20,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         #region Osztalyszintű elemek
 
         public event Event_Kidobó Eszterga_Valtozas;
-        // JAVÍTANDÓ:
+
         readonly bool Baross = Program.PostásTelephely.Trim() == "Baross";
         private bool frissul = false;
         DataTable AdatTablaMuvelet = new DataTable();
@@ -206,9 +206,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             try
             {
                 CmbxEgyseg.SelectedItem = EsztergaEgyseg.Bekövetkezés;
-                // JAVÍTANDÓ:miért kell tudnunk itt , hogy mi az ID? kezelőben a helye
-                //Nem ezt beszéltük meg.
-                //kesz
                 EgysegEllenorzes(EsztergaEgyseg.Bekövetkezés.ToStrTrim());
             }
             catch (HibásBevittAdat ex)
@@ -341,10 +338,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (string.IsNullOrEmpty(TxtBxId.Text))
                     throw new HibásBevittAdat("Töltse ki az Azonosító mezőt.");
 
-                // JAVÍTANDÓ:a true mikor lesz false?
-                //kesz
-                //olvasd el mégegyszer!!!!!!!!!!!!
-                //három a magyar igazság
                 string Egyseg = CmbxEgyseg.SelectedItem?.ToStrTrim();
                 bool Nap = int.TryParse(TxtBxMennyiNap.Text, out int MennyiNap);
                 bool Ora = int.TryParse(TxtBxMennyiOra.Text, out int MennyiÓra);
@@ -450,10 +443,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     rekord.Mennyi_Óra != int.Parse(TxtBxMennyiOra.Text) ||
                     rekord.Utolsó_Dátum != DtmPckrUtolsoDatum.Value ||
                     rekord.Utolsó_Üzemóra_Állás != int.Parse(TxtBxUtolsoUzemoraAllas.Text);
-
-                // JAVÍTANDÓ:Mikor lesz igaz?
-                //Ezt még gondold át mégegyszer van egyszerűbb megoldás is
-                //kesz
             }
             catch (HibásBevittAdat ex)
             {
@@ -467,8 +456,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             return Muvelet;
         }
 
-        // JAVÍTANDÓ:Akkor tulajdonképpen táblát színez
-        //Igen kesz
         /// <summary>
         /// Színezi a táblázat sorait a státusz alapján, ha a státusz "Törölt".
         /// Ha a státusz "Törölt", a sor háttérszíne piros, szövege fekete, és áthúzott betűtípust kap.
@@ -478,8 +465,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             foreach (DataGridViewRow sor in tabla.Rows)
             {
-                // JAVÍTANDÓ:
-                //kesz
                 string statusz = sor.Cells["Státusz"].Value?.ToStrTrim();
 
                 if (statusz == "Törölt")
@@ -583,8 +568,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             try
             {
-                // JAVÍTANDÓ:
-                //kesz
                 int AktivId = int.TryParse(TxtBxId.Text?.Trim(), out int id) ? id : 0;
 
                 if (AktivId != 0 && !ModositasEll(true))
@@ -592,8 +575,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 if (!TxtBxEllenorzes(AktivId, false))
                     return;
-                // JAVÍTANDÓ: Nem azt mondtam, hogy nem vezethetsz be új változót
-                //kesz
 
                 Adat_Eszterga_Muveletek ADAT = new Adat_Eszterga_Muveletek(
                     AktivId,
@@ -603,8 +584,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     TxtBxMennyiOra.Text.ToÉrt_Int(),
                     ChckBxStatus.Checked,
                     DtmPckrUtolsoDatum.Value.Date,
-                    TxtBxUtolsoUzemoraAllas.Text.ToÉrt_Long()
-                );
+                    TxtBxUtolsoUzemoraAllas.Text.ToÉrt_Long());
 
                 if (AktivId != 0)
                     Kez_Muvelet.Modositas_MeglevoMuvelet(ADAT);
@@ -708,8 +688,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
-        // JAVÍTANDÓ:Kezelőben
-        //kesz
         /// Két kijelölt rekord sorrendjének felcserélése az adatbázisban.
         /// Ellenőrzi, hogy pontosan két sor van-e kijelölve, majd végrehajtja a cserét, frissíti a táblázatot.
         /// </summary>
@@ -740,8 +718,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             }
         }
 
-        // JAVÍTANDÓ:ez miben tér el az előzőtől?
-        //kesz
         /// <summary>
         /// Két kijelölt sor sorrendjét felcseréli az adatbázisban úgy, hogy az egyik rekord a másik helyére kerül.
         /// Először ellenőrzi, hogy pontosan két sor van-e kijelölve, majd a cserét végrehajtja, frissíti a listát.

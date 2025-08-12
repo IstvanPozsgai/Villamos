@@ -332,18 +332,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
                 {
-                    // JAVÍTANDÓ: Ez miért kell?
-                    //kesz
-                    // Nincs kész miért nem linq?
-
                     int ID = rekord.ID;
                     DateTime UtolsoDatum = rekord.Utolsó_Dátum;
                     long UtolsoUzemora = rekord.Utolsó_Üzemóra_Állás;
                     long BecsultUzemora = this.BecsultUzemora(TervDatum);
 
-                    // JAVÍTANDÓ:Mit csinálunk itt?
-                    //kesz
-                    // Addig generáljuk az új esedékességeket, amíg a dátum vagy az üzemóra nem lépi túl a tervezett határt.
                     while (UtolsoDatum.AddDays(rekord.Mennyi_Dátum) <= TervDatum || (UtolsoUzemora + rekord.Mennyi_Óra) >= BecsultUzemora)
                     {
                         bool Esedekes = false;

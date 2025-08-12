@@ -24,7 +24,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
         DataTable AdatTabla = new DataTable();
         public event Event_Kidobo Eszterga_Valtozas;
-        // JAVÍTANDÓ:?
         readonly bool Baross = Program.PostásTelephely.Trim() == "Baross";
         #endregion
 
