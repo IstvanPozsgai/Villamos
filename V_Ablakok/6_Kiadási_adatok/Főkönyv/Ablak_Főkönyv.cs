@@ -125,6 +125,8 @@ namespace Villamos
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             Óráig.Value = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, 11, 0, 0);
             AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Gombok();
         }
