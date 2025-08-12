@@ -263,7 +263,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 else
                     UjRekordHozzaadasa(UjDatum, UjUzemora, UjStatus);
 
-                if (Form.ActiveForm is Ablak_Eszterga_Karbantartás_Üzemóra)
+                if (ActiveForm is Ablak_Eszterga_Karbantartás_Üzemóra)
                     TablaListazas();
             }
             catch (HibásBevittAdat ex)
