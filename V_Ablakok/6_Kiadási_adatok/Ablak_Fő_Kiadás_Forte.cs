@@ -31,6 +31,8 @@ namespace Villamos
         {
             Dátum.Value = DateTime.Today;
             Dátumról.Value = DateTime.Today;
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
         }
