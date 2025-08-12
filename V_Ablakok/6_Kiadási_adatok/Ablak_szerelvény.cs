@@ -58,6 +58,8 @@ namespace Villamos.Ablakok
         private void Start()
         {
             Telephelyekfeltöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Ellenőrzés();
             List<Adat_Szerelvény> Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
