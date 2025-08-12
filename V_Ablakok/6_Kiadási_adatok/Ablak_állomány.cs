@@ -36,6 +36,7 @@ namespace Villamos
         private void Ablak_állomány_Load(object sender, EventArgs e)
         {
             Telephelyekfeltöltése();
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Telephelyeklistázasa();
         }

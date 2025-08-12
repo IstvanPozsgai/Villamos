@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -11,9 +13,13 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
     public class Kezelő_Eszterga_Üzemóra
     {
         readonly string jelszo = "bozaim";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb".KönyvSzerk();
         readonly string Tabla_Uzem = "Üzemóra";
-        // JAVÍTANDÓ:Hogy jön létre a fájl?
+ 
+        public Kezelő_Eszterga_Üzemóra()
+        {
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Eszterga_Karbantartás(hely);
+        }
 
         public List<Adat_Eszterga_Uzemora> Lista_Adatok()
         {

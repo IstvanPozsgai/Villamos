@@ -15,8 +15,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         string hely;
         readonly string tablaNev = "Műveletek_Napló";
 
-        // JAVÍTANDÓ:Nem jó, hogyan fogjuk a tavalyi adatokat olvasni, itt csak az aktuális év adatai vannak
-        //Akkuban vannak ilyenek
         private void FájlBeállítás(int Év)
         {
             hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás_{Év}_Napló.mdb".KönyvSzerk();
@@ -60,8 +58,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             return Adatok;
         }
 
-        // JAVÍTANDÓ:Ez rögzítés
-        //kesz
         public void Rogzites(List<Adat_Eszterga_Muveletek_Naplo> Adatok, int Év)
         {
             try
@@ -97,8 +93,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:az módosítás
-        //kesz
+
         public void Modositas(Adat_Eszterga_Muveletek_Naplo újAdat, DateTime eredetiDatum, int Év)
         {
             try

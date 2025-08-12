@@ -14,8 +14,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
         List<Adat_Eszterga_Uzemora> AdatokUzemora = new List<Adat_Eszterga_Uzemora>();
         readonly Kezelő_Eszterga_Üzemóra Kez_Uzemora = new Kezelő_Eszterga_Üzemóra();
-        // JAVÍTANDÓ:Biztos?
-        readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
+        readonly bool Baross = Program.PostásTelephely.Trim() == "Baross";
         public int Uzemora { get; private set; }
         #endregion
 

@@ -51,6 +51,8 @@ namespace Villamos
             VáltozatCombofeltölt();
             Gombok();
             Label18.Text = "";
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
 

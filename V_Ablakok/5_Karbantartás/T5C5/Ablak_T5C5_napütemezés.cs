@@ -259,8 +259,8 @@ namespace Villamos
                 Tábla.Columns[32].Width = 100;
 
                 Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
-                Adatok = KézÁllomány.Lista_Adatok("Főmérnökség", DateTime.Today).Where(a => a.Telephely == Cmbtelephely.Text.Trim()).ToList();
-                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = KézÁllomány.Lista_Adatok("Főmérnökség", DateTime.Today); 
+                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Valóstípus.Contains("T5C5")).ToList();
                 AdatokSzerelvény = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());   // Szerelvény
                 AdatokZserKm = KézKorr.Lista_adatok(Dátum.Value.Year);      //Zser adatok
                 AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());    //    Hiba
@@ -274,63 +274,61 @@ namespace Villamos
                 Holtart.Be(Adatok.Count + 2);
 
                 // kiírjuk az alapot
-                foreach (Adat_T5C5_Göngyöl rekord in Adatok)
+                foreach (Adat_Jármű EgyJármű in AdatokJármű)
                 {
                     Holtart.Lép();
                     Tábla.RowCount++;
                     int i = Tábla.RowCount - 1;
-                    Tábla.Rows[i].Cells[0].Value = rekord.Azonosító;
-                    Tábla.Rows[i].Cells[2].Value = rekord.Vizsgálatdátuma.ToString("yyyy.MM.dd");
-                    Tábla.Rows[i].Cells[3].Value = rekord.Vizsgálatfokozata;
-                    Tábla.Rows[i].Cells[4].Value = rekord.Vizsgálatszáma;
-                    Tábla.Rows[i].Cells[5].Value = rekord.Futásnap;
+                    Tábla.Rows[i].Cells[0].Value = EgyJármű.Azonosító;
+                    Tábla.Rows[i].Cells[1].Value = EgyJármű.Valóstípus;
                     Tábla.Rows[i].Cells[6].Value = "_";
                     Tábla.Rows[i].Cells[9].Value = "_";
                     Tábla.Rows[i].Cells[10].Value = "_";
                     Tábla.Rows[i].Cells[11].Value = 0;
-                    Tábla.Rows[i].Cells[12].Value = rekord.Utolsóforgalminap.ToString("yyyy.MM.dd");
                     Tábla.Rows[i].Cells[14].Value = "_";
                     Tábla.Rows[i].Cells[15].Value = "0";
+                    Tábla.Rows[i].Cells[15].Value = EgyJármű.Szerelvénykocsik;
                     Tábla.Rows[i].Cells[16].Value = "_";
+                    Tábla.Rows[i].Cells[23].Value = EgyJármű.Státus;
                     Tábla.Rows[i].Cells[24].Value = 0;
                     Tábla.Rows[i].Cells[25].Value = 0;
                     Tábla.Rows[i].Cells[26].Value = 0;
                     Tábla.Rows[i].Cells[27].Value = "_";
                     Tábla.Rows[i].Cells[31].Value = 0;
 
-                    Adat_Jármű EgyJármű = (from a in AdatokJármű
-                                           where a.Azonosító == rekord.Azonosító
-                                           select a).FirstOrDefault();
-                    if (EgyJármű != null)
+                    Adat_T5C5_Göngyöl rekord = Adatok.Where(a => a.Azonosító == EgyJármű.Azonosító).FirstOrDefault();
+                    if (rekord != null)
                     {
-                        Tábla.Rows[i].Cells[1].Value = EgyJármű.Valóstípus;
-                        Tábla.Rows[i].Cells[15].Value = EgyJármű.Szerelvénykocsik;
-                        Tábla.Rows[i].Cells[23].Value = EgyJármű.Státus;
+                        Tábla.Rows[i].Cells[2].Value = rekord.Vizsgálatdátuma.ToString("yyyy.MM.dd");
+                        Tábla.Rows[i].Cells[3].Value = rekord.Vizsgálatfokozata;
+                        Tábla.Rows[i].Cells[4].Value = rekord.Vizsgálatszáma;
+                        Tábla.Rows[i].Cells[5].Value = rekord.Futásnap;
+                        Tábla.Rows[i].Cells[12].Value = rekord.Utolsóforgalminap.ToString("yyyy.MM.dd");
+                    }
 
-                        Adat_Szerelvény EgySzerelvény = (from a in AdatokSzerelvény
-                                                         where a.Szerelvény_ID == EgyJármű.Szerelvénykocsik
-                                                         select a).FirstOrDefault();
-                        if (EgySzerelvény != null)
-                        {
-                            string ideig = EgySzerelvény.Kocsi1.Trim();
-                            ideig += EgySzerelvény.Kocsi2.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi2.Trim();
-                            ideig += EgySzerelvény.Kocsi3.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi3.Trim();
-                            ideig += EgySzerelvény.Kocsi4.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi4.Trim();
-                            ideig += EgySzerelvény.Kocsi5.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi5.Trim();
-                            ideig += EgySzerelvény.Kocsi6.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi6.Trim();
-                            Tábla.Rows[i].Cells[16].Value = ideig;
-                        }
+                    Adat_Szerelvény EgySzerelvény = (from a in AdatokSzerelvény
+                                                     where a.Szerelvény_ID == EgyJármű.Szerelvénykocsik
+                                                     select a).FirstOrDefault();
+                    if (EgySzerelvény != null)
+                    {
+                        string ideig = EgySzerelvény.Kocsi1.Trim();
+                        ideig += EgySzerelvény.Kocsi2.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi2.Trim();
+                        ideig += EgySzerelvény.Kocsi3.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi3.Trim();
+                        ideig += EgySzerelvény.Kocsi4.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi4.Trim();
+                        ideig += EgySzerelvény.Kocsi5.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi5.Trim();
+                        ideig += EgySzerelvény.Kocsi6.Trim() == "0" ? "" : "-" + EgySzerelvény.Kocsi6.Trim();
+                        Tábla.Rows[i].Cells[16].Value = ideig;
                     }
 
                     Adat_Nap_Hiba EgyHiba = (from a in AdatokHiba
-                                             where a.Azonosító == rekord.Azonosító
+                                             where a.Azonosító == EgyJármű.Azonosító
                                              select a).FirstOrDefault();
                     if (EgyHiba != null)
                     {
                         Tábla.Rows[i].Cells[6].Value = EgyHiba.Üzemképtelen.Trim() + "-" + EgyHiba.Beálló.Trim() + "-" + EgyHiba.Üzemképeshiba.Trim();
                     }
                     Adat_Vezénylés EgyVezénylés = (from a in AdatokVezénylés
-                                                   where a.Azonosító == rekord.Azonosító
+                                                   where a.Azonosító == EgyJármű.Azonosító
                                                    select a).FirstOrDefault();
                     if (EgyVezénylés != null)
                     {
@@ -349,7 +347,7 @@ namespace Villamos
                     }
 
                     Adat_Vezénylés EgyVezénylésN = (from a in AdatokVezénylésN
-                                                    where a.Azonosító == rekord.Azonosító
+                                                    where a.Azonosító == EgyJármű.Azonosító
                                                     select a).FirstOrDefault();
                     if (EgyVezénylésN != null)
                     {
@@ -360,8 +358,8 @@ namespace Villamos
                     }
 
                     Adat_Szerelvény EgySzerElő = (from a in AdatokSzerElő
-                                                  where a.Kocsi1 == rekord.Azonosító || a.Kocsi2 == rekord.Azonosító || a.Kocsi3 == rekord.Azonosító ||
-                                                        a.Kocsi4 == rekord.Azonosító || a.Kocsi5 == rekord.Azonosító || a.Kocsi6 == rekord.Azonosító
+                                                  where a.Kocsi1 == EgyJármű.Azonosító || a.Kocsi2 ==EgyJármű.Azonosító || a.Kocsi3 == EgyJármű.Azonosító ||
+                                                        a.Kocsi4 == EgyJármű.Azonosító || a.Kocsi5 == EgyJármű.Azonosító || a.Kocsi6 == EgyJármű.Azonosító
                                                   select a).FirstOrDefault();
                     if (EgySzerElő != null)
                     {
@@ -377,19 +375,19 @@ namespace Villamos
                     }
 
                     Adat_Osztály_Adat EgyOszt = (from a in AdatokOszt
-                                                 where a.Azonosító == rekord.Azonosító
+                                                 where a.Azonosító == EgyJármű.Azonosító
                                                  select a).FirstOrDefault();
                     if (EgyOszt != null)
                         Tábla.Rows[i].Cells[29].Value = KézOszt.Érték(EgyOszt, "Csatolhatóság");
 
                     Adat_Jármű_Vendég EgyIdegen = (from a in AdatokIdegen
-                                                   where a.Azonosító == rekord.Azonosító
+                                                   where a.Azonosító == EgyJármű.Azonosító
                                                    select a).FirstOrDefault();
                     if (EgyIdegen != null)
                         Tábla.Rows[i].Cells[7].Value = EgyIdegen.KiadóTelephely;
 
                     Adat_T5C5_Kmadatok EgyKm = (from a in AdatokKM
-                                                where a.Azonosító == rekord.Azonosító
+                                                where a.Azonosító == EgyJármű.Azonosító
                                                 && a.Törölt == false
                                                 orderby a.Vizsgdátumk descending
                                                 select a).FirstOrDefault();
@@ -412,7 +410,7 @@ namespace Villamos
 
                         List<Adat_Főkönyv_Zser_Km> SzűrtAdat = (from a in AdatokZserKm
                                                                 where a.Dátum > EgyKm.KMUdátum &&
-                                                                a.Azonosító == rekord.Azonosító.Trim()
+                                                                a.Azonosító == EgyJármű.Azonosító.Trim()
                                                                 select a).ToList();
                         int Napikm = SzűrtAdat.Sum(a => a.Napikm);
                         Tábla.Rows[i].Cells[31].Value = Napikm;

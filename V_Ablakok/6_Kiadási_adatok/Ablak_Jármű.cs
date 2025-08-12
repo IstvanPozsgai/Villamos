@@ -50,6 +50,7 @@ namespace Villamos
 
             Telephelyekfeltöltése();
             Telephelyeklistázasa();
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
             Kocsilistaellenőrzés();
