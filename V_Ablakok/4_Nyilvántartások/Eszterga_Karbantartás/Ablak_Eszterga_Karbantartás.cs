@@ -763,6 +763,25 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private DateTime DatumEsedekesegSzamitasa(DateTime utolsoDatum, Adat_Eszterga_Muveletek rekord, Adat_Eszterga_Uzemora uzemoraRekord)
         {
+            if (utolsoDatum == new DateTime(1900, 1, 1))
+            {
+                long celUzemora = rekord.Utolsó_Üzemóra_Állás + rekord.Mennyi_Óra;
+                double napiNov = AtlagUzemoraNovekedesKiszamitasa(DateTime.Today);
+
+                if (napiNov > 0)
+                {
+                    long aktualisUzemora = AdatokUzemora
+                        .Where(a => !a.Státus)
+                        .OrderByDescending(a => a.Dátum)
+                        .FirstOrDefault()?.Uzemora ?? 0;
+
+                    double napok = (celUzemora - aktualisUzemora) / napiNov;
+                    return DateTime.Today.AddDays(Math.Ceiling(napok));
+                }
+                else
+                    return DateTime.Today;
+            }
+
             DateTime? EsedekesDatumNap = null;
             if (rekord.Mennyi_Dátum > 0)
                 EsedekesDatumNap = utolsoDatum.AddDays(rekord.Mennyi_Dátum);
@@ -802,6 +821,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             return utolsoDatum;
         }
 
+
+
         /// <summary>
         /// Becsült üzemóra értéket számol a megadott jövőbeli dátumhoz, 
         /// az eddigi rögzített üzemóra növekedés átlaga alapján.
@@ -809,37 +830,49 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         private long BecsultUzemora(DateTime EloDatum)
         {
             double NapiNovekedes = 0;
-            double NapokEloDatumhoz = 0;
+            double napokEloDatumhoz = 0;
             Adat_Eszterga_Uzemora UtolsoRekord = null;
+
             try
             {
-                if (AdatokUzemora == null || AdatokUzemora.Count < 2)
+                if (AdatokUzemora == null || AdatokUzemora.Count < 1)
                     return 0;
 
-                List<Adat_Eszterga_Uzemora> rekord = (from a in AdatokUzemora
-                                                      where !a.Státus
-                                                      orderby a.Dátum
-                                                      select a).ToList();
+                UtolsoRekord = AdatokUzemora
+                    .Where(a => !a.Státus)
+                    .OrderByDescending(a => a.Dátum)
+                    .FirstOrDefault();
 
-                if (rekord.Count < 2)
+                if (UtolsoRekord == null)
                     return 0;
 
-                NapiNovekedes = 0;
-
-                for (int i = 1; i < rekord.Count; i++)
+                if (EloDatum == new DateTime(1900, 1, 1))
                 {
-                    double Napok = (rekord[i].Dátum - rekord[i - 1].Dátum).TotalDays;
-                    if (Napok > 0)
-                        NapiNovekedes += (rekord[i].Uzemora - rekord[i - 1].Uzemora) / Napok;
+                    Adat_Eszterga_Muveletek muvelet = AdatokMuvelet.FirstOrDefault(m => m.Utolsó_Üzemóra_Állás == UtolsoRekord.Uzemora);
+                    if (muvelet != null)
+                        return muvelet.Utolsó_Üzemóra_Állás + muvelet.Mennyi_Óra;
+                    else
+                        return UtolsoRekord.Uzemora;
                 }
-                NapiNovekedes /= rekord.Count - 1;
+
+                List<Adat_Eszterga_Uzemora> rekordok = AdatokUzemora
+                    .Where(a => !a.Státus)
+                    .OrderBy(a => a.Dátum)
+                    .ToList();
+
+                for (int i = 1; i < rekordok.Count; i++)
+                {
+                    double napok = (rekordok[i].Dátum - rekordok[i - 1].Dátum).TotalDays;
+                    if (napok > 0)
+                        NapiNovekedes += (rekordok[i].Uzemora - rekordok[i - 1].Uzemora) / napok;
+                }
+
+                if (rekordok.Count > 1)
+                    NapiNovekedes /= (rekordok.Count - 1);
+
                 NapiNovekedes = Math.Floor(NapiNovekedes);
 
-                UtolsoRekord = rekord
-                  .Where(a => !a.Státus)
-                  .LastOrDefault();
-
-                NapokEloDatumhoz = (EloDatum - UtolsoRekord.Dátum).TotalDays;
+                napokEloDatumhoz = (EloDatum - UtolsoRekord.Dátum).TotalDays;
 
             }
             catch (HibásBevittAdat ex)
@@ -851,8 +884,10 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return UtolsoRekord.Uzemora + (long)(NapiNovekedes * NapokEloDatumhoz);
+            return UtolsoRekord.Uzemora + (long)(NapiNovekedes * napokEloDatumhoz);
         }
+
+
 
         /// <summary>
         /// Ellenőrzi, hogy a művelet módosítása aktuális napon történik-e.  
