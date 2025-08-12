@@ -23,7 +23,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         #region Osztalyszintu elemek
 
         DateTime TervDatum;
-        readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
+        readonly bool Baross = Program.PostásTelephely.Trim() == "Baross";
         private string AktivTablaTipus;
         DataTable AdatTabla = new DataTable();
         private const int Alap_Napi_Atlag = 30;

@@ -21,7 +21,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
         public event Event_Kidobó Eszterga_Valtozas;
         // JAVÍTANDÓ:
-        readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
+        readonly bool Baross = Program.PostásTelephely.Trim() == "Baross";
         private bool frissul = false;
         DataTable AdatTablaMuvelet = new DataTable();
         #endregion

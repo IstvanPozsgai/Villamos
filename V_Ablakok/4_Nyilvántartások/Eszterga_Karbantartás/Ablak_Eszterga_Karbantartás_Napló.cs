@@ -18,7 +18,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         //ugyanezek a modosit oldalra
         #region Osztalyszintű elemek
 
-        readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
+        readonly bool Baross = Program.PostásTelephely.Trim() == "Baross";
         private bool frissul = false;
         private int elozoEv = DateTime.Today.Year;
         DataTable AdatTablaMuvelet = new DataTable();
