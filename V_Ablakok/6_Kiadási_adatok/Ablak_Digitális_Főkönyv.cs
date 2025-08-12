@@ -45,6 +45,7 @@ namespace Villamos
             Panel5.Visible = false;
             Típusfeltöltés_melyik();
             Telephelyfeltöltés_Melyik();
+            GombLathatosagKezelo.Beallit(this);
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)
