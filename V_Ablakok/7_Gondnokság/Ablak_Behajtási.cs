@@ -63,6 +63,8 @@ namespace Villamos
             {
                 Telephelyekfeltöltése();
                 Szereplők_lista();
+
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 Alapadatokfeltöltése();
 
