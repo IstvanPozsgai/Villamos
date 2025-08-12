@@ -821,8 +821,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             return utolsoDatum;
         }
 
-
-
         /// <summary>
         /// Becsült üzemóra értéket számol a megadott jövőbeli dátumhoz, 
         /// az eddigi rögzített üzemóra növekedés átlaga alapján.
