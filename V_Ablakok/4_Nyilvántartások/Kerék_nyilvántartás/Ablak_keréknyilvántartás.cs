@@ -1390,8 +1390,6 @@ namespace Villamos
             Holtart.Ki();
         }
 
-
-
         private void Tábla2_típus(string azonosító, int sor)
         {
             try
