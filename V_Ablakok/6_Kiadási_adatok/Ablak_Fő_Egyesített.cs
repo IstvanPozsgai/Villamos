@@ -55,6 +55,7 @@ namespace Villamos
                 Dátum.Value = DateTime.Today;
                 ElőzőDátum = Dátum.Value;
 
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
                 Kategóriák();
                 Listák_Feltöltés();
