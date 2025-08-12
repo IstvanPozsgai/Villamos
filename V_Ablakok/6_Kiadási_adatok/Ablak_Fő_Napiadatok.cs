@@ -59,6 +59,8 @@ namespace Villamos
             AdatokTelep = KézTelep.Lista_Adatok();
             Táblaalaphelyzet();
             Gombokfel();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
 
