@@ -756,43 +756,36 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private DateTime DatumEsedekesegSzamitasa(DateTime utolsoDatum, Adat_Eszterga_Muveletek rekord, Adat_Eszterga_Uzemora uzemoraRekord)
         {
-            DateTime? EsedekesDatumNap = null;
+            DateTime Válasz=new DateTime (1900,1,1);
             if (rekord.Mennyi_Dátum > 0)
-                EsedekesDatumNap = utolsoDatum.AddDays(rekord.Mennyi_Dátum);
-
-            DateTime? EsedekesDatumUzemora = null;
-            if (rekord.Mennyi_Óra > 0 && uzemoraRekord != null)
             {
-                double NapiNov = AtlagUzemoraNovekedesKiszamitasa(DateTime.Today);
-                if (NapiNov > 0)
-                {
-                    long AktualisUzemora = AdatokUzemora
-                        .Where(a => !a.Státus)
-                        .OrderByDescending(a => a.Dátum)
-                        .FirstOrDefault()?.Uzemora ?? 0;
+                Válasz = utolsoDatum.AddDays(rekord.Mennyi_Dátum);
+            }
+            else
+            {
 
-                    if (AktualisUzemora - uzemoraRekord.Uzemora >= rekord.Mennyi_Óra)
-                        EsedekesDatumUzemora = DateTime.Today;
-                    else
+                if (rekord.Mennyi_Óra > 0 && uzemoraRekord != null)
+                {
+                    double NapiNov = AtlagUzemoraNovekedesKiszamitasa(DateTime.Today);
+                    if (NapiNov > 0)
                     {
-                        double Napok = rekord.Mennyi_Óra / NapiNov;
-                        EsedekesDatumUzemora = utolsoDatum.AddDays(Math.Ceiling(Napok));
+                        long AktualisUzemora = AdatokUzemora
+                            .Where(a => !a.Státus)
+                            .OrderByDescending(a => a.Dátum)
+                            .FirstOrDefault()?.Uzemora ?? 0;
+
+                        if (AktualisUzemora - uzemoraRekord.Uzemora >= rekord.Mennyi_Óra)
+                            Válasz = DateTime.Today;
+                        else
+                        {
+                            double Napok = rekord.Mennyi_Óra / NapiNov;
+                            Válasz = utolsoDatum.AddDays(Math.Ceiling(Napok));
+                        }
                     }
                 }
             }
 
-            if (EsedekesDatumNap.HasValue && EsedekesDatumUzemora.HasValue)
-                return EsedekesDatumNap.Value <= EsedekesDatumUzemora.Value
-                    ? EsedekesDatumNap.Value
-                    : EsedekesDatumUzemora.Value;
-
-            if (EsedekesDatumNap.HasValue)
-                return EsedekesDatumNap.Value;
-
-            if (EsedekesDatumUzemora.HasValue)
-                return EsedekesDatumUzemora.Value;
-
-            return utolsoDatum;
+            return Válasz;
         }
 
         /// <summary>
@@ -1055,7 +1048,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MyE.DataGridViewToExcel(fájlexc, Tabla, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás($"{fájlexc}.xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1068,6 +1061,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             }
         }
 
+        // JAVÍTANDÓ:Ez olyan ...
         /// <summary>
         /// Eseménykezelő, amely PDF fájlba exportálja a megjelenített műveleti táblázatot.
         /// Ellenőrzi, hogy van-e adat, majd mentési helyet kér a felhasználótól, 
