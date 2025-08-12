@@ -19,10 +19,18 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             InitializeComponent();
         }
 
+
+        public Ablak_Főkönyv_Napi_Adatok()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Főkönyv_Napi_Adatok_Load(object sender, EventArgs e)
         {
             Dátumról.Value = DateTime.Today;
             Dátumra.Value = DateTime.Today;
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
 
