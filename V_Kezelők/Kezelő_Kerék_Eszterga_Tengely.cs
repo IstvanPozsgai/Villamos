@@ -116,39 +116,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        //Elkopó
-        public List<Adat_Kerék_Eszterga_Tengely> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kerék_Eszterga_Tengely> Adatok = new List<Adat_Kerék_Eszterga_Tengely>();
-            Adat_Kerék_Eszterga_Tengely Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kerék_Eszterga_Tengely(
-                                        rekord["Típus"].ToStrTrim(),
-                                        rekord["Munkaidő"].ToÉrt_Int(),
-                                        rekord["Állapot"].ToÉrt_Int()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
     }
 }
