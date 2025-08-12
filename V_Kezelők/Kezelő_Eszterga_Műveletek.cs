@@ -10,9 +10,6 @@ using MyA = Adatbázis;
 
 namespace Villamos.Villamos_Kezelők
 {
-    // JAVÍTANDÓ:
-    //sok módosítás
-    //kesz
     public class Kezelő_Eszterga_Műveletek
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\Eszterga_Karbantartás.mdb".KönyvSzerk();
@@ -198,21 +195,6 @@ namespace Villamos.Villamos_Kezelők
             }
         }
 
-        /// <summary>
-        /// Egy meglévő műveleti rekord összes mezőjét módosítja.
-        /// </summary>
-        private string UpdateEgesz(Adat_Eszterga_Muveletek Adat)
-        {
-            return $"UPDATE {tablaNev} SET " +
-                   $"Művelet='{Adat.Művelet}', " +
-                   $"Egység={Adat.Egység}, " +
-                   $"Mennyi_Dátum={Adat.Mennyi_Dátum}, " +
-                   $"Mennyi_Óra={Adat.Mennyi_Óra}, " +
-                   $"Státus={(Adat.Státus ? "True" : "False")}, " +
-                   $"Utolsó_Dátum=#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, " +
-                   $"Utolsó_Üzemóra_állás={Adat.Utolsó_Üzemóra_Állás} " +
-                   $"WHERE ID={Adat.ID}";
-        }
 
         /// <summary>
         /// Egy meglévő műveleti rekord összes mezőjét módosítja.
@@ -221,7 +203,15 @@ namespace Villamos.Villamos_Kezelők
         {
             try
             {
-                string sql = UpdateEgesz(Adat);
+                string sql = $"UPDATE {tablaNev} SET " +
+                   $"Művelet='{Adat.Művelet}', " +
+                   $"Egység={Adat.Egység}, " +
+                   $"Mennyi_Dátum={Adat.Mennyi_Dátum}, " +
+                   $"Mennyi_Óra={Adat.Mennyi_Óra}, " +
+                   $"Státus={(Adat.Státus ? "True" : "False")}, " +
+                   $"Utolsó_Dátum=#{Adat.Utolsó_Dátum:yyyy-MM-dd}#, " +
+                   $"Utolsó_Üzemóra_állás={Adat.Utolsó_Üzemóra_Állás} " +
+                   $"WHERE ID={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszo, sql);
             }
             catch (HibásBevittAdat ex)

@@ -18,7 +18,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         //ugyanezek a modosit oldalra
         #region Osztalyszintű elemek
 
-        readonly bool Baross = Program.PostásTelephely.Trim() == "Angyalföld";
+        readonly bool Baross = Program.PostásTelephely.Trim() == "Baross";
         private bool frissul = false;
         private int elozoEv = DateTime.Today.Year;
         DataTable AdatTablaMuvelet = new DataTable();
@@ -384,8 +384,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                     Eredmeny = false;
                     throw new HibásBevittAdat("A megjegyzés mező nem lehet üres.");
                 }
-                // JAVÍTANDÓ:a dátum az nem dátum?
-                //kesz
+
                 DateTime datum = DtmPckr.Value;
                 string megjegyzes = TxtBxMegjegyzes.Text.Trim();
 
@@ -423,8 +422,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 
                     naploLista.Add(adat);
                 }
-                // JAVÍTANDÓ:   Nincs Év
-                //kesz
                 Kez_Muvelet_Naplo.Rogzites(naploLista, DtmPckr.Value.Year);
             }
             catch (HibásBevittAdat ex)
@@ -515,8 +512,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void NaploModositas()
         {
-            // JAVÍTANDÓ:
-            //Kesz
             try
             {
                 DateTime datum = DtmPckr.Value;
@@ -540,21 +535,20 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                         ujUzemora != eredeti.Utolsó_Üzemóra_Állás ||
                         ujMegjegyzes != eredeti.Megjegyzés;
 
-                    if (!Valtozas)
-                        continue;
-
-                    Adat_Eszterga_Muveletek_Naplo modositott = new Adat_Eszterga_Muveletek_Naplo(
-                        id,
-                        eredeti.Művelet,
-                        eredeti.Mennyi_Dátum,
-                        eredeti.Mennyi_Óra,
-                        ujDatum,
-                        ujUzemora,
-                        ujMegjegyzes,
-                        Program.PostásNév.ToStrTrim(),
-                        DateTime.Today
-                    );
-                    Kez_Muvelet_Naplo.Modositas(modositott, eredetiDatum, DtmPckr.Value.Year);
+                    if (Valtozas)
+                    {
+                        Adat_Eszterga_Muveletek_Naplo modositott = new Adat_Eszterga_Muveletek_Naplo(
+                            id,
+                            eredeti.Művelet,
+                            eredeti.Mennyi_Dátum,
+                            eredeti.Mennyi_Óra,
+                            ujDatum,
+                            ujUzemora,
+                            ujMegjegyzes,
+                            Program.PostásNév.ToStrTrim(),
+                            DateTime.Today);
+                        Kez_Muvelet_Naplo.Modositas(modositott, eredetiDatum, DtmPckr.Value.Year);
+                    }
                 }
             }
             catch (HibásBevittAdat ex)
