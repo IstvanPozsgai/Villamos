@@ -67,6 +67,8 @@ namespace Villamos
             Panel2.Visible = Cmbtelephely.Enabled;
 
             Pályaszámokfeltöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();  // Jogosultságok beállítása
         }
 
