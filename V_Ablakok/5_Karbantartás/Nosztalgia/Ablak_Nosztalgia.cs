@@ -200,7 +200,6 @@ namespace Villamos.Villamos_Ablakok
         {
             Telephelyekfeltöltése();
 
-
             // létrehozzuk a  könyvtárat
             string hely = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia";
             if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
@@ -219,13 +218,15 @@ namespace Villamos.Villamos_Ablakok
             Jogosultságkiosztás();
             ListaFeltöltés();
 
-
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             Fülek.SelectedIndex = 0;
         }
         #endregion
 
         #region Alap
+        /// <summary>
+        /// Kiválasztja a nosztalgia kocsikat a hibatáblából és ellenőrzi, hogy van-e rögzített hiba a mai napra.
+        /// </summary>
         private void HibaVizsgálat()
         {
             try
@@ -251,6 +252,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Betölti a telephelyeket a legördülő listába.
+        /// </summary>
         private void Telephelyekfeltöltése()
         {
             try
@@ -272,6 +277,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Feltölti a nosztalgia pályaszámokat a legördülő listába.
+        /// </summary>
         private void Pályaszám_feltöltés()
         {
             try
@@ -296,6 +305,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Betölti az adott fülhöz tartozó listákat.
+        /// </summary>
         private void Fülekkitöltése()
         {
             switch (Fülek.SelectedIndex)
@@ -312,6 +325,10 @@ namespace Villamos.Villamos_Ablakok
                 case 3: break;
             }
         }
+
+        /// <summary>
+        /// Kiosztja a jogosultságokat a funkciókhoz.
+        /// </summary>
         private void Jogosultságkiosztás()
         {
             //TODO
@@ -327,6 +344,10 @@ namespace Villamos.Villamos_Ablakok
             //    alapadatRögzít.Enabled = true;
             //}
         }
+
+        /// <summary>
+        /// Fülek megjelenítésének meghatározása, és rajzolása.
+        /// </summary>
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
             // Határozza meg, hogy melyik lap van jelenleg kiválasztva
@@ -356,11 +377,11 @@ namespace Villamos.Villamos_Ablakok
             // Munka kész – dobja ki a keféket
             BlackTextBrush.Dispose();
         }
+
+        /// <summary>
+        /// Frissíti a pályaszámokat, és újra betölti az alapadatokat.
+        /// </summary>
         private void Pályaszámkereső_Click(object sender, EventArgs e)
-        {
-            Frissít();
-        }
-        private void Frissít()
         {
             try
             {
@@ -384,6 +405,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Megnyitja a súgót a nosztalgia lapokhoz.
+        /// </summary>
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
@@ -397,24 +422,26 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private string SzerelvényÖÁ(string Azonosító)
-        {
-            string válasz = "";
-            Adat_Szerelvény rekordszer = (from a in AdatokSzer
-                                          where a.Kocsi1 == Azonosító || a.Kocsi2 == Azonosító || a.Kocsi3 == Azonosító ||
-                                                a.Kocsi4 == Azonosító || a.Kocsi5 == Azonosító || a.Kocsi6 == Azonosító
-                                          select a).FirstOrDefault();
-            if (rekordszer != null)
-            {
-                válasz = rekordszer.Kocsi1;
-                if (rekordszer.Kocsi2 != "0") válasz += "-" + rekordszer.Kocsi2;
-                if (rekordszer.Kocsi3 != "0") válasz += "-" + rekordszer.Kocsi3;
-                if (rekordszer.Kocsi4 != "0") válasz += "-" + rekordszer.Kocsi4;
-                if (rekordszer.Kocsi5 != "0") válasz += "-" + rekordszer.Kocsi5;
-                if (rekordszer.Kocsi6 != "0") válasz += "-" + rekordszer.Kocsi6;
-            }
-            return válasz;
-        }
+
+        //TODO: Ezeket a metódusokat implementálni kell?
+        //private string SzerelvényÖÁ(string Azonosító)
+        //{
+        //    string válasz = "";
+        //    Adat_Szerelvény rekordszer = (from a in AdatokSzer
+        //                                  where a.Kocsi1 == Azonosító || a.Kocsi2 == Azonosító || a.Kocsi3 == Azonosító ||
+        //                                        a.Kocsi4 == Azonosító || a.Kocsi5 == Azonosító || a.Kocsi6 == Azonosító
+        //                                  select a).FirstOrDefault();
+        //    if (rekordszer != null)
+        //    {
+        //        válasz = rekordszer.Kocsi1;
+        //        if (rekordszer.Kocsi2 != "0") válasz += "-" + rekordszer.Kocsi2;
+        //        if (rekordszer.Kocsi3 != "0") válasz += "-" + rekordszer.Kocsi3;
+        //        if (rekordszer.Kocsi4 != "0") válasz += "-" + rekordszer.Kocsi4;
+        //        if (rekordszer.Kocsi5 != "0") válasz += "-" + rekordszer.Kocsi5;
+        //        if (rekordszer.Kocsi6 != "0") válasz += "-" + rekordszer.Kocsi6;
+        //    }
+        //    return válasz;
+        //}
 
         //private void AdatokListábaRakása(string Azonosító, string Típus, string álló, string beálló, string szabad)
         //{
@@ -443,7 +470,6 @@ namespace Villamos.Villamos_Ablakok
         //{
         //    try
         //    {
-        //        //TODO
 
         //        string Pályaszám = "";
         //        string Típus = "";
@@ -503,6 +529,9 @@ namespace Villamos.Villamos_Ablakok
         //    }
         //}
 
+        /// <summary>
+        /// Fülek újratöltése, amikor a felhasználó kiválaszt egy fület.
+        /// </summary>
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
