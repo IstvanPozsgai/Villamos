@@ -128,45 +128,33 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(int Év, List<Adat_Kerék_Mérés> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Kerék_Mérés Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {táblanév}  SET SAP={Adat.SAP} WHERE ";
+                    szöveg += $" kerékberendezés='{Adat.Kerékberendezés}' and ";
+                    szöveg += $" mikor=#{Adat.Mikor:yyyy-MM-dd HH:mm:ss}#";
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         //Elkopó
-        public List<Adat_Kerék_Mérés> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kerék_Mérés> Adatok = new List<Adat_Kerék_Mérés>();
-            Adat_Kerék_Mérés Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kerék_Mérés(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["Pozíció"].ToStrTrim(),
-                                        rekord["Kerékberendezés"].ToStrTrim(),
-                                        rekord["Kerékgyártásiszám"].ToStrTrim(),
-                                        rekord["Állapot"].ToStrTrim(),
-                                        rekord["Méret"].ToÉrt_Int(),
-                                        rekord["Módosító"].ToStrTrim(),
-                                        rekord["Mikor"].ToÉrt_DaTeTime(),
-                                        rekord["Oka"].ToStrTrim(),
-                                        rekord["SAP"].ToÉrt_Int()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public Adat_Kerék_Mérés Egy_Adat(string hely, string jelszó, string szöveg)
         {

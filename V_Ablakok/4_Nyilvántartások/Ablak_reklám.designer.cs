@@ -36,16 +36,17 @@ namespace Villamos
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_reklám));
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
             this.Lapfülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.Utasítás = new System.Windows.Forms.Button();
             this.Beilleszt = new System.Windows.Forms.Button();
             this.Másol = new System.Windows.Forms.Button();
             this.Törlés = new System.Windows.Forms.Button();
@@ -96,13 +97,9 @@ namespace Villamos
             this.TáblaNapló = new System.Windows.Forms.DataGridView();
             this.Command6 = new System.Windows.Forms.Button();
             this.Command5 = new System.Windows.Forms.Button();
-            this.TabPage4 = new System.Windows.Forms.TabPage();
-            this.Vezénylésbeírás = new System.Windows.Forms.Button();
-            this.Txtírásimező = new System.Windows.Forms.RichTextBox();
-            this.Command12 = new System.Windows.Forms.Button();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Button13 = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -111,7 +108,6 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.TabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaNapló)).BeginInit();
-            this.TabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // Panel1
@@ -149,7 +145,6 @@ namespace Villamos
             this.Lapfülek.Controls.Add(this.TabPage1);
             this.Lapfülek.Controls.Add(this.TabPage2);
             this.Lapfülek.Controls.Add(this.TabPage3);
-            this.Lapfülek.Controls.Add(this.TabPage4);
             this.Lapfülek.Location = new System.Drawing.Point(5, 55);
             this.Lapfülek.Name = "Lapfülek";
             this.Lapfülek.Padding = new System.Drawing.Point(16, 3);
@@ -162,6 +157,7 @@ namespace Villamos
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Turquoise;
+            this.TabPage1.Controls.Add(this.Utasítás);
             this.TabPage1.Controls.Add(this.Beilleszt);
             this.TabPage1.Controls.Add(this.Másol);
             this.TabPage1.Controls.Add(this.Törlés);
@@ -195,6 +191,18 @@ namespace Villamos
             this.TabPage1.Size = new System.Drawing.Size(1183, 379);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Rögzítés";
+            // 
+            // Utasítás
+            // 
+            this.Utasítás.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
+            this.Utasítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Utasítás.Location = new System.Drawing.Point(619, 32);
+            this.Utasítás.Name = "Utasítás";
+            this.Utasítás.Size = new System.Drawing.Size(40, 40);
+            this.Utasítás.TabIndex = 123;
+            this.ToolTip1.SetToolTip(this.Utasítás, "Reklám adatok az utasításban való rögzítése");
+            this.Utasítás.UseVisualStyleBackColor = true;
+            this.Utasítás.Click += new System.EventHandler(this.Utasítás_Click);
             // 
             // Beilleszt
             // 
@@ -637,19 +645,19 @@ namespace Villamos
             // 
             this.Tábla.AllowUserToAddRows = false;
             this.Tábla.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.EnableHeadersVisualStyles = false;
             this.Tábla.Location = new System.Drawing.Point(3, 56);
@@ -703,19 +711,19 @@ namespace Villamos
             // 
             this.TáblaNapló.AllowUserToAddRows = false;
             this.TáblaNapló.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.TáblaNapló.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.TáblaNapló.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.TáblaNapló.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.TáblaNapló.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.TáblaNapló.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.TáblaNapló.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TáblaNapló.EnableHeadersVisualStyles = false;
             this.TáblaNapló.Location = new System.Drawing.Point(11, 57);
@@ -748,55 +756,6 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.Command5, "Kiválasztott feltételeknek megfelelően kiírja a naplózást.\r\n");
             this.Command5.UseVisualStyleBackColor = true;
             this.Command5.Click += new System.EventHandler(this.Command5_Click);
-            // 
-            // TabPage4
-            // 
-            this.TabPage4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.TabPage4.Controls.Add(this.Vezénylésbeírás);
-            this.TabPage4.Controls.Add(this.Txtírásimező);
-            this.TabPage4.Controls.Add(this.Command12);
-            this.TabPage4.Location = new System.Drawing.Point(4, 29);
-            this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1183, 379);
-            this.TabPage4.TabIndex = 3;
-            this.TabPage4.Text = "Utasítás generálás";
-            // 
-            // Vezénylésbeírás
-            // 
-            this.Vezénylésbeírás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Vezénylésbeírás.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Vezénylésbeírás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Vezénylésbeírás.Location = new System.Drawing.Point(61, 9);
-            this.Vezénylésbeírás.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Vezénylésbeírás.Name = "Vezénylésbeírás";
-            this.Vezénylésbeírás.Size = new System.Drawing.Size(40, 40);
-            this.Vezénylésbeírás.TabIndex = 79;
-            this.ToolTip1.SetToolTip(this.Vezénylésbeírás, "Utasításokba rögzíti a reklám előírást.\r\n");
-            this.Vezénylésbeírás.UseVisualStyleBackColor = true;
-            this.Vezénylésbeírás.Click += new System.EventHandler(this.Vezénylésbeírás_Click);
-            // 
-            // Txtírásimező
-            // 
-            this.Txtírásimező.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Txtírásimező.Location = new System.Drawing.Point(3, 57);
-            this.Txtírásimező.Name = "Txtírásimező";
-            this.Txtírásimező.Size = new System.Drawing.Size(1167, 310);
-            this.Txtírásimező.TabIndex = 78;
-            this.Txtírásimező.Text = "";
-            // 
-            // Command12
-            // 
-            this.Command12.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Command12.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Command12.Location = new System.Drawing.Point(9, 9);
-            this.Command12.Name = "Command12";
-            this.Command12.Size = new System.Drawing.Size(40, 40);
-            this.Command12.TabIndex = 77;
-            this.ToolTip1.SetToolTip(this.Command12, "Frissíti a szöveges mezőt az aktuális reklám előírással.");
-            this.Command12.UseVisualStyleBackColor = true;
-            this.Command12.Click += new System.EventHandler(this.Command12_Click);
             // 
             // Button13
             // 
@@ -837,6 +796,7 @@ namespace Villamos
             this.Name = "Ablak_reklám";
             this.Text = "Ablak_reklám";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_reklám_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_reklám_Load);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
@@ -849,7 +809,6 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.TabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TáblaNapló)).EndInit();
-            this.TabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -879,7 +838,6 @@ namespace Villamos
         internal Label Label2;
         internal Label Label1;
         internal TabPage TabPage3;
-        internal TabPage TabPage4;
         internal ComboBox Méret;
         internal DateTimePicker Rekezd;
         internal DateTimePicker Revég;
@@ -900,9 +858,6 @@ namespace Villamos
         internal Button Command6;
         internal Button Command5;
         internal DataGridView TáblaNapló;
-        internal Button Vezénylésbeírás;
-        internal RichTextBox Txtírásimező;
-        internal Button Command12;
         internal CheckedListBox TelephelyList;
         internal DateTimePicker Naplótól;
         internal DateTimePicker Naplóig;
@@ -915,5 +870,6 @@ namespace Villamos
         internal Button Típus_Semmi;
         internal Button Típus_Mind;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal Button Utasítás;
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok.Közös;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -32,14 +33,19 @@ namespace Villamos
             Írokfeltöltése();
             Dátumig.MaxDate = new DateTime(DateTime.Today.Year, 12, 31, 23, 59, 59);
             Dátumtól.MaxDate = DateTime.Today;
-            btnrögzítés.Visible = true;
+
 
             Utasítás_feltöltés();
 
             Táblalistázás();
-            btnrögzítés.Visible = false;
+
             GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
+        }
+
+        private void Ablak_Utasítás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Utasítás_Generálás?.Close();
         }
 
         #region Alapadatok
@@ -130,7 +136,7 @@ namespace Villamos
             int melyikelem;
             btnVisszavon.Enabled = false;
             btnOlvasva.Enabled = false;
-            btnrögzítés.Enabled = false;
+
             melyikelem = 202;
             // módosítás 1
 
@@ -152,7 +158,7 @@ namespace Villamos
             // módosítás 1
             if (MyF.Vanjoga(melyikelem, 1))
             {
-                btnrögzítés.Enabled = true;
+
             }
             // módosítás 2 főmérnökségi belépés és mindenhova tud írni
 
@@ -265,13 +271,48 @@ namespace Villamos
         }
         #endregion
 
+        #region Utasítás Írás
 
-        #region Vezérlő gombok
+        Ablak_Utasítás_Generálás Új_Ablak_Utasítás_Generálás;
         private void Btnújüzenet_Click(object sender, EventArgs e)
         {
-            txtírásimező.Text = "";
-            btnrögzítés.Visible = true;
+            Új_Ablak_Utasítás_Generálás?.Close();
+
+            Új_Ablak_Utasítás_Generálás = new Ablak_Utasítás_Generálás(Cmbtelephely.Text.Trim(), "");
+            Új_Ablak_Utasítás_Generálás.FormClosed += Ablak_Utasítás_Generálás_FormClosed;
+            Új_Ablak_Utasítás_Generálás.Változás += Változások;
+            Új_Ablak_Utasítás_Generálás.Show();
         }
+
+        private void Ablak_Utasítás_Generálás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Utasítás_Generálás = null;
+        }
+
+        private void Változások()
+        {
+            try
+            {
+
+                btnOlvasva.Visible = false;
+                Utasítás_feltöltés();
+                Olvas_feltöltés();
+                Táblalistázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+
+        #region Vezérlő gombok
 
         private void BtnOlvasva_Click(object sender, EventArgs e)
         {
@@ -332,35 +373,7 @@ namespace Villamos
             }
         }
 
-        private void Btnrögzítés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (txtírásimező.Text.Trim() == "") throw new HibásBevittAdat("Nincs rögzítendő utasítás");
-                // megtisztítjuk a szöveget
-                txtírásimező.Text = txtírásimező.Text.Replace('"', '°').Replace("\'", "°");
 
-                // csak aktuális évben tudunk rögzíteni
-                Adat_Utasítás ADAT = new Adat_Utasítás(0, txtírásimező.Text.Trim(), Program.PostásNév.Trim(), DateTime.Now, 0);
-                double sorszám = KézUtas.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Now.Year, ADAT);
-                txtsorszám.Text = sorszám.ToString();
-
-                btnrögzítés.Visible = false;
-                btnOlvasva.Visible = false;
-                Utasítás_feltöltés();
-                Olvas_feltöltés();
-                Táblalistázás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion
 
 
@@ -485,7 +498,7 @@ namespace Villamos
                 txtírásimező.Text += "\r\n\r\n" + szöveg0;
 
                 // gombok kezelése
-                btnrögzítés.Visible = false;
+
                 btnOlvasva.Visible = false;
                 //Ha olvasta akkor mégegyszer nem kell 
                 if (Olvasta != null)
@@ -680,6 +693,7 @@ namespace Villamos
             }
         }
         #endregion
+
 
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
+using MyEn = Villamos.V_MindenEgyéb.Enumok;
 
 namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
 {
@@ -108,20 +109,19 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
         string MilyenÁllapot(string Állapot)
         {
             string MilyenÁllapot = "";
-            switch (Állapot.Trim().Substring(0, 1))
+            try
             {
-                case "1":
-                    MilyenÁllapot = "1 Frissen esztergált";
-                    break;
-                case "2":
-                    MilyenÁllapot = "2 Üzemszerűen kopott forgalomban";
-                    break;
-                case "3":
-                    MilyenÁllapot = "3 Forgalomképes esztergálandó";
-                    break;
-                case "4":
-                    MilyenÁllapot = "4 Forgalomképtelen azonnali esztergálást igényel";
-                    break;
+                int szám = int.Parse(Állapot);
+                MilyenÁllapot = ((MyEn.Kerék_Állapot)szám).ToString().Replace('_', ' ');
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return MilyenÁllapot;
         }
@@ -134,9 +134,9 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
         private void ValidateKeyPress(object sender, KeyPressEventArgs e)
         {
             //Kerék állapot
-            if ((char)(e.KeyChar) != 13 && (char)(e.KeyChar) != 8 && !int.TryParse(e.KeyChar.ToString(), out int Állapot))
+            if (!((char)(e.KeyChar) >= 49 && (char)(e.KeyChar) <= 52))
             {
-                MessageBox.Show("Csak egész számot lehet beírni!");
+                MessageBox.Show("Csak 1-4 közötti számot lehet beírni!");
                 e.Handled = true;
             }
         }

@@ -9,14 +9,12 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok.Kerék_nyilvántartás;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyE = Villamos.Module_Excel;
+using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
-using MyKerék = Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerék_nyilvántartás.KerékNyilvántartás_funkciók;
-
 
 namespace Villamos
 {
@@ -32,6 +30,8 @@ namespace Villamos
         readonly Kezelő_Kerék_Eszterga_Igény KézEsztIgény = new Kezelő_Kerék_Eszterga_Igény();
         readonly Kezelő_Nap_Hiba KézHiba = new Kezelő_Nap_Hiba();
         readonly Kezelő_Kiegészítő_Jelenlétiív KézKiegJelenlét = new Kezelő_Kiegészítő_Jelenlétiív();
+        readonly Kezelő_T5C5_Kmadatok KézT5C5Elő = new Kezelő_T5C5_Kmadatok("T5C5");
+        readonly Kezelő_T5C5_Kmadatok KézICSElő = new Kezelő_T5C5_Kmadatok("ICS");
 
         List<Adat_Kerék_Mérés> AdatokMérés = new List<Adat_Kerék_Mérés>();
         List<Adat_Jármű> AdatokJármű = new List<Adat_Jármű>();
@@ -43,6 +43,7 @@ namespace Villamos
         List<Adat_Nap_Hiba> AdatokHiba = new List<Adat_Nap_Hiba>();
         List<Adat_Kiegészítő_Jelenlétiív> AdatokKiegJelenlét = new List<Adat_Kiegészítő_Jelenlétiív>();
 
+        #region alap
         public Ablak_keréknyilvántartás()
         {
             InitializeComponent();
@@ -62,16 +63,6 @@ namespace Villamos
         {
             try
             {
-                string hely;
-                hely = Application.StartupPath + @"\Főmérnökség\Adatok\Kerék.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Kerékbeolvasástábla(hely);
-
-                hely = Application.StartupPath + @"\Főmérnökség\adatok\" + DateTime.Today.Year;
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely += @"\telepikerék.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Méréstáblakerék(hely);
-
                 Telephelyekfeltöltése();
                 Pályaszámfeltöltés();
                 Állapotfeltöltés();
@@ -96,9 +87,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        #region alap
 
         private void Telephelyekfeltöltése()
         {
@@ -127,10 +115,20 @@ namespace Villamos
 
         private void Button13_Click(object sender, EventArgs e)
         {
-
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\berendezés_kerék.html";
-            Module_Excel.Megnyitás(hely);
-
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\berendezés_kerék.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Jogosultságkiosztás()
@@ -256,7 +254,6 @@ namespace Villamos
             }
         }
 
-
         private void Pályaszámfeltöltés()
         {
             try
@@ -299,15 +296,12 @@ namespace Villamos
             }
         }
 
-
         private void Állapotfeltöltés()
         {
-            RögzítÁllapot.Items.Add("1   Frissen esztergált");
-            RögzítÁllapot.Items.Add("2   Üzemszerűen kopott forgalomban");
-            RögzítÁllapot.Items.Add("3   Forgalomképes esztergálandó");
-            RögzítÁllapot.Items.Add("4   Forgalomképtelen azonnali esztergálást igényel");
+            RögzítÁllapot.Items.Clear();
+            foreach (MyEn.Kerék_Állapot elem in Enum.GetValues(typeof(MyEn.Kerék_Állapot)))
+                RögzítÁllapot.Items.Add($"{(int)elem}-{elem.ToString().Replace('_', ' ')}");
         }
-
 
         private void Irányítófeltöltés()
         {
@@ -399,13 +393,8 @@ namespace Villamos
         {
             try
             {
-
                 if (SAPPályaszám.Text.Trim() == "") return;
-                Erőtámvan.Visible = MyKerék.Erőtámkiolvasás(SAPPályaszám.Text.Trim());
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-                string jelszó = "szabólászló";
-                string szöveg = "";
+                Erőtámvan.Visible = Erőtámkiolvasás(SAPPályaszám.Text.Trim());
 
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
@@ -431,33 +420,46 @@ namespace Villamos
                 Tábla.Columns[7].HeaderText = "Megnevezés";
                 Tábla.Columns[7].Width = 300;
 
-                int i;
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
                 switch (Választ)
                 {
                     case "Kerék":
-                        szöveg = "SELECT * FROM tábla where [azonosító]='" + SAPPályaszám.Text.Trim() + "'";
-                        szöveg += " and objektumfajta='V.KERÉKPÁR' order by pozíció ";
+                        Adatok = (from a in Adatok
+                                  where a.Azonosító == SAPPályaszám.Text.Trim()
+                                  && a.Objektumfajta == "V.KERÉKPÁR"
+                                  orderby a.Pozíció
+                                  select a).ToList();
                         break;
                     case "Forgóváz":
-                        szöveg = "SELECT * FROM tábla where [azonosító]='" + SAPPályaszám.Text.Trim() + "'";
-                        szöveg += " and (objektumfajta='V.KERÉKPÁR' or objektumfajta='FORGVKERET') order by pozíció ";
+                        Adatok = (from a in Adatok
+                                  where a.Azonosító == SAPPályaszám.Text.Trim()
+                                  && (a.Objektumfajta == "V.KERÉKPÁR"
+                                  || a.Objektumfajta == "FORGVKERET")
+                                  orderby a.Pozíció
+                                  select a).ToList();
                         break;
                     case "Minden":
-                        szöveg = "SELECT * FROM tábla where [azonosító]='" + SAPPályaszám.Text.Trim() + "' order by pozíció ";
+                        Adatok = (from a in Adatok
+                                  where a.Azonosító == SAPPályaszám.Text.Trim()
+                                  orderby a.Pozíció
+                                  select a).ToList();
                         break;
                     default:
                         break;
                 }
 
-                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok(hely, jelszó, szöveg);
-                MérésiListázás();
 
+                AdatokMérés = KézMérés.Lista_Adatok(DateTime.Today.AddYears(-1).Year);
+                List<Adat_Kerék_Mérés> Ideig = KézMérés.Lista_Adatok(DateTime.Today.Year);
+                AdatokMérés.AddRange(Ideig);
+                AdatokMérés = (from a in AdatokMérés
+                               orderby a.Kerékberendezés, a.Mikor descending
+                               select a).ToList();
 
                 foreach (Adat_Kerék_Tábla rekord in Adatok)
                 {
-
                     Tábla.RowCount++;
-                    i = Tábla.RowCount - 1;
+                    int i = Tábla.RowCount - 1;
                     Tábla.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
                     Tábla.Rows[i].Cells[1].Value = rekord.Kerékberendezés.Trim();
                     Tábla.Rows[i].Cells[2].Value = rekord.Kerékgyártásiszám.Trim();
@@ -480,10 +482,8 @@ namespace Villamos
                         }
                     }
                 }
-
                 Tábla.Visible = true;
                 Tábla.Refresh();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -496,54 +496,46 @@ namespace Villamos
             }
         }
 
-
-
         private void SAPPályaszám_TextUpdate(object sender, EventArgs e)
         {
-            Erőtámvan.Visible = MyKerék.Erőtámkiolvasás(SAPPályaszám.Text.Trim());
+            Erőtámvan.Visible = Erőtámkiolvasás(SAPPályaszám.Text.Trim());
         }
-
 
         private void Berendezés_ellemőrzés()
         {
             try
             {
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-                string jelszó = "szabólászló";
-                string szöveg = "SELECT * FROM tábla ORDER BY kerékberendezés";
-
-
-                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
 
                 string előző = "";
-                List<string> SzövegMásolGY = new List<string>();
-                List<string> szövegTörölGY = new List<string>();
+                List<Adat_Kerék_Tábla> AdatokGY = new List<Adat_Kerék_Tábla>();
+                List<string> SzövegGY = new List<string>();
                 foreach (Adat_Kerék_Tábla rekord in Adatok)
                 {
                     if (előző == rekord.Kerékberendezés)
                     {
                         // ha egyforma akkor töröljük
-                        string szövegmásol = "INSERT INTO tábla (kerékberendezés, kerékmegnevezés, kerékgyártásiszám, föléberendezés, azonosító, pozíció, objektumfajta, dátum) VALUES (";
-                        szövegmásol += $"'{rekord.Kerékberendezés}', "; // kerékberendezés
-                        szövegmásol += $"'{rekord.Kerékmegnevezés}', "; // kerékmegnevezés
-                        szövegmásol += $"'{rekord.Kerékgyártásiszám}', "; // kerékgyártásiszám
-                        szövegmásol += $"'{rekord.Föléberendezés}', "; // föléberendezés
-                        szövegmásol += $"'{rekord.Azonosító}', "; // azonosító
-                        szövegmásol += $"'{rekord.Pozíció}', "; // pozíció
-                        szövegmásol += $"'{rekord.Objektumfajta}', "; // objektumfajta
-                        szövegmásol += $"'{rekord.Dátum:yyyy.MM.dd}') "; // dátum
-                        SzövegMásolGY.Add(szövegmásol);
+                        SzövegGY.Add(rekord.Kerékberendezés);
 
-                        string szövegtöröl = $"DELETE FROM tábla WHERE [kerékberendezés]='{rekord.Kerékberendezés}'";
-                        szövegTörölGY.Add(szövegtöröl);
+                        Adat_Kerék_Tábla ADAT = new Adat_Kerék_Tábla(
+                                 rekord.Kerékberendezés,
+                                 rekord.Kerékmegnevezés,
+                                 rekord.Kerékgyártásiszám,
+                                 rekord.Föléberendezés,
+                                 rekord.Azonosító,
+                                 rekord.Pozíció,
+                                 rekord.Dátum,
+                                 rekord.Objektumfajta);
+                        AdatokGY.Add(ADAT);
                     }
                     else
                     {
                         előző = rekord.Kerékberendezés;
                     }
                 }
-                MyA.ABtörlés(hely, jelszó, szövegTörölGY);
-                MyA.ABMódosítás(hely, jelszó, SzövegMásolGY);
+                //Először törölni kell utána rögzíteni
+                if (SzövegGY.Count > 0) KézKerék.Törlés(SzövegGY);
+                if (AdatokGY.Count > 0) KézKerék.Rögzítés(AdatokGY);
 
             }
             catch (HibásBevittAdat ex)
@@ -565,12 +557,12 @@ namespace Villamos
                 // ha üres a tábla akkor kilép
                 if (SAPPályaszám.Text.Trim() == "") return;
 
-                JelenlétiListázás();
+                AdatokKiegJelenlét = KézKiegJelenlét.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Jelenlétiív AdatKiegJelenlét = (from a in AdatokKiegJelenlét
                                                                 where a.Id == 1
                                                                 select a).FirstOrDefault();
 
-                AdatokJárműLista();
+                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 Adat_Jármű AdatJármű = (from a in AdatokJármű
                                         where a.Azonosító == SAPPályaszám.Text.Trim()
                                         select a).FirstOrDefault();
@@ -584,7 +576,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Kerék esztergálási adatlap készítés",
-                    FileName = "Kerék_esztergálási_tábla_" + SAPPályaszám.Text.Trim() + "_" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    FileName = $"Kerék_esztergálási_tábla_{SAPPályaszám.Text.Trim()}_{DateTime.Now:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -730,19 +722,38 @@ namespace Villamos
             }
         }
 
-
         private void Command10_Click(object sender, EventArgs e)
         {
             try
             {
                 // ha üres a tábla akkor kilép
-                if (SAPPályaszám.Text.Trim() == "")
-                    return;
-
+                if (SAPPályaszám.Text.Trim() == "") return;
 
                 Csakkerék.Checked = true;
                 Berendezés_adatok("Kerék");
                 Nyomtatvány_készítés();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Command7_Click(object sender, EventArgs e)
+        {
+            try
+            {      // ha üres a tábla akkor kilép
+                if (SAPPályaszám.Text.Trim() == "") return;
+
+                Csakkerék.Checked = false;
+                Berendezés_adatok("Minden");
+
+                Nyomtatvány_készítés1();
             }
             catch (HibásBevittAdat ex)
             {
@@ -766,7 +777,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Kerékmérés adatlap készítés",
-                    FileName = "Kerékmérés_tábla_" + SAPPályaszám.Text.Trim() + "_" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Kerékmérés_tábla_{SAPPályaszám.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -792,12 +803,12 @@ namespace Villamos
                 int sor = 1;
                 int eleje;
 
-                JelenlétiListázás();
+                AdatokKiegJelenlét = KézKiegJelenlét.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_Jelenlétiív AdatKiegJelenlét = (from a in AdatokKiegJelenlét
                                                                 where a.Id == 1
                                                                 select a).FirstOrDefault();
 
-                JárműListázás();
+                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Jármű AdatJármű = (from a in AdatokJármű
                                         where a.Azonosító == SAPPályaszám.Text.Trim()
                                         select a).FirstOrDefault();
@@ -909,27 +920,17 @@ namespace Villamos
             }
         }
 
-
         private string Km_Adat(string Azonosító, string Típus)
         {
             long KMU = 0;
-
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos4T5C5.mdb";
-            string jelszó = "pocsaierzsi";
-            string szöveg = "Select * FROM KMtábla";
-
-            Kezelő_T5C5_Kmadatok KézT5C5Elő = new Kezelő_T5C5_Kmadatok("T5C5");
-            List<Adat_T5C5_Kmadatok> AdatokT5CElő = KézT5C5Elő.Lista_Adat(hely, jelszó, szöveg);
-
+            List<Adat_T5C5_Kmadatok> AdatokT5CElő = KézT5C5Elő.Lista_Adatok();
             Adat_T5C5_Kmadatok AdatT5C5Elő = (from a in AdatokT5CElő
                                               where a.Törölt == false
                                               && a.Azonosító == Azonosító.Trim()
                                               orderby a.Vizsgdátumk descending
                                               select a).FirstOrDefault();
 
-            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ICSKCSV\Villamos4ICS.mdb";
-
-            List<Adat_T5C5_Kmadatok> AdatokICSelő = KézT5C5Elő.Lista_Adat(hely, jelszó, szöveg);
+            List<Adat_T5C5_Kmadatok> AdatokICSelő = KézICSElő.Lista_Adatok();
             Adat_T5C5_Kmadatok AdatICSelő = (from a in AdatokICSelő
                                              where a.Törölt == false
                                              && a.Azonosító == Azonosító.Trim()
@@ -959,35 +960,10 @@ namespace Villamos
             return KMU.ToString();
         }
 
-        private void Command7_Click(object sender, EventArgs e)
-        {
-
-            try
-            {      // ha üres a tábla akkor kilép
-                if (SAPPályaszám.Text.Trim() == "")
-                    return;
-
-                Csakkerék.Checked = false;
-                Berendezés_adatok("Minden");
-
-                Nyomtatvány_készítés1();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Nyomtatvány_készítés1()
         {
             try
             {
-                //string hely, jelszó, szöveg;
                 // kimeneti fájl helye és neve
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -995,7 +971,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Berendezések adatlap készítés",
-                    FileName = "Berendezés_tábla_" + SAPPályaszám.Text.Trim() + "_" + DateTime.Now.ToString("yyyyMMddhhmmss"),
+                    FileName = $"Berendezés_tábla_{SAPPályaszám.Text.Trim()}_{DateTime.Now:yyyyMMddhhmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1021,14 +997,13 @@ namespace Villamos
 
                 //Új
 
-                JelenlétiListázás();
+                AdatokKiegJelenlét = KézKiegJelenlét.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Jelenlétiív AdatKiegJelenlét = (from a in AdatokKiegJelenlét
                                                                 where a.Id == 1
                                                                 select a).FirstOrDefault();
 
-                JárműListázás();
-
+                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Jármű AdatJármű = (from a in AdatokJármű
                                         where a.Azonosító == SAPPályaszám.Text.Trim()
                                         select a).FirstOrDefault();
@@ -1122,7 +1097,7 @@ namespace Villamos
         {
             Beolvas_SAP();
         }
-
+        // JAVÍTANDÓ:
         private void Beolvas_SAP()
         {
             string fájlexc = "";
@@ -1199,21 +1174,16 @@ namespace Villamos
             return Adatok;
         }
 
-
         private void SAP(List<Adat_Kerék_Tábla> ELista)
         {
             try
             {
-
                 Holtart.Be(ELista.Count + 1);
 
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-                string jelszó = "szabólászló";
-                string szöveg = "SELECT * FROM tábla ";
-
-
-                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok(hely, jelszó, szöveg);
-                List<string> szövegGY = new List<string>();
+                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
+                List<Adat_Kerék_Tábla> AdatokGyAlap = new List<Adat_Kerék_Tábla>();
+                List<Adat_Kerék_Tábla> AdatokGy = new List<Adat_Kerék_Tábla>();
+                List<Adat_Kerék_Tábla> AdatokGyR = new List<Adat_Kerék_Tábla>();
                 if (Adatok != null)
                 {
                     foreach (Adat_Kerék_Tábla Elem in ELista)
@@ -1224,32 +1194,29 @@ namespace Villamos
                                               select a.Kerékberendezés).FirstOrDefault();
                         if (RégiBerszám != null)
                         {
-                            szöveg = " UPDATE tábla SET";
-                            szöveg += " [pozíció]='_',  azonosító='_', föléberendezés='_' ";
-                            szöveg += $" WHERE [kerékberendezés]='{RégiBerszám}'";
-                            szövegGY.Add(szöveg);
-                            //   MyA.ABMódosítás(hely, jelszó, szöveg);
+                            Adat_Kerék_Tábla Adat = new Adat_Kerék_Tábla(RégiBerszám, "_", "_", "_");
+                            AdatokGy.Add(Adat);
                         }
                         //Ha benne van, de rossz helyen
                         Adat_Kerék_Tábla Rekord_berendezés = (from a in Adatok
                                                               where (a.Kerékberendezés == Elem.Kerékberendezés && a.Azonosító != Elem.Azonosító)
                                                                  || (a.Kerékberendezés == Elem.Kerékberendezés && a.Pozíció != Elem.Pozíció)
                                                               select a).FirstOrDefault();
-                        if (Rekord_berendezés != null) szövegGY.Add(Kerék_módosítás(Méretrevág(Elem)));
-                        //if (Rekord_berendezés != null) Kerék_módosítás(Méretrevág(Elem));
+                        if (Rekord_berendezés != null) AdatokGy.Add(Méretrevág(Elem));
 
                         //Ha nincs benne
                         Rekord_berendezés = (from a in Adatok
                                              where (a.Kerékberendezés == Elem.Kerékberendezés)
                                              select a).FirstOrDefault();
-                        //    if (Rekord_berendezés == null) Kerék_rögzítés(Méretrevág(Elem));
-                        if (Rekord_berendezés == null) szövegGY.Add(Kerék_rögzítés(Méretrevág(Elem)));
+                        if (Rekord_berendezés == null) AdatokGyR.Add(Méretrevág(Elem));
 
                         Holtart.Lép();
                     }
-                    MyA.ABMódosítás(hely, jelszó, szövegGY);
+
                 }
-
+                if (AdatokGyAlap.Count > 0) KézKerék.Módosítás_Alapra(AdatokGyAlap);
+                if (AdatokGy.Count > 0) KézKerék.Módosítás(AdatokGy);
+                if (AdatokGyR.Count > 0) KézKerék.Rögzítés(AdatokGyR);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1261,67 +1228,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        private string Kerék_módosítás(Adat_Kerék_Tábla SAP_kerék)
-        {
-            string szöveg = "";
-            try
-            {
-                szöveg = "UPDATE tábla SET";
-                szöveg += $" kerékmegnevezés='{SAP_kerék.Kerékmegnevezés}', ";
-                szöveg += $" kerékgyártásiszám='{SAP_kerék.Kerékgyártásiszám}', ";
-                szöveg += $" föléberendezés='{SAP_kerék.Föléberendezés}', ";
-                szöveg += $" azonosító='{SAP_kerék.Azonosító}', ";
-                szöveg += $" pozíció='{SAP_kerék.Pozíció}', ";
-                szöveg += $" objektumfajta='{SAP_kerék.Objektumfajta}', ";
-                szöveg += $" dátum='{SAP_kerék.Dátum:yyyy.MM.dd}' ";
-                szöveg += $" WHERE  [kerékberendezés]='{SAP_kerék.Kerékberendezés}'";
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return szöveg;
-        }
-
-        private string Kerék_rögzítés(Adat_Kerék_Tábla SAP_kerék)
-        {
-            string szöveg = "";
-            try
-            {
-                szöveg = "INSERT INTO tábla (kerékberendezés, kerékmegnevezés, kerékgyártásiszám, föléberendezés, azonosító, pozíció, objektumfajta, dátum) VALUES (";
-                szöveg += $"'{SAP_kerék.Kerékberendezés}', ";
-                szöveg += $"'{SAP_kerék.Kerékmegnevezés}', ";
-                szöveg += $"'{SAP_kerék.Kerékgyártásiszám}', ";
-                szöveg += $"'{SAP_kerék.Föléberendezés}', ";
-                szöveg += $"'{SAP_kerék.Azonosító}', ";
-                szöveg += $"'{SAP_kerék.Pozíció}', ";
-                szöveg += $"'{SAP_kerék.Objektumfajta}', ";
-                szöveg += $"'{SAP_kerék.Dátum:yyyy.MM.dd}') ";
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return szöveg;
-        }
-
-        #endregion
-
-
-
 
         private Adat_Kerék_Tábla Méretrevág(Adat_Kerék_Tábla elem)
         {
@@ -1338,6 +1244,7 @@ namespace Villamos
             return válasz;
         }
         #endregion
+        #endregion
 
 
         #region Eredmények listázása lapfül
@@ -1346,32 +1253,23 @@ namespace Villamos
             try
             {
                 Feltöltések();
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-
                 // oszlopok számának meghatározása
                 int oszlop = 0;
 
-                string szöveg, helyvill, jelszóvill;
-                if (Típus_Szűrő.Text.Trim() == "")
-                    szöveg = "SELECT * FROM állománytábla where törölt=0 order by  azonosító";
-                else
-                    szöveg = $"SELECT * FROM állománytábla where típus='{Típus_Szűrő.Text.Trim()}' AND törölt=0 order by  azonosító";
-
-
+                List<Adat_Jármű> Jármű = new List<Adat_Jármű>();
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                {
-                    helyvill = Application.StartupPath + @"\Főmérnökség\Adatok\villamos.mdb";
-                    jelszóvill = "pozsgaii";
-                }
+                    Jármű = KézJármű.Lista_Adatok("Főmérnökség");
                 else
-                {
-                    helyvill = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\villamos.mdb";
-                    jelszóvill = "pozsgaii";
-                }
+                    Jármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                Kezelő_Jármű KézJármű = new Kezelő_Jármű();
-                List<Adat_Jármű> Jármű = KézJármű.Lista_Adatok(helyvill, jelszóvill, szöveg);
+                if (Típus_Szűrő.Text.Trim() == "")
+                    Jármű = Jármű.Where(a => a.Típus.Trim() == Típus_Szűrő.Text.Trim()).ToList();
+
+                Jármű = (from a in Jármű
+                         where a.Törölt == false
+                         orderby a.Azonosító
+                         select a).ToList();
+
                 Holtart.Be(Jármű.Count + 1);
                 foreach (Adat_Jármű Elem in Jármű)
                 {
@@ -1458,13 +1356,12 @@ namespace Villamos
             }
         }
 
-
         private void Feltöltések()
         {
             Holtart.Be();
-            AdatokJárműLista();
+            AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
             Holtart.Lép();
-            AdatokKerékLista();
+            AdatokKerék = KézKerék.Lista_Adatok().Where(a => a.Objektumfajta == "V.KERÉKPÁR").ToList();
             Holtart.Lép();
             AdatokCsatLista();
             Holtart.Lép();
@@ -1474,7 +1371,12 @@ namespace Villamos
             Holtart.Lép();
             AdatokEsztergaIgényLista();
             Holtart.Lép();
-            MérésiListázás();
+            AdatokMérés = KézMérés.Lista_Adatok(DateTime.Today.AddYears(-1).Year);
+            List<Adat_Kerék_Mérés> Ideig = KézMérés.Lista_Adatok(DateTime.Today.Year);
+            AdatokMérés.AddRange(Ideig);
+            AdatokMérés = (from a in AdatokMérés
+                           orderby a.Kerékberendezés, a.Mikor descending
+                           select a).ToList();
             Holtart.Lép();
             HibaLista();
             Holtart.Ki();
@@ -1504,6 +1406,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Tábla2_kerékszám(string azonosító, int sor)
         {
             try
@@ -1528,6 +1431,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Tábla2_Csatolhatóság(string azonosító, int sor)
         {
             try
@@ -1550,6 +1454,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Tábla2_erőtám(string azonosító, int sor)
         {
             try
@@ -1578,6 +1483,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Tábla2_esztergálás(string azonosító, int sor)
         {
             try
@@ -1601,6 +1507,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Tábla2_Eszt_igény(string azonosító, int sor)
         {
             try
@@ -1612,10 +1519,8 @@ namespace Villamos
                                                        select a).LastOrDefault();
                     if (Keres != null)
                     {
-                        if (Keres.Státus == 0)
-                            Tábla2.Rows[sor].Cells[2].Style.BackColor = Color.Yellow;
-                        if (Keres.Státus == 2)
-                            Tábla2.Rows[sor].Cells[2].Style.BackColor = Color.Orange;
+                        if (Keres.Státus == 0) Tábla2.Rows[sor].Cells[2].Style.BackColor = Color.Yellow;
+                        if (Keres.Státus == 2) Tábla2.Rows[sor].Cells[2].Style.BackColor = Color.Orange;
                     }
                 }
             }
@@ -1629,6 +1534,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Tábla2_méretek(string azonosító, int sor)
         {
             try
@@ -1696,6 +1602,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Hiba_listázása(string azonosító, int sor)
         {
             try
@@ -1704,8 +1611,7 @@ namespace Villamos
                 Adat_Nap_Hiba rekordszer = (from a in AdatokHiba
                                             where a.Azonosító == azonosító
                                             select a).FirstOrDefault();
-                if (rekordszer != null)
-                    Tábla2.Rows[sor].Cells[6].Value = rekordszer.Üzemképtelen + "-" + rekordszer.Beálló + "-" + rekordszer.Üzemképeshiba;
+                if (rekordszer != null) Tábla2.Rows[sor].Cells[6].Value = rekordszer.Üzemképtelen + "-" + rekordszer.Beálló + "-" + rekordszer.Üzemképeshiba;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1722,8 +1628,7 @@ namespace Villamos
         {
             try
             {
-                if (Tábla2.Rows.Count <= 0)
-                    return;
+                if (Tábla2.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -1732,7 +1637,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Kerékméretek_export_" + Program.PostásTelephely.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Kerékméretek_export_{Program.PostásTelephely.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1745,10 +1650,10 @@ namespace Villamos
                     return;
                 }
 
-                Module_Excel.DataGridViewToExcel(fájlexc, Tábla2);
+                MyE.DataGridViewToExcel(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1796,12 +1701,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
         #region Rögzítések listázása
-
         private void Command4_Click(object sender, EventArgs e)
         {
             try
@@ -1813,9 +1716,7 @@ namespace Villamos
                 Tábla1.Visible = false;
                 Tábla1.ColumnCount = 9;
 
-
                 // fejléc elkészítése
-
                 Tábla1.Columns[0].HeaderText = "Psz";
                 Tábla1.Columns[0].Width = 70;
                 Tábla1.Columns[1].HeaderText = "Berendezésszám";
@@ -1849,9 +1750,7 @@ namespace Villamos
                           orderby a.Azonosító, a.Pozíció
                           select a).ToList();
 
-
-                if (PályaszámCombo2.Text.Trim() != "")
-                    Adatok = Adatok.Where(a => a.Azonosító == PályaszámCombo2.Text.Trim()).ToList();
+                if (PályaszámCombo2.Text.Trim() != "") Adatok = Adatok.Where(a => a.Azonosító == PályaszámCombo2.Text.Trim()).ToList();
 
                 foreach (Adat_Kerék_Mérés rekord in Adatok)
                 {
@@ -1867,10 +1766,7 @@ namespace Villamos
                     Tábla1.Rows[i].Cells[7].Value = rekord.Módosító.Trim();
                     Tábla1.Rows[i].Cells[8].Value = rekord.Oka.Trim();
                 }
-
-
                 Tábla1.Visible = true;
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1881,31 +1777,26 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
-        string MilyenÁllapot(string Állapot)
+        private string MilyenÁllapot(string Állapot)
         {
-
-            //Van rá enum
             string MilyenÁllapot = "";
-            switch (Állapot.Trim().Substring(0, 1))
+            try
             {
-                case "1":
-                    MilyenÁllapot = "1 Frissen esztergált";
-                    break;
-                case "2":
-                    MilyenÁllapot = "2 Üzemszerűen kopott forgalomban";
-                    break;
-                case "3":
-                    MilyenÁllapot = "3 Forgalomképes esztergálandó";
-                    break;
-                case "4":
-                    MilyenÁllapot = "4 Forgalomképtelen azonnali esztergálást igényel";
-                    break;
+                int szám = int.Parse(Állapot);
+                MilyenÁllapot = ((MyEn.Kerék_Állapot)szám).ToString().Replace('_', ' ');
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return MilyenÁllapot;
-
         }
 
         private void Command9_Click(object sender, EventArgs e)
@@ -1922,7 +1813,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Kerékméretek_export_" + Program.PostásTelephely.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Kerékméretek_export_{Program.PostásTelephely.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1935,10 +1826,10 @@ namespace Villamos
                     return;
                 }
 
-                Module_Excel.DataGridViewToExcel(fájlexc, Tábla1);
+                MyE.DataGridViewToExcel(fájlexc, Tábla1);
                 MessageBox.Show("Elkészült az Excel tábla: \n" + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1954,15 +1845,12 @@ namespace Villamos
 
 
         #region Főmérnökség adatok feltöltése
-
         private void Command4Főm_Click(object sender, EventArgs e)
         {
             Főmérnökség_Frissítés();
-
         }
 
-
-        void Főmérnökség_Frissítés()
+        private void Főmérnökség_Frissítés()
         {
             Tábla1írófőm();
             Jegyzettömbírófőm();
@@ -1981,7 +1869,6 @@ namespace Villamos
                 {
                     Jegyzettömb.Visible = true;
                     Tábla1.Visible = false;
-
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1999,19 +1886,13 @@ namespace Villamos
         {
             try
             {
-                string hely, jelszó, szöveg;
-                hely = Application.StartupPath + @"\főmérnökség\adatok\" + Dátumtól.Value.Year + @"\telepikerék.mdb";
-                jelszó = "szabólászló";
-
                 Tábla1.Rows.Clear();
                 Tábla1.Columns.Clear();
                 Tábla1.Refresh();
                 Tábla1.Visible = false;
                 Tábla1.ColumnCount = 9;
 
-
                 // fejléc elkészítése
-
                 Tábla1.Columns[0].HeaderText = "Psz";
                 Tábla1.Columns[0].Width = 70;
                 Tábla1.Columns[1].HeaderText = "Berendezésszám";
@@ -2031,41 +1912,14 @@ namespace Villamos
                 Tábla1.Columns[8].HeaderText = "Mérés Oka";
                 Tábla1.Columns[8].Width = 170;
 
-                int i;
-
-                szöveg = "SELECT * FROM keréktábla where ";
-                if (PályaszámCombo2.Text.ToString().Trim() != "")
-                {
-                    szöveg += " azonosító='" + PályaszámCombo2.Text.Trim() + "' and ";
-                }
-                if (SAPba.Checked)
-                {
-                    szöveg += " SAP=1 and ";
-                }
-                else
-                {
-                    szöveg += " SAP<>1 and ";
-                }
-                if (Dátumtól.Value == Dátumig.Value)
-                {
-                    szöveg += " mikor>= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 00:00:00#";
-                    szöveg += " and mikor<= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 23:59:59#";
-                }
-                else
-                {
-                    szöveg += " mikor>= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 00:00:00#";
-                    szöveg += " and mikor<= #" + Dátumig.Value.ToString("yyyy-MM-dd") + " 23:59:59#";
-                }
-                szöveg += " order by azonosító,pozíció ";
-
-
-                List<Adat_Kerék_Mérés> Adatok = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Mérés> Adatok = KézMérés.Lista_Adatok(Dátumtól.Value.Year);
+                AdatSzűrés(ref Adatok);
 
                 foreach (Adat_Kerék_Mérés rekord in Adatok)
                 {
 
                     Tábla1.RowCount++;
-                    i = Tábla1.RowCount - 1;
+                    int i = Tábla1.RowCount - 1;
                     Tábla1.Rows[i].Cells[0].Value = rekord.Azonosító.Trim();
                     Tábla1.Rows[i].Cells[1].Value = rekord.Kerékberendezés.Trim();
                     Tábla1.Rows[i].Cells[2].Value = rekord.Kerékgyártásiszám.Trim();
@@ -2090,44 +1944,50 @@ namespace Villamos
             }
         }
 
+        private void AdatSzűrés(ref List<Adat_Kerék_Mérés> Adatok)
+        {
+            try
+            {
+                if (PályaszámCombo2.Text.ToStrTrim() != "")
+                    Adatok = Adatok.Where(a => a.Azonosító == PályaszámCombo2.Text.Trim()).ToList();
+
+                if (SAPba.Checked)
+                    Adatok = Adatok.Where(a => a.SAP == 1).ToList();
+                else
+                    Adatok = Adatok.Where(a => a.SAP != 1).ToList();
+
+                if (Dátumtól.Value == Dátumig.Value)
+                {
+                    Adatok = Adatok.Where(a => a.Mikor >= MyF.Nap0000(Dátumtól.Value) && a.Mikor <= MyF.Nap2359(Dátumtól.Value)).ToList();
+                }
+                else
+                {
+                    Adatok = Adatok.Where(a => a.Mikor >= MyF.Nap0000(Dátumtól.Value) && a.Mikor <= MyF.Nap2359(Dátumig.Value)).ToList();
+                }
+                Adatok = Adatok.OrderBy(a => a.Azonosító).ThenBy(a => a.Pozíció).ToList();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Jegyzettömbírófőm()
         {
             try
             {
-                string hely, jelszó, szöveg;
-                hely = Application.StartupPath + @"\főmérnökség\adatok\" + Dátumtól.Value.Year + @"\telepikerék.mdb";
-                jelszó = "szabólászló";
-
                 Jegyzettömb.Text = "";
-
-                szöveg = "SELECT * FROM keréktábla where ";
-                if (PályaszámCombo2.Text.Trim() != "")
-                    szöveg = szöveg + " azonosító='" + PályaszámCombo2.Text.Trim() + "' and ";
-
-                if (SAPba.Checked)
-                    szöveg += " SAP=1 and ";
-                else
-                    szöveg += " SAP<>1 and ";
-
-                if (Dátumtól.Value == Dátumig.Value)
-                {
-                    szöveg += " mikor>= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 00:00:00#";
-                    szöveg += " and mikor<= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 23:59:59#";
-                }
-                else
-                {
-                    szöveg += " mikor>= #" + Dátumtól.Value.ToString("yyyy-MM-dd") + " 00:00:00#";
-                    szöveg += " and mikor<= #" + Dátumig.Value.ToString("yyyy-MM-dd") + " 23:59:59#";
-                }
-                szöveg += " order by azonosító,pozíció ";
-
-
-                List<Adat_Kerék_Mérés> Adatok = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Mérés> Adatok = KézMérés.Lista_Adatok(Dátumtól.Value.Year);
+                AdatSzűrés(ref Adatok);
 
                 foreach (Adat_Kerék_Mérés rekord in Adatok)
                 {
-
-                    szöveg = rekord.Kerékberendezés.Trim() + "\t";
+                    string szöveg = rekord.Kerékberendezés.Trim() + "\t";
                     szöveg += "ATM_J" + "\t" + "\t" + "\t" + "\t" + "\t";
                     szöveg += "0" + "\t" + "\t" + "\t";
                     szöveg += rekord.Mikor.ToString("yyyy.MM.dd") + "\t";
@@ -2149,8 +2009,6 @@ namespace Villamos
 
                     Jegyzettömb.Text += szöveg;
                 }
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -2167,21 +2025,18 @@ namespace Villamos
         {
             try
             {
-                string hely = Application.StartupPath + @"\főmérnökség\adatok\" + Dátumtól.Value.Year + @"\telepikerék.mdb";
-                string jelszó = "szabólászló";
-                string kerékberendezés;
-
                 Jegyzettömb.Visible = false;
 
                 Tábla1.Visible = true;
                 Holtart.Be(Tábla1.Rows.Count + 2);
 
-                KerékMérésListázás();
+                AdatokMérés.Clear();
+                AdatokMérés = KézMérés.Lista_Adatok(Dátumtól.Value.Year);
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Kerék_Mérés> AdatokGy = new List<Adat_Kerék_Mérés>();
                 for (int i = 0; i < Tábla1.Rows.Count; i++)
                 {
-                    kerékberendezés = Tábla1.Rows[i].Cells[1].Value.ToString();
+                    string kerékberendezés = Tábla1.Rows[i].Cells[1].Value.ToString();
 
                     DateTime rögzítésdátuma = DateTime.Parse(Tábla1.Rows[i].Cells[4].Value.ToString());
                     Adat_Kerék_Mérés AdatKerék = (from a in AdatokMérés
@@ -2190,14 +2045,12 @@ namespace Villamos
                                                   select a).FirstOrDefault();
                     if (AdatKerék != null)
                     {
-                        string szöveg = "UPDATE keréktábla  SET SAP=1 WHERE ";
-                        szöveg += " kerékberendezés='" + kerékberendezés.Trim() + "' and ";
-                        szöveg += " mikor=#" + rögzítésdátuma.ToString("yyyy-MM-dd HH:mm:ss") + "#";
-                        SzövegGy.Add(szöveg);
+                        Adat_Kerék_Mérés Adat = new Adat_Kerék_Mérés(kerékberendezés.Trim(), rögzítésdátuma, 1);
+                        AdatokGy.Add(Adat);
                     }
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (AdatokGy.Count > 0) KézMérés.Módosítás(Dátumtól.Value.Year, AdatokGy);
 
                 Holtart.Ki();
                 MessageBox.Show("Az adatok státus állítása megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2218,8 +2071,7 @@ namespace Villamos
         {
             try
             {
-                if (Jegyzettömb.Text.Trim() == "")
-                    return;
+                if (Jegyzettömb.Text.Trim() == "") return;
                 // kimeneti fájl helye és neve
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -2227,7 +2079,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Kerék esztergálási adatok előkészítése SAP-ba való feltöltéshez",
-                    FileName = "Kerékmérések_export_" + Dátumtól.Value.ToString("yyyyMMdd") + "_" + Dátumig.Value.ToString("yyyyMMdd"),
+                    FileName = $"Kerékmérések_export_{Dátumtól.Value:yyyyMMdd}_{Dátumig.Value:yyyyMMdd}",
                     Filter = "Normal text file |*.txt"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -2258,12 +2110,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
         #region Mérési adatok lapfül
-
         private void RögzítPályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             Új_Gyári.Visible = false;
@@ -2288,11 +2138,11 @@ namespace Villamos
 
                 Rögzítpozíció.Refresh();
 
-                ChkErőtám.Checked = MyKerék.Erőtámkiolvasás(SAPPályaszám.Text.Trim());
+                ChkErőtám.Checked = Erőtámkiolvasás(SAPPályaszám.Text.Trim());
 
                 EsztergaDátum.Text = "";
                 KMU_old.Text = "";
-                Adat_Kerék_Eszterga rekord = MyKerék.Esztergakiolvasás(SAPPályaszám.Text.Trim());
+                Adat_Kerék_Eszterga rekord = Esztergakiolvasás(SAPPályaszám.Text.Trim());
                 if (rekord != null)
                 {
                     EsztergaDátum.Text = rekord.Eszterga.ToString("yyyy.MM.dd");
@@ -2329,7 +2179,7 @@ namespace Villamos
             Oka.Text = "";
             EsztergaDátum.Text = "";
         }
-
+        // JAVÍTANDÓ:   
         private void Rögzítpozíció_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -2382,28 +2232,13 @@ namespace Villamos
 
                     if (Mérés != null)
                     {
-                        switch (Mérés.Állapot.Trim().Substring(0, 1))
-                        {
-                            case "1":
-                                Állapot.Text = "1 Frissen esztergált";
-                                break;
-                            case "2":
-                                Állapot.Text = "2 Üzemszerűen kopott forgalomban";
-                                break;
-                            case "3":
-                                Állapot.Text = "3 Forgalomképes esztergálandó";
-                                break;
-                            case "4":
-                                Állapot.Text = "4 Forgalomképtelen azonnali esztergálást igényel";
-                                break;
-                        }
+                        Állapot.Text = MilyenÁllapot(Mérés.Állapot.Trim().Substring(0, 1));
                         Méret.Text = Mérés.Méret.ToString();
                         Oka.Text = Mérés.Oka.Trim();
                         volt = 1;
                     }
 
-                    if (volt == 1)
-                        break;
+                    if (volt == 1) break;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -2432,13 +2267,14 @@ namespace Villamos
                     if (Új_Gyári.Text.Trim() == "") throw new HibásBevittAdat("A gyári szám mezót ki kell tölteni.");
                     ÚjGyáriKitöltése();
                 }
+                string[] Darabol = RögzítÁllapot.Text.Trim().Split('-');
 
                 Adat_Kerék_Mérés ADAT = new Adat_Kerék_Mérés(
                                         RögzítPályaszám.Text.Trim(),
                                         Rögzítpozíció.Text.Trim(),
                                         Berendezés.Text.Trim(),
                                         Gyártási.Text.Trim(),
-                                        RögzítÁllapot.Text.Trim().Substring(0, 1),
+                                        Darabol[0],
                                         Méret,
                                         Program.PostásNév,
                                         DateTime.Now,
@@ -2473,7 +2309,7 @@ namespace Villamos
             Berendezés.Text = "Ideiglenes";
             Megnevezés.Text = "Ideiglenes fődarab";
         }
-
+        // JAVÍTANDÓ:
         private void Command3_Click(object sender, EventArgs e)
         {
             try
@@ -2534,7 +2370,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Command6_Click(object sender, EventArgs e)
         {
             try
@@ -2579,8 +2415,8 @@ namespace Villamos
             try
             {
                 if (RögzítPályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva pályaszám.");
-                AdatokJárműLista();
-                AdatokKerékLista();
+                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
+                AdatokKerék = KézKerék.Lista_Adatok().Where(a => a.Objektumfajta == "V.KERÉKPÁR").ToList();
 
                 string típus = (from a in AdatokJármű
                                 where a.Azonosító == RögzítPályaszám.Text.Trim()
@@ -2622,20 +2458,18 @@ namespace Villamos
             Új_Gyári.Left = 313;
             Új_Gyári.Top = 62;
             Új_Gyári.Visible = true;
-
         }
-
         #endregion
 
 
         #region Kerékesztergára ütemez
         Ablak_Kerék_segéd Új_Ablak_Kerék_segéd;
+        // JAVÍTANDÓ:
         private void Kerék_Ütemez_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla2.SelectedRows.Count <= 0)
-                    throw new HibásBevittAdat("Nincs kijelölve egy jármű sem kerékesztergálásra.");
+                if (Tábla2.SelectedRows.Count <= 0) throw new HibásBevittAdat("Nincs kijelölve egy jármű sem kerékesztergálásra.");
 
                 List<string> Küld = new List<string>();
                 int tengely = 0;
@@ -2748,12 +2582,12 @@ namespace Villamos
             }
         }
 
-
         private void Ablak_Kerék_segéd_Closed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Kerék_segéd = null;
         }
         #endregion
+
 
         #region Táblázatos rögzítés
         Ablak_Kerék_Gyűjtő Új_Ablak_Kerék_gyűjtő;
@@ -2775,63 +2609,8 @@ namespace Villamos
 
 
         #region Listák
-        private void MérésiListázás()
-        {
-            AdatokMérés.Clear();
-            string hely = Application.StartupPath + @"\Főmérnökség\adatok\" + DateTime.Today.AddYears(-1).Year + @"\telepikerék.mdb";
-
-            string jelszó = "szabólászló";
-            string szöveg = "SELECT * FROM keréktábla ORDER BY kerékberendezés asc, mikor desc";
-
-            AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
-
-            hely = Application.StartupPath + @"\Főmérnökség\adatok\" + DateTime.Today.Year + @"\telepikerék.mdb";
-            List<Adat_Kerék_Mérés> AdatokMérés1 = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
-            AdatokMérés.AddRange(AdatokMérés1);
-        }
-        private void AdatokJárműLista()
-        {
-            try
-            {
-                AdatokJármű.Clear();
-                string hely = $@"{Application.StartupPath}\főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla ORDER BY azonosító";
-                AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
 
 
-        }
-        private void AdatokKerékLista()
-        {
-            try
-            {
-                AdatokKerék.Clear();
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kerék.mdb";
-                string jelszó = "szabólászló";
-                string szöveg = "SELECT *  FROM tábla where objektumfajta='V.KERÉKPÁR'";
-                AdatokKerék = KézKerék.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
         private void AdatokCsatLista()
         {
             try
@@ -2849,6 +2628,8 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        // JAVÍTANDÓ:
         private void AdatokErőTámLista()
         {
             try
@@ -2876,6 +2657,8 @@ namespace Villamos
             }
 
         }
+
+        // JAVÍTANDÓ:
         private void AdatokEsztergaLista()
         {
             try
@@ -2900,6 +2683,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        // JAVÍTANDÓ:
         private void AdatokEsztergaIgényLista()
         {
             try
@@ -2924,16 +2708,14 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void HibaLista()
         {
             try
             {
                 if (Program.PostásTelephely != "Főmérnökség") Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
                 AdatokHiba.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\Új_napihiba.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM hiba  ORDER BY azonosító";
-                AdatokHiba = KézHiba.Lista_adatok(hely, jelszó, szöveg);
+                AdatokHiba = KézHiba.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -2945,15 +2727,40 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void JelenlétiListázás()
+
+
+        // JAVÍTANDÓ:
+
+        private bool Erőtámkiolvasás(string pályaszám)
         {
+            bool Válasz = false;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM jelenlétiív";
-                AdatokKiegJelenlét.Clear();
-                AdatokKiegJelenlét = KézKiegJelenlét.Lista_Adatok(hely, jelszó, szöveg);
+                // betöljük az utolsó erőtám adatot
+                Kezelő_Kerék_Erő Kéz = new Kezelő_Kerék_Erő();
+                List<Adat_Kerék_Erő> Adatok = new List<Adat_Kerék_Erő>();
+                for (int év = 0; év < 1; év++)
+                {
+                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{DateTime.Now.AddYears(-1 * év).Year}\telepikerék.mdb";
+                    string jelszó = "szabólászló";
+                    string szöveg = "SELECT * FROM erőtábla";
+                    if (Exists(hely))
+                    {
+                        List<Adat_Kerék_Erő> AdatokIdeig = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                        Adatok.AddRange(AdatokIdeig);
+                    }
+                }
+                if (Adatok.Count != 0)
+                {
+                    Adat_Kerék_Erő Elem = (from a in Adatok
+                                           where a.Azonosító == pályaszám
+                                           orderby a.Mikor descending
+                                           select a).FirstOrDefault();
+                    if (Elem != null)
+                    {
+                        if (Elem.Van == "van") Válasz = true;
+                    }
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -2961,20 +2768,38 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, "KerékNyilvántartás_funkciók", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return Válasz;
         }
-
-        private void JárműListázás()
+        // JAVÍTANDÓ:
+        private Adat_Kerék_Eszterga Esztergakiolvasás(string pályaszám)
         {
+            Adat_Kerék_Eszterga Válasz = null;
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla";
-                AdatokJármű.Clear();
-                AdatokJármű = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
+                // betöljük az utolsó erőtám adatot
+                Kezelő_Kerék_Eszterga Kéz = new Kezelő_Kerék_Eszterga();
+                List<Adat_Kerék_Eszterga> Adatok = new List<Adat_Kerék_Eszterga>();
+                for (int év = 0; év < 1; év++)
+                {
+                    string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{DateTime.Now.AddYears(-1 * év).Year}\telepikerék.mdb";
+                    string jelszó = "szabólászló";
+                    string szöveg = "SELECT * FROM esztergatábla";
+                    if (Exists(hely))
+                    {
+                        List<Adat_Kerék_Eszterga> AdatokIdeig = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                        Adatok.AddRange(AdatokIdeig);
+                    }
+                }
+                if (Adatok.Count != 0)
+                {
+                    Válasz = (from a in Adatok
+                              where a.Azonosító == pályaszám
+                              orderby a.Mikor descending
+                              select a).FirstOrDefault();
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -2982,37 +2807,12 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, "KerékNyilvántartás_funkciók", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return Válasz;
         }
 
-        private void KerékMérésListázás()
-        {
-            try
-            {
-                string hely;
-                if (Dátumtól.Value != null)
-                    hely = Application.StartupPath + @"\főmérnökség\adatok\" + Dátumtól.Value.Year + @"\telepikerék.mdb";
-                else
-                    hely = Application.StartupPath + @"\főmérnökség\adatok\" + DateTime.Today.Year + @"\telepikerék.mdb";
-
-                string jelszó = "szabólászló";
-                string szöveg = "SELECT * FROM keréktábla ";
-
-                AdatokMérés.Clear();
-                AdatokMérés = KézMérés.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion
     }
 }

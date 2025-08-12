@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok.Közös;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -51,6 +52,7 @@ namespace Villamos.Ablakok
         private void Ablak_szerelvény_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Kereső?.Close();
+            Új_Ablak_Utasítás_Generálás?.Close();
         }
 
         private void Start()
@@ -184,9 +186,8 @@ namespace Villamos.Ablakok
             Előírt_hozzáad.Enabled = false;
             E2_panel.Visible = false;
 
-            Btnrögzítés.Enabled = false;
             E2_Törlés.Enabled = false;
-
+            Utasítás.Enabled = false;
 
 
             melyikelem = 100;
@@ -214,7 +215,7 @@ namespace Villamos.Ablakok
             if (MyF.Vanjoga(melyikelem, 3))
             {
                 //itt kapcsolja vissza a gombot
-                Btnrögzítés.Enabled = true;
+                Utasítás.Enabled = true;
                 E2_Törlés.Enabled = true;
             }
         }
@@ -246,12 +247,6 @@ namespace Villamos.Ablakok
                     {
                         // napló
                         DátumNapló.Value = DateTime.Today;
-                        break;
-                    }
-                case 3:
-                    {
-                        // Utasítás
-                        Tervezet_utasítás();
                         break;
                     }
             }
@@ -2218,35 +2213,44 @@ namespace Villamos.Ablakok
 
 
         #region Utasítás
-        private void Utasítás_tervezet_Click(object sender, EventArgs e)
+        Ablak_Utasítás_Generálás Új_Ablak_Utasítás_Generálás;
+        private void Utasítás_Click(object sender, EventArgs e)
         {
-            Tervezet_utasítás();
+            Új_Ablak_Utasítás_Generálás?.Close();
+
+            Új_Ablak_Utasítás_Generálás = new Ablak_Utasítás_Generálás(Cmbtelephely.Text.Trim(), UtasításSzövegTervezet());
+            Új_Ablak_Utasítás_Generálás.FormClosed += Ablak_Utasítás_Generálás_FormClosed;
+            Új_Ablak_Utasítás_Generálás.Show();
         }
 
-        private void Tervezet_utasítás()
+        private void Ablak_Utasítás_Generálás_FormClosed(object sender, FormClosedEventArgs e)
         {
+            Új_Ablak_Utasítás_Generálás = null;
+        }
+
+        private string UtasításSzövegTervezet()
+        {
+            string válasz = "";
             try
             {
                 // ****************************************
                 // **  Előírt szerelvény lista           **
                 // ****************************************
-                Txtírásimező.Text = "";
-                Btnrögzítés.Visible = true;
-                Txtírásimező.Text = "Előírt szerelvény lista 20  -től \r\n\r\n";
+                válasz = "Előírt szerelvény lista 20  -től \r\n\r\n";
 
                 Elő_Szer_Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);
                 foreach (Adat_Szerelvény adat in Elő_Szer_Adatok)
                 {
 
-                    Txtírásimező.Text += adat.Kocsi1 == "_" ? "" : adat.Kocsi1;
-                    Txtírásimező.Text += adat.Kocsi2 == "_" ? "" : "-" + adat.Kocsi2;
-                    Txtírásimező.Text += adat.Kocsi3 == "_" ? "" : "-" + adat.Kocsi3;
-                    Txtírásimező.Text += adat.Kocsi4 == "_" ? "" : "-" + adat.Kocsi4;
-                    Txtírásimező.Text += adat.Kocsi5 == "_" ? "" : "-" + adat.Kocsi5;
-                    Txtírásimező.Text += adat.Kocsi6 == "_" ? "" : "-" + adat.Kocsi6;
-                    Txtírásimező.Text += "\r\n";
+                    válasz += adat.Kocsi1 == "_" ? "" : adat.Kocsi1;
+                    válasz += adat.Kocsi2 == "_" ? "" : "-" + adat.Kocsi2;
+                    válasz += adat.Kocsi3 == "_" ? "" : "-" + adat.Kocsi3;
+                    válasz += adat.Kocsi4 == "_" ? "" : "-" + adat.Kocsi4;
+                    válasz += adat.Kocsi5 == "_" ? "" : "-" + adat.Kocsi5;
+                    válasz += adat.Kocsi6 == "_" ? "" : "-" + adat.Kocsi6;
+                    válasz += "\r\n";
                 }
-                Txtírásimező.Text += "\r\n";
+                válasz += "\r\n";
             }
             catch (HibásBevittAdat ex)
             {
@@ -2257,30 +2261,7 @@ namespace Villamos.Ablakok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void Btnrögzítés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Txtírásimező.Text.Trim() == "") return;
-                // megtisztítjuk a szöveget
-                Txtírásimező.Text = MyF.Szöveg_Tisztítás(Txtírásimező.Text);
-                //Utasírás rögzítés és olvasás rögzítés
-                double Sorszám = KézUtasítás.Új_utasítás(Cmbtelephely.Text.Trim(), DateTime.Now.Year, Txtírásimező.Text.Trim());
-
-                MessageBox.Show($"Az utasítás rögzítése {Sorszám} szám alatt megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            return válasz;
         }
         #endregion
     }

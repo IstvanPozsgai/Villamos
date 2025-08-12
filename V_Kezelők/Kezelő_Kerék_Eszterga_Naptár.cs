@@ -154,8 +154,8 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy} 00:00:0#";
-                szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy} 23:59:0# ";
+                string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy HH:mm:ss}#";
+                szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy HH:mm:ss}# ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -177,8 +177,8 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kerék_Eszterga_Naptár Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy} 00:00:0#";
-                    szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy} 23:59:0#";
+                    string szöveg = $"UPDATE {táblanév} SET munkaidő={Adat.Munkaidő} WHERE [idő]>=# {Adat.Dátumtól:MM-dd-yyyy HH:mm:ss}#";
+                    szöveg += $" and [idő]<=#{Adat.Dátumig:MM-dd-yyyy HH:mm:ss}#";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);

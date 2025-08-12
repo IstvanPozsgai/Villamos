@@ -2044,8 +2044,7 @@ namespace Villamos
             try
             {
                 if (Dolgozószám.Text.Trim() == "") return;
-                Adat_Dolgozó_Alap ADAT = new Adat_Dolgozó_Alap(Dolgozószám.Text.Trim(), CheckBox1.Checked);
-                KézDolgozó.Módosít_Túl(Cmbtelephely.Text.Trim(), ADAT);
+                KézDolgozó.Módosít_Túl(Cmbtelephely.Text.Trim(), Dolgozószám.Text.Trim(), CheckBox1.Checked);
                 DolgozóAdatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
                 ÚjraKiír();
                 MessageBox.Show("Az adatok rögzítése megtörtént. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -95,7 +95,7 @@ namespace Villamos
             this.Tábla1 = new System.Windows.Forms.DataGridView();
             this.Dátum1 = new System.Windows.Forms.DateTimePicker();
             this.Zárva1 = new System.Windows.Forms.Button();
-            this.Command11 = new System.Windows.Forms.Button();
+            this.Mentés = new System.Windows.Forms.Button();
             this.Nyitva1 = new System.Windows.Forms.Button();
             this.Command9 = new System.Windows.Forms.Button();
             this.Le1 = new System.Windows.Forms.Button();
@@ -712,7 +712,7 @@ namespace Villamos
             this.Helyiséglista.FormattingEnabled = true;
             this.Helyiséglista.Location = new System.Drawing.Point(5, 50);
             this.Helyiséglista.Name = "Helyiséglista";
-            this.Helyiséglista.Size = new System.Drawing.Size(412, 361);
+            this.Helyiséglista.Size = new System.Drawing.Size(412, 466);
             this.Helyiséglista.TabIndex = 132;
             this.Helyiséglista.Click += new System.EventHandler(this.Helyiséglista_Click);
             // 
@@ -751,7 +751,7 @@ namespace Villamos
             this.TabPage2.Controls.Add(this.Tábla1);
             this.TabPage2.Controls.Add(this.Dátum1);
             this.TabPage2.Controls.Add(this.Zárva1);
-            this.TabPage2.Controls.Add(this.Command11);
+            this.TabPage2.Controls.Add(this.Mentés);
             this.TabPage2.Controls.Add(this.Nyitva1);
             this.TabPage2.Controls.Add(this.Command9);
             this.TabPage2.Controls.Add(this.Le1);
@@ -862,17 +862,17 @@ namespace Villamos
             this.Zárva1.UseVisualStyleBackColor = true;
             this.Zárva1.Click += new System.EventHandler(this.Zárva1_Click);
             // 
-            // Command11
+            // Mentés
             // 
-            this.Command11.BackgroundImage = global::Villamos.Properties.Resources.mentés32;
-            this.Command11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Command11.Location = new System.Drawing.Point(1080, 5);
-            this.Command11.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Command11.Name = "Command11";
-            this.Command11.Size = new System.Drawing.Size(45, 45);
-            this.Command11.TabIndex = 188;
-            this.Command11.UseVisualStyleBackColor = true;
-            this.Command11.Click += new System.EventHandler(this.Command11_Click);
+            this.Mentés.BackgroundImage = global::Villamos.Properties.Resources.mentés32;
+            this.Mentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Mentés.Location = new System.Drawing.Point(1080, 5);
+            this.Mentés.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Mentés.Name = "Mentés";
+            this.Mentés.Size = new System.Drawing.Size(45, 45);
+            this.Mentés.TabIndex = 188;
+            this.Mentés.UseVisualStyleBackColor = true;
+            this.Mentés.Click += new System.EventHandler(this.Mentés_Click);
             // 
             // Nyitva1
             // 
@@ -1125,7 +1125,7 @@ namespace Villamos
         internal Button Command9;
         internal Button Zárva1;
         internal Button Command2;
-        internal Button Command11;
+        internal Button Mentés;
         internal Button Nyitva1;
         internal Button Command10;
         internal DataGridView Tábla1;

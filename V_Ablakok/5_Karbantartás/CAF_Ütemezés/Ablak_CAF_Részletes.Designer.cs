@@ -95,6 +95,32 @@
             this.Ütem_Rögzít = new System.Windows.Forms.Button();
             this.IDŐ = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tb_p3_p2_kozott = new System.Windows.Forms.TextBox();
+            this.lb_p3_p2_kozott = new System.Windows.Forms.Label();
+            this.tb_rendben_p3 = new System.Windows.Forms.TextBox();
+            this.lb_rendben_p3 = new System.Windows.Forms.Label();
+            this.tb_rendben_p2 = new System.Windows.Forms.TextBox();
+            this.lb_rendben_p2 = new System.Windows.Forms.Label();
+            this.tb_megtett_p1 = new System.Windows.Forms.TextBox();
+            this.lb_megtett_p1 = new System.Windows.Forms.Label();
+            this.tb_megtett_p0 = new System.Windows.Forms.TextBox();
+            this.lb_megtett_p0 = new System.Windows.Forms.Label();
+            this.tb_futhatmeg_p2 = new System.Windows.Forms.TextBox();
+            this.tb_futhatmeg_p1 = new System.Windows.Forms.TextBox();
+            this.tb_futhatmeg_p0 = new System.Windows.Forms.TextBox();
+            this.lb_futhatmeg_p1 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lb_futhatmeg_p2 = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btn_frissit = new System.Windows.Forms.Button();
+            this.btn_elso_futtatas = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // Ütem_dátum_program
@@ -134,7 +160,7 @@
             // Ütem_frissítés
             // 
             this.Ütem_frissítés.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Ütem_frissítés.Location = new System.Drawing.Point(922, 383);
+            this.Ütem_frissítés.Location = new System.Drawing.Point(254, 367);
             this.Ütem_frissítés.Name = "Ütem_frissítés";
             this.Ütem_frissítés.Size = new System.Drawing.Size(119, 26);
             this.Ütem_frissítés.TabIndex = 278;
@@ -142,7 +168,7 @@
             // Label46
             // 
             this.Label46.AutoSize = true;
-            this.Label46.Location = new System.Drawing.Point(681, 389);
+            this.Label46.Location = new System.Drawing.Point(13, 373);
             this.Label46.Name = "Label46";
             this.Label46.Size = new System.Drawing.Size(130, 20);
             this.Label46.TabIndex = 277;
@@ -151,7 +177,7 @@
             // Label45
             // 
             this.Label45.AutoSize = true;
-            this.Label45.Location = new System.Drawing.Point(681, 325);
+            this.Label45.Location = new System.Drawing.Point(13, 309);
             this.Label45.Name = "Label45";
             this.Label45.Size = new System.Drawing.Size(85, 20);
             this.Label45.TabIndex = 276;
@@ -159,7 +185,7 @@
             // 
             // Ütem_Napkm
             // 
-            this.Ütem_Napkm.Location = new System.Drawing.Point(922, 319);
+            this.Ütem_Napkm.Location = new System.Drawing.Point(254, 303);
             this.Ütem_Napkm.Name = "Ütem_Napkm";
             this.Ütem_Napkm.ReadOnly = true;
             this.Ütem_Napkm.Size = new System.Drawing.Size(146, 26);
@@ -168,7 +194,7 @@
             // Label44
             // 
             this.Label44.AutoSize = true;
-            this.Label44.Location = new System.Drawing.Point(681, 357);
+            this.Label44.Location = new System.Drawing.Point(13, 341);
             this.Label44.Name = "Label44";
             this.Label44.Size = new System.Drawing.Size(178, 20);
             this.Label44.TabIndex = 274;
@@ -176,7 +202,7 @@
             // 
             // Ütem_KM_futhatmég
             // 
-            this.Ütem_KM_futhatmég.Location = new System.Drawing.Point(922, 351);
+            this.Ütem_KM_futhatmég.Location = new System.Drawing.Point(254, 335);
             this.Ütem_KM_futhatmég.Name = "Ütem_KM_futhatmég";
             this.Ütem_KM_futhatmég.ReadOnly = true;
             this.Ütem_KM_futhatmég.Size = new System.Drawing.Size(146, 26);
@@ -185,7 +211,7 @@
             // Label37
             // 
             this.Label37.AutoSize = true;
-            this.Label37.Location = new System.Drawing.Point(681, 293);
+            this.Label37.Location = new System.Drawing.Point(13, 277);
             this.Label37.Name = "Label37";
             this.Label37.Size = new System.Drawing.Size(84, 20);
             this.Label37.TabIndex = 272;
@@ -193,7 +219,7 @@
             // 
             // Ütem_havifutás
             // 
-            this.Ütem_havifutás.Location = new System.Drawing.Point(922, 287);
+            this.Ütem_havifutás.Location = new System.Drawing.Point(254, 271);
             this.Ütem_havifutás.Name = "Ütem_havifutás";
             this.Ütem_havifutás.ReadOnly = true;
             this.Ütem_havifutás.Size = new System.Drawing.Size(146, 26);
@@ -201,7 +227,7 @@
             // 
             // Ütem_km_KMU
             // 
-            this.Ütem_km_KMU.Location = new System.Drawing.Point(922, 159);
+            this.Ütem_km_KMU.Location = new System.Drawing.Point(254, 143);
             this.Ütem_km_KMU.Name = "Ütem_km_KMU";
             this.Ütem_km_KMU.ReadOnly = true;
             this.Ütem_km_KMU.Size = new System.Drawing.Size(146, 26);
@@ -210,7 +236,7 @@
             // Label36
             // 
             this.Label36.AutoSize = true;
-            this.Label36.Location = new System.Drawing.Point(681, 165);
+            this.Label36.Location = new System.Drawing.Point(13, 149);
             this.Label36.Name = "Label36";
             this.Label36.Size = new System.Drawing.Size(191, 20);
             this.Label36.TabIndex = 269;
@@ -219,7 +245,7 @@
             // Label35
             // 
             this.Label35.AutoSize = true;
-            this.Label35.Location = new System.Drawing.Point(681, 261);
+            this.Label35.Location = new System.Drawing.Point(13, 245);
             this.Label35.Name = "Label35";
             this.Label35.Size = new System.Drawing.Size(114, 20);
             this.Label35.TabIndex = 268;
@@ -228,7 +254,7 @@
             // Label29
             // 
             this.Label29.AutoSize = true;
-            this.Label29.Location = new System.Drawing.Point(681, 229);
+            this.Label29.Location = new System.Drawing.Point(13, 213);
             this.Label29.Name = "Label29";
             this.Label29.Size = new System.Drawing.Size(106, 20);
             this.Label29.TabIndex = 267;
@@ -237,7 +263,7 @@
             // Label27
             // 
             this.Label27.AutoSize = true;
-            this.Label27.Location = new System.Drawing.Point(681, 197);
+            this.Label27.Location = new System.Drawing.Point(13, 181);
             this.Label27.Name = "Label27";
             this.Label27.Size = new System.Drawing.Size(99, 20);
             this.Label27.TabIndex = 266;
@@ -245,7 +271,7 @@
             // 
             // Ütem_KM_felső
             // 
-            this.Ütem_KM_felső.Location = new System.Drawing.Point(922, 255);
+            this.Ütem_KM_felső.Location = new System.Drawing.Point(254, 239);
             this.Ütem_KM_felső.Name = "Ütem_KM_felső";
             this.Ütem_KM_felső.ReadOnly = true;
             this.Ütem_KM_felső.Size = new System.Drawing.Size(146, 26);
@@ -253,7 +279,7 @@
             // 
             // Ütem_KM_alsó
             // 
-            this.Ütem_KM_alsó.Location = new System.Drawing.Point(922, 223);
+            this.Ütem_KM_alsó.Location = new System.Drawing.Point(254, 207);
             this.Ütem_KM_alsó.Name = "Ütem_KM_alsó";
             this.Ütem_KM_alsó.ReadOnly = true;
             this.Ütem_KM_alsó.Size = new System.Drawing.Size(146, 26);
@@ -261,7 +287,7 @@
             // 
             // Ütem_KM_névleges
             // 
-            this.Ütem_KM_névleges.Location = new System.Drawing.Point(922, 191);
+            this.Ütem_KM_névleges.Location = new System.Drawing.Point(254, 175);
             this.Ütem_KM_névleges.Name = "Ütem_KM_névleges";
             this.Ütem_KM_névleges.ReadOnly = true;
             this.Ütem_KM_névleges.Size = new System.Drawing.Size(146, 26);
@@ -270,7 +296,7 @@
             // Label28
             // 
             this.Label28.AutoSize = true;
-            this.Label28.Location = new System.Drawing.Point(681, 505);
+            this.Label28.Location = new System.Drawing.Point(13, 489);
             this.Label28.Name = "Label28";
             this.Label28.Size = new System.Drawing.Size(105, 20);
             this.Label28.TabIndex = 261;
@@ -278,7 +304,7 @@
             // 
             // Ütem_névleges_nap
             // 
-            this.Ütem_névleges_nap.Location = new System.Drawing.Point(922, 502);
+            this.Ütem_névleges_nap.Location = new System.Drawing.Point(254, 486);
             this.Ütem_névleges_nap.Name = "Ütem_névleges_nap";
             this.Ütem_névleges_nap.ReadOnly = true;
             this.Ütem_névleges_nap.Size = new System.Drawing.Size(146, 26);
@@ -286,7 +312,7 @@
             // 
             // Ütem_Ciklus_IDŐ
             // 
-            this.Ütem_Ciklus_IDŐ.Location = new System.Drawing.Point(922, 438);
+            this.Ütem_Ciklus_IDŐ.Location = new System.Drawing.Point(254, 422);
             this.Ütem_Ciklus_IDŐ.Name = "Ütem_Ciklus_IDŐ";
             this.Ütem_Ciklus_IDŐ.ReadOnly = true;
             this.Ütem_Ciklus_IDŐ.Size = new System.Drawing.Size(146, 26);
@@ -294,7 +320,7 @@
             // 
             // Ütem_Ciklus_KM
             // 
-            this.Ütem_Ciklus_KM.Location = new System.Drawing.Point(922, 29);
+            this.Ütem_Ciklus_KM.Location = new System.Drawing.Point(254, 13);
             this.Ütem_Ciklus_KM.Name = "Ütem_Ciklus_KM";
             this.Ütem_Ciklus_KM.ReadOnly = true;
             this.Ütem_Ciklus_KM.Size = new System.Drawing.Size(146, 26);
@@ -491,7 +517,7 @@
             // 
             // Ütem_Utolsó_futott
             // 
-            this.Ütem_Utolsó_futott.Location = new System.Drawing.Point(922, 127);
+            this.Ütem_Utolsó_futott.Location = new System.Drawing.Point(254, 111);
             this.Ütem_Utolsó_futott.Name = "Ütem_Utolsó_futott";
             this.Ütem_Utolsó_futott.ReadOnly = true;
             this.Ütem_Utolsó_futott.Size = new System.Drawing.Size(146, 26);
@@ -500,7 +526,7 @@
             // Label33
             // 
             this.Label33.AutoSize = true;
-            this.Label33.Location = new System.Drawing.Point(681, 133);
+            this.Label33.Location = new System.Drawing.Point(13, 117);
             this.Label33.Name = "Label33";
             this.Label33.Size = new System.Drawing.Size(193, 20);
             this.Label33.TabIndex = 232;
@@ -508,7 +534,7 @@
             // 
             // Ütem_számláló_KM
             // 
-            this.Ütem_számláló_KM.Location = new System.Drawing.Point(922, 95);
+            this.Ütem_számláló_KM.Location = new System.Drawing.Point(254, 79);
             this.Ütem_számláló_KM.Name = "Ütem_számláló_KM";
             this.Ütem_számláló_KM.ReadOnly = true;
             this.Ütem_számláló_KM.Size = new System.Drawing.Size(146, 26);
@@ -517,7 +543,7 @@
             // Label34
             // 
             this.Label34.AutoSize = true;
-            this.Label34.Location = new System.Drawing.Point(681, 101);
+            this.Label34.Location = new System.Drawing.Point(13, 85);
             this.Label34.Name = "Label34";
             this.Label34.Size = new System.Drawing.Size(78, 20);
             this.Label34.TabIndex = 230;
@@ -525,7 +551,7 @@
             // 
             // Ütem_vizsgálat_KM
             // 
-            this.Ütem_vizsgálat_KM.Location = new System.Drawing.Point(922, 63);
+            this.Ütem_vizsgálat_KM.Location = new System.Drawing.Point(254, 47);
             this.Ütem_vizsgálat_KM.Name = "Ütem_vizsgálat_KM";
             this.Ütem_vizsgálat_KM.ReadOnly = true;
             this.Ütem_vizsgálat_KM.Size = new System.Drawing.Size(146, 26);
@@ -545,7 +571,7 @@
             // Label38
             // 
             this.Label38.AutoSize = true;
-            this.Label38.Location = new System.Drawing.Point(681, 69);
+            this.Label38.Location = new System.Drawing.Point(13, 53);
             this.Label38.Name = "Label38";
             this.Label38.Size = new System.Drawing.Size(78, 20);
             this.Label38.TabIndex = 227;
@@ -554,7 +580,7 @@
             // Label39
             // 
             this.Label39.AutoSize = true;
-            this.Label39.Location = new System.Drawing.Point(681, 37);
+            this.Label39.Location = new System.Drawing.Point(13, 21);
             this.Label39.Name = "Label39";
             this.Label39.Size = new System.Drawing.Size(117, 20);
             this.Label39.TabIndex = 226;
@@ -562,7 +588,7 @@
             // 
             // Ütem_vizsgálat_IDŐ
             // 
-            this.Ütem_vizsgálat_IDŐ.Location = new System.Drawing.Point(922, 470);
+            this.Ütem_vizsgálat_IDŐ.Location = new System.Drawing.Point(254, 454);
             this.Ütem_vizsgálat_IDŐ.Name = "Ütem_vizsgálat_IDŐ";
             this.Ütem_vizsgálat_IDŐ.ReadOnly = true;
             this.Ütem_vizsgálat_IDŐ.Size = new System.Drawing.Size(146, 26);
@@ -582,7 +608,7 @@
             // Label30
             // 
             this.Label30.AutoSize = true;
-            this.Label30.Location = new System.Drawing.Point(681, 473);
+            this.Label30.Location = new System.Drawing.Point(13, 457);
             this.Label30.Name = "Label30";
             this.Label30.Size = new System.Drawing.Size(78, 20);
             this.Label30.TabIndex = 223;
@@ -591,7 +617,7 @@
             // Label31
             // 
             this.Label31.AutoSize = true;
-            this.Label31.Location = new System.Drawing.Point(681, 441);
+            this.Label31.Location = new System.Drawing.Point(13, 425);
             this.Label31.Name = "Label31";
             this.Label31.Size = new System.Drawing.Size(117, 20);
             this.Label31.TabIndex = 222;
@@ -669,36 +695,277 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
-            // Ablak_CAF_Részletes
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.btn_elso_futtatas, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.tb_p3_p2_kozott, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.lb_p3_p2_kozott, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p3, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p3, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p2, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p2, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.tb_megtett_p1, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.lb_megtett_p1, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.tb_megtett_p0, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lb_megtett_p0, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p2, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p1, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p0, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p2, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.btn_frissit, 0, 8);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 6);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 9;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 176F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 471);
+            this.tableLayoutPanel1.TabIndex = 284;
+            // 
+            // tb_p3_p2_kozott
+            // 
+            this.tb_p3_p2_kozott.Location = new System.Drawing.Point(303, 245);
+            this.tb_p3_p2_kozott.Name = "tb_p3_p2_kozott";
+            this.tb_p3_p2_kozott.ReadOnly = true;
+            this.tb_p3_p2_kozott.Size = new System.Drawing.Size(139, 26);
+            this.tb_p3_p2_kozott.TabIndex = 15;
+            // 
+            // lb_p3_p2_kozott
+            // 
+            this.lb_p3_p2_kozott.AutoSize = true;
+            this.lb_p3_p2_kozott.Location = new System.Drawing.Point(3, 242);
+            this.lb_p3_p2_kozott.Name = "lb_p3_p2_kozott";
+            this.lb_p3_p2_kozott.Size = new System.Drawing.Size(179, 20);
+            this.lb_p3_p2_kozott.TabIndex = 14;
+            this.lb_p3_p2_kozott.Text = "P3 és P2 között megtett";
+            // 
+            // tb_rendben_p3
+            // 
+            this.tb_rendben_p3.Location = new System.Drawing.Point(303, 213);
+            this.tb_rendben_p3.Name = "tb_rendben_p3";
+            this.tb_rendben_p3.ReadOnly = true;
+            this.tb_rendben_p3.Size = new System.Drawing.Size(139, 26);
+            this.tb_rendben_p3.TabIndex = 13;
+            // 
+            // lb_rendben_p3
+            // 
+            this.lb_rendben_p3.AutoSize = true;
+            this.lb_rendben_p3.Location = new System.Drawing.Point(3, 210);
+            this.lb_rendben_p3.Name = "lb_rendben_p3";
+            this.lb_rendben_p3.Size = new System.Drawing.Size(200, 20);
+            this.lb_rendben_p3.TabIndex = 12;
+            this.lb_rendben_p3.Text = "Első P3 vizsgálat rendben?";
+            // 
+            // tb_rendben_p2
+            // 
+            this.tb_rendben_p2.Location = new System.Drawing.Point(303, 178);
+            this.tb_rendben_p2.Name = "tb_rendben_p2";
+            this.tb_rendben_p2.ReadOnly = true;
+            this.tb_rendben_p2.Size = new System.Drawing.Size(139, 26);
+            this.tb_rendben_p2.TabIndex = 11;
+            // 
+            // lb_rendben_p2
+            // 
+            this.lb_rendben_p2.AutoSize = true;
+            this.lb_rendben_p2.Location = new System.Drawing.Point(3, 175);
+            this.lb_rendben_p2.Name = "lb_rendben_p2";
+            this.lb_rendben_p2.Size = new System.Drawing.Size(200, 20);
+            this.lb_rendben_p2.TabIndex = 10;
+            this.lb_rendben_p2.Text = "Első P2 vizsgálat rendben?";
+            // 
+            // tb_megtett_p1
+            // 
+            this.tb_megtett_p1.Location = new System.Drawing.Point(303, 143);
+            this.tb_megtett_p1.Name = "tb_megtett_p1";
+            this.tb_megtett_p1.ReadOnly = true;
+            this.tb_megtett_p1.Size = new System.Drawing.Size(139, 26);
+            this.tb_megtett_p1.TabIndex = 9;
+            // 
+            // lb_megtett_p1
+            // 
+            this.lb_megtett_p1.AutoSize = true;
+            this.lb_megtett_p1.Location = new System.Drawing.Point(3, 140);
+            this.lb_megtett_p1.Name = "lb_megtett_p1";
+            this.lb_megtett_p1.Size = new System.Drawing.Size(294, 20);
+            this.lb_megtett_p1.TabIndex = 8;
+            this.lb_megtett_p1.Text = "Utolsó P1 vizsgálatok között megtett KM";
+            // 
+            // tb_megtett_p0
+            // 
+            this.tb_megtett_p0.Location = new System.Drawing.Point(303, 108);
+            this.tb_megtett_p0.Name = "tb_megtett_p0";
+            this.tb_megtett_p0.ReadOnly = true;
+            this.tb_megtett_p0.Size = new System.Drawing.Size(139, 26);
+            this.tb_megtett_p0.TabIndex = 7;
+            // 
+            // lb_megtett_p0
+            // 
+            this.lb_megtett_p0.AutoSize = true;
+            this.lb_megtett_p0.Location = new System.Drawing.Point(3, 105);
+            this.lb_megtett_p0.Name = "lb_megtett_p0";
+            this.lb_megtett_p0.Size = new System.Drawing.Size(294, 20);
+            this.lb_megtett_p0.TabIndex = 6;
+            this.lb_megtett_p0.Text = "Utolsó P0 vizsgálatok között megtett KM";
+            // 
+            // tb_futhatmeg_p2
+            // 
+            this.tb_futhatmeg_p2.Location = new System.Drawing.Point(303, 73);
+            this.tb_futhatmeg_p2.Name = "tb_futhatmeg_p2";
+            this.tb_futhatmeg_p2.ReadOnly = true;
+            this.tb_futhatmeg_p2.Size = new System.Drawing.Size(139, 26);
+            this.tb_futhatmeg_p2.TabIndex = 5;
+            // 
+            // tb_futhatmeg_p1
+            // 
+            this.tb_futhatmeg_p1.Location = new System.Drawing.Point(303, 38);
+            this.tb_futhatmeg_p1.Name = "tb_futhatmeg_p1";
+            this.tb_futhatmeg_p1.ReadOnly = true;
+            this.tb_futhatmeg_p1.Size = new System.Drawing.Size(139, 26);
+            this.tb_futhatmeg_p1.TabIndex = 3;
+            // 
+            // tb_futhatmeg_p0
+            // 
+            this.tb_futhatmeg_p0.Location = new System.Drawing.Point(303, 3);
+            this.tb_futhatmeg_p0.Name = "tb_futhatmeg_p0";
+            this.tb_futhatmeg_p0.ReadOnly = true;
+            this.tb_futhatmeg_p0.Size = new System.Drawing.Size(139, 26);
+            this.tb_futhatmeg_p0.TabIndex = 1;
+            // 
+            // lb_futhatmeg_p1
+            // 
+            this.lb_futhatmeg_p1.AutoSize = true;
+            this.lb_futhatmeg_p1.Location = new System.Drawing.Point(3, 35);
+            this.lb_futhatmeg_p1.Name = "lb_futhatmeg_p1";
+            this.lb_futhatmeg_p1.Size = new System.Drawing.Size(173, 20);
+            this.lb_futhatmeg_p1.TabIndex = 0;
+            this.lb_futhatmeg_p1.Text = "Következő P1-ig futhat:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(173, 20);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Következő P0-ig futhat:";
+            // 
+            // lb_futhatmeg_p2
+            // 
+            this.lb_futhatmeg_p2.AutoSize = true;
+            this.lb_futhatmeg_p2.Location = new System.Drawing.Point(3, 70);
+            this.lb_futhatmeg_p2.Name = "lb_futhatmeg_p2";
+            this.lb_futhatmeg_p2.Size = new System.Drawing.Size(173, 20);
+            this.lb_futhatmeg_p2.TabIndex = 4;
+            this.lb_futhatmeg_p2.Text = "Következő P2-ig futhat:";
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(667, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(467, 587);
+            this.tabControl1.TabIndex = 285;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.Color.Peru;
+            this.tabPage1.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(459, 554);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Ellenőrzések";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.Color.Peru;
+            this.tabPage2.Controls.Add(this.Label39);
+            this.tabPage2.Controls.Add(this.Label31);
+            this.tabPage2.Controls.Add(this.Label30);
+            this.tabPage2.Controls.Add(this.Ütem_vizsgálat_IDŐ);
+            this.tabPage2.Controls.Add(this.Label38);
+            this.tabPage2.Controls.Add(this.Ütem_frissítés);
+            this.tabPage2.Controls.Add(this.Ütem_vizsgálat_KM);
+            this.tabPage2.Controls.Add(this.Label46);
+            this.tabPage2.Controls.Add(this.Label34);
+            this.tabPage2.Controls.Add(this.Label45);
+            this.tabPage2.Controls.Add(this.Ütem_számláló_KM);
+            this.tabPage2.Controls.Add(this.Ütem_Napkm);
+            this.tabPage2.Controls.Add(this.Label33);
+            this.tabPage2.Controls.Add(this.Label44);
+            this.tabPage2.Controls.Add(this.Ütem_Utolsó_futott);
+            this.tabPage2.Controls.Add(this.Ütem_KM_futhatmég);
+            this.tabPage2.Controls.Add(this.Ütem_Ciklus_KM);
+            this.tabPage2.Controls.Add(this.Label37);
+            this.tabPage2.Controls.Add(this.Ütem_Ciklus_IDŐ);
+            this.tabPage2.Controls.Add(this.Ütem_havifutás);
+            this.tabPage2.Controls.Add(this.Ütem_névleges_nap);
+            this.tabPage2.Controls.Add(this.Ütem_km_KMU);
+            this.tabPage2.Controls.Add(this.Label28);
+            this.tabPage2.Controls.Add(this.Label36);
+            this.tabPage2.Controls.Add(this.Ütem_KM_névleges);
+            this.tabPage2.Controls.Add(this.Label35);
+            this.tabPage2.Controls.Add(this.Ütem_KM_alsó);
+            this.tabPage2.Controls.Add(this.Label29);
+            this.tabPage2.Controls.Add(this.Ütem_KM_felső);
+            this.tabPage2.Controls.Add(this.Label27);
+            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(459, 554);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Számítások";
+            // 
+            // btn_frissit
+            // 
+            this.btn_frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.btn_frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_frissit.Location = new System.Drawing.Point(3, 421);
+            this.btn_frissit.Name = "btn_frissit";
+            this.btn_frissit.Size = new System.Drawing.Size(45, 45);
+            this.btn_frissit.TabIndex = 16;
+            this.btn_frissit.UseVisualStyleBackColor = true;
+            this.btn_frissit.Click += new System.EventHandler(this.btn_frissit_Click);
+            // 
+            // btn_elso_futtatas
+            // 
+            this.btn_elso_futtatas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_elso_futtatas.BackgroundImage = global::Villamos.Properties.Resources.Graphicloads_Colorful_Long_Shadow_Arrow_download_3;
+            this.btn_elso_futtatas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_elso_futtatas.Location = new System.Drawing.Point(400, 421);
+            this.btn_elso_futtatas.Name = "btn_elso_futtatas";
+            this.btn_elso_futtatas.Size = new System.Drawing.Size(45, 45);
+            this.btn_elso_futtatas.TabIndex = 17;
+            this.btn_elso_futtatas.UseVisualStyleBackColor = true;
+            this.btn_elso_futtatas.Visible = false;
+            this.btn_elso_futtatas.Click += new System.EventHandler(this.btn_elso_futtatas_Click);
+            // 
+            // Ablak_CAF_Részletes_WIP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Peru;
-            this.ClientSize = new System.Drawing.Size(1086, 540);
+            this.ClientSize = new System.Drawing.Size(1137, 620);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Ütem_dátum_program);
             this.Controls.Add(this.Label48);
             this.Controls.Add(this.Label47);
             this.Controls.Add(this.Ütem_megjegyzés);
-            this.Controls.Add(this.Ütem_frissítés);
-            this.Controls.Add(this.Label46);
-            this.Controls.Add(this.Label45);
-            this.Controls.Add(this.Ütem_Napkm);
-            this.Controls.Add(this.Label44);
-            this.Controls.Add(this.Ütem_KM_futhatmég);
-            this.Controls.Add(this.Label37);
-            this.Controls.Add(this.Ütem_havifutás);
-            this.Controls.Add(this.Ütem_km_KMU);
-            this.Controls.Add(this.Label36);
-            this.Controls.Add(this.Label35);
-            this.Controls.Add(this.Label29);
-            this.Controls.Add(this.Label27);
-            this.Controls.Add(this.Ütem_KM_felső);
-            this.Controls.Add(this.Ütem_KM_alsó);
-            this.Controls.Add(this.Ütem_KM_névleges);
-            this.Controls.Add(this.Label28);
-            this.Controls.Add(this.Ütem_névleges_nap);
-            this.Controls.Add(this.Ütem_Ciklus_IDŐ);
-            this.Controls.Add(this.Ütem_Ciklus_KM);
             this.Controls.Add(this.Ütem_köv_sorszám);
             this.Controls.Add(this.Ütem_Köv_IDŐvKM);
             this.Controls.Add(this.Ütem_Köv_Státus);
@@ -721,18 +988,8 @@
             this.Controls.Add(this.Ütem_dátum);
             this.Controls.Add(this.Label24);
             this.Controls.Add(this.Label23);
-            this.Controls.Add(this.Ütem_Utolsó_futott);
-            this.Controls.Add(this.Label33);
-            this.Controls.Add(this.Ütem_számláló_KM);
-            this.Controls.Add(this.Label34);
-            this.Controls.Add(this.Ütem_vizsgálat_KM);
             this.Controls.Add(this.Ütem_vizsg_sorszám_km);
-            this.Controls.Add(this.Label38);
-            this.Controls.Add(this.Label39);
-            this.Controls.Add(this.Ütem_vizsgálat_IDŐ);
             this.Controls.Add(this.Ütem_vizsg_sorszám_idő);
-            this.Controls.Add(this.Label30);
-            this.Controls.Add(this.Label31);
             this.Controls.Add(this.Ütem_pályaszám);
             this.Controls.Add(this.Label32);
             this.Controls.Add(this.Ütem_átütemezés);
@@ -745,11 +1002,16 @@
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
-            this.Name = "Ablak_CAF_Részletes";
+            this.Name = "Ablak_CAF_Részletes_WIP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ütemezés Módosítás";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_CAF_Részletes_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_CAF_Részletes_Load);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -822,5 +1084,27 @@
         internal System.Windows.Forms.Button Ütem_Rögzít;
         internal System.Windows.Forms.Button IDŐ;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label lb_futhatmeg_p1;
+        private System.Windows.Forms.TextBox tb_futhatmeg_p0;
+        private System.Windows.Forms.TextBox tb_futhatmeg_p1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tb_futhatmeg_p2;
+        private System.Windows.Forms.Label lb_futhatmeg_p2;
+        private System.Windows.Forms.TextBox tb_megtett_p0;
+        private System.Windows.Forms.Label lb_megtett_p0;
+        private System.Windows.Forms.TextBox tb_megtett_p1;
+        private System.Windows.Forms.Label lb_megtett_p1;
+        private System.Windows.Forms.TextBox tb_rendben_p2;
+        private System.Windows.Forms.Label lb_rendben_p2;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TextBox tb_rendben_p3;
+        private System.Windows.Forms.Label lb_rendben_p3;
+        private System.Windows.Forms.TextBox tb_p3_p2_kozott;
+        private System.Windows.Forms.Label lb_p3_p2_kozott;
+        private System.Windows.Forms.Button btn_frissit;
+        private System.Windows.Forms.Button btn_elso_futtatas;
     }
 }

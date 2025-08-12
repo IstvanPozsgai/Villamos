@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -102,25 +101,11 @@ namespace Villamos
         {
             try
             {
-                int melyikelem;
-
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 Rögzítnap.Enabled = false;
-
-        
                 Módosítás.Enabled = false;
 
-
-                // csak főmérnökségi belépéssel törölhető
-                if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                {
-  
-                }
-                else
-                {
-      
-                }
-                melyikelem = 106;
+                int melyikelem = 106;
                 // módosítás 1 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
@@ -141,7 +126,7 @@ namespace Villamos
                 // módosítás 1 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-          
+
                 }
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))
@@ -264,13 +249,13 @@ namespace Villamos
                     }
                 case 4:
                     {
-                    
+
                         Kiirjaatörténelmet();
                         break;
                     }
                 case 5:
                     {
-           
+
                         Kiirjaatörténelmet();
                         break;
                     }
@@ -323,7 +308,7 @@ namespace Villamos
         private void Pályaszám_SelectedIndexChanged(object sender, EventArgs e)
         {
             Frissít();
-         }
+        }
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -893,7 +878,7 @@ namespace Villamos
         {
             try
             {
-                   if (e.RowIndex < 0) return;
+                if (e.RowIndex < 0) return;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1415,7 +1400,7 @@ namespace Villamos
 
             if (!int.TryParse(Text1.Text, out int result))
                 Text1.Text = "";
-           Option8.Checked = true;
+            Option8.Checked = true;
         }
 
         private void Command1_Click(object sender, EventArgs e)
@@ -2137,7 +2122,7 @@ namespace Villamos
 
 
         #region Másik Kimenet
-        private void Kimutatás_más_Click(object sender, EventArgs e)
+        private async void Kimutatás_más_Click(object sender, EventArgs e)
         {
             // kimeneti fájl helye és neve
             SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -2157,31 +2142,18 @@ namespace Villamos
 
             Holtart.Be();
             timer1.Enabled = true;
-            SZál_Kimutatás(() =>
-            { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                timer1.Enabled = false;
-                Holtart.Ki();
-                MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            });
-        }
 
-        private void SZál_Kimutatás(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
-                SZál_Kimutatás_Eljárás();
-
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
+            await Task.Run(() => SZál_Kimutatás_Eljárás());
+            //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+            timer1.Enabled = false;
+            Holtart.Ki();
+            MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void SZál_Kimutatás_Eljárás()
         {
             try
             {
-
                 MyE.ExcelLétrehozás();
                 string munkalap = "Adatok";
                 MyE.Munkalap_átnevezés("Munka1", munkalap);

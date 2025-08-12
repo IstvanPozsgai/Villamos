@@ -19,6 +19,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         readonly Kezelő_CAF_alap AlapKéz = new Kezelő_CAF_alap();
         readonly Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
+        readonly Kezelő_CAF_KM_Attekintes KézCafKm = new Kezelő_CAF_KM_Attekintes();
 
         Adat_CAF_alap EgyCAF;
 
@@ -35,21 +36,41 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Elő_Dátumig = elő_Dátumig;
             Start();
 
+            if (Program.PostásNév == "POZSGAII" || Program.PostásNév == "PAPR")
+            {
+                btn_elso_futtatas.Visible = true;
+            }
         }
 
         public Ablak_CAF_Részletes()
         {
             InitializeComponent();
-
         }
-
-        private void Ablak_CAF_Részletes_Load(object sender, EventArgs e)
+        private void Start()
         {
+            EgyCAF = AlapKéz.Egy_Adat(Posta_Segéd.Azonosító.Trim());
+
+            Státus_feltöltés();
+            Ütem_Pályaszámokfeltöltése();
+
+            Ciklus = Kéz_Ciklus.Lista_Adatok(true);
+            Ütem_Ciklus_IDŐ_Sorszám_feltöltés();
+            Ütem_Ciklus_KM_Sorszám_feltöltés();
+            if (Posta_Segéd.Sorszám > 0)
+            {
+                AdatokKiírása();
+                KiírJobbOldal();
+            }
+            else
+            {
+                AdatokKeresés();
+                KiírJobbOldal();
+            }
             GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
         }
 
-        private void Ablak_CAF_Részletes_FormClosed(object sender, FormClosedEventArgs e)
+        private void Ablak_CAF_Részletes_Load(object sender, EventArgs e)
         {
 
         }
@@ -102,28 +123,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        private void Start()
-        {
-            EgyCAF = AlapKéz.Egy_Adat(Posta_Segéd.Azonosító.Trim());
 
-            Státus_feltöltés();
-            Ütem_Pályaszámokfeltöltése();
-
-            Ciklus = Kéz_Ciklus.Lista_Adatok(true);
-            Ütem_Ciklus_IDŐ_Sorszám_feltöltés();
-            Ütem_Ciklus_KM_Sorszám_feltöltés();
-            if (Posta_Segéd.Sorszám > 0)
-            {
-                AdatokKiírása();
-                KiírJobbOldal();
-            }
-            else
-            {
-                AdatokKeresés();
-                KiírJobbOldal();
-            }
-        }
-
+        // JAVÍTANDÓ:ez lehetne enum
         private void Státus_feltöltés()
         {
             Ütem_státus.Items.Clear();
@@ -210,7 +211,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
 
         #region Kiírások
-        // JAVÍTANDÓ: WIN-be átvittem  Mivel az ID nem folytonos, ezért nem használható az előző vizsgálatra
         private void AdatokKiírása()
         {
             try
@@ -237,6 +237,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 {
                     Ütem_Köv_Számláló.BackColor = Color.LightPink;
                 }
+                KiirPvizsgalat();
             }
             catch (HibásBevittAdat ex)
             {
@@ -305,35 +306,122 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        // JAVÍTANDÓ:
-        // Olvasás után töröld Kezdet: int.tryParse, helyett használd a .ToÉrt_Int() fejlesztett függvényt
-        // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
-        // hogy nincs havi km, kivéve ha törött/selejtes.
-        // Nem tenném bele catch mert későbbiek folyamán a ki nem töltött mező problémát fog okozni
-        // Azért, hogy ne okozzon hibát javítottam, de nem tekintem véglegesnek a megoldást.
-        // Olvasás után töröld Vége:
+        private void KiirPvizsgalat()
+        {
+            if (Ütem_pályaszám.Text.Trim() == "") return;
+
+            Adat_CAF_KM_Attekintes teszt_adat = KézCafKm.Egy_Adat(Ütem_pályaszám.Text);
+
+            if (teszt_adat != null)
+            {
+                // P0: határ -1400
+                tb_futhatmeg_p0.Text = string.IsNullOrEmpty(teszt_adat.kov_p0?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p0}";
+                if (tb_futhatmeg_p0.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p0, 1400);
+
+                // P1: határ -7000
+                tb_futhatmeg_p1.Text = string.IsNullOrEmpty(teszt_adat.kov_p1?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p1}";
+                if (tb_futhatmeg_p1.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p1, 7000);
+
+                // P2: határ -28000
+                tb_futhatmeg_p2.Text = string.IsNullOrEmpty(teszt_adat.kov_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p2}";
+                if (tb_futhatmeg_p2.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p2, 28000);
+
+
+                // Megtett P0
+                tb_megtett_p0.Text = string.IsNullOrEmpty(teszt_adat.utolso_p0_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p0_kozott}";
+                if (tb_megtett_p0.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p0, 14000, 15400);
+
+                // Megtett P1
+                tb_megtett_p1.Text = string.IsNullOrEmpty(teszt_adat.utolso_p1_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p1_kozott}";
+                if (tb_megtett_p1.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p1, 70000, 77000);
+
+                // P2 rendben
+                tb_rendben_p2.Text = string.IsNullOrEmpty(teszt_adat.elso_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p2}";
+                if (tb_rendben_p2.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p2, 280000, 308000);
+
+                // P3 rendben
+                tb_rendben_p3.Text = string.IsNullOrEmpty(teszt_adat.elso_p3?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p3}";
+                if (tb_rendben_p3.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p3, 560000, 616000);
+
+                // P3–P2 közötti futás
+                tb_p3_p2_kozott.Text = string.IsNullOrEmpty(teszt_adat.utolso_p3_es_p2_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p3_es_p2_kozott}";
+                if (tb_p3_p2_kozott.Text != "Még nem történt.") SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
+            }
+            else
+            {
+                tb_futhatmeg_p0.Text = "Nincs adat";
+                tb_futhatmeg_p1.Text = "Nincs adat";
+                tb_futhatmeg_p2.Text = "Nincs adat";
+                tb_megtett_p0.Text = "Nincs adat";
+                tb_megtett_p1.Text = "Nincs adat";
+                tb_rendben_p2.Text = "Nincs adat";
+                tb_rendben_p3.Text = "Nincs adat";
+                tb_p3_p2_kozott.Text = "Nincs adat";
+            }
+        }
+
+        private void SzinezdTextBox(TextBox tb, int alsoHatar, int felsoHatar)
+        {
+            if (int.TryParse(tb.Text, out int ertek))
+            {
+                if (ertek <= alsoHatar)
+                {
+                    tb.BackColor = Color.LightGreen;
+                }
+                else if (ertek <= felsoHatar)
+                {
+                    tb.BackColor = Color.PaleGoldenrod;
+                }
+                else
+                {
+                    tb.BackColor = ControlPaint.Light(Color.Red);
+                }
+                tb.Text = tb.Text + " Km";
+            }
+            else
+            {
+                tb.BackColor = SystemColors.Window;
+            }
+        }
+
+        void SzinezdFuthatMeg(TextBox tb, int pirosHatar)
+        {
+            if (int.TryParse(tb.Text, out int ertek))
+            {
+                if (ertek < -pirosHatar)
+                {
+                    tb.BackColor = ControlPaint.Light(Color.Red);
+                }
+                else if (ertek < 0)
+                {
+                    tb.BackColor = Color.PaleGoldenrod;
+                }
+                else
+                {
+                    tb.BackColor = Color.LightGreen;
+                }
+                tb.Text = tb.Text + " Km";
+            }
+            else
+            {
+                tb.BackColor = SystemColors.Window;
+            }
+        }
+
         private void KiírJobbOldal()
         {
             try
             {
                 KM_ciklus_kiirás();
-                int KM_felső = Ütem_KM_felső.Text.ToÉrt_Int();
+                int KM_felső = int.TryParse(Ütem_KM_felső.Text, out KM_felső) ? KM_felső : 0;
                 Ütem_számláló_KM.Text = EgyCAF.Számláló.ToString();
                 Ütem_Utolsó_futott.Text = (EgyCAF.KMUkm - EgyCAF.Számláló).ToString();
                 Ütem_km_KMU.Text = EgyCAF.KMUkm.ToString();
                 Ütem_havifutás.Text = EgyCAF.Havikm.ToString();
-                //Meg kell kérdezni,hogy mit csináljon akkor ha nincs havifutás, ha áll akkor nem okoz proplémát,
-                //ha indult és még nincs havi adata, akkor továbbra sem ütemezi.
-                //Megoldások
-                //* Ha hosszú állás után elkészült, akkor kézzel kell a havi km-t nulláról átállítani valamilyen számra
-                //* Ha 0 lenne akkor a típus átlagos futással fog számolni a program és a beütemezett vizsgálatokat ki kell törölni a tervből.
-                //Mindkét javaslatommal felhasználói beavatkozást igényel
                 Ütem_Napkm.Text = ((int)(EgyCAF.Havikm / 30)).ToString();
-                // JAVÍTANDÓ: Módosítani szükséges  ezzel ki van küszöbölve a 0-val való osztás
-                if ((EgyCAF.Havikm / 30) <= 100)
-                    Ütem_KM_futhatmég.Text = (KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)).ToString();
-                else
-                    Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
+                // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
+                // hogy nincs havi km, kivéve ha törött/selejtes.
+                Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
             }
             catch (Exception ex)
             {
@@ -737,6 +825,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 KézAdatok.Döntés(ADAT);
                 Változás?.Invoke();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -748,8 +838,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
@@ -783,5 +871,44 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
         #endregion
+
+        private void btn_frissit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                KézCafKm.Erteket_Frissit(Posta_Segéd.Azonosító);
+                KiirPvizsgalat();
+                MessageBox.Show("Sikeres frissítés!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        //Javítás :élesítés után törlendő
+        private void btn_elso_futtatas_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Kezelő_CAF_KM_Attekintes.InitializeCache(KézAdatok);
+                KézCafKm.Tabla_Feltoltese();
+                MessageBox.Show("Sikeres feltöltés!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

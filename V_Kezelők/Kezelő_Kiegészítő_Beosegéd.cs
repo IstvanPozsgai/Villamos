@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő1.mdb";
+        readonly string táblanév = "beosegéd";
 
         public Kezelő_Kiegészítő_Beosegéd()
         {
@@ -19,40 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Beosegéd> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM beosegéd  ORDER BY beosztáskód ";
-            List<Adat_Kiegészítő_Beosegéd> Adatok = new List<Adat_Kiegészítő_Beosegéd>();
-            Adat_Kiegészítő_Beosegéd Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Beosegéd(
-                                     rekord["Beosztáskód"].ToStrTrim(),
-                                     rekord["Túlóra"].ToÉrt_Int(),
-                                     rekord["Kezdőidő"].ToÉrt_DaTeTime(),
-                                     rekord["Végeidő"].ToÉrt_DaTeTime(),
-                                     rekord["túlóraoka"].ToStrTrim(),
-                                     rekord["telephely"].ToStrTrim());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public List<Adat_Kiegészítő_Beosegéd> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
+            string szöveg = $"SELECT * FROM {táblanév}  ORDER BY beosztáskód ";
             List<Adat_Kiegészítő_Beosegéd> Adatok = new List<Adat_Kiegészítő_Beosegéd>();
             Adat_Kiegészítő_Beosegéd Adat;
 

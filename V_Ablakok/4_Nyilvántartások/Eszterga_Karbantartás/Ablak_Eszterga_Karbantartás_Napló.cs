@@ -14,7 +14,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
     public partial class Ablak_Eszterga_Karbantartás_Napló : Form
     {
         public delegate void Event_Kidobo();
-        //hiba a rogzitesnel uzemorat rogziti amikor nem is kellene, tovabb megy amikor ki kene dobnia. 
         //databindingot elhanyagolni mas mod a szinezesre keresni egy masik oldalon 
         //ugyanezek a modosit oldalra
         #region Osztalyszintű elemek
@@ -375,11 +374,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             try
             {
                 if (TablaMuvelet.SelectedRows[0].Cells["Státusz"].Value?.ToStrTrim() == "Törölt")
+                {
+                    Eredmeny = false;
                     throw new HibásBevittAdat("Törölt műveletet nem lehet naplózni");
+                }
 
                 if (TxtBxMegjegyzes.Text == "")
+                {
+                    Eredmeny = false;
                     throw new HibásBevittAdat("A megjegyzés mező nem lehet üres.");
-
+                }
                 // JAVÍTANDÓ:a dátum az nem dátum?
                 //kesz
                 DateTime datum = DtmPckr.Value;

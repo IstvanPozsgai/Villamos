@@ -29,6 +29,13 @@ namespace Villamos.Villamos_Adatszerkezet
             Oka = oka;
             SAP = sAP;
         }
+
+        public Adat_Kerék_Mérés(string kerékberendezés, DateTime mikor, int sAP)
+        {
+            Kerékberendezés = kerékberendezés;
+            Mikor = mikor;
+            SAP = sAP;
+        }
     }
 
 
@@ -48,7 +55,7 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-    
+
 
     public class Adat_Kerék_Eszterga
     {
@@ -81,7 +88,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public DateTime Dátum { get; private set; }
         public string Objektumfajta { get; private set; }
 
-        public Adat_Kerék_Tábla(string kerékberendezés, string kerékmegnevezés, string kerékgyártásiszám, 
+        public Adat_Kerék_Tábla(string kerékberendezés, string kerékmegnevezés, string kerékgyártásiszám,
             string föléberendezés, string azonosító, string pozíció, DateTime dátum, string objektumfajta)
         {
             Kerékberendezés = kerékberendezés;
@@ -92,6 +99,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Pozíció = pozíció;
             Dátum = dátum;
             Objektumfajta = objektumfajta;
+        }
+
+        public Adat_Kerék_Tábla(string kerékberendezés, string föléberendezés, string azonosító, string pozíció)
+        {
+            Kerékberendezés = kerékberendezés;
+            Föléberendezés = föléberendezés;
+            Azonosító = azonosító;
+            Pozíció = pozíció;
         }
     }
 

@@ -435,6 +435,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
 
+                if (AdatokMuvelet.Count() == 0)
+                    return Muvelet;
+
                 Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(a => a.ID == int.Parse(TxtBxId.Text));
 
                 Enum.TryParse(CmbxEgyseg.SelectedItem.ToStrTrim(), out EsztergaEgyseg egyseg);
@@ -680,7 +683,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             {
                 Btn_Torles.Visible = false;
                 AdatokMuvelet = Kez_Muvelet.Lista_Adatok();
-                TxtBxId.Text = (AdatokMuvelet.Any() ? AdatokMuvelet.Max(a => a.ID) + 1 : 1).ToStrTrim();
+                TxtBxId.Text = "0";
                 TxtBxMuvelet.Text = "";
                 CmbxEgyseg.SelectedItem = EsztergaEgyseg.Bekövetkezés;
                 TxtBxMennyiNap.Text = "0";

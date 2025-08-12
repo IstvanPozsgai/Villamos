@@ -18,35 +18,7 @@ namespace Villamos.Kezelők
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
-        public List<Adat_Kiegészítő_Jelenlétiív> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Jelenlétiív> Adatok = new List<Adat_Kiegészítő_Jelenlétiív>();
-            Adat_Kiegészítő_Jelenlétiív Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Jelenlétiív(
-                                        rekord["id"].ToÉrt_Long(),
-                                        rekord["Szervezet"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Kiegészítő_Jelenlétiív> Lista_Adatok(string Telephely)
         {
@@ -116,6 +88,37 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        //Elkopó
+        public List<Adat_Kiegészítő_Jelenlétiív> Lista_Adatok(string hely, string jelszó, string szöveg)
+        {
+            List<Adat_Kiegészítő_Jelenlétiív> Adatok = new List<Adat_Kiegészítő_Jelenlétiív>();
+            Adat_Kiegészítő_Jelenlétiív Adat;
+
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Kiegészítő_Jelenlétiív(
+                                        rekord["id"].ToÉrt_Long(),
+                                        rekord["Szervezet"].ToStrTrim()
+                                          );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
         }
     }
 }

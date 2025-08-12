@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -1006,7 +1005,7 @@ namespace Villamos
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
+        private async void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
         {
             SaveFileDialog SaveFileDialog1 = new SaveFileDialog
             {
@@ -1027,28 +1026,13 @@ namespace Villamos
 
             Holtart.Be();
             timer1.Enabled = true;
-            SZál_ABadatbázis(() =>
-            { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                timer1.Enabled = false;
-                Holtart.Ki();
-                MessageBox.Show("Az Excel tábla elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(_fájlexc);
-            });
-        }
 
-        /// <summary>
-        /// Szálon futó eljárás, ami elkészíti az excelt a háttérben
-        /// </summary>
-        /// <param name="callback"></param>
-        private void SZál_ABadatbázis(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót
-                MyE.DataTableToExcel(_fájlexc, _Tábla);
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
+            await Task.Run(() => MyE.DataTableToExcel(_fájlexc, _Tábla));
+            //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+            timer1.Enabled = false;
+            Holtart.Ki();
+            MessageBox.Show("Az Excel tábla elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MyE.Megnyitás(_fájlexc);
         }
 
         /// <summary>

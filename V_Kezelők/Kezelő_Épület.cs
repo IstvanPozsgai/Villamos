@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -62,5 +64,142 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+
+        public void Rögzítés(string Telephely, int Év, List<Adat_Épület_Takarításrakijelölt> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
+                {
+                    string szöveg = "INSERT INTO takarításrakijelölt (E1elvégzettdb, E1kijelöltdb, E1rekijelölt,";
+                    szöveg += " E2elvégzettdb, E2kijelöltdb, E2rekijelölt,";
+                    szöveg += " E3elvégzettdb, E3kijelöltdb, E3rekijelölt,";
+                    szöveg += " helységkód, hónap, Megnevezés, osztály ) VALUES (";
+                    szöveg += $" {Adat.E1elvégzettdb}, {Adat.E1kijelöltdb}, '{Adat.E1rekijelölt}', ";
+                    szöveg += $" {Adat.E2elvégzettdb}, {Adat.E2kijelöltdb}, '{Adat.E2rekijelölt}', ";
+                    szöveg += $" {Adat.E3elvégzettdb}, {Adat.E3kijelöltdb}, '{Adat.E3rekijelölt}', ";
+                    szöveg += $"'{Adat.Helységkód}',";
+                    szöveg += $"{Adat.Hónap},";
+                    szöveg += $"'{Adat.Megnevezés}',";
+                    szöveg += $"'{Adat.Osztály}')";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// A kijelölések módosítását követően összesített darabszámokat rögzítjük az adatbázisban.
+        /// </summary>
+        /// <param name="Telephely"></param>
+        /// <param name="Év"></param>
+        /// <param name="Adatok"></param>
+        public void Módosítás(string Telephely, int Év, List<Adat_Épület_Takarításrakijelölt> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
+                {
+                    string szöveg = "UPDATE takarításrakijelölt SET ";
+                    szöveg += $"E1kijelöltdb={Adat.E1kijelöltdb}, ";
+                    szöveg += $"E2kijelöltdb={Adat.E2kijelöltdb}, ";
+                    szöveg += $"E3kijelöltdb={Adat.E3kijelöltdb} ";
+                    szöveg += $" WHERE hónap={Adat.Hónap} ";
+                    szöveg += $" AND helységkód='{Adat.Helységkód}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void Módosítás(List<Adat_Épület_Takarításrakijelölt> Adatok, int Év, string Telephely)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
+                {
+                    string szöveg = "UPDATE takarításrakijelölt SET ";
+                    szöveg += $"E1kijelöltdb={Adat.E1kijelöltdb}, ";
+                    szöveg += $"E2kijelöltdb={Adat.E2kijelöltdb}, ";
+                    szöveg += $"E3kijelöltdb={Adat.E3kijelöltdb}, ";
+                    szöveg += $"E1rekijelölt='{Adat.E1rekijelölt}', ";
+                    szöveg += $"E2rekijelölt='{Adat.E2rekijelölt}', ";
+                    szöveg += $"E3rekijelölt='{Adat.E3rekijelölt}' ";
+                    szöveg += $" WHERE hónap={Adat.Hónap} ";
+                    szöveg += $" AND helységkód='{Adat.Helységkód}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Az elvégzett darabszámok módosítását követően összesített darabszámokat rögzítjük az adatbázisban.
+        /// </summary>
+        /// <param name="Év"></param>
+        /// <param name="Telephely"></param>
+        /// <param name="Adatok"></param>
+        public void Módosítás(int Év, string Telephely, List<Adat_Épület_Takarításrakijelölt> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
+                {
+                    string szöveg = "UPDATE takarításrakijelölt  SET ";
+                    szöveg += $"E1elvégzettdb={Adat.E1elvégzettdb}, ";
+                    szöveg += $"E2elvégzettdb={Adat.E2elvégzettdb}, ";
+                    szöveg += $"E3elvégzettdb={Adat.E3elvégzettdb} ";
+                    szöveg += $" WHERE hónap={Adat.Hónap} ";
+                    szöveg += $" AND helységkód='{Adat.Helységkód}'";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

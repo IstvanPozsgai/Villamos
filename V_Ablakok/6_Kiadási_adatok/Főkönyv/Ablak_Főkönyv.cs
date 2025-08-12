@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -649,7 +649,7 @@ namespace Villamos
 
 
         #region Háromnapos
-        private void Haromnapos_Click(object sender, EventArgs e)
+        private async void Haromnapos_Click(object sender, EventArgs e)
         {
             Papírméret.Text = "A4";
             PapírElrendezés.Text = "Fekvő";
@@ -684,32 +684,19 @@ namespace Villamos
             else
                 return;
 
-
+            Főkönyv_Funkciók.Napiállók(Telephely_);
+            Főkönyv_Háromnapos nyomtatvány = new Főkönyv_Háromnapos();
+            // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
+            await Task.Run(() => nyomtatvány.Három_Nyomtatvány(fájlnév_, Telephely_, Papírméret_, PapírElrendezés_));
             Holtart.Be(100);
             timer1.Enabled = true;
             fájlnév_ = fájlexc.Trim();
             Telephely_ = Cmbtelephely.Text.Trim();
 
-            SZál_háromnapos(() =>
-            { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                timer1.Enabled = false;
-                Holtart.Ki();
-                MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            });
-        }
 
-        private void SZál_háromnapos(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                Főkönyv_Funkciók.Napiállók(Telephely_);
-                Főkönyv_Háromnapos nyomtatvány = new Főkönyv_Háromnapos();
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
-                nyomtatvány.Három_Nyomtatvány(fájlnév_, Telephely_, Papírméret_, PapírElrendezés_);
-
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
+            timer1.Enabled = false;
+            Holtart.Ki();
+            MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void Osztás()
@@ -2421,21 +2408,7 @@ namespace Villamos
 
 
         #region főkönyv készül
-        private void SZál_Főkönyv(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                Főkönyv_Főkönyv nyomtatvány = new Főkönyv_Főkönyv();
-
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
-                nyomtatvány.Főkönyv_Alap(Telephely_, szövegd_, napszak_, Dátum_, fájlnév_);
-
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
-        }
-
-        private void Főkönyv_Click(object sender, EventArgs e)
+        private async void Főkönyv_Click(object sender, EventArgs e)
         {
             List<Adat_Főkönyv_Nap> AdatokÖ = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
             if (AdatokÖ.Count < 1) return;
@@ -2497,23 +2470,20 @@ namespace Villamos
             szövegd_ = szövegd;
             napszak_ = Délelőtt.Checked ? "de" : "du";
             Dátum_ = Dátum.Value;
+            Főkönyv_Főkönyv nyomtatvány = new Főkönyv_Főkönyv();
+            await Task.Run(() => nyomtatvány.Főkönyv_Alap(Telephely_, szövegd_, napszak_, Dátum_, fájlnév_));
 
-            SZál_Főkönyv(() =>
-            { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                timer1.Enabled = false;
-                Holtart.Ki();
-                MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            });
-
+            timer1.Enabled = false;
+            Holtart.Ki();
+            MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Főkönyv.Visible = true;
         }
         #endregion
 
 
         #region meghagyás
-        private void Meghagyás_Click(object sender, EventArgs e)
+        private async void Meghagyás_Click(object sender, EventArgs e)
         {
-
             string fájlexc;
             // kimeneti fájl helye és neve
             SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -2529,7 +2499,6 @@ namespace Villamos
             else
                 return;
 
-
             Holtart.Be();
             timer1.Enabled = true;
             fájlnév_ = fájlexc.Trim();
@@ -2537,34 +2506,19 @@ namespace Villamos
             Dátum_ = Dátum.Value;
             PapírElrendezés_ = PapírElrendezés.Text.Trim();
             Papírméret_ = Papírméret.Text.Trim();
+            Főkönyv_Meghagyás nyomtatvány = new Főkönyv_Meghagyás();
 
-
-            SZál_Meghagyás(() =>
-            { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                timer1.Enabled = false;
-                Holtart.Ki();
-                MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            });
-        }
-
-        private void SZál_Meghagyás(Action value)
-        {
-            Thread proc = new Thread(() =>
-             {
-                 Főkönyv_Meghagyás nyomtatvány = new Főkönyv_Meghagyás();
-
-                 // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
-                 nyomtatvány.Főkönyv_Meghagyáskészítés(fájlnév_, Telephely_, Dátum_, Papírméret_, PapírElrendezés_);
-
-                 this.Invoke(value, new object[] { });
-             });
-            proc.Start();
+            await Task.Run(() => nyomtatvány.Főkönyv_Meghagyáskészítés(fájlnév_, Telephely_, Dátum_, Papírméret_, PapírElrendezés_));
+            //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+            timer1.Enabled = false;
+            Holtart.Ki();
+            MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
 
 
         #region Beálló lista
-        private void Beállólista_Click(object sender, EventArgs e)
+        private async void Beállólista_Click(object sender, EventArgs e)
         {
             try
             {
@@ -2593,12 +2547,13 @@ namespace Villamos
                 PapírElrendezés_ = PapírElrendezés.Text.Trim();
                 Papírméret_ = Papírméret.Text.Trim();
 
-                SZál_Beálló(() =>
-                { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                    timer1.Enabled = false;
-                    Holtart.Ki();
-                    MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                });
+                Főkönyv_Beálló nyomtatvány = new Főkönyv_Beálló();
+
+                await Task.Run(() => nyomtatvány.Beálló_kocsik(fájlnév_, Telephely_, Dátum_, napszak_, Papírméret_, PapírElrendezés_));
+                //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+                timer1.Enabled = false;
+                Holtart.Ki();
+                MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2609,21 +2564,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void SZál_Beálló(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                Főkönyv_Beálló nyomtatvány = new Főkönyv_Beálló();
-
-
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
-                nyomtatvány.Beálló_kocsik(fájlnév_, Telephely_, Dátum_, napszak_, Papírméret_, PapírElrendezés_);
-
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
         }
         #endregion
 
@@ -2984,7 +2924,7 @@ namespace Villamos
 
 
         #region Jegykezelő      
-        private void Jegykezelő_Click(object sender, EventArgs e)
+        private async void Jegykezelő_Click(object sender, EventArgs e)
         {
             try
             {
@@ -3018,13 +2958,13 @@ namespace Villamos
                 Dátum_ = Dátum.Value;
                 DateTime kezdet = DateTime.Now;
 
-                SZál_Jegykezelő(() =>
-                { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                    timer1.Enabled = false;
-                    Holtart.Ki();
-                    DateTime Vége = DateTime.Now;
-                    MessageBox.Show($"A nyomtatvány elkészült ! Elkészítési idő:{Vége - kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                });
+                Főkönyv_Jegykezelő nyomtatvány = new Főkönyv_Jegykezelő();
+                await Task.Run(() => nyomtatvány.Jegykezelő(fájlnév_, Telephely_, AdatokJármű, AdatokFőkönyvNap, Dátum_, AdatokTakarításTípus, AdatokFőVendég));
+                //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+                timer1.Enabled = false;
+                Holtart.Ki();
+                DateTime Vége = DateTime.Now;
+                MessageBox.Show($"A nyomtatvány elkészült ! Elkészítési idő:{Vége - kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -3036,35 +2976,11 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void SZál_Jegykezelő(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                Főkönyv_Jegykezelő nyomtatvány = new Főkönyv_Jegykezelő();
-                // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
-                nyomtatvány.Jegykezelő(fájlnév_, Telephely_, AdatokJármű, AdatokFőkönyvNap, Dátum_, AdatokTakarításTípus, AdatokFőVendég);
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
-        }
-
         #endregion
 
 
         #region Takarítás
-        private void SZál_takarítás(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                Főkönyv_Takarítás nyomtatvány = new Főkönyv_Takarítás();
-                nyomtatvány.Takarítás_Excel(fájlnév_, Telephely_, Dátum_, napszak_, AdatokTakarításTípus, AdatokJármű, AdatokFőkönyvNap, AdatokFőVendég, AdatokFőkönyvZSER);
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
-        }
-
-        private void Button5_Click(object sender, EventArgs e)
+        private async void Button5_Click(object sender, EventArgs e)
         {
             string fájlexc;
             AdatokFőkönyvNap = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
@@ -3107,13 +3023,13 @@ namespace Villamos
             napszak_ = Délelőtt.Checked ? "de" : "du";
             DateTime kezdet = DateTime.Now;
 
-            SZál_takarítás(() =>
-                { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                    timer1.Enabled = false;
-                    Holtart.Ki();
-                    DateTime Vége = DateTime.Now;
-                    MessageBox.Show($"A nyomtatvány elkészült ! Elkészítési idő:{Vége - kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                });
+            Főkönyv_Takarítás nyomtatvány = new Főkönyv_Takarítás();
+            await Task.Run(() => nyomtatvány.Takarítás_Excel(fájlnév_, Telephely_, Dátum_, napszak_, AdatokTakarításTípus, AdatokJármű, AdatokFőkönyvNap, AdatokFőVendég, AdatokFőkönyvZSER));
+            //leállítjuk a számlálót és kikapcsoljuk a holtartot.
+            timer1.Enabled = false;
+            Holtart.Ki();
+            DateTime Vége = DateTime.Now;
+            MessageBox.Show($"A nyomtatvány elkészült ! Elkészítési idő:{Vége - kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
 

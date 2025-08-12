@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -5046,7 +5046,7 @@ namespace Villamos
             }
         }
 
-        private void TIG_Készítés_Click(object sender, EventArgs e)
+        private async void TIG_Készítés_Click(object sender, EventArgs e)
         {
             try
             {
@@ -5066,14 +5066,16 @@ namespace Villamos
                     fájlexcel_ = SaveFileDialog1.FileName;
                 else
                     return;
+
                 timer1.Enabled = true;
-                SZál_TIG(() =>
-                   { //leállítjuk a számlálót és kikapcsoljuk a holtartot.
-                       timer1.Enabled = false;
-                       Holtart.Ki();
-                       DateTime Vége = DateTime.Now;
-                       MessageBox.Show($"A feladat {Vége - Eleje} idő alatt végrehajtásra került.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                   });
+                Takarítás_teljesítés_Igazolás Fájl = new Takarítás_teljesítés_Igazolás(Dátum_, false, Telephely_);
+                await Task.Run(() => Fájl.ExcelJárműTábla(fájlexcel_));
+
+                timer1.Enabled = false;
+                Holtart.Ki();
+                DateTime Vége = DateTime.Now;
+                MessageBox.Show($"A feladat {Vége - Eleje} idő alatt végrehajtásra került.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -5086,16 +5088,6 @@ namespace Villamos
             }
         }
 
-        private void SZál_TIG(Action callback)
-        {
-            Thread proc = new Thread(() =>
-            {
-                Takarítás_teljesítés_Igazolás Fájl = new Takarítás_teljesítés_Igazolás(Dátum_, false, Telephely_);
-                Fájl.ExcelJárműTábla(fájlexcel_);
-                this.Invoke(callback, new object[] { });
-            });
-            proc.Start();
-        }
 
         private void Timer1_Tick(object sender, EventArgs e)
         {

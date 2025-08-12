@@ -22,6 +22,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         readonly Kezelő_CAF_Adatok KezCafAdatok = new Kezelő_CAF_Adatok();
         readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_Főkönyv_Zser_Km KézZSerKm = new Kezelő_Főkönyv_Zser_Km();
+        readonly Kezelő_CAF_KM_Attekintes KézCafKm = new Kezelő_CAF_KM_Attekintes();
 
         List<Adat_CAF_alap> AdatokCAFAlap = new List<Adat_CAF_alap>();
         List<Adat_Főkönyv_Zser_Km> AdatokZser = new List<Adat_Főkönyv_Zser_Km>();
@@ -222,6 +223,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                     }
                     KézCAFAlap.Módosítás_kmAdat(AdatokGy);
+                    
+                    //Frissítem a km adatokat a CAF_KM_Attekintes táblában
+                    foreach (Adat_CAF_alap rekord in Adatok)
+                        KézCafKm.Erteket_Frissit(rekord.Azonosító);
                 }
                 Holtart.Ki();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);

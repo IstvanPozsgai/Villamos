@@ -334,12 +334,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosít_Túl(string Telephely, Adat_Dolgozó_Alap Adat)
+        public void Módosít_Túl(string Telephely, string Dolgozószám, bool túlóraeng)
         {
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Dolgozóadatok SET túlóraeng={Adat.Túlóraeng} WHERE dolgozószám='{Adat.Dolgozószám}'";
+                string szöveg = $"UPDATE Dolgozóadatok SET túlóraeng={túlóraeng} WHERE dolgozószám='{Dolgozószám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
