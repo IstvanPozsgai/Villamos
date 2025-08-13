@@ -78,7 +78,7 @@ namespace Villamos
             Telephelyekfeltöltése();
 
             GombLathatosagKezelo.Beallit(this);
-           // Jogosultságkiosztás();
+            // Jogosultságkiosztás();
             Papír();
             Reklámot_üzen();
         }
@@ -689,12 +689,12 @@ namespace Villamos
             Főkönyv_Funkciók.Napiállók(Telephely_);
             Főkönyv_Háromnapos nyomtatvány = new Főkönyv_Háromnapos();
             // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
-            await Task.Run(() => nyomtatvány.Három_Nyomtatvány(fájlnév_, Telephely_, Papírméret_, PapírElrendezés_));
+
             Holtart.Be(100);
             timer1.Enabled = true;
             fájlnév_ = fájlexc.Trim();
             Telephely_ = Cmbtelephely.Text.Trim();
-
+            await Task.Run(() => nyomtatvány.Három_Nyomtatvány(fájlnév_, Telephely_, Papírméret_, PapírElrendezés_));
 
             timer1.Enabled = false;
             Holtart.Ki();
