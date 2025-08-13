@@ -14,8 +14,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
     public partial class Ablak_Eszterga_Karbantartás_Napló : Form
     {
         public delegate void Event_Kidobo();
-        //databindingot elhanyagolni mas mod a szinezesre keresni egy masik oldalon 
-        //ugyanezek a modosit oldalra
         #region Osztalyszintű elemek
 
         readonly bool Baross = Program.PostásTelephely.Trim() == "Baross";

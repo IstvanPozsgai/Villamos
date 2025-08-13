@@ -734,7 +734,7 @@ namespace Villamos
                 menüleírás[131] = " 1- Jármű történte módosítás és PDF feltöltés, 2- , 3-  ";
 
                 menünév[160] = "Kerékeszterga Karbantartás";
-                menüleírás[160] = " 1- Adatok listázása/excel kimenet, 2- Alap adatok rögzítése , 3- Adatok módosítása/újak létrehozása ";
+                menüleírás[160] = " 1- Napi üzemóra megadása, 2-  Műveletek rögzítése , 3- Műveletek és üzemórák szerkesztése";
 
                 menünév[165] = "Baross Kerékeszterga I";
                 menüleírás[165] = " 1- Elkészülés és visszaállítás gombok , 2- Törölt gomb, 3- Beosztás és Esztergályosok gombok";

@@ -324,14 +324,75 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// Új rekord hozzáadása esetén ellenőrzi, hogy az azonosító már létezik-e az adatbázisban, 
         /// illetve biztosítja, hogy minden mező érvényes adatokat tartalmazzon.
         /// </summary>
+        //private bool TxtBxEllenorzes(int ujRekord, bool torles = false)
+        //{
+        //    bool Eredmeny = false;
+        //    try
+        //    {
+        //        if (torles)
+        //            return true;
+        //        //Ujrekordnal nem ellenőrizzük, hogy van-e kiválasztott sor
+        //        if (ujRekord != 0 && TablaMuvelet.SelectedRows.Count < 1)
+        //            throw new HibásBevittAdat("Nincs kiválasztott művelet.");
+
+        //        if (string.IsNullOrEmpty(TxtBxId.Text))
+        //            throw new HibásBevittAdat("Töltse ki az Azonosító mezőt.");
+
+        //        string Egyseg = CmbxEgyseg.SelectedItem?.ToStrTrim();
+        //        bool Nap = int.TryParse(TxtBxMennyiNap.Text, out int MennyiNap);
+        //        bool Ora = int.TryParse(TxtBxMennyiOra.Text, out int MennyiÓra);
+
+        //        if (Egyseg == "Dátum" && (!Nap || MennyiNap <= 0))
+        //            throw new HibásBevittAdat("A Nap mezőben csak pozitív egész szám szerepelhet.");
+
+        //        else if (Egyseg == "Üzemóra" && (!Ora || MennyiÓra <= 0))
+        //            throw new HibásBevittAdat("Az Óra mezőben csak pozitív egész szám szerepelhet.");
+
+        //        else if (Egyseg == "Bekövetkezés" && (!Nap || !Ora || MennyiNap <= 0 || MennyiÓra <= 0))
+        //            throw new HibásBevittAdat("A Nap és Óra mezőkben csak pozitív egész szám szerepelhetnek.");
+
+        //        if (string.IsNullOrEmpty(TxtBxMuvelet.Text))
+        //            throw new HibásBevittAdat("Töltse ki a Művelet mezőt.");
+
+        //        if (Egyseg == "Üzemóra" || Egyseg == "Bekövetkezés")
+        //        {
+        //            AdatokUzemora = Kez_Uzemora.Lista_Adatok();
+
+        //            if (string.IsNullOrEmpty(TxtBxUtolsoUzemoraAllas.Text) || TxtBxUtolsoUzemoraAllas.Text == "0" ||
+        //                !long.TryParse(TxtBxUtolsoUzemoraAllas.Text, out _))
+        //                throw new HibásBevittAdat("Az Utolsó Üzemóra Állás mező csak pozitív egész számot tartalmazhat.");
+
+        //            else
+        //            {
+        //                long aktualisUzemora = AdatokUzemora.Count > 0 ? AdatokUzemora.Max(u => u.Uzemora) : 0;
+        //                if (long.Parse(TxtBxUtolsoUzemoraAllas.Text) > aktualisUzemora)
+        //                    throw new HibásBevittAdat("Az Utolsó Üzemóra Állás nem lehet nagyobb, mint az aktuális Üzemóra érték.");
+        //            }
+
+        //        }
+        //        Eredmeny = true;
+        //    }
+        //    catch (HibásBevittAdat ex)
+        //    {
+        //        MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+        //        MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    return Eredmeny;
+        //}
         private bool TxtBxEllenorzes(int ujRekord, bool torles = false)
         {
             bool Eredmeny = false;
             try
             {
+                AdatokUzemora = Kez_Uzemora.Lista_Adatok();
+
                 if (torles)
                     return true;
-                //Ujrekordnal nem ellenőrizzük, hogy van-e kiválasztott sor
+
                 if (ujRekord != 0 && TablaMuvelet.SelectedRows.Count < 1)
                     throw new HibásBevittAdat("Nincs kiválasztott művelet.");
 
@@ -354,10 +415,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 if (string.IsNullOrEmpty(TxtBxMuvelet.Text))
                     throw new HibásBevittAdat("Töltse ki a Művelet mezőt.");
 
+                Adat_Eszterga_Uzemora uzemoraRekordDatum = KeresUzemora(0, DtmPckrUtolsoDatum.Value, EsztergaEgyseg.Dátum);
+                if (uzemoraRekordDatum == null)
+                    throw new HibásBevittAdat($"Nem található üzemóra rögzítve a következő dátumra: {DtmPckrUtolsoDatum.Value.ToShortDateString()}.");
+
                 if (Egyseg == "Üzemóra" || Egyseg == "Bekövetkezés")
                 {
-                    AdatokUzemora = Kez_Uzemora.Lista_Adatok();
-
                     if (string.IsNullOrEmpty(TxtBxUtolsoUzemoraAllas.Text) || TxtBxUtolsoUzemoraAllas.Text == "0" ||
                         !long.TryParse(TxtBxUtolsoUzemoraAllas.Text, out _))
                         throw new HibásBevittAdat("Az Utolsó Üzemóra Állás mező csak pozitív egész számot tartalmazhat.");
@@ -367,8 +430,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                         long aktualisUzemora = AdatokUzemora.Count > 0 ? AdatokUzemora.Max(u => u.Uzemora) : 0;
                         if (long.Parse(TxtBxUtolsoUzemoraAllas.Text) > aktualisUzemora)
                             throw new HibásBevittAdat("Az Utolsó Üzemóra Állás nem lehet nagyobb, mint az aktuális Üzemóra érték.");
-                    }
 
+                        Adat_Eszterga_Uzemora uzemoraRekordUzemora = KeresUzemora(
+                            long.Parse(TxtBxUtolsoUzemoraAllas.Text),
+                            DateTime.MinValue,
+                            EsztergaEgyseg.Üzemóra) ?? throw new HibásBevittAdat($"Nem található üzemóra rögzítve a következő értékre: {TxtBxUtolsoUzemoraAllas.Text}.");
+                    }
                 }
                 Eredmeny = true;
             }
