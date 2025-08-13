@@ -1834,7 +1834,7 @@ namespace Villamos
                     // töröljük a pipát
                     Helyiséglista.SetItemChecked(i, false);
 
-                    string[] darabol = Helyiséglista.Items[i].ToString().Split('-');
+                    string[] darabol = Helyiséglista.CheckedItems[i].ToString().Split('-');
                     string helységkód = darabol[0];
                     string Megnevezés = darabol[1];
 
