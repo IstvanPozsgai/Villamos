@@ -168,7 +168,7 @@ namespace Villamos
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Btn_Súgó = new System.Windows.Forms.Button();
             this.LapFülek.SuspendLayout();
@@ -557,6 +557,7 @@ namespace Villamos
             this.Dolgozó_töröl.Name = "Dolgozó_töröl";
             this.Dolgozó_töröl.Size = new System.Drawing.Size(45, 45);
             this.Dolgozó_töröl.TabIndex = 129;
+            this.ToolTip1.SetToolTip(this.Dolgozó_töröl, "Törlés");
             this.Dolgozó_töröl.UseVisualStyleBackColor = true;
             this.Dolgozó_töröl.Click += new System.EventHandler(this.Dolgozó_töröl_Click);
             // 
@@ -766,6 +767,7 @@ namespace Villamos
             this.Autó_töröl.Name = "Autó_töröl";
             this.Autó_töröl.Size = new System.Drawing.Size(45, 45);
             this.Autó_töröl.TabIndex = 99;
+            this.ToolTip1.SetToolTip(this.Autó_töröl, "Törlés");
             this.Autó_töröl.UseVisualStyleBackColor = true;
             this.Autó_töröl.Click += new System.EventHandler(this.Autó_töröl_Click);
             // 
@@ -1098,6 +1100,7 @@ namespace Villamos
             this.Button2.Name = "Button2";
             this.Button2.Size = new System.Drawing.Size(45, 45);
             this.Button2.TabIndex = 116;
+            this.ToolTip1.SetToolTip(this.Button2, "Frissiti a táblázat adatit");
             this.Button2.UseVisualStyleBackColor = true;
             this.Button2.Click += new System.EventHandler(this.Button2_Click);
             // 
@@ -1109,6 +1112,7 @@ namespace Villamos
             this.Telephely_rögzít.Name = "Telephely_rögzít";
             this.Telephely_rögzít.Size = new System.Drawing.Size(45, 45);
             this.Telephely_rögzít.TabIndex = 109;
+            this.ToolTip1.SetToolTip(this.Telephely_rögzít, "Adatok rögzítése");
             this.Telephely_rögzít.UseVisualStyleBackColor = true;
             this.Telephely_rögzít.Click += new System.EventHandler(this.Telephely_rögzít_Click);
             // 
@@ -1120,6 +1124,7 @@ namespace Villamos
             this.Btnkilelöltörlés.Name = "Btnkilelöltörlés";
             this.Btnkilelöltörlés.Size = new System.Drawing.Size(45, 45);
             this.Btnkilelöltörlés.TabIndex = 108;
+            this.ToolTip1.SetToolTip(this.Btnkilelöltörlés, "Minden kijelöléstávolít");
             this.Btnkilelöltörlés.UseVisualStyleBackColor = true;
             this.Btnkilelöltörlés.Click += new System.EventHandler(this.Btnkilelöltörlés_Click);
             // 
@@ -1131,6 +1136,7 @@ namespace Villamos
             this.BtnKijelölcsop.Name = "BtnKijelölcsop";
             this.BtnKijelölcsop.Size = new System.Drawing.Size(45, 45);
             this.BtnKijelölcsop.TabIndex = 107;
+            this.ToolTip1.SetToolTip(this.BtnKijelölcsop, "Minden adatot kijelöl");
             this.BtnKijelölcsop.UseVisualStyleBackColor = true;
             this.BtnKijelölcsop.Click += new System.EventHandler(this.BtnKijelölcsop_Click);
             // 
@@ -1143,6 +1149,7 @@ namespace Villamos
             this.Btn3szak.Name = "Btn3szak";
             this.Btn3szak.Size = new System.Drawing.Size(45, 45);
             this.Btn3szak.TabIndex = 106;
+            this.ToolTip1.SetToolTip(this.Btn3szak, "Szakszolgálatnak megfelelő kijelölés");
             this.Btn3szak.UseVisualStyleBackColor = true;
             this.Btn3szak.Click += new System.EventHandler(this.Btn3szak_Click);
             // 
@@ -1155,6 +1162,7 @@ namespace Villamos
             this.Btn2szak.Name = "Btn2szak";
             this.Btn2szak.Size = new System.Drawing.Size(45, 45);
             this.Btn2szak.TabIndex = 105;
+            this.ToolTip1.SetToolTip(this.Btn2szak, "Szakszolgálatnak megfelelő kijelölés");
             this.Btn2szak.UseVisualStyleBackColor = true;
             this.Btn2szak.Click += new System.EventHandler(this.Btn2szak_Click);
             // 
@@ -1167,6 +1175,7 @@ namespace Villamos
             this.Btn1szak.Name = "Btn1szak";
             this.Btn1szak.Size = new System.Drawing.Size(45, 45);
             this.Btn1szak.TabIndex = 104;
+            this.ToolTip1.SetToolTip(this.Btn1szak, "Szakszolgálatnak megfelelő kijelölés");
             this.Btn1szak.UseVisualStyleBackColor = true;
             this.Btn1szak.Click += new System.EventHandler(this.Btn1szak_Click);
             // 
@@ -1327,6 +1336,7 @@ namespace Villamos
             this.Lekérd_Excel.Name = "Lekérd_Excel";
             this.Lekérd_Excel.Size = new System.Drawing.Size(45, 45);
             this.Lekérd_Excel.TabIndex = 129;
+            this.ToolTip1.SetToolTip(this.Lekérd_Excel, "Táblázat adatait excelbe menti");
             this.Lekérd_Excel.UseVisualStyleBackColor = true;
             this.Lekérd_Excel.Click += new System.EventHandler(this.Lekérd_Excel_Click);
             // 
@@ -1338,6 +1348,7 @@ namespace Villamos
             this.Lekérd_autó.Name = "Lekérd_autó";
             this.Lekérd_autó.Size = new System.Drawing.Size(45, 45);
             this.Lekérd_autó.TabIndex = 128;
+            this.ToolTip1.SetToolTip(this.Lekérd_autó, "Excel táblázat az autók listájáról");
             this.Lekérd_autó.UseVisualStyleBackColor = true;
             this.Lekérd_autó.Click += new System.EventHandler(this.Lekérd_autó_Click);
             // 
@@ -1349,6 +1360,7 @@ namespace Villamos
             this.Lekérd_dolgozó.Name = "Lekérd_dolgozó";
             this.Lekérd_dolgozó.Size = new System.Drawing.Size(45, 45);
             this.Lekérd_dolgozó.TabIndex = 127;
+            this.ToolTip1.SetToolTip(this.Lekérd_dolgozó, "Excel táblázat a dolgozók listájáról");
             this.Lekérd_dolgozó.UseVisualStyleBackColor = true;
             this.Lekérd_dolgozó.Click += new System.EventHandler(this.Lekérd_dolgozó_Click);
             // 
@@ -1597,6 +1609,7 @@ namespace Villamos
             this.PDF_törlés.Name = "PDF_törlés";
             this.PDF_törlés.Size = new System.Drawing.Size(45, 45);
             this.PDF_törlés.TabIndex = 130;
+            this.ToolTip1.SetToolTip(this.PDF_törlés, "Törlés");
             this.PDF_törlés.UseVisualStyleBackColor = true;
             this.PDF_törlés.Visible = false;
             this.PDF_törlés.Click += new System.EventHandler(this.PDF_törlés_Click);
