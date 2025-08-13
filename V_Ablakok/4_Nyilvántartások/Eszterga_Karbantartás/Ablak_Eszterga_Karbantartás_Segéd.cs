@@ -26,6 +26,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         public Ablak_Eszterga_Karbantartás_Segéd()
         {
             InitializeComponent();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultsagkiosztas();
         }
 

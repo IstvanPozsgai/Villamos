@@ -56,6 +56,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         private void Ablak_Eszterga_Karbantartás_Üzemóra_Load(object sender, EventArgs e)
         {
             TablaListazas();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultsagkiosztas();
             // A DataGridView adatforrásának kötése után automatikusan meghívja a ToroltTablaSzinezes metódust,
             // hogy a törölt státuszú sorokat színezve jelenítse meg.

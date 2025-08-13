@@ -43,6 +43,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         /// <summary>
         /// Ablak inicializálása és adatok betöltése a vezérlőelemekbe
         /// </summary>
+
         public Ablak_Eszterga_Karbantartás_Módosít()
         {
             InitializeComponent();
@@ -52,6 +53,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             CmbxEgyseg.DataSource = Enum.GetValues(typeof(EsztergaEgyseg));
         }
 
+
         /// <summary>
         /// Az ablak betöltésekor lefutó inicializálási műveletek
         /// </summary>
@@ -59,6 +61,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             Eszterga_Valtozas?.Invoke();
             TablaMuvelet.ClearSelection();
+
+            GombLathatosagKezelo.Beallit(this);
             JogosultsagKiosztas();
             Btn_Csere.Visible = false;
             Btn_Sorrend.Visible = false;
