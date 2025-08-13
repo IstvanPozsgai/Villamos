@@ -1832,11 +1832,12 @@ namespace Villamos
                 {
 
                     // töröljük a pipát
-                    Helyiséglista.SetItemChecked(i, false);
 
-                    string[] darabol = Helyiséglista.Items[i].ToString().Split('-');
+
+                    string[] darabol = Helyiséglista.CheckedItems[i].ToString().Split('-');
                     string helységkód = darabol[0];
                     string Megnevezés = darabol[1];
+                    Helyiséglista.SetItemChecked(i, false);
 
                     Adat_Épület_Adattábla ÉpAdat = (from a in AdatokAdatTábla
                                                     where a.Helységkód == helységkód.Trim()
