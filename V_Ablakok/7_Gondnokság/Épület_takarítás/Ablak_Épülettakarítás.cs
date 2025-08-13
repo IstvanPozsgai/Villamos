@@ -54,6 +54,8 @@ namespace Villamos
         private void Start()
         {
             Telephelyekfeltöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             AlapHelyzet();
         }
