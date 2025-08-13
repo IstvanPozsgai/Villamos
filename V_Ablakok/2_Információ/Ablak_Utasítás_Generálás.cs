@@ -37,6 +37,8 @@ namespace Villamos.V_Ablakok.Közös
         private void Start()
         {
             Txtírásimező.Text = Előterv;
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Üzemekfeltöltése();
         }
