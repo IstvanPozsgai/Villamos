@@ -1285,7 +1285,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
-                if (DateTime.Today == DtmPckrEloTerv.Value)
+                if (DtmPckrEloTerv.Value.Date == DateTime.Today)
                     TablaListazas();
                 else
                     EloreTervezesListazasa();
@@ -1308,7 +1308,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
-                if (DateTime.Today == DtmPckrEloTerv.Value)
+                if(DtmPckrEloTerv.Value.Date == DateTime.Today)
                     TablaListazas();
                 else
                     EloreTervezesListazasa();
