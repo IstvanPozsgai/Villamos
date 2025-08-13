@@ -116,6 +116,8 @@ namespace Villamos
 
             Fülekkitöltése();
             Azonosítók();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             JelenlétiListaFeltöltés();
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
