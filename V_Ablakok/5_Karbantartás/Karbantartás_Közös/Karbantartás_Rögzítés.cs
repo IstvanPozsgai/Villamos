@@ -42,6 +42,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             Start();
         }
 
+        public Karbantartás_Rögzítés()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
 
@@ -49,6 +54,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             Üzemek_listázása();
             CiklusrendCombo_feltöltés();
             this.Text = $"Pályaszámú {Adat.Azonosító} jármű {Adat.ID} számú vizsgálata";
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             AdatokKmAdatok = KézKmAdatok.Lista_Adatok();
         }
