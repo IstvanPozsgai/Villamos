@@ -483,6 +483,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 {
                     Utolsó_V_rögzítés.Enabled = true;
                     Töröl.Enabled = true;
+                    Új_adat.Visible = false;
                 }
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))
@@ -505,6 +506,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 {
                     Utolsó_V_rögzítés.Enabled = true;
                     Töröl.Enabled = true;
+                    Új_adat.Visible = false;
                 }
                 // módosítás 2
                 if (MyF.Vanjoga(melyikelem, 2))

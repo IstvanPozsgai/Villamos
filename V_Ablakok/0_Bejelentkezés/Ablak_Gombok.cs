@@ -136,6 +136,7 @@ namespace Villamos.Ablakok
                 Kéz.Döntés(adat);
                 Adatok = Kéz.Lista_Adatok();
                 Alap_tábla_író();
+                Törölt.Checked = false;
             }
             catch (HibásBevittAdat ex)
             {
