@@ -59,6 +59,8 @@ namespace Villamos
 
                 Lapfülek.SelectedIndex = 0;
                 Fülekkitöltése();
+
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
 
                 Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
