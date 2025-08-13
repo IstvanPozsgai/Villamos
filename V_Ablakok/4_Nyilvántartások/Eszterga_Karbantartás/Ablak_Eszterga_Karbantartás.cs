@@ -257,7 +257,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         .FirstOrDefault(a => a.Dátum.Date == rekord.Utolsó_Dátum.Date && a.Státus == false);
 
                     Soradat["Utolsó Üzemóra"] = uzemoraRekord != null ? uzemoraRekord.Uzemora : rekord.Utolsó_Üzemóra_Állás;
-                    //DateTime EsedekesDatum = DatumEsedekesegSzamitasa(rekord.Utolsó_Dátum, rekord, uzemoraRekord);
                     DateTime EsedekesDatum = VegsoEsedekesDatumSzamitasa(rekord.Utolsó_Dátum, rekord, uzemoraRekord);
                     Soradat["Esedékesség Dátuma"] = EsedekesDatum.ToShortDateString();
                     Soradat["Becsült Üzemóra"] = BecsultUzemora(EsedekesDatum);
