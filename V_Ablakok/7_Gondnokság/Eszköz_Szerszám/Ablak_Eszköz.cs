@@ -50,6 +50,8 @@ namespace Villamos.Villamos_Ablakok
         void Start()
         {
             Telephelyekfeltöltése();
+
+            GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Fülekkitöltése();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
