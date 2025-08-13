@@ -61,6 +61,8 @@ namespace Villamos
             try
             {
                 Telephelyekfeltöltése();
+
+                GombLathatosagKezelo.Beallit(this);
                 Jogosultságkiosztás();
 
                 LapFülek.SelectedIndex = 0;
