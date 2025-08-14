@@ -854,14 +854,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             try
             {
                 // csak a látható oszlopokat használjuk
-                var visibleCols = tábla.Columns.Cast<DataGridViewColumn>().Where(c => c.Visible).ToList();
+                List<DataGridViewColumn> visibleCols = tábla.Columns.Cast<DataGridViewColumn>().Where(c => c.Visible).ToList();
                 if (visibleCols.Count == 0)
                     throw new Exception("Nincsenek látható oszlopok a táblázatban.");
 
                 using (FileStream stream = new FileStream(fájlNév, FileMode.Create))
                 {
                     // dokumentum (A4 fektetett)
-                    var doc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
+                    Document doc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
                     PdfWriter.GetInstance(doc, stream);
                     doc.Open();
 
@@ -878,16 +878,16 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                     List<float> desiredPixels = new List<float>();
 
                     // Graphics alapú mérések: pontosabban tükrözi a Windows megjelenést
-                    using (var bmp = new Bitmap(1, 1))
-                    using (var g = Graphics.FromImage(bmp))
+                    using (Bitmap bmp = new Bitmap(1, 1))
+                    using (Graphics g = Graphics.FromImage(bmp))
                     {
                         // Fontok, amikkel mérünk (System.Drawing.Font)
-                        using (var headerDrawFont = new System.Drawing.Font("Arial", headerPtDefault, System.Drawing.FontStyle.Bold, GraphicsUnit.Point))
-                        using (var cellDrawFont = new System.Drawing.Font("Arial", cellPtDefault, System.Drawing.FontStyle.Regular, GraphicsUnit.Point))
+                        using (System.Drawing.Font headerDrawFont = new System.Drawing.Font("Arial", headerPtDefault, System.Drawing.FontStyle.Bold, GraphicsUnit.Point))
+                        using (System.Drawing.Font cellDrawFont = new System.Drawing.Font("Arial", cellPtDefault, System.Drawing.FontStyle.Regular, GraphicsUnit.Point))
                         {
                             float dpiX = g.DpiX; // szükséges, ha pontokra konvertálunk később
 
-                            foreach (var col in visibleCols)
+                            foreach (DataGridViewColumn col in visibleCols)
                             {
                                 string headerText = (col.HeaderText ?? "").Trim();
                                 // fejléc szélesség (pixelben)
@@ -898,7 +898,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                 foreach (DataGridViewRow row in tábla.Rows)
                                 {
                                     if (row.IsNewRow) continue;
-                                    var cell = row.Cells[col.Index];
+                                    DataGridViewCell cell = row.Cells[col.Index];
                                     string txt = cell.Value?.ToString() ?? "";
                                     if (string.IsNullOrEmpty(txt)) continue;
                                     float w = (float)g.MeasureString(txt, cellDrawFont).Width;
@@ -915,19 +915,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                 const float padding = 12f; // cella padding hozzáadása
 
                                 if (diff <= 0f)
-                                {
                                     desired = headerW; // elég a fejléc
-                                }
                                 else if (diff <= smallDiffThreshold)
-                                {
                                     // csak egy kis növelés, ha csak pár karakter a különbség
                                     desired = headerW + diff * 0.25f;
-                                }
                                 else
-                                {
                                     // ha nagyon hosszú az adat, adjunk neki nagyobb helyet (majdnem a teljes diff)
                                     desired = headerW + diff * 0.95f;
-                                }
 
                                 // legalább egy kicsi padding és minimum szélesség
                                 desired = Math.Max(desired + padding, minWidth);
@@ -954,11 +948,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                             pdfTable.SetWidths(desiredPixels.ToArray());
 
                             // iText betűk a tényleges (méretezett) pontméretekkel
-                            var headerITextFont = new iTextSharp.text.Font(baseFont, headerPt, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-                            var cellITextFontBase = new iTextSharp.text.Font(baseFont, cellPt, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                            iTextSharp.text.Font headerITextFont = new iTextSharp.text.Font(baseFont, headerPt, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                            iTextSharp.text.Font cellITextFontBase = new iTextSharp.text.Font(baseFont, cellPt, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
 
                             // Fejlécek felvétele (csak akkor tördeljük a fejlécet, ha több szóból áll)
-                            foreach (var col in visibleCols)
+                            foreach (DataGridViewColumn col in visibleCols)
                             {
                                 string headerText = (col.HeaderText ?? "").Trim();
                                 bool headerSingleWord = headerText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length == 1;
@@ -977,9 +971,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                             {
                                 if (row.IsNewRow) continue;
 
-                                foreach (var col in visibleCols)
+                                foreach (DataGridViewColumn col in visibleCols)
                                 {
-                                    var dgvc = row.Cells[col.Index];
+                                    DataGridViewCell dgvc = row.Cells[col.Index];
                                     string text = dgvc.Value?.ToString() ?? "";
 
                                     // színek
@@ -994,7 +988,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                                     BaseColor backBase = new BaseColor(back.R, back.G, back.B);
 
                                     // cella font - színnel
-                                    var cellFont = new iTextSharp.text.Font(baseFont, cellPt, iTextSharp.text.Font.NORMAL, foreBase);
+                                    iTextSharp.text.Font cellFont = new iTextSharp.text.Font(baseFont, cellPt, iTextSharp.text.Font.NORMAL, foreBase);
 
                                     PdfPCell pdfCell = new PdfPCell(new Phrase(text, cellFont))
                                     {
