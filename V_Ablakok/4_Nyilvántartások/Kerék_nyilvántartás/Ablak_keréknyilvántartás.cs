@@ -4,9 +4,11 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok.Kerék_nyilvántartás;
 using Villamos.Villamos_Adatszerkezet;
@@ -1097,8 +1099,8 @@ namespace Villamos
         {
             Beolvas_SAP();
         }
-        // JAVÍTANDÓ:
-        private void Beolvas_SAP()
+
+        private async void Beolvas_SAP()
         {
             string fájlexc = "";
             try
@@ -1119,16 +1121,11 @@ namespace Villamos
 
                 DateTime Eleje = DateTime.Now;
                 //Adattáblába tesszük
-                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexc);
-
-                if (!MyF.Betöltéshelyes("Kerék", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
-
-                //Készítünk egy listát az adatszerkezetnek megfelelően
-                List<Adat_Kerék_Tábla> Excel_Listában = Excel_Kerék_Beolvas(Tábla);
-
-                if (Excel_Listában != null) SAP(Excel_Listában);
-
+                Holtart.Be();
+                timer1.Enabled = true;
+                await Task.Run(() => SAP_Adatokbeolvasása.Kerék_beolvasó(fájlexc));
                 DateTime Vége = DateTime.Now;
+                timer1.Enabled = false;
                 Holtart.Ki();
                 //kitöröljük a betöltött fájlt
                 Delete(fájlexc);
@@ -1151,97 +1148,9 @@ namespace Villamos
             }
         }
 
-        private List<Adat_Kerék_Tábla> Excel_Kerék_Beolvas(DataTable EgyTábla)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
-            List<Adat_Kerék_Tábla> Adatok = new List<Adat_Kerék_Tábla>();
-            if (EgyTábla != null)
-            {
-                for (int i = 0; i < EgyTábla.Rows.Count; i++)
-                {
-                    Adat_Kerék_Tábla Adat = new Adat_Kerék_Tábla(
-                                                EgyTábla.Rows[i]["Berendezés"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Megnevezés"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Gyártási szám"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["FölérendBerend."].ToStrTrim().Replace(",", ""),
-                                                EgyTábla.Rows[i]["FölérendBerend."].ToStrTrim() == "" ? "_" : EgyTábla.Rows[i]["FölérendBerend."].ToStrTrim().Replace(",", "").Replace("V", "").Replace("F", ""),
-                                                EgyTábla.Rows[i]["Tétel"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Módosít. dátuma"].ToÉrt_DaTeTime(),
-                                                EgyTábla.Rows[i]["Objektumfajta"].ToStrTrim()
-                                                 );
-                    Adatok.Add(Adat);
-                }
-            }
-            return Adatok;
-        }
-
-        private void SAP(List<Adat_Kerék_Tábla> ELista)
-        {
-            try
-            {
-                Holtart.Be(ELista.Count + 1);
-
-                List<Adat_Kerék_Tábla> Adatok = KézKerék.Lista_Adatok();
-                List<Adat_Kerék_Tábla> AdatokGyAlap = new List<Adat_Kerék_Tábla>();
-                List<Adat_Kerék_Tábla> AdatokGy = new List<Adat_Kerék_Tábla>();
-                List<Adat_Kerék_Tábla> AdatokGyR = new List<Adat_Kerék_Tábla>();
-                if (Adatok != null)
-                {
-                    foreach (Adat_Kerék_Tábla Elem in ELista)
-                    {
-                        // a pozícióban eddig volt berendezést felszabadítja
-                        string RégiBerszám = (from a in Adatok
-                                              where a.Pozíció == Elem.Pozíció && a.Azonosító == Elem.Azonosító && a.Kerékberendezés != Elem.Kerékberendezés
-                                              select a.Kerékberendezés).FirstOrDefault();
-                        if (RégiBerszám != null)
-                        {
-                            Adat_Kerék_Tábla Adat = new Adat_Kerék_Tábla(RégiBerszám, "_", "_", "_");
-                            AdatokGy.Add(Adat);
-                        }
-                        //Ha benne van, de rossz helyen
-                        Adat_Kerék_Tábla Rekord_berendezés = (from a in Adatok
-                                                              where (a.Kerékberendezés == Elem.Kerékberendezés && a.Azonosító != Elem.Azonosító)
-                                                                 || (a.Kerékberendezés == Elem.Kerékberendezés && a.Pozíció != Elem.Pozíció)
-                                                              select a).FirstOrDefault();
-                        if (Rekord_berendezés != null) AdatokGy.Add(Méretrevág(Elem));
-
-                        //Ha nincs benne
-                        Rekord_berendezés = (from a in Adatok
-                                             where (a.Kerékberendezés == Elem.Kerékberendezés)
-                                             select a).FirstOrDefault();
-                        if (Rekord_berendezés == null) AdatokGyR.Add(Méretrevág(Elem));
-
-                        Holtart.Lép();
-                    }
-
-                }
-                if (AdatokGyAlap.Count > 0) KézKerék.Módosítás_Alapra(AdatokGyAlap);
-                if (AdatokGy.Count > 0) KézKerék.Módosítás(AdatokGy);
-                if (AdatokGyR.Count > 0) KézKerék.Rögzítés(AdatokGyR);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private Adat_Kerék_Tábla Méretrevág(Adat_Kerék_Tábla elem)
-        {
-            Adat_Kerék_Tábla válasz = new Adat_Kerék_Tábla(
-                        MyF.Szöveg_Tisztítás(elem.Kerékberendezés, 0, 10),
-                        MyF.Szöveg_Tisztítás(elem.Kerékmegnevezés, 0, 255),
-                        MyF.Szöveg_Tisztítás(elem.Kerékgyártásiszám, 0, 30),
-                        MyF.Szöveg_Tisztítás(elem.Föléberendezés, 0, 10),
-                        MyF.Szöveg_Tisztítás(elem.Azonosító, 0, 10),
-                        MyF.Szöveg_Tisztítás(elem.Pozíció, 0, 10),
-                                             elem.Dátum,
-                        MyF.Szöveg_Tisztítás(elem.Objektumfajta, 0, 20)
-                    );
-            return válasz;
+            Holtart.Lép();
         }
         #endregion
         #endregion
@@ -2702,5 +2611,7 @@ namespace Villamos
             return Válasz;
         }
         #endregion
+
+
     }
 }
