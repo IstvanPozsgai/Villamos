@@ -9,6 +9,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using MyE = Villamos.Module_Excel;
 
 namespace Villamos
@@ -27,7 +28,6 @@ namespace Villamos
             InitializeComponent();
             Start();
         }
-
 
         private void AblakBejelentkezés_Load(object sender, EventArgs e)
         {
@@ -60,9 +60,15 @@ namespace Villamos
             Hálózat();
             Dátumformátumellenőrzés();
             Karbantartásellenőrzés();
-            Adatok = Kéz.Lista_Adatok();
+            FelhasználókLista();
             FelhasználókFeltöltése();
             if (Beléphet) WinVan();
+        }
+
+        private void FelhasználókLista() 
+        {
+            Adatok = Kéz.Lista_Adatok();
+            Adatok = Adatok.Where(a => a.Törölt == false).ToList();
         }
 
         private void FelhasználókFeltöltése()
@@ -70,7 +76,7 @@ namespace Villamos
             try
             {
                 CmbUserName.Items.Clear();
-                Adatok = Adatok.Where(a => a.Törölt == false).ToList();
+              
 
                 foreach (Adat_Users Adat in Adatok)
                 {
@@ -316,6 +322,7 @@ namespace Villamos
         private void Subjelszómódosítás(Adat_Users Adat)
         {
             Ablak_Jelszó_Változtatás jelszó_váltás = new Ablak_Jelszó_Változtatás(Adat);
+            jelszó_váltás.Változás += FelhasználókLista;
             jelszó_váltás.ShowDialog();
             TxtPassword.Text = "";
             TxtPassword.Focus();
@@ -337,35 +344,17 @@ namespace Villamos
         #endregion
 
 
-        private void Subdolgozófeltöltés()
-        {
-            //AdatokJogosultságTelephely = Kéz_Jogosultság.Lista_Adatok(CmbTelephely.Text.Trim());
-            //AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(CmbTelephely.Text.Trim());
-            //CmbUserName.Items.Clear();
-
-            //foreach (Adat_Belépés_Bejelentkezés Elem in AdatokBelépésTelephely)
-            //    CmbUserName.Items.Add(Elem.Név.ToUpper());
-
-            //CmbUserName.Refresh();
-        }
-
-
         #region Jelszó Módosítás
         private void BtnJelszóMódosítás_Click(object sender, EventArgs e)
         {
-            //if (CmbUserName.Text.Trim() == "") return;
-            //TxtPassword.Text = "";
-            //Subjelszómódosítás();
-            //AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(CmbTelephely.Text.Trim());
-        }
+            if (CmbUserName.Text.Trim() == "") return;
+            TxtPassword.Text = "";
+            Adat_Users Belép = (from a in Adatok
+                                where a.UserName.ToUpper() == CmbUserName.Text.ToUpper().Trim()
+                                && a.Törölt == false
+                                select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
 
-
-        private void Subjelszómódosítás()
-        {
-            //AblakJelszóváltoztatás jelszó_váltás = new AblakJelszóváltoztatás("", CmbUserName.Text.Trim());
-            //jelszó_váltás.ShowDialog();
-            //TxtPassword.Text = "";
-            //TxtPassword.Focus();
+            Subjelszómódosítás(Belép);
         }
         #endregion
     }

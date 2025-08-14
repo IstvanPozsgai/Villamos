@@ -2,12 +2,15 @@
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.Villamos_Ablakok;
 
 
 namespace Villamos
 {
     public partial class Ablak_Jelszó_Változtatás
     {
+
+        public event Event_Kidobó Változás;
         readonly Kezelő_Users Kéz = new Kezelő_Users();
 
 #pragma warning disable IDE0044
@@ -57,7 +60,7 @@ namespace Villamos
 
                 Adat_Users adat = new Adat_Users(Adat.UserId,Jelszó.HashPassword(Első.Text.Trim()),  false);
                 Kéz.MódosításJeszó(adat);
-
+                Változás?.Invoke();
                 MessageBox.Show("A jelszó módosításra került !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
 
