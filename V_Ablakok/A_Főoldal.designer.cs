@@ -1489,8 +1489,7 @@ namespace Villamos
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.A_Főoldal_FormClosed);
             this.Load += new System.EventHandler(this.AblakFőoldal_Load);
-            this.Shown += new System.EventHandler(this.AblakFőoldal_Shown);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AblakFőoldal_KeyDown);
+                this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AblakFőoldal_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.AblakFőoldal_KeyUp);
             this.Resize += new System.EventHandler(this.AblakFőoldal_Resize);
             this.Menü.ResumeLayout(false);

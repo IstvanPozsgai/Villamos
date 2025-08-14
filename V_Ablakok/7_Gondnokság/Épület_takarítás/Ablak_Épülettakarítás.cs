@@ -1962,12 +1962,12 @@ namespace Villamos
                 AdatokAdatTábla = KézAdatTábla.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 int l = 0;
-                Holtart.Be(Helyiséglista.Items.Count + 1);
+                Holtart.Be(Helyiséglista.CheckedItems.Count + 1);
 
                 for (l = 0; l < Helyiséglista.CheckedItems.Count; l++)
                 {
                     // helyiség kód visszafejtése
-                    string[] darabol = Helyiséglista.Items[l].ToString().Split('-');
+                    string[] darabol = Helyiséglista.CheckedItems[l].ToString().Split('-');
                     string helységkód = darabol[0].Trim();
 
                     string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

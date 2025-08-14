@@ -35,5 +35,12 @@ namespace Villamos.Adatszerkezet
             Törölt = törölt;
             Szervezetek = szervezetek;
         }
+
+        public Adat_Users(int userId, string password, bool frissít)
+        {
+            UserId = userId;
+            Password = password;
+            Frissít = frissít;
+        }
     }
 }

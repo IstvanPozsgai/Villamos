@@ -62,297 +62,310 @@ namespace Villamos
         /// </summary>
         private void Menükbeállítása()
         {
-            ablakokBeállításaToolStripMenuItem.Visible = false;
-            gombokBeállításaToolStripMenuItem.Visible = false;
-            felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = false;
-            jogosultságKiosztásToolStripMenuItem.Visible = false;
+            try
+            {
+                ablakokBeállításaToolStripMenuItem.Visible = false;
+                gombokBeállításaToolStripMenuItem.Visible = false;
+                felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = false;
+                jogosultságKiosztásToolStripMenuItem.Visible = false;
 
-            if (panels2.Text.Substring(0, 1) == "0")
-                FelhasználókBeállításaMenü.Enabled = false;
-            else
-                FelhasználókBeállításaMenü.Enabled = true;
-            if (panels2.Text.Substring(1, 1) == "0")
-                ProgramAdatokKiadásiAdatokToolStripMenuItem.Enabled = false;
-            else
-                ProgramAdatokKiadásiAdatokToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(4, 1) == "0")
-                ProgramAdatokSzemélyMenü.Enabled = false;
-            else
-                ProgramAdatokSzemélyMenü.Enabled = true;
-            if (panels2.Text.Substring(6, 1) == "0")
-                CiklusrendToolStripMenuItem.Enabled = false;
-            else
-                CiklusrendToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(0, 1) == "0")
+                    FelhasználókBeállításaMenü.Enabled = false;
+                else
+                    FelhasználókBeállításaMenü.Enabled = true;
+                if (panels2.Text.Substring(1, 1) == "0")
+                    ProgramAdatokKiadásiAdatokToolStripMenuItem.Enabled = false;
+                else
+                    ProgramAdatokKiadásiAdatokToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(4, 1) == "0")
+                    ProgramAdatokSzemélyMenü.Enabled = false;
+                else
+                    ProgramAdatokSzemélyMenü.Enabled = true;
+                if (panels2.Text.Substring(6, 1) == "0")
+                    CiklusrendToolStripMenuItem.Enabled = false;
+                else
+                    CiklusrendToolStripMenuItem.Enabled = true;
 
-            if (panels2.Text.Substring(10, 1) == "0")
-                VáltósMunkarendÉsTúlóraToolStripMenuItem.Enabled = false;
-            else
-                VáltósMunkarendÉsTúlóraToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(14, 1) == "0")
-                ProgramAdatokEgyébToolStripMenuItem.Enabled = false;
-            else
-                ProgramAdatokEgyébToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(15, 1) == "0")
-                járműTechnológiákToolStripMenuItem.Enabled = false;
-            else
-                járműTechnológiákToolStripMenuItem.Enabled = true;
-
-
-            if (panels2.Text.Substring(19, 1) == "0")
-                MenetkimaradásMenü.Enabled = false;
-            else
-                MenetkimaradásMenü.Enabled = true;
-
-            if (panels2.Text.Substring(21, 1) == "0")
-                BeosztásToolStripMenuItem.Enabled = false;
-            else
-                BeosztásToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(10, 1) == "0")
+                    VáltósMunkarendÉsTúlóraToolStripMenuItem.Enabled = false;
+                else
+                    VáltósMunkarendÉsTúlóraToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(14, 1) == "0")
+                    ProgramAdatokEgyébToolStripMenuItem.Enabled = false;
+                else
+                    ProgramAdatokEgyébToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(15, 1) == "0")
+                    járműTechnológiákToolStripMenuItem.Enabled = false;
+                else
+                    járműTechnológiákToolStripMenuItem.Enabled = true;
 
 
-            if (panels2.Text.Substring(59, 1) == "0")
-                ListákJelenlétiÍvekToolStripMenuItem.Enabled = false;
-            else
-                ListákJelenlétiÍvekToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(60, 1) == "0")
-                SzabadságTúlóraBetegállományToolStripMenuItem.Enabled = false;
-            else
-                SzabadságTúlóraBetegállományToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(19, 1) == "0")
+                    MenetkimaradásMenü.Enabled = false;
+                else
+                    MenetkimaradásMenü.Enabled = true;
 
-            if (panels2.Text.Substring(63, 1) == "0")
-                OktatásokToolStripMenuItem.Enabled = false;
-            else
-                OktatásokToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(65, 1) == "0")
-                DolgozóiAlapadatokToolStripMenuItem.Enabled = false;
-            else
-                DolgozóiAlapadatokToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(68, 1) == "0")
-                DolgozóFelvételátvételvezénylésToolStripMenuItem.Enabled = false;
-            else
-                DolgozóFelvételátvételvezénylésToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(74, 1) == "0")
-                LétszámGazdálkodásToolStripMenuItem.Enabled = false;
-            else
-                LétszámGazdálkodásToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(76, 1) == "0")
-                LekérdezésekToolStripMenuItem.Enabled = false;
-            else
-                LekérdezésekToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(77, 1) == "0")
-                TúlóraEllenőrzésToolStripMenuItem.Enabled = false;
-            else
-                TúlóraEllenőrzésToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(78, 1) == "0")
-                BeosztásNaplóToolStripMenuItem.Enabled = false;
-            else
-                BeosztásNaplóToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(79, 1) == "0")
-                MunkalapAdatokkarbantartásaToolStripMenuItem.Enabled = false;
-            else
-                MunkalapAdatokkarbantartásaToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(84, 1) == "0")
-                MunkalapKészítésToolStripMenuItem.Enabled = false;
-            else
-                MunkalapKészítésToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(85, 1) == "0")
-                MunkalapDekádolóToolStripMenuItem.Enabled = false;
-            else
-                MunkalapDekádolóToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(88, 1) == "0")
-                ReklámNyilvántartásToolStripMenuItem.Enabled = false;
-            else
-                ReklámNyilvántartásToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(89, 1) == "0")
-                JárműLétrehozásMozgásToolStripMenuItem.Enabled = false;
-            else
-                JárműLétrehozásMozgásToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(91, 1) == "0")
-                SérülésNyilvántartásToolStripMenuItem.Enabled = false;
-            else
-                SérülésNyilvántartásToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(97, 1) == "0")
-                FőkönyvToolStripMenuItem.Enabled = false;
-            else
-                FőkönyvToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(98, 1) == "0")
-                JárműKarbantartásiAdatokToolStripMenuItem.Enabled = false;
-            else
-                JárműKarbantartásiAdatokToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(99, 1) == "0")
-                SzerelvényToolStripMenuItem.Enabled = false;
-            else
-                SzerelvényToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(100, 1) == "0")
-                T5C5FutásnapRögzítésToolStripMenuItem.Enabled = false;
-            else
-                T5C5FutásnapRögzítésToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(101, 1) == "0")
-                T5C5FutásnapÜtemezésToolStripMenuItem.Enabled = false;
-            else
-                T5C5FutásnapÜtemezésToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(102, 1) == "0")
-                T5C5VJavításÜtemezésToolStripMenuItem.Enabled = false;
-            else
-                T5C5VJavításÜtemezésToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(105, 1) == "0")
-                T5C5AdatokMódosításaToolStripMenuItem.Enabled = false;
-            else
-                T5C5AdatokMódosításaToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(107, 1) == "0")
-                NapiAdatokToolStripMenuItem.Enabled = false;
-            else
-                NapiAdatokToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(108, 1) == "0")
-                FogaskerekűToolStripMenuItem.Enabled = false;
-            else
-                FogaskerekűToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(109, 1) == "0")
-                TW6000AdatokToolStripMenuItem.Enabled = false;
-            else
-                TW6000AdatokToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(112, 1) == "0")
-                ICSKCSVToolStripMenuItem.Enabled = false;
-            else
-                ICSKCSVToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(114, 1) == "0")
-                CAF5CAF9AdatokÉsÜtemezésToolStripMenuItem.Enabled = false;
-            else
-                CAF5CAF9AdatokÉsÜtemezésToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(124, 1) == "0")
-                nosztalgiaToolStripMenuItem.Enabled = false;
-            else
-                nosztalgiaToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(129, 1) == "0")
-                TTTPToolStripMenuItem.Enabled = false;
-            else
-                TTTPToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(159, 1) == "0")
-                EsztergaKarbantartásToolStripMenuItem.Enabled = false;
-            else
-                EsztergaKarbantartásToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(164, 1) == "0")
-                kerékesztergálásSzervezésToolStripMenuItem.Enabled = false;
-            else
-                kerékesztergálásSzervezésToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(167, 1) == "0")
-                kerékesztergálásiAdatokBarossToolStripMenuItem.Enabled = false;
-            else
-                kerékesztergálásiAdatokBarossToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(169, 1) == "0")
-                karbantartásiMunkalapokToolStripMenuItem.Enabled = false;
-            else
-                karbantartásiMunkalapokToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(176, 1) == "0")
-                T5C5UtastérFűtésToolStripMenuItem.Enabled = false;
-            else
-                T5C5UtastérFűtésToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(177, 1) == "0")
-                KidobóKészítésToolStripMenuItem.Enabled = false;
-            else
-                KidobóKészítésToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(178, 1) == "0")
-                ÁllományTáblaToolStripMenuItem.Enabled = false;
-            else
-                ÁllományTáblaToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(179, 1) == "0")
-                ToolStripMenuItem1.Enabled = false;
-            else
-                ToolStripMenuItem1.Enabled = true;
-            if (panels2.Text.Substring(180, 1) == "0")
-                ToolStripMenuItem2.Enabled = false;
-            else
-                ToolStripMenuItem2.Enabled = true;
-
-            if (panels2.Text.Substring(182, 1) == "0")
-                FőmérnökségiAdatokToolStripMenuItem.Enabled = false;
-            else
-                FőmérnökségiAdatokToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(183, 1) == "0")
-                TelephelyiAdatokÖsszesítéseToolStripMenuItem.Enabled = false;
-            else
-                TelephelyiAdatokÖsszesítéseToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(184, 1) == "0")
-                KiadásiForteAdatokToolStripMenuItem.Enabled = false;
-            else
-                KiadásiForteAdatokToolStripMenuItem.Enabled = true;
-
-            if (panels2.Text.Substring(185, 1) == "0")
-                KerékátmérőNyilvántartásSAPBerendezésekToolStripMenuItem.Enabled = false;
-            else
-                KerékátmérőNyilvántartásSAPBerendezésekToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(187, 1) == "0")
-                DigitálisFőkönyvToolStripMenuItem.Enabled = false;
-            else
-                DigitálisFőkönyvToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(188, 1) == "0")
-                SAPOsztályToolStripMenuItem.Enabled = false;
-            else
-                SAPOsztályToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(189, 1) == "0")
-                AkkumulátorNyilvántartásToolStripMenuItem1.Enabled = false;
-            else
-                AkkumulátorNyilvántartásToolStripMenuItem1.Enabled = true;
-
-            if (panels2.Text.Substring(199, 1) == "0")
-                ÜzenetekToolStripMenuItem.Enabled = false;
-            else
-                ÜzenetekToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(201, 1) == "0")
-                UtasításokToolStripMenuItem.Enabled = false;
-            else
-                UtasításokToolStripMenuItem.Enabled = true;
-
-            fődarabNótaToolStripMenuItem.Enabled = panels2.Text.Substring(209, 1) != "0";
+                if (panels2.Text.Substring(21, 1) == "0")
+                    BeosztásToolStripMenuItem.Enabled = false;
+                else
+                    BeosztásToolStripMenuItem.Enabled = true;
 
 
-            if (panels2.Text.Substring(219, 1) == "0")
-                RezsiRaktárToolStripMenuItem.Enabled = false;
-            else
-                RezsiRaktárToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(227, 1) == "0")
-                eszközNyilvántartásToolStripMenuItem.Enabled = false;
-            else
-                eszközNyilvántartásToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(228, 1) == "0")
-                épületTartozékNyilvántartásToolStripMenuItem.Enabled = false;
-            else
-                épületTartozékNyilvántartásToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(229, 1) == "0")
-                SzerszámNyilvántartásToolStripMenuItem.Enabled = false;
-            else
-                SzerszámNyilvántartásToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(233, 1) == "0")
-                ÉpületTakarításToolStripMenuItem.Enabled = false;
-            else
-                ÉpületTakarításToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(234, 1) == "0")
-                ÉpületTakarításTörzsAdatokToolStripMenuItem.Enabled = false;
-            else
-                ÉpületTakarításTörzsAdatokToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(236, 1) == "0")
-                VédőeszközToolStripMenuItem.Enabled = false;
-            else
-                VédőeszközToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(239, 1) == "0")
-                BehajtásiEngedélyToolStripMenuItem.Enabled = false;
-            else
-                BehajtásiEngedélyToolStripMenuItem.Enabled = true;
-            if (panels2.Text.Substring(246, 1) == "0")
-                KülsősDolgozókBelépésiÉsBehajtásaToolStripMenuItem.Enabled = false;
-            else
-                KülsősDolgozókBelépésiÉsBehajtásaToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(59, 1) == "0")
+                    ListákJelenlétiÍvekToolStripMenuItem.Enabled = false;
+                else
+                    ListákJelenlétiÍvekToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(60, 1) == "0")
+                    SzabadságTúlóraBetegállományToolStripMenuItem.Enabled = false;
+                else
+                    SzabadságTúlóraBetegállományToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(63, 1) == "0")
+                    OktatásokToolStripMenuItem.Enabled = false;
+                else
+                    OktatásokToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(65, 1) == "0")
+                    DolgozóiAlapadatokToolStripMenuItem.Enabled = false;
+                else
+                    DolgozóiAlapadatokToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(68, 1) == "0")
+                    DolgozóFelvételátvételvezénylésToolStripMenuItem.Enabled = false;
+                else
+                    DolgozóFelvételátvételvezénylésToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(74, 1) == "0")
+                    LétszámGazdálkodásToolStripMenuItem.Enabled = false;
+                else
+                    LétszámGazdálkodásToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(76, 1) == "0")
+                    LekérdezésekToolStripMenuItem.Enabled = false;
+                else
+                    LekérdezésekToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(77, 1) == "0")
+                    TúlóraEllenőrzésToolStripMenuItem.Enabled = false;
+                else
+                    TúlóraEllenőrzésToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(78, 1) == "0")
+                    BeosztásNaplóToolStripMenuItem.Enabled = false;
+                else
+                    BeosztásNaplóToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(79, 1) == "0")
+                    MunkalapAdatokkarbantartásaToolStripMenuItem.Enabled = false;
+                else
+                    MunkalapAdatokkarbantartásaToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(84, 1) == "0")
+                    MunkalapKészítésToolStripMenuItem.Enabled = false;
+                else
+                    MunkalapKészítésToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(85, 1) == "0")
+                    MunkalapDekádolóToolStripMenuItem.Enabled = false;
+                else
+                    MunkalapDekádolóToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(88, 1) == "0")
+                    ReklámNyilvántartásToolStripMenuItem.Enabled = false;
+                else
+                    ReklámNyilvántartásToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(89, 1) == "0")
+                    JárműLétrehozásMozgásToolStripMenuItem.Enabled = false;
+                else
+                    JárműLétrehozásMozgásToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(91, 1) == "0")
+                    SérülésNyilvántartásToolStripMenuItem.Enabled = false;
+                else
+                    SérülésNyilvántartásToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(97, 1) == "0")
+                    FőkönyvToolStripMenuItem.Enabled = false;
+                else
+                    FőkönyvToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(98, 1) == "0")
+                    JárműKarbantartásiAdatokToolStripMenuItem.Enabled = false;
+                else
+                    JárműKarbantartásiAdatokToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(99, 1) == "0")
+                    SzerelvényToolStripMenuItem.Enabled = false;
+                else
+                    SzerelvényToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(100, 1) == "0")
+                    T5C5FutásnapRögzítésToolStripMenuItem.Enabled = false;
+                else
+                    T5C5FutásnapRögzítésToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(101, 1) == "0")
+                    T5C5FutásnapÜtemezésToolStripMenuItem.Enabled = false;
+                else
+                    T5C5FutásnapÜtemezésToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(102, 1) == "0")
+                    T5C5VJavításÜtemezésToolStripMenuItem.Enabled = false;
+                else
+                    T5C5VJavításÜtemezésToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(105, 1) == "0")
+                    T5C5AdatokMódosításaToolStripMenuItem.Enabled = false;
+                else
+                    T5C5AdatokMódosításaToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(107, 1) == "0")
+                    NapiAdatokToolStripMenuItem.Enabled = false;
+                else
+                    NapiAdatokToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(108, 1) == "0")
+                    FogaskerekűToolStripMenuItem.Enabled = false;
+                else
+                    FogaskerekűToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(109, 1) == "0")
+                    TW6000AdatokToolStripMenuItem.Enabled = false;
+                else
+                    TW6000AdatokToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(112, 1) == "0")
+                    ICSKCSVToolStripMenuItem.Enabled = false;
+                else
+                    ICSKCSVToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(114, 1) == "0")
+                    CAF5CAF9AdatokÉsÜtemezésToolStripMenuItem.Enabled = false;
+                else
+                    CAF5CAF9AdatokÉsÜtemezésToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(124, 1) == "0")
+                    nosztalgiaToolStripMenuItem.Enabled = false;
+                else
+                    nosztalgiaToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(129, 1) == "0")
+                    TTTPToolStripMenuItem.Enabled = false;
+                else
+                    TTTPToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(159, 1) == "0")
+                    EsztergaKarbantartásToolStripMenuItem.Enabled = false;
+                else
+                    EsztergaKarbantartásToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(164, 1) == "0")
+                    kerékesztergálásSzervezésToolStripMenuItem.Enabled = false;
+                else
+                    kerékesztergálásSzervezésToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(167, 1) == "0")
+                    kerékesztergálásiAdatokBarossToolStripMenuItem.Enabled = false;
+                else
+                    kerékesztergálásiAdatokBarossToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(169, 1) == "0")
+                    karbantartásiMunkalapokToolStripMenuItem.Enabled = false;
+                else
+                    karbantartásiMunkalapokToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(176, 1) == "0")
+                    T5C5UtastérFűtésToolStripMenuItem.Enabled = false;
+                else
+                    T5C5UtastérFűtésToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(177, 1) == "0")
+                    KidobóKészítésToolStripMenuItem.Enabled = false;
+                else
+                    KidobóKészítésToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(178, 1) == "0")
+                    ÁllományTáblaToolStripMenuItem.Enabled = false;
+                else
+                    ÁllományTáblaToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(179, 1) == "0")
+                    ToolStripMenuItem1.Enabled = false;
+                else
+                    ToolStripMenuItem1.Enabled = true;
+                if (panels2.Text.Substring(180, 1) == "0")
+                    ToolStripMenuItem2.Enabled = false;
+                else
+                    ToolStripMenuItem2.Enabled = true;
+
+                if (panels2.Text.Substring(182, 1) == "0")
+                    FőmérnökségiAdatokToolStripMenuItem.Enabled = false;
+                else
+                    FőmérnökségiAdatokToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(183, 1) == "0")
+                    TelephelyiAdatokÖsszesítéseToolStripMenuItem.Enabled = false;
+                else
+                    TelephelyiAdatokÖsszesítéseToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(184, 1) == "0")
+                    KiadásiForteAdatokToolStripMenuItem.Enabled = false;
+                else
+                    KiadásiForteAdatokToolStripMenuItem.Enabled = true;
+
+                if (panels2.Text.Substring(185, 1) == "0")
+                    KerékátmérőNyilvántartásSAPBerendezésekToolStripMenuItem.Enabled = false;
+                else
+                    KerékátmérőNyilvántartásSAPBerendezésekToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(187, 1) == "0")
+                    DigitálisFőkönyvToolStripMenuItem.Enabled = false;
+                else
+                    DigitálisFőkönyvToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(188, 1) == "0")
+                    SAPOsztályToolStripMenuItem.Enabled = false;
+                else
+                    SAPOsztályToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(189, 1) == "0")
+                    AkkumulátorNyilvántartásToolStripMenuItem1.Enabled = false;
+                else
+                    AkkumulátorNyilvántartásToolStripMenuItem1.Enabled = true;
+
+                if (panels2.Text.Substring(199, 1) == "0")
+                    ÜzenetekToolStripMenuItem.Enabled = false;
+                else
+                    ÜzenetekToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(201, 1) == "0")
+                    UtasításokToolStripMenuItem.Enabled = false;
+                else
+                    UtasításokToolStripMenuItem.Enabled = true;
+
+                fődarabNótaToolStripMenuItem.Enabled = panels2.Text.Substring(209, 1) != "0";
+
+
+                if (panels2.Text.Substring(219, 1) == "0")
+                    RezsiRaktárToolStripMenuItem.Enabled = false;
+                else
+                    RezsiRaktárToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(227, 1) == "0")
+                    eszközNyilvántartásToolStripMenuItem.Enabled = false;
+                else
+                    eszközNyilvántartásToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(228, 1) == "0")
+                    épületTartozékNyilvántartásToolStripMenuItem.Enabled = false;
+                else
+                    épületTartozékNyilvántartásToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(229, 1) == "0")
+                    SzerszámNyilvántartásToolStripMenuItem.Enabled = false;
+                else
+                    SzerszámNyilvántartásToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(233, 1) == "0")
+                    ÉpületTakarításToolStripMenuItem.Enabled = false;
+                else
+                    ÉpületTakarításToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(234, 1) == "0")
+                    ÉpületTakarításTörzsAdatokToolStripMenuItem.Enabled = false;
+                else
+                    ÉpületTakarításTörzsAdatokToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(236, 1) == "0")
+                    VédőeszközToolStripMenuItem.Enabled = false;
+                else
+                    VédőeszközToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(239, 1) == "0")
+                    BehajtásiEngedélyToolStripMenuItem.Enabled = false;
+                else
+                    BehajtásiEngedélyToolStripMenuItem.Enabled = true;
+                if (panels2.Text.Substring(246, 1) == "0")
+                    KülsősDolgozókBelépésiÉsBehajtásaToolStripMenuItem.Enabled = false;
+                else
+                    KülsősDolgozókBelépésiÉsBehajtásaToolStripMenuItem.Enabled = true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                //HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                //MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Menü_Beállítása_Új();
+            }
         }
 
         private void Menü_Beállítása_Új()
@@ -397,16 +410,8 @@ namespace Villamos
         private void Start()
         {
             Program.PostásMenü = AblakokGombok.MenüListaKészítés(Menü);
-        }
-
-        private void AblakFőoldal_Load(object sender, EventArgs e)
-        {
             Timer1.Enabled = true;
             Timer2.Enabled = true;
-        }
-
-        private void AblakFőoldal_Shown(object sender, EventArgs e)
-        {
             lbltelephely.Text = Program.PostásTelephely;
             lblVerzió.Text = $"Verzió: {Application.ProductVersion}";
             Panels1.Text = Program.PostásNév;
@@ -421,6 +426,12 @@ namespace Villamos
             Verziószám_kiírás();
             Program_változó(lbltelephely.Text.Trim());
         }
+
+        private void AblakFőoldal_Load(object sender, EventArgs e)
+        {
+
+        }
+
 
         private void Könyvtárak_Létrehozása()
         {
