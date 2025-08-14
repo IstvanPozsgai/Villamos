@@ -197,7 +197,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             Dátum = 1,
             Üzemóra = 2,
-            Bekövetkezés = 3
+            Beköv = 3
         }
         #endregion
 
@@ -363,7 +363,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                 }
                                 break;
 
-                            case EsztergaEgyseg.Bekövetkezés:
+                            case EsztergaEgyseg.Beköv:
                                 bool NapEsedekes = (TervDatum - UtolsoDatum).TotalDays >= rekord.Mennyi_Dátum;
                                 bool UzemoraEsedekes = (BecsultUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra;
 
@@ -680,7 +680,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                             return Color.Yellow;
                         break;
 
-                    case EsztergaEgyseg.Bekövetkezés:
+                    case EsztergaEgyseg.Beköv:
                         bool datumEsedekes = elteltNap >= rekord.Mennyi_Dátum;
                         bool oraEsedekes = elteltÓra >= rekord.Mennyi_Óra;
 
