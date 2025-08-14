@@ -17,6 +17,11 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             InitializeComponent();
         }
 
+        public Ablak_Főkönyv_Zser_Másol()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Főkönyv_Zser_Másol_Load(object sender, EventArgs e)
         {
             ZSER_dátumtól.Value = DateTime.Today;

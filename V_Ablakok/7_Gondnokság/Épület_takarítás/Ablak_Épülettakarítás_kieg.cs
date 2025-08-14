@@ -26,6 +26,10 @@ namespace Villamos.Villamos_Ablakok
             FőAl = főal;
         }
 
+        public Ablak_Épülettakarítás_kieg()
+        {
+            InitializeComponent();
+        }
 
         private void Ablak_Épülettakarítás_kieg_Load(object sender, EventArgs e)
         {

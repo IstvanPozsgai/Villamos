@@ -32,6 +32,11 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
             Telephely = telephely;
         }
 
+        public Ablak_Opció()
+        {
+            InitializeComponent();
+        }
+
 
         private void Ablak_Opció_Load(object sender, EventArgs e)
         {

@@ -33,6 +33,11 @@ namespace Villamos.Villamos_Ablakok
             InitializeComponent();
         }
 
+        public Ablak_Kerék_segéd()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Kerék_segéd_Load(object sender, EventArgs e)
         {
             try

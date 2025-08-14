@@ -15,6 +15,11 @@ namespace Villamos
             Kiir();
         }
 
+        public Ablak_Menetrögítés()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Menetrögítés_Load(object sender, System.EventArgs e)
         {
         }

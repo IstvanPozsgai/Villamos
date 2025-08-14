@@ -27,6 +27,12 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
             Telephely = telephely;
         }
 
+        public Ablak_T5C5_Vonalak()
+        {
+            InitializeComponent();
+
+        }
+
         private void Ablak_T5C5_Vonalak_Load(object sender, EventArgs e)
         {
 

@@ -25,6 +25,11 @@ namespace Villamos.Villamos_Ablakok
             Start();
         }
 
+        public Ablak_Eszterga_Dolgozók()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
             Telephelyfeltöltés();

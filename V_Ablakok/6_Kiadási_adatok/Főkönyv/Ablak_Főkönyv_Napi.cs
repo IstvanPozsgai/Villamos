@@ -29,6 +29,11 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
             Start();
         }
 
+        public Ablak_Főkönyv_Napi()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
             Forte_típus_feltöltése();
