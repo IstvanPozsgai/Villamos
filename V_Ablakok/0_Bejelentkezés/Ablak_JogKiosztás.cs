@@ -283,6 +283,11 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Btn_MindenMasol_Click(object sender, EventArgs e)
+        {
+            //valamit ide csinalj martin
+        }
         #endregion
 
 
@@ -502,8 +507,9 @@ namespace Villamos
             for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
                 LstChkSzervezet.SetItemChecked(i, kell);
         }
+
         #endregion
 
-
+        
     }
 }
