@@ -404,5 +404,27 @@ namespace Villamos
             TxtPassword.Focus();
         }
         #endregion
+
+        //Conttoll mellett az új bejelentekezési ablakot nyitja meg
+        bool CTRL_le = false;
+        private void lblVerzió_DoubleClick(object sender, EventArgs e)
+        {
+            if (CTRL_le)
+            {
+                AblakBejelentkezés_Új Újablak = new AblakBejelentkezés_Új();
+                Újablak.Show();
+                this.Hide();
+            }
+        }
+
+        private void AblakBejelentkezés_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control) CTRL_le = true;
+        }
+
+        private void AblakBejelentkezés_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Control) CTRL_le = false;
+        }
     }
 }
