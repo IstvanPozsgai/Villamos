@@ -286,7 +286,10 @@ namespace Villamos
 
         private void Btn_MindenMasol_Click(object sender, EventArgs e)
         {
-            //valamit ide csinalj martin
+            Kezelő_Belépés_MindenMásol kezelo = new Kezelő_Belépés_MindenMásol();
+            kezelo.Másolás(LstChkSzervezet.Text, Felhasználók.Text);
+            TáblázatListázás();
+            MessageBox.Show("Másolás megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
 
