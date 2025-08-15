@@ -286,10 +286,29 @@ namespace Villamos
 
         private void Btn_MindenMasol_Click(object sender, EventArgs e)
         {
-            Kezelő_Belépés_MindenMásol kezelo = new Kezelő_Belépés_MindenMásol();
-            kezelo.Másolás(LstChkSzervezet.Text, Felhasználók.Text);
-            TáblázatListázás();
-            MessageBox.Show("Másolás megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            try
+            {
+                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
+
+                Kezelő_Belépés_MindenMásol kezelo = new Kezelő_Belépés_MindenMásol();
+                kezelo.Másolás(Program.PostásTelephely, Felhasználók.Text);
+                TáblázatListázás();
+                MessageBox.Show("Másolás megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
 
@@ -513,6 +532,6 @@ namespace Villamos
 
         #endregion
 
-        
+
     }
 }

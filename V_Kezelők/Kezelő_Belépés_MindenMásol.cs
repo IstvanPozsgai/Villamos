@@ -1,80 +1,129 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Belépés_MindenMásol
     {
-        private readonly Kezelő_Belépés_Jogosultságtábla kezRegi = new Kezelő_Belépés_Jogosultságtábla();
-        private readonly Kezelő_Users kezUsers = new Kezelő_Users();
-        private readonly Kezelő_Gombok kezGombok = new Kezelő_Gombok();
-        private readonly Kezelő_Oldalok kezOldalak = new Kezelő_Oldalok();
-        private readonly Kezelő_Kiegészítő_Könyvtár kezSzervezetek = new Kezelő_Kiegészítő_Könyvtár();
-        private readonly Kezelő_Jogosultságok kezJog = new Kezelő_Jogosultságok();
+        private readonly Kezelő_Belépés_Jogosultságtábla KézRégi = new Kezelő_Belépés_Jogosultságtábla();
+        private readonly Kezelő_Users KézUsers = new Kezelő_Users();
+        private readonly Kezelő_Kiegészítő_Könyvtár KézSzervezetek = new Kezelő_Kiegészítő_Könyvtár();
+        private readonly Kezelő_Jogosultságok KézJog = new Kezelő_Jogosultságok();
 
         public void Másolás(string telephely, string felhasznaloNev)
         {
-            // 1. Betöltés listába
-            List<Adat_Belépés_Jogosultságtábla> regiJogokLista = kezRegi.Lista_Adatok(telephely);
-            List<Adat_Users> usersLista = kezUsers.Lista_Adatok();
-            List<Adat_Gombok> gombokLista = kezGombok.Lista_Adatok();
-            List<Adat_Oldalak> oldalakLista = kezOldalak.Lista_Adatok();
-            List<Adat_Kiegészítő_Könyvtár> szervezetekLista = kezSzervezetek.Lista_Adatok();
+            try
+            {
+                string fájlexc = "";
 
-            // 2. Felhasználó keresése új rendszerben
-            Adat_Users user = (from u in usersLista
-                               where u.UserName.Equals(felhasznaloNev, StringComparison.OrdinalIgnoreCase)
-                               select u).FirstOrDefault() ?? throw new Exception("A felhasználó nincs az új rendszerben!");
+                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "SAP-s Adatok betöltése",
+                    FileName = "",
+                    Filter = "Excel |*.xlsx"
+                };
 
-            // 3. Régi jogosultság keresése
-            Adat_Belépés_Jogosultságtábla regiJog = (from r in regiJogokLista
-                                                     where r.Név.Equals(felhasznaloNev, StringComparison.OrdinalIgnoreCase)
-                                                     select r).FirstOrDefault();
-            if (regiJog == null || string.IsNullOrWhiteSpace(regiJog.Jogkörúj1))
-                throw new Exception("Nincs régi jogosultság!");
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = OpenFileDialog1.FileName;
+                else
+                    return;
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexc);
+                List<IdeigJogosultságok> ExcelLista = new List<IdeigJogosultságok>();
+                for (int i = 0; i < Tábla.Rows.Count; i++)
+                {
+                    IdeigJogosultságok EgyJog = new IdeigJogosultságok(
+                      Tábla.Rows[i]["Sorszám"].ToÉrt_Int(),
+                      Tábla.Rows[i]["Mező"].ToÉrt_Int(),
+                      Tábla.Rows[i]["Ablak ID"].ToÉrt_Int(),
+                      Tábla.Rows[i]["Gomb ID"].ToÉrt_Int());
+                    ExcelLista.Add(EgyJog);
+                }
 
-            // 4. Jogosultságok építése LINQ-val
-            List<Adat_Jogosultságok> ujJogLista =
-                (from karakter in regiJog.Jogkörúj1.Select((kod, index) => new { Kod = kod, Index = index })
-                 where karakter.Kod != '0'
-                 let gomb = (from g in gombokLista
-                             orderby g.GombokId
-                             select g).ElementAtOrDefault(karakter.Index)
-                 where gomb != null
-                 let oldalId = (from o in oldalakLista
-                                where o.FromName == gomb.FromName
-                                select o.OldalId).FirstOrDefault()
-                 where oldalId > 0
-                 let allowedOrgNames = (gomb.Szervezet ?? "")
-                     .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                     .Select(s => s.Trim())
-                     .ToList()
-                 let userOrgNames = (user.Szervezetek ?? "")
-                     .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                     .Select(s => s.Trim())
-                     .ToList()
-                 let targetOrgNames = userOrgNames.Count > 0
-                     ? allowedOrgNames.Where(a => userOrgNames.Contains(a)).ToList()
-                     : allowedOrgNames
-                 from orgName in targetOrgNames
-                 let szervezetId = (from s in szervezetekLista
-                                    where s.Név.Equals(orgName, StringComparison.OrdinalIgnoreCase)
-                                    select s.ID).FirstOrDefault()
-                 where szervezetId > 0
-                 select new Adat_Jogosultságok(
-                     user.UserId,
-                     oldalId,
-                     gomb.GombokId,
-                     szervezetId,
-                     false
-                 )).ToList();
 
-            // 5. Mentés
-            if (ujJogLista.Count > 0)
-                kezJog.Rögzítés(ujJogLista);
+                List<Adat_Belépés_Jogosultságtábla> AdatokJogRégi = KézRégi.Lista_Adatok(telephely);
+                Adat_Belépés_Jogosultságtábla AdatFelhasználó = AdatokJogRégi.Where(a => a.Név.ToUpper() == felhasznaloNev.ToUpper()).FirstOrDefault();
+
+                List<Adat_Users> AdatokUser = KézUsers.Lista_Adatok();
+                Adat_Users Adat_Users = AdatokUser.Where(a => a.UserName == felhasznaloNev).FirstOrDefault();
+
+                List<Adat_Kiegészítő_Könyvtár> Szervezetek = KézSzervezetek.Lista_Adatok();
+                Adat_Kiegészítő_Könyvtár Telep = Szervezetek.Where(a => a.Név == telephely).FirstOrDefault();
+
+                List<Adat_Jogosultságok> AdatokGy = new List<Adat_Jogosultságok>();
+                if (AdatFelhasználó == null || Adat_Users == null || Telep == null) return;
+
+                for (int i = 0; i < AdatFelhasználó.Jogkörúj1.Length; i++)
+                {
+                    string betű = AdatFelhasználó.Jogkörúj1.Substring(i, 1);
+                    if (betű != "0")
+                    {
+                        List<int> Mezők = Mező(betű);
+                        foreach (int mező in Mezők)
+                        {
+                            List<IdeigJogosultságok> GombokId = (from a in ExcelLista
+                                                                 where a.Sorszám == i+1
+                                                                 && a.Mező == mező
+                                                                 select a).ToList();
+                            foreach (IdeigJogosultságok gomb in GombokId)
+                            {
+                                Adat_Jogosultságok ADAT = new Adat_Jogosultságok(
+                                    Adat_Users.UserId,
+                                    gomb.Ablakid,
+                                    gomb.Gombid,
+                                    Telep.ID,
+                                    false);
+                                AdatokGy.Add(ADAT);
+                            }
+                        }
+                    }
+                }
+                KézJog.Rögzítés(AdatokGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private List<int> Mező(string Betű)
+        {
+            List<int> válasz = new List<int>();
+            if (Betű == "3" || Betű == "7" || Betű == "b" || Betű == "f") válasz.Add(1); //1-es csoport
+            if (Betű == "5" || Betű == "7" || Betű == "d" || Betű == "f") válasz.Add(2); //2-es csoport
+            if (Betű == "9" || Betű == "b" || Betű == "d" || Betű == "f") válasz.Add(3); //3-es csoport
+            return válasz;
+        }
+
+
+    }
+
+    public class IdeigJogosultságok
+    {
+        public int Sorszám { get; set; }
+        public int Mező { get; set; }
+        public int Ablakid { get; set; }
+        public int Gombid { get; set; }
+
+        public IdeigJogosultságok(int sorszám, int mező, int ablakid, int gombid)
+        {
+            Sorszám = sorszám;
+            Mező = mező;
+            Ablakid = ablakid;
+            Gombid = gombid;
         }
     }
+
 }
