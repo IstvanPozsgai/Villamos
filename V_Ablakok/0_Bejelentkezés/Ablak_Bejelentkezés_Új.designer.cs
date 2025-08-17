@@ -81,7 +81,6 @@ namespace Villamos
             this.Btnlekérdezés.TabIndex = 1;
             this.Btnlekérdezés.Text = "Csak Lekérdezésre";
             this.Btnlekérdezés.UseVisualStyleBackColor = true;
-            this.Btnlekérdezés.Visible = false;
             this.Btnlekérdezés.Click += new System.EventHandler(this.Btnlekérdezés_Click);
             // 
             // lblProgramnév

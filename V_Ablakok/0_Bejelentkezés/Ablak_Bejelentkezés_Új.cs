@@ -265,7 +265,11 @@ namespace Villamos
         #region Beléptetés
         private void Btnlekérdezés_Click(object sender, EventArgs e)
         {
-
+            Adat_Users Belép = (from a in Adatok
+                                where a.UserName.ToUpper() == "VENDÉG"
+                                && a.Törölt == false
+                                select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
+            Belépés(Belép);
         }
 
         public void BtnBelépés_Click(object sender, EventArgs e)
@@ -310,6 +314,10 @@ namespace Villamos
         /// </summary>
         private void Belépés(Adat_Users Elem)
         {
+            //Program.PostásJogkör majd törölni kell
+            Program.PostásJogkör = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
+                                   "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
+                                   "000000000000000000000000000000000000000000000000000000000000";
             Program.PostásNév = Elem.UserName;
             Program.PostásNévId = Elem.UserId;
             Program.PostásTelephely = Elem.Szervezet;

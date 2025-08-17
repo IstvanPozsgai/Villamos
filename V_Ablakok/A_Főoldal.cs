@@ -355,6 +355,10 @@ namespace Villamos
                     KülsősDolgozókBelépésiÉsBehajtásaToolStripMenuItem.Enabled = false;
                 else
                     KülsősDolgozókBelépésiÉsBehajtásaToolStripMenuItem.Enabled = true;
+
+
+                //az új esetén az új beállítással megyünk be.
+                if (!panels2.Text.Any(c => c != '0')) Menü_Beállítása_Új();
             }
             catch (HibásBevittAdat ex)
             {
@@ -362,9 +366,8 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                //HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                //MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Menü_Beállítása_Új();
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -381,10 +384,11 @@ namespace Villamos
                 }
 
                 //Beállítjuk a jogosultságot amit felhasználóknak adtunk
-                List<Adat_Jogosultságok> JogAdatok = Program.PostásJogosultságok;
-                if (JogAdatok == null) return;
+                Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
 
-                List<int> JogIDék = JogAdatok.Select(a => a.OldalId).Distinct().ToList();
+                if (Program.PostásJogosultságok == null) return;
+
+                List<int> JogIDék = Program.PostásJogosultságok.Select(a => a.OldalId).Distinct().ToList();
                 foreach (ToolStripMenuItem item in Program.PostásMenü)
                 {
                     Adat_Oldalak OldalAdat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
