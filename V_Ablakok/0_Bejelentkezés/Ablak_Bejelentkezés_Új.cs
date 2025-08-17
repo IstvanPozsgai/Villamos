@@ -17,7 +17,12 @@ namespace Villamos
     {
         readonly Kezelő_Users Kéz = new Kezelő_Users();
         readonly Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
+        readonly Kezelő_Gombok KézGombok = new Kezelő_Gombok();
+        readonly Kezelő_Oldalok KézOldal = new Kezelő_Oldalok();
+        readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
+
         List<Adat_Users> Adatok = new List<Adat_Users>();
+
 
         bool Beléphet = true;
 
@@ -321,6 +326,9 @@ namespace Villamos
             Program.PostásNév = Elem.UserName;
             Program.PostásNévId = Elem.UserId;
             Program.PostásTelephely = Elem.Szervezet;
+            Program.PostásGombok = KézGombok.Lista_Adatok();
+            Program.PostásOldalak = KézOldal.Lista_Adatok();
+            Program.PostásKönyvtár = KézKönyvtár.Lista_Adatok();
             //Valamint, hogy mire van jogosultsága
             A_Főoldal Főoldalablak = new A_Főoldal();
             Főoldalablak.Show();

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos;
 using Villamos.Adatszerkezet;
-using Villamos.Kezelõk;
 using Villamos.Villamos_Adatszerkezet;
 
 
 public static class GombLathatosagKezelo
 {
-    private static Kezelõ_Gombok KézGombok = new Kezelõ_Gombok();
     /// <summary>
     /// Beállítja az ablakon található gombok láthatóságát az adatbázis alapján.
     /// </summary>
@@ -18,9 +16,7 @@ public static class GombLathatosagKezelo
     public static void Beallit(Form form, string Telephely = "")
     {
         // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
-        List<Adat_Gombok> gombok = KézGombok.Lista_Adatok()
-            .Where(g => g.FromName == form.Name && !g.Törölt)
-            .ToList();
+        List<Adat_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
 
         GombokÁltalános(form, gombok);
         GombokSzemélyes(form, gombok, Telephely);
@@ -67,18 +63,14 @@ public static class GombLathatosagKezelo
     {
         try
         {
-
-            Kezelõ_Kiegészítõ_Könyvtár kézKönyvtár = new Kezelõ_Kiegészítõ_Könyvtár();
-            List<Adat_Kiegészítõ_Könyvtár> AdatokKönyvtár = kézKönyvtár.Lista_Adatok();
             int TelephelyID = 0;
-            Adat_Kiegészítõ_Könyvtár TelephelyAdat = (from a in AdatokKönyvtár
+            Adat_Kiegészítõ_Könyvtár TelephelyAdat = (from a in Program.PostásKönyvtár
                                                       where a.Név == Telephely
                                                       select a).FirstOrDefault();
             if (TelephelyAdat != null) TelephelyID = TelephelyAdat.ID;
 
             // Lekérjük az aktuális oldal ID-ját
-            Kezelõ_Oldalok KézOldal = new Kezelõ_Oldalok();
-            Adat_Oldalak AdatOldal = KézOldal.Lista_Adatok().Where(o => o.FromName == form.Name).FirstOrDefault();
+            Adat_Oldalak AdatOldal = Program.PostásOldalak.Where(o => o.FromName == form.Name).FirstOrDefault();
             if (AdatOldal == null) return;
 
             // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
