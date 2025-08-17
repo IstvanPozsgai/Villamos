@@ -21,7 +21,7 @@ namespace Villamos
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
-        
+
         #region Alap
         public Ablak_Felhasználó()
         {
@@ -100,6 +100,7 @@ namespace Villamos
                 AdatTáblaALap.Columns.Add("WinFelhasználó név");
                 AdatTáblaALap.Columns.Add("Dolgozószám");
                 AdatTáblaALap.Columns.Add("Dolgozó Név");
+                AdatTáblaALap.Columns.Add("Szervezet");
                 AdatTáblaALap.Columns.Add("Szervezetek");
                 AdatTáblaALap.Columns.Add("Jelszó");
                 AdatTáblaALap.Columns.Add("Dátum");
@@ -135,6 +136,7 @@ namespace Villamos
                     Soradat["WinFelhasználó név"] = rekord.WinUserName;
                     Soradat["Dolgozószám"] = rekord.Dolgozószám;
                     Soradat["Dolgozó Név"] = DolgozóNév;
+                    Soradat["Szervezet"] = rekord.Szervezet;
                     Soradat["Szervezetek"] = rekord.Szervezetek; // ÚJ: közvetlenül a Dolgozó Név után
                     Soradat["Jelszó"] = rekord.Password;
                     Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
@@ -162,6 +164,7 @@ namespace Villamos
             Tábla.Columns["WinFelhasználó név"].Width = 180;
             Tábla.Columns["Dolgozószám"].Width = 110;
             Tábla.Columns["Dolgozó Név"].Width = 250;
+            Tábla.Columns["Szervezet"].Width = 150;
             Tábla.Columns["Szervezetek"].Width = 250;
             Tábla.Columns["Dátum"].Width = 130;
             Tábla.Columns["Frissít"].Width = 110;
@@ -194,6 +197,7 @@ namespace Villamos
                 TxtPassword.Text = "";
                 Frissít.Checked = adat.Frissít;
                 Törölt.Checked = adat.Törölt;
+                CmbSzervezet.Text = adat.Szervezet;
 
                 for (int i = 0; i < ChkSzervezet.Items.Count; i++)
                     ChkSzervezet.SetItemChecked(i, false);
@@ -252,6 +256,7 @@ namespace Villamos
                 if (TextWinUser.Text.Trim() != "" && Adatok.Any(a => a.WinUserName == TextWinUser.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Windows felhasználónév már létezik egy másik felhasználónál!");
                 if (Adatok.Any(a => a.Dolgozószám == CmbDolgozószám.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Dolgozószámhoz már létezik egy másik felhasználó!");
                 string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
+                if (CmbSzervezet.Text.Trim() == "") throw new HibásBevittAdat("Kérem töltse ki a Alap szervezet mezőt!"); ;
 
                 // --- ÚJ: Szervezetek szöveg összeállítása a ChkSzervezet kijelölt elemeiből ---
                 string szervezetek = "";
@@ -275,7 +280,8 @@ namespace Villamos
                     DateTime.Now,
                     Frissít.Checked,
                     Törölt.Checked,
-                    szervezetek // új paraméter
+                    szervezetek,
+                    CmbSzervezet.Text.Trim()
                 );
                 Kéz.Döntés(ADAT);
                 TáblázatListázás();
@@ -376,10 +382,11 @@ namespace Villamos
             {
                 Kezelő_Kiegészítő_Könyvtár kezSzervezet = new Kezelő_Kiegészítő_Könyvtár();
                 List<Adat_Kiegészítő_Könyvtár> adatokSzervezet = kezSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
-
+                CmbSzervezet.Items.Clear();
                 ChkSzervezet.Items.Clear();
                 for (int i = 0; i < adatokSzervezet.Count; i++)
                 {
+                    CmbSzervezet.Items.Add(adatokSzervezet[i].Név);
                     ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
                     ChkSzervezet.SetItemChecked(i, false);
                 }
@@ -444,10 +451,45 @@ namespace Villamos
             else CmbDolgozószám.Text = "";
 
         }
-
-
         #endregion
 
 
+        #region AlapSzervezet
+
+        /// <summary>
+        /// Alapszervezet, hogy melyik telephelyre jelentkezett be a felhasználó
+        /// A lista feltöltése a ChkSzervezet elemeknél történik
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CmbSzervezet_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            //Leellenőrizzük, hogy van-e kiválasztva szervezet szerepel a chkszervetben, ha nem kijelöljük
+            try
+            {
+                CmbSzervezet.Text = CmbSzervezet.Items[CmbSzervezet.SelectedIndex].ToString();
+                if (CmbSzervezet.Text.Trim() == "") return;
+
+                for (int i = 0; i < ChkSzervezet.Items.Count; i++)
+                {
+                    if (ChkSzervezet.Items[i].ToString() == CmbSzervezet.Text.Trim())
+                    {
+                        ChkSzervezet.SetItemChecked(i, true);
+                        break;
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        #endregion
     }
 }

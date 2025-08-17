@@ -9,7 +9,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using MyE = Villamos.Module_Excel;
 
 namespace Villamos
@@ -65,7 +64,7 @@ namespace Villamos
             if (Beléphet) WinVan();
         }
 
-        private void FelhasználókLista() 
+        private void FelhasználókLista()
         {
             Adatok = Kéz.Lista_Adatok();
             Adatok = Adatok.Where(a => a.Törölt == false).ToList();
@@ -76,7 +75,7 @@ namespace Villamos
             try
             {
                 CmbUserName.Items.Clear();
-              
+
 
                 foreach (Adat_Users Adat in Adatok)
                 {
@@ -271,10 +270,10 @@ namespace Villamos
 
         public void BtnBelépés_Click(object sender, EventArgs e)
         {
-            Belépés(CmbUserName.Text.Trim (), Jelszó.HashPassword(TxtPassword.Text.Trim()));
+            Belépés(CmbUserName.Text.Trim(), Jelszó.HashPassword(TxtPassword.Text.Trim()));
         }
 
-        private void Belépés( string UserName, string Begépeltjelszó)
+        private void Belépés(string UserName, string Begépeltjelszó)
         {
             try
             {
@@ -313,6 +312,7 @@ namespace Villamos
         {
             Program.PostásNév = Elem.UserName;
             Program.PostásNévId = Elem.UserId;
+            Program.PostásTelephely = Elem.Szervezet;
             //Valamint, hogy mire van jogosultsága
             A_Főoldal Főoldalablak = new A_Főoldal();
             Főoldalablak.Show();
@@ -324,6 +324,7 @@ namespace Villamos
             Ablak_Jelszó_Változtatás jelszó_váltás = new Ablak_Jelszó_Változtatás(Adat);
             jelszó_váltás.Változás += FelhasználókLista;
             jelszó_váltás.ShowDialog();
+
             TxtPassword.Text = "";
             TxtPassword.Focus();
         }

@@ -63,6 +63,8 @@ namespace Villamos
             this.ChkSzervezet = new System.Windows.Forms.CheckedListBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.CmbSzervezet = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
@@ -322,17 +324,17 @@ namespace Villamos
             this.lblSzervezet.AutoSize = true;
             this.lblSzervezet.Location = new System.Drawing.Point(3, 0);
             this.lblSzervezet.Name = "lblSzervezet";
-            this.lblSzervezet.Size = new System.Drawing.Size(80, 20);
+            this.lblSzervezet.Size = new System.Drawing.Size(117, 20);
             this.lblSzervezet.TabIndex = 225;
-            this.lblSzervezet.Text = "Szervezet";
+            this.lblSzervezet.Text = "Alap szervezet:";
             // 
             // ChkSzervezet
             // 
             this.ChkSzervezet.CheckOnClick = true;
             this.ChkSzervezet.FormattingEnabled = true;
-            this.ChkSzervezet.Location = new System.Drawing.Point(3, 33);
+            this.ChkSzervezet.Location = new System.Drawing.Point(3, 103);
             this.ChkSzervezet.Name = "ChkSzervezet";
-            this.ChkSzervezet.Size = new System.Drawing.Size(265, 235);
+            this.ChkSzervezet.Size = new System.Drawing.Size(265, 172);
             this.ChkSzervezet.TabIndex = 226;
             // 
             // tableLayoutPanel2
@@ -362,15 +364,39 @@ namespace Villamos
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.CmbSzervezet, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.lblSzervezet, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.ChkSzervezet, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.label7, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.ChkSzervezet, 0, 3);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(688, 11);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(271, 283);
             this.tableLayoutPanel3.TabIndex = 228;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 70);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(157, 20);
+            this.label7.TabIndex = 227;
+            this.label7.Text = "További szervezetek:";
+            // 
+            // CmbSzervezet
+            // 
+            this.CmbSzervezet.FormattingEnabled = true;
+            this.CmbSzervezet.Location = new System.Drawing.Point(3, 33);
+            this.CmbSzervezet.MaxLength = 8;
+            this.CmbSzervezet.Name = "CmbSzervezet";
+            this.CmbSzervezet.Size = new System.Drawing.Size(265, 28);
+            this.CmbSzervezet.Sorted = true;
+            this.CmbSzervezet.TabIndex = 109;
+            this.CmbSzervezet.SelectionChangeCommitted += new System.EventHandler(this.CmbSzervezet_SelectionChangeCommitted);
             // 
             // Ablak_Felhasználó
             // 
@@ -425,5 +451,7 @@ namespace Villamos
         internal CheckedListBox ChkSzervezet;
         private TableLayoutPanel tableLayoutPanel2;
         private TableLayoutPanel tableLayoutPanel3;
+        private ComboBox CmbSzervezet;
+        internal Label label7;
     }
 }

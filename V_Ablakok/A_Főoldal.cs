@@ -2430,7 +2430,7 @@ namespace Villamos
         {
             if (Shift_le && CTRL_le)
             {
-                if (panels2.Text.Substring(0, 1) == "b")
+                if (Gombok.Visible || panels2.Text.Substring(0, 1) == "b")
                 {
                     Telephelyekfeltöltése();
                     Alsó.Left = 200;
