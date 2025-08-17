@@ -63,9 +63,15 @@ namespace Villamos
             {
                 Telephelyekfeltöltése();
                 if (Cmbtelephely.Items.Count > 0)
-                {// Ha telephelyek feltöltése sikeres csak akkor fejezi be az ablak kitöltését
-                    GombLathatosagKezelo.Beallit(this);
-                    Jogosultságkiosztás();
+                {
+                    // Ha telephelyek feltöltése sikeres csak akkor fejezi be az ablak kitöltését
+
+                    //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                    //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                    if (Program.PostásJogkör.Any(c => c != '0'))
+                        Jogosultságkiosztás();
+                    else
+                        GombLathatosagKezelo.Beallit(this);
                     Típusfeltöltés();
                     Főkönyvialáírások();
                     Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;

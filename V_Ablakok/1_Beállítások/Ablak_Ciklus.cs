@@ -16,21 +16,30 @@ namespace Villamos
 
         List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
 
+        #region ALAP
         public Ablak_Ciklus()
         {
             InitializeComponent();
+            Start();
+        }
+
+        private void Start()
+        {
+            Adatok = Kéz.Lista_Adatok();
+            CiklusTípusfeltöltés();
+            //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+            //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+            if (Program.PostásJogkör.Any(c => c != '0'))
+                Jogosultságkiosztás();
+            else
+                GombLathatosagKezelo.Beallit(this);
         }
 
         private void Ablak_Ciklus_Load(object sender, EventArgs e)
         {
-            Adatok = Kéz.Lista_Adatok();
-            CiklusTípusfeltöltés();
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
         }
 
 
-        #region ALAP
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
