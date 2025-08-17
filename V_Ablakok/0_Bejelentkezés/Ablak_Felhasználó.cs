@@ -69,7 +69,7 @@ namespace Villamos
         {
             try
             {
-                Adatok = Kéz.Lista_Adatok();
+                Adatok = Kéz.Lista_Adatok().OrderBy(a => a.UserName).ToList();
                 Tábla.Visible = false;
                 Tábla.CleanFilterAndSort();
                 AlapTáblaFejléc();

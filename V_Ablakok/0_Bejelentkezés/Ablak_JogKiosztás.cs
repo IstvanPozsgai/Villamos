@@ -52,7 +52,11 @@ namespace Villamos
             AdatokOldal = KézOldal.Lista_Adatok().Where(a => a.Törölt == false).ToList();
             AdatokGombok = KézGombok.Lista_Adatok().Where(a => a.Törölt == false).ToList();
             AdatokSzervezet = KézSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
-            AdatokUsers = KézUsers.Lista_Adatok().Where(a => a.Törölt == false).ToList();
+            AdatokUsers = KézUsers.Lista_Adatok();
+            AdatokUsers = (from a in AdatokUsers
+                           where a.Törölt == false
+                           orderby a.UserName
+                           select a).ToList();
             AdatokDolgozó = KézDolgozó.Lista_Adatok().Where(a => a.Státus == false).OrderBy(a => a.Dolgozónév).ToList();
             AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
             OldalFeltöltés();
