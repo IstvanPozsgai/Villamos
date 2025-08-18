@@ -464,7 +464,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 Tabla.Columns.Clear();
                 AdatTabla = new DataTable();
                 AdatTabla.Columns.Clear();
-                AdatTabla.Columns.Add("Művelet Sorsz.a");
+                AdatTabla.Columns.Add("Sorsz.");
                 AdatTabla.Columns.Add("Művelet");
                 AdatTabla.Columns.Add("Nap");
                 AdatTabla.Columns.Add("Óra");
@@ -480,7 +480,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 {
                     DataRow Soradat = AdatTabla.NewRow();
 
-                    Soradat["Művelet Sorsz.a"] = rekord.ID;
+                    Soradat["Sorsz."] = rekord.ID;
                     Soradat["Művelet"] = rekord.Művelet;
                     Soradat["Nap"] = rekord.Mennyi_Dátum;
                     Soradat["Óra"] = rekord.Mennyi_Óra;
@@ -494,14 +494,14 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 }
                 IEnumerable<DataRow> RendezettAdatok = RendezettSorok
                     .OrderBy(sor => DateTime.Parse(sor["Utolsó Dátum"].ToStrTrim()))
-                    .ThenBy(sor => int.Parse(sor["Művelet Sorsz.a"].ToStrTrim()));
+                    .ThenBy(sor => int.Parse(sor["Sorsz."].ToStrTrim()));
 
                 foreach (DataRow sor in RendezettAdatok)
                     AdatTabla.Rows.Add(sor);
 
                 Tabla.DataSource = AdatTabla;
 
-                Tabla.Columns["Művelet Sorsz.a"].Width = 110;
+                Tabla.Columns["Sorsz."].Width = 110;
                 Tabla.Columns["Művelet"].Width = 943;
                 Tabla.Columns["Nap"].Width = 60;
                 Tabla.Columns["Óra"].Width = 60;
@@ -531,7 +531,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void OszlopSzelesseg()
         {
-            Tabla.Columns["Sorsz."].Width = 97;
+            Tabla.Columns["Sorsz."].Width = 80;
             Tabla.Columns["Művelet"].Width = 700;
             Tabla.Columns["Egység"].Width = 110;
             Tabla.Columns["Nap"].Width = 60;
