@@ -327,7 +327,8 @@ namespace Villamos.Kezelők
                 .Where(a => a.IDŐvKM == 2 &&
                             a.Státus == 6 &&
                             a.Azonosító == Aktualis_palyaszam &&
-                            a.KM_Sorszám % 5 != 0)
+                            a.KM_Sorszám % 5 != 0
+                            && a.Megjegyzés != "Ütemezési Segéd")
                 .OrderByDescending(a => a.Dátum)
                 .Take(2)
                 .ToList();
@@ -338,7 +339,7 @@ namespace Villamos.Kezelők
             return p0Vizsgalatok[0].Számláló - p0Vizsgalatok[1].Számláló;
         }
 
-        private long P1_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
+        private long? P1_vizsgalatok_kozott_megtett_KM_Erteke(string Aktualis_palyaszam)
         {
             // P1: osztható 5-tel, de nem 20-szal
             var p1Vizsgalatok = osszes_adat
@@ -346,14 +347,17 @@ namespace Villamos.Kezelők
                             a.Státus == 6 &&
                             a.Azonosító == Aktualis_palyaszam &&
                             a.KM_Sorszám % 5 == 0 &&
-                            a.KM_Sorszám % 20 != 0)
+                            a.KM_Sorszám % 20 != 0
+                            && a.Megjegyzés != "Ütemezési Segéd")
                 .OrderByDescending(a => a.Dátum)
                 .Take(2)
                 .ToList();
 
-            if (p1Vizsgalatok.Count < 2)
-                return 0;
+            ;
 
+            if (p1Vizsgalatok.Count < 2 || p1Vizsgalatok[0].KM_Sorszám == p1Vizsgalatok[1].KM_Sorszám)
+                return null;
+            
             return p1Vizsgalatok[0].Számláló - p1Vizsgalatok[1].Számláló;
         }
 
@@ -416,7 +420,6 @@ namespace Villamos.Kezelők
                             a.Megjegyzés != "Ütemezési Segéd")
                 .OrderBy(a => a.Dátum)
                 .FirstOrDefault();
-
             return elsoP3?.Számláló;
         }
 
