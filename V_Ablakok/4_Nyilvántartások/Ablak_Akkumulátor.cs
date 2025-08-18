@@ -40,15 +40,19 @@ namespace Villamos
             try
             {
                 MérésDátuma.MaxDate = DateTime.Today;
-                Telephelyekfeltöltése();
+
                 //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
                 //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
                 if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
                     Jogosultságkiosztás();
+                }
                 else
+                {
+                    TelephelyekFeltöltéseÚj();
                     GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
-
-
+                }
                 Fülekkitöltése();
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             }
@@ -280,6 +284,27 @@ namespace Villamos
 
                 CmbTelephely.Text = Program.PostásTelephely;
                 CmbTelephely.Enabled = Program.Postás_Vezér;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                CmbTelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    CmbTelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                CmbTelephely.Text = Program.PostásTelephely;
             }
             catch (HibásBevittAdat ex)
             {

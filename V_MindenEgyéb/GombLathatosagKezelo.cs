@@ -106,4 +106,44 @@ public static class GombLathatosagKezelo
             MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
+
+    public static List<string> Telephelyek(string AblakNév)
+    {
+        List<string> Válasz = new List<string>();
+        try
+        {
+            //Mi az oldal Id-je
+            Adat_Oldalak Oldal = (from a in Program.PostásOldalak
+                                  where a.FromName == AblakNév
+                                  select a).FirstOrDefault();
+            int OldalId = 0;
+            if (Oldal != null) OldalId = Oldal.OldalId;
+            //Azok a jogosultságok amik az adott oldalhoz tartoznak
+            List<Adat_Jogosultságok> AdatokA = (from a in Program.PostásJogosultságok
+                                                where a.OldalId == OldalId
+                                                select a).ToList();
+
+            List<Adat_Kiegészítõ_Könyvtár> Ideig = new List<Adat_Kiegészítõ_Könyvtár>();
+            foreach (Adat_Jogosultságok Adat in AdatokA)
+            {
+                Adat_Kiegészítõ_Könyvtár AdatKönyv = (from a in Program.PostásKönyvtár
+                                                      where a.ID == Adat.SzervezetId
+                                                      select a).FirstOrDefault();
+                Ideig.Add(AdatKönyv);
+            }
+
+            if (Ideig.Count > 0) Válasz = Ideig.OrderBy(a => a.Név).Select(a => a.Név).Distinct().ToList();
+        }
+        catch (HibásBevittAdat ex)
+        {
+            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "GombLathatosagKezelo - Telephelyek Listázása", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        return Válasz;
+    }
+
 }
