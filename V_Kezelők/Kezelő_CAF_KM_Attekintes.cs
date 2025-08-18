@@ -15,7 +15,6 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
-        /// JAVÍTANDÓ:  Kérem a táblanév legyen, mert így könnyebb karbantartani.
         readonly string táblanév = "KM_Attekintes";
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
@@ -71,7 +70,6 @@ namespace Villamos.Kezelők
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
 
-        // JAVÍTANDÓ:táblanév legyen, mert így könnyebb karbantartani.      Megcsináltam mert zavart a warning
         public List<Adat_CAF_KM_Attekintes> Lista_Adatok()
         {
             string szöveg;
@@ -93,6 +91,8 @@ namespace Villamos.Kezelők
                             while (rekord.Read())
                             {
                                 // JAVÍTANDÓ: és miért nem jó, ha 0 értéket kap?
+                                // Mivel lehet, hogy éppen úgy áll a számláló, hogy 0 Km lenne a következő vizsgálat.
+                                // Így tudom, hogyha null, akkor üzenetet kell átadni és nem 0-án áll a számláló.
                                 // Itt azért van null vizsgálat, mivel ha nem volt még olyan vizsgálat null értéket kap adatbázisban.
                                 Adat = new Adat_CAF_KM_Attekintes(
                                  rekord["azonosito"].ToStrTrim(),
@@ -134,14 +134,13 @@ namespace Villamos.Kezelők
             return Adat;
         }
 
-        // JAVÍTANDÓ:táblanév legyen, mert így könnyebb karbantartani.
         private void Rögzítés_Elso(Adat_CAF_KM_Attekintes Adat)
         {
             try
             {
                 if (Egy_Adat(Adat.azonosito) == null)
                 {
-                    string szöveg = "INSERT INTO KM_Attekintes (azonosito, kov_p0, kov_p1, kov_p2, utolso_p0_kozott, utolso_p1_kozott, utolso_p3_es_p2_kozott, elso_p2, elso_p3) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosito, kov_p0, kov_p1, kov_p2, utolso_p0_kozott, utolso_p1_kozott, utolso_p3_es_p2_kozott, elso_p2, elso_p3) VALUES (";
 
                     szöveg += $"'{Adat.azonosito}', "; // azonosító
 
@@ -193,13 +192,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        // JAVÍTANDÓ:táblanév legyen, mert így könnyebb karbantartani.
         // Ez fog lefutni a frissítés gomb hatására / javítás beírásakor.
         private void Erteket_Frissit(Adat_CAF_KM_Attekintes Adat)
         {
             try
             {
-                string szoveg = "UPDATE KM_Attekintes SET ";
+                string szoveg = $"UPDATE {táblanév} SET ";
 
                 szoveg += Adat.kov_p0 == null
                     ? "kov_p0=null, "
