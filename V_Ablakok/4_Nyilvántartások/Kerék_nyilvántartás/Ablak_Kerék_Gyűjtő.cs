@@ -156,13 +156,13 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
             if (Tábla.CurrentCell.ColumnIndex == 6) // put columnindextovalidate
             {
                 e.Control.KeyPress -= ValidateKeyPressEnum;
-                e.Control.KeyPress -= ValidateKeyPressEnum;
+                e.Control.KeyPress -= ValidateKeyPress;
                 e.Control.KeyPress += ValidateKeyPressEnum;
             }
 
             if (Tábla.CurrentCell.ColumnIndex == 7) // put columnindextovalidate
             {
-                e.Control.KeyPress -= ValidateKeyPress;
+                e.Control.KeyPress -= ValidateKeyPressEnum;
                 e.Control.KeyPress -= ValidateKeyPress;
                 e.Control.KeyPress += ValidateKeyPress;
             }
