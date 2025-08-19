@@ -28,6 +28,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
             Start();
         }
 
+        public Ablak_T5C5_Felmentés()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
             Pályaszámok();

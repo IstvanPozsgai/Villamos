@@ -27,6 +27,11 @@ namespace Villamos.Villamos_Ablakok
             Start();
         }
 
+        public Ablak_Kidobó_változat()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
             Változatlista1();

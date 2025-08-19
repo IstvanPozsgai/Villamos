@@ -25,6 +25,10 @@ namespace Villamos.Villamos_Ablakok
             Cmbtelephely = cmbtelephely;
         }
 
+        public Ablak_munkalap_dekádoló_oszlopot_beilleszt()
+        {
+            InitializeComponent();
+        }
 
         private void Ablak_munkalap_dekádoló_oszlopot_beilleszt_Load(object sender, EventArgs e)
         {

@@ -24,6 +24,11 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             Start();
         }
 
+        public Ablak_Eszterga_Adatok_Javítás()
+        {
+            InitializeComponent();
+        }
+
         private void Start()
         {
             Adatok = Kéz.Lista_Adatok();

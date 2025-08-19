@@ -38,6 +38,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
 
         }
 
+        public Ablak_PDF_Feltöltés()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Sérülés_PDF_Load(object sender, EventArgs e)
         {
             if (Megjelenítés)

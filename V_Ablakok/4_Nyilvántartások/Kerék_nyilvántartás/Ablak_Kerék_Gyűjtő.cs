@@ -19,6 +19,11 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
             Pályaszám = pályaszám;
         }
 
+        public Ablak_Kerék_Gyűjtő()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Kerék_Gyűjtő_Load(object sender, EventArgs e)
         {
             PályaszámTxt.Text = Pályaszám.Trim();
