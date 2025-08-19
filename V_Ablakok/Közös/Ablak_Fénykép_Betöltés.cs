@@ -23,6 +23,10 @@ namespace Villamos.Villamos_Ablakok.Közös
             InitializeComponent();
         }
 
+        public Ablak_Fénykép_Betöltés()
+        {
+            InitializeComponent();
+        }
 
         private void Ablak_Fénykép_Betöltés_Load(object sender, EventArgs e)
         {

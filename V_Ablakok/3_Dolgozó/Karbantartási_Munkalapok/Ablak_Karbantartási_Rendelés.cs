@@ -28,6 +28,11 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             CmbTelephely = cmbTelephely;
         }
 
+        public Ablak_Karbantartási_Rendelés()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Karbantartási_Rendelés_Load(object sender, EventArgs e)
         {
             Rendelés_Dátum.Value = DateTime.Today;

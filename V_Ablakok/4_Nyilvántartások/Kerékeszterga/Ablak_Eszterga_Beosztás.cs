@@ -22,6 +22,11 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             Gyökér = gyökér;
         }
 
+        public Ablak_Eszterga_Beosztás()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Eszterga_Beosztás_Load(object sender, EventArgs e)
         {
             Beosztás();

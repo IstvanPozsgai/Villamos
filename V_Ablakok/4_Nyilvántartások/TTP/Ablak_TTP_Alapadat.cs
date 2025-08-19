@@ -22,6 +22,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             Start();
         }
 
+        public Ablak_TTP_Alapadat()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_TTP_Alapadat_Load(object sender, EventArgs e)
         { }
 

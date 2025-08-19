@@ -31,6 +31,11 @@ namespace Villamos.Villamos_Ablakok
             Adatok_kiírása(rekord);
         }
 
+        public Ablak_Kidobó_Ismétlődő()
+        {
+            InitializeComponent();
+        }
+
         Ablak_Kidobó_változat Új_Ablak_Kidobó_változat;
 
         private void Ablak_Kidobó_Ismétlődő_Load(object sender, EventArgs e)

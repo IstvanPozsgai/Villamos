@@ -27,6 +27,11 @@ namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
             InitializeComponent();
         }
 
+        public Ablak_BMR()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_BMR_Load(object sender, EventArgs e)
         {
             if (Jármű)

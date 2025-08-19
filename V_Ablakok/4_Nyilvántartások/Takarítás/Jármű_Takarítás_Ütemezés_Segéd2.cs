@@ -22,6 +22,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás
             InitializeComponent();
         }
 
+        public Jármű_Takarítás_Ütemezés_Segéd2()
+        {
+            InitializeComponent();
+        }
+
         public void Kiírja_Kocsi_Másik(int sor)
         {
             try

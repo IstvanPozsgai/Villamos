@@ -28,6 +28,11 @@ namespace Villamos.Villamos_Ablakok
             Adatak_kiírása();
         }
 
+        public Ablak_Kidobó_Napi()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_Kidobó_Napi_Load(object sender, EventArgs e)
         {
 
