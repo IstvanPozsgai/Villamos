@@ -139,7 +139,7 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
         private void ValidateKeyPressEnum(object sender, KeyPressEventArgs e)
         {
             //Enum állapot
-            if (!((char)(e.KeyChar) >= 49 && (char)(e.KeyChar) <= 52))
+            if (!(((char)(e.KeyChar) >= 49 && (char)(e.KeyChar) <= 52) || (char)(e.KeyChar) == 8))
             {
                 MessageBox.Show("Csak 1-4 közötti számot lehet beírni!");
                 e.Handled = true;
@@ -149,7 +149,7 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
         private void ValidateKeyPress(object sender, KeyPressEventArgs e)
         {
             //Kerék állapot
-            if (!((char)(e.KeyChar) >= 48 && (char)(e.KeyChar) <= 59))
+            if (!(((char)(e.KeyChar) >= 48 && (char)(e.KeyChar) <= 59) || (char)(e.KeyChar) == 8 ))
             {
                 MessageBox.Show("Csak 0-9 közötti számot lehet beírni!");
                 e.Handled = true;
