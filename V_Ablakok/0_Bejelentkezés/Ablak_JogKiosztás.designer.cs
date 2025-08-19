@@ -54,6 +54,7 @@ namespace Villamos
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Felhasználók = new System.Windows.Forms.ComboBox();
             this.DolgozóNév = new System.Windows.Forms.Label();
+            this.Btn_MindenMasol = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -253,12 +254,26 @@ namespace Villamos
             this.DolgozóNév.TabIndex = 222;
             this.DolgozóNév.Text = "<< >>";
             // 
+            // Btn_MindenMasol
+            // 
+            this.Btn_MindenMasol.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_MindenMasol.BackgroundImage = global::Villamos.Properties.Resources.Clipboard_Paste_01;
+            this.Btn_MindenMasol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.Btn_MindenMasol.Location = new System.Drawing.Point(1566, 157);
+            this.Btn_MindenMasol.Name = "Btn_MindenMasol";
+            this.Btn_MindenMasol.Size = new System.Drawing.Size(45, 45);
+            this.Btn_MindenMasol.TabIndex = 224;
+            this.ToolTip1.SetToolTip(this.Btn_MindenMasol, "Rögzíti az adatokat");
+            this.Btn_MindenMasol.UseVisualStyleBackColor = true;
+            this.Btn_MindenMasol.Click += new System.EventHandler(this.Btn_MindenMasol_Click);
+            // 
             // Ablak_JogKiosztás
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1623, 495);
+            this.Controls.Add(this.Btn_MindenMasol);
             this.Controls.Add(this.Frissít);
             this.Controls.Add(this.DolgozóNév);
             this.Controls.Add(this.Felhasználók);
@@ -300,5 +315,6 @@ namespace Villamos
         private ComboBox CmbAblak;
         private CheckedListBox LstChkSzervezet;
         private ComboBox CmbGombok;
+        internal Button Btn_MindenMasol;
     }
 }

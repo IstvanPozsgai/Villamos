@@ -97,6 +97,7 @@ namespace Villamos
             this.lblVerzió.TabIndex = 38;
             this.lblVerzió.Text = "Verzió: 20.04.19";
             this.lblVerzió.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblVerzió.DoubleClick += new System.EventHandler(this.lblVerzió_DoubleClick);
             // 
             // CmbTelephely
             // 
@@ -264,6 +265,7 @@ namespace Villamos
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -272,6 +274,8 @@ namespace Villamos
             this.Text = "Bejelentkezés";
             this.Load += new System.EventHandler(this.AblakBejelentkezés_Load);
             this.Shown += new System.EventHandler(this.AblakBejelentkezés_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AblakBejelentkezés_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.AblakBejelentkezés_KeyUp);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
             this.GroupBox2.ResumeLayout(false);

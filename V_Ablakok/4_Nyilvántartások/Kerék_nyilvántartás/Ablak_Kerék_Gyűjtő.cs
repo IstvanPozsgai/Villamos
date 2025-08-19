@@ -136,12 +136,22 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
             Berendezés_adatok();
         }
 
-        private void ValidateKeyPress(object sender, KeyPressEventArgs e)
+        private void ValidateKeyPressEnum(object sender, KeyPressEventArgs e)
         {
-            //Kerék állapot
+            //Enum állapot
             if (!((char)(e.KeyChar) >= 49 && (char)(e.KeyChar) <= 52))
             {
                 MessageBox.Show("Csak 1-4 közötti számot lehet beírni!");
+                e.Handled = true;
+            }
+        }
+
+        private void ValidateKeyPress(object sender, KeyPressEventArgs e)
+        {
+            //Kerék állapot
+            if (!((char)(e.KeyChar) >= 48 && (char)(e.KeyChar) <= 59))
+            {
+                MessageBox.Show("Csak 0-9 közötti számot lehet beírni!");
                 e.Handled = true;
             }
         }
@@ -150,9 +160,9 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
         {
             if (Tábla.CurrentCell.ColumnIndex == 6) // put columnindextovalidate
             {
-                e.Control.KeyPress -= ValidateKeyPress;
-                e.Control.KeyPress -= ValidateKeyPress;
-                e.Control.KeyPress += ValidateKeyPress;
+                e.Control.KeyPress -= ValidateKeyPressEnum;
+                e.Control.KeyPress -= ValidateKeyPressEnum;
+                e.Control.KeyPress += ValidateKeyPressEnum;
             }
 
             if (Tábla.CurrentCell.ColumnIndex == 7) // put columnindextovalidate

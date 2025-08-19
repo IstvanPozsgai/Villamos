@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyE = Villamos.Module_Excel;
@@ -44,14 +43,13 @@ namespace Villamos
             {
                 // betöltjük a telephelyeket
                 Telephelyekfeltöltése();
-                GombLathatosagKezelo.Beallit(this);
-                Jogosultságkiosztás();
 
-
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Osztálytábla(hely);
-
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                    Jogosultságkiosztás();
+                else
+                    GombLathatosagKezelo.Beallit(this);
                 Fülek.SelectedIndex = 0;
                 Fülekkitöltése();
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;

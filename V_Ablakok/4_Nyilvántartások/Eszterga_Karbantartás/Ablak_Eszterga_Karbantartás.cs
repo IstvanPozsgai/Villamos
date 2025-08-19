@@ -197,7 +197,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             Dátum = 1,
             Üzemóra = 2,
-            Bekövetkezés = 3
+            Beköv = 3
         }
         #endregion
 
@@ -218,7 +218,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 TablaUrites();
                 AdatTabla.Columns.Clear();
                 AdatTabla.Rows.Clear();
-                AdatTabla.Columns.Add("Sorszám");
+                AdatTabla.Columns.Add("Sorsz.");
                 AdatTabla.Columns.Add("Művelet");
                 AdatTabla.Columns.Add("Egység");
                 AdatTabla.Columns.Add("Nap");
@@ -245,7 +245,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 {
                     DataRow Soradat = AdatTabla.NewRow();
 
-                    Soradat["Sorszám"] = rekord.ID;
+                    Soradat["Sorsz."] = rekord.ID;
                     Soradat["Művelet"] = rekord.Művelet;
                     Soradat["Egység"] = Enum.GetName(typeof(EsztergaEgyseg), rekord.Egység);
                     Soradat["Nap"] = rekord.Mennyi_Dátum;
@@ -295,7 +295,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         ///   - Üzemóra alapú esedékesség: becsült üzemóra érték alapján esedékes.
         ///   - Bekövetkezés típus: a fenti két feltétel bármelyikének teljesülése.
         /// - A kiszámolt esedékességi adatokat új sorokként hozzáadja a megjelenítendő DataTable-hez.
-        /// - Az adatokat dátum és sorszám szerint rendezi, majd megjeleníti a táblázatban.
+        /// - Az adatokat dátum és Sorsz. szerint rendezi, majd megjeleníti a táblázatban.
         /// - A sorokat színezi és az oszlopokat lezárja írásvédettként.
         /// </summary>
         private void EloreTervezesListazasa()
@@ -308,7 +308,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 AdatTabla = new DataTable();
                 AdatTabla.Columns.Clear();
                 AdatTabla.Rows.Clear();
-                AdatTabla.Columns.Add("Sorszám");
+                AdatTabla.Columns.Add("Sorsz.");
                 AdatTabla.Columns.Add("Művelet");
                 AdatTabla.Columns.Add("Egység");
                 AdatTabla.Columns.Add("Nap");
@@ -363,7 +363,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                 }
                                 break;
 
-                            case EsztergaEgyseg.Bekövetkezés:
+                            case EsztergaEgyseg.Beköv:
                                 bool NapEsedekes = (TervDatum - UtolsoDatum).TotalDays >= rekord.Mennyi_Dátum;
                                 bool UzemoraEsedekes = (BecsultUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra;
 
@@ -401,7 +401,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         {
                             DataRow Soradat = AdatTabla.NewRow();
 
-                            Soradat["Sorszám"] = rekord.ID;
+                            Soradat["Sorsz."] = rekord.ID;
                             Soradat["Művelet"] = rekord.Művelet;
                             Soradat["Egység"] = Enum.GetName(typeof(EsztergaEgyseg), rekord.Egység);
                             Soradat["Nap"] = rekord.Mennyi_Dátum;
@@ -425,7 +425,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 IEnumerable<DataRow> RendezettAdatok = RendezettSorok
                     .OrderBy(sor => DateTime.Parse(sor["Esedékesség Dátuma"].ToStrTrim()))
-                    .ThenBy(sor => int.Parse(sor["Sorszám"].ToStrTrim()));
+                    .ThenBy(sor => int.Parse(sor["Sorsz."].ToStrTrim()));
 
                 foreach (DataRow sor in RendezettAdatok)
                     AdatTabla.Rows.Add(sor);
@@ -464,7 +464,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 Tabla.Columns.Clear();
                 AdatTabla = new DataTable();
                 AdatTabla.Columns.Clear();
-                AdatTabla.Columns.Add("Művelet Sorszáma");
+                AdatTabla.Columns.Add("Sorsz.");
                 AdatTabla.Columns.Add("Művelet");
                 AdatTabla.Columns.Add("Nap");
                 AdatTabla.Columns.Add("Óra");
@@ -480,7 +480,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 {
                     DataRow Soradat = AdatTabla.NewRow();
 
-                    Soradat["Művelet Sorszáma"] = rekord.ID;
+                    Soradat["Sorsz."] = rekord.ID;
                     Soradat["Művelet"] = rekord.Művelet;
                     Soradat["Nap"] = rekord.Mennyi_Dátum;
                     Soradat["Óra"] = rekord.Mennyi_Óra;
@@ -494,14 +494,14 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 }
                 IEnumerable<DataRow> RendezettAdatok = RendezettSorok
                     .OrderBy(sor => DateTime.Parse(sor["Utolsó Dátum"].ToStrTrim()))
-                    .ThenBy(sor => int.Parse(sor["Művelet Sorszáma"].ToStrTrim()));
+                    .ThenBy(sor => int.Parse(sor["Sorsz."].ToStrTrim()));
 
                 foreach (DataRow sor in RendezettAdatok)
                     AdatTabla.Rows.Add(sor);
 
                 Tabla.DataSource = AdatTabla;
 
-                Tabla.Columns["Művelet Sorszáma"].Width = 110;
+                Tabla.Columns["Sorsz."].Width = 110;
                 Tabla.Columns["Művelet"].Width = 943;
                 Tabla.Columns["Nap"].Width = 60;
                 Tabla.Columns["Óra"].Width = 60;
@@ -531,7 +531,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         /// </summary>
         private void OszlopSzelesseg()
         {
-            Tabla.Columns["Sorszám"].Width = 97;
+            Tabla.Columns["Sorsz."].Width = 80;
             Tabla.Columns["Művelet"].Width = 700;
             Tabla.Columns["Egység"].Width = 110;
             Tabla.Columns["Nap"].Width = 60;
@@ -618,7 +618,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 foreach (DataGridViewRow row in Tabla.Rows)
                 {
-                    if (row.Cells["Sorszám"].Value != null && int.TryParse(row.Cells["Sorszám"].Value.ToStrTrim(), out int Sorszam))
+                    if (row.Cells["Sorsz."].Value != null && int.TryParse(row.Cells["Sorsz."].Value.ToStrTrim(), out int Sorszam))
                     {
                         Adat_Eszterga_Muveletek rekord = AdatokMuvelet.FirstOrDefault(r => r.ID == Sorszam);
                         if (rekord != null)
@@ -680,7 +680,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                             return Color.Yellow;
                         break;
 
-                    case EsztergaEgyseg.Bekövetkezés:
+                    case EsztergaEgyseg.Beköv:
                         bool datumEsedekes = elteltNap >= rekord.Mennyi_Dátum;
                         bool oraEsedekes = elteltÓra >= rekord.Mennyi_Óra;
 
@@ -1102,7 +1102,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
             }
         }
 
-        // JAVÍTANDÓ:Ez olyan ...
         /// <summary>
         /// Eseménykezelő, amely PDF fájlba exportálja a megjelenített műveleti táblázatot.
         /// Ellenőrzi, hogy van-e adat, majd mentési helyet kér a felhasználótól, 
@@ -1154,65 +1153,126 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
+                List<DataGridViewColumn> visibleCols = tábla.Columns.Cast<DataGridViewColumn>().Where(c => c.Visible).ToList();
+                if (visibleCols.Count == 0)
+                    throw new Exception("Nincsenek látható oszlopok a táblázatban.");
+
                 using (FileStream stream = new FileStream(fájlNév, FileMode.Create))
                 {
-                    Document pdfDoc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
-                    PdfWriter.GetInstance(pdfDoc, stream);
-                    pdfDoc.Open();
+                    Document doc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f);
+                    PdfWriter.GetInstance(doc, stream);
+                    doc.Open();
 
-                    // Betűtípus betöltése (Arial, Unicode támogatás)
-                    string betutipusUt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
-                    BaseFont alapFont = BaseFont.CreateFont(betutipusUt, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                    string arial = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                    BaseFont baseFont = File.Exists(arial)
+                        ? BaseFont.CreateFont(arial, BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
+                        : BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
 
-                    // Fejléc betűtípus - fekete, vastag
-                    iTextSharp.text.Font fejlecBetu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    float headerPt = 10f;
+                    float cellPt = 9f;
 
-                    PdfPTable pdfTable = new PdfPTable(tábla.Columns.Count)
+                    // fix szélességek definiálása (pontban, kb. 1 karakter ~ 5–6 pont)
+                    Dictionary<string, float> fixWidths = new Dictionary<string, float>(StringComparer.OrdinalIgnoreCase)
                     {
-                        WidthPercentage = 100
+                        { "Sorsz.", 29f },
+                        { "Művelet", 180f },
+                        { "Egység", 35f },
+                        { "Nap", 22f },
+                        { "Óra", 27f },
+                        { "Státusz", 33f },     
+                        { "Utolsó dátum", 43f },
+                        { "Utolsó üzemóra", 40f },
+                        { "Esedékesség dátuma", 53f },
+                        { "Becsült üzemóra", 38f },
+                        { "Megjegyzés", 130f }
                     };
 
-                    // Fejléc hozzáadása, egységes fekete háttérrel (vagy tetszőleges színnel)
-                    foreach (DataGridViewColumn column in tábla.Columns)
+                    // PDF tábla létrehozása fix oszlopszélességekkel
+                    PdfPTable pdfTable = new PdfPTable(visibleCols.Count)
                     {
-                        PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fejlecBetu))
+                        WidthPercentage = 100f
+                    };
+
+                    float[] colWidths = new float[visibleCols.Count];
+                    for (int i = 0; i < visibleCols.Count; i++)
+                    {
+                        string colName = visibleCols[i].HeaderText.Trim();
+                        if (fixWidths.ContainsKey(colName))
+                            colWidths[i] = fixWidths[colName];
+                        else
+                            colWidths[i] = 50f; // alapértelmezett szélesség
+                    }
+                    pdfTable.SetWidths(colWidths);
+
+                    // betűk
+                    iTextSharp.text.Font headerITextFont = new iTextSharp.text.Font(baseFont, headerPt, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    iTextSharp.text.Font cellITextFontBase = new iTextSharp.text.Font(baseFont, cellPt, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+
+                    // fejlécek
+                    foreach (DataGridViewColumn col in visibleCols)
+                    {
+                        string headerText = (col.HeaderText ?? "").Trim();
+                        bool allowWrap = true;
+
+                        // dátum és óra mezőknél engedjük törni a fejlécet, de az adatnál nem
+                        if (headerText.Contains("dátum") || headerText.Contains("üzemóra"))
+                            allowWrap = true;
+
+                        PdfPCell headCell = new PdfPCell(new Phrase(headerText, headerITextFont))
                         {
-                            BackgroundColor = new BaseColor(240, 240, 240)
+                            BackgroundColor = new BaseColor(240, 240, 240),
+                            Padding = 4f,
+                            NoWrap = !allowWrap
                         };
-                        pdfTable.AddCell(cell);
+                        pdfTable.AddCell(headCell);
                     }
 
-                    // Sorok bejárása
+                    // sorok
                     foreach (DataGridViewRow row in tábla.Rows)
                     {
-                        foreach (DataGridViewCell cell in row.Cells)
+                        if (row.IsNewRow) continue;
+
+                        foreach (DataGridViewColumn col in visibleCols)
                         {
-                            string szoveg = cell.Value?.ToStrTrim() ?? "";
+                            DataGridViewCell dgvc = row.Cells[col.Index];
+                            string text = dgvc.Value?.ToString() ?? "";
 
-                            // Színek lekérése az InheritedStyle-ból (ez tartalmazza a tényleges megjelenő színt)
-                            BaseColor háttérSzín = cell.InheritedStyle.BackColor.IsEmpty
-                                ? BaseColor.WHITE
-                                : new BaseColor(cell.InheritedStyle.BackColor.R, cell.InheritedStyle.BackColor.G, cell.InheritedStyle.BackColor.B);
+                            Color fore = dgvc.Style.ForeColor;
+                            if (fore.IsEmpty) fore = row.DefaultCellStyle.ForeColor;
+                            if (fore.IsEmpty) fore = Color.Black;
+                            BaseColor foreBase = new BaseColor(fore.R, fore.G, fore.B);
 
-                            BaseColor szovegSzín = cell.InheritedStyle.ForeColor.IsEmpty
-                                ? BaseColor.BLACK
-                                : new BaseColor(cell.InheritedStyle.ForeColor.R, cell.InheritedStyle.ForeColor.G, cell.InheritedStyle.ForeColor.B);
+                            Color back = dgvc.Style.BackColor;
+                            if (back.IsEmpty) back = row.DefaultCellStyle.BackColor;
+                            if (back.IsEmpty) back = Color.White;
+                            BaseColor backBase = new BaseColor(back.R, back.G, back.B);
 
-                            // Betűtípus az adott cella szövegszínével
-                            iTextSharp.text.Font betu = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.NORMAL, szovegSzín);
+                            iTextSharp.text.Font cellFont = new iTextSharp.text.Font(baseFont, cellPt, iTextSharp.text.Font.NORMAL, foreBase);
 
-                            PdfPCell pdfCell = new PdfPCell(new Phrase(szoveg, betu))
+                            bool noWrap = false;
+                            string header = col.HeaderText.Trim();
+
+                            // bizonyos mezőknél fix hosszt és NoWrap-et kérünk
+                            if (header == "Utolsó dátum" || header == "Esedékesség dátuma")
+                                noWrap = true; // dátum fix 11 char, nem törjük
+                            if (header == "Utolsó üzemóra" || header == "Becsült üzemóra")
+                                noWrap = true; // szám mezők fix
+
+                            PdfPCell pdfCell = new PdfPCell(new Phrase(text, cellFont))
                             {
-                                BackgroundColor = háttérSzín
+                                BackgroundColor = backBase,
+                                Padding = 4f,
+                                NoWrap = noWrap,
+                                HorizontalAlignment = Element.ALIGN_LEFT,
+                                VerticalAlignment = Element.ALIGN_MIDDLE
                             };
 
                             pdfTable.AddCell(pdfCell);
                         }
                     }
 
-                    pdfDoc.Add(pdfTable);
-                    pdfDoc.Close();
-                    stream.Close();
+                    doc.Add(pdfTable);
+                    doc.Close();
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1225,6 +1285,9 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+
 
         /// <summary>
         /// Betölti a naplózott műveletek listáját a táblázatba, és elrejti a rögzítés gombot.

@@ -1293,6 +1293,7 @@ namespace Villamos
             this.CmbTelephely.Name = "CmbTelephely";
             this.CmbTelephely.Size = new System.Drawing.Size(186, 28);
             this.CmbTelephely.TabIndex = 18;
+            this.CmbTelephely.SelectedIndexChanged += new System.EventHandler(this.CmbTelephely_SelectedIndexChanged);
             // 
             // label23
             // 

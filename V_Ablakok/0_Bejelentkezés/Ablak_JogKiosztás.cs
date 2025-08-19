@@ -52,7 +52,11 @@ namespace Villamos
             AdatokOldal = KézOldal.Lista_Adatok().Where(a => a.Törölt == false).ToList();
             AdatokGombok = KézGombok.Lista_Adatok().Where(a => a.Törölt == false).ToList();
             AdatokSzervezet = KézSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
-            AdatokUsers = KézUsers.Lista_Adatok().Where(a => a.Törölt == false).ToList();
+            AdatokUsers = KézUsers.Lista_Adatok();
+            AdatokUsers = (from a in AdatokUsers
+                           where a.Törölt == false
+                           orderby a.UserName
+                           select a).ToList();
             AdatokDolgozó = KézDolgozó.Lista_Adatok().Where(a => a.Státus == false).OrderBy(a => a.Dolgozónév).ToList();
             AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
             OldalFeltöltés();
@@ -283,6 +287,33 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Btn_MindenMasol_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
+
+                Kezelő_Belépés_MindenMásol kezelo = new Kezelő_Belépés_MindenMásol();
+                kezelo.Másolás(Program.PostásTelephely, Felhasználók.Text);
+                TáblázatListázás();
+                MessageBox.Show("Másolás megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
@@ -502,6 +533,7 @@ namespace Villamos
             for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
                 LstChkSzervezet.SetItemChecked(i, kell);
         }
+
         #endregion
 
 

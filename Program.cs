@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatszerkezet;
 using Zuby.ADGV;
 
 namespace Villamos
@@ -37,7 +38,8 @@ namespace Villamos
         public static int PostásNévId = 1;
         public static List<Adat_Jogosultságok> PostásJogosultságok = new List<Adat_Jogosultságok>();
         public static List<Adat_Oldalak> PostásOldalak = new List<Adat_Oldalak>();
-
+        public static List<Adat_Gombok> PostásGombok = new List<Adat_Gombok>();
+        public static List<Adat_Kiegészítő_Könyvtár> PostásKönyvtár = new List<Adat_Kiegészítő_Könyvtár>();
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

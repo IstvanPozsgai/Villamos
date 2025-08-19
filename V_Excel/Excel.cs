@@ -37,9 +37,10 @@ namespace Villamos
             {
                 Visible = teszt
             };
+            xlApp.DisplayAlerts = false;
+            xlApp.Interactive = false;
             Module_Excel.xlWorkBook = xlApp.Workbooks.Add(misValue);
             Module_Excel.xlWorkSheet = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets.get_Item(1);
-
         }
 
 

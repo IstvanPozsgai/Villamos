@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
@@ -12,36 +13,31 @@ using MyE = Villamos.Module_Excel;
 
 namespace Villamos
 {
-    public partial class AblakBejelentkezés
+    public partial class AblakBejelentkezés_Új
     {
-        readonly Kezelő_Belépés_Jogosultságtábla Kéz_Jogosultság = new Kezelő_Belépés_Jogosultságtábla();
-        readonly Kezelő_Belépés_Bejelentkezés Kéz_Bejelentkezés = new Kezelő_Belépés_Bejelentkezés();
-        readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
+        readonly Kezelő_Users Kéz = new Kezelő_Users();
         readonly Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
-        readonly Kezelő_Belépés_WinTábla KézWin = new Kezelő_Belépés_WinTábla();
+        readonly Kezelő_Gombok KézGombok = new Kezelő_Gombok();
+        readonly Kezelő_Oldalok KézOldal = new Kezelő_Oldalok();
+        readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
 
-        List<Adat_Belépés_Jogosultságtábla> AdatokJogosultságTelephely = new List<Adat_Belépés_Jogosultságtábla>();
-        List<Adat_Belépés_Bejelentkezés> AdatokBelépésTelephely = new List<Adat_Belépés_Bejelentkezés>();
+        List<Adat_Users> Adatok = new List<Adat_Users>();
+
 
         bool Beléphet = true;
-        public AblakBejelentkezés()
+
+        #region Alap
+        public AblakBejelentkezés_Új()
         {
             InitializeComponent();
             Start();
         }
 
-
         private void AblakBejelentkezés_Load(object sender, EventArgs e)
         {
-
+            AcceptButton = BtnBelépés;
         }
 
-        private void AblakBejelentkezés_Shown(object sender, EventArgs e)
-        {
-            if (Beléphet) WinVan();
-        }
-
-        #region Alap
         private void Súgó_Click(object sender, EventArgs e)
         {
             try
@@ -59,10 +55,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
-
-
-        #region Indulás
 
         private void Start()
         {
@@ -72,7 +64,39 @@ namespace Villamos
             Hálózat();
             Dátumformátumellenőrzés();
             Karbantartásellenőrzés();
-            Subtelephelyfeltöltés();
+            FelhasználókLista();
+            FelhasználókFeltöltése();
+            if (Beléphet) WinVan();
+        }
+
+        private void FelhasználókLista()
+        {
+            Adatok = Kéz.Lista_Adatok();
+            Adatok = Adatok.Where(a => a.Törölt == false).ToList();
+        }
+
+        private void FelhasználókFeltöltése()
+        {
+            try
+            {
+                CmbUserName.Items.Clear();
+
+
+                foreach (Adat_Users Adat in Adatok)
+                {
+                    CmbUserName.Items.Add(Adat.UserName.ToUpper());
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Hálózat()
@@ -85,8 +109,6 @@ namespace Villamos
                 Beléphet = false;
             }
         }
-
-
 
         private void Dátumformátumellenőrzés()
         {
@@ -149,50 +171,30 @@ namespace Villamos
             else
                 Verzióellenőrzés();
         }
-
-        private void Subtelephelyfeltöltés()
-        {
-            try
-            {
-                CmbTelephely.Items.Clear();
-                List<Adat_Kiegészítő_Könyvtár> Adatok = KézKönyvtár.Lista_Adatok().OrderBy(a => a.Név).ToList();
-                foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
-                    CmbTelephely.Items.Add(rekord.Név);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        // JAVÍTANDÓ:
         private void WinVan()
         {
             try
             {
-                List<Adat_Belépés_WinTábla> Adatok = KézWin.Lista_Adatok();
+                //List<Adat_Belépés_WinTábla> Adatok = KézWin.Lista_Adatok();
 
-                if (Adatok != null)
-                {
-                    Adat_Belépés_WinTábla Elem = (from a in Adatok
-                                                  where a.WinUser.ToUpper() == Environment.UserName.ToUpper()
-                                                  select a).FirstOrDefault();
+                //if (Adatok != null)
+                //{
+                //    Adat_Belépés_WinTábla Elem = (from a in Adatok
+                //                                  where a.WinUser.ToUpper() == Environment.UserName.ToUpper()
+                //                                  select a).FirstOrDefault();
 
-                    //Ha van ilyen dolgozó, akkor beléptetjük
-                    if (Elem != null)
-                    {
-                        AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(Elem.Telephely);
-                        Adat_Belépés_Bejelentkezés Kiaz = (from a in AdatokBelépésTelephely
-                                                           where a.Név.ToUpper() == Elem.Név.ToUpper()
-                                                           select a).FirstOrDefault();
+                //    //Ha van ilyen dolgozó, akkor beléptetjük
+                //    if (Elem != null)
+                //    {
+                //        AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(Elem.Telephely);
+                //        Adat_Belépés_Bejelentkezés Kiaz = (from a in AdatokBelépésTelephely
+                //                                           where a.Név.ToUpper() == Elem.Név.ToUpper()
+                //                                           select a).FirstOrDefault();
 
-                        Belépés(Elem.Telephely, Elem.Név.ToUpper(), Kiaz.Jelszó.ToUpper());
-                    }
-                }
+                //        Belépés(Elem.Telephely, Elem.Név.ToUpper(), Kiaz.Jelszó.ToUpper());
+                //    }
+                //}
             }
             catch (HibásBevittAdat ex)
             {
@@ -236,7 +238,7 @@ namespace Villamos
 
         private void FigyKiírás(string szöveg)
         {
-            GroupBox1.Visible = false;
+
             Timer_kilép.Enabled = true;
 
             Label Figyelmeztetés = new Label
@@ -268,35 +270,38 @@ namespace Villamos
         #region Beléptetés
         private void Btnlekérdezés_Click(object sender, EventArgs e)
         {
-            CmbUserName.Text = "VENDÉG";
-            Jogosultság_Belépés(CmbTelephely.Text.Trim(), CmbUserName.Text.Trim());
+            Adat_Users Belép = (from a in Adatok
+                                where a.UserName.ToUpper() == "VENDÉG"
+                                && a.Törölt == false
+                                select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
+            Belépés(Belép);
         }
 
         public void BtnBelépés_Click(object sender, EventArgs e)
         {
-            Belépés(CmbTelephely.Text.Trim(), CmbUserName.Text.Trim(), TxtPassword.Text.Trim().ToUpper());
+            Belépés(CmbUserName.Text.Trim(), Jelszó.HashPassword(TxtPassword.Text.Trim()));
         }
 
-        private void Belépés(string Telephely, string UserName, string Begépeltjelszó)
+        private void Belépés(string UserName, string Begépeltjelszó)
         {
             try
             {
-                if (Begépeltjelszó.Trim().ToUpper() == "INIT") throw new HibásBevittAdat("A jelszó még nem lett módosítva az alapbeállításról, a jelszó módosítani szükséges.");
+                Adat_Users Belép = (from a in Adatok
+                                    where a.UserName.ToUpper() == UserName.ToUpper().Trim()
+                                    && a.Törölt == false
+                                    select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
 
-                Adat_Belépés_Bejelentkezés Elem = (from a in AdatokBelépésTelephely
-                                                   where a.Név.ToUpper() == UserName.ToUpper()
-                                                   select a).FirstOrDefault();
-                if (Elem != null)
+                if (Begépeltjelszó != Belép.Password) throw new HibásBevittAdat("Hibás jelszó!");
+                if (Belép.Frissít)
                 {
-                    if (Begépeltjelszó.Trim().ToUpper() == Elem.Jelszó.Trim().ToUpper())
-                        Jogosultság_Belépés(Telephely, UserName);
-                    else
-                    {
-                        MessageBox.Show("Hibás jelszó!", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        TxtPassword.Text = "";
-                        TxtPassword.Focus();
-                    }
+                    MessageBox.Show("A jelszó még nem lett módosítva az alapbeállításról, a jelszó módosítani szükséges.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //kérjük, hogy változtassa meg a jelszavát
+                    Subjelszómódosítás(Belép);
+                    Adatok = Kéz.Lista_Adatok();
+                    return;
                 }
+                if (Jelszó.HashPassword(TxtPassword.Text.Trim()) != Belép.Password) throw new HibásBevittAdat("Hibás jelszó!");
+                Belépés(Belép);
             }
             catch (HibásBevittAdat ex)
             {
@@ -309,33 +314,35 @@ namespace Villamos
             }
         }
 
-        private void Jogosultság_Belépés(string Telephely, string Név)
+        /// <summary>
+        /// Beállítjuk , hogy ki lép be, milyen joggal és a programba és beléptetjük
+        /// </summary>
+        private void Belépés(Adat_Users Elem)
         {
-            try
-            {
-                AdatokJogosultságTelephely = Kéz_Jogosultság.Lista_Adatok(Telephely);
-                Adat_Belépés_Jogosultságtábla rekord = (from a in AdatokJogosultságTelephely
-                                                        where a.Név.ToUpper() == Név.ToUpper()
-                                                        select a).FirstOrDefault();
-                if (rekord != null)
-                {
-                    Program.PostásJogkör = rekord.Jogkörúj1.Trim();
-                    Program.PostásTelephely = Telephely;
-                    Program.PostásNév = Név.ToUpper();
-                    A_Főoldal Főoldalablak = new A_Főoldal();
-                    Főoldalablak.Show();
-                    this.Hide();
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //Program.PostásJogkör majd törölni kell
+            Program.PostásJogkör = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
+                                   "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
+                                   "000000000000000000000000000000000000000000000000000000000000";
+            Program.PostásNév = Elem.UserName;
+            Program.PostásNévId = Elem.UserId;
+            Program.PostásTelephely = Elem.Szervezet;
+            Program.PostásGombok = KézGombok.Lista_Adatok();
+            Program.PostásOldalak = KézOldal.Lista_Adatok();
+            Program.PostásKönyvtár = KézKönyvtár.Lista_Adatok();
+            //Valamint, hogy mire van jogosultsága
+            A_Főoldal Főoldalablak = new A_Főoldal();
+            Főoldalablak.Show();
+            this.Hide();
+        }
+
+        private void Subjelszómódosítás(Adat_Users Adat)
+        {
+            Ablak_Jelszó_Változtatás jelszó_váltás = new Ablak_Jelszó_Változtatás(Adat);
+            jelszó_váltás.Változás += FelhasználókLista;
+            jelszó_váltás.ShowDialog();
+
+            TxtPassword.Text = "";
+            TxtPassword.Focus();
         }
 
         private void BtnMégse_Click(object sender, EventArgs e)
@@ -354,77 +361,18 @@ namespace Villamos
         #endregion
 
 
-        #region Telephelyfeltöltés
-        private void CmbTelephely_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (CmbTelephely.Text.Trim() == "")
-            {
-                Btnlekérdezés.Visible = false;
-                GroupBox2.Visible = false;
-            }
-            else
-            {
-                Btnlekérdezés.Visible = true;
-                GroupBox2.Visible = true;
-                CmbUserName.Focus();
-                TxtPassword.Text = "";
-                Subdolgozófeltöltés();
-            }
-        }
-
-        private void Subdolgozófeltöltés()
-        {
-            AdatokJogosultságTelephely = Kéz_Jogosultság.Lista_Adatok(CmbTelephely.Text.Trim());
-            AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(CmbTelephely.Text.Trim());
-            CmbUserName.Items.Clear();
-
-            foreach (Adat_Belépés_Bejelentkezés Elem in AdatokBelépésTelephely)
-                CmbUserName.Items.Add(Elem.Név.ToUpper());
-
-            CmbUserName.Refresh();
-        }
-        #endregion
-
-
         #region Jelszó Módosítás
         private void BtnJelszóMódosítás_Click(object sender, EventArgs e)
         {
             if (CmbUserName.Text.Trim() == "") return;
             TxtPassword.Text = "";
-            Subjelszómódosítás();
-            AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(CmbTelephely.Text.Trim());
-        }
+            Adat_Users Belép = (from a in Adatok
+                                where a.UserName.ToUpper() == CmbUserName.Text.ToUpper().Trim()
+                                && a.Törölt == false
+                                select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
 
-
-        private void Subjelszómódosítás()
-        {
-            AblakJelszóváltoztatás jelszó_váltás = new AblakJelszóváltoztatás(CmbTelephely.Text.Trim(), CmbUserName.Text.Trim());
-            jelszó_váltás.ShowDialog();
-            TxtPassword.Text = "";
-            TxtPassword.Focus();
+            Subjelszómódosítás(Belép);
         }
         #endregion
-
-        //Conttoll mellett az új bejelentekezési ablakot nyitja meg
-        bool CTRL_le = false;
-        private void lblVerzió_DoubleClick(object sender, EventArgs e)
-        {
-            if (CTRL_le)
-            {
-                AblakBejelentkezés_Új Újablak = new AblakBejelentkezés_Új();
-                Újablak.Show();
-                this.Hide();
-            }
-        }
-
-        private void AblakBejelentkezés_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control) CTRL_le = true;
-        }
-
-        private void AblakBejelentkezés_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Control) CTRL_le = false;
-        }
     }
 }

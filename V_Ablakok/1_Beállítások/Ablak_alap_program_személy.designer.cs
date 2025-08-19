@@ -212,7 +212,6 @@ namespace Villamos
             this.Label16 = new System.Windows.Forms.Label();
             this.Label17 = new System.Windows.Forms.Label();
             this.Button4 = new System.Windows.Forms.Button();
-            this.Töröl = new System.Windows.Forms.Button();
             this.Command7 = new System.Windows.Forms.Button();
             this.Command9 = new System.Windows.Forms.Button();
             this.TabPage9 = new System.Windows.Forms.TabPage();
@@ -1853,7 +1852,6 @@ namespace Villamos
             this.TabPage8.Controls.Add(this.Label16);
             this.TabPage8.Controls.Add(this.Label17);
             this.TabPage8.Controls.Add(this.Button4);
-            this.TabPage8.Controls.Add(this.Töröl);
             this.TabPage8.Controls.Add(this.Command7);
             this.TabPage8.Controls.Add(this.Command9);
             this.TabPage8.Location = new System.Drawing.Point(4, 54);
@@ -2009,18 +2007,6 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.Button4, "Frissíti a táblázatot");
             this.Button4.UseVisualStyleBackColor = true;
             this.Button4.Click += new System.EventHandler(this.Button4_Click);
-            // 
-            // Töröl
-            // 
-            this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Töröl.Location = new System.Drawing.Point(688, 73);
-            this.Töröl.Name = "Töröl";
-            this.Töröl.Size = new System.Drawing.Size(45, 45);
-            this.Töröl.TabIndex = 80;
-            this.ToolTip1.SetToolTip(this.Töröl, "Törli az adatokat");
-            this.Töröl.UseVisualStyleBackColor = true;
-            this.Töröl.Click += new System.EventHandler(this.Töröl_Click);
             // 
             // Command7
             // 
@@ -2949,7 +2935,6 @@ namespace Villamos
         internal TabPage TabPage9;
         internal CheckBox Vezér2;
         internal CheckBox Vezér1;
-        internal Button Töröl;
         internal Zuby.ADGV.AdvancedDataGridView Munka_Tábla;
         internal TextBox Munka_Megnevezés;
         internal Label Label19;

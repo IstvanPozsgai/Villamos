@@ -145,7 +145,7 @@ namespace Villamos
                     Command3.Visible = true;
 
                     Command9.Visible = true;
-                    Töröl.Visible = true;
+                  
 
                     Munka_Rögzít.Visible = true;
 
@@ -170,7 +170,6 @@ namespace Villamos
                     Command3.Visible = false;
 
                     Command9.Visible = false;
-                    Töröl.Visible = false;
 
                     Munka_Rögzít.Visible = false;
 
@@ -196,7 +195,7 @@ namespace Villamos
                 Command3.Enabled = false;
 
                 Command9.Enabled = false;
-                Töröl.Enabled = false;
+              
 
                 Munka_Rögzít.Enabled = false;
 
@@ -238,7 +237,7 @@ namespace Villamos
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
                     Command9.Enabled = true;
-                    Töröl.Enabled = true;
+
                 }
                 // módosítás 3 Dokumentumok
                 if (MyF.Vanjoga(melyikelem, 3))
@@ -1728,6 +1727,10 @@ namespace Villamos
 
 
         #region Szervezeti könyvtár
+        /// <summary>
+        /// Csak rögzíteni lehet, hogy a jogosultságokhoz tartozó könyvtárak listája ne módosuljon.
+        ///
+        /// </summary>
         private void KönyvtárListaFeltöltés()
         {
             try

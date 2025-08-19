@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -170,74 +171,55 @@ namespace Villamos.Kezelők
             }
         }
 
-        //elkopó
-        public List<Adat_Kerék_Tábla> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public void Osztályoz(List<Adat_Kerék_Tábla> AdatokBe)
         {
-            List<Adat_Kerék_Tábla> Adatok = new List<Adat_Kerék_Tábla>();
-            Adat_Kerék_Tábla Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                List<Adat_Kerék_Tábla> Adatok = Lista_Adatok();
+                List<Adat_Kerék_Tábla> AdatokGyAlap = new List<Adat_Kerék_Tábla>();
+                List<Adat_Kerék_Tábla> AdatokGy = new List<Adat_Kerék_Tábla>();
+                List<Adat_Kerék_Tábla> AdatokGyR = new List<Adat_Kerék_Tábla>();
+                if (Adatok != null)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    foreach (Adat_Kerék_Tábla Elem in AdatokBe)
                     {
-                        if (rekord.HasRows)
+                        // a pozícióban eddig volt berendezést felszabadítja
+                        string RégiBerszám = (from a in Adatok
+                                              where a.Pozíció == Elem.Pozíció && a.Azonosító == Elem.Azonosító && a.Kerékberendezés != Elem.Kerékberendezés
+                                              select a.Kerékberendezés).FirstOrDefault();
+                        if (RégiBerszám != null)
                         {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kerék_Tábla(
-                                        rekord["Kerékberendezés"].ToStrTrim(),
-                                        rekord["kerékmegnevezés"].ToStrTrim(),
-                                        rekord["kerékgyártásiszám"].ToStrTrim(),
-                                        rekord["föléberendezés"].ToStrTrim(),
-                                        rekord["azonosító"].ToStrTrim(),
-                                        rekord["pozíció"].ToStrTrim(),
-                                        rekord["Dátum"].ToÉrt_DaTeTime(),
-                                        rekord["objektumfajta"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
-                            }
+                            Adat_Kerék_Tábla Adat = new Adat_Kerék_Tábla(RégiBerszám, "_", "_", "_");
+                            AdatokGy.Add(Adat);
                         }
+                        //Ha benne van, de rossz helyen
+                        Adat_Kerék_Tábla Rekord_berendezés = (from a in Adatok
+                                                              where (a.Kerékberendezés == Elem.Kerékberendezés && a.Azonosító != Elem.Azonosító)
+                                                                 || (a.Kerékberendezés == Elem.Kerékberendezés && a.Pozíció != Elem.Pozíció)
+                                                              select a).FirstOrDefault();
+                        if (Rekord_berendezés != null) AdatokGy.Add(Elem);
+
+                        //Ha nincs benne
+                        Rekord_berendezés = (from a in Adatok
+                                             where (a.Kerékberendezés == Elem.Kerékberendezés)
+                                             select a).FirstOrDefault();
+                        if (Rekord_berendezés == null) AdatokGyR.Add(Elem);
                     }
+
                 }
+                if (AdatokGyAlap.Count > 0) Módosítás_Alapra(AdatokGyAlap);
+                if (AdatokGy.Count > 0) Módosítás(AdatokGy);
+                if (AdatokGyR.Count > 0) Rögzítés(AdatokGyR);
             }
-            return Adatok;
-        }
-
-        public Adat_Kerék_Tábla Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Kerék_Tábla Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            catch (HibásBevittAdat ex)
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_Kerék_Tábla(
-                                    rekord["Kerékberendezés"].ToStrTrim(),
-                                    rekord["kerékmegnevezés"].ToStrTrim(),
-                                    rekord["kerékgyártásiszám"].ToStrTrim(),
-                                    rekord["föléberendezés"].ToStrTrim(),
-                                    rekord["azonosító"].ToStrTrim(),
-                                    rekord["pozíció"].ToStrTrim(),
-                                    rekord["Dátum"].ToÉrt_DaTeTime(),
-                                    rekord["objektumfajta"].ToStrTrim()
-                                      );
-                        }
-                    }
-                }
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            return Adat;
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
-
 }

@@ -274,7 +274,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             Dátum = 1,
             Üzemóra = 2,
-            Bekövetkezés = 3
+            Beköv = 3
         }
         #endregion
 
@@ -448,7 +448,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
             {
                 switch (egyseg)
                 {
-                    case EsztergaEgyseg.Bekövetkezés:
+                    case EsztergaEgyseg.Beköv:
                         Eredmeny = null;
                         break;
                     case EsztergaEgyseg.Üzemóra:

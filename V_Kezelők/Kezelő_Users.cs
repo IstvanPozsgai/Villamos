@@ -48,7 +48,8 @@ namespace Villamos.Kezelők
                                         rekord["Dátum"].ToÉrt_DaTeTime(),
                                         rekord["Frissít"].ToÉrt_Bool(),
                                         rekord["Törölt"].ToÉrt_Bool(),
-                                        rekord["Szervezetek"].ToStrTrim()
+                                        rekord["Szervezetek"].ToStrTrim(),
+                                        rekord["Szervezet"].ToStrTrim()
                                 );
                                 Adatok.Add(Adat);
                             }
@@ -88,8 +89,8 @@ namespace Villamos.Kezelők
                 string pword = Adat.Password;
                 if (Adat.Password.Trim() == "") pword = "123456";
                 bool frissít = true;
-                string szöveg = $"INSERT INTO {táblanév} (UserName, WinUserName, Dolgozószám, [Password], Dátum, frissít, Törölt, Szervezetek) VALUES (";
-                szöveg += $"'{Adat.UserName}', '{Adat.WinUserName}', '{Adat.Dolgozószám}', '{pword}', '{Adat.Dátum:yyyy.MM.dd}', {frissít}, {Adat.Törölt}, '{Adat.Szervezetek}')";
+                string szöveg = $"INSERT INTO {táblanév} (UserName, WinUserName, Dolgozószám, [Password], Dátum, frissít, Törölt, Szervezetek, Szervezet) VALUES (";
+                szöveg += $"'{Adat.UserName}', '{Adat.WinUserName}', '{Adat.Dolgozószám}', '{pword}', '{Adat.Dátum:yyyy.MM.dd}', {frissít}, {Adat.Törölt}, '{Adat.Szervezetek}', '{Adat.Szervezet}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -113,7 +114,30 @@ namespace Villamos.Kezelők
                 szöveg += $"Dátum ='{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"Frissít ={Adat.Frissít}, ";
                 szöveg += $"Törölt ={Adat.Törölt}, ";
-                szöveg += $"Szervezetek ='{Adat.Szervezetek}' ";
+                szöveg += $"Szervezetek ='{Adat.Szervezetek}', ";
+                szöveg += $"Szervezet ='{Adat.Szervezet}' ";
+                szöveg += $"WHERE UserId = {Adat.UserId}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void MódosításJeszó(Adat_Users Adat)
+        {
+            try
+            {
+                string szöveg = $"UPDATE {táblanév} SET ";
+                szöveg += $"[Password] ='{Adat.Password}', ";
+                szöveg += $"Dátum ='{DateTime.Today:yyyy.MM.dd}', ";
+                szöveg += $"Frissít ={Adat.Frissít} ";
                 szöveg += $"WHERE UserId = {Adat.UserId}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

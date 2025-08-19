@@ -167,6 +167,12 @@
     <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Gombok.Designer.cs">
       <DependentUpon>Ablak_Gombok.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Jelszó_Változtatás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Jelszó_Változtatás.designer.cs">
+      <DependentUpon>Ablak_Jelszó_Változtatás.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_JogKiosztás.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -306,7 +312,14 @@
     <Compile Include="V_Ablakok\2_Információ\Ablak_Utasítás_Generálás.Designer.cs">
       <DependentUpon>Ablak_Utasítás_Generálás.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Bejelentkezés_Új.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Bejelentkezés_Új.designer.cs">
+      <DependentUpon>Ablak_Bejelentkezés_Új.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Belépés_MindenMásol.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />
     <Compile Include="V_Kezelők\Kezelő_Ciklus_Sorrend.cs" />
     <Compile Include="V_Kezelők\Kezelő_Eszterga_Műveletek_Napló.cs" />
@@ -1334,6 +1347,9 @@
     <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Gombok.resx">
       <DependentUpon>Ablak_Gombok.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Jelszó_Változtatás.resx">
+      <DependentUpon>Ablak_Jelszó_Változtatás.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_JogKiosztás.resx">
       <DependentUpon>Ablak_JogKiosztás.cs</DependentUpon>
     </EmbeddedResource>
@@ -1611,6 +1627,9 @@
     <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_Épülettakarítás.resx">
       <DependentUpon>Ablak_Épülettakarítás.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\0_Bejelentkezés\Ablak_Bejelentkezés_Új.resx">
+      <DependentUpon>Ablak_Bejelentkezés_Új.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\Közös\Ablak_Fénykép_Betöltés.resx">
       <DependentUpon>Ablak_Fénykép_Betöltés.cs</DependentUpon>
     </EmbeddedResource>
@@ -1721,6 +1740,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\login-icon.png" />
     <None Include="Resources\J_eleje.ico" />
     <None Include="Resources\V1_Plusz.ico" />
     <None Include="Resources\V1_B.ico" />
