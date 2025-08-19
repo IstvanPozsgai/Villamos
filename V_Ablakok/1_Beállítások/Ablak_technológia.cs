@@ -29,16 +29,34 @@ namespace Villamos.Villamos_Ablakok
         public Ablak_technológia()
         {
             InitializeComponent();
+            Start();
         }
 
-        private void Ablak_technológia_Load(object sender, EventArgs e)
+        private void Start() 
         {
+            try
+            {
             GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
             Típus_feltöltés();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             DátumBef.Value = DateTime.Today;
             DátumKezd.Value = DateTime.Today;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Ablak_technológia_Load(object sender, EventArgs e)
+        {
         }
 
         private void LapFülek_SelectedIndexChanged(object sender, EventArgs e)
