@@ -852,6 +852,10 @@ namespace Villamos.Villamos_Ablakok
         #endregion
 
         #region Lekérdezések
+
+        /// <summary>
+        /// Rögzíti a napi adatokat a kiválasztott kocsiról az éves adatbázisba.
+        /// </summary>
         private void Napi_Adatok_rögzítése_Click(object sender, EventArgs e)
         {
             try
@@ -908,6 +912,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Lekérdezésk tábla fejléceinek beállítása.
+        /// </summary>
         private void Lekérdezés_lekérdezés_listázás()
         {
             try
@@ -938,12 +946,16 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Lekérdezés_lekérdezés_Click(object sender, EventArgs e)
         {
             Lekérdezés_lekérdezés_listázás();
             Futásnaptábla_Rögzítés.Enabled = true;
         }
 
+        /// <summary>
+        /// Excelből beolvassa és kilistázza a futás adatokat.
+        /// </summary>
         void ZSER_Beolvasás()
         {
             try
@@ -1049,6 +1061,8 @@ namespace Villamos.Villamos_Ablakok
 
             //új metódus 
         }
+
+        //TODO: Summary kitalálása
         private void RögzítőbeAdatok()
         {
             Nap_azonosító.Text = Tábla_lekérdezés.CurrentRow.Cells[0].Value.ToString();
@@ -1057,10 +1071,16 @@ namespace Villamos.Villamos_Ablakok
             else Nap_törlés.Checked = false;
             Nap_Telephely.Text = Tábla_lekérdezés.CurrentRow.Cells[5].Value.ToString();
         }
+
+
         private void Tábla_lekérdezés_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             RögzítőbeAdatok();
         }
+
+        /// <summary>
+        /// Rögzíti a futásnaptáblába a kilistázott adatokat
+        /// </summary>
         private void Futásnaptábla_Rögzítés_Click(object sender, EventArgs e)
         {
 
@@ -1132,12 +1152,18 @@ namespace Villamos.Villamos_Ablakok
 
         #region KÉP
 
+        /// <summary>
+        /// Kélpek beolvasása.
+        /// </summary>
         private void Kép_Listázás_Click(object sender, EventArgs e)
         {
             Kép_azonísító_választó();
             Kép_lista_szűrés();
         }
 
+        /// <summary>
+        /// A kiválasztott pályaszámhoz tartozóa képek kilistázása.
+        /// </summary>
         private void Kép_azonísító_választó()
         {
             try
@@ -1166,6 +1192,9 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
+        /// <summary>
+        /// Képek szűrése.
+        /// </summary>
         private void Kép_lista_szűrés()
         {
             try
@@ -1192,6 +1221,10 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Kép feltöltése.
+        /// </summary>
         private void Kép_btn_Click(object sender, EventArgs e)
         {
             try
@@ -1216,6 +1249,9 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
+        /// <summary>
+        /// Kiválasztott kép megjelenítése.
+        /// </summary>
         private void Kép_megjelenítés()
         {
             try
@@ -1250,6 +1286,7 @@ namespace Villamos.Villamos_Ablakok
             Kép_Feltöltendő.Text = Application.StartupPath + @"\Főmérnökség\Adatok\Nosztalgia\kép\" + Kép_listbox.SelectedItems[0].ToString();
             Kép_megjelenítés();
         }
+
 
         private void Kép_rögzít_Click(object sender, EventArgs e)
         {
