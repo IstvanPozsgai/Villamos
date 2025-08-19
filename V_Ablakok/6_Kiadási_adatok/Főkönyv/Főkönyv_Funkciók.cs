@@ -546,7 +546,7 @@ namespace Villamos
 
                     string napszak = "*";
                     string szerelvénytípus = MyE.Beolvas($"m{i}");
-                    long kocsikszáma = long.Parse(MyE.Beolvas($"o{i}"));
+                    long kocsikszáma = (MyE.Beolvas($"o{i}")).ToÉrt_Long ();
                     string megjegyzés = MyF.Szöveg_Tisztítás(MyE.Beolvas($"r{i}"), 0, 20);
 
                     string ideig = MyE.Beolvas($"S{i}").Trim();
