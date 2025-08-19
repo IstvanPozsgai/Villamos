@@ -18,7 +18,7 @@ namespace Villamos
         /// /// <param name="oszlopisnétlődés">"" vagy "$A:$B"</param>
         /// <param name="álló">Álló esetén true, fekvó esetén false</param>
         public static void NyomtatásiTerület_részletes(string munkalap, string terület, string sorismétlődés, string oszlopisnétlődés,
-                                                       bool álló, string oldalszéles="1",string oldalmagas="")
+                                                       bool álló, string oldalszéles = "1", string oldalmagas = "")
         {
             try
             {
@@ -82,6 +82,7 @@ namespace Villamos
                 {
                     HibaNapló.Log(ex.Message, "NyomtatásiTerület_részletes", ex.StackTrace, ex.Source, ex.HResult);
                     MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    throw new Exception("NyomtatásiTerület_részletes hiba");
                 }
             }
         }
@@ -408,50 +409,45 @@ namespace Villamos
                 PageSetup Táblaterület = (MyExcel.PageSetup)Munkalap.PageSetup;
 
                 Táblaterület.PrintArea = terület;
-                {
-                    Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó);
-                    Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó);
-                    Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó);
-                    Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó);
-                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret);
-                    Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret);
-                    Táblaterület.PrintHeadings = false;
-                    Táblaterület.PrintGridlines = false;
 
-                    Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
-                    if (álló)
-                        Táblaterület.Orientation = MyExcel.XlPageOrientation.xlPortrait;
-                    else
-                        Táblaterület.Orientation = MyExcel.XlPageOrientation.xlLandscape;
+                Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó);
+                Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó);
+                Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó);
+                Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó);
+                Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret);
+                Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret);
+                Táblaterület.PrintHeadings = false;
+                Táblaterület.PrintGridlines = false;
 
-                    Táblaterület.Draft = false;
+                Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
+                if (álló)
+                    Táblaterület.Orientation = MyExcel.XlPageOrientation.xlPortrait;
+                else
+                    Táblaterület.Orientation = MyExcel.XlPageOrientation.xlLandscape;
 
-                    Táblaterület.CenterHorizontally = víz_közép;
-                    Táblaterület.CenterVertically = Függ_közép;
+                Táblaterület.Draft = false;
 
-                    if (papírméret == "A4")
-                        Táblaterület.PaperSize = MyExcel.XlPaperSize.xlPaperA4;
-                    else
-                        Táblaterület.PaperSize = MyExcel.XlPaperSize.xlPaperA3;
+                Táblaterület.CenterHorizontally = víz_közép;
+                Táblaterület.CenterVertically = Függ_közép;
 
-                    Táblaterület.Order = MyExcel.XlOrder.xlDownThenOver;
-                    Táblaterület.BlackAndWhite = false;
-                    Táblaterület.Zoom = false;
-                    if (int.TryParse(oldalszéles, out int széles))
-                        Táblaterület.FitToPagesWide = széles;
-                    else
-                        Táblaterület.FitToPagesWide = false;
-                    if (int.TryParse(oldalmagas, out int magas))
-                        Táblaterület.FitToPagesTall = magas;
-                    else
-                        Táblaterület.FitToPagesTall = false;
+                if (papírméret == "A4")
+                    Táblaterület.PaperSize = MyExcel.XlPaperSize.xlPaperA4;
+                else
+                    Táblaterület.PaperSize = MyExcel.XlPaperSize.xlPaperA3;
 
-                    Táblaterület.PrintErrors = MyExcel.XlPrintErrors.xlPrintErrorsDisplayed;
-                }
+                Táblaterület.Order = MyExcel.XlOrder.xlDownThenOver;
+                Táblaterület.BlackAndWhite = false;
+                Táblaterület.Zoom = false;
+                if (int.TryParse(oldalszéles, out int széles))
+                    Táblaterület.FitToPagesWide = széles;
+                else
+                    Táblaterület.FitToPagesWide = false;
+                if (int.TryParse(oldalmagas, out int magas))
+                    Táblaterület.FitToPagesTall = magas;
+                else
+                    Táblaterület.FitToPagesTall = false;
 
-
-
-
+                Táblaterület.PrintErrors = MyExcel.XlPrintErrors.xlPrintErrorsDisplayed;
             }
             catch (HibásBevittAdat ex)
             {
