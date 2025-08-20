@@ -249,6 +249,7 @@ namespace Villamos
                         Típusfeltöltés();
                         Mód_üzembehelyezésdátuma.Value = new DateTime(1900, 1, 1);
                         Listáz_psz_();
+                        Listázközös();
                         break;
                     }
                 case 2:
