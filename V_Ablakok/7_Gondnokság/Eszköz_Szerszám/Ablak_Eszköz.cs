@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -32,19 +33,9 @@ namespace Villamos.Villamos_Ablakok
             InitializeComponent();
             Start();
         }
-        // JAVÍTANDÓ:
+
         private void Ablak_Eszköz_Load(object sender, EventArgs e)
         {
-            // létrehozzuk a  könyvtárat
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz";
-            if (!Directory.Exists(hely))
-                Directory.CreateDirectory(hely);
-
-            hely += $@"\Eszköz.mdb";
-            if (!File.Exists(hely))
-                Adatbázis_Létrehozás.Eszköztábla(hely);
-
-
         }
 
         private void Start()
@@ -282,157 +273,7 @@ namespace Villamos.Villamos_Ablakok
                     return;
                 }
 
-                MyE.ExcelMegnyitás(fájlexc);
-                string munkalap = "Format";
-                //  string munkalap = "RawData";
-
-                MyE.Munkalap_aktív(munkalap);
-                // ***********************************
-                // ***** Ellenőrzés eleje ************
-                // ***********************************
-                // beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
-                string fejlécbeolvas = "";
-                for (int i = 1; i <= 29; i++)
-                    fejlécbeolvas += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
-
-                if (!MyF.Betöltéshelyes("Eszköz", fejlécbeolvas))
-                {
-                    MyE.ExcelBezárás();
-                    throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
-                }
-                // ***********************************
-                // ***** Ellenőrzés vége  ************
-                // ***********************************
-                Holtart.Be(100);
-
-                //Beolvasás
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
-                string jelszó = "TóthKatalin";
-
-                string szöveg = "SELECT * FROM Adatok ORDER BY eszköz";
-
-                List<string> AdatokEszk = KézEszk.Lista_EszközNév(hely, jelszó, szöveg);
-
-
-                string Eszköz, Alszám, Megnevezés, Megnevezés_folyt, Gyártási_szám, Leltárszám;
-                DateTime Leltár_dátuma;
-                double Mennyiség;
-                string Bázis_menny_egység;
-                DateTime Aktiválás_dátuma;
-                string Telephely, Telephely_megnevezése, Helyiség, Helyiség_megnevezés, Gyár, Leltári_költséghely, Vonalkód;
-                DateTime Leltár_forduló_nap;
-                string Szemügyi_törzsszám, Dolgozó_neve;
-                DateTime Deaktiválás_dátuma;
-                string Eszközosztály, Üzletág, Cím, Költséghely, Felelős_költséghely, Régi_leltárszám;
-                bool Vonalkódozható;
-                string Rendszám_pályaszám;
-
-
-                // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres
-                int sor = 2;
-
-                List<string> SzövegGy = new List<string>();
-                while (MyE.Beolvas($"A{sor}") != "_")
-                {
-                    //Elemek amiket mindenképpen beolvasunk
-                    Eszköz = MyE.Beolvas($"A{sor}").Trim().Replace(",", "");
-                    Megnevezés = MyE.Beolvas($"C{sor}").Trim().Replace(",", "").Replace("'", "");
-                    double ideigdouble;
-                    ideigdouble = double.TryParse(MyE.Beolvas($"H{sor}").Trim(), out ideigdouble) ? ideigdouble : 0;
-                    Mennyiség = ideigdouble;
-
-                    if (Mennyiség != 0)
-                    {
-                        if (AdatokEszk.Contains(Eszköz))
-                        {
-                            //ha van ilyen akkor módosítjuk?
-                            Helyiség = MyE.Beolvas($"M{sor}").Trim().Replace(",", "");
-                            Helyiség_megnevezés = MyE.Beolvas($"N{sor}").Trim().Replace(",", "");
-                            Szemügyi_törzsszám = MyE.Beolvas($"S{sor}").Trim().Replace(",", "");
-                            Dolgozó_neve = MyE.Beolvas($"T{sor}").Trim().Replace(",", "");
-                            Költséghely = MyE.Beolvas($"Y{sor}".Trim()).Replace(",", "");
-                            Felelős_költséghely = MyE.Beolvas($"Z{sor}".Trim()).Replace(",", "");
-                            Leltárszám = MyE.Beolvas($"F{sor}").Trim().Replace(",", "");
-                            if (Leltárszám.Trim() == "") Leltárszám = "_";
-                            szöveg = "UPDATE Adatok SET ";
-                            szöveg += $" Helyiség='{Helyiség.Trim()}', ";
-                            szöveg += $" Helyiség_megnevezés='{Helyiség_megnevezés.Trim()}', ";
-                            szöveg += $" Szemügyi_törzsszám='{Szemügyi_törzsszám.Trim()}', ";
-                            szöveg += $" Dolgozó_neve='{Dolgozó_neve.Trim()}', ";
-                            szöveg += $" Költséghely='{Költséghely.Trim()}', ";
-                            szöveg += $" Leltárszám='{Leltárszám.Trim()}', ";
-                            szöveg += $" Felelős_költséghely='{Felelős_költséghely.Trim()}' ";
-                            szöveg += $"WHERE Eszköz='{Eszköz.Trim()}'";
-                            SzövegGy.Add(szöveg);
-                        }
-                        else
-                        {
-                            //ha nincs akkor létrehozzuk
-                            szöveg = "INSERT INTO Adatok (" +
-                                "Eszköz, Alszám, Megnevezés, Megnevezés_folyt, Gyártási_szám," +
-                                "Leltárszám, Leltár_dátuma, Mennyiség, Bázis_menny_egység, Aktiválás_dátuma," +
-                                " Telephely, Telephely_megnevezése, Helyiség, Helyiség_megnevezés,  Gyár," +
-                                " Leltári_költséghely, Vonalkód, Leltár_forduló_nap, Szemügyi_törzsszám, Dolgozó_neve," +
-                                " Deaktiválás_dátuma, Eszközosztály, Üzletág, Cím, Költséghely, " +
-                                "Felelős_költséghely, Régi_leltárszám, Vonalkódozható, Rendszám_pályaszám," +
-                                " Épület_Szerszám, Épület_van, Szerszám_van, státus) VALUES ( ";
-                            DateTime ideigdátum;
-
-                            Alszám = MyE.Beolvas($"B{sor}").Trim().Replace(",", "");
-
-                            Megnevezés_folyt = MyE.Beolvas($"D{sor}").Trim().Replace(",", "").Replace("'", "");
-                            Gyártási_szám = MyE.Beolvas($"E{sor}").Trim().Replace(",", "");
-                            Leltárszám = MyE.Beolvas($"F{sor}").Trim().Replace(",", "");
-                            if (Leltárszám.Trim() == "") Leltárszám = "_";
-                            ideigdátum = DateTime.TryParse(MyE.Beolvas($"G{sor}").Trim(), out ideigdátum) ? ideigdátum : new DateTime(1900, 1, 1);
-                            Leltár_dátuma = ideigdátum;
-                            Bázis_menny_egység = MyE.Beolvas($"I{sor}").Trim().Replace(",", "");
-                            ideigdátum = DateTime.TryParse(MyE.Beolvas($"J{sor}").Trim(), out ideigdátum) ? ideigdátum : new DateTime(1900, 1, 1);
-                            Aktiválás_dátuma = ideigdátum;
-                            Telephely = MyE.Beolvas($"K{sor}").Trim().Replace(",", "");
-                            Telephely_megnevezése = MyE.Beolvas($"L{sor}").Trim().Replace(",", "");
-                            Helyiség = MyE.Beolvas($"M{sor}").Trim().Replace(",", "");
-                            Helyiség_megnevezés = MyE.Beolvas($"N{sor}").Trim().Replace(",", "");
-                            Gyár = MyE.Beolvas($"O{sor}").Trim().Replace(",", "");
-                            Leltári_költséghely = MyE.Beolvas($"P{sor}").Trim().Replace(",", "");
-                            Vonalkód = MyE.Beolvas($"Q{sor}").Trim().Replace(",", "");
-                            ideigdátum = DateTime.TryParse(MyE.Beolvas($"R{sor}").Trim(), out ideigdátum) ? ideigdátum : new DateTime(1900, 1, 1);
-                            Leltár_forduló_nap = ideigdátum;
-                            Szemügyi_törzsszám = MyE.Beolvas($"S{sor}").Trim().Replace(",", "");
-                            Dolgozó_neve = MyE.Beolvas($"T{sor}").Trim().Replace(",", "");
-                            ideigdátum = DateTime.TryParse(MyE.Beolvas($"U{sor}").Trim(), out ideigdátum) ? ideigdátum : new DateTime(1900, 1, 1);
-                            Deaktiválás_dátuma = ideigdátum;
-                            Eszközosztály = MyE.Beolvas($"V{sor}".Trim()).Replace(",", "");
-                            Üzletág = MyE.Beolvas($"W{sor}".Trim()).Replace(",", "");
-                            Cím = MyE.Beolvas($"X{sor}".Trim()).Replace(",", "");
-                            Költséghely = MyE.Beolvas($"Y{sor}".Trim()).Replace(",", "");
-                            Felelős_költséghely = MyE.Beolvas($"Z{sor}".Trim()).Replace(",", "");
-                            Régi_leltárszám = MyE.Beolvas($"AA{sor}".Trim()).Replace(",", "");
-                            Vonalkódozható = MyE.Beolvas($"AB{sor}").Trim() != "NEM";
-                            Rendszám_pályaszám = MyF.Szöveg_Tisztítás(MyE.Beolvas($"AC{sor}").Trim().Replace(",", ""), 0, 10);
-
-                            szöveg += $"'{Eszköz}', '{Alszám}', '{Megnevezés}', '{Megnevezés_folyt}', '{Gyártási_szám}', ";
-                            szöveg += $"'{Leltárszám}', '{Leltár_dátuma}', {Mennyiség.ToString().Replace(',', '.')}, '{Bázis_menny_egység}', '{Aktiválás_dátuma}', ";
-                            szöveg += $"'{Telephely}', '{Telephely_megnevezése}', '{Helyiség}', '{Helyiség_megnevezés}', '{Gyár}', ";
-                            szöveg += $"'{Leltári_költséghely}', '{Vonalkód}', '{Leltár_forduló_nap}', '{Szemügyi_törzsszám}', '{Dolgozó_neve}', ";
-                            szöveg += $"'{Deaktiválás_dátuma}', '{Eszközosztály}', '{Üzletág}', '{Cím}', '{Költséghely}', ";
-                            szöveg += $"'{Felelős_költséghely}', '{Régi_leltárszám}', {Vonalkódozható}, '{Rendszám_pályaszám}', ";
-                            szöveg += "'Nincs beállítva', false, false, false)";
-
-                            SzövegGy.Add(szöveg);
-
-                            AdatokEszk.Add(Eszköz);
-                        }
-                    }
-                    sor++;
-                    Holtart.Lép();
-                }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
-
-                Holtart.Ki();
-                MyE.ExcelBezárás();
-
-                File.Delete(fájlexc);
+                SAP_Adatokbeolvasása.Eszköz_Beolvasó(fájlexc, Cmbtelephely.Text.Trim());
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

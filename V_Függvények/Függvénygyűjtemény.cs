@@ -45,7 +45,7 @@ public static partial class Függvénygyűjtemény
                     if (rekord.Fejléc.Trim() == Tábla.Columns[i].ColumnName.Trim()) volt = true;
                     i++;
                 }
-                if (volt == false)
+                if (!volt)
                 {
                     válasz = false;
                     break;

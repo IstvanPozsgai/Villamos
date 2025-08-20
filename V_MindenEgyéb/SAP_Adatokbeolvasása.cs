@@ -164,7 +164,6 @@ namespace Villamos.V_MindenEgyéb
         }
 
 
-
         /// <summary>
         /// Menetkimaradáshoz szükséges adatok beolvasása az SAP Excel fájlból.
         /// </summary>
@@ -319,6 +318,171 @@ namespace Villamos.V_MindenEgyéb
                                select a).FirstOrDefault();
             if (Elem != null) típus = Elem.Valóstípus;
             return típus;
+        }
+
+        public static void Eszköz_Beolvasó(string fájlexcel, string Telephely)
+        {
+            try
+            {
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("Eszköz", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+
+                // Beolvasni kívánt oszlopok
+                Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+                List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+                //Meghatározzuk a beolvasó tábla elnevezéseit 
+                //Oszlopnevek beállítása
+                string OszlopFelKtg = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Felelős_költséghely" select a.Fejléc).FirstOrDefault();
+                string OszlopEszköz = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Eszköz" select a.Fejléc).FirstOrDefault();
+                string OszlopAlszám = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Alszám" select a.Fejléc).FirstOrDefault();
+                string Oszloplelszám = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Leltárszám" select a.Fejléc).FirstOrDefault();
+                string OszlopMegn = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Megnevezés" select a.Fejléc).FirstOrDefault();
+                string OszlopMFolyt = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Megnevezés_folyt" select a.Fejléc).FirstOrDefault();
+                string OszlopGyártási = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Gyártási_szám" select a.Fejléc).FirstOrDefault();
+                string OszlopAktDát = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Aktiválás_dátuma" select a.Fejléc).FirstOrDefault();
+                string OszlopMenny = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Mennyiség" select a.Fejléc).FirstOrDefault();
+                string OszlopBázisE = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Bázis_menny_egység" select a.Fejléc).FirstOrDefault();
+                string OszlopDeaktDát = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Deaktiválás_dátuma" select a.Fejléc).FirstOrDefault();
+                string OszlopTelep = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Telephely" select a.Fejléc).FirstOrDefault();
+                string OszlopTMegnev = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Telephely_megnevezése" select a.Fejléc).FirstOrDefault();
+                string OszlopHely = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Helyiség" select a.Fejléc).FirstOrDefault();
+                string OszlopHMegnev = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Helyiség_megnevezés" select a.Fejléc).FirstOrDefault();
+                string OszlopHR = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Szemügyi_törzsszám" select a.Fejléc).FirstOrDefault();
+                string OszlopDolgNév = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Dolgozó_neve" select a.Fejléc).FirstOrDefault();
+                string OszlopLelDát = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Leltár_dátuma" select a.Fejléc).FirstOrDefault();
+
+                if (OszlopFelKtg == null ||
+                    OszlopEszköz == null ||
+                    OszlopAlszám == null ||
+                    Oszloplelszám == null ||
+                    OszlopMegn == null ||
+                    OszlopMFolyt == null ||
+                    OszlopGyártási == null ||
+                    OszlopAktDát == null ||
+                    OszlopMenny == null ||
+                    OszlopBázisE == null ||
+                    OszlopDeaktDát == null ||
+                    OszlopTelep == null ||
+                    OszlopTMegnev == null ||
+                    OszlopHely == null ||
+                    OszlopHMegnev == null ||
+                    OszlopHR == null ||
+                    OszlopDolgNév == null ||
+                    OszlopLelDát == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+
+                Kezelő_Eszköz Kéz = new Kezelő_Eszköz();
+                List<Adat_Eszköz> Adatok = Kéz.Lista_Adatok(Telephely);
+                // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres
+                List<Adat_Eszköz> AdatokGyR = new List<Adat_Eszköz>();
+                List<Adat_Eszköz> AdatokGyM = new List<Adat_Eszköz>();
+                int sor = 2;
+                foreach (DataRow Sor in Tábla.Rows)
+                {
+                    string Eszköz = MyF.Szöveg_Tisztítás(Sor[OszlopEszköz].ToStrTrim());
+                    if (Eszköz.Trim() != "")
+                    {
+                        string Alszám = MyF.Szöveg_Tisztítás(Sor[OszlopAlszám].ToStrTrim());
+                        string Megnevezés = MyF.Szöveg_Tisztítás(Sor[OszlopMegn].ToStrTrim());
+                        string Megnevezés_folyt = MyF.Szöveg_Tisztítás(Sor[OszlopMFolyt].ToStrTrim());
+                        string Gyártási_szám = MyF.Szöveg_Tisztítás(Sor[OszlopGyártási].ToStrTrim());
+                        string Leltárszám = MyF.Szöveg_Tisztítás(Sor[Oszloplelszám].ToStrTrim());
+                        string Bázis_menny_egység = MyF.Szöveg_Tisztítás(Sor[OszlopBázisE].ToStrTrim());
+                        string Szemügyi_törzsszám = MyF.Szöveg_Tisztítás(Sor[OszlopHR].ToStrTrim());
+                        string Dolgozó_neve = MyF.Szöveg_Tisztítás(Sor[OszlopDolgNév].ToStrTrim());
+                        string Felelős_költséghely = MyF.Szöveg_Tisztítás(Sor[OszlopFelKtg].ToStrTrim());
+                        string telephely = MyF.Szöveg_Tisztítás(Sor[OszlopTelep].ToStrTrim());
+                        string Telephely_megnevezése = MyF.Szöveg_Tisztítás(Sor[OszlopTMegnev].ToStrTrim());
+                        string Helyiség = MyF.Szöveg_Tisztítás(Sor[OszlopHely].ToStrTrim());
+                        string Helyiség_megnevezés = MyF.Szöveg_Tisztítás(Sor[OszlopHMegnev].ToStrTrim());
+
+                        string Eszközosztály = "";
+                        string Üzletág = "";
+                        string Cím = "";
+                        string Költséghely = "";
+                        string Régi_leltárszám = "";
+                        string Gyár = "";
+                        string Leltári_költséghely = "";
+                        string Vonalkód = "";
+                        string Rendszám_pályaszám = "";
+
+                        DateTime Leltár_dátuma = Sor[OszlopLelDát].ToÉrt_DaTeTime();
+                        DateTime Aktiválás_dátuma = Sor[OszlopAktDát].ToÉrt_DaTeTime();
+                        DateTime Deaktiválás_dátuma = Sor[OszlopDeaktDát].ToÉrt_DaTeTime();
+
+                        DateTime Leltár_forduló_nap = new DateTime(1900, 1, 1);
+
+                        double Mennyiség = Sor[OszlopMenny].ToÉrt_Double();
+
+                        bool Vonalkódozható = false;
+
+                        string Épület_Szerszám = "Nincs beállítva";
+                        bool Épület_van = false;
+                        bool Szerszám_van = false;
+                        bool Státus = false;
+
+                        Adat_Eszköz Elem = (from a in Adatok
+                                            where a.Eszköz == Eszköz.Trim()
+                                            select a).FirstOrDefault();
+
+                        Adat_Eszköz ADAT = new Adat_Eszköz(
+                             Eszköz,
+                             Alszám,
+                             Megnevezés,
+                             Megnevezés_folyt,
+                             Gyártási_szám,
+                             Leltárszám,
+                             Leltár_dátuma,
+                             Mennyiség,
+                             Bázis_menny_egység,
+                             Aktiválás_dátuma,
+                             telephely,
+                             Telephely_megnevezése,
+                             Helyiség,
+                             Helyiség_megnevezés,
+                             Gyár,
+                             Leltári_költséghely,
+                             Vonalkód,
+                             Leltár_forduló_nap,
+                             Szemügyi_törzsszám,
+                             Dolgozó_neve,
+                             Deaktiválás_dátuma,
+                             Eszközosztály,
+                             Üzletág,
+                             Cím,
+                             Költséghely,
+                             Felelős_költséghely,
+                             Régi_leltárszám,
+                             Vonalkódozható,
+                             Rendszám_pályaszám,
+                             Épület_Szerszám,
+                             Épület_van,
+                             Szerszám_van,
+                             Státus);
+
+                        if (Elem != null)
+                            AdatokGyM.Add(ADAT);
+                        else
+                            AdatokGyR.Add(ADAT);
+                    }
+                    sor++;
+                }
+                if (AdatokGyM.Count > 0) Kéz.Módosítás(Telephely, AdatokGyM);
+                if (AdatokGyR.Count > 0) Kéz.Rögzítés(Telephely, AdatokGyR);
+
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

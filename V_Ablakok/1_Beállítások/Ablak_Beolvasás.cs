@@ -209,7 +209,7 @@ namespace Villamos
             try
             {
                 SAPCsoport.Text = MyF.Szöveg_Tisztítás(SAPCsoport.Text);
-                SAPFejléc.Text = MyF.Szöveg_Tisztítás(SAPFejléc.Text);
+                SAPFejléc.Text = SAPFejléc.Text.Trim();
                 Változónév.Text = MyF.Szöveg_Tisztítás(Változónév.Text);
 
                 // leellenőrizzük, hogy minden adat ki van-e töltve
