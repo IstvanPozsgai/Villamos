@@ -190,7 +190,7 @@ namespace Villamos
             Zserbeolvasás.Visible = false;
             ZSERellenőrzés.Visible = false;
 
-            Button5.Visible = false;
+            Takarítás.Visible = false;
             Beállólista.Visible = false;
             Meghagyás.Visible = false;
             Haromnapos.Visible = false;
@@ -243,7 +243,7 @@ namespace Villamos
 
             {
 
-                Button5.Visible = true;
+                Takarítás.Visible = true;
                 Beállólista.Visible = true;
                 Meghagyás.Visible = true;
                 Haromnapos.Visible = true;
@@ -412,14 +412,14 @@ namespace Villamos
             {
                 Beállólista.Enabled = false;
                 Főkönyv.Enabled = false;
-                Button5.Enabled = false;
+                Takarítás.Enabled = false;
                 Jegykezelő.Enabled = false;
             }
             else
             {
                 Beállólista.Enabled = true;
                 Főkönyv.Enabled = true;
-                Button5.Enabled = true;
+                Takarítás.Enabled = true;
                 Jegykezelő.Enabled = true;
             }
 
@@ -691,6 +691,7 @@ namespace Villamos
             // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
 
             Holtart.Be(100);
+            Haromnapos.Visible = false;
             timer1.Enabled = true;
             fájlnév_ = fájlexc.Trim();
             Telephely_ = Cmbtelephely.Text.Trim();
@@ -698,6 +699,7 @@ namespace Villamos
 
             timer1.Enabled = false;
             Holtart.Ki();
+            Haromnapos.Visible = true;
             MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -2474,7 +2476,6 @@ namespace Villamos
             Dátum_ = Dátum.Value;
             Főkönyv_Főkönyv nyomtatvány = new Főkönyv_Főkönyv();
             await Task.Run(() => nyomtatvány.Főkönyv_Alap(Telephely_, szövegd_, napszak_, Dátum_, fájlnév_));
-
             timer1.Enabled = false;
             Holtart.Ki();
             MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2509,11 +2510,12 @@ namespace Villamos
             PapírElrendezés_ = PapírElrendezés.Text.Trim();
             Papírméret_ = Papírméret.Text.Trim();
             Főkönyv_Meghagyás nyomtatvány = new Főkönyv_Meghagyás();
-
+            Meghagyás.Visible = false;
             await Task.Run(() => nyomtatvány.Főkönyv_Meghagyáskészítés(fájlnév_, Telephely_, Dátum_, Papírméret_, PapírElrendezés_));
             //leállítjuk a számlálót és kikapcsoljuk a holtartot.
             timer1.Enabled = false;
             Holtart.Ki();
+            Meghagyás.Visible = true;
             MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
@@ -2550,11 +2552,12 @@ namespace Villamos
                 Papírméret_ = Papírméret.Text.Trim();
 
                 Főkönyv_Beálló nyomtatvány = new Főkönyv_Beálló();
-
+                Beállólista.Visible = false;
                 await Task.Run(() => nyomtatvány.Beálló_kocsik(fájlnév_, Telephely_, Dátum_, napszak_, Papírméret_, PapírElrendezés_));
                 //leállítjuk a számlálót és kikapcsoljuk a holtartot.
                 timer1.Enabled = false;
                 Holtart.Ki();
+                Beállólista.Visible = true;
                 MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -2961,11 +2964,13 @@ namespace Villamos
                 DateTime kezdet = DateTime.Now;
 
                 Főkönyv_Jegykezelő nyomtatvány = new Főkönyv_Jegykezelő();
+                Jegykezelő.Visible = false;
                 await Task.Run(() => nyomtatvány.Jegykezelő(fájlnév_, Telephely_, AdatokJármű, AdatokFőkönyvNap, Dátum_, AdatokTakarításTípus, AdatokFőVendég));
                 //leállítjuk a számlálót és kikapcsoljuk a holtartot.
                 timer1.Enabled = false;
                 Holtart.Ki();
                 DateTime Vége = DateTime.Now;
+                Jegykezelő.Visible = true;
                 MessageBox.Show($"A nyomtatvány elkészült ! Elkészítési idő:{Vége - kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -2982,7 +2987,7 @@ namespace Villamos
 
 
         #region Takarítás
-        private async void Button5_Click(object sender, EventArgs e)
+        private async void Takarítás_Click(object sender, EventArgs e)
         {
             string fájlexc;
             AdatokFőkönyvNap = KézFőkönyvNap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
@@ -3026,11 +3031,13 @@ namespace Villamos
             DateTime kezdet = DateTime.Now;
 
             Főkönyv_Takarítás nyomtatvány = new Főkönyv_Takarítás();
+            Takarítás.Visible = false;
             await Task.Run(() => nyomtatvány.Takarítás_Excel(fájlnév_, Telephely_, Dátum_, napszak_, AdatokTakarításTípus, AdatokJármű, AdatokFőkönyvNap, AdatokFőVendég, AdatokFőkönyvZSER));
             //leállítjuk a számlálót és kikapcsoljuk a holtartot.
             timer1.Enabled = false;
             Holtart.Ki();
             DateTime Vége = DateTime.Now;
+            Takarítás.Visible = true;
             MessageBox.Show($"A nyomtatvány elkészült ! Elkészítési idő:{Vége - kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
@@ -3470,5 +3477,6 @@ namespace Villamos
             Új_Ablak_Kereső = null;
         }
         #endregion
+
     }
 }

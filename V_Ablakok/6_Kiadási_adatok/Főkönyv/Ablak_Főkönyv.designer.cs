@@ -136,7 +136,7 @@ namespace Villamos
             this.Km_frissít = new System.Windows.Forms.Button();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Jegykezelő = new System.Windows.Forms.Button();
-            this.Button5 = new System.Windows.Forms.Button();
+            this.Takarítás = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Papírméret = new System.Windows.Forms.ComboBox();
@@ -1250,16 +1250,16 @@ namespace Villamos
             this.Jegykezelő.UseVisualStyleBackColor = false;
             this.Jegykezelő.Click += new System.EventHandler(this.Jegykezelő_Click);
             // 
-            // Button5
+            // Takarítás
             // 
-            this.Button5.BackColor = System.Drawing.Color.SpringGreen;
-            this.Button5.Location = new System.Drawing.Point(5, 465);
-            this.Button5.Name = "Button5";
-            this.Button5.Size = new System.Drawing.Size(208, 35);
-            this.Button5.TabIndex = 202;
-            this.Button5.Text = "Takarítás";
-            this.Button5.UseVisualStyleBackColor = false;
-            this.Button5.Click += new System.EventHandler(this.Button5_Click);
+            this.Takarítás.BackColor = System.Drawing.Color.SpringGreen;
+            this.Takarítás.Location = new System.Drawing.Point(5, 465);
+            this.Takarítás.Name = "Takarítás";
+            this.Takarítás.Size = new System.Drawing.Size(208, 35);
+            this.Takarítás.TabIndex = 202;
+            this.Takarítás.Text = "Takarítás";
+            this.Takarítás.UseVisualStyleBackColor = false;
+            this.Takarítás.Click += new System.EventHandler(this.Takarítás_Click);
             // 
             // timer1
             // 
@@ -1315,7 +1315,7 @@ namespace Villamos
             this.Controls.Add(this.Papírméret);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.Button5);
+            this.Controls.Add(this.Takarítás);
             this.Controls.Add(this.Jegykezelő);
             this.Controls.Add(this.Fülek);
             this.Controls.Add(this.Dátum);
@@ -1450,7 +1450,7 @@ namespace Villamos
         internal Panel GombokPanel;
         internal Button ZSER_másol;
         internal Button ZSER_módosítás;
-        internal Button Button5;
+        internal Button Takarítás;
         internal TabPage TabPage8;    
         internal Button Km_frissít;
         internal DateTimePicker KM_dátum_kezd;
