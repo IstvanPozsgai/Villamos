@@ -324,7 +324,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
                     Title = "IDM-s Adatok betöltése",
                     FileName = "",
-                    Filter = "Excel |*.xlsx"
+                    Filter = "Excel 97-2003 (*.xls)|*.xls|Excel (*.xlsx)|*.xlsx"
                 };
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
