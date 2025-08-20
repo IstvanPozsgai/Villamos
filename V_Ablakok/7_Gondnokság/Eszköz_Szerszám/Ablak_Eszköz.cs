@@ -26,13 +26,13 @@ namespace Villamos.Villamos_Ablakok
 
         List<Adat_Szerszám_Cikktörzs> AdatokCikk = new List<Adat_Szerszám_Cikktörzs>();
 
-
+        #region Alap
         public Ablak_Eszköz()
         {
             InitializeComponent();
             Start();
         }
-
+        // JAVÍTANDÓ:
         private void Ablak_Eszköz_Load(object sender, EventArgs e)
         {
             // létrehozzuk a  könyvtárat
@@ -47,19 +47,24 @@ namespace Villamos.Villamos_Ablakok
 
         }
 
-        void Start()
+        private void Start()
         {
-            Telephelyekfeltöltése();
+            //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+            //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Telephelyekfeltöltése();
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                TelephelyekFeltöltéseÚj();
+                GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+            }
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
             Fülekkitöltése();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
-
-
-        #region Alap
-
 
         private void Telephelyekfeltöltése()
         {
@@ -87,6 +92,26 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void Jogosultságkiosztás()
         {
@@ -114,19 +139,31 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             string hely = Application.StartupPath + @"\Súgó\VillamosLapok\eszköz.html";
             Module_Excel.Megnyitás(hely);
-        }
 
+            try
+            {
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();
         }
-
 
         private void Fülekkitöltése()
         {
@@ -146,7 +183,7 @@ namespace Villamos.Villamos_Ablakok
 
             }
         }
-
+        // JAVÍTANDÓ:
         private void OsztályozCombo_Feltöltés()
         {
             Szűr_Osztás.Items.Clear();
@@ -157,7 +194,7 @@ namespace Villamos.Villamos_Ablakok
 
 
         }
-
+        // JAVÍTANDÓ:
         private void EllenCombo_Feltöltés()
         {
 
@@ -183,21 +220,19 @@ namespace Villamos.Villamos_Ablakok
             Besorolás_Combo.Items.Add("Szerszám");
         }
 
-
-
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
         {
             // Határozza meg, hogy melyik lap van jelenleg kiválasztva
-            var SelectedTab = Fülek.TabPages[e.Index];
+            TabPage SelectedTab = Fülek.TabPages[e.Index];
 
             // Szerezze be a lap fejlécének területét
-            var HeaderRect = Fülek.GetTabRect(e.Index);
+            Rectangle HeaderRect = Fülek.GetTabRect(e.Index);
 
             // Hozzon létreecsetet a szöveg megfestéséhez
-            var BlackTextBrush = new SolidBrush(Color.Black);
+            SolidBrush BlackTextBrush = new SolidBrush(Color.Black);
 
             // Állítsa be a szöveg igazítását
-            var sf = new StringFormat()
+            StringFormat sf = new StringFormat()
             {
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
@@ -207,10 +242,10 @@ namespace Villamos.Villamos_Ablakok
             // Festse meg a szöveget a megfelelő félkövér és szín beállítással
             if ((e.State & DrawItemState.Selected) != 0)
             {
-                var BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
+                Font BoldFont = new Font(Fülek.Font.Name, Fülek.Font.Size, FontStyle.Bold);
                 // háttér szín beállítása
                 e.Graphics.FillRectangle(new SolidBrush(Color.DarkGray), e.Bounds);
-                var paddedBounds = e.Bounds;
+                Rectangle paddedBounds = e.Bounds;
                 paddedBounds.Inflate(0, 0);
                 e.Graphics.DrawString(SelectedTab.Text, BoldFont, BlackTextBrush, paddedBounds, sf);
             }
@@ -221,13 +256,11 @@ namespace Villamos.Villamos_Ablakok
             // Munka kész – dobja ki a keféket
             BlackTextBrush.Dispose();
         }
-
         #endregion
 
 
         #region Adatbeolvasás lapfül
-
-
+        // JAVÍTANDÓ:
         private void SAP_adatok_Click(object sender, EventArgs e)
         {
             try
@@ -414,7 +447,6 @@ namespace Villamos.Villamos_Ablakok
 
         }
 
-
         private void BtnExcelkimenet_Click(object sender, EventArgs e)
         {
             try
@@ -428,13 +460,12 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Frissítés_Click(object sender, EventArgs e)
         {
             TáblaÍró();
         }
 
-
+        // JAVÍTANDÓ:
         private void TáblaÍró()
         {
             try
@@ -569,8 +600,8 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
-        void Cikklétrehozás(string hely, Adat_Eszköz EszkAdat)
+        // JAVÍTANDÓ:   
+        private void Cikklétrehozás(string hely, Adat_Eszköz EszkAdat)
         {
             // cikk adatok
             string jelszóúj = "csavarhúzó";
@@ -601,9 +632,8 @@ namespace Villamos.Villamos_Ablakok
                 KézSzerszámCikk.Rögzítés(hely, jelszóúj, Adat);
         }
 
-
-
-        void Könyvlétrehozás(string hely, Adat_Eszköz EszkAdat)
+        // JAVÍTANDÓ:
+        private void Könyvlétrehozás(string hely, Adat_Eszköz EszkAdat)
         {
             VanKönyv = false;
             KönyvSzám = "";
@@ -670,8 +700,8 @@ namespace Villamos.Villamos_Ablakok
             if (AdatHely != null) KézKönyv.Rögzítés(hely, jelszóúj, AdatHely);
         }
 
-
-        void KönyvelésLétrehozása(string hely, Adat_Eszköz eszkAdat)
+        // JAVÍTANDÓ:
+        private void KönyvelésLétrehozása(string hely, Adat_Eszköz eszkAdat)
         {
             string jelszóúj = "csavarhúzó";
             Kezelő_Szerszám_könvyvelés KézKönyvelés = new Kezelő_Szerszám_könvyvelés();
@@ -696,12 +726,10 @@ namespace Villamos.Villamos_Ablakok
                 }
             }
         }
-
         #endregion
 
 
         #region Ellenőrzés lapfül
-
         private void Ellen_Excel_Click(object sender, EventArgs e)
         {
             try
@@ -719,13 +747,12 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Ellen_Frissít_Click(object sender, EventArgs e)
         {
             Ellen_TáblaÍró();
         }
 
-
+        // JAVÍTANDÓ:
         private void Ellen_TáblaÍró()
         {
             try
@@ -826,7 +853,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Ellenőriz()
         {
             try
@@ -891,7 +918,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Ellen_Ellenőr_Click(object sender, EventArgs e)
         {
             try
@@ -910,7 +936,7 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Besorol_Click(object sender, EventArgs e)
         {
             try
@@ -962,7 +988,7 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         private void Át_Tölt_Click(object sender, EventArgs e)
         {
             try
@@ -1038,37 +1064,47 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Közös
-        void Excel_Kimenet(DataGridView Tábla, string fájlnévrész)
+        private void Excel_Kimenet(DataGridView Tábla, string fájlnévrész)
         {
-            if (Tábla.Rows.Count <= 0)
-                return;
-
-            string fájlexc;
-            // kimeneti fájl helye és neve
-            SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+            try
             {
-                InitialDirectory = "MyDocuments",
-                Title = "Listázott tartalom mentése Excel fájlba",
-                FileName = $"{fájlnévrész}_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
-                Filter = "Excel |*.xlsx"
-            };
-            // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-            if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                fájlexc = SaveFileDialog1.FileName;
-            else
-                return;
+                if (Tábla.Rows.Count <= 0) return;
 
-            MyE.DataGridViewToExcel(fájlexc, Tábla);
-            MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string fájlexc;
+                // kimeneti fájl helye és neve
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"{fájlnévrész}_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
 
-            Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.DataGridViewToExcel(fájlexc, Tábla);
+                MyE.Megnyitás(fájlexc);
+                MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-
-
         #endregion
 
+
         #region ListákFeltöltése
+        // JAVÍTANDÓ:
         private void CikktörzsListaFeltöltés(string hely)
         {
             try
