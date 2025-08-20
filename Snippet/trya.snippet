@@ -20,14 +20,17 @@
 				</Literal>
 			</Declarations>
 			<Code Language="csharp">
-				<![CDATA[try
-            {	
+				<![CDATA[
+			try
+            {
+			
 			}
             catch (Exception ex)
             {
-                string HibaHely = $"Void név:{System.Reflection.MethodBase.GetCurrentMethod().Name}";
+                string HibaHely = "Void nev:"+System.Reflection.MethodBase.GetCurrentMethod().Name;
                 HibaNapló.Log(ex.Message, HibaHely, ex.StackTrace, ex.Source, ex.HResult);
-            }]]>
+            }
+			]]>
 			</Code>
 		</Snippet>
 	</CodeSnippet>
