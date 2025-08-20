@@ -43,13 +43,6 @@ namespace Villamos
             Module_Excel.xlWorkSheet = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets.get_Item(1);
         }
 
-
-
-
-
-
-
-
         public static int Tábla_Író(string hely, string jelszó, string szöveg, int sor, string munkalap)
         {
             Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
@@ -339,19 +332,28 @@ namespace Villamos
         /// <param name="mit">szöveg</param>
         public static void Egyesít(string munkalap, string mit)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
 
-            MyExcel.Range Táblaterület = Munkalap.Range[mit];
-            Táblaterület.Select();
-            Táblaterület.HorizontalAlignment = Constants.xlCenter;
-            Táblaterület.VerticalAlignment = Constants.xlCenter;
-            Táblaterület.WrapText = false;
-            Táblaterület.Orientation = 0;
-            Táblaterület.AddIndent = false;
-            Táblaterület.IndentLevel = 0;
-            Táblaterület.ShrinkToFit = false;
-            Táblaterület.MergeCells = false;
-            Táblaterület.Merge();
+                Range Táblaterület = Munkalap.Range[mit];
+                Táblaterület.Select();
+                Táblaterület.HorizontalAlignment = Constants.xlCenter;
+                Táblaterület.VerticalAlignment = Constants.xlCenter;
+                Táblaterület.WrapText = false;
+                Táblaterület.Orientation = 0;
+                Táblaterület.AddIndent = false;
+                Táblaterület.IndentLevel = 0;
+                Táblaterület.ShrinkToFit = false;
+                Táblaterület.MergeCells = false;
+                Táblaterület.Merge();
+
+            }
+            catch (Exception ex)
+            {
+                string HibaHely = $"Void név:{System.Reflection.MethodBase.GetCurrentMethod().Name}";
+                HibaNapló.Log(ex.Message, HibaHely, ex.StackTrace, ex.Source, ex.HResult);
+            }
         }
 
 
