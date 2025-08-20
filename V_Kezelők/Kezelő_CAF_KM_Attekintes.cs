@@ -18,10 +18,10 @@ namespace Villamos.Kezelők
         readonly string táblanév = "KM_Attekintes";
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
-        // JAVÍTANDÓ:message
+
         IEnumerable<Adat_CAF_Adatok> osszes_adat;
         static IEnumerable<Adat_CAF_Adatok> cache_osszes_adat = null;
-        // JAVÍTANDÓ: Ezt kívüéről tudni kell állítani!
+        // JAVÍTANDÓ: Ezt kívülről tudni kell állítani!
         const int Vizsgalatok_Kozott_Megteheto_Km = 14000;
 
         public Kezelő_CAF_KM_Attekintes()
@@ -355,7 +355,7 @@ namespace Villamos.Kezelők
 
             if (p1Vizsgalatok.Count < 2 || p1Vizsgalatok[0].KM_Sorszám == p1Vizsgalatok[1].KM_Sorszám)
                 return null;
-            
+
             return p1Vizsgalatok[0].Számláló - p1Vizsgalatok[1].Számláló;
         }
 
@@ -422,6 +422,7 @@ namespace Villamos.Kezelők
         }
 
         // JAVÍTANDÓ: A pályaszám, helyett a típust használd
+        //Amúgy miben különbözik a rövis és a hosszú CAF?
         public void Tabla_Feltoltese()
         {
             List<int> azonositoLista_HosszuCaf = KézAdatok.Lista_Adatok()
