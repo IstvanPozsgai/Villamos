@@ -22,6 +22,7 @@ namespace Villamos
         public Ablak_Szerszám()
         {
             InitializeComponent();
+            Start();
         }
         readonly Kezelő_Szerszám_Cikk KézSzerszámCikk = new Kezelő_Szerszám_Cikk();
         readonly Kezelő_Szerszám_Könyv KézKönyv = new Kezelő_Szerszám_Könyv();
@@ -62,68 +63,93 @@ namespace Villamos
 
         private void Ablak_Szerszám_Load(object sender, EventArgs e)
         {
-            if (Könyvtár_adat.Trim() == "Adatok\\Szerszám")
-                this.Text = "Szerszám Nyilvántartás";
-            else
-                this.Text = "Helység tartozék nyilvántartás";
 
-
-            Telephelyekfeltöltése();
-            string hova;
-
-            // létrehozzuk a  könyvtárat
-            hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\" + Könyvtár_adat;
-            if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
-
-            hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok";
-            if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
-
-            hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek";
-            if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
-
-            hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_PDF";
-            if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
-
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-            string jelszó = "csavarhúzó";
-
-            if (!File.Exists(hely))
-            {
-                Adatbázis_Létrehozás.Szerszám_nyilvántartás(hely);
-                // hozzáadjuk az előírt értékeket
-                Adat_Szerszám_Könyvtörzs Adat;
-                Adat = new Adat_Szerszám_Könyvtörzs("Érkezett", "Új eszközök beérkeztetése", "_", "_", false);
-                KézKönyv.Rögzítés(hely, jelszó, Adat);
-
-                Adat = new Adat_Szerszám_Könyvtörzs("Raktár", "Szerszámraktárban lévő anyagok és eszközök", "_", "_", false);
-                KézKönyv.Rögzítés(hely, jelszó, Adat);
-
-                Adat = new Adat_Szerszám_Könyvtörzs("Selejt", "Leselejtezett", "_", "_", false);
-                KézKönyv.Rögzítés(hely, jelszó, Adat);
-
-                Adat = new Adat_Szerszám_Könyvtörzs("Selejtre", "Selejtezésre előkészítés", "_", "_", false);
-                KézKönyv.Rögzítés(hely, jelszó, Adat);
-            }
-
-            CikktörzsListaFeltöltés();
-            KönyvListaFeltöltés();
-            DolgozóListaFeltöltés();
-            JelenlétiListaFeltöltés();
-            EszközListaFeltöltés();
-            KönyvelésListaFeltöltés();
-            NaplóListaFeltöltés(DateTime.Today);
-
-
-            Fülekkitöltése();
-            Azonosítók();
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            JelenlétiListaFeltöltés();
-            Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
         #region Alap
+        private void Start()
+        {
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                if (Könyvtár_adat.Trim() == "Adatok\\Szerszám")
+                    this.Text = "Szerszám Nyilvántartás";
+                else
+                    this.Text = "Helység tartozék nyilvántartás";
+
+                string hova;
+
+                // létrehozzuk a  könyvtárat
+                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\" + Könyvtár_adat;
+                if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
+
+                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok";
+                if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
+
+                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek";
+                if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
+
+                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_PDF";
+                if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
+
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
+                string jelszó = "csavarhúzó";
+
+                if (!File.Exists(hely))
+                {
+                    Adatbázis_Létrehozás.Szerszám_nyilvántartás(hely);
+                    // hozzáadjuk az előírt értékeket
+                    Adat_Szerszám_Könyvtörzs Adat;
+                    Adat = new Adat_Szerszám_Könyvtörzs("Érkezett", "Új eszközök beérkeztetése", "_", "_", false);
+                    KézKönyv.Rögzítés(hely, jelszó, Adat);
+
+                    Adat = new Adat_Szerszám_Könyvtörzs("Raktár", "Szerszámraktárban lévő anyagok és eszközök", "_", "_", false);
+                    KézKönyv.Rögzítés(hely, jelszó, Adat);
+
+                    Adat = new Adat_Szerszám_Könyvtörzs("Selejt", "Leselejtezett", "_", "_", false);
+                    KézKönyv.Rögzítés(hely, jelszó, Adat);
+
+                    Adat = new Adat_Szerszám_Könyvtörzs("Selejtre", "Selejtezésre előkészítés", "_", "_", false);
+                    KézKönyv.Rögzítés(hely, jelszó, Adat);
+                }
+
+                CikktörzsListaFeltöltés();
+                KönyvListaFeltöltés();
+                DolgozóListaFeltöltés();
+                JelenlétiListaFeltöltés();
+                EszközListaFeltöltés();
+                KönyvelésListaFeltöltés();
+                NaplóListaFeltöltés(DateTime.Today);
+
+                Fülekkitöltése();
+                Azonosítók();
+
+                JelenlétiListaFeltöltés();
+                Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Telephelyekfeltöltése()
         {
             try
@@ -138,6 +164,26 @@ namespace Villamos
                     Cmbtelephely.Text = Program.PostásTelephely;
 
                 Cmbtelephely.Enabled = Program.Postás_Vezér;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
             }
             catch (HibásBevittAdat ex)
             {
