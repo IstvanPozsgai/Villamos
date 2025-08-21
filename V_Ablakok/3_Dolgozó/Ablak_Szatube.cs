@@ -30,40 +30,65 @@ namespace Villamos
         public Ablak_Szatube()
         {
             InitializeComponent();
+            Start();
         }
-
 
         private void Ablak_Szatube_Load(object sender, EventArgs e)
         {
-            Telephelyekfeltöltése();
 
-            hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
-            if (!Exists(hely)) Directory.Exists(hely);
-
-            hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs\{DateTime.Now.Year}Szatubecs.mdb";
-            if (!Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
-
-            Évek_Feltöltése();
-
-            Névfeltöltés();
-            Munkahely();
-            TabFülek.TabIndex = 0;
-
-            // Gombok nem láthatóak mert mindent listáz
-            SzabLeadás.Visible = false;
-            SzabNyomtatás.Visible = false;
-            EgyéniTúlNyom.Visible = false;
-            TúlCsopNyom.Visible = false;
-            Túl_Eng_Beáll.Visible = false;
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-
-            TabFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
-
         #region  Alap
+
+        private void Start()
+        {
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+                }
+
+                hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
+                if (!Exists(hely)) Directory.Exists(hely);
+
+                hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs\{DateTime.Now.Year}Szatubecs.mdb";
+                if (!Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
+
+                Évek_Feltöltése();
+
+                Névfeltöltés();
+                Munkahely();
+                TabFülek.TabIndex = 0;
+
+                // Gombok nem láthatóak mert mindent listáz
+                SzabLeadás.Visible = false;
+                SzabNyomtatás.Visible = false;
+                EgyéniTúlNyom.Visible = false;
+                TúlCsopNyom.Visible = false;
+                Túl_Eng_Beáll.Visible = false;
+
+                TabFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void Telephelyekfeltöltése()
         {
@@ -90,6 +115,28 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                CmbTelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    CmbTelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                CmbTelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
 
         private void Névfeltöltés()
@@ -1797,7 +1844,7 @@ namespace Villamos
             try
             {
 
-                if (Tábla.SelectedRows.Count < 1)                    throw new HibásBevittAdat("Nincs kiválasztva érvényes sor a táblázatban.");
+                if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva érvényes sor a táblázatban.");
                 Holtart.Be();
 
                 string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + "Túlóra_egyéni_" + Program.PostásNév.Trim() + "_" + DateTime.Now.ToString("yyyyMMddhhmmss");
@@ -2011,7 +2058,7 @@ namespace Villamos
                     MyE.Kiir(Beosztás, "d30");
                     MyE.Kiir(Beosztás, "m30");
                 }
-                MyE.NyomtatásiTerület_részletes(munkalap, "a1:p30", "", "", false,"1","1");
+                MyE.NyomtatásiTerület_részletes(munkalap, "a1:p30", "", "", false, "1", "1");
 
                 helym = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
                 jelszóm = "forgalmiutasítás";
