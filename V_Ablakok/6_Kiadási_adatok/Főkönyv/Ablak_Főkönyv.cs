@@ -75,13 +75,50 @@ namespace Villamos
 
         private void Start()
         {
-            Telephelyekfeltöltése();
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                Papír();
+                Reklámot_üzen();
+                Dátum.Value = DateTime.Today;
+                Idődátum.Value = DateTime.Today;
+                Időidő.Value = DateTime.Now;
 
-            GombLathatosagKezelo.Beallit(this);
-            // Jogosultságkiosztás();
-            Papír();
-            Reklámot_üzen();
+                Részletes_ürítés();
+                if (DateTime.Now.Hour > 10)
+                    Délutáni.Checked = true;
+                else
+                    Délelőtt.Checked = true;
+
+                Eredménytábla();
+                Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+                Óráig.Value = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, 11, 0, 0);
+                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+                Gombok();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         private void Papír()
         {
@@ -111,24 +148,7 @@ namespace Villamos
 
         private void Ablak_Főkönyv_Shown(object sender, EventArgs e)
         {
-            Dátum.Value = DateTime.Today;
-            Idődátum.Value = DateTime.Today;
-            Időidő.Value = DateTime.Now;
 
-            Részletes_ürítés();
-            if (DateTime.Now.Hour > 10)
-                Délutáni.Checked = true;
-            else
-                Délelőtt.Checked = true;
-
-            Eredménytábla();
-            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            Óráig.Value = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, 11, 0, 0);
-            AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Gombok();
         }
 
         #region Alap
@@ -150,6 +170,26 @@ namespace Villamos
                 { Cmbtelephely.Text = Program.PostásTelephely; }
 
                 Cmbtelephely.Enabled = Program.Postás_Vezér;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
             }
             catch (HibásBevittAdat ex)
             {
