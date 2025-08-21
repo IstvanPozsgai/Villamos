@@ -27,10 +27,13 @@ namespace Villamos.Kezelők
         public Kezelő_CAF_KM_Attekintes()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
-            if (!Km_Attekintes_Tabla_Letezik_E())
-            {
-                Tabla_Letrehozasa();
-            }
+
+            // Ez később kivehető, ez csak a programrész verziócsere utáni első futtatása miatt került bele, hogy ne kézzel hozzuk létre a táblát.
+            //if (!Adatbázis.ABvanTábla(hely, jelszó, $"SELECT * FROM {táblanév}"))
+            //{
+            //    Tabla_Letrehozasa();
+            //}
+
             if (cache_osszes_adat == null)
             {
                 InitializeCache(KézAdatok); // egyszeri töltés
@@ -38,37 +41,24 @@ namespace Villamos.Kezelők
             osszes_adat = cache_osszes_adat;
         }
 
-        // JAVÍTANDÓ: Adatbázis ABvanTábla lehet használni , vagy ezt átvinni oda
-        private bool Km_Attekintes_Tabla_Letezik_E()
-        {
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-
-            using (OleDbConnection kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                kapcsolat.Open();
-                // Lekéri az táblákat
-                DataTable tables = kapcsolat.GetSchema("Tables");
-                // Megnézi, hogy van-e KM_Attekintes nevű tábla
-                return tables.Rows.Cast<DataRow>().Any(row => row["TABLE_NAME"].ToString().Equals("KM_Attekintes", StringComparison.OrdinalIgnoreCase));
-            }
-        }
-
         // JAVÍTANDÓ: kerüljön át  Adatbázis_Létrehozás osztályba a CAF alá
-        private void Tabla_Letrehozasa()
-        {
-            string szöveg = "CREATE TABLE KM_Attekintes (";
-            szöveg += "azonosito CHAR(10), ";
-            szöveg += "kov_p0 LONG, ";
-            szöveg += "kov_p1 LONG, ";
-            szöveg += "kov_p2 LONG, ";
-            szöveg += "utolso_p0_kozott LONG, ";
-            szöveg += "utolso_p1_kozott LONG, ";
-            szöveg += "utolso_p3_es_p2_kozott LONG, ";
-            szöveg += "elso_p2 LONG, ";
-            szöveg += "elso_p3 LONG);";
+        // Ez később kivehető, ez csak a programrész verziócsere utáni első futtatása miatt került bele, hogy ne kézzel hozzuk létre a táblát.
+        // Az Adatbázis_Létrehozás osztályban szerepel a lenti SQL szintaxis.
+        //private void Tabla_Letrehozasa()
+        //{
+        //    string szöveg = "CREATE TABLE KM_Attekintes (";
+        //    szöveg += "azonosito CHAR(10), ";
+        //    szöveg += "kov_p0 LONG, ";
+        //    szöveg += "kov_p1 LONG, ";
+        //    szöveg += "kov_p2 LONG, ";
+        //    szöveg += "utolso_p0_kozott LONG, ";
+        //    szöveg += "utolso_p1_kozott LONG, ";
+        //    szöveg += "utolso_p3_es_p2_kozott LONG, ";
+        //    szöveg += "elso_p2 LONG, ";
+        //    szöveg += "elso_p3 LONG);";
 
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
+        //    MyA.ABMódosítás(hely, jelszó, szöveg);
+        //}
 
         public List<Adat_CAF_KM_Attekintes> Lista_Adatok()
         {
