@@ -30,27 +30,48 @@ namespace Villamos
 
         private void Start()
         {
-            Telephelyekfeltöltése();
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
 
-            // Szakszolgálati lekérdezés esetén működik csak a lekérdezés
-            Kimutatás_készítés.Visible = Cmbtelephely.Enabled;
+                // Szakszolgálati lekérdezés esetén működik csak a lekérdezés
+                Kimutatás_készítés.Visible = Cmbtelephely.Enabled;
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Dátum_év.Value = DateTime.Today;
-            Dátum.Value = DateTime.Today;
+                Dátum_év.Value = DateTime.Today;
+                Dátum.Value = DateTime.Today;
 
-            // virtuálisan megnyitjuk a képet
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Fűtés_beállítás.jpg";
-            Kezelő_Kép.KépMegnyitás(PictureBox2, hely, ToolTip1);
-            PictureBox2.Top = 10;
-            PictureBox2.Left = 10;
-            PictureBox2.Width = 450;
-            PictureBox2.Height = 570;
-            PictureBox2.Visible = false;
+                // virtuálisan megnyitjuk a képet
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Fűtés_beállítás.jpg";
+                Kezelő_Kép.KépMegnyitás(PictureBox2, hely, ToolTip1);
+                PictureBox2.Top = 10;
+                PictureBox2.Left = 10;
+                PictureBox2.Width = 450;
+                PictureBox2.Height = 570;
+                PictureBox2.Visible = false;
 
-            Dolgozófeltöltés();
-            Pályaszámok_feltöltése();
+                Dolgozófeltöltés();
+                Pályaszámok_feltöltése();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -69,6 +90,26 @@ namespace Villamos
                 { Cmbtelephely.Text = Program.PostásTelephely; }
 
                 Cmbtelephely.Enabled = Program.Postás_Vezér;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
             }
             catch (HibásBevittAdat ex)
             {

@@ -66,11 +66,31 @@ namespace Villamos
 
         private void Start()
         {
-            Telephelyekfeltöltése();
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Dátum.Value = DateTime.Today;
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                Dátum.Value = DateTime.Today;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Ablak_T5C5_napütemezés_Load(object sender, EventArgs e)
@@ -91,6 +111,26 @@ namespace Villamos
                 { Cmbtelephely.Text = Program.PostásTelephely; }
 
                 Cmbtelephely.Enabled = Program.Postás_Vezér;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
             }
             catch (HibásBevittAdat ex)
             {
@@ -259,7 +299,7 @@ namespace Villamos
                 Tábla.Columns[32].Width = 100;
 
                 Főkönyv_Funkciók.Napiállók(Cmbtelephely.Text.Trim());
-                Adatok = KézÁllomány.Lista_Adatok("Főmérnökség", DateTime.Today); 
+                Adatok = KézÁllomány.Lista_Adatok("Főmérnökség", DateTime.Today);
                 AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Valóstípus.Contains("T5C5")).ToList();
                 AdatokSzerelvény = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());   // Szerelvény
                 AdatokZserKm = KézKorr.Lista_adatok(Dátum.Value.Year);      //Zser adatok
@@ -358,7 +398,7 @@ namespace Villamos
                     }
 
                     Adat_Szerelvény EgySzerElő = (from a in AdatokSzerElő
-                                                  where a.Kocsi1 == EgyJármű.Azonosító || a.Kocsi2 ==EgyJármű.Azonosító || a.Kocsi3 == EgyJármű.Azonosító ||
+                                                  where a.Kocsi1 == EgyJármű.Azonosító || a.Kocsi2 == EgyJármű.Azonosító || a.Kocsi3 == EgyJármű.Azonosító ||
                                                         a.Kocsi4 == EgyJármű.Azonosító || a.Kocsi5 == EgyJármű.Azonosító || a.Kocsi6 == EgyJármű.Azonosító
                                                   select a).FirstOrDefault();
                     if (EgySzerElő != null)
