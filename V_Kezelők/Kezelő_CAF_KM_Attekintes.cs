@@ -24,7 +24,6 @@ namespace Villamos.Kezelők
 
         IEnumerable<Adat_CAF_Adatok> osszes_adat;
         static IEnumerable<Adat_CAF_Adatok> cache_osszes_adat = null;
-        // JAVÍTANDÓ: Ezt kívülről tudni kell állítani!
         long Vizsgalatok_Kozott_Megteheto_Km;
 
         public Kezelő_CAF_KM_Attekintes()
@@ -43,6 +42,8 @@ namespace Villamos.Kezelők
             }
             osszes_adat = cache_osszes_adat;
 
+            // Lekéri a Ciklusrend adatbázisból a vizsgálatok közötti megtehető km értékét.
+            // Elég az elsőt lekérnünk, mivel minden vizsgálatra egységesen van meghatározva.
             Vizsgalatok_Kozott_Megteheto_Km = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;            
         }
 

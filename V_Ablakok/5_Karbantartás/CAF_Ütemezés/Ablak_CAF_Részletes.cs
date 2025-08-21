@@ -359,8 +359,20 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 tb_p3_p2_kozott.Text = "Nincs adat";
             }
 
-            tb_ciklusrend.Text = $"{Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges}";
-            tb_tureshatar.Text = $"{(double)(Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges - Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Alsóérték) / Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges * 100}";
+            // Ciklusrend kiírások
+
+            // Eltárolom a szükséges értékeket egy változóba a Ciklusrend adb-ből, így nem kell minden egyes művelet során adb-ből olvasni őket.
+            long nevlegesKmErtek = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;
+            long alsoKmErtek = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Alsóérték;
+
+            // Lekéri a Ciklusrend adatbázisból a vizsgálatok közötti megtehető km értékét.
+            tb_ciklusrend.Text = $"{nevlegesKmErtek}";
+
+            // Alább kiszámolja és visszaadja a ciklusrendben meghatározott tűréshatár értékét százalékos formában.
+            // Így nem szükséges tárolnunk a tűréshatárt, de mégis módosítható.
+            // A double castolásra szükség van, hiszen pl. 10 % alatt olyan kicsi számmal dolgozunk, amely már nem fér bele az INT típus értékkészletébe.
+            // A következő képletet használja: (Névleges - Alsóérték) / (Névleges * 100)
+            tb_tureshatar.Text = $"{(double)(nevlegesKmErtek - alsoKmErtek) / nevlegesKmErtek * 100}";
 
         }
 
@@ -919,6 +931,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
+                // Elmenti a ciklusrend adatbázisba a módosított értékeket..
                 Kéz_Ciklus.Módosítás_CAF(long.Parse(tb_ciklusrend.Text), int.Parse(tb_tureshatar.Text));
                 MessageBox.Show("Sikeres módosítás!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
