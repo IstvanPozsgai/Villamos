@@ -20,11 +20,12 @@ namespace Villamos.Kezelők
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
         readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
 
         IEnumerable<Adat_CAF_Adatok> osszes_adat;
         static IEnumerable<Adat_CAF_Adatok> cache_osszes_adat = null;
         // JAVÍTANDÓ: Ezt kívülről tudni kell állítani!
-        const int Vizsgalatok_Kozott_Megteheto_Km = 14000;
+        long Vizsgalatok_Kozott_Megteheto_Km;
 
         public Kezelő_CAF_KM_Attekintes()
         {
@@ -41,6 +42,8 @@ namespace Villamos.Kezelők
                 InitializeCache(KézAdatok); // egyszeri töltés
             }
             osszes_adat = cache_osszes_adat;
+
+            Vizsgalatok_Kozott_Megteheto_Km = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;            
         }
 
         // JAVÍTANDÓ: kerüljön át  Adatbázis_Létrehozás osztályba a CAF alá
