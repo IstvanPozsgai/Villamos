@@ -37,26 +37,53 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         public Ablak_TTP()
         {
             InitializeComponent();
-
-
+            Start();
         }
 
 
         #region alap
+
+        private void Start()
+        {
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/PDF";
+                if (!Directory.Exists(hely)) hely.KönyvSzerk();
+
+                TelephelyLista();
+                HibákFeltöltése();
+                AdatokTábla = KézTábla.Lista_Adatok();
+                PályaszámListaFeltölt();
+
+                Gombok_Ki();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Ablak_TTP_Load(object sender, EventArgs e)
         {
-            string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/PDF";
-            if (!Directory.Exists(hely)) hely.KönyvSzerk();
 
-            Telephelyekfeltöltése();
-            TelephelyLista();
-            HibákFeltöltése();
-            AdatokTábla = KézTábla.Lista_Adatok();
-            PályaszámListaFeltölt();
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Gombok_Ki();
         }
 
         private void Ablak_TTP_FormClosed(object sender, FormClosedEventArgs e)
@@ -108,6 +135,28 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void Jogosultságkiosztás()
         {
