@@ -53,25 +53,31 @@ namespace Villamos
             BtnMentésihely = _BtnMentésihely;
             _BtnMmegnyitás.Name = "BtnMmegnyitás";
             _BtnMentésihely.Name = "BtnMentésihely";
+            Start();
         }
 
 
         #region alap
-        private void AblakBeállításkiadás_Load(object sender, EventArgs e)
+
+        private void Start()
         {
             try
             {
-                Telephelyekfeltöltése();
                 if (Cmbtelephely.Items.Count > 0)
                 {
-                    // Ha telephelyek feltöltése sikeres csak akkor fejezi be az ablak kitöltését
-
                     //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
                     //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
                     if (Program.PostásJogkör.Any(c => c != '0'))
+                    {
+                        Telephelyekfeltöltése();
                         Jogosultságkiosztás();
+                    }
                     else
-                        GombLathatosagKezelo.Beallit(this);
+                    {
+                        TelephelyekFeltöltéseÚj();
+                        GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                    }
+
                     Típusfeltöltés();
                     Főkönyvialáírások();
                     Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
@@ -86,6 +92,11 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void AblakBeállításkiadás_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void Típusfeltöltés()
@@ -144,6 +155,27 @@ namespace Villamos
                 Cmbtelephely.Enabled = Program.Postás_Vezér;
 
                 if (Cmbtelephely.Items.Contains(Program.PostásTelephely.Trim())) Program.Postás_telephely = true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
             }
             catch (HibásBevittAdat ex)
             {
