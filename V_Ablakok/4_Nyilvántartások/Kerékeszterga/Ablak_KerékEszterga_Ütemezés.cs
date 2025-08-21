@@ -56,15 +56,37 @@ namespace Villamos.Villamos_Ablakok
 
         private void Start()
         {
-            Dátum.Value = DateTime.Today;
-            Telephelyekfeltöltése();
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Fülekkitöltése();
-            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            Telephelyek_Szűrő_feltöltése();
-            Automata_Jelentés();
+                Dátum.Value = DateTime.Today;
+                Fülekkitöltése();
+                Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+                Telephelyek_Szűrő_feltöltése();
+                Automata_Jelentés();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)
@@ -110,6 +132,28 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void Telephelyek_Szűrő_feltöltése()
         {
@@ -723,7 +767,7 @@ namespace Villamos.Villamos_Ablakok
                         }
                         Holtart.Lép();
                     }
-             if(AdatokGy.Count >0)       KézNaptár.Módosítás_Munkaidő(Hételső.Year, AdatokGy);
+                    if (AdatokGy.Count > 0) KézNaptár.Módosítás_Munkaidő(Hételső.Year, AdatokGy);
                 }
                 Holtart.Ki();
             }
@@ -901,7 +945,7 @@ namespace Villamos.Villamos_Ablakok
                 //ha nem ugyanabban a hónapban van a két dátum és van adat a két idő között, akkor töröljük az eddigi adatokat.
                 if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumtól, Dátumtól, Dátumig, true);
                 if (Dátumtól.Month != Dátumig.Month)
-                     if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumig, Dátumtól, Dátumig, true);
+                    if (Adatok_Beoszt_Új.Any(a => a.Nap >= Dátumtól && a.Nap <= Dátumig)) Kezelő_Beoszt_Új.Törlés(Telephely.Trim(), Dátumig, Dátumtól, Dátumig, true);
             }
             catch (HibásBevittAdat ex)
             {
