@@ -27,26 +27,19 @@ namespace Villamos
         public Ablak_üzenet()
         {
             InitializeComponent();
+            Start();
         }
 
 
         private void Ablak_üzenet_Load(object sender, EventArgs e)
         {
-            Telephelyekfeltöltése();
+            
         }
 
 
         private void Ablak_üzenet_Shown(object sender, EventArgs e)
         {
 
-            Dátumig.MaxDate = DateTime.Today;
-            Dátumtól.MaxDate = DateTime.Today;
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Többrögzít.Visible = false;
-
-            Radioolvastan.Checked = true;
-            Táblalistázás();
         }
 
         private void Listák_Feltöltése()
@@ -63,6 +56,42 @@ namespace Villamos
 
 
         #region Alap
+
+        private void Start()
+        {
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+
+                Dátumig.MaxDate = DateTime.Today;
+                Dátumtól.MaxDate = DateTime.Today;
+                Többrögzít.Visible = false;
+
+                Radioolvastan.Checked = true;
+                Táblalistázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Telephelyekfeltöltése()
         {
             try
@@ -93,8 +122,29 @@ namespace Villamos
             }
         }
 
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-        #endregion 
+        #endregion
+
 
         private void Szűrésalaphelyzetbe()
         {
