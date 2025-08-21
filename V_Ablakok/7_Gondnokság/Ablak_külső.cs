@@ -43,23 +43,45 @@ namespace Villamos
         public Ablak_külső()
         {
             InitializeComponent();
+            Start();
         }
 
         private void Ablak_külső_Load(object sender, EventArgs e)
         {
-            string helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\";
-            if (!Directory.Exists(helyi)) Directory.CreateDirectory(helyi);
 
-            helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Külső_PDF";
-            if (!Directory.Exists(helyi)) Directory.CreateDirectory(helyi);
-
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Külsős_Táblák(hely);
         }
 
         private void Ablak_külső_Shown(object sender, EventArgs e)
         {
+
+        }
+
+        #region alap
+        private void Start()
+        {
             try
             {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                string helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\";
+                if (!Directory.Exists(helyi)) Directory.CreateDirectory(helyi);
+
+                helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Külső_PDF";
+                if (!Directory.Exists(helyi)) Directory.CreateDirectory(helyi);
+
+                if (!File.Exists(hely)) Adatbázis_Létrehozás.Külsős_Táblák(hely);
+
+
                 Telephelyekfeltöltése();
 
                 GombLathatosagKezelo.Beallit(this);
@@ -110,6 +132,7 @@ namespace Villamos
                                 where a.Szakszolgálat == true && a.Szakszolgálatszöveg.Trim() == szakszolgálatszöveg.Trim()
                                 select a.Id).FirstOrDefault();
                 }
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -122,8 +145,6 @@ namespace Villamos
             }
         }
 
-
-        #region alap
         private void Jogosultságkiosztás()
         {
             try
@@ -366,6 +387,26 @@ namespace Villamos
             }
         }
 
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         #endregion
 
