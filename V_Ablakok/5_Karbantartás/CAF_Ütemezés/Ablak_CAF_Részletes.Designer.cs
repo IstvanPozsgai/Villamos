@@ -96,6 +96,7 @@
             this.IDŐ = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btn_elso_futtatas = new System.Windows.Forms.Button();
             this.tb_p3_p2_kozott = new System.Windows.Forms.TextBox();
             this.lb_p3_p2_kozott = new System.Windows.Forms.Label();
             this.tb_rendben_p3 = new System.Windows.Forms.TextBox();
@@ -112,15 +113,21 @@
             this.lb_futhatmeg_p1 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lb_futhatmeg_p2 = new System.Windows.Forms.Label();
+            this.btn_frissit = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btn_frissit = new System.Windows.Forms.Button();
-            this.btn_elso_futtatas = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.lb_ciklusrend_km = new System.Windows.Forms.Label();
+            this.tb_ciklusrend = new System.Windows.Forms.TextBox();
+            this.lb_tureshatar = new System.Windows.Forms.Label();
+            this.tb_tureshatar = new System.Windows.Forms.TextBox();
+            this.tb_ciklusrend_modosit = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // Ütem_dátum_program
@@ -728,11 +735,24 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 176F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 119F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 87F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 471);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 414);
             this.tableLayoutPanel1.TabIndex = 284;
+            // 
+            // btn_elso_futtatas
+            // 
+            this.btn_elso_futtatas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_elso_futtatas.BackgroundImage = global::Villamos.Properties.Resources.Graphicloads_Colorful_Long_Shadow_Arrow_download_3;
+            this.btn_elso_futtatas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_elso_futtatas.Location = new System.Drawing.Point(400, 364);
+            this.btn_elso_futtatas.Name = "btn_elso_futtatas";
+            this.btn_elso_futtatas.Size = new System.Drawing.Size(45, 45);
+            this.btn_elso_futtatas.TabIndex = 17;
+            this.btn_elso_futtatas.UseVisualStyleBackColor = true;
+            this.btn_elso_futtatas.Visible = false;
+            this.btn_elso_futtatas.Click += new System.EventHandler(this.btn_elso_futtatas_Click);
             // 
             // tb_p3_p2_kozott
             // 
@@ -870,6 +890,17 @@
             this.lb_futhatmeg_p2.TabIndex = 4;
             this.lb_futhatmeg_p2.Text = "Következő P2-ig futhat:";
             // 
+            // btn_frissit
+            // 
+            this.btn_frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.btn_frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_frissit.Location = new System.Drawing.Point(3, 364);
+            this.btn_frissit.Name = "btn_frissit";
+            this.btn_frissit.Size = new System.Drawing.Size(45, 45);
+            this.btn_frissit.TabIndex = 16;
+            this.btn_frissit.UseVisualStyleBackColor = true;
+            this.btn_frissit.Click += new System.EventHandler(this.btn_frissit_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -883,6 +914,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Peru;
+            this.tabPage1.Controls.Add(this.tableLayoutPanel2);
             this.tabPage1.Controls.Add(this.tableLayoutPanel1);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
@@ -931,31 +963,72 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Számítások";
             // 
-            // btn_frissit
+            // tableLayoutPanel2
             // 
-            this.btn_frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.btn_frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btn_frissit.Location = new System.Drawing.Point(3, 421);
-            this.btn_frissit.Name = "btn_frissit";
-            this.btn_frissit.Size = new System.Drawing.Size(45, 45);
-            this.btn_frissit.TabIndex = 16;
-            this.btn_frissit.UseVisualStyleBackColor = true;
-            this.btn_frissit.Click += new System.EventHandler(this.btn_frissit_Click);
+            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 57F));
+            this.tableLayoutPanel2.Controls.Add(this.tb_tureshatar, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.lb_tureshatar, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.tb_ciklusrend, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lb_ciklusrend_km, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tb_ciklusrend_modosit, 2, 1);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(6, 465);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(448, 83);
+            this.tableLayoutPanel2.TabIndex = 285;
             // 
-            // btn_elso_futtatas
+            // lb_ciklusrend_km
             // 
-            this.btn_elso_futtatas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_elso_futtatas.BackgroundImage = global::Villamos.Properties.Resources.Graphicloads_Colorful_Long_Shadow_Arrow_download_3;
-            this.btn_elso_futtatas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btn_elso_futtatas.Location = new System.Drawing.Point(400, 421);
-            this.btn_elso_futtatas.Name = "btn_elso_futtatas";
-            this.btn_elso_futtatas.Size = new System.Drawing.Size(45, 45);
-            this.btn_elso_futtatas.TabIndex = 17;
-            this.btn_elso_futtatas.UseVisualStyleBackColor = true;
-            this.btn_elso_futtatas.Visible = false;
-            this.btn_elso_futtatas.Click += new System.EventHandler(this.btn_elso_futtatas_Click);
+            this.lb_ciklusrend_km.AutoSize = true;
+            this.lb_ciklusrend_km.Location = new System.Drawing.Point(3, 0);
+            this.lb_ciklusrend_km.Name = "lb_ciklusrend_km";
+            this.lb_ciklusrend_km.Size = new System.Drawing.Size(110, 20);
+            this.lb_ciklusrend_km.TabIndex = 15;
+            this.lb_ciklusrend_km.Text = "Ciklusrend Km";
             // 
-            // Ablak_CAF_Részletes_WIP
+            // tb_ciklusrend
+            // 
+            this.tb_ciklusrend.Location = new System.Drawing.Point(198, 3);
+            this.tb_ciklusrend.Name = "tb_ciklusrend";
+            this.tb_ciklusrend.Size = new System.Drawing.Size(139, 26);
+            this.tb_ciklusrend.TabIndex = 16;
+            // 
+            // lb_tureshatar
+            // 
+            this.lb_tureshatar.AutoSize = true;
+            this.lb_tureshatar.Location = new System.Drawing.Point(3, 33);
+            this.lb_tureshatar.Name = "lb_tureshatar";
+            this.lb_tureshatar.Size = new System.Drawing.Size(146, 20);
+            this.lb_tureshatar.TabIndex = 264;
+            this.lb_tureshatar.Text = "Tűréshatár (%-ban)";
+            // 
+            // tb_tureshatar
+            // 
+            this.tb_tureshatar.Location = new System.Drawing.Point(198, 36);
+            this.tb_tureshatar.Name = "tb_tureshatar";
+            this.tb_tureshatar.Size = new System.Drawing.Size(139, 26);
+            this.tb_tureshatar.TabIndex = 265;
+            // 
+            // tb_ciklusrend_modosit
+            // 
+            this.tb_ciklusrend_modosit.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.tb_ciklusrend_modosit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.tb_ciklusrend_modosit.Location = new System.Drawing.Point(393, 36);
+            this.tb_ciklusrend_modosit.Name = "tb_ciklusrend_modosit";
+            this.tb_ciklusrend_modosit.Size = new System.Drawing.Size(45, 41);
+            this.tb_ciklusrend_modosit.TabIndex = 266;
+            this.toolTip1.SetToolTip(this.tb_ciklusrend_modosit, "Rögzíti az adatokat");
+            this.tb_ciklusrend_modosit.UseVisualStyleBackColor = true;
+            this.tb_ciklusrend_modosit.Click += new System.EventHandler(this.tb_ciklusrend_modosit_Click);
+            // 
+            // Ablak_CAF_Részletes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1002,7 +1075,7 @@
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
-            this.Name = "Ablak_CAF_Részletes_WIP";
+            this.Name = "Ablak_CAF_Részletes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ütemezés Módosítás";
             this.Load += new System.EventHandler(this.Ablak_CAF_Részletes_Load);
@@ -1012,6 +1085,8 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1106,5 +1181,11 @@
         private System.Windows.Forms.Label lb_p3_p2_kozott;
         private System.Windows.Forms.Button btn_frissit;
         private System.Windows.Forms.Button btn_elso_futtatas;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TextBox tb_ciklusrend;
+        private System.Windows.Forms.Label lb_ciklusrend_km;
+        private System.Windows.Forms.TextBox tb_tureshatar;
+        private System.Windows.Forms.Label lb_tureshatar;
+        internal System.Windows.Forms.Button tb_ciklusrend_modosit;
     }
 }

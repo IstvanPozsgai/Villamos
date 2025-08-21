@@ -358,6 +358,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 tb_rendben_p3.Text = "Nincs adat";
                 tb_p3_p2_kozott.Text = "Nincs adat";
             }
+
+            tb_ciklusrend.Text = $"{Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges}";
+            tb_tureshatar.Text = $"{(double)(Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges - Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Alsóérték) / Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges * 100}";
+
         }
 
         private void SzinezdTextBox(TextBox tb, int alsoHatar, int felsoHatar)
@@ -909,6 +913,24 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void tb_ciklusrend_modosit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Kéz_Ciklus.Módosítás_CAF(long.Parse(tb_ciklusrend.Text), int.Parse(tb_tureshatar.Text));
+                MessageBox.Show("Sikeres módosítás!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }           
         }
     }
 }

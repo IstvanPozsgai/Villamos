@@ -5,6 +5,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -18,57 +19,51 @@ namespace Villamos.Kezelők
         readonly string táblanév = "KM_Attekintes";
 
         readonly Kezelő_CAF_Adatok KézAdatok = new Kezelő_CAF_Adatok();
+        readonly Kezelő_Jármű KézJármű = new Kezelő_Jármű();
+        readonly Kezelő_Ciklus Kéz_Ciklus = new Kezelő_Ciklus();
 
         IEnumerable<Adat_CAF_Adatok> osszes_adat;
         static IEnumerable<Adat_CAF_Adatok> cache_osszes_adat = null;
         // JAVÍTANDÓ: Ezt kívülről tudni kell állítani!
-        const int Vizsgalatok_Kozott_Megteheto_Km = 14000;
+        long Vizsgalatok_Kozott_Megteheto_Km;
 
         public Kezelő_CAF_KM_Attekintes()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
-            if (!Km_Attekintes_Tabla_Letezik_E())
-            {
-                Tabla_Letrehozasa();
-            }
+
+            // Ez később kivehető, ez csak a programrész verziócsere utáni első futtatása miatt került bele, hogy ne kézzel hozzuk létre a táblát.
+            //if (!Adatbázis.ABvanTábla(hely, jelszó, $"SELECT * FROM {táblanév}"))
+            //{
+            //    Tabla_Letrehozasa();
+            //}
+
             if (cache_osszes_adat == null)
             {
                 InitializeCache(KézAdatok); // egyszeri töltés
             }
             osszes_adat = cache_osszes_adat;
-        }
 
-        // JAVÍTANDÓ: Adatbázis ABvanTábla lehet használni , vagy ezt átvinni oda
-        private bool Km_Attekintes_Tabla_Letezik_E()
-        {
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-
-            using (OleDbConnection kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                kapcsolat.Open();
-                // Lekéri az táblákat
-                DataTable tables = kapcsolat.GetSchema("Tables");
-                // Megnézi, hogy van-e KM_Attekintes nevű tábla
-                return tables.Rows.Cast<DataRow>().Any(row => row["TABLE_NAME"].ToString().Equals("KM_Attekintes", StringComparison.OrdinalIgnoreCase));
-            }
+            Vizsgalatok_Kozott_Megteheto_Km = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;            
         }
 
         // JAVÍTANDÓ: kerüljön át  Adatbázis_Létrehozás osztályba a CAF alá
-        private void Tabla_Letrehozasa()
-        {
-            string szöveg = "CREATE TABLE KM_Attekintes (";
-            szöveg += "azonosito CHAR(10), ";
-            szöveg += "kov_p0 LONG, ";
-            szöveg += "kov_p1 LONG, ";
-            szöveg += "kov_p2 LONG, ";
-            szöveg += "utolso_p0_kozott LONG, ";
-            szöveg += "utolso_p1_kozott LONG, ";
-            szöveg += "utolso_p3_es_p2_kozott LONG, ";
-            szöveg += "elso_p2 LONG, ";
-            szöveg += "elso_p3 LONG);";
+        // Ez később kivehető, ez csak a programrész verziócsere utáni első futtatása miatt került bele, hogy ne kézzel hozzuk létre a táblát.
+        // Az Adatbázis_Létrehozás osztályban szerepel a lenti SQL szintaxis.
+        //private void Tabla_Letrehozasa()
+        //{
+        //    string szöveg = "CREATE TABLE KM_Attekintes (";
+        //    szöveg += "azonosito CHAR(10), ";
+        //    szöveg += "kov_p0 LONG, ";
+        //    szöveg += "kov_p1 LONG, ";
+        //    szöveg += "kov_p2 LONG, ";
+        //    szöveg += "utolso_p0_kozott LONG, ";
+        //    szöveg += "utolso_p1_kozott LONG, ";
+        //    szöveg += "utolso_p3_es_p2_kozott LONG, ";
+        //    szöveg += "elso_p2 LONG, ";
+        //    szöveg += "elso_p3 LONG);";
 
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
+        //    MyA.ABMódosítás(hely, jelszó, szöveg);
+        //}
 
         public List<Adat_CAF_KM_Attekintes> Lista_Adatok()
         {
@@ -262,9 +257,8 @@ namespace Villamos.Kezelők
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
-                                                       .First();
+                                                       .FirstOrDefault();            
             // Visszaadja a következő P vizsgálat KM várt értékét.
-
             return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
         }
 
@@ -422,32 +416,22 @@ namespace Villamos.Kezelők
         }
 
         // JAVÍTANDÓ: A pályaszám, helyett a típust használd
+        // KÉSZ
         //Amúgy miben különbözik a rövis és a hosszú CAF?
+        // Itt azért oldottam meg így, mivel 2117 az utolsó rövid CAF és ugye 2201 az első rövid.
+        // Ha 1 db for ciklust használnék a feltöltésre, akkor a 2118 és 2199 között lenne egy "lyuk".
+        // De teljesen jogos, most jutott eszembe, hogy 1 LINQ lekérdezés elég lett volna és a StartsWith szerepelhetett volna 2x &&-el, ha nem típust használnánk.
         public void Tabla_Feltoltese()
         {
-            List<int> azonositoLista_HosszuCaf = KézAdatok.Lista_Adatok()
-                                                          .Where(x => x.Azonosító.StartsWith("21"))
-                                                          .Select(x => int.Parse(x.Azonosító))
-                                                          .Distinct()
-                                                          .ToList();
 
-            List<int> azonositoLista_RovidCaf = KézAdatok.Lista_Adatok()
-                                                         .Where(x => x.Azonosító.StartsWith("22"))
-                                                         .Select(x => int.Parse(x.Azonosító))
-                                                         .Distinct()
-                                                         .ToList();
+            List<int> azonositoLista = KézJármű.Lista_Adatok("Főmérnökség")
+                .Where(a => a.Típus.Contains("CAF"))
+                .Select(a => int.Parse(a.Azonosító))
+                .ToList();           
 
-
-            for (int i = azonositoLista_HosszuCaf.First(); i <= azonositoLista_HosszuCaf.Last(); i++)
+            for (int i = 0; i <= azonositoLista.Count()-1; i++)
             {
-                string Palyaszam = $"{i}";
-                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam));
-                Rögzítés_Elso(teszt);
-            }
-
-            for (int i = azonositoLista_RovidCaf.First(); i <= azonositoLista_RovidCaf.Last(); i++)
-            {
-                string Palyaszam = $"{i}";
+                string Palyaszam = $"{azonositoLista[i]}";
                 Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam));
                 Rögzítés_Elso(teszt);
             }

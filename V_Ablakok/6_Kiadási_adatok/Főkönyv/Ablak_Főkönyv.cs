@@ -726,6 +726,9 @@ namespace Villamos
             else
                 return;
 
+            fájlnév_ = fájlexc.Trim();
+            Telephely_ = Cmbtelephely.Text.Trim();
+
             Főkönyv_Funkciók.Napiállók(Telephely_);
             Főkönyv_Háromnapos nyomtatvány = new Főkönyv_Háromnapos();
             // elkészítjük a formanyomtatványt változókat nem lehet küldeni definiálni kell egy külső változót.
@@ -733,8 +736,7 @@ namespace Villamos
             Holtart.Be(100);
             Haromnapos.Visible = false;
             timer1.Enabled = true;
-            fájlnév_ = fájlexc.Trim();
-            Telephely_ = Cmbtelephely.Text.Trim();
+
             await Task.Run(() => nyomtatvány.Három_Nyomtatvány(fájlnév_, Telephely_, Papírméret_, PapírElrendezés_));
 
             timer1.Enabled = false;
