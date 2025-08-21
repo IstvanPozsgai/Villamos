@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         string hely;
         readonly string jelszó = "pozsgaii";
+        readonly string táblanév = "hiba";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -26,7 +27,7 @@ namespace Villamos.Kezelők
         public List<Adat_Nap_Hiba> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM hiba";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Nap_Hiba> Adatok = new List<Adat_Nap_Hiba>();
             Adat_Nap_Hiba Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -64,7 +65,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "DELETE FROM hiba ";
+                string szöveg = $"DELETE FROM {táblanév} ";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -86,7 +87,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Nap_Hiba Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO Hiba (azonosító, mikori, beálló, üzemképtelen, üzemképeshiba, típus, státus ) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, mikori, beálló, üzemképtelen, üzemképeshiba, típus, státus ) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";
                     szöveg += $"'{Adat.Mikori}', ";
                     szöveg += $"'{Adat.Beálló}', ";
