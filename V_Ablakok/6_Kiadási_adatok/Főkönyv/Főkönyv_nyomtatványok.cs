@@ -2120,19 +2120,20 @@ namespace Villamos.Villamos_Nyomtatványok
             MyE.Megnyitás(fájlneve);
         }
     }
-
+    // JAVÍTANDÓ:
     public class Főkönyv_Beálló
     {
         public void Beálló_kocsik(string fájlexl, string Telephely, DateTime Dátum, string napszak, string papírméret, string papírelrendezés)
         {
-
-            MyE.ExcelLétrehozás();
+            try
+            {
+                MyE.ExcelLétrehozás();
             // egész lap betű méret arial 16
             MyE.Munkalap_betű("Arial", 16);
-            string munkalap = "Munka1";
+                string munkalap = "Munka1";
 
-            // oszlop szélességeket beállítjuk az alapot
-            MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(1) + ":" + MyE.Oszlopnév(13), 8);
+                // oszlop szélességeket beállítjuk az alapot
+                MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(1) + ":" + MyE.Oszlopnév(13), 8);
             MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(2) + ":" + MyE.Oszlopnév(2), 13);
             MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(9) + ":" + MyE.Oszlopnév(9), 13);
             MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(3) + ":" + MyE.Oszlopnév(3), 30);
@@ -2294,6 +2295,23 @@ namespace Villamos.Villamos_Nyomtatványok
 
 
             MyE.Megnyitás(fájlexl);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                string HibaSzöveg = $"{this.ToString()}\n" +
+                    $"Telephely:{Telephely} \n" +
+                    $"fájlexl:{fájlexl} \n"+
+                    $"Dátum:{Dátum}\n"+
+                    $"napszak:{napszak}\n" +
+                    $"papírméret:{papírméret}\n" +
+                    $"papírelrendezés:{papírelrendezés}";
+                HibaNapló.Log(ex.Message, HibaSzöveg, ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }
@@ -2411,6 +2429,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
     public class Főkönyv_Meghagyás
     {
+        // JAVÍTANDÓ:
         public void Főkönyv_Meghagyáskészítés(string fájlexc, string Cmbtelephely, DateTime Dátum, string papírméret, string papírelrendezés)
         {
             try
@@ -2447,10 +2466,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 // elkészítjük a formanyomtatványt
                 Főkönyv_Funkciók.Napiállók(Cmbtelephely.Trim());
                 // kiirjuk a V2-t
-
                 string jelszó = "pozsgaii";
-
-
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\villamos\Új_napihiba.mdb";
                 string szöveg = "SELECT * FROM hiba order by azonosító asc";
 

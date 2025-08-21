@@ -64,7 +64,7 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Eszterga:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Mikor}', ";
                 szöveg += $"'{Adat.Módosító}', ";
-                szöveg += $"'{Adat.Azonosító}' ";
+                szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"{Adat.KMU} )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

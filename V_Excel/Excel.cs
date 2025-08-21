@@ -219,9 +219,18 @@ namespace Villamos
         /// <param name="hova">szöveg</param>
         public static void Kiir(string mit, string hova)
         {
-
-            MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[hova];
-            Cella.Value = mit;
+            try
+            {
+                MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[hova];
+                Cella.Value = mit;
+            }
+            catch (Exception ex)
+            {
+                string HibaHely = $"Void nev:{System.Reflection.MethodBase.GetCurrentMethod().Name}\n" +
+                    $"mit:{mit}\n" +
+                    $"hova:{hova}";
+                HibaNapló.Log(ex.Message, HibaHely, ex.StackTrace, ex.Source, ex.HResult);
+            }
         }
 
         /// <summary>
@@ -351,7 +360,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                string HibaHely = $"Void név:{System.Reflection.MethodBase.GetCurrentMethod().Name}";
+                string HibaHely = $"Void név:{System.Reflection.MethodBase.GetCurrentMethod().Name}" +
+                    $"munkalap:{munkalap}\n" +
+                    $"mit:{mit}";
                 HibaNapló.Log(ex.Message, HibaHely, ex.StackTrace, ex.Source, ex.HResult);
             }
         }
@@ -364,14 +375,22 @@ namespace Villamos
         /// <param name="méret">egész</param>
         public static void Betű(string mit, int méret)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.Font.Size = méret;
-            Táblaterület.Font.Strikethrough = false;
-            Táblaterület.Font.Superscript = false;
-            Táblaterület.Font.Subscript = false;
-            Táblaterület.Font.OutlineFont = false;
-            Táblaterület.Font.Shadow = false;
-            Táblaterület.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
+            try
+            {
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+                Táblaterület.Font.Size = méret;
+                Táblaterület.Font.Strikethrough = false;
+                Táblaterület.Font.Superscript = false;
+                Táblaterület.Font.Subscript = false;
+                Táblaterület.Font.OutlineFont = false;
+                Táblaterület.Font.Shadow = false;
+                Táblaterület.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
+            }
+            catch (Exception ex)
+            {
+                string HibaHely = "Void nev:" + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                HibaNapló.Log(ex.Message, HibaHely, ex.StackTrace, ex.Source, ex.HResult);
+            }
         }
 
         public static void Betű(string mit, Color színe)
