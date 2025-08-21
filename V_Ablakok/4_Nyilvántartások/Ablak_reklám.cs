@@ -55,23 +55,46 @@ namespace Villamos
         {
             Új_Ablak_Utasítás_Generálás?.Close();
         }
+
         private void Start()
         {
-            Telephelyekfeltöltése();
-            Naplótól.Value = DateTime.Today;
-            Naplóig.Value = DateTime.Today;
-            Rekezd.Value = DateTime.Today;
-            Revég.Value = DateTime.Today;
-            Ragaszt.Value = new DateTime(2000, 1, 1);
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
 
-            Méretbetöltés();
+                Naplótól.Value = DateTime.Today;
+                Naplóig.Value = DateTime.Today;
+                Rekezd.Value = DateTime.Today;
+                Revég.Value = DateTime.Today;
+                Ragaszt.Value = new DateTime(2000, 1, 1);
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Telephely.Text = Cmbtelephely.Text;
-            Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            AdatokJármű_Teljes = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).OrderBy(a => a.Azonosító).ToList();
-            AdatokReklám = KézReklám.Lista_Adatok();
+                Méretbetöltés();
+
+                Telephely.Text = Cmbtelephely.Text;
+                Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+                AdatokJármű_Teljes = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).OrderBy(a => a.Azonosító).ToList();
+                AdatokReklám = KézReklám.Lista_Adatok();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Telephelyekfeltöltése()
@@ -100,6 +123,28 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void Button13_Click(object sender, EventArgs e)
         {

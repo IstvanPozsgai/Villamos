@@ -49,18 +49,47 @@ namespace Villamos
         public Ablak_Dolgozóialapadatok()
         {
             InitializeComponent();
+            Start();
         }
+
+        private void Start()
+        {
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+
+                DolgozóAdatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Névfeltöltés();
+                Fülek.SelectedIndex = 0;
+                Fülekkitöltése();
+                Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void Ablak_Dolgozóialapadatok_Shown(object sender, EventArgs e)
         {
-            Telephelyekfeltöltése();
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            DolgozóAdatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
-            Névfeltöltés();
-            Fülek.SelectedIndex = 0;
-            Fülekkitöltése();
-            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+
         }
 
         private void AblakDolgozóialapadatok_Load(object sender, EventArgs e)
@@ -91,6 +120,28 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void BtnSúgó_Click(object sender, EventArgs e)
         {

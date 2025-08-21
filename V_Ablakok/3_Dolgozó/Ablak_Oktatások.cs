@@ -37,27 +37,57 @@ namespace Villamos
         public Ablak_Oktatások()
         {
             InitializeComponent();
+            Start();
         }
+
+        private void Start()
+        {
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+
+                Csoportfeltöltés();
+                Névfeltöltés();
+                Oktatásistátusok();
+                TáblaOktatáslistázás();
+                PDF_néző.Width = TPOktatásRögz.Width;
+                Okatatófeltöltés();
+                Tárgyfeltöltés();
+
+                BizDátum.Value = DateTime.Now;
+                OktDátum.Value = DateTime.Now;
+                Dátumig.Value = DateTime.Now;
+                Átütemezés.Value = DateTime.Now;
+                Dátumtól.Value = new DateTime(DateTime.Now.Year, 1, 1);
+                Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void AblakOktatások_Load(object sender, EventArgs e)
         {
-            Telephelyekfeltöltése();
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Csoportfeltöltés();
-            Névfeltöltés();
-            Oktatásistátusok();
-            TáblaOktatáslistázás();
-            PDF_néző.Width = TPOktatásRögz.Width;
-            Okatatófeltöltés();
-            Tárgyfeltöltés();
 
-            BizDátum.Value = DateTime.Now;
-            OktDátum.Value = DateTime.Now;
-            Dátumig.Value = DateTime.Now;
-            Átütemezés.Value = DateTime.Now;
-            Dátumtól.Value = new DateTime(DateTime.Now.Year, 1, 1);
-            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
@@ -131,6 +161,28 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void Jogosultságkiosztás()
         {

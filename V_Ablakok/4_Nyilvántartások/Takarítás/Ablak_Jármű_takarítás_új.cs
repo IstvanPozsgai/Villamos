@@ -80,28 +80,49 @@ namespace Villamos
 
         private void Start()
         {
-            Visible = false;
-            Telephelyekfeltöltése();
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Fülekkitöltése();
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
 
-            Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            Lapfülek.SelectedIndex = 0;
-            JDátum.Value = DateTime.Today.AddDays(-1);
-            Dátum.Value = DateTime.Today;
-            Gepi_datum.Value = DateTime.Today;
-            Ütem_kezdődátum.Value = DateTime.Today;
-            Utolsó_dátum.Value = DateTime.Today;
-            ListaDátum.Value = DateTime.Today;
+                Visible = false;
+                Fülekkitöltése();
 
-            Background_Process();
-            this.KeyPreview = true;
+                Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+                Lapfülek.SelectedIndex = 0;
+                JDátum.Value = DateTime.Today.AddDays(-1);
+                Dátum.Value = DateTime.Today;
+                Gepi_datum.Value = DateTime.Today;
+                Ütem_kezdődátum.Value = DateTime.Today;
+                Utolsó_dátum.Value = DateTime.Today;
+                ListaDátum.Value = DateTime.Today;
 
+                Background_Process();
+                this.KeyPreview = true;
 
+                Refresh();
+                Visible = true;
 
-            Refresh();
-            Visible = true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Ablak_Jármű_takarítás_új_Load(object sender, EventArgs e)
@@ -271,6 +292,28 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void LapFülek_DrawItem(object sender, DrawItemEventArgs e)
         {

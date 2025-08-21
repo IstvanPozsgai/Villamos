@@ -60,14 +60,12 @@ namespace Villamos
         public Ablak_sérülés()
         {
             InitializeComponent();
+            Start();
         }
 
         private void Ablak_sérülés_Load(object sender, EventArgs e)
         {
-            Lapfülek.Visible = false;
-            Cursor = Cursors.WaitCursor;
-            Telephelyekfeltöltése();
-            Dátum.Value = DateTime.Today;
+
         }
 
 
@@ -80,8 +78,33 @@ namespace Villamos
 
         private void Ablak_sérülés_Shown(object sender, EventArgs e)
         {
+
+        }
+        #endregion
+
+
+        #region alap
+
+        private void Start()
+        {
             try
             {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                Lapfülek.Visible = false;
+                Cursor = Cursors.WaitCursor;
+                Dátum.Value = DateTime.Today;
+
                 // létrehozzuk az adott évi táblázatot illetve könyvtárat
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today:yyyy}";
                 if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
@@ -107,8 +130,6 @@ namespace Villamos
 
                 Üresrögzítő();
 
-                GombLathatosagKezelo.Beallit(this);
-                Jogosultságkiosztás();
                 AdatokSérülés_Feltöltés();
                 AdatokKöltség_Feltöltés();
                 AdatokKöltségNullás_Feltöltés();
@@ -118,6 +139,7 @@ namespace Villamos
                 Refresh();
                 Cursor = Cursors.Default;
                 Kitöltendő_mezők();
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -125,14 +147,11 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, this.ToStrTrim(), ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
 
-
-        #region alap
 
         private void Telephelyekfeltöltése()
         {
@@ -166,6 +185,26 @@ namespace Villamos
             }
         }
 
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void Btn_Súgó_Click(object sender, EventArgs e)
         {
