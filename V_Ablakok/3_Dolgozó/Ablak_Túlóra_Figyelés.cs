@@ -36,26 +36,55 @@ namespace Villamos
         public Ablak_Túlóra_Figyelés()
         {
             InitializeComponent();
+            Start();
         }
+
+        private void Start()
+        {
+            try
+            {
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                Dátum.Value = DateTime.Today;
+
+                // elvont feltöltés
+                Félév_feltöltés();
+                Év_feltöltés();
+                Subtelephelyiváltozat();
+                Turnuskiirás();
+                // Munkaidő keret feltöltés
+                Kötelezőidők();
+                Csoportfeltöltés();
+                Névfeltöltés();
+
+                Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void Ablak_Túlóra_Figyelés_Load(object sender, EventArgs e)
         {
-            Dátum.Value = DateTime.Today;
-            Telephelyekfeltöltése();
 
-            // elvont feltöltés
-            Félév_feltöltés();
-            Év_feltöltés();
-            Subtelephelyiváltozat();
-            Turnuskiirás();
-            // Munkaidő keret feltöltés
-            Kötelezőidők();
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Csoportfeltöltés();
-            Névfeltöltés();
-
-            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
         }
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
@@ -118,6 +147,28 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                Cmbtelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
