@@ -40,6 +40,7 @@ namespace Villamos
         List<Adat_Kiegészítő_Jelenlétiív> Adatok_Kieg_Jelenlétiív = new List<Adat_Kiegészítő_Jelenlétiív>();
         List<Adat_Külső_Email> Adatok_Külső_Email = new List<Adat_Külső_Email>();
 
+        #region alap
         public Ablak_külső()
         {
             InitializeComponent();
@@ -51,12 +52,6 @@ namespace Villamos
 
         }
 
-        private void Ablak_külső_Shown(object sender, EventArgs e)
-        {
-
-        }
-
-        #region alap
         private void Start()
         {
             try

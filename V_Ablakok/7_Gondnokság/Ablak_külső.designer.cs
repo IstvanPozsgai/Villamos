@@ -1705,7 +1705,6 @@ namespace Villamos
             this.Text = "Külsős Munkavállalók belépése és behajtása";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_külső_Load);
-            this.Shown += new System.EventHandler(this.Ablak_külső_Shown);
             this.LapFülek.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();

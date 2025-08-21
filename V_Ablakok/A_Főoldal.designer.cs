@@ -159,7 +159,6 @@ namespace Villamos
             this.Üzenetektext = new System.Windows.Forms.RichTextBox();
             this.Utasításoktext = new System.Windows.Forms.RichTextBox();
             this.Label2 = new System.Windows.Forms.Label();
-            this.Panels1 = new System.Windows.Forms.Label();
             this.Label4 = new System.Windows.Forms.Label();
             this.Label8 = new System.Windows.Forms.Label();
             this.panels4 = new System.Windows.Forms.Label();
@@ -173,7 +172,6 @@ namespace Villamos
             this.Command9 = new System.Windows.Forms.Button();
             this.Label6 = new System.Windows.Forms.Label();
             this.Rejtett = new System.Windows.Forms.GroupBox();
-            this.Gombok = new System.Windows.Forms.Button();
             this.TároltVerzió = new System.Windows.Forms.TextBox();
             this.Label5 = new System.Windows.Forms.Label();
             this.Verzió_Váltás = new System.Windows.Forms.Button();
@@ -187,6 +185,10 @@ namespace Villamos
             this.Btnüzenetfrissítés = new System.Windows.Forms.Button();
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
+            this.Panels1 = new System.Windows.Forms.Label();
+            this.toolStripSeparator37 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator38 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator39 = new System.Windows.Forms.ToolStripSeparator();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -218,11 +220,14 @@ namespace Villamos
             // 
             this.ProgramAdatokMenü.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ablakokBeállításaToolStripMenuItem,
-            this.felhasználókLétrehozásaTörléseToolStripMenuItem,
             this.gombokBeállításaToolStripMenuItem,
+            this.toolStripSeparator37,
+            this.felhasználókLétrehozásaTörléseToolStripMenuItem,
             this.jogosultságKiosztásToolStripMenuItem,
+            this.toolStripSeparator38,
             this.toolStripSeparator36,
             this.FelhasználókBeállításaMenü,
+            this.toolStripSeparator39,
             this.ToolStripSeparator1,
             this.ProgramAdatokKiadásiAdatokToolStripMenuItem,
             this.ProgramAdatokSzemélyMenü,
@@ -1117,7 +1122,7 @@ namespace Villamos
             this.LblÓra.BackColor = System.Drawing.Color.Bisque;
             this.LblÓra.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.LblÓra.Font = new System.Drawing.Font("Monotype Corsiva", 26.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.LblÓra.Location = new System.Drawing.Point(0, 28);
+            this.LblÓra.Location = new System.Drawing.Point(2, 26);
             this.LblÓra.Name = "LblÓra";
             this.LblÓra.Size = new System.Drawing.Size(200, 50);
             this.LblÓra.TabIndex = 8;
@@ -1130,7 +1135,7 @@ namespace Villamos
             this.lblVerzió.BackColor = System.Drawing.Color.Bisque;
             this.lblVerzió.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblVerzió.Font = new System.Drawing.Font("Monotype Corsiva", 26.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblVerzió.Location = new System.Drawing.Point(707, 28);
+            this.lblVerzió.Location = new System.Drawing.Point(707, 26);
             this.lblVerzió.Name = "lblVerzió";
             this.lblVerzió.Size = new System.Drawing.Size(177, 50);
             this.lblVerzió.TabIndex = 10;
@@ -1143,9 +1148,9 @@ namespace Villamos
             this.lbltelephely.BackColor = System.Drawing.Color.Bisque;
             this.lbltelephely.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbltelephely.Font = new System.Drawing.Font("Monotype Corsiva", 26.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbltelephely.Location = new System.Drawing.Point(204, 28);
+            this.lbltelephely.Location = new System.Drawing.Point(410, 26);
             this.lbltelephely.Name = "lbltelephely";
-            this.lbltelephely.Size = new System.Drawing.Size(497, 50);
+            this.lbltelephely.Size = new System.Drawing.Size(291, 50);
             this.lbltelephely.TabIndex = 11;
             this.lbltelephely.Text = "Telephely";
             this.lbltelephely.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1179,15 +1184,6 @@ namespace Villamos
             this.Label2.Size = new System.Drawing.Size(40, 20);
             this.Label2.TabIndex = 1;
             this.Label2.Text = "Név:";
-            // 
-            // Panels1
-            // 
-            this.Panels1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.Panels1.Location = new System.Drawing.Point(57, 35);
-            this.Panels1.Name = "Panels1";
-            this.Panels1.Size = new System.Drawing.Size(345, 20);
-            this.Panels1.TabIndex = 2;
-            this.Panels1.Text = "név";
             // 
             // Label4
             // 
@@ -1279,7 +1275,6 @@ namespace Villamos
             this.Alsó.Controls.Add(this.Rejtett);
             this.Alsó.Controls.Add(this.BtnHardverkulcs);
             this.Alsó.Controls.Add(this.Rejtett_Frissít);
-            this.Alsó.Controls.Add(this.Panels1);
             this.Alsó.Controls.Add(this.Label2);
             this.Alsó.Location = new System.Drawing.Point(200, 100);
             this.Alsó.Name = "Alsó";
@@ -1315,7 +1310,6 @@ namespace Villamos
             // Rejtett
             // 
             this.Rejtett.BackColor = System.Drawing.Color.Peru;
-            this.Rejtett.Controls.Add(this.Gombok);
             this.Rejtett.Controls.Add(this.Cmbtelephely);
             this.Rejtett.Controls.Add(this.TároltVerzió);
             this.Rejtett.Controls.Add(this.txtutsorszám);
@@ -1334,17 +1328,6 @@ namespace Villamos
             this.Rejtett.TabIndex = 29;
             this.Rejtett.TabStop = false;
             this.Rejtett.Visible = false;
-            // 
-            // Gombok
-            // 
-            this.Gombok.BackgroundImage = global::Villamos.Properties.Resources.Filesystem_blockdevice_cubes;
-            this.Gombok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Gombok.Location = new System.Drawing.Point(567, 238);
-            this.Gombok.Name = "Gombok";
-            this.Gombok.Size = new System.Drawing.Size(40, 40);
-            this.Gombok.TabIndex = 29;
-            this.Gombok.UseVisualStyleBackColor = true;
-            this.Gombok.Click += new System.EventHandler(this.Gombok_Click);
             // 
             // TároltVerzió
             // 
@@ -1461,12 +1444,42 @@ namespace Villamos
             this.Képkeret1.TabIndex = 27;
             this.Képkeret1.TabStop = false;
             // 
+            // Panels1
+            // 
+            this.Panels1.BackColor = System.Drawing.Color.Bisque;
+            this.Panels1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Panels1.Font = new System.Drawing.Font("Monotype Corsiva", 26.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Panels1.Location = new System.Drawing.Point(206, 26);
+            this.Panels1.Name = "Panels1";
+            this.Panels1.Size = new System.Drawing.Size(200, 50);
+            this.Panels1.TabIndex = 28;
+            this.Panels1.Text = "Név";
+            this.Panels1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Panels1.DoubleClick += new System.EventHandler(this.Panels1_DoubleClick);
+            
+            // 
+            // toolStripSeparator37
+            // 
+            this.toolStripSeparator37.Name = "toolStripSeparator37";
+            this.toolStripSeparator37.Size = new System.Drawing.Size(268, 6);
+            // 
+            // toolStripSeparator38
+            // 
+            this.toolStripSeparator38.Name = "toolStripSeparator38";
+            this.toolStripSeparator38.Size = new System.Drawing.Size(268, 6);
+            // 
+            // toolStripSeparator39
+            // 
+            this.toolStripSeparator39.Name = "toolStripSeparator39";
+            this.toolStripSeparator39.Size = new System.Drawing.Size(268, 6);
+            // 
             // A_Főoldal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(890, 515);
+            this.Controls.Add(this.Panels1);
             this.Controls.Add(this.Btnüzenetfrissítés);
             this.Controls.Add(this.Btnutasításfrissítés);
             this.Controls.Add(this.Figyelmeztetés);
@@ -1548,7 +1561,6 @@ namespace Villamos
         internal ToolStripMenuItem MunkalapKészítésToolStripMenuItem;
         internal ToolStripMenuItem MunkalapDekádolóToolStripMenuItem;
         internal Label Label2;
-        internal Label Panels1;
         internal Label Label4;
         internal Label Label8;
         internal Label panels4;
@@ -1648,11 +1660,14 @@ namespace Villamos
         internal ToolStripMenuItem EsztergaKarbantartásToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator35;
         private ToolStripMenuItem fődarabNótaToolStripMenuItem;
-        internal Button Gombok;
         private ToolStripMenuItem ablakokBeállításaToolStripMenuItem;
         private ToolStripMenuItem felhasználókLétrehozásaTörléseToolStripMenuItem;
         private ToolStripMenuItem gombokBeállításaToolStripMenuItem;
         private ToolStripMenuItem jogosultságKiosztásToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator36;
+        internal Label Panels1;
+        private ToolStripSeparator toolStripSeparator37;
+        private ToolStripSeparator toolStripSeparator38;
+        private ToolStripSeparator toolStripSeparator39;
     }
 }

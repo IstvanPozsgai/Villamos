@@ -445,7 +445,7 @@ namespace Villamos
 
         private void AblakFőoldal_Resize(object sender, EventArgs e)
         {
-            lbltelephely.Width = Width - 480;
+            lbltelephely.Width = Width - 690;
             lblVerzió.Left = lbltelephely.Width + lbltelephely.Left + 4;
             lblVerzió.Width = 255;
 
@@ -2434,7 +2434,7 @@ namespace Villamos
         {
             if (Shift_le && CTRL_le)
             {
-                if (Gombok.Visible || panels2.Text.Substring(0, 1) == "b")
+                if (panels2.Text.Substring(0, 1) == "b")
                 {
                     Telephelyekfeltöltése();
                     Alsó.Left = 200;
@@ -2584,21 +2584,6 @@ namespace Villamos
         #endregion
 
 
-        #region Gombok beállítása
-
-        private void Gombok_Click(object sender, EventArgs e)
-        {
-            ablakokBeállításaToolStripMenuItem.Visible = true;
-            gombokBeállításaToolStripMenuItem.Visible = true;
-            felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = true;
-            jogosultságKiosztásToolStripMenuItem.Visible = true;
-
-            Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
-            Menü_Beállítása_Új();
-        }
-
-
-        #endregion
 
         Ablak_Formok Új_Ablak_Formok;
         private void AblakokBeállításaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2685,6 +2670,62 @@ namespace Villamos
         private void Új_Ablak_JogKiosztás_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_JogKiosztás = null;
+        }
+
+        private void Panels1_DoubleClick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Shift_le && CTRL_le && Alt_le)
+                {
+                    //Az új jogosultság kiosztáshoz való hozzáférés ideiglenes
+                    ablakokBeállításaToolStripMenuItem.Visible = true;
+                    gombokBeállításaToolStripMenuItem.Visible = true;
+                    felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = true;
+                    jogosultságKiosztásToolStripMenuItem.Visible = true;
+
+                    Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
+                    Menü_Beállítása_Új();
+                }
+                else
+                {
+                    //Ha nincs shift és kontroll akkor csak a jogosultságok beállítása történik meg.
+                    if (Program.PostásJogkör.Any(c => c != '0'))
+                    {
+                        //Régi jogosultságok lekérése
+                        List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(lbltelephely.Text.Trim());
+
+                        Adat_Belépés_Jogosultságtábla Elem = (from a in Adatok
+                                                              where a.Név.ToUpper() == Panels1.Text.Trim().ToUpper()
+                                                              select a).FirstOrDefault();
+
+                        if (Elem != null)
+                        {
+                            panels2.Text = Elem.Jogkörúj1;
+                            Program.PostásJogkör = Elem.Jogkörúj1;
+                            Menükbeállítása();
+                        }
+                    }
+                    else
+                    {
+                        // Új jogosultságok
+                        Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
+                        Menü_Beállítása_Új();
+                    }
+                }
+                Shift_le = false;
+                Alt_le = false;
+                CTRL_le = false;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
