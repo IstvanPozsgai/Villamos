@@ -219,18 +219,8 @@ namespace Villamos
         /// <param name="hova">szöveg</param>
         public static void Kiir(string mit, string hova)
         {
-            try
-            {
-                MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[hova];
-                Cella.Value = mit;
-            }
-            catch (Exception ex)
-            {
-                string HibaHely = $"Void nev:{System.Reflection.MethodBase.GetCurrentMethod().Name}\n" +
-                    $"mit:{mit}\n" +
-                    $"hova:{hova}";
-                HibaNapló.Log(ex.Message, HibaHely, ex.StackTrace, ex.Source, ex.HResult);
-            }
+            MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[hova];
+            Cella.Value = mit;
         }
 
         /// <summary>
@@ -341,30 +331,19 @@ namespace Villamos
         /// <param name="mit">szöveg</param>
         public static void Egyesít(string munkalap, string mit)
         {
-            try
-            {
-                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
 
-                Range Táblaterület = Munkalap.Range[mit];
-                Táblaterület.Select();
-                Táblaterület.HorizontalAlignment = Constants.xlCenter;
-                Táblaterület.VerticalAlignment = Constants.xlCenter;
-                Táblaterület.WrapText = false;
-                Táblaterület.Orientation = 0;
-                Táblaterület.AddIndent = false;
-                Táblaterület.IndentLevel = 0;
-                Táblaterület.ShrinkToFit = false;
-                Táblaterület.MergeCells = false;
-                Táblaterület.Merge();
-
-            }
-            catch (Exception ex)
-            {
-                string HibaHely = $"Void név:{System.Reflection.MethodBase.GetCurrentMethod().Name}" +
-                    $"munkalap:{munkalap}\n" +
-                    $"mit:{mit}";
-                HibaNapló.Log(ex.Message, HibaHely, ex.StackTrace, ex.Source, ex.HResult);
-            }
+            Range Táblaterület = Munkalap.Range[mit];
+            Táblaterület.Select();
+            Táblaterület.HorizontalAlignment = Constants.xlCenter;
+            Táblaterület.VerticalAlignment = Constants.xlCenter;
+            Táblaterület.WrapText = false;
+            Táblaterület.Orientation = 0;
+            Táblaterület.AddIndent = false;
+            Táblaterület.IndentLevel = 0;
+            Táblaterület.ShrinkToFit = false;
+            Táblaterület.MergeCells = false;
+            Táblaterület.Merge();
         }
 
 
@@ -375,22 +354,14 @@ namespace Villamos
         /// <param name="méret">egész</param>
         public static void Betű(string mit, int méret)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.Font.Size = méret;
-                Táblaterület.Font.Strikethrough = false;
-                Táblaterület.Font.Superscript = false;
-                Táblaterület.Font.Subscript = false;
-                Táblaterület.Font.OutlineFont = false;
-                Táblaterület.Font.Shadow = false;
-                Táblaterület.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
-            }
-            catch (Exception ex)
-            {
-                string HibaHely = "Void nev:" + System.Reflection.MethodBase.GetCurrentMethod().Name;
-                HibaNapló.Log(ex.Message, HibaHely, ex.StackTrace, ex.Source, ex.HResult);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Font.Size = méret;
+            Táblaterület.Font.Strikethrough = false;
+            Táblaterület.Font.Superscript = false;
+            Táblaterület.Font.Subscript = false;
+            Táblaterület.Font.OutlineFont = false;
+            Táblaterület.Font.Shadow = false;
+            Táblaterület.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
         }
 
         public static void Betű(string mit, Color színe)
@@ -788,31 +759,17 @@ namespace Villamos
         {
             DateTime válasz = new DateTime(1900, 1, 1);
             MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[honnan];
-            try
+            if (Cella.Value == null)
             {
-
-                if (Cella.Value == null)
-                {
-                    válasz = new DateTime(1900, 1, 1);
-                }
-                else if (!int.TryParse(Cella.Value.ToString(), out int result))
-                {
-                    válasz = Convert.ToDateTime(Cella.Value);
-                }
-                else
-                {
-                    válasz = Convert.ToDateTime(Cella.Value);
-                }
-
+                válasz = new DateTime(1900, 1, 1);
             }
-            catch (HibásBevittAdat ex)
+            else if (!int.TryParse(Cella.Value.ToString(), out int result))
             {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                válasz = Cella.Value.ToString().ToÉrt_DaTeTime();
             }
-            catch (Exception ex)
+            else
             {
-                HibaNapló.Log(ex.Message, $"A cella :{honnan} tartalma:{Cella.Value}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                válasz = Cella.Value.ToÉrt_DaTeTime();
             }
             return válasz;
         }
@@ -1074,90 +1031,78 @@ namespace Villamos
         }
 
 
-        public static void Kimutatás_Fő(string munkalap_adat, string balfelső, string jobbalsó, string kimutatás_Munkalap, string Kimutatás_cella, string Kimutatás_név
-    , List<string> összesítNév, List<string> Összesítés_módja, List<string> sorNév, List<string> oszlopNév, List<string> SzűrőNév)
+        public static void Kimutatás_Fő(string munkalap_adat, string balfelső, string jobbalsó, string kimutatás_Munkalap, string Kimutatás_cella, string Kimutatás_név,
+            List<string> összesítNév, List<string> Összesítés_módja, List<string> sorNév, List<string> oszlopNév, List<string> SzűrőNév)
         {
-            try
+            MyExcel.Worksheet Adatok_lap = (Worksheet)xlWorkBook.Worksheets[munkalap_adat];
+            MyExcel.Worksheet Kimutatás_lap = (Worksheet)xlWorkBook.Worksheets[kimutatás_Munkalap];
+
+            MyExcel.Range AdatRange = Adatok_lap.Range[balfelső, jobbalsó];
+
+            PivotCaches pivotCaches = xlWorkBook.PivotCaches();
+            MyExcel.Range pivotData = Adatok_lap.Range[balfelső, jobbalsó];
+
+            MyExcel.PivotCache pivotCache = pivotCaches.Create(XlPivotTableSourceType.xlDatabase, pivotData);
+            MyExcel.PivotTable pivotTable = pivotCache.CreatePivotTable(Kimutatás_lap.Range[Kimutatás_cella], Kimutatás_név);
+
+            //Táblázatban megjelenő érték
+            if (összesítNév.Count > 0)
             {
-                MyExcel.Worksheet Adatok_lap = (Worksheet)xlWorkBook.Worksheets[munkalap_adat];
-                MyExcel.Worksheet Kimutatás_lap = (Worksheet)xlWorkBook.Worksheets[kimutatás_Munkalap];
-
-                MyExcel.Range AdatRange = Adatok_lap.Range[balfelső, jobbalsó];
-
-                PivotCaches pivotCaches = xlWorkBook.PivotCaches();
-                MyExcel.Range pivotData = Adatok_lap.Range[balfelső, jobbalsó];
-
-                MyExcel.PivotCache pivotCache = pivotCaches.Create(XlPivotTableSourceType.xlDatabase, pivotData);
-                MyExcel.PivotTable pivotTable = pivotCache.CreatePivotTable(Kimutatás_lap.Range[Kimutatás_cella], Kimutatás_név);
-
-                //Táblázatban megjelenő érték
-                if (összesítNév.Count > 0)
+                for (int i = 0; i < összesítNév.Count; i++)
                 {
-                    for (int i = 0; i < összesítNév.Count; i++)
+
+                    PivotField salesField = (PivotField)pivotTable.PivotFields(összesítNév[i]);
+                    salesField.Orientation = XlPivotFieldOrientation.xlDataField;
+                    switch (Összesítés_módja[i])
                     {
 
-                        PivotField salesField = (PivotField)pivotTable.PivotFields(összesítNév[i]);
-                        salesField.Orientation = XlPivotFieldOrientation.xlDataField;
-                        switch (Összesítés_módja[i])
-                        {
+                        case "xlSum":
+                            salesField.Function = XlConsolidationFunction.xlSum;
+                            salesField.Name = összesítNév[i] + " db";
+                            break;
 
-                            case "xlSum":
-                                salesField.Function = XlConsolidationFunction.xlSum;
-                                salesField.Name = összesítNév[i] + " db";
-                                break;
+                        case "xlCount":
+                            salesField.Function = XlConsolidationFunction.xlCount;
+                            salesField.Name = összesítNév[i] + " Összeg";
+                            break;
 
-                            case "xlCount":
-                                salesField.Function = XlConsolidationFunction.xlCount;
-                                salesField.Name = összesítNév[i] + " Összeg";
-                                break;
-
-                            default:
-                                break;
-                        }
-
-
+                        default:
+                            break;
                     }
-                }
-                //oszlopok 
-                if (oszlopNév.Count > 0)
-                {
-                    for (int i = 0; i < oszlopNév.Count; i++)
-                    {
-                        PivotField regionField = (PivotField)pivotTable.PivotFields(oszlopNév[i]);
-                        regionField.Orientation = XlPivotFieldOrientation.xlColumnField;
-                        regionField.Position = i + 1;
-                    }
-                }
-
-                //Sor adatok
-                if (sorNév.Count > 0)
-                {
-                    for (int i = 0; i < sorNév.Count; i++)
-                    {
-                        PivotField colorsRowsField = (PivotField)pivotTable.PivotFields(sorNév[i]);
-                        colorsRowsField.Orientation = XlPivotFieldOrientation.xlRowField;
-                    }
-                }
 
 
-
-                //Szűrő mezők
-                if (SzűrőNév.Count > 0)
-                {
-                    for (int i = 0; i < SzűrőNév.Count; i++)
-                    {
-                        PivotField datefield = (PivotField)pivotTable.PivotFields(SzűrőNév[i]);
-                        datefield.Orientation = XlPivotFieldOrientation.xlPageField;
-                        datefield.EnableMultiplePageItems = true;
-                    }
                 }
-                //Szűrés egy napra
-                //    datefield.CurrentPage = SzűrőÉrték;
             }
-            catch (Exception ex)
+            //oszlopok 
+            if (oszlopNév.Count > 0)
             {
-                HibaNapló.Log(ex.Message, "Kimutatás_Fő", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                for (int i = 0; i < oszlopNév.Count; i++)
+                {
+                    PivotField regionField = (PivotField)pivotTable.PivotFields(oszlopNév[i]);
+                    regionField.Orientation = XlPivotFieldOrientation.xlColumnField;
+                    regionField.Position = i + 1;
+                }
+            }
+
+            //Sor adatok
+            if (sorNév.Count > 0)
+            {
+                for (int i = 0; i < sorNév.Count; i++)
+                {
+                    PivotField colorsRowsField = (PivotField)pivotTable.PivotFields(sorNév[i]);
+                    colorsRowsField.Orientation = XlPivotFieldOrientation.xlRowField;
+                }
+            }
+
+            //Szűrő mezők
+            if (SzűrőNév.Count > 0)
+            {
+                for (int i = 0; i < SzűrőNév.Count; i++)
+                {
+                    PivotField datefield = (PivotField)pivotTable.PivotFields(SzűrőNév[i]);
+                    datefield.Orientation = XlPivotFieldOrientation.xlPageField;
+                    datefield.EnableMultiplePageItems = true;
+                }
             }
         }
 
