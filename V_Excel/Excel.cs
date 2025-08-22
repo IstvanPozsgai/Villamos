@@ -38,7 +38,7 @@ namespace Villamos
                 Visible = teszt
             };
             xlApp.DisplayAlerts = false;
-            xlApp.Interactive = false;
+            // xlApp.Interactive = false;  Nem szabad bekapcsolni mert akkor nem működik kivétel HRESULT-értéke: 0x800AC472 dob.
             Module_Excel.xlWorkBook = xlApp.Workbooks.Add(misValue);
             Module_Excel.xlWorkSheet = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets.get_Item(1);
         }
