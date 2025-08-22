@@ -2683,9 +2683,6 @@ namespace Villamos
                     gombokBeállításaToolStripMenuItem.Visible = true;
                     felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = true;
                     jogosultságKiosztásToolStripMenuItem.Visible = true;
-
-                    Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
-                    Menü_Beállítása_Új();
                 }
                 else
                 {
