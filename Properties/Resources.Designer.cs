@@ -153,6 +153,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Aha_Soft_Security_Modify_key {
+            get {
+                object obj = ResourceManager.GetObject("Aha-Soft-Security-Modify-key", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Aha_Soft_Standard_Transport_Tram {
             get {
                 object obj = ResourceManager.GetObject("Aha-Soft-Standard-Transport-Tram", resourceCulture);

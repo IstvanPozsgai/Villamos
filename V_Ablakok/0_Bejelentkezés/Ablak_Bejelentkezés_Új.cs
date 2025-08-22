@@ -329,6 +329,7 @@ namespace Villamos
             Program.PostásGombok = KézGombok.Lista_Adatok();
             Program.PostásOldalak = KézOldal.Lista_Adatok();
             Program.PostásKönyvtár = KézKönyvtár.Lista_Adatok();
+            Program.PostásUsers = Elem;
             //Valamint, hogy mire van jogosultsága
             A_Főoldal Főoldalablak = new A_Főoldal();
             Főoldalablak.Show();

@@ -32,12 +32,15 @@ namespace Villamos
         private void Start()
         {
             Adatok = Kéz.Lista_Adatok();
-            AdatokDolg = KézDolgozó.Lista_Adatok().Where(a => a.Státus == true).ToList();
+            AdatokDolg = KézDolgozó.Lista_Adatok();
+            //    AdatokDolg = KézDolgozó.Lista_Adatok().Where(a => a.Státus == true).ToList();
             CombokFeltöltése();
             Üres();
             TáblázatListázás();
             SzervezetFeltöltésChk();
             //    GombLathatosagKezelo.Beallit(this);
+            Admin();
+
         }
 
         private void AblakFelhasználó_Load(object sender, EventArgs e)
@@ -198,6 +201,8 @@ namespace Villamos
                 Frissít.Checked = adat.Frissít;
                 Törölt.Checked = adat.Törölt;
                 CmbSzervezet.Text = adat.Szervezet;
+                GlobalAdmin.Checked = adat.GlobalAdmin;
+                TelephelyAdmin.Checked = adat.TelepAdmin;
 
                 for (int i = 0; i < ChkSzervezet.Items.Count; i++)
                     ChkSzervezet.SetItemChecked(i, false);
@@ -281,7 +286,9 @@ namespace Villamos
                     Frissít.Checked,
                     Törölt.Checked,
                     szervezetek,
-                    CmbSzervezet.Text.Trim()
+                    CmbSzervezet.Text.Trim(),
+                    GlobalAdmin.Checked,
+                    TelephelyAdmin.Checked
                 );
                 Kéz.Döntés(ADAT);
                 TáblázatListázás();
@@ -337,6 +344,27 @@ namespace Villamos
             }
         }
 
+        private void JelszóMódosítás_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(UserId.Text, out int Id)) Id = 0;
+                if (Id == 0) throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót a táblázatból!");
+                if (TxtPassword.Text.Trim() == "") TxtPassword.Text = "123456";
+                string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
+                Adat_Users adat = new Adat_Users(Id, jelszó, true);
+                Kéz.MódosításJeszó(adat);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
@@ -490,6 +518,25 @@ namespace Villamos
             }
         }
 
+        #endregion
+
+        #region Admin
+        private void Admin()
+        {
+            GlobalAdmin.Visible = false;
+            TelephelyAdmin.Visible = false;
+            if (Program.PostásUsers?.TelepAdmin == true)
+            {
+                GlobalAdmin.Visible = false;
+                TelephelyAdmin.Visible = true;
+            }
+            if (Program.PostásUsers?.GlobalAdmin == true)
+            {
+                GlobalAdmin.Visible = true;
+                TelephelyAdmin.Visible = true;
+            }
+
+        }
         #endregion
     }
 }

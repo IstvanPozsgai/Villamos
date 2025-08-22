@@ -1740,6 +1740,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\Aha-Soft-Security-Modify-key.ico" />
     <None Include="Resources\login-icon.png" />
     <None Include="Resources\J_eleje.ico" />
     <None Include="Resources\V1_Plusz.ico" />
