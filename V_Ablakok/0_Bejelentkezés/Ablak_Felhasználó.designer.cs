@@ -63,8 +63,10 @@ namespace Villamos
             this.ChkSzervezet = new System.Windows.Forms.CheckedListBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.label7 = new System.Windows.Forms.Label();
             this.CmbSzervezet = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.Főadmin = new System.Windows.Forms.CheckBox();
+            this.TelephelyAdmin = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
@@ -79,7 +81,8 @@ namespace Villamos
             // 
             this.BtnRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.BtnRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.BtnRögzít.Location = new System.Drawing.Point(3, 232);
+            this.BtnRögzít.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.BtnRögzít.Location = new System.Drawing.Point(3, 299);
             this.BtnRögzít.Name = "BtnRögzít";
             this.BtnRögzít.Size = new System.Drawing.Size(44, 45);
             this.BtnRögzít.TabIndex = 97;
@@ -189,9 +192,11 @@ namespace Villamos
             this.tableLayoutPanel1.Controls.Add(this.label6, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.TxtPassword, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.Frissít, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.Főadmin, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.TelephelyAdmin, 1, 9);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 8;
+            this.tableLayoutPanel1.RowCount = 10;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -200,7 +205,9 @@ namespace Villamos
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(670, 282);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(670, 347);
             this.tableLayoutPanel1.TabIndex = 99;
             // 
             // label5
@@ -309,12 +316,12 @@ namespace Villamos
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.FilterAndSortEnabled = true;
             this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla.Location = new System.Drawing.Point(12, 300);
+            this.Tábla.Location = new System.Drawing.Point(12, 365);
             this.Tábla.MaxFilterButtonImageHeight = 23;
             this.Tábla.Name = "Tábla";
             this.Tábla.ReadOnly = true;
             this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Tábla.Size = new System.Drawing.Size(1165, 201);
+            this.Tábla.Size = new System.Drawing.Size(1165, 260);
             this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 221;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
@@ -334,7 +341,7 @@ namespace Villamos
             this.ChkSzervezet.FormattingEnabled = true;
             this.ChkSzervezet.Location = new System.Drawing.Point(3, 103);
             this.ChkSzervezet.Name = "ChkSzervezet";
-            this.ChkSzervezet.Size = new System.Drawing.Size(265, 172);
+            this.ChkSzervezet.Size = new System.Drawing.Size(265, 235);
             this.ChkSzervezet.TabIndex = 226;
             // 
             // tableLayoutPanel2
@@ -357,7 +364,7 @@ namespace Villamos
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 79F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(212, 282);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(212, 347);
             this.tableLayoutPanel2.TabIndex = 227;
             // 
             // tableLayoutPanel3
@@ -375,17 +382,8 @@ namespace Villamos
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(271, 283);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(271, 348);
             this.tableLayoutPanel3.TabIndex = 228;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 70);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(157, 20);
-            this.label7.TabIndex = 227;
-            this.label7.Text = "További szervezetek:";
             // 
             // CmbSzervezet
             // 
@@ -398,12 +396,43 @@ namespace Villamos
             this.CmbSzervezet.TabIndex = 109;
             this.CmbSzervezet.SelectionChangeCommitted += new System.EventHandler(this.CmbSzervezet_SelectionChangeCommitted);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 70);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(157, 20);
+            this.label7.TabIndex = 227;
+            this.label7.Text = "További szervezetek:";
+            // 
+            // Főadmin
+            // 
+            this.Főadmin.AutoSize = true;
+            this.Főadmin.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.Főadmin.Location = new System.Drawing.Point(201, 283);
+            this.Főadmin.Name = "Főadmin";
+            this.Főadmin.Size = new System.Drawing.Size(194, 24);
+            this.Főadmin.TabIndex = 109;
+            this.Főadmin.Text = "Program Adminisztrátor";
+            this.Főadmin.UseVisualStyleBackColor = false;
+            // 
+            // TelephelyAdmin
+            // 
+            this.TelephelyAdmin.AutoSize = true;
+            this.TelephelyAdmin.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.TelephelyAdmin.Location = new System.Drawing.Point(201, 318);
+            this.TelephelyAdmin.Name = "TelephelyAdmin";
+            this.TelephelyAdmin.Size = new System.Drawing.Size(204, 24);
+            this.TelephelyAdmin.TabIndex = 110;
+            this.TelephelyAdmin.Text = "Telephelyi Adminisztrátor";
+            this.TelephelyAdmin.UseVisualStyleBackColor = false;
+            // 
             // Ablak_Felhasználó
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(1189, 513);
+            this.ClientSize = new System.Drawing.Size(1189, 637);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.Tábla);
@@ -453,5 +482,7 @@ namespace Villamos
         private TableLayoutPanel tableLayoutPanel3;
         private ComboBox CmbSzervezet;
         internal Label label7;
+        private CheckBox Főadmin;
+        private CheckBox TelephelyAdmin;
     }
 }

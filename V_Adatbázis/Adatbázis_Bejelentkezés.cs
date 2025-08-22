@@ -65,7 +65,9 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[Frissít] yesno,";
             szöveg += "[Törölt] yesno,";
             szöveg += "[Szervezetek] CHAR(255),";
-            szöveg += "[Szervezet] CHAR(25))";
+            szöveg += "[Szervezet] CHAR(25),";
+            szöveg += "[GlobalAdmin] yesno,";
+            szöveg += "[TelepAdmin] yesno)";
             ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg, táblanév);
         }
 

@@ -49,7 +49,10 @@ namespace Villamos.Kezelők
                                         rekord["Frissít"].ToÉrt_Bool(),
                                         rekord["Törölt"].ToÉrt_Bool(),
                                         rekord["Szervezetek"].ToStrTrim(),
-                                        rekord["Szervezet"].ToStrTrim()
+                                        rekord["Szervezet"].ToStrTrim(),
+                                        rekord["GlobalAdmin"].ToÉrt_Bool(),
+                                        rekord["TelepAdmin"].ToÉrt_Bool()
+
                                 );
                                 Adatok.Add(Adat);
                             }
@@ -89,8 +92,9 @@ namespace Villamos.Kezelők
                 string pword = Adat.Password;
                 if (Adat.Password.Trim() == "") pword = "123456";
                 bool frissít = true;
-                string szöveg = $"INSERT INTO {táblanév} (UserName, WinUserName, Dolgozószám, [Password], Dátum, frissít, Törölt, Szervezetek, Szervezet) VALUES (";
-                szöveg += $"'{Adat.UserName}', '{Adat.WinUserName}', '{Adat.Dolgozószám}', '{pword}', '{Adat.Dátum:yyyy.MM.dd}', {frissít}, {Adat.Törölt}, '{Adat.Szervezetek}', '{Adat.Szervezet}')";
+                string szöveg = $"INSERT INTO {táblanév} (UserName, WinUserName, Dolgozószám, [Password], Dátum, frissít, Törölt, Szervezetek, Szervezet, GlobalAdmin, TelepAdmin) VALUES (";
+                szöveg += $"'{Adat.UserName}', '{Adat.WinUserName}', '{Adat.Dolgozószám}', '{pword}', '{Adat.Dátum:yyyy.MM.dd}', {frissít}, {Adat.Törölt},";
+                szöveg += $" '{Adat.Szervezetek}', '{Adat.Szervezet}',{Adat.GlobalAdmin} ,{Adat.TelepAdmin} )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -115,7 +119,9 @@ namespace Villamos.Kezelők
                 szöveg += $"Frissít ={Adat.Frissít}, ";
                 szöveg += $"Törölt ={Adat.Törölt}, ";
                 szöveg += $"Szervezetek ='{Adat.Szervezetek}', ";
-                szöveg += $"Szervezet ='{Adat.Szervezet}' ";
+                szöveg += $"Szervezet ='{Adat.Szervezet}', ";
+                szöveg += $"GlobalAdmin ='{Adat.GlobalAdmin}', ";
+                szöveg += $"TelepAdmin ='{Adat.TelepAdmin}', ";
                 szöveg += $"WHERE UserId = {Adat.UserId}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

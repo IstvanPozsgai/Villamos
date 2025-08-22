@@ -436,7 +436,6 @@ namespace Villamos
 
         }
 
-
         private void Könyvtárak_Létrehozása()
         {
             if (lbltelephely.Text.Trim() != "")
@@ -557,7 +556,7 @@ namespace Villamos
             }
         }
 
-        void FigyKiírás(string szöveg)
+        private void FigyKiírás(string szöveg)
         {
             Figyelmeztetés.Left = lbltelephely.Left;
             Figyelmeztetés.Top = 100;
@@ -573,7 +572,6 @@ namespace Villamos
             Btnüzenetfrissítés.Visible = false;
             Btnutasításfrissítés.Visible = false;
         }
-
 
         private void Képetvált()
         {

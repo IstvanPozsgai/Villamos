@@ -167,7 +167,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:   Nem írja ki a dolgozó nevét
         private void Felhasználók_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
