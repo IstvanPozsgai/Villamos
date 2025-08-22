@@ -75,11 +75,6 @@ namespace Villamos
             DátumIg.Value = MyF.Hónap_utolsónapja(DateTime.Today);
             Szolgálatoklista();
             Telephelyek_Feltöltése_lista();
-
-            // ha járműkiadó telephely, akkor csak a saját telephelyet kezeli.
-            Panel1.Visible = Cmbtelephely.Enabled;
-            Panel2.Visible = Cmbtelephely.Enabled;
-
             Pályaszámokfeltöltése();
 
             }
