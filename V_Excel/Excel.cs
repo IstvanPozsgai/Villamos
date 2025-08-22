@@ -765,11 +765,11 @@ namespace Villamos
             }
             else if (!int.TryParse(Cella.Value.ToString(), out int result))
             {
-                válasz = Cella.Value.ToString().ToÉrt_DaTeTime();
+                válasz = Convert.ToDateTime(Cella.Value);
             }
             else
             {
-                válasz = Cella.Value.ToÉrt_DaTeTime();
+                válasz = Convert.ToDateTime(Cella.Value);
             }
             return válasz;
         }
