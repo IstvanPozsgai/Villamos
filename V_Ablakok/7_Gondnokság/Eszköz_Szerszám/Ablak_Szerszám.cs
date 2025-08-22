@@ -22,7 +22,7 @@ namespace Villamos
         public Ablak_Szerszám()
         {
             InitializeComponent();
-            Start();
+          
         }
         readonly Kezelő_Szerszám_Cikk KézSzerszámCikk = new Kezelő_Szerszám_Cikk();
         readonly Kezelő_Szerszám_Könyv KézKönyv = new Kezelő_Szerszám_Könyv();
@@ -63,7 +63,7 @@ namespace Villamos
 
         private void Ablak_Szerszám_Load(object sender, EventArgs e)
         {
-
+            Start();
         }
 
         #region Alap
@@ -71,6 +71,10 @@ namespace Villamos
         {
             try
             {
+                                if (Könyvtár_adat.Trim() == "Adatok\\Szerszám")
+                    this.Text = "Szerszám Nyilvántartás";
+                else
+                    this.Text = "Helység tartozék nyilvántartás";
                 //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
                 //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
                 if (Program.PostásJogkör.Any(c => c != '0'))
@@ -83,10 +87,7 @@ namespace Villamos
                     TelephelyekFeltöltéseÚj();
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 }
-                if (Könyvtár_adat.Trim() == "Adatok\\Szerszám")
-                    this.Text = "Szerszám Nyilvántartás";
-                else
-                    this.Text = "Helység tartozék nyilvántartás";
+
 
                 string hova;
 
