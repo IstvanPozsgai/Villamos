@@ -35,6 +35,7 @@ namespace Villamos
 
         private void AblakBejelentkezés_Load(object sender, EventArgs e)
         {
+            CmbUserName.Focus();
             AcceptButton = BtnBelépés;
         }
 
@@ -67,6 +68,7 @@ namespace Villamos
             FelhasználókLista();
             FelhasználókFeltöltése();
             if (Beléphet) WinVan();
+
         }
 
         private void FelhasználókLista()

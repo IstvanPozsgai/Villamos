@@ -114,14 +114,12 @@ namespace Villamos.Kezelők
             {
                 string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"WinUserName ='{Adat.WinUserName}', ";
-                szöveg += $"[Password] ='{Adat.Password}', ";
                 szöveg += $"Dátum ='{Adat.Dátum:yyyy.MM.dd}', ";
-                szöveg += $"Frissít ={Adat.Frissít}, ";
                 szöveg += $"Törölt ={Adat.Törölt}, ";
                 szöveg += $"Szervezetek ='{Adat.Szervezetek}', ";
                 szöveg += $"Szervezet ='{Adat.Szervezet}', ";
-                szöveg += $"GlobalAdmin ='{Adat.GlobalAdmin}', ";
-                szöveg += $"TelepAdmin ='{Adat.TelepAdmin}', ";
+                szöveg += $"GlobalAdmin={Adat.GlobalAdmin}, ";
+                szöveg += $"TelepAdmin={Adat.TelepAdmin} ";
                 szöveg += $"WHERE UserId = {Adat.UserId}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

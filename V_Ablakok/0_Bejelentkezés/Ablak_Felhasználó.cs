@@ -107,8 +107,10 @@ namespace Villamos
                 AdatTáblaALap.Columns.Add("Szervezetek");
                 AdatTáblaALap.Columns.Add("Jelszó");
                 AdatTáblaALap.Columns.Add("Dátum");
-                AdatTáblaALap.Columns.Add("Frissít");
-                AdatTáblaALap.Columns.Add("Törölt");
+                AdatTáblaALap.Columns.Add("Frissít", typeof(bool));
+                AdatTáblaALap.Columns.Add("Törölt", typeof(bool));
+                AdatTáblaALap.Columns.Add("GlobalAdmin", typeof(bool));
+                AdatTáblaALap.Columns.Add("TelepAdmin", typeof(bool));
             }
             catch (HibásBevittAdat ex)
             {
@@ -143,8 +145,10 @@ namespace Villamos
                     Soradat["Szervezetek"] = rekord.Szervezetek; // ÚJ: közvetlenül a Dolgozó Név után
                     Soradat["Jelszó"] = rekord.Password;
                     Soradat["Dátum"] = rekord.Dátum.ToShortDateString();
-                    Soradat["Frissít"] = rekord.Frissít ? "Igen" : "Nem";
-                    Soradat["Törölt"] = rekord.Törölt == true ? "Törölt" : "Aktív";
+                    Soradat["Frissít"] = rekord.Frissít;
+                    Soradat["Törölt"] = rekord.Törölt;
+                    Soradat["GlobalAdmin"] = rekord.GlobalAdmin;
+                    Soradat["TelepAdmin"] = rekord.TelepAdmin;
                     AdatTáblaALap.Rows.Add(Soradat);
                 }
 
@@ -170,8 +174,10 @@ namespace Villamos
             Tábla.Columns["Szervezet"].Width = 150;
             Tábla.Columns["Szervezetek"].Width = 250;
             Tábla.Columns["Dátum"].Width = 130;
-            Tábla.Columns["Frissít"].Width = 110;
-            Tábla.Columns["Törölt"].Width = 110;
+            Tábla.Columns["Frissít"].Width = 80;
+            Tábla.Columns["Törölt"].Width = 80;
+            Tábla.Columns["GlobalAdmin"].Width = 120;
+            Tábla.Columns["TelepAdmin"].Width = 120;
         }
 
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -251,6 +257,21 @@ namespace Villamos
         /// <param name="e"></param>
         private void BtnRögzít_Click(object sender, EventArgs e)
         {
+            if (Program.PostásUsers?.GlobalAdmin == true)
+            {
+                GlobalRögzítés();
+            }
+            else
+            {
+                TelepRögzítés();
+            }
+        }
+
+        /// <summary>
+        /// Minden rögzítés módosítás engedélyezve van részére
+        /// </summary>
+        private void GlobalRögzítés()
+        {
             try
             {
                 if (!int.TryParse(UserId.Text, out int Id)) Id = 0;
@@ -274,6 +295,64 @@ namespace Villamos
                     }
                     szervezetek = string.Join(";", szervezetLista);
                 }
+                // ------------------------------------------------------------------------------
+
+                Adat_Users ADAT = new Adat_Users(
+                    Id,
+                    TextUserNév.Text.Trim(),
+                    TextWinUser.Text.Trim(),
+                    CmbDolgozószám.Text.Trim(),
+                    jelszó,
+                    DateTime.Now,
+                    Frissít.Checked,
+                    Törölt.Checked,
+                    szervezetek,
+                    CmbSzervezet.Text.Trim(),
+                    GlobalAdmin.Checked,
+                    TelephelyAdmin.Checked
+                );
+                Kéz.Döntés(ADAT);
+                TáblázatListázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // JAVÍTANDÓ:   Más telephely dolgozóinak plusz terület adását engedélyezi csak
+        //a telephelyek listájának átvizsgálása során ki kell szűrni azokat amikhez nincs joga és törölni kell 
+        // ha nincs benne akkor meg bele kell tenni
+        private void TelepRögzítés()
+        {
+            try
+            {
+                if (!int.TryParse(UserId.Text, out int Id)) Id = 0;
+                if (string.IsNullOrWhiteSpace(TextUserNév.Text)) throw new HibásBevittAdat("Kérem töltse ki az Felhasználó név mezőt!");
+                if (string.IsNullOrWhiteSpace(CmbDolgozószám.Text)) throw new HibásBevittAdat("Kérem töltse ki a Dolgozószám mezőt!");
+                TextUserNév.Text = TextUserNév.Text.ToLower();
+                if (Adatok.Any(a => a.UserName == TextUserNév.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A felhasználónév már létezik!");
+                if (TextWinUser.Text.Trim() != "" && Adatok.Any(a => a.WinUserName == TextWinUser.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Windows felhasználónév már létezik egy másik felhasználónál!");
+                if (Adatok.Any(a => a.Dolgozószám == CmbDolgozószám.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Dolgozószámhoz már létezik egy másik felhasználó!");
+                string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
+                if (CmbSzervezet.Text.Trim() == "") throw new HibásBevittAdat("Kérem töltse ki a Alap szervezet mezőt!"); ;
+
+                // --- ÚJ: Szervezetek szöveg összeállítása a ChkSzervezet kijelölt elemeiből ---
+                string szervezetek = "" + Adatok.Where(a => a.UserId == Id).FirstOrDefault()?.Szervezetek;
+                for (int i = 0; i < ChkSzervezet.Items.Count; i++)
+                {
+                    //  if (ChkSzervezet.Items[i].)
+                    ////ha még nincs benne a listába akkor adja hozzá
+                    //if (!szervezetek.Contains(item.ToStrTrim()))
+                    //    szervezetek += $";{item.ToStrTrim()}";
+                }
+
+
                 // ------------------------------------------------------------------------------
 
                 Adat_Users ADAT = new Adat_Users(
@@ -354,6 +433,7 @@ namespace Villamos
                 string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
                 Adat_Users adat = new Adat_Users(Id, jelszó, true);
                 Kéz.MódosításJeszó(adat);
+                MessageBox.Show("A jeszó módosítása befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -379,6 +459,8 @@ namespace Villamos
             TxtPassword.Text = "123456";
             Frissít.Checked = true;
             Törölt.Checked = false;
+            GlobalAdmin.Checked = false;
+            TelephelyAdmin.Checked = false;
             for (int i = 0; i < ChkSzervezet.Items.Count; i++)
                 ChkSzervezet.SetItemChecked(i, false);
         }
@@ -412,11 +494,17 @@ namespace Villamos
                 List<Adat_Kiegészítő_Könyvtár> adatokSzervezet = kezSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
                 CmbSzervezet.Items.Clear();
                 ChkSzervezet.Items.Clear();
+                int j = 0;
                 for (int i = 0; i < adatokSzervezet.Count; i++)
                 {
-                    CmbSzervezet.Items.Add(adatokSzervezet[i].Név);
-                    ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
-                    ChkSzervezet.SetItemChecked(i, false);
+                    // Azokhoz amihez van joga azok jelennek meg a listában
+                    if (Program.PostásUsers.Szervezetek.Contains(adatokSzervezet[i].Név))
+                    {
+                        ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
+                        ChkSzervezet.SetItemChecked(j, false);
+                        CmbSzervezet.Items.Add(adatokSzervezet[i].Név);
+                        j++;
+                    }
                 }
             }
             catch (HibásBevittAdat ex)
@@ -529,13 +617,18 @@ namespace Villamos
             {
                 GlobalAdmin.Visible = false;
                 TelephelyAdmin.Visible = true;
+                CmbSzervezet.Text = Program.PostásUsers.Szervezet;
+                CmbSzervezet.Enabled = false;
+
+
             }
             if (Program.PostásUsers?.GlobalAdmin == true)
             {
                 GlobalAdmin.Visible = true;
                 TelephelyAdmin.Visible = true;
-            }
+                CmbSzervezet.Enabled = true;
 
+            }
         }
         #endregion
     }
