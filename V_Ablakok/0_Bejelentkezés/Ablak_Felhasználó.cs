@@ -346,15 +346,36 @@ namespace Villamos
                 string szervezetek = "" + Adatok.Where(a => a.UserId == Id).FirstOrDefault()?.Szervezetek;
                 for (int i = 0; i < ChkSzervezet.Items.Count; i++)
                 {
-                    //  if (ChkSzervezet.Items[i].)
-                    ////ha még nincs benne a listába akkor adja hozzá
-                    //if (!szervezetek.Contains(item.ToStrTrim()))
-                    //    szervezetek += $";{item.ToStrTrim()}";
+                    //ha benne van a listában és ki van jelölve, akkor belerakjuk
+                    if (ChkSzervezet.GetItemChecked(i))
+                    {   //Ha nincs benne a listában akkor hozzáadjuk
+                        if (!szervezetek.Contains(ChkSzervezet.Items[i].ToStrTrim()))
+                        {
+                            if (szervezetek.Trim() == "")
+                                szervezetek = ChkSzervezet.Items[i].ToStrTrim();
+                            else
+                                szervezetek += $";{ChkSzervezet.Items[i].ToStrTrim()}";
+                        }
+                        //ha benne van akkor nincs dolgunk
+                    }
+                    else
+                    {
+                        //ha benne van a listában és nincs kijelölve, akkor belerakjuk
+                        if (szervezetek.Trim() != "")
+                        {
+                            if (szervezetek.Contains(ChkSzervezet.Items[i].ToStrTrim()))
+                            {
+                                //ha nincs benne a listában és nincs kijelölve akkor kitöröljük a listából
+                                string[] DarabSzervezet = szervezetek.Split(';');
+                                //Ha az első elem, akkor pontosvesszőt nem kell előle törölni
+                                if (DarabSzervezet[0].ToStrTrim() == ChkSzervezet.Items[i].ToStrTrim())
+                                    szervezetek = szervezetek.Replace($"{ChkSzervezet.Items[i].ToStrTrim()}", "");
+                                else
+                                    szervezetek = szervezetek.Replace($";{ChkSzervezet.Items[i].ToStrTrim()}", "");
+                            }
+                        }
+                    }
                 }
-
-
-                // ------------------------------------------------------------------------------
-
                 Adat_Users ADAT = new Adat_Users(
                     Id,
                     TextUserNév.Text.Trim(),
