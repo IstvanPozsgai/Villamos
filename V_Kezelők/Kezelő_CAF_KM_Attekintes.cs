@@ -54,6 +54,7 @@ namespace Villamos.Kezelők
         {
             string szöveg = "CREATE TABLE KM_Attekintes (";
             szöveg += "azonosito CHAR(10), ";
+            szöveg += "utolso_vizsgalat_valos_allasa LONG, ";
             szöveg += "kov_p0 LONG, ";
             szöveg += "kov_p1 LONG, ";
             szöveg += "kov_p2 LONG, ";
@@ -201,8 +202,8 @@ namespace Villamos.Kezelők
                 string szoveg = $"UPDATE {táblanév} SET ";
 
                 szoveg += Adat.utolso_vizsgalat_valos_allasa == null
-                       ? "null, "
-                       : $"'{Adat.utolso_vizsgalat_valos_allasa}', ";
+                    ? "utolso_vizsgalat_valos_allasa=null, "
+                    : $"utolso_vizsgalat_valos_allasa='{Adat.utolso_vizsgalat_valos_allasa}', ";
 
                 szoveg += Adat.kov_p0 == null
                     ? "kov_p0=null, "

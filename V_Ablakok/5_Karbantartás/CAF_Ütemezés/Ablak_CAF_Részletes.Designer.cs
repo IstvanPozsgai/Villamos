@@ -763,7 +763,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 137F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 471);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 400);
             this.tableLayoutPanel1.TabIndex = 284;
             // 
             // btn_elso_futtatas
@@ -1081,7 +1081,8 @@
             // 
             // tb_tervezetthez_kepest
             // 
-            this.tb_tervezetthez_kepest.Location = new System.Drawing.Point(303, 35);
+            this.tb_tervezetthez_kepest.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tb_tervezetthez_kepest.Location = new System.Drawing.Point(303, 43);
             this.tb_tervezetthez_kepest.Name = "tb_tervezetthez_kepest";
             this.tb_tervezetthez_kepest.ReadOnly = true;
             this.tb_tervezetthez_kepest.Size = new System.Drawing.Size(139, 26);

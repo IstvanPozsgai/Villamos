@@ -316,10 +316,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
 
                 // Utoljára teljesített vizsgálat sorszáma
-                tb_utolso_teljesitett.Text = $"{KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text).KM_Sorszám}";
+                tb_utolso_teljesitett.Text = $"{KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text).KM_Sorszám}. ({KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text).KM_Sorszám * 14000} Km)";
 
                 // Előző vizsgálat tervezett állása
                 tb_tervezetthez_kepest.Text = string.IsNullOrEmpty(teszt_adat.utolso_vizsgalat_valos_allasa?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_vizsgalat_valos_allasa}";
+                if (tb_tervezetthez_kepest.Text != "Még nem történt.") SzinezdTextBox(tb_tervezetthez_kepest, 0, -14000, true);
 
                 // P0: határ -1400
                 tb_futhatmeg_p0.Text = string.IsNullOrEmpty(teszt_adat.kov_p0?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p0}";
@@ -332,7 +333,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // P2: határ -28000
                 tb_futhatmeg_p2.Text = string.IsNullOrEmpty(teszt_adat.kov_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p2}";
                 if (tb_futhatmeg_p2.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p2, 28000);
-
 
                 // Megtett P0
                 tb_megtett_p0.Text = string.IsNullOrEmpty(teszt_adat.utolso_p0_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p0_kozott}";
@@ -383,22 +383,31 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         }
 
-        private void SzinezdTextBox(TextBox tb, int alsoHatar, int felsoHatar)
+        private void SzinezdTextBox(TextBox tb, int alsoHatar, int felsoHatar, bool fordított = false)
         {
             if (int.TryParse(tb.Text, out int ertek))
             {
-                if (ertek <= alsoHatar)
+                if (!fordított)
                 {
-                    tb.BackColor = Color.LightGreen;
-                }
-                else if (ertek <= felsoHatar)
-                {
-                    tb.BackColor = Color.PaleGoldenrod;
+                    // régi logika (megszokott helyeken minden marad)
+                    if (ertek <= alsoHatar)
+                        tb.BackColor = Color.LightGreen;
+                    else if (ertek <= felsoHatar)
+                        tb.BackColor = Color.PaleGoldenrod;
+                    else
+                        tb.BackColor = ControlPaint.Light(Color.Red);
                 }
                 else
                 {
-                    tb.BackColor = ControlPaint.Light(Color.Red);
+                    // új logika: 0-tól zöld, -1 … -13999 sárga, <= -14000 piros
+                    if (ertek >= 0)
+                        tb.BackColor = Color.LightGreen;
+                    else if (ertek > -14000)
+                        tb.BackColor = Color.PaleGoldenrod;
+                    else
+                        tb.BackColor = ControlPaint.Light(Color.Red);
                 }
+
                 tb.Text = tb.Text + " Km";
             }
             else
@@ -406,6 +415,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 tb.BackColor = SystemColors.Window;
             }
         }
+
 
         void SzinezdFuthatMeg(TextBox tb, int pirosHatar)
         {
