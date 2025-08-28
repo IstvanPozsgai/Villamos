@@ -22,10 +22,12 @@ namespace Villamos.Kezelők
             if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Jogosultság(hely);
         }
 
-        public List<Adat_Jogosultságok> Lista_Adatok()
+        public List<Adat_Jogosultságok> Lista_Adatok(bool Minden = false)
         {
             List<Adat_Jogosultságok> Adatok = new List<Adat_Jogosultságok>();
-            string szöveg = $"SELECT * FROM {táblanév} WHERE Törölt=false";
+
+            string szöveg = $"SELECT * FROM {táblanév} WHERE Törölt={false}";
+            if (Minden) szöveg = $"SELECT * FROM {táblanév} ";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
 
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -62,8 +64,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                Törlés(Adatok);
-                List<Adat_Jogosultságok> AdatokRégi = Lista_Adatok();
+                List<Adat_Jogosultságok> AdatokRégi = Lista_Adatok(true);
                 List<string> SzövegGyR = new List<string>();
                 List<string> SzövegGyM = new List<string>();
                 foreach (Adat_Jogosultságok Adat in Adatok)
@@ -78,7 +79,7 @@ namespace Villamos.Kezelők
                     else
                     {
                         string szöveg = $"UPDATE {táblanév} SET ";
-                        szöveg += $"Törölt ={false} ";
+                        szöveg += $"Törölt ={Adat.Törölt} ";
                         szöveg += $"WHERE SzervezetId = {Adat.SzervezetId} AND ";
                         szöveg += $"UserId ={Adat.UserId} AND ";
                         szöveg += $"OldalId ={Adat.OldalId} AND ";
