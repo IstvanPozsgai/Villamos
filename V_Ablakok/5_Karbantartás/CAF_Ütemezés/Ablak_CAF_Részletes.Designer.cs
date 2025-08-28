@@ -95,6 +95,7 @@
             this.Ütem_Rögzít = new System.Windows.Forms.Button();
             this.IDŐ = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.tb_ciklusrend_modosit = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btn_elso_futtatas = new System.Windows.Forms.Button();
             this.tb_p3_p2_kozott = new System.Windows.Forms.TextBox();
@@ -116,20 +117,23 @@
             this.btn_frissit = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.tb_tureshatar = new System.Windows.Forms.TextBox();
             this.lb_tureshatar = new System.Windows.Forms.Label();
             this.tb_ciklusrend = new System.Windows.Forms.TextBox();
             this.lb_ciklusrend_km = new System.Windows.Forms.Label();
+            this.tb_tureshatar = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.tb_ciklusrend_modosit = new System.Windows.Forms.Button();
+            this.lb_utolso_teljesitett = new System.Windows.Forms.Label();
+            this.tb_utolso_teljesitett = new System.Windows.Forms.TextBox();
+            this.lb_tervezett_allashoz_kepest = new System.Windows.Forms.Label();
+            this.tb_tervezetthez_kepest = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // Ütem_dátum_program
@@ -704,43 +708,62 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
+            // tb_ciklusrend_modosit
+            // 
+            this.tb_ciklusrend_modosit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tb_ciklusrend_modosit.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.tb_ciklusrend_modosit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.tb_ciklusrend_modosit.Location = new System.Drawing.Point(6, 10);
+            this.tb_ciklusrend_modosit.Name = "tb_ciklusrend_modosit";
+            this.tb_ciklusrend_modosit.Size = new System.Drawing.Size(45, 44);
+            this.tb_ciklusrend_modosit.TabIndex = 266;
+            this.toolTip1.SetToolTip(this.tb_ciklusrend_modosit, "Rögzíti az adatokat");
+            this.tb_ciklusrend_modosit.UseVisualStyleBackColor = true;
+            this.tb_ciklusrend_modosit.Click += new System.EventHandler(this.tb_ciklusrend_modosit_Click);
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.btn_elso_futtatas, 1, 8);
-            this.tableLayoutPanel1.Controls.Add(this.tb_p3_p2_kozott, 1, 7);
-            this.tableLayoutPanel1.Controls.Add(this.lb_p3_p2_kozott, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p3, 1, 6);
-            this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p3, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p2, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p2, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.tb_megtett_p1, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.lb_megtett_p1, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.tb_megtett_p0, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.lb_megtett_p0, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p2, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p1, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p0, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p1, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p2, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.btn_frissit, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.tb_tervezetthez_kepest, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lb_tervezett_allashoz_kepest, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tb_utolso_teljesitett, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lb_utolso_teljesitett, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btn_elso_futtatas, 1, 10);
+            this.tableLayoutPanel1.Controls.Add(this.tb_p3_p2_kozott, 1, 9);
+            this.tableLayoutPanel1.Controls.Add(this.lb_p3_p2_kozott, 0, 9);
+            this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p3, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p3, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.tb_rendben_p2, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.lb_rendben_p2, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.tb_megtett_p1, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.lb_megtett_p1, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.tb_megtett_p0, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.lb_megtett_p0, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p2, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p1, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.tb_futhatmeg_p0, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p1, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lb_futhatmeg_p2, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.btn_frissit, 0, 10);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 6);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 9;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowCount = 11;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 172F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 137F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 328);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(448, 471);
             this.tableLayoutPanel1.TabIndex = 284;
             // 
             // btn_elso_futtatas
@@ -748,7 +771,7 @@
             this.btn_elso_futtatas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_elso_futtatas.BackgroundImage = global::Villamos.Properties.Resources.Graphicloads_Colorful_Long_Shadow_Arrow_download_3;
             this.btn_elso_futtatas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btn_elso_futtatas.Location = new System.Drawing.Point(400, 279);
+            this.btn_elso_futtatas.Location = new System.Drawing.Point(400, 354);
             this.btn_elso_futtatas.Name = "btn_elso_futtatas";
             this.btn_elso_futtatas.Size = new System.Drawing.Size(45, 45);
             this.btn_elso_futtatas.TabIndex = 17;
@@ -758,7 +781,7 @@
             // 
             // tb_p3_p2_kozott
             // 
-            this.tb_p3_p2_kozott.Location = new System.Drawing.Point(303, 245);
+            this.tb_p3_p2_kozott.Location = new System.Drawing.Point(303, 318);
             this.tb_p3_p2_kozott.Name = "tb_p3_p2_kozott";
             this.tb_p3_p2_kozott.ReadOnly = true;
             this.tb_p3_p2_kozott.Size = new System.Drawing.Size(139, 26);
@@ -767,7 +790,7 @@
             // lb_p3_p2_kozott
             // 
             this.lb_p3_p2_kozott.AutoSize = true;
-            this.lb_p3_p2_kozott.Location = new System.Drawing.Point(3, 242);
+            this.lb_p3_p2_kozott.Location = new System.Drawing.Point(3, 315);
             this.lb_p3_p2_kozott.Name = "lb_p3_p2_kozott";
             this.lb_p3_p2_kozott.Size = new System.Drawing.Size(179, 20);
             this.lb_p3_p2_kozott.TabIndex = 14;
@@ -775,7 +798,7 @@
             // 
             // tb_rendben_p3
             // 
-            this.tb_rendben_p3.Location = new System.Drawing.Point(303, 213);
+            this.tb_rendben_p3.Location = new System.Drawing.Point(303, 285);
             this.tb_rendben_p3.Name = "tb_rendben_p3";
             this.tb_rendben_p3.ReadOnly = true;
             this.tb_rendben_p3.Size = new System.Drawing.Size(139, 26);
@@ -784,7 +807,7 @@
             // lb_rendben_p3
             // 
             this.lb_rendben_p3.AutoSize = true;
-            this.lb_rendben_p3.Location = new System.Drawing.Point(3, 210);
+            this.lb_rendben_p3.Location = new System.Drawing.Point(3, 282);
             this.lb_rendben_p3.Name = "lb_rendben_p3";
             this.lb_rendben_p3.Size = new System.Drawing.Size(200, 20);
             this.lb_rendben_p3.TabIndex = 12;
@@ -792,7 +815,7 @@
             // 
             // tb_rendben_p2
             // 
-            this.tb_rendben_p2.Location = new System.Drawing.Point(303, 178);
+            this.tb_rendben_p2.Location = new System.Drawing.Point(303, 252);
             this.tb_rendben_p2.Name = "tb_rendben_p2";
             this.tb_rendben_p2.ReadOnly = true;
             this.tb_rendben_p2.Size = new System.Drawing.Size(139, 26);
@@ -801,7 +824,7 @@
             // lb_rendben_p2
             // 
             this.lb_rendben_p2.AutoSize = true;
-            this.lb_rendben_p2.Location = new System.Drawing.Point(3, 175);
+            this.lb_rendben_p2.Location = new System.Drawing.Point(3, 249);
             this.lb_rendben_p2.Name = "lb_rendben_p2";
             this.lb_rendben_p2.Size = new System.Drawing.Size(200, 20);
             this.lb_rendben_p2.TabIndex = 10;
@@ -809,7 +832,7 @@
             // 
             // tb_megtett_p1
             // 
-            this.tb_megtett_p1.Location = new System.Drawing.Point(303, 143);
+            this.tb_megtett_p1.Location = new System.Drawing.Point(303, 219);
             this.tb_megtett_p1.Name = "tb_megtett_p1";
             this.tb_megtett_p1.ReadOnly = true;
             this.tb_megtett_p1.Size = new System.Drawing.Size(139, 26);
@@ -818,7 +841,7 @@
             // lb_megtett_p1
             // 
             this.lb_megtett_p1.AutoSize = true;
-            this.lb_megtett_p1.Location = new System.Drawing.Point(3, 140);
+            this.lb_megtett_p1.Location = new System.Drawing.Point(3, 216);
             this.lb_megtett_p1.Name = "lb_megtett_p1";
             this.lb_megtett_p1.Size = new System.Drawing.Size(294, 20);
             this.lb_megtett_p1.TabIndex = 8;
@@ -826,7 +849,7 @@
             // 
             // tb_megtett_p0
             // 
-            this.tb_megtett_p0.Location = new System.Drawing.Point(303, 108);
+            this.tb_megtett_p0.Location = new System.Drawing.Point(303, 185);
             this.tb_megtett_p0.Name = "tb_megtett_p0";
             this.tb_megtett_p0.ReadOnly = true;
             this.tb_megtett_p0.Size = new System.Drawing.Size(139, 26);
@@ -835,7 +858,7 @@
             // lb_megtett_p0
             // 
             this.lb_megtett_p0.AutoSize = true;
-            this.lb_megtett_p0.Location = new System.Drawing.Point(3, 105);
+            this.lb_megtett_p0.Location = new System.Drawing.Point(3, 182);
             this.lb_megtett_p0.Name = "lb_megtett_p0";
             this.lb_megtett_p0.Size = new System.Drawing.Size(294, 20);
             this.lb_megtett_p0.TabIndex = 6;
@@ -843,7 +866,7 @@
             // 
             // tb_futhatmeg_p2
             // 
-            this.tb_futhatmeg_p2.Location = new System.Drawing.Point(303, 73);
+            this.tb_futhatmeg_p2.Location = new System.Drawing.Point(303, 151);
             this.tb_futhatmeg_p2.Name = "tb_futhatmeg_p2";
             this.tb_futhatmeg_p2.ReadOnly = true;
             this.tb_futhatmeg_p2.Size = new System.Drawing.Size(139, 26);
@@ -851,7 +874,7 @@
             // 
             // tb_futhatmeg_p1
             // 
-            this.tb_futhatmeg_p1.Location = new System.Drawing.Point(303, 38);
+            this.tb_futhatmeg_p1.Location = new System.Drawing.Point(303, 117);
             this.tb_futhatmeg_p1.Name = "tb_futhatmeg_p1";
             this.tb_futhatmeg_p1.ReadOnly = true;
             this.tb_futhatmeg_p1.Size = new System.Drawing.Size(139, 26);
@@ -859,7 +882,7 @@
             // 
             // tb_futhatmeg_p0
             // 
-            this.tb_futhatmeg_p0.Location = new System.Drawing.Point(303, 3);
+            this.tb_futhatmeg_p0.Location = new System.Drawing.Point(303, 83);
             this.tb_futhatmeg_p0.Name = "tb_futhatmeg_p0";
             this.tb_futhatmeg_p0.ReadOnly = true;
             this.tb_futhatmeg_p0.Size = new System.Drawing.Size(139, 26);
@@ -868,7 +891,7 @@
             // lb_futhatmeg_p1
             // 
             this.lb_futhatmeg_p1.AutoSize = true;
-            this.lb_futhatmeg_p1.Location = new System.Drawing.Point(3, 35);
+            this.lb_futhatmeg_p1.Location = new System.Drawing.Point(3, 114);
             this.lb_futhatmeg_p1.Name = "lb_futhatmeg_p1";
             this.lb_futhatmeg_p1.Size = new System.Drawing.Size(173, 20);
             this.lb_futhatmeg_p1.TabIndex = 0;
@@ -877,7 +900,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(3, 80);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(173, 20);
             this.label1.TabIndex = 2;
@@ -886,7 +909,7 @@
             // lb_futhatmeg_p2
             // 
             this.lb_futhatmeg_p2.AutoSize = true;
-            this.lb_futhatmeg_p2.Location = new System.Drawing.Point(3, 70);
+            this.lb_futhatmeg_p2.Location = new System.Drawing.Point(3, 148);
             this.lb_futhatmeg_p2.Name = "lb_futhatmeg_p2";
             this.lb_futhatmeg_p2.Size = new System.Drawing.Size(173, 20);
             this.lb_futhatmeg_p2.TabIndex = 4;
@@ -896,7 +919,7 @@
             // 
             this.btn_frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.btn_frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btn_frissit.Location = new System.Drawing.Point(3, 279);
+            this.btn_frissit.Location = new System.Drawing.Point(3, 354);
             this.btn_frissit.Name = "btn_frissit";
             this.btn_frissit.Size = new System.Drawing.Size(45, 45);
             this.btn_frissit.TabIndex = 16;
@@ -926,6 +949,19 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Ellenőrzések";
             // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.tb_ciklusrend_modosit, 0, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(395, 483);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(58, 65);
+            this.tableLayoutPanel3.TabIndex = 267;
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 3;
@@ -945,13 +981,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(448, 65);
             this.tableLayoutPanel2.TabIndex = 285;
-            // 
-            // tb_tureshatar
-            // 
-            this.tb_tureshatar.Location = new System.Drawing.Point(198, 35);
-            this.tb_tureshatar.Name = "tb_tureshatar";
-            this.tb_tureshatar.Size = new System.Drawing.Size(139, 26);
-            this.tb_tureshatar.TabIndex = 265;
             // 
             // lb_tureshatar
             // 
@@ -977,6 +1006,13 @@
             this.lb_ciklusrend_km.Size = new System.Drawing.Size(110, 20);
             this.lb_ciklusrend_km.TabIndex = 15;
             this.lb_ciklusrend_km.Text = "Ciklusrend Km";
+            // 
+            // tb_tureshatar
+            // 
+            this.tb_tureshatar.Location = new System.Drawing.Point(198, 35);
+            this.tb_tureshatar.Name = "tb_tureshatar";
+            this.tb_tureshatar.Size = new System.Drawing.Size(139, 26);
+            this.tb_tureshatar.TabIndex = 265;
             // 
             // tabPage2
             // 
@@ -1018,31 +1054,38 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Számítások";
             // 
-            // tableLayoutPanel3
+            // lb_utolso_teljesitett
             // 
-            this.tableLayoutPanel3.ColumnCount = 1;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Controls.Add(this.tb_ciklusrend_modosit, 0, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(395, 483);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 1;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(58, 65);
-            this.tableLayoutPanel3.TabIndex = 267;
+            this.lb_utolso_teljesitett.AutoSize = true;
+            this.lb_utolso_teljesitett.Location = new System.Drawing.Point(3, 0);
+            this.lb_utolso_teljesitett.Name = "lb_utolso_teljesitett";
+            this.lb_utolso_teljesitett.Size = new System.Drawing.Size(215, 20);
+            this.lb_utolso_teljesitett.TabIndex = 18;
+            this.lb_utolso_teljesitett.Text = "Utolsó teljesített KM vizsgálat";
             // 
-            // tb_ciklusrend_modosit
+            // tb_utolso_teljesitett
             // 
-            this.tb_ciklusrend_modosit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.tb_ciklusrend_modosit.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.tb_ciklusrend_modosit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.tb_ciklusrend_modosit.Location = new System.Drawing.Point(6, 10);
-            this.tb_ciklusrend_modosit.Name = "tb_ciklusrend_modosit";
-            this.tb_ciklusrend_modosit.Size = new System.Drawing.Size(45, 44);
-            this.tb_ciklusrend_modosit.TabIndex = 266;
-            this.toolTip1.SetToolTip(this.tb_ciklusrend_modosit, "Rögzíti az adatokat");
-            this.tb_ciklusrend_modosit.UseVisualStyleBackColor = true;
-            this.tb_ciklusrend_modosit.Click += new System.EventHandler(this.tb_ciklusrend_modosit_Click);
+            this.tb_utolso_teljesitett.Location = new System.Drawing.Point(303, 3);
+            this.tb_utolso_teljesitett.Name = "tb_utolso_teljesitett";
+            this.tb_utolso_teljesitett.ReadOnly = true;
+            this.tb_utolso_teljesitett.Size = new System.Drawing.Size(139, 26);
+            this.tb_utolso_teljesitett.TabIndex = 19;
+            // 
+            // lb_tervezett_allashoz_kepest
+            // 
+            this.lb_tervezett_allashoz_kepest.Location = new System.Drawing.Point(3, 32);
+            this.lb_tervezett_allashoz_kepest.Name = "lb_tervezett_allashoz_kepest";
+            this.lb_tervezett_allashoz_kepest.Size = new System.Drawing.Size(279, 45);
+            this.lb_tervezett_allashoz_kepest.TabIndex = 20;
+            this.lb_tervezett_allashoz_kepest.Text = "Előző vizsgálat tervezett állásához képesti állás";
+            // 
+            // tb_tervezetthez_kepest
+            // 
+            this.tb_tervezetthez_kepest.Location = new System.Drawing.Point(303, 35);
+            this.tb_tervezetthez_kepest.Name = "tb_tervezetthez_kepest";
+            this.tb_tervezetthez_kepest.ReadOnly = true;
+            this.tb_tervezetthez_kepest.Size = new System.Drawing.Size(139, 26);
+            this.tb_tervezetthez_kepest.TabIndex = 21;
             // 
             // Ablak_CAF_Részletes
             // 
@@ -1099,11 +1142,11 @@
             this.tableLayoutPanel1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            this.tableLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1205,5 +1248,9 @@
         private System.Windows.Forms.Label lb_tureshatar;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         internal System.Windows.Forms.Button tb_ciklusrend_modosit;
+        private System.Windows.Forms.TextBox tb_utolso_teljesitett;
+        private System.Windows.Forms.Label lb_utolso_teljesitett;
+        private System.Windows.Forms.TextBox tb_tervezetthez_kepest;
+        private System.Windows.Forms.Label lb_tervezett_allashoz_kepest;
     }
 }

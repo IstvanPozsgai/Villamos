@@ -314,6 +314,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
             if (teszt_adat != null)
             {
+
+                // Utoljára teljesített vizsgálat sorszáma
+                tb_utolso_teljesitett.Text = $"{KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text).KM_Sorszám}";
+
+                // Előző vizsgálat tervezett állása
+                tb_tervezetthez_kepest.Text = string.IsNullOrEmpty(teszt_adat.utolso_vizsgalat_valos_allasa?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_vizsgalat_valos_allasa}";
+
                 // P0: határ -1400
                 tb_futhatmeg_p0.Text = string.IsNullOrEmpty(teszt_adat.kov_p0?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p0}";
                 if (tb_futhatmeg_p0.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p0, 1400);
