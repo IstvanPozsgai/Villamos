@@ -137,9 +137,13 @@ namespace Villamos.Kezelők
             {
                 if (Egy_Adat(Adat.azonosito) == null)
                 {
-                    string szöveg = $"INSERT INTO {táblanév} (azonosito, kov_p0, kov_p1, kov_p2, utolso_p0_kozott, utolso_p1_kozott, utolso_p3_es_p2_kozott, elso_p2, elso_p3) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosito, utolso_vizsgalat_valos_allasa, kov_p0, kov_p1, kov_p2, utolso_p0_kozott, utolso_p1_kozott, utolso_p3_es_p2_kozott, elso_p2, elso_p3) VALUES (";
 
                     szöveg += $"'{Adat.azonosito}', "; // azonosító
+
+                    szöveg += Adat.utolso_vizsgalat_valos_allasa == null
+                        ? "null, "
+                        : $"'{Adat.utolso_vizsgalat_valos_allasa}', "; // Utolsó vizsgálat tervezett számláló állásához képest való eltérés.
 
                     szöveg += Adat.kov_p0 == null
                         ? "null, "
@@ -195,6 +199,10 @@ namespace Villamos.Kezelők
             try
             {
                 string szoveg = $"UPDATE {táblanév} SET ";
+
+                szoveg += Adat.utolso_vizsgalat_valos_allasa == null
+                       ? "null, "
+                       : $"'{Adat.utolso_vizsgalat_valos_allasa}', ";
 
                 szoveg += Adat.kov_p0 == null
                     ? "kov_p0=null, "
