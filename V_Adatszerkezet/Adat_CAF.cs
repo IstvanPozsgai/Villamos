@@ -264,6 +264,7 @@ namespace Villamos.Villamos_Adatszerkezet
     public class Adat_CAF_KM_Attekintes
     {
         public string azonosito { get; set; }
+        public long? utolso_vizsgalat_valos_allasa { get; set; }
         public long? kov_p0 { get; set; }
         public long? kov_p1 { get; set; }
         public long? kov_p2 { get; set; }
@@ -273,9 +274,10 @@ namespace Villamos.Villamos_Adatszerkezet
         public long? elso_p2 { get; set; }
         public long? elso_p3 { get; set; }
 
-        public Adat_CAF_KM_Attekintes(string azonosito, long? kov_p0, long? kov_p1, long? kov_p2, long? utolso_p0_kozott, long? utolso_p1_kozott, long? utolso_p3_es_p2_kozott, long? elso_p2, long? elso_p3)
+        public Adat_CAF_KM_Attekintes(string azonosito, long? utolso_vizsgalat_valos_allasa, long? kov_p0, long? kov_p1, long? kov_p2, long? utolso_p0_kozott, long? utolso_p1_kozott, long? utolso_p3_es_p2_kozott, long? elso_p2, long? elso_p3)
         {
             this.azonosito = azonosito;
+            this.utolso_vizsgalat_valos_allasa = utolso_vizsgalat_valos_allasa;
             this.kov_p0 = kov_p0;
             this.kov_p1 = kov_p1;
             this.kov_p2 = kov_p2;

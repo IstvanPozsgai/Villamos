@@ -92,6 +92,7 @@ namespace Villamos.Kezelők
                                 // Itt azért van null vizsgálat, mivel ha nem volt még olyan vizsgálat null értéket kap adatbázisban.
                                 Adat = new Adat_CAF_KM_Attekintes(
                                  rekord["azonosito"].ToStrTrim(),
+                                  rekord["utolso_vizsgalat_valos_allasa"] != DBNull.Value ? rekord["utolso_vizsgalat_valos_allasa"].ToÉrt_Long() : (long?)null,
                                  rekord["kov_p0"] != DBNull.Value ? rekord["kov_p0"].ToÉrt_Long() : (long?)null,
                                  rekord["kov_p1"] != DBNull.Value ? rekord["kov_p1"].ToÉrt_Long() : (long?)null,
                                  rekord["kov_p2"] != DBNull.Value ? rekord["kov_p2"].ToÉrt_Long() : (long?)null,
@@ -261,6 +262,16 @@ namespace Villamos.Kezelők
                                                        .FirstOrDefault();            
             // Visszaadja a következő P vizsgálat KM várt értékét.
             return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+        }
+
+        // Visszaadja, hogy a villamos a legutolsó teljesített vizsgálat során az előírt számlálóhoz képest milyen állással teljesítette azt.
+        private long? Utolso_Vizsgalat_Valos_Allasa(string Aktualis_palyaszam)
+        {
+            Adat_CAF_Adatok Adott_Villamos = osszes_adat
+                                                       .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
+                                                       .OrderByDescending(a => a.Dátum)
+                                                       .FirstOrDefault();
+            return (Adott_Villamos.KM_Sorszám * Vizsgalatok_Kozott_Megteheto_Km - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam));
         }
 
         // Ez már benne van a kezelőben félig meddig, overload-olva beleteszem ezt a verziót is később
@@ -433,14 +444,14 @@ namespace Villamos.Kezelők
             for (int i = 0; i <= azonositoLista.Count()-1; i++)
             {
                 string Palyaszam = $"{azonositoLista[i]}";
-                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam));
+                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Utolso_Vizsgalat_Valos_Allasa(Palyaszam), Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam));
                 Rögzítés_Elso(teszt);
             }
         }
 
         public void Erteket_Frissit(string palya)
         {
-            Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya));
+            Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Utolso_Vizsgalat_Valos_Allasa(palya), Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya));
             Erteket_Frissit(teszt);
         }
     }
