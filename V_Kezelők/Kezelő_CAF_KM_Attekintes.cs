@@ -364,9 +364,7 @@ namespace Villamos.Kezelők
                             && a.Megjegyzés != "Ütemezési Segéd")
                 .OrderByDescending(a => a.Dátum)
                 .Take(2)
-                .ToList();
-
-            ;
+                .ToList();     
 
             if (p1Vizsgalatok.Count < 2 || p1Vizsgalatok[0].KM_Sorszám == p1Vizsgalatok[1].KM_Sorszám)
                 return null;
@@ -387,7 +385,7 @@ namespace Villamos.Kezelők
                 .FirstOrDefault();
 
             // Ha nem találunk P3 vizsgálatot
-            if (P3 == null) return null;
+            if (P3 == null || P3.Számláló == 0) return null;
 
             // Utolsó P2 keresése
             Adat_CAF_Adatok P2 = osszes_adat
@@ -400,7 +398,7 @@ namespace Villamos.Kezelők
                 .FirstOrDefault();
 
             // Ha nem találunk P2 vizsgálatot.
-            if (P2 == null) return null;
+            if (P2 == null || P2.Számláló == 0) return null;
 
             return P3.Számláló - P2.Számláló;
         }
@@ -419,6 +417,8 @@ namespace Villamos.Kezelők
                 .OrderBy(a => a.Dátum)
                 .FirstOrDefault();
 
+            if (elsoP2 == null || elsoP2.Számláló == 0) return null;
+
             return elsoP2?.Számláló;
         }
 
@@ -433,6 +433,9 @@ namespace Villamos.Kezelők
                             a.Megjegyzés != "Ütemezési Segéd")
                 .OrderBy(a => a.Dátum)
                 .FirstOrDefault();
+
+            if (elsoP3 == null || elsoP3.Számláló == 0) return null;
+
             return elsoP3?.Számláló;
         }
 
