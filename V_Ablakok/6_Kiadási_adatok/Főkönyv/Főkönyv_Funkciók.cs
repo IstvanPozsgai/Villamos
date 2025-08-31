@@ -546,7 +546,7 @@ namespace Villamos
 
                     string napszak = "*";
                     string szerelvénytípus = MyE.Beolvas($"m{i}");
-                    long kocsikszáma = (MyE.Beolvas($"o{i}")).ToÉrt_Long ();
+                    long kocsikszáma = (MyE.Beolvas($"o{i}")).ToÉrt_Long();
                     string megjegyzés = MyF.Szöveg_Tisztítás(MyE.Beolvas($"r{i}"), 0, 20);
 
                     string ideig = MyE.Beolvas($"S{i}").Trim();
@@ -601,7 +601,7 @@ namespace Villamos
             catch (Exception ex)
             {
 
-                if (ex.HResult == -2147024860 || ex.HResult == -2147024864)
+                if (ex.HResult == -2147024860 || ex.HResult == -2147024864 || ex.HResult == -2146777998)
                 {
                     MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
