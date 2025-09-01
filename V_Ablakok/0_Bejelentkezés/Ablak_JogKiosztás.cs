@@ -419,145 +419,36 @@ namespace Villamos
             AblakFőID = Ablak.OldalId;
 
             GombokFeltöltése();
-            if (Program.PostásUsers.GlobalAdmin)
-                SzervezetFeltöltés();
-            else
-                TelepAdminTelepei();
+            Szervezetek();
             TáblázatListázás();
         }
 
-        private void TelepAdminTelepei()
-        {
-            LstChkSzervezet.Items.Clear();
-            LstChkSzervezet.Items.Add(Program.PostásUsers.Szervezet);
-            string[] gomb = CmbGombok.Text.Split('=');
-            Adat_Gombok Egy_Gomb = (from a in AdatokGombok
-                                    where a.FromName == AblakFormName
-                                    && a.GombName == gomb[1].Trim()
-                                    select a).FirstOrDefault();
-            GombFőID = -1;
-            if (Egy_Gomb != null)
-                GombFőID = Egy_Gomb.GombokId;
-            //Megnézzük, hogy mi a jogosultsága
-            int szervezetID = (from a in AdatokSzervezet
-                               where a.Név.Trim() == Program.PostásUsers.Szervezet.Trim()
-                               select a.ID).FirstOrDefault();
 
-            Adat_Jogosultságok Jog = (from a in AdatokJogosultságok
-                                      where a.UserId == FelhasználóFőId
-                                      && a.OldalId == AblakFőID
-                                      && a.GombokId == GombFőID
-                                      && a.SzervezetId == szervezetID
-                                      select a).FirstOrDefault();
-            if (Jog != null && !Jog.Törölt)
-                LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.Count - 1, true);
-        }
         #endregion
 
         private void CmbGombok_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            try
-            {
-                CmbGombok.Text = CmbGombok.Items[CmbGombok.SelectedIndex].ToString();
-
-                string[] gomb = CmbGombok.Text.Split('=');
-                Adat_Gombok Egy_Gomb = (from a in AdatokGombok
-                                        where a.FromName == AblakFormName
-                                        && a.GombName == gomb[1].Trim()
-                                        select a).FirstOrDefault();
-                if (Egy_Gomb != null) GombFőID = Egy_Gomb.GombokId;
-
-                if (Program.PostásUsers.GlobalAdmin)
-                    SzervezetFeltöltés();
-                else
-                    TelepAdminTelepei();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Szervezetek();
         }
 
         #region Szervezet
-        /// <summary>
-        /// Feltöltjük, hogy melyik szervezetnek engedjük meg a módosítást
-        /// </summary>
-        private void SzervezetFeltöltés()
+        //A gombhoz tartozó szervezetek betöltése
+        private void Szervezetek()
         {
             try
             {
                 LstChkSzervezet.Items.Clear();
-                Adat_Users EgyFelhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text.Trim());
-                if (EgyFelhasználó == null) return;
+                if (CmbGombok.Text.Trim() == "") return;
+                string[] Darabol = CmbGombok.Text.Trim().Split('=');
+                Adat_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FromName == AblakFormName);
+                if (Gomb == null) return;
+                string[] szervezetek = Gomb.Szervezet.Split(';');
+                foreach (string szervezet in szervezetek)
+                    LstChkSzervezet.Items.Add(szervezet.Trim());
 
-                //Ha van ehhez a szervezethez joga akkor engedélyezzük a kiírást
-                string[] gomb = CmbGombok.Text.Split('=');
-                Adat_Oldalak EgyOldal = AdatokOldal.Where(a => a.MenuFelirat == CmbAblak.Text.Trim()).FirstOrDefault();
-                if (EgyOldal == null) return;
+                //A teljes lista csorbítása a beálító jogosultságaival
 
-                Adat_Gombok Egy_Gomb = (from a in AdatokGombok
-                                        where a.FromName == EgyOldal.FromName
-                                        && a.GombName == gomb[1].Trim()
-                                        select a).FirstOrDefault();
-
-                //Megnézzük, hogy van-e kóbor jogosultsága
-                List<Adat_Jogosultságok> Jogok = (from a in AdatokJogosultságok
-                                                  where a.UserId == EgyFelhasználó.UserId
-                                                  && a.OldalId == EgyOldal.OldalId
-                                                  && a.GombokId == Egy_Gomb.GombokId
-                                                  && a.Törölt == false
-                                                  select a).ToList();
-
-                foreach (Adat_Jogosultságok jog in Jogok)
-                {
-                    string szervezet = AdatokSzervezet.FirstOrDefault(a => a.ID == jog.SzervezetId)?.Név ?? "";
-                    LstChkSzervezet.Items.Add(szervezet);
-                    LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.Count - 1, true);
-                }
-
-                //Végig megyünk azokon amikhez lehetne szervezeteken
-                foreach (Adat_Kiegészítő_Könyvtár szervezet in AdatokSzervezet)
-                {
-
-                    Adat_Gombok EgyGomb = (from a in AdatokGombok
-                                           where a.Szervezet.Contains(szervezet.Név)
-                                           && a.FromName == EgyOldal.FromName
-                                           && a.GombName == gomb[1].Trim()
-                                           select a).FirstOrDefault();
-                    if (EgyGomb != null)
-                    {
-                        string[] szervezetek = EgyGomb.Szervezet.Split(';');
-                        string szervezetNév = szervezetek.FirstOrDefault(a => a.Trim() == szervezet.Név);
-                        if (szervezetNév != null)
-                        {
-                            if (!LstChkSzervezet.Items.Contains(szervezetNév))
-                            {
-                                // ha van joga ahhoz a szervezethez a felhasználónak akkor kiírjuk a lehetőséget
-                                //ha még nincs kiírva
-                                if (EgyFelhasználó.Szervezetek.Contains(szervezet.Név))
-                                {
-                                    LstChkSzervezet.Items.Add(szervezet.Név);
-
-                                    // Jogosultság beállítása, ha már van ilyen
-                                    Adat_Jogosultságok EgyJog = AdatokJogosultságok.FirstOrDefault(a =>
-                                        a.UserId == FelhasználóFőId &&
-                                        a.OldalId == AblakFőID &&
-                                        a.SzervezetId == szervezet.ID
-                                        && a.GombokId == EgyGomb.GombokId
-                                    );
-                                    if (EgyJog != null) LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.Count - 1, true);
-                                }
-                            }
-                        }
-                    }
-                }
-                ListaSorbaRendzés();
-
+                //Ha global akkor mindenhez adhat és nem csorbítunk.
             }
             catch (HibásBevittAdat ex)
             {
@@ -568,33 +459,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
 
-        private void ListaSorbaRendzés()
-        {
-            // SzervezetFeltöltés végén, mielőtt visszatérne a metódus
-            List<string> szervezetLista = new List<string>();
-            for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
-            {
-                szervezetLista.Add(LstChkSzervezet.Items[i].ToString());
-                // Ha szükséges, megjegyezheted, hogy melyik volt bejelölve
-            }
-            szervezetLista = szervezetLista.OrderBy(x => x).ToList();
-
-            // Eredeti checked állapotok mentése (ha kell)
-            HashSet<string> checkedItems = new HashSet<string>();
-            for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
-            {
-                if (LstChkSzervezet.GetItemChecked(i))
-                    checkedItems.Add(LstChkSzervezet.Items[i].ToString());
-            }
-
-            // ListBox újratöltése
-            LstChkSzervezet.Items.Clear();
-            foreach (string szervezet in szervezetLista)
-            {
-                LstChkSzervezet.Items.Add(szervezet, checkedItems.Contains(szervezet));
-            }
         }
 
         private void SzervezetMinden_Click(object sender, EventArgs e)
@@ -614,7 +479,5 @@ namespace Villamos
         }
 
         #endregion
-
-
     }
 }

@@ -69,7 +69,7 @@ namespace Villamos.Kezelők
                         foreach (int mező in Mezők)
                         {
                             List<IdeigJogosultságok> GombokId = (from a in ExcelLista
-                                                                 where a.Sorszám == i+1
+                                                                 where a.Sorszám == i + 1
                                                                  && a.Mező == mező
                                                                  select a).ToList();
                             foreach (IdeigJogosultságok gomb in GombokId)
@@ -104,6 +104,7 @@ namespace Villamos.Kezelők
             if (Betű == "3" || Betű == "7" || Betű == "b" || Betű == "f") válasz.Add(1); //1-es csoport
             if (Betű == "5" || Betű == "7" || Betű == "d" || Betű == "f") válasz.Add(2); //2-es csoport
             if (Betű == "9" || Betű == "b" || Betű == "d" || Betű == "f") válasz.Add(3); //3-es csoport
+            if (Betű == "1") válasz.Add(4); //Megjelenítés csoport
             return válasz;
         }
 
