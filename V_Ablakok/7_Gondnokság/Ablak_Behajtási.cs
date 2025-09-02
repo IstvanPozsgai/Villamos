@@ -1364,6 +1364,9 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
+                // JAVÍTANDÓ: Mivel nem látszik a teljes táblázat, hogy hozzon hibát minden adatot listázunk.
+                Nézet_Egyszerű.Checked = false;
+                LISTAlista();
 
                 MyE.DataGridViewToExcel(fájlexc, TáblaLista);
 
