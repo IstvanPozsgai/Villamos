@@ -1515,8 +1515,7 @@ namespace Villamos
             this.Text = "AblakBehajtási";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.AblakBehajtási_Load);
-            this.Shown += new System.EventHandler(this.Ablak_Behajtási_Shown);
-            this.Fülek.ResumeLayout(false);
+                 this.Fülek.ResumeLayout(false);
             this.Engedélyek.ResumeLayout(false);
             this.Engedélyek.PerformLayout();
             this.PanelEngedély.ResumeLayout(false);

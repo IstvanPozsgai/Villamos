@@ -145,11 +145,6 @@ namespace Villamos
         {
         }
 
-        private void Ablak_Behajtási_Shown(object sender, EventArgs e)
-        {
-
-        }
-
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
         {
             Fülekkitöltése();

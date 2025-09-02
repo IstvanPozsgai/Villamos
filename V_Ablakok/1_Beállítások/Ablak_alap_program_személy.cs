@@ -90,26 +90,13 @@ namespace Villamos
 
         private void AblakProgramadatokszemély_Load(object sender, EventArgs e)
         {
-            try
-            {
-                
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void Ablak_alap_program_személy_Shown(object sender, EventArgs e)
         {
             try
             {
-                
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -195,7 +182,7 @@ namespace Villamos
                     Command3.Visible = true;
 
                     Command9.Visible = true;
-                  
+
 
                     Munka_Rögzít.Visible = true;
 
@@ -245,7 +232,7 @@ namespace Villamos
                 Command3.Enabled = false;
 
                 Command9.Enabled = false;
-              
+
 
                 Munka_Rögzít.Enabled = false;
 
@@ -3146,12 +3133,12 @@ namespace Villamos
                 Gond_Név.Text = MyF.Szöveg_Tisztítás(Gond_Név.Text);
 
 
-                if (Gond_telephely.Text.Trim() == "") Gond_telephely.Text = "_";
+                if (Gond_telephely.Text.Trim() == "") throw new HibásBevittAdat("A Telephely mező nem lehet üres!");
                 if (Gond_email.Text.Trim() == "") Gond_email.Text = "_";
                 if (Gond_telefon.Text.Trim() == "") Gond_telefon.Text = "_";
                 if (Gond_szakszolg_szöv.Text.Trim() == "") Gond_szakszolg_szöv.Text = "_";
-                if (Gond_beosztás.Text.Trim() == "") Gond_beosztás.Text = "_";
-                if (Gond_Név.Text.Trim() == "") Gond_Név.Text = "_";
+                if (Gond_beosztás.Text.Trim() == "") throw new HibásBevittAdat("A Beosztás mező nem lehet üres!");
+                if (Gond_Név.Text.Trim() == "") throw new HibásBevittAdat("A Név mező nem lehet üres!");
                 if (!int.TryParse(Gond_sorszám.Text, out int sorszám)) sorszám = 0;
 
                 Adat_Behajtás_Engedélyezés ADAT = new Adat_Behajtás_Engedélyezés(
