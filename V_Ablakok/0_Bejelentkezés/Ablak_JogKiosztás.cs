@@ -442,13 +442,30 @@ namespace Villamos
                 if (CmbGombok.Text.Trim() == "") return;
                 string[] Darabol = CmbGombok.Text.Trim().Split('=');
                 Adat_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FromName == AblakFormName);
+                GombFőID = Gomb?.GombokId ?? -1;
                 if (Gomb == null) return;
                 string[] Gombszervezetek = Gomb.Szervezet.Split(';');
                 //A teljes lista csorbítása a beálító jogosultságaival
                 foreach (string szervezet in Gombszervezetek)
-                    if (Program.PostásUsers.Szervezetek.Contains(szervezet)) LstChkSzervezet.Items.Add(szervezet.Trim());
-
-                // JAVÍTANDÓ:      //Jogosoultságok kiírása a meglévő alapján
+                {
+                    if (Program.PostásUsers.Szervezetek.Contains(szervezet))
+                    {
+                        //Csak azokat a szervezeteket írjuk ki amelyek a beállító jogosultságai között is szerepelnek
+                        LstChkSzervezet.Items.Add(szervezet.Trim());
+                        //Jogosoultságok kiírása a meglévő alapján
+                        int UserId = FelhasználóFőId;
+                        Adat_Jogosultságok Jog = (from a in AdatokJogosultságok
+                                                  where a.UserId == FelhasználóFőId
+                                                  && a.OldalId == AblakFőID
+                                                  && a.GombokId == GombFőID
+                                                  && a.SzervezetId == AdatokSzervezet.FirstOrDefault(b => b.Név == szervezet.Trim())?.ID
+                                                  select a).FirstOrDefault();
+                        if (Jog != null && !Jog.Törölt)
+                            LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.IndexOf(szervezet.Trim()), true);
+                        else
+                            LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.IndexOf(szervezet.Trim()), false);
+                    }
+                }
             }
             catch (HibásBevittAdat ex)
             {
