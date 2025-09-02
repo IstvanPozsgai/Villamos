@@ -1060,7 +1060,17 @@ namespace Villamos
 
                 AdatokAkku = KézAkku.Lista_Adatok();
                 if (AdatokAkku == null) return;
-                Akkuszám_ellenőrzés();
+
+                List<string> Elem = (from a in AdatokAkku
+                                     where a.Gyáriszám.Contains(Textgyárimérés.Text.Trim())
+                                     select a.Gyáriszám).ToList();
+                if (Elem == null || Elem.Count == 0) throw new HibásBevittAdat("Nincs ilyen gyáriszámú akkumulátor!");
+                if (Elem.Count == 1) Textgyárimérés.Text = Elem[0];
+                if (Elem.Count > 1)
+                {
+                    if (MessageBox.Show($"Kérem pontosítsd, melyik akkumulátorra gondolsz:\n {string.Join("\n ", Elem)} \n\nRögzíted mégis?",
+                        "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No) return;
+                }
 
                 Adat_Akkumulátor AdatAkku = (from a in AdatokAkku
                                              where a.Gyáriszám == Textgyárimérés.Text.Trim()
@@ -1095,15 +1105,6 @@ namespace Villamos
             }
         }
 
-        private void Akkuszám_ellenőrzés()
-        {
-            List<string> Elem = (from a in AdatokAkku
-                                 where a.Gyáriszám.Contains(Textgyárimérés.Text.Trim())
-                                 select a.Gyáriszám).ToList();
-            if (Elem == null || Elem.Count == 0) throw new HibásBevittAdat("Nincs ilyen gyáriszámú akkumulátor!");
-            if (Elem.Count == 1) Textgyárimérés.Text = Elem[0];
-            if (Elem.Count > 1) throw new HibásBevittAdat($"Kérem pontosítsd, melyik akkumulátorra gondolsz:\n {string.Join("\n ", Elem)}");
-        }
 
         private void Btnmérúj_Click(object sender, EventArgs e)
         {
