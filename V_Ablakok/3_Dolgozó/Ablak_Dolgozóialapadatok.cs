@@ -1382,10 +1382,11 @@ namespace Villamos
 
         private void TáblaOktatás_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
-            string hely = $@"{Application.StartupPath}\Főmérnökség\Oktatás\{Cmbtelephely.Text.Trim()}\{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[8].Value}";
-            if (!File.Exists(hely)) return;
-            PDF_Nyitás(hely);
+            if (e.RowIndex >= 0)
+            {
+                TáblaOktatás.ClearSelection();
+                TáblaOktatás.Rows[e.RowIndex].Selected = true;
+            }
         }
         #endregion
 

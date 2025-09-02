@@ -428,6 +428,7 @@ namespace Villamos
 
         private void CmbGombok_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            CmbGombok.Text = CmbGombok.Items[CmbGombok.SelectedIndex].ToString();
             Szervezetek();
         }
 
@@ -442,13 +443,12 @@ namespace Villamos
                 string[] Darabol = CmbGombok.Text.Trim().Split('=');
                 Adat_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FromName == AblakFormName);
                 if (Gomb == null) return;
-                string[] szervezetek = Gomb.Szervezet.Split(';');
-                foreach (string szervezet in szervezetek)
-                    LstChkSzervezet.Items.Add(szervezet.Trim());
-
+                string[] Gombszervezetek = Gomb.Szervezet.Split(';');
                 //A teljes lista csorbítása a beálító jogosultságaival
+                foreach (string szervezet in Gombszervezetek)
+                    if (Program.PostásUsers.Szervezetek.Contains(szervezet)) LstChkSzervezet.Items.Add(szervezet.Trim());
 
-                //Ha global akkor mindenhez adhat és nem csorbítunk.
+                // JAVÍTANDÓ:      //Jogosoultságok kiírása a meglévő alapján
             }
             catch (HibásBevittAdat ex)
             {
