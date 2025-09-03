@@ -139,6 +139,7 @@ namespace Villamos.Kezelők
                     string szöveg = $"UPDATE {táblanév}  SET SAP={Adat.SAP} WHERE ";
                     szöveg += $" kerékberendezés='{Adat.Kerékberendezés}' and ";
                     szöveg += $" mikor=#{Adat.Mikor:yyyy-MM-dd HH:mm:ss}#";
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
