@@ -87,6 +87,7 @@ namespace Villamos
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.SAP_adatok = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage4.SuspendLayout();
@@ -230,6 +231,7 @@ namespace Villamos
             // TabPage6
             // 
             this.TabPage6.BackColor = System.Drawing.Color.ForestGreen;
+            this.TabPage6.Controls.Add(this.SAP_adatok);
             this.TabPage6.Controls.Add(this.Módosítás);
             this.TabPage6.Controls.Add(this.VizsA_Excel);
             this.TabPage6.Controls.Add(this.Tábla1);
@@ -665,6 +667,18 @@ namespace Villamos
             this.Holtart.TabIndex = 174;
             this.Holtart.Visible = false;
             // 
+            // SAP_adatok
+            // 
+            this.SAP_adatok.BackgroundImage = global::Villamos.Properties.Resources.SAP;
+            this.SAP_adatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAP_adatok.Location = new System.Drawing.Point(231, 3);
+            this.SAP_adatok.Name = "SAP_adatok";
+            this.SAP_adatok.Size = new System.Drawing.Size(45, 45);
+            this.SAP_adatok.TabIndex = 177;
+            this.ToolTip1.SetToolTip(this.SAP_adatok, "SAP adatokkal frissíti az adatbázist");
+            this.SAP_adatok.UseVisualStyleBackColor = true;
+            this.SAP_adatok.Click += new System.EventHandler(this.SAP_adatok_Click);
+            // 
             // Ablak_Fogaskerekű_Tulajdonságok
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -760,5 +774,6 @@ namespace Villamos
         internal V_MindenEgyéb.MyProgressbar AlHoltart;
         internal V_MindenEgyéb.MyProgressbar FőHoltart;
         internal Button Módosítás;
+        internal Button SAP_adatok;
     }
 }

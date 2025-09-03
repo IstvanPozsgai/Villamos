@@ -425,7 +425,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
 
                 timer1.Enabled = true;
                 Holtart.Be();
-                await Task.Run(() => SAP_Adatokbeolvasása.Km_beolvasó(_fájlexc, "T5C5"));
+                await Task.Run(() => SAP_Adatokbeolvasása.Km_beolvasó(_fájlexc, Típus));
                 timer1.Enabled = false;
                 Holtart.Ki();
                 MessageBox.Show("Az adatok beolvasása megtörtént !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
