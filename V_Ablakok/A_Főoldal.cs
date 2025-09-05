@@ -64,11 +64,6 @@ namespace Villamos
         {
             try
             {
-                ablakokBeállításaToolStripMenuItem.Visible = false;
-                gombokBeállításaToolStripMenuItem.Visible = false;
-                felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = false;
-                jogosultságKiosztásToolStripMenuItem.Visible = false;
-
                 if (panels2.Text.Substring(0, 1) == "0")
                     FelhasználókBeállításaMenü.Enabled = false;
                 else
@@ -356,7 +351,10 @@ namespace Villamos
                 else
                     KülsősDolgozókBelépésiÉsBehajtásaToolStripMenuItem.Enabled = true;
 
-
+                ablakokBeállításaToolStripMenuItem.Enabled = false;
+                gombokBeállításaToolStripMenuItem.Enabled = false;
+                felhasználókLétrehozásaTörléseToolStripMenuItem.Enabled = false;
+                jogosultságKiosztásToolStripMenuItem.Enabled = false;
                 //az új esetén az új beállítással megyünk be.
                 if (!panels2.Text.Any(c => c != '0')) Menü_Beállítása_Új();
             }
@@ -2674,43 +2672,28 @@ namespace Villamos
         {
             try
             {
-                if (Shift_le && CTRL_le && Alt_le)
+                if (Program.PostásJogkör.Any(c => c != '0'))
                 {
-                    //Az új jogosultság kiosztáshoz való hozzáférés ideiglenes
-                    ablakokBeállításaToolStripMenuItem.Visible = true;
-                    gombokBeállításaToolStripMenuItem.Visible = true;
-                    felhasználókLétrehozásaTörléseToolStripMenuItem.Visible = true;
-                    jogosultságKiosztásToolStripMenuItem.Visible = true;
+                    //Régi jogosultságok lekérése
+                    List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(lbltelephely.Text.Trim());
+
+                    Adat_Belépés_Jogosultságtábla Elem = (from a in Adatok
+                                                          where a.Név.ToUpper() == Panels1.Text.Trim().ToUpper()
+                                                          select a).FirstOrDefault();
+
+                    if (Elem != null)
+                    {
+                        panels2.Text = Elem.Jogkörúj1;
+                        Program.PostásJogkör = Elem.Jogkörúj1;
+                        Menükbeállítása();
+                    }
                 }
                 else
                 {
-                    //Ha nincs shift és kontroll akkor csak a jogosultságok beállítása történik meg.
-                    if (Program.PostásJogkör.Any(c => c != '0'))
-                    {
-                        //Régi jogosultságok lekérése
-                        List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(lbltelephely.Text.Trim());
-
-                        Adat_Belépés_Jogosultságtábla Elem = (from a in Adatok
-                                                              where a.Név.ToUpper() == Panels1.Text.Trim().ToUpper()
-                                                              select a).FirstOrDefault();
-
-                        if (Elem != null)
-                        {
-                            panels2.Text = Elem.Jogkörúj1;
-                            Program.PostásJogkör = Elem.Jogkörúj1;
-                            Menükbeállítása();
-                        }
-                    }
-                    else
-                    {
-                        // Új jogosultságok
-                        Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
-                        Menü_Beállítása_Új();
-                    }
+                    // Új jogosultságok
+                    Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
+                    Menü_Beállítása_Új();
                 }
-                Shift_le = false;
-                Alt_le = false;
-                CTRL_le = false;
             }
             catch (HibásBevittAdat ex)
             {
