@@ -133,12 +133,17 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE {táblanév} SET ";
-                szöveg += $"Törölt ={true} ";
-                szöveg += $"WHERE UserId ={Adatok[0].UserId} AND ";
-                szöveg += $"OldalId ={Adatok[0].OldalId} AND ";
-                szöveg += $"GombokId ={Adatok[0].GombokId}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Jogosultságok Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $"Törölt ={true} ";
+                    szöveg += $"WHERE UserId ={Adat.UserId} AND ";
+                    szöveg += $"OldalId ={Adat.OldalId} AND ";
+                    szöveg += $"GombokId ={Adat.GombokId}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {

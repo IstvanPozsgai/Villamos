@@ -2809,7 +2809,6 @@ namespace Villamos
             this.Text = "Program Adatok Személy";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.AblakProgramadatokszemély_Load);
-            this.Shown += new System.EventHandler(this.Ablak_alap_program_személy_Shown);
             this.Fülek.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();

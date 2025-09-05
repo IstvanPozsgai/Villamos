@@ -283,10 +283,6 @@ namespace Villamos
                 kezelo.Másolás(Program.PostásTelephely, Felhasználók.Text);
                 TáblázatListázás();
                 MessageBox.Show("Másolás megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -496,5 +492,32 @@ namespace Villamos
         }
 
         #endregion
+
+        private void JogTörlés_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
+                //csak a kiválasztott felhasználó jogain megyünk végig
+                Adat_Users Egy = (from a in AdatokUsers
+                                  where a.UserName == Felhasználók.Text.Trim()
+                                  select a).FirstOrDefault();
+                List<Adat_Jogosultságok> Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
+
+                KézJogosultságok.Törlés(Adatok);
+                TáblázatListázás();
+                MessageBox.Show("Jogosultságok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
     }
 }

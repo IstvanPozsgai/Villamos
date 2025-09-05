@@ -56,6 +56,7 @@ namespace Villamos
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Felhasználók = new System.Windows.Forms.ComboBox();
             this.DolgozóNév = new System.Windows.Forms.Label();
+            this.JogTörlés = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -175,6 +176,7 @@ namespace Villamos
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.JogTörlés);
             this.panel1.Controls.Add(this.Btn_MindenMasol);
             this.panel1.Controls.Add(this.Frissít);
             this.panel1.Controls.Add(this.Rögzít);
@@ -281,6 +283,18 @@ namespace Villamos
             this.DolgozóNév.TabIndex = 222;
             this.DolgozóNév.Text = "<< >>";
             // 
+            // JogTörlés
+            // 
+            this.JogTörlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.JogTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.JogTörlés.Location = new System.Drawing.Point(5, 100);
+            this.JogTörlés.Name = "JogTörlés";
+            this.JogTörlés.Size = new System.Drawing.Size(45, 45);
+            this.JogTörlés.TabIndex = 225;
+            this.ToolTip1.SetToolTip(this.JogTörlés, "Jogosultságok törlése");
+            this.JogTörlés.UseVisualStyleBackColor = true;
+            this.JogTörlés.Click += new System.EventHandler(this.JogTörlés_Click);
+            // 
             // Ablak_JogKiosztás
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -328,5 +342,6 @@ namespace Villamos
         internal Button Btn_MindenMasol;
         internal Label label2;
         private Panel panel1;
+        internal Button JogTörlés;
     }
 }
