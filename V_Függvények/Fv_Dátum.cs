@@ -283,5 +283,20 @@ public static partial class Függvénygyűjtemény
         int lastDay = DateTime.DaysInMonth(dateTime.Year, lastMonth);
         return new DateTime(dateTime.Year, lastMonth, lastDay);
     }
+
+    public static DateTime Négyhónap_elsőnapja(DateTime dateTime)
+    {
+        int period = ((dateTime.Month - 1) / 4) + 1;
+        int firstMonth = (period - 1) * 4 + 1;
+        return new DateTime(dateTime.Year, firstMonth, 1);
+    }
+
+    public static DateTime Négyhónap_utolsónapja(DateTime dateTime)
+    {
+        int period = ((dateTime.Month - 1) / 4) + 1;
+        int lastMonth = period * 4;
+        int lastDay = DateTime.DaysInMonth(dateTime.Year, lastMonth);
+        return new DateTime(dateTime.Year, lastMonth, lastDay);
+    }
 }
 
