@@ -190,7 +190,17 @@ namespace Villamos
         {
             try
             {
-                Fülekkitöltése();
+                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+                if (Cmbtelephely.Text.Trim() == "") return;
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Fülekkitöltése();
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+
             }
             catch (HibásBevittAdat ex)
             {
