@@ -270,5 +270,18 @@ public static partial class Függvénygyűjtemény
         int lastDay = DateTime.DaysInMonth(dateTime.Year, lastMonth);
         return new DateTime(dateTime.Year, lastMonth, lastDay);
     }
+
+    public static DateTime Félév_elsőnapja(DateTime dateTime)
+    {
+        int firstMonth = (dateTime.Month <= 6) ? 1 : 7;
+        return new DateTime(dateTime.Year, firstMonth, 1);
+    }
+
+    public static DateTime Félév_utolsónapja(DateTime dateTime)
+    {
+        int lastMonth = (dateTime.Month <= 6) ? 6 : 12;
+        int lastDay = DateTime.DaysInMonth(dateTime.Year, lastMonth);
+        return new DateTime(dateTime.Year, lastMonth, lastDay);
+    }
 }
 
