@@ -256,6 +256,19 @@ public static partial class Függvénygyűjtemény
         return datum;
     }
 
+    public static DateTime Negyedév_elsőnapja(DateTime dateTime)
+    {
+        int quarter = ((dateTime.Month - 1) / 3) + 1;
+        int firstMonth = (quarter - 1) * 3 + 1;
+        return new DateTime(dateTime.Year, firstMonth, 1);
+    }
 
+    public static DateTime Negyedév_utolsónapja(DateTime dateTime)
+    {
+        int quarter = ((dateTime.Month - 1) / 3) + 1;
+        int lastMonth = quarter * 3;
+        int lastDay = DateTime.DaysInMonth(dateTime.Year, lastMonth);
+        return new DateTime(dateTime.Year, lastMonth, lastDay);
+    }
 }
 
