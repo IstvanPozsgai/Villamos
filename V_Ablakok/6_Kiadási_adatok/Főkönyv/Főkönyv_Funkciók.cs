@@ -493,6 +493,8 @@ namespace Villamos
             }
         }
 
+
+
         public static void ZSER_Betöltés(string Telephely, DateTime Dátum, string Napszak, string ExcelFájl, long kiadási_korr = 0, long érkezési_korr = 0)
         {
             try
@@ -614,7 +616,7 @@ namespace Villamos
             }
         }
 
-        private static string Pályaszám_csorbítás(string mit)
+        public static string Pályaszám_csorbítás(string mit)
         {
             if (mit == null || mit.Trim() == "") mit = "_";
             if (mit != "_")

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
+using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_MindenEgyéb
@@ -310,6 +311,8 @@ namespace Villamos.V_MindenEgyéb
             }
         }
 
+
+
         private static string Milyen_típus(List<Adat_Jármű> AdatokJármű, string azonosító)
         {
             string típus = "?";
@@ -319,6 +322,7 @@ namespace Villamos.V_MindenEgyéb
             if (Elem != null) típus = Elem.Valóstípus;
             return típus;
         }
+
 
         public static void Eszköz_Beolvasó(string fájlexcel, string Telephely)
         {
@@ -483,6 +487,114 @@ namespace Villamos.V_MindenEgyéb
                 HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+
+        public static void ZSER_Betöltés(string Telephely, DateTime Dátum, string Napszak, string fájlexcel, long kiadási_korr = 0, long érkezési_korr = 0)
+        {
+            try
+            {
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("Zsel", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+                // Beolvasni kívánt oszlopok
+                Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+                List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+                //Meghatározzuk a beolvasó tábla elnevezéseit 
+                //Oszlopnevek beállítása
+                string OszlopFelKtg = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Felelős_költséghely" select a.Fejléc).FirstOrDefault();
+
+                if (OszlopFelKtg == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+
+                List<Adat_Főkönyv_ZSER> AdatokGy = new List<Adat_Főkönyv_ZSER>();
+                Kezelő_Főkönyv_ZSER KézFőZser = new Kezelő_Főkönyv_ZSER();
+                int sor = 2;
+                foreach (DataRow Sor in Tábla.Rows)
+                {
+                    string viszonylat = MyE.Beolvas($"b{sor}");
+                    string forgalmiszám = MyE.Beolvas($"c{sor}");
+
+                    DateTime idegignap = MyE.BeolvasDátum($"D{sor}");
+                    DateTime idegigóra = MyE.Beolvasidő($"E{sor}");
+                    DateTime ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    ideigdátum = ideigdátum.AddMinutes(kiadási_korr);
+                    DateTime tervindulás = ideigdátum;
+
+                    idegignap = MyE.BeolvasDátum($"F{sor}");
+                    idegigóra = MyE.Beolvasidő($"G{sor}");
+                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    ideigdátum = ideigdátum.AddMinutes(kiadási_korr);
+                    DateTime tényindulás = ideigdátum;
+
+                    idegignap = MyE.BeolvasDátum($"H{sor}");
+                    idegigóra = MyE.Beolvasidő($"I{sor}");
+                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    ideigdátum = ideigdátum.AddMinutes(érkezési_korr);
+                    DateTime tervérkezés = ideigdátum;
+
+                    idegignap = MyE.BeolvasDátum($"J{sor}");
+                    idegigóra = MyE.Beolvasidő($"K{sor}");
+                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    ideigdátum = ideigdátum.AddMinutes(érkezési_korr);
+                    DateTime tényérkezés = ideigdátum;
+
+                    string napszak = "*";
+                    string szerelvénytípus = MyE.Beolvas($"m{sor}");
+                    long kocsikszáma = (MyE.Beolvas($"o{sor}")).ToÉrt_Long();
+                    string megjegyzés = MyF.Szöveg_Tisztítás(MyE.Beolvas($"r{sor}"), 0, 20);
+
+                    string ideig = MyE.Beolvas($"S{sor}").Trim();
+                    string kocsi1 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
+                    ideig = MyE.Beolvas($"U{sor}").Trim();
+                    string kocsi2 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
+                    ideig = MyE.Beolvas($"W{sor}").Trim();
+                    string kocsi3 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
+                    ideig = MyE.Beolvas($"Y{sor}").Trim();
+                    string kocsi4 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
+                    ideig = MyE.Beolvas($"AA{sor}").Trim();
+                    string kocsi5 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
+                    ideig = MyE.Beolvas($"AC{sor}").Trim();
+                    string kocsi6 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
+                    string ellenőrző = "_";
+                    string státus = MyF.Szöveg_Tisztítás(MyE.Beolvas($"l{sor}"), 0, 10);
+
+                    Adat_Főkönyv_ZSER ADAT = new Adat_Főkönyv_ZSER(
+                                viszonylat,
+                                forgalmiszám,
+                                tervindulás,
+                                tényindulás,
+                                tervérkezés,
+                                tényérkezés,
+                                napszak,
+                                szerelvénytípus,
+                                kocsikszáma,
+                                megjegyzés,
+                                kocsi1,
+                                kocsi2,
+                                kocsi3,
+                                kocsi4,
+                                kocsi5,
+                                kocsi6,
+                                ellenőrző,
+                                státus);
+                    AdatokGy.Add(ADAT);
+                }
+
+                KézFőZser.Rögzítés(Telephely, Dátum, Napszak, AdatokGy);
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "ZSER_Betöltés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 }
