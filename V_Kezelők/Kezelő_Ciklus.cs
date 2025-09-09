@@ -147,7 +147,7 @@ namespace Villamos.Kezelők
                                 $"Névleges={kmErtek}, " +
                                 $"alsóérték={kmErtek * (1 - turesHatar / 100.0)}, " +
                                 $"felsőérték={kmErtek * (1 + turesHatar / 100.0)} " +
-                                $"WHERE [típus]='CAF_km'";               
+                                $"WHERE [típus]='CAF_km'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -180,43 +180,6 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-
-        //elkopó
-        public List<Adat_Ciklus> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
-            Adat_Ciklus Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    Kapcsolat.Open();
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Ciklus(
-                                        rekord["Típus"].ToStrTrim(),
-                                        rekord["Sorszám"].ToÉrt_Long(),
-                                        rekord["Vizsgálatfok"].ToStrTrim(),
-                                        rekord["Törölt"].ToStrTrim(),
-                                        rekord["Névleges"].ToÉrt_Long(),
-                                        rekord["Alsóérték"].ToÉrt_Long(),
-                                        rekord["Felsőérték"].ToÉrt_Long()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
         }
     }
 }

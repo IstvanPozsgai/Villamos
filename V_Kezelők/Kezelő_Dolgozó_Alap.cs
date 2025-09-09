@@ -835,36 +835,7 @@ namespace Villamos.Kezelők
         }
     }
 
-    public class Kezelő_Dolgozó_Beosztás_lista
-    {
-        public List<string> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<string> Adatok = new List<string>();
-            string Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = rekord["dolgozólista"].ToStrTrim();
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
 
 
