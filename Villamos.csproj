@@ -708,10 +708,10 @@
     <Compile Include="V_Ablakok\7_Gondnokság\Ablak_külső.designer.cs">
       <DependentUpon>Ablak_külső.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Rezsi.cs">
+    <Compile Include="V_Ablakok\7_Gondnokság\Rezsi\Ablak_Rezsi.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Rezsi.designer.cs">
+    <Compile Include="V_Ablakok\7_Gondnokság\Rezsi\Ablak_Rezsi.designer.cs">
       <DependentUpon>Ablak_Rezsi.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Védő.cs">
@@ -1558,7 +1558,7 @@
     <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Ablak_külső.resx">
       <DependentUpon>Ablak_külső.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Ablak_Rezsi.resx">
+    <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Rezsi\Ablak_Rezsi.resx">
       <DependentUpon>Ablak_Rezsi.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Ablak_Védő.resx">
