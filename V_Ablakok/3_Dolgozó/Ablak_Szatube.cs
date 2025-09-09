@@ -25,6 +25,8 @@ namespace Villamos
 
         readonly Kezelő_Szatube_Szabadság Kéz_Szabadság = new Kezelő_Szatube_Szabadság();
         readonly Kezelő_Dolgozó_Személyes KézSzemélyes = new Kezelő_Dolgozó_Személyes();
+        readonly Kezelő_Dolgozó_Alap KézDolgAlap = new Kezelő_Dolgozó_Alap();
+
         List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();
 
         public Ablak_Szatube()
@@ -137,23 +139,11 @@ namespace Villamos
             }
         }
 
-
-        // JAVÍTANDÓ:
         private void Névfeltöltés()
         {
             Dolgozónév.Items.Clear();
             Dolgozónév.BeginUpdate();
-            string helyn = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-            string jelszón = "forgalmiutasítás";
-            string szövegn;
-
-            if (Kilépettjel.Checked)
-                szövegn = "SELECT * FROM Dolgozóadatok ORDER BY DolgozóNév asc";
-            else
-                szövegn = $"SELECT * FROM Dolgozóadatok WHERE kilépésiidő=#01-01-1900# ORDER BY DolgozóNév asc";
-
-            Kezelő_Dolgozó_Alap Kéz = new Kezelő_Dolgozó_Alap();
-            List<Adat_Dolgozó_Alap> Adatok = Kéz.Lista_Adatok(helyn, jelszón, szövegn);
+            List<Adat_Dolgozó_Alap> Adatok = KézDolgAlap.Lista_Adatok(CmbTelephely.Text.Trim(), Kilépettjel.Checked);
 
             foreach (Adat_Dolgozó_Alap rekord in Adatok)
                 Dolgozónév.Items.Add(rekord.DolgozóNév.Trim() + " = " + rekord.Dolgozószám.Trim());
@@ -1619,12 +1609,7 @@ namespace Villamos
                     P++;
                 }
 
-
-                helym = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                jelszóm = "forgalmiutasítás";
-                szöveg = "SELECT * FROM dolgozóadatok";
-                Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> DolgAdatok = KézDolg.Lista_Adatok(helym, jelszóm, szöveg);
+                List<Adat_Dolgozó_Alap> DolgAdatok = KézDolgAlap.Lista_Adatok(CmbTelephely.Text.Trim());
 
 
                 // vastag vonal
@@ -2057,11 +2042,7 @@ namespace Villamos
                 }
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:p30", "", "", false, "1", "1");
 
-                helym = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                jelszóm = "forgalmiutasítás";
-                szöveg = "SELECT * FROM dolgozóadatok";
-                Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
-                List<Adat_Dolgozó_Alap> DolgAdatok = KézDolg.Lista_Adatok(helym, jelszóm, szöveg);
+                List<Adat_Dolgozó_Alap> DolgAdatok = KézDolgAlap.Lista_Adatok(CmbTelephely.Text.Trim());
 
 
                 for (int i = 0; i < Tábla.SelectedRows.Count; i++)

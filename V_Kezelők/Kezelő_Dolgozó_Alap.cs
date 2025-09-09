@@ -282,7 +282,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO dolgozóadatok ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += "(dolgozószám, dolgozónév, Vezényelt, Vezényelve, lakcím, kilépésiidő)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.Dolgozószám}', ";
@@ -309,7 +309,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE Dolgozóadatok SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" csoport='{Adat.Csoport}', ";
                 szöveg += $" Főkönyvtitulus='{Adat.Főkönyvtitulus}', ";
                 szöveg += $" bejelentkezésinév='{Adat.Bejelentkezésinév}', ";
@@ -340,7 +340,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Dolgozóadatok SET túlóraeng={túlóraeng} WHERE dolgozószám='{Dolgozószám}'";
+                string szöveg = $"UPDATE {táblanév} SET túlóraeng={túlóraeng} WHERE dolgozószám='{Dolgozószám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -359,7 +359,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE Dolgozóadatok SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" feorsz='{Adat.Feorsz}', ";
                 szöveg += $" munkakör='{Adat.Munkakör}' ";
                 szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
@@ -381,7 +381,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE Dolgozóadatok SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Jogosítványszám='{Adat.Jogosítványszám}', ";
                 szöveg += $" Jogtanúsítvány='{Adat.Jogtanúsítvány}', ";
                 szöveg += $" jogosítványérvényesség='{Adat.Jogosítványérvényesség:yyyy.MM.dd}', ";
@@ -408,7 +408,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (string elem in Adatok)
                 {
-                    string szöveg = $"UPDATE Dolgozóadatok SET csoport='Nincs' WHERE dolgozószám='{elem}'";
+                    string szöveg = $"UPDATE {táblanév} SET csoport='Nincs' WHERE dolgozószám='{elem}'";
                     SzövegGy.Add(szöveg);
                 }
 
@@ -579,81 +579,6 @@ namespace Villamos.Kezelők
         }
 
         //Elkopó
-        public List<Adat_Dolgozó_Alap> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Dolgozó_Alap> Adatok = new List<Adat_Dolgozó_Alap>();
-            Adat_Dolgozó_Alap Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Dolgozó_Alap(
-                                          rekord["Sorszám"].ToÉrt_Long(),
-                                          rekord["DolgozóNév"].ToStrTrim(),
-                                          rekord["Dolgozószám"].ToStrTrim(),
-                                          rekord["Leánykori"].ToStrTrim(),
-                                          rekord["Anyja"].ToStrTrim(),
-                                          rekord["Születésiidő"].ToÉrt_DaTeTime(),
-                                          rekord["Születésihely"].ToStrTrim(),
-                                          rekord["TAj"].ToStrTrim(),
-                                          rekord["ADÓ"].ToStrTrim(),
-                                          rekord["Belépésiidő"].ToÉrt_DaTeTime(),
-                                          rekord["Lakcím"].ToStrTrim(),
-                                          rekord["Ideiglenescím"].ToStrTrim(),
-                                          rekord["Telefonszám1"].ToStrTrim(),
-                                          rekord["telefonszám2"].ToStrTrim(),
-                                          rekord["telefonszám3"].ToStrTrim(),
-                                          rekord["Munkakör"].ToStrTrim(),
-                                          rekord["Csopvez"].ToÉrt_Bool(),
-                                          rekord["Csoport"].ToStrTrim(),
-                                          rekord["Munkarend"].ToÉrt_Bool(),
-                                          rekord["Orvosiérvényesség"].ToÉrt_DaTeTime(),
-                                          rekord["Orvosivizsgálat"].ToÉrt_DaTeTime(),
-                                          rekord["Targoncaérvényesség"].ToÉrt_DaTeTime(),
-                                          rekord["Emelőérvényesség"].ToÉrt_DaTeTime(),
-                                          rekord["Kilépésiidő"].ToÉrt_DaTeTime(),
-                                          rekord["emelőgépigazolvány"].ToStrTrim(),
-                                          rekord["nehézgépkezelőigazolvány"].ToStrTrim(),
-                                          rekord["targoncaigazolvány"].ToStrTrim(),
-                                          rekord["képernyősidő"].ToÉrt_DaTeTime(),
-                                          rekord["nehézgépidő"].ToÉrt_DaTeTime(),
-                                          rekord["feorsz"].ToStrTrim(),
-                                          rekord["jogosítványszám"].ToStrTrim(),
-                                          rekord["Jogosítványérvényesség"].ToÉrt_DaTeTime(),
-                                          rekord["jogtanúsítvány"].ToStrTrim(),
-                                          rekord["jogorvosi"].ToÉrt_DaTeTime(),
-                                          rekord["tűzvizsgaideje"].ToÉrt_DaTeTime(),
-                                          rekord["tűzvizsgaérv"].ToÉrt_DaTeTime(),
-                                          rekord["passzív"].ToÉrt_Bool(),
-                                          rekord["jogosítványkategória"].ToStrTrim(),
-                                          rekord["Bejelentkezésinév"].ToStrTrim(),
-                                          rekord["főkönyvtitulus"].ToStrTrim(),
-                                          rekord["vezényelt"].ToÉrt_Bool(),
-                                          rekord["vezényelve"].ToÉrt_Bool(),
-                                          rekord["részmunkaidős"].ToÉrt_Bool(),
-                                          rekord["alkalmazott"].ToÉrt_Bool(),
-                                          rekord["csoportkód"].ToStrTrim(),
-                                          rekord["túlóraeng"].ToÉrt_Bool(),
-                                          rekord["részmunkaidőperc"].ToÉrt_Int()
-                                          );
-
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public Adat_Dolgozó_Alap Egy_Adat(string hely, string jelszó, string szöveg)
         {

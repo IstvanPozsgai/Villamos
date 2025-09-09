@@ -4536,7 +4536,7 @@ namespace Villamos
                 string jelszó = "forgalmiutasítás";
                 string szöveg = "SELECT * FROM Dolgozóadatok ORDER BY Dolgozónév";
                 AdatokDolgozó.Clear();
-                AdatokDolgozó = KézDolgozó.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
