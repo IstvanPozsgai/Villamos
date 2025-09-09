@@ -14,7 +14,6 @@ namespace Villamos
 {
     public static class Főkönyv_Funkciók
     {
-        readonly static Kezelő_Főkönyv_Zser_Km KézFőZserKm = new Kezelő_Főkönyv_Zser_Km();
         readonly static Kezelő_Főkönyv_ZSER KézFőZser = new Kezelő_Főkönyv_ZSER();
         readonly static Kezelő_Főkönyv_Nap KézFőkönyvNap = new Kezelő_Főkönyv_Nap();
         readonly static Kezelő_Nap_Hiba KézHibaÚj = new Kezelő_Nap_Hiba();
