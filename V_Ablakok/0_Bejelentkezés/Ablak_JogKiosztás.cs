@@ -63,6 +63,8 @@ namespace Villamos
             OldalFeltöltés();
             FelhasználóFeltöltés();
             //   GombLathatosagKezelo.Beallit(this);
+            AblakIdLab.Text = "";
+            GombIDLab.Text = "";
         }
 
 
@@ -153,6 +155,7 @@ namespace Villamos
                 Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
                 AblakFormName = Ablak.FromName;
                 AblakFőID = Ablak.OldalId;
+                AblakIdLab.Text = Ablak.OldalId.ToString ();
                 GombokFeltöltése();
 
                 TáblázatListázás();
@@ -438,6 +441,7 @@ namespace Villamos
                 string[] Darabol = CmbGombok.Text.Trim().Split('=');
                 Adat_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FromName == AblakFormName);
                 GombFőID = Gomb?.GombokId ?? -1;
+                GombIDLab .Text = GombFőID.ToString();
                 if (Gomb == null) return;
                 string[] Gombszervezetek = Gomb.Szervezet.Split(';');
                 //A teljes lista csorbítása a beálító jogosultságaival
