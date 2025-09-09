@@ -73,8 +73,12 @@ namespace Villamos
                 Program.Postás_Vezér = Elem.Vezér1;
 
             }
+            else 
+            {
+                Eredmény = Adatok;
+            }
 
-            List<string> Válasz = new List<string>();
+                List<string> Válasz = new List<string>();
             foreach (Adat_Kiegészítő_Sérülés rekord in Eredmény)
             {
                 Válasz.Add(rekord.Név);
