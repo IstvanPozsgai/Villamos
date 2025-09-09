@@ -146,7 +146,7 @@ namespace Villamos
         private void Telephely_Beállítás()
         {
             Cursor = Cursors.WaitCursor; // homok óra kezdete
-            Listák_feltöltése();
+            AdatokDolg = KézDolg.Lista_Adatok(Cmbtelephely.Text.Trim());
             Csoportfeltöltés();
             Névfeltöltés();
             Dátum.Value = DateTime.Today;
@@ -1908,7 +1908,6 @@ namespace Villamos
         #endregion
 
 
-
         #region gombok
         private void Adatok_egyeztetése_Click(object sender, EventArgs e)
         {
@@ -2506,35 +2505,6 @@ namespace Villamos
                 Holtart.Ki();
 
                 Táblaíró();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-
-
-        #region Listák feltöltése
-        private void Listák_feltöltése()
-        {
-            DolgozóiLista_Feltöltése();
-        }
-        // JAVÍTANDÓ:
-        private void DolgozóiLista_Feltöltése()
-        {
-            try
-            {
-                AdatokDolg.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\dolgozók.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = $"Select * FROM dolgozóadatok ORDER BY dolgozószám";
-                AdatokDolg = KézDolg.Lista_Adatok(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
