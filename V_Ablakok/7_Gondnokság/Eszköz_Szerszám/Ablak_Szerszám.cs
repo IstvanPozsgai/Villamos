@@ -22,7 +22,7 @@ namespace Villamos
         public Ablak_Szerszám()
         {
             InitializeComponent();
-          
+
         }
         readonly Kezelő_Szerszám_Cikk KézSzerszámCikk = new Kezelő_Szerszám_Cikk();
         readonly Kezelő_Szerszám_Könyv KézKönyv = new Kezelő_Szerszám_Könyv();
@@ -71,7 +71,7 @@ namespace Villamos
         {
             try
             {
-                                if (Könyvtár_adat.Trim() == "Adatok\\Szerszám")
+                if (Könyvtár_adat.Trim() == "Adatok\\Szerszám")
                     this.Text = "Szerszám Nyilvántartás";
                 else
                     this.Text = "Helység tartozék nyilvántartás";
@@ -4617,6 +4617,33 @@ namespace Villamos
             }
         }
         #endregion
+
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            try
+            {
+                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+                if (Cmbtelephely.Text.Trim() == "") return;
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
 

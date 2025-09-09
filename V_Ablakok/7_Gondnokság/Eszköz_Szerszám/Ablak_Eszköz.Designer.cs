@@ -37,7 +37,7 @@
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Fülek = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -51,7 +51,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.Tábla =  new Zuby.ADGV.AdvancedDataGridView();
+            this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.SAP_adatok = new System.Windows.Forms.Button();
             this.BtnExcelkimenet = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -96,15 +96,16 @@
             this.Cmbtelephely.FormattingEnabled = true;
             this.Cmbtelephely.Location = new System.Drawing.Point(143, 0);
             this.Cmbtelephely.Name = "Cmbtelephely";
-            this.Cmbtelephely.Size = new System.Drawing.Size(186, 33);
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 
             this.Label13.AutoSize = true;
             this.Label13.Location = new System.Drawing.Point(5, 5);
             this.Label13.Name = "Label13";
-            this.Label13.Size = new System.Drawing.Size(184, 25);
+            this.Label13.Size = new System.Drawing.Size(145, 20);
             this.Label13.TabIndex = 17;
             this.Label13.Text = "Telephelyi beállítás:";
             // 
@@ -140,10 +141,10 @@
             this.tabPage1.Controls.Add(this.Tábla);
             this.tabPage1.Controls.Add(this.SAP_adatok);
             this.tabPage1.Controls.Add(this.BtnExcelkimenet);
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1474, 332);
+            this.tabPage1.Size = new System.Drawing.Size(1474, 337);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Adatbeolvasás";
             // 
@@ -169,7 +170,7 @@
             // 
             this.Szűr_Megnevezés.Location = new System.Drawing.Point(88, 26);
             this.Szűr_Megnevezés.Name = "Szűr_Megnevezés";
-            this.Szűr_Megnevezés.Size = new System.Drawing.Size(195, 30);
+            this.Szűr_Megnevezés.Size = new System.Drawing.Size(195, 26);
             this.Szűr_Megnevezés.TabIndex = 182;
             // 
             // Frissítés
@@ -188,14 +189,14 @@
             // 
             this.Szűr_Név.Location = new System.Drawing.Point(490, 26);
             this.Szűr_Név.Name = "Szűr_Név";
-            this.Szűr_Név.Size = new System.Drawing.Size(195, 30);
+            this.Szűr_Név.Size = new System.Drawing.Size(195, 26);
             this.Szűr_Név.TabIndex = 183;
             // 
             // Szűr_Hely
             // 
             this.Szűr_Hely.Location = new System.Drawing.Point(289, 26);
             this.Szűr_Hely.Name = "Szűr_Hely";
-            this.Szűr_Hely.Size = new System.Drawing.Size(195, 30);
+            this.Szűr_Hely.Size = new System.Drawing.Size(195, 26);
             this.Szűr_Hely.TabIndex = 184;
             // 
             // Szűr_Osztás
@@ -203,7 +204,7 @@
             this.Szűr_Osztás.FormattingEnabled = true;
             this.Szűr_Osztás.Location = new System.Drawing.Point(691, 24);
             this.Szűr_Osztás.Name = "Szűr_Osztás";
-            this.Szűr_Osztás.Size = new System.Drawing.Size(169, 33);
+            this.Szűr_Osztás.Size = new System.Drawing.Size(169, 28);
             this.Szűr_Osztás.TabIndex = 185;
             // 
             // label5
@@ -211,7 +212,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(694, 1);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(99, 25);
+            this.label5.Size = new System.Drawing.Size(80, 20);
             this.label5.TabIndex = 190;
             this.label5.Text = "Besorolás";
             // 
@@ -220,7 +221,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(2, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(101, 25);
+            this.label1.Size = new System.Drawing.Size(80, 20);
             this.label1.TabIndex = 186;
             this.label1.Text = "Szűrések:";
             // 
@@ -229,7 +230,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(493, 3);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(127, 25);
+            this.label4.Size = new System.Drawing.Size(101, 20);
             this.label4.TabIndex = 189;
             this.label4.Text = "Dolgozó név:";
             // 
@@ -238,7 +239,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(91, 3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(131, 25);
+            this.label2.Size = new System.Drawing.Size(103, 20);
             this.label2.TabIndex = 187;
             this.label2.Text = "Megnevezés:";
             // 
@@ -247,7 +248,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(292, 2);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 25);
+            this.label3.Size = new System.Drawing.Size(70, 20);
             this.label3.TabIndex = 188;
             this.label3.Text = "Helység:";
             // 
@@ -263,8 +264,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla.FilterAndSortEnabled = true;
+            this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.Location = new System.Drawing.Point(6, 73);
+            this.Tábla.MaxFilterButtonImageHeight = 23;
             this.Tábla.Name = "Tábla";
+            this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -275,6 +280,7 @@
             this.Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.Tábla.RowHeadersWidth = 25;
             this.Tábla.Size = new System.Drawing.Size(1462, 258);
+            this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 191;
             // 
             // SAP_adatok
@@ -311,10 +317,10 @@
             this.tabPage2.Controls.Add(this.panel4);
             this.tabPage2.Controls.Add(this.panel3);
             this.tabPage2.Controls.Add(this.Ellen_Tábla);
-            this.tabPage2.Location = new System.Drawing.Point(4, 34);
+            this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1474, 332);
+            this.tabPage2.Size = new System.Drawing.Size(1474, 337);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Ellenőrzések";
             // 
@@ -338,7 +344,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(8, 11);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(99, 25);
+            this.label7.Size = new System.Drawing.Size(80, 20);
             this.label7.TabIndex = 196;
             this.label7.Text = "Besorolás";
             // 
@@ -360,7 +366,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(185, 8);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(226, 25);
+            this.label8.Size = new System.Drawing.Size(181, 20);
             this.label8.TabIndex = 200;
             this.label8.Text = "Nyilvántartás Ellenőrzés:";
             // 
@@ -369,7 +375,7 @@
             this.Ellen_Besorolás.FormattingEnabled = true;
             this.Ellen_Besorolás.Location = new System.Drawing.Point(7, 31);
             this.Ellen_Besorolás.Name = "Ellen_Besorolás";
-            this.Ellen_Besorolás.Size = new System.Drawing.Size(171, 33);
+            this.Ellen_Besorolás.Size = new System.Drawing.Size(171, 28);
             this.Ellen_Besorolás.TabIndex = 195;
             // 
             // Ellen_Szűrő
@@ -377,7 +383,7 @@
             this.Ellen_Szűrő.FormattingEnabled = true;
             this.Ellen_Szűrő.Location = new System.Drawing.Point(184, 31);
             this.Ellen_Szűrő.Name = "Ellen_Szűrő";
-            this.Ellen_Szűrő.Size = new System.Drawing.Size(187, 33);
+            this.Ellen_Szűrő.Size = new System.Drawing.Size(187, 28);
             this.Ellen_Szűrő.TabIndex = 199;
             // 
             // Ellen_Frissít
@@ -422,7 +428,7 @@
             this.Besorolás_Combo.FormattingEnabled = true;
             this.Besorolás_Combo.Location = new System.Drawing.Point(8, 24);
             this.Besorolás_Combo.Name = "Besorolás_Combo";
-            this.Besorolás_Combo.Size = new System.Drawing.Size(171, 33);
+            this.Besorolás_Combo.Size = new System.Drawing.Size(171, 28);
             this.Besorolás_Combo.TabIndex = 202;
             // 
             // Át_Tölt
@@ -454,7 +460,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(9, 4);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(99, 25);
+            this.label6.Size = new System.Drawing.Size(80, 20);
             this.label6.TabIndex = 203;
             this.label6.Text = "Besorolás";
             // 
@@ -470,8 +476,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Ellen_Tábla.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.Ellen_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Ellen_Tábla.FilterAndSortEnabled = true;
+            this.Ellen_Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Ellen_Tábla.Location = new System.Drawing.Point(6, 80);
+            this.Ellen_Tábla.MaxFilterButtonImageHeight = 23;
             this.Ellen_Tábla.Name = "Ellen_Tábla";
+            this.Ellen_Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -482,6 +492,7 @@
             this.Ellen_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.Ellen_Tábla.RowHeadersWidth = 25;
             this.Ellen_Tábla.Size = new System.Drawing.Size(1462, 250);
+            this.Ellen_Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Ellen_Tábla.TabIndex = 192;
             // 
             // toolTip1
@@ -502,7 +513,7 @@
             // 
             // Ablak_Eszköz
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkGoldenrod;
             this.ClientSize = new System.Drawing.Size(1495, 434);

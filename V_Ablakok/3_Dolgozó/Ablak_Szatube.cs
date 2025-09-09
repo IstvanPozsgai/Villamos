@@ -2796,5 +2796,31 @@ namespace Villamos
         }
         #endregion
 
+        private void CmbTelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            try
+            {
+                CmbTelephely.Text = CmbTelephely.Items[CmbTelephely.SelectedIndex].ToStrTrim();
+                if (CmbTelephely.Text.Trim() == "") return;
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

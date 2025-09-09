@@ -237,6 +237,7 @@ namespace Villamos
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 0;
             this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 
@@ -1598,11 +1599,16 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Gépi_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Gépi_Tábla.FilterAndSortEnabled = true;
+            this.Gépi_Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Gépi_Tábla.Location = new System.Drawing.Point(5, 110);
+            this.Gépi_Tábla.MaxFilterButtonImageHeight = 23;
             this.Gépi_Tábla.Name = "Gépi_Tábla";
+            this.Gépi_Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Gépi_Tábla.RowHeadersVisible = false;
             this.Gépi_Tábla.RowHeadersWidth = 62;
             this.Gépi_Tábla.Size = new System.Drawing.Size(1295, 359);
+            this.Gépi_Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Gépi_Tábla.TabIndex = 0;
             // 
             // groupBox8

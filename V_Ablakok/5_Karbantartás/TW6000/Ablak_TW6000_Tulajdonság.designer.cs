@@ -60,7 +60,7 @@ namespace Villamos
             this.Mindentkijelöl = new System.Windows.Forms.Button();
             this.Kijelöléstörlése = new System.Windows.Forms.Button();
             this.BtnElőtervezőKeres = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Pá = new System.Windows.Forms.Label();
             this.Pályaszám = new System.Windows.Forms.ComboBox();
             this.TabPage6 = new System.Windows.Forms.TabPage();
@@ -168,6 +168,7 @@ namespace Villamos
             this.Cmbtelephely.Name = "Cmbtelephely";
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 
@@ -1113,11 +1114,11 @@ namespace Villamos
             this.Vizsgdátum.Size = new System.Drawing.Size(107, 26);
             this.Vizsgdátum.TabIndex = 7;
             // 
-            // Start
+            // StartDátum
             // 
             this.StartDátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.StartDátum.Location = new System.Drawing.Point(204, 79);
-            this.StartDátum.Name = "Start";
+            this.StartDátum.Name = "StartDátum";
             this.StartDátum.Size = new System.Drawing.Size(107, 26);
             this.StartDátum.TabIndex = 0;
             // 

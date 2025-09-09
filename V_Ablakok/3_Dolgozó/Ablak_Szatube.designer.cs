@@ -100,7 +100,7 @@ namespace Villamos
             this.Adat_Évek = new System.Windows.Forms.ComboBox();
             this.Súgó = new System.Windows.Forms.Button();
             this.BtnExcelkimenet = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             this.TabFülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -138,6 +138,7 @@ namespace Villamos
             this.CmbTelephely.Size = new System.Drawing.Size(186, 28);
             this.CmbTelephely.TabIndex = 18;
             this.CmbTelephely.SelectedIndexChanged += new System.EventHandler(this.CmbTelephely_SelectedIndexChanged);
+            this.CmbTelephely.SelectionChangeCommitted += new System.EventHandler(this.CmbTelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 

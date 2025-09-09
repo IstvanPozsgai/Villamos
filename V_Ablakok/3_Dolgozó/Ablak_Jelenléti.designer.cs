@@ -86,7 +86,7 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Btnmindkijelöl = new System.Windows.Forms.Button();
             this.BtnKijelölcsop = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.GroupBox1.SuspendLayout();
             this.GroupBox2.SuspendLayout();
             this.GroupBox3.SuspendLayout();
@@ -532,6 +532,7 @@ namespace Villamos
             this.Cmbtelephely.TabIndex = 18;
             this.ToolTip1.SetToolTip(this.Cmbtelephely, "Telephely választó");
             this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 

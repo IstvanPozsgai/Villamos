@@ -33,7 +33,6 @@ namespace Villamos
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_épülettakarítás_alap));
             this.Panel4 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
@@ -146,6 +145,7 @@ namespace Villamos
             this.Cmbtelephely.Name = "Cmbtelephely";
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label5
             // 

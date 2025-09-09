@@ -96,7 +96,7 @@ namespace Villamos
             this.Label8 = new System.Windows.Forms.Label();
             this.Lekérdezés_Tábla = new System.Windows.Forms.DataGridView();
             this.Lekérdezés = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
@@ -847,6 +847,7 @@ namespace Villamos
             this.Cmbtelephely.Size = new System.Drawing.Size(277, 28);
             this.Cmbtelephely.TabIndex = 18;
             this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 

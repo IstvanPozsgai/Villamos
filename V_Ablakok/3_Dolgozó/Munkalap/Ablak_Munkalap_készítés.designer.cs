@@ -87,7 +87,7 @@ namespace Villamos
             this.Csoportkijelölmind = new System.Windows.Forms.Button();
             this.Nyit = new System.Windows.Forms.Button();
             this.Benn_Lévők = new System.Windows.Forms.Button();
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Panel1.SuspendLayout();
             this.Panel2.SuspendLayout();
             this.Panel3.SuspendLayout();
@@ -115,6 +115,7 @@ namespace Villamos
             this.Cmbtelephely.Name = "Cmbtelephely";
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 

@@ -82,6 +82,7 @@ namespace Villamos
             this.Állkirak = new System.Windows.Forms.Button();
             this.Állvesz = new System.Windows.Forms.Button();
             this.TabPage2 = new System.Windows.Forms.TabPage();
+            this.Pdf_csere = new System.Windows.Forms.Button();
             this.PDF_néző = new PdfiumViewer.PdfViewer();
             this.Label38 = new System.Windows.Forms.Label();
             this.Feltöltendő = new System.Windows.Forms.TextBox();
@@ -116,7 +117,6 @@ namespace Villamos
             this.Panel4 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label5 = new System.Windows.Forms.Label();
-            this.Pdf_csere = new System.Windows.Forms.Button();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.Panel3.SuspendLayout();
@@ -635,6 +635,18 @@ namespace Villamos
             this.TabPage2.TabIndex = 6;
             this.TabPage2.Text = "Jármű dokumentáció";
             // 
+            // Pdf_csere
+            // 
+            this.Pdf_csere.BackgroundImage = global::Villamos.Properties.Resources.Mimetype_recycled;
+            this.Pdf_csere.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Pdf_csere.Location = new System.Drawing.Point(110, 3);
+            this.Pdf_csere.Name = "Pdf_csere";
+            this.Pdf_csere.Size = new System.Drawing.Size(45, 45);
+            this.Pdf_csere.TabIndex = 242;
+            this.ToolTip1.SetToolTip(this.Pdf_csere, "A feltöltött két PDF fájl sorrendjét megcseréli");
+            this.Pdf_csere.UseVisualStyleBackColor = true;
+            this.Pdf_csere.Click += new System.EventHandler(this.Pdf_csere_Click);
+            // 
             // PDF_néző
             // 
             this.PDF_néző.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1017,6 +1029,7 @@ namespace Villamos
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
             this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label5
             // 
@@ -1026,18 +1039,6 @@ namespace Villamos
             this.Label5.Size = new System.Drawing.Size(145, 20);
             this.Label5.TabIndex = 17;
             this.Label5.Text = "Telephelyi beállítás:";
-            // 
-            // Pdf_csere
-            // 
-            this.Pdf_csere.BackgroundImage = global::Villamos.Properties.Resources.Mimetype_recycled;
-            this.Pdf_csere.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Pdf_csere.Location = new System.Drawing.Point(110, 3);
-            this.Pdf_csere.Name = "Pdf_csere";
-            this.Pdf_csere.Size = new System.Drawing.Size(45, 45);
-            this.Pdf_csere.TabIndex = 242;
-            this.ToolTip1.SetToolTip(this.Pdf_csere, "A feltöltött két PDF fájl sorrendjét megcseréli");
-            this.Pdf_csere.UseVisualStyleBackColor = true;
-            this.Pdf_csere.Click += new System.EventHandler(this.Pdf_csere_Click);
             // 
             // Ablak_Jármű
             // 

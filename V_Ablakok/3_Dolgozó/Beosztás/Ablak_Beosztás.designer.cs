@@ -59,20 +59,20 @@ namespace Villamos
             this.Előzmény = new System.Windows.Forms.Button();
             this.Adatok_egyeztetése = new System.Windows.Forms.Button();
             this.Váltós = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.CsukDolgozó = new System.Windows.Forms.Button();
-            this.CsukCsoport = new System.Windows.Forms.Button();
-            this.Chk_CTRL = new System.Windows.Forms.CheckBox();
             this.Kiegészítő_Doboz = new System.Windows.Forms.Button();
             this.DolgozóFrissít = new System.Windows.Forms.Button();
             this.Dolgozóvissza = new System.Windows.Forms.Button();
             this.Dolgozókijelölmind = new System.Windows.Forms.Button();
-            this.NyitDolgozó = new System.Windows.Forms.Button();
             this.Csoportvissza = new System.Windows.Forms.Button();
             this.Csoportkijelölmind = new System.Windows.Forms.Button();
-            this.NyitCsoport = new System.Windows.Forms.Button();
             this.CsoportFrissít = new System.Windows.Forms.Button();
             this.Excel_gomb = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.CsukDolgozó = new System.Windows.Forms.Button();
+            this.CsukCsoport = new System.Windows.Forms.Button();
+            this.Chk_CTRL = new System.Windows.Forms.CheckBox();
+            this.NyitDolgozó = new System.Windows.Forms.Button();
+            this.NyitCsoport = new System.Windows.Forms.Button();
             this.Súgó = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -97,6 +97,7 @@ namespace Villamos
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
             this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 
@@ -352,50 +353,6 @@ namespace Villamos
             this.Váltós.Visible = false;
             this.Váltós.Click += new System.EventHandler(this.Váltós_Click);
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(0, 0);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 0;
-            // 
-            // CsukDolgozó
-            // 
-            this.CsukDolgozó.BackgroundImage = global::Villamos.Properties.Resources.fel;
-            this.CsukDolgozó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.CsukDolgozó.Location = new System.Drawing.Point(389, 41);
-            this.CsukDolgozó.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.CsukDolgozó.Name = "CsukDolgozó";
-            this.CsukDolgozó.Size = new System.Drawing.Size(40, 40);
-            this.CsukDolgozó.TabIndex = 117;
-            this.CsukDolgozó.UseVisualStyleBackColor = true;
-            this.CsukDolgozó.Visible = false;
-            this.CsukDolgozó.Click += new System.EventHandler(this.Csukdolgozó_Click);
-            // 
-            // CsukCsoport
-            // 
-            this.CsukCsoport.BackgroundImage = global::Villamos.Properties.Resources.fel;
-            this.CsukCsoport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.CsukCsoport.Location = new System.Drawing.Point(389, 87);
-            this.CsukCsoport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.CsukCsoport.Name = "CsukCsoport";
-            this.CsukCsoport.Size = new System.Drawing.Size(40, 40);
-            this.CsukCsoport.TabIndex = 113;
-            this.CsukCsoport.UseVisualStyleBackColor = true;
-            this.CsukCsoport.Visible = false;
-            this.CsukCsoport.Click += new System.EventHandler(this.CsukCsoport_Click);
-            // 
-            // Chk_CTRL
-            // 
-            this.Chk_CTRL.AutoSize = true;
-            this.Chk_CTRL.Location = new System.Drawing.Point(535, 8);
-            this.Chk_CTRL.Name = "Chk_CTRL";
-            this.Chk_CTRL.Size = new System.Drawing.Size(127, 24);
-            this.Chk_CTRL.TabIndex = 166;
-            this.Chk_CTRL.Text = "CTRL nyomva";
-            this.Chk_CTRL.UseVisualStyleBackColor = true;
-            this.Chk_CTRL.Visible = false;
-            // 
             // Kiegészítő_Doboz
             // 
             this.Kiegészítő_Doboz.BackgroundImage = global::Villamos.Properties.Resources.BeCardStack;
@@ -448,18 +405,6 @@ namespace Villamos
             this.Dolgozókijelölmind.UseVisualStyleBackColor = true;
             this.Dolgozókijelölmind.Click += new System.EventHandler(this.Dolgozókijelölmind_Click);
             // 
-            // NyitDolgozó
-            // 
-            this.NyitDolgozó.BackgroundImage = global::Villamos.Properties.Resources.le;
-            this.NyitDolgozó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.NyitDolgozó.Location = new System.Drawing.Point(389, 43);
-            this.NyitDolgozó.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.NyitDolgozó.Name = "NyitDolgozó";
-            this.NyitDolgozó.Size = new System.Drawing.Size(40, 40);
-            this.NyitDolgozó.TabIndex = 116;
-            this.NyitDolgozó.UseVisualStyleBackColor = true;
-            this.NyitDolgozó.Click += new System.EventHandler(this.Nyitdolgozó_Click);
-            // 
             // Csoportvissza
             // 
             this.Csoportvissza.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
@@ -486,18 +431,6 @@ namespace Villamos
             this.Csoportkijelölmind.UseVisualStyleBackColor = true;
             this.Csoportkijelölmind.Click += new System.EventHandler(this.Csoportkijelölmind_Click);
             // 
-            // NyitCsoport
-            // 
-            this.NyitCsoport.BackgroundImage = global::Villamos.Properties.Resources.le;
-            this.NyitCsoport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.NyitCsoport.Location = new System.Drawing.Point(389, 87);
-            this.NyitCsoport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.NyitCsoport.Name = "NyitCsoport";
-            this.NyitCsoport.Size = new System.Drawing.Size(40, 40);
-            this.NyitCsoport.TabIndex = 112;
-            this.NyitCsoport.UseVisualStyleBackColor = true;
-            this.NyitCsoport.Click += new System.EventHandler(this.NyitCsoport_Click);
-            // 
             // CsoportFrissít
             // 
             this.CsoportFrissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
@@ -523,6 +456,74 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.Excel_gomb, "Excelt készít");
             this.Excel_gomb.UseVisualStyleBackColor = true;
             this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(0, 0);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 0;
+            // 
+            // CsukDolgozó
+            // 
+            this.CsukDolgozó.BackgroundImage = global::Villamos.Properties.Resources.fel;
+            this.CsukDolgozó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CsukDolgozó.Location = new System.Drawing.Point(389, 41);
+            this.CsukDolgozó.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.CsukDolgozó.Name = "CsukDolgozó";
+            this.CsukDolgozó.Size = new System.Drawing.Size(40, 40);
+            this.CsukDolgozó.TabIndex = 117;
+            this.CsukDolgozó.UseVisualStyleBackColor = true;
+            this.CsukDolgozó.Visible = false;
+            this.CsukDolgozó.Click += new System.EventHandler(this.Csukdolgozó_Click);
+            // 
+            // CsukCsoport
+            // 
+            this.CsukCsoport.BackgroundImage = global::Villamos.Properties.Resources.fel;
+            this.CsukCsoport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CsukCsoport.Location = new System.Drawing.Point(389, 87);
+            this.CsukCsoport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.CsukCsoport.Name = "CsukCsoport";
+            this.CsukCsoport.Size = new System.Drawing.Size(40, 40);
+            this.CsukCsoport.TabIndex = 113;
+            this.CsukCsoport.UseVisualStyleBackColor = true;
+            this.CsukCsoport.Visible = false;
+            this.CsukCsoport.Click += new System.EventHandler(this.CsukCsoport_Click);
+            // 
+            // Chk_CTRL
+            // 
+            this.Chk_CTRL.AutoSize = true;
+            this.Chk_CTRL.Location = new System.Drawing.Point(535, 8);
+            this.Chk_CTRL.Name = "Chk_CTRL";
+            this.Chk_CTRL.Size = new System.Drawing.Size(127, 24);
+            this.Chk_CTRL.TabIndex = 166;
+            this.Chk_CTRL.Text = "CTRL nyomva";
+            this.Chk_CTRL.UseVisualStyleBackColor = true;
+            this.Chk_CTRL.Visible = false;
+            // 
+            // NyitDolgozó
+            // 
+            this.NyitDolgozó.BackgroundImage = global::Villamos.Properties.Resources.le;
+            this.NyitDolgozó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.NyitDolgozó.Location = new System.Drawing.Point(389, 43);
+            this.NyitDolgozó.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.NyitDolgozó.Name = "NyitDolgozó";
+            this.NyitDolgozó.Size = new System.Drawing.Size(40, 40);
+            this.NyitDolgozó.TabIndex = 116;
+            this.NyitDolgozó.UseVisualStyleBackColor = true;
+            this.NyitDolgozó.Click += new System.EventHandler(this.Nyitdolgozó_Click);
+            // 
+            // NyitCsoport
+            // 
+            this.NyitCsoport.BackgroundImage = global::Villamos.Properties.Resources.le;
+            this.NyitCsoport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.NyitCsoport.Location = new System.Drawing.Point(389, 87);
+            this.NyitCsoport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.NyitCsoport.Name = "NyitCsoport";
+            this.NyitCsoport.Size = new System.Drawing.Size(40, 40);
+            this.NyitCsoport.TabIndex = 112;
+            this.NyitCsoport.UseVisualStyleBackColor = true;
+            this.NyitCsoport.Click += new System.EventHandler(this.NyitCsoport_Click);
             // 
             // Súgó
             // 
