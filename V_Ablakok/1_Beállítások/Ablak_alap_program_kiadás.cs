@@ -186,7 +186,7 @@ namespace Villamos
             }
         }
 
-        private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
             {
@@ -4471,5 +4471,7 @@ namespace Villamos
 
         }
         #endregion
+
+
     }
 }
