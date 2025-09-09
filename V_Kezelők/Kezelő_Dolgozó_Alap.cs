@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "forgalmiutasítás";
         string hely;
+        readonly string táblanév = "Dolgozóadatok";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -34,9 +35,9 @@ namespace Villamos.Kezelők
             Adat_Dolgozó_Alap Adat;
             string szöveg;
             if (Aktív)
-                szöveg = "SELECT * FROM Dolgozóadatok WHERE Kilépésiidő=#1/1/1900# order by DolgozóNév ";
+                szöveg = $"SELECT * FROM {táblanév} WHERE Kilépésiidő=#1/1/1900# order by DolgozóNév ";
             else
-                szöveg = "SELECT * FROM Dolgozóadatok order by DolgozóNév ";
+                szöveg = $"SELECT * FROM {táblanév} order by DolgozóNév ";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -114,7 +115,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO dolgozóadatok ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += " ( dolgozónév, dolgozószám, kilépésiidő, belépésiidő)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.DolgozóNév}', ";
@@ -140,7 +141,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Dolgozóadatok SET csoport='Nincs' WHERE dolgozószám='{Adat.Dolgozószám}'";
+                string szöveg = $"UPDATE {táblanév} SET csoport='Nincs' WHERE dolgozószám='{Adat.Dolgozószám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -159,7 +160,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  dolgozóadatok SET ";
+                string szöveg = $"UPDATE  {táblanév} SET ";
                 szöveg += $" kilépésiidő ='{Adat.Kilépésiidő:yyyy.MM.dd}' ";
                 szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -180,7 +181,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  dolgozóadatok SET ";
+                string szöveg = $"UPDATE  {táblanév} SET ";
                 szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
                 szöveg += $" belépésiidő='{Adat.Belépésiidő:yyyy.MM.dd}', ";
                 szöveg += $" lakcím='{Adat.Lakcím}', ";
@@ -205,7 +206,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO dolgozóadatok ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += " ( dolgozónév, dolgozószám, kilépésiidő, belépésiidő, lakcím)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.DolgozóNév}', ";
@@ -232,7 +233,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  dolgozóadatok SET ";
+                string szöveg = $"UPDATE  {táblanév} SET ";
                 szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
                 szöveg += $" lakcím='{Adat.Lakcím}', ";
                 szöveg += $" Vezényelt={Adat.Vezényelt}, ";
@@ -257,7 +258,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  dolgozóadatok SET ";
+                string szöveg = $"UPDATE  {táblanév} SET ";
                 szöveg += $" lakcím='{Adat.Lakcím}', ";
                 szöveg += $" Vezényelt={Adat.Vezényelt}, ";
                 szöveg += $" Vezényelve={Adat.Vezényelve} ";
@@ -429,7 +430,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  dolgozóadatok SET ";
+                string szöveg = $"UPDATE  {táblanév} SET ";
                 szöveg += $" kilépésiidő ='{Adat.Kilépésiidő}', ";
                 szöveg += $" dolgozónév='{Adat.DolgozóNév}'";
                 szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
@@ -451,7 +452,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  dolgozóadatok SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
                 szöveg += $" lakcím='{Adat.Lakcím}' ";
                 szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
@@ -523,11 +524,10 @@ namespace Villamos.Kezelők
         /// <param name="Adat"></param>
         public void Rögzítés_IDM(string Telephely, Adat_Dolgozó_Alap Adat)
         {
-
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO dolgozóadatok ( Dolgozószám, Dolgozónév, belépésiidő, kilépésiidő, munkakör, lakcím )  VALUES ( ";
+                string szöveg = $"INSERT INTO {táblanév} ( Dolgozószám, Dolgozónév, belépésiidő, kilépésiidő, munkakör, lakcím )  VALUES ( ";
                 szöveg += $"'{Adat.Dolgozószám}', ";   // Dolgozószám
                 szöveg += $"'{Adat.DolgozóNév}', "; // Dolgozónév
                 szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}', ";  // belépésiidő
@@ -559,7 +559,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE dolgozóadatok  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"Dolgozónév='{Adat.DolgozóNév}', "; // Dolgozónév
                 szöveg += $"belépésiidő='{Adat.Belépésiidő:yyyy.MM.dd}', ";  // belépésiidő
                 szöveg += $"kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}' ";  // kilépésiidő
