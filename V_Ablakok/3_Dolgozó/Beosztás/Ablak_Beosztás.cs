@@ -23,6 +23,7 @@ namespace Villamos
         int ScrollY = 0;
         int Elsősor = 0;
         int hónap_hossz = 0;
+        bool Chk_CTRL = false;
 
         int TáblaSor;
         int TáblaOszlop;
@@ -54,13 +55,13 @@ namespace Villamos
         private void Ablak_Beosztás_KeyDown(object sender, KeyEventArgs e)
         {
             if ((int)e.KeyCode == 17)
-                Chk_CTRL.Checked = true;
+                Chk_CTRL = true;
         }
 
         private void Ablak_Beosztás_KeyUp(object sender, KeyEventArgs e)
         {
             if ((int)e.KeyCode == 17)
-                Chk_CTRL.Checked = false;
+                Chk_CTRL = false;
         }
 
         private void Start()
@@ -1209,7 +1210,7 @@ namespace Villamos
                     return;
                 }
                 // Kijelöljök a sort
-                if (Chk_CTRL.Checked == true)
+                if (Chk_CTRL)
                 {
                     // egész sor színezése ha törölt
                     for (int i = 0; i < Tábla.ColumnCount; i++)

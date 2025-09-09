@@ -67,10 +67,8 @@ namespace Villamos
             this.Csoportkijelölmind = new System.Windows.Forms.Button();
             this.CsoportFrissít = new System.Windows.Forms.Button();
             this.Excel_gomb = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.CsukDolgozó = new System.Windows.Forms.Button();
             this.CsukCsoport = new System.Windows.Forms.Button();
-            this.Chk_CTRL = new System.Windows.Forms.CheckBox();
             this.NyitDolgozó = new System.Windows.Forms.Button();
             this.NyitCsoport = new System.Windows.Forms.Button();
             this.Súgó = new System.Windows.Forms.Button();
@@ -457,13 +455,6 @@ namespace Villamos
             this.Excel_gomb.UseVisualStyleBackColor = true;
             this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(0, 0);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 0;
-            // 
             // CsukDolgozó
             // 
             this.CsukDolgozó.BackgroundImage = global::Villamos.Properties.Resources.fel;
@@ -489,17 +480,6 @@ namespace Villamos
             this.CsukCsoport.UseVisualStyleBackColor = true;
             this.CsukCsoport.Visible = false;
             this.CsukCsoport.Click += new System.EventHandler(this.CsukCsoport_Click);
-            // 
-            // Chk_CTRL
-            // 
-            this.Chk_CTRL.AutoSize = true;
-            this.Chk_CTRL.Location = new System.Drawing.Point(535, 8);
-            this.Chk_CTRL.Name = "Chk_CTRL";
-            this.Chk_CTRL.Size = new System.Drawing.Size(127, 24);
-            this.Chk_CTRL.TabIndex = 166;
-            this.Chk_CTRL.Text = "CTRL nyomva";
-            this.Chk_CTRL.UseVisualStyleBackColor = true;
-            this.Chk_CTRL.Visible = false;
             // 
             // NyitDolgozó
             // 
@@ -544,9 +524,7 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
             this.ClientSize = new System.Drawing.Size(1200, 484);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.Gomb_nappalos);
-            this.Controls.Add(this.Chk_CTRL);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Előzmény);
             this.Controls.Add(this.Ledolgozottidő);
@@ -631,8 +609,6 @@ namespace Villamos
         internal Label Ledolgozottidő;
         internal ToolTip ToolTip1;
         internal Button Előzmény;
-        internal CheckBox Chk_CTRL;
         internal Button Gomb_nappalos;
-        internal Button button3;
     }
 }
