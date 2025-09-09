@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -1070,13 +1071,22 @@ namespace Villamos
                 else
                     return;
 
+                //beolvassuk az excel táblát
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexc);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("Zsel", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma !");
+
+
                 DateTime Eleje = DateTime.Now;
-                Főkönyv_Funkciók.ZSER_Betöltés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", fájlexc, kiadási_korr, érkezési_korr);
+                SAP_Adatokbeolvasása.ZSER_Betöltés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", Tábla, kiadási_korr, érkezési_korr);
                 DateTime Vége = DateTime.Now;
 
                 // megnézzük, hogy előző éjszaka volt -e tábla, ha volt akkor hozzá fűzzük a napi adatokhoz.
                 List<Adat_Főkönyv_ZSER> AdatokÉ = KézFőkönyvZSER.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.AddDays(-1), "éj");
-                if (AdatokÉ != null && AdatokÉ.Count != 0) Előzőnapuéjszakaijárat();
+                if (AdatokÉ != null && AdatokÉ.Count != 0) Előzőnapuéjszakaijárat(AdatokÉ);
+
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexc);
                 MessageBox.Show($"Az adat konvertálás befejeződött!\n Idő:{Vége - Eleje}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -1091,12 +1101,11 @@ namespace Villamos
             }
         }
 
-        private void Előzőnapuéjszakaijárat()
+        private void Előzőnapuéjszakaijárat(List<Adat_Főkönyv_ZSER> AdatokÉ)
         {
             try
             {
                 // hozzátesszük az előző éjszakai járatokat az aktuális naphoz.
-                List<Adat_Főkönyv_ZSER> AdatokÉ = KézFőkönyvZSER.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.AddDays(-1), "éj");
                 List<Adat_Főkönyv_ZSER> AdatokGY = new List<Adat_Főkönyv_ZSER>();
                 foreach (Adat_Főkönyv_ZSER rekord in AdatokÉ)
                 {

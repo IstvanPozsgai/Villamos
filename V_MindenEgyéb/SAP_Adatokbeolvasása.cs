@@ -490,13 +490,10 @@ namespace Villamos.V_MindenEgyéb
         }
 
 
-        public static void ZSER_Betöltés(string Telephely, DateTime Dátum, string Napszak, string fájlexcel, long kiadási_korr = 0, long érkezési_korr = 0)
+        public static void ZSER_Betöltés(string Telephely, DateTime Dátum, string Napszak, DataTable Tábla, long kiadási_korr = 0, long érkezési_korr = 0)
         {
             try
             {
-                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
-                //Ellenőrzés
-                if (!MyF.Betöltéshelyes("Zsel", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
                 // Beolvasni kívánt oszlopok
                 Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
                 List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
@@ -582,8 +579,7 @@ namespace Villamos.V_MindenEgyéb
                 }
 
                 KézFőZser.Rögzítés(Telephely, Dátum, Napszak, AdatokGy);
-                // kitöröljük a betöltött fájlt
-                File.Delete(fájlexcel);
+           
             }
             catch (HibásBevittAdat ex)
             {
@@ -596,5 +592,110 @@ namespace Villamos.V_MindenEgyéb
             }
 
         }
+
+        private static void Km_adatok_beolvasása(int sormax, long kiadásikorr, long érkezésikorr, DateTime Dátum, string Telephely)
+        {
+            string szöveg = "";
+            int oszlop = 0;
+            int i = 0;
+            try
+            {
+                Kezelő_Főkönyv_Zser_Km KézFőZserKm = new Kezelő_Főkönyv_Zser_Km();
+                List<Adat_Főkönyv_Zser_Km> Adatok = KézFőZserKm.Lista_adatok(Dátum.Year);
+
+                List<Adat_Főkönyv_Zser_Km> Elemek = (from a in Adatok
+                                                     where a.Telephely == Telephely.Trim() && a.Dátum.ToShortDateString() == Dátum.ToShortDateString()
+                                                     select a).ToList();
+
+                // leellenőrizzük, hogy van-e már erre a napra rögzítve adat ha van töröljük
+
+                if (Elemek != null) KézFőZserKm.Törlés(Telephely.Trim(), Dátum);
+
+                string[] oszlopok = new string[7];
+                oszlopok[1] = "S";
+                oszlopok[2] = "U";
+                oszlopok[3] = "W";
+                oszlopok[4] = "Y";
+                oszlopok[5] = "AA";
+                oszlopok[6] = "AC";
+
+                // beolvassuk az excel tábla szükséges adatait
+
+                List<Adat_Főkönyv_Zser_Km> AdatokGy = new List<Adat_Főkönyv_Zser_Km>();
+                for (i = 2; i <= sormax; i++)
+                {
+                    DateTime idegignap = MyE.Beolvas("D" + i).ToÉrt_DaTeTime();
+                    DateTime idegigóra = MyE.Beolvasidő("E" + i);
+                    DateTime ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    DateTime tervindulás = ideigdátum.AddMinutes(kiadásikorr);
+
+                    idegignap = MyE.Beolvas("F" + i).ToÉrt_DaTeTime();
+                    idegigóra = MyE.Beolvasidő("G" + i);
+                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    DateTime tényindulás = ideigdátum.AddMinutes(kiadásikorr);
+
+                    idegignap = MyE.Beolvas("H" + i).ToÉrt_DaTeTime();
+                    idegigóra = MyE.Beolvasidő("I" + i);
+                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    DateTime tervérkezés = ideigdátum.AddMinutes(érkezésikorr);
+
+                    idegignap = MyE.Beolvas("J" + i).ToÉrt_DaTeTime();
+                    idegigóra = MyE.Beolvasidő("K" + i);
+                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    DateTime tényérkezés = ideigdátum.AddMinutes(érkezésikorr);
+
+
+                    string kms = MyE.Beolvas("ae" + i.ToString());
+                    if (!int.TryParse(kms, out int km)) km = 0;
+
+                    TimeSpan számhossz = tervérkezés - tervindulás;
+                    TimeSpan menethossz = tényérkezés - tényindulás;
+
+                    if (számhossz.TotalMinutes != menethossz.TotalMinutes && menethossz.TotalMinutes != 0)
+                    {
+                        //Ha nem a teljes számot járja le akkor kiszámoljuk a töredék km-t.
+                        km = (int)((km * menethossz.TotalMinutes) / számhossz.TotalMinutes);
+                    }
+
+
+                    for (oszlop = 1; oszlop <= 6; oszlop++)
+                    {
+
+                        string szövegideig = MyE.Beolvas(oszlopok[oszlop] + i).Trim();
+                        if (szövegideig != "")
+                        {
+                            string azonosító = "";
+                            szövegideig = MyF.Szöveg_Tisztítás(szövegideig, 1, 4);
+                            if (szövegideig.Trim().Length < 4)
+                            {
+                                //Fogaskerekű pályaszáma
+                                string ideigpsz = new string('0', 4 - szövegideig.Trim().Length);
+                                azonosító = ideigpsz + szövegideig.Trim();
+                            }
+                            else
+                                azonosító = szövegideig.Trim();
+                            Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(
+                                                     azonosító.Trim(),
+                                                     tervindulás,
+                                                     km,
+                                                     Telephely.Trim());
+                            AdatokGy.Add(ADAT);
+                        }
+                    }
+                }
+                KézFőZserKm.Rögzítés(AdatokGy, Dátum.Year);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_adatok_beolvasása", ex.StackTrace, ex.Source, ex.HResult, $"{szöveg}\nOszlop:{oszlop}\nSor:{i}");
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new Exception("MyA rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+            }
+        }
+
     }
 }
