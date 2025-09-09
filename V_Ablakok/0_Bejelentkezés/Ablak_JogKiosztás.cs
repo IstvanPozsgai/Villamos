@@ -58,7 +58,7 @@ namespace Villamos
                            where a.Törölt == false
                            orderby a.UserName
                            select a).ToList();
-            AdatokDolgozó = KézDolgozó.Lista_Adatok().Where(a => a.Státus == false).OrderBy(a => a.Dolgozónév).ToList();
+            AdatokDolgozó = KézDolgozó.Lista_Adatok().Where(a => a.Státus == true ).OrderBy(a => a.Dolgozónév).ToList();
             AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
             OldalFeltöltés();
             FelhasználóFeltöltés();
@@ -168,7 +168,7 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:   Nem írja ki a dolgozó nevét
+
         private void Felhasználók_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
@@ -180,7 +180,6 @@ namespace Villamos
                     DolgozóNév.Text = $"<< - >>";
                     FelhasználóFőId = -1;
                 }
-
                 else
                 {
                     FelhasználóFőId = Felhasználó.UserId;
