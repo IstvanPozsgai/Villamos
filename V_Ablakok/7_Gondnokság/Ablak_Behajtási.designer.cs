@@ -111,6 +111,7 @@ namespace Villamos
             this.Táblagondnok = new System.Windows.Forms.DataGridView();
             this.BtnGondnokFrissít = new System.Windows.Forms.Button();
             this.TabPage2 = new System.Windows.Forms.TabPage();
+            this.Elutasít_gomb = new System.Windows.Forms.Button();
             this.LblSzakszGondnokiFelülbírálás = new System.Windows.Forms.Label();
             this.LblSzakszEngedély = new System.Windows.Forms.Label();
             this.CmbSzakszlista = new System.Windows.Forms.ComboBox();
@@ -157,7 +158,6 @@ namespace Villamos
             this.LblTelephelyBeállítás = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Elutasít_gomb = new System.Windows.Forms.Button();
             this.Fülek.SuspendLayout();
             this.Engedélyek.SuspendLayout();
             this.PanelEngedély.SuspendLayout();
@@ -985,6 +985,18 @@ namespace Villamos
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Engedélyezés Szakszolgálat";
             // 
+            // Elutasít_gomb
+            // 
+            this.Elutasít_gomb.BackgroundImage = global::Villamos.Properties.Resources.bezár;
+            this.Elutasít_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Elutasít_gomb.Location = new System.Drawing.Point(226, 11);
+            this.Elutasít_gomb.Name = "Elutasít_gomb";
+            this.Elutasít_gomb.Size = new System.Drawing.Size(45, 45);
+            this.Elutasít_gomb.TabIndex = 123;
+            this.ToolTip1.SetToolTip(this.Elutasít_gomb, "Elutasítja a kérelmeket");
+            this.Elutasít_gomb.UseVisualStyleBackColor = true;
+            this.Elutasít_gomb.Click += new System.EventHandler(this.Elutasít_gomb_Click);
+            // 
             // LblSzakszGondnokiFelülbírálás
             // 
             this.LblSzakszGondnokiFelülbírálás.AutoSize = true;
@@ -1463,6 +1475,7 @@ namespace Villamos
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
             this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // LblTelephelyBeállítás
             // 
@@ -1486,18 +1499,6 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
-            // Elutasít_gomb
-            // 
-            this.Elutasít_gomb.BackgroundImage = global::Villamos.Properties.Resources.bezár;
-            this.Elutasít_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Elutasít_gomb.Location = new System.Drawing.Point(226, 11);
-            this.Elutasít_gomb.Name = "Elutasít_gomb";
-            this.Elutasít_gomb.Size = new System.Drawing.Size(45, 45);
-            this.Elutasít_gomb.TabIndex = 123;
-            this.ToolTip1.SetToolTip(this.Elutasít_gomb, "Elutasítja a kérelmeket");
-            this.Elutasít_gomb.UseVisualStyleBackColor = true;
-            this.Elutasít_gomb.Click += new System.EventHandler(this.Elutasít_gomb_Click);
-            // 
             // Ablak_Behajtási
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1515,7 +1516,7 @@ namespace Villamos
             this.Text = "AblakBehajtási";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.AblakBehajtási_Load);
-                 this.Fülek.ResumeLayout(false);
+            this.Fülek.ResumeLayout(false);
             this.Engedélyek.ResumeLayout(false);
             this.Engedélyek.PerformLayout();
             this.PanelEngedély.ResumeLayout(false);

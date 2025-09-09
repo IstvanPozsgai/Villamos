@@ -48,6 +48,7 @@ namespace Villamos
             this.Label13 = new System.Windows.Forms.Label();
             this.Lapfülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.Telephely = new System.Windows.Forms.ComboBox();
             this.Label68 = new System.Windows.Forms.Label();
             this.Telephely1 = new System.Windows.Forms.TextBox();
             this.Költséghely = new System.Windows.Forms.TextBox();
@@ -264,7 +265,6 @@ namespace Villamos
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Btn_Súgó = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.Telephely = new System.Windows.Forms.ComboBox();
             this.Panel1.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -307,6 +307,7 @@ namespace Villamos
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
             this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
             // 
@@ -410,6 +411,15 @@ namespace Villamos
             this.TabPage1.Size = new System.Drawing.Size(1240, 617);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Jelentés létrehozás / módosítás";
+            // 
+            // Telephely
+            // 
+            this.Telephely.Enabled = false;
+            this.Telephely.FormattingEnabled = true;
+            this.Telephely.Location = new System.Drawing.Point(367, 6);
+            this.Telephely.Name = "Telephely";
+            this.Telephely.Size = new System.Drawing.Size(186, 28);
+            this.Telephely.TabIndex = 272;
             // 
             // Label68
             // 
@@ -2710,15 +2720,6 @@ namespace Villamos
             this.Holtart.Size = new System.Drawing.Size(830, 30);
             this.Holtart.TabIndex = 272;
             this.Holtart.Visible = false;
-            // 
-            // Telephely
-            // 
-            this.Telephely.Enabled = false;
-            this.Telephely.FormattingEnabled = true;
-            this.Telephely.Location = new System.Drawing.Point(367, 6);
-            this.Telephely.Name = "Telephely";
-            this.Telephely.Size = new System.Drawing.Size(186, 28);
-            this.Telephely.TabIndex = 272;
             // 
             // Ablak_sérülés
             // 

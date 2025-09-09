@@ -69,13 +69,13 @@ namespace Villamos
                     TelephelyekFeltöltéseÚj();
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 }
-            // beállítjuk a dátumot az előző napra mert mai adat még nincs
-            Dátum.Value = DateTime.Now.AddDays(-1);
-            DátumTól.Value = MyF.Hónap_elsőnapja(DateTime.Today);
-            DátumIg.Value = MyF.Hónap_utolsónapja(DateTime.Today);
-            Szolgálatoklista();
-            Telephelyek_Feltöltése_lista();
-            Pályaszámokfeltöltése();
+                // beállítjuk a dátumot az előző napra mert mai adat még nincs
+                Dátum.Value = DateTime.Now.AddDays(-1);
+                DátumTól.Value = MyF.Hónap_elsőnapja(DateTime.Today);
+                DátumIg.Value = MyF.Hónap_utolsónapja(DateTime.Today);
+                Szolgálatoklista();
+                Telephelyek_Feltöltése_lista();
+                Pályaszámokfeltöltése();
 
             }
             catch (HibásBevittAdat ex)
@@ -1479,8 +1479,34 @@ namespace Villamos
         }
 
 
+
         #endregion
 
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            try
+            {
+                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+                if (Cmbtelephely.Text.Trim() == "") return;
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
 
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
