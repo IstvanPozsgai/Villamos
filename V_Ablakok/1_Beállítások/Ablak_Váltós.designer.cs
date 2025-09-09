@@ -228,7 +228,10 @@ namespace Villamos
             this.Chk_CTRL = new System.Windows.Forms.CheckBox();
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Holtart = new V_MindenEgyéb.MyProgressbar();
+            this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.label43 = new System.Windows.Forms.Label();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_BeoKód)).BeginInit();
@@ -256,6 +259,7 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_Éjszaka)).BeginInit();
             this.TabPage9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_CsopVez)).BeginInit();
+            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // Fülek
@@ -273,12 +277,12 @@ namespace Villamos
             this.Fülek.Controls.Add(this.TabPage8);
             this.Fülek.Controls.Add(this.TabPage10);
             this.Fülek.Controls.Add(this.TabPage9);
-            this.Fülek.Location = new System.Drawing.Point(1, 56);
+            this.Fülek.Location = new System.Drawing.Point(1, 86);
             this.Fülek.Multiline = true;
             this.Fülek.Name = "Fülek";
             this.Fülek.Padding = new System.Drawing.Point(16, 3);
             this.Fülek.SelectedIndex = 0;
-            this.Fülek.Size = new System.Drawing.Size(1140, 410);
+            this.Fülek.Size = new System.Drawing.Size(1140, 380);
             this.Fülek.TabIndex = 63;
             this.toolTip1.SetToolTip(this.Fülek, "Éves naptárat készít");
             this.Fülek.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.Fülek_DrawItem);
@@ -307,7 +311,7 @@ namespace Villamos
             this.TabPage1.Location = new System.Drawing.Point(4, 54);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage1.Size = new System.Drawing.Size(1132, 322);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Beosztás kód";
             // 
@@ -315,7 +319,7 @@ namespace Villamos
             // 
             this.BEOkódFriss.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.BEOkódFriss.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BEOkódFriss.Location = new System.Drawing.Point(616, 91);
+            this.BEOkódFriss.Location = new System.Drawing.Point(616, 94);
             this.BEOkódFriss.Name = "BEOkódFriss";
             this.BEOkódFriss.Size = new System.Drawing.Size(45, 45);
             this.BEOkódFriss.TabIndex = 76;
@@ -342,7 +346,7 @@ namespace Villamos
             this.Tábla_BeoKód.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.Tábla_BeoKód.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla_BeoKód.EnableHeadersVisualStyles = false;
-            this.Tábla_BeoKód.Location = new System.Drawing.Point(3, 215);
+            this.Tábla_BeoKód.Location = new System.Drawing.Point(3, 218);
             this.Tábla_BeoKód.Name = "Tábla_BeoKód";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
@@ -353,7 +357,7 @@ namespace Villamos
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tábla_BeoKód.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.Tábla_BeoKód.RowHeadersWidth = 51;
-            this.Tábla_BeoKód.Size = new System.Drawing.Size(1126, 134);
+            this.Tábla_BeoKód.Size = new System.Drawing.Size(1126, 101);
             this.Tábla_BeoKód.TabIndex = 45;
             this.Tábla_BeoKód.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_BeoKód_CellClick);
             this.Tábla_BeoKód.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_BeoKód_CellDoubleClick);
@@ -363,7 +367,7 @@ namespace Villamos
             // 
             this.Végeidő.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Végeidő.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.Végeidő.Location = new System.Drawing.Point(150, 110);
+            this.Végeidő.Location = new System.Drawing.Point(150, 113);
             this.Végeidő.Name = "Végeidő";
             this.Végeidő.Size = new System.Drawing.Size(112, 26);
             this.Végeidő.TabIndex = 3;
@@ -373,7 +377,7 @@ namespace Villamos
             // 
             this.Kezdőidő.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Kezdőidő.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.Kezdőidő.Location = new System.Drawing.Point(150, 74);
+            this.Kezdőidő.Location = new System.Drawing.Point(150, 77);
             this.Kezdőidő.Name = "Kezdőidő";
             this.Kezdőidő.Size = new System.Drawing.Size(112, 26);
             this.Kezdőidő.TabIndex = 2;
@@ -381,21 +385,21 @@ namespace Villamos
             // 
             // Túlóra
             // 
-            this.Túlóra.Location = new System.Drawing.Point(150, 42);
+            this.Túlóra.Location = new System.Drawing.Point(150, 45);
             this.Túlóra.Name = "Túlóra";
             this.Túlóra.Size = new System.Drawing.Size(141, 26);
             this.Túlóra.TabIndex = 1;
             // 
             // Beosztáskód
             // 
-            this.Beosztáskód.Location = new System.Drawing.Point(150, 6);
+            this.Beosztáskód.Location = new System.Drawing.Point(150, 9);
             this.Beosztáskód.Name = "Beosztáskód";
             this.Beosztáskód.Size = new System.Drawing.Size(141, 26);
             this.Beosztáskód.TabIndex = 0;
             // 
             // Túlóraoka
             // 
-            this.Túlóraoka.Location = new System.Drawing.Point(150, 147);
+            this.Túlóraoka.Location = new System.Drawing.Point(150, 150);
             this.Túlóraoka.Name = "Túlóraoka";
             this.Túlóraoka.Size = new System.Drawing.Size(511, 26);
             this.Túlóraoka.TabIndex = 4;
@@ -403,7 +407,7 @@ namespace Villamos
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Location = new System.Drawing.Point(16, 189);
+            this.Label5.Location = new System.Drawing.Point(16, 192);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(80, 20);
             this.Label5.TabIndex = 39;
@@ -412,7 +416,7 @@ namespace Villamos
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Location = new System.Drawing.Point(16, 153);
+            this.Label4.Location = new System.Drawing.Point(16, 156);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(87, 20);
             this.Label4.TabIndex = 38;
@@ -421,7 +425,7 @@ namespace Villamos
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(16, 117);
+            this.Label3.Location = new System.Drawing.Point(16, 120);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(95, 20);
             this.Label3.TabIndex = 37;
@@ -430,7 +434,7 @@ namespace Villamos
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(16, 81);
+            this.Label2.Location = new System.Drawing.Point(16, 84);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(118, 20);
             this.Label2.TabIndex = 36;
@@ -439,7 +443,7 @@ namespace Villamos
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(16, 45);
+            this.Label1.Location = new System.Drawing.Point(16, 48);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(57, 20);
             this.Label1.TabIndex = 35;
@@ -448,7 +452,7 @@ namespace Villamos
             // Telephely
             // 
             this.Telephely.FormattingEnabled = true;
-            this.Telephely.Location = new System.Drawing.Point(150, 181);
+            this.Telephely.Location = new System.Drawing.Point(150, 184);
             this.Telephely.Name = "Telephely";
             this.Telephely.Size = new System.Drawing.Size(187, 28);
             this.Telephely.TabIndex = 5;
@@ -456,7 +460,7 @@ namespace Villamos
             // Label57
             // 
             this.Label57.AutoSize = true;
-            this.Label57.Location = new System.Drawing.Point(16, 9);
+            this.Label57.Location = new System.Drawing.Point(16, 12);
             this.Label57.Name = "Label57";
             this.Label57.Size = new System.Drawing.Size(106, 20);
             this.Label57.TabIndex = 34;
@@ -466,7 +470,7 @@ namespace Villamos
             // 
             this.Tábla_BeoKód_Új.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
             this.Tábla_BeoKód_Új.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Tábla_BeoKód_Új.Location = new System.Drawing.Point(358, 92);
+            this.Tábla_BeoKód_Új.Location = new System.Drawing.Point(358, 95);
             this.Tábla_BeoKód_Új.Name = "Tábla_BeoKód_Új";
             this.Tábla_BeoKód_Új.Size = new System.Drawing.Size(45, 45);
             this.Tábla_BeoKód_Új.TabIndex = 7;
@@ -478,7 +482,7 @@ namespace Villamos
             // 
             this.Tábla_BeoKód_Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.Tábla_BeoKód_Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Tábla_BeoKód_Töröl.Location = new System.Drawing.Point(409, 92);
+            this.Tábla_BeoKód_Töröl.Location = new System.Drawing.Point(409, 95);
             this.Tábla_BeoKód_Töröl.Name = "Tábla_BeoKód_Töröl";
             this.Tábla_BeoKód_Töröl.Size = new System.Drawing.Size(45, 45);
             this.Tábla_BeoKód_Töröl.TabIndex = 8;
@@ -490,7 +494,7 @@ namespace Villamos
             // 
             this.Tábla_BeoKód_OK.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Tábla_BeoKód_OK.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Tábla_BeoKód_OK.Location = new System.Drawing.Point(358, 6);
+            this.Tábla_BeoKód_OK.Location = new System.Drawing.Point(358, 9);
             this.Tábla_BeoKód_OK.Name = "Tábla_BeoKód_OK";
             this.Tábla_BeoKód_OK.Size = new System.Drawing.Size(45, 45);
             this.Tábla_BeoKód_OK.TabIndex = 6;
@@ -2252,11 +2256,39 @@ namespace Villamos
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(15, 25);
+            this.Holtart.Location = new System.Drawing.Point(15, 14);
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(930, 25);
             this.Holtart.TabIndex = 66;
             this.Holtart.Visible = false;
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.Cmbtelephely);
+            this.panel6.Controls.Add(this.label43);
+            this.panel6.Location = new System.Drawing.Point(15, 45);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(373, 33);
+            this.panel6.TabIndex = 67;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(175, 2);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(3, 4);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(145, 20);
+            this.label43.TabIndex = 17;
+            this.label43.Text = "Telephelyi beállítás:";
             // 
             // Ablak_Váltós
             // 
@@ -2264,6 +2296,7 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SeaGreen;
             this.ClientSize = new System.Drawing.Size(1140, 469);
+            this.Controls.Add(this.panel6);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Chk_CTRL);
             this.Controls.Add(this.Fülek);
@@ -2318,6 +2351,8 @@ namespace Villamos
             this.TabPage9.ResumeLayout(false);
             this.TabPage9.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla_CsopVez)).EndInit();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2487,5 +2522,8 @@ namespace Villamos
         internal Button BEOkódFriss;
         internal Button TúlóraFrissít;
         internal Label Label9;
+        internal Panel panel6;
+        internal ComboBox Cmbtelephely;
+        internal Label label43;
     }
 }
