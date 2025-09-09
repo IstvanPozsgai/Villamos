@@ -500,61 +500,92 @@ namespace Villamos.V_MindenEgyéb
 
                 //Meghatározzuk a beolvasó tábla elnevezéseit 
                 //Oszlopnevek beállítása
-                string OszlopFelKtg = (from a in oszlopnév where a.Csoport == "Eszköz" && a.Státusz == false && a.Változónév == "Felelős_költséghely" select a.Fejléc).FirstOrDefault();
+                string OszlopVisz = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "viszonylat" select a.Fejléc).FirstOrDefault();
+                string OszlopForg = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "forgalmiszám" select a.Fejléc).FirstOrDefault();
+                string OszlopIndDát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "IndDát" select a.Fejléc).FirstOrDefault();
+                string OszlopIndIdő = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "IndÓra" select a.Fejléc).FirstOrDefault();
+                string OszlopTényDát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "TényDát" select a.Fejléc).FirstOrDefault();
+                string OszlopTényIdő = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "TényÓra" select a.Fejléc).FirstOrDefault();
+                string OszlopÉrkDát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "ÉrkDát" select a.Fejléc).FirstOrDefault();
+                string OszlopÉrkÓra = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "ÉrkÓra" select a.Fejléc).FirstOrDefault();
+                string OszlopTÉrkDát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "TÉrkDát" select a.Fejléc).FirstOrDefault();
+                string OszlopTÉrkÓra = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "TÉrkÓra" select a.Fejléc).FirstOrDefault();
+                string OszlopSzTípus = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "szerelvénytípus" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsikSZ = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsikszáma" select a.Fejléc).FirstOrDefault();
+                string OszlopMegj = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "megjegyzés" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi1 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi1" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi2 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi2" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi3 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi3" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi4 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi4" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi5 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi5" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi6 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi6" select a.Fejléc).FirstOrDefault();
+                string OszlopStát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "státus" select a.Fejléc).FirstOrDefault();
 
-                if (OszlopFelKtg == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+                if (OszlopVisz == null
+                    || OszlopForg == null
+                    || OszlopIndDát == null
+                    || OszlopIndIdő == null
+                    || OszlopTényDát == null
+                    || OszlopTényIdő == null
+                    || OszlopÉrkDát == null
+                    || OszlopÉrkÓra == null
+                    || OszlopTÉrkDát == null
+                    || OszlopTÉrkÓra == null
+                    || OszlopSzTípus == null
+                    || OszlopKocsikSZ == null
+                    || OszlopMegj == null
+                    || OszlopKocsi1 == null
+                    || OszlopKocsi2 == null
+                    || OszlopKocsi3 == null
+                    || OszlopKocsi4 == null
+                    || OszlopKocsi5 == null
+                    || OszlopKocsi6 == null
+                    || OszlopStát == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
 
                 List<Adat_Főkönyv_ZSER> AdatokGy = new List<Adat_Főkönyv_ZSER>();
                 Kezelő_Főkönyv_ZSER KézFőZser = new Kezelő_Főkönyv_ZSER();
-                int sor = 2;
                 foreach (DataRow Sor in Tábla.Rows)
                 {
-                    string viszonylat = MyE.Beolvas($"b{sor}");
-                    string forgalmiszám = MyE.Beolvas($"c{sor}");
+                    string viszonylat = MyF.Szöveg_Tisztítás(Sor[OszlopVisz].ToStrTrim());
+                    string forgalmiszám = MyF.Szöveg_Tisztítás(Sor[OszlopForg].ToStrTrim());
 
-                    DateTime idegignap = MyE.BeolvasDátum($"D{sor}");
-                    DateTime idegigóra = MyE.Beolvasidő($"E{sor}");
-                    DateTime ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    DateTime IndDát = Sor[OszlopIndDát].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime IndÓra = Sor[OszlopIndIdő].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime ideigdátum = new DateTime(IndDát.Year, IndDát.Month, IndDát.Day, IndÓra.Hour, IndÓra.Minute, IndÓra.Second);
                     ideigdátum = ideigdátum.AddMinutes(kiadási_korr);
                     DateTime tervindulás = ideigdátum;
 
-                    idegignap = MyE.BeolvasDátum($"F{sor}");
-                    idegigóra = MyE.Beolvasidő($"G{sor}");
-                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    DateTime TényDát = Sor[OszlopTényDát].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime TényÓra = Sor[OszlopTényIdő].ToStrTrim().ToÉrt_DaTeTime();
+                    ideigdátum = new DateTime(TényDát.Year, TényDát.Month, TényDát.Day, TényÓra.Hour, TényÓra.Minute, TényÓra.Second);
                     ideigdátum = ideigdátum.AddMinutes(kiadási_korr);
                     DateTime tényindulás = ideigdátum;
 
-                    idegignap = MyE.BeolvasDátum($"H{sor}");
-                    idegigóra = MyE.Beolvasidő($"I{sor}");
-                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    DateTime ÉrkDát = Sor[OszlopÉrkDát].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime ÉrkÓra = Sor[OszlopÉrkÓra].ToStrTrim().ToÉrt_DaTeTime();
+                    ideigdátum = new DateTime(ÉrkDát.Year, ÉrkDát.Month, ÉrkDát.Day, ÉrkÓra.Hour, ÉrkÓra.Minute, ÉrkÓra.Second);
                     ideigdátum = ideigdátum.AddMinutes(érkezési_korr);
                     DateTime tervérkezés = ideigdátum;
 
-                    idegignap = MyE.BeolvasDátum($"J{sor}");
-                    idegigóra = MyE.Beolvasidő($"K{sor}");
-                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
+                    DateTime TÉrkDát = Sor[OszlopTÉrkDát].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime TÉrkÓra = Sor[OszlopTÉrkÓra].ToStrTrim().ToÉrt_DaTeTime();
+                    ideigdátum = new DateTime(TÉrkDát.Year, TÉrkDát.Month, TÉrkDát.Day, TÉrkÓra.Hour, TÉrkÓra.Minute, TÉrkÓra.Second);
                     ideigdátum = ideigdátum.AddMinutes(érkezési_korr);
                     DateTime tényérkezés = ideigdátum;
 
                     string napszak = "*";
-                    string szerelvénytípus = MyE.Beolvas($"m{sor}");
-                    long kocsikszáma = (MyE.Beolvas($"o{sor}")).ToÉrt_Long();
-                    string megjegyzés = MyF.Szöveg_Tisztítás(MyE.Beolvas($"r{sor}"), 0, 20);
+                    string szerelvénytípus = MyF.Szöveg_Tisztítás(Sor[OszlopSzTípus].ToStrTrim());
+                    long kocsikszáma = MyF.Szöveg_Tisztítás(Sor[OszlopKocsikSZ].ToStrTrim()).ToÉrt_Long();
+                    string megjegyzés = MyF.Szöveg_Tisztítás(Sor[OszlopMegj].ToStrTrim(), 0, 20);
 
-                    string ideig = MyE.Beolvas($"S{sor}").Trim();
-                    string kocsi1 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
-                    ideig = MyE.Beolvas($"U{sor}").Trim();
-                    string kocsi2 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
-                    ideig = MyE.Beolvas($"W{sor}").Trim();
-                    string kocsi3 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
-                    ideig = MyE.Beolvas($"Y{sor}").Trim();
-                    string kocsi4 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
-                    ideig = MyE.Beolvas($"AA{sor}").Trim();
-                    string kocsi5 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
-                    ideig = MyE.Beolvas($"AC{sor}").Trim();
-                    string kocsi6 = Főkönyv_Funkciók.Pályaszám_csorbítás(ideig.Trim());
+                    string kocsi1 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi1].ToStrTrim());
+                    string kocsi2 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi2].ToStrTrim());
+                    string kocsi3 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi3].ToStrTrim());
+                    string kocsi4 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi4].ToStrTrim());
+                    string kocsi5 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi5].ToStrTrim());
+                    string kocsi6 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi6].ToStrTrim());
                     string ellenőrző = "_";
-                    string státus = MyF.Szöveg_Tisztítás(MyE.Beolvas($"l{sor}"), 0, 10);
+                    string státus = MyF.Szöveg_Tisztítás(Sor[OszlopStát].ToStrTrim(), 0, 10);
 
                     Adat_Főkönyv_ZSER ADAT = new Adat_Főkönyv_ZSER(
                                 viszonylat,
@@ -579,7 +610,6 @@ namespace Villamos.V_MindenEgyéb
                 }
 
                 KézFőZser.Rögzítés(Telephely, Dátum, Napszak, AdatokGy);
-           
             }
             catch (HibásBevittAdat ex)
             {
@@ -593,13 +623,16 @@ namespace Villamos.V_MindenEgyéb
 
         }
 
-        private static void Km_adatok_beolvasása(int sormax, long kiadásikorr, long érkezésikorr, DateTime Dátum, string Telephely)
+        public static void Km_adatok_beolvasása(DataTable Tábla, long kiadásikorr, long érkezésikorr, DateTime Dátum, string Telephely)
         {
-            string szöveg = "";
-            int oszlop = 0;
-            int i = 0;
             try
             {
+
+                // Beolvasni kívánt oszlopok
+                Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+                List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+
                 Kezelő_Főkönyv_Zser_Km KézFőZserKm = new Kezelő_Főkönyv_Zser_Km();
                 List<Adat_Főkönyv_Zser_Km> Adatok = KézFőZserKm.Lista_adatok(Dátum.Year);
 
@@ -608,45 +641,76 @@ namespace Villamos.V_MindenEgyéb
                                                      select a).ToList();
 
                 // leellenőrizzük, hogy van-e már erre a napra rögzítve adat ha van töröljük
-
                 if (Elemek != null) KézFőZserKm.Törlés(Telephely.Trim(), Dátum);
 
-                string[] oszlopok = new string[7];
-                oszlopok[1] = "S";
-                oszlopok[2] = "U";
-                oszlopok[3] = "W";
-                oszlopok[4] = "Y";
-                oszlopok[5] = "AA";
-                oszlopok[6] = "AC";
+                string OszlopIndDát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "IndDát" select a.Fejléc).FirstOrDefault();
+                string OszlopIndIdő = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "IndÓra" select a.Fejléc).FirstOrDefault();
+                string OszlopTényDát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "TényDát" select a.Fejléc).FirstOrDefault();
+                string OszlopTényIdő = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "TényÓra" select a.Fejléc).FirstOrDefault();
+                string OszlopÉrkDát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "ÉrkDát" select a.Fejléc).FirstOrDefault();
+                string OszlopÉrkÓra = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "ÉrkÓra" select a.Fejléc).FirstOrDefault();
+                string OszlopTÉrkDát = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "TÉrkDát" select a.Fejléc).FirstOrDefault();
+                string OszlopTÉrkÓra = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "TÉrkÓra" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi1 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi1" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi2 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi2" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi3 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi3" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi4 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi4" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi5 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi5" select a.Fejléc).FirstOrDefault();
+                string OszlopKocsi6 = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "kocsi6" select a.Fejléc).FirstOrDefault();
+                string OszlopKm = (from a in oszlopnév where a.Csoport == "Zsel" && a.Státusz == false && a.Változónév == "km" select a.Fejléc).FirstOrDefault();
+
+                if (OszlopIndDát == null
+                            || OszlopIndIdő == null
+                            || OszlopTényDát == null
+                            || OszlopTényIdő == null
+                            || OszlopÉrkDát == null
+                            || OszlopÉrkÓra == null
+                            || OszlopTÉrkDát == null
+                            || OszlopTÉrkÓra == null
+                            || OszlopKocsi1 == null
+                            || OszlopKocsi2 == null
+                            || OszlopKocsi3 == null
+                            || OszlopKocsi4 == null
+                            || OszlopKocsi5 == null
+                            || OszlopKocsi6 == null
+                            || OszlopKm == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
 
                 // beolvassuk az excel tábla szükséges adatait
-
                 List<Adat_Főkönyv_Zser_Km> AdatokGy = new List<Adat_Főkönyv_Zser_Km>();
-                for (i = 2; i <= sormax; i++)
+                foreach (DataRow Sor in Tábla.Rows)
                 {
-                    DateTime idegignap = MyE.Beolvas("D" + i).ToÉrt_DaTeTime();
-                    DateTime idegigóra = MyE.Beolvasidő("E" + i);
-                    DateTime ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
-                    DateTime tervindulás = ideigdátum.AddMinutes(kiadásikorr);
+                    DateTime IndDát = Sor[OszlopIndDát].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime IndÓra = Sor[OszlopIndIdő].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime ideigdátum = new DateTime(IndDát.Year, IndDát.Month, IndDát.Day, IndÓra.Hour, IndÓra.Minute, IndÓra.Second);
+                    ideigdátum = ideigdátum.AddMinutes(kiadásikorr);
+                    DateTime tervindulás = ideigdátum;
 
-                    idegignap = MyE.Beolvas("F" + i).ToÉrt_DaTeTime();
-                    idegigóra = MyE.Beolvasidő("G" + i);
-                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
-                    DateTime tényindulás = ideigdátum.AddMinutes(kiadásikorr);
+                    DateTime TényDát = Sor[OszlopTényDát].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime TényÓra = Sor[OszlopTényIdő].ToStrTrim().ToÉrt_DaTeTime();
+                    ideigdátum = new DateTime(TényDát.Year, TényDát.Month, TényDát.Day, TényÓra.Hour, TényÓra.Minute, TényÓra.Second);
+                    ideigdátum = ideigdátum.AddMinutes(kiadásikorr);
+                    DateTime tényindulás = ideigdátum;
 
-                    idegignap = MyE.Beolvas("H" + i).ToÉrt_DaTeTime();
-                    idegigóra = MyE.Beolvasidő("I" + i);
-                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
-                    DateTime tervérkezés = ideigdátum.AddMinutes(érkezésikorr);
+                    DateTime ÉrkDát = Sor[OszlopÉrkDát].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime ÉrkÓra = Sor[OszlopÉrkÓra].ToStrTrim().ToÉrt_DaTeTime();
+                    ideigdátum = new DateTime(ÉrkDát.Year, ÉrkDát.Month, ÉrkDát.Day, ÉrkÓra.Hour, ÉrkÓra.Minute, ÉrkÓra.Second);
+                    ideigdátum = ideigdátum.AddMinutes(érkezésikorr);
+                    DateTime tervérkezés = ideigdátum;
 
-                    idegignap = MyE.Beolvas("J" + i).ToÉrt_DaTeTime();
-                    idegigóra = MyE.Beolvasidő("K" + i);
-                    ideigdátum = new DateTime(idegignap.Year, idegignap.Month, idegignap.Day, idegigóra.Hour, idegigóra.Minute, idegigóra.Second);
-                    DateTime tényérkezés = ideigdátum.AddMinutes(érkezésikorr);
+                    DateTime TÉrkDát = Sor[OszlopTÉrkDát].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime TÉrkÓra = Sor[OszlopTÉrkÓra].ToStrTrim().ToÉrt_DaTeTime();
+                    ideigdátum = new DateTime(TÉrkDát.Year, TÉrkDát.Month, TÉrkDát.Day, TÉrkÓra.Hour, TÉrkÓra.Minute, TÉrkÓra.Second);
+                    ideigdátum = ideigdátum.AddMinutes(érkezésikorr);
+                    DateTime tényérkezés = ideigdátum;
 
+                    string kocsi1 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi1].ToStrTrim());
+                    string kocsi2 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi2].ToStrTrim());
+                    string kocsi3 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi3].ToStrTrim());
+                    string kocsi4 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi4].ToStrTrim());
+                    string kocsi5 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi5].ToStrTrim());
+                    string kocsi6 = Főkönyv_Funkciók.Pályaszám_csorbítás(Sor[OszlopKocsi6].ToStrTrim());
 
-                    string kms = MyE.Beolvas("ae" + i.ToString());
-                    if (!int.TryParse(kms, out int km)) km = 0;
+                    int km = Sor[OszlopKm].ToStrTrim().ToÉrt_Int();
 
                     TimeSpan számhossz = tervérkezés - tervindulás;
                     TimeSpan menethossz = tényérkezés - tényindulás;
@@ -656,31 +720,35 @@ namespace Villamos.V_MindenEgyéb
                         //Ha nem a teljes számot járja le akkor kiszámoljuk a töredék km-t.
                         km = (int)((km * menethossz.TotalMinutes) / számhossz.TotalMinutes);
                     }
-
-
-                    for (oszlop = 1; oszlop <= 6; oszlop++)
+                    if (kocsi1.Trim() != "_")
                     {
-
-                        string szövegideig = MyE.Beolvas(oszlopok[oszlop] + i).Trim();
-                        if (szövegideig != "")
-                        {
-                            string azonosító = "";
-                            szövegideig = MyF.Szöveg_Tisztítás(szövegideig, 1, 4);
-                            if (szövegideig.Trim().Length < 4)
-                            {
-                                //Fogaskerekű pályaszáma
-                                string ideigpsz = new string('0', 4 - szövegideig.Trim().Length);
-                                azonosító = ideigpsz + szövegideig.Trim();
-                            }
-                            else
-                                azonosító = szövegideig.Trim();
-                            Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(
-                                                     azonosító.Trim(),
-                                                     tervindulás,
-                                                     km,
-                                                     Telephely.Trim());
-                            AdatokGy.Add(ADAT);
-                        }
+                        Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(kocsi1.Trim(), tervindulás, km, Telephely.Trim());
+                        AdatokGy.Add(ADAT);
+                    }
+                    if (kocsi2.Trim() != "_")
+                    {
+                        Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(kocsi2.Trim(), tervindulás, km, Telephely.Trim());
+                        AdatokGy.Add(ADAT);
+                    }
+                    if (kocsi3.Trim() != "_")
+                    {
+                        Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(kocsi3.Trim(), tervindulás, km, Telephely.Trim());
+                        AdatokGy.Add(ADAT);
+                    }
+                    if (kocsi4.Trim() != "_")
+                    {
+                        Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(kocsi4.Trim(), tervindulás, km, Telephely.Trim());
+                        AdatokGy.Add(ADAT);
+                    }
+                    if (kocsi5.Trim() != "_")
+                    {
+                        Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(kocsi5.Trim(), tervindulás, km, Telephely.Trim());
+                        AdatokGy.Add(ADAT);
+                    }
+                    if (kocsi6.Trim() != "_")
+                    {
+                        Adat_Főkönyv_Zser_Km ADAT = new Adat_Főkönyv_Zser_Km(kocsi6.Trim(), tervindulás, km, Telephely.Trim());
+                        AdatokGy.Add(ADAT);
                     }
                 }
                 KézFőZserKm.Rögzítés(AdatokGy, Dátum.Year);
@@ -691,11 +759,10 @@ namespace Villamos.V_MindenEgyéb
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "Km_adatok_beolvasása", ex.StackTrace, ex.Source, ex.HResult, $"{szöveg}\nOszlop:{oszlop}\nSor:{i}");
+                HibaNapló.Log(ex.Message, "Km_adatok_beolvasása", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw new Exception("MyA rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
             }
         }
-
     }
 }

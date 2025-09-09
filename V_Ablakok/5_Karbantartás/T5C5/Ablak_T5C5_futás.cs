@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -1315,9 +1316,13 @@ namespace Villamos
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
+
+                //beolvassuk az excel táblát
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexc);
                 DateTime Kezdet = DateTime.Now;
+
                 Holtart.Be();
-                Főkönyv_Funkciók.ZSER_Betöltés(Cmbtelephely.Text.Trim(), Dátum.Value, "", fájlexc);
+                SAP_Adatokbeolvasása.ZSER_Betöltés(Cmbtelephely.Text.Trim(), Dátum.Value, "", Tábla);
                 Holtart.Ki();
                 DateTime Vég = DateTime.Now;
                 MessageBox.Show($"Az adat konvertálás befejeződött!\n Eltelt idő{Vég - Kezdet}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -1079,6 +1079,8 @@ namespace Villamos
 
                 DateTime Eleje = DateTime.Now;
                 SAP_Adatokbeolvasása.ZSER_Betöltés(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du", Tábla, kiadási_korr, érkezési_korr);
+                SAP_Adatokbeolvasása.Km_adatok_beolvasása(Tábla, kiadási_korr, érkezési_korr, Dátum.Value, Cmbtelephely.Text.Trim());
+
                 DateTime Vége = DateTime.Now;
 
                 // megnézzük, hogy előző éjszaka volt -e tábla, ha volt akkor hozzá fűzzük a napi adatokhoz.
