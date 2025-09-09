@@ -520,7 +520,7 @@ namespace Villamos
             this.TabPage2.Location = new System.Drawing.Point(4, 54);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage2.Size = new System.Drawing.Size(1132, 322);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Túlóra keret";
             // 
@@ -691,7 +691,7 @@ namespace Villamos
             this.TabPage3.Controls.Add(this.Éves_Ok);
             this.TabPage3.Location = new System.Drawing.Point(4, 54);
             this.TabPage3.Name = "TabPage3";
-            this.TabPage3.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage3.Size = new System.Drawing.Size(1132, 322);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Éves összesítő";
             // 
@@ -914,7 +914,7 @@ namespace Villamos
             this.TabPage4.Controls.Add(this.Panel1);
             this.TabPage4.Location = new System.Drawing.Point(4, 54);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage4.Size = new System.Drawing.Size(1132, 322);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Csoport turnusok";
             // 
@@ -1273,7 +1273,7 @@ namespace Villamos
             this.TabPage5.Controls.Add(this.Label25);
             this.TabPage5.Location = new System.Drawing.Point(4, 54);
             this.TabPage5.Name = "TabPage5";
-            this.TabPage5.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage5.Size = new System.Drawing.Size(1132, 322);
             this.TabPage5.TabIndex = 4;
             this.TabPage5.Text = "Munkaidő naptár";
             // 
@@ -1424,7 +1424,7 @@ namespace Villamos
             this.TabPage6.Controls.Add(this.Label26);
             this.TabPage6.Location = new System.Drawing.Point(4, 54);
             this.TabPage6.Name = "TabPage6";
-            this.TabPage6.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage6.Size = new System.Drawing.Size(1132, 322);
             this.TabPage6.TabIndex = 5;
             this.TabPage6.Text = "Váltós naptár";
             // 
@@ -1598,7 +1598,7 @@ namespace Villamos
             this.TabPage7.Controls.Add(this.Tábla_Elvont);
             this.TabPage7.Location = new System.Drawing.Point(4, 54);
             this.TabPage7.Name = "TabPage7";
-            this.TabPage7.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage7.Size = new System.Drawing.Size(1132, 322);
             this.TabPage7.TabIndex = 6;
             this.TabPage7.Text = "Elvont napok";
             // 
@@ -1807,7 +1807,7 @@ namespace Villamos
             this.TabPage8.Controls.Add(this.Label35);
             this.TabPage8.Location = new System.Drawing.Point(4, 54);
             this.TabPage8.Name = "TabPage8";
-            this.TabPage8.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage8.Size = new System.Drawing.Size(1132, 322);
             this.TabPage8.TabIndex = 7;
             this.TabPage8.Text = "Váltós munkarend";
             // 
@@ -1959,7 +1959,7 @@ namespace Villamos
             this.TabPage10.Controls.Add(this.Label42);
             this.TabPage10.Location = new System.Drawing.Point(4, 54);
             this.TabPage10.Name = "TabPage10";
-            this.TabPage10.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage10.Size = new System.Drawing.Size(1132, 322);
             this.TabPage10.TabIndex = 9;
             this.TabPage10.Text = "Éjszakás munkarend";
             // 
@@ -2109,7 +2109,7 @@ namespace Villamos
             this.TabPage9.Controls.Add(this.Label39);
             this.TabPage9.Location = new System.Drawing.Point(4, 54);
             this.TabPage9.Name = "TabPage9";
-            this.TabPage9.Size = new System.Drawing.Size(1132, 352);
+            this.TabPage9.Size = new System.Drawing.Size(1132, 322);
             this.TabPage9.TabIndex = 8;
             this.TabPage9.Text = "Csop.vez nevek";
             // 
