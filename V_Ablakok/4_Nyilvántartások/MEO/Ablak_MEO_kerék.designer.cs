@@ -105,6 +105,9 @@ namespace Villamos
             this.Btn_Jog_Tipus_Rogzit = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Panel1 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -114,6 +117,7 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.LekérdTábla)).BeginInit();
             this.TabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóTábla)).BeginInit();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // BtnSúgó
@@ -301,7 +305,7 @@ namespace Villamos
             this.Tábla.Name = "Tábla";
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.RowHeadersWidth = 51;
-            this.Tábla.Size = new System.Drawing.Size(1005, 279);
+            this.Tábla.Size = new System.Drawing.Size(1005, 272);
             this.Tábla.TabIndex = 83;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -708,9 +712,9 @@ namespace Villamos
             this.TabPage4.Controls.Add(this.Btn_Jog_Frissit);
             this.TabPage4.Controls.Add(this.Btn_Jog_Hatarnap_Rogzit);
             this.TabPage4.Controls.Add(this.Btn_Jog_Tipus_Rogzit);
-            this.TabPage4.Location = new System.Drawing.Point(4, 29);
+            this.TabPage4.Location = new System.Drawing.Point(4, 22);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1278, 298);
+            this.TabPage4.Size = new System.Drawing.Size(1278, 305);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Jogosultság kiosztás";
             // 
@@ -860,17 +864,46 @@ namespace Villamos
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(40, 15);
+            this.Holtart.Location = new System.Drawing.Point(384, 15);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(1200, 30);
+            this.Holtart.Size = new System.Drawing.Size(856, 30);
             this.Holtart.TabIndex = 158;
             this.Holtart.Visible = false;
+            // 
+            // Panel1
+            // 
+            this.Panel1.Controls.Add(this.Cmbtelephely);
+            this.Panel1.Controls.Add(this.Label13);
+            this.Panel1.Location = new System.Drawing.Point(5, 15);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 33);
+            this.Panel1.TabIndex = 177;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(175, 2);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(3, 4);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
             // 
             // Ablak_MEO_kerék
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.OliveDrab;
             this.ClientSize = new System.Drawing.Size(1298, 392);
+            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Lapfülek);
             this.Controls.Add(this.BtnSúgó);
@@ -895,6 +928,8 @@ namespace Villamos
             this.TabPage4.ResumeLayout(false);
             this.TabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóTábla)).EndInit();
+            this.Panel1.ResumeLayout(false);
+            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -958,5 +993,8 @@ namespace Villamos
         internal Button BtnKijelölTípus1Törlés;
         internal Button BtnKijelölTípus1;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal Panel Panel1;
+        internal ComboBox Cmbtelephely;
+        internal Label Label13;
     }
 }
