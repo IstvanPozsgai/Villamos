@@ -17,7 +17,7 @@ namespace Villamos
 {
     public partial class Ablak_Szatube
     {
-
+        // JAVÍTANDÓ:
         string Texttelephely;
         string Textlista;
         string hely;
@@ -39,7 +39,7 @@ namespace Villamos
         }
 
         #region  Alap
-
+        // JAVÍTANDÓ:
         private void Start()
         {
             try
@@ -138,7 +138,7 @@ namespace Villamos
         }
 
 
-
+        // JAVÍTANDÓ:
         private void Névfeltöltés()
         {
             Dolgozónév.Items.Clear();
@@ -167,7 +167,7 @@ namespace Villamos
             Névfeltöltés();
         }
 
-
+        // JAVÍTANDÓ:
         private void Munkahely()
         {
             Kezelő_Kiegészítő_Jelenlétiív Kéz = new Kezelő_Kiegészítő_Jelenlétiív();
@@ -284,7 +284,7 @@ namespace Villamos
             BlackTextBrush.Dispose();
         }
 
-
+        // JAVÍTANDÓ:
         private void Évek_Feltöltése()
         {
             try
@@ -313,7 +313,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Adat_Évek_SelectedIndexChanged(object sender, EventArgs e)
         {
             hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs\{Adat_Évek.Text.Trim()}Szatubecs.mdb";
@@ -417,8 +417,7 @@ namespace Villamos
         {
             try
             {
-                if (Tábla.Rows.Count <= 0)
-                    return;
+                if (Tábla.Rows.Count <= 0) return;
                 string fájlexc;
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -450,181 +449,211 @@ namespace Villamos
             }
         }
 
+        private void CmbTelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            try
+            {
+                CmbTelephely.Text = CmbTelephely.Items[CmbTelephely.SelectedIndex].ToStrTrim();
+                if (CmbTelephely.Text.Trim() == "") return;
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
         #region Általános
-        private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        { }
-
         private void Tábla_Formázás()
         {
-
-            // cellák színezése
-            switch (Textlista)
+            try
             {
-                case "Szabadság":
-                    {
-                        for (int sor = 0; sor < Tábla.Rows.Count; sor++)
+                // cellák színezése
+                switch (Textlista)
+                {
+                    case "Szabadság":
                         {
-                            if (Tábla.Rows[sor].Cells[6].Value != null)
+                            for (int sor = 0; sor < Tábla.Rows.Count; sor++)
                             {
-                                if (Tábla.Rows[sor].Cells[6].Value.ToString().ToUpper().Contains("ÉVKÖZI") != false || Tábla.Rows[sor].Cells[6].Value.ToString().ToUpper().Contains("PÓT") != false)
+                                if (Tábla.Rows[sor].Cells[6].Value != null)
                                 {
-                                    for (int i = 5; i < 7; i++)
+                                    if (Tábla.Rows[sor].Cells[6].Value.ToString().ToUpper().Contains("ÉVKÖZI") != false || Tábla.Rows[sor].Cells[6].Value.ToString().ToUpper().Contains("PÓT") != false)
                                     {
-                                        Tábla.Rows[sor].Cells[i].Style.BackColor = Color.DarkCyan;
-                                        Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.Red;
-                                        Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
+                                        for (int i = 5; i < 7; i++)
+                                        {
+                                            Tábla.Rows[sor].Cells[i].Style.BackColor = Color.DarkCyan;
+                                            Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.Red;
+                                            Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
+                                        }
+                                    }
+                                    if (Tábla.Rows[sor].Cells[6].Value.ToString().ToUpper().Contains("ALAP") != true)
+                                    {
+                                        for (int i = 5; i < 7; i++)
+                                        {
+                                            Tábla.Rows[sor].Cells[i].Style.BackColor = Color.Cyan;
+                                            Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.Green;
+                                            Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
+                                        }
                                     }
                                 }
-                                if (Tábla.Rows[sor].Cells[6].Value.ToString().ToUpper().Contains("ALAP") != true)
+
+
+                                if ((Tábla.Rows[sor].Cells[7].Value) != null)
                                 {
-                                    for (int i = 5; i < 7; i++)
+                                    switch (Tábla.Rows[sor].Cells[7].Value)
                                     {
-                                        Tábla.Rows[sor].Cells[i].Style.BackColor = Color.Cyan;
-                                        Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.Green;
-                                        Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
-                                    }
-                                }
-                            }
-
-
-                            if ((Tábla.Rows[sor].Cells[7].Value) != null)
-                            {
-                                switch (Tábla.Rows[sor].Cells[7].Value)
-                                {
-                                    case "Nyomtatott":
-                                        {
-                                            Tábla.Rows[sor].Cells[7].Style.BackColor = Color.Blue;
-                                            Tábla.Rows[sor].Cells[7].Style.ForeColor = Color.White;
-                                            Tábla.Rows[sor].Cells[7].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
-                                            break;
-                                        }
-                                    case "Leadott":
-                                        {
-                                            Tábla.Rows[sor].Cells[7].Style.BackColor = Color.DarkGreen;
-                                            Tábla.Rows[sor].Cells[7].Style.ForeColor = Color.White;
-                                            Tábla.Rows[sor].Cells[7].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
-                                            break;
-                                        }
-                                    case "Törölt":
-                                        {
-                                            // egész sor színezése ha törölt
-                                            for (int i = 0; i < 8; i++)
+                                        case "Nyomtatott":
                                             {
-                                                Tábla.Rows[sor].Cells[i].Style.BackColor = Color.IndianRed;
-                                                Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.White;
-                                                Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
+                                                Tábla.Rows[sor].Cells[7].Style.BackColor = Color.Blue;
+                                                Tábla.Rows[sor].Cells[7].Style.ForeColor = Color.White;
+                                                Tábla.Rows[sor].Cells[7].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
+                                                break;
                                             }
-                                            break;
-                                        }
-                                }
-                            }
-
-
-                        }
-
-                        break;
-                    }
-                case "Beteg":
-                    {
-                        for (int sor = 0; sor < Tábla.Rows.Count; sor++)
-                        {
-                            if ((Tábla.Rows[sor].Cells[7].Value) != null)
-                            {
-                                switch (Tábla.Rows[sor].Cells[7].Value)
-                                {
-                                    case "Igény":
-                                        {
-                                            break;
-                                        }
-
-                                    case "Nyomtatott":
-                                        {
-                                            Tábla.Rows[sor].Cells[7].Style.BackColor = Color.Blue;
-                                            Tábla.Rows[sor].Cells[7].Style.ForeColor = Color.White;
-                                            Tábla.Rows[sor].Cells[7].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
-                                            break;
-                                        }
-                                    case "Leadott":
-                                        {
-                                            Tábla.Rows[sor].Cells[7].Style.BackColor = Color.DarkGreen;
-                                            Tábla.Rows[sor].Cells[7].Style.ForeColor = Color.White;
-                                            Tábla.Rows[sor].Cells[7].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
-                                            break;
-                                        }
-                                    case "Törölt":
-                                        {
-                                            for (int i = 0; i < 8; i++)
+                                        case "Leadott":
+                                            {
+                                                Tábla.Rows[sor].Cells[7].Style.BackColor = Color.DarkGreen;
+                                                Tábla.Rows[sor].Cells[7].Style.ForeColor = Color.White;
+                                                Tábla.Rows[sor].Cells[7].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
+                                                break;
+                                            }
+                                        case "Törölt":
                                             {
                                                 // egész sor színezése ha törölt
-                                                Tábla.Rows[sor].Cells[i].Style.BackColor = Color.IndianRed;
-                                                Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.White;
-                                                Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
+                                                for (int i = 0; i < 8; i++)
+                                                {
+                                                    Tábla.Rows[sor].Cells[i].Style.BackColor = Color.IndianRed;
+                                                    Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.White;
+                                                    Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
+                                                }
+                                                break;
                                             }
-                                            break;
-                                        }
+                                    }
                                 }
+
+
                             }
 
+                            break;
                         }
-                        break;
-
-                    }
-
-                default:
-                    {
-
-                        for (int sor = 0; sor < Tábla.Rows.Count; sor++)
-
+                    case "Beteg":
                         {
-                            if ((Tábla.Rows[sor].Cells[6].Value) != null)
+                            for (int sor = 0; sor < Tábla.Rows.Count; sor++)
                             {
-                                switch (Tábla.Rows[sor].Cells[6].Value.ToString())
+                                if ((Tábla.Rows[sor].Cells[7].Value) != null)
                                 {
-                                    case "Igény":
-                                        {
-                                            break;
-                                        }
-
-                                    case "Nyomtatott":
-                                        {
-                                            Tábla.Rows[sor].Cells[6].Style.BackColor = Color.Blue;
-                                            Tábla.Rows[sor].Cells[6].Style.ForeColor = Color.White;
-                                            Tábla.Rows[sor].Cells[6].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
-                                            break;
-                                        }
-                                    case "Leadott":
-                                        {
-                                            Tábla.Rows[sor].Cells[6].Style.BackColor = Color.DarkGreen;
-                                            Tábla.Rows[sor].Cells[6].Style.ForeColor = Color.White;
-                                            Tábla.Rows[sor].Cells[6].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
-                                            break;
-                                        }
-                                    case "Törölt":
-                                        {
-                                            // egész sor színezése ha törölt
-                                            for (int i = 0; i < 7; i++)
+                                    switch (Tábla.Rows[sor].Cells[7].Value)
+                                    {
+                                        case "Igény":
                                             {
-                                                Tábla.Rows[sor].Cells[i].Style.BackColor = Color.IndianRed;
-                                                Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.White;
-                                                Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
+                                                break;
                                             }
-                                            break;
-                                        }
 
+                                        case "Nyomtatott":
+                                            {
+                                                Tábla.Rows[sor].Cells[7].Style.BackColor = Color.Blue;
+                                                Tábla.Rows[sor].Cells[7].Style.ForeColor = Color.White;
+                                                Tábla.Rows[sor].Cells[7].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
+                                                break;
+                                            }
+                                        case "Leadott":
+                                            {
+                                                Tábla.Rows[sor].Cells[7].Style.BackColor = Color.DarkGreen;
+                                                Tábla.Rows[sor].Cells[7].Style.ForeColor = Color.White;
+                                                Tábla.Rows[sor].Cells[7].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
+                                                break;
+                                            }
+                                        case "Törölt":
+                                            {
+                                                for (int i = 0; i < 8; i++)
+                                                {
+                                                    // egész sor színezése ha törölt
+                                                    Tábla.Rows[sor].Cells[i].Style.BackColor = Color.IndianRed;
+                                                    Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.White;
+                                                    Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
+                                                }
+                                                break;
+                                            }
+                                    }
                                 }
+
                             }
+                            break;
 
                         }
-                        break;
 
-                    }
+                    default:
+                        {
 
+                            for (int sor = 0; sor < Tábla.Rows.Count; sor++)
+
+                            {
+                                if ((Tábla.Rows[sor].Cells[6].Value) != null)
+                                {
+                                    switch (Tábla.Rows[sor].Cells[6].Value.ToString())
+                                    {
+                                        case "Igény":
+                                            {
+                                                break;
+                                            }
+
+                                        case "Nyomtatott":
+                                            {
+                                                Tábla.Rows[sor].Cells[6].Style.BackColor = Color.Blue;
+                                                Tábla.Rows[sor].Cells[6].Style.ForeColor = Color.White;
+                                                Tábla.Rows[sor].Cells[6].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
+                                                break;
+                                            }
+                                        case "Leadott":
+                                            {
+                                                Tábla.Rows[sor].Cells[6].Style.BackColor = Color.DarkGreen;
+                                                Tábla.Rows[sor].Cells[6].Style.ForeColor = Color.White;
+                                                Tábla.Rows[sor].Cells[6].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
+                                                break;
+                                            }
+                                        case "Törölt":
+                                            {
+                                                // egész sor színezése ha törölt
+                                                for (int i = 0; i < 7; i++)
+                                                {
+                                                    Tábla.Rows[sor].Cells[i].Style.BackColor = Color.IndianRed;
+                                                    Tábla.Rows[sor].Cells[i].Style.ForeColor = Color.White;
+                                                    Tábla.Rows[sor].Cells[i].Style.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
+                                                }
+                                                break;
+                                            }
+
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Táblatörlése()
         {
@@ -632,7 +661,6 @@ namespace Villamos
             Tábla.Columns.Clear();
             Tábla.Refresh();
         }
-
         #endregion
 
 
@@ -642,7 +670,7 @@ namespace Villamos
             NyomtatásSzabi();
         }
 
-
+        // JAVÍTANDÓ:
         private void NyomtatásSzabi()
         {
             try
@@ -838,7 +866,6 @@ namespace Villamos
             }
         }
 
-
         private void Laptisztítás()
         {
             MyE.Kiir("", "i5");
@@ -904,12 +931,10 @@ namespace Villamos
             MyE.Kiir("", "q45");
         }
 
-
         private void BtnÖsszSzabiLista_Click(object sender, EventArgs e)
         {
             Szabadságkiírása(1);
         }
-
 
         private void Szabadságkiírása(int csoport)
         {
@@ -1020,9 +1045,7 @@ namespace Villamos
                     Tábla.Rows[i].Cells[5].Value = összes;
                 }
                 Tábla.Refresh();
-
                 Tábla_Formázás();
-
                 Tábla.Visible = true;
             }
             catch (HibásBevittAdat ex)
@@ -1035,7 +1058,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         string SzabStátus(int státus)
         {
@@ -1066,16 +1088,12 @@ namespace Villamos
             return "";
         }
 
-
         private void SzabLeadás_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Textlista != "Szabadság")
-                    throw new HibásBevittAdat("A táblázat tartalma nem Szabadság adat.");
-
-                if (Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy sor sem!");
+                if (Textlista != "Szabadság") throw new HibásBevittAdat("A táblázat tartalma nem Szabadság adat.");
+                if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy sor sem!");
 
                 List<string> SzövegGy = new List<string>();
                 for (int i = 0; i < Tábla.SelectedRows.Count; i++)
@@ -1104,8 +1122,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
+        // JAVÍTANDÓ:
         private int Kivettnapja(string törzsszám, DateTime dátum)
         {
             int válasz = 0;
@@ -1122,8 +1139,8 @@ namespace Villamos
             return válasz;
         }
 
-
-        int Összesnapja(string törzsszám)
+        // JAVÍTANDÓ:
+        private int Összesnapja(string törzsszám)
         {
             int válasz = 0;
             try
@@ -1155,14 +1172,12 @@ namespace Villamos
             return válasz;
         }
 
-
         private void Mind_Click(object sender, EventArgs e)
         {
             SzabLeadás.Visible = false;
             SzabNyomtatás.Visible = false;
             Szabadságkiírása(1);
         }
-
 
         private void Kért_Click(object sender, EventArgs e)
         {
@@ -1171,14 +1186,12 @@ namespace Villamos
             Szabadságkiírása(1);
         }
 
-
         private void Nyomtatott_Click(object sender, EventArgs e)
         {
             SzabNyomtatás.Visible = true;
             SzabLeadás.Visible = true;
             Szabadságkiírása(1);
         }
-
 
         private void Rögzített_Click(object sender, EventArgs e)
         {
@@ -1195,7 +1208,7 @@ namespace Villamos
             Szabadságkiírása(0);
         }
 
-
+        // JAVÍTANDÓ:
         private void Szab_Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -1239,14 +1252,13 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Éves_Összesítő_Click(object sender, EventArgs e)
         {
             try
             {
 
-                if (Dolgozónév.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+                if (Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
                 string[] darabol = Dolgozónév.Text.Trim().Split('=');
 
@@ -1399,18 +1411,14 @@ namespace Villamos
             }
         }
 
-
         private void SzabNyilat_Click(object sender, EventArgs e)
         {
             try
             {
-
-                if (Dolgozónév.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+                if (Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
                 string fájlexcel = $@"{Application.StartupPath}\" + CmbTelephely.Text.ToString() + @"\nyomtatvány\Szabadságkivétel_egylapos.xlsx";
-                if (!Exists(fájlexcel))
-                    throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
+                if (!Exists(fájlexcel)) throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
 
                 Holtart.Be();
                 MyE.ExcelMegnyitás(fájlexcel);
@@ -1456,7 +1464,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Szabadságokfeltölt()
         {
             try
@@ -1484,9 +1492,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
         #endregion
 
 
@@ -1499,7 +1504,6 @@ namespace Villamos
             Túl_Eng_Beáll.Visible = false;
         }
 
-
         private void Túlóraigényelt_Click(object sender, EventArgs e)
         {
             Túlórakiírás(1);
@@ -1507,7 +1511,6 @@ namespace Villamos
             EgyéniTúlNyom.Visible = true;
             TúlCsopNyom.Visible = true;
         }
-
 
         private void Túlóranyomtatott_Click(object sender, EventArgs e)
         {
@@ -1517,7 +1520,6 @@ namespace Villamos
             Túl_Eng_Beáll.Visible = true;
         }
 
-
         private void Túlórarögzített_Click(object sender, EventArgs e)
         {
             Túlórakiírás(1);
@@ -1526,19 +1528,17 @@ namespace Villamos
             TúlCsopNyom.Visible = true;
         }
 
-
         private void BtnTúlóraÖsszlekérd_Click(object sender, EventArgs e)
         {
             Túlórakiírás(1);
         }
 
-
+        // JAVÍTANDÓ:
         private void Túl_Eng_Beáll_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy sor sem.");
+                if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy sor sem.");
 
                 // a státusokat átállítja
                 List<string> SzövegGy = new List<string>();
@@ -1563,13 +1563,12 @@ namespace Villamos
             }
         }
 
-
         private void EgyéniTúlNyom_Click(object sender, EventArgs e)
         {
             Egyéninyomtatás_más();
         }
 
-
+        // JAVÍTANDÓ:
         private void TúlCsopNyom_Click(object sender, EventArgs e)
         {
             try
@@ -1837,13 +1836,11 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Egyéninyomtatás_más()
         {
-
             try
             {
-
                 if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva érvényes sor a táblázatban.");
                 Holtart.Be();
 
@@ -2201,10 +2198,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
-
+        // JAVÍTANDÓ:
         private void Túlórakiírás(int csoport)
         {
             try
@@ -2234,11 +2228,8 @@ namespace Villamos
                 Tábla.Columns[8].HeaderText = "Vége";
                 Tábla.Columns[8].Width = 60;
 
-                if (!Exists(hely))
-                    throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
-
-                if (csoport == 0 && Dolgozónév.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+                if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
+                if (csoport == 0 && Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
                 string szöveg = "SELECT * FROM Túlóra ";
 
@@ -2306,13 +2297,11 @@ namespace Villamos
             }
         }
 
-
         private void AblakSzaTuBe_KeyDown(object sender, KeyEventArgs e)
         {
             if ((int)e.KeyCode == 17)
                 Chk_CTRL.Checked = true;
         }
-
 
         private void AblakSzaTuBe_KeyUp(object sender, KeyEventArgs e)
         {
@@ -2320,7 +2309,6 @@ namespace Villamos
                 Chk_CTRL.Checked = false;
 
         }
-
 
         private void Panel6_MouseClick(object sender, MouseEventArgs e)
         {
@@ -2336,7 +2324,6 @@ namespace Villamos
                 }
             }
         }
-
         #endregion
 
 
@@ -2354,13 +2341,12 @@ namespace Villamos
             Betegkiírása(1);
         }
 
-
         private void Beteg_Egy_Click(object sender, EventArgs e)
         {
             Betegkiírása(0);
         }
 
-
+        // JAVÍTANDÓ:
         private void Betegkiírása(int csoport)
         {
             try
@@ -2388,10 +2374,8 @@ namespace Villamos
                 Tábla.Columns[7].HeaderText = "Státusz";
                 Tábla.Columns[7].Width = 120;
 
-                if (!Exists(hely))
-                    throw new HibásBevittAdat("Az adatbázis ebben az évben nem lett létrehozva");
-                if (csoport == 0 && Dolgozónév.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kijelölve dolgozó.");
+                if (!Exists(hely)) throw new HibásBevittAdat("Az adatbázis ebben az évben nem lett létrehozva");
+                if (csoport == 0 && Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve dolgozó.");
 
                 string[] darabol = Dolgozónév.Text.Trim().Split('=');
 
@@ -2451,6 +2435,7 @@ namespace Villamos
 
 
         #region Csúsztatás
+        // JAVÍTANDÓ:
         private void Csúsztatáskiírása(int csoport)
         {
             try
@@ -2479,11 +2464,8 @@ namespace Villamos
                 Tábla.Columns[7].Width = 120;
                 Tábla.Columns[8].HeaderText = "Vége";
                 Tábla.Columns[8].Width = 120;
-                if (!Exists(hely))
-                    throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
-
-                if (csoport == 0 && Dolgozónév.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+                if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
+                if (csoport == 0 && Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
 
                 string szöveg = "SELECT * FROM Csúsztatás ";
@@ -2538,35 +2520,29 @@ namespace Villamos
             }
         }
 
-
         private void Csúsz_Össz_lista_Click(object sender, EventArgs e)
         {
             Csúsztatáskiírása(1);
         }
 
-
         private void Csúsz_Egy_lista_Click(object sender, EventArgs e)
         {
             Csúsztatáskiírása(0);
         }
-
         #endregion
 
 
         #region AFT
-
         private void Aft_Össz_Lista_Click(object sender, EventArgs e)
         {
             AFTkiírása(1);
         }
 
-
         private void Aft_Egy_Lista_Click(object sender, EventArgs e)
         {
             AFTkiírása(0);
         }
-
-
+        // JAVÍTANDÓ:
         private void AFTkiírása(int csoport)
         {
             try
@@ -2592,11 +2568,8 @@ namespace Villamos
                 Tábla.Columns[6].HeaderText = "Státusz";
                 Tábla.Columns[6].Width = 60;
 
-                if (!Exists(hely))
-                    throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
-
-                if (csoport == 0 && Dolgozónév.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+                if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
+                if (csoport == 0 && Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
                 string szöveg = "SELECT * FROM AFT ";
                 string[] darabol = Dolgozónév.Text.Trim().Split('=');
@@ -2652,13 +2625,12 @@ namespace Villamos
         #endregion
 
         #region Határnapi összesítés
-
+        // JAVÍTANDÓ:
         private void Határnapig_Összesít_Click(object sender, EventArgs e)
         {
             try
             {
-                if (!Exists(hely))
-                    throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
+                if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
 
                 string szöveg = $"SELECT * FROM szabadság WHERE Státus=0 AND sorszám=0 AND Kezdődátum<=#{Határnap.Value:yyyy-MM-dd}# ORDER BY törzsszám,kezdődátum";
 
@@ -2743,8 +2715,8 @@ namespace Villamos
             }
         }
 
-
-        void Csoportosítja_Elemeket(Adat_Szatube_Szabadság rekord)
+        // JAVÍTANDÓ:
+        private void Csoportosítja_Elemeket(Adat_Szatube_Szabadság rekord)
         {
             SzabadságListaFeltöltés();
 
@@ -2755,8 +2727,8 @@ namespace Villamos
             szöveg += $"AND  Befejeződátum<=#{rekord.Befejeződátum:yyyy-MM-dd}# AND státus<>3";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
-
-        bool VanKözötte(string Első_HR, DateTime ELőző_Kezdő, DateTime Aktuális)
+        // JAVÍTANDÓ:
+        private bool VanKözötte(string Első_HR, DateTime ELőző_Kezdő, DateTime Aktuális)
         {
             bool válasz = false;
             string szöveg = $"SELECT * FROM beosztás WHERE Dolgozószám='{Első_HR.Trim()}' AND nap>#{ELőző_Kezdő:yyyy-MM-dd}# AND nap<#{Aktuális:yyyy-MM-dd}#";
@@ -2770,12 +2742,10 @@ namespace Villamos
 
             return válasz;
         }
-
-
         #endregion
 
         #region Listák
-
+        // JAVÍTANDÓ:
         private void SzabadságListaFeltöltés()
         {
             try
@@ -2795,32 +2765,5 @@ namespace Villamos
             }
         }
         #endregion
-
-        private void CmbTelephely_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            try
-            {
-                CmbTelephely.Text = CmbTelephely.Items[CmbTelephely.SelectedIndex].ToStrTrim();
-                if (CmbTelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-
-                }
-                else
-                {
-                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
-                }
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }
