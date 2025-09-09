@@ -34,25 +34,22 @@ namespace Villamos
         readonly Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
 
         List<Adat_Dolgozó_Alap> AdatokDolg = new List<Adat_Dolgozó_Alap>();
-
+        #region Alap
         public Ablak_Beosztás()
         {
             InitializeComponent();
             Start();
         }
 
-
         private void Ablak_Beosztás_Load(object sender, EventArgs e)
         {
 
         }
 
-
         private void Ablak_Beosztás_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Beosztás_kieg?.Close();
         }
-
 
         private void Ablak_Beosztás_KeyDown(object sender, KeyEventArgs e)
         {
@@ -60,16 +57,11 @@ namespace Villamos
                 Chk_CTRL.Checked = true;
         }
 
-
         private void Ablak_Beosztás_KeyUp(object sender, KeyEventArgs e)
         {
             if ((int)e.KeyCode == 17)
                 Chk_CTRL.Checked = false;
         }
-
-
-
-        #region Alap
 
         private void Start()
         {
@@ -103,7 +95,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Telephelyekfeltöltése()
         {
@@ -150,8 +141,8 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        void Telephely_Beállítás()
+        // JAVÍTANDÓ:
+        private void Telephely_Beállítás()
         {
             Cursor = Cursors.WaitCursor; // homok óra kezdete
             Listák_feltöltése();
@@ -199,22 +190,17 @@ namespace Villamos
 
             GombLathatosagKezelo.Beallit(this);
             Jogosultságkiosztás();
-
-
         }
-
 
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
             Telephely_Beállítás();
         }
 
-
         private void Kilépettjel_CheckedChanged(object sender, EventArgs e)
         {
             Névfeltöltés();
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -227,7 +213,7 @@ namespace Villamos
             Váltós.Visible = false;
 
             Előzmény.Visible = false;
-            button3.Visible = false;
+
 
             Adatok_egyeztetése.Visible = false;
 
@@ -331,7 +317,6 @@ namespace Villamos
             if (MyF.Vanjoga(melyikelem, 3))
             {
                 Előzmény.Visible = true;
-                button3.Visible = true;
             }
 
             melyikelem = 28;
@@ -354,6 +339,32 @@ namespace Villamos
 
         }
 
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            try
+            {
+                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+                if (Cmbtelephely.Text.Trim() == "") return;
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
@@ -390,7 +401,6 @@ namespace Villamos
             }
         }
 
-
         private void Nyitdolgozó_Click(object sender, EventArgs e)
         {
             Dolgozónév.Height = 500;
@@ -398,12 +408,10 @@ namespace Villamos
             NyitDolgozó.Visible = false;
         }
 
-
         private void Csukdolgozó_Click(object sender, EventArgs e)
         {
             Visszacsukjadolgozó();
         }
-
 
         private void Visszacsukjadolgozó()
         {
@@ -412,7 +420,6 @@ namespace Villamos
             NyitDolgozó.Visible = true;
             Lenyíló_Off();
         }
-
 
         private void Dolgozókijelölmind_Click(object sender, EventArgs e)
         {
@@ -434,7 +441,6 @@ namespace Villamos
             }
         }
 
-
         private void Dolgozóvissza_Click(object sender, EventArgs e)
         {
             try
@@ -454,7 +460,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void DolgozóFrissít_Click(object sender, EventArgs e)
         {
@@ -480,6 +485,7 @@ namespace Villamos
 
 
         #region Csoport választás
+        // JAVÍTANDÓ:
         private void Csoportfeltöltés()
         {
             try
@@ -502,7 +508,6 @@ namespace Villamos
             }
         }
 
-
         private void NyitCsoport_Click(object sender, EventArgs e)
         {
             Csoport.Height = 300;
@@ -510,12 +515,10 @@ namespace Villamos
             NyitCsoport.Visible = false;
         }
 
-
         private void CsukCsoport_Click(object sender, EventArgs e)
         {
             Visszacsukcsoport();
         }
-
 
         private void Visszacsukcsoport()
         {
@@ -524,7 +527,6 @@ namespace Villamos
             NyitCsoport.Visible = true;
             Lenyíló_Off();
         }
-
 
         private void Csoportkijelölmind_Click(object sender, EventArgs e)
         {
@@ -547,7 +549,6 @@ namespace Villamos
             }
         }
 
-
         private void Csoportvissza_Click(object sender, EventArgs e)
         {
             try
@@ -568,7 +569,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void CsoportFrissít_Click(object sender, EventArgs e)
         {
@@ -593,7 +593,7 @@ namespace Villamos
             }
         }
 
-        void Lenyíló_Off()
+        private void Lenyíló_Off()
         {
             Nyolcórás.Visible = false;
             Tizenkétórás.Visible = false;
@@ -661,7 +661,7 @@ namespace Villamos
             Holtart.Ki();
         }
 
-
+        // JAVÍTANDÓ:
         private void Naptár_Színezése()
         {
             try
@@ -751,7 +751,6 @@ namespace Villamos
             }
         }
 
-
         private void Naptár_kiírás()
         {
             try
@@ -810,7 +809,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Váltós_BEO_Kiírás()
         {
             try
@@ -878,7 +877,6 @@ namespace Villamos
 
         }
 
-
         private void Dolgozók_kiírás_tábla()
         {
             try
@@ -918,7 +916,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Szabi_kiírás()
         {
             try
@@ -967,7 +965,6 @@ namespace Villamos
             }
         }
 
-
         private void Munkarend_kiírás()
         {
             try
@@ -976,8 +973,6 @@ namespace Villamos
                 // Munkarend kiírása 
                 // ********************************************
                 Holtart.BackColor = Color.Red;
-
-
                 for (int i = 0; i < Tábla.Rows.Count; i++)
                 {
                     Holtart.Lép();
@@ -986,17 +981,12 @@ namespace Villamos
                         bool munkarend = (from a in AdatokDolg
                                           where a.Dolgozószám.Trim() == Tábla.Rows[i].Cells[Tábla.Columns.Count - 1].Value.ToString().Trim()
                                           select a.Munkarend).FirstOrDefault();
-                        //if (munkarend != null)
-                        //{
                         if (munkarend)
                             Tábla.Rows[i].Cells[Tábla.Columns.Count - 2].Value = 8;
                         else
                             Tábla.Rows[i].Cells[Tábla.Columns.Count - 2].Value = 12;
-
-                        //}
                     }
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1009,7 +999,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Beosztás_kiírása()
         {
             try
@@ -1168,7 +1158,6 @@ namespace Villamos
             }
         }
 
-
         private void Tábla_Sorted(object sender, EventArgs e)
         {
             //nem engedjük a sorbarendezést
@@ -1176,16 +1165,13 @@ namespace Villamos
                 Tábla.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
         }
 
-
         private void Tábla_Scroll(object sender, ScrollEventArgs e)
         {
             if (e.ScrollOrientation == 0)
                 ScrollX = e.NewValue;
             else
                 ScrollY = e.NewValue;
-
         }
-
 
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1272,7 +1258,7 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Dátum_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -1322,7 +1308,6 @@ namespace Villamos
             }
         }
 
-
         private void Tábla_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -1369,12 +1354,12 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
         #endregion
 
 
         #region Tizenkétórás
+        // JAVÍTANDÓ:
         private void Tizenkétórásfeltölt()
         {
             try
@@ -1406,13 +1391,11 @@ namespace Villamos
             }
         }
 
-
         private void Tizenkétórás_SelectedIndexChanged(object sender, EventArgs e)
         {
             Tizenkétórás_rögzítés();
             Tizenkétórás.Visible = false;
         }
-
 
         private void Tizenkétórás_rögzítés()
         {
@@ -1440,7 +1423,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Tizenkétórás_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1492,7 +1474,6 @@ namespace Villamos
             }
         }
 
-
         private void Tizenkétórás_MouseDown(object sender, MouseEventArgs e)
         {
             try
@@ -1505,8 +1486,6 @@ namespace Villamos
                 {
                     Kiegészítő_doboz();
                 }
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1522,11 +1501,11 @@ namespace Villamos
 
 
         #region Minden
+        // JAVÍTANDÓ:
         private void Mindenfeltölt()
         {
             try
             {
-
                 Minden.Items.Clear();
                 Minden.BeginUpdate();
                 Minden.Items.Add("");
@@ -1553,13 +1532,11 @@ namespace Villamos
             }
         }
 
-
         private void Minden_SelectedIndexChanged(object sender, EventArgs e)
         {
             Minden_rögzítés();
             Minden.Visible = false;
         }
-
 
         private void Minden_rögzítés()
         {
@@ -1588,7 +1565,6 @@ namespace Villamos
             }
         }
 
-
         private void Minden_MouseDown(object sender, MouseEventArgs e)
         {
             try
@@ -1612,7 +1588,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Minden_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1651,8 +1626,6 @@ namespace Villamos
                     Nyolcórás.Visible = false;
                     Minden.Visible = false;
                 }
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1668,7 +1641,7 @@ namespace Villamos
 
 
         #region Nyolcórás
-
+        // JAVÍTANDÓ:
         private void Nyolcórásfeltölt()
         {
             try
@@ -1705,10 +1678,8 @@ namespace Villamos
             Nyolcórás_rögzítés();
         }
 
-
         private void Nyolcórás_rögzítés()
         {
-
             try
             {
                 BeosztáskódVálasztott = "";
@@ -1734,12 +1705,10 @@ namespace Villamos
             }
         }
 
-
         private void Nyolcórás_MouseDown(object sender, MouseEventArgs e)
         {
             try
             {
-
                 if (e.Button == MouseButtons.Right)
                 {
                     Nyolcórás_rögzítés();
@@ -1749,7 +1718,6 @@ namespace Villamos
 
                     Kiegészítő_doboz();
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1761,7 +1729,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Nyolcórás_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1800,7 +1767,6 @@ namespace Villamos
                     Nyolcórás.Visible = false;
                     Minden.Visible = false;
                 }
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1816,7 +1782,8 @@ namespace Villamos
 
 
         #region Rögzítés
-        void Rögzítés()
+        // JAVÍTANDÓ:
+        private void Rögzítés()
         {
             try
             {
@@ -1847,22 +1814,19 @@ namespace Villamos
                         {
                             case -1:
                                 {
-                                    if (!MyF.Vanjoga(melyikelem, 1))
-                                        throw new HibásBevittAdat("Nincs jogosultsága az elmúlt napok beosztásának megváltoztatására!");
+                                    if (!MyF.Vanjoga(melyikelem, 1)) throw new HibásBevittAdat("Nincs jogosultsága az elmúlt napok beosztásának megváltoztatására!");
                                     break;
                                 }
                             case 0:
                                 {
                                     // módosítás 2 dolgozó oktatás elrendelésének törlése átütemezése
-                                    if (!MyF.Vanjoga(melyikelem, 2))
-                                        throw new HibásBevittAdat("Nincs jogosultsága a beosztás megváltoztatására!");
+                                    if (!MyF.Vanjoga(melyikelem, 2)) throw new HibásBevittAdat("Nincs jogosultsága a beosztás megváltoztatására!");
                                     break;
                                 }
                             case 1:
                                 {
                                     // módosítás 3 adminisztráció mentés, jelenléti ív készítés, e-mail küldés
-                                    if (!MyF.Vanjoga(melyikelem, 3))
-                                        throw new HibásBevittAdat("Nincs jogosultsága a hónap hátralévő napjainak beosztásának megváltoztatására!");
+                                    if (!MyF.Vanjoga(melyikelem, 3)) throw new HibásBevittAdat("Nincs jogosultsága a hónap hátralévő napjainak beosztásának megváltoztatására!");
                                     break;
                                 }
                         }
@@ -1894,14 +1858,11 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
         #endregion
 
 
         #region Kiegészítő doboz
-
         Ablak_Beosztás_kieg Új_Ablak_Beosztás_kieg;
 
         private void Kiegészítő_Doboz_Click(object sender, EventArgs e)
@@ -1912,7 +1873,6 @@ namespace Villamos
             Kiegészítő_doboz();
         }
 
-
         private void Kiegészítő_doboz()
         {
             try
@@ -1920,12 +1880,9 @@ namespace Villamos
                 Új_Ablak_Beosztás_kieg?.Close();
                 int lapfülszám = 3;
 
-                if (BeosztáskódVálasztott.Length > 0 && BeosztáskódVálasztott.Substring(0, 1) == "A")
-                    lapfülszám = 4;
-                if (Előzőtartalom.Length > 0 && Előzőtartalom.Substring(0, 1) == "A")
-                    lapfülszám = 4;
-                if (!DateTime.TryParse(NapKiválaszt.Text, out DateTime Dátumérték))
-                    throw new HibásBevittAdat("Nincs kiválasztva módodításhoz/rögzítéshez dátum.");
+                if (BeosztáskódVálasztott.Length > 0 && BeosztáskódVálasztott.Substring(0, 1) == "A") lapfülszám = 4;
+                if (Előzőtartalom.Length > 0 && Előzőtartalom.Substring(0, 1) == "A") lapfülszám = 4;
+                if (!DateTime.TryParse(NapKiválaszt.Text, out DateTime Dátumérték)) throw new HibásBevittAdat("Nincs kiválasztva módodításhoz/rögzítéshez dátum.");
 
                 Új_Ablak_Beosztás_kieg = new Ablak_Beosztás_kieg(Cmbtelephely.Text.Trim(), Dátumérték, BeosztáskódVálasztott, Előzőtartalom, Hrazonosító.Text.Trim(), Dolgozóneve.Text.Trim(), Ledolgozott_idő, lapfülszám);
                 Új_Ablak_Beosztás_kieg.FormClosed += Új_Ablak_Beosztás_kieg_FormClosed;
@@ -1941,17 +1898,12 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
-
 
         private void Új_Ablak_Beosztás_kieg_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Beosztás_kieg = null;
         }
-
-
         #endregion
 
 
@@ -1962,7 +1914,6 @@ namespace Villamos
             Adat_egyeztetés_eseménye();
             MessageBox.Show("Az adatok ellenőrzése megtörént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
 
         private void Adat_egyeztetés_eseménye()
         {
@@ -1999,13 +1950,12 @@ namespace Villamos
             }
         }
 
-
+        // JAVÍTANDÓ:
         private void Excel_gomb_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Dolgozónév.CheckedItems.Count < 1)
-                    throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem, így nem készül Excel tábla.");
+                if (Dolgozónév.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem, így nem készül Excel tábla.");
 
                 string fájlexc;
                 // kimeneti fájl helye és neve
@@ -2259,10 +2209,8 @@ namespace Villamos
             }
         }
 
-
         private void Súgó_Click(object sender, EventArgs e)
         {
-
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\beosztás.html";
@@ -2279,14 +2227,12 @@ namespace Villamos
             }
         }
 
-
         private void Váltós_Click(object sender, EventArgs e)
         {
-
             Kitölti_váltósnak();
         }
 
-
+        // JAVÍTANDÓ:
         private void Kitölti_váltósnak()
         {
             try
@@ -2421,7 +2367,6 @@ namespace Villamos
             }
         }
 
-
         private void Előzmény_Click(object sender, EventArgs e)
         {
             Beosztás_Rögzítés BR = new Beosztás_Rögzítés();
@@ -2429,7 +2374,7 @@ namespace Villamos
             ELőzmények_törlése();
         }
 
-
+        // JAVÍTANDÓ:
         private void ELőzmények_törlése()
         {
             try
@@ -2510,13 +2455,12 @@ namespace Villamos
             }
         }
 
-
         private void Gomb_nappalos_Click(object sender, EventArgs e)
         {
             Nappalos_beosztás();
         }
 
-
+        // JAVÍTANDÓ:
         private void Nappalos_beosztás()
         {
             try
@@ -2576,14 +2520,11 @@ namespace Villamos
 
 
         #region Listák feltöltése
-
         private void Listák_feltöltése()
         {
             DolgozóiLista_Feltöltése();
-
-
         }
-
+        // JAVÍTANDÓ:
         private void DolgozóiLista_Feltöltése()
         {
             try
@@ -2604,34 +2545,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
-
-        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            try
-            {
-                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
-                if (Cmbtelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-
-                }
-                else
-                {
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                }
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }
