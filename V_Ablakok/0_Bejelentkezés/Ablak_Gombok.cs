@@ -35,7 +35,8 @@ namespace Villamos.Ablakok
             Adatok = Kéz.Lista_Adatok();
             Alap_tábla_író();
             SzervezetFeltöltésChk();
-            //     GombLathatosagKezelo.Beallit(this);
+            //Csak globaladmin tud módosítani
+            Alap_Rögzít.Visible = Program.Postás_Felhasználó.GlobalAdmin;
         }
 
         private void Ablak_Anyagok_Load(object sender, System.EventArgs e)

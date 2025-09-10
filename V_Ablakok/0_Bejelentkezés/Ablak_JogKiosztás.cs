@@ -62,7 +62,7 @@ namespace Villamos
             AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
             OldalFeltöltés();
             FelhasználóFeltöltés();
-            GombLathatosagKezelo.Beallit(this);
+            GombLathatosagKezelo.Beallit(this, "Főmérnökség");
         }
 
 
@@ -99,6 +99,7 @@ namespace Villamos
         {
             if (CmbAblak.Text.Trim() == "") return;
             CmbGombok.Text = "";
+            CmbGombId.Text = "";
             CmbGombok.Items.Clear();
             Adat_Oldalak oldal = (from a in AdatokOldal
                                   where a.Törölt == false
@@ -457,7 +458,7 @@ namespace Villamos
                 //A teljes lista csorbítása a beálító jogosultságaival
                 foreach (string szervezet in Gombszervezetek)
                 {
-                    if (Program.PostásUsers.Szervezetek.Contains(szervezet))
+                    if (Program.Postás_Felhasználó.Szervezetek.Contains(szervezet))
                     {
                         //Csak azokat a szervezeteket írjuk ki amelyek a beállító jogosultságai között is szerepelnek
                         LstChkSzervezet.Items.Add(szervezet.Trim());
@@ -563,9 +564,7 @@ namespace Villamos
                 CmbGombok.SelectedIndex = i;
                 CmbGombok.Text = CmbGombok.Items[CmbGombok.SelectedIndex].ToString();
             }
-
             Szervezetek();
-
         }
     }
 }

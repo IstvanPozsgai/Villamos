@@ -40,7 +40,7 @@ namespace Villamos
         public static List<Adat_Oldalak> PostásOldalak = new List<Adat_Oldalak>();
         public static List<Adat_Gombok> PostásGombok = new List<Adat_Gombok>();
         public static List<Adat_Kiegészítő_Könyvtár> PostásKönyvtár = new List<Adat_Kiegészítő_Könyvtár>();
-        public static Adat_Users PostásUsers = null;
+        public static Adat_Users Postás_Felhasználó = null;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

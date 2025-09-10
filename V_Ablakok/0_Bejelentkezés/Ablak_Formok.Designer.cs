@@ -48,6 +48,7 @@
             this.BtnExcel = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnSugó = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -240,7 +241,7 @@
             // 
             this.BtnExcel.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.BtnExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnExcel.Location = new System.Drawing.Point(153, 3);
+            this.BtnExcel.Location = new System.Drawing.Point(153, 53);
             this.BtnExcel.Name = "BtnExcel";
             this.BtnExcel.Size = new System.Drawing.Size(45, 44);
             this.BtnExcel.TabIndex = 218;
@@ -256,10 +257,11 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.BtnExcel, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnFrissít, 3, 2);
             this.tableLayoutPanel2.Controls.Add(this.Új_adat, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.Alap_Rögzít, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.BtnExcel, 3, 1);
+            this.tableLayoutPanel2.Controls.Add(this.BtnSugó, 3, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(744, 4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 4;
@@ -269,6 +271,18 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(210, 222);
             this.tableLayoutPanel2.TabIndex = 222;
+            // 
+            // BtnSugó
+            // 
+            this.BtnSugó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSugó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.BtnSugó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSugó.Location = new System.Drawing.Point(162, 3);
+            this.BtnSugó.Name = "BtnSugó";
+            this.BtnSugó.Size = new System.Drawing.Size(45, 44);
+            this.BtnSugó.TabIndex = 219;
+            this.toolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
+            this.BtnSugó.UseVisualStyleBackColor = true;
             // 
             // Ablak_Formok
             // 
@@ -314,5 +328,6 @@
         private System.Windows.Forms.ComboBox MenüFelirat;
         private System.Windows.Forms.ComboBox MenüNév;
         internal System.Windows.Forms.Label label1;
+        internal System.Windows.Forms.Button BtnSugó;
     }
 }

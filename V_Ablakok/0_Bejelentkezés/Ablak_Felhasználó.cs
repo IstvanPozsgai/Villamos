@@ -38,7 +38,7 @@ namespace Villamos
             Üres();
             TáblázatListázás();
             SzervezetFeltöltésChk();
-            //    GombLathatosagKezelo.Beallit(this);
+         //     GombLathatosagKezelo.Beallit(this);
             Admin();
 
         }
@@ -219,6 +219,8 @@ namespace Villamos
                     for (int i = 0; i < ChkSzervezet.Items.Count; i++)
                     {
                         string itemText = ChkSzervezet.Items[i].ToString();
+                        // JAVÍTANDÓ:Csak azokat a szervezeteket írja ki ahol van jogosultsága
+                        //kivéve a globál admin
                         if (szervezetek.Contains(itemText))
                         {
                             ChkSzervezet.SetItemChecked(i, true);
@@ -257,7 +259,7 @@ namespace Villamos
         /// <param name="e"></param>
         private void BtnRögzít_Click(object sender, EventArgs e)
         {
-            if (Program.PostásUsers?.GlobalAdmin == true)
+            if (Program.Postás_Felhasználó?.GlobalAdmin == true)
             {
                 GlobalRögzítés();
             }
@@ -518,13 +520,21 @@ namespace Villamos
                 int j = 0;
                 for (int i = 0; i < adatokSzervezet.Count; i++)
                 {
-                    // Azokhoz amihez van joga azok jelennek meg a listában
-                    if (Program.PostásUsers.Szervezetek.Contains(adatokSzervezet[i].Név))
+                    if (Program.Postás_Felhasználó.GlobalAdmin)
+                    { 
+                    
+                    }
+                    else
                     {
-                        ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
-                        ChkSzervezet.SetItemChecked(j, false);
-                        CmbSzervezet.Items.Add(adatokSzervezet[i].Név);
-                        j++;
+                        // JAVÍTANDÓ:Ez sem jó
+                        // Azokhoz amihez van joga azok jelennek meg a listában
+                        if (Program.Postás_Felhasználó.Szervezetek.Contains(adatokSzervezet[i].Név))
+                        {
+                            ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
+                            ChkSzervezet.SetItemChecked(j, false);
+                            CmbSzervezet.Items.Add(adatokSzervezet[i].Név);
+                            j++;
+                        }
                     }
                 }
             }
@@ -634,16 +644,16 @@ namespace Villamos
         {
             GlobalAdmin.Visible = false;
             TelephelyAdmin.Visible = false;
-            if (Program.PostásUsers?.TelepAdmin == true)
+            if (Program.Postás_Felhasználó?.TelepAdmin == true)
             {
                 GlobalAdmin.Visible = false;
                 TelephelyAdmin.Visible = true;
-                CmbSzervezet.Text = Program.PostásUsers.Szervezet;
+                CmbSzervezet.Text = Program.Postás_Felhasználó.Szervezet;
                 CmbSzervezet.Enabled = false;
 
 
             }
-            if (Program.PostásUsers?.GlobalAdmin == true)
+            if (Program.Postás_Felhasználó?.GlobalAdmin == true)
             {
                 GlobalAdmin.Visible = true;
                 TelephelyAdmin.Visible = true;
