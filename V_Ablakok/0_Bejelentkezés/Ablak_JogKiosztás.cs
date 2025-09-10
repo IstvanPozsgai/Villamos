@@ -98,8 +98,6 @@ namespace Villamos
         private void GombokFeltöltése()
         {
             if (CmbAblak.Text.Trim() == "") return;
-            CmbGombok.Text = "";
-            CmbGombId.Text = "";
             CmbGombok.Items.Clear();
             Adat_Oldalak oldal = (from a in AdatokOldal
                                   where a.Törölt == false
@@ -162,6 +160,8 @@ namespace Villamos
                 CmbAblakId.Text = Ablak.OldalId.ToString();
 
                 MezőkÜrítése(false);
+                CmbGombok.Text = "";
+                CmbGombId.Text = "";
                 GombokFeltöltése();
                 TáblázatListázás();
             }
@@ -425,14 +425,15 @@ namespace Villamos
             if (e.RowIndex < 0) return;
             Felhasználók.Text = Tábla.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
             CmbGombok.Text = Tábla.Rows[e.RowIndex].Cells[2].Value.ToStrTrim();
+            CmbGombId.Text = Tábla.Rows[e.RowIndex].Cells[5].Value.ToStrTrim();
             CmbAblak.Text = Tábla.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
+            CmbAblakId.Text = Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim();
             Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
             AblakFormName = Ablak.FromName;
             AblakFőID = Ablak.OldalId;
-            // JAVÍTANDÓ:
+
             GombokFeltöltése();
             Szervezetek();
-            TáblázatListázás();
         }
 
 
@@ -545,6 +546,8 @@ namespace Villamos
             CmbAblak.Text = Ablak.MenuFelirat;
             AblakFőID = Ablak.OldalId;
             MezőkÜrítése(false);
+            CmbGombok.Text = "";
+            CmbGombId.Text = "";
             GombokFeltöltése();
             TáblázatListázás();
         }
