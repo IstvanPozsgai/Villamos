@@ -38,6 +38,12 @@ namespace Villamos
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Felhasználó));
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.BtnSugó = new System.Windows.Forms.Button();
+            this.BtnFrissít = new System.Windows.Forms.Button();
+            this.BtnDolgozóilsta = new System.Windows.Forms.Button();
+            this.BtnÚj = new System.Windows.Forms.Button();
+            this.BtnRögzít = new System.Windows.Forms.Button();
+            this.JelszóMódosítás = new System.Windows.Forms.Button();
             this.TextWinUser = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.TextUserNév = new System.Windows.Forms.TextBox();
@@ -62,12 +68,6 @@ namespace Villamos
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.CmbSzervezet = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.BtnSugó = new System.Windows.Forms.Button();
-            this.BtnFrissít = new System.Windows.Forms.Button();
-            this.BtnDolgozóilsta = new System.Windows.Forms.Button();
-            this.BtnÚj = new System.Windows.Forms.Button();
-            this.BtnRögzít = new System.Windows.Forms.Button();
-            this.JelszóMódosítás = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
@@ -77,6 +77,79 @@ namespace Villamos
             // ToolTip1
             // 
             this.ToolTip1.IsBalloon = true;
+            // 
+            // BtnSugó
+            // 
+            this.BtnSugó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSugó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.BtnSugó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSugó.Location = new System.Drawing.Point(164, 3);
+            this.BtnSugó.Name = "BtnSugó";
+            this.BtnSugó.Size = new System.Drawing.Size(45, 44);
+            this.BtnSugó.TabIndex = 2;
+            this.ToolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
+            this.BtnSugó.UseVisualStyleBackColor = true;
+            this.BtnSugó.Click += new System.EventHandler(this.BtnSugó_Click);
+            // 
+            // BtnFrissít
+            // 
+            this.BtnFrissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.BtnFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnFrissít.Location = new System.Drawing.Point(3, 103);
+            this.BtnFrissít.Name = "BtnFrissít";
+            this.BtnFrissít.Size = new System.Drawing.Size(44, 44);
+            this.BtnFrissít.TabIndex = 223;
+            this.ToolTip1.SetToolTip(this.BtnFrissít, "Hozzákötjük a felhasználónévhez  a Windows profilt");
+            this.BtnFrissít.UseVisualStyleBackColor = true;
+            this.BtnFrissít.Click += new System.EventHandler(this.BtnFrissít_Click);
+            // 
+            // BtnDolgozóilsta
+            // 
+            this.BtnDolgozóilsta.BackgroundImage = global::Villamos.Properties.Resources.felhasználók32;
+            this.BtnDolgozóilsta.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnDolgozóilsta.Location = new System.Drawing.Point(53, 3);
+            this.BtnDolgozóilsta.Name = "BtnDolgozóilsta";
+            this.BtnDolgozóilsta.Size = new System.Drawing.Size(44, 44);
+            this.BtnDolgozóilsta.TabIndex = 224;
+            this.ToolTip1.SetToolTip(this.BtnDolgozóilsta, "Frissíti a dolgozói listát IDM adataival");
+            this.BtnDolgozóilsta.UseVisualStyleBackColor = true;
+            this.BtnDolgozóilsta.Click += new System.EventHandler(this.BtnDolgozóilsta_Click);
+            // 
+            // BtnÚj
+            // 
+            this.BtnÚj.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
+            this.BtnÚj.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnÚj.Location = new System.Drawing.Point(3, 3);
+            this.BtnÚj.Name = "BtnÚj";
+            this.BtnÚj.Size = new System.Drawing.Size(44, 44);
+            this.BtnÚj.TabIndex = 222;
+            this.ToolTip1.SetToolTip(this.BtnÚj, "Új felhasználó létrehozás");
+            this.BtnÚj.UseVisualStyleBackColor = true;
+            this.BtnÚj.Click += new System.EventHandler(this.BtnÚj_Click);
+            // 
+            // BtnRögzít
+            // 
+            this.BtnRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.BtnRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnRögzít.Location = new System.Drawing.Point(3, 293);
+            this.BtnRögzít.Name = "BtnRögzít";
+            this.BtnRögzít.Size = new System.Drawing.Size(44, 44);
+            this.BtnRögzít.TabIndex = 97;
+            this.ToolTip1.SetToolTip(this.BtnRögzít, "Minden jogosultság rögzítése");
+            this.BtnRögzít.UseVisualStyleBackColor = true;
+            this.BtnRögzít.Click += new System.EventHandler(this.BtnRögzít_Click);
+            // 
+            // JelszóMódosítás
+            // 
+            this.JelszóMódosítás.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Security_Modify_key;
+            this.JelszóMódosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.JelszóMódosítás.Location = new System.Drawing.Point(103, 293);
+            this.JelszóMódosítás.Name = "JelszóMódosítás";
+            this.JelszóMódosítás.Size = new System.Drawing.Size(44, 44);
+            this.JelszóMódosítás.TabIndex = 225;
+            this.ToolTip1.SetToolTip(this.JelszóMódosítás, "Új jelszó beállítás");
+            this.JelszóMódosítás.UseVisualStyleBackColor = true;
+            this.JelszóMódosítás.Click += new System.EventHandler(this.JelszóMódosítás_Click);
             // 
             // TextWinUser
             // 
@@ -367,79 +440,6 @@ namespace Villamos
             this.label7.Size = new System.Drawing.Size(157, 20);
             this.label7.TabIndex = 227;
             this.label7.Text = "További szervezetek:";
-            // 
-            // BtnSugó
-            // 
-            this.BtnSugó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnSugó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.BtnSugó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSugó.Location = new System.Drawing.Point(164, 3);
-            this.BtnSugó.Name = "BtnSugó";
-            this.BtnSugó.Size = new System.Drawing.Size(45, 44);
-            this.BtnSugó.TabIndex = 2;
-            this.ToolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
-            this.BtnSugó.UseVisualStyleBackColor = true;
-            this.BtnSugó.Click += new System.EventHandler(this.BtnSugó_Click);
-            // 
-            // BtnFrissít
-            // 
-            this.BtnFrissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.BtnFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.BtnFrissít.Location = new System.Drawing.Point(3, 103);
-            this.BtnFrissít.Name = "BtnFrissít";
-            this.BtnFrissít.Size = new System.Drawing.Size(44, 44);
-            this.BtnFrissít.TabIndex = 223;
-            this.ToolTip1.SetToolTip(this.BtnFrissít, "Hozzákötjük a felhasználónévhez  a Windows profilt");
-            this.BtnFrissít.UseVisualStyleBackColor = true;
-            this.BtnFrissít.Click += new System.EventHandler(this.BtnFrissít_Click);
-            // 
-            // BtnDolgozóilsta
-            // 
-            this.BtnDolgozóilsta.BackgroundImage = global::Villamos.Properties.Resources.felhasználók32;
-            this.BtnDolgozóilsta.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnDolgozóilsta.Location = new System.Drawing.Point(53, 3);
-            this.BtnDolgozóilsta.Name = "BtnDolgozóilsta";
-            this.BtnDolgozóilsta.Size = new System.Drawing.Size(44, 44);
-            this.BtnDolgozóilsta.TabIndex = 224;
-            this.ToolTip1.SetToolTip(this.BtnDolgozóilsta, "Frissíti a dolgozói listát IDM adataival");
-            this.BtnDolgozóilsta.UseVisualStyleBackColor = true;
-            this.BtnDolgozóilsta.Click += new System.EventHandler(this.BtnDolgozóilsta_Click);
-            // 
-            // BtnÚj
-            // 
-            this.BtnÚj.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.BtnÚj.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.BtnÚj.Location = new System.Drawing.Point(3, 3);
-            this.BtnÚj.Name = "BtnÚj";
-            this.BtnÚj.Size = new System.Drawing.Size(44, 44);
-            this.BtnÚj.TabIndex = 222;
-            this.ToolTip1.SetToolTip(this.BtnÚj, "Hozzákötjük a felhasználónévhez  a Windows profilt");
-            this.BtnÚj.UseVisualStyleBackColor = true;
-            this.BtnÚj.Click += new System.EventHandler(this.BtnÚj_Click);
-            // 
-            // BtnRögzít
-            // 
-            this.BtnRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.BtnRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.BtnRögzít.Location = new System.Drawing.Point(3, 293);
-            this.BtnRögzít.Name = "BtnRögzít";
-            this.BtnRögzít.Size = new System.Drawing.Size(44, 44);
-            this.BtnRögzít.TabIndex = 97;
-            this.ToolTip1.SetToolTip(this.BtnRögzít, "Minden jogosultság rögzítése");
-            this.BtnRögzít.UseVisualStyleBackColor = true;
-            this.BtnRögzít.Click += new System.EventHandler(this.BtnRögzít_Click);
-            // 
-            // JelszóMódosítás
-            // 
-            this.JelszóMódosítás.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Security_Modify_key;
-            this.JelszóMódosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.JelszóMódosítás.Location = new System.Drawing.Point(103, 293);
-            this.JelszóMódosítás.Name = "JelszóMódosítás";
-            this.JelszóMódosítás.Size = new System.Drawing.Size(44, 44);
-            this.JelszóMódosítás.TabIndex = 225;
-            this.ToolTip1.SetToolTip(this.JelszóMódosítás, "Új jelszó beállítás");
-            this.JelszóMódosítás.UseVisualStyleBackColor = true;
-            this.JelszóMódosítás.Click += new System.EventHandler(this.JelszóMódosítás_Click);
             // 
             // Ablak_Felhasználó
             // 

@@ -33,12 +33,11 @@ namespace Villamos
         {
             Adatok = Kéz.Lista_Adatok();
             AdatokDolg = KézDolgozó.Lista_Adatok();
-            //    AdatokDolg = KézDolgozó.Lista_Adatok().Where(a => a.Státus == true).ToList();
             CombokFeltöltése();
             Üres();
             TáblázatListázás();
             SzervezetFeltöltésChk();
-         //     GombLathatosagKezelo.Beallit(this);
+            //     GombLathatosagKezelo.Beallit(this);
             Admin();
 
         }
@@ -517,23 +516,29 @@ namespace Villamos
                 List<Adat_Kiegészítő_Könyvtár> adatokSzervezet = kezSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
                 CmbSzervezet.Items.Clear();
                 ChkSzervezet.Items.Clear();
-                int j = 0;
+                // JAVÍTANDÓ:Feltöltjük kezdéskor az összes szervezetet
+                string[] darabol = Program.Postás_Felhasználó.Szervezetek.Split(';');
+
                 for (int i = 0; i < adatokSzervezet.Count; i++)
                 {
                     if (Program.Postás_Felhasználó.GlobalAdmin)
-                    { 
-                    
+                    {
+                        CmbSzervezet.Items.Add(adatokSzervezet[i].Név);
+                        ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
                     }
                     else
                     {
-                        // JAVÍTANDÓ:Ez sem jó
-                        // Azokhoz amihez van joga azok jelennek meg a listában
-                        if (Program.Postás_Felhasználó.Szervezetek.Contains(adatokSzervezet[i].Név))
-                        {
-                            ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
-                            ChkSzervezet.SetItemChecked(j, false);
-                            CmbSzervezet.Items.Add(adatokSzervezet[i].Név);
+                        //Ha nem globáladmin akkor csak azokat a szervezeteket látja amikhez joga van
+                        int j = 0;
+                        int k = 0;
+                        while (darabol.Length - 1 > j && darabol[j].ToStrTrim() != adatokSzervezet[i].Név)
                             j++;
+                        if (darabol.Length - 1 >= j && darabol[j].ToStrTrim() == adatokSzervezet[i].Név)
+                        {
+
+                            ChkSzervezet.Items.Add(adatokSzervezet[i].Név);
+                            ChkSzervezet.SetItemChecked(k, false);
+                            k++;
                         }
                     }
                 }

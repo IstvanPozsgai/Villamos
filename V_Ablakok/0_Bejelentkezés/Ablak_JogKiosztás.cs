@@ -426,7 +426,7 @@ namespace Villamos
             Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
             AblakFormName = Ablak.FromName;
             AblakFőID = Ablak.OldalId;
-
+            // JAVÍTANDÓ:
             GombokFeltöltése();
             Szervezetek();
             TáblázatListázás();
