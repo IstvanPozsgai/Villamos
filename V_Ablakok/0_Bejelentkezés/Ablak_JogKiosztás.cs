@@ -77,8 +77,8 @@ namespace Villamos
             {
                 foreach (Adat_Oldalak Elem in AdatokOldal)
                 {
-                    CmbAblak.Items.Add(Elem.MenuFelirat); 
-                    CmbAblakId .Items.Add(Elem.OldalId.ToString());
+                    CmbAblak.Items.Add(Elem.MenuFelirat);
+                    CmbAblakId.Items.Add(Elem.OldalId.ToString());
                 }
             }
             catch (HibásBevittAdat ex)
@@ -117,7 +117,7 @@ namespace Villamos
                 Adat_Gombok item = gombok[i];
                 string felirat = $"{item.GombFelirat} = {item.GombName}";
                 CmbGombok.Items.Add(felirat);
-                CmbGombId .Items.Add(item.GombokId.ToString());
+                CmbGombId.Items.Add(item.GombokId.ToString());
             }
         }
 
@@ -161,7 +161,7 @@ namespace Villamos
                 AblakFőID = Ablak.OldalId;
                 CmbAblakId.Text = Ablak.OldalId.ToString();
 
-                MezőkÜrítése(false );
+                MezőkÜrítése(false);
                 GombokFeltöltése();
                 TáblázatListázás();
             }
@@ -211,7 +211,7 @@ namespace Villamos
             }
         }
 
-        private void MezőkÜrítése(bool minden=true )
+        private void MezőkÜrítése(bool minden = true)
         {
             if (minden)
             {
@@ -220,8 +220,8 @@ namespace Villamos
                 CmbAblakId.Text = "";
                 CmbGombId.Text = "";
             }
-        
-           
+
+
             CmbGombok.Items.Clear();
             LstChkSzervezet.Items.Clear();
         }
@@ -345,7 +345,8 @@ namespace Villamos
                 AdatTáblaALap.Columns.Add("Ablak név");
                 AdatTáblaALap.Columns.Add("Gomb név");
                 AdatTáblaALap.Columns.Add("Szervezet");
-                AdatTáblaALap.Columns.Add("Törölt");
+                AdatTáblaALap.Columns.Add("AblakId");
+                AdatTáblaALap.Columns.Add("GombId");
             }
             catch (HibásBevittAdat ex)
             {
@@ -392,7 +393,8 @@ namespace Villamos
                     string szervezet = "<<Nincs Szervezet>>";
                     szervezet = AdatokSzervezet.FirstOrDefault(a => a.ID == rekord.SzervezetId)?.Név ?? "<<Nincs Szervezet>>";
                     Soradat["Szervezet"] = szervezet;
-                    Soradat["Törölt"] = rekord.Törölt ? "Igen" : "Nem";
+                    Soradat["AblakId"] = rekord.OldalId;
+                    Soradat["GombId"] = rekord.GombokId;
                     AdatTáblaALap.Rows.Add(Soradat);
                 }
             }
@@ -413,7 +415,8 @@ namespace Villamos
             Tábla.Columns["Ablak név"].Width = 250;
             Tábla.Columns["Gomb név"].Width = 600;
             Tábla.Columns["Szervezet"].Width = 500;
-            Tábla.Columns["Törölt"].Width = 110;
+            Tábla.Columns["AblakId"].Width = 110;
+            Tábla.Columns["GombId"].Width = 110;
         }
 
 
