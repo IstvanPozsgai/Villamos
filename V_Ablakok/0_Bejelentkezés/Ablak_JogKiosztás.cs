@@ -58,13 +58,11 @@ namespace Villamos
                            where a.Törölt == false
                            orderby a.UserName
                            select a).ToList();
-            AdatokDolgozó = KézDolgozó.Lista_Adatok().Where(a => a.Státus == true ).OrderBy(a => a.Dolgozónév).ToList();
+            AdatokDolgozó = KézDolgozó.Lista_Adatok().Where(a => a.Státus == true).OrderBy(a => a.Dolgozónév).ToList();
             AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
             OldalFeltöltés();
             FelhasználóFeltöltés();
-            //   GombLathatosagKezelo.Beallit(this);
-            AblakIdLab.Text = "";
-            GombIDLab.Text = "";
+            GombLathatosagKezelo.Beallit(this);
         }
 
 
@@ -78,7 +76,10 @@ namespace Villamos
             try
             {
                 foreach (Adat_Oldalak Elem in AdatokOldal)
-                    CmbAblak.Items.Add(Elem.MenuFelirat);
+                {
+                    CmbAblak.Items.Add(Elem.MenuFelirat); 
+                    CmbAblakId .Items.Add(Elem.OldalId.ToString());
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -97,6 +98,7 @@ namespace Villamos
         private void GombokFeltöltése()
         {
             if (CmbAblak.Text.Trim() == "") return;
+            CmbGombok.Text = "";
             CmbGombok.Items.Clear();
             Adat_Oldalak oldal = (from a in AdatokOldal
                                   where a.Törölt == false
@@ -114,6 +116,7 @@ namespace Villamos
                 Adat_Gombok item = gombok[i];
                 string felirat = $"{item.GombFelirat} = {item.GombName}";
                 CmbGombok.Items.Add(felirat);
+                CmbGombId .Items.Add(item.GombokId.ToString());
             }
         }
 
@@ -155,9 +158,10 @@ namespace Villamos
                 Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
                 AblakFormName = Ablak.FromName;
                 AblakFőID = Ablak.OldalId;
-                AblakIdLab.Text = Ablak.OldalId.ToString ();
-                GombokFeltöltése();
+                CmbAblakId.Text = Ablak.OldalId.ToString();
 
+                MezőkÜrítése(false );
+                GombokFeltöltése();
                 TáblázatListázás();
             }
             catch (HibásBevittAdat ex)
@@ -206,13 +210,19 @@ namespace Villamos
             }
         }
 
-        private void MezőkÜrítése()
+        private void MezőkÜrítése(bool minden=true )
         {
-            CmbAblak.Text = "";
-            CmbGombok.Text = "";
+            if (minden)
+            {
+                CmbAblak.Text = "";
+                CmbGombok.Text = "";
+                CmbAblakId.Text = "";
+                CmbGombId.Text = "";
+            }
+        
+           
             CmbGombok.Items.Clear();
             LstChkSzervezet.Items.Clear();
-
         }
         #endregion
 
@@ -441,7 +451,7 @@ namespace Villamos
                 string[] Darabol = CmbGombok.Text.Trim().Split('=');
                 Adat_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FromName == AblakFormName);
                 GombFőID = Gomb?.GombokId ?? -1;
-                GombIDLab .Text = GombFőID.ToString();
+                CmbGombId.Text = GombFőID.ToString();
                 if (Gomb == null) return;
                 string[] Gombszervezetek = Gomb.Szervezet.Split(';');
                 //A teljes lista csorbítása a beálító jogosultságaival
@@ -520,6 +530,41 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+        }
+
+        private void CmbAblakId_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            CmbAblakId.Text = CmbAblakId.Items[CmbAblakId.SelectedIndex].ToString();
+            Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.OldalId == CmbAblakId.Text.ToÉrt_Int());
+            AblakFormName = Ablak.FromName;
+            CmbAblak.Text = Ablak.MenuFelirat;
+            AblakFőID = Ablak.OldalId;
+            MezőkÜrítése(false);
+            GombokFeltöltése();
+            TáblázatListázás();
+        }
+
+        private void CmbGombId_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            CmbGombId.Text = CmbGombId.Items[CmbGombId.SelectedIndex].ToString();
+
+            Adat_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombokId == CmbGombId.Text.ToÉrt_Int() && a.FromName == AblakFormName);
+            string felirat = $"{Gomb.GombFelirat} = {Gomb.GombName}";
+            int i = 0;
+            while (CmbGombok.Items.Count > i && CmbGombok.Items[i].ToStrTrim() != felirat)
+            {
+                i++;
+            }
+
+
+            if (CmbGombok.Items.Count > i)
+            {
+                CmbGombok.SelectedIndex = i;
+                CmbGombok.Text = CmbGombok.Items[CmbGombok.SelectedIndex].ToString();
+            }
+
+            Szervezetek();
 
         }
     }

@@ -47,26 +47,26 @@ namespace Villamos
             this.JogTörlés = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.CmbGombok = new System.Windows.Forms.ComboBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.CmbAblak = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.CmbGombok = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.CmbAblak = new System.Windows.Forms.ComboBox();
             this.LstChkSzervezet = new System.Windows.Forms.CheckedListBox();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Felhasználók = new System.Windows.Forms.ComboBox();
             this.DolgozóNév = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.GombIDLab = new System.Windows.Forms.Label();
-            this.AblakIdLab = new System.Windows.Forms.Label();
+            this.CmbGombId = new System.Windows.Forms.ComboBox();
+            this.CmbAblakId = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // ToolTip1
@@ -192,6 +192,48 @@ namespace Villamos
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1555, 315);
             this.tableLayoutPanel1.TabIndex = 99;
             // 
+            // panel3
+            // 
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel3.Controls.Add(this.CmbGombId);
+            this.panel3.Controls.Add(this.CmbGombok);
+            this.panel3.Location = new System.Drawing.Point(303, 68);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(688, 244);
+            this.panel3.TabIndex = 223;
+            // 
+            // CmbGombok
+            // 
+            this.CmbGombok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.CmbGombok.FormattingEnabled = true;
+            this.CmbGombok.Location = new System.Drawing.Point(3, 3);
+            this.CmbGombok.Name = "CmbGombok";
+            this.CmbGombok.Size = new System.Drawing.Size(681, 28);
+            this.CmbGombok.Sorted = true;
+            this.CmbGombok.TabIndex = 227;
+            this.CmbGombok.SelectionChangeCommitted += new System.EventHandler(this.CmbGombok_SelectionChangeCommitted);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.CmbAblakId);
+            this.panel2.Controls.Add(this.CmbAblak);
+            this.panel2.Location = new System.Drawing.Point(3, 68);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(294, 244);
+            this.panel2.TabIndex = 223;
+            // 
+            // CmbAblak
+            // 
+            this.CmbAblak.FormattingEnabled = true;
+            this.CmbAblak.Location = new System.Drawing.Point(3, 3);
+            this.CmbAblak.Name = "CmbAblak";
+            this.CmbAblak.Size = new System.Drawing.Size(288, 28);
+            this.CmbAblak.Sorted = true;
+            this.CmbAblak.TabIndex = 101;
+            this.CmbAblak.SelectionChangeCommitted += new System.EventHandler(this.CmbAblak_SelectionChangeCommitted);
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.JogTörlés);
@@ -212,18 +254,6 @@ namespace Villamos
             this.label2.TabIndex = 228;
             this.label2.Text = "Gombok";
             // 
-            // CmbGombok
-            // 
-            this.CmbGombok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.CmbGombok.FormattingEnabled = true;
-            this.CmbGombok.Location = new System.Drawing.Point(3, 3);
-            this.CmbGombok.Name = "CmbGombok";
-            this.CmbGombok.Size = new System.Drawing.Size(681, 28);
-            this.CmbGombok.Sorted = true;
-            this.CmbGombok.TabIndex = 227;
-            this.CmbGombok.SelectionChangeCommitted += new System.EventHandler(this.CmbGombok_SelectionChangeCommitted);
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.SzervezetMinden);
@@ -243,16 +273,6 @@ namespace Villamos
             this.label4.Size = new System.Drawing.Size(49, 20);
             this.label4.TabIndex = 99;
             this.label4.Text = "Ablak";
-            // 
-            // CmbAblak
-            // 
-            this.CmbAblak.FormattingEnabled = true;
-            this.CmbAblak.Location = new System.Drawing.Point(3, 3);
-            this.CmbAblak.Name = "CmbAblak";
-            this.CmbAblak.Size = new System.Drawing.Size(288, 28);
-            this.CmbAblak.Sorted = true;
-            this.CmbAblak.TabIndex = 101;
-            this.CmbAblak.SelectionChangeCommitted += new System.EventHandler(this.CmbAblak_SelectionChangeCommitted);
             // 
             // LstChkSzervezet
             // 
@@ -301,43 +321,23 @@ namespace Villamos
             this.DolgozóNév.TabIndex = 222;
             this.DolgozóNév.Text = "<< >>";
             // 
-            // panel2
+            // CmbGombId
             // 
-            this.panel2.Controls.Add(this.AblakIdLab);
-            this.panel2.Controls.Add(this.CmbAblak);
-            this.panel2.Location = new System.Drawing.Point(3, 68);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(294, 244);
-            this.panel2.TabIndex = 223;
+            this.CmbGombId.FormattingEnabled = true;
+            this.CmbGombId.Location = new System.Drawing.Point(4, 37);
+            this.CmbGombId.Name = "CmbGombId";
+            this.CmbGombId.Size = new System.Drawing.Size(121, 28);
+            this.CmbGombId.TabIndex = 229;
+            this.CmbGombId.SelectionChangeCommitted += new System.EventHandler(this.CmbGombId_SelectionChangeCommitted);
             // 
-            // panel3
+            // CmbAblakId
             // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel3.Controls.Add(this.GombIDLab);
-            this.panel3.Controls.Add(this.CmbGombok);
-            this.panel3.Location = new System.Drawing.Point(303, 68);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(688, 244);
-            this.panel3.TabIndex = 223;
-            // 
-            // GombIDLab
-            // 
-            this.GombIDLab.AutoSize = true;
-            this.GombIDLab.Location = new System.Drawing.Point(3, 34);
-            this.GombIDLab.Name = "GombIDLab";
-            this.GombIDLab.Size = new System.Drawing.Size(51, 20);
-            this.GombIDLab.TabIndex = 228;
-            this.GombIDLab.Text = "label3";
-            // 
-            // AblakIdLab
-            // 
-            this.AblakIdLab.AutoSize = true;
-            this.AblakIdLab.Location = new System.Drawing.Point(3, 34);
-            this.AblakIdLab.Name = "AblakIdLab";
-            this.AblakIdLab.Size = new System.Drawing.Size(51, 20);
-            this.AblakIdLab.TabIndex = 102;
-            this.AblakIdLab.Text = "label5";
+            this.CmbAblakId.FormattingEnabled = true;
+            this.CmbAblakId.Location = new System.Drawing.Point(4, 37);
+            this.CmbAblakId.Name = "CmbAblakId";
+            this.CmbAblakId.Size = new System.Drawing.Size(121, 28);
+            this.CmbAblakId.TabIndex = 103;
+            this.CmbAblakId.SelectionChangeCommitted += new System.EventHandler(this.CmbAblakId_SelectionChangeCommitted);
             // 
             // Ablak_JogKiosztás
             // 
@@ -360,13 +360,11 @@ namespace Villamos
             this.Load += new System.EventHandler(this.Ablak_JogKiosztás_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -392,8 +390,8 @@ namespace Villamos
         private Panel panel1;
         internal Button JogTörlés;
         private Panel panel3;
-        private Label GombIDLab;
         private Panel panel2;
-        private Label AblakIdLab;
+        private ComboBox CmbGombId;
+        private ComboBox CmbAblakId;
     }
 }
