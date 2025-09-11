@@ -63,11 +63,7 @@ namespace Villamos
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.ÚjCiklus = new System.Windows.Forms.TextBox();
-            this.Panel1 = new System.Windows.Forms.Panel();
-            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
-            this.Label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
-            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Tábla
@@ -107,7 +103,7 @@ namespace Villamos
             // CiklusTípus
             // 
             this.CiklusTípus.FormattingEnabled = true;
-            this.CiklusTípus.Location = new System.Drawing.Point(195, 48);
+            this.CiklusTípus.Location = new System.Drawing.Point(195, 12);
             this.CiklusTípus.MaxLength = 15;
             this.CiklusTípus.Name = "CiklusTípus";
             this.CiklusTípus.Size = new System.Drawing.Size(162, 28);
@@ -116,7 +112,7 @@ namespace Villamos
             // 
             // Vizsálatsorszám
             // 
-            this.Vizsálatsorszám.Location = new System.Drawing.Point(195, 92);
+            this.Vizsálatsorszám.Location = new System.Drawing.Point(195, 56);
             this.Vizsálatsorszám.Name = "Vizsálatsorszám";
             this.Vizsálatsorszám.Size = new System.Drawing.Size(162, 26);
             this.Vizsálatsorszám.TabIndex = 175;
@@ -124,7 +120,7 @@ namespace Villamos
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(4, 263);
+            this.Label1.Location = new System.Drawing.Point(4, 227);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(104, 20);
             this.Label1.TabIndex = 176;
@@ -133,7 +129,7 @@ namespace Villamos
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(4, 224);
+            this.Label2.Location = new System.Drawing.Point(4, 188);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(96, 20);
             this.Label2.TabIndex = 177;
@@ -142,7 +138,7 @@ namespace Villamos
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(4, 182);
+            this.Label3.Location = new System.Drawing.Point(4, 146);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(118, 20);
             this.Label3.TabIndex = 178;
@@ -151,7 +147,7 @@ namespace Villamos
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Location = new System.Drawing.Point(4, 140);
+            this.Label4.Location = new System.Drawing.Point(4, 104);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(113, 20);
             this.Label4.TabIndex = 179;
@@ -160,7 +156,7 @@ namespace Villamos
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Location = new System.Drawing.Point(4, 98);
+            this.Label5.Location = new System.Drawing.Point(4, 62);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(151, 20);
             this.Label5.TabIndex = 180;
@@ -169,7 +165,7 @@ namespace Villamos
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Location = new System.Drawing.Point(4, 56);
+            this.Label6.Location = new System.Drawing.Point(4, 20);
             this.Label6.Name = "Label6";
             this.Label6.Size = new System.Drawing.Size(134, 20);
             this.Label6.TabIndex = 181;
@@ -177,7 +173,7 @@ namespace Villamos
             // 
             // Vizsgálatfoka
             // 
-            this.Vizsgálatfoka.Location = new System.Drawing.Point(195, 134);
+            this.Vizsgálatfoka.Location = new System.Drawing.Point(195, 98);
             this.Vizsgálatfoka.MaxLength = 10;
             this.Vizsgálatfoka.Name = "Vizsgálatfoka";
             this.Vizsgálatfoka.Size = new System.Drawing.Size(162, 26);
@@ -185,21 +181,21 @@ namespace Villamos
             // 
             // Névleges
             // 
-            this.Névleges.Location = new System.Drawing.Point(195, 176);
+            this.Névleges.Location = new System.Drawing.Point(195, 140);
             this.Névleges.Name = "Névleges";
             this.Névleges.Size = new System.Drawing.Size(162, 26);
             this.Névleges.TabIndex = 183;
             // 
             // Alsóeltérés
             // 
-            this.Alsóeltérés.Location = new System.Drawing.Point(195, 218);
+            this.Alsóeltérés.Location = new System.Drawing.Point(195, 182);
             this.Alsóeltérés.Name = "Alsóeltérés";
             this.Alsóeltérés.Size = new System.Drawing.Size(162, 26);
             this.Alsóeltérés.TabIndex = 184;
             // 
             // Felsőeltérés
             // 
-            this.Felsőeltérés.Location = new System.Drawing.Point(195, 260);
+            this.Felsőeltérés.Location = new System.Drawing.Point(195, 224);
             this.Felsőeltérés.Name = "Felsőeltérés";
             this.Felsőeltérés.Size = new System.Drawing.Size(162, 26);
             this.Felsőeltérés.TabIndex = 185;
@@ -238,7 +234,7 @@ namespace Villamos
             // 
             this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Töröl.Location = new System.Drawing.Point(312, 292);
+            this.Töröl.Location = new System.Drawing.Point(312, 256);
             this.Töröl.Name = "Töröl";
             this.Töröl.Size = new System.Drawing.Size(45, 45);
             this.Töröl.TabIndex = 173;
@@ -250,7 +246,7 @@ namespace Villamos
             // 
             this.Rögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Rögzít.Location = new System.Drawing.Point(312, 292);
+            this.Rögzít.Location = new System.Drawing.Point(312, 256);
             this.Rögzít.Name = "Rögzít";
             this.Rögzít.Size = new System.Drawing.Size(45, 45);
             this.Rögzít.TabIndex = 172;
@@ -262,7 +258,7 @@ namespace Villamos
             // 
             this.Lekérdezés_lekérdezés.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Lekérdezés_lekérdezés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Lekérdezés_lekérdezés.Location = new System.Drawing.Point(312, 292);
+            this.Lekérdezés_lekérdezés.Location = new System.Drawing.Point(312, 256);
             this.Lekérdezés_lekérdezés.Name = "Lekérdezés_lekérdezés";
             this.Lekérdezés_lekérdezés.Size = new System.Drawing.Size(45, 45);
             this.Lekérdezés_lekérdezés.TabIndex = 171;
@@ -274,7 +270,7 @@ namespace Villamos
             // 
             this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_gomb.Location = new System.Drawing.Point(4, 346);
+            this.Excel_gomb.Location = new System.Drawing.Point(4, 310);
             this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Excel_gomb.Name = "Excel_gomb";
             this.Excel_gomb.Size = new System.Drawing.Size(45, 45);
@@ -287,7 +283,7 @@ namespace Villamos
             // 
             this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
             this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(4, 296);
+            this.BtnSúgó.Location = new System.Drawing.Point(4, 260);
             this.BtnSúgó.Name = "BtnSúgó";
             this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
             this.BtnSúgó.TabIndex = 169;
@@ -314,41 +310,12 @@ namespace Villamos
             this.ÚjCiklus.Size = new System.Drawing.Size(162, 26);
             this.ÚjCiklus.TabIndex = 187;
             // 
-            // Panel1
-            // 
-            this.Panel1.Controls.Add(this.Cmbtelephely);
-            this.Panel1.Controls.Add(this.Label13);
-            this.Panel1.Location = new System.Drawing.Point(4, 12);
-            this.Panel1.Name = "Panel1";
-            this.Panel1.Size = new System.Drawing.Size(353, 26);
-            this.Panel1.TabIndex = 191;
-            // 
-            // Cmbtelephely
-            // 
-            this.Cmbtelephely.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Cmbtelephely.FormattingEnabled = true;
-            this.Cmbtelephely.Location = new System.Drawing.Point(139, 0);
-            this.Cmbtelephely.Name = "Cmbtelephely";
-            this.Cmbtelephely.Size = new System.Drawing.Size(214, 28);
-            this.Cmbtelephely.TabIndex = 18;
-            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
-            // 
-            // Label13
-            // 
-            this.Label13.AutoSize = true;
-            this.Label13.Location = new System.Drawing.Point(3, 4);
-            this.Label13.Name = "Label13";
-            this.Label13.Size = new System.Drawing.Size(145, 20);
-            this.Label13.TabIndex = 17;
-            this.Label13.Text = "Telephelyi beállítás:";
-            // 
             // Ablak_Ciklus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Peru;
             this.ClientSize = new System.Drawing.Size(909, 526);
-            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.CiklusSorrend);
             this.Controls.Add(this.CsoportosMásolás);
             this.Controls.Add(this.label8);
@@ -380,8 +347,6 @@ namespace Villamos
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Ablak_Ciklus_FormClosing);
             this.Load += new System.EventHandler(this.Ablak_Ciklus_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
-            this.Panel1.ResumeLayout(false);
-            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -410,8 +375,5 @@ namespace Villamos
         internal TextBox ÚjCiklus;
         internal Button CsoportosMásolás;
         internal Button CiklusSorrend;
-        internal Panel Panel1;
-        internal ComboBox Cmbtelephely;
-        internal Label Label13;
     }
 }

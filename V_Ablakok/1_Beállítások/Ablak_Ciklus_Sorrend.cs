@@ -32,6 +32,11 @@ namespace Villamos.V_Ablakok._1_Beállítások
             CiklusTípusfeltöltés();
             Típusfeltöltés();
             Táblaíró();
+
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            { }
+            else
+                GombLathatosagKezelo.Beallit(this, "Főmérnökség");
         }
 
         private void Ablak_Ciklus_Sorrend_Load(object sender, EventArgs e)
