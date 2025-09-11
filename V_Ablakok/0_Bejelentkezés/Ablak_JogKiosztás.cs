@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -458,11 +459,17 @@ namespace Villamos
                 GombFőID = Gomb?.GombokId ?? -1;
                 CmbGombId.Text = GombFőID.ToString();
                 if (Gomb == null) return;
-                string[] Gombszervezetek = Gomb.Szervezet.Split(';');
+                string[] Gomb_Szervezetek_darabolva = Gomb.Szervezet.Split(';');
+                string[] Felhasználó_Szervezetek_darabolva = Program.Postás_Felhasználó.Szervezetek.Split(';');
                 //A teljes lista csorbítása a beálító jogosultságaival
-                foreach (string szervezet in Gombszervezetek)
+                foreach (string szervezet in Gomb_Szervezetek_darabolva)
                 {
-                    if (Program.Postás_Felhasználó.Szervezetek.Contains(szervezet))
+                    // A listában szereplő szervezetet megnézzük a felhasználónál is és ha egyezés van akkor kiírjuk
+                    int i = 0;
+                    while (i < Felhasználó_Szervezetek_darabolva.Length && Felhasználó_Szervezetek_darabolva[i] != szervezet)
+                        i++;
+                    
+                    if (i < Felhasználó_Szervezetek_darabolva.Length && Felhasználó_Szervezetek_darabolva[i] == szervezet)
                     {
                         //Csak azokat a szervezeteket írjuk ki amelyek a beállító jogosultságai között is szerepelnek
                         LstChkSzervezet.Items.Add(szervezet.Trim());
