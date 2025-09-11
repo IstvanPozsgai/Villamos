@@ -1064,10 +1064,14 @@ namespace Villamos
                     Filter = "Excel |*.xlsx"
                 };
 
-
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                {
                     fájlexc = OpenFileDialog1.FileName;
+                    string[] darabol = fájlexc.Split('.');
+                    if (darabol.Length < 2) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl formátuma!");
+                    if (!darabol[1].Contains("xls")) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl kiterjesztés formátuma!");
+                }
                 else
                     return;
 
@@ -1090,6 +1094,10 @@ namespace Villamos
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexc);
                 MessageBox.Show($"Az adat konvertálás befejeződött!\n Idő:{Vége - Eleje}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

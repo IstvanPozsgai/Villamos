@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_MindenEgyéb
@@ -540,7 +539,7 @@ namespace Villamos.V_MindenEgyéb
                     || OszlopKocsi4 == null
                     || OszlopKocsi5 == null
                     || OszlopKocsi6 == null
-                    || OszlopStát == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+                    || OszlopStát == null) throw new HibásBevittAdat("Nem megfelelő formátumú a betölteni kívánt táblázat.");
 
                 List<Adat_Főkönyv_ZSER> AdatokGy = new List<Adat_Főkönyv_ZSER>();
                 Kezelő_Főkönyv_ZSER KézFőZser = new Kezelő_Főkönyv_ZSER();
@@ -673,7 +672,7 @@ namespace Villamos.V_MindenEgyéb
                             || OszlopKocsi4 == null
                             || OszlopKocsi5 == null
                             || OszlopKocsi6 == null
-                            || OszlopKm == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+                            || OszlopKm == null) throw new HibásBevittAdat("Nem megfelelő formátumú a betölteni kívánt táblázat.");
 
                 // beolvassuk az excel tábla szükséges adatait
                 List<Adat_Főkönyv_Zser_Km> AdatokGy = new List<Adat_Főkönyv_Zser_Km>();
