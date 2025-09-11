@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
@@ -13,70 +14,45 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        readonly string táblanév = "csoportbeosztás";
 
-        private void FájlBeállítás(string Telephely)
+        private bool FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            return File.Exists(hely);
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
-        public List<Adat_Kiegészítő_Csoportbeosztás> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Csoportbeosztás> Adatok = new List<Adat_Kiegészítő_Csoportbeosztás>();
-            Adat_Kiegészítő_Csoportbeosztás Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Csoportbeosztás(
-                                        rekord["Sorszám"].ToÉrt_Long(),
-                                        rekord["Csoportbeosztás"].ToStrTrim(),
-                                        rekord["Típus"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Kiegészítő_Csoportbeosztás> Lista_Adatok(string Telephely)
         {
-            FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM csoportbeosztás order by sorszám";
             List<Adat_Kiegészítő_Csoportbeosztás> Adatok = new List<Adat_Kiegészítő_Csoportbeosztás>();
-            Adat_Kiegészítő_Csoportbeosztás Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            if (FájlBeállítás(Telephely))
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = $"SELECT * FROM {táblanév} order by sorszám";
+
+                Adat_Kiegészítő_Csoportbeosztás Adat;
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                Adat = new Adat_Kiegészítő_Csoportbeosztás(
-                                        rekord["Sorszám"].ToÉrt_Long(),
-                                        rekord["Csoportbeosztás"].ToStrTrim(),
-                                        rekord["Típus"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Kiegészítő_Csoportbeosztás(
+                                            rekord["Sorszám"].ToÉrt_Long(),
+                                            rekord["Csoportbeosztás"].ToStrTrim(),
+                                            rekord["Típus"].ToStrTrim()
+                                              );
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
@@ -89,12 +65,14 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO csoportbeosztás (sorszám, csoportbeosztás, típus) ";
-                szöveg += $"VALUES ({Sorszám(Telephely)}, ";
-                szöveg += $"'{Adat.Csoportbeosztás}', ";
-                szöveg += $"'{Adat.Típus}' )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"INSERT INTO {táblanév} (sorszám, csoportbeosztás, típus) ";
+                    szöveg += $"VALUES ({Sorszám(Telephely)}, ";
+                    szöveg += $"'{Adat.Csoportbeosztás}', ";
+                    szöveg += $"'{Adat.Típus}' )";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -112,11 +90,13 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = " UPDATE csoportbeosztás SET ";
-                szöveg += $" típus='{Adat.Típus}'";
-                szöveg += $" WHERE csoportbeosztás='{Adat.Csoportbeosztás}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $" típus='{Adat.Típus}'";
+                    szöveg += $" WHERE csoportbeosztás='{Adat.Csoportbeosztás}'";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -134,17 +114,19 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Kiegészítő_Csoportbeosztás rekord in Adat)
+                if (FájlBeállítás(Telephely))
                 {
-                    string szöveg = " UPDATE csoportbeosztás SET ";
-                    szöveg += $" típus='{rekord.Típus}'";
-                    szöveg += $" WHERE csoportbeosztás='{rekord.Csoportbeosztás}'";
-                    SzövegGy.Add(szöveg);
+                    List<string> SzövegGy = new List<string>();
+                    foreach (Adat_Kiegészítő_Csoportbeosztás rekord in Adat)
+                    {
+                        string szöveg = $"UPDATE {táblanév} SET ";
+                        szöveg += $" típus='{rekord.Típus}'";
+                        szöveg += $" WHERE csoportbeosztás='{rekord.Csoportbeosztás}'";
+                        SzövegGy.Add(szöveg);
 
+                    }
+                    MyA.ABMódosítás(hely, jelszó, SzövegGy);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -163,9 +145,11 @@ namespace Villamos.Kezelők
             long Válasz = 1;
             try
             {
-                FájlBeállítás(Telephely);
-                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(Telephely);
-                if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(a => a.Sorszám) + 1;
+                if (FájlBeállítás(Telephely))
+                {
+                    List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(Telephely);
+                    if (Adatok != null && Adatok.Count > 0) Válasz = Adatok.Max(a => a.Sorszám) + 1;
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -183,9 +167,11 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $" DELETE FROM csoportbeosztás WHERE sorszám={Sorszám}";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $" DELETE FROM {táblanév} WHERE sorszám={Sorszám}";
+                    MyA.ABtörlés(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -203,20 +189,22 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(Telephely);
-                Adat_Kiegészítő_Csoportbeosztás Adat1 = Adatok.Find(a => a.Sorszám == Sorszám1);
-                Adat_Kiegészítő_Csoportbeosztás Adat2 = Adatok.Find(a => a.Sorszám == Sorszám2);
-                if (Adat1 != null && Adat2 != null)
+                if (FájlBeállítás(Telephely))
                 {
-                    string szöveg = $" UPDATE csoportbeosztás SET ";
-                    szöveg += $" sorszám={Adat2.Sorszám}";
-                    szöveg += $" WHERE csoportbeosztás='{Adat1.Csoportbeosztás}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
-                    szöveg = $" UPDATE csoportbeosztás SET ";
-                    szöveg += $" sorszám={Adat1.Sorszám}";
-                    szöveg += $" WHERE csoportbeosztás='{Adat2.Csoportbeosztás}'";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    List<Adat_Kiegészítő_Csoportbeosztás> Adatok = Lista_Adatok(Telephely);
+                    Adat_Kiegészítő_Csoportbeosztás Adat1 = Adatok.Find(a => a.Sorszám == Sorszám1);
+                    Adat_Kiegészítő_Csoportbeosztás Adat2 = Adatok.Find(a => a.Sorszám == Sorszám2);
+                    if (Adat1 != null && Adat2 != null)
+                    {
+                        string szöveg = $" UPDATE {táblanév} SET ";
+                        szöveg += $" sorszám={Adat2.Sorszám}";
+                        szöveg += $" WHERE csoportbeosztás='{Adat1.Csoportbeosztás}'";
+                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        szöveg = $" UPDATE {táblanév} SET ";
+                        szöveg += $" sorszám={Adat1.Sorszám}";
+                        szöveg += $" WHERE csoportbeosztás='{Adat2.Csoportbeosztás}'";
+                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                    }
                 }
             }
             catch (HibásBevittAdat ex)
@@ -234,26 +222,28 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = Lista_Adatok(Telephely);
-
-                int i = 1;
-
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Kiegészítő_Csoportbeosztás rekord in AdatokÖ)
+                if (FájlBeállítás(Telephely))
                 {
-                    long ideig = rekord.Sorszám - 1;
-                    if (i != ideig)
-                    {   //Ha a sorszám nem a következő akkor módosítjuk
+                    List<Adat_Kiegészítő_Csoportbeosztás> AdatokÖ = Lista_Adatok(Telephely);
 
-                        string szöveg = "UPDATE csoportbeosztás  SET ";
-                        szöveg += $"sorszám={i + 1}";
-                        szöveg += $" WHERE csoportbeosztás='{rekord.Csoportbeosztás}' AND  Típus='{rekord.Típus}'";
-                        SzövegGy.Add(szöveg);
+                    int i = 1;
+
+                    List<string> SzövegGy = new List<string>();
+                    foreach (Adat_Kiegészítő_Csoportbeosztás rekord in AdatokÖ)
+                    {
+                        long ideig = rekord.Sorszám - 1;
+                        if (i != ideig)
+                        {   //Ha a sorszám nem a következő akkor módosítjuk
+
+                            string szöveg = $"UPDATE {táblanév}  SET ";
+                            szöveg += $"sorszám={i + 1}";
+                            szöveg += $" WHERE csoportbeosztás='{rekord.Csoportbeosztás}' AND  Típus='{rekord.Típus}'";
+                            SzövegGy.Add(szöveg);
+                        }
+                        i++;
                     }
-                    i++;
+                    MyA.ABMódosítás(hely, jelszó, SzövegGy);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
             catch (HibásBevittAdat ex)
             {

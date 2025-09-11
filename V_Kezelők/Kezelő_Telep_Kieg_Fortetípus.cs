@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -11,38 +12,43 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        readonly string táblanév = "fortetipus";
 
-        private void FájlBeállítás(string Telephely)
+        private bool FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            return File.Exists(hely);
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
         public List<Adat_Telep_Kieg_Fortetípus> Lista_Adatok(string Telephely)
-        {
-            FájlBeállítás(Telephely);
-            string szöveg = "SELECT *  FROM fortetipus ORDER BY ftípus";
+        { 
             List<Adat_Telep_Kieg_Fortetípus> Adatok = new List<Adat_Telep_Kieg_Fortetípus>();
-            Adat_Telep_Kieg_Fortetípus Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            if (FájlBeállítás(Telephely))
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = $"SELECT * FROM {táblanév} ORDER BY ftípus";
+             
+                Adat_Telep_Kieg_Fortetípus Adat;
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                Adat = new Adat_Telep_Kieg_Fortetípus(
-                                        rekord["típus"].ToStrTrim(),
-                                        rekord["ftípus"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Telep_Kieg_Fortetípus(
+                                            rekord["típus"].ToStrTrim(),
+                                            rekord["ftípus"].ToStrTrim()
+                                              );
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
@@ -55,11 +61,13 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO fortetipus (típus, ftípus) ";
-                szöveg += $"VALUES ('{Adat.Típus}',";
-                szöveg += $" '{Adat.Ftípus}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"INSERT INTO {táblanév} (típus, ftípus) ";
+                    szöveg += $"VALUES ('{Adat.Típus}',";
+                    szöveg += $" '{Adat.Ftípus}')";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -76,9 +84,11 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"DELETE * FROM fortetipus where típus='{Adat.Típus}' and ftípus='{Adat.Ftípus}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"DELETE * FROM {táblanév} where típus='{Adat.Típus}' and ftípus='{Adat.Ftípus}'";
+                    MyA.ABtörlés(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {

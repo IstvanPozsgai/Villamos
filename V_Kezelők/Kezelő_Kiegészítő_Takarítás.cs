@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Villamos.Kezelők
@@ -8,31 +9,38 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        readonly string táblanév = "takarítástípus";
 
-        private void FájlBeállítás(string Telephely)
+        private bool FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
-            // if (!File.Exists(hely)) Adatbázis_Létrehozás.  (hely.KönyvSzerk());
+            return File.Exists(hely);
+            //nincs elkészítve
+            // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
         public List<string> Lista_Adatok(string Telephely)
         {
-            string szöveg = "Select * FROM takarítástípus order by típus";
             List<string> Adatok = new List<string>();
-            FájlBeállítás(Telephely);
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            if (FájlBeállítás(Telephely))
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = $"Select * FROM {táblanév} order by típus";
+               
+                FájlBeállítás(Telephely);
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                Adatok.Add(rekord["típus"].ToString());
+                                while (rekord.Read())
+                                {
+                                    Adatok.Add(rekord["típus"].ToString());
+                                }
                             }
                         }
                     }

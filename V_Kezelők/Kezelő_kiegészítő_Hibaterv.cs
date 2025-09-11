@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -11,39 +12,44 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        readonly string táblanév = "hibaterv";
 
-        private void FájlBeállítás(string Telephely)
+        private bool FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            return File.Exists(hely);
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
         public List<Adat_Kiegészítő_Hibaterv> Lista_Adatok(string Telephely)
         {
-            FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM hibaterv order by id";
             List<Adat_Kiegészítő_Hibaterv> Adatok = new List<Adat_Kiegészítő_Hibaterv>();
-            Adat_Kiegészítő_Hibaterv Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            if (FájlBeállítás(Telephely))
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = $"SELECT * FROM {táblanév} order by id";
+
+                Adat_Kiegészítő_Hibaterv Adat;
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                Adat = new Adat_Kiegészítő_Hibaterv(
-                                    rekord["id"].ToÉrt_Long(),
-                                    rekord["szöveg"].ToStrTrim(),
-                                    rekord["főkönyv"].ToÉrt_Bool()
-                                    );
-                                Adatok.Add(Adat);
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Kiegészítő_Hibaterv(
+                                        rekord["id"].ToÉrt_Long(),
+                                        rekord["szöveg"].ToStrTrim(),
+                                        rekord["főkönyv"].ToÉrt_Bool()
+                                        );
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
@@ -56,12 +62,14 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO hibaterv (id , szöveg, főkönyv ) ";
-                szöveg += $" VALUES ({Adat.Id}, ";
-                szöveg += $"'{Adat.Szöveg}', ";
-                szöveg += $"{Adat.Főkönyv})";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"INSERT INTO {táblanév} (id , szöveg, főkönyv ) ";
+                    szöveg += $" VALUES ({Adat.Id}, ";
+                    szöveg += $"'{Adat.Szöveg}', ";
+                    szöveg += $"{Adat.Főkönyv})";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -78,13 +86,14 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE hibaterv SET ";
-                szöveg += $"főkönyv={Adat.Főkönyv}, ";
-                szöveg += $"szöveg='{Adat.Szöveg}' ";
-                szöveg += $"WHERE id={Adat.Id}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $"főkönyv={Adat.Főkönyv}, ";
+                    szöveg += $"szöveg='{Adat.Szöveg}' ";
+                    szöveg += $"WHERE id={Adat.Id}";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -101,9 +110,11 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"DELETE * FROM hibaterv where id={Adat.Id}";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"DELETE * FROM {táblanév} where id={Adat.Id}";
+                    MyA.ABtörlés(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
