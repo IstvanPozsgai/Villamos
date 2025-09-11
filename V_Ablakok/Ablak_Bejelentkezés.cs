@@ -409,12 +409,9 @@ namespace Villamos
         bool CTRL_le = false;
         private void lblVerzió_DoubleClick(object sender, EventArgs e)
         {
-            if (CTRL_le)
-            {
-                AblakBejelentkezés_Új Újablak = new AblakBejelentkezés_Új();
-                Újablak.Show();
-                this.Hide();
-            }
+            AblakBejelentkezés_Új Újablak = new AblakBejelentkezés_Új();
+            Újablak.Show();
+            this.Hide();
         }
 
         private void AblakBejelentkezés_KeyDown(object sender, KeyEventArgs e)
