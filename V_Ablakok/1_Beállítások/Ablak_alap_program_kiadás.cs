@@ -853,8 +853,6 @@ namespace Villamos
             try
             {
                 // főkönyvi aláírások
-
-
                 List<Adat_Kiegészítő_főkönyvtábla> Adatok = Kézfőkönyvtábla.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_főkönyvtábla Adat = (from a in Adatok
