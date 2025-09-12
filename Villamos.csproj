@@ -324,7 +324,10 @@
     <Compile Include="V_Ablakok\0_Bejelentkezés\Ablak_Bejelentkezés_Új.designer.cs">
       <DependentUpon>Ablak_Bejelentkezés_Új.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
+    <Compile Include="V_Kezelők\Kezelő_AnyagTörzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_MindenMásol.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />
     <Compile Include="V_Kezelők\Kezelő_Ciklus_Sorrend.cs" />

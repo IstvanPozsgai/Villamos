@@ -163,7 +163,6 @@ namespace Villamos.V_MindenEgyéb
             }
         }
 
-
         /// <summary>
         /// Menetkimaradáshoz szükséges adatok beolvasása az SAP Excel fájlból.
         /// </summary>
@@ -310,8 +309,6 @@ namespace Villamos.V_MindenEgyéb
             }
         }
 
-
-
         private static string Milyen_típus(List<Adat_Jármű> AdatokJármű, string azonosító)
         {
             string típus = "?";
@@ -321,7 +318,6 @@ namespace Villamos.V_MindenEgyéb
             if (Elem != null) típus = Elem.Valóstípus;
             return típus;
         }
-
 
         public static void Eszköz_Beolvasó(string fájlexcel, string Telephely)
         {
@@ -487,7 +483,6 @@ namespace Villamos.V_MindenEgyéb
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         public static void ZSER_Betöltés(string Telephely, DateTime Dátum, string Napszak, DataTable Tábla, long kiadási_korr = 0, long érkezési_korr = 0)
         {
@@ -761,6 +756,70 @@ namespace Villamos.V_MindenEgyéb
                 HibaNapló.Log(ex.Message, "Km_adatok_beolvasása", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw new Exception("MyA rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+            }
+        }
+
+        public static void Raktár_beolvasó(string fájlexcel)
+        {
+            try
+            {
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("AnyagVétel", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+
+                // Beolvasni kívánt oszlopok
+                Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+                List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+                //Meghatározzuk a beolvasó tábla elnevezéseit 
+                //Oszlopnevek beállítása
+                string oszlopBerendezés = (from a in oszlopnév where a.Csoport == "Kerék" && a.Státusz == false && a.Változónév == "kerékberendezés" select a.Fejléc).FirstOrDefault();
+
+
+                if (oszlopBerendezés == null)
+                    throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+
+
+                // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres
+                List<Adat_Kerék_Tábla> AdatokGy = new List<Adat_Kerék_Tábla>();
+                int sor = 2;
+                foreach (DataRow Sor in Tábla.Rows)
+                {
+                    string kerékberendezés = MyF.Szöveg_Tisztítás(Sor[oszlopBerendezés].ToStrTrim(), 0, 10);
+                    string kerékmegnevezés = MyF.Szöveg_Tisztítás(Sor[oszlopMegnevezés].ToStrTrim(), 0, 255);
+                    string kerékgyártásiszám = MyF.Szöveg_Tisztítás(Sor[oszlopGyártási].ToStrTrim(), 0, 30);
+                    string föléberendezés = MyF.Szöveg_Tisztítás(Sor[oszlopFölé].ToStrTrim(), 0, 10).Replace(",", "");
+                    string Azonosító = föléberendezés.Replace(",", "").Replace("V", "").Replace("F", "");
+                    string objektumfajta = MyF.Szöveg_Tisztítás(Sor[oszlopFajta].ToStrTrim(), 0, 20);
+                    string pozíció = MyF.Szöveg_Tisztítás(Sor[oszlopTétel].ToStrTrim(), 0, 10);
+                    DateTime Dátum = Sor[oszlopMódosít].ToÉrt_DaTeTime();
+
+                    Adat_Kerék_Tábla ADAT = new Adat_Kerék_Tábla(
+                               kerékberendezés,
+                               kerékmegnevezés,
+                               kerékgyártásiszám,
+                               föléberendezés,
+                               Azonosító,
+                               pozíció,
+                               Dátum,
+                               objektumfajta);
+                    AdatokGy.Add(ADAT);
+
+                    sor++;
+                }
+                Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
+                if (AdatokGy.Count > 0) KézKerék.Osztályoz(AdatokGy);
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

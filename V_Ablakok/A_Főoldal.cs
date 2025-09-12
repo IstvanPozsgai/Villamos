@@ -1728,12 +1728,12 @@ namespace Villamos
             Új_Ablak_Fődarab = null;
         }
 
-        V_Ablakok._4_Nyilvántartások.Ablak_Vételezés Új_Ablak_Vételezés;
+        V_Ablakok._4_Nyilvántartások.Vételezés.Ablak_Vételezés Új_Ablak_Vételezés;
         private void VételezésMenü_Click(object sender, EventArgs e)
         {
             if (Új_Ablak_Vételezés == null)
             {
-                Új_Ablak_Vételezés = new V_Ablakok._4_Nyilvántartások.Ablak_Vételezés();
+                Új_Ablak_Vételezés = new V_Ablakok._4_Nyilvántartások.Vételezés.Ablak_Vételezés();
                 Új_Ablak_Vételezés.FormClosed += Új_Ablak_Vételezés_FormClosed;
                 Új_Ablak_Vételezés.Show();
             }
