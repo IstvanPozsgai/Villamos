@@ -1070,7 +1070,7 @@ namespace Villamos
                     fájlexc = OpenFileDialog1.FileName.ToLower();
                     string[] darabol = fájlexc.Split('.');
                     if (darabol.Length < 2) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl formátuma!");
-                    if (!darabol[darabol.Length-1].Contains("xls")) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl kiterjesztés formátuma!");
+                    if (!darabol[darabol.Length - 1].Contains("xls")) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl kiterjesztés formátuma!");
                 }
                 else
                     return;
@@ -1093,7 +1093,7 @@ namespace Villamos
 
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexc);
-                MessageBox.Show($"Az adat konvertálás befejeződött!\n Idő:{Vége - Eleje}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (HibásBevittAdat ex)
             {

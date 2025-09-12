@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
@@ -773,44 +774,56 @@ namespace Villamos.V_MindenEgyéb
 
                 //Meghatározzuk a beolvasó tábla elnevezéseit 
                 //Oszlopnevek beállítása
-                string oszlopBerendezés = (from a in oszlopnév where a.Csoport == "Kerék" && a.Státusz == false && a.Változónév == "kerékberendezés" select a.Fejléc).FirstOrDefault();
+                string oszlopCikk = (from a in oszlopnév where a.Csoport == "AnyagVétel" && a.Státusz == false && a.Változónév == "Cikkszám" select a.Fejléc).FirstOrDefault();
+                string oszlopMeg = (from a in oszlopnév where a.Csoport == "AnyagVétel" && a.Státusz == false && a.Változónév == "Megnevezés" select a.Fejléc).FirstOrDefault();
+                string oszlopRaktár = (from a in oszlopnév where a.Csoport == "AnyagVétel" && a.Státusz == false && a.Változónév == "Raktár" select a.Fejléc).FirstOrDefault();
+                string oszlopMennyi = (from a in oszlopnév where a.Csoport == "AnyagVétel" && a.Státusz == false && a.Változónév == "Mennyi" select a.Fejléc).FirstOrDefault();
+                string oszlopÁr = (from a in oszlopnév where a.Csoport == "AnyagVétel" && a.Státusz == false && a.Változónév == "Ár" select a.Fejléc).FirstOrDefault();
+                string oszlopSarzs = (from a in oszlopnév where a.Csoport == "AnyagVétel" && a.Státusz == false && a.Változónév == "Sarzs" select a.Fejléc).FirstOrDefault();
 
-
-                if (oszlopBerendezés == null)
-                    throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+                if (oszlopCikk == null
+                  || oszlopMeg == null
+                  || oszlopRaktár == null
+                  || oszlopMennyi == null
+                  || oszlopÁr == null
+                  || oszlopSarzs == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
 
 
                 // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres
-                List<Adat_Kerék_Tábla> AdatokGy = new List<Adat_Kerék_Tábla>();
-                int sor = 2;
+                List<Adat_Anyagok> AdatokGy = new List<Adat_Anyagok>();
+                int sor = 0;
                 foreach (DataRow Sor in Tábla.Rows)
                 {
-                    string kerékberendezés = MyF.Szöveg_Tisztítás(Sor[oszlopBerendezés].ToStrTrim(), 0, 10);
-                    string kerékmegnevezés = MyF.Szöveg_Tisztítás(Sor[oszlopMegnevezés].ToStrTrim(), 0, 255);
-                    string kerékgyártásiszám = MyF.Szöveg_Tisztítás(Sor[oszlopGyártási].ToStrTrim(), 0, 30);
-                    string föléberendezés = MyF.Szöveg_Tisztítás(Sor[oszlopFölé].ToStrTrim(), 0, 10).Replace(",", "");
-                    string Azonosító = föléberendezés.Replace(",", "").Replace("V", "").Replace("F", "");
-                    string objektumfajta = MyF.Szöveg_Tisztítás(Sor[oszlopFajta].ToStrTrim(), 0, 20);
-                    string pozíció = MyF.Szöveg_Tisztítás(Sor[oszlopTétel].ToStrTrim(), 0, 10);
-                    DateTime Dátum = Sor[oszlopMódosít].ToÉrt_DaTeTime();
+                    //Beolvasott értékeke
+                    string Cikkszám = MyF.Szöveg_Tisztítás(Sor[oszlopCikk].ToStrTrim(), 0, 20).TrimStart('0');
+                    string Megnevezés = MyF.Szöveg_Tisztítás(Sor[oszlopMeg].ToStrTrim(), 0, 255);
+                    string Raktár = MyF.Szöveg_Tisztítás(Sor[oszlopRaktár].ToStrTrim(), 0, 5);
+                    double Mennyi = MyF.Szöveg_Tisztítás(Sor[oszlopMennyi].ToStrTrim()).Replace(".", "").ToÉrt_Double();
+                    double Ár = MyF.Szöveg_Tisztítás(Sor[oszlopÁr].ToStrTrim()).Replace(".", "").ToÉrt_Double();
+                    string Sarzs = MyF.Szöveg_Tisztítás(Sor[oszlopSarzs].ToStrTrim(), 0, 5);
+                    double Árdb = 0;
+                    if (Mennyi != 0) Árdb = Ár / Mennyi;
 
-                    Adat_Kerék_Tábla ADAT = new Adat_Kerék_Tábla(
-                               kerékberendezés,
-                               kerékmegnevezés,
-                               kerékgyártásiszám,
-                               föléberendezés,
-                               Azonosító,
-                               pozíció,
-                               Dátum,
-                               objektumfajta);
+                    //Előállítjuk a cikktörzsnek megfelelő adatokat
+                    Adat_Anyagok ADAT = new Adat_Anyagok(
+                               Cikkszám,
+                               Megnevezés,
+                               "",
+                               Sarzs,
+                               Árdb);
                     AdatokGy.Add(ADAT);
+                    // JAVÍTANDÓ:
+                    //Módosítjuk a raktárkészletet
 
                     sor++;
                 }
-                Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
-                if (AdatokGy.Count > 0) KézKerék.Osztályoz(AdatokGy);
+
+                Kezelő_AnyagTörzs Kéz = new Kezelő_AnyagTörzs();
+
+                if (AdatokGy.Count > 0) Kéz.Osztályoz(AdatokGy);
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexcel);
+                MessageBox.Show($"Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {

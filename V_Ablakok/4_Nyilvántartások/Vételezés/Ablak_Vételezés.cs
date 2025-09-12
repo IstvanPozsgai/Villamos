@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Villamos.V_Kezelők;
+using Villamos.V_MindenEgyéb;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 {
@@ -56,6 +57,42 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         /// <param name="e"></param>
         private void BtnSAP_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string fájlexc = "";
+                // megpróbáljuk megnyitni az excel táblát.
+                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "SAP-s Adatok betöltése",
+                    FileName = "",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                {
+                    fájlexc = OpenFileDialog1.FileName.ToLower();
+                    string[] darabol = fájlexc.Split('.');
+                    if (darabol.Length < 2) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl formátuma!");
+                    if (!darabol[darabol.Length - 1].Contains("xls")) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl kiterjesztés formátuma!");
+                }
+                else
+                    return;
+
+                SAP_Adatokbeolvasása.Raktár_beolvasó(fájlexc);
+
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
     }
