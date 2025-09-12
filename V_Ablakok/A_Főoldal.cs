@@ -1727,6 +1727,27 @@ namespace Villamos
         {
             Új_Ablak_Fődarab = null;
         }
+
+        V_Ablakok._4_Nyilvántartások.Ablak_Vételezés Új_Ablak_Vételezés;
+        private void VételezésMenü_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Vételezés == null)
+            {
+                Új_Ablak_Vételezés = new V_Ablakok._4_Nyilvántartások.Ablak_Vételezés();
+                Új_Ablak_Vételezés.FormClosed += Új_Ablak_Vételezés_FormClosed;
+                Új_Ablak_Vételezés.Show();
+            }
+            else
+            {
+                Új_Ablak_Vételezés.Activate();
+                Új_Ablak_Vételezés.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Új_Ablak_Vételezés_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Vételezés = null;
+        }
         #endregion
 
 
@@ -2705,5 +2726,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
     }
 }
