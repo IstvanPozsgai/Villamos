@@ -230,6 +230,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Anyag_Karbantartás";
             this.Text = "Anyagok karrbantartása";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_Anyag_Karbantartás_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);

@@ -27,6 +27,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void Start()
         {
+
             TáblaÍrás();
         }
 
@@ -52,12 +53,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         #region Táblázat
         private void Frissíti_táblalistát_Click(object sender, EventArgs e)
         {
-            Adatok = KézAnyag.Lista_Adatok();
             TáblaÍrás();
         }
 
         private void TáblaÍrás()
         {
+            Adatok = KézAnyag.Lista_Adatok();
             Fejléc();
             ABFeltöltése();
             Tábla.DataSource = AdatTábla;
