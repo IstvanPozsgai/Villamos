@@ -57,6 +57,7 @@
             this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
             this.BtnSúgó.TabIndex = 188;
             this.BtnSúgó.UseVisualStyleBackColor = true;
+            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
             // Panel1
             // 

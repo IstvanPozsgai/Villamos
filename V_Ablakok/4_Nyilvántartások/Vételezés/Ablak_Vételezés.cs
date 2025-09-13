@@ -27,7 +27,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         }
 
-        private void Súgó_Click(object sender, EventArgs e)
+        private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
             {
@@ -44,8 +44,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
 
 
@@ -95,5 +93,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             }
 
         }
+
+
     }
 }

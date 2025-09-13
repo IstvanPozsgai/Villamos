@@ -1478,6 +1478,9 @@
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\TTP\Ablak_TTP_Év.resx">
       <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Anyag_Karbantartás.resx">
+      <DependentUpon>Ablak_Anyag_Karbantartás.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Vételezés.resx">
       <DependentUpon>Ablak_Vételezés.cs</DependentUpon>
     </EmbeddedResource>
