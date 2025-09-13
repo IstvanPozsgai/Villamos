@@ -1,6 +1,6 @@
 ﻿namespace Villamos
 {
-    partial class Ablak_Anyag_Karbantartás
+    partial class Ablak_Beolvasás
     {
         /// <summary>
         /// Required designer variable.

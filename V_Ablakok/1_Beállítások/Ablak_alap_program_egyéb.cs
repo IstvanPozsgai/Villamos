@@ -1874,7 +1874,7 @@ namespace Villamos
 
         #region Csempékhez
 
-        Ablak_Anyag_Karbantartás Új_Ablak_Beolvasás;
+        Ablak_Beolvasás Új_Ablak_Beolvasás;
         private void BeolvásBeállítás_Click(object sender, EventArgs e)
         {
             if (Új_Ablak_Beolvasás == null)

@@ -44,6 +44,7 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.BtnRögzít = new System.Windows.Forms.Button();
+            this.Frissíti_táblalistát = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -161,6 +162,7 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.Frissíti_táblalistát, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnSúgó, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnRögzít, 0, 3);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(810, 6);
@@ -196,6 +198,18 @@
             this.BtnRögzít.TabIndex = 190;
             this.toolTip1.SetToolTip(this.BtnRögzít, "Rögzíti/módosítja az adatokat");
             this.BtnRögzít.UseVisualStyleBackColor = true;
+            // 
+            // Frissíti_táblalistát
+            // 
+            this.Frissíti_táblalistát.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Frissíti_táblalistát.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Frissíti_táblalistát.Location = new System.Drawing.Point(3, 3);
+            this.Frissíti_táblalistát.Name = "Frissíti_táblalistát";
+            this.Frissíti_táblalistát.Size = new System.Drawing.Size(44, 44);
+            this.Frissíti_táblalistát.TabIndex = 191;
+            this.toolTip1.SetToolTip(this.Frissíti_táblalistát, "Frissíti a táblázat adatait");
+            this.Frissíti_táblalistát.UseVisualStyleBackColor = true;
+            this.Frissíti_táblalistát.Click += new System.EventHandler(this.Frissíti_táblalistát_Click);
             // 
             // Ablak_Anyag_Karbantartás
             // 
@@ -236,5 +250,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         internal System.Windows.Forms.Button BtnSúgó;
         internal System.Windows.Forms.Button BtnRögzít;
+        internal System.Windows.Forms.Button Frissíti_táblalistát;
     }
 }
