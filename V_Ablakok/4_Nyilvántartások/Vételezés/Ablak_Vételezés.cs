@@ -23,8 +23,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         }
 
         private void Ablak_Vételezés_Load(object sender, EventArgs e)
-        {
+        { }
 
+        private void Ablak_Vételezés_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Anyag_Karbantartás?.Close();
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)
@@ -94,6 +97,30 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         }
 
+
+
+        #region Anyagkarbantartás 
+        Ablak_Anyag_Karbantartás Új_Ablak_Anyag_Karbantartás;
+        private void AnyagMódosítás_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Anyag_Karbantartás == null)
+            {
+                Új_Ablak_Anyag_Karbantartás = new Ablak_Anyag_Karbantartás();
+                Új_Ablak_Anyag_Karbantartás.FormClosed += Új_Ablak_Anyag_Karbantartás_FormClosed;
+                Új_Ablak_Anyag_Karbantartás.Show();
+            }
+            else
+            {
+                Új_Ablak_Anyag_Karbantartás.Activate();
+                Új_Ablak_Anyag_Karbantartás.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Új_Ablak_Anyag_Karbantartás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Anyag_Karbantartás = null;
+        }
+        #endregion
 
     }
 }

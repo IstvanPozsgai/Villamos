@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.BtnSAP = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.CmbTelephely = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
+            this.AnyagMódosítás = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,6 +47,7 @@
             this.BtnSAP.Name = "BtnSAP";
             this.BtnSAP.Size = new System.Drawing.Size(45, 45);
             this.BtnSAP.TabIndex = 187;
+            this.toolTip1.SetToolTip(this.BtnSAP, "Raktárkészlet frissítés");
             this.BtnSAP.UseVisualStyleBackColor = true;
             this.BtnSAP.Click += new System.EventHandler(this.BtnSAP_Click);
             // 
@@ -56,6 +60,7 @@
             this.BtnSúgó.Name = "BtnSúgó";
             this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
             this.BtnSúgó.TabIndex = 188;
+            this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
@@ -86,11 +91,24 @@
             this.label23.TabIndex = 17;
             this.label23.Text = "Telephelyi beállítás:";
             // 
+            // AnyagMódosítás
+            // 
+            this.AnyagMódosítás.BackgroundImage = global::Villamos.Properties.Resources.Document_preferences;
+            this.AnyagMódosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.AnyagMódosítás.Location = new System.Drawing.Point(590, 12);
+            this.AnyagMódosítás.Name = "AnyagMódosítás";
+            this.AnyagMódosítás.Size = new System.Drawing.Size(45, 45);
+            this.AnyagMódosítás.TabIndex = 190;
+            this.toolTip1.SetToolTip(this.AnyagMódosítás, "Anyag adatok módosítása");
+            this.AnyagMódosítás.UseVisualStyleBackColor = true;
+            this.AnyagMódosítás.Click += new System.EventHandler(this.AnyagMódosítás_Click);
+            // 
             // Ablak_Vételezés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(913, 429);
+            this.Controls.Add(this.AnyagMódosítás);
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.BtnSúgó);
             this.Controls.Add(this.BtnSAP);
@@ -98,6 +116,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Vételezés";
             this.Text = "Ablak_Vételezés";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Vételezés_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_Vételezés_Load);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
@@ -112,5 +131,7 @@
         internal System.Windows.Forms.Panel Panel1;
         internal System.Windows.Forms.ComboBox CmbTelephely;
         internal System.Windows.Forms.Label label23;
+        internal System.Windows.Forms.Button AnyagMódosítás;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
