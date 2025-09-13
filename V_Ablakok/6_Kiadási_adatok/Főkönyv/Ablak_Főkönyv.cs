@@ -1055,6 +1055,7 @@ namespace Villamos
                     else
                         return;
                 }
+
                 // megpróbáljuk megnyitni az excel táblát.
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
                 {
@@ -1063,14 +1064,9 @@ namespace Villamos
                     FileName = "",
                     Filter = "Excel |*.xlsx"
                 };
-
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                 {
-                    fájlexc = OpenFileDialog1.FileName.ToLower();
-                    string[] darabol = fájlexc.Split('.');
-                    if (darabol.Length < 2) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl formátuma!");
-                    if (!darabol[darabol.Length - 1].Contains("xls")) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl kiterjesztés formátuma!");
+                    fájlexc = OpenFileDialog1.FileName;
                 }
                 else
                     return;
