@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Vételezés));
             this.BtnSAP = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Panel1 = new System.Windows.Forms.Panel();
@@ -41,6 +42,7 @@
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.TáblaFelső = new Zuby.ADGV.AdvancedDataGridView();
             this.Kereső = new System.Windows.Forms.TextBox();
+            this.Másol = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaFelső)).BeginInit();
@@ -165,6 +167,7 @@
             this.TáblaFelső.MaxFilterButtonImageHeight = 23;
             this.TáblaFelső.Name = "TáblaFelső";
             this.TáblaFelső.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.TáblaFelső.RowHeadersVisible = false;
             this.TáblaFelső.Size = new System.Drawing.Size(896, 231);
             this.TáblaFelső.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TáblaFelső.TabIndex = 192;
@@ -180,11 +183,24 @@
             this.Kereső.TabIndex = 193;
             this.Kereső.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Kereső_KeyDown);
             // 
+            // Másol
+            // 
+            this.Másol.BackgroundImage = global::Villamos.Properties.Resources.Document_Copy_01;
+            this.Másol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Másol.Location = new System.Drawing.Point(471, 13);
+            this.Másol.Name = "Másol";
+            this.Másol.Size = new System.Drawing.Size(44, 44);
+            this.Másol.TabIndex = 196;
+            this.toolTip1.SetToolTip(this.Másol, "Frissíti a táblázat adatait");
+            this.Másol.UseVisualStyleBackColor = true;
+            this.Másol.Click += new System.EventHandler(this.Másol_Click);
+            // 
             // Ablak_Vételezés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(913, 584);
+            this.Controls.Add(this.Másol);
             this.Controls.Add(this.MásikTáblázatba);
             this.Controls.Add(this.Frissíti_táblalistát);
             this.Controls.Add(this.Kereső);
@@ -195,6 +211,7 @@
             this.Controls.Add(this.BtnSúgó);
             this.Controls.Add(this.BtnSAP);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Vételezés";
             this.Text = "Ablak_Vételezés";
@@ -224,5 +241,6 @@
         private System.Windows.Forms.TextBox Kereső;
         internal System.Windows.Forms.Button Frissíti_táblalistát;
         internal System.Windows.Forms.Button MásikTáblázatba;
+        internal System.Windows.Forms.Button Másol;
     }
 }

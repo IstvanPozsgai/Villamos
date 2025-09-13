@@ -371,5 +371,45 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Másol_Click(object sender, EventArgs e)
+        {
+            // Először töröljük az esetleges korábbi kijelöléseket
+            TáblaFelső.ClearSelection();
+
+            // Végigmegyünk az összes soron
+            foreach (DataGridViewRow row in TáblaFelső.Rows)
+            {
+                // Csak a nem új sorokat jelöljük ki
+                if (!row.IsNewRow)
+                {
+                    // Az első 5 oszlopot jelöljük ki
+                    for (int i = 0; i < 5 && i < TáblaFelső.ColumnCount; i++)
+                    {
+                        row.Cells[i].Selected = true;
+                    }
+                }
+            }
+
+            // Sorok adatainak összegyűjtése
+            List<string> lines = new List<string>();
+
+            foreach (DataGridViewRow row in TáblaFelső.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    List<string> cells = new List<string>();
+                    for (int i = 0; i < 5 && i < TáblaFelső.ColumnCount; i++)
+                    {
+                        cells.Add(row.Cells[i].Value?.ToString() ?? "");
+                    }
+                    lines.Add(string.Join("\t", cells));
+                }
+            }
+
+            // Vágólapra helyezés
+            string result = string.Join(Environment.NewLine, lines);
+            Clipboard.SetText(result);
+        }
     }
 }
