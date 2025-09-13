@@ -10,11 +10,11 @@ using MyF = Függvénygyűjtemény;
 
 namespace Villamos
 {
-    public partial class Ablak_Beolvasás : Form
+    public partial class Ablak_Anyag_Karbantartás : Form
     {
         readonly Kezelő_Excel_Beolvasás KézBeolv = new Kezelő_Excel_Beolvasás();
 
-        public Ablak_Beolvasás()
+        public Ablak_Anyag_Karbantartás()
         {
             InitializeComponent();
             CiklusTípusfeltöltés();
