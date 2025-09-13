@@ -4,6 +4,7 @@ using System.Data;
 using System.Windows.Forms;
 using Villamos.V_Kezelők;
 using Villamos.Villamos_Adatszerkezet;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 {
@@ -26,7 +27,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void Start()
         {
-            Adatok = KézAnyag.Lista_Adatok();
             TáblaÍrás();
         }
 
@@ -52,6 +52,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         #region Táblázat
         private void Frissíti_táblalistát_Click(object sender, EventArgs e)
         {
+            Adatok = KézAnyag.Lista_Adatok();
             TáblaÍrás();
         }
 
@@ -118,15 +119,47 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void OszlopSzélesség()
         {
-            Tábla.Columns["Cikkszám"].Width = 80;
-            Tábla.Columns["Megnevezés"].Width = 80;
-            Tábla.Columns["Kereső fogalom"].Width = 430;
-            Tábla.Columns["Sarzs"].Width = 430;
-            Tábla.Columns["Ár"].Width = 430;
+            Tábla.Columns["Cikkszám"].Width = 130;
+            Tábla.Columns["Megnevezés"].Width = 400;
+            Tábla.Columns["Kereső fogalom"].Width = 400;
+            Tábla.Columns["Sarzs"].Width = 80;
+            Tábla.Columns["Ár"].Width = 80;
 
         }
+
+        private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Cikkszám.Text = Tábla.CurrentRow.Cells["Cikkszám"].Value.ToString();
+            Megnevezés.Text = Tábla.CurrentRow.Cells["Megnevezés"].Value.ToString();
+            KeresőFogalom.Text = Tábla.CurrentRow.Cells["Kereső fogalom"].Value.ToString();
+            Sarzs.Text = Tábla.CurrentRow.Cells["Sarzs"].Value.ToString();
+        }
+
         #endregion
 
-
+        private void BtnRögzít_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Cikkszám.Text.Trim() == "") throw new HibásBevittAdat("A cikkszám megadása kötelező!");
+                Adat_Anyagok ADAT = new Adat_Anyagok(
+                    Cikkszám.Text.Trim(),
+                    MyF.Szöveg_Tisztítás(Megnevezés.Text.Trim(), 0, 255),
+                    MyF.Szöveg_Tisztítás(KeresőFogalom.Text.Trim()),
+                    MyF.Szöveg_Tisztítás(Sarzs.Text.Trim(), 0, 5),
+                    0);
+                KézAnyag.Döntés(ADAT);
+                TáblaÍrás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

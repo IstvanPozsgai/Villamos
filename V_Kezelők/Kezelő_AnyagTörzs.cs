@@ -122,6 +122,31 @@ namespace Villamos.V_Kezelők
             }
         }
 
+        /// <summary>
+        /// Módosítás csak a KeresőFogalom
+        /// </summary>
+        /// <param name="Adatok"></param>
+        private void Módosítás(Adat_Anyagok Adat)
+        {
+            try
+            {
+                string szöveg = $"UPDATE {táblanév} SET ";
+                szöveg += $"KeresőFogalom='{Adat.KeresőFogalom}' ";
+                szöveg += $"WHERE Cikkszám='{Adat.Cikkszám}' ";
+                szöveg += $"AND Sarzs='{Adat.Sarzs}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void Rögzítés(List<Adat_Anyagok> Adatok)
         {
             try
@@ -150,6 +175,29 @@ namespace Villamos.V_Kezelők
             }
         }
 
+        private void Rögzítés(Adat_Anyagok Adat)
+        {
+            try
+            {
+                string szöveg = $"INSERT INTO {táblanév} (Cikkszám, Megnevezés, KeresőFogalom, Sarzs, Ár) VALUES (";
+                szöveg += $"'{Adat.Cikkszám}', ";
+                szöveg += $"'{Adat.Megnevezés}', ";
+                szöveg += $"'{Adat.KeresőFogalom}', ";
+                szöveg += $"'{Adat.Sarzs}', ";
+                szöveg += $"{Adat.Ár.ToString().Replace(",", ".")})";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public bool TeljesEgyezes(Adat_Anyagok egyik, Adat_Anyagok masik)
         {
             return egyik.Cikkszám == masik.Cikkszám &&
@@ -165,6 +213,34 @@ namespace Villamos.V_Kezelők
                    egyik.Megnevezés == masik.Megnevezés &&
                    egyik.Sarzs == masik.Sarzs &&
                    egyik.Ár == masik.Ár;
+        }
+
+        public void Döntés(Adat_Anyagok Adat)
+        {
+            try
+            {
+                List<Adat_Anyagok> Adatok = Lista_Adatok();
+                Adat_Anyagok VanAnyag = (from a in Adatok
+                                         where a.Cikkszám == Adat.Cikkszám
+                                         && a.Sarzs == Adat.Sarzs
+                                         select a).FirstOrDefault();
+                if (VanAnyag == null)
+                    Rögzítés(Adat);
+                else
+                {
+                    if (!Egyezes(Adat, VanAnyag)) Módosítás(Adat);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 }

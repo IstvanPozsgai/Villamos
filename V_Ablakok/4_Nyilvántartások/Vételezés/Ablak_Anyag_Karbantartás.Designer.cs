@@ -61,6 +61,7 @@
             // 
             // Cikkszám
             // 
+            this.Cikkszám.Enabled = false;
             this.Cikkszám.Location = new System.Drawing.Point(135, 3);
             this.Cikkszám.Name = "Cikkszám";
             this.Cikkszám.Size = new System.Drawing.Size(198, 26);
@@ -76,11 +77,14 @@
             this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.Location = new System.Drawing.Point(3, 199);
             this.Tábla.MaxFilterButtonImageHeight = 23;
+            this.Tábla.MultiSelect = false;
             this.Tábla.Name = "Tábla";
             this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Tábla.RowHeadersVisible = false;
             this.Tábla.Size = new System.Drawing.Size(1007, 325);
             this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 2;
+            this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
             // tableLayoutPanel1
             // 
@@ -198,6 +202,7 @@
             this.BtnRögzít.TabIndex = 190;
             this.toolTip1.SetToolTip(this.BtnRögzít, "Rögzíti/módosítja az adatokat");
             this.BtnRögzít.UseVisualStyleBackColor = true;
+            this.BtnRögzít.Click += new System.EventHandler(this.BtnRögzít_Click);
             // 
             // Frissíti_táblalistát
             // 
