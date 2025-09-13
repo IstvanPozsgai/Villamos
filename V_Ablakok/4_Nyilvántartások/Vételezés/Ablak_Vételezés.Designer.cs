@@ -36,11 +36,14 @@
             this.label23 = new System.Windows.Forms.Label();
             this.AnyagMódosítás = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Frissíti_táblalistát = new System.Windows.Forms.Button();
+            this.MásikTáblázatba = new System.Windows.Forms.Button();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
-            this.advancedDataGridView1 = new Zuby.ADGV.AdvancedDataGridView();
+            this.TáblaFelső = new Zuby.ADGV.AdvancedDataGridView();
+            this.Kereső = new System.Windows.Forms.TextBox();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TáblaFelső)).BeginInit();
             this.SuspendLayout();
             // 
             // BtnSAP
@@ -107,48 +110,85 @@
             this.AnyagMódosítás.UseVisualStyleBackColor = true;
             this.AnyagMódosítás.Click += new System.EventHandler(this.AnyagMódosítás_Click);
             // 
+            // Frissíti_táblalistát
+            // 
+            this.Frissíti_táblalistát.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Frissíti_táblalistát.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Frissíti_táblalistát.Location = new System.Drawing.Point(421, 13);
+            this.Frissíti_táblalistát.Name = "Frissíti_táblalistát";
+            this.Frissíti_táblalistát.Size = new System.Drawing.Size(44, 44);
+            this.Frissíti_táblalistát.TabIndex = 194;
+            this.toolTip1.SetToolTip(this.Frissíti_táblalistát, "Frissíti a táblázat adatait");
+            this.Frissíti_táblalistát.UseVisualStyleBackColor = true;
+            this.Frissíti_táblalistát.Click += new System.EventHandler(this.Frissíti_táblalistát_Click);
+            // 
+            // MásikTáblázatba
+            // 
+            this.MásikTáblázatba.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
+            this.MásikTáblázatba.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.MásikTáblázatba.Location = new System.Drawing.Point(371, 13);
+            this.MásikTáblázatba.Name = "MásikTáblázatba";
+            this.MásikTáblázatba.Size = new System.Drawing.Size(44, 44);
+            this.MásikTáblázatba.TabIndex = 195;
+            this.toolTip1.SetToolTip(this.MásikTáblázatba, "Frissíti a táblázat adatait");
+            this.MásikTáblázatba.UseVisualStyleBackColor = true;
+            this.MásikTáblázatba.Click += new System.EventHandler(this.MásikTáblázatba_Click);
+            // 
             // Tábla
             // 
+            this.Tábla.AllowUserToAddRows = false;
+            this.Tábla.AllowUserToDeleteRows = false;
             this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.FilterAndSortEnabled = true;
             this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla.Location = new System.Drawing.Point(5, 252);
+            this.Tábla.Location = new System.Drawing.Point(5, 318);
             this.Tábla.MaxFilterButtonImageHeight = 23;
-            this.Tábla.MultiSelect = false;
             this.Tábla.Name = "Tábla";
             this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Tábla.RowHeadersVisible = false;
-            this.Tábla.Size = new System.Drawing.Size(896, 175);
+            this.Tábla.Size = new System.Drawing.Size(896, 258);
             this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 191;
             // 
-            // advancedDataGridView1
+            // TáblaFelső
             // 
-            this.advancedDataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.TáblaFelső.AllowUserToAddRows = false;
+            this.TáblaFelső.AllowUserToDeleteRows = false;
+            this.TáblaFelső.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.advancedDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.advancedDataGridView1.FilterAndSortEnabled = true;
-            this.advancedDataGridView1.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.advancedDataGridView1.Location = new System.Drawing.Point(5, 63);
-            this.advancedDataGridView1.MaxFilterButtonImageHeight = 23;
-            this.advancedDataGridView1.MultiSelect = false;
-            this.advancedDataGridView1.Name = "advancedDataGridView1";
-            this.advancedDataGridView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.advancedDataGridView1.RowHeadersVisible = false;
-            this.advancedDataGridView1.Size = new System.Drawing.Size(896, 175);
-            this.advancedDataGridView1.SortStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.advancedDataGridView1.TabIndex = 192;
+            this.TáblaFelső.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TáblaFelső.FilterAndSortEnabled = true;
+            this.TáblaFelső.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TáblaFelső.Location = new System.Drawing.Point(5, 63);
+            this.TáblaFelső.MaxFilterButtonImageHeight = 23;
+            this.TáblaFelső.Name = "TáblaFelső";
+            this.TáblaFelső.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.TáblaFelső.Size = new System.Drawing.Size(896, 231);
+            this.TáblaFelső.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TáblaFelső.TabIndex = 192;
+            this.TáblaFelső.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaFelső_CellValueChanged);
+            // 
+            // Kereső
+            // 
+            this.Kereső.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Kereső.Location = new System.Drawing.Point(5, 294);
+            this.Kereső.Name = "Kereső";
+            this.Kereső.Size = new System.Drawing.Size(896, 26);
+            this.Kereső.TabIndex = 193;
+            this.Kereső.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Kereső_KeyDown);
             // 
             // Ablak_Vételezés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(913, 429);
-            this.Controls.Add(this.advancedDataGridView1);
+            this.ClientSize = new System.Drawing.Size(913, 584);
+            this.Controls.Add(this.MásikTáblázatba);
+            this.Controls.Add(this.Frissíti_táblalistát);
+            this.Controls.Add(this.Kereső);
+            this.Controls.Add(this.TáblaFelső);
             this.Controls.Add(this.Tábla);
             this.Controls.Add(this.AnyagMódosítás);
             this.Controls.Add(this.Panel1);
@@ -158,13 +198,15 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Vételezés";
             this.Text = "Ablak_Vételezés";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Vételezés_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_Vételezés_Load);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TáblaFelső)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -178,6 +220,9 @@
         internal System.Windows.Forms.Button AnyagMódosítás;
         private System.Windows.Forms.ToolTip toolTip1;
         private Zuby.ADGV.AdvancedDataGridView Tábla;
-        private Zuby.ADGV.AdvancedDataGridView advancedDataGridView1;
+        private Zuby.ADGV.AdvancedDataGridView TáblaFelső;
+        private System.Windows.Forms.TextBox Kereső;
+        internal System.Windows.Forms.Button Frissíti_táblalistát;
+        internal System.Windows.Forms.Button MásikTáblázatba;
     }
 }
