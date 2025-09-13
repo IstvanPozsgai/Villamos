@@ -417,7 +417,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 };
 
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     _fájlexc = OpenFileDialog1.FileName;
                 else
                     return;

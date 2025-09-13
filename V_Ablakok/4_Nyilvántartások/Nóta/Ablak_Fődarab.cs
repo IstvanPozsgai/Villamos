@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using static Villamos.V_MindenEgyéb.Enumok;
@@ -314,7 +315,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 };
 
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;

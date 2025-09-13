@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -32,16 +33,16 @@ namespace Villamos.Villamos_Ablakok
             Start();
         }
 
-        private void Start() 
+        private void Start()
         {
             try
             {
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
-            Típus_feltöltés();
-            Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-            DátumBef.Value = DateTime.Today;
-            DátumKezd.Value = DateTime.Today;
+                GombLathatosagKezelo.Beallit(this);
+                Jogosultságkiosztás();
+                Típus_feltöltés();
+                Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+                DátumBef.Value = DateTime.Today;
+                DátumKezd.Value = DateTime.Today;
 
             }
             catch (HibásBevittAdat ex)
@@ -862,7 +863,7 @@ namespace Villamos.Villamos_Ablakok
                 };
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;

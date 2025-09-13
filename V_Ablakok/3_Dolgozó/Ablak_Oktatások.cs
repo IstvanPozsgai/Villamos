@@ -596,7 +596,7 @@ namespace Villamos
                 Txtmegnyitott.Text = "";
                 Txtmentett.Text = "";
                 OpenFileDialog1.Filter = "PDF Files |*.pdf";
-                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                 {
                     Kezelő_Pdf.PdfMegnyitás(PDF_néző, OpenFileDialog1.FileName);
 
@@ -1525,7 +1525,7 @@ namespace Villamos
                     InitialDirectory = Könyvtár
                 };
 
-                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                 {
                     if (!OpenFileDialog1.FileName.Contains(Könyvtár)) throw new HibásBevittAdat("A program által beállított könyvtárból lehet csak fájlt választani.");
                     PDF_néző.Document = PdfDocument.Load(OpenFileDialog1.FileName);

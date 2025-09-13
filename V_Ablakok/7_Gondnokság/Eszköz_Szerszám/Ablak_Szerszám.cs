@@ -1891,7 +1891,7 @@ namespace Villamos
                 {
                     Filter = "JPG Files |*.jpg"
                 };
-                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                 {
                     Kép_Feltöltendő.Text = OpenFileDialog1.FileName;
                     Kép_megjelenítés();
@@ -2133,7 +2133,7 @@ namespace Villamos
                 {
                     Filter = "PDF Files |*.pdf"
                 };
-                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                 {
                     Kezelő_Pdf.PdfMegnyitás(PDF_néző, OpenFileDialog1.FileName);
                     Feltöltendő.Text = OpenFileDialog1.FileName;

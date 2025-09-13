@@ -1374,7 +1374,7 @@ namespace Villamos
                 };
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
@@ -1748,7 +1748,7 @@ namespace Villamos
                 };
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
@@ -3331,7 +3331,7 @@ namespace Villamos
             {
                 Filter = "PDF Files |*.pdf"
             };
-            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+            if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
             {
                 PDF_megjelenítés(OpenFileDialog1.FileName);
                 TxtKérrelemPDF.Text = OpenFileDialog1.FileName;

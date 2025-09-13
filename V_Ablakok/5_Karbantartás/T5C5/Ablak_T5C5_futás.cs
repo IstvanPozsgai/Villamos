@@ -1312,7 +1312,7 @@ namespace Villamos
                 };
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
@@ -1491,7 +1491,7 @@ namespace Villamos
                     Filter = "Excel (*.xlsx)|*.xlsx|Excel 97-2003 (*.xls)|*.xls"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     FájlExcel_ = OpenFileDialog1.FileName;
                 else
                 {

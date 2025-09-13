@@ -70,7 +70,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                 {
                     fájlexc = OpenFileDialog1.FileName.ToLower();
                     string[] darabol = fájlexc.Split('.');

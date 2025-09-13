@@ -79,7 +79,7 @@ namespace Villamos.Villamos_Ablakok
                 };
 
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     Fájlexc = OpenFileDialog1.FileName;
                 else
                     return;

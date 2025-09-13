@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
@@ -970,8 +971,10 @@ namespace Villamos.Villamos_Ablakok
                 openFileDialog1.Filter = "Excel |*.xlsx";
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (openFileDialog1.ShowDialog() != DialogResult.Cancel) fájlexc = openFileDialog1.FileName;
-                else return;
+                if (OpenFileDialogPI.ShowDialogEllenőr(openFileDialog1) == DialogResult.OK)
+                    fájlexc = openFileDialog1.FileName;
+                else
+                    return;
 
                 // megnyitjuk a beolvasandó táblát
                 MyE.ExcelMegnyitás(fájlexc);
@@ -1232,7 +1235,7 @@ namespace Villamos.Villamos_Ablakok
                 Kép_Feltöltendő.Text = "";
 
                 openFileDialog1.Filter = "JPG Files |*.jpg";
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                if (OpenFileDialogPI.ShowDialogEllenőr(openFileDialog1) == DialogResult.OK)
                 {
                     Kép_Feltöltendő.Text = openFileDialog1.FileName;
                     Kép_megjelenítés();
@@ -1452,7 +1455,7 @@ namespace Villamos.Villamos_Ablakok
             {
                 Feltöltendő.Text = "";
                 openFileDialog1.Filter = "PDF Files |*.pdf";
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                if (OpenFileDialogPI.ShowDialogEllenőr(openFileDialog1) == DialogResult.OK)
                 {
                     Byte[] bytes = File.ReadAllBytes(openFileDialog1.FileName);
                     MemoryStream stream = new MemoryStream(bytes);
@@ -1615,8 +1618,10 @@ namespace Villamos.Villamos_Ablakok
                 openFileDialog1.Filter = "Excel |*.xlsx";
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (openFileDialog1.ShowDialog() != DialogResult.Cancel) fájlexc = openFileDialog1.FileName;
-                else return;
+                if (OpenFileDialogPI.ShowDialogEllenőr(openFileDialog1) == DialogResult.OK)
+                    fájlexc = openFileDialog1.FileName;
+                else
+                    return;
 
                 // megnyitjuk a beolvasandó táblát
                 MyE.ExcelMegnyitás(fájlexc);

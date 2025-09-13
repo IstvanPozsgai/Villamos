@@ -1039,7 +1039,7 @@ namespace Villamos
                 TxtKérrelemPDF.Text = "";
                 OpenFileDialog1.Filter = "PDF Files |*.pdf";
 
-                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                 {
                     Kezelő_Pdf.PdfMegnyitás(PDF_néző, OpenFileDialog1.FileName);
 
@@ -3072,7 +3072,7 @@ namespace Villamos
                 string fájlexc;
 
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;

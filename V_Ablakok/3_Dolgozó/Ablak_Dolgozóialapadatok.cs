@@ -1592,7 +1592,7 @@ namespace Villamos
                 {
                     Filter = "PDF Files |*.pdf"
                 };
-                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                 {
                     PDF_Nyitás(OpenFileDialog1.FileName);
                     TxtPDFfájl.Text = OpenFileDialog1.FileName;

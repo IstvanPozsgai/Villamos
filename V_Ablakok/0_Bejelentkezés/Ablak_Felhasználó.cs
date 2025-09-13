@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 
@@ -425,7 +426,7 @@ namespace Villamos
                 string fájlexc;
 
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel)
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
