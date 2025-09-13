@@ -36,7 +36,11 @@
             this.label23 = new System.Windows.Forms.Label();
             this.AnyagMódosítás = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
+            this.advancedDataGridView1 = new Zuby.ADGV.AdvancedDataGridView();
             this.Panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // BtnSAP
@@ -103,11 +107,49 @@
             this.AnyagMódosítás.UseVisualStyleBackColor = true;
             this.AnyagMódosítás.Click += new System.EventHandler(this.AnyagMódosítás_Click);
             // 
+            // Tábla
+            // 
+            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla.FilterAndSortEnabled = true;
+            this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tábla.Location = new System.Drawing.Point(5, 252);
+            this.Tábla.MaxFilterButtonImageHeight = 23;
+            this.Tábla.MultiSelect = false;
+            this.Tábla.Name = "Tábla";
+            this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Tábla.RowHeadersVisible = false;
+            this.Tábla.Size = new System.Drawing.Size(896, 175);
+            this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.Tábla.TabIndex = 191;
+            // 
+            // advancedDataGridView1
+            // 
+            this.advancedDataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.advancedDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.advancedDataGridView1.FilterAndSortEnabled = true;
+            this.advancedDataGridView1.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.advancedDataGridView1.Location = new System.Drawing.Point(5, 63);
+            this.advancedDataGridView1.MaxFilterButtonImageHeight = 23;
+            this.advancedDataGridView1.MultiSelect = false;
+            this.advancedDataGridView1.Name = "advancedDataGridView1";
+            this.advancedDataGridView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.advancedDataGridView1.RowHeadersVisible = false;
+            this.advancedDataGridView1.Size = new System.Drawing.Size(896, 175);
+            this.advancedDataGridView1.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.advancedDataGridView1.TabIndex = 192;
+            // 
             // Ablak_Vételezés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(913, 429);
+            this.Controls.Add(this.advancedDataGridView1);
+            this.Controls.Add(this.Tábla);
             this.Controls.Add(this.AnyagMódosítás);
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.BtnSúgó);
@@ -120,6 +162,8 @@
             this.Load += new System.EventHandler(this.Ablak_Vételezés_Load);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -133,5 +177,7 @@
         internal System.Windows.Forms.Label label23;
         internal System.Windows.Forms.Button AnyagMódosítás;
         private System.Windows.Forms.ToolTip toolTip1;
+        private Zuby.ADGV.AdvancedDataGridView Tábla;
+        private Zuby.ADGV.AdvancedDataGridView advancedDataGridView1;
     }
 }
