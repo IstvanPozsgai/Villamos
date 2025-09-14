@@ -65,8 +65,8 @@ namespace Villamos.V_Kezelők
                 foreach (Adat_Anyagok adat in AdatokKap)
                 {
                     Adat_Anyagok VanAnyag = (from a in Adatok
-                                             where a.Cikkszám == adat.Cikkszám
-                                             && a.Sarzs == adat.Sarzs
+                                             where a.Cikkszám.Trim() == adat.Cikkszám.Trim()
+                                             && a.Sarzs.Trim() == adat.Sarzs.Trim()
                                              select a).FirstOrDefault();
                     //ha eddig nem volt ilyen anyag akkor felvesszük
                     if (VanAnyag == null)
@@ -78,7 +78,7 @@ namespace Villamos.V_Kezelők
                     }
                 }
                 if (AdatokGyMód.Count > 0) Módosítás(AdatokGyMód);
-                if (AdatokGyRögzítés.Count > 0) Rögzítés(AdatokGyMód);
+                if (AdatokGyRögzítés.Count > 0) Rögzítés(AdatokGyRögzítés);
             }
             catch (HibásBevittAdat ex)
             {
@@ -209,9 +209,9 @@ namespace Villamos.V_Kezelők
 
         public bool Egyezes(Adat_Anyagok egyik, Adat_Anyagok masik)
         {
-            return egyik.Cikkszám == masik.Cikkszám &&
-                   egyik.Megnevezés == masik.Megnevezés &&
-                   egyik.Sarzs == masik.Sarzs &&
+            return egyik.Cikkszám.Trim() == masik.Cikkszám.Trim() &&
+                   egyik.Megnevezés.Trim() == masik.Megnevezés.Trim() &&
+                   egyik.Sarzs.Trim() == masik.Sarzs.Trim() &&
                    egyik.Ár == masik.Ár;
         }
 

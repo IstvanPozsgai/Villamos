@@ -794,6 +794,11 @@ namespace Villamos.V_MindenEgyéb
                 List<Adat_Anyagok> AdatokGy = new List<Adat_Anyagok>();
                 List<Adat_Raktár> AdatokGyR = new List<Adat_Raktár>();
                 int sor = 0;
+                List<string> Raktárhelyek = Tábla.AsEnumerable()
+                                              .Select(Sor => MyF.Szöveg_Tisztítás(Sor[oszlopRaktár].ToString().Trim(), 0, 5))
+                                              .Where(r => !string.IsNullOrWhiteSpace(r))
+                                              .Distinct()
+                                              .ToList();
                 foreach (DataRow Sor in Tábla.Rows)
                 {
                     //Beolvasott értékeke
@@ -825,10 +830,15 @@ namespace Villamos.V_MindenEgyéb
                     sor++;
                 }
 
+
                 Kezelő_AnyagTörzs Kéz = new Kezelő_AnyagTörzs();
                 if (AdatokGy.Count > 0) Kéz.Osztályoz(AdatokGy);
 
                 Kezelő_Raktár KézRaktár = new Kezelő_Raktár();
+                // töröljük a raktárkészletet a telephelyen
+                foreach (string Raktár in Raktárhelyek)
+                    KézRaktár.Törlés(Raktár);
+
                 if (AdatokGyR.Count > 0) KézRaktár.Rögzítés(AdatokGyR);
 
                 // kitöröljük a betöltött fájlt

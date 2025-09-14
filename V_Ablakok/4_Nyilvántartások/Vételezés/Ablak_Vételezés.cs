@@ -190,9 +190,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     return;
 
                 SAP_Adatokbeolvasása.Raktár_beolvasó(fájlexc);
-
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -269,15 +266,24 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                                                  && a.Raktárhely.Trim() == Raktárhely.Trim()
                                                  select a).FirstOrDefault();
                         if (EgyRaktár != null) RaktárK = EgyRaktár.Mennyiség;
-
-                        Soradat["Raktárkészlet"] = RaktárK;
+                        Soradat["Saját Raktár"] = RaktárK;
 
                         double RezsiK = 0;
                         Adat_Rezsi_Lista EgyRezsi = (from a in AdatokKész
                                                      where a.Azonosító.Trim() == rekord.Cikkszám.Trim()
                                                      select a).FirstOrDefault();
                         if (EgyRezsi != null) RezsiK = EgyRezsi.Mennyiség;
-                        Soradat["Rezsikészlet"] = RezsiK;
+                        Soradat["Rezsi készlet"] = RezsiK;
+
+                        double RaktárKE = 0;
+                        Adat_Raktár EgyRaktárE = (from a in AdatokRaktár
+                                                  where a.Cikkszám.Trim() == rekord.Cikkszám.Trim()
+                                                  && a.Sarzs.Trim() == rekord.Sarzs.Trim()
+                                                  && a.Raktárhely.Trim() != Raktárhely.Trim()
+                                                  select a).FirstOrDefault();
+                        if (EgyRaktárE != null) RaktárKE = EgyRaktárE.Mennyiség;
+                        Soradat["Egyéb Raktár"] = RaktárKE;
+
                         AdatTábla.Rows.Add(Soradat);
                     }
                 }
@@ -316,8 +322,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 AdatTábla.Columns.Add("Kereső fogalom");
                 AdatTábla.Columns.Add("Sarzs");
                 AdatTábla.Columns.Add("Ár", typeof(double));
-                AdatTábla.Columns.Add("Raktárkészlet", typeof(double));
-                AdatTábla.Columns.Add("Rezsikészlet", typeof(double));
+                AdatTábla.Columns.Add("Saját Raktár", typeof(double));
+                AdatTábla.Columns.Add("Rezsi készlet", typeof(double));
+                AdatTábla.Columns.Add("Egyéb Raktár", typeof(double));
             }
             catch (HibásBevittAdat ex)
             {
@@ -337,8 +344,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             Tábla.Columns["Kereső fogalom"].Width = 400;
             Tábla.Columns["Sarzs"].Width = 80;
             Tábla.Columns["Ár"].Width = 80;
-            Tábla.Columns["Raktárkészlet"].Width = 120;
-            Tábla.Columns["Rezsikészlet"].Width = 120;
+            Tábla.Columns["Saját Raktár"].Width = 100;
+            Tábla.Columns["Rezsi készlet"].Width = 100;
+            Tábla.Columns["Egyéb Raktár"].Width = 100;
 
         }
 
