@@ -855,5 +855,111 @@ namespace Villamos.V_MindenEgyéb
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public static void Technológia_beolvasó(string fájlexcel, List<Adat_technológia_Ciklus> Adatok_ciklus, string Járműtípus)
+        {
+            try
+            {
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("Technológi", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+
+                // Beolvasni kívánt oszlopok
+                Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+                List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+                //Meghatározzuk a beolvasó tábla elnevezéseit 
+                //Oszlopnevek beállítása
+                string oszlopId = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Id" select a.Fejléc).FirstOrDefault();
+                string oszlopRész = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Részegység" select a.Fejléc).FirstOrDefault();
+                string oszlopMunka = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Munka_utasítás_szám" select a.Fejléc).FirstOrDefault();
+                string oszlopCím = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Utasítás_Cím" select a.Fejléc).FirstOrDefault();
+                string oszlopLeír = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Utasítás_leírás" select a.Fejléc).FirstOrDefault();
+                string oszlopParam = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Paraméter" select a.Fejléc).FirstOrDefault();
+                string oszlopCikE = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Karb_ciklus_eleje" select a.Fejléc).FirstOrDefault();
+                string oszlopCikV = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Karb_ciklus_vége" select a.Fejléc).FirstOrDefault();
+                string oszlopÉrvK = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Érv_kezdete" select a.Fejléc).FirstOrDefault();
+                string oszlopÉrvV = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Érv_vége" select a.Fejléc).FirstOrDefault();
+                string oszlopSzak = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Szakmai_bontás" select a.Fejléc).FirstOrDefault();
+                string oszlopTer = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Munkaterületi_bontás" select a.Fejléc).FirstOrDefault();
+                string oszlopAlTip = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Altípus" select a.Fejléc).FirstOrDefault();
+                string oszlopKenés = (from a in oszlopnév where a.Csoport == "Technológi" && a.Státusz == false && a.Változónév == "Kenés" select a.Fejléc).FirstOrDefault();
+
+                if (oszlopId == null
+                  || oszlopRész == null
+                  || oszlopMunka == null
+                  || oszlopCím == null
+                  || oszlopLeír == null
+                  || oszlopParam == null
+                  || oszlopCikE == null
+                  || oszlopCikV == null
+                  || oszlopÉrvK == null
+                  || oszlopÉrvV == null
+                  || oszlopSzak == null
+                  || oszlopTer == null
+                  || oszlopAlTip == null
+                  || oszlopKenés == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+
+                List<Adat_Technológia_Új> BeAdatok = new List<Adat_Technológia_Új>();
+                foreach (DataRow Sor in Tábla.Rows)
+                {
+                    //Beolvasott értékeke
+                    int Id = MyF.Szöveg_Tisztítás(Sor[oszlopId].ToStrTrim()).ToÉrt_Int();
+                    string Részegység = MyF.Szöveg_Tisztítás(Sor[oszlopRész].ToStrTrim(), 0, 10);
+                    string Munka_utasítás_szám = MyF.Szöveg_Tisztítás(Sor[oszlopMunka].ToStrTrim(), 0, 10);
+                    string Utasítás_Cím = MyF.Szöveg_Tisztítás(Sor[oszlopCím].ToStrTrim(), 0, 250);
+                    string Utasítás_leírás = MyF.Szöveg_Tisztítás(Sor[oszlopLeír].ToStrTrim());
+                    string Paraméter = MyF.Szöveg_Tisztítás(Sor[oszlopParam].ToStrTrim());
+                    string Karb_ciklus_eleje = MyF.Szöveg_Tisztítás(Sor[oszlopCikE].ToStrTrim());
+                    string Karb_ciklus_vége = MyF.Szöveg_Tisztítás(Sor[oszlopCikV].ToStrTrim());
+                    DateTime Érv_kezdete = MyF.Szöveg_Tisztítás(Sor[oszlopÉrvK].ToStrTrim()).ToÉrt_DaTeTime();
+                    DateTime Érv_vége = MyF.Szöveg_Tisztítás(Sor[oszlopÉrvV].ToStrTrim()).ToÉrt_DaTeTime();
+                    string Szakmai_bontás = MyF.Szöveg_Tisztítás(Sor[oszlopSzak].ToStrTrim(), 0, 50);
+                    string Munkaterületi_bontás = MyF.Szöveg_Tisztítás(Sor[oszlopTer].ToStrTrim(), 0, 50);
+                    string Altípus = MyF.Szöveg_Tisztítás(Sor[oszlopAlTip].ToStrTrim(), 0, 50);
+                    bool Kenés = MyF.Szöveg_Tisztítás(Sor[oszlopKenés].ToStrTrim()).ToÉrt_Bool();
+
+                    int Karb_sor1 = 1;
+                    if (Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_ciklus_eleje) != null)
+                        Karb_sor1 = Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_ciklus_eleje).Sorszám;
+
+                    int Karb_sor2 = 1;
+                    if (Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_ciklus_vége) != null)
+                        Karb_sor2 = Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_ciklus_vége).Sorszám;
+
+                    Adat_Technológia_Új Adat = new Adat_Technológia_Új(
+                        Id,
+                        Részegység,
+                        Munka_utasítás_szám,
+                        Utasítás_Cím,
+                        Utasítás_leírás,
+                        Paraméter,
+                        Karb_sor1,
+                        Karb_sor2,
+                        Érv_kezdete,
+                        Érv_vége,
+                        Szakmai_bontás,
+                        Munkaterületi_bontás,
+                        Altípus,
+                        Kenés);
+                    BeAdatok.Add(Adat);
+                }
+                Kezelő_Technológia KézAdat = new Kezelő_Technológia();
+                if (BeAdatok.Count > 0) KézAdat.Rögzítés(Járműtípus, BeAdatok);
+
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+                MessageBox.Show($"Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

@@ -874,66 +874,7 @@ namespace Villamos.Villamos_Ablakok
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
-
-                MyE.ExcelMegnyitás(fájlexc);
-                string munkalap = "Munka1";
-                string valós = "";
-                //leellenőrizzük a fejlécet, hogy egyforma-e
-                int maxoszlop = MyE.Utolsóoszlop(munkalap);
-                for (int i = 1; i <= maxoszlop; i++)
-                {
-                    valós += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
-                }
-
-                if (!MyF.Betöltéshelyes("Technológi", valós))
-                {
-                    MyE.ExcelBezárás();
-                    throw new HibásBevittAdat("A beolvasanó Exceltábla nem egyezik meg a várt formátummal.");
-                }
-
-                int sormax = MyE.Utolsósor(munkalap);
-                Holtart.Be(sormax + 1);
-                List<Adat_Technológia_Új> BeAdatok = new List<Adat_Technológia_Új>();
-                for (int i = 2; i <= sormax; i++)
-                {
-                    if (!bool.TryParse(MyE.Beolvas($"N{i}"), out bool Kenés)) Kenés = false;
-
-                    string Karb_fok = MyE.Beolvas($"G{i}").Trim();
-                    int Karb_sor1 = 1;
-                    if (Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_fok) != null)
-                        Karb_sor1 = Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_fok).Sorszám;
-
-                    Karb_fok = MyE.Beolvas($"H{i}").Trim();
-                    int Karb_sor2 = 1;
-                    if (Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_fok) != null)
-                        Karb_sor2 = Adatok_ciklus.FirstOrDefault(x => x.Fokozat == Karb_fok).Sorszám;
-
-
-                    Adat_Technológia_Új Adat = new Adat_Technológia_Új(
-                        int.Parse(MyE.Beolvas($"A{i}")),
-                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"B{i}").Trim(), 0, 10),
-                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"C{i}").Trim(), 0, 10),
-                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"D{i}").Trim(), 0, 250),
-                        MyE.Beolvas($"E{i}").Trim(),
-                        MyE.Beolvas($"F{i}").Trim(),
-                        Karb_sor1,
-                        Karb_sor2,
-                        MyE.BeolvasDátum($"I{i}"),
-                        MyE.BeolvasDátum($"J{i}"),
-                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"K{i}").Trim(), 0, 50),
-                        MyF.Szöveg_Tisztítás(MyE.Beolvas($"L{i}").Trim(), 0, 50),
-                        MyE.Beolvas($"M{i}").Trim(),
-                        Kenés
-                        );
-                    BeAdatok.Add(Adat);
-                    Holtart.Lép();
-
-                }
-                KézAdat.Rögzítés(Járműtípus.Text.Trim(), BeAdatok);
-                Holtart.Ki();
-                MyE.ExcelBezárás();
-                System.IO.File.Delete(fájlexc);
-                MessageBox.Show("Az adatok betöltése elkészült", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                SAP_Adatokbeolvasása.Technológia_beolvasó(fájlexc, Adatok_ciklus, Járműtípus.Text.Trim());
 
             }
             catch (HibásBevittAdat ex)
