@@ -59,6 +59,7 @@ namespace Villamos
                 else
                 {
                     TelephelyekFeltöltéseÚj();
+                    Cmbtelephely.Text = "Főmérnökség";
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 }
 

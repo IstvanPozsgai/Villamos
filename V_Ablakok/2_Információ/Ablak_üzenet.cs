@@ -76,7 +76,7 @@ namespace Villamos
 
                 Dátumig.MaxDate = DateTime.Today;
                 Dátumtól.MaxDate = DateTime.Today;
-                Többrögzít.Visible = false;
+                Többrögzít.Enabled = false;
 
                 Radioolvastan.Checked = true;
                 Táblalistázás();
@@ -381,7 +381,7 @@ namespace Villamos
                     BtnOlvasva.Visible = false;
 
                 btnválaszol.Visible = true;
-                Többrögzít.Visible = false;
+                Többrögzít.Enabled = false;
 
             }
             catch (HibásBevittAdat ex)
@@ -547,7 +547,7 @@ namespace Villamos
         private void Btnújüzenet_Click(object sender, EventArgs e)
         {
             Txtírásimező.Text = "";
-            Többrögzít.Visible = true;
+            Többrögzít.Enabled = true;
             txtválasz.Text = "0";
         }
 
@@ -649,35 +649,35 @@ namespace Villamos
             {
                 int melyikelem;
 
-                BtnOlvasva.Enabled = false;
-                Többrögzít.Enabled = false;
-                Cmbtelephely.Enabled = false;
-                Többhelyreír.Enabled = false;
+                BtnOlvasva.Visible = false;
+                Többrögzít.Visible = false;
+                Cmbtelephely.Visible = false;
+                Többhelyreír.Visible = false;
                 if (Program.PostásTelephely.Trim() == "Főmérnökség" || Program.Postás_Vezér)
                 {
-                    Többhelyreír.Visible = true;
+                    Többhelyreír.Enabled = true;
                 }
                 else
                 {
-                    Többhelyreír.Visible = false;
+                    Többhelyreír.Enabled = false;
                 }
 
                 melyikelem = 200;
                 // módosítás 1
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
-                    BtnOlvasva.Enabled = true;
-                    Többrögzít.Enabled = true;
+                    BtnOlvasva.Visible = true;
+                    Többrögzít.Visible = true;
                 }
                 // módosítás 2 főmérnökségi belépés és mindenhova tud írni
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
-                    Többhelyreír.Enabled = true;
+                    Többhelyreír.Visible = true;
                 }
                 // módosítás 3 szakszolgálati belépés és sajátjaiba tud írni
                 if (MyF.Vanjoga(melyikelem, 3))
                 {
-                    Többhelyreír.Enabled = true;
+                    Többhelyreír.Visible = true;
                 }
             }
             catch (HibásBevittAdat ex)

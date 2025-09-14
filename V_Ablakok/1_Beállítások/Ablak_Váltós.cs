@@ -77,8 +77,17 @@ namespace Villamos
 
         private void Ablak_Váltós_Load(object sender, EventArgs e)
         {
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+
+            //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+            //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, "Főmérnökség");
+            }
             Fülek.SelectedIndex = 0;
             Fülekkitöltése();
             Munkarend8és12kiirás();

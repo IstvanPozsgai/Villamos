@@ -37,13 +37,20 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                GombLathatosagKezelo.Beallit(this);
-                Jogosultságkiosztás();
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, "Főmérnökség");
+                }
                 Típus_feltöltés();
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
                 DátumBef.Value = DateTime.Today;
                 DátumKezd.Value = DateTime.Today;
-
             }
             catch (HibásBevittAdat ex)
             {
