@@ -8,6 +8,7 @@ using Villamos.V_Adatszerkezet;
 using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 {
@@ -16,6 +17,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         readonly Kezelő_AnyagTörzs KézAnyag = new Kezelő_AnyagTörzs();
         readonly Kezelő_Rezsi_Könyvelés KézRezsi = new Kezelő_Rezsi_Könyvelés();
         readonly Kezelő_Raktár KézRaktár = new Kezelő_Raktár();
+        readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgálattelepei = new Kezelő_Kiegészítő_Szolgálattelepei();
 
 
         List<Adat_Anyagok> Adatok = new List<Adat_Anyagok>();
@@ -25,6 +27,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         readonly DataTable AdatTábla = new DataTable();
         readonly DataTable AdatTáblaFelső = new DataTable();
+
+        string Raktárhely = "";
         public Ablak_Vételezés()
         {
             InitializeComponent();
@@ -35,11 +39,22 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void Start()
         {
-            TáblaÍrás();
-            CmbTelephely.Text = "Angyalföld";
-            //  List<Adat_Rezsi_Lista> AdatokKész = KézRezsi.Lista_Adatok(CmbTelephely.Text.Trim());
-            AdatokKész = KézRezsi.Lista_Adatok("Angyalföld");
+            //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+            //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Telephelyekfeltöltése();
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                TelephelyekFeltöltéseÚj();
+                GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+            }
+            AdatokKész = KézRezsi.Lista_Adatok(CmbTelephely.Text.Trim());
             AdatokRaktár = KézRaktár.Lista_Adatok();
+            Raktárhely = KézSzolgálattelepei.Lista_Adatok().Where(a => a.Telephelynév == CmbTelephely.Text.Trim()).Select(a => a.Raktár).FirstOrDefault() ?? "";
+            TáblaÍrás();
         }
 
         private void Ablak_Vételezés_Load(object sender, EventArgs e)
@@ -70,9 +85,81 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             }
         }
 
+        private void Telephelyekfeltöltése()
+        {
+            try
+            {
+                CmbTelephely.Items.Clear();
+                foreach (string Elem in Listák.TelephelyLista_Jármű())
+                    CmbTelephely.Items.Add(Elem);
+                if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
+                { CmbTelephely.Text = CmbTelephely.Items[0].ToString().Trim(); }
+                else
+                { CmbTelephely.Text = Program.PostásTelephely; }
 
+                CmbTelephely.Enabled = Program.Postás_Vezér;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                CmbTelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    CmbTelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                CmbTelephely.Text = Program.PostásTelephely;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Jogosultságkiosztás()
+        {
+            int melyikelem;
+            BtnSAP.Visible = false;
+            AnyagMódosítás.Visible = false;
+
+            // ide kell az összes gombot tenni amit szabályozni akarunk false
+
+
+            melyikelem = 50;
+            // módosítás 1 
+            if (MyF.Vanjoga(melyikelem, 1))
+            {
+                BtnSAP.Visible = true;
+            }
+            // módosítás 2 
+            if (MyF.Vanjoga(melyikelem, 2))
+            {
+                AnyagMódosítás.Visible = true;
+            }
+            // módosítás 3
+            if (MyF.Vanjoga(melyikelem, 3))
+            {
+
+            }
+        }
 
         #endregion
+
         /// <summary>
         /// Betöltjük a raktárkészletet és módosítjuk a cikkszámokat és árakat SAP szerint
         /// </summary>
@@ -179,6 +266,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         Adat_Raktár EgyRaktár = (from a in AdatokRaktár
                                                  where a.Cikkszám.Trim() == rekord.Cikkszám.Trim()
                                                  && a.Sarzs.Trim() == rekord.Sarzs.Trim()
+                                                 && a.Raktárhely.Trim() == Raktárhely.Trim()
                                                  select a).FirstOrDefault();
                         if (EgyRaktár != null) RaktárK = EgyRaktár.Mennyiség;
 
@@ -227,9 +315,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 AdatTábla.Columns.Add("Megnevezés");
                 AdatTábla.Columns.Add("Kereső fogalom");
                 AdatTábla.Columns.Add("Sarzs");
-                AdatTábla.Columns.Add("Ár");
-                AdatTábla.Columns.Add("Raktárkészlet");
-                AdatTábla.Columns.Add("Rezsikészlet");
+                AdatTábla.Columns.Add("Ár", typeof(double));
+                AdatTábla.Columns.Add("Raktárkészlet", typeof(double));
+                AdatTábla.Columns.Add("Rezsikészlet", typeof(double));
             }
             catch (HibásBevittAdat ex)
             {
@@ -280,9 +368,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 AdatTáblaFelső.Columns.Add("Megnevezés");
                 AdatTáblaFelső.Columns.Add("Kereső fogalom");
                 AdatTáblaFelső.Columns.Add("Sarzs");
-                AdatTáblaFelső.Columns.Add("Ár");
-                AdatTáblaFelső.Columns.Add("Mennyiség");
-                AdatTáblaFelső.Columns.Add("Összesen");
+                AdatTáblaFelső.Columns.Add("Ár", typeof(double));
+                AdatTáblaFelső.Columns.Add("Mennyiség", typeof(double));
+                AdatTáblaFelső.Columns.Add("Összesen", typeof(double));
             }
             catch (HibásBevittAdat ex)
             {

@@ -40,10 +40,10 @@
             this.Frissíti_táblalistát = new System.Windows.Forms.Button();
             this.MásikTáblázatba = new System.Windows.Forms.Button();
             this.Másol = new System.Windows.Forms.Button();
+            this.Excel_gomb = new System.Windows.Forms.Button();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.TáblaFelső = new Zuby.ADGV.AdvancedDataGridView();
             this.Kereső = new System.Windows.Forms.TextBox();
-            this.Excel_gomb = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -151,6 +151,19 @@
             this.Másol.UseVisualStyleBackColor = true;
             this.Másol.Click += new System.EventHandler(this.Másol_Click);
             // 
+            // Excel_gomb
+            // 
+            this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Excel_gomb.Location = new System.Drawing.Point(338, 2);
+            this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Excel_gomb.Name = "Excel_gomb";
+            this.Excel_gomb.Size = new System.Drawing.Size(43, 45);
+            this.Excel_gomb.TabIndex = 197;
+            this.toolTip1.SetToolTip(this.Excel_gomb, "Excel kimenetet készít a táblázat adatai alapján");
+            this.Excel_gomb.UseVisualStyleBackColor = true;
+            this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
+            // 
             // Tábla
             // 
             this.Tábla.AllowUserToAddRows = false;
@@ -198,19 +211,6 @@
             this.Kereső.TabIndex = 193;
             this.Kereső.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Kereső_KeyDown);
             // 
-            // Excel_gomb
-            // 
-            this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_gomb.Location = new System.Drawing.Point(338, 2);
-            this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Excel_gomb.Name = "Excel_gomb";
-            this.Excel_gomb.Size = new System.Drawing.Size(43, 45);
-            this.Excel_gomb.TabIndex = 197;
-            this.toolTip1.SetToolTip(this.Excel_gomb, "Excel kimenetet készít a táblázat adatai alapján");
-            this.Excel_gomb.UseVisualStyleBackColor = true;
-            this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -244,6 +244,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Coral;
             this.ClientSize = new System.Drawing.Size(913, 584);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Kereső);
@@ -254,7 +255,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Vételezés";
-            this.Text = "Ablak_Vételezés";
+            this.Text = "Vételezés segéd";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Vételezés_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_Vételezés_Load);

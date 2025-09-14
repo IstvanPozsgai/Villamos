@@ -105,6 +105,10 @@ namespace Villamos
                 else
                     BeosztásToolStripMenuItem.Enabled = true;
 
+                if (panels2.Text.Substring(49, 1) == "0")
+                    VételezésMenü.Enabled = false;
+                else
+                    VételezésMenü.Enabled = true;
 
                 if (panels2.Text.Substring(59, 1) == "0")
                     ListákJelenlétiÍvekToolStripMenuItem.Enabled = false;

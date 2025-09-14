@@ -654,7 +654,8 @@ namespace Villamos
                 // 47
                 // 48
                 // 49
-                // 50
+                menünév[50] = "Vételezés";
+                menüleírás[50] = " 1- SAP feltöltés 2- Anyagok karbantartása, 3- ";
                 // 51
                 // 52
                 // 53
