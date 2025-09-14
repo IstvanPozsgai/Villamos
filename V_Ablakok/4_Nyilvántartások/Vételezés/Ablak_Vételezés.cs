@@ -420,5 +420,15 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             string result = string.Join(Environment.NewLine, lines);
             Clipboard.SetText(result);
         }
+
+        private void Excel_gomb_Click(object sender, EventArgs e)
+        {
+            if (TáblaFelső.Rows.Count <= 0) return;
+            Excel_Mentés.Mentés("MyDocuments",
+                                "Listázott tartalom mentése Excel fájlba",
+                                $"Vételezés-{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
+                                "Excel |*.xlsx",
+                                TáblaFelső);
+        }
     }
 }
