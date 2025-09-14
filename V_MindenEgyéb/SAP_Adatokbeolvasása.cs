@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.V_Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
@@ -791,6 +792,7 @@ namespace Villamos.V_MindenEgyéb
 
                 // Első adattól végig pörgetjük a beolvasást addig amíg nem lesz üres
                 List<Adat_Anyagok> AdatokGy = new List<Adat_Anyagok>();
+                List<Adat_Raktár> AdatokGyR = new List<Adat_Raktár>();
                 int sor = 0;
                 foreach (DataRow Sor in Tábla.Rows)
                 {
@@ -812,15 +814,23 @@ namespace Villamos.V_MindenEgyéb
                                Sarzs,
                                Árdb);
                     AdatokGy.Add(ADAT);
-                    // JAVÍTANDÓ:
-                    //Módosítjuk a raktárkészletet
 
+                    //Módosítjuk a raktárkészletet
+                    Adat_Raktár ADATR = new Adat_Raktár(
+                                Cikkszám,
+                                Sarzs,
+                                Raktár,
+                                Mennyi);
+                    AdatokGyR.Add(ADATR);
                     sor++;
                 }
 
                 Kezelő_AnyagTörzs Kéz = new Kezelő_AnyagTörzs();
-
                 if (AdatokGy.Count > 0) Kéz.Osztályoz(AdatokGy);
+
+                Kezelő_Raktár KézRaktár = new Kezelő_Raktár();
+                if (AdatokGyR.Count > 0) KézRaktár.Rögzítés(AdatokGyR);
+
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexcel);
                 MessageBox.Show($"Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);

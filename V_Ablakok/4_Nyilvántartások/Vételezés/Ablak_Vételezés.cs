@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
@@ -14,10 +15,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
     {
         readonly Kezelő_AnyagTörzs KézAnyag = new Kezelő_AnyagTörzs();
         readonly Kezelő_Rezsi_Könyvelés KézRezsi = new Kezelő_Rezsi_Könyvelés();
+        readonly Kezelő_Raktár KézRaktár = new Kezelő_Raktár();
 
 
         List<Adat_Anyagok> Adatok = new List<Adat_Anyagok>();
         List<Adat_Rezsi_Lista> AdatokKész = new List<Adat_Rezsi_Lista>();
+        List<Adat_Raktár> AdatokRaktár = new List<Adat_Raktár>();
         string[] Keresőszavak;
 
         readonly DataTable AdatTábla = new DataTable();
@@ -36,6 +39,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             CmbTelephely.Text = "Angyalföld";
             //  List<Adat_Rezsi_Lista> AdatokKész = KézRezsi.Lista_Adatok(CmbTelephely.Text.Trim());
             AdatokKész = KézRezsi.Lista_Adatok("Angyalföld");
+            AdatokRaktár = KézRaktár.Lista_Adatok();
         }
 
         private void Ablak_Vételezés_Load(object sender, EventArgs e)
@@ -171,15 +175,20 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         Soradat["Kereső fogalom"] = rekord.KeresőFogalom;
                         Soradat["Sarzs"] = rekord.Sarzs;
                         Soradat["Ár"] = rekord.Ár;
-                        int RaktárK = 0;
+                        double RaktárK = 0;
+                        Adat_Raktár EgyRaktár = (from a in AdatokRaktár
+                                                 where a.Cikkszám.Trim() == rekord.Cikkszám.Trim()
+                                                 && a.Sarzs.Trim() == rekord.Sarzs.Trim()
+                                                 select a).FirstOrDefault();
+                        if (EgyRaktár != null) RaktárK = EgyRaktár.Mennyiség;
 
-                        Soradat["Raktárkészlet"] = 0;
+                        Soradat["Raktárkészlet"] = RaktárK;
 
-                        int RezsiK = 0;
+                        double RezsiK = 0;
                         Adat_Rezsi_Lista EgyRezsi = (from a in AdatokKész
                                                      where a.Azonosító.Trim() == rekord.Cikkszám.Trim()
                                                      select a).FirstOrDefault();
-                        if (EgyRezsi != null) RezsiK = (int)EgyRezsi.Mennyiség;
+                        if (EgyRezsi != null) RezsiK = EgyRezsi.Mennyiség;
                         Soradat["Rezsikészlet"] = RezsiK;
                         AdatTábla.Rows.Add(Soradat);
                     }

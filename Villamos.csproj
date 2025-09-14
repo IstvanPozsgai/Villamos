@@ -333,6 +333,7 @@
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
     <Compile Include="V_Kezelők\Kezelő_AnyagTörzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_MindenMásol.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />
@@ -835,6 +836,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szabadságok.cs" />
     <Compile Include="V_Kezelők\Kezelő_MEO_KerékMérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Raktár.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
