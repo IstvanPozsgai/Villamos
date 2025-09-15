@@ -1323,6 +1323,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PlusMinus {
+            get {
+                object obj = ResourceManager.GetObject("PlusMinus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap process_accept {
             get {
                 object obj = ResourceManager.GetObject("process_accept", resourceCulture);

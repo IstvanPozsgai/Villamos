@@ -235,12 +235,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         Soradat["Rezsi készlet"] = RezsiK;
 
                         double RaktárKE = 0;
-                        Adat_Raktár EgyRaktárE = (from a in AdatokRaktár
-                                                  where a.Cikkszám.Trim() == rekord.Cikkszám.Trim()
-                                                  && a.Sarzs.Trim() == rekord.Sarzs.Trim()
-                                                  && a.Raktárhely.Trim() != Raktárhely.Trim()
-                                                  select a).FirstOrDefault();
-                        if (EgyRaktárE != null) RaktárKE = EgyRaktárE.Mennyiség;
+                        RaktárKE = (from a in AdatokRaktár
+                                    where a.Cikkszám.Trim() == rekord.Cikkszám.Trim()
+                                    && a.Sarzs.Trim() == rekord.Sarzs.Trim()
+                                    && a.Raktárhely.Trim() != Raktárhely.Trim()
+                                    select a).ToList().Sum(a => a.Mennyiség);
+
                         Soradat["Egyéb Raktár"] = RaktárKE;
 
                         AdatTábla.Rows.Add(Soradat);
@@ -320,11 +320,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
 
         #region FelsőTáblázat
-        private void Frissíti_táblalistát_Click(object sender, EventArgs e)
-        {
-  
-        }
-
         private void FejlécFelső()
         {
             try
@@ -355,10 +350,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         {
             TáblaFelső.Columns["Cikkszám"].Width = 130;
             TáblaFelső.Columns["Megnevezés"].Width = 400;
-                      TáblaFelső.Columns["Sarzs"].Width = 80;
+            TáblaFelső.Columns["Sarzs"].Width = 80;
             TáblaFelső.Columns["Ár"].Width = 80;
-            TáblaFelső.Columns["Mennyiség"].Width = 80;
-            TáblaFelső.Columns["Összesen"].Width = 80;
+            TáblaFelső.Columns["Mennyiség"].Width = 120;
+            TáblaFelső.Columns["Összesen"].Width = 120;
 
         }
 
@@ -556,6 +551,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             AdatTáblaFelső.Clear(); // Csak a sorokat törli, az oszlopokat nem
             TáblaFelső.DataSource = AdatTáblaFelső; // Biztosan frissül a nézet
             TáblaFelső.Refresh();
+            Összesen.Text = $"Összeg: <<< - >>>";
         }
 
         private void Excel_gomb_Click(object sender, EventArgs e)
@@ -567,12 +563,33 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                                 "Excel |*.xlsx",
                                 TáblaFelső);
         }
-        // JAVÍTANDÓ:
+
         private void SorTörlés_Click(object sender, EventArgs e)
         {
+            // Ellenőrizzük, hogy van-e kijelölt sor
+            if (TáblaFelső.SelectedRows.Count > 0)
+            {
+                // Végigmegyünk a kijelölt sorokon
+                foreach (DataGridViewRow dgvRow in TáblaFelső.SelectedRows)
+                {
+                    // Megkeressük a megfelelő DataRow-t
+                    int index = dgvRow.Index;
+                    if (index >= 0 && index < AdatTáblaFelső.Rows.Count)
+                    {
+                        AdatTáblaFelső.Rows[index].Delete(); // Megjelöli törlésre
+                    }
+                }
 
+                // Véglegesítjük a törlést
+                AdatTáblaFelső.AcceptChanges();
+
+                // Frissítjük a DataGridView-t
+                TáblaFelső.DataSource = AdatTáblaFelső;
+                TáblaFelső.Refresh();
+                Összesít();
+            }
         }
-        
+
         private void Előjeletvált_Click(object sender, EventArgs e)
         {
             try
@@ -609,7 +626,5 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         }
         #endregion
-
-  
     }
 }

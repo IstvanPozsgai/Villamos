@@ -30,54 +30,29 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Vételezés));
-            this.BtnSAP = new System.Windows.Forms.Button();
-            this.BtnSúgó = new System.Windows.Forms.Button();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.CmbTelephely = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
-            this.AnyagMódosítás = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.MásikTáblázatba = new System.Windows.Forms.Button();
-            this.Másol = new System.Windows.Forms.Button();
-            this.Excel_gomb = new System.Windows.Forms.Button();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.TáblaFelső = new Zuby.ADGV.AdvancedDataGridView();
             this.Kereső = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Összesen = new System.Windows.Forms.Label();
-            this.FelsőÜrítés = new System.Windows.Forms.Button();
-            this.SorTörlés = new System.Windows.Forms.Button();
             this.Előjeletvált = new System.Windows.Forms.Button();
+            this.SorTörlés = new System.Windows.Forms.Button();
+            this.FelsőÜrítés = new System.Windows.Forms.Button();
+            this.MásikTáblázatba = new System.Windows.Forms.Button();
+            this.Másol = new System.Windows.Forms.Button();
+            this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Excel_gomb = new System.Windows.Forms.Button();
+            this.AnyagMódosítás = new System.Windows.Forms.Button();
+            this.BtnSAP = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaFelső)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // BtnSAP
-            // 
-            this.BtnSAP.BackgroundImage = global::Villamos.Properties.Resources.SAP;
-            this.BtnSAP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSAP.Location = new System.Drawing.Point(303, 3);
-            this.BtnSAP.Name = "BtnSAP";
-            this.BtnSAP.Size = new System.Drawing.Size(44, 45);
-            this.BtnSAP.TabIndex = 187;
-            this.toolTip1.SetToolTip(this.BtnSAP, "Raktárkészlet frissítés");
-            this.BtnSAP.UseVisualStyleBackColor = true;
-            this.BtnSAP.Click += new System.EventHandler(this.BtnSAP_Click);
-            // 
-            // BtnSúgó
-            // 
-            this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(621, 3);
-            this.BtnSúgó.Name = "BtnSúgó";
-            this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
-            this.BtnSúgó.TabIndex = 188;
-            this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
-            this.BtnSúgó.UseVisualStyleBackColor = true;
-            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
             // Panel1
             // 
@@ -105,55 +80,6 @@
             this.label23.Size = new System.Drawing.Size(145, 20);
             this.label23.TabIndex = 17;
             this.label23.Text = "Telephelyi beállítás:";
-            // 
-            // AnyagMódosítás
-            // 
-            this.AnyagMódosítás.BackgroundImage = global::Villamos.Properties.Resources.Document_preferences;
-            this.AnyagMódosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.AnyagMódosítás.Location = new System.Drawing.Point(353, 3);
-            this.AnyagMódosítás.Name = "AnyagMódosítás";
-            this.AnyagMódosítás.Size = new System.Drawing.Size(44, 45);
-            this.AnyagMódosítás.TabIndex = 190;
-            this.toolTip1.SetToolTip(this.AnyagMódosítás, "Anyag adatok módosítása");
-            this.AnyagMódosítás.UseVisualStyleBackColor = true;
-            this.AnyagMódosítás.Click += new System.EventHandler(this.AnyagMódosítás_Click);
-            // 
-            // MásikTáblázatba
-            // 
-            this.MásikTáblázatba.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
-            this.MásikTáblázatba.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.MásikTáblázatba.Location = new System.Drawing.Point(3, 3);
-            this.MásikTáblázatba.Name = "MásikTáblázatba";
-            this.MásikTáblázatba.Size = new System.Drawing.Size(44, 45);
-            this.MásikTáblázatba.TabIndex = 195;
-            this.toolTip1.SetToolTip(this.MásikTáblázatba, "Alsó táblából a felső táblába\r\n átmásolja a tételt");
-            this.MásikTáblázatba.UseVisualStyleBackColor = true;
-            this.MásikTáblázatba.Click += new System.EventHandler(this.MásikTáblázatba_Click);
-            // 
-            // Másol
-            // 
-            this.Másol.BackgroundImage = global::Villamos.Properties.Resources.Document_Copy_01;
-            this.Másol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Másol.Location = new System.Drawing.Point(53, 3);
-            this.Másol.Name = "Másol";
-            this.Másol.Size = new System.Drawing.Size(44, 45);
-            this.Másol.TabIndex = 196;
-            this.toolTip1.SetToolTip(this.Másol, "Adatokat másolja a vágólapra");
-            this.Másol.UseVisualStyleBackColor = true;
-            this.Másol.Click += new System.EventHandler(this.Másol_Click);
-            // 
-            // Excel_gomb
-            // 
-            this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_gomb.Location = new System.Drawing.Point(453, 2);
-            this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Excel_gomb.Name = "Excel_gomb";
-            this.Excel_gomb.Size = new System.Drawing.Size(43, 45);
-            this.Excel_gomb.TabIndex = 197;
-            this.toolTip1.SetToolTip(this.Excel_gomb, "Excel kimenetet készít a Felső \r\ntáblázat adatai alapján");
-            this.Excel_gomb.UseVisualStyleBackColor = true;
-            this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
             // 
             // Tábla
             // 
@@ -218,7 +144,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 69F));
             this.tableLayoutPanel1.Controls.Add(this.Előjeletvált, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.SorTörlés, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.FelsőÜrítés, 2, 0);
@@ -239,23 +165,24 @@
             // 
             this.Összesen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Összesen.AutoSize = true;
+            this.Összesen.BackColor = System.Drawing.Color.LightSalmon;
             this.Összesen.Location = new System.Drawing.Point(823, 294);
             this.Összesen.Name = "Összesen";
-            this.Összesen.Size = new System.Drawing.Size(71, 20);
+            this.Összesen.Size = new System.Drawing.Size(120, 20);
             this.Összesen.TabIndex = 199;
-            this.Összesen.Text = "Összeg: ";
+            this.Összesen.Text = "Összeg: << - >>";
             // 
-            // FelsőÜrítés
+            // Előjeletvált
             // 
-            this.FelsőÜrítés.BackgroundImage = global::Villamos.Properties.Resources.New_32_piros;
-            this.FelsőÜrítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.FelsőÜrítés.Location = new System.Drawing.Point(103, 3);
-            this.FelsőÜrítés.Name = "FelsőÜrítés";
-            this.FelsőÜrítés.Size = new System.Drawing.Size(44, 45);
-            this.FelsőÜrítés.TabIndex = 198;
-            this.toolTip1.SetToolTip(this.FelsőÜrítés, "A feslő táblázat tartalmát kiüríti");
-            this.FelsőÜrítés.UseVisualStyleBackColor = true;
-            this.FelsőÜrítés.Click += new System.EventHandler(this.FelsőÜrítés_Click);
+            this.Előjeletvált.BackgroundImage = global::Villamos.Properties.Resources.PlusMinus;
+            this.Előjeletvált.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Előjeletvált.Location = new System.Drawing.Point(203, 3);
+            this.Előjeletvált.Name = "Előjeletvált";
+            this.Előjeletvált.Size = new System.Drawing.Size(44, 45);
+            this.Előjeletvált.TabIndex = 200;
+            this.toolTip1.SetToolTip(this.Előjeletvált, "A mennyiség adatokat megfordítja (+/-)");
+            this.Előjeletvált.UseVisualStyleBackColor = true;
+            this.Előjeletvált.Click += new System.EventHandler(this.Előjeletvált_Click);
             // 
             // SorTörlés
             // 
@@ -269,17 +196,91 @@
             this.SorTörlés.UseVisualStyleBackColor = true;
             this.SorTörlés.Click += new System.EventHandler(this.SorTörlés_Click);
             // 
-            // Előjeletvált
+            // FelsőÜrítés
             // 
-            this.Előjeletvált.BackgroundImage = global::Villamos.Properties.Resources.alá;
-            this.Előjeletvált.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Előjeletvált.Location = new System.Drawing.Point(203, 3);
-            this.Előjeletvált.Name = "Előjeletvált";
-            this.Előjeletvált.Size = new System.Drawing.Size(44, 45);
-            this.Előjeletvált.TabIndex = 200;
-            this.toolTip1.SetToolTip(this.Előjeletvált, "A mennyiség adatokat megfordítja (+/-)");
-            this.Előjeletvált.UseVisualStyleBackColor = true;
-            this.Előjeletvált.Click += new System.EventHandler(this.Előjeletvált_Click);
+            this.FelsőÜrítés.BackgroundImage = global::Villamos.Properties.Resources.New_32_piros;
+            this.FelsőÜrítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.FelsőÜrítés.Location = new System.Drawing.Point(103, 3);
+            this.FelsőÜrítés.Name = "FelsőÜrítés";
+            this.FelsőÜrítés.Size = new System.Drawing.Size(44, 45);
+            this.FelsőÜrítés.TabIndex = 198;
+            this.toolTip1.SetToolTip(this.FelsőÜrítés, "A feslő táblázat tartalmát kiüríti");
+            this.FelsőÜrítés.UseVisualStyleBackColor = true;
+            this.FelsőÜrítés.Click += new System.EventHandler(this.FelsőÜrítés_Click);
+            // 
+            // MásikTáblázatba
+            // 
+            this.MásikTáblázatba.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
+            this.MásikTáblázatba.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.MásikTáblázatba.Location = new System.Drawing.Point(3, 3);
+            this.MásikTáblázatba.Name = "MásikTáblázatba";
+            this.MásikTáblázatba.Size = new System.Drawing.Size(44, 45);
+            this.MásikTáblázatba.TabIndex = 195;
+            this.toolTip1.SetToolTip(this.MásikTáblázatba, "Alsó táblából a felső táblába\r\n átmásolja a tételt");
+            this.MásikTáblázatba.UseVisualStyleBackColor = true;
+            this.MásikTáblázatba.Click += new System.EventHandler(this.MásikTáblázatba_Click);
+            // 
+            // Másol
+            // 
+            this.Másol.BackgroundImage = global::Villamos.Properties.Resources.Document_Copy_01;
+            this.Másol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Másol.Location = new System.Drawing.Point(53, 3);
+            this.Másol.Name = "Másol";
+            this.Másol.Size = new System.Drawing.Size(44, 45);
+            this.Másol.TabIndex = 196;
+            this.toolTip1.SetToolTip(this.Másol, "Adatokat másolja a vágólapra");
+            this.Másol.UseVisualStyleBackColor = true;
+            this.Másol.Click += new System.EventHandler(this.Másol_Click);
+            // 
+            // BtnSúgó
+            // 
+            this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSúgó.Location = new System.Drawing.Point(621, 3);
+            this.BtnSúgó.Name = "BtnSúgó";
+            this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
+            this.BtnSúgó.TabIndex = 188;
+            this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
+            this.BtnSúgó.UseVisualStyleBackColor = true;
+            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
+            // 
+            // Excel_gomb
+            // 
+            this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Excel_gomb.Location = new System.Drawing.Point(453, 2);
+            this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Excel_gomb.Name = "Excel_gomb";
+            this.Excel_gomb.Size = new System.Drawing.Size(43, 45);
+            this.Excel_gomb.TabIndex = 197;
+            this.toolTip1.SetToolTip(this.Excel_gomb, "Excel kimenetet készít a Felső \r\ntáblázat adatai alapján");
+            this.Excel_gomb.UseVisualStyleBackColor = true;
+            this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
+            // 
+            // AnyagMódosítás
+            // 
+            this.AnyagMódosítás.BackgroundImage = global::Villamos.Properties.Resources.Document_preferences;
+            this.AnyagMódosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.AnyagMódosítás.Location = new System.Drawing.Point(353, 3);
+            this.AnyagMódosítás.Name = "AnyagMódosítás";
+            this.AnyagMódosítás.Size = new System.Drawing.Size(44, 45);
+            this.AnyagMódosítás.TabIndex = 190;
+            this.toolTip1.SetToolTip(this.AnyagMódosítás, "Anyag adatok módosítása");
+            this.AnyagMódosítás.UseVisualStyleBackColor = true;
+            this.AnyagMódosítás.Click += new System.EventHandler(this.AnyagMódosítás_Click);
+            // 
+            // BtnSAP
+            // 
+            this.BtnSAP.BackgroundImage = global::Villamos.Properties.Resources.SAP;
+            this.BtnSAP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSAP.Location = new System.Drawing.Point(303, 3);
+            this.BtnSAP.Name = "BtnSAP";
+            this.BtnSAP.Size = new System.Drawing.Size(44, 45);
+            this.BtnSAP.TabIndex = 187;
+            this.toolTip1.SetToolTip(this.BtnSAP, "Raktárkészlet frissítés");
+            this.BtnSAP.UseVisualStyleBackColor = true;
+            this.BtnSAP.Click += new System.EventHandler(this.BtnSAP_Click);
             // 
             // Ablak_Vételezés
             // 
