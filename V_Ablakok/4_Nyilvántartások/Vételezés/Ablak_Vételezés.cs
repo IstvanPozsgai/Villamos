@@ -36,7 +36,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         }
 
         #region Alap
-
         private void Start()
         {
             //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
@@ -51,6 +50,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 TelephelyekFeltöltéseÚj();
                 GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
             }
+            AdatokFrissítése();
+        }
+
+        private void AdatokFrissítése()
+        {
             AdatokKész = KézRezsi.Lista_Adatok(CmbTelephely.Text.Trim());
             AdatokRaktár = KézRaktár.Lista_Adatok();
             Raktárhely = KézSzolgálattelepei.Lista_Adatok().Where(a => a.Telephelynév == CmbTelephely.Text.Trim()).Select(a => a.Raktár).FirstOrDefault() ?? "";
@@ -160,50 +164,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         #endregion
 
-        /// <summary>
-        /// Betöltjük a raktárkészletet és módosítjuk a cikkszámokat és árakat SAP szerint
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnSAP_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string fájlexc = "";
-                // megpróbáljuk megnyitni az excel táblát.
-                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
-                {
-                    InitialDirectory = "MyDocuments",
-                    Title = "SAP-s Adatok betöltése",
-                    FileName = "",
-                    Filter = "Excel |*.xlsx"
-                };
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
-                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
-                {
-                    fájlexc = OpenFileDialog1.FileName.ToLower();
-                    string[] darabol = fájlexc.Split('.');
-                    if (darabol.Length < 2) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl formátuma!");
-                    if (!darabol[darabol.Length - 1].Contains("xls")) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl kiterjesztés formátuma!");
-                }
-                else
-                    return;
-
-                SAP_Adatokbeolvasása.Raktár_beolvasó(fájlexc);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-
 
         #region Anyagkarbantartás 
         Ablak_Anyag_Karbantartás Új_Ablak_Anyag_Karbantartás;
@@ -230,7 +190,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
 
         #region Kereső Tábla
-
         private void TáblaÍrás()
         {
             Adatok = KézAnyag.Lista_Adatok().OrderBy(a => a.Cikkszám).ToList();
@@ -363,8 +322,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         #region FelsőTáblázat
         private void Frissíti_táblalistát_Click(object sender, EventArgs e)
         {
-            AdatTáblaFelső.Clear();
-            TáblaFelső.Refresh();
+  
         }
 
         private void FejlécFelső()
@@ -373,11 +331,13 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             {
                 AdatTáblaFelső.Columns.Clear();
                 AdatTáblaFelső.Columns.Add("Cikkszám");
-                AdatTáblaFelső.Columns.Add("Megnevezés");
-                AdatTáblaFelső.Columns.Add("Kereső fogalom");
-                AdatTáblaFelső.Columns.Add("Sarzs");
-                AdatTáblaFelső.Columns.Add("Ár", typeof(double));
                 AdatTáblaFelső.Columns.Add("Mennyiség", typeof(double));
+                AdatTáblaFelső.Columns.Add("Sarzs");
+                AdatTáblaFelső.Columns.Add("Raktár");
+                AdatTáblaFelső.Columns.Add("Művelet");
+                AdatTáblaFelső.Columns.Add("Fogadó");
+                AdatTáblaFelső.Columns.Add("Megnevezés");
+                AdatTáblaFelső.Columns.Add("Ár", typeof(double));
                 AdatTáblaFelső.Columns.Add("Összesen", typeof(double));
             }
             catch (HibásBevittAdat ex)
@@ -395,52 +355,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         {
             TáblaFelső.Columns["Cikkszám"].Width = 130;
             TáblaFelső.Columns["Megnevezés"].Width = 400;
-            TáblaFelső.Columns["Kereső fogalom"].Width = 400;
-            TáblaFelső.Columns["Sarzs"].Width = 80;
+                      TáblaFelső.Columns["Sarzs"].Width = 80;
             TáblaFelső.Columns["Ár"].Width = 80;
             TáblaFelső.Columns["Mennyiség"].Width = 80;
             TáblaFelső.Columns["Összesen"].Width = 80;
-
-        }
-        #endregion
-
-        private void MásikTáblázatba_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Tábla.SelectedRows.Count < 1) return;
-                // Ha még nincs beállítva a felső tábla szerkezete, hozzuk létre
-                if (AdatTáblaFelső.Columns.Count == 0) FejlécFelső();
-
-                foreach (DataGridViewRow row in Tábla.SelectedRows)
-                {
-                    if (!row.IsNewRow)
-                    {
-                        DataRow Soradat = AdatTáblaFelső.NewRow();
-                        Soradat["Cikkszám"] = row.Cells["Cikkszám"].Value;
-                        Soradat["Megnevezés"] = row.Cells["Megnevezés"].Value;
-                        Soradat["Kereső fogalom"] = row.Cells["Kereső fogalom"].Value;
-                        Soradat["Sarzs"] = row.Cells["Sarzs"].Value;
-                        Soradat["Ár"] = row.Cells["Ár"].Value;
-                        Soradat["Mennyiség"] = 0;
-                        Soradat["Összesen"] = 0;
-                        AdatTáblaFelső.Rows.Add(Soradat);
-                    }
-                }
-                // Frissítjük a felső táblázatot
-                TáblaFelső.DataSource = AdatTáblaFelső;
-                TáblaFelső.Refresh();
-                OszlopSzélességFelső();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
 
         }
 
@@ -465,6 +383,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         }
                     }
                 }
+                Összesít();
             }
             catch (HibásBevittAdat ex)
             {
@@ -475,6 +394,121 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Összesít()
+        {
+            try
+            {
+                double összesen = 0;
+                foreach (DataGridViewRow row in TáblaFelső.Rows)
+                {
+                    if (row.Cells["Összesen"].Value != null && double.TryParse(row.Cells["Összesen"].Value.ToString(), out double cellaErtek))
+                    {
+                        összesen += cellaErtek;
+                    }
+                }
+                Összesen.Text = $"Összeg: {összesen} Ft";
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+
+        #region Gombok
+        /// <summary>
+        /// Betöltjük a raktárkészletet és módosítjuk a cikkszámokat és árakat SAP szerint
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnSAP_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string fájlexc = "";
+                // megpróbáljuk megnyitni az excel táblát.
+                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+                    Title = "SAP-s Adatok betöltése",
+                    FileName = "",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
+                {
+                    fájlexc = OpenFileDialog1.FileName.ToLower();
+                    string[] darabol = fájlexc.Split('.');
+                    if (darabol.Length < 2) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl formátuma!");
+                    if (!darabol[darabol.Length - 1].Contains("xls")) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt fájl kiterjesztés formátuma!");
+                }
+                else
+                    return;
+
+                SAP_Adatokbeolvasása.Raktár_beolvasó(fájlexc);
+                AdatokFrissítése();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void MásikTáblázatba_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Tábla.SelectedRows.Count < 1) return;
+                // Ha még nincs beállítva a felső tábla szerkezete, hozzuk létre
+                if (AdatTáblaFelső.Columns.Count == 0) FejlécFelső();
+
+                foreach (DataGridViewRow row in Tábla.SelectedRows)
+                {
+                    if (!row.IsNewRow)
+                    {
+                        DataRow Soradat = AdatTáblaFelső.NewRow();
+                        Soradat["Cikkszám"] = row.Cells["Cikkszám"].Value;
+                        Soradat["Megnevezés"] = row.Cells["Megnevezés"].Value;
+                        Soradat["Sarzs"] = row.Cells["Sarzs"].Value;
+                        Soradat["Ár"] = row.Cells["Ár"].Value;
+                        Soradat["Mennyiség"] = 0;
+                        Soradat["Összesen"] = 0;
+                        Soradat["Raktár"] = Raktárhely;
+                        Soradat["Művelet"] = "0010";
+                        Soradat["Összesen"] = 0;
+                        Soradat["Fogadó"] = "";
+                        AdatTáblaFelső.Rows.Add(Soradat);
+                    }
+                }
+                // Frissítjük a felső táblázatot
+                TáblaFelső.DataSource = AdatTáblaFelső;
+                TáblaFelső.Refresh();
+                OszlopSzélességFelső();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void Másol_Click(object sender, EventArgs e)
@@ -488,8 +522,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 // Csak a nem új sorokat jelöljük ki
                 if (!row.IsNewRow)
                 {
-                    // Az első 5 oszlopot jelöljük ki
-                    for (int i = 0; i < 5 && i < TáblaFelső.ColumnCount; i++)
+                    // Az első 6 oszlopot jelöljük ki
+                    for (int i = 0; i < 6 && i < TáblaFelső.ColumnCount; i++)
                     {
                         row.Cells[i].Selected = true;
                     }
@@ -504,7 +538,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 if (!row.IsNewRow)
                 {
                     List<string> cells = new List<string>();
-                    for (int i = 0; i < 5 && i < TáblaFelső.ColumnCount; i++)
+                    for (int i = 0; i < 6 && i < TáblaFelső.ColumnCount; i++)
                     {
                         cells.Add(row.Cells[i].Value?.ToString() ?? "");
                     }
@@ -517,6 +551,13 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             Clipboard.SetText(result);
         }
 
+        private void FelsőÜrítés_Click(object sender, EventArgs e)
+        {
+            AdatTáblaFelső.Clear(); // Csak a sorokat törli, az oszlopokat nem
+            TáblaFelső.DataSource = AdatTáblaFelső; // Biztosan frissül a nézet
+            TáblaFelső.Refresh();
+        }
+
         private void Excel_gomb_Click(object sender, EventArgs e)
         {
             if (TáblaFelső.Rows.Count <= 0) return;
@@ -526,5 +567,49 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                                 "Excel |*.xlsx",
                                 TáblaFelső);
         }
+        // JAVÍTANDÓ:
+        private void SorTörlés_Click(object sender, EventArgs e)
+        {
+
+        }
+        
+        private void Előjeletvált_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (DataGridViewRow row in TáblaFelső.Rows)
+                {
+                    if (!row.IsNewRow && row.Cells["Mennyiség"].Value != null)
+                    {
+                        if (double.TryParse(row.Cells["Mennyiség"].Value.ToString(), out double mennyiseg))
+                        {
+                            double ujMennyiseg = mennyiseg * -1;
+                            row.Cells["Mennyiség"].Value = ujMennyiseg;
+
+                            // Ha van "Ár" oszlop, frissítsük az "Összesen" értéket is
+                            if (row.Cells["Ár"].Value != null && double.TryParse(row.Cells["Ár"].Value.ToString(), out double ar))
+                            {
+                                row.Cells["Összesen"].Value = ujMennyiseg * ar;
+                            }
+                        }
+                    }
+                }
+                TáblaFelső.Refresh();
+                Összesít();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+        #endregion
+
+  
     }
 }
