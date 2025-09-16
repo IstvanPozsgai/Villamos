@@ -2341,7 +2341,7 @@ namespace Villamos.Villamos_Nyomtatványok
                         // COM eldobasa
                         Marshal.ReleaseComObject(excelApp);
                         excelApp = null;
-                        MessageBox.Show("A futó Excel fájlok sikeresen belettek zárva.\nPróbálja meg a generálást újból!", "Figyelem", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                        MessageBox.Show("A futó Excel fájlok sikeresen belettek zárva.\nPróbálja meg a generálást újból!", "Figyelem", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
