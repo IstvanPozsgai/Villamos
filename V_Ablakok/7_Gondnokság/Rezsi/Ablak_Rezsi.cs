@@ -970,7 +970,7 @@ namespace Villamos
 
                 Új_Ablak_Fénykép_Betöltés?.Close();
 
-                Új_Ablak_Fénykép_Betöltés = new Ablak_Fénykép_Betöltés(hely, Fényazonosító.Text.Trim(), SorszámMax(hely, Fényazonosító.Text.Trim()) + 1);
+                Új_Ablak_Fénykép_Betöltés = new Ablak_Fénykép_Betöltés(hely, Fényazonosító.Text.Trim());
                 Új_Ablak_Fénykép_Betöltés.FormClosed += Új_Ablak_Fénykép_Betöltés_Closed;
                 Új_Ablak_Fénykép_Betöltés.Top = 50;
                 Új_Ablak_Fénykép_Betöltés.Left = 50;
@@ -990,21 +990,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private int SorszámMax(string hely, string azonosító)
-        {
-            int sorszám = 0;
-            //Megnézzük, hogy melyik az utolsó fénykép az adott azonosítóból
-            DirectoryInfo dir = new DirectoryInfo(hely);
-            foreach (FileInfo Elem in dir.GetFiles($"*{azonosító.Trim()}*.jpg"))
-            {
-                string[] darabol = Elem.Name.Split('_');
-                string[] ideig = darabol[1].Split('.');
-                if (int.TryParse(ideig[0], out int sor))
-                    if (sorszám < sor) sorszám = sor;
-            }
-            return sorszám;
         }
 
         private void ÚjraListáz()

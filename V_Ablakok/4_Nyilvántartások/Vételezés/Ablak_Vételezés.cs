@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -8,6 +9,7 @@ using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
 using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
+using Villamos.Villamos_Ablakok.Közös;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
@@ -72,6 +74,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         private void Ablak_Vételezés_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Anyag_Karbantartás?.Close();
+            Új_Ablak_Fénykép_Betöltés?.Close();
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)
@@ -323,6 +326,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 TáblaÍrás();
             }
         }
+
+        private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            CikkSzám = Tábla.Rows[e.RowIndex].Cells["Cikkszám"].Value.ToString();
+        }
         #endregion
 
 
@@ -421,6 +430,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void TáblaFelső_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            CikkSzám = TáblaFelső.Rows[e.RowIndex].Cells["Cikkszám"].Value.ToString();
         }
         #endregion
 
@@ -639,5 +654,49 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         }
         #endregion
+
+
+        #region Fényképek megjelenítése és rögzítése
+        Ablak_Fénykép_Betöltés Új_Ablak_Fénykép_Betöltés;
+        private void Képnéző_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (CikkSzám.Trim() == "") return;
+                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek".KönyvSzerk();
+
+                DirectoryInfo dir = new DirectoryInfo(hely);
+                System.IO.FileInfo[] aryFi = dir.GetFiles($"*{CikkSzám.Trim()}*.jpg");
+                if (aryFi.Length == 0)
+                    if (MessageBox.Show("Nincs kép a kiválasztott cikkszámhoz.\nFolytatjuk a képek feltöltésével?", "Információ", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No) return;
+
+
+
+                Új_Ablak_Fénykép_Betöltés?.Close();
+                Új_Ablak_Fénykép_Betöltés = new Ablak_Fénykép_Betöltés(hely, CikkSzám);
+                Új_Ablak_Fénykép_Betöltés.FormClosed += Új_Ablak_Fénykép_Betöltés_Closed;
+                Új_Ablak_Fénykép_Betöltés.Top = 50;
+                Új_Ablak_Fénykép_Betöltés.Left = 50;
+                Új_Ablak_Fénykép_Betöltés.Show();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Új_Ablak_Fénykép_Betöltés_Closed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Fénykép_Betöltés = null;
+        }
+
+        #endregion
+
+
     }
 }

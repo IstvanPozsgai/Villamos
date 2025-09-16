@@ -9,18 +9,50 @@ namespace Villamos.Villamos_Ablakok.Közös
     public partial class Ablak_Fénykép_Betöltés : Form
     {
         string Könyvtár = "";
-        public string Hova { get; private set; }
+        public string Hely { get; private set; }
         public string Név { get; private set; }
-        public int Sorszám { get; private set; }
+
+        int Sorszám = 0;
 
         public event Event_Kidobó Változás;
 
-        public Ablak_Fénykép_Betöltés(string hova, string név, int sorszám)
+        /// <summary>
+        /// Fényképek betöltése és új képek feltöltése
+        /// </summary>
+        /// <param name="hely">Az a hely ahova akarjuk menteni a képeket</param>
+        /// <param name="név">Az az azonosító melyhez kötni szeretnénk a képeket</param>
+
+        public Ablak_Fénykép_Betöltés(string hely, string név)
         {
-            Hova = hova;
+            Hely = hely;
             Név = név;
-            Sorszám = sorszám;
+
             InitializeComponent();
+            Sorszám = SorszámMax() + 1;
+            this.Text = $"A {név} cikkszámú anyag fényképei";
+            FényképekFeltöltése();
+        }
+
+        private void FényképekFeltöltése()
+        {
+            try
+            {
+                //Választott könyvtár beállítása
+                Könyvtár = Hely;
+                DirectoryInfo dir = new DirectoryInfo(Hely);
+                System.IO.FileInfo[] aryFi = dir.GetFiles($"*{Név.Trim()}*.jpg");
+                foreach (FileInfo fi in aryFi)
+                    Fényképek.Items.Add(fi.Name);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public Ablak_Fénykép_Betöltés()
@@ -38,7 +70,6 @@ namespace Villamos.Villamos_Ablakok.Közös
             Képpekkel();
 
         }
-
 
         private void Képpekkel()
         {
@@ -74,7 +105,6 @@ namespace Villamos.Villamos_Ablakok.Közös
             {
                 if (Fényképek.SelectedItems.Count < 1) return;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek\";
                 string hova;
                 string honnan;
 
@@ -82,13 +112,15 @@ namespace Villamos.Villamos_Ablakok.Közös
                 for (int i = 0; i < Fényképek.SelectedItems.Count; i++)
                 {
 
-                    hova = hely + Név.Trim() + $"_{Sorszám}.jpg";
-                    honnan = Könyvtár + @"\" + Fényképek.SelectedItems[i].ToString().Trim();
+                    hova = Hely + @"\" + Név.Trim() + $"_{Sorszám}.jpg";
+                    honnan = Könyvtár + @"\" + Fényképek.SelectedItems[i].ToStrTrim();
                     Copy(honnan, hova);
                     Sorszám += 1;
                 }
 
                 Változás?.Invoke();
+                MessageBox.Show("Fényképek feltöltése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -103,9 +135,24 @@ namespace Villamos.Villamos_Ablakok.Közös
 
         private void Fényképek_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string hely = $@"{Könyvtár}\{Fényképek.SelectedItems[0].ToStrTrim()}";
-            if (!Exists(hely)) return;
-            Kezelő_Kép.KépMegnyitás(Képtöltő, hely, toolTip1);
+            string helyi = $@"{Könyvtár}\{Fényképek.SelectedItems[0].ToStrTrim()}";
+            if (!Exists(helyi)) return;
+            Kezelő_Kép.KépMegnyitás(Képtöltő, helyi, toolTip1);
+        }
+
+        private int SorszámMax()
+        {
+            int sorszám = 0;
+            //Megnézzük, hogy melyik az utolsó fénykép az adott azonosítóból
+            DirectoryInfo dir = new DirectoryInfo(Hely);
+            foreach (FileInfo Elem in dir.GetFiles($"*{Név.Trim()}*.jpg"))
+            {
+                string[] darabol = Elem.Name.Split('_');
+                string[] ideig = darabol[1].Split('.');
+                if (int.TryParse(ideig[0], out int sor))
+                    if (sorszám < sor) sorszám = sor;
+            }
+            return sorszám;
         }
     }
 }

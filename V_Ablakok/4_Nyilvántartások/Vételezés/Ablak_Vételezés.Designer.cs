@@ -101,6 +101,7 @@
             this.Tábla.Size = new System.Drawing.Size(1132, 250);
             this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 191;
+            this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
             // TáblaFelső
             // 
@@ -118,6 +119,7 @@
             this.TáblaFelső.Size = new System.Drawing.Size(1132, 225);
             this.TáblaFelső.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TáblaFelső.TabIndex = 192;
+            this.TáblaFelső.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaFelső_CellClick);
             this.TáblaFelső.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaFelső_CellValueChanged);
             // 
             // Kereső
@@ -296,6 +298,7 @@
             this.Képnéző.TabIndex = 201;
             this.toolTip1.SetToolTip(this.Képnéző, "A mennyiség adatokat megfordítja (+/-)");
             this.Képnéző.UseVisualStyleBackColor = true;
+            this.Képnéző.Click += new System.EventHandler(this.Képnéző_Click);
             // 
             // Holtart
             // 

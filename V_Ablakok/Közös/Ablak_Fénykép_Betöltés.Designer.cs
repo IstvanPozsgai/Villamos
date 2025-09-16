@@ -60,6 +60,7 @@
             this.Képnyitó.Name = "Képnyitó";
             this.Képnyitó.Size = new System.Drawing.Size(45, 45);
             this.Képnyitó.TabIndex = 237;
+            this.toolTip1.SetToolTip(this.Képnyitó, "Fényképek feltöltéséhez tallózási könyvtár beállítása");
             this.Képnyitó.UseVisualStyleBackColor = true;
             this.Képnyitó.Click += new System.EventHandler(this.Képnyitó_Click);
             // 
@@ -72,6 +73,7 @@
             this.Képválasztó.Name = "Képválasztó";
             this.Képválasztó.Size = new System.Drawing.Size(45, 45);
             this.Képválasztó.TabIndex = 234;
+            this.toolTip1.SetToolTip(this.Képválasztó, "Kiválasztott fényképek rögzítése");
             this.Képválasztó.UseVisualStyleBackColor = true;
             this.Képválasztó.Click += new System.EventHandler(this.Képválasztó_Click);
             // 
