@@ -224,7 +224,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         Soradat["Megnevezés"] = rekord.Megnevezés;
                         Soradat["Kereső fogalom"] = rekord.KeresőFogalom;
                         Soradat["Sarzs"] = rekord.Sarzs;
-                        Soradat["Ár"] = rekord.Ár;
+                        Soradat["Ár"] = Math.Round(rekord.Ár, 1);
                         double RaktárK = 0;
                         Adat_Raktár EgyRaktár = (from a in AdatokRaktár
                                                  where a.Cikkszám.Trim() == rekord.Cikkszám.Trim()

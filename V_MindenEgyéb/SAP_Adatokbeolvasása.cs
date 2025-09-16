@@ -807,6 +807,7 @@ namespace Villamos.V_MindenEgyéb
                     string Raktár = MyF.Szöveg_Tisztítás(Sor[oszlopRaktár].ToStrTrim(), 0, 5);
                     double Mennyi = MyF.Szöveg_Tisztítás(Sor[oszlopMennyi].ToStrTrim()).Replace(".", "").ToÉrt_Double();
                     double Ár = MyF.Szöveg_Tisztítás(Sor[oszlopÁr].ToStrTrim()).Replace(".", "").ToÉrt_Double();
+                    Ár = Math.Round(Ár, 1);
                     string Sarzs = MyF.Szöveg_Tisztítás(Sor[oszlopSarzs].ToStrTrim(), 0, 5);
                     double Árdb = 0;
                     if (Mennyi != 0) Árdb = Ár / Mennyi;
