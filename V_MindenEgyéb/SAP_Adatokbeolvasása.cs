@@ -843,7 +843,7 @@ namespace Villamos.V_MindenEgyéb
 
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexcel);
-                MessageBox.Show($"Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (HibásBevittAdat ex)
             {

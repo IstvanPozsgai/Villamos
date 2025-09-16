@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
@@ -29,6 +30,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         readonly DataTable AdatTáblaFelső = new DataTable();
 
         string Raktárhely = "";
+        string fájlexc = "";
+        string CikkSzám = "";
         public Ablak_Vételezés()
         {
             InitializeComponent();
@@ -162,6 +165,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             }
         }
 
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            Holtart.Lép();
+        }
         #endregion
 
 
@@ -424,11 +431,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnSAP_Click(object sender, EventArgs e)
+        private async void BtnSAP_Click(object sender, EventArgs e)
         {
             try
             {
-                string fájlexc = "";
+
                 // megpróbáljuk megnyitni az excel táblát.
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
                 {
@@ -448,8 +455,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 else
                     return;
 
-                SAP_Adatokbeolvasása.Raktár_beolvasó(fájlexc);
+                Holtart.Be();
+                timer1.Enabled = true;
+                await Task.Run(() => SAP_Adatokbeolvasása.Raktár_beolvasó(fájlexc));
+                timer1.Enabled = false;
+                Holtart.Ki();
+
                 AdatokFrissítése();
+                MessageBox.Show($"Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {

@@ -233,6 +233,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap App_photo {
+            get {
+                object obj = ResourceManager.GetObject("App-photo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap App_spreadsheet {
             get {
                 object obj = ResourceManager.GetObject("App-spreadsheet", resourceCulture);

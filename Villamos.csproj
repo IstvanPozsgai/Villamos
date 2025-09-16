@@ -1765,6 +1765,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <None Include="Resources\App-photo.ico" />
     <None Include="Resources\PlusMinus.ico" />
     <None Include="Resources\Aha-Soft-Security-Modify-key.ico" />
     <None Include="Resources\login-icon.png" />
