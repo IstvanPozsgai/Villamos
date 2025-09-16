@@ -2304,7 +2304,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
-            {
+            {           
                 if (ex.HResult == 0x800AC472)
                 {
                     // Lekeri COM platformrol a hatterben futo nyitott Excel tablakat.
@@ -2348,7 +2348,9 @@ namespace Villamos.Villamos_Nyomtatványok
                         MessageBox.Show("A folyamat megszakítva, nem történt Excel fájl generálás.");
                     }
                 }
-                string HibaSzöveg = $"{this.ToString()}\n" +
+                else
+                {
+                    string HibaSzöveg = $"{this.ToString()}\n" +
                    $"Telephely:{Telephely} \n" +
                    $"fájlexl:{fájlexl} \n" +
                    $"Dátum:{Dátum}\n" +
@@ -2356,8 +2358,9 @@ namespace Villamos.Villamos_Nyomtatványok
                    $"papírméret:{papírméret}\n" +
                    $"papírelrendezés:{papírelrendezés}";
 
-                HibaNapló.Log(ex.Message, HibaSzöveg, ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    HibaNapló.Log(ex.Message, HibaSzöveg, ex.StackTrace, ex.Source, ex.HResult);
+                    MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }                
             }
         }
 
