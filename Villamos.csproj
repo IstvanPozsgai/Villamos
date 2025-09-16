@@ -294,6 +294,12 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Anyag_Karbantartás.Designer.cs">
       <DependentUpon>Ablak_Anyag_Karbantartás.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Készlet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Készlet.Designer.cs">
+      <DependentUpon>Ablak_Készlet.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Vételezés.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1483,6 +1489,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Anyag_Karbantartás.resx">
       <DependentUpon>Ablak_Anyag_Karbantartás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Készlet.resx">
+      <DependentUpon>Ablak_Készlet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\4_Nyilvántartások\Vételezés\Ablak_Vételezés.resx">
       <DependentUpon>Ablak_Vételezés.cs</DependentUpon>

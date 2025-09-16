@@ -34,6 +34,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         string Raktárhely = "";
         string fájlexc = "";
         string CikkSzám = "";
+        string Sarzs = "";
         public Ablak_Vételezés()
         {
             InitializeComponent();
@@ -75,6 +76,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         {
             Új_Ablak_Anyag_Karbantartás?.Close();
             Új_Ablak_Fénykép_Betöltés?.Close();
+            Új_Ablak_Készlet?.Close();
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)
@@ -331,6 +333,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         {
             if (e.RowIndex < 0) return;
             CikkSzám = Tábla.Rows[e.RowIndex].Cells["Cikkszám"].Value.ToString();
+            Sarzs = Tábla.Rows[e.RowIndex].Cells["Sarzs"].Value.ToString();
         }
         #endregion
 
@@ -436,6 +439,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         {
             if (e.RowIndex < 0) return;
             CikkSzám = TáblaFelső.Rows[e.RowIndex].Cells["Cikkszám"].Value.ToString();
+            Sarzs = TáblaFelső.Rows[e.RowIndex].Cells["Sarzs"].Value.ToString();
         }
         #endregion
 
@@ -670,8 +674,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 if (aryFi.Length == 0)
                     if (MessageBox.Show("Nincs kép a kiválasztott cikkszámhoz.\nFolytatjuk a képek feltöltésével?", "Információ", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No) return;
 
-
-
                 Új_Ablak_Fénykép_Betöltés?.Close();
                 Új_Ablak_Fénykép_Betöltés = new Ablak_Fénykép_Betöltés(hely, CikkSzám);
                 Új_Ablak_Fénykép_Betöltés.FormClosed += Új_Ablak_Fénykép_Betöltés_Closed;
@@ -698,5 +700,28 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         #endregion
 
 
+        #region Készletek
+        Ablak_Készlet Új_Ablak_Készlet;
+        private void RaktárKészlet_Click(object sender, EventArgs e)
+        {
+            if (CikkSzám.Trim() == "") return;
+            List<Adat_Raktár> RaktárKészlet = (from a in AdatokRaktár
+                                               where a.Cikkszám.Trim() == CikkSzám
+                                               && a.Sarzs.Trim() == Sarzs
+                                               select a).ToList();
+
+            Új_Ablak_Készlet?.Close();
+            Új_Ablak_Készlet = new Ablak_Készlet(RaktárKészlet, CikkSzám);
+            Új_Ablak_Készlet.FormClosed += Új_Ablak_Készlet_Closed;
+            Új_Ablak_Készlet.Top = 50;
+            Új_Ablak_Készlet.Left = 50;
+            Új_Ablak_Készlet.Show();
+        }
+
+        private void Új_Ablak_Készlet_Closed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Készlet = null;
+        }
+        #endregion
     }
 }
