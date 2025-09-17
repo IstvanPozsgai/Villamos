@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -11,39 +12,44 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        readonly string táblanév = "igen_nem";
 
-        private void FájlBeállítás(string Telephely)
+        private bool FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb";
+            return File.Exists(hely);
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
         public List<Adat_Kiegészítő_Igen_Nem> Lista_Adatok(string Telephely)
         {
-            FájlBeállítás(Telephely);
-            string szöveg = "SELECT *  FROM igen_nem ";
             List<Adat_Kiegészítő_Igen_Nem> Adatok = new List<Adat_Kiegészítő_Igen_Nem>();
-            Adat_Kiegészítő_Igen_Nem Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            if (FájlBeállítás(Telephely))
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = $"SELECT *  FROM {táblanév} ";
+
+                Adat_Kiegészítő_Igen_Nem Adat;
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                Adat = new Adat_Kiegészítő_Igen_Nem(
-                                        rekord["id"].ToÉrt_Long(),
-                                        rekord["Válasz"].ToÉrt_Bool(),
-                                        rekord["Megjegyzés"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Kiegészítő_Igen_Nem(
+                                            rekord["id"].ToÉrt_Long(),
+                                            rekord["Válasz"].ToÉrt_Bool(),
+                                            rekord["Megjegyzés"].ToStrTrim()
+                                              );
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
@@ -56,12 +62,14 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO igen_nem  (id, válasz, megjegyzés) ";
-                szöveg += $"VALUES ({Adat.Id}, ";
-                szöveg += $"{Adat.Válasz}, ";
-                szöveg += $"'{Adat.Megjegyzés}')";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"INSERT INTO {táblanév}  (id, válasz, megjegyzés) ";
+                    szöveg += $"VALUES ({Adat.Id}, ";
+                    szöveg += $"{Adat.Válasz}, ";
+                    szöveg += $"'{Adat.Megjegyzés}')";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -78,10 +86,12 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE igen_nem SET Válasz={Adat.Válasz} ";
-                szöveg += $"WHERE '{Adat.Id}' ";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"UPDATE {táblanév} SET Válasz={Adat.Válasz} ";
+                    szöveg += $"WHERE '{Adat.Id}' ";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {

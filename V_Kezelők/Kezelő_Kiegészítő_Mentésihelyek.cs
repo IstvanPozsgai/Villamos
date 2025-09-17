@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -11,38 +12,43 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        readonly string táblanév = "Mentésihelyek";
 
-        private void FájlBeállítás(string Telephely)
+        private bool FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb";
+            return File.Exists(hely);
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
         public List<Adat_Kiegészítő_Mentésihelyek> Lista_Adatok(string Telephely)
         {
-            FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM Mentésihelyek  order by  sorszám";
             List<Adat_Kiegészítő_Mentésihelyek> Adatok = new List<Adat_Kiegészítő_Mentésihelyek>();
-            Adat_Kiegészítő_Mentésihelyek Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            if (FájlBeállítás(Telephely))
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = $"SELECT * FROM {táblanév}  order by  sorszám";
+
+                Adat_Kiegészítő_Mentésihelyek Adat;
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                Adat = new Adat_Kiegészítő_Mentésihelyek(
-                                     rekord["sorszám"].ToÉrt_Long(),
-                                     rekord["alprogram"].ToStrTrim(),
-                                     rekord["Elérésiút"].ToStrTrim());
-                                Adatok.Add(Adat);
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Kiegészítő_Mentésihelyek(
+                                         rekord["sorszám"].ToÉrt_Long(),
+                                         rekord["alprogram"].ToStrTrim(),
+                                         rekord["Elérésiút"].ToStrTrim());
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
@@ -53,26 +59,30 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(string Telephely, Adat_Kiegészítő_Mentésihelyek Adat)
         {
-            FájlBeállítás(Telephely);
-            string szöveg = $"INSERT INTO Mentésihelyek ( sorszám, alprogram, elérésiút )";
-            szöveg += $" VALUES ({Adat.Sorszám}, ";
-            szöveg += $"'{Adat.Alprogram}',";
-            szöveg += $"'{Adat.Elérésiút}' )";
+            if (FájlBeállítás(Telephely))
+            {
+                string szöveg = $"INSERT INTO {táblanév} ( sorszám, alprogram, elérésiút )";
+                szöveg += $" VALUES ({Adat.Sorszám}, ";
+                szöveg += $"'{Adat.Alprogram}',";
+                szöveg += $"'{Adat.Elérésiút}' )";
 
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
         }
 
         public void Módosítás(string Telephely, Adat_Kiegészítő_Mentésihelyek Adat)
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Mentésihelyek SET ";
-                szöveg += $" alprogram='{Adat.Alprogram}',";
-                szöveg += $" elérésiút='{Adat.Elérésiút}' ";
-                szöveg += $" WHERE sorszám={Adat.Sorszám} ";
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $" alprogram='{Adat.Alprogram}',";
+                    szöveg += $" elérésiút='{Adat.Elérésiút}' ";
+                    szöveg += $" WHERE sorszám={Adat.Sorszám} ";
 
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -89,9 +99,11 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM Mentésihelyek WHERE sorszám={Adat.Sorszám}";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"DELETE FROM {táblanév} WHERE sorszám={Adat.Sorszám}";
+                    MyA.ABtörlés(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {

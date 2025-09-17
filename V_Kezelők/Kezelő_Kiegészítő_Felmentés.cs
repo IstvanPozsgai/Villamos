@@ -4,7 +4,6 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
@@ -14,44 +13,48 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        readonly string táblanév = "Felmentés";
 
-        private void FájlBeállítás(string Telephely)
+        private bool FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Segéd\kiegészítő1.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kieg1_Telephely_Felmentés(hely.KönyvSzerk());
+            return File.Exists(hely);
         }
 
         public List<Adat_Kiegészítő_Felmentés> Lista_Adatok(string Telephely)
         {
-            FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM Felmentés";
             List<Adat_Kiegészítő_Felmentés> Adatok = new List<Adat_Kiegészítő_Felmentés>();
-            Adat_Kiegészítő_Felmentés Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            if (FájlBeállítás(Telephely))
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = $"SELECT * FROM {táblanév}";
+
+                Adat_Kiegészítő_Felmentés Adat;
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                Adat = new Adat_Kiegészítő_Felmentés(
-                                        rekord["id"].ToÉrt_Int(),
-                                        rekord["Címzett"].ToStrTrim(),
-                                        rekord["Másolat"].ToStrTrim(),
-                                        rekord["Tárgy"].ToStrTrim(),
-                                        rekord["Kértvizsgálat"].ToStrTrim(),
-                                        rekord["Bevezetés"].ToStrTrim(),
-                                        rekord["Tárgyalás"].ToStrTrim(),
-                                        rekord["Befejezés"].ToStrTrim(),
-                                        rekord["CiklusTípus"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Kiegészítő_Felmentés(
+                                            rekord["id"].ToÉrt_Int(),
+                                            rekord["Címzett"].ToStrTrim(),
+                                            rekord["Másolat"].ToStrTrim(),
+                                            rekord["Tárgy"].ToStrTrim(),
+                                            rekord["Kértvizsgálat"].ToStrTrim(),
+                                            rekord["Bevezetés"].ToStrTrim(),
+                                            rekord["Tárgyalás"].ToStrTrim(),
+                                            rekord["Befejezés"].ToStrTrim(),
+                                            rekord["CiklusTípus"].ToStrTrim()
+                                              );
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
@@ -64,19 +67,21 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                // Módosítjuk
-                string szöveg = "UPDATE Felmentés  SET ";
-                szöveg += $"Címzett='{Adat.Címzett}', ";
-                szöveg += $"Másolat='{Adat.Másolat}', ";
-                szöveg += $"Tárgy='{Adat.Tárgy}', ";
-                szöveg += $"Kértvizsgálat='{Adat.Kértvizsgálat}', ";
-                szöveg += $"Bevezetés='{Adat.Bevezetés}', ";
-                szöveg += $"Tárgyalás='{Adat.Tárgyalás}', ";
-                szöveg += $"Befejezés='{Adat.Befejezés}' ";
-                szöveg += $"CiklusTípus='{Adat.CiklusTípus}' ";
-                szöveg += $" WHERE Id={Adat.Id}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    // Módosítjuk
+                    string szöveg = $"UPDATE {táblanév}  SET ";
+                    szöveg += $"Címzett='{Adat.Címzett}', ";
+                    szöveg += $"Másolat='{Adat.Másolat}', ";
+                    szöveg += $"Tárgy='{Adat.Tárgy}', ";
+                    szöveg += $"Kértvizsgálat='{Adat.Kértvizsgálat}', ";
+                    szöveg += $"Bevezetés='{Adat.Bevezetés}', ";
+                    szöveg += $"Tárgyalás='{Adat.Tárgyalás}', ";
+                    szöveg += $"Befejezés='{Adat.Befejezés}' ";
+                    szöveg += $"CiklusTípus='{Adat.CiklusTípus}' ";
+                    szöveg += $" WHERE Id={Adat.Id}";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -93,19 +98,21 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO Felmentés (id, Címzett, Másolat,Tárgy,Kértvizsgálat, Bevezetés, Tárgyalás,Befejezés, CiklusTípus ) VALUES (";
-                szöveg += $"{Sorszám(Telephely)}, ";
-                szöveg += $"'{Adat.Címzett}', ";
-                szöveg += $"'{Adat.Másolat}', ";
-                szöveg += $"'{Adat.Tárgy}', ";
-                szöveg += $"'{Adat.Kértvizsgálat}', ";
-                szöveg += $"'{Adat.Bevezetés}', ";
-                szöveg += $"'{Adat.Tárgyalás}', ";
-                szöveg += $"'{Adat.Befejezés}', ";
-                szöveg += $"'{Adat.CiklusTípus}') ";
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"INSERT INTO {táblanév} (id, Címzett, Másolat,Tárgy,Kértvizsgálat, Bevezetés, Tárgyalás,Befejezés, CiklusTípus ) VALUES (";
+                    szöveg += $"{Sorszám(Telephely)}, ";
+                    szöveg += $"'{Adat.Címzett}', ";
+                    szöveg += $"'{Adat.Másolat}', ";
+                    szöveg += $"'{Adat.Tárgy}', ";
+                    szöveg += $"'{Adat.Kértvizsgálat}', ";
+                    szöveg += $"'{Adat.Bevezetés}', ";
+                    szöveg += $"'{Adat.Tárgyalás}', ";
+                    szöveg += $"'{Adat.Befejezés}', ";
+                    szöveg += $"'{Adat.CiklusTípus}') ";
 
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {

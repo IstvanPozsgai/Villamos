@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
@@ -11,37 +12,42 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Mocó";
         string hely;
+        readonly string táblanév = "Típuszínektábla";
 
-        private void FájlBeállítás(string Telephely)
+        private bool FájlBeállítás(string Telephely)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő1.mdb";
+            return File.Exists(hely);
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
 
         public List<Adat_Kiegészítő_Típuszínektábla> Lista_Adatok(string Telephely)
         {
-            FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM Típuszínektábla ORDER BY  típus";
             List<Adat_Kiegészítő_Típuszínektábla> Adatok = new List<Adat_Kiegészítő_Típuszínektábla>();
-            Adat_Kiegészítő_Típuszínektábla Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            if (FájlBeállítás(Telephely))
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                string szöveg = $"SELECT * FROM {táblanév} ORDER BY  típus";
+
+                Adat_Kiegészítő_Típuszínektábla Adat;
+
+                string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+                using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    Kapcsolat.Open();
+                    using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                     {
-                        if (rekord.HasRows)
+                        using (OleDbDataReader rekord = Parancs.ExecuteReader())
                         {
-                            while (rekord.Read())
+                            if (rekord.HasRows)
                             {
-                                Adat = new Adat_Kiegészítő_Típuszínektábla(
-                                     rekord["típus"].ToStrTrim(),
-                                     rekord["színszám"].ToÉrt_Long());
-                                Adatok.Add(Adat);
+                                while (rekord.Read())
+                                {
+                                    Adat = new Adat_Kiegészítő_Típuszínektábla(
+                                         rekord["típus"].ToStrTrim(),
+                                         rekord["színszám"].ToÉrt_Long());
+                                    Adatok.Add(Adat);
+                                }
                             }
                         }
                     }
@@ -52,22 +58,26 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(string Telephely, Adat_Kiegészítő_Típuszínektábla Adat)
         {
-            FájlBeállítás(Telephely);
-            string szöveg = $"INSERT INTO Típuszínektábla (típus, színszám) ";
-            szöveg += $"VALUES ('{Adat.Típus}' ,";
-            szöveg += $" {Adat.Színszám})";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            if (FájlBeállítás(Telephely))
+            {
+                string szöveg = $"INSERT INTO {táblanév} (típus, színszám) ";
+                szöveg += $"VALUES ('{Adat.Típus}' ,";
+                szöveg += $" {Adat.Színszám})";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
         }
 
         public void Módosítás(string Telephely, Adat_Kiegészítő_Típuszínektábla Adat)
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Típuszínektábla SET ";
-                szöveg += $"színszám={Adat.Színszám} ";
-                szöveg += $"WHERE típus='{Adat.Típus}'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $"színszám={Adat.Színszám} ";
+                    szöveg += $"WHERE típus='{Adat.Típus}'";
+                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -84,9 +94,11 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely);
-                string szöveg = $"DELETE * FROM Típuszínektábla where típus='{Adat.Típus}'";
-                MyA.ABtörlés(hely, jelszó, szöveg);
+                if (FájlBeállítás(Telephely))
+                {
+                    string szöveg = $"DELETE * FROM {táblanév} where típus='{Adat.Típus}'";
+                    MyA.ABtörlés(hely, jelszó, szöveg);
+                }
             }
             catch (HibásBevittAdat ex)
             {
