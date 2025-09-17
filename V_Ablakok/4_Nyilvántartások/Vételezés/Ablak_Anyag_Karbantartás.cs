@@ -67,6 +67,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void TáblaÍrás()
         {
+            Tábla.CleanFilterAndSort();
             Adatok = KézAnyag.Lista_Adatok();
             Fejléc();
             ABFeltöltése();
