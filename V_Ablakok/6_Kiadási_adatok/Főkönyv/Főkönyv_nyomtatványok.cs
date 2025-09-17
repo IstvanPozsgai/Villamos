@@ -2326,27 +2326,48 @@ namespace Villamos.Villamos_Nyomtatványok
 
                     HibaNapló.Log(ex.Message, HibaSzöveg2, ex.StackTrace, ex.Source, ex.HResult);
 
-                    DialogResult ExcelBezarE = MessageBox.Show($"Úgy tűnik, hogy a következő Excel fájlok nyitva vannak, emiatt a program hibára futott:\nBezárja őket?(Mentésre kerülnek)\n{string.Join(",\n", futoExcelek)}"
-                        , "Figyelem", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-
-                    if (ExcelBezarE == DialogResult.Yes)
+                    // Ha nem fut EXCEL.EXE, akkor is probalja meg kiloni, mivel betud ragadni ugy, hogy nem latjuk a COM interfeszen keresztul.
+                    if (futoExcelek.Count == 0)
                     {
-                        // Ha van nyitott Excel
-                        while (excelApp.Workbooks.Count > 0)
+                        // Lekeri a hatterben futo folyamatokat, es az osszes olyat, amelynek a neve tartalmazza az EXCEL-t kilovi.
+                        foreach (var proc in System.Diagnostics.Process.GetProcessesByName("EXCEL"))
                         {
-                            excelApp.Workbooks[1].Close(true); // true = Menti oket
+                            try
+                            {
+                                proc.Kill();
+                                proc.WaitForExit();
+                            }
+                            catch 
+                            { 
+                                // Erre azert van szukseg, hogyha nem fut semmilyen EXCEL a hatterben, ne akadjon meg a program.
+                                HibaNapló.Log(ex.Message, HibaSzöveg2 + "\nHatterben levo Excel kilove!", ex.StackTrace, ex.Source, ex.HResult);
+                            }
                         }
-                        // Excel bezarasa
-                        excelApp.Quit();
-                        // COM eldobasa
-                        Marshal.ReleaseComObject(excelApp);
-                        excelApp = null;
-                        MessageBox.Show("A futó Excel fájlok sikeresen belettek zárva.\nPróbálja meg a generálást újból!", "Figyelem", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
-                        MessageBox.Show("A folyamat megszakítva, nem történt Excel fájl generálás.");
-                    }
+                        DialogResult ExcelBezarE = MessageBox.Show($"Úgy tűnik, hogy a következő Excel fájlok nyitva vannak, emiatt a program hibára futott:\nBezárja őket?(Mentésre kerülnek)\n{string.Join(",\n", futoExcelek)}"
+                        , "Figyelem", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+
+                        if (ExcelBezarE == DialogResult.Yes)
+                        {
+                            // Ha van nyitott Excel
+                            while (excelApp.Workbooks.Count > 0)
+                            {
+                                excelApp.Workbooks[1].Close(true); // true = Menti oket
+                            }
+                            // Excel bezarasa
+                            excelApp.Quit();
+                            // COM eldobasa
+                            Marshal.ReleaseComObject(excelApp);
+                            excelApp = null;
+                            MessageBox.Show("A futó Excel fájlok sikeresen belettek zárva.\nPróbálja meg a generálást újból!", "Figyelem", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            MessageBox.Show("A folyamat megszakítva, nem történt Excel fájl generálás.");
+                        }
+                    }                   
                 }
                 else
                 {
