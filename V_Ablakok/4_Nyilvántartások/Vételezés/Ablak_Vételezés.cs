@@ -204,6 +204,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         #region Kereső Tábla
         private void TáblaÍrás()
         {
+            Tábla.CleanFilterAndSort();
             Adatok = KézAnyag.Lista_Adatok().OrderBy(a => a.Cikkszám).ToList();
             Fejléc();
             ABFeltöltése();
@@ -343,6 +344,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         {
             try
             {
+                Tábla.CleanFilterAndSort();
                 AdatTáblaFelső.Columns.Clear();
                 AdatTáblaFelső.Columns.Add("Cikkszám");
                 AdatTáblaFelső.Columns.Add("Mennyiség", typeof(double));

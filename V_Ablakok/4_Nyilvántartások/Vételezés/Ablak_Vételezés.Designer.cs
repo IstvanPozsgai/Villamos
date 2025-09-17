@@ -44,6 +44,7 @@
             this.AnyagMódosítás = new System.Windows.Forms.Button();
             this.BtnSAP = new System.Windows.Forms.Button();
             this.Képnéző = new System.Windows.Forms.Button();
+            this.RaktárKészlet = new System.Windows.Forms.Button();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.TáblaFelső = new Zuby.ADGV.AdvancedDataGridView();
             this.Kereső = new System.Windows.Forms.TextBox();
@@ -51,7 +52,6 @@
             this.Összesen = new System.Windows.Forms.Label();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.RaktárKészlet = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaFelső)).BeginInit();
@@ -105,7 +105,7 @@
             this.SorTörlés.Name = "SorTörlés";
             this.SorTörlés.Size = new System.Drawing.Size(44, 45);
             this.SorTörlés.TabIndex = 199;
-            this.toolTip1.SetToolTip(this.SorTörlés, "A felső táblázat kijelöl elemeit törli");
+            this.toolTip1.SetToolTip(this.SorTörlés, "A felső táblázat kijelölt elemeit törli");
             this.SorTörlés.UseVisualStyleBackColor = true;
             this.SorTörlés.Click += new System.EventHandler(this.SorTörlés_Click);
             // 
@@ -203,9 +203,21 @@
             this.Képnéző.Name = "Képnéző";
             this.Képnéző.Size = new System.Drawing.Size(44, 45);
             this.Képnéző.TabIndex = 201;
-            this.toolTip1.SetToolTip(this.Képnéző, "A mennyiség adatokat megfordítja (+/-)");
+            this.toolTip1.SetToolTip(this.Képnéző, "Fényképek megjelenítése");
             this.Képnéző.UseVisualStyleBackColor = true;
             this.Képnéző.Click += new System.EventHandler(this.Képnéző_Click);
+            // 
+            // RaktárKészlet
+            // 
+            this.RaktárKészlet.BackgroundImage = global::Villamos.Properties.Resources.Google_Noto_Emoji_Travel_Places_42498_factory;
+            this.RaktárKészlet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.RaktárKészlet.Location = new System.Drawing.Point(353, 3);
+            this.RaktárKészlet.Name = "RaktárKészlet";
+            this.RaktárKészlet.Size = new System.Drawing.Size(44, 45);
+            this.RaktárKészlet.TabIndex = 202;
+            this.toolTip1.SetToolTip(this.RaktárKészlet, "A készletek listázása");
+            this.RaktárKészlet.UseVisualStyleBackColor = true;
+            this.RaktárKészlet.Click += new System.EventHandler(this.RaktárKészlet_Click);
             // 
             // Tábla
             // 
@@ -275,7 +287,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel1.Controls.Add(this.Előjeletvált, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.SorTörlés, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.FelsőÜrítés, 2, 0);
@@ -291,6 +303,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(802, 55);
             this.tableLayoutPanel1.TabIndex = 198;
             // 
@@ -319,18 +332,6 @@
             // 
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
-            // 
-            // RaktárKészlet
-            // 
-            this.RaktárKészlet.BackgroundImage = global::Villamos.Properties.Resources.Google_Noto_Emoji_Travel_Places_42498_factory;
-            this.RaktárKészlet.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.RaktárKészlet.Location = new System.Drawing.Point(353, 3);
-            this.RaktárKészlet.Name = "RaktárKészlet";
-            this.RaktárKészlet.Size = new System.Drawing.Size(44, 45);
-            this.RaktárKészlet.TabIndex = 202;
-            this.toolTip1.SetToolTip(this.RaktárKészlet, "A mennyiség adatokat megfordítja (+/-)");
-            this.RaktárKészlet.UseVisualStyleBackColor = true;
-            this.RaktárKészlet.Click += new System.EventHandler(this.RaktárKészlet_Click);
             // 
             // Ablak_Vételezés
             // 
