@@ -2305,7 +2305,7 @@ namespace Villamos.Villamos_Nyomtatványok
             }
             catch (Exception ex)
             {           
-                if (ex.HResult == 0x800AC472)
+                if (ex.HResult == -2146777998)
                 {
                     // Lekeri COM platformrol a hatterben futo nyitott Excel tablakat.
                     Microsoft.Office.Interop.Excel.Application excelApp = (Microsoft.Office.Interop.Excel.Application)Marshal.GetActiveObject("Excel.Application");
