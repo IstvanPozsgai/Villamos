@@ -121,8 +121,6 @@ namespace Villamos
             this.BtnEngedélySzakFrissít = new System.Windows.Forms.Button();
             this.Adminisztátor = new System.Windows.Forms.TabPage();
             this.PanelAdminAlap = new System.Windows.Forms.Panel();
-            this.LblAdminAktuális = new System.Windows.Forms.Label();
-            this.TxtadminAktuálissor = new System.Windows.Forms.TextBox();
             this.BtnAdminÚjEngedély = new System.Windows.Forms.Button();
             this.DataAdminAlap = new System.Windows.Forms.DataGridView();
             this.LblAdminAktuálisAB = new System.Windows.Forms.Label();
@@ -158,6 +156,7 @@ namespace Villamos
             this.LblTelephelyBeállítás = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Aktuálissor = new System.Windows.Forms.CheckBox();
             this.Fülek.SuspendLayout();
             this.Engedélyek.SuspendLayout();
             this.PanelEngedély.SuspendLayout();
@@ -1106,8 +1105,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PanelAdminAlap.BackColor = System.Drawing.Color.OliveDrab;
-            this.PanelAdminAlap.Controls.Add(this.LblAdminAktuális);
-            this.PanelAdminAlap.Controls.Add(this.TxtadminAktuálissor);
+            this.PanelAdminAlap.Controls.Add(this.Aktuálissor);
             this.PanelAdminAlap.Controls.Add(this.BtnAdminÚjEngedély);
             this.PanelAdminAlap.Controls.Add(this.DataAdminAlap);
             this.PanelAdminAlap.Controls.Add(this.LblAdminAktuálisAB);
@@ -1127,22 +1125,6 @@ namespace Villamos
             this.PanelAdminAlap.Name = "PanelAdminAlap";
             this.PanelAdminAlap.Size = new System.Drawing.Size(1255, 328);
             this.PanelAdminAlap.TabIndex = 114;
-            // 
-            // LblAdminAktuális
-            // 
-            this.LblAdminAktuális.AutoSize = true;
-            this.LblAdminAktuális.Location = new System.Drawing.Point(8, 117);
-            this.LblAdminAktuális.Name = "LblAdminAktuális";
-            this.LblAdminAktuális.Size = new System.Drawing.Size(69, 20);
-            this.LblAdminAktuális.TabIndex = 117;
-            this.LblAdminAktuális.Text = "Aktuális:";
-            // 
-            // TxtadminAktuálissor
-            // 
-            this.TxtadminAktuálissor.Location = new System.Drawing.Point(170, 111);
-            this.TxtadminAktuálissor.Name = "TxtadminAktuálissor";
-            this.TxtadminAktuálissor.Size = new System.Drawing.Size(173, 26);
-            this.TxtadminAktuálissor.TabIndex = 118;
             // 
             // BtnAdminÚjEngedély
             // 
@@ -1499,6 +1481,16 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
+            // Aktuálissor
+            // 
+            this.Aktuálissor.AutoSize = true;
+            this.Aktuálissor.Location = new System.Drawing.Point(170, 116);
+            this.Aktuálissor.Name = "Aktuálissor";
+            this.Aktuálissor.Size = new System.Drawing.Size(84, 24);
+            this.Aktuálissor.TabIndex = 118;
+            this.Aktuálissor.Text = "Aktuális";
+            this.Aktuálissor.UseVisualStyleBackColor = true;
+            // 
             // Ablak_Behajtási
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1649,8 +1641,6 @@ namespace Villamos
         internal Panel PanelAdminAlap;
         internal DataGridView DataAdminAlap;
         internal Button BtnAdminÚjEngedély;
-        internal Label LblAdminAktuális;
-        internal TextBox TxtadminAktuálissor;
         internal TextBox TxtRendszámszűrő;
         internal Label LblEngedélyRendszám;
         internal Button BtnEngedélyListaSzakEmail;
@@ -1667,5 +1657,6 @@ namespace Villamos
         internal DataGridViewTextBoxColumn Column4;
         internal DataGridViewTextBoxColumn Column5;
         internal Button Elutasít_gomb;
+        private CheckBox Aktuálissor;
     }
 }

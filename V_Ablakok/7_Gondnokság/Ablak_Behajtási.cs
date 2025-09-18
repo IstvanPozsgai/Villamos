@@ -2980,7 +2980,7 @@ namespace Villamos
             TxtAdminSorszám.Text = DataAdminAlap.Rows[e.RowIndex].Cells[3].Value.ToString();
             TxtadminBetű.Text = DataAdminAlap.Rows[e.RowIndex].Cells[2].Value.ToString();
             DatadminÉrvényes.Value = DateTime.Parse(DataAdminAlap.Rows[e.RowIndex].Cells[4].Value.ToString());
-            TxtadminAktuálissor.Text = DataAdminAlap.Rows[e.RowIndex].Cells[5].Value.ToString();
+            Aktuálissor.Checked = DataAdminAlap.Rows[e.RowIndex].Cells[5].Value.ToÉrt_Int ()==1;
         }
 
         private void Adminalapbeállítás()
@@ -2997,7 +2997,7 @@ namespace Villamos
                 TxtadminBetű.Text = rekord.Sorszámbetűjele.Trim();
                 TxtAdminSorszám.Text = rekord.Sorszámkezdete.ToString().Trim();
                 DatadminÉrvényes.Value = DateTime.Parse(rekord.Engedélyérvényes.ToString().Trim());
-                TxtadminAktuálissor.Text = rekord.Státus.ToString().Trim();
+                Aktuálissor.Checked = rekord.Státus.ToÉrt_Bool();
             }
         }
 
@@ -3008,8 +3008,6 @@ namespace Villamos
                 // Módosítjuk a tábla beállításait
                 if (!int.TryParse(TxtAdminaktuális.Text, out int ID)) throw new HibásBevittAdat("Javítsa ki az aktuális adatbázis mezőt!");
                 if (!int.TryParse(TxtAdminSorszám.Text, out int Sorszám)) throw new HibásBevittAdat("A sorszám kezdetének egész számnak kell lennie.");
-                if (!int.TryParse(TxtadminAktuálissor.Text, out int Státus)) throw new HibásBevittAdat("Státus mező csak 0 és 1 tartalmhazhat.");
-                if (Státus < 0 || Státus > 1) throw new HibásBevittAdat("Státus mező csak 0 és 1 tartalmhazhat.");
                 if (TxtAdminkönyvtár.Text.Trim() == "") TxtAdminkönyvtár.Text = "_";
                 if (TxtAmindFájl.Text.Trim() == "") TxtAmindFájl.Text = "_";
                 if (TxtadminBetű.Text.Trim() == "") TxtadminBetű.Text = "_";
@@ -3019,7 +3017,7 @@ namespace Villamos
                                                                  TxtadminBetű.Text.Trim(),
                                                                  Sorszám,
                                                                  DatadminÉrvényes.Value,
-                                                                 Státus,
+                                                                 Aktuálissor.Checked ? 0 : 1,
                                                                  TxtAdminkönyvtár.Text.Trim());
                 Kéz_BehajtásAlap.Módosítás(ADAT);
                 Alapadatokfeltöltése();
