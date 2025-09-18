@@ -102,6 +102,7 @@ namespace Villamos
                 finally
                 {
                     GC.Collect();
+                    GC.WaitForPendingFinalizers();
                 }
             }
         }
@@ -219,7 +220,9 @@ namespace Villamos
         /// <param name="hova">szöveg</param>
         public static void Kiir(string mit, string hova)
         {
-            MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[hova];
+            // JAVÍTANDÓ:
+            //  MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[hova];
+            MyExcel.Range Cella = Module_Excel.xlApp.get_Range(hova);
             Cella.Value = mit;
         }
 
@@ -555,10 +558,15 @@ namespace Villamos
         /// <param name="mit"></param>
         public static void Aktív_Cella(string munkalap, string mit)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munkalap.Select();
+            //Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            //Munkalap.Select();
 
-            MyExcel.Range range = Munkalap.get_Range(mit, mit);
+            //MyExcel.Range range = Munkalap.get_Range(mit, mit);
+            //range.Select();
+            // JAVÍTANDÓ:
+            MyExcel.Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            Munkalap.Activate(); // Fontos!
+            MyExcel.Range range = Munkalap.get_Range(mit);
             range.Select();
         }
 
