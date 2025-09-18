@@ -360,12 +360,13 @@ namespace Villamos
         {
             MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
             Táblaterület.Font.Size = méret;
-            Táblaterület.Font.Strikethrough = false;
-            Táblaterület.Font.Superscript = false;
-            Táblaterület.Font.Subscript = false;
-            Táblaterület.Font.OutlineFont = false;
-            Táblaterület.Font.Shadow = false;
-            Táblaterület.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
+            // JAVÍTANDÓ:
+            //Táblaterület.Font.Strikethrough = false;
+            //Táblaterület.Font.Superscript = false;
+            //Táblaterület.Font.Subscript = false;
+            //Táblaterület.Font.OutlineFont = false;
+            //Táblaterület.Font.Shadow = false;
+            //Táblaterület.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
         }
 
         public static void Betű(string mit, Color színe)
@@ -387,7 +388,8 @@ namespace Villamos
         public static void Betű(string mit, bool aláhúzott, bool dőlt, bool vastag)
         {
             MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.Font.Underline = aláhúzott;
+            Táblaterület.Font.Underline = aláhúzott ? MyExcel.XlUnderlineStyle.xlUnderlineStyleSingle : MyExcel.XlUnderlineStyle.xlUnderlineStyleNone;
+            //Táblaterület.Font.Underline = aláhúzott;
             Táblaterület.Font.Italic = dőlt;
             Táblaterület.Font.Bold = vastag;
         }
