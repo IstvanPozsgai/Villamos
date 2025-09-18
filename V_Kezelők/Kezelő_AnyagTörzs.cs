@@ -249,5 +249,31 @@ namespace Villamos.V_Kezelők
             }
 
         }
+
+        public void DöntésEgyedi(Adat_Anyagok Adat)
+        {
+            try
+            {
+                List<Adat_Anyagok> Adatok = Lista_Adatok();
+                Adat_Anyagok VanAnyag = (from a in Adatok
+                                         where a.Cikkszám == Adat.Cikkszám
+                                         && a.Sarzs == Adat.Sarzs
+                                         select a).FirstOrDefault();
+                if (VanAnyag == null)
+                    Rögzítés(Adat);
+                else
+              Módosítás(Adat);
+                
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

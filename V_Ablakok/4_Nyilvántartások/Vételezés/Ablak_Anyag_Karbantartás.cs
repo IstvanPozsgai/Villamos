@@ -159,7 +159,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     MyF.Szöveg_Tisztítás(KeresőFogalom.Text.Trim()),
                     MyF.Szöveg_Tisztítás(Sarzs.Text.Trim(), 0, 5),
                     0);
-                KézAnyag.Döntés(ADAT);
+                KézAnyag.DöntésEgyedi(ADAT);
                 TáblaÍrás();
             }
             catch (HibásBevittAdat ex)
