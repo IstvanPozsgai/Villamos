@@ -1292,14 +1292,14 @@ namespace Villamos
                 Tábla_Beép.Columns[10].Width = 120;
                 Tábla_Beép.Columns[11].HeaderText = "Telephely";
                 Tábla_Beép.Columns[11].Width = 120;
-                Tábla_Beép.Columns[12].HeaderText = "Uolsó Kapacitás";
+                Tábla_Beép.Columns[12].HeaderText = "Utolsó Kapacitás";
                 Tábla_Beép.Columns[12].Width = 120;
 
                 List<Adat_Akkumulátor_Mérés> AdatokMérés = KézAkkuMér.Lista_Adatok(Dátumtól.Value.Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList();
                 AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-1).Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
                 AdatokMérés.AddRange(KézAkkuMér.Lista_Adatok(Dátumtól.Value.AddYears(-2).Year).Where(a => a.Rögzítő != "TÖRÖLT").ToList());
                 AdatokMérés = (from a in AdatokMérés
-                               orderby a.Gyáriszám descending, a.Mérésdátuma ascending
+                               orderby a.Gyáriszám descending, a.Mérésdátuma descending
                                select a).ToList();
 
                 foreach (Adat_Akkumulátor rekord in Adatok)
