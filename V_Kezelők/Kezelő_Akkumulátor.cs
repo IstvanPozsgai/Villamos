@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely;
         readonly string jelszó = "kasosmiklós";
+        readonly string táblanév = "akkutábla";
 
         public Kezelő_Akkumulátor()
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Akkumulátor> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM akkutábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Akkumulátor> Adatok = new List<Adat_Akkumulátor>();
             Adat_Akkumulátor Adat;
 
@@ -66,7 +67,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO akkutábla ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.Beépítve}', "; //beépítve       ,
@@ -98,7 +99,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " UPDATE akkutábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" fajta='{Adat.Fajta}', ";
                 szöveg += $" gyártó='{Adat.Gyártó}', ";
                 szöveg += $" típus='{Adat.Típus}', ";
@@ -125,7 +126,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " UPDATE akkutábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" beépítve='{Adat.Beépítve}', ";
                 szöveg += $" státus={Adat.Státus}, ";
                 szöveg += $" Módosításdátuma='{Adat.Módosításdátuma:yyyy.MM.dd}' ";
@@ -147,7 +148,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE akkutábla SET  telephely='{Telep.Trim()}' WHERE Gyáriszám='{gyáriszám.Trim()}' ";
+                string szöveg = $"UPDATE {táblanév} SET  telephely='{Telep.Trim()}' WHERE Gyáriszám='{gyáriszám.Trim()}' ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

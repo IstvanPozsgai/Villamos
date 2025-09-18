@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
         readonly string jelszó = "egérpad";
+        readonly string táblanév = "alapadatok";
 
         public Kezelő_Behajtás_Alap()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Behajtás_Alap> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM alapadatok ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_Behajtás_Alap> Adatok = new List<Adat_Behajtás_Alap>();
             Adat_Behajtás_Alap Adat;
 
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT  INTO alapadatok (id, adatbázisnév, Sorszámbetűjele, Sorszámkezdete, Engedélyérvényes, Státus, Adatbáziskönyvtár) ";
+                string szöveg = $"INSERT  INTO {táblanév} (id, adatbázisnév, Sorszámbetűjele, Sorszámkezdete, Engedélyérvényes, Státus, Adatbáziskönyvtár) ";
                 szöveg += " VALUES ";
                 szöveg += $" ({Sorszám()}, '{Adat.Adatbázisnév}', '{Adat.Sorszámbetűjele}', {Adat.Sorszámkezdete},";
                 szöveg += $" '{Adat.Engedélyérvényes:yyyy.MM.dd}', {Adat.Státus}, '{Adat.Adatbáziskönyvtár}')";
@@ -80,7 +81,8 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"Adatbázisnév='{Adat.Adatbázisnév}', ";
+                string szöveg = $"UPDATE {táblanév} SET ";
+                szöveg += $"Adatbázisnév='{Adat.Adatbázisnév}', ";
                 szöveg += $"Sorszámbetűjele='{Adat.Sorszámbetűjele}', ";
                 szöveg += $"Sorszámkezdete={Adat.Sorszámkezdete}, ";
                 szöveg += $"Engedélyérvényes='{Adat.Engedélyérvényes:yyyy.MM.dd}', ";
