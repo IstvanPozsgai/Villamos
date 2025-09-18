@@ -279,8 +279,12 @@ namespace Villamos
             MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
             Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
                      MyExcel.XlBorderWeight.xlMedium,
-                     MyExcel.XlColorIndex.xlColorIndexAutomatic,
                      MyExcel.XlColorIndex.xlColorIndexAutomatic);
+            // JAVÍTANDÓ:
+            //Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
+            //         MyExcel.XlBorderWeight.xlMedium,
+            //         MyExcel.XlColorIndex.xlColorIndexAutomatic,
+            //         MyExcel.XlColorIndex.xlColorIndexAutomatic);
         }
 
 

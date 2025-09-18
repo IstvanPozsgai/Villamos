@@ -48,7 +48,8 @@ namespace Villamos
                     Táblaterület.PrintGridlines = false;
                     Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
                     Táblaterület.CenterHorizontally = false;
-                    Táblaterület.CenterVertically = false;
+                    // JAVÍTANDÓ:
+                        //    Táblaterület.CenterVertically = false;
                     if (álló)
                         Táblaterület.Orientation = MyExcel.XlPageOrientation.xlPortrait;
                     else
