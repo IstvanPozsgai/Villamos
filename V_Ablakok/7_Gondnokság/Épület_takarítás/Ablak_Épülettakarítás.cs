@@ -1113,7 +1113,7 @@ namespace Villamos
                         sor += 1;
                         MyE.Egyesít(munkalap, "b" + sor.ToString() + ":af" + sor.ToString());
                         MyE.Igazít_vízszintes("b" + sor.ToString() + ":p" + sor.ToString(), "bal");
-                        MyE.Háttérszín("b" + sor.ToString() + ":af" + sor.ToString(), 13434828L);
+                        MyE.Háttérszín("b" + sor.ToString() + ":af" + sor.ToString(), 13434828);
                         MyE.Kiir(rekord.Osztály.Trim(), "b" + sor.ToString());
                         MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 20);
 
@@ -1195,7 +1195,7 @@ namespace Villamos
                 // 'összesítő sor
                 sor += 1;
                 MyE.Igazít_vízszintes("b" + sor.ToString() + ":af" + sor.ToString(), "bal");
-                MyE.Háttérszín("b" + sor.ToString() + ":af" + sor.ToString(), 13434828L);
+                MyE.Háttérszín("b" + sor.ToString() + ":af" + sor.ToString(), 13434828);
                 MyE.Egyesít(munkalap, "b" + sor.ToString() + ":r" + sor.ToString());
                 MyE.Kiir(Cmbtelephely.Text.Trim() + " Összesen/hó", "b" + sor.ToString() + ":r" + sor.ToString());
                 MyE.Betű("b" + sor.ToString() + ":o" + sor.ToString(), false, false, true);
@@ -2113,11 +2113,11 @@ namespace Villamos
                         for (int i = 0; i < hónapnap; i++)
                         {
                             if (MyF.Szöveg_Tisztítás(rekord.E1rekijelölt, i, 1) == "0")
-                                MyE.Háttérszín("b" + sor.ToString(), 12632256L);
+                                MyE.Háttérszín("b" + sor.ToString(), 12632256);
                             if (MyF.Szöveg_Tisztítás(rekord.E2rekijelölt, i, 1) == "0")
-                                MyE.Háttérszín("c" + sor.ToString(), 12632256L);
+                                MyE.Háttérszín("c" + sor.ToString(), 12632256);
                             if (MyF.Szöveg_Tisztítás(rekord.E3rekijelölt, i, 1) == "0")
-                                MyE.Háttérszín("d" + sor.ToString(), 12632256L);
+                                MyE.Háttérszín("d" + sor.ToString(), 12632256);
                             sor += 1;
                         }
                     }
@@ -2162,12 +2162,12 @@ namespace Villamos
                     MyE.Kiir("Megrendelt takarítás", "b" + sor.ToString());
                     sor += 1;
                     MyE.Vékonykeret("a" + sor.ToString());
-                    MyE.Háttérszín("a" + sor.ToString(), 12632256L);
+                    MyE.Háttérszín("a" + sor.ToString(), 12632256);
                     MyE.Kiir("Nincs megrendelve a takarítás", "b" + sor.ToString());
                     sor += 1;
                     MyE.Vékonykeret("a" + sor.ToString());
                     MyE.FerdeVonal($"A{sor}");
-                    MyE.Háttérszín("a" + sor.ToString(), 12632256L);
+                    MyE.Háttérszín("a" + sor.ToString(), 12632256);
                     MyE.Kiir("Munkaszüneti nap", "b" + sor.ToString());
 
                     // **********************************************
@@ -2340,7 +2340,7 @@ namespace Villamos
                     sor += 1;
                     MyE.Egyesít(munkalap, "b" + sor.ToString() + ":W" + sor.ToString());
                     MyE.Igazít_vízszintes("b" + sor.ToString() + ":W" + sor.ToString(), "bal");
-                    MyE.Háttérszín("b" + sor.ToString() + ":W" + sor.ToString(), 13434828L);
+                    MyE.Háttérszín("b" + sor.ToString() + ":W" + sor.ToString(), 13434828);
                     MyE.Kiir(rekord.Osztály.Trim(), "b" + sor.ToString());
                     MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 20);
 
@@ -2400,7 +2400,7 @@ namespace Villamos
                 // összesítő sor
                 sor += 1;
                 MyE.Igazít_vízszintes("b" + sor.ToString() + ":W" + sor.ToString(), "bal");
-                MyE.Háttérszín("b" + sor.ToString() + ":W" + sor.ToString(), 13434828L);
+                MyE.Háttérszín("b" + sor.ToString() + ":W" + sor.ToString(), 13434828);
                 MyE.Egyesít(munkalap, "b" + sor.ToString() + ":n" + sor.ToString());
                 MyE.Kiir(Cmbtelephely.Text.Trim() + " Összesen/hó", "b" + sor.ToString() + ":n" + sor.ToString());
                 MyE.Betű("b" + sor.ToString() + ":n" + sor.ToString(), false, false, true);

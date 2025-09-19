@@ -370,7 +370,7 @@ namespace Villamos
                     Adat_Kiegészítő_Típuszínektábla AdatSzín = AdatokSzín.FirstOrDefault(a => a.Típus == A.Típus);
                     if (AdatSzín != null)
                     {
-                        double szine = AdatSzín.Színszám;
+                        int szine = (int)AdatSzín.Színszám;
                         MyE.Háttérszín(MyE.Oszlopnév(k) + $"{j}", szine);
                     }
                     Adat_Jármű_Vendég AdatTelep = AdatokTelep.FirstOrDefault(a => a.Azonosító == A.Azonosító);
@@ -379,7 +379,7 @@ namespace Villamos
                         AdatSzín = AdatokSzín.FirstOrDefault(a => a.Típus == AdatTelep.KiadóTelephely);
                         if (AdatSzín != null)
                         {
-                            double szine = AdatSzín.Színszám;
+                            int szine = (int)AdatSzín.Színszám;
                             MyE.Háttérszín(MyE.Oszlopnév(k) + $"{j}", szine);
                         }
                     }

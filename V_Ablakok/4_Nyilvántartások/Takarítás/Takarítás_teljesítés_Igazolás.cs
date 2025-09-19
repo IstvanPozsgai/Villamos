@@ -242,7 +242,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                         sor += 1;
                         MyE.Egyesít(munkalap, $"b{sor}:p{sor}");
                         MyE.Igazít_vízszintes($"b{sor}:p{sor}", "bal");
-                        MyE.Háttérszín($"b{sor}:p{sor}", 13434828L);
+                        MyE.Háttérszín($"b{sor}:p{sor}", 13434828);
                         MyE.Kiir(rekord.Osztály.Trim(), $"b{sor}");
                         MyE.Sormagasság($"{sor}:{sor}", 20);
 
@@ -361,7 +361,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 // összesítő sor
                 sor += 1;
                 MyE.Igazít_vízszintes($"b{sor}:p{sor}", "bal");
-                MyE.Háttérszín($"b{sor}:p{sor}", 13434828L);
+                MyE.Háttérszín($"b{sor}:p{sor}", 13434828);
                 MyE.Egyesít(munkalap, $"b{sor}:o{sor}");
                 MyE.Kiir(Telephely + " Összesen/hó", $"b{sor}:o{sor}");
 
