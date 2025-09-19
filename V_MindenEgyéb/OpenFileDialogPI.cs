@@ -42,7 +42,7 @@ namespace Villamos.V_MindenEgyéb
 
                 // Ellenõrzés + bezárás elérési út alapján Excel esetén
                 // Mint utólag rájöttem, a FileName nem a fájlnevet, hanem a teljes elérési utat adja vissza.
-                if (KiterjesztésLista.Contains(fájlKiterjesztés))
+                if (fájlKiterjesztés.ToLower() == "xls" || fájlKiterjesztés.ToLower() == "xlsx")
                 {
                     IsFileOpened(dialog.FileName);
                 }
