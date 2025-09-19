@@ -46,7 +46,7 @@ namespace Villamos.V_MindenEgyéb
                 {
                     IsFileOpened(dialog.FileName);
                 }
-               
+
                 isValidFile = true;
             }
             return result;
@@ -62,7 +62,7 @@ namespace Villamos.V_MindenEgyéb
                     (Microsoft.Office.Interop.Excel.Application)Marshal.GetActiveObject("Excel.Application");
 
                 // Megkeressük a keresett fájlt teljes elérési út alapján
-                var workbook = excelApp.Workbooks
+                Microsoft.Office.Interop.Excel.Workbook workbook = excelApp.Workbooks
                     .Cast<Microsoft.Office.Interop.Excel.Workbook>()
                     .FirstOrDefault(wb => wb.FullName.Equals(filePath, StringComparison.OrdinalIgnoreCase));
 
