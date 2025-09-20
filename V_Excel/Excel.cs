@@ -11,10 +11,8 @@ using DT = System.Data;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
 
-
 namespace Villamos
 {
-
     public static partial class Module_Excel
     {
         public static int sor;
@@ -141,21 +139,7 @@ namespace Villamos
 
 
 
-        /// <summary>
-        /// Kijelölt területet rácsoz
-        /// </summary>
-        /// <param name="ws"></param>
-        /// <param name="Kijelöltterület">szöveg kijelölt terület A1:V4 formában</param>
-        public static void Rácsoz(string Kijelöltterület)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[Kijelöltterület];
-            Táblaterület.Borders.LineStyle = XlLineStyle.xlContinuous;
-            Táblaterület.Borders.Weight = MyExcel.XlBorderWeight.xlThin;
-            Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
-                                        MyExcel.XlBorderWeight.xlMedium,
-                                        MyExcel.XlColorIndex.xlColorIndexAutomatic,
-                                        MyExcel.XlColorIndex.xlColorIndexAutomatic);
-        }
+
 
 
         /// <summary>
@@ -269,61 +253,6 @@ namespace Villamos
                     Táblaterület.VerticalAlignment = Constants.xlCenter;
                     break;
             }
-        }
-
-        /// <summary>
-        /// Vastagkeretet készít a kijelölt területre
-        /// </summary>
-        /// <param name="mit">szöveg</param>
-        public static void Vastagkeret(string mit)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
-                     MyExcel.XlBorderWeight.xlMedium,
-                     MyExcel.XlColorIndex.xlColorIndexAutomatic,
-                     MyExcel.XlColorIndex.xlColorIndexAutomatic);
-        }
-
-
-
-
-        /// <summary>
-        /// Vékonykeretet készít a kijelölt területre
-        /// </summary>
-        /// <param name="mit">azöveg</param>
-        public static void Vékonykeret(string mit)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
-                     MyExcel.XlBorderWeight.xlThin,
-                     MyExcel.XlColorIndex.xlColorIndexAutomatic,
-                     MyExcel.XlColorIndex.xlColorIndexAutomatic);
-        }
-
-        public static void VékonyFelső(string mit)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-
-            Táblaterület.Borders[XlBordersIndex.xlDiagonalDown].LineStyle = Constants.xlNone;
-            Táblaterület.Borders[XlBordersIndex.xlDiagonalUp].LineStyle = Constants.xlNone;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeLeft].LineStyle = Constants.xlNone;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = 0;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlThin;
-        }
-
-        public static void VastagFelső(string mit)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-
-            Táblaterület.Borders[XlBordersIndex.xlDiagonalDown].LineStyle = Constants.xlNone;
-            Táblaterület.Borders[XlBordersIndex.xlDiagonalUp].LineStyle = Constants.xlNone;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeLeft].LineStyle = Constants.xlNone;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = 0;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
-            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlMedium;
         }
 
         /// <summary>
@@ -506,16 +435,7 @@ namespace Villamos
 
 
 
-        public static void Pontvonal(string mit)
-        {
 
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].ColorIndex = Constants.xlAutomatic;
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlHairline;
-        }
 
         /// <summary>
         /// Megnyitja az excel, html lapot
@@ -641,25 +561,7 @@ namespace Villamos
             return válasz;
         }
 
-        public static void Aláírásvonal(string mit)
 
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-
-            Táblaterület.Borders.Item[XlBordersIndex.xlDiagonalDown].LineStyle = Constants.xlNone;
-            Táblaterület.Borders.Item[XlBordersIndex.xlDiagonalUp].LineStyle = Constants.xlNone;
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeLeft].LineStyle = Constants.xlNone;
-
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlDash;
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].ColorIndex = Constants.xlAutomatic;
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlThin;
-
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeBottom].LineStyle = Constants.xlNone;
-            Táblaterület.Borders.Item[XlBordersIndex.xlEdgeRight].LineStyle = Constants.xlNone;
-            Táblaterület.Borders.Item[XlBordersIndex.xlInsideVertical].LineStyle = Constants.xlNone;
-            Táblaterület.Borders.Item[XlBordersIndex.xlInsideHorizontal].LineStyle = Constants.xlNone;
-        }
 
 
         public static int Utolsósor(string munkalap)
@@ -679,42 +581,6 @@ namespace Villamos
         }
 
 
-        public static void Keret(string mit, bool jobb, bool bal, bool alsó, bool felső)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-
-            if (jobb)
-            {
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeRight].LineStyle = XlLineStyle.xlContinuous;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeRight].ColorIndex = Constants.xlAutomatic;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeRight].TintAndShade = 0;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeRight].Weight = XlBorderWeight.xlThin;
-            }
-
-            if (bal)
-            {
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeLeft].LineStyle = XlLineStyle.xlContinuous;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeLeft].ColorIndex = Constants.xlAutomatic;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeLeft].TintAndShade = 0;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeLeft].Weight = XlBorderWeight.xlThin;
-            }
-
-            if (alsó)
-            {
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeBottom].LineStyle = XlLineStyle.xlContinuous;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeBottom].ColorIndex = Constants.xlAutomatic;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeBottom].TintAndShade = 0;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeBottom].Weight = XlBorderWeight.xlThin;
-            }
-
-            if (felső)
-            {
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].ColorIndex = Constants.xlAutomatic;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
-                Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlThin;
-            }
-        }
 
 
         public static void Kép_beillesztés(string munkalap, String mit, string hely)
@@ -915,15 +781,7 @@ namespace Villamos
         }
 
 
-        public static void FerdeVonal(string mit)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
 
-            Táblaterület.Borders.Item[XlBordersIndex.xlDiagonalDown].LineStyle = XlLineStyle.xlContinuous;
-            Táblaterület.Borders.Item[XlBordersIndex.xlDiagonalDown].ColorIndex = Constants.xlAutomatic;
-            Táblaterület.Borders.Item[XlBordersIndex.xlDiagonalDown].TintAndShade = 0;
-            Táblaterület.Borders.Item[XlBordersIndex.xlDiagonalDown].Weight = XlBorderWeight.xlThin;
-        }
 
         /// <summary>
         /// Munkalapot a jelzett helyen és sornál két részre osztja

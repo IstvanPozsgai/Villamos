@@ -13,6 +13,8 @@ namespace Villamos
 {
     public static partial class Module_Excel
     {
+        // JAVÍTANDÓ:
+
         /// <summary>
         /// Ez a változat közvetlenül Adattáblából írja ki az adatokat
         /// és az ArrayToExcel könyvtárat használja
@@ -55,13 +57,9 @@ namespace Villamos
                 ExcelMentés();
                 ExcelBezárás();
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "ExcelTábla", ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"DataTableToExcel(fájl: {fájl})", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

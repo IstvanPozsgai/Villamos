@@ -7,7 +7,7 @@ namespace Villamos
 {
     public static partial class Module_Excel
     {
-
+        // JAVÍTANDÓ:copilot
 
         /// <summary>
         /// Nyomtatási területet 
@@ -49,7 +49,7 @@ namespace Villamos
                     Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
                     Táblaterület.CenterHorizontally = false;
                     // JAVÍTANDÓ:
-                        //    Táblaterület.CenterVertically = false;
+                    //    Táblaterület.CenterVertically = false;
                     if (álló)
                         Táblaterület.Orientation = MyExcel.XlPageOrientation.xlPortrait;
                     else
