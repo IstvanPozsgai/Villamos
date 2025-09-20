@@ -215,6 +215,12 @@
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_technológia.Designer.cs">
       <DependentUpon>Ablak_technológia.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\2_Információ\Ablak_Üzenet_Generálás.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\2_Információ\Ablak_Üzenet_Generálás.Designer.cs">
+      <DependentUpon>Ablak_Üzenet_Generálás.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1398,6 +1404,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_technológia.resx">
       <DependentUpon>Ablak_technológia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\2_Információ\Ablak_Üzenet_Generálás.resx">
+      <DependentUpon>Ablak_Üzenet_Generálás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.resx">
       <DependentUpon>Ablak_DolgozóiLekérdezések.cs</DependentUpon>

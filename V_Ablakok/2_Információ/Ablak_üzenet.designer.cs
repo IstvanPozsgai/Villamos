@@ -50,13 +50,6 @@ namespace Villamos
             this.cmbNév = new System.Windows.Forms.ComboBox();
             this.txtszövegrészlet = new System.Windows.Forms.TextBox();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.Többhelyreír = new System.Windows.Forms.Button();
-            this.Btnkilelöltörlés = new System.Windows.Forms.Button();
-            this.BtnKijelölcsop = new System.Windows.Forms.Button();
-            this.Btn3szak = new System.Windows.Forms.Button();
-            this.Btn2szak = new System.Windows.Forms.Button();
-            this.Btn1szak = new System.Windows.Forms.Button();
-            this.Többrögzít = new System.Windows.Forms.Button();
             this.Button6 = new System.Windows.Forms.Button();
             this.BtnOlvasva = new System.Windows.Forms.Button();
             this.Button10 = new System.Windows.Forms.Button();
@@ -82,16 +75,10 @@ namespace Villamos
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.Panel = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.Panel_bezárás = new System.Windows.Forms.Button();
-            this.ChkTelephely = new System.Windows.Forms.CheckedListBox();
-            this.Label13 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.Panel1.SuspendLayout();
-            this.Panel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -213,102 +200,6 @@ namespace Villamos
             this.txtszövegrészlet.Name = "txtszövegrészlet";
             this.txtszövegrészlet.Size = new System.Drawing.Size(277, 26);
             this.txtszövegrészlet.TabIndex = 6;
-            // 
-            // Többhelyreír
-            // 
-            this.Többhelyreír.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
-            this.Többhelyreír.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Többhelyreír.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Többhelyreír.Location = new System.Drawing.Point(698, 3);
-            this.Többhelyreír.Name = "Többhelyreír";
-            this.Többhelyreír.Size = new System.Drawing.Size(40, 40);
-            this.Többhelyreír.TabIndex = 129;
-            this.ToolTip1.SetToolTip(this.Többhelyreír, "Több telephelyes üzenet íráshoz tartozó segédablakot megnyitja.");
-            this.Többhelyreír.UseVisualStyleBackColor = true;
-            this.Többhelyreír.Click += new System.EventHandler(this.Többhelyreír_Click);
-            // 
-            // Btnkilelöltörlés
-            // 
-            this.Btnkilelöltörlés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btnkilelöltörlés.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
-            this.Btnkilelöltörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btnkilelöltörlés.Location = new System.Drawing.Point(271, 50);
-            this.Btnkilelöltörlés.Name = "Btnkilelöltörlés";
-            this.Btnkilelöltörlés.Size = new System.Drawing.Size(40, 40);
-            this.Btnkilelöltörlés.TabIndex = 124;
-            this.ToolTip1.SetToolTip(this.Btnkilelöltörlés, "Mindent kijelölést töröl");
-            this.Btnkilelöltörlés.UseVisualStyleBackColor = true;
-            this.Btnkilelöltörlés.Click += new System.EventHandler(this.Btnkilelöltörlés_Click);
-            // 
-            // BtnKijelölcsop
-            // 
-            this.BtnKijelölcsop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnKijelölcsop.BackgroundImage = global::Villamos.Properties.Resources.mndent_kijelöl;
-            this.BtnKijelölcsop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnKijelölcsop.Location = new System.Drawing.Point(225, 50);
-            this.BtnKijelölcsop.Name = "BtnKijelölcsop";
-            this.BtnKijelölcsop.Size = new System.Drawing.Size(40, 40);
-            this.BtnKijelölcsop.TabIndex = 123;
-            this.ToolTip1.SetToolTip(this.BtnKijelölcsop, "Mindent kijelöl");
-            this.BtnKijelölcsop.UseVisualStyleBackColor = true;
-            this.BtnKijelölcsop.Click += new System.EventHandler(this.BtnKijelölcsop_Click);
-            // 
-            // Btn3szak
-            // 
-            this.Btn3szak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn3szak.BackgroundImage = global::Villamos.Properties.Resources._3B;
-            this.Btn3szak.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn3szak.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Btn3szak.Location = new System.Drawing.Point(225, 197);
-            this.Btn3szak.Name = "Btn3szak";
-            this.Btn3szak.Size = new System.Drawing.Size(40, 40);
-            this.Btn3szak.TabIndex = 122;
-            this.ToolTip1.SetToolTip(this.Btn3szak, "III Szakszolgálat telepeit jelöli ki");
-            this.Btn3szak.UseVisualStyleBackColor = true;
-            this.Btn3szak.Click += new System.EventHandler(this.Btn3szak_Click);
-            // 
-            // Btn2szak
-            // 
-            this.Btn2szak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn2szak.BackgroundImage = global::Villamos.Properties.Resources._2B;
-            this.Btn2szak.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn2szak.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Btn2szak.Location = new System.Drawing.Point(225, 151);
-            this.Btn2szak.Name = "Btn2szak";
-            this.Btn2szak.Size = new System.Drawing.Size(40, 40);
-            this.Btn2szak.TabIndex = 121;
-            this.ToolTip1.SetToolTip(this.Btn2szak, "II Szakszolgálat telepeit jelöli ki");
-            this.Btn2szak.UseVisualStyleBackColor = true;
-            this.Btn2szak.Click += new System.EventHandler(this.Btn2szak_Click);
-            // 
-            // Btn1szak
-            // 
-            this.Btn1szak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn1szak.BackgroundImage = global::Villamos.Properties.Resources._1B;
-            this.Btn1szak.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn1szak.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Btn1szak.Location = new System.Drawing.Point(225, 105);
-            this.Btn1szak.Name = "Btn1szak";
-            this.Btn1szak.Size = new System.Drawing.Size(40, 40);
-            this.Btn1szak.TabIndex = 120;
-            this.ToolTip1.SetToolTip(this.Btn1szak, "I Szakszolgálat telepeit jelöli ki");
-            this.Btn1szak.UseVisualStyleBackColor = true;
-            this.Btn1szak.Click += new System.EventHandler(this.Btn1szak_Click);
-            // 
-            // Többrögzít
-            // 
-            this.Többrögzít.BackColor = System.Drawing.Color.Plum;
-            this.Többrögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Többrögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Többrögzít.Location = new System.Drawing.Point(651, 4);
-            this.Többrögzít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Többrögzít.Name = "Többrögzít";
-            this.Többrögzít.Size = new System.Drawing.Size(40, 40);
-            this.Többrögzít.TabIndex = 120;
-            this.ToolTip1.SetToolTip(this.Többrögzít, "Üzenet rögzítése");
-            this.Többrögzít.UseVisualStyleBackColor = false;
-            this.Többrögzít.Visible = false;
-            this.Többrögzít.Click += new System.EventHandler(this.Többrögzít_Click);
             // 
             // Button6
             // 
@@ -509,7 +400,6 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.Bit64, "Adatok konvertálása");
             this.Bit64.UseVisualStyleBackColor = true;
             this.Bit64.Visible = false;
-            this.Bit64.Click += new System.EventHandler(this.Bit64_Click);
             // 
             // Label1
             // 
@@ -615,69 +505,6 @@ namespace Villamos
             this.label2.TabIndex = 17;
             this.label2.Text = "Telephelyi beállítás:";
             // 
-            // Panel
-            // 
-            this.Panel.Controls.Add(this.label3);
-            this.Panel.Controls.Add(this.Panel_bezárás);
-            this.Panel.Controls.Add(this.Btnkilelöltörlés);
-            this.Panel.Controls.Add(this.BtnKijelölcsop);
-            this.Panel.Controls.Add(this.Btn3szak);
-            this.Panel.Controls.Add(this.Btn2szak);
-            this.Panel.Controls.Add(this.Btn1szak);
-            this.Panel.Controls.Add(this.ChkTelephely);
-            this.Panel.Controls.Add(this.Label13);
-            this.Panel.Location = new System.Drawing.Point(949, 52);
-            this.Panel.Name = "Panel";
-            this.Panel.Size = new System.Drawing.Size(323, 269);
-            this.Panel.TabIndex = 122;
-            this.Panel.Visible = false;
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.MediumOrchid;
-            this.label3.Location = new System.Drawing.Point(13, 25);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 20);
-            this.label3.TabIndex = 128;
-            this.label3.Text = "Könyvtár:";
-            // 
-            // Panel_bezárás
-            // 
-            this.Panel_bezárás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Panel_bezárás.BackgroundImage = global::Villamos.Properties.Resources.bezár;
-            this.Panel_bezárás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Panel_bezárás.Location = new System.Drawing.Point(283, 0);
-            this.Panel_bezárás.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Panel_bezárás.Name = "Panel_bezárás";
-            this.Panel_bezárás.Size = new System.Drawing.Size(40, 40);
-            this.Panel_bezárás.TabIndex = 127;
-            this.Panel_bezárás.UseVisualStyleBackColor = true;
-            this.Panel_bezárás.Click += new System.EventHandler(this.Panel_bezárás_Click);
-            // 
-            // ChkTelephely
-            // 
-            this.ChkTelephely.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ChkTelephely.CheckOnClick = true;
-            this.ChkTelephely.FormattingEnabled = true;
-            this.ChkTelephely.Location = new System.Drawing.Point(13, 50);
-            this.ChkTelephely.Name = "ChkTelephely";
-            this.ChkTelephely.Size = new System.Drawing.Size(206, 193);
-            this.ChkTelephely.TabIndex = 125;
-            // 
-            // Label13
-            // 
-            this.Label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Label13.AutoSize = true;
-            this.Label13.BackColor = System.Drawing.Color.MediumOrchid;
-            this.Label13.Location = new System.Drawing.Point(0, 0);
-            this.Label13.Name = "Label13";
-            this.Label13.Size = new System.Drawing.Size(189, 20);
-            this.Label13.TabIndex = 119;
-            this.Label13.Text = "Üzenet írás több területre";
-            this.Label13.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Label13_MouseMove);
-            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.Bit64);
@@ -687,7 +514,6 @@ namespace Villamos
             this.panel2.Controls.Add(this.txtsorszám);
             this.panel2.Controls.Add(this.btnolvasás);
             this.panel2.Controls.Add(this.Első);
-            this.panel2.Controls.Add(this.Többrögzít);
             this.panel2.Controls.Add(this.Előző);
             this.panel2.Controls.Add(this.Következő);
             this.panel2.Controls.Add(this.Utolsó);
@@ -695,12 +521,10 @@ namespace Villamos
             this.panel2.Controls.Add(this.btnválaszol);
             this.panel2.Controls.Add(this.btnújüzenet);
             this.panel2.Controls.Add(this.BtnOlvasva);
-            this.panel2.Controls.Add(this.Többhelyreír);
             this.panel2.Location = new System.Drawing.Point(5, 290);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(965, 50);
             this.panel2.TabIndex = 132;
-            this.panel2.DoubleClick += new System.EventHandler(this.Panel2_DoubleClick);
             // 
             // Holtart
             // 
@@ -716,11 +540,10 @@ namespace Villamos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Plum;
+            this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.ClientSize = new System.Drawing.Size(1284, 701);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Excel_kimenet);
-            this.Controls.Add(this.Panel);
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Button6);
             this.Controls.Add(this.RadioMinden);
@@ -743,13 +566,10 @@ namespace Villamos
             this.Text = "Üzenetek írása, olvasása";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_üzenet_Load);
-            this.Shown += new System.EventHandler(this.Ablak_üzenet_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ablak_üzenet_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
-            this.Panel.ResumeLayout(false);
-            this.Panel.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
@@ -781,7 +601,6 @@ namespace Villamos
         internal RadioButton Radioolvastan;
         internal RadioButton RadioMinden;
         internal Button Button6;
-        internal Button Többrögzít;
         internal Panel Panel1;
         internal Label label2;
         internal DataGridViewTextBoxColumn Column1;
@@ -790,17 +609,6 @@ namespace Villamos
         internal DataGridViewTextBoxColumn Column4;
         internal DataGridViewCheckBoxColumn Column5;
         internal ComboBox Cmbtelephely;
-        private Panel Panel;
-        internal Button Panel_bezárás;
-        internal Button Btnkilelöltörlés;
-        internal Button BtnKijelölcsop;
-        internal Button Btn3szak;
-        internal Button Btn2szak;
-        internal Button Btn1szak;
-        internal CheckedListBox ChkTelephely;
-        internal Label Label13;
-        internal Label label3;
-        internal Button Többhelyreír;
         internal Button Excel_kimenet;
         private Panel panel2;
         internal Button button8;

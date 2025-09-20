@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.V_Ablakok.Közös;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
@@ -24,23 +24,15 @@ namespace Villamos
 
         bool CTRL_le = false;
 
+        #region Alap
         public Ablak_üzenet()
         {
             InitializeComponent();
             Start();
         }
 
-
         private void Ablak_üzenet_Load(object sender, EventArgs e)
-        {
-
-        }
-
-
-        private void Ablak_üzenet_Shown(object sender, EventArgs e)
-        {
-
-        }
+        { }
 
         private void Listák_Feltöltése()
         {
@@ -53,9 +45,6 @@ namespace Villamos
             Szűrésalaphelyzetbe();
             Írokfeltöltése();
         }
-
-
-        #region Alap
 
         private void Start()
         {
@@ -76,7 +65,6 @@ namespace Villamos
 
                 Dátumig.MaxDate = DateTime.Today;
                 Dátumtól.MaxDate = DateTime.Today;
-                Többrögzít.Enabled = false;
 
                 Radioolvastan.Checked = true;
                 Táblalistázás();
@@ -105,11 +93,6 @@ namespace Villamos
                 { Cmbtelephely.Text = Program.PostásTelephely; }
 
                 Cmbtelephely.Enabled = Program.Postás_Vezér;
-
-
-                ChkTelephely.Items.Clear();
-                foreach (string Elem in Listák.TelephelyLista_Személy(false))
-                    ChkTelephely.Items.Add(Elem);
             }
             catch (HibásBevittAdat ex)
             {
@@ -143,6 +126,23 @@ namespace Villamos
             }
         }
 
+        private void Button6_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\üzenetek.html";
+                MyE.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
@@ -175,12 +175,10 @@ namespace Villamos
             }
         }
 
-
         private void Button10_Click(object sender, EventArgs e)
         {
             Szűrésalaphelyzetbe();
         }
-
 
         private void Írokfeltöltése()
         {
@@ -210,14 +208,11 @@ namespace Villamos
             }
         }
 
-
         private void Button1_Click(object sender, EventArgs e)
         {
-
             Táblalistázás();
             Txtírásimező.Text = "";
         }
-
 
         private void Táblalistázás()
         {
@@ -298,7 +293,6 @@ namespace Villamos
             }
         }
 
-
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (Tábla.RowCount == 0) return;
@@ -311,7 +305,6 @@ namespace Villamos
             }
         }
 
-
         private void Tábla_SelectionChanged(object sender, EventArgs e)
         {
             if (Tábla.RowCount == 0) return;
@@ -322,9 +315,7 @@ namespace Villamos
 
             txtsorszám.Text = sorszám.ToString();
             Kiválasztott_üzenet(sorszám);
-
         }
-
 
         private void Kiválasztott_üzenet(double sorszám)
         {
@@ -381,8 +372,6 @@ namespace Villamos
                     BtnOlvasva.Visible = false;
 
                 btnválaszol.Visible = true;
-                Többrögzít.Enabled = false;
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -431,7 +420,6 @@ namespace Villamos
             }
         }
 
-
         private void Előző_Click(object sender, EventArgs e)
         {
             try
@@ -455,7 +443,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Következő_Click(object sender, EventArgs e)
         {
@@ -485,7 +472,6 @@ namespace Villamos
             }
         }
 
-
         private int Utolsóüzenet()
         {
             int válasz = 1;
@@ -498,7 +484,6 @@ namespace Villamos
 
             return válasz;
         }
-
 
         private void Utolsó_Click(object sender, EventArgs e)
         {
@@ -519,7 +504,6 @@ namespace Villamos
             }
         }
 
-
         private void Btnválaszol_Click(object sender, EventArgs e)
         {
             try
@@ -528,9 +512,12 @@ namespace Villamos
                 if (txtsorszám.Text.Trim() == "") return;
                 if (!int.TryParse(txtsorszám.Text, out int sorszám)) return;
 
-                txtválasz.Text = sorszám.ToString();
-                Txtírásimező.Text = "";
-                Többrögzít.Visible = true;
+                Új_Ablak_Üzenet_Generálás?.Close();
+
+                Új_Ablak_Üzenet_Generálás = new Ablak_Üzenet_Generálás(Cmbtelephely.Text.Trim(), "", sorszám);
+                Új_Ablak_Üzenet_Generálás.FormClosed += Ablak_Üzenet_Generálás_FormClosed;
+                Új_Ablak_Üzenet_Generálás.Változás += Változások;
+                Új_Ablak_Üzenet_Generálás.Show();
             }
             catch (HibásBevittAdat ex)
             {
@@ -544,13 +531,42 @@ namespace Villamos
         }
 
 
+        #region Üzenet Írás
+
+        Ablak_Üzenet_Generálás Új_Ablak_Üzenet_Generálás;
         private void Btnújüzenet_Click(object sender, EventArgs e)
         {
-            Txtírásimező.Text = "";
-            Többrögzít.Enabled = true;
-            txtválasz.Text = "0";
+            Új_Ablak_Üzenet_Generálás?.Close();
+
+            Új_Ablak_Üzenet_Generálás = new Ablak_Üzenet_Generálás(Cmbtelephely.Text.Trim(), "", 0);
+            Új_Ablak_Üzenet_Generálás.FormClosed += Ablak_Üzenet_Generálás_FormClosed;
+            Új_Ablak_Üzenet_Generálás.Változás += Változások;
+            Új_Ablak_Üzenet_Generálás.Show();
         }
 
+        private void Ablak_Üzenet_Generálás_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Üzenet_Generálás = null;
+        }
+
+        private void Változások()
+        {
+            try
+            {
+                BtnOlvasva.Visible = false;
+                Táblalistázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
 
         private void BtnOlvasva_Click(object sender, EventArgs e)
         {
@@ -650,34 +666,19 @@ namespace Villamos
                 int melyikelem;
 
                 BtnOlvasva.Visible = false;
-                Többrögzít.Visible = false;
-                Cmbtelephely.Visible = false;
-                Többhelyreír.Visible = false;
-                if (Program.PostásTelephely.Trim() == "Főmérnökség" || Program.Postás_Vezér)
-                {
-                    Többhelyreír.Enabled = true;
-                }
-                else
-                {
-                    Többhelyreír.Enabled = false;
-                }
-
                 melyikelem = 200;
                 // módosítás 1
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
                     BtnOlvasva.Visible = true;
-                    Többrögzít.Visible = true;
                 }
                 // módosítás 2 főmérnökségi belépés és mindenhova tud írni
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
-                    Többhelyreír.Visible = true;
                 }
                 // módosítás 3 szakszolgálati belépés és sajátjaiba tud írni
                 if (MyF.Vanjoga(melyikelem, 3))
                 {
-                    Többhelyreír.Visible = true;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -690,7 +691,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Tábla_MultiSelectChanged(object sender, EventArgs e)
         {
@@ -700,177 +700,10 @@ namespace Villamos
                 BtnOlvasva.Visible = false;
         }
 
-        private void Többrögzít_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Adatok_Üzenet = KézÜzenet.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
-                if (Txtírásimező.Text.Trim() == "") return;
-                if (txtválasz.Text.Trim() == "") txtválasz.Text = "0";
 
-                int volt = 0;
-                //leellenőrizzük, hogy volt-e kijelölve
-                for (int j = 0; j < ChkTelephely.Items.Count; j++)
-                {
-                    if (ChkTelephely.GetItemChecked(j))
-                    {
-                        volt = 1;
-                        break;
-                    }
-                }
-
-                // ha nem volt kijelölve, akkor a belépő telephelyet jelüljük ki
-
-                if (volt == 0)
-                {
-                    for (int j = 0; j < ChkTelephely.Items.Count; j++)
-                    {
-                        if (ChkTelephely.Items[j].ToString().Trim() == Program.PostásTelephely.Trim())
-                        {
-                            ChkTelephely.SetItemChecked(j, true);
-                            break;
-                        }
-                    }
-
-                }
-
-
-                //Végig nézzük a telephelyeket
-                for (int j = 0; j < ChkTelephely.Items.Count; j++)
-                {
-                    //Ha jelölve van akkor rögzítünk
-                    if (ChkTelephely.GetItemChecked(j))
-                    {
-                        //megtisztítjuk a szöveget
-                        Txtírásimező.Text = Txtírásimező.Text.Replace('"', '°');
-                        if (!double.TryParse(txtválasz.Text, out double Válasz)) Válasz = 0;
-
-                        //csak aktuális évben tudunk rögzíteni
-                        Adat_Üzenet ADAT = new Adat_Üzenet(0,
-                                                           Txtírásimező.Text.Trim(),
-                                                           Program.PostásNév.Trim(),
-                                                           DateTime.Now,
-                                                           Válasz);
-                        KézÜzenet.Rögzítés(ChkTelephely.Items[j].ToString().Trim(), DateTime.Now.Year, ADAT);
-                        Többrögzít.Visible = false;
-                        BtnOlvasva.Visible = false;
-                    }
-                }
-                Táblalistázás();
-                Txtírásimező.Text = "";
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        #region Kiegészítő rész
-
-        void Szakszolgálat_választó(int melyik)
-        {
-            try
-            {
-                List<Adat_Kiegészítő_Könyvtár> AdatokÖ = KézKiegKönyvtár.Lista_Adatok();
-                List<Adat_Kiegészítő_Könyvtár> Adatok = (from a in AdatokÖ
-                                                         where a.Csoport1 == melyik
-                                                         select a).ToList();
-
-                foreach (Adat_Kiegészítő_Könyvtár rekord in Adatok)
-                {
-                    for (int j = 0; j < ChkTelephely.Items.Count; j += 1)
-                    {
-                        if (ChkTelephely.Items[j].ToString().Trim() == rekord.Név.Trim())
-                            ChkTelephely.SetItemChecked(j, true);
-                    }
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private void Panel_bezárás_Click(object sender, EventArgs e)
-        {
-            Panel.Visible = false;
-        }
-
-
-        private void Btn1szak_Click(object sender, EventArgs e)
-        {
-            Szakszolgálat_választó(1);
-        }
-
-
-        private void Btn2szak_Click(object sender, EventArgs e)
-        {
-            Szakszolgálat_választó(2);
-        }
-
-
-        private void Btn3szak_Click(object sender, EventArgs e)
-        {
-            Szakszolgálat_választó(3);
-        }
-
-
-        private void BtnKijelölcsop_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < ChkTelephely.Items.Count; i++)
-                ChkTelephely.SetItemChecked(i, true);
-
-
-        }
-
-
-        private void Btnkilelöltörlés_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < ChkTelephely.Items.Count; i++)
-            {
-                ChkTelephely.SetItemChecked(i, false);
-                //saját belépés aktív marad
-                if (ChkTelephely.Items[i].ToString().Trim() == Program.Postás_telephely.ToString().Trim())
-                    ChkTelephely.SetItemChecked(i, true);
-            }
-        }
-
-
-        private void Label13_MouseMove(object sender, MouseEventArgs e)
-        {
-            // egér bal gomb hatására a groupbox1 bal felső sarkánál fogva mozgatja a lapot.
-
-            if (e.Button == MouseButtons.Left)
-            {
-                Panel.Top = Top + Panel.Top + e.Y;
-                Panel.Left = Left + Panel.Left + e.X;
-            }
-        }
-
-
-        private void Többhelyreír_Click(object sender, EventArgs e)
-        {
-            Panel.Visible = true;
-        }
-
-
-        #endregion
 
 
         #region Excel
-
         private void Excel_kimenet_Click(object sender, EventArgs e)
         {
             try
@@ -935,26 +768,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        private void Button6_Click_1(object sender, EventArgs e)
-        {
-            try
-            {
-                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\üzenetek.html";
-                MyE.Megnyitás(hely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         #endregion
 
 
@@ -971,7 +784,6 @@ namespace Villamos
             }
         }
 
-
         private void Button7_DoubleClick(object sender, EventArgs e)
         {
             //Felfelé mozgat
@@ -982,7 +794,6 @@ namespace Villamos
             Txtírásimező.Top -= lépés;
             Txtírásimező.Height += lépés;
         }
-
 
         private void Button8_Click(object sender, EventArgs e)
         {
@@ -1014,18 +825,9 @@ namespace Villamos
             }
         }
 
-        private void Bit64_Click(object sender, EventArgs e)
-        {
-        }
-
         private void Ablak_üzenet_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control) CTRL_le = true;
-        }
-
-        private void Panel2_DoubleClick(object sender, EventArgs e)
-        {
-            if (CTRL_le) Bit64.Visible = true;
         }
 
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
