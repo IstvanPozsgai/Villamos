@@ -134,5 +134,35 @@ namespace Villamos
             }
         }
 
+
+        /// <summary>
+        /// Betű típusát és méretét állítja be a munkalapon
+        /// </summary>
+        /// <param name="név"></param>
+        /// <param name="méret"></param>
+        public static void Munkalap_betű(string név, int méret)
+        {
+            try
+            {
+                MyExcel.Range Cellák = Module_Excel.xlApp.Application.Cells;
+                Cellák.VerticalAlignment = MyExcel.XlVAlign.xlVAlignCenter;
+                Cellák.Font.Name = név;
+                Cellák.Font.Size = méret;
+                Cellák.Font.Strikethrough = false;
+                Cellák.Font.Superscript = false;
+                Cellák.Font.Subscript = false;
+                Cellák.Font.OutlineFont = false;
+                Cellák.Font.Shadow = false;
+                Cellák.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
+                Cellák.Font.ThemeColor = Microsoft.Office.Interop.Excel.XlThemeColor.xlThemeColorLight1;
+                Cellák.Font.TintAndShade = 0;
+                Cellák.Font.ThemeFont = Microsoft.Office.Interop.Excel.XlThemeFont.xlThemeFontNone;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Munkalap_betű(név: {név}, méret: {méret})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

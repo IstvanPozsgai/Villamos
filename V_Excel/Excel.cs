@@ -437,27 +437,7 @@ namespace Villamos
 
 
 
-        /// <summary>
-        /// Betű típusát és méretét állítja be a munkalapon
-        /// </summary>
-        /// <param name="név"></param>
-        /// <param name="méret"></param>
-        public static void Munkalap_betű(string név, int méret)
-        {
-            MyExcel.Range Cellák = Module_Excel.xlApp.Application.Cells;
-            Cellák.VerticalAlignment = Constants.xlCenter;
-            Cellák.Font.Name = név;
-            Cellák.Font.Size = méret;
-            Cellák.Font.Strikethrough = false;
-            Cellák.Font.Superscript = false;
-            Cellák.Font.Subscript = false;
-            Cellák.Font.OutlineFont = false;
-            Cellák.Font.Shadow = false;
-            Cellák.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
-            Cellák.Font.ThemeColor = Microsoft.Office.Interop.Excel.XlThemeColor.xlThemeColorLight1;
-            Cellák.Font.TintAndShade = 0;
-            Cellák.Font.ThemeFont = Microsoft.Office.Interop.Excel.XlThemeFont.xlThemeFontNone;
-        }
+
         /// <summary>
         /// A munkalapot, úgy mozgatja, hogy a kívánt cella rajta legyen a képernyőn.
         /// </summary>
