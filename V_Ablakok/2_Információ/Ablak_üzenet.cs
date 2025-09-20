@@ -915,7 +915,7 @@ namespace Villamos
                 }
                 MyE.Rácsoz("A1:D" + (Tábla.Rows.Count + 2).ToString());
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:d" + (Tábla.Rows.Count + 2).ToString(), "1:1", "", false);
-                MyE.Szűrés(munkalap, 1, 4, 1);
+                MyE.Szűrés(munkalap, "A", "D", Tábla.Rows.Count + 2);
                 MyE.Aktív_Cella(munkalap, "A1");
 
                 MyE.ExcelMentés(fájlexc);

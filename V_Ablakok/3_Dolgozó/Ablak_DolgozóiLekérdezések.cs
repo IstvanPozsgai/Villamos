@@ -526,7 +526,7 @@ namespace Villamos
                         }
                     }
                     MyE.Oszlopszélesség(munkalap, "A:M");
-                    MyE.Szűrés(munkalap, "A:M", 1);
+                    MyE.Szűrés(munkalap, "A", "M", i);
 
                     MyE.Rácsoz($"A1:m{i}");
                     MyE.Vastagkeret($"A1:m{i}");

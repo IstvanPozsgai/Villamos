@@ -3484,7 +3484,7 @@ namespace Villamos
                 MyE.Vastagkeret("a3:Ak" + (utolsósor + 3).ToString());
                 MyE.Vastagkeret("a3:Ak3");
                 // szűrő
-                MyE.Szűrés(munkalap, "A3:AK" + (utolsósor + 3), 3);
+                MyE.Szűrés(munkalap, "A", "AK", (int)(utolsósor + 3), 3);
 
                 // ablaktábla rögzítése
 

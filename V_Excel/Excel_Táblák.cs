@@ -44,7 +44,7 @@ namespace Villamos
                 if (TáblaGrid != null) Színezés(TáblaGrid);
 
                 Tábla_Rögzítés(1);  //Rögzítjük a fejlécet
-                Szűrés("Munka1", 1, oszlop, 1);    //szűrést felteszük
+                Szűrés("Munka1", "A", Oszlopnév(oszlop), sor + 1);    //szűrést felteszük
 
                 //Nyomtatási terület kijelülése
                 NyomtatásiTerület_részletes("Munka1", $"A1:{Oszlopnév(oszlop)}{sor + 1}", "$1:$1", "", true);
@@ -228,7 +228,7 @@ namespace Villamos
             xlApp.ActiveWindow.FreezePanes = true;
 
             //szűrést felteszük
-            Szűrés(munkalap, 1, oszlop, 1);
+            Szűrés(munkalap, "A", Oszlopnév(oszlop), sor + 1);
 
 
             //Nyomtatási terület kijelülése
@@ -312,7 +312,7 @@ namespace Villamos
             xlApp.ActiveWindow.FreezePanes = true;
 
             //szűrést felteszük
-            Szűrés("Munka1", 1, oszlop, 1);
+            Szűrés("Munka1", "A", Oszlopnév(oszlop), sor + 1);
 
 
             //Nyomtatási terület kijelülése

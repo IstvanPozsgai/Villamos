@@ -2471,7 +2471,7 @@ namespace Villamos
                 MyE.Vastagkeret("a3:m3");
 
                 // szűrő
-                MyE.Szűrés(munkalap, $"a3:m{sor}", 3);
+                MyE.Szűrés(munkalap, $"A", "M", sor, 3);
 
                 // ablaktábla rögzítése
                 MyE.Tábla_Rögzítés(3);

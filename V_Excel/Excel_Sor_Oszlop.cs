@@ -43,14 +43,14 @@ namespace Villamos
         /// Sormagasságot lehet beállítani
         /// </summary>
         /// <param name="mit">szöveg</param>
-        /// <param name="mekkora">egész</param>
+        /// <param name="mekkora">egész, ha -1 akkor automatikus sormagasságot akarunk beállítani</param>
         /// 
-        public static void Sormagasság(string mit, int? mekkora)
+        public static void Sormagasság(string mit, int mekkora)
         {
             try
             {
                 MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(mit);
-                if (mekkora.HasValue)
+                if (mekkora > 0)
                     Táblaterület.RowHeight = mekkora;
                 else
                     Táblaterület.EntireRow.AutoFit();

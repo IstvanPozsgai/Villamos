@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using static System.IO.File;
+using DT = System.Data;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
 
@@ -398,46 +399,6 @@ namespace Villamos
         }
 
 
-
-        /// <summary>
-        /// A küldött névvel beszúr utolsó lapnak egy munkalapot
-        /// </summary>
-        /// <param name="név"></param>
-        public static void Új_munkalap(string név)
-        {
-            //Munakalap hozzáadás
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets.Add();
-            // munkalap átnevezéséhez 
-            Munkalap.Name = név;
-        }
-
-
-        /// <summary>
-        /// Egy munkalapot átnevez és aktívvá teszi
-        /// </summary>
-        /// <param name="régi"></param>
-        /// <param name="új"></param>
-        public static void Munkalap_átnevezés(string régi, string új)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[régi];
-            Munkalap.Name = új;
-            Munkalap.Select();
-        }
-
-
-        /// <summary>
-        /// Kijelöljük a munkalapot
-        /// </summary>
-        /// <param name="név"></param>
-        public static void Munkalap_aktív(string név)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[név];
-            Munkalap.Select();
-        }
-
-
-
-
         /// <summary>
         /// A munkalapot, úgy mozgatja, hogy a kívánt cella rajta legyen a képernyőn.
         /// </summary>
@@ -542,34 +503,7 @@ namespace Villamos
             Táblaterület.MergeCells = true;
         }
 
-        public static void Szűrés(string munkalap, int oszloptól, int oszlopig, int sor)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range myRange = Munkalap.Range[Oszlopnév(oszloptól) + ":" + Oszlopnév(oszlopig)];
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            object result = myRange.AutoFilter(sor);
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
-        }
 
-
-        public static void Szűrés(string munkalap, string oszloptól, string oszlopig, int sor)
-        {
-
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range myRange = Munkalap.Range[oszloptól + ":" + oszlopig];
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            object result = myRange.AutoFilter(sor);
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
-        }
-
-        public static void Szűrés(string munkalap, string mit, int sor)
-        {
-
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range myRange = Munkalap.Range[mit];
-            myRange.AutoFilter(sor);
-
-        }
 
 
         public static void Pontvonal(string mit)
@@ -1023,6 +957,29 @@ namespace Villamos
 
         }
 
+        //Elkopó
+        public static long Munkalap(DT.DataTable Tábla, int sor, string munkalap)
+        {
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            Munkalap.Select();
 
+            //Fejléc
+            for (int j = 0; j < Tábla.Columns.Count; j++)
+            {
+                Munkalap.Cells[sor, j + 1] = Tábla.Columns[j].ColumnName.ToString();
+            }
+
+
+            for (int i = 0; i < Tábla.Rows.Count; i++)
+            {
+                for (int j = 0; j < Tábla.Columns.Count; j++)
+                {
+                    Munkalap.Cells[i + sor + 1, j + 1] = Tábla.Rows[i].ItemArray[j];
+                }
+            }
+
+            long utolsó_sor = Tábla.Rows.Count;
+            return utolsó_sor;
+        }
     }
 }
