@@ -1328,7 +1328,7 @@ namespace Villamos.Villamos_Ablakok
                             MyE.Kiir(ideignév.Replace("_", "\n"), "AT" + sor);
                             MyE.Sortörésseltöbbsorba("M" + sor, true);
                         }
-                        MyE.Sormagasság($"{sor}:{sor}");
+                        MyE.Sormagasság($"{sor}:{sor}", -1);
                         MyE.Igazít_vízszintes("B" + sor, "bal");
                         Adat_technológia_Ciklus cikluselelje = AdatokCiklus.Where(B => B.Sorszám == a.Karb_ciklus_eleje).FirstOrDefault();
                         if (cikluselelje != null) MyE.Kiir(cikluselelje.Fokozat, $"J{sor}");

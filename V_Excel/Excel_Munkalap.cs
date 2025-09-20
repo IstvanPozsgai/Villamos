@@ -1,5 +1,6 @@
 ﻿using Microsoft.Office.Interop.Excel;
-using DT = System.Data;
+using System;
+using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
 
@@ -13,9 +14,17 @@ namespace Villamos
         /// <param name="sor">sor</param>
         public static void Tábla_Rögzítés(int sor)
         {
-            xlApp.ActiveWindow.SplitColumn = 0;
-            xlApp.ActiveWindow.SplitRow = sor;
-            xlApp.ActiveWindow.FreezePanes = true;
+            try
+            {
+                xlApp.ActiveWindow.SplitColumn = 0;
+                xlApp.ActiveWindow.SplitRow = sor;
+                xlApp.ActiveWindow.FreezePanes = true;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Tábla_Rögzítés(sor {sor})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -25,35 +34,96 @@ namespace Villamos
         /// <param name="munkalap"></param>
         public static void SzűrésKi(string munkalap)
         {
-
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munkalap.AutoFilterMode = false;
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                Munkalap.Activate();
+                Munkalap.AutoFilterMode = false;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"SzűrésKi(munkalap {munkalap})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
-        //Elkopó
-        public static long Munkalap(DT.DataTable Tábla, int sor, string munkalap)
+        /// <summary>
+        /// A küldött névvel beszúr utolsó lapnak egy munkalapot
+        /// </summary>
+        /// <param name="név"></param>
+        public static void Új_munkalap(string munkalap)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munkalap.Select();
-
-            //Fejléc
-            for (int j = 0; j < Tábla.Columns.Count; j++)
+            try
             {
-                Munkalap.Cells[sor, j + 1] = Tábla.Columns[j].ColumnName.ToString();
+                //Munakalap hozzáadás
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets.Add();
+                // munkalap átnevezéséhez 
+                Munkalap.Name = munkalap;
             }
-
-
-            for (int i = 0; i < Tábla.Rows.Count; i++)
+            catch (Exception ex)
             {
-                for (int j = 0; j < Tábla.Columns.Count; j++)
-                {
-                    Munkalap.Cells[i + sor + 1, j + 1] = Tábla.Rows[i].ItemArray[j];
-                }
+                HibaNapló.Log(ex.Message, $"Új_munkalap(munkalap {munkalap})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
 
-            long utolsó_sor = Tábla.Rows.Count;
-            return utolsó_sor;
+
+        /// <summary>
+        /// Egy munkalapot átnevez és aktívvá teszi
+        /// </summary>
+        /// <param name="régi"></param>
+        /// <param name="új"></param>
+        public static void Munkalap_átnevezés(string régi, string új)
+        {
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[régi];
+                Munkalap.Name = új;
+                Munkalap.Select();
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Munkalap_átnevezés(régi {régi}, új {új})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        /// <summary>
+        /// Kijelöljük a munkalapot
+        /// </summary>
+        /// <param name="név"></param>
+        public static void Munkalap_aktív(string munkalap)
+        {
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                Munkalap.Activate();
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Munkalap_aktív(munkalap {munkalap})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public static void Szűrés(string munkalap, string oszloptól, string oszlopig, int sorig, int sortól = 1)
+        {
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                string kezdőCella = oszloptól + sortól;
+                string utolsóCella = oszlopig + sorig;
+                MyExcel.Range myRange = Munkalap.get_Range(kezdőCella, utolsóCella);
+                object result = myRange.AutoFilter(sortól);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Szűrés(munkalap: {munkalap}, oszloptól: {oszloptól}, oszlopig: {oszlopig}, sorig: {sorig},sortól: {sortól} )", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

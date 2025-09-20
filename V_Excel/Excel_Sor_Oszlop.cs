@@ -43,21 +43,21 @@ namespace Villamos
         /// Sormagasságot lehet beállítani
         /// </summary>
         /// <param name="mit">szöveg</param>
-        /// <param name="mekkora">egész</param>
+        /// <param name="mekkora">egész, ha -1 akkor automatikus sormagasságot akarunk beállítani</param>
         /// 
-        public static void Sormagasság(string mit, int? mekkora)
+        public static void Sormagasság(string mit, int mekkora)
         {
             try
             {
                 MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(mit);
-                if (mekkora.HasValue)
+                if (mekkora > 0)
                     Táblaterület.RowHeight = mekkora;
                 else
                     Táblaterület.EntireRow.AutoFit();
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Sormagasság(mit: {mit}, mekkora: {(mekkora.HasValue ? mekkora.Value.ToString() : "AutoFit")})", ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"Sormagasság(mit: {mit}, mekkora: {mekkora})", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

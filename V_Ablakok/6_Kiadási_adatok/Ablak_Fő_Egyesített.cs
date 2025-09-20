@@ -954,7 +954,7 @@ namespace Villamos
                 for (int i = 2; i <= sormax; i++)
                     MyE.Kiir("=SUM(RC[-" + (oszlop - 3).ToString() + "]:RC[-1])", MyE.Oszlopnév(oszlop) + i.ToString());
                 // szűrés
-                MyE.Szűrés("Munka1", 1, oszlop, 1);
+                MyE.Szűrés("Munka1", "A", MyE.Oszlopnév(oszlop), sormax);
 
                 // rácsozás
                 MyE.Rácsoz("a1:" + MyE.Oszlopnév(oszlop) + sormax.ToString());

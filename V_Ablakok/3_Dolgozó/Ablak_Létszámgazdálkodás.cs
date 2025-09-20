@@ -1463,7 +1463,7 @@ namespace Villamos
                     }
                 }
 
-                MyE.Szűrés(munkalap, "A:N", 1);
+                MyE.Szűrés(munkalap, "A", "N", i);
                 MyE.Oszlopszélesség(munkalap, "A:N");
 
                 MyE.Rácsoz($"A1:N{i}");

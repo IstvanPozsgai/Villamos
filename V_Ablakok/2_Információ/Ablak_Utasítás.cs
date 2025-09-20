@@ -618,8 +618,8 @@ namespace Villamos
                     Holtart.Lép();
                 }
                 MyE.Rácsoz("A1:D" + (tábla.Rows.Count + 1).ToString());
-                MyE.NyomtatásiTerület_részletes(munkalap, "a1:d" + (tábla.Rows.Count + 1).ToString(), "1:1", "", false);
-                MyE.Szűrés(munkalap, 1, 4, 1);
+                MyE.NyomtatásiTerület_részletes(munkalap, "A1:D" + (tábla.Rows.Count + 1).ToString(), "1:1", "", false);
+                MyE.Szűrés(munkalap, "A", "D", tábla.Rows.Count + 1);
                 MyE.Aktív_Cella(munkalap, "A1");
 
                 MyE.ExcelMentés(fájlexc);

@@ -307,7 +307,7 @@ namespace Villamos
                 //Első sor sárga
                 MyE.Háttérszín("A1:C1", Color.Yellow);
 
-                MyE.Szűrés("Munka1", 1, 3, 1);
+                MyE.Szűrés("Munka1", "A", "C", sor);
 
                 // Oszlopok beállítása
                 MyE.Oszlopszélesség("Munka1", "A:C");
