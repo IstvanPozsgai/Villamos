@@ -601,13 +601,6 @@ namespace Villamos
             xlWorkBook = xlApp.Workbooks.Open(hely);
         }
 
-        public static void Értékmásol(string hol)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[hol];
-            Táblaterület.Range[hol].Cells.Select();
-            Táblaterület.Copy();
-            Táblaterület.PasteSpecial(Paste: XlPasteType.xlPasteValues, Operation: XlPasteSpecialOperation.xlPasteSpecialOperationNone, SkipBlanks: false, Transpose: false);
-        }
 
         public static void Értékmásol(string munkalap, string honnan, string hova)
         {
@@ -734,29 +727,6 @@ namespace Villamos
             Táblaterület.Borders.Item[XlBordersIndex.xlInsideHorizontal].LineStyle = Constants.xlNone;
         }
 
-        public static void Sorbarednezés(int oszlopszám, string terület)
-        {
-            MyExcel.Range Táblaterület = (MyExcel.Range)Module_Excel.xlApp.Application.Range[terület];
-
-            Táblaterület.Sort(Táblaterület.Columns[oszlopszám], XlSortOrder.xlAscending,
-                                misValue, misValue, XlSortOrder.xlAscending,
-                                misValue, XlSortOrder.xlAscending,
-                                XlYesNoGuess.xlGuess, misValue, misValue, XlSortOrientation.xlSortColumns, XlSortMethod.xlPinYin, XlSortDataOption.xlSortNormal);
-        }
-
-        public static void ConvertToTxt(string excel, string csv)
-        {
-
-            xlApp = new MyExcel.Application();
-            // //xlApp.Visible = true;
-            xlWorkBook = xlApp.Workbooks.Open(excel);
-
-            //xlApp.DisplayAlerts = false;
-            xlWorkBook.SaveAs(csv, Microsoft.Office.Interop.Excel.XlFileFormat.xlTextWindows, misValue, misValue, misValue, XlSaveAsAccessMode.xlNoChange,
-                   Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-
-            ExcelBezárás();
-        }
 
         public static int Utolsósor(string munkalap)
         {
@@ -1010,12 +980,6 @@ namespace Villamos
 
         }
 
-        public static void Törlés(string munkalap, string mit)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Táblaterület = Munkalap.Range[mit];
-            Táblaterület.ClearContents();
-        }
 
         public static void FerdeVonal(string mit)
         {
@@ -1042,12 +1006,6 @@ namespace Villamos
             Munkalap.HPageBreaks.Add(Munkalap.Cells[sor, oldaltörés]);
         }
 
-        public static void Kép_beillesztés(string munkalap, string hova, string fájl, float bal, float teteje, float széles, float magas)
-        {
-            Worksheet Munka_lap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munka_lap.Shapes.AddPicture(fájl, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoCTrue, bal, teteje, széles, magas);
-
-        }
 
         public static void Diagram(string munkalap, int felsőx, int felsőy, int alsóx, int alsóy, string táblafelső, string táblaalsó)
         {
