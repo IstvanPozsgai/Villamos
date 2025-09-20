@@ -42,12 +42,8 @@
             this.Üzemek = new System.Windows.Forms.CheckedListBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Panel = new System.Windows.Forms.TableLayoutPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.Panel.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // Txtírásimező
@@ -56,9 +52,9 @@
             this.Txtírásimező.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Txtírásimező.Location = new System.Drawing.Point(12, 65);
+            this.Txtírásimező.Location = new System.Drawing.Point(12, 12);
             this.Txtírásimező.Name = "Txtírásimező";
-            this.Txtírásimező.Size = new System.Drawing.Size(1019, 534);
+            this.Txtírásimező.Size = new System.Drawing.Size(538, 587);
             this.Txtírásimező.TabIndex = 82;
             this.Txtírásimező.Text = "";
             // 
@@ -154,7 +150,7 @@
             this.Üzemek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Üzemek.Enabled = false;
             this.Üzemek.FormattingEnabled = true;
-            this.Üzemek.Location = new System.Drawing.Point(1037, 196);
+            this.Üzemek.Location = new System.Drawing.Point(560, 196);
             this.Üzemek.Name = "Üzemek";
             this.Üzemek.Size = new System.Drawing.Size(231, 403);
             this.Üzemek.TabIndex = 84;
@@ -169,7 +165,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.Controls.Add(this.Btnrögzítés, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(1037, 12);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(560, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
@@ -190,7 +186,7 @@
             this.Panel.Controls.Add(this.ISzak, 0, 1);
             this.Panel.Controls.Add(this.MindVissza, 3, 0);
             this.Panel.Controls.Add(this.MindKijelöl, 2, 0);
-            this.Panel.Location = new System.Drawing.Point(1037, 73);
+            this.Panel.Location = new System.Drawing.Point(560, 73);
             this.Panel.Name = "Panel";
             this.Panel.RowCount = 2;
             this.Panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
@@ -198,40 +194,12 @@
             this.Panel.Size = new System.Drawing.Size(231, 117);
             this.Panel.TabIndex = 89;
             // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.Cmbtelephely);
-            this.panel2.Controls.Add(this.label2);
-            this.panel2.Location = new System.Drawing.Point(12, 12);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(361, 41);
-            this.panel2.TabIndex = 123;
-            // 
-            // Cmbtelephely
-            // 
-            this.Cmbtelephely.FormattingEnabled = true;
-            this.Cmbtelephely.Location = new System.Drawing.Point(144, 5);
-            this.Cmbtelephely.Name = "Cmbtelephely";
-            this.Cmbtelephely.Size = new System.Drawing.Size(214, 28);
-            this.Cmbtelephely.TabIndex = 18;
-            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 8);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(145, 20);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "Telephelyi beállítás:";
-            // 
             // Ablak_Utasítás_Generálás
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
-            this.ClientSize = new System.Drawing.Size(1274, 611);
-            this.Controls.Add(this.panel2);
+            this.ClientSize = new System.Drawing.Size(799, 611);
             this.Controls.Add(this.Panel);
             this.Controls.Add(this.Üzemek);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -244,8 +212,6 @@
             this.Load += new System.EventHandler(this.Ablak_Utasítás_Generálás_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.Panel.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -263,8 +229,5 @@
         internal System.Windows.Forms.Button ISzak;
         internal System.Windows.Forms.Button MindVissza;
         internal System.Windows.Forms.Button MindKijelöl;
-        internal System.Windows.Forms.Panel panel2;
-        internal System.Windows.Forms.ComboBox Cmbtelephely;
-        internal System.Windows.Forms.Label label2;
     }
 }

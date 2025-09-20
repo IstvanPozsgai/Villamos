@@ -41,16 +41,14 @@ namespace Villamos.V_Ablakok.Közös
             //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
             if (Program.PostásJogkör.Any(c => c != '0'))
             {
-                Telephelyekfeltöltése();
                 Jogosultságkiosztás();
+                Üzemekfeltöltése();
             }
             else
             {
-                TelephelyekFeltöltéseÚj();
-                GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                GombLathatosagKezelo.Beallit(this, Program.Postás_Felhasználó.Szervezet);
+                ÜzemekfeltöltéseÚj();
             }
-
-            Üzemekfeltöltése();
         }
 
         private void Jogosultságkiosztás()
@@ -157,6 +155,34 @@ namespace Villamos.V_Ablakok.Közös
             }
         }
 
+        private void ÜzemekfeltöltéseÚj()
+        {
+            try
+            {
+                Üzemek.Items.Clear();
+                foreach (string adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                {
+                    Üzemek.Items.Add(adat);
+                }
+
+                for (int i = 0; i < Üzemek.Items.Count; i++)
+                {
+                    if (Üzemek.Items[i].ToStrTrim() == Telephely.Trim()) Üzemek.SetItemChecked(i, true);
+                }
+                Üzemek.Enabled = Üzemek.Items.Count > 1;
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         #region Gombok
         private void GombokLátszanak(bool Látszik)
@@ -168,8 +194,6 @@ namespace Villamos.V_Ablakok.Közös
             IISzak.Visible = Látszik;
             IIISzak.Visible = Látszik;
         }
-
-
 
         private void MindKijelöl_Click(object sender, EventArgs e)
         {
@@ -206,83 +230,7 @@ namespace Villamos.V_Ablakok.Közös
             for (int j = 0; j < Üzemek.Items.Count; j++)
                 if (EgySzolg.Any(a => a.Telephelynév == Üzemek.Items[j].ToStrTrim())) Üzemek.SetItemChecked(j, true);
         }
-
         #endregion
-
-        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            try
-            {
-                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
-                if (Cmbtelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-
-                }
-                else
-                {
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                }
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void TelephelyekFeltöltéseÚj()
-        {
-            try
-            {
-                Cmbtelephely.Items.Clear();
-                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
-                    Cmbtelephely.Items.Add(Adat.Trim());
-                //Alapkönyvtárat beállítjuk 
-                Cmbtelephely.Text = Program.PostásTelephely;
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Telephelyekfeltöltése()
-        {
-            try
-            {
-                Cmbtelephely.Items.Clear();
-                foreach (string Elem in Listák.TelephelyLista_Személy(true))
-                    Cmbtelephely.Items.Add(Elem);
-
-                if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
-                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString(); }
-                else
-                { Cmbtelephely.Text = Program.PostásTelephely; }
-
-                Cmbtelephely.Enabled = Program.Postás_Vezér;
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
     }
 }
