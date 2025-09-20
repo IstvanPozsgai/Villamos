@@ -48,6 +48,7 @@ namespace Villamos
             Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
             Munkalap.Select();
 
+            DataGridView dataGridView1 = new DataGridView();
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
 
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -101,7 +102,6 @@ namespace Villamos
                 finally
                 {
                     GC.Collect();
-                    GC.WaitForPendingFinalizers();
                 }
             }
         }
@@ -114,73 +114,30 @@ namespace Villamos
         /// <param name="fájlnév"></param>
         public static void ExcelMentés(string fájlnév)
         {
-            try
-            {
-                xlApp.DisplayAlerts = false;
-                xlWorkBook.SaveAs(fájlnév, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, misValue, misValue, misValue, misValue,
-                       Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"ExcelMentés:{fájlnév}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            xlApp.DisplayAlerts = false;
+            xlWorkBook.SaveAs(fájlnév, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, misValue, misValue, misValue, misValue,
+                   Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
         }
-
 
         /// <summary>
         /// Excel mentés ugyan azon a néven.
         /// </summary>
         public static void ExcelMentés()
         {
-            try
-            {
-                xlApp.DisplayAlerts = false;
-                xlWorkBook.Save();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "ExcelMentés", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+            xlApp.DisplayAlerts = false;
+            xlWorkBook.Save();
 
+        }
 
         public static void ExcelBezárás()
         {
-            try
-            {
-                //xlWorkBook.Close(true, misValue, misValue);
-                //xlApp.Quit();
-                //ReleaseObject(xlApp);
-                //ReleaseObject(xlWorkBook);
-                //ReleaseObject(xlWorkSheet);
-                //Először a munkalapot (xlWorkSheet), aztán a munkafüzetet (xlWorkBook), végül az alkalmazást (xlApp) érdemes felszabadítani
-                //– ez a sorrend logikusabb, mert a munkalap a munkafüzet része, az pedig az alkalmazásé.
-                xlWorkBook.Close(true, misValue, misValue);
-                xlApp.Quit();
-                ReleaseObject(xlWorkSheet);
-                ReleaseObject(xlWorkBook);
-                ReleaseObject(xlApp);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "ExcelBezárás", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+            ReleaseObject(xlApp);
+            ReleaseObject(xlWorkBook);
+            ReleaseObject(xlWorkSheet);
         }
+
 
 
         /// <summary>
@@ -190,98 +147,45 @@ namespace Villamos
         /// <param name="Kijelöltterület">szöveg kijelölt terület A1:V4 formában</param>
         public static void Rácsoz(string Kijelöltterület)
         {
-            try
-            {
-                //MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[Kijelöltterület];
-
-                //A Module_Excel.xlApp.Application.Range[...] használata működhet, de nem mindig egyértelmű, melyik munkalapon történik a művelet.
-                MyExcel.Range Táblaterület = Module_Excel.xlWorkSheet.Range[Kijelöltterület];
-                Táblaterület.Borders.LineStyle = XlLineStyle.xlContinuous;
-                Táblaterület.Borders.Weight = MyExcel.XlBorderWeight.xlThin;
-                Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
-                                            MyExcel.XlBorderWeight.xlMedium,
-                                            MyExcel.XlColorIndex.xlColorIndexAutomatic,
-                                            MyExcel.XlColorIndex.xlColorIndexAutomatic);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Rácsoz: {Kijelöltterület}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[Kijelöltterület];
+            Táblaterület.Borders.LineStyle = XlLineStyle.xlContinuous;
+            Táblaterület.Borders.Weight = MyExcel.XlBorderWeight.xlThin;
+            Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
+                                        MyExcel.XlBorderWeight.xlMedium,
+                                        MyExcel.XlColorIndex.xlColorIndexAutomatic,
+                                        MyExcel.XlColorIndex.xlColorIndexAutomatic);
         }
 
 
-        //Elkopik
         /// <summary>
         /// Megadott oszlop szélesség beállítása az oszlopnál
         /// </summary>
         /// <param name="ws"></param>
         /// <param name="oszlop">string oszlopnév</param>
         /// <param name="szélesség">double szélesség</param>
-        //public static void Oszlopszélesség(string munkalap, string oszlop, int szélesség)
-        //{
-        //    try
-        //    {  //Oszlop szélesség beállítás
-        //        Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+        public static void Oszlopszélesség(string munkalap, string oszlop, int szélesség)
+        {
+            //Oszlop szélesség beállítás
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
 
-        //        MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
-        //        // Táblaterület.Columns.Select();                       //A Táblaterület.Columns.Select(); nem szükséges, ha csak a szélességet állítod be.
-        //        Táblaterület.Columns.ColumnWidth = szélesség;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        HibaNapló.Log(ex.Message, $"Oszlopszélesség(string {munkalap}, string {oszlop}, int {szélesség})", ex.StackTrace, ex.Source, ex.HResult);
-        //        MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //}
+            MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
+            Táblaterület.Columns.Select();
+            Táblaterület.Columns.ColumnWidth = szélesség;
 
+        }
 
-        //Elkopik
         /// <summary>
         /// Ebben a változatban automatikus az oszlop szélesség
         /// </summary>
         /// <param name="munkalap"></param>
         /// <param name="oszlop"></param>
-        //public static void Oszlopszélesség(string munkalap, string oszlop)
-        //{
-        //    //Oszlop szélesség beállítás
-        //    Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-        //    MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
-        //    Táblaterület.Columns.EntireColumn.AutoFit();
-        //}
-
-
-        /// <summary>
-        /// Megadott oszlop szélesség beállítása az oszlopnál
-        /// </summary>
-        /// <param name="ws"></param>
-        /// <param name="oszlop">string oszlopnév</param>
-        /// <param name="szélesség">int szélesség opcionális ha nincs megadva akkor automatikusan állítja be</param>
-        public static void Oszlopszélesség(string munkalap, string oszlop, int? szélesség = null)
+        public static void Oszlopszélesség(string munkalap, string oszlop)
         {
-            try
-            {
-                Worksheet Munkalap = (Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-                Range Táblaterület = Munkalap.Range[oszlop];
-
-                if (szélesség.HasValue)
-                {
-                    if (szélesség.Value <= 0) return;
-                    Táblaterület.Columns.ColumnWidth = szélesség.Value;
-                }
-                else
-                {
-                    Táblaterület.Columns.AutoFit(); // Automatikus szélesség, ha nincs megadva
-                }
-            }
-
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Oszlopszélesség(string {munkalap}, string {oszlop}, int? szélesség = null)", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //Oszlop szélesség beállítás
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
+            Táblaterület.Columns.EntireColumn.AutoFit();
         }
-
 
 
         /// <summary>
@@ -291,18 +195,9 @@ namespace Villamos
         /// <param name="oszlop">formában kell megadni "A:A" </param>
         public static void OszlopTörlés(string oszlop)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = xlWorkSheet.Range[oszlop];
-                Táblaterület.Delete(Microsoft.Office.Interop.Excel.XlDirection.xlToLeft);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"OszlopTörlés(string {oszlop})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = xlWorkSheet.Range[oszlop];
+            Táblaterület.Delete(Microsoft.Office.Interop.Excel.XlDirection.xlToLeft);
         }
-
 
         /// <summary>
         /// Elrejti az oszlopot
@@ -310,17 +205,10 @@ namespace Villamos
         /// <param name="oszlop"></param>
         public static void OszlopRejtés(string munkalap, string oszlop)
         {
-            try
-            {
-                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-                MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
-                Táblaterület.EntireColumn.Hidden = true;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"OszlopRejtés(string {munkalap}, string {oszlop})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
+            Táblaterület.EntireColumn.Hidden = true;
+
         }
 
 
@@ -331,18 +219,9 @@ namespace Villamos
         /// <param name="hova">szöveg</param>
         public static void Kiir(string mit, string hova)
         {
-            try
-            {
-                MyExcel.Range Cella = Module_Excel.xlApp.get_Range(hova);
-                Cella.Value = mit;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Kiir(string {mit}, string {hova})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[hova];
+            Cella.Value = mit;
         }
-
 
         /// <summary>
         ///  A szöveg helyzetét lehet meghatározni a cellában bal és jobb a kötött név minden egyéb középre kerül.
@@ -351,60 +230,45 @@ namespace Villamos
         /// <param name="irány">bal/jobb/közép</param>
         public static void Igazít_vízszintes(string mit, string irány)
         {
-            try
+
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            switch (irány)
             {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                switch (irány.ToLowerInvariant())
-                {
-                    case "bal":
-                        Táblaterület.HorizontalAlignment = Constants.xlLeft;
-                        break;
-                    case "jobb":
-                        Táblaterület.HorizontalAlignment = Constants.xlRight;
-                        break;
-                    default:
-                        Táblaterület.HorizontalAlignment = Constants.xlCenter;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Igazít_vízszintes(string {mit}, string {irány})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                case "bal":
+                    Táblaterület.HorizontalAlignment = Constants.xlLeft;
+                    break;
+
+                case "jobb":
+                    Táblaterület.HorizontalAlignment = Constants.xlRight;
+                    break;
+                default:
+                    Táblaterület.HorizontalAlignment = Constants.xlCenter;
+                    break;
             }
         }
-
-
         /// <summary>
         /// szöveg függőleges helyzetét lehet megadni
         /// </summary>
         /// <param name="mit"></param>
         /// <param name="irány">felső/alsó/közép</param>
+
         public static void Igazít_függőleges(string mit, string irány)
         {
-            try
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            switch (irány)
             {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                switch (irány.ToLowerInvariant())
-                {
-                    case "felső":
-                        Táblaterület.VerticalAlignment = Constants.xlTop;
-                        break;
-                    case "alsó":
-                        Táblaterület.VerticalAlignment = Constants.xlBottom;
-                        break;
-                    default:
-                        Táblaterület.VerticalAlignment = Constants.xlCenter;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Igazít_függőleges(string {mit}, string {irány})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                case "felső":
+                    Táblaterület.VerticalAlignment = Constants.xlTop;
+                    break;
+
+                case "alsó":
+                    Táblaterület.VerticalAlignment = Constants.xlBottom;
+                    break;
+                default:
+                    Táblaterület.VerticalAlignment = Constants.xlCenter;
+                    break;
             }
         }
-
 
         /// <summary>
         /// Vastagkeretet készít a kijelölt területre
@@ -412,19 +276,14 @@ namespace Villamos
         /// <param name="mit">szöveg</param>
         public static void Vastagkeret(string mit)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
-                         MyExcel.XlBorderWeight.xlMedium,
-                         MyExcel.XlColorIndex.xlColorIndexAutomatic);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Vastagkeret(string {mit})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
+                     MyExcel.XlBorderWeight.xlMedium,
+                     MyExcel.XlColorIndex.xlColorIndexAutomatic,
+                     MyExcel.XlColorIndex.xlColorIndexAutomatic);
         }
+
+
 
 
         /// <summary>
@@ -433,65 +292,38 @@ namespace Villamos
         /// <param name="mit">azöveg</param>
         public static void Vékonykeret(string mit)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
-                         MyExcel.XlBorderWeight.xlThin,
-                         MyExcel.XlColorIndex.xlColorIndexAutomatic,
-                         MyExcel.XlColorIndex.xlColorIndexAutomatic);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Vékonykeret(string {mit})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
+                     MyExcel.XlBorderWeight.xlThin,
+                     MyExcel.XlColorIndex.xlColorIndexAutomatic,
+                     MyExcel.XlColorIndex.xlColorIndexAutomatic);
         }
-
 
         public static void VékonyFelső(string mit)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
 
-                Táblaterület.Borders[XlBordersIndex.xlDiagonalDown].LineStyle = Constants.xlNone;
-                Táblaterület.Borders[XlBordersIndex.xlDiagonalUp].LineStyle = Constants.xlNone;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeLeft].LineStyle = Constants.xlNone;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = 0;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlThin;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"VékonyFelső(string {mit})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Táblaterület.Borders[XlBordersIndex.xlDiagonalDown].LineStyle = Constants.xlNone;
+            Táblaterület.Borders[XlBordersIndex.xlDiagonalUp].LineStyle = Constants.xlNone;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeLeft].LineStyle = Constants.xlNone;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = 0;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlThin;
         }
-
 
         public static void VastagFelső(string mit)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
 
-                Táblaterület.Borders[XlBordersIndex.xlDiagonalDown].LineStyle = Constants.xlNone;
-                Táblaterület.Borders[XlBordersIndex.xlDiagonalUp].LineStyle = Constants.xlNone;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeLeft].LineStyle = Constants.xlNone;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = 0;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
-                Táblaterület.Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlMedium;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"VastagFelső(string {mit})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Táblaterület.Borders[XlBordersIndex.xlDiagonalDown].LineStyle = Constants.xlNone;
+            Táblaterület.Borders[XlBordersIndex.xlDiagonalUp].LineStyle = Constants.xlNone;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeLeft].LineStyle = Constants.xlNone;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = 0;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
+            Táblaterület.Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlMedium;
         }
-
 
         /// <summary>
         /// Egyesíti a kiválasztott területet
@@ -499,26 +331,19 @@ namespace Villamos
         /// <param name="mit">szöveg</param>
         public static void Egyesít(string munkalap, string mit)
         {
-            try
-            {
-                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
 
-                Range Táblaterület = Munkalap.Range[mit];
-                Táblaterület.HorizontalAlignment = Constants.xlCenter;
-                Táblaterület.VerticalAlignment = Constants.xlCenter;
-                Táblaterület.WrapText = false;
-                Táblaterület.Orientation = 0;
-                Táblaterület.AddIndent = false;
-                Táblaterület.IndentLevel = 0;
-                Táblaterület.ShrinkToFit = false;
-                Táblaterület.MergeCells = false;
-                Táblaterület.Merge();
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Range Táblaterület = Munkalap.Range[mit];
+            Táblaterület.Select();
+            Táblaterület.HorizontalAlignment = Constants.xlCenter;
+            Táblaterület.VerticalAlignment = Constants.xlCenter;
+            Táblaterület.WrapText = false;
+            Táblaterület.Orientation = 0;
+            Táblaterület.AddIndent = false;
+            Táblaterület.IndentLevel = 0;
+            Táblaterület.ShrinkToFit = false;
+            Táblaterület.MergeCells = false;
+            Táblaterület.Merge();
         }
 
 
@@ -529,31 +354,22 @@ namespace Villamos
         /// <param name="méret">egész</param>
         public static void Betű(string mit, int méret)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.Font.Size = méret;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Betű(string {mit}, int {méret})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Font.Size = méret;
+            Táblaterület.Font.Strikethrough = false;
+            Táblaterület.Font.Superscript = false;
+            Táblaterület.Font.Subscript = false;
+            Táblaterület.Font.OutlineFont = false;
+            Táblaterület.Font.Shadow = false;
+            Táblaterület.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
         }
-
 
         public static void Betű(string mit, Color színe)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.Font.Color = ColorTranslator.ToOle(színe);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Betű(string {mit}, Color {színe})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Font.Color = színe;
+            //     Táblaterület.Font.ThemeColor = színe;
+            //Táblaterület.Font.TintAndShade = 0;
         }
 
 
@@ -566,20 +382,11 @@ namespace Villamos
         /// <param name="vastag"></param>
         public static void Betű(string mit, bool aláhúzott, bool dőlt, bool vastag)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.Font.Underline = aláhúzott ? MyExcel.XlUnderlineStyle.xlUnderlineStyleSingle : MyExcel.XlUnderlineStyle.xlUnderlineStyleNone;
-                Táblaterület.Font.Italic = dőlt;
-                Táblaterület.Font.Bold = vastag;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Betű(string {mit}, bool {aláhúzott}, bool {dőlt}, bool {vastag})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Font.Underline = aláhúzott;
+            Táblaterület.Font.Italic = dőlt;
+            Táblaterület.Font.Bold = vastag;
         }
-
 
         /// <summary>
         /// A Betű stílusából egyet lehet kiválasztani, annak a formátum maszkját kell elküldeni.
@@ -590,19 +397,12 @@ namespace Villamos
         /// <param name="formátum"></param>
         public static void Betű(string mit, string stílus = "", string formátum = "")
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                if (stílus.Trim() != "") Táblaterület.Style = stílus;
-                if (formátum.Trim() != "") Táblaterület.NumberFormat = formátum;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Betű(string {mit}, string {stílus}, string {formátum})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            if (stílus.Trim() != "")
+                Táblaterület.Style = stílus;
+            if (formátum.Trim() != "")
+                Táblaterület.NumberFormat = formátum;
         }
-
 
         /// <summary>
         /// Cellán belüli szöveg formázásokat láncba kell megadni, a lánc minden elemére vonatkozóan
@@ -615,49 +415,41 @@ namespace Villamos
         /// <param name="hossz"></param>
         public static void Cella_Betű(string mit, bool aláhúzott, bool dőlt, bool vastag, int kezdet, int hossz)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.Characters[kezdet, hossz].Font.Underline = aláhúzott;
-                Táblaterület.Characters[kezdet, hossz].Font.Italic = dőlt;
-                Táblaterület.Characters[kezdet, hossz].Font.Bold = vastag;
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Cella_Betű(string {mit}, bool {aláhúzott}, bool {dőlt}, bool {vastag}, int {kezdet}, int {hossz})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Characters[kezdet, hossz].Font.Underline = aláhúzott;
+            Táblaterület.Characters[kezdet, hossz].Font.Italic = dőlt;
+            Táblaterület.Characters[kezdet, hossz].Font.Bold = vastag;
         }
 
+        public static void Cella_Betű(string mit, bool aláhúzott, bool dőlt, bool vastag, int kezdet, int hossz, Color szín, string betű = "Arial", int méret = 12)
+        {
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Characters[kezdet, hossz].Font.Underline = aláhúzott;
+            Táblaterület.Characters[kezdet, hossz].Font.Italic = dőlt;
+            Táblaterület.Characters[kezdet, hossz].Font.Bold = vastag;
+            Táblaterület.Characters[kezdet, hossz].Font.Color = szín;
+            Táblaterület.Characters[kezdet, hossz].Font.FontStyle = betű;
+            Táblaterület.Characters[kezdet, hossz].Font.Size = méret;
+        }
 
         /// <summary>
         /// Háttérszín beállítása
         /// </summary>
         /// <param name="mit">szöveg</param>
-        /// <param name="szín">int</param>
-        public static void Háttérszín(string mit, int szín)
+        /// <param name="szín">dupla</param>
+        public static void Háttérszín(string mit, double szín)
         {
-            Color színcolor = Color.FromArgb(szín);
-            Háttérszín(mit, színcolor);
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Interior.Color = szín;
         }
-
 
         public static void Háttérszín(string mit, Color színe)
         {
-            try
-            {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.Interior.Color = System.Drawing.ColorTranslator.ToOle(színe);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Háttérszín(string {mit}, Color {színe})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+            Táblaterület.Interior.Color = System.Drawing.ColorTranslator.ToOle(színe);
+
         }
 
-
-        //itt tartok
         public static void CellaNincsHáttér(string mit)
         {
             MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
@@ -757,15 +549,10 @@ namespace Villamos
         /// <param name="mit"></param>
         public static void Aktív_Cella(string munkalap, string mit)
         {
-            //Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            //Munkalap.Select();
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            Munkalap.Select();
 
-            //MyExcel.Range range = Munkalap.get_Range(mit, mit);
-            //range.Select();
-            // JAVÍTANDÓ:
-            MyExcel.Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munkalap.Activate(); // Fontos!
-            MyExcel.Range range = Munkalap.get_Range(mit);
+            MyExcel.Range range = Munkalap.get_Range(mit, mit);
             range.Select();
         }
 
