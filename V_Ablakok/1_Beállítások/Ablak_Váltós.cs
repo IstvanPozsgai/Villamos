@@ -3042,7 +3042,7 @@ namespace Villamos
                             MyE.Kiir(ideigszöveg, MyE.Oszlopnév(oszlopv + 1) + (sorv + 6).ToString());
 
                             if (ideigszöveg == "7" | ideigszöveg == "Z")
-                                MyE.Háttérszín(MyE.Oszlopnév(oszlopv + 1) + (sorv + 6).ToString(), 15773696d);
+                                MyE.Háttérszín(MyE.Oszlopnév(oszlopv + 1) + (sorv + 6).ToString(), 15773696);
 
                             if (ideigszöveg == "Z")
                             {
@@ -3058,7 +3058,7 @@ namespace Villamos
                             }
                             if (ideigszöveg == "E")
                             {
-                                MyE.Háttérszín(MyE.Oszlopnév(oszlopv + 1) + (sorv + 6).ToString(), 15773696d);
+                                MyE.Háttérszín(MyE.Oszlopnév(oszlopv + 1) + (sorv + 6).ToString(), 15773696);
                                 MyE.Betű(MyE.Oszlopnév(oszlopv + 1) + (sorv + 6).ToString(), false, false, true);
                             }
                             if (ideigszöveg == "8")
@@ -3070,7 +3070,7 @@ namespace Villamos
                             ideigszöveg = Tábla9.Rows[sorw - 1].Cells[oszlopv + 4].Value.ToStrTrim();
                             MyE.Kiir(ideigszöveg, MyE.Oszlopnév(oszlopv + 1) + (sorw + 7).ToString());
                             if (ideigszöveg == "7" | ideigszöveg == "Z")
-                                MyE.Háttérszín(MyE.Oszlopnév(oszlopv + 1) + (sorw + 7).ToString(), 15773696d);
+                                MyE.Háttérszín(MyE.Oszlopnév(oszlopv + 1) + (sorw + 7).ToString(), 15773696);
                             if (ideigszöveg == "Z")
                             {
                                 if (VváltósCsoport.Text.Substring(0, 1) == "6")
@@ -3086,7 +3086,7 @@ namespace Villamos
 
                             if (ideigszöveg == "E")
                             {
-                                MyE.Háttérszín(MyE.Oszlopnév(oszlopv + 1) + (sorw + 7).ToString(), 15773696d);
+                                MyE.Háttérszín(MyE.Oszlopnév(oszlopv + 1) + (sorw + 7).ToString(), 15773696);
                                 MyE.Betű(MyE.Oszlopnév(oszlopv + 1) + (sorw + 7).ToString(), false, false, true);
                             }
                             if (ideigszöveg == "8")
@@ -3231,13 +3231,13 @@ namespace Villamos
                     // jel magyarázat
                     MyE.Egyesít(munkalap, "a23:E23");
                     MyE.Kiir("7 - Nappalos műszak", "a23");
-                    MyE.Háttérszín("a23", 15773696d);
+                    MyE.Háttérszín("a23", 15773696);
                     MyE.Egyesít(munkalap, "f23:l23");
                     MyE.Kiir("8 - Éjszakás műszak", "f23");
                     MyE.Háttérszíninverz("f23", 255d);
                     MyE.Egyesít(munkalap, "m23:s23");
                     MyE.Kiir("E - Elvont pihenőnap", "m23");
-                    MyE.Háttérszín("m23", 15773696d);
+                    MyE.Háttérszín("m23", 15773696);
                     MyE.Betű("m23", false, false, true);
                     MyE.Egyesít(munkalap, "t23:z23");
                     MyE.Kiir("P - Pihenőnap", "t23");

@@ -851,7 +851,7 @@ namespace Villamos
                             MyE.Kiir("Érkezés ideje", MyE.Oszlopnév(oszlop) + "5");
                             MyE.Kiir("Távozás ideje", MyE.Oszlopnév(oszlop + 1) + "5");
                             MyE.Kiir("A dolgozó aláírása", MyE.Oszlopnév(oszlop + 2) + "5");
-                            MyE.Háttérszín(MyE.Oszlopnév(oszlop) + "4:" + MyE.Oszlopnév(oszlop + 2) + "5", 65535L);
+                            MyE.Háttérszín(MyE.Oszlopnév(oszlop) + "4:" + MyE.Oszlopnév(oszlop + 2) + "5", 65535);
                             Napszíne += "1";
                         }
                         if (beosztáskód == "7")

@@ -1103,15 +1103,15 @@ namespace Villamos
 
                 DateTime ideigdátum;
                 DateTime előzőHónap = new DateTime(1900, 1, 1);
-                double szombat = 255;
-                double vasárnap = 255;
+                int szombat = 255;
+                int vasárnap = 255;
 
                 List<Adat_CAF_Szinezés> AdatokSzín = KézSzín.Lista_Adatok();
                 Adat_CAF_Szinezés Szín = AdatokSzín.Where(a => a.Telephely == Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[3].Value.ToStrTrim()).FirstOrDefault();
                 if (Szín != null)
                 {
-                    szombat = Szín.Színszombat;
-                    vasárnap = Szín.SzínVasárnap;
+                    szombat = (int)Szín.Színszombat;
+                    vasárnap = (int)Szín.SzínVasárnap;
                 }
 
                 // Kiírjuk a dátumokat
@@ -1169,14 +1169,14 @@ namespace Villamos
                 for (int ii = 3; ii < Tábla_elő.ColumnCount; ii++)
                 {
                     MyE.Kiir((Tábla_elő.Columns[ii].HeaderText.Trim()), $"a{sor}");
-                    double PSZszín = 255;
-                    double PSZgarszín = 255;
+                    int PSZszín = 255;
+                    int PSZgarszín = 255;
 
                     Szín = AdatokSzín.Where(a => a.Telephely == Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[ii].Value.ToStrTrim()).FirstOrDefault();
                     if (Szín != null)
                     {
-                        PSZszín = Szín.SzínPsz;
-                        PSZgarszín = Szín.SzínPSZgar;
+                        PSZszín = (int)Szín.SzínPsz;
+                        PSZgarszín = (int)Szín.SzínPSZgar;
                     }
 
                     if (Tábla_elő.Rows[Tábla_elő.RowCount - 4].Cells[ii].Value.ToString().Trim() == "1")
@@ -1200,16 +1200,16 @@ namespace Villamos
                         // ha a két pályaszám egyezik
                         if (pályaszám.Trim() == Tábla_elő.Columns[j].HeaderText.Trim())
                         {
-                            double isszín = 255d;
-                            double istűrésszín = 255d;
-                            double Pszín = 255d;
+                            int isszín = 255;
+                            int istűrésszín = 255;
+                            int Pszín = 255;
 
                             Szín = AdatokSzín.Where(a => a.Telephely == Tábla_elő.Rows[Tábla_elő.RowCount - 5].Cells[j].Value.ToStrTrim()).FirstOrDefault();
                             if (Szín != null)
                             {
-                                isszín = Szín.SzínIS;
-                                istűrésszín = Szín.SzínIStűrés;
-                                Pszín = Szín.SzínP;
+                                isszín = (int)Szín.SzínIS;
+                                istűrésszín = (int)Szín.SzínIStűrés;
+                                Pszín = (int)Szín.SzínP;
 
                             }
                             for (int i = 0; i < Tábla_elő.Rows.Count - 6; i++)
@@ -1282,22 +1282,22 @@ namespace Villamos
                         if (pályaszám.Trim() == Tábla_elő.Columns[j].HeaderText.Trim())
                         {
                             // a színeket betöltjük
-                            double Szín_E_v = 255d;
-                            double Szín_dollár_v = 255d;
-                            double Szín_Kukac_v = 255d;
-                            double Szín_Hasteg_v = 255d;
-                            double Szín_jog_v = 255d;
-                            double Szín_nagyobb_v = 255d;
+                            int Szín_E_v = 255;
+                            int Szín_dollár_v = 255;
+                            int Szín_Kukac_v = 255;
+                            int Szín_Hasteg_v = 255;
+                            int Szín_jog_v = 255;
+                            int Szín_nagyobb_v = 255;
 
                             Szín = AdatokSzín.Where(a => a.Telephely == Tábla_elő.Rows[Tábla_elő.RowCount - 1].Cells[j].Value.ToStrTrim()).FirstOrDefault();
                             if (Szín != null)
                             {
-                                Szín_E_v = Szín.Szín_E;
-                                Szín_dollár_v = Szín.Szín_dollár;
-                                Szín_Kukac_v = Szín.Szín_Kukac;
-                                Szín_Hasteg_v = Szín.Szín_Hasteg;
-                                Szín_jog_v = Szín.Szín_jog;
-                                Szín_nagyobb_v = Szín.Szín_nagyobb;
+                                Szín_E_v = (int)Szín.Szín_E;
+                                Szín_dollár_v = (int)Szín.Szín_dollár;
+                                Szín_Kukac_v = (int)Szín.Szín_Kukac;
+                                Szín_Hasteg_v = (int)Szín.Szín_Hasteg;
+                                Szín_jog_v = (int)Szín.Szín_jog;
+                                Szín_nagyobb_v = (int)Szín.Szín_nagyobb;
                             }
 
                             // végig megyünk cellánként és ha van tartalma akkor kiírjuk, illetve színezzük

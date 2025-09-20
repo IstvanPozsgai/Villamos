@@ -4115,7 +4115,7 @@ namespace Villamos
                 MyE.Betű("a1", 18);
 
                 MyE.Kiir($"{Pályaszám.Text} pályaszám - sérülés utáni járműszemle", $"a{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 MyE.Igazít_vízszintes($"a{sor}", "közép");
                 MyE.Vastagkeret($"a{sor}:c{sor}");
                 sor++;
@@ -4129,7 +4129,7 @@ namespace Villamos
                 MyE.Kiir("Jelen vannak", $"a{sor}");
                 MyE.Vastagkeret($"a{sor}:c{sor}");
 
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
 
                 sor++;
                 MyE.Kiir("Szervezet", $"a{sor}");
@@ -4152,7 +4152,7 @@ namespace Villamos
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("Baleset / Rongálás bekövetkezésének időpontja.", $"a{sor}:c{sor}");
-                MyE.Háttérszín($"a{sor}:c{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}:c{sor}", 13619151);
 
                 sor++;
                 MyE.Kiir("Dátum / idő", $"a{sor}");
@@ -4174,7 +4174,7 @@ namespace Villamos
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("Baleset/vagy rongálásal érintett kocsirészek (pl C1, S, stb)", $"a{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir(Leírás.Text, $"a{sor}");
@@ -4183,7 +4183,7 @@ namespace Villamos
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("Biztosítói hibaszemle történt e? (megfelelő aláhúzandó)", $"a{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 sor++;
                 MyE.Kiir("Igen", $"a{sor}");
                 MyE.Kiir("Nem", $"b{sor}");
@@ -4198,7 +4198,7 @@ namespace Villamos
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("Baleset / Rongálás leírása (pontosan mely elemek sérültek, leírás szövegesen)." +
                     " Mindenképpen szükséges fotókat készíteni", $"a{sor}:c{sor}");
-                MyE.Háttérszín($"a{sor}:c{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}:c{sor}", 13619151);
                 MyE.Sormagasság($"{sor}:{sor}", 32);
                 MyE.Sortörésseltöbbsorba_egyesített($"a{sor}:c{sor}");
                 MyE.Vastagkeret($"a{sor - 6}:c{sor}");
@@ -4211,7 +4211,7 @@ namespace Villamos
                 sor += 6;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("A baleset / rongálás okozója", $"a{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor + 1}");
                 string szöveg = "";
@@ -4226,7 +4226,7 @@ namespace Villamos
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("Baleset / Rongálás javításához felhasznált alkatrészek", $"a{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 sor++;
                 MyE.Kiir("Megnevezés", $"a{sor}");
                 MyE.Kiir("Cikkszám", $"b{sor}");
@@ -4239,7 +4239,7 @@ namespace Villamos
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor + 1}");
                 MyE.Kiir("Javítási módszer meghatározása, ha van rá pontos technológia annak számát kell beírni, ha nincs szövegesen kell leírni a javítást.", $"a{sor}:c{sor + 1}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 MyE.Sortörésseltöbbsorba_egyesített($"a{sor}");
                 sor += 2;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
@@ -4256,13 +4256,13 @@ namespace Villamos
                 Holtart.Lép();
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 MyE.Kiir("A fenti javítást ki végzi el? (megfelelő aláhúzandó)", $"a{sor}");
                 sor++;
                 MyE.Vastagkeret($"a{sor - 3}:c{sor}");
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 MyE.Kiir("A fenti javítási technológiát elfogadják, javítás megkezdhető:", $"a{sor}");
                 MyE.Vastagkeret($"a{sor}:c{sor}");
                 sor++;
@@ -4289,7 +4289,7 @@ namespace Villamos
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Betű($"a{sor}", 18);
                 MyE.Kiir("Javítás utáni visszaellenőrzés", $"a{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 MyE.Vastagkeret($"a{sor}:c{sor}");
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
@@ -4303,14 +4303,14 @@ namespace Villamos
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("A Javítást felek átnézték, az alábbi észrevételeket teszik:", $"a{sor}");
                 MyE.Vastagkeret($"a{sor}:c{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor + 3}");
                 MyE.Vastagkeret($"a{sor}:c{sor + 3}");
                 sor += 4;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("Javításnál BKV készletből felhasznált erőforrások (idő, anyag):", $"a{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 sor++;
                 MyE.Kiir("Megnevezés", $"a{sor}");
                 MyE.Kiir("Cikkszám/rendelési szám", $"b{sor}");
@@ -4322,7 +4322,7 @@ namespace Villamos
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("Megjegyzések", $"a{sor}");
-                MyE.Háttérszín($"a{sor}", 13619151d);
+                MyE.Háttérszín($"a{sor}", 13619151);
                 sor++;
                 MyE.Egyesít("Munka1", $"a{sor}:c{sor}");
                 MyE.Kiir("A felek a javítás eredményét együttesen átnézték, BKV nyilatkozik hogy az előírt technológiának megfelelően végezte el a javítást." +
