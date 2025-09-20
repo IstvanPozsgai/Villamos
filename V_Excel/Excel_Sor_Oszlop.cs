@@ -31,16 +31,13 @@ namespace Villamos
                     row.Insert(MyExcel.XlInsertShiftDirection.xlShiftDown);
                 }
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "SorBeszúrás", ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"SorBeszúrás(munkalap: {munkalap}, munkalap: {sor}, munkalap: {beszúrás})", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         /// <summary>
         /// Sormagasságot lehet beállítani
@@ -48,21 +45,21 @@ namespace Villamos
         /// <param name="mit">szöveg</param>
         /// <param name="mekkora">egész</param>
         /// 
-
-        public static void Sormagasság(string mit, int mekkora)
+        public static void Sormagasság(string mit, int? mekkora)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.RowHeight = mekkora;
-        }
-
-        /// <summary>
-        /// Automata sormagasság beállítása
-        /// </summary>
-        /// <param name="mit"></param>
-        public static void Sormagasság(string mit)
-        {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.EntireRow.AutoFit();
+            try
+            {
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(mit);
+                if (mekkora.HasValue)
+                    Táblaterület.RowHeight = mekkora;
+                else
+                    Táblaterület.EntireRow.AutoFit();
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Sormagasság(mit: {mit}, mekkora: {(mekkora.HasValue ? mekkora.Value.ToString() : "AutoFit")})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
