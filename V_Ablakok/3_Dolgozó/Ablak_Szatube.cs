@@ -143,7 +143,7 @@ namespace Villamos
         {
             Dolgozónév.Items.Clear();
             Dolgozónév.BeginUpdate();
-            List<Adat_Dolgozó_Alap> Adatok = KézDolgAlap.Lista_Adatok(CmbTelephely.Text.Trim(), Kilépettjel.Checked);
+            List<Adat_Dolgozó_Alap> Adatok = KézDolgAlap.Lista_Adatok(CmbTelephely.Text.Trim(), !Kilépettjel.Checked);
 
             foreach (Adat_Dolgozó_Alap rekord in Adatok)
                 Dolgozónév.Items.Add(rekord.DolgozóNév.Trim() + " = " + rekord.Dolgozószám.Trim());
