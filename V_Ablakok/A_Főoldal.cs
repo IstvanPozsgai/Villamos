@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._0_Bejelentkezés;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP;
@@ -359,6 +360,7 @@ namespace Villamos
                 gombokBeállításaToolStripMenuItem.Enabled = false;
                 felhasználókLétrehozásaTörléseToolStripMenuItem.Enabled = false;
                 jogosultságKiosztásToolStripMenuItem.Enabled = false;
+                SzoftverkulcsKészítésMenü.Enabled = false;
                 //az új esetén az új beállítással megyünk be.
                 if (!panels2.Text.Any(c => c != '0')) Menü_Beállítása_Új();
             }
@@ -2455,16 +2457,13 @@ namespace Villamos
         {
             if (Shift_le && CTRL_le)
             {
-                if (panels2.Text.Substring(0, 1) == "b")
-                {
-                    Telephelyekfeltöltése();
-                    Alsó.Left = 200;
-                    Alsó.Top = 100;
-                    Hardvergomb();
-                    Alsó.Visible = true;
-                    Rejtett.Visible = true;
-                    Alsó.Height = 395;
-                }
+                Telephelyekfeltöltése();
+                Alsó.Left = 200;
+                Alsó.Top = 100;
+                Hardvergomb();
+                Alsó.Visible = true;
+                Rejtett.Visible = true;
+                Alsó.Height = 395;
             }
         }
 
@@ -2691,6 +2690,27 @@ namespace Villamos
         private void Új_Ablak_JogKiosztás_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_JogKiosztás = null;
+        }
+
+        Ablak_Szoftver_Kulcs Új_Ablak_Szoftver_Kulcs;
+        private void SzoftverkulcsKészítésMenü_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Szoftver_Kulcs == null)
+            {
+                Új_Ablak_Szoftver_Kulcs = new Ablak_Szoftver_Kulcs();
+                Új_Ablak_Szoftver_Kulcs.FormClosed += Ablak_Szoftver_Kulcs_FormClosed;
+                Új_Ablak_Szoftver_Kulcs.Show();
+            }
+            else
+            {
+                Új_Ablak_Szoftver_Kulcs.Activate();
+                Új_Ablak_Szoftver_Kulcs.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Ablak_Szoftver_Kulcs_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Szoftver_Kulcs = null;
         }
 
         private void Panels1_DoubleClick(object sender, EventArgs e)

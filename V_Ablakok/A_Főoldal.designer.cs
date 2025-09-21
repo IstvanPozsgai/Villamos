@@ -103,6 +103,8 @@ namespace Villamos
             this.TTTPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator35 = new System.Windows.Forms.ToolStripSeparator();
             this.fődarabNótaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator40 = new System.Windows.Forms.ToolStripSeparator();
+            this.VételezésMenü = new System.Windows.Forms.ToolStripMenuItem();
             this.KarbantartásToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.JárműKarbantartásiAdatokToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -189,8 +191,7 @@ namespace Villamos
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
             this.Panels1 = new System.Windows.Forms.Label();
-            this.toolStripSeparator40 = new System.Windows.Forms.ToolStripSeparator();
-            this.VételezésMenü = new System.Windows.Forms.ToolStripMenuItem();
+            this.SzoftverkulcsKészítésMenü = new System.Windows.Forms.ToolStripMenuItem();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -223,6 +224,7 @@ namespace Villamos
             this.ProgramAdatokMenü.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ablakokBeállításaToolStripMenuItem,
             this.gombokBeállításaToolStripMenuItem,
+            this.SzoftverkulcsKészítésMenü,
             this.toolStripSeparator37,
             this.felhasználókLétrehozásaTörléseToolStripMenuItem,
             this.jogosultságKiosztásToolStripMenuItem,
@@ -718,6 +720,18 @@ namespace Villamos
             this.fődarabNótaToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.fődarabNótaToolStripMenuItem.Text = "Fődarab Nóta";
             this.fődarabNótaToolStripMenuItem.Click += new System.EventHandler(this.FődarabNótaToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator40
+            // 
+            this.toolStripSeparator40.Name = "toolStripSeparator40";
+            this.toolStripSeparator40.Size = new System.Drawing.Size(350, 6);
+            // 
+            // VételezésMenü
+            // 
+            this.VételezésMenü.Name = "VételezésMenü";
+            this.VételezésMenü.Size = new System.Drawing.Size(353, 22);
+            this.VételezésMenü.Text = "Anyag Vételezési segéd";
+            this.VételezésMenü.Click += new System.EventHandler(this.VételezésMenü_Click);
             // 
             // KarbantartásToolStripMenuItem
             // 
@@ -1476,17 +1490,12 @@ namespace Villamos
             this.Panels1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Panels1.DoubleClick += new System.EventHandler(this.Panels1_DoubleClick);
             // 
-            // toolStripSeparator40
+            // SzoftverkulcsKészítésMenü
             // 
-            this.toolStripSeparator40.Name = "toolStripSeparator40";
-            this.toolStripSeparator40.Size = new System.Drawing.Size(350, 6);
-            // 
-            // VételezésMenü
-            // 
-            this.VételezésMenü.Name = "VételezésMenü";
-            this.VételezésMenü.Size = new System.Drawing.Size(353, 22);
-            this.VételezésMenü.Text = "Anyag Vételezési segéd";
-            this.VételezésMenü.Click += new System.EventHandler(this.VételezésMenü_Click);
+            this.SzoftverkulcsKészítésMenü.Name = "SzoftverkulcsKészítésMenü";
+            this.SzoftverkulcsKészítésMenü.Size = new System.Drawing.Size(271, 22);
+            this.SzoftverkulcsKészítésMenü.Text = "Szoftverkulcs készítés";
+            this.SzoftverkulcsKészítésMenü.Click += new System.EventHandler(this.SzoftverkulcsKészítésMenü_Click);
             // 
             // A_Főoldal
             // 
@@ -1686,5 +1695,6 @@ namespace Villamos
         private ToolStripSeparator toolStripSeparator39;
         private ToolStripSeparator toolStripSeparator40;
         private ToolStripMenuItem VételezésMenü;
+        private ToolStripMenuItem SzoftverkulcsKészítésMenü;
     }
 }

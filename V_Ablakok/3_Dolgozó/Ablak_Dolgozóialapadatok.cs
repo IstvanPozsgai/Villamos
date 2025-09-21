@@ -86,15 +86,8 @@ namespace Villamos
             }
         }
 
-
-        private void Ablak_Dolgozóialapadatok_Shown(object sender, EventArgs e)
-        {
-
-        }
-
         private void AblakDolgozóialapadatok_Load(object sender, EventArgs e)
-        {
-        }
+        { }
 
         private void Telephelyekfeltöltése()
         {
@@ -141,7 +134,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void BtnSúgó_Click(object sender, EventArgs e)
         {

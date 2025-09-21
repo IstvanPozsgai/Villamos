@@ -1685,7 +1685,6 @@ namespace Villamos
             this.Text = "Dolgozói alapadatok";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.AblakDolgozóialapadatok_Load);
-            this.Shown += new System.EventHandler(this.Ablak_Dolgozóialapadatok_Shown);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             this.TabPage10.ResumeLayout(false);

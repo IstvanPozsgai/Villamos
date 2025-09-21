@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos9.mdb".KönyvSzerk();
         readonly string jelszó = "Fekete_Könyv";
+        readonly string táblanév = "Adat";
 
         public Kezelő_Kulcs_Fekete()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kulcs> Lista_Adatok()
         {
-            string szöveg = " Select * From Adat ";
+            string szöveg = $"Select * From {táblanév} ";
             List<Adat_Kulcs> Adatok = new List<Adat_Kulcs>();
             Adat_Kulcs Adat;
 
@@ -74,10 +75,11 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO adattábla ";
-                szöveg += "(adat1, adat2) VALUES ";
+                string szöveg = $"INSERT INTO {táblanév} ";
+                szöveg += "(adat1, adat2, adat3) VALUES ";
                 szöveg += $"('{Adat.Adat1}', ";
-                szöveg += $" '{Adat.Adat2}')";
+                szöveg += $" '{Adat.Adat2}', ";
+                szöveg += $" '{Adat.Adat3}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -95,7 +97,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " Delete From Adat WHERE ";
+                string szöveg = $"Delete From {táblanév} WHERE ";
                 szöveg += $" Adat1='{Adat.Adat1}' ";
                 szöveg += $" AND Adat2='{Adat.Adat2}' ";
                 szöveg += $" AND Adat3='{Adat.Adat3}' ";
