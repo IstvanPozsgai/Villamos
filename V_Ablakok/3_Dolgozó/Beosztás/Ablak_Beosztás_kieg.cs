@@ -22,6 +22,10 @@ namespace Villamos.Villamos_Ablakok
         public int Ledolgozott { get; private set; }
         public int Fülszám { get; private set; }
 
+        public bool Múlt { get; private set; }
+        public bool Jelen { get; private set; }
+        public bool Jövő { get; private set; }
+
 
         Adat_Dolgozó_Beosztás_Új Adat = null;
 
@@ -39,7 +43,8 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Alap
-        public Ablak_Beosztás_kieg(string cmbtelephely, DateTime dátum, string beosztáskódVálasztott, string beosztáskódElőző, string hrazonosító, string dolgozónév, int ledolgozott, int fülszám)
+        public Ablak_Beosztás_kieg(string cmbtelephely, DateTime dátum, string beosztáskódVálasztott, string beosztáskódElőző, string hrazonosító,
+            string dolgozónév, int ledolgozott, int fülszám, bool múlt, bool jelen, bool jövő)
         {
             InitializeComponent();
 
@@ -51,6 +56,9 @@ namespace Villamos.Villamos_Ablakok
             Ledolgozott = ledolgozott;
             Fülszám = fülszám;
             BeosztáskódElőző = beosztáskódElőző;
+            Múlt = múlt;
+            Jelen = jelen;
+            Jövő = jövő;
             Start();
         }
 
@@ -66,8 +74,18 @@ namespace Villamos.Villamos_Ablakok
 
         private void Start()
         {
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+            //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, Cmbtelephely);
+            }
+            MúltJelenJövő();
 
             Kiürít_Füleket();
 
@@ -80,6 +98,47 @@ namespace Villamos.Villamos_Ablakok
             Kiegészítő_doboz();
             Fülek.SelectedIndex = Fülszám;
             Fülekkitöltése();
+        }
+
+        private void MúltJelenJövő()
+        {
+            Gombok_látszik(false);
+            int Választék;
+            if (Dátum == DateTime.Today)
+            {
+                Választék = 0;
+            }
+            else if (Dátum > DateTime.Today)
+            {
+                Választék = 1;
+            }
+            else
+            {
+                Választék = -1;
+            }
+
+            switch (Választék)
+            {
+                case -1:
+                    {
+                        if (Múlt)
+                            Gombok_látszik(true);
+                        break;
+                    }
+                case 0:
+                    {
+                        if (Jelen)
+                            Gombok_látszik(true);
+                        break;
+                    }
+                case 1:
+                    {
+                        if (Jövő)
+                            Gombok_látszik(true);
+                        break;
+                    }
+            }
+
         }
 
         private void Jogosultságkiosztás()
@@ -115,41 +174,7 @@ namespace Villamos.Villamos_Ablakok
             AftRögzítés.Enabled = false;
 
             melyikelem = 22;
-            int Választék;
-            if (Dátum == DateTime.Today)
-            {
-                Választék = 0;
-            }
-            else if (Dátum > DateTime.Today)
-            {
-                Választék = 1;
-            }
-            else
-            {
-                Választék = -1;
-            }
 
-            switch (Választék)
-            {
-                case -1:
-                    {
-                        if (MyF.Vanjoga(melyikelem, 1))
-                            Gombok_látszik();
-                        break;
-                    }
-                case 0:
-                    {
-                        if (MyF.Vanjoga(melyikelem, 2))
-                            Gombok_látszik();
-                        break;
-                    }
-                case 1:
-                    {
-                        if (MyF.Vanjoga(melyikelem, 3))
-                            Gombok_látszik();
-                        break;
-                    }
-            }
 
             melyikelem = 23;
             // módosítás 1 Túlóra rögzítés
@@ -247,20 +272,20 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        private void Gombok_látszik()
+        private void Gombok_látszik(bool látszik)
         {
-            TúlóraRögzítés.Visible = true;
-            Túlóratörlés.Visible = true;
+            TúlóraRögzítés.Visible = látszik;
+            Túlóratörlés.Visible = látszik;
 
-            CsúsztatásTörlés.Visible = true;
-            CsúsztatásRögzítés.Visible = true;
+            CsúsztatásTörlés.Visible = látszik;
+            CsúsztatásRögzítés.Visible = látszik;
 
-            SzabadságRögzítés.Visible = true;
+            SzabadságRögzítés.Visible = látszik;
 
-            MegjegyzésRögzítés.Visible = true;
+            MegjegyzésRögzítés.Visible = látszik;
 
-            AftTörlés.Visible = true;
-            AftRögzítés.Visible = true;
+            AftTörlés.Visible = látszik;
+            AftRögzítés.Visible = látszik;
         }
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)

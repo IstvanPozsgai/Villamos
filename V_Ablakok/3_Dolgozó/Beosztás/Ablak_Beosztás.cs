@@ -33,6 +33,11 @@ namespace Villamos
         DateTime Hónap_első;
 
         readonly Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
+        readonly Kezelő_Kiegészítő_Csoportbeosztás KézCsop = new Kezelő_Kiegészítő_Csoportbeosztás();
+        readonly Kezelő_Szatube_Szabadság KézSzaTuBe = new Kezelő_Szatube_Szabadság();
+        readonly Kezelő_Kiegészítő_Beosztáskódok KÉZBeoKód = new Kezelő_Kiegészítő_Beosztáskódok();
+        readonly Kezelő_Dolgozó_Beosztás_Új KézBeo = new Kezelő_Dolgozó_Beosztás_Új();
+
 
         List<Adat_Dolgozó_Alap> AdatokDolg = new List<Adat_Dolgozó_Alap>();
         #region Alap
@@ -142,6 +147,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         // JAVÍTANDÓ:
         private void Telephely_Beállítás()
         {
@@ -188,9 +194,6 @@ namespace Villamos
 
 
             Cursor = Cursors.Default; // homokóra vége
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
         }
 
         private void Cmbtelephely_SelectedIndexChanged(object sender, EventArgs e)
@@ -212,30 +215,29 @@ namespace Villamos
 
             Excel_gomb.Visible = false;
             Váltós.Visible = false;
-
             Előzmény.Visible = false;
-
-
             Adatok_egyeztetése.Visible = false;
-
             Gomb_nappalos.Visible = false;
 
+            Múlt.Visible = false;
+            Jelen.Visible = false;
+            Jövő.Visible = false;
 
             melyikelem = 22;
             // módosítás 1  visszamenőleges beosztás rögzítés
             if (MyF.Vanjoga(melyikelem, 1))
             {
-
+                Múlt.Visible = true;
             }
             // módosítás 2 Adott napi beosztás rögzítés
             if (MyF.Vanjoga(melyikelem, 2))
             {
-
+                Jelen.Visible = true;
             }
             // módosítás 3 előre menő adatrögzítés
             if (MyF.Vanjoga(melyikelem, 3))
             {
-
+                Jövő.Visible = true;
             }
 
             melyikelem = 23;
@@ -486,13 +488,11 @@ namespace Villamos
 
 
         #region Csoport választás
-        // JAVÍTANDÓ:
         private void Csoportfeltöltés()
         {
             try
             {
                 Csoport.Items.Clear();
-                Kezelő_Kiegészítő_Csoportbeosztás KézCsop = new Kezelő_Kiegészítő_Csoportbeosztás();
                 List<Adat_Kiegészítő_Csoportbeosztás> Adatok = KézCsop.Lista_Adatok(Cmbtelephely.Text.Trim());
                 foreach (Adat_Kiegészítő_Csoportbeosztás Elem in Adatok)
                     Csoport.Items.Add(Elem.Csoportbeosztás);
@@ -928,8 +928,8 @@ namespace Villamos
                     return;
                 string szöveg = $"Select * FROM Szabadság";
 
-                Kezelő_Szatube_Szabadság Kéz = new Kezelő_Szatube_Szabadság();
-                List<Adat_Szatube_Szabadság> AdatokSzab = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Szatube_Szabadság> AdatokSzab = KézSzaTuBe.Lista_Adatok(hely, jelszó, szöveg);
 
                 for (int i = 0; i < Tábla.Rows.Count; i++)
                 {
@@ -1008,10 +1008,8 @@ namespace Villamos
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
                 string jelszó = "Mocó";
                 string szöveg = "SELECT * FROM beosztáskódok WHERE éjszakás=true";
-                Kezelő_Kiegészítő_Beosztáskódok KÉZBeo = new Kezelő_Kiegészítő_Beosztáskódok();
-                List<Adat_Kiegészítő_Beosztáskódok> AdatokBEO = KÉZBeo.Lista_Adatok(hely, jelszó, szöveg);
 
-
+                List<Adat_Kiegészítő_Beosztáskódok> AdatokBEO = KÉZBeoKód.Lista_Adatok(hely, jelszó, szöveg);
                 hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
 
                 if (!Exists(hely)) return;
@@ -1020,8 +1018,8 @@ namespace Villamos
 
                 Holtart.BackColor = Color.Blue;
 
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                List<Adat_Dolgozó_Beosztás_Új> AdatokBeoszt = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Dolgozó_Beosztás_Új> AdatokBeoszt = KézBeo.Lista_Adatok(hely, jelszó, szöveg);
                 if (AdatokBeoszt != null)
                 {
                     for (int i = 0; i < Tábla.Rows.Count; i++)
@@ -1793,8 +1791,6 @@ namespace Villamos
                 {
                     // Jogosultságok ellenőrzése
                     int Választék;
-                    int melyikelem = 22;
-
 
                     if (!(NapKiválaszt.Text.Trim() == "" || NapKiválaszt.Text.Trim() == "_"))
                     {
@@ -1815,19 +1811,19 @@ namespace Villamos
                         {
                             case -1:
                                 {
-                                    if (!MyF.Vanjoga(melyikelem, 1)) throw new HibásBevittAdat("Nincs jogosultsága az elmúlt napok beosztásának megváltoztatására!");
+                                    if (Múlt.Visible == false) throw new HibásBevittAdat("Nincs jogosultsága az elmúlt napok beosztásának megváltoztatására!");
                                     break;
                                 }
                             case 0:
                                 {
                                     // módosítás 2 dolgozó oktatás elrendelésének törlése átütemezése
-                                    if (!MyF.Vanjoga(melyikelem, 2)) throw new HibásBevittAdat("Nincs jogosultsága a beosztás megváltoztatására!");
+                                    if (Jelen.Visible == false) throw new HibásBevittAdat("Nincs jogosultsága a beosztás megváltoztatására!");
                                     break;
                                 }
                             case 1:
                                 {
                                     // módosítás 3 adminisztráció mentés, jelenléti ív készítés, e-mail küldés
-                                    if (!MyF.Vanjoga(melyikelem, 3)) throw new HibásBevittAdat("Nincs jogosultsága a hónap hátralévő napjainak beosztásának megváltoztatására!");
+                                    if (Jövő.Visible == false) throw new HibásBevittAdat("Nincs jogosultsága a hónap hátralévő napjainak beosztásának megváltoztatására!");
                                     break;
                                 }
                         }
@@ -1864,7 +1860,7 @@ namespace Villamos
 
 
         #region Kiegészítő doboz
-        Ablak_Beosztás_kieg Új_Ablak_Beosztás_kieg;
+
 
         private void Kiegészítő_Doboz_Click(object sender, EventArgs e)
         {
@@ -1874,6 +1870,7 @@ namespace Villamos
             Kiegészítő_doboz();
         }
 
+        Ablak_Beosztás_kieg Új_Ablak_Beosztás_kieg;
         private void Kiegészítő_doboz()
         {
             try
@@ -1885,7 +1882,7 @@ namespace Villamos
                 if (Előzőtartalom.Length > 0 && Előzőtartalom.Substring(0, 1) == "A") lapfülszám = 4;
                 if (!DateTime.TryParse(NapKiválaszt.Text, out DateTime Dátumérték)) throw new HibásBevittAdat("Nincs kiválasztva módodításhoz/rögzítéshez dátum.");
 
-                Új_Ablak_Beosztás_kieg = new Ablak_Beosztás_kieg(Cmbtelephely.Text.Trim(), Dátumérték, BeosztáskódVálasztott, Előzőtartalom, Hrazonosító.Text.Trim(), Dolgozóneve.Text.Trim(), Ledolgozott_idő, lapfülszám);
+                Új_Ablak_Beosztás_kieg = new Ablak_Beosztás_kieg(Cmbtelephely.Text.Trim(), Dátumérték, BeosztáskódVálasztott, Előzőtartalom, Hrazonosító.Text.Trim(), Dolgozóneve.Text.Trim(), Ledolgozott_idő, lapfülszám, Múlt.Visible, Jelen.Visible, Jövő.Visible);
                 Új_Ablak_Beosztás_kieg.FormClosed += Új_Ablak_Beosztás_kieg_FormClosed;
                 Új_Ablak_Beosztás_kieg.Show();
                 Új_Ablak_Beosztás_kieg.Változás += Táblaíró;
