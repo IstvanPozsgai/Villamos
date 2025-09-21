@@ -42,6 +42,7 @@ namespace Villamos.V_Ablakok.Közös
             //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
             if (Program.PostásJogkör.Any(c => c != '0'))
             {
+                GombokLátszanak(false);
                 Jogosultságkiosztás();
                 Üzemekfeltöltése();
             }
@@ -50,24 +51,19 @@ namespace Villamos.V_Ablakok.Közös
                 GombLathatosagKezelo.Beallit(this, Program.Postás_Felhasználó.Szervezet);
                 ÜzemekfeltöltéseÚj();
             }
+
             if (Válasz != 0)
                 this.Text = $"{Válasz} számú üzenetre válasz";
             else
                 this.Text = "Új üzenet írása";
-            GombokLátszanak(false);
         }
 
         private void Jogosultságkiosztás()
         {
             try
             {
-
                 Btnrögzítés.Visible = false;
-
-
-
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
-
                 int melyikelem = 200;
                 // módosítás 1
 
@@ -83,8 +79,6 @@ namespace Villamos.V_Ablakok.Közös
                     GombokLátszanak(true);
 
                 }
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -96,7 +90,6 @@ namespace Villamos.V_Ablakok.Közös
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Ablak_Utasítás_Generálás_Load(object sender, EventArgs e)
         {
@@ -149,6 +142,9 @@ namespace Villamos.V_Ablakok.Közös
                 {
                     if (Üzemek.Items[i].ToStrTrim() == Telephely.Trim()) Üzemek.SetItemChecked(i, true);
                 }
+                Üzemek.Enabled = false;
+                Üzemek.Visible = true;
+
             }
             catch (HibásBevittAdat ex)
             {
