@@ -1088,7 +1088,7 @@ namespace Villamos
 
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexc);
-
+                MessageBox.Show("Az adatok konvertálása befejeződött!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
