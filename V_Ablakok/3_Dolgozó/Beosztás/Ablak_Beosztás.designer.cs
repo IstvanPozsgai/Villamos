@@ -76,6 +76,7 @@ namespace Villamos
             this.Jövő = new System.Windows.Forms.Button();
             this.Jelen = new System.Windows.Forms.Button();
             this.Múlt = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.Idő.SuspendLayout();
@@ -532,7 +533,6 @@ namespace Villamos
             this.Idő.Name = "Idő";
             this.Idő.Size = new System.Drawing.Size(71, 124);
             this.Idő.TabIndex = 168;
-            this.Idő.Visible = false;
             // 
             // Jövő
             // 
@@ -561,12 +561,20 @@ namespace Villamos
             this.Múlt.Text = "Múlt";
             this.Múlt.UseVisualStyleBackColor = true;
             // 
+            // panel2
+            // 
+            this.panel2.Location = new System.Drawing.Point(926, 10);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(69, 124);
+            this.panel2.TabIndex = 169;
+            // 
             // Ablak_Beosztás
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
             this.ClientSize = new System.Drawing.Size(1200, 484);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.Idő);
             this.Controls.Add(this.Gomb_nappalos);
             this.Controls.Add(this.Holtart);
@@ -659,5 +667,6 @@ namespace Villamos
         private Button Jövő;
         private Button Jelen;
         private Button Múlt;
+        private Panel panel2;
     }
 }
