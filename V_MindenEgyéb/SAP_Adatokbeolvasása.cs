@@ -805,8 +805,8 @@ namespace Villamos.V_MindenEgyéb
                     string Cikkszám = MyF.Szöveg_Tisztítás(Sor[oszlopCikk].ToStrTrim(), 0, 20).TrimStart('0');
                     string Megnevezés = MyF.Szöveg_Tisztítás(Sor[oszlopMeg].ToStrTrim(), 0, 255);
                     string Raktár = MyF.Szöveg_Tisztítás(Sor[oszlopRaktár].ToStrTrim(), 0, 5);
-                    double Mennyi = MyF.Szöveg_Tisztítás(Sor[oszlopMennyi].ToStrTrim()).Replace(".", "").ToÉrt_Double();
-                    double Ár = MyF.Szöveg_Tisztítás(Sor[oszlopÁr].ToStrTrim()).Replace(".", "").ToÉrt_Double();
+                    double Mennyi =Sor[oszlopMennyi].ToStrTrim().Replace(".", ",").ToÉrt_Double();
+                    double Ár = Sor[oszlopÁr].ToStrTrim().Replace(".", ",").ToÉrt_Double();
                     Ár = Math.Round(Ár, 1);
                     string Sarzs = MyF.Szöveg_Tisztítás(Sor[oszlopSarzs].ToStrTrim(), 0, 5);
                     double Árdb = 0;
@@ -818,7 +818,7 @@ namespace Villamos.V_MindenEgyéb
                                Megnevezés,
                                "",
                                Sarzs,
-                               Árdb);
+                               Math.Round(Árdb,3));
                     AdatokGy.Add(ADAT);
 
                     //Módosítjuk a raktárkészletet
@@ -826,7 +826,7 @@ namespace Villamos.V_MindenEgyéb
                                 Cikkszám,
                                 Sarzs,
                                 Raktár,
-                                Mennyi);
+                                Math.Round(Mennyi,3));
                     AdatokGyR.Add(ADATR);
                     sor++;
                 }
