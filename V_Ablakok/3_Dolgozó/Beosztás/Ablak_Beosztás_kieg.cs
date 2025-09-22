@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
+using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Beosztás;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
@@ -102,43 +103,52 @@ namespace Villamos.Villamos_Ablakok
 
         private void MúltJelenJövő()
         {
-            Gombok_látszik(false);
+
             int Választék;
             if (Dátum == DateTime.Today)
-            {
                 Választék = 0;
-            }
             else if (Dátum > DateTime.Today)
-            {
                 Választék = 1;
-            }
             else
-            {
                 Választék = -1;
-            }
 
-            switch (Választék)
+            //Végig megyünk a gombokon és ha látszódik akkor megvizsgáljuk hogy van-e hozzá joga a felhasználónak az idő szerint(múlt, jelen, jövő)
+            List<Button> Gombok = AblakokGombok.FormbanlévőGombok(this.Name);
+            if (Gombok == null) return;
+            foreach (Button gomb in Gombok)
             {
-                case -1:
+                Control control = this.Controls.Find(gomb.Name, true).FirstOrDefault();
+                if (control is Button button)
+                {
+                    switch (Választék)
                     {
-                        if (Múlt)
-                            Gombok_látszik(true);
-                        break;
+                        case -1:
+                            {
+                                if (Múlt && gomb.Visible)
+                                    button.Visible = true;
+                                else
+                                    button.Visible = false;
+                                break;
+                            }
+                        case 0:
+                            {
+                                if (Jelen && gomb.Visible)
+                                    button.Visible = true;
+                                else
+                                    button.Visible = false;
+                                break;
+                            }
+                        case 1:
+                            {
+                                if (Jövő && gomb.Visible)
+                                    button.Visible = true;
+                                else
+                                    button.Visible = false;
+                                break;
+                            }
                     }
-                case 0:
-                    {
-                        if (Jelen)
-                            Gombok_látszik(true);
-                        break;
-                    }
-                case 1:
-                    {
-                        if (Jövő)
-                            Gombok_látszik(true);
-                        break;
-                    }
+                }
             }
-
         }
 
         private void Jogosultságkiosztás()
@@ -270,22 +280,6 @@ namespace Villamos.Villamos_Ablakok
             {
 
             }
-        }
-
-        private void Gombok_látszik(bool látszik)
-        {
-            TúlóraRögzítés.Visible = látszik;
-            Túlóratörlés.Visible = látszik;
-
-            CsúsztatásTörlés.Visible = látszik;
-            CsúsztatásRögzítés.Visible = látszik;
-
-            SzabadságRögzítés.Visible = látszik;
-
-            MegjegyzésRögzítés.Visible = látszik;
-
-            AftTörlés.Visible = látszik;
-            AftRögzítés.Visible = látszik;
         }
 
         private void Fülek_DrawItem(object sender, DrawItemEventArgs e)
