@@ -31,15 +31,23 @@ namespace Villamos
         /// </summary>
         public static void ExcelLétrehozás(bool teszt = false)
         {
-            //elindítjuk az alkalmazást. létrehozzuk a fájlt és a munkalapot.
-            xlApp = new MyExcel.Application
+            try
             {
-                Visible = teszt
-            };
-            xlApp.DisplayAlerts = false;
-            // xlApp.Interactive = false;  Nem szabad bekapcsolni mert akkor nem működik kivétel HRESULT-értéke: 0x800AC472 dob.
-            Module_Excel.xlWorkBook = xlApp.Workbooks.Add(misValue);
-            Module_Excel.xlWorkSheet = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets.get_Item(1);
+                //elindítjuk az alkalmazást. létrehozzuk a fájlt és a munkalapot.
+                xlApp = new MyExcel.Application
+                {
+                    Visible = teszt
+                };
+                xlApp.DisplayAlerts = false;
+                // xlApp.Interactive = false;  Nem szabad bekapcsolni mert akkor nem működik kivétel HRESULT-értéke: 0x800AC472 dob.
+                xlWorkBook = xlApp.Workbooks.Add(misValue);
+                xlWorkSheet = (MyExcel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "ExcelLétrehozás", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public static int Tábla_Író(string hely, string jelszó, string szöveg, int sor, string munkalap)
@@ -135,65 +143,6 @@ namespace Villamos
             ReleaseObject(xlApp);
             ReleaseObject(xlWorkBook);
             ReleaseObject(xlWorkSheet);
-        }
-
-
-
-
-
-
-        /// <summary>
-        /// Megadott oszlop szélesség beállítása az oszlopnál
-        /// </summary>
-        /// <param name="ws"></param>
-        /// <param name="oszlop">string oszlopnév</param>
-        /// <param name="szélesség">double szélesség</param>
-        public static void Oszlopszélesség(string munkalap, string oszlop, int szélesség)
-        {
-            //Oszlop szélesség beállítás
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-
-            MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
-            Táblaterület.Columns.Select();
-            Táblaterület.Columns.ColumnWidth = szélesség;
-
-        }
-
-        /// <summary>
-        /// Ebben a változatban automatikus az oszlop szélesség
-        /// </summary>
-        /// <param name="munkalap"></param>
-        /// <param name="oszlop"></param>
-        public static void Oszlopszélesség(string munkalap, string oszlop)
-        {
-            //Oszlop szélesség beállítás
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
-            Táblaterület.Columns.EntireColumn.AutoFit();
-        }
-
-
-        /// <summary>
-        /// Törli az oszlopot
-        /// </summary>
-        /// <param name="ws"></param>
-        /// <param name="oszlop">formában kell megadni "A:A" </param>
-        public static void OszlopTörlés(string oszlop)
-        {
-            MyExcel.Range Táblaterület = xlWorkSheet.Range[oszlop];
-            Táblaterület.Delete(Microsoft.Office.Interop.Excel.XlDirection.xlToLeft);
-        }
-
-        /// <summary>
-        /// Elrejti az oszlopot
-        /// </summary>
-        /// <param name="oszlop"></param>
-        public static void OszlopRejtés(string munkalap, string oszlop)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
-            Táblaterület.EntireColumn.Hidden = true;
-
         }
 
 
@@ -360,24 +309,7 @@ namespace Villamos
 
 
 
-        /// <summary>
-        /// Oszlop sorszámát átalakítja az oszlop jelölő betűvé 
-        /// </summary>
-        /// <param name="sorszám">Int adunnk át</param>
-        /// <returns></returns>
-        public static string Oszlopnév(int sorszám)
-        {
-            if (sorszám < 1) throw new ArgumentOutOfRangeException(nameof(sorszám), "Az oszlopszámnak 1 vagy nagyobbnak kell lennie.");
 
-            string oszlopNev = string.Empty;
-            while (sorszám > 0)
-            {
-                sorszám--;
-                oszlopNev = (char)('A' + (sorszám % 26)) + oszlopNev;
-                sorszám /= 26;
-            }
-            return oszlopNev;
-        }
 
 
         /// <summary>
@@ -431,11 +363,6 @@ namespace Villamos
             Táblaterület.ShrinkToFit = false;
             Táblaterület.MergeCells = true;
         }
-
-
-
-
-
 
         /// <summary>
         /// Megnyitja az excel, html lapot
@@ -560,28 +487,6 @@ namespace Villamos
             }
             return válasz;
         }
-
-
-
-
-        public static int Utolsósor(string munkalap)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Range = Munkalap.UsedRange;
-            int maxRow = Range.Rows.Count;
-            return maxRow;
-        }
-
-        public static int Utolsóoszlop(string munkalap)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range RangeX = Munkalap.UsedRange;
-            int maxColumn = RangeX.Columns.Count;
-            return maxColumn;
-        }
-
-
-
 
         public static void Kép_beillesztés(string munkalap, String mit, string hely)
         {

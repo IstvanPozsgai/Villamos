@@ -11,6 +11,7 @@ using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Közös;
 using Villamos.Villamos_Adatszerkezet;
+using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
@@ -604,7 +605,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         private void Excel_gomb_Click(object sender, EventArgs e)
         {
             if (TáblaFelső.Rows.Count <= 0) return;
-            Excel_Mentés.Mentés("MyDocuments",
+            MyE.Mentés("MyDocuments",
                                 "Listázott tartalom mentése Excel fájlba",
                                 $"Vételezés-{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                                 "Excel |*.xlsx",

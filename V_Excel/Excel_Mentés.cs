@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Windows.Forms;
-using MyE = Villamos.Module_Excel;
 
-namespace Villamos.V_MindenEgyéb
+namespace Villamos
 {
-    public static class Excel_Mentés
+    public static partial class Module_Excel
     {
+        /// <summary>
+        /// DatagridView tartalmát elmenti Excel fájlba
+        /// </summary>
+        /// <param name="InitialDirectory">Fájl elérési út</param>
+        /// <param name="Title">Ablak felirat</param>
+        /// <param name="FileName">Fájlnév</param>
+        /// <param name="Filter">Szűrő</param>
+        /// <param name="Tábla">DatagridView táblanév</param>
         public static void Mentés(string InitialDirectory, string Title, string FileName, string Filter, DataGridView Tábla)
         {
             try
@@ -27,9 +34,9 @@ namespace Villamos.V_MindenEgyéb
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla);
+                DataGridViewToExcel(fájlexc, Tábla);
                 MessageBox.Show($"Elkészült az Excel tábla:\n{fájlexc}", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

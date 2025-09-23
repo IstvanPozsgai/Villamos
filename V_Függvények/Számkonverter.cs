@@ -33,11 +33,12 @@
             {
                 ki = ki.Substring(0, ki.IndexOf("-ezer-") + 1) + ki.Substring(ki.IndexOf("-ezer-") + 6, ki.Length);
             }
-            if (ki.Substring (ki.Length - 1) == "-") ki = ki.Substring(0, ki.Length - 1); // milliós - le
+            if (ki.Substring(ki.Length - 1) == "-") ki = ki.Substring(0, ki.Length - 1); // milliós - le
 
         }
         return ki;
     }
+
     private static string Szazas(int x)
     {
         switch (x)

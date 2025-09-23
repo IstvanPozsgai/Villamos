@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
@@ -61,5 +62,138 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        /// <summary>
+        /// Megadott oszlop szélesség beállítása az oszlopnál
+        /// </summary>
+        /// <param name="ws"></param>
+        /// <param name="oszlop">string oszlopnév</param>
+        /// <param name="szélesség">double szélesség, ha nincs megadva akkor automatikus</param>
+        public static void Oszlopszélesség(string munkalap, string oszlop, double szélesség = -1)
+        {
+            try
+            {
+                //Oszlop szélesség beállítás
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
+                if (szélesség > 0)
+                    Táblaterület.Columns.ColumnWidth = szélesség;
+                else
+                    Táblaterület.Columns.EntireColumn.AutoFit();
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Oszlopszélesség(munkalap: {munkalap}, oszlop: {oszlop}, szélesség: {szélesség}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        /// <summary>
+        /// Törli az oszlopot
+        /// </summary>
+        /// <param name="ws"></param>
+        /// <param name="oszlop">formában kell megadni "A:A" </param>
+        public static void OszlopTörlés(string oszlop)
+        {
+            try
+            {
+                MyExcel.Range Táblaterület = xlWorkSheet.Range[oszlop];
+                Táblaterület.Delete(Microsoft.Office.Interop.Excel.XlDirection.xlToLeft);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"OszlopTörlés(oszlop {oszlop})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        /// <summary>
+        /// Elrejti az oszlopot
+        /// </summary>
+        /// <param name="oszlop"></param>
+        public static void OszlopRejtés(string munkalap, string oszlop)
+        {
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
+                Táblaterület.EntireColumn.Hidden = true;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"OszlopRejtés(munkalap {munkalap}, oszlop {oszlop})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        /// <summary>
+        /// Oszlop sorszámát átalakítja az oszlop jelölő betűvé 
+        /// </summary>
+        /// <param name="sorszám">Int adunnk át</param>
+        /// <returns></returns>
+        public static string Oszlopnév(int sorszám)
+        {
+            string oszlopNev = string.Empty;
+            int eredetiSorszám = sorszám;
+            try
+            {
+                if (sorszám < 1) throw new ArgumentOutOfRangeException(nameof(sorszám), "Az oszlopszámnak 1 vagy nagyobbnak kell lennie.");
+                while (sorszám > 0)
+                {
+                    sorszám--;
+                    oszlopNev = (char)('A' + (sorszám % 26)) + oszlopNev;
+                    sorszám /= 26;
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Oszlopnév(sorszám {eredetiSorszám})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return oszlopNev;
+        }
+
+
+        public static int Utolsósor(string munkalap)
+        {
+            int maxRow = 0;
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range Range = Munkalap.UsedRange;
+                maxRow = Range.Rows.Count;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Utolsósor(munkalap {munkalap})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return maxRow;
+        }
+
+
+        public static int Utolsóoszlop(string munkalap)
+        {
+            int maxColumn = 0;
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range RangeX = Munkalap.UsedRange;
+                maxColumn = RangeX.Columns.Count;
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Utolsósor(munkalap {munkalap})", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return maxColumn;
+        }
+
+
+
     }
 }
