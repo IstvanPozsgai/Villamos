@@ -228,7 +228,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         DataRow Soradat = AdatTábla.NewRow();
                         Soradat["Cikkszám"] = rekord.Cikkszám;
                         Soradat["Megnevezés"] = rekord.Megnevezés;
-                        Soradat["Kereső fogalom"] = rekord.KeresőFogalom;
+                        Soradat["Kereső fogalom"] = KeresőFogalom(rekord.Cikkszám);
                         Soradat["Sarzs"] = rekord.Sarzs;
                         Soradat["Ár"] = Math.Round(rekord.Ár, 1);
                         double RaktárK = 0;
@@ -269,6 +269,19 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private string KeresőFogalom(string cikkszám)
+        {
+            string válasz = "";
+            List<Adat_Anyagok> AdatokKereső = (from a in Adatok
+                                               where a.Cikkszám.Trim() == cikkszám.Trim()
+                                               select a).ToList();
+            foreach (Adat_Anyagok rekord in AdatokKereső)
+            {
+                if (!válasz.Contains(rekord.KeresőFogalom.Trim())) válasz += rekord.KeresőFogalom.Trim() + " ";
+            }
+            return válasz;
         }
 
         private bool KellÍrni(string szöveg)

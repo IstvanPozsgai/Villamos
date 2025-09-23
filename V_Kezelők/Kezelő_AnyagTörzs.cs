@@ -61,31 +61,33 @@ namespace Villamos.V_Kezelők
                 List<Adat_Anyagok> AdatokGyMód = new List<Adat_Anyagok>();
                 List<Adat_Anyagok> AdatokGyRögzítés = new List<Adat_Anyagok>();
                 List<Adat_Anyagok> Adatok = Lista_Adatok();
-                string előzőcikk = "";
-                string előzősarzs = "";
                 // Kiválogatjuk a betöltendő adatokat
                 foreach (Adat_Anyagok adat in AdatokKap)
                 {
-                    if (!(előzőcikk == adat.Cikkszám && előzősarzs == adat.Sarzs))
-                    {
-                        Adat_Anyagok VanAnyag = (from a in Adatok
+                    //Nincs a cikktörzsben
+                    Adat_Anyagok VanAnyag = (from a in Adatok
+                                             where a.Cikkszám.Trim() == adat.Cikkszám.Trim()
+                                             && a.Sarzs.Trim() == adat.Sarzs.Trim()
+                                             select a).FirstOrDefault();
+
+                    //Nincs a rögzítésben
+                    Adat_Anyagok VanAnyagRögz = (from a in AdatokGyRögzítés
                                                  where a.Cikkszám.Trim() == adat.Cikkszám.Trim()
                                                  && a.Sarzs.Trim() == adat.Sarzs.Trim()
                                                  select a).FirstOrDefault();
-                        //ha eddig nem volt ilyen anyag akkor felvesszük
-                        if (VanAnyag == null)
-                            AdatokGyRögzítés.Add(adat);
-                        else
-                        {
-                            //Csak azokat vesszük fel a módosítandók közé, ahol van változás
-                            if (!Egyezes(adat, VanAnyag)) AdatokGyMód.Add(adat);
-                        }
+                    //ha eddig nem volt ilyen anyag akkor felvesszük
+                    if (VanAnyag == null && VanAnyagRögz == null)
+                        AdatokGyRögzítés.Add(adat);
+                    else
+                    {
+                        //Csak azokat vesszük fel a módosítandók közé, ahol van változás
+                        if(VanAnyag!=null && !Egyezes(adat, VanAnyag)) AdatokGyMód.Add(adat);
                     }
-                    előzőcikk = adat.Cikkszám.Trim();
-                    előzősarzs = adat.Sarzs.Trim();
+
                 }
-                if (AdatokGyMód.Count > 0) Módosítás(AdatokGyMód);
                 if (AdatokGyRögzítés.Count > 0) Rögzítés(AdatokGyRögzítés);
+                if (AdatokGyMód.Count > 0) Módosítás(AdatokGyMód);
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -262,8 +264,8 @@ namespace Villamos.V_Kezelők
                 if (VanAnyag == null)
                     Rögzítés(Adat);
                 else
-              Módosítás(Adat);
-                
+                    Módosítás(Adat);
+
             }
             catch (HibásBevittAdat ex)
             {
