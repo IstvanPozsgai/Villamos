@@ -5,7 +5,6 @@ using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static System.IO.File;
 using DT = System.Data;
@@ -23,6 +22,7 @@ namespace Villamos
         public static MyExcel.Worksheet xlWorkSheet;
         public static MyExcel._Workbook _xlWorkBook;
         public static MyExcel._Worksheet _xlWorkSheet;
+
 
         public static object misValue = System.Reflection.Missing.Value;
 
@@ -46,7 +46,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "ExcelLétrehozás", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"ExcelLétrehozás \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -80,7 +82,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "ReleaseObject", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"ReleaseObject \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -101,7 +105,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"ExcelMentés(fájlnév {fájlnév})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"ExcelMentés(fájlnév {fájlnév}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -119,7 +125,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "ExcelMentés", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"ExcelMentés \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -131,14 +139,15 @@ namespace Villamos
             {
                 xlWorkBook.Close(true, misValue, misValue);
                 xlApp.Quit();
-           //     Marshal.ReleaseComObject(xlWorkBook);
                 ReleaseObject(xlWorkSheet);
                 ReleaseObject(xlWorkBook);
                 ReleaseObject(xlApp);
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, "ExcelBezárás", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"ExcelBezárás \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -158,7 +167,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Kiir(mit {mit}, hova {hova})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Kiir(mit {mit}, hova {hova})\n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -189,7 +200,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Igazít_vízszintes(mit {mit}, irány {irány})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Igazít_vízszintes(mit {mit}, irány {irány}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -220,7 +233,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Igazít_függőleges(mit {mit}, irány {irány})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Igazít_függőleges(mit {mit}, irány {irány}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -242,7 +257,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Egyesít(munkalap {munkalap}, mit {mit})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Egyesít(munkalap {munkalap}, mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -252,21 +269,23 @@ namespace Villamos
         /// Háttérszín beállítása
         /// </summary>
         /// <param name="mit">szöveg</param>
-        /// <param name="szín">dupla</param>
+        /// <param name="szín">int</param>
         public static void Háttérszín(string mit, int szín)
         {
-            try
+            if (szín < 0 || szín > 16777215)
             {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                if (szín < 0 || szín > 16777215)
-                    Táblaterület.Interior.Color = Color.White;
-                else
-                    Táblaterület.Interior.Color = szín;
+                // Ha érvénytelen, akkor fehér színnel hívjuk meg a másikat
+                Háttérszín(mit, Color.White);
             }
-            catch (Exception ex)
+            else
             {
-                HibaNapló.Log(ex.Message, $"Háttérszín(mit {mit}, szín {szín})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Konvertáljuk az int-et Color-á, majd hívjuk a másik túlterhelést
+                Color color = Color.FromArgb(
+                    (szín >> 16) & 0xFF, // R
+                    (szín >> 8) & 0xFF,  // G
+                    szín & 0xFF          // B
+                );
+                Háttérszín(mit, color);
             }
         }
 
@@ -276,45 +295,94 @@ namespace Villamos
             try
             {
                 MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-                Táblaterület.Interior.Color = System.Drawing.ColorTranslator.ToOle(színe);
+                Táblaterület.Interior.Color = ColorTranslator.ToOle(színe);
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Háttérszín(mit {mit}, színe {színe})", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Háttérszín(mit {mit}, színe {színe}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        //itt tartok
+
         public static void CellaNincsHáttér(string mit)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.Interior.Pattern = Constants.xlNone;
-            Táblaterület.Interior.TintAndShade = 0;
-            Táblaterület.Interior.PatternTintAndShade = 0;
+            try
+            {
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
 
+                // 1. Kitöltési minta eltávolítása
+                Táblaterület.Interior.Pattern = Constants.xlNone;
+
+                // 2. Szín visszaállítása alapértelmezettre („nincs szín”)
+                // Az Excelben ez a -4142 (xlColorIndexNone) érték
+                Táblaterület.Interior.ColorIndex = -4142;
+
+                // A TintAndShade és PatternTintAndShade általában nem szükséges,
+                // ha Pattern = xlNone, de meghagyhatod biztonságból.
+                Táblaterület.Interior.TintAndShade = 0;
+                Táblaterület.Interior.PatternTintAndShade = 0;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"CellaNincsHáttér(mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+
         /// <summary>
         /// Sötét háttérhez világos betűt állít be
         /// </summary>
         /// <param name="mit">szöveg</param>
         /// <param name="szín">dupla</param>
-        public static void Háttérszíninverz(string mit, double szín)
+        public static void Háttérszíninverz(string mit, int szín)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.Interior.Color = szín;
-
-            Táblaterület.Font.ThemeColor = Microsoft.Office.Interop.Excel.XlThemeColor.xlThemeColorDark1;
-            Táblaterület.Font.TintAndShade = 0;
+            if (szín < 0 || szín > 16777215)
+            {
+                // Ha érvénytelen, akkor fehér színnel hívjuk meg a másikat
+                Háttérszín(mit, Color.White);
+            }
+            else
+            {
+                // Konvertáljuk az int-et Color-á, majd hívjuk a másik túlterhelést
+                Color color = Color.FromArgb(
+                    (szín >> 16) & 0xFF, // R
+                    (szín >> 8) & 0xFF,  // G
+                    szín & 0xFF          // B
+                );
+                Háttérszín(mit, color);
+            }
         }
+
 
         public static void Háttérszíninverz(string mit, Color színe)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.Interior.Color = System.Drawing.ColorTranslator.ToOle(színe);
+            try
+            {
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
 
-            Táblaterület.Font.ThemeColor = Microsoft.Office.Interop.Excel.XlThemeColor.xlThemeColorDark1;
-            Táblaterület.Font.TintAndShade = 0;
+                // Háttérszín beállítása (OLE_COLOR formátumban)
+                Táblaterület.Interior.Color = System.Drawing.ColorTranslator.ToOle(színe);
+
+                // Betűszín: FEHÉR (közvetlenül, nem ThemeColor!)
+                Táblaterület.Font.Color = System.Drawing.ColorTranslator.ToOle(Color.White);
+
+                // Opcionális: eltávolítjuk a ThemeColor és TintAndShade hatásokat
+                Táblaterület.Font.ThemeColor = 0; // vagy: nincs értelme, ha Color-t használunk
+                Táblaterület.Font.TintAndShade = 0;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Háttérszíninverz(mit {mit}, színe {színe}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -325,14 +393,22 @@ namespace Villamos
         /// <param name="mit"></param>
         public static void Aktív_Cella(string munkalap, string mit)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munkalap.Select();
-
-            MyExcel.Range range = Munkalap.get_Range(mit, mit);
-            range.Select();
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                Module_Excel.xlWorkBook.Activate();
+                Munkalap.Activate(); // Activate() stabilabb, mint Select()
+                MyExcel.Range range = Munkalap.get_Range(mit, mit);
+                range.Select();
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Aktív_Cella(munkalap {munkalap}, mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-
 
 
         /// <summary>
@@ -343,14 +419,20 @@ namespace Villamos
         /// <param name="mennyit">-90 bal- 0 vízszintes- 90 jobb</param>
         public static void SzövegIrány(string munkalap, string mit, double mennyit)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Táblaterület = Munkalap.Range[mit];
-            Táblaterület.Orientation = mennyit;
+            try
+            {
+                Worksheet Munkalap = (Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range Táblaterület = Munkalap.get_Range(mit, Type.Missing);
+                Táblaterület.Orientation = mennyit;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"SzövegIrány(munkalap {munkalap}, mit {mit}, mennyit {mennyit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-
-
-
 
 
         /// <summary>
@@ -358,52 +440,76 @@ namespace Villamos
         /// </summary>
         /// <param name="mit"></param>
         /// 
-
         public static void Sortörésseltöbbsorba(string mit)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.Cells.Select();
-
-            Táblaterület.HorizontalAlignment = Constants.xlGeneral;
-            Táblaterület.VerticalAlignment = Constants.xlCenter;
-            Táblaterület.WrapText = true;
-            Táblaterület.Orientation = 0;
-            Táblaterület.AddIndent = false;
-            Táblaterület.IndentLevel = 0;
-            Táblaterület.ShrinkToFit = false;
-            Táblaterület.MergeCells = false;
+            try
+            {
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+                // Vízszintes igazítás: Általános
+                Táblaterület.HorizontalAlignment = MyExcel.XlHAlign.xlHAlignGeneral; // vagy -4133
+                // Függőleges igazítás: Középre
+                Táblaterület.VerticalAlignment = MyExcel.XlVAlign.xlVAlignCenter;    // vagy -4108
+                // Sortörés BE
+                Táblaterület.WrapText = true;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Sortörésseltöbbsorba(mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
         public static void Sortörésseltöbbsorba(string mit, bool egyesített)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.Cells.Select();
+            try
+            {
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+                Táblaterület.HorizontalAlignment = MyExcel.XlHAlign.xlHAlignGeneral; // vagy -4133
+                Táblaterület.VerticalAlignment = MyExcel.XlVAlign.xlVAlignCenter;    // vagy -4108
 
-            Táblaterület.HorizontalAlignment = Constants.xlGeneral;
-            Táblaterület.VerticalAlignment = Constants.xlCenter;
-            Táblaterület.WrapText = true;
-            Táblaterület.Orientation = 0;
-            Táblaterület.AddIndent = false;
-            Táblaterület.IndentLevel = 0;
-            Táblaterület.ShrinkToFit = false;
-            Táblaterület.MergeCells = egyesített;
+                Táblaterület.WrapText = true;
+                Táblaterület.Orientation = 0;
+                Táblaterület.AddIndent = false;
+                Táblaterület.IndentLevel = 0;
+                Táblaterület.ShrinkToFit = false;
+                Táblaterület.MergeCells = egyesített;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Sortörésseltöbbsorba(mit {mit}, egyesített {egyesített}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         public static void Sortörésseltöbbsorba_egyesített(string mit)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.Cells.Select();
-
-            Táblaterület.HorizontalAlignment = Constants.xlGeneral;
-            Táblaterület.VerticalAlignment = Constants.xlCenter;
-            Táblaterület.WrapText = true;
-            Táblaterület.Orientation = 0;
-            Táblaterület.AddIndent = false;
-            Táblaterület.IndentLevel = 0;
-            Táblaterület.ShrinkToFit = false;
-            Táblaterület.MergeCells = true;
+            try
+            {
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+                Táblaterület.HorizontalAlignment = MyExcel.XlHAlign.xlHAlignGeneral; // vagy -4133
+                Táblaterület.VerticalAlignment = MyExcel.XlVAlign.xlVAlignCenter;    // vagy -4108
+                Táblaterület.WrapText = true;
+                Táblaterület.Orientation = 0;
+                Táblaterület.AddIndent = false;
+                Táblaterület.IndentLevel = 0;
+                Táblaterület.ShrinkToFit = false;
+                Táblaterület.MergeCells = true;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Sortörésseltöbbsorba(mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         /// <summary>
         /// Megnyitja az excel, html lapot
@@ -411,32 +517,141 @@ namespace Villamos
         /// <param name="Fájlhelye"></param>
         public static void Megnyitás(string Fájlhelye)
         {
-            if (!Exists(Fájlhelye)) return;
-            Process.Start(Fájlhelye);
+            try
+            {
+                if (!Exists(Fájlhelye)) return;
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = Fájlhelye,
+                    UseShellExecute = true, // Fontos: ezzel a rendszer alapértelmezett alkalmazását használja
+                    Verb = "open"           // Explicit "megnyitás" parancs
+                };
+                Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Megnyitás(Fájlhelye {Fájlhelye}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
         public static void ExcelMegnyitás(string hely, bool látszik = false)
         {
-            xlApp = new MyExcel.Application();
-            xlApp.Visible = látszik;
-            xlWorkBook = xlApp.Workbooks.Open(hely);
+            // 1. Régi példányok bezárása (ha vannak)
+            ExcelBezárásÚJ();
+
+            try
+            {
+                xlApp = new MyExcel.Application();
+                xlApp.Visible = látszik;
+                xlApp.DisplayAlerts = false; // Fontos: letiltja a figyelmeztetéseket (pl. "fájl foglalt")
+
+                xlWorkBook = xlApp.Workbooks.Open(
+                    Filename: hely,
+                    ReadOnly: false,           // Vagy true, ha csak olvasol
+                    UpdateLinks: false,        // Ne frissítsen hivatkozásokat
+                    Editable: true,
+                    Notify: false              // Ne jelenjen meg üzenet, ha a fájl foglalt
+                );
+            }
+            catch (Exception ex)
+            {
+                // Hibakezelés és takarítás
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"ExcelMegnyitás(hely: {hely}, látszik: {látszik}) \n Hívó: {hívóInfo}, ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(
+                    $"Nem sikerült megnyitni az Excel-fájlt:\n{hely}\n\nHiba: {ex.Message}",
+                    "Hiba az Excel megnyitásakor",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                ExcelBezárásÚJ();
+            }
+        }
+
+
+        public static void ExcelBezárásÚJ()
+        {
+            try
+            {
+                if (xlWorkBook != null)
+                {
+                    xlWorkBook.Close(SaveChanges: false); // Vagy true, ha menteni szeretnél
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(xlWorkBook);
+                    xlWorkBook = null;
+                }
+
+                if (xlApp != null)
+                {
+                    xlApp.Quit();
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(xlApp);
+                    xlApp = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"ExcelBezárás \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                // Ne dobjon kivételt – csak logol
+            }
+            finally
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
         }
 
 
         public static void Értékmásol(string munkalap, string honnan, string hova)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range területhonnan = Munkalap.Range[honnan];
-            MyExcel.Range területhova = Munkalap.Range[hova];
+            try
+            {
+                // JAVÍTANDÓ:
+                //Eredeti
+                //Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                //MyExcel.Range területhonnan = Munkalap.Range[honnan];
+                //MyExcel.Range területhova = Munkalap.Range[hova];
 
-            területhonnan.Select();
-            területhonnan.Copy();
-            területhova.Select();
-            területhova.PasteSpecial(Paste: XlPasteType.xlPasteValues, Operation: XlPasteSpecialOperation.xlPasteSpecialOperationNone, SkipBlanks: false, Transpose: false);
+                //területhonnan.Select();
+                //területhonnan.Copy();
+                //területhova.Select();
+                //területhova.PasteSpecial(Paste: XlPasteType.xlPasteValues, Operation: XlPasteSpecialOperation.xlPasteSpecialOperationNone, SkipBlanks: false, Transpose: false);
+
+                // Közvetlen érték másolása – NINCS vágólap, NINCS Select!
+                Worksheet Munkalap = (Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range forrás = Munkalap.Range[honnan];
+                MyExcel.Range cél = Munkalap.Range[hova];
+                cél.Value = forrás.Value;
+
+                //Kipróbálható
+                //Worksheet Munkalap = (Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                //MyExcel.Range forrás = Munkalap.Range[honnan];
+                //MyExcel.Range cél = Munkalap.Range[hova];
+                //forrás.Copy(); // Nincs szükség kijelölésre
+                //cél.PasteSpecial(
+                //    Paste: MyExcel.XlPasteType.xlPasteValues,
+                //    Operation: MyExcel.XlPasteSpecialOperation.xlPasteSpecialOperationNone,
+                //    SkipBlanks: false,
+                //    Transpose: false
+                //);
+                //// Vágólap törlése (opcionális, de ajánlott)
+                //Module_Excel.xlApp.CutCopyMode = false;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Értékmásol(munkalap {munkalap}, honnan {honnan}, hova {hova}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-
+        //itt tartok 
         public static void Képlet_másol(string munkalap, string honnan, string hova)
         {
             Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];

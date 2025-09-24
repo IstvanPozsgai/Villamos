@@ -1,5 +1,6 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
@@ -34,7 +35,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"SorBeszúrás(munkalap: {munkalap}, munkalap: {sor}, munkalap: {beszúrás})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"SorBeszúrás(munkalap: {munkalap}, munkalap: {sor}, munkalap: {beszúrás}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -58,7 +61,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Sormagasság(mit: {mit}, mekkora: {mekkora})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Sormagasság(mit: {mit}, mekkora: {mekkora}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -84,7 +89,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Oszlopszélesség(munkalap: {munkalap}, oszlop: {oszlop}, szélesség: {szélesség}", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Oszlopszélesség(munkalap: {munkalap}, oszlop: {oszlop}, szélesség: {szélesség} \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -104,7 +111,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"OszlopTörlés(oszlop {oszlop})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"OszlopTörlés(oszlop {oszlop}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -124,7 +133,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"OszlopRejtés(munkalap {munkalap}, oszlop {oszlop})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"OszlopRejtés(munkalap {munkalap}, oszlop {oszlop}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -151,7 +162,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Oszlopnév(sorszám {eredetiSorszám})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Oszlopnév(sorszám {eredetiSorszám}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return oszlopNev;
@@ -169,7 +182,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Utolsósor(munkalap {munkalap})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Utolsósor(munkalap {munkalap}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return maxRow;
@@ -187,7 +202,9 @@ namespace Villamos
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, $"Utolsósor(munkalap {munkalap})", ex.StackTrace, ex.Source, ex.HResult);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Utolsósor(munkalap {munkalap}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return maxColumn;

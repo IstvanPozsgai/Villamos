@@ -1512,7 +1512,7 @@ namespace Villamos
             // ** munkalap fejléce         ******************
             // **********************************************
             MyE.Egyesít(munkalap, "a1:r1");
-            MyE.Kiir("Munkautasítás", "a1");
+            MyE.Kiir("Munkautasítás", "a-1");
             MyE.Betű("a1:r1", 22);
             MyE.Betű("a1:r1", false, false, true);
             MyE.Igazít_vízszintes("a1:r1", "bal");
@@ -1541,7 +1541,7 @@ namespace Villamos
             MyE.Kiir(Dátum.Value.ToString("yyyy.MM.dd"), "i3");
             MyE.Egyesít(munkalap, "l2:n2");
             MyE.Kiir("Költséghely:", "l2");
-            MyE.Egyesít(munkalap, "l3:n3"); 
+            MyE.Egyesít(munkalap, "l3:n3");
             MyE.Betű("l3:n3", 10);
             MyE.Betű("l3:n3", false, true, true);
 
