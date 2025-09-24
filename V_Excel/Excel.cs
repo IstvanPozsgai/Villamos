@@ -562,7 +562,7 @@ namespace Villamos
                 // Hibakezelés és takarítás
                 StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"ExcelMegnyitás(hely: {hely}, látszik: {látszik}) \n Hívó: {hívóInfo}, ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"ExcelMegnyitás(hely: {hely}, látszik: {látszik}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(
                     $"Nem sikerült megnyitni az Excel-fájlt:\n{hely}\n\nHiba: {ex.Message}",
                     "Hiba az Excel megnyitásakor",

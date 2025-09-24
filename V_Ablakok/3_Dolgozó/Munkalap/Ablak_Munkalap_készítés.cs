@@ -1512,7 +1512,7 @@ namespace Villamos
             // ** munkalap fejléce         ******************
             // **********************************************
             MyE.Egyesít(munkalap, "a1:r1");
-            MyE.Kiir("Munkautasítás", "a-1");
+            MyE.Kiir("Munkautasítás", "a1");
             MyE.Betű("a1:r1", 22);
             MyE.Betű("a1:r1", false, false, true);
             MyE.Igazít_vízszintes("a1:r1", "bal");

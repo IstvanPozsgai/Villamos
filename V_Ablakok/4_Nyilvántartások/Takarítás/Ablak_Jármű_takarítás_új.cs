@@ -4112,11 +4112,11 @@ namespace Villamos
                     MyE.Kiir(Lekérdezés_Kategória.Text.Trim() + " nappal", "a" + sor);
                     if (Lekérdezés_Kategória.Text.Trim() == "Graffiti" | Lekérdezés_Kategória.Text.Trim() == "Eseti")
                     {
-                        MyE.Kiir("nm", "b" + sor.ToString());
+                        MyE.Kiir("nm", $"B{sor}");
                     }
                     else
                     {
-                        MyE.Kiir("db", "b" + sor.ToString());
+                        MyE.Kiir("db", $"B{sor}");
                     }
                     MyE.Kiir("0", "c" + sor.ToString());
 
@@ -4125,11 +4125,11 @@ namespace Villamos
                     MyE.Kiir(Lekérdezés_Kategória.Text.Trim() + " éjszaka", "a" + sor);
                     if (Lekérdezés_Kategória.Text.Trim() == "Graffiti" | Lekérdezés_Kategória.Text.Trim() == "Eseti" | Lekérdezés_Kategória.Text.Trim() == "Fertőtlenítés")
                     {
-                        MyE.Kiir("nm", "b" + sor.ToString());
+                        MyE.Kiir("nm", $"B{sor}");
                     }
                     else
                     {
-                        MyE.Kiir("db", "b" + sor.ToString());
+                        MyE.Kiir("db", $"B{sor}");
                     }
                     MyE.Kiir("0", "c" + sor.ToString());
                 }
@@ -4376,19 +4376,19 @@ namespace Villamos
                 int sor;
                 sor = 8;
                 MyE.Kiir("J1", "A" + sor);
-                MyE.Kiir("Nappal", "B" + sor);
+                MyE.Kiir("Nappal", $"B{sor}");
                 sor += 1;
                 MyE.Kiir("J1", "A" + sor);
-                MyE.Kiir("Éjszaka", "B" + sor);
+                MyE.Kiir("Éjszaka", $"B{sor}");
 
                 for (int i = 0; i <= Lekérdezés_Kategória.Items.Count - 1; i++)
                 {
                     sor += 1;
                     MyE.Kiir(Lekérdezés_Kategória.Items[i].ToString(), "A" + sor);
-                    MyE.Kiir("Nappal", "B" + sor);
+                    MyE.Kiir("Nappal", $"B{sor}");
                     sor += 1;
                     MyE.Kiir(Lekérdezés_Kategória.Items[i].ToString(), "A" + sor);
-                    MyE.Kiir("Éjszaka", "B" + sor);
+                    MyE.Kiir("Éjszaka", $"B{sor}");
                 }
                 sor += 1;
                 MyE.Kiir("Összesen", "A" + sor);
@@ -4504,8 +4504,8 @@ namespace Villamos
                         MyE.Munkalap_aktív("Összesítő_minden");
 
                         melyikoszlop = 0;
-                        takfajta = MyE.Beolvas("a" + sorb);
-                        napszak = MyE.Beolvas("b" + sorb);
+                        takfajta = MyE.Beolvas($"A{sorb}");
+                        napszak = MyE.Beolvas($"B{sorb}");
                         if (takfajta.Substring(0, 1) == "J")
                         {
                             // átmegyünk a lapra
@@ -4998,28 +4998,28 @@ namespace Villamos
                 // Két széle színez
                 for (int i = 2; i <= 8; i++)
                 {
-                    MyE.Háttérszín("A" + i, Color.Yellow);
-                    MyE.Háttérszín("C" + i, Color.Yellow);
+                    MyE.Háttérszín($"A{i}", Color.Yellow);
+                    MyE.Háttérszín($"C{i}", Color.Yellow);
                 }
                 Holtart.Lép();
 
                 MyE.Kép_beillesztés("Munka1", "A1", $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\képek\Villamos.png");
 
                 sor = 8;
-                MyE.Kiir("Takarítási terv", "b" + sor);
-                MyE.Igazít_vízszintes("b" + sor, "közép");
+                MyE.Kiir("Takarítási terv", $"B{sor}");
+                MyE.Igazít_vízszintes($"B{sor}", "közép");
 
                 sor += 1;
                 // kiírjuk a dátumot
-                MyE.Sormagasság(sor + ":" + sor, 45);
+                MyE.Sormagasság($"{sor}:{sor}", 45);
 
 
                 // két széle sárga
-                MyE.Háttérszín("A" + sor, Color.Yellow);
-                MyE.Háttérszín("C" + sor, Color.Yellow);
-                MyE.Kiir(Dátum.Value.ToString("yyyy.MM.dd"), "b" + sor);
-                MyE.Igazít_vízszintes("b" + sor, "közép");
-                MyE.Betű("b" + sor, 36);
+                MyE.Háttérszín($"A{sor}", Color.Yellow);
+                MyE.Háttérszín($"C{sor}", Color.Yellow);
+                MyE.Kiir(Dátum.Value.ToString("yyyy.MM.dd"), $"B{sor}");
+                MyE.Igazít_vízszintes($"B{sor}", "közép");
+                MyE.Betű($"B{sor}", 36);
 
                 Holtart.Be(Ütemezés_lista.Items.Count);
 
@@ -5030,23 +5030,22 @@ namespace Villamos
                     {
                         // üres sornál sort emel
                         sor += 1;
-                        MyE.Háttérszín("A" + sor, Color.Yellow);
-                        MyE.Háttérszín("C" + sor, Color.Yellow);
+                        MyE.Háttérszín($"A{sor}", Color.Yellow);
+                        MyE.Háttérszín($"C{sor}", Color.Yellow);
                     }
                     else if (Ütemezés_lista.Items[elemek].ToStrTrim().Substring(0, 1) == "J")
                     {
                         // kategória kiírása
                         sor += 1;
                         // ha új takarítási fajta akkor kiírjuk a takarítási fajtát
-                        MyE.Sormagasság(sor + ":" + sor, 45);
+                        MyE.Sormagasság($"{sor}:{sor}", 45);
                         // két széle sárga
-                        MyE.Háttérszín("A" + sor, Color.Yellow);
-                        MyE.Háttérszín("C" + sor, Color.Yellow);
-                        MyE.Kiir(Ütemezés_lista.Items[elemek].ToStrTrim(), "b" + sor);
-                        MyE.Igazít_vízszintes("b" + sor, "közép");
-                        MyE.Betű("b" + sor, 36);
+                        MyE.Háttérszín($"A{sor}", Color.Yellow);
+                        MyE.Háttérszín($"C{sor}", Color.Yellow);
+                        MyE.Kiir(Ütemezés_lista.Items[elemek].ToStrTrim(), $"B{sor}");
+                        MyE.Igazít_vízszintes($"B{sor}", "közép");
+                        MyE.Betű($"B{sor}", 36);
                     }
-
                     else
                     {
                         // ütemezett kocsik
@@ -5054,23 +5053,23 @@ namespace Villamos
                         string kiírandó = Ütemezés_lista.Items[elemek].ToStrTrim();
                         if (kiírandó.Substring(kiírandó.Length - 1, 1) == "-")
                         {
-                            MyE.Kiir(kiírandó.Substring(0, kiírandó.Length - 1), "b" + sor.ToString());
+                            MyE.Kiir(kiírandó.Substring(0, kiírandó.Length - 1), $"B{sor}");
                         }
                         else
                         {
-                            MyE.Kiir(kiírandó, "b" + sor.ToString());
+                            MyE.Kiir(kiírandó, $"B{sor}");
                         }
-                        MyE.Igazít_vízszintes("b" + sor, "közép");
-                        MyE.Háttérszín("A" + sor, Color.Yellow);
-                        MyE.Háttérszín("C" + sor, Color.Yellow);
+                        MyE.Igazít_vízszintes($"B{sor}", "közép");
+                        MyE.Háttérszín($"A{sor}", Color.Yellow);
+                        MyE.Háttérszín($"C{sor}", Color.Yellow);
                     }
                 }
 
                 // vége sárga
                 sor += 1;
-                MyE.Háttérszín("A" + sor + ":C" + sor, Color.Yellow);
+                MyE.Háttérszín($"A{sor}:C{sor}", Color.Yellow);
                 // nyomtatási beállítások
-                MyE.NyomtatásiTerület_részletes("Munka1", "A1:C" + sor, "", "", true);
+                MyE.NyomtatásiTerület_részletes("Munka1", $"A1:C{sor}", "", "", true);
                 MyE.Aktív_Cella("Munka1", "A1");
                 MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();
