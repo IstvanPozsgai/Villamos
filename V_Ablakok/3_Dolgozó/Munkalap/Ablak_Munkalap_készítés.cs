@@ -1522,8 +1522,8 @@ namespace Villamos
 
             MyE.Egyesít(munkalap, "e2:h2");
             MyE.Kiir("Munkarend:", "e2");
-            MyE.Betű("a2:r2", 10);
-            MyE.Betű("a2:r2", false, true, true);
+            MyE.Betű("e2:h2", 10);
+            MyE.Betű("e2:h2", false, true, true);
 
             MyE.Egyesít(munkalap, "e3:h3");
             if (Munkarendlist.SelectedItems.Count != 0)
@@ -1535,11 +1535,19 @@ namespace Villamos
             MyE.Egyesít(munkalap, "i2:k2");
             MyE.Kiir("Dátum:", "i2");
             MyE.Egyesít(munkalap, "i3:k3");
+            MyE.Betű("i3:k3", 10);
+            MyE.Betű("i3:k3", false, true, true);
+
             MyE.Kiir(Dátum.Value.ToString("yyyy.MM.dd"), "i3");
             MyE.Egyesít(munkalap, "l2:n2");
             MyE.Kiir("Költséghely:", "l2");
-            MyE.Egyesít(munkalap, "l3:n3");
+            MyE.Egyesít(munkalap, "l3:n3"); 
+            MyE.Betű("l3:n3", 10);
+            MyE.Betű("l3:n3", false, true, true);
+
             MyE.Egyesít(munkalap, "o2:r2");
+            MyE.Betű("o2:r2", 10);
+            MyE.Betű("o2:r2", false, true, true);
             MyE.Egyesít(munkalap, "o3:r3");
 
 

@@ -50,42 +50,6 @@ namespace Villamos
             }
         }
 
-        public static int Tábla_Író(string hely, string jelszó, string szöveg, int sor, string munkalap)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            Munkalap.Select();
-
-            DataGridView dataGridView1 = new DataGridView();
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                OleDbDataAdapter Adapter = new OleDbDataAdapter(szöveg, Kapcsolat);
-
-                DataSet Tábla = new DataSet();
-
-                Adapter.Fill(Tábla);
-                //Fejléc
-                for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
-                {
-                    Munkalap.Cells[sor, j + 1] = Tábla.Tables[0].Columns[j].ColumnName.ToString();
-                }
-
-
-                for (int i = 0; i < Tábla.Tables[0].Rows.Count; i++)
-                {
-                    for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
-                    {
-                        Munkalap.Cells[i + sor + 1, j + 1] = Tábla.Tables[0].Rows[i].ItemArray[j];
-                    }
-                }
-
-                int utolsó_sor = Tábla.Tables[0].Rows.Count;
-                return utolsó_sor;
-            }
-
-        }
 
 
         /// <summary>
@@ -138,11 +102,19 @@ namespace Villamos
 
         public static void ExcelBezárás()
         {
-            xlWorkBook.Close(true, misValue, misValue);
-            xlApp.Quit();
-            ReleaseObject(xlApp);
-            ReleaseObject(xlWorkBook);
-            ReleaseObject(xlWorkSheet);
+            try
+            {
+                xlWorkBook.Close(true, misValue, misValue);
+                xlApp.Quit();
+                ReleaseObject(xlWorkSheet);
+                ReleaseObject(xlWorkBook);
+                ReleaseObject(xlApp);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "ExcelBezárás", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -744,5 +716,43 @@ namespace Villamos
             long utolsó_sor = Tábla.Rows.Count;
             return utolsó_sor;
         }
+
+        public static int Tábla_Író(string hely, string jelszó, string szöveg, int sor, string munkalap)
+        {
+            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+            Munkalap.Select();
+
+            DataGridView dataGridView1 = new DataGridView();
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                OleDbDataAdapter Adapter = new OleDbDataAdapter(szöveg, Kapcsolat);
+
+                DataSet Tábla = new DataSet();
+
+                Adapter.Fill(Tábla);
+                //Fejléc
+                for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
+                {
+                    Munkalap.Cells[sor, j + 1] = Tábla.Tables[0].Columns[j].ColumnName.ToString();
+                }
+
+
+                for (int i = 0; i < Tábla.Tables[0].Rows.Count; i++)
+                {
+                    for (int j = 0; j < Tábla.Tables[0].Columns.Count; j++)
+                    {
+                        Munkalap.Cells[i + sor + 1, j + 1] = Tábla.Tables[0].Rows[i].ItemArray[j];
+                    }
+                }
+
+                int utolsó_sor = Tábla.Tables[0].Rows.Count;
+                return utolsó_sor;
+            }
+
+        }
+
     }
 }
