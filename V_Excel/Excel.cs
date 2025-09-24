@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static System.IO.File;
 using DT = System.Data;
@@ -130,6 +131,7 @@ namespace Villamos
             {
                 xlWorkBook.Close(true, misValue, misValue);
                 xlApp.Quit();
+           //     Marshal.ReleaseComObject(xlWorkBook);
                 ReleaseObject(xlWorkSheet);
                 ReleaseObject(xlWorkBook);
                 ReleaseObject(xlApp);
